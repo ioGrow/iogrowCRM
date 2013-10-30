@@ -17,19 +17,15 @@
     
 <div  class="page-content">
 
-   <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
-      <div id="portlet-config" class="modal hide">
-        <div class="modal-header">
-        boo <button data-dismiss="modal" class="close" type="button"></button>
-          <h3>portlet Settings</h3>
-        </div>
-        <div class="modal-body">
-          <p>Here will be a configuration form</p>
+      <div class="container-fluid" ng-show="immediateFailed">
+         <div class="span12">  
+          <h1>Sign-in Button;</h1>
+              <span id="signin">
+                  <span id="myGsignin"></span>
+              </span>
         </div>
       </div>
-      <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
-      <!-- BEGIN PAGE CONTAINER-->
-      <div class="container-fluid">
+      <div class="container-fluid" ng-show="isContentLoaded">
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->

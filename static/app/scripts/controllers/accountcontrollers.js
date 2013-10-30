@@ -1,13 +1,22 @@
 app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAccountLoader','Account',
     function($scope,$route,$location,Conf,MultiAccountLoader,Account) {
      console.log('i am in account list controller');
+
      $("#id_Accounts").addClass("active");
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
+     $scope.nextPageToken = undefined;
+     $scope.pagination = {};
+     
      $scope.accounts = [];
      $scope.renderSignIn = function() {
           console.log('$scope.renderSignIn #start_debug');
-          gapi.signin.render('myGsignin', {
+          if (window.is_signed_in){
+              console.log('I am signed-in so you can continue');
+              $scope.processAuth(window.authResult);
+          }else{
+            console.log('I am  not signed-in so render Button');
+            gapi.signin.render('myGsignin', {
             'callback': $scope.signIn,
             'clientid': Conf.clientId,
             'requestvisibleactions': Conf.requestvisibleactions,
@@ -15,15 +24,19 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
             'theme': 'dark',
             'cookiepolicy': Conf.cookiepolicy,
             'accesstype': 'offline'
-      });
+            });
 
+          }
+          
+
+     }
+     $scope.listNextPageItems = function(){
+      Account.list();
      }
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
-        $scope.$apply(function() {
-          console.log('signIn $apply callback #start_debug');
-          $scope.processAuth(authResult);
-        });
+        $scope.processAuth(authResult);
+        
      }
 
      $scope.processAuth = function(authResult) {
@@ -34,21 +47,24 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
           console.log('User is signed-in');
           $scope.immediateFailed = false;
           $scope.isSignedIn = true;
+          window.is_signed_in = true;
+          window.authResult = authResult;
           // Call the backend to get the list of accounts
-          gapi.client.crmengine.accounts.list().execute(function(resp) {
-            if(!resp.code){
-               $scope.accounts = resp.items;
-               // Call the method $apply to make the update on the scope
-               $scope.$apply();
 
-            }else {
-               alert("Error, response is: " + angular.toJson(resp));
-            }
-            console.log('gapi #end_execute');
-          });
+          var params = {};
+          if ($scope.nextPageToken){
+            params = {'limit':7,
+                      'pageToken':$scope.nextPageToken
+                     }
+          }else{
+            params = {'limit':7}
+          }
+          Account.list($scope,params);
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
             $scope.immediateFailed = true;
+
+            window.location.replace('/sign-in');
             console.log('Immediate Failed');
           } else {
             console.log('Error:' + authResult['error']);
@@ -56,15 +72,83 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
         }
      }
      $scope.renderSignIn();
+     $scope.showModal = function(){
+        console.log('button clicked');
+        $('#addAccountModal').modal('show');
+
+      };
+      
+    $scope.save = function(account){
+      Account.insert(account);
+    };
      
      
    
 
     
 }]);
-app.controller('AccountShowCtrl', ['$scope','$route','$location','Topic','Note','WhoHasAccess','User',
-    function($scope,$route,$location,Topic,Note,WhoHasAccess,User) {
+app.controller('AccountShowCtrl', ['$scope','$route','$location','Conf','Account', 'Topic','Note','WhoHasAccess','User',
+    function($scope,$route,$location,Conf,Account,Topic,Note,WhoHasAccess,User) {
+
       $("#id_Accounts").addClass("active");
+     $scope.isSignedIn = false;
+     $scope.immediateFailed = false;
+     $scope.isContentLoaded = false;
+     $scope.accounts = [];
+     $scope.renderSignIn = function() {
+          console.log('$scope.renderSignIn #start_debug');
+          if (window.is_signed_in){
+              console.log('I am signed-in so you can continue');
+              $scope.processAuth(window.authResult);
+          }else{
+            console.log('I am  not signed-in so render Button');
+            gapi.signin.render('myGsignin', {
+            'callback': $scope.signIn,
+            'clientid': Conf.clientId,
+            'requestvisibleactions': Conf.requestvisibleactions,
+            'scope': Conf.scopes,
+            'theme': 'dark',
+            'cookiepolicy': Conf.cookiepolicy,
+            'accesstype': 'offline'
+            });
+
+          }
+          
+
+     }
+     $scope.signIn = function(authResult) {
+        console.log('signIn callback #start_debug');
+        $scope.processAuth(authResult);
+        
+     }
+
+
+     $scope.processAuth = function(authResult) {
+        console.log('process Auth #startdebug');
+        $scope.immediateFailed = true;
+        if (authResult['access_token']) {
+          // User is signed-in
+          console.log('User is signed-in');
+          $scope.immediateFailed = false;
+          $scope.isSignedIn = true;
+          window.is_signed_in = true;
+          window.authResult = authResult;
+          // Call the backend to get the list of accounts
+          var accountid = {'id':$route.current.params.accountId};
+          Account.get($scope,accountid);
+        } else if (authResult['error']) {
+          if (authResult['error'] == 'immediate_failed') {
+            $scope.immediateFailed = true;
+
+            console.log('Immediate Failed');
+          } else {
+            console.log('Error:' + authResult['error']);
+          }
+        }
+     }
+     $scope.renderSignIn();
+     $('#addAccountModal').modal('show');
+
       
 
 

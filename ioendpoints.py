@@ -6,13 +6,15 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 from iomodels.crmengine.accounts import Account
 import model
 import auth_util
+# The ID of javascript client authorized to access to our api
+# This client_id could be generated on the Google API console
 CLIENT_ID = '800974247399.apps.googleusercontent.com'
 
 
 @endpoints.api(name='crmengine', version='v1', description='I/Ogrow CRM API',allowed_client_ids=[CLIENT_ID,
                                    endpoints.API_EXPLORER_CLIENT_ID])
 class CrmEngineApi(remote.Service):
-
+  # TEDJ_29_10_write annotation to reference wich model for example @Account to refernce Account model
   @Account.method(user_required=True,path='accounts', http_method='POST', name='accounts.insert')
   def AccountInsert(self, my_model):
 
@@ -34,7 +36,7 @@ class CrmEngineApi(remote.Service):
     user_from_email = model.User.query(model.User.email == user.email()).get()
     if user_from_email is None:
       raise endpoints.UnauthorizedException('You must sign-in!' )
-
+    # Todo: Check permissions
     my_model.owner = user_from_email.key
     my_model.put()
     
@@ -66,7 +68,8 @@ class CrmEngineApi(remote.Service):
   # This is identical to the example in basic/main.py, however since the
   # ProtoRPC schema for the model now includes "id", all the values in "items"
   # will also contain an "id".
-  @Account.query_method(user_required=True,path='accounts', name='accounts.list')
+  
+  @Account.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='accounts', name='accounts.list')
   def AccountList(self, query):
     
     return query

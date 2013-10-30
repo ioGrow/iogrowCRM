@@ -29,29 +29,14 @@
       <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
       <!-- BEGIN PAGE CONTAINER-->
       <div class="container-fluid"ng-show="immediateFailed">
-        <div class="span12">  
+         <div class="span12">  
           <h1>Sign-in Button;</h1>
               <span id="signin">
                   <span id="myGsignin"></span>
               </span>
         </div>
       </div>
-      <div class="container-fluid" ng-show="isSignedIn">
-        
-        <!-- END PAGE HEADER-->
-        <!-- BEGIN PAGE CONTENT-->
-        <div class="row-fluid">
-          
-          <div class="span12">
-            <h2>{{ _("Accounts") }} </h2>
-            
-            <div class="btn-group">
-            
-                    <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
-                    {{ _("New Account") }} <i class="icon-plus"></i>
-                    </button>
-            </div>
-               <div id="addAccountModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div id="addAccountModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3 id="myModalLabel">{{_("New Account")}}</h3>
@@ -95,6 +80,22 @@
               </div>
                </form>
        </div>
+      <div class="container-fluid" ng-show="isSignedIn">
+        
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row-fluid">
+          
+          <div class="span12">
+            <h2>{{ _("Accounts") }} </h2>
+            
+            <div class="btn-group">
+            
+                    <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
+                    {{ _("New Account") }} <i class="icon-plus"></i>
+                    </button>
+            </div>
+               
             <hr/>
             
           </div>
@@ -127,9 +128,13 @@
             <div class="pagination pull-right">
            
                   <ul>
-                    <li ng-show="pagination.prev"><a href="#/accounts/p/<%= pagination.prev %>">{{_("Prev")}}</a></li>
+                    <li ng-show="pagination.prev"><button ng-click="showModal()" id="sample_editable_1_new" class="btn">
+                    {{_("Prev")}} <i class="icon-plus"></i>
+                    </button></li>
                     <li ng-repeat="page in pagination.pages" ng-class='{active: page.isCurrent}'><a  href="#/accounts/p/<%= page.id %>"><%= page.id %></a></li>
-                    <li  ng-show="pagination.next"><a href="#/accounts/p/<%= pagination.next %>">{{_("Next")}}</a></li>
+                    <li  ng-show="pagination.next"><button ng-click="listNextPageItems()"  class="btn">
+                    {{_("Next")}} 
+                    </button></li>
                   </ul>
                 </div>
           </div>

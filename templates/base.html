@@ -227,9 +227,10 @@
   }
   
     function loadGapi() {
-       
+       window.is_signed_in = false;
+       window.authResult = undefined;
        var apisToLoad;
-       var ROOT = 'https://easycrm-dev.appspot.com/_ah/api';
+       var ROOT = '/_ah/api';
        var callback = function() {
         if (--apisToLoad == 0) {
           apiLoaded();
