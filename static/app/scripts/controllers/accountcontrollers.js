@@ -9,8 +9,13 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
      $scope.pagination = {};
+     $scope.currentPage = 01;
+     $scope.pages = [];
      
      $scope.accounts = [];
+     
+     
+
      $scope.renderSignIn = function() {
           console.log('$scope.renderSignIn #start_debug');
           if (window.is_signed_in){
@@ -27,35 +32,35 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
             'cookiepolicy': Conf.cookiepolicy,
             'accesstype': 'offline'
             });
-
           }
-          
-
-     }
+      }
      $scope.listNextPageItems = function(){
         $scope.isLoading = true;
+        var nextPage = $scope.currentPage + 1;
        var params = {};
-          if ($scope.nextPageToken){
+          if ($scope.pages[nextPage]){
             params = {'limit':7,
-                      'pageToken':$scope.nextPageToken
+                      'pageToken':$scope.pages[nextPage]
                      }
           }else{
             params = {'limit':7}
           }
           console.log('in listNextPageItems');
-          console.log($scope);
+          $scope.currentPage = $scope.currentPage + 1 ; 
           Account.list($scope,params);
      }
      $scope.listPrevPageItems = function(){
        $scope.isLoading = true;
+       var prevPage = $scope.currentPage - 1;
        var params = {};
-          if ($scope.nextPageToken){
+          if ($scope.pages[prevPage]){
             params = {'limit':7,
-                      'pageToken':$scope.prevPageToken
+                      'pageToken':$scope.pages[prevPage]
                      }
           }else{
             params = {'limit':7}
           }
+          $scope.currentPage = $scope.currentPage - 1 ;
           Account.list($scope,params);
      }
      $scope.signIn = function(authResult) {
@@ -75,8 +80,12 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
           window.is_signed_in = true;
           window.authResult = authResult;
           // Call the backend to get the list of accounts
+          var params = {'limit':7}
+          console.log('current page');
+          console.log($scope.currentPage);
 
-          $scope.listNextPageItems();
+          Account.list($scope,params);
+
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
             $scope.immediateFailed = true;

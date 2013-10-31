@@ -44,17 +44,26 @@ accountservices.factory('Account', function($http) {
               if(!resp.code){
                  $scope.accounts = resp.items;
                  if (resp.nextPageToken){
-                   $scope.prevPageToken = $scope.nextPageToken;
-                   $scope.nextPageToken = resp.nextPageToken;
+                  var nextPage = $scope.currentPage + 1;
+                   $scope.pages[nextPage] = resp.nextPageToken;
+                   console.log($scope.pages);
+                   
+                   
 
                    $scope.pagination.next = true;
+                   if ($scope.currentPage>1){
                    $scope.pagination.prev = true;
+                   }else{
+                       $scope.pagination.prev = false;
+                   }
                  }else{
                   $scope.pagination.next = false;
                  }
                  // Call the method $apply to make the update on the scope
                  $scope.isLoading = false;
                  $scope.$apply();
+                 console.log('current page');
+                 console.log($scope.currentPage);
                  
 
               }else {
