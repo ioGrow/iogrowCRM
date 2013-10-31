@@ -8,7 +8,7 @@ import model
 import auth_util
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
-CLIENT_ID = '800974247399.apps.googleusercontent.com'
+CLIENT_ID = '330861492018.apps.googleusercontent.com'
 
 
 @endpoints.api(name='crmengine', version='v1', description='I/Ogrow CRM API',allowed_client_ids=[CLIENT_ID,

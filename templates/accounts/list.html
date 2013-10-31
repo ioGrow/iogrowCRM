@@ -125,11 +125,11 @@
               </div>
             </div>
           <div class="row-fluid">
-            <div class="pagination pull-right">
-           
+            <div class="pagination pull-right" ng-hide="isLoading">
+                  
                   <ul>
-                    <li ng-show="pagination.prev"><button ng-click="showModal()" id="sample_editable_1_new" class="btn">
-                    {{_("Prev")}} <i class="icon-plus"></i>
+                    <li ng-show="pagination.prev"><button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
+                    {{_("Prev")}} 
                     </button></li>
                     <li ng-repeat="page in pagination.pages" ng-class='{active: page.isCurrent}'><a  href="#/accounts/p/<%= page.id %>"><%= page.id %></a></li>
                     <li  ng-show="pagination.next"><button ng-click="listNextPageItems()"  class="btn">
@@ -137,6 +137,7 @@
                     </button></li>
                   </ul>
                 </div>
+                <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
           </div>
             
           

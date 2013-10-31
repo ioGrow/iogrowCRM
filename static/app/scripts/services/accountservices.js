@@ -8,7 +8,7 @@ accountservices.factory('Conf', function($location) {
         return rootUrl;
       };
       return {
-        'clientId': '800974247399.apps.googleusercontent.com',
+        'clientId': '330861492018.apps.googleusercontent.com',
         'apiBase': '/api/',
         'rootUrl': getRootUrl(),
         'scopes': 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email',
@@ -40,16 +40,22 @@ accountservices.factory('Account', function($http) {
   };
   Account.list = function($scope,params){
       gapi.client.crmengine.accounts.list(params).execute(function(resp) {
+
               if(!resp.code){
                  $scope.accounts = resp.items;
                  if (resp.nextPageToken){
+                   $scope.prevPageToken = $scope.nextPageToken;
                    $scope.nextPageToken = resp.nextPageToken;
+
                    $scope.pagination.next = true;
+                   $scope.pagination.prev = true;
                  }else{
                   $scope.pagination.next = false;
                  }
                  // Call the method $apply to make the update on the scope
+                 $scope.isLoading = false;
                  $scope.$apply();
+                 
 
               }else {
                  alert("Error, response is: " + angular.toJson(resp));
