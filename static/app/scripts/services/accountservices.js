@@ -39,41 +39,32 @@ accountservices.factory('Account', function($http) {
           });
   };
   Account.list = function($scope,params){
+      $scope.isLoading = true;
       gapi.client.crmengine.accounts.list(params).execute(function(resp) {
 
               if(!resp.code){
                  $scope.accounts = resp.items;
                  if (resp.nextPageToken){
-                  var nextPage = $scope.currentPage + 1;
+                   var nextPage = $scope.currentPage + 1;
+                   // Store the nextPageToken
                    $scope.pages[nextPage] = resp.nextPageToken;
-                   console.log($scope.pages);
-                   
-                   
-
                    $scope.pagination.next = true;
                    if ($scope.currentPage>1){
-                   $scope.pagination.prev = true;
+                      $scope.pagination.prev = true;
                    }else{
                        $scope.pagination.prev = false;
                    }
                  }else{
                   $scope.pagination.next = false;
                  }
-                 // Call the method $apply to make the update on the scope
+                 // Loaded succefully
                  $scope.isLoading = false;
+                 // Call the method $apply to make the update on the scope
                  $scope.$apply();
-                 console.log('current page');
-                 console.log($scope.currentPage);
-                 
-
               }else {
                  alert("Error, response is: " + angular.toJson(resp));
               }
-              console.log('gapi #end_execute');
-        });
-    
-  	
-
+      });
   };
   Account.insert = function(account){
       gapi.client.crmengine.accounts.insert(account).execute(function(resp) {

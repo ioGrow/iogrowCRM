@@ -35,9 +35,10 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
           }
       }
      $scope.listNextPageItems = function(){
-        $scope.isLoading = true;
+        
+        
         var nextPage = $scope.currentPage + 1;
-       var params = {};
+        var params = {};
           if ($scope.pages[nextPage]){
             params = {'limit':7,
                       'pageToken':$scope.pages[nextPage]
@@ -50,7 +51,7 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
           Account.list($scope,params);
      }
      $scope.listPrevPageItems = function(){
-       $scope.isLoading = true;
+       
        var prevPage = $scope.currentPage - 1;
        var params = {};
           if ($scope.pages[prevPage]){
@@ -80,10 +81,8 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
           window.is_signed_in = true;
           window.authResult = authResult;
           // Call the backend to get the list of accounts
+          
           var params = {'limit':7}
-          console.log('current page');
-          console.log($scope.currentPage);
-
           Account.list($scope,params);
 
         } else if (authResult['error']) {
