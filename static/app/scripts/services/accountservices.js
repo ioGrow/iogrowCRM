@@ -8,7 +8,7 @@ accountservices.factory('Conf', function($location) {
         return rootUrl;
       };
       return {
-        'clientId': '800974247399.apps.googleusercontent.com',
+        'clientId': '330861492018.apps.googleusercontent.com',
         'apiBase': '/api/',
         'rootUrl': getRootUrl(),
         'scopes': 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email',

@@ -4,11 +4,12 @@ from protorpc import remote
 from endpoints_proto_datastore.ndb import EndpointsAliasProperty
 from endpoints_proto_datastore.ndb import EndpointsModel
 from iomodels.crmengine.accounts import Account
+from iomodels.crmengine.contacts import Contact
 import model
 import auth_util
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
-CLIENT_ID = '800974247399.apps.googleusercontent.com'
+CLIENT_ID = '330861492018.apps.googleusercontent.com'
 
 
 @endpoints.api(name='crmengine', version='v1', description='I/Ogrow CRM API',allowed_client_ids=[CLIENT_ID,
@@ -72,4 +73,29 @@ class CrmEngineApi(remote.Service):
   @Account.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='accounts', name='accounts.list')
   def AccountList(self, query):
     
+    return query
+
+#HKA 30.10.2013 Create Contact APIs insert, get, list
+  @Contact.method(user_required=True,path='contacts',http_method='POST', name='contacts.insert')
+  def ContactInsert (self, my_model) :
+
+    user = endpoints.get_current_user()
+    if user is None:
+      raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+        raise endpoints.UnauthorizedException('You must sign-in!' )
+        my_model.owner = user_from_email.key
+        my_model.put()
+
+        return my_model
+
+  @Contact.method(request_fields=('id',),path='contacts/{id}',http_method='GET', name='contacts.get')
+  def ContactGet(self,my_model) :
+    if not my_model.from_datastore:
+      raise endpoints.NotFoundException('Contact Not found')
+    return my_model
+
+  @Contact.query_method(user_required='True',path='contacts',name='contacts.list')
+  def ContectList (self, query) :
     return query
