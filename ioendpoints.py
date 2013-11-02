@@ -4,6 +4,7 @@ from protorpc import remote
 from endpoints_proto_datastore.ndb import EndpointsAliasProperty
 from endpoints_proto_datastore.ndb import EndpointsModel
 from iomodels.crmengine.accounts import Account
+from iomodels.crmengine.notes import Note,Topic
 import model
 import auth_util
 # The ID of javascript client authorized to access to our api
@@ -71,5 +72,42 @@ class CrmEngineApi(remote.Service):
   
   @Account.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='accounts', name='accounts.list')
   def AccountList(self, query):
+    
+    return query
+
+  ##############################Notes API##################################""""
+  @Note.method(user_required=True,path='notes', http_method='POST', name='notes.insert')
+  def NoteInsert(self, my_model):
+
+    # Here, since the schema includes an ID, it is possible that the entity
+    # my_model has an ID, hence we could be specifying a new ID in the datastore
+    # or overwriting an existing entity. If no ID is included in the ProtoRPC
+    # request, then no key will be set in the model and the ID will be set after
+    # the put completes, as in basic/main.py.
+
+    # In either case, the datastore ID from the entity will be returned in the
+    # ProtoRPC response message.
+
+
+
+    
+    user = endpoints.get_current_user()
+    if user is None:
+        raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in!' )
+    # Todo: Check permissions
+    note_author = model.User()
+    note_author.google_display_name = user_from_email.google_display_name
+    my_model.author = note_author
+    my_model.put()
+    
+
+    return my_model
+
+  ################################ Topic API ##################################
+  @Topic.query_method(user_required=True,query_fields=('about_kind','about_item', 'limit', 'order', 'pageToken'),path='topics', name='topics.list')
+  def TopicList(self, query):
     
     return query

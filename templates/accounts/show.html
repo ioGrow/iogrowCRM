@@ -102,7 +102,8 @@
                                          
                                          <div class="pull-right">
                                          <!-- <input type="submit" class="btn btn-primary" value="Attach file">-->
-                                          <input type="submit" class="btn green" value="Add this note">
+                                          <input ng-hide="isLoading" type="submit" class="btn green" value="Add this note">
+                                          <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
                                           </div>
                                         </form>
                                        </div>
@@ -110,63 +111,35 @@
 
                                         
                             <ul class="chats">
-                              <li class="in">
+                              <li class="in" ng-repeat="topic in topics" id="topic_<%=$index%>">
                                 <img class="avatar" alt="" src="static/img/avatar.jpg.png" />
                                 <div class="message">
                                   <span class="arrow"></span>
-                                  <a href="#" class="name">Hakim Karriche</a>
+                                  <a href="#" class="name"><%= topic.last_updater.google_display_name%></a>
                                   <span class="datetime">at Jul 25, 2012 11:09</span>
                                   <span class="body">
-                                  <a href="#/accounts/show/1/notes/22" class="discussion-content"><strong class="ng-binding">Note works</strong><span class="excerpt ng-binding"> - we success to add notes</span><span class="chat-meta pull-right"><i class="icon-comment"></i> 3 comments</span></a>
+                                  <a href="#/accounts/show/1/notes/22" class="discussion-content"><strong class="ng-binding"><%= topic.title%></strong><span class="excerpt ng-binding"> - <%= topic.excerpt%></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <%= topic.comments%> comments</span></a>
                                   </span>
                                 </div>
                               </li>
-                              <li class="in">
-                                <img class="avatar" alt="" src="static/img/avatar.jpg.png" />
-                                <div class="message">
-                                  <span class="arrow"></span>
-                                  <a href="#" class="name">Hakim Karriche</a>
-                                  <span class="datetime">at Jul 25, 2012 11:09</span>
-                                  <span class="body">
-                                  <a href="#/accounts/show/1/notes/22" class="discussion-content"><strong class="ng-binding">Note works</strong><span class="excerpt ng-binding"> - we success to add notes</span><span class="chat-meta pull-right"><i class="icon-comment"></i> 3 comments</span></a>
-                                  </span>
-                                </div>
-                              </li><li class="in">
-                                <img class="avatar" alt="" src="static/img/avatar.jpg.png" />
-                                <div class="message">
-                                  <span class="arrow"></span>
-                                  <a href="#" class="name">Hakim Karriche</a>
-                                  <span class="datetime">at Jul 25, 2012 11:09</span>
-                                  <span class="body">
-                                  <a href="#/accounts/show/1/notes/22" class="discussion-content"><strong class="ng-binding">Note works</strong><span class="excerpt ng-binding"> - we success to add notes</span><span class="chat-meta pull-right"><i class="icon-comment"></i> 3 comments</span></a>
-                                  </span>
-                                </div>
-                              </li><li class="in">
-                                <img class="avatar" alt="" src="static/img/avatar.jpg.png" />
-                                <div class="message">
-                                  <span class="arrow"></span>
-                                  <a href="#" class="name">Hakim Karriche</a>
-                                  <span class="datetime">at Jul 25, 2012 11:09</span>
-                                  <span class="body">
-                                  <a href="#/accounts/show/1/notes/22" class="discussion-content"><strong class="ng-binding">Note works</strong><span class="excerpt ng-binding"> - we success to add notes</span><span class="chat-meta pull-right"><i class="icon-comment"></i> 3 comments</span></a>
-                                  </span>
-                                </div>
-                              </li><li class="in">
-                                <img class="avatar" alt="" src="static/img/avatar.jpg.png" />
-                                <div class="message">
-                                  <span class="arrow"></span>
-                                  <a href="#" class="name">Hakim Karriche</a>
-                                  <span class="datetime">at Jul 25, 2012 11:09</span>
-                                  <span class="body">
-                                  <a href="#/accounts/show/1/notes/22" class="discussion-content"><strong class="ng-binding">Note works</strong><span class="excerpt ng-binding"> - we success to add notes</span><span class="chat-meta pull-right"><i class="icon-comment"></i> 3 comments</span></a>
-                                  </span>
-                                </div>
-                              </li>
+                              
                             </ul>
-                  
-                          
-                        
-                      </div>
+                            <div class="row-fluid">
+                                <div class="pagination pull-right" ng-hide="isLoading">
+                                      
+                                      <ul>
+                                        <li ng-show="pagination.prev"><button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                        {{_("Prev")}} 
+                                        </button></li>
+                                        
+                                        <li  ng-show="pagination.next"><button ng-click="listNextPageItems()"  class="btn">
+                                        {{_("Next")}} 
+                                        </button></li>
+                                      </ul>
+                                    </div>
+                                    <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                              </div>
+                            </div>
                       <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
                         
                         <div class="row-fluid">
