@@ -485,10 +485,10 @@
 
                                  
                                   <ul id="tasks" class="unstyled">
-                                    <li>
+                                    <li ng-repeat="task in tasks">
                                       <input value="check1" type="checkbox">
                                       <!-- Name -->
-                                    <span><a href="/tasks/1" class="discussion-content"> Prepare a commercial offer for salesforce training [before: 20/08/2013]</a></span>
+                                    <span><a href="/tasks/1" class="discussion-content"><%= task.title%> [before: <%= task.due%>]</a></span>
                                     </li>
                                     <li>
                                       <input value="check1" type="checkbox">
@@ -529,47 +529,18 @@
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
               <h3 id="myModalLabel">New Task</h3>
             </div>
-            <div class="modal-body">
+            <div class="modal-body pickerin">
                      <div class="controls controls-row">
-                                                  <input class="input-block-level" autofocus="" type="text" placeholder="Add a new task" id="taskTitle">
+                                          <form id="addNote" ng-submit="addTask(task,data)" class="ng-pristine ng-valid">
+                                                  <input class="input-block-level" autofocus type="text" placeholder="Add a new task" id="taskTitle" ng-model="task.title">
+                                                  
                                                   <p>When's it due?</p>
+                                                  <datetimepicker data-ng-model="data.date"
+                                                  data-datetimepicker-config="{ startView:'day', minView:'day' }" />
                                                 
-                                                        <div id="datetimepicker2" class="input-append">
-                                                          <input placeholder="dd/MM/yyyy" data-format="MM/dd/yyyy HH:mm:ss PP" type="text">
-                                                          <span class="add-on">
-                                                            <i data-time-icon="icon-time" data-date-icon="icon-calendar">
-                                                            </i>
-                                                          </span>
-                                                        </div>
+                                                       
 
-                                                    <p>Who's responsible?</p>
-
-                                                   <!--<p>Who's responsible?</p>
-          >>>>>>> 803fd0d019c8ca6e8b1fd7a1dd6462b38c06b49f
-                                                    <select id="task_owner_id" name="task[owner_id]"><option value="889860" selected="selected">Me</option>
-                                                      <option value="922510">Hakim Karriche</option></select>
-                                                     <p>Choose a category</p>
-                                                     <p>
-                                                    <select id="category_task" name="task[category_id]" onchange="Tasks.changeCategory(this)">
-                                                                      <option value="" selected="selected">None</option>
-                                                                      <option value="4377192">Call</option>
-                                                                      <option value="4377193">Demo</option>
-                                                                      <option value="4377194">Email</option>
-                                                                      <option value="4377195">Fax</option>
-                                                                      <option value="4377196">Follow-up</option>
-                                                                      <option value="4377197">Lunch</option>
-                                                                      <option value="4377198">Meeting</option>
-                                                                      <option value="4561547">new one</option>
-                                                                      <option value="4377199">Ship</option>
-                                                                      <option value="4377200">Thank-you</option>
-                                                                      <option value="new">New category...</option>
-                                                    </select>
-
-                                                    <a href="/task_categories" behavior="return_to" class="edit_categories">Edit categories</a>
-                                                    </p>
-
-                                                    <a href="/task_categories" behavior="return_to" class="edit_categories">Edit categories</a>
-                                                    </p>!-->
+                                                   
 
                         
                                                
@@ -579,7 +550,11 @@
             </div>
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-              <button class="btn btn-primary">Add this task</button>
+              
+               <input ng-hide="isLoading" type="submit" class="btn green" value="Add this task">
+                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                                        
+            </form>
             </div>
           </div>
 
@@ -642,3 +617,11 @@
       </div>
       <!-- END PAGE CONTAINER-->
 </div>
+<script type="text/javascript">
+  $(function() {
+    $('#datetimepicker2').datetimepicker({
+      language: 'fr',
+      pickTime: false
+    });
+  });
+</script>

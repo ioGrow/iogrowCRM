@@ -652,3 +652,11 @@ background-color: #fff;
 .highlight{
     background-color: #FFFF88;
 }
+.bootpicker{
+
+  z-index: 10550 !important;
+
+}
+.pickerin{
+  height: 325px;
+}

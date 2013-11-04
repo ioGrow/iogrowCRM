@@ -5,6 +5,7 @@ from endpoints_proto_datastore.ndb import EndpointsAliasProperty
 from endpoints_proto_datastore.ndb import EndpointsModel
 from iomodels.crmengine.accounts import Account
 from iomodels.crmengine.notes import Note,Topic
+from iomodels.crmengine.tasks import Task
 import model
 import auth_util
 # The ID of javascript client authorized to access to our api
@@ -109,5 +110,36 @@ class CrmEngineApi(remote.Service):
   ################################ Topic API ##################################
   @Topic.query_method(user_required=True,query_fields=('about_kind','about_item', 'limit', 'order', 'pageToken'),path='topics', name='topics.list')
   def TopicList(self, query):
+    
+    return query
+  ################################ Tasks API ##################################
+  @Task.method(user_required=True,path='tasks', http_method='POST', name='tasks.insert')
+  def TaskInsert(self, my_model):
+
+    # Here, since the schema includes an ID, it is possible that the entity
+    # my_model has an ID, hence we could be specifying a new ID in the datastore
+    # or overwriting an existing entity. If no ID is included in the ProtoRPC
+    # request, then no key will be set in the model and the ID will be set after
+    # the put completes, as in basic/main.py.
+
+    # In either case, the datastore ID from the entity will be returned in the
+    # ProtoRPC response message.
+
+    user = endpoints.get_current_user()
+    if user is None:
+        raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in!' )
+    # Todo: Check permissions
+    task_owner = model.User()
+    task_owner.google_display_name = user_from_email.google_display_name
+    my_model.owner = task_owner
+    my_model.put()
+    
+
+    return my_model
+  @Task.query_method(user_required=True,query_fields=('about_kind','about_item','status', 'due', 'limit', 'order', 'pageToken'),path='tasks', name='tasks.list')
+  def TaskList(self, query):
     
     return query

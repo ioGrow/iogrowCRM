@@ -952,13 +952,7 @@ Bootstrap modal
   border-top: 0;
 }
 
-.modal {
-  z-index: 10050 !important;
-}
 
-.modal-backdrop {
-  z-index: 10049 !important;
-}
 
 .modal-backdrop, 
 .modal-backdrop.fade.in {
