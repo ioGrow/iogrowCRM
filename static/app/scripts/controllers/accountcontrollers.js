@@ -112,8 +112,8 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
 
     
 }]);
-app.controller('AccountShowCtrl', ['$scope','$route','$location','Conf','Account', 'Topic','Note','WhoHasAccess','User',
-    function($scope,$route,$location,Conf,Account,Topic,Note,WhoHasAccess,User) {
+app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Conf','Account', 'Topic','Note','Task','WhoHasAccess','User',
+    function($scope,$filter,$route,$location,Conf,Account,Topic,Note,Task,WhoHasAccess,User) {
       console.log('i am in account list controller');
       $("#id_Accounts").addClass("active");
       var tab = $route.current.params.accountTab;
@@ -152,6 +152,29 @@ app.controller('AccountShowCtrl', ['$scope','$route','$location','Conf','Account
      $scope.accounts = [];
      
      
+     $scope.addTask = function(task,data){
+      
+      $('#myModal').modal('hide');
+      var params ={}
+
+      console.log('adding a new task');
+      console.log(task);
+      console.log(data);
+      if (data.date){
+
+      var dueDate= $filter('date')(data.date,['yyyy-MM-dd']);
+      dueDate = dueDate +'T00:00:00.000000'
+      params ={'title': task.title,
+                'due': dueDate
+                }
+      console.log(dueDate);
+    }else{
+        params ={'title': task.title}
+    };
+    Task.insert($scope,params);
+
+    
+     }
 
      $scope.renderSignIn = function() {
           console.log('$scope.renderSignIn #start_debug');

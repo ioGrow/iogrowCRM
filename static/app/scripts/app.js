@@ -1,4 +1,5 @@
-var app = angular.module('crmEngine',['ui.bootstrap','crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.leadservices']);
+var app = angular.module('crmEngine',['ui.bootstrap.datetimepicker','ui.bootstrap','crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.leadservices']);
+
 
 app.config(function($interpolateProvider){
   $interpolateProvider.startSymbol('<%=');
