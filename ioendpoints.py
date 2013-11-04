@@ -5,6 +5,7 @@ from endpoints_proto_datastore.ndb import EndpointsAliasProperty
 from endpoints_proto_datastore.ndb import EndpointsModel
 from iomodels.crmengine.accounts import Account
 from iomodels.crmengine.contacts import Contact
+from iomodels.crmengine.campaigns import Campaign
 import model
 import auth_util
 # The ID of javascript client authorized to access to our api
@@ -12,12 +13,12 @@ import auth_util
 CLIENT_ID = '330861492018.apps.googleusercontent.com'
 
 
-@endpoints.api(name='crmengine', version='v1', description='I/Ogrow CRM API',allowed_client_ids=[CLIENT_ID,
+@endpoints.api(name='crmengine', version='v1', description='I/Ogrow CRM APIs',allowed_client_ids=[CLIENT_ID,
                                    endpoints.API_EXPLORER_CLIENT_ID])
 class CrmEngineApi(remote.Service):
   # TEDJ_29_10_write annotation to reference wich model for example @Account to refernce Account model
-  @Account.method(user_required=True,path='accounts', http_method='POST', name='accounts.insert')
-  def AccountInsert(self, my_model):
+  @Contact.method(user_required=True,path='contacts', http_method='POST', name='contacts.insert')
+  def ContactInsert(self, my_model):
 
     # Here, since the schema includes an ID, it is possible that the entity
     # my_model has an ID, hence we could be specifying a new ID in the datastore
@@ -27,9 +28,6 @@ class CrmEngineApi(remote.Service):
 
     # In either case, the datastore ID from the entity will be returned in the
     # ProtoRPC response message.
-
-
-
     
     user = endpoints.get_current_user()
     if user is None:
@@ -40,20 +38,14 @@ class CrmEngineApi(remote.Service):
     # Todo: Check permissions
     my_model.owner = user_from_email.key
     my_model.put()
-    
-
     return my_model
 
-  # This method is not defined in any of the previous examples: it allows an
-  # entity to be retrieved from it's ID. As in
-  # custom_api_response_messages/main.py, we override the schema of the ProtoRPC
-  # request message to limit to a single field: "id". Since "id" is one of
-  # the helper methods provided by EndpointsModel, we may use it as one of our
-  # request_fields. In general, other than these five, only properties you
-  # define are allowed.
-  @Account.method(request_fields=('id',),
-                  path='accounts/{id}', http_method='GET', name='accounts.get')
-  def AccountGet(self, my_model):
+
+
+         
+  @Contact.method(request_fields=('id',),
+                  path='contacts/{id}', http_method='GET', name='contacts.get')
+  def ContactGet(self, my_model):
     # Since the field "id" is included, when it is set from the ProtoRPC
     # message, the decorator attempts to retrieve the entity by its ID. If the
     # entity was retrieved, the boolean from_datastore on the entity will be
@@ -63,39 +55,47 @@ class CrmEngineApi(remote.Service):
     # For more details on the behavior of setting "id", see the sample
     # custom_alias_properties/main.py.
     if not my_model.from_datastore:
-      raise endpoints.NotFoundException('Account not found.')
+      raise endpoints.NotFoundException('Contact not found.')
     return my_model
 
   # This is identical to the example in basic/main.py, however since the
   # ProtoRPC schema for the model now includes "id", all the values in "items"
   # will also contain an "id".
-  
-  @Account.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='accounts', name='accounts.list')
-  def AccountList(self, query):
-    
+ 
+  @Contact.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='contacts', name='contacts.list')
+  def ContactList(self, query):
     return query
 
-#HKA 30.10.2013 Create Contact APIs insert, get, list
-  @Contact.method(user_required=True,path='contacts',http_method='POST', name='contacts.insert')
-  def ContactInsert (self, my_model) :
+  @Account.method(user_required=True,path='accounts', http_method='POST', name='accounts.insert')
+  def AccountInsert(self, my_model):
 
+    
+    
     user = endpoints.get_current_user()
     if user is None:
-      raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!' )
-        my_model.owner = user_from_email.key
-        my_model.put()
-
-        return my_model
-
-  @Contact.method(request_fields=('id',),path='contacts/{id}',http_method='GET', name='contacts.get')
-  def ContactGet(self,my_model) :
-    if not my_model.from_datastore:
-      raise endpoints.NotFoundException('Contact Not found')
+        raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in!' )
+    # Todo: Check permissions
+    my_model.owner = user_from_email.key
+    my_model.put()
     return my_model
 
-  @Contact.query_method(user_required='True',path='contacts',name='contacts.list')
-  def ContectList (self, query) :
+  @Account.method(request_fields=('id',),path='accounts/{id}', http_method='GET', name='accounts.get')
+  def AccountGet(self, my_model):
+    if not my_model.from_datastore:
+      raise endpoints.NotFoundException('Account not found.')
+    return my_model
+
+  @Account.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='accounts', name='accounts.list')
+  def AccountList(self, query):
     return query
+
+
+
+
+
+  
+
+  

@@ -1,267 +1,175 @@
-app.controller('ContactListCtrl', ['$scope','$route','$location','Account','accounts',
-    function($scope,$route,$location,Account,accounts) {
+app.controller('ContactListCtrl', ['$scope','$route','$location','Conf','MultiContactLoader','Contact',
+    function($scope,$route,$location,Conf,MultiContactLoader,Contact) {
       $("#id_Contacts").addClass("active");
       
-      console.log('i am in account list controller');
+      console.log('i am in contact list controller');
+       $("#id_Contacts").addClass("active");
+     $scope.isSignedIn = false;
+     $scope.immediateFailed = false;
+     $scope.nextPageToken = undefined;
+     $scope.prevPageToken = undefined;
+     $scope.isLoading = false;
+     $scope.pagination = {};
     	
-      $scope.accounts = accounts.accounts;
-      // pagination
-      var pagesCount = Math.ceil(accounts.count / 7);
-    console.log('Number of page'+pagesCount);
-      var pagination = {};
-      pagination.pages = [];
-      pagination.current = $route.current.params.page;
-      if ((pagination.current-1)<1){
-        pagination.prev = false;
-      }
-      else{
-        pagination.prev =  pagination.current-1
-      }
-      if ((pagesCount-parseInt(pagination.current))>0){
-        pagination.next =  parseInt(pagination.current)+1;
-      }
-      else{
-        pagination.next = false;
-      }
-      for (var i = 1; i <= pagesCount; i++) {
-        var page = {}
-        page.id = i;
-        page.isCurrent = (i===parseInt($route.current.params.page));
-        pagination.pages.push(page);
-      }
+      $scope.contacts = [];
 
-      $scope.pagination = pagination;
-     // console.log(pagination);
-      // Todo add next and prev to pagination
+      $scope.renderSignIn = function() {
+          console.log('$scope.renderSignIn #start_debug');
+          if (window.is_signed_in){
+              console.log('I am signed-in so you can continue');
+              $scope.processAuth(window.authResult);
+          }else{
+            console.log('I am  not signed-in so render Button');
+            gapi.signin.render('myGsignin', {
+            'callback': $scope.signIn,
+            'clientid': Conf.clientId,
+            'requestvisibleactions': Conf.requestvisibleactions,
+            'scope': Conf.scopes,
+            'theme': 'dark',
+            'cookiepolicy': Conf.cookiepolicy,
+            'accesstype': 'offline'
+            });
 
-      // new account
-      $scope.showModal = function(){
-        $('#addAccountModal').modal('show');
-
-      };
-      
-      $scope.account = new Account();
-      $scope.save = function(account){
-        
-        
-        var created_account = $scope.account.create();
-        created_account.then(function(account){
+          }
           
-          $('#addAccountModal').modal('hide');
-          $location.path('/accounts/show/'+account.id);
 
-        });
+     }
+     $scope.listNextPageItems = function(){
+        $scope.isLoading = true;
+       var params = {};
+          if ($scope.nextPageToken){
+            params = {'limit':7,
+                      'pageToken':$scope.nextPageToken
+                     }
+          }else{
+            params = {'limit':7}
+          }
+          console.log('in listNextPageItems');
+          console.log($scope);
+          Contact.list($scope,params);
+     }
+     $scope.listPrevPageItems = function(){
+       $scope.isLoading = true;
+       var params = {};
+          if ($scope.nextPageToken){
+            params = {'limit':7,
+                      'pageToken':$scope.prevPageToken
+                     }
+          }else{
+            params = {'limit':7}
+          }
+          Contact.list($scope,params);
+     }
+     $scope.signIn = function(authResult) {
+        console.log('signIn callback #start_debug');
+        $scope.processAuth(authResult);
         
+     }
 
+     $scope.processAuth = function(authResult) {
+        console.log('process Auth #startdebug');
+        $scope.immediateFailed = true;
+        if (authResult['access_token']) {
+          // User is signed-in
+          console.log('User is signed-in');
+          $scope.immediateFailed = false;
+          $scope.isSignedIn = true;
+          window.is_signed_in = true;
+          window.authResult = authResult;
+          // Call the backend to get the list of accounts
 
-      };
+          $scope.listNextPageItems();
+        } else if (authResult['error']) {
+          if (authResult['error'] == 'immediate_failed') {
+            $scope.immediateFailed = true;
 
-
-      
-}]);
-app.controller('ContactShowCtrl', ['$scope','$route','$location','account','Topic','Note','WhoHasAccess','User',
-    function($scope,$route,$location,account,Topic,Note,WhoHasAccess,User) {
-      $("#id_Accounts").addClass("active");
-      var tab = $route.current.params.accountTab;
-      switch (tab)
-        {
-        case 'notes':
-         $scope.selectedTab = 1;
-          break;
-        case 'about':
-         $scope.selectedTab = 2;
-          break;
-        case 'contacts':
-         $scope.selectedTab = 3;
-          break;
-        case 'opportunities':
-         $scope.selectedTab = 4;
-          break;
-        case 'cases':
-         $scope.selectedTab = 5;
-          break;
-        default:
-        $scope.selectedTab = 1;
-
+            window.location.replace('/sign-in');
+            console.log('Immediate Failed');
+          } else {
+            console.log('Error:' + authResult['error']);
+          }
         }
-      
-
-      $scope.account = account;
-      var prop = {}
-      prop.topicaboutkind = 'Account';
-      prop.topicaboutitem = account.id;
-      
-      prop.page = 1;
-      var topic = new Topic(prop);
-      console.log(topic);
-      $scope.note = new Note();
-      var propsharing = {};
-      console.log(account);
-      propsharing.obj = account.related_object;
-      propsharing.itemid = account.id;
-      var who = new WhoHasAccess(propsharing);
-      $scope.selectedinvitee = undefined;
-
-      
-
-      $scope.showSharingSettings = function () {
-            var ac_list = who.get();
-            var whohasaccess = [];
-            var inv = new User();
-      
-            ac_list.then(function(ac){
-                
-                console.log(ac);
-                var ownerac = {}
-                ownerac.name = account.ownername;
-                ownerac.email = account.owner;
-                ownerac.role = 'owner';
-                ac.whohasaccess.push(ownerac);
-                $scope.whohasaccess = ac.whohasaccess;
-                console.log(ac.is_public);
-
-                $scope.ispublic = ac.is_public;
-            });
-            var inv_list = inv.list();
-            inv_list.then(function(invitees){
-              console.log('in invitees');
-              console.log(invitees);
-              $scope.users = invitees;
-
-            });
-            /*
-            user = new User();
-        user.organization = $scope.organization;
-        console.log(user);
-        
-            var user_list = user.list();
-      
-            user_list.then(function(users){
-                
-                console.log(users);
-                $scope.users = users.users;
-                
-                
-                //var arr = $.map(users.users, function (value, key) { return value; });
-                
-               // console.log(arr);
-                
-           });*/
-
-
-
-
-            
-            $scope.sharingSettingsShouldBeOpen = true;
-       };
-
-      $scope.closeSharingSettings = function () {
-        
-        $scope.sharingSettingsShouldBeOpen = false;
-      };
-      $scope.shareObject = function (selectedinvitee) {
-        console.log(selectedinvitee);
-        
-      };
-      $scope.opts = {
-          backdropFade: true,
-          dialogFade:true
-      };
-
-      $scope.addNote = function(note){
-        note.noteaboutkind = 'Account';
-        note.noteaboutitemid = $scope.account.id;
-        
-        
-        var created_note = $scope.note.create();
-        created_note.then(function(note){
-          
-          console.log('/accounts/show/'+$scope.account.id+'/notes/'+note.id);
-        $location.path('/accounts/show/'+$scope.account.id+'/notes/'+note.id);
-        $location.replace();
-
-      });
-      };
-      
-      $scope.paginator = function(topics){
-          var pagesCount = Math.ceil(topics.count / 7);
-          console.log(pagesCount);
-          var pagination = {};
-          pagination.pages = [];
-          pagination.current = topic.page;
-          if ((pagination.current-1)<1){
-            pagination.prev = false;
-          }
-          else{
-            pagination.prev =  pagination.current-1
-          }
-          if ((pagesCount-parseInt(pagination.current))>0){
-            pagination.next =  parseInt(pagination.current)+1;
-          }
-          else{
-            pagination.next = false;
-          }
-          for (var i = 1; i <= pagesCount; i++) {
-            var page = {}
-            page.id = i;
-            page.isCurrent = (i===parseInt(topic.page));
-            pagination.pages.push(page);
-          }
-
-
-
-            return pagination;
-
-      };
-      $scope.refreshTopics = function(page){
-            topic.page = page;
-            var topic_list = topic.list();
-      
-            topic_list.then(function(topics){
-                
-                console.log(topics);
-                
-                $scope.pagination = $scope.paginator(topics);
-                
-                $scope.topics = topics;
-                
-               
-
-              });
-            
-
-          //  $scope.pagination = $scope.paginator();
-
-
-      };
-      $scope.refreshTopics(1);
-     //console.log($scope.topics);
-      $("#id_Accounts").addClass("current");
-    	
-}]);
-
-app.controller('AccountNewCtrl', ['$scope','$location','Account',
-    function($scope,$location,Account) {
-      $("#id_Accounts").addClass("current");
+     }
+     $scope.renderSignIn();
+    
+      // new Contact
       $scope.showModal = function(){
-        $('#addAccountModal').modal('show');
+        $('#addContactModal').modal('show');
 
       };
       
-      $scope.account = new Account();
-      $scope.save = function(account){
-        
-        var created_account = $scope.account.create();
-        created_account.then(function(account){
-          
-          $('#addAccountModal').modal('hide');
-          $location.path('/accounts/show/'+account.id);
-
-        });
-        
-
-
+    
+      $scope.save = function(contact){
+        Contact.insert(contact);
       };
-      $scope.showModal();
-    	
+
+
+      
+}]);
+app.controller('ContactShowCtrl', ['$scope','$route','$location','Conf','Contact',
+    function($scope,$route,$location,Conf,Contact) {
+ console.log('I am in ContactShowCtrl');
+      $("#id_Contacts").addClass("active");
+     $scope.isSignedIn = false;
+     $scope.immediateFailed = false;
+     $scope.isContentLoaded = false;
+     $scope.accounts = [];
+     $scope.renderSignIn = function() {
+          console.log('$scope.renderSignIn #start_debug');
+          if (window.is_signed_in){
+              console.log('I am signed-in so you can continue');
+              $scope.processAuth(window.authResult);
+          }else{
+            console.log('I am  not signed-in so render Button');
+            gapi.signin.render('myGsignin', {
+            'callback': $scope.signIn,
+            'clientid': Conf.clientId,
+            'requestvisibleactions': Conf.requestvisibleactions,
+            'scope': Conf.scopes,
+            'theme': 'dark',
+            'cookiepolicy': Conf.cookiepolicy,
+            'accesstype': 'offline'
+            });
+
+          }
+          
+
+     }
+     $scope.signIn = function(authResult) {
+        console.log('signIn callback #start_debug');
+        $scope.processAuth(authResult);
+        
+     }
+
+
+     $scope.processAuth = function(authResult) {
+        console.log('process Auth #startdebug');
+        $scope.immediateFailed = true;
+        if (authResult['access_token']) {
+          // User is signed-in
+          console.log('User is signed-in');
+          $scope.immediateFailed = false;
+          $scope.isSignedIn = true;
+          window.is_signed_in = true;
+          window.authResult = authResult;
+          // Call the backend to get the list of accounts
+          var contactid = {'id':$route.current.params.contactId};
+          Contact.get($scope,contactid);
+        } else if (authResult['error']) {
+          if (authResult['error'] == 'immediate_failed') {
+            $scope.immediateFailed = true;
+
+            console.log('Immediate Failed');
+          } else {
+            console.log('Error:' + authResult['error']);
+          }
+        }
+     }
+     $scope.renderSignIn();
+     $('#addContactModal').modal('show');
+
+      
+
+
+
 }]);

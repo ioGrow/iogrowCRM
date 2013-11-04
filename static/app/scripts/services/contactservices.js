@@ -1,6 +1,6 @@
-var accountservices = angular.module('crmEngine.accountservices',[]);
+var contactservices = angular.module('crmEngine.contactservices',[]);
 // Base sercice (create, delete, get)
-accountservices.factory('Conf', function($location) {
+contactservices.factory('Conf', function($location) {
       function getRootUrl() {
         var rootUrl = $location.protocol() + '://' + $location.host();
         if ($location.port())
@@ -17,17 +17,17 @@ accountservices.factory('Conf', function($location) {
          'cookiepolicy': 'single_host_origin'
       };
 });
-accountservices.factory('Account', function($http) {
+accountservices.factory('Contact', function($http) {
   
-  var Account = function(data) {
+  var Contact = function(data) {
     angular.extend(this, data);
   }
 
   
-  Account.get = function($scope,id) {
-          gapi.client.crmengine.accounts.get(id).execute(function(resp) {
+  Contact.get = function($scope,id) {
+          gapi.client.crmengine.contacts.get(id).execute(function(resp) {
             if(!resp.code){
-               $scope.account = resp;
+               $scope.contact = resp;
                $scope.isContentLoaded = true;
                // Call the method $apply to make the update on the scope
                $scope.$apply();
@@ -38,11 +38,11 @@ accountservices.factory('Account', function($http) {
             console.log('gapi #end_execute');
           });
   };
-  Account.list = function($scope,params){
-      gapi.client.crmengine.accounts.list(params).execute(function(resp) {
+  Contact.list = function($scope,params){
+      gapi.client.crmengine.contacts.list(params).execute(function(resp) {
 
               if(!resp.code){
-                 $scope.accounts = resp.items;
+                 $scope.contacts = resp.items;
                  if (resp.nextPageToken){
                    $scope.prevPageToken = $scope.nextPageToken;
                    $scope.nextPageToken = resp.nextPageToken;
@@ -66,13 +66,13 @@ accountservices.factory('Account', function($http) {
   	
 
   };
-  Account.insert = function(account){
-      gapi.client.crmengine.accounts.insert(account).execute(function(resp) {
+  Contact.insert = function(contact){
+      gapi.client.crmengine.contacts.insert(contact).execute(function(resp) {
          console.log('in insert resp');
          console.log(resp);
          if(!resp.code){
-          $('#addAccountModal').modal('hide');
-          window.location.replace('#/accounts/show/'+resp.id);
+          $('#addAContactModal').modal('hide');
+          window.location.replace('#/contacts/show/'+resp.id);
           
          }else{
           console.log(resp.code);
@@ -81,15 +81,15 @@ accountservices.factory('Account', function($http) {
   };
   
 
-return Account;
+return Contact;
 });
 
 // retrieve list account
-accountservices.factory('MultiAccountLoader', ['Account','$route', '$q',
+contactservices.factory('MultiContactLoader', ['Account','$route', '$q',
     function(Account, $route, $q) {
     return function() {
     var delay = $q.defer();
-    gapi.client.crmengine.accounts.list().execute(function(resp) {
+    gapi.client.crmengine.contacts.list().execute(function(resp) {
             console.log('after execution');
            // console.log(resp);
             
@@ -112,15 +112,15 @@ accountservices.factory('MultiAccountLoader', ['Account','$route', '$q',
  // };
 }]);
 
-// retrieve an account
-accountservices.factory('AccountLoader', ['Account', '$route', '$q',
-    function(Account, $route, $q) {
+// retrieve a contact
+contactservices.factory('ContactLoader', ['Contact', '$route', '$q',
+    function(Contact, $route, $q) {
   return function() {
     var delay = $q.defer();
     
-    var accountId = $route.current.params.accountId;
+    var contactId = $route.current.params.contactId;
     
     
-    return Account.get($route.current.params.accountId);
+    return Contact.get($route.current.params.contactId);
   };
 }]);

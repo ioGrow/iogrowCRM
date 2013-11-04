@@ -68,7 +68,7 @@ class BaseHandler(webapp2.RequestHandler):
     def set_user_locale(self):
         # Get user's Localization settings
         locale = self.request.GET.get('locale', 'en_US')
-        i18n.get_i18n().set_locale('ar')
+        i18n.get_i18n().set_locale('en')
       
 
 
@@ -223,6 +223,26 @@ class AccountShowHandler(BaseHandler, SessionEnabledHandler):
             template_values = {'tabs':tabs}
             template = jinja_environment.get_template('templates/accounts/show.html')
             self.response.out.write(template.render(template_values))
+class ContactListHandler(BaseHandler, SessionEnabledHandler):
+  def get(self):
+    if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+      user = self.get_user_from_session()
+      self.set_user_locale()
+      tabs = user.get_user_active_tabs()
+      self.set_user_locale()
+      template_values={'tabs':tabs}
+      template = jinja_environment.get_template('templates/contacts/list.html')
+      self.response.out.write(template.render(template_values))
+class ContactShowHandler(BaseHandler,SessionEnabledHandler):
+  def get(self):
+    if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+      user = self.get_user_from_session()
+      self.set_user_locale()
+      tabs = user.get_user_active_tabs()
+      self.set_user_locale()
+      template_values={'tabs':tabs}
+      template = jinja_environment.get_template('templates/contacts/show.html')
+      self.response.out.write(template.render(template_values))
 
 class GooglePlusConnect(SessionEnabledHandler):
     @staticmethod
@@ -1196,6 +1216,8 @@ routes = [
     # Templates Views Routes
     ('/views/accounts/list',AccountListHandler),
     ('/views/accounts/show',AccountShowHandler),
+    ('/views/contacts/list',ContactListHandler),
+    ('/views/contacts/show',ContactShowHandler),
     ('/hello',HelloWorldHandler),
     ('/sign-in',SignInHandler),
     ('/sign-up',SignUpHandler),

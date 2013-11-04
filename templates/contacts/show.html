@@ -42,16 +42,20 @@
                 </div>
                 
             <h2>
-            <a href="/#/accounts/p/1" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
-            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Accounts")}} > <%= account.name %></h2>
+            <a href="/#/contacts/p/1" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     Contacts > <%= contact.firstname %></h2>
             
 
-           <span>{{_("Type")}}: </span><span><span><a class="tag" href="#">#<%=account.account_type%></a></span>
-            <br><span>{{_("Industry")}}: </span><span><span><a class="tag" href="#">#<%=account.industry%></a></span> 
-             </br>
-             <span class="page-meta"><i class="icon-pencil"><a ng-click="editaccount()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |  <i class="icon-trash"><a ng-click="delete(account)" class="btn-link addAnotherPhone">  {{_("Delete")}}</a></i></span>
+            <ul class="unstyled inline blog-tags">
+                        <li>
+                           
+                          <a class="tag" href="#">#Technology</a> 
+                          <a class="tag" href="#">#Education</a>
+                          <a class="tag" href="#">#Internet</a>
+                        </li>
+            </ul>
 
-           
+            
             
             <hr/>
             
@@ -65,7 +69,7 @@
               <!-- BEGIN PORTLET-->
               <div class="portlet paddingless">
                 <div class="portlet-title line">
-                  <div class="caption">Account Feeds</div>
+                  <div class="caption">Contact Feeds</div>
                   
                 </div>
                 <div class="portlet-body">
@@ -657,61 +661,11 @@
               <!-- END PORTLET-->
             </div>
             </div>
-
           
             
           
         
         <!-- END PAGE CONTENT-->
       </div>
-      <!--HKA 11.10.2013 Edit Account -->
-             <div id="EditAccountModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("Edit Account")}}</h3>
-              </div>
-
-              <div class="modal-body">
-                 <form id="editAccount" name="editlead" ng-submit="put(account)" class="form-horizontal"> 
-                
-
-                  <div class="control-group">
-                        <label  class="required control-label">{{_("Name")}} *</label>
-                       
-                        <div class="controls">
-                          <input type="text" required id="id_lastname" ng-model="account.name">
-                          
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Type")}}</label>
-                       
-                        <div class="controls">
-                          <input type="text"  id="id_type" ng-model="account.account_type">
-                          
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Industry")}} *</label>
-                       
-                        <div class="controls">
-                          <input type="text"  required id="id_industry" ng-model="account.industry">
-                          
-                        </div>
-                    </div>                      
-                  
-                     
-                    
-                  
-                
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
-                <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
-              </div>
-               </form>
-              </div> 
-        </div>
       <!-- END PAGE CONTAINER-->
 </div>

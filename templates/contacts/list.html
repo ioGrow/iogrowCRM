@@ -28,7 +28,7 @@
       </div>
       <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
       <!-- BEGIN PAGE CONTAINER-->
-      <div class="container-fluid"ng-show="immediateFailed">
+      <div class="container-fluid" ng-show="immediateFailed">
          <div class="span12">  
           <h1>Sign-in Button;</h1>
               <span id="signin">
@@ -36,38 +36,38 @@
               </span>
         </div>
       </div>
-      <div id="addAccountModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div id="addContactModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("New Account")}}</h3>
+                <h3 id="myModalLabel">{{_("New Contact")}}</h3>
               </div>
               <div class="modal-body">
-                 <form id="addAccount" name="addaccount" ng-submit="save(account)" class="form-horizontal"> 
+                 <form id="addContact" name="addcontact" ng-submit="save(contact)" class="form-horizontal"> 
                   <fieldset>
                   
                     
 
                     <div class="control-group">
-                        <label  class="required control-label">{{_("Name")}} *</label>
+                        <label  class="required control-label">{{_("First Name")}} *</label>
                        
                         <div class="controls">
-                          <input type="text" required id="id_name" ng-model="account.name">
+                          <input type="text" required id="id_firstname" ng-model="contact.firstname">
                           
                         </div>
                     </div>
                     <div class="control-group">
-                        <label  class="required control-label">{{_("Type")}}</label>
+                        <label  class="required control-label">{{_("Last Name")}}</label>
                        
                         <div class="controls">
-                          <input type="text"  id="id_name" ng-model="account.account_type">
+                          <input type="text"  id="id_lastname" ng-model="contact.lastname">
                           
                         </div>
                     </div>
                     <div class="control-group">
-                        <label  class="required control-label">{{_("Industry")}} </label>
+                        <label  class="required control-label">{{_("Account")}} </label>
                        
                         <div class="controls">
-                          <input type="text"  id="id_name" ng-model="account.industry">
+                          <input type="text"  id="id_account" ng-model="contact.account">
                           
                         </div>
                     </div>
@@ -76,7 +76,7 @@
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button  type="submit" class="btn blue addContactNow">{{_("Add Account")}}</button>
+                <button  type="submit" class="btn blue addContactNow">{{_("Add Contact")}}</button>
               </div>
                </form>
        </div>
@@ -87,12 +87,12 @@
         <div class="row-fluid">
           
           <div class="span12">
-            <h2>{{ _("Accounts") }} </h2>
+            <h2>{{ _("Contacts") }} </h2>
             
             <div class="btn-group">
             
                     <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
-                    {{ _("New Account") }} <i class="icon-plus"></i>
+                    {{ _("New Contact") }} <i class="icon-plus"></i>
                     </button>
             </div>
                
@@ -105,19 +105,19 @@
             <div class="row-fluid cards-container">
             <div class="inner-cards-container">
             
-              <div ng-repeat="account in accounts" class="span3 responsive" data-tablet="span6" data-desktop="span3">
+              <div ng-repeat="contact in contacts" class="span3 responsive" data-tablet="span6" data-desktop="span3">
                 <div class="dashboard-stat cards">
                   
                   <div class="details">
-                    <a href="/#/accounts/show/<%= account.id %>"><h2 class="cardTitle">
-                      <%= account.name %>
+                    <a href="/#/contacts/show/<%= contact.id %>"><h2 class="cardTitle">
+                      <%= contact.firstname %> <%=contact.lastname%>
                     </h2></a>
                     <div class="desc">                           
                       
-                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#<%=account.industry%></a>
+                    <a  class="desc" href="/#/contacts/industry/<%=contact.industry%>">#<%=contact.lastname%></a>
                     </div>
                   </div>
-                  <a class="more" href="/#/accounts/show/<%= account.id %>">
+                  <a class="more" href="/#/contacts/show/<%= contact.id %>">
                   View more <i class="m-icon-swapright m-icon-white"></i>
                   </a>                 
                 </div>

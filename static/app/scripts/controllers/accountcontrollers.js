@@ -6,6 +6,8 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
+     $scope.prevPageToken = undefined;
+     $scope.isLoading = false;
      $scope.pagination = {};
      
      $scope.accounts = [];
@@ -31,7 +33,30 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
 
      }
      $scope.listNextPageItems = function(){
-      Account.list();
+        $scope.isLoading = true;
+       var params = {};
+          if ($scope.nextPageToken){
+            params = {'limit':7,
+                      'pageToken':$scope.nextPageToken
+                     }
+          }else{
+            params = {'limit':7}
+          }
+          console.log('in listNextPageItems');
+          console.log($scope);
+          Account.list($scope,params);
+     }
+     $scope.listPrevPageItems = function(){
+       $scope.isLoading = true;
+       var params = {};
+          if ($scope.nextPageToken){
+            params = {'limit':7,
+                      'pageToken':$scope.prevPageToken
+                     }
+          }else{
+            params = {'limit':7}
+          }
+          Account.list($scope,params);
      }
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
@@ -51,15 +76,7 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
           window.authResult = authResult;
           // Call the backend to get the list of accounts
 
-          var params = {};
-          if ($scope.nextPageToken){
-            params = {'limit':7,
-                      'pageToken':$scope.nextPageToken
-                     }
-          }else{
-            params = {'limit':7}
-          }
-          Account.list($scope,params);
+          $scope.listNextPageItems();
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
             $scope.immediateFailed = true;
@@ -148,6 +165,10 @@ app.controller('AccountShowCtrl', ['$scope','$route','$location','Conf','Account
      }
      $scope.renderSignIn();
      $('#addAccountModal').modal('show');
+
+    $scope.editaccount = function() {
+       $('#EditAccountModal').modal('show');
+    }
 
       
 
