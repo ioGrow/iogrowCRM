@@ -29,8 +29,9 @@ accountservices.factory('Account', function($http) {
             if(!resp.code){
                $scope.account = resp;
                $scope.isContentLoaded = true;
+               $scope.listTopics(resp);
                // Call the method $apply to make the update on the scope
-               $scope.$apply();
+               //$scope.apply();
 
             }else {
                alert("Error, response is: " + angular.toJson(resp));
@@ -39,32 +40,32 @@ accountservices.factory('Account', function($http) {
           });
   };
   Account.list = function($scope,params){
+      $scope.isLoading = true;
       gapi.client.crmengine.accounts.list(params).execute(function(resp) {
-
               if(!resp.code){
                  $scope.accounts = resp.items;
+                 if ($scope.currentPage>1){
+                      $scope.pagination.prev = true;
+                   }else{
+                       $scope.pagination.prev = false;
+                   }
                  if (resp.nextPageToken){
-                   $scope.prevPageToken = $scope.nextPageToken;
-                   $scope.nextPageToken = resp.nextPageToken;
-
+                   var nextPage = $scope.currentPage + 1;
+                   // Store the nextPageToken
+                   $scope.pages[nextPage] = resp.nextPageToken;
                    $scope.pagination.next = true;
-                   $scope.pagination.prev = true;
+                   
                  }else{
                   $scope.pagination.next = false;
                  }
-                 // Call the method $apply to make the update on the scope
+                 // Loaded succefully
                  $scope.isLoading = false;
+                 // Call the method $apply to make the update on the scope
                  $scope.$apply();
-                 
-
               }else {
                  alert("Error, response is: " + angular.toJson(resp));
               }
-              console.log('gapi #end_execute');
-        });
-    
-  	
-
+      });
   };
   Account.insert = function(account){
       gapi.client.crmengine.accounts.insert(account).execute(function(resp) {
