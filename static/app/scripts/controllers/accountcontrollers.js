@@ -366,6 +366,10 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
 
 
 
+    $scope.editaccount = function() {
+       $('#EditAccountModal').modal('show');
+    }
+
       
 
 

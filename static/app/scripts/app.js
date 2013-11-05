@@ -1,5 +1,7 @@
 var app = angular.module('crmEngine',['ui.bootstrap.datetimepicker','ui.bootstrap','crmEngine.accountservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.eventservices', 'crmEngine.leadservices']);
 
+
+
 app.config(function($interpolateProvider){
   $interpolateProvider.startSymbol('<%=');
   $interpolateProvider.endSymbol('%>');
@@ -41,12 +43,7 @@ app.config(function($httpProvider) {
 app.config(['$routeProvider', function($routeProvider) {
      $routeProvider.
       when('/accounts/p/:page', {
-        controller: 'AccountListCtrl',
-        
-        
-        
-        
-        
+        controller: 'AccountListCtrl',        
         templateUrl:'/views/accounts/list'
       }).when('/accounts/show/:accountId/tab/:accountTab', {
         controller: 'AccountShowCtrl',
@@ -54,9 +51,7 @@ app.config(['$routeProvider', function($routeProvider) {
         
         templateUrl:'/views/accounts/show'
       }).when('/accounts/show/:accountId', {
-        controller: 'AccountShowCtrl',
-       
-        
+        controller: 'AccountShowCtrl',       
         templateUrl:'/views/accounts/show'
       }).when('/accounts/edit/:accountId', {
         controller: 'AccountEditCtrl',
@@ -69,23 +64,11 @@ app.config(['$routeProvider', function($routeProvider) {
 
         
       }).when('/contacts/p/:page', {
-        controller: 'ContactListCtrl',
-        resolve: {
-          accounts: ["MultiAccountLoader", function(MultiAccountLoader) {
-            return MultiAccountLoader();
-          }]
-        },
-        
-        templateUrl:'/contacts/'
+        controller: 'ContactListCtrl',      
+        templateUrl:'/views/contacts/list'
         //HKA 22.08.13 Step 1 create route
-      }).when('/contacts/show/:accountId', {
-        controller: 'ContactShowCtrl',
-        resolve: {
-          account: ["AccountLoader", function(AccountLoader) {
-            return AccountLoader();
-          }]
-        },
-        
+      }).when('/contacts/show/:contactId', {
+        controller: 'ContactShowCtrl',        
         templateUrl:'/views/contacts/show'
       }).when('/opportunities/p/:page', {
         controller: 'OpportunityListCtrl',
