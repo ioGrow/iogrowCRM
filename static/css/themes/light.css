@@ -660,3 +660,9 @@ background-color: #fff;
 .pickerin{
   height: 325px;
 }
+.calendar-picker{
+  padding-left: 150px;
+}
+.new-event-container{
+  width: 600px;
+}

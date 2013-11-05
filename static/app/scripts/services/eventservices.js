@@ -1,28 +1,28 @@
-var topicservices = angular.module('crmEngine.taskservices',[]);
+var topicservices = angular.module('crmEngine.eventservices',[]);
 
-topicservices.factory('Task', function($http) {
+topicservices.factory('Event', function($http) {
   
-  var Task = function(data) {
+  var Event = function(data) {
     angular.extend(this, data);
   }
 
   
-  Task.get = function(id) {
+  Event.get = function(id) {
     return $http.get('/api/topics/' + id).then(function(response) {
       return new Topic(response.data);
     });
   };
-  Task.list = function($scope,params){
-      console.log('in tasks.list');
+  Event.list = function($scope,params){
+      console.log('in events.list');
       console.log(params);
 
       $scope.isLoading = true;
-      gapi.client.crmengine.tasks.list(params).execute(function(resp) {
+      gapi.client.crmengine.events.list(params).execute(function(resp) {
               if(!resp.code){
                 console.log('in topics.list looking for pagingation');
                 console.log($scope.currentPage);
 
-                 $scope.tasks = resp.items;
+                 $scope.events = resp.items;
                  /*if ($scope.currentPage>1){
                       console.log('Should show PREV');
                       $scope.pagination.prev = true;
@@ -44,21 +44,21 @@ topicservices.factory('Task', function($http) {
 
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
-                 $scope.hilightTask();
+                 $scope.hilightEvent();
               }else {
                  alert("Error, response is: " + angular.toJson(resp));
               }
       });
   };
-   Task.insert = function($scope,params){
+   Event.insert = function($scope,params){
       $scope.isLoading = true;
-      gapi.client.crmengine.tasks.insert(params).execute(function(resp) {
-         console.log('in insert TASK resp');
+      gapi.client.crmengine.events.insert(params).execute(function(resp) {
+         console.log('in insert Event resp');
          console.log(resp);
          if(!resp.code){
           console.log(resp);
           // TME_02_11_13 when a note is inserted reload topics
-          $scope.listTasks();
+          $scope.listEvents();
           $scope.isLoading = false;
 
           $scope.apply();
@@ -73,5 +73,5 @@ topicservices.factory('Task', function($http) {
 
   
 
-return Task;
+return Event;
 });

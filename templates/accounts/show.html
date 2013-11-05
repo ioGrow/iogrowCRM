@@ -481,29 +481,14 @@
                 <div class="portlet-body" id="chats">
                   <div class="scroller" style="height:200x" data-always-visible="1" data-rail-visible="0">
                     <div id="newTask">
-                                <p><strong>Tasks:</strong></p>
+                                <p><strong>Tasks:</strong><a href="#"> [View all(25)]</a></p>
 
                                  
                                   <ul id="tasks" class="unstyled">
-                                    <li ng-repeat="task in tasks">
+                                    <li ng-repeat="task in tasks" id="task_<%=$index%>">
                                       <input value="check1" type="checkbox">
                                       <!-- Name -->
-                                    <span><a href="/tasks/1" class="discussion-content"><%= task.title%> [before: <%= task.due%>]</a></span>
-                                    </li>
-                                    <li>
-                                      <input value="check1" type="checkbox">
-                                      <!-- Name -->
-                                    <span><a href="/tasks/1" class="discussion-content"> Talk with Teacher</a></span>
-                                    </li>
-                                    <li>
-                                      <input value="check1" type="checkbox">
-                                      <!-- Name -->
-                                    <span><a href="/tasks/1" class="discussion-content"> Find interns</a></span>
-                                    </li>
-                                    <li>
-                                      <input value="check1" type="checkbox">
-                                      <!-- Name -->
-                                    <span><a href="/tasks/1" class="discussion-content"> Pepare plan to migrate</a></span>
+                                    <span><a href="/tasks/1" class="discussion-content"><%= task.title%> <span ng-show="task.due"> [before: <%= task.due | date:'yyyy-MM-dd '%>]</span></a></span>
                                     </li>
                                     
                                     <li><a href="#myModal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new task</a></li>
@@ -514,6 +499,11 @@
 
                                  
                                   <ul id="tasks" class="unstyled">
+                                    <li ng-repeat="event in events" id="event_<%=$index%>">
+                                      <input value="check1" type="checkbox">
+                                      <!-- Name -->
+                                    <span><a href="/tasks/1" class="discussion-content"><%= event.title%> <span ng-show="event.starts_at"> [<%= event.starts_at | date:'yyyy-MM-dd '%>]</span></a></span>
+                                    </li>
                                    
                                     
 
@@ -527,26 +517,19 @@
           <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 id="myModalLabel">New Task</h3>
+              <h3 id="myModalLabel">Add a new Task</h3>
             </div>
             <div class="modal-body pickerin">
                      <div class="controls controls-row">
-                                          <form id="addNote" ng-submit="addTask(task,data)" class="ng-pristine ng-valid">
+                                          <form id="addTask" ng-submit="addTask(task)" class="ng-pristine ng-valid">
                                                   <input class="input-block-level" autofocus type="text" placeholder="Add a new task" id="taskTitle" ng-model="task.title">
                                                   
-                                                  <p>When's it due?</p>
-                                                  <datetimepicker data-ng-model="data.date"
-                                                  data-datetimepicker-config="{ startView:'day', minView:'day' }" />
-                                                
-                                                       
-
-                                                   
-
-                        
-                                               
-
-                                                  
-                  </div>
+                                                  <p><strong>When's it due?</strong></p>
+                                                  <center>
+                                                    <datetimepicker data-ng-model="task.due"
+                                                    data-datetimepicker-config="{ startView:'day', minView:'day' }" />
+                                                  </center>
+                     </div>
             </div>
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
@@ -559,32 +542,30 @@
           </div>
 
           <!--Event Modal -->
-          <div id="newEventModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div id="newEventModal" class="modal  hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
               <h3 id="myModalLabel">New Event</h3>
             </div>
             <div class="modal-body">
                      <div class="controls controls-row">
-                                                  <input class="input-block-level" autofocus="" type="text" placeholder="Add a new event" id="taskTitle">
-                                                  <p>When?</p>
-                                                
-                                                        <div id="event_start_date" class="input-append">
-                                                          <input placeholder="Start" data-format="MM/dd/yyyy HH:mm:ss PP" type="text">
-                                                          <span class="add-on">
-                                                            <i data-time-icon="icon-time" data-date-icon="icon-calendar">
-                                                            </i>
-                                                          </span>
-                                                        </div>
-                                                        <div id="event_end_date" class="input-append">
-                                                          <input placeholder="End" data-format="MM/dd/yyyy HH:mm:ss PP" type="text">
-                                                          <span class="add-on">
-                                                            <i data-time-icon="icon-time" data-date-icon="icon-calendar">
-                                                            </i>
-                                                          </span>
-                                                        </div>
-                                                    <input class="input-block-level" autofocus="" type="text" placeholder="Where?" id="taskTitle">
-                                                    <textarea class="input-block-level" placeholder="Description"></textarea>
+                            <form id="addTask" ng-submit="addEvent(ioevent)" class="ng-pristine ng-valid">
+                                                  <input class="input-block-level" autofocus type="text" placeholder="Add a new event" id="taskTitle" ng-model="ioevent.title">
+                                                  <p><strong>When?</strong></p>
+                                                <div class="row-fluid">
+                                                  <div class="span6">
+                                                    <p> <strong>Starts</strong>: <%=ioevent.starts_at | date:'MMMM dd, yyyy, HH:mm'%></p>
+                                                        <datetimepicker data-ng-model="ioevent.starts_at"
+                                                    data-datetimepicker-config="{ startView:'day', minView:'minute' }" />
+                                                  </div>
+                                                  <div class="span6">
+                                                  <p><strong>Ends</strong>: <%=ioevent.ends_at | date:'MMMM dd, yyyy, HH:mm'%></p>
+                                                        <datetimepicker data-ng-model="ioevent.ends_at"
+                                                    data-datetimepicker-config="{ startView:'day', minView:'minute' }" />
+                                                  </div>
+                                                </div>
+                                                    <input class="input-block-level" autofocus="" type="text" placeholder="Where?" id="taskTitle" ng-model="ioevent.where">
+                                                    
                                                     
                                                     
                                                
@@ -594,7 +575,11 @@
             </div>
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-              <button class="btn btn-primary">Add this event</button>
+              
+               <input ng-hide="isLoading" type="submit" class="btn green" value="Add this event">
+                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                                        
+            </form>
             </div>
           </div>
                                     

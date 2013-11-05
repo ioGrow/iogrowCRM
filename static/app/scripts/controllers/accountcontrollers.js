@@ -112,8 +112,8 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
 
     
 }]);
-app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Conf','Account', 'Topic','Note','Task','WhoHasAccess','User',
-    function($scope,$filter,$route,$location,Conf,Account,Topic,Note,Task,WhoHasAccess,User) {
+app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Conf','Account', 'Topic','Note','Task','Event','WhoHasAccess','User',
+    function($scope,$filter,$route,$location,Conf,Account,Topic,Note,Task,Event,WhoHasAccess,User) {
       console.log('i am in account list controller');
       $("#id_Accounts").addClass("active");
       var tab = $route.current.params.accountTab;
@@ -152,28 +152,86 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
      $scope.accounts = [];
      
      
-     $scope.addTask = function(task,data){
+     $scope.addTask = function(task){
       
-      $('#myModal').modal('hide');
-      var params ={}
+        $('#myModal').modal('hide');
+        var params ={}
 
-      console.log('adding a new task');
-      console.log(task);
-      console.log(data);
-      if (data.date){
+        console.log('adding a new task');
+        console.log(task);
+        
+        if (task.due){
 
-      var dueDate= $filter('date')(data.date,['yyyy-MM-dd']);
-      dueDate = dueDate +'T00:00:00.000000'
-      params ={'title': task.title,
-                'due': dueDate
-                }
-      console.log(dueDate);
-    }else{
-        params ={'title': task.title}
-    };
-    Task.insert($scope,params);
+            var dueDate= $filter('date')(task.due,['yyyy-MM-dd']);
+            dueDate = dueDate +'T00:00:00.000000'
+            params ={'title': task.title,
+                      'due': dueDate
+            }
+            console.log(dueDate);
+        }else{
+            params ={'title': task.title}
+        };
+        Task.insert($scope,params);
+     }
 
-    
+     $scope.hilightTask = function(){
+        console.log('Should higll');
+        $('#task_0').effect("highlight","slow");
+        $('#task_0').effect( "bounce", "slow" );
+       
+     }
+     $scope.listTasks = function(){
+        var params = {/*'about_kind':'Account',
+                      'about_item':$scope.account.id,*/
+                      'order': '-updated_at',
+                      'limit': 5
+                      };
+        Task.list($scope,params);
+
+     }
+     $scope.addEvent = function(ioevent){
+      
+        $('#newEventModal').modal('hide');
+        var params ={}
+
+        console.log('adding a new event');
+        
+        
+        if (ioevent.starts_at){
+            if (ioevent.ends_at){
+              params ={'title': ioevent.title,
+                      'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                      'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                      'where': ioevent.where
+              }
+
+            }else{
+              params ={'title': task.title,
+                      'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                      'where': ioevent.where
+              }
+            }
+            console.log('inserting the event');
+            console.log(params);
+            Event.insert($scope,params);
+
+            
+        };
+     }
+     $scope.hilightEvent = function(){
+        console.log('Should higll');
+        $('#event_0').effect("highlight","slow");
+        $('#event_0').effect( "bounce", "slow" );
+       
+     }
+     $scope.listEvents = function(){
+        var params = {/*'about_kind':'Account',
+                      'about_item':$scope.account.id,*/
+                      'order': 'starts_at',
+                      'limit': 5
+                      };
+        Event.list($scope,params);
+
      }
 
      $scope.renderSignIn = function() {
