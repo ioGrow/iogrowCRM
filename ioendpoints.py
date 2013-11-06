@@ -9,8 +9,10 @@ from iomodels.crmengine.campaigns import Campaign
 from iomodels.crmengine.notes import Note,Topic
 from iomodels.crmengine.tasks import Task
 from iomodels.crmengine.events import Event
+from model import User
 import model
 import auth_util
+from google.appengine.api import mail
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
 CLIENT_ID = '330861492018.apps.googleusercontent.com'
@@ -201,4 +203,44 @@ class CrmEngineApi(remote.Service):
   @Event.query_method(user_required=True,query_fields=('about_kind','about_item','status', 'starts_at','ends_at', 'limit', 'order', 'pageToken'),path='events', name='events.list')
   def EventList(self, query):
     
+    return query
+###################################### Users API ################################################
+  @User.method(user_required=True,path='users', http_method='POST', name='users.insert')
+  def UserInsert(self, my_model):
+
+    
+    
+    user = endpoints.get_current_user()
+    if user is None:
+        raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in!' )
+    # Todo: Check permissions
+    my_model.organization = user_from_email.organization
+    my_model.status = 'invited'
+    profile = model.Profile.query(model.Profile.name=='Standard User', model.Profile.organization==user_from_email.organization).get()
+    my_model.init_user_config(user_from_email.organization,profile.key)
+    my_model.put()
+    confirmation_url = "http://iogrow-dev.appspot.com/sign-in?id=" + str(my_model.id) + '&'
+    sender_address = "ioGrow notifications <notifications@iogrow-dev.appspotmail.com>"
+    subject = "Confirm your registration"
+    body = """
+Thank you for creating an account! Please confirm your email address by
+clicking on the link below:
+
+%s
+""" % confirmation_url
+
+    mail.send_mail(sender_address, my_model.email , subject, body)
+    return my_model
+
+  @User.method(request_fields=('id',),path='users/{id}', http_method='GET', name='users.get')
+  def UserGet(self, my_model):
+    if not my_model.from_datastore:
+      raise endpoints.NotFoundException('Account not found.')
+    return my_model
+
+  @User.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='users', name='users.list')
+  def UserList(self, query):
     return query

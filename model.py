@@ -243,6 +243,7 @@ class Profile(EndpointsModel):
 # The User model store all the informations about the user
 class User(EndpointsModel):
     # General informations about the user
+    _message_fields_schema = ('id','email', 'google_user_id','google_display_name','google_public_profile_photo_url','language')
     email = ndb.StringProperty()
     google_user_id = ndb.StringProperty()
     google_display_name = ndb.StringProperty()

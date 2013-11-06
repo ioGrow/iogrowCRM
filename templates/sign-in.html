@@ -202,11 +202,13 @@ var helper = (function() {
      */
     connectServer: function() {
       console.log(this.authResult.code);
+      var userId = '{{ID}}';
       $.ajax({
-        type: 'post',
+        type: 'POST',
         url: '/gconnect',
-        contentType: 'application/json',
+        
         success: function(result) {
+          console.log('i am in connectServer show me result please');
           console.log(result);
           if (result==false){
              window.location.replace('/');
@@ -216,8 +218,10 @@ var helper = (function() {
           }
          // helper.people();
         },
-        processData: false,
-        data: this.authResult.code
+        
+        
+
+        data: {code:this.authResult.code, id: userId}
       });
     },
     /**
