@@ -243,6 +243,27 @@ class ContactShowHandler(BaseHandler,SessionEnabledHandler):
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/contacts/show.html')
       self.response.out.write(template.render(template_values))
+class OpportunityListHandler(BaseHandler,SessionEnabledHandler):
+  def get(self):
+    if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+      user = self.get_user_from_session()
+      self.set_user_locale()
+      tabs = user.get_user_active_tabs()
+      self.set_user_locale()
+      template_values = {'tabs':tabs}
+      template = jinja_environment.get_template('templates/opportunities/opportunity_list.html')
+      self.response.out.write(template.render(template_values))
+class OpportunityShowHandler(BaseHandler,SessionEnabledHandler):
+  def get (self):
+    if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+      user = self.get_user_from_session()
+      self.set_user_locale()
+      tabs = user.get_user_active_tabs()
+      self.set_user_locale()
+      template_values={'tabs':tabs}
+      template = jinja_environment.get_template('templates/opportunities/opportunity_show.html')
+      self.response.out.write(template.render(template_values))
+   
 
 class GooglePlusConnect(SessionEnabledHandler):
     @staticmethod
@@ -1218,6 +1239,8 @@ routes = [
     ('/views/accounts/show',AccountShowHandler),
     ('/views/contacts/list',ContactListHandler),
     ('/views/contacts/show',ContactShowHandler),
+    ('/views/opportunities/list',OpportunityListHandler),
+    ('/views/opportunities/show',OpportunityShowHandler),
     ('/hello',HelloWorldHandler),
     ('/sign-in',SignInHandler),
     ('/sign-up',SignUpHandler),

@@ -1,0 +1,345 @@
+<div class="page-sidebar nav-collapse collapse">
+      <!-- BEGIN SIDEBAR MENU -->        
+      <ul class="page-sidebar-menu">
+        
+        {% for tab in tabs %}
+           <li id="id_{{tab.name}}"  ><a href="{{ tab.url }}"><i class="icon-cogs"></i><span class="title">{{ tab.name }}</span></a></li>
+          {% endfor %}
+
+
+        
+      </ul>
+     
+     
+      <!-- END SIDEBAR MENU -->
+</div>
+    
+<div  class="page-content">
+
+   <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+      <div id="portlet-config" class="modal hide">
+        <div class="modal-header">
+        boo <button data-dismiss="modal" class="close" type="button"></button>
+          <h3>portlet Settings</h3>
+        </div>
+        <div class="modal-body">
+          <p>Here will be a configuration form</p>
+        </div>
+      </div>
+      <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+      <!-- BEGIN PAGE CONTAINER-->
+      <div class="container-fluid">
+        
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row-fluid">
+          
+          <div class="span12">
+            <div class="pull-right sharebuttonDiv"> 
+                  <a href="" class="btn blue jfk-button jfk-button-action">
+                    <i class="icon-lock"></i> {{_("Share")}}
+                  </a>
+                        
+                        
+                     
+                </div>
+                
+            <h2>
+            <a href="/#/opportunities/" data-toggle="tooltip" data-placement="bottom" title="Back to Opportunities">
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Opportunities")}} > <%=opportunity.description %></h2>
+            
+
+            <span class="opportunity-amount" >$<%=opportunity.amount %></span><span> associated with </span><span><a class="tag" href="#">#<%=opportunity.account %></a></span>
+            <br><span>Stage: </span><span><span><a class="tag" href="#">#<%=opportunity.stage %></a></span>
+            <br><span>Category: </span><span><span><a class="tag" href="#">#appengine</a></span> <br>
+            <span class="page-meta"><i class="icon-pencil"><a ng-click="editOpp()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="delete(opportunity)" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
+
+
+            <hr/>
+            
+          </div>
+        </div>
+        
+
+            
+            <div class="row-fluid">
+              <div class="span8">
+              <!-- BEGIN PORTLET-->
+              <div class="portlet paddingless">
+                <div class="portlet-title line">
+                  <div class="caption">{{_("Opportunity Feeds")}}</div>
+                  
+                </div>
+                <div class="portlet-body">
+                  <div class="row-fluid">
+                           <div class="span12 margin-bottom-10"> 
+                          <p class⁼"lead"=""><strong>Just add notes to remember what's important :</strong> </p>
+                          <form id="addNote" ng-submit="addNote(note)" class="ng-pristine ng-valid">
+                                            
+                                            <input class="input-block-level ng-pristine ng-valid" autofocus type="text" placeholder="Add a new subject" id="messageSubject" ng-model="note.title">
+
+                                         
+                                            
+                                            <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="note.content"></textarea>
+                                            <input ng-init="note.organization=1" required="" id="id_organization" type="hidden" name="organization" value="1"> 
+                                  
+                                            <input type="hidden" id="id_related_object" ng-init="note.related_object=1" value="1">
+                                          
+                                         
+                                         <div class="pull-right">
+                                         <!-- <input type="submit" class="btn btn-primary" value="Attach file">-->
+                                          <input type="submit" class="btn green" value="Add this note">
+                                          </div>
+                                        </form>
+                                       </div>
+                                      </div>
+
+                                        
+                            <ul class="chats">
+                              <li class="in">
+                                <img class="avatar" alt="" src="static/img/avatar.jpg.png  " />
+                                <div class="message">
+                                  <span class="arrow"></span>
+                                  <a href="#" class="name">Hakim Karriche</a>
+                                  <span class="datetime">at Jul 25, 2012 11:09</span>
+                                  <span class="body">
+                                  <a href="#/accounts/show/1/notes/22" class="discussion-content"><strong class="ng-binding">Note works</strong><span class="excerpt ng-binding"> - we success to add notes</span><span class="chat-meta pull-right"><i class="icon-comment"></i> 3 comments</span></a>
+                                  </span>
+                                </div>
+                              </li>
+                              <li class="in">
+                                <img class="avatar" alt="" src="static/img/avatar.jpg.png " />
+                                <div class="message">
+                                  <span class="arrow"></span>
+                                  <a href="#" class="name">Hakim Karriche</a>
+                                  <span class="datetime">at Jul 25, 2012 11:09</span>
+                                  <span class="body">
+                                  <a href="#/accounts/show/1/notes/22" class="discussion-content"><strong class="ng-binding">Note works</strong><span class="excerpt ng-binding"> - we success to add notes</span><span class="chat-meta pull-right"><i class="icon-comment"></i> 3 comments</span></a>
+                                  </span>
+                                </div>
+                              </li><li class="in">
+                                <img class="avatar" alt="" src= "static/img/avatar.jpg.png " />
+                                <div class="message">
+                                  <span class="arrow"></span>
+                                  <a href="#" class="name">Hakim Karriche</a>
+                                  <span class="datetime">at Jul 25, 2012 11:09</span>
+                                  <span class="body">
+                                  <a href="#/accounts/show/1/notes/22" class="discussion-content"><strong class="ng-binding">Note works</strong><span class="excerpt ng-binding"> - we success to add notes</span><span class="chat-meta pull-right"><i class="icon-comment"></i> 3 comments</span></a>
+                                  </span>
+                                </div>
+                              </li><li class="in">
+                                <img class="avatar" alt="" src= "static/img/avatar.jpg.png " />
+                                <div class="message">
+                                  <span class="arrow"></span>
+                                  <a href="#" class="name">Hakim Karriche</a>
+                                  <span class="datetime">at Jul 25, 2012 11:09</span>
+                                  <span class="body">
+                                  <a href="#/accounts/show/1/notes/22" class="discussion-content"><strong class="ng-binding">Note works</strong><span class="excerpt ng-binding"> - we success to add notes</span><span class="chat-meta pull-right"><i class="icon-comment"></i> 3 comments</span></a>
+                                  </span>
+                                </div>
+                              </li><li class="in">
+                                <img class="avatar" alt="" src=" "static/img/avatar.jpg.png " />
+                                <div class="message">
+                                  <span class="arrow"></span>
+                                  <a href="#" class="name">Hakim Karriche</a>
+                                  <span class="datetime">at Jul 25, 2012 11:09</span>
+                                  <span class="body">
+                                  <a href="#/accounts/show/1/notes/22" class="discussion-content"><strong class="ng-binding">Note works</strong><span class="excerpt ng-binding"> - we success to add notes</span><span class="chat-meta pull-right"><i class="icon-comment"></i> 3 comments</span></a>
+                                  </span>
+                                </div>
+                              </li>
+                            </ul>
+                </div>
+              </div>
+              <!-- END PORTLET-->
+            </div>
+            <div class="span4">
+              <!-- BEGIN PORTLET-->
+              <div class="portlet">
+                <div class="portlet-title line">
+                  <div class="caption"><i class="icon-tasks"></i>Tasks & Events</div>
+                  
+                </div>
+                <div class="portlet-body" id="chats">
+                  <div class="scroller" style="height:200x" data-always-visible="1" data-rail-visible="0">
+                    <div id="newTask">
+                                <p><strong>Tasks:</strong></p>
+
+                                 
+                                  <ul id="tasks" class="unstyled">
+                                    <li>
+                                      <input value="check1" type="checkbox">
+                                      <!-- Name -->
+                                    <span><a href="/tasks/1" class="discussion-content"> Prepare a commercial offer for salesforce training [before: 20/08/2013]</a></span>
+                                    </li>
+                                    <li>
+                                      <input value="check1" type="checkbox">
+                                      <!-- Name -->
+                                    <span><a href="/tasks/1" class="discussion-content"> Talk with Teacher</a></span>
+                                    </li>
+                                    <li>
+                                      <input value="check1" type="checkbox">
+                                      <!-- Name -->
+                                    <span><a href="/tasks/1" class="discussion-content"> Find interns</a></span>
+                                    </li>
+                                    <li>
+                                      <input value="check1" type="checkbox">
+                                      <!-- Name -->
+                                    <span><a href="/tasks/1" class="discussion-content"> Pepare plan to migrate</a></span>
+                                    </li>
+                                    
+                                    <li><a href="#myModal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new task</a></li>
+
+                                  </ul>
+                                 
+                                  <p><strong>Events:</strong></p>
+
+                                 
+                                  <ul id="tasks" class="unstyled">
+                                   
+                                    
+
+                                    
+                                    <li><a href="#newEventModal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new event</a></li>
+
+
+                                  </ul>
+
+                                  <!-- Modal -->
+          <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h3 id="myModalLabel">New Task</h3>
+            </div>
+            <div class="modal-body">
+                     <div class="controls controls-row">
+                                                  <input class="input-block-level" autofocus="" type="text" placeholder="Add a new task" id="taskTitle">
+                                                  <p>When's it due?</p>
+                                                
+                                                        <div id="datetimepicker2" class="input-append">
+                                                          <input placeholder="dd/MM/yyyy" data-format="MM/dd/yyyy HH:mm:ss PP" type="text">
+                                                          <span class="add-on">
+                                                            <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                                                            </i>
+                                                          </span>
+                                                        </div>
+
+                                                    <p>Who's responsible?</p>
+
+
+                                                  
+                  </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              <button class="btn btn-primary">Add this task</button>
+            </div>
+          </div>
+
+          <!--Event Modal -->
+          <div id="newEventModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h3 id="myModalLabel">New Event</h3>
+            </div>
+            <div class="modal-body">
+                     <div class="controls controls-row">
+                                                  <input class="input-block-level" autofocus="" type="text" placeholder="Add a new event" id="taskTitle">
+                                                  <p>When?</p>
+                                                
+                                                        <div id="event_start_date" class="input-append">
+                                                          <input placeholder="Start" data-format="MM/dd/yyyy HH:mm:ss PP" type="text">
+                                                          <span class="add-on">
+                                                            <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                                                            </i>
+                                                          </span>
+                                                        </div>
+                                                        <div id="event_end_date" class="input-append">
+                                                          <input placeholder="End" data-format="MM/dd/yyyy HH:mm:ss PP" type="text">
+                                                          <span class="add-on">
+                                                            <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                                                            </i>
+                                                          </span>
+                                                        </div>
+                                                    <input class="input-block-level" autofocus="" type="text" placeholder="Where?" id="taskTitle">
+                                                    <textarea class="input-block-level" placeholder="Description"></textarea>
+                                                    
+                                                    
+                                               
+
+                                                  
+                  </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              <button class="btn btn-primary">Add this event</button>
+            </div>
+          </div>
+                                    
+
+                                </div>
+                            </div>
+                  
+                </div>
+              </div>
+              
+              
+              <!-- END PORTLET-->
+            </div>
+            </div>
+          
+            
+          
+        
+        <!-- END PAGE CONTENT-->
+      </div>
+      <div id="EditOpportunityModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("Edit Opportunity")}}</h3>
+              </div>
+
+              <div class="modal-body">
+                 <form id="editLead" name="editopportunity" ng-submit="put(opportunity)" class="form-horizontal"> 
+                 <fieldset>
+            
+
+                  <div class="control-group">
+                        <label  class="required control-label">{{_("Description")}} *</label>
+                       
+                        <div class="controls">
+                          <input type="text" required id="id_description" ng-model="opportunity.description">
+                          
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_( "Amount")}} </label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_amount" ng-model="opportunity.amount">
+                          
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Stage")}} *</label>
+                       
+                        <div class="controls">
+                          <input type="text"  required id="id_stage" ng-model="opportunity.stage">
+                          
+                        </div>
+                    </div>                      
+                  
+                     
+                    
+                
+                
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
+                <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+              </div>
+               </form>
+              </div>  
+      <!-- END PAGE CONTAINER-->
+</div>

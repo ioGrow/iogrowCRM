@@ -1,4 +1,4 @@
-var app = angular.module('crmEngine',['ui.bootstrap.datetimepicker','ui.bootstrap','crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.leadservices']);
+var app = angular.module('crmEngine',['ui.bootstrap.datetimepicker','ui.bootstrap','crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.leadservices','crmEngine.opportunityservices']);
 
 
 app.config(function($interpolateProvider){
@@ -62,32 +62,21 @@ app.config(['$routeProvider', function($routeProvider) {
         templateUrl:'http://localhost:8090/accounts/'
 
         
-      }).when('/contacts/p/:page', {
+      }).when('/contacts/', {
         controller: 'ContactListCtrl',      
         templateUrl:'/views/contacts/list'
         //HKA 22.08.13 Step 1 create route
       }).when('/contacts/show/:contactId', {
         controller: 'ContactShowCtrl',        
         templateUrl:'/views/contacts/show'
-      }).when('/opportunities/p/:page', {
-        controller: 'OpportunityListCtrl',
-        resolve: {
-          accounts: ["MultiAccountLoader", function(MultiAccountLoader) {
-            return MultiAccountLoader();
-          }]
-        },
+      }).when('/opportunities/', {
+        controller: 'OpportunityListCtrl',        
+        templateUrl:'/views/opportunities/list'
         
-        templateUrl:'/opportunities/'
-        //HKA 22.08.13 Step 1 create route
-      }).when('/opportunities/show/:accountId', {
-        controller: 'OpportunityShowCtrl',
-        resolve: {
-          account: ["AccountLoader", function(AccountLoader) {
-            return AccountLoader();
-          }]
-        },
-        
+      }).when('/opportunities/show/:opportunityId', {
+        controller: 'OpportunityShowCtrl',        
         templateUrl:'/views/opportunities/show'
+
       }).when('/leads/p/:page', {
         controller: 'LeadListCtrl',
         resolve: {

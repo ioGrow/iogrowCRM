@@ -8,7 +8,9 @@ from iomodels.crmengine.contacts import Contact
 from iomodels.crmengine.campaigns import Campaign
 from iomodels.crmengine.notes import Note,Topic
 from iomodels.crmengine.tasks import Task
+from iomodels.crmengine.opprortunities import Opportunity
 import model
+import logging
 import auth_util
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
@@ -169,4 +171,26 @@ class CrmEngineApi(remote.Service):
   @Task.query_method(user_required=True,query_fields=('about_kind','about_item','status', 'due', 'limit', 'order', 'pageToken'),path='tasks', name='tasks.list')
   def TaskList(self, query):
     
+    return query
+  # HKA 4.11.2013 Add Opportuity APIs
+  @Opportunity.method(user_required=True,path='opportunities',http_method='POST',name='opportunities.insert')
+  def OpportunityInsert(self, my_model):
+    user = endpoints.get_current_user()
+    if user is  None :
+      raise endpoints.UnauthorizedException('You must be aunthenticated')
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is  None :
+      raise endpoints.UnauthorizedException('You must sign-in ')
+    my_model.owner = user_from_email.key
+    my_model.put()
+    return my_model
+  
+  @Opportunity.method(request_fields=('id',),path='opportunities/{id}', http_method='GET', name='opportunities.get')
+  def OpportunityGet(self, my_model):
+    if not my_model.from_datastore:
+      raise endpoints.NotFoundException('Opportunity not found')
+    return my_model
+  
+  @Opportunity.query_method(user_required=True,query_fields=('description','amount','limit', 'order', 'pageToken'),path='opportunities',name='opportunities.list')
+  def OpportunityList(self,query):
     return query

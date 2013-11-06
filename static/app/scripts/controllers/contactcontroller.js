@@ -101,6 +101,7 @@ app.controller('ContactListCtrl', ['$scope','$route','$location','Conf','MultiCo
     
       $scope.save = function(contact){
         Contact.insert(contact);
+        $('#addContactModal').modal('hide')
       };
 
 
@@ -152,7 +153,7 @@ app.controller('ContactShowCtrl', ['$scope','$route','$location','Conf','Contact
           $scope.isSignedIn = true;
           window.is_signed_in = true;
           window.authResult = authResult;
-          // Call the backend to get the list of accounts
+          // Call the backend to get the list of contact
           var contactid = {'id':$route.current.params.contactId};
           Contact.get($scope,contactid);
         } else if (authResult['error']) {
@@ -166,7 +167,7 @@ app.controller('ContactShowCtrl', ['$scope','$route','$location','Conf','Contact
         }
      }
      $scope.renderSignIn();
-     $('#addContactModal').modal('show');
+     //$('#addContactModal').modal('show');
 
       
 
