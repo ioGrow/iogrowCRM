@@ -1,4 +1,4 @@
-var app = angular.module('crmEngine',['ui.bootstrap.datetimepicker','ui.bootstrap','crmEngine.accountservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.eventservices', 'crmEngine.leadservices','crmEngine.userservices']);
+var app = angular.module('crmEngine',['ui.bootstrap.datetimepicker','ui.bootstrap','crmEngine.accountservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.eventservices', 'crmEngine.leadservices','crmEngine.userservices','crmEngine.groupservices']);
 
 
 
@@ -121,5 +121,11 @@ app.config(['$routeProvider', function($routeProvider) {
       }).when('/admin/users', {
         controller: 'UserListCtrl',        
         templateUrl:'/views/admin/users/list'
+      }).when('/admin/groups', {
+        controller: 'GroupListCtrl',        
+        templateUrl:'/views/admin/groups/list'
+      }).when('/admin/groups/show/:groupId', {
+        controller: 'GroupShowCtrl',        
+        templateUrl:'/views/admin/groups/show'
       });
 }]);

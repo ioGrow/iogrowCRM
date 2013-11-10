@@ -9,7 +9,7 @@ from iomodels.crmengine.campaigns import Campaign
 from iomodels.crmengine.notes import Note,Topic
 from iomodels.crmengine.tasks import Task
 from iomodels.crmengine.events import Event
-from model import User
+from model import User,Group,Member
 import model
 import auth_util
 from google.appengine.api import mail
@@ -243,4 +243,61 @@ clicking on the link below:
 
   @User.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='users', name='users.list')
   def UserList(self, query):
+    return query
+
+###################################### Groups API ################################################
+  @Group.method(user_required=True,path='groups', http_method='POST', name='groups.insert')
+  def GroupInsert(self, my_model):
+
+    
+    
+    user = endpoints.get_current_user()
+    if user is None:
+        raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in!' )
+    # Todo: Check permissions
+    my_model.organization = user_from_email.organization
+    
+    my_model.put()
+    
+    return my_model
+
+  @Group.method(request_fields=('id',),path='groups/{id}', http_method='GET', name='groups.get')
+  def GroupGet(self, my_model):
+    if not my_model.from_datastore:
+      raise endpoints.NotFoundException('Account not found.')
+    return my_model
+
+  @Group.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='groups', name='groups.list')
+  def GroupList(self, query):
+    return query
+###################################### Members API ################################################
+  @Member.method(user_required=True,path='members', http_method='POST', name='members.insert')
+  def MemberInsert(self, my_model):
+
+    
+    
+    user = endpoints.get_current_user()
+    if user is None:
+        raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in!' )
+    # Todo: Check permissions
+    my_model.organization = user_from_email.organization
+    
+    my_model.put()
+    
+    return my_model
+
+  @Member.method(request_fields=('id',),path='members/{id}', http_method='GET', name='members.get')
+  def MemberGet(self, my_model):
+    if not my_model.from_datastore:
+      raise endpoints.NotFoundException('Account not found.')
+    return my_model
+
+  @Member.query_method(user_required=True,query_fields=('limit', 'order','groupKey', 'pageToken'),path='members', name='members.list')
+  def MemberList(self, query):
     return query

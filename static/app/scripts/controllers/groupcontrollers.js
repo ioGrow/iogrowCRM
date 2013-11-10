@@ -1,5 +1,5 @@
-app.controller('UserListCtrl', ['$scope','$route','$location','Conf','User',
-    function($scope,$route,$location,Conf,User) {
+app.controller('GroupListCtrl', ['$scope','$route','$location','Conf','Group',
+    function($scope,$route,$location,Conf,Group) {
      console.log('i am in user list controller');
 
      $("#id_Accounts").addClass("active");
@@ -48,7 +48,7 @@ app.controller('UserListCtrl', ['$scope','$route','$location','Conf','User',
           }
           console.log('in listNextPageItems');
           $scope.currentPage = $scope.currentPage + 1 ; 
-          User.list($scope,params);
+          Group.list($scope,params);
      }
      $scope.listPrevPageItems = function(){
        
@@ -62,7 +62,7 @@ app.controller('UserListCtrl', ['$scope','$route','$location','Conf','User',
             params = {'limit':7}
           }
           $scope.currentPage = $scope.currentPage - 1 ;
-          User.list($scope,params);
+          Group.list($scope,params);
      }
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
@@ -83,7 +83,7 @@ app.controller('UserListCtrl', ['$scope','$route','$location','Conf','User',
           // Call the backend to get the list of accounts
           
           var params = {'limit':7}
-          User.list($scope,params);
+          Group.list($scope,params);
 
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
@@ -105,7 +105,7 @@ app.controller('UserListCtrl', ['$scope','$route','$location','Conf','User',
       
     $scope.addNewUser = function(user){
       
-      User.insert(user);
+      Group.insert(user);
     };
      
      
@@ -113,34 +113,12 @@ app.controller('UserListCtrl', ['$scope','$route','$location','Conf','User',
 
     
 }]);
-app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Conf','Account', 'Topic','Note','Task','Event','WhoHasAccess','User',
-    function($scope,$filter,$route,$location,Conf,Account,Topic,Note,Task,Event,WhoHasAccess,User) {
-      console.log('i am in account list controller');
-      $("#id_Accounts").addClass("active");
-      var tab = $route.current.params.accountTab;
-      switch (tab)
-        {
-        case 'notes':
-         $scope.selectedTab = 1;
-          break;
-        case 'about':
-         $scope.selectedTab = 2;
-          break;
-        case 'contacts':
-         $scope.selectedTab = 3;
-          break;
-        case 'opportunities':
-         $scope.selectedTab = 4;
-          break;
-        case 'cases':
-         $scope.selectedTab = 5;
-          break;
-        default:
-        $scope.selectedTab = 1;
 
-        }
+app.controller('GroupShowCtrl', ['$scope','$route','$location','Conf','User', 'Group', 'Member',
+    function($scope,$route,$location,Conf,User,Group,Member) {
+     console.log('i am in user list controller');
 
-     
+     $("#id_Accounts").addClass("active");
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -150,91 +128,32 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
      $scope.currentPage = 01;
      $scope.pages = [];
      
-     $scope.accounts = [];
+     $scope.users = [];
+     $scope.user = undefined;
+     $scope.slected_memeber = undefined;
+     $scope.role= 'member';
+
+     $scope.selectMember = function(){
+        console.log('slecting user yeaaah');
+        $scope.slected_memeber = $scope.user;
+        $scope.user = $scope.slected_memeber.google_display_name;
+
+     };
+     $scope.addNewMember = function(selected_user,role){
+      console.log('groups members.insert');
+      console.log(selected_user);
+      console.log(role);
+      var params = {
+                      'groupKey': $scope.group.entityKey,
+                      'memberKey':$scope.slected_memeber.entityKey,
+                      'role': role
+        }  
+        console.log('selected member');
+        console.log(params); 
+        Member.insert($scope,params);
+     $('#addMemberModal').modal('hide');
+     }
      
-     
-     $scope.addTask = function(task){
-      
-        $('#myModal').modal('hide');
-        var params ={}
-
-        console.log('adding a new task');
-        console.log(task);
-        
-        if (task.due){
-
-            var dueDate= $filter('date')(task.due,['yyyy-MM-dd']);
-            dueDate = dueDate +'T00:00:00.000000'
-            params ={'title': task.title,
-                      'due': dueDate
-            }
-            console.log(dueDate);
-        }else{
-            params ={'title': task.title}
-        };
-        Task.insert($scope,params);
-     }
-
-     $scope.hilightTask = function(){
-        console.log('Should higll');
-        $('#task_0').effect("highlight","slow");
-        $('#task_0').effect( "bounce", "slow" );
-       
-     }
-     $scope.listTasks = function(){
-        var params = {/*'about_kind':'Account',
-                      'about_item':$scope.account.id,*/
-                      'order': '-updated_at',
-                      'limit': 5
-                      };
-        Task.list($scope,params);
-
-     }
-     $scope.addEvent = function(ioevent){
-      
-        $('#newEventModal').modal('hide');
-        var params ={}
-
-        console.log('adding a new event');
-        
-        
-        if (ioevent.starts_at){
-            if (ioevent.ends_at){
-              params ={'title': ioevent.title,
-                      'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'where': ioevent.where
-              }
-
-            }else{
-              params ={'title': task.title,
-                      'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'where': ioevent.where
-              }
-            }
-            console.log('inserting the event');
-            console.log(params);
-            Event.insert($scope,params);
-
-            
-        };
-     }
-     $scope.hilightEvent = function(){
-        console.log('Should higll');
-        $('#event_0').effect("highlight","slow");
-        $('#event_0').effect( "bounce", "slow" );
-       
-     }
-     $scope.listEvents = function(){
-        var params = {/*'about_kind':'Account',
-                      'about_item':$scope.account.id,*/
-                      'order': 'starts_at',
-                      'limit': 5
-                      };
-        Event.list($scope,params);
-
-     }
-
      $scope.renderSignIn = function() {
           console.log('$scope.renderSignIn #start_debug');
           if (window.is_signed_in){
@@ -259,62 +178,41 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
         var nextPage = $scope.currentPage + 1;
         var params = {};
           if ($scope.pages[nextPage]){
-            params = {'about_kind':'Account',
-                      'about_item':$scope.account.id,
-                      'order': '-updated_at',
-                      'limit': 5,
+            params = {'limit':7,
                       'pageToken':$scope.pages[nextPage]
                      }
           }else{
-            params = {'about_kind':'Account',
-                      'about_item':$scope.account.id,
-                      'order': '-updated_at',
-                      'limit': 5}
+            params = {'limit':7}
           }
           console.log('in listNextPageItems');
           $scope.currentPage = $scope.currentPage + 1 ; 
-          Topic.list($scope,params);
+          Group.list($scope,params);
      }
      $scope.listPrevPageItems = function(){
        
        var prevPage = $scope.currentPage - 1;
        var params = {};
           if ($scope.pages[prevPage]){
-            params = {'about_kind':'Account',
-                      'about_item':$scope.account.id,
-                      'order': '-updated_at',
-                      'limit': 5,
+            params = {'limit':7,
                       'pageToken':$scope.pages[prevPage]
                      }
           }else{
-            params = {'about_kind':'Account',
-                      'about_item':$scope.account.id,
-                      'order': '-updated_at',
-                      'limit': 5}
+            params = {'limit':7}
           }
           $scope.currentPage = $scope.currentPage - 1 ;
-          Topic.list($scope,params);
-          console.log()
+          Group.list($scope,params);
+     }
+     $scope.listMembers = function(){
+        console.log('listMembers');
+        var params = {'id':$route.current.params.groupId};
+        Group.get($scope,params);
      }
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
         $scope.processAuth(authResult);
         
      }
-     $scope.listTopics = function(account){
-        var params = {'about_kind':'Account',
-                      'about_item':account.id,
-                      'order': '-updated_at',
-                      'limit': 5
-                      };
-        Topic.list($scope,params);
 
-     }
-     $scope.hilightTopic = function(){
-        console.log('Should higll');
-       $('#topic_0').effect( "bounce", "slow" );
-       $('#topic_0 .message').effect("highlight","slow");
-     }
 
      $scope.processAuth = function(authResult) {
         console.log('process Auth #startdebug');
@@ -328,8 +226,9 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
           window.authResult = authResult;
           // Call the backend to get the list of accounts
           
-          var accountid = {'id':$route.current.params.accountId};
-          Account.get($scope,accountid);
+          var params = {'id':$route.current.params.groupId};
+          Group.get($scope,params);
+          User.list($scope,{});
 
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
@@ -345,34 +244,17 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
      $scope.renderSignIn();
      $scope.showModal = function(){
         console.log('button clicked');
-        $('#addAccountModal').modal('show');
+        $('#addMemberModal').modal('show');
 
       };
       
-    $scope.addNote = function(note){
-      console.log('debug addNote');
+    $scope.addNewUser = function(user){
       
-      var params ={
-                  'about_kind': 'Account',
-                  'about_item': $scope.account.id,
-                  'title': note.title,
-                  'content': note.content
-      };
-      console.log(params);
-      Note.insert($scope,params);
-      $scope.note.title = '';
-      $scope.note.content = '';
+      Group.insert(user);
     };
-      
+     
+     
+   
 
-
-
-    $scope.editaccount = function() {
-       $('#EditAccountModal').modal('show');
-    }
-
-      
-
-
-
+    
 }]);

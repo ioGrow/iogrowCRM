@@ -263,6 +263,36 @@ class UserListHandler(BaseHandler, SessionEnabledHandler):
             template = jinja_environment.get_template('templates/admin/users/list.html')
             self.response.out.write(template.render(template_values))
 
+class GroupListHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+      if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            tabs = user.get_user_active_tabs()
+
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            # Render the template
+            template_values = {'tabs':tabs}
+            template = jinja_environment.get_template('templates/admin/groups/list.html')
+            self.response.out.write(template.render(template_values))
+
+class GroupShowHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+      if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            tabs = user.get_user_active_tabs()
+
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            # Render the template
+            template_values = {'tabs':tabs}
+            template = jinja_environment.get_template('templates/admin/groups/show.html')
+            self.response.out.write(template.render(template_values))
+
 class GooglePlusConnect(SessionEnabledHandler):
     @staticmethod
     def exchange_code(code):
@@ -307,7 +337,7 @@ class GooglePlusConnect(SessionEnabledHandler):
       return userinfo.userinfo().get().execute()
 
     @staticmethod
-    def save_token_for_user(google_user_id, credentials,user_id):
+    def save_token_for_user(google_user_id, credentials,user_id=None):
       """Creates a user for the given ID and credential or updates the existing
       user with the existing credential.
 
@@ -358,7 +388,9 @@ class GooglePlusConnect(SessionEnabledHandler):
         response = self.request.get("id")
         code = self.request.get("code")
         invited_user_id_request = self.request.get("id")
-        invited_user_id = long(invited_user_id_request)
+        invited_user_id = None
+        if invited_user_id_request:
+          invited_user_id = long(invited_user_id_request)
 
         
 
@@ -1273,6 +1305,10 @@ routes = [
     ('/views/contacts/list',ContactListHandler),
     ('/views/contacts/show',ContactShowHandler),
     ('/views/admin/users/list',UserListHandler),
+    ('/views/admin/groups/list',GroupListHandler),
+    ('/views/admin/groups/show',GroupShowHandler),
+    
+    
     ('/hello',HelloWorldHandler),
     ('/sign-in',SignInHandler),
     ('/sign-up',SignUpHandler),

@@ -231,7 +231,7 @@
        window.is_signed_in = false;
        window.authResult = undefined;
        var apisToLoad;
-       var ROOT = 'https://iogrow-dev.appspot.com/_ah/api';
+       var ROOT = '/_ah/api';
        var callback = function() {
         if (--apisToLoad == 0) {
           apiLoaded();
@@ -294,6 +294,7 @@
   <script src="static/app/scripts/services/eventservices.js" ></script>
   <script src="static/app/scripts/services/leadservices.js" ></script>
   <script src="static/app/scripts/services/userservices.js"></script>
+  <script src="static/app/scripts/services/groupservices.js"></script>
 
   <script src="static/app/scripts/app.js" ></script>
   <script src="static/app/scripts/controllers/accountcontrollers.js" ></script>
@@ -301,6 +302,7 @@
   <script src="static/app/scripts/controllers/opportunitycontroller.js" ></script>
   <!--Admin controllers-->
   <script src="static/app/scripts/controllers/usercontrollers.js" ></script>
+  <script src="static/app/scripts/controllers/groupcontrollers.js" ></script>
   
 
   <script src="static/app/scripts/controllers/leadcontrollers.js" ></script>

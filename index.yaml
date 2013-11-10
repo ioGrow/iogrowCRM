@@ -16,6 +16,11 @@ indexes:
   - name: status
   - name: starts_at
 
+- kind: Member
+  properties:
+  - name: groupKey
+  - name: role
+
 - kind: Task
   properties:
   - name: comments
