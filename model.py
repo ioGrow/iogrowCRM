@@ -230,6 +230,7 @@ class Organization(EndpointsModel):
           
 
 
+    
 # We use the Profile model to describe what each user can do?
 class Profile(EndpointsModel):
     name = ndb.StringProperty(required=True)
@@ -241,8 +242,18 @@ class Profile(EndpointsModel):
     # Visible tabs to this profile
     tabs = ndb.KeyProperty(repeated=True)
 # The User model store all the informations about the user
+class Userinfo(EndpointsModel):
+    # General informations about the user
+    email = ndb.StringProperty()
+    google_user_id = ndb.StringProperty()
+    display_name = ndb.StringProperty()
+    google_public_profile_url = ndb.StringProperty()
+    photo = ndb.StringProperty()
+    
+    
 class User(EndpointsModel):
     # General informations about the user
+    _message_fields_schema = ('id','email','entityKey', 'google_user_id','google_display_name','google_public_profile_photo_url','language')
     email = ndb.StringProperty()
     google_user_id = ndb.StringProperty()
     google_display_name = ndb.StringProperty()
@@ -317,6 +328,38 @@ class User(EndpointsModel):
 
 
 
+
+class Group(EndpointsModel):
+    _message_fields_schema = ('id','entityKey','name','description','status','members', 'organization')
+    owner = ndb.KeyProperty()
+    name = ndb.StringProperty(required=True)
+    description = ndb.TextProperty()
+    status = ndb.StringProperty()
+    members = ndb.StructuredProperty(Userinfo,repeated=True)
+    organization = ndb.KeyProperty()
+
+
+class Member(EndpointsModel):
+    groupKey = ndb.KeyProperty()
+    memberKey = ndb.KeyProperty()
+    role = ndb.StringProperty(required=True)
+    organization = ndb.KeyProperty()
+
+    def put(self, **kwargs):
+      ndb.Model.put(self, **kwargs)
+      self._setup()
+
+    def _setup(self):
+      member = self.memberKey.get()
+      group = self.groupKey.get()
+      member_info = Userinfo()
+      member_info.email = member.email
+      member_info.google_user_id = member.google_user_id
+      member_info.display_name = member.google_display_name
+      member_info.google_public_profile_url = member.google_public_profile_url
+      member_info.photo = member.google_public_profile_photo_url
+      group.members = [member_info]
+      group.put()
 
 
 

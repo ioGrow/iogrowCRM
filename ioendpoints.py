@@ -12,9 +12,11 @@ from iomodels.crmengine.opprortunities import Opportunity
 from iomodels.crmengine.events import Event
 from iomodels.crmengine.leads import Lead
 from iomodels.crmengine.cases import Case
+from model import User,Group,Member
 import model
 import logging
 import auth_util
+from google.appengine.api import mail
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
 CLIENT_ID = '330861492018.apps.googleusercontent.com'
@@ -231,6 +233,7 @@ class CrmEngineApi(remote.Service):
     
 
     return query
+
 # HKA 06.11.2013 Add Opportuity APIs
   @Lead.method(user_required=True,path='leads',http_method='POST',name='leads.insert')
   def LeadInsert(self, my_model):
@@ -297,3 +300,102 @@ class CrmEngineApi(remote.Service):
   @Campaign.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='campaigns',name='campaigns.list')
   def CampaignList(self,query):
      return query
+
+###################################### Users API ################################################
+  @User.method(user_required=True,path='users', http_method='POST', name='users.insert')
+  def UserInsert(self, my_model):
+
+    
+    
+    user = endpoints.get_current_user()
+    if user is None:
+        raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in!' )
+    # Todo: Check permissions
+    my_model.organization = user_from_email.organization
+    my_model.status = 'invited'
+    profile = model.Profile.query(model.Profile.name=='Standard User', model.Profile.organization==user_from_email.organization).get()
+    my_model.init_user_config(user_from_email.organization,profile.key)
+    my_model.put()
+    confirmation_url = "http://iogrow-dev.appspot.com/sign-in?id=" + str(my_model.id) + '&'
+    sender_address = "ioGrow notifications <notifications@iogrow-dev.appspotmail.com>"
+    subject = "Confirm your registration"
+    body = """
+Thank you for creating an account! Please confirm your email address by
+clicking on the link below:
+
+%s
+""" % confirmation_url
+
+    mail.send_mail(sender_address, my_model.email , subject, body)
+    return my_model
+
+  @User.method(request_fields=('id',),path='users/{id}', http_method='GET', name='users.get')
+  def UserGet(self, my_model):
+    if not my_model.from_datastore:
+      raise endpoints.NotFoundException('Account not found.')
+    return my_model
+
+  @User.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='users', name='users.list')
+  def UserList(self, query):
+    return query
+
+###################################### Groups API ################################################
+  @Group.method(user_required=True,path='groups', http_method='POST', name='groups.insert')
+  def GroupInsert(self, my_model):
+
+    
+    
+    user = endpoints.get_current_user()
+    if user is None:
+        raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in!' )
+    # Todo: Check permissions
+    my_model.organization = user_from_email.organization
+    
+    my_model.put()
+    
+    return my_model
+
+  @Group.method(request_fields=('id',),path='groups/{id}', http_method='GET', name='groups.get')
+  def GroupGet(self, my_model):
+    if not my_model.from_datastore:
+      raise endpoints.NotFoundException('Account not found.')
+    return my_model
+
+  @Group.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='groups', name='groups.list')
+  def GroupList(self, query):
+    return query
+###################################### Members API ################################################
+  @Member.method(user_required=True,path='members', http_method='POST', name='members.insert')
+  def MemberInsert(self, my_model):
+
+    
+    
+    user = endpoints.get_current_user()
+    if user is None:
+        raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in!' )
+    # Todo: Check permissions
+    my_model.organization = user_from_email.organization
+    
+    my_model.put()
+    
+    return my_model
+
+  @Member.method(request_fields=('id',),path='members/{id}', http_method='GET', name='members.get')
+  def MemberGet(self, my_model):
+    if not my_model.from_datastore:
+      raise endpoints.NotFoundException('Account not found.')
+    return my_model
+
+  @Member.query_method(user_required=True,query_fields=('limit', 'order','groupKey', 'pageToken'),path='members', name='members.list')
+  def MemberList(self, query):
+    return query
+

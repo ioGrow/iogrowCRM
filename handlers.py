@@ -15,6 +15,7 @@
 #
 
 """All request handlers of PhotoHunt, including its built-in API."""
+import logging
 import time
 import httplib2
 import model
@@ -161,8 +162,11 @@ class SignInHandler(BaseHandler, SessionEnabledHandler):
         
             # Set the user locale from user's settings
             self.set_user_locale()
+            user_id = self.request.get('id')
             # Render the template
-            template_values = {'CLIENT_ID': CLIENT_ID}
+            template_values = {'CLIENT_ID': CLIENT_ID,
+                               'ID' : user_id
+                              }
             template = jinja_environment.get_template('templates/sign-in.html')
             self.response.out.write(template.render(template_values))
           
@@ -327,6 +331,51 @@ class CampaignShowHandler(BaseHandler,SessionEnabledHandler):
       self.response.out.write(template.render(template_values))
    
 
+class UserListHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+      if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            tabs = user.get_user_active_tabs()
+
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            # Render the template
+            template_values = {'tabs':tabs}
+            template = jinja_environment.get_template('templates/admin/users/list.html')
+            self.response.out.write(template.render(template_values))
+
+class GroupListHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+      if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            tabs = user.get_user_active_tabs()
+
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            # Render the template
+            template_values = {'tabs':tabs}
+            template = jinja_environment.get_template('templates/admin/groups/list.html')
+            self.response.out.write(template.render(template_values))
+
+class GroupShowHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+      if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            tabs = user.get_user_active_tabs()
+
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            # Render the template
+            template_values = {'tabs':tabs}
+            template = jinja_environment.get_template('templates/admin/groups/show.html')
+            self.response.out.write(template.render(template_values))
+
 class GooglePlusConnect(SessionEnabledHandler):
     @staticmethod
     def exchange_code(code):
@@ -371,7 +420,7 @@ class GooglePlusConnect(SessionEnabledHandler):
       return userinfo.userinfo().get().execute()
 
     @staticmethod
-    def save_token_for_user(google_user_id, credentials):
+    def save_token_for_user(google_user_id, credentials,user_id=None):
       """Creates a user for the given ID and credential or updates the existing
       user with the existing credential.
 
@@ -382,7 +431,21 @@ class GooglePlusConnect(SessionEnabledHandler):
       Returns:
         Updated User.
       """
-      user = model.User.query(model.User.google_user_id == google_user_id).get()      
+      if user_id:
+        user = model.User.get_by_id(user_id)
+        profile = GooglePlusConnect.get_user_profile(credentials)
+        email = GooglePlusConnect.get_user_email(credentials)
+
+        
+        user.google_user_id = profile.get('id')
+        user.google_display_name = profile.get('displayName')
+        user.google_public_profile_url = profile.get('url')
+        user.email = email.get('email')
+        image = profile.get('image')
+        if image is not None:
+          user.google_public_profile_photo_url = image.get('url')
+      else:
+        user = model.User.query(model.User.google_user_id == google_user_id).get()     
       #user = model.User.all().filter('google_user_id =', google_user_id).get()
       
       if user is None:
@@ -405,7 +468,20 @@ class GooglePlusConnect(SessionEnabledHandler):
 
   
     def post(self):
-        code = self.request.body
+        response = self.request.get("id")
+        code = self.request.get("code")
+        invited_user_id_request = self.request.get("id")
+        invited_user_id = None
+        if invited_user_id_request:
+          invited_user_id = long(invited_user_id_request)
+
+        
+
+       
+
+
+        
+
         self.response.headers['Content-Type'] = 'application/json'  
         credentials = None
         try:
@@ -440,8 +516,15 @@ class GooglePlusConnect(SessionEnabledHandler):
         if user is None:
           isNewUser = True
         # Store our credentials with in the datastore with our user.
-        user = GooglePlusConnect.save_token_for_user(token_info.get('user_id'),
+        if invited_user_id:
+
+          user = GooglePlusConnect.save_token_for_user(token_info.get('user_id'),
+                                                  credentials,invited_user_id)
+        else:
+
+          user = GooglePlusConnect.save_token_for_user(token_info.get('user_id'),
                                                   credentials)
+
         # Store the user ID in the session for later use.
         self.session[self.CURRENT_USER_SESSION_KEY] = token_info.get('user_id')
 
@@ -451,7 +534,7 @@ class GooglePlusConnect(SessionEnabledHandler):
            'payload': 'some var',
            
         }
-        self.response.out.write(json.dumps(isNewUser))
+        self.response.out.write(json.dumps(response))
 
 class ConnectHandler(JsonRestHandler, SessionEnabledHandler):
   """Provides an API to connect users to Photohunt.
@@ -498,7 +581,7 @@ class ConnectHandler(JsonRestHandler, SessionEnabledHandler):
     return plus.people().get(userId='me').execute()
 
   @staticmethod
-  def save_token_for_user(google_user_id, credentials):
+  def save_token_for_user(google_user_id, credentials,user_id):
     """Creates a user for the given ID and credential or updates the existing
     user with the existing credential.
 
@@ -509,7 +592,10 @@ class ConnectHandler(JsonRestHandler, SessionEnabledHandler):
     Returns:
       Updated User.
     """
-    user = model.User.query(model.User.google_user_id == google_user_id).get()
+    if user_id:
+      user = model.User.get_by_id(user_id)
+    else:
+      user = model.User.query(model.User.google_user_id == google_user_id).get()
     #user = model.User.all().filter('google_user_id =', google_user_id).get()
     if user is None:
       # Couldn't find User in datastore.  Register a new user.
@@ -1309,6 +1395,9 @@ routes = [
     ('/views/cases/show',CaseShowHandler),
     ('/views/campaigns/list',CampaignListHandler),
     ('/views/campaigns/show',CampaignShowHandler),
+    ('/views/admin/users/list',UserListHandler),
+    ('/views/admin/groups/list',GroupListHandler),
+    ('/views/admin/groups/show',GroupShowHandler),
     ('/hello',HelloWorldHandler),
     ('/sign-in',SignInHandler),
     ('/sign-up',SignUpHandler),
@@ -1327,3 +1416,4 @@ config['webapp2_extras.sessions'] = {
     'secret_key': 'YOUR_SESSION_SECRET'
 }
 app = webapp2.WSGIApplication(routes, config=config, debug=True)
+
