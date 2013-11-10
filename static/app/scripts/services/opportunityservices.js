@@ -33,6 +33,7 @@ opportunityservices.factory('Opportunity', function($http) {
       if(!resp.code){
         $scope.opportunity = resp;
         $scope.isContentLoaded = true;
+        $scope.listTasks();
         $scope.$apply();
 
       }else {
@@ -62,6 +63,19 @@ opportunityservices.factory('Opportunity', function($http) {
       }
     });
     };
+    //HKA 09.11.2013 Add an opportunity
+    Opportunity.insert = function(opportunity){
+      gapi.client.crmengine.opportunities.insert(opportunity).execute(function(resp){
+        if(!resp.code){
+          $('#addOpportunityModal').modal('hide');
+          window.location.replace('#/opportunities/show/'+resp.id);
+          
+         }else{
+          console.log(resp.code);
+         }
+
+
+      })}
   
 
 

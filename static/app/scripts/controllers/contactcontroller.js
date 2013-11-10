@@ -107,10 +107,32 @@ app.controller('ContactListCtrl', ['$scope','$route','$location','Conf','MultiCo
 
       
 }]);
-app.controller('ContactShowCtrl', ['$scope','$route','$location','Conf','Contact',
-    function($scope,$route,$location,Conf,Contact) {
+app.controller('ContactShowCtrl', ['$scope','$filter','$route','$location','Conf','Task','Contact',
+    function($scope,$filter,$route,$location,Conf,Task,Contact) {
  console.log('I am in ContactShowCtrl');
       $("#id_Contacts").addClass("active");
+      var tab = $route.current.params.accountTab;
+      switch (tab)
+        {
+        case 'notes':
+         $scope.selectedTab = 1;
+          break;
+        case 'about':
+         $scope.selectedTab = 2;
+          break;
+        case 'contacts':
+         $scope.selectedTab = 3;
+          break;
+        case 'opportunities':
+         $scope.selectedTab = 4;
+          break;
+        case 'cases':
+         $scope.selectedTab = 5;
+          break;
+        default:
+        $scope.selectedTab = 1;
+
+        }
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.isContentLoaded = false;
@@ -169,8 +191,51 @@ app.controller('ContactShowCtrl', ['$scope','$route','$location','Conf','Contact
      $scope.renderSignIn();
      //$('#addContactModal').modal('show');
 
+  $scope.editacontact = function(){
+    $('#EditContactModal').modal('show');
+  }
+ //HKA 09.11.2013 Add a new Tasks
+   $scope.addTask = function(task){
       
+        $('#myModal').modal('hide');
+        var params ={}
 
+        console.log('adding a new task');
+        console.log(task);
+        
+        if (task.due){
+
+            var dueDate= $filter('date')(task.due,['yyyy-MM-dd']);
+            dueDate = dueDate +'T00:00:00.000000'
+            params ={'title': task.title,
+                      'due': dueDate,
+                      'about_kind':'Contact',
+                     'about_item':$scope.contact.id
+            }
+            console.log(dueDate);
+        }else{
+            params ={'title': task.title,
+                     'about_kind':'Contact',
+                     'about_item':$scope.contact.id}
+        };
+        Task.insert($scope,params);
+     }
+
+     $scope.hilightTask = function(){
+        console.log('Should higll');
+        $('#task_0').effect("highlight","slow");
+        $('#task_0').effect( "bounce", "slow" );
+       
+     }
+     $scope.listTasks = function(){
+        var params = {'about_kind':'Contact',
+                      'about_item':$scope.contact.id,
+                      'order': '-updated_at',
+                      'limit': 5
+                      };
+        Task.list($scope,params);
+
+     }
 
 
 }]);

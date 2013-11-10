@@ -10,10 +10,9 @@ class Campaign(EndpointsModel):
   # Should be required
   organization = ndb.KeyProperty()
   name = ndb.StringProperty(required=True)
-  type = ndb.StringProperty()
-  industry = ndb.StringProperty()
+  status = ndb.StringProperty()
   creationTime = ndb.DateTimeProperty(auto_now_add=True)
-  address = ndb.StringProperty()
+ 
 
   
 

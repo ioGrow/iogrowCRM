@@ -33,9 +33,9 @@ from oauth2client.appengine import CredentialsNDBProperty
 from google.appengine.ext import ndb
 from endpoints_proto_datastore.ndb import EndpointsModel
 
-STANDARD_TABS = [{'name': 'Accounts','label': 'Accounts','url':'/#/accounts/p/1'},{'name': 'Contacts','label': 'Contacts','url':'/#/contacts/p/1'},{'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/p/1'},{'name': 'Leads','label': 'Leads','url':'/#/leads/p/1'}]
+STANDARD_TABS = [{'name': 'Accounts','label': 'Accounts','url':'/#/accounts/'},{'name': 'Contacts','label': 'Contacts','url':'/#/contacts/'},{'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/'},{'name': 'Leads','label': 'Leads','url':'/#/leads/'},{'name': 'Cases','label': 'Cases','url':'/#/cases/'}]
 STANDARD_PROFILES = ['Super Administrator', 'Standard User', 'Sales User', 'Marketing User', 'Read Only', 'Support User', 'Contract Manager','Read Only']
-STANDARD_APPS = [{'name': 'sales', 'label': 'Sales', 'url':'/#/accounts/p/1'},{'name': 'marketing', 'label':'Marketing', 'url':'/#/compaigns/p/1'},{'name':'call_center','label': 'Call Center','url':'/#/cases/p/1'}]
+STANDARD_APPS = [{'name': 'sales', 'label': 'Sales', 'url':'/#/accounts/'},{'name': 'marketing', 'label':'Marketing', 'url':'/#/compaigns/'},{'name':'call_center','label': 'Call Center','url':'/#/cases/'}]
 STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
 
 

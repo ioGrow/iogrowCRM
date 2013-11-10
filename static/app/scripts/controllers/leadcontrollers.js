@@ -1,80 +1,245 @@
+app.controller('LeadListCtrl', ['$scope','$route','$location','Conf','Lead',
+    function($scope,$route,$location,Conf,Lead) {
+      $("#id_Leads").addClass("active");
+      
+      console.log('i am in lead list controller');
+       $("#id_Leads").addClass("active");
+     $scope.isSignedIn = false;
+     $scope.immediateFailed = false;
+     $scope.nextPageToken = undefined;
+     $scope.prevPageToken = undefined;
+     $scope.isLoading = false;
+     $scope.pagination = {};
+    	
+      $scope.leads = [];
 
-app.controller('LeadListCtrl', ['$scope','$route','$location','Lead','leads',
-  
-    function($scope,$route,$location,Lead,leads) {
-    	 $("#id_Leads").addClass("current");
-    
-      $scope.leads = leads.leads ;
-      // pagination
-      var pagesCount = Math.ceil(leads.count / 5);
-    console.log('Number of page'+pagesCount);
-      var pagination = {};
-      pagination.pages = [];
-      pagination.current = $route.current.params.page;
-      if ((pagination.current-1)<1){
-        pagination.prev = false;
-      }
-      else{
-        pagination.prev =  pagination.current-1
-      }
-      if ((pagesCount-parseInt(pagination.current))>0){
-        pagination.next =  parseInt(pagination.current)+1;
-      }
-      else{
-        pagination.next = false;
-      }
-      for (var i = 1; i <= pagesCount; i++) {
-        var page = {}
-        page.id = i;
-        page.isCurrent = (i===parseInt($route.current.params.page));
-        pagination.pages.push(page);
-      }
+      $scope.renderSignIn = function() {
+          console.log('$scope.renderSignIn #start_debug');
+          if (window.is_signed_in){
+              console.log('I am signed-in so you can continue');
+              $scope.processAuth(window.authResult);
+          }else{
+            console.log('I am  not signed-in so render Button');
+            gapi.signin.render('myGsignin', {
+            'callback': $scope.signIn,
+            'clientid': Conf.clientId,
+            'requestvisibleactions': Conf.requestvisibleactions,
+            'scope': Conf.scopes,
+            'theme': 'dark',
+            'cookiepolicy': Conf.cookiepolicy,
+            'accesstype': 'offline'
+            });
 
-      $scope.pagination = pagination;
-     // console.log(pagination);
-      // Todo add next and prev to pagination
-//add new lead
- $scope.showModal = function(){
-  $('#addLeadModal').modal('show');
- };
- $scope.lead = new Lead();
-      $scope.save = function(lead){      
-        
-        var created_lead = $scope.lead.create();
-        created_lead.then(function(lead){
+          }
           
-          $('#addLeadModal').modal('hide');
-          $location.path('/leads/show/'+lead.id);
 
-        });
+     }
+     $scope.listNextPageItems = function(){
+        $scope.isLoading = true;
+       var params = {};
+          if ($scope.nextPageToken){
+            params = {'limit':7,
+                      'pageToken':$scope.nextPageToken
+                     }
+          }else{
+            params = {'limit':7}
+          }
+          console.log('in listNextPageItems');
+          console.log($scope);
+          Lead.list($scope,params);
+     }
+     $scope.listPrevPageItems = function(){
+       $scope.isLoading = true;
+       var params = {};
+          if ($scope.nextPageToken){
+            params = {'limit':7,
+                      'pageToken':$scope.prevPageToken
+                     }
+          }else{
+            params = {'limit':7}
+          }
+          Lead.list($scope,params);
+     }
+     $scope.signIn = function(authResult) {
+        console.log('signIn callback #start_debug');
+        $scope.processAuth(authResult);
+        
+     }
+
+     $scope.processAuth = function(authResult) {
+        console.log('process Auth #startdebug');
+        $scope.immediateFailed = true;
+        if (authResult['access_token']) {
+          // User is signed-in
+          console.log('User is signed-in');
+          $scope.immediateFailed = false;
+          $scope.isSignedIn = true;
+          window.is_signed_in = true;
+          window.authResult = authResult;
+          // Call the backend to get the list of accounts
+
+          $scope.listNextPageItems();
+        } else if (authResult['error']) {
+          if (authResult['error'] == 'immediate_failed') {
+            $scope.immediateFailed = true;
+
+            window.location.replace('/sign-in');
+            console.log('Immediate Failed');
+          } else {
+            console.log('Error:' + authResult['error']);
+          }
+        }
+     }
+     $scope.renderSignIn();
+    
+      // new Contact
+      $scope.showModal = function(){
+        $('#addLeadModal').modal('show');
+
+      };
+      
+    
+      $scope.save = function(lead){
+        Lead.insert(lead);
+        $('#addLeadModal').modal('hide')
       };
 
-}]);
 
-app.controller('LeadShowCtrl',['$scope','$location','lead',
-  function($scope,$location,lead){
-    $scope.lead = lead
-
-    $scope.editLead =function(){
-      $('#EditLeadModal').modal('show');
-    };
-
-    $scope.put = function(lead){
-       var updated_lead = $scope.lead.put(lead);
-       updated_lead.then(function(lead){
-        $('#EditLeadModal').modal('hide');
-      });
-
-    };
-$scope.delete = function(lead){
-      var delete_lead= $scope.lead.delete(lead);
-      $location.path('/leads/p/1');
-      delete_lead.then(function(lead){
-        $location.path('/leads/p/1');
-
-      });
-      }
       
-  }]);
+}]);
+app.controller('LeadShowCtrl', ['$scope','$filter','$route','$location','Conf','Task','Lead',
+    function($scope,$filter,$route,$location,Conf,Task,Lead) {
+ console.log('I am in LeadShowCtrl f');
+
+      $("#id_Leads").addClass("active");
+      var tab = $route.current.params.accountTab;
+      switch (tab)
+        {
+        case 'notes':
+         $scope.selectedTab = 1;
+          break;
+        case 'about':
+         $scope.selectedTab = 2;
+          break;
+        case 'contacts':
+         $scope.selectedTab = 3;
+          break;
+        case 'opportunities':
+         $scope.selectedTab = 4;
+          break;
+        case 'cases':
+         $scope.selectedTab = 5;
+          break;
+        default:
+        $scope.selectedTab = 1;
+
+        }
+      $scope.editLead = function(){
+      $('#EditLeadModal').modal('show');
+     }
+
+     $scope.isSignedIn = false;
+     $scope.immediateFailed = false;
+     $scope.isContentLoaded = false;
+     $scope.leads = [];
+     //HKA 09.11.2013 Add a new Task
+     $scope.addTask = function(task){
+      
+        $('#myModal').modal('hide');
+        var params ={}
+
+        console.log('adding a new task');
+        console.log(task);
+        
+        if (task.due){
+
+            var dueDate= $filter('date')(task.due,['yyyy-MM-dd']);
+            dueDate = dueDate +'T00:00:00.000000'
+            params ={'title': task.title,
+                      'due': dueDate,
+                      'about_kind':'Lead',
+                      'about_item':$scope.lead.id
+            }
+            console.log(dueDate);
+        }else{
+            params ={'title': task.title,
+                     'about_kind':'Lead',
+                     'about_item':$scope.lead.id}
+        };
+        Task.insert($scope,params);
+     }
+
+     $scope.hilightTask = function(){
+        console.log('Should higll');
+        $('#task_0').effect("highlight","slow");
+        $('#task_0').effect( "bounce", "slow" );
+       
+     }
+     $scope.listTasks = function(){
+        var params = {'about_kind':'Lead',
+                      'about_item':$scope.lead.id,
+                      'order': '-updated_at',
+                      'limit': 5
+                      };
+        Task.list($scope,params);
+
+     }
+     $scope.renderSignIn = function() {
+          console.log('$scope.renderSignIn #start_debug');
+          if (window.is_signed_in){
+              console.log('I am signed-in so you can continue');
+              $scope.processAuth(window.authResult);
+          }else{
+            console.log('I am  not signed-in so render Button');
+            gapi.signin.render('myGsignin', {
+            'callback': $scope.signIn,
+            'clientid': Conf.clientId,
+            'requestvisibleactions': Conf.requestvisibleactions,
+            'scope': Conf.scopes,
+            'theme': 'dark',
+            'cookiepolicy': Conf.cookiepolicy,
+            'accesstype': 'offline'
+            });
+
+          }
+          
+
+     }
+     $scope.signIn = function(authResult) {
+        console.log('signIn callback #start_debug');
+        $scope.processAuth(authResult);
+        
+     }
 
 
+     $scope.processAuth = function(authResult) {
+        console.log('process Auth #startdebug');
+        $scope.immediateFailed = true;
+        if (authResult['access_token']) {
+          // User is signed-in
+          console.log('User is signed-in');
+          $scope.immediateFailed = false;
+          $scope.isSignedIn = true;
+          window.is_signed_in = true;
+          window.authResult = authResult;
+          // Call the backend to get the list of contact
+          var leadid = {'id':$route.current.params.leadId};
+          Lead.get($scope,leadid);
+        } else if (authResult['error']) {
+          if (authResult['error'] == 'immediate_failed') {
+            $scope.immediateFailed = true;
+
+            console.log('Immediate Failed');
+          } else {
+            console.log('Error:' + authResult['error']);
+          }
+        }
+     }
+     $scope.renderSignIn();
+     //$('#addContactModal').modal('show');
+     
+      
+
+
+
+}]);

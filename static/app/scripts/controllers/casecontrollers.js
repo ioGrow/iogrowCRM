@@ -1,8 +1,8 @@
-app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAccountLoader','Account',
-    function($scope,$route,$location,Conf,MultiAccountLoader,Account) {
-     console.log('i am in account list controller');
+app.controller('CaseListCtrl', ['$scope','$route','$location','Conf','Case',
+    function($scope,$route,$location,Conf,Case) {
+     console.log('i am in case list controller');
 
-     $("#id_Accounts").addClass("active");
+     $("#id_Cases").addClass("active");
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -12,7 +12,7 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
      $scope.currentPage = 01;
      $scope.pages = [];
      
-     $scope.accounts = [];
+     $scope.cases = [];
      
      
 
@@ -48,7 +48,7 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
           }
           console.log('in listNextPageItems');
           $scope.currentPage = $scope.currentPage + 1 ; 
-          Account.list($scope,params);
+          Case.list($scope,params);
      }
      $scope.listPrevPageItems = function(){
        
@@ -62,7 +62,7 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
             params = {'limit':7}
           }
           $scope.currentPage = $scope.currentPage - 1 ;
-          Account.list($scope,params);
+          Case.list($scope,params);
      }
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
@@ -83,7 +83,7 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
           // Call the backend to get the list of accounts
           
           var params = {'limit':7}
-          Account.list($scope,params);
+          Case.list($scope,params);
 
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
@@ -99,12 +99,12 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
      $scope.renderSignIn();
      $scope.showModal = function(){
         console.log('button clicked');
-        $('#addAccountModal').modal('show');
+        $('#addCaseModal').modal('show');
 
       };
       
-    $scope.save = function(account){
-      Account.insert(account);
+    $scope.save = function(casee){
+      Case.insert(casee);
     };
      
      
@@ -112,33 +112,11 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
 
     
 }]);
-app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Conf','Account', 'Topic','Note','Task','Event','WhoHasAccess','User',
-    function($scope,$filter,$route,$location,Conf,Account,Topic,Note,Task,Event,WhoHasAccess,User) {
+app.controller('CaseShowCtrl', ['$scope','$filter', '$route','$location','Conf','Case', 'Topic','Note','Task','Event','WhoHasAccess','User',
+    function($scope,$filter,$route,$location,Conf,Case,Topic,Note,Task,Event,WhoHasAccess,User) {
       console.log('i am in account list controller');
-      $("#id_Accounts").addClass("active");
-      var tab = $route.current.params.accountTab;
-      switch (tab)
-        {
-        case 'notes':
-         $scope.selectedTab = 1;
-          break;
-        case 'about':
-         $scope.selectedTab = 2;
-          break;
-        case 'contacts':
-         $scope.selectedTab = 3;
-          break;
-        case 'opportunities':
-         $scope.selectedTab = 4;
-          break;
-        case 'cases':
-         $scope.selectedTab = 5;
-          break;
-        default:
-        $scope.selectedTab = 1;
-
-        }
-
+      $("#id_Cases").addClass("active");
+      
      
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
@@ -149,9 +127,9 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
      $scope.currentPage = 01;
      $scope.pages = [];
      
-     $scope.accounts = [];
+     $scope.cases = [];
      
-     
+     //HKA 09.11.2013 Add a new Task
      $scope.addTask = function(task){
       
         $('#myModal').modal('hide');
@@ -166,14 +144,14 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
             dueDate = dueDate +'T00:00:00.000000'
             params ={'title': task.title,
                       'due': dueDate,
-                      'about_kind':'Account',
-                      'about_item':$scope.account.id
+                      'about_kind':'Case',
+                      'about_item':$scope.casee.id
             }
             console.log(dueDate);
         }else{
             params ={'title': task.title,
-                     'about_kind':'Account',
-                     'about_item':$scope.account.id}
+                     'about_kind':'Case',
+                     'about_item':$scope.casee.id}
         };
         Task.insert($scope,params);
      }
@@ -185,8 +163,8 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
        
      }
      $scope.listTasks = function(){
-        var params = {'about_kind':'Account',
-                      'about_item':$scope.account.id,
+        var params = {'about_kind':'Case',
+                      'about_item':$scope.casee.id,
                       'order': '-updated_at',
                       'limit': 5
                       };
@@ -262,15 +240,15 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
         var nextPage = $scope.currentPage + 1;
         var params = {};
           if ($scope.pages[nextPage]){
-            params = {'about_kind':'Account',
-                      'about_item':$scope.account.id,
+            params = {'about_kind':'Case',
+                      'about_item':$scope.casee.id,
                       'order': '-updated_at',
                       'limit': 5,
                       'pageToken':$scope.pages[nextPage]
                      }
           }else{
-            params = {'about_kind':'Account',
-                      'about_item':$scope.account.id,
+            params = {'about_kind':'Case',
+                      'about_item':$scope.casee.id,
                       'order': '-updated_at',
                       'limit': 5}
           }
@@ -283,15 +261,15 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
        var prevPage = $scope.currentPage - 1;
        var params = {};
           if ($scope.pages[prevPage]){
-            params = {'about_kind':'Account',
-                      'about_item':$scope.account.id,
+            params = {'about_kind':'Case',
+                      'about_item':$scope.casee.id,
                       'order': '-updated_at',
                       'limit': 5,
                       'pageToken':$scope.pages[prevPage]
                      }
           }else{
-            params = {'about_kind':'Account',
-                      'about_item':$scope.account.id,
+            params = {'about_kind':'Case',
+                      'about_item':$scope.casee.id,
                       'order': '-updated_at',
                       'limit': 5}
           }
@@ -304,9 +282,9 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
         $scope.processAuth(authResult);
         
      }
-     $scope.listTopics = function(account){
-        var params = {'about_kind':'Account',
-                      'about_item':account.id,
+     $scope.listTopics = function(casee){
+        var params = {'about_kind':'Case',
+                      'about_item':casee.id,
                       'order': '-updated_at',
                       'limit': 5
                       };
@@ -331,8 +309,8 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
           window.authResult = authResult;
           // Call the backend to get the list of accounts
           
-          var accountid = {'id':$route.current.params.accountId};
-          Account.get($scope,accountid);
+          var caseid = {'id':$route.current.params.caseId};
+          Case.get($scope,caseid);
 
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
@@ -348,7 +326,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
      $scope.renderSignIn();
      $scope.showModal = function(){
         console.log('button clicked');
-        $('#addAccountModal').modal('show');
+        $('#addCaseModal').modal('show');
 
       };
       
@@ -356,8 +334,8 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
       console.log('debug addNote');
       
       var params ={
-                  'about_kind': 'Account',
-                  'about_item': $scope.account.id,
+                  'about_kind': 'Case',
+                  'about_item': $scope.casee.id,
                   'title': note.title,
                   'content': note.content
       };
@@ -370,8 +348,8 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
 
 
 
-    $scope.editaccount = function() {
-       $('#EditAccountModal').modal('show');
+    $scope.editcase = function() {
+       $('#EditCaseModal').modal('show');
     }
 
       

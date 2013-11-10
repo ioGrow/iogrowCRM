@@ -1,4 +1,5 @@
-var app = angular.module('crmEngine',['ui.bootstrap.datetimepicker','ui.bootstrap','crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.leadservices','crmEngine.opportunityservices']);
+var app = angular.module('crmEngine',['ui.bootstrap.datetimepicker','ui.bootstrap','crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.eventservices', 'crmEngine.leadservices','crmEngine.opportunityservices','crmEngine.caseservices','crmEngine.campaignservices']);
+
 
 
 app.config(function($interpolateProvider){
@@ -41,7 +42,7 @@ app.config(function($httpProvider) {
 });
 app.config(['$routeProvider', function($routeProvider) {
      $routeProvider.
-      when('/accounts/p/:page', {
+      when('/accounts/', {
         controller: 'AccountListCtrl',        
         templateUrl:'/views/accounts/list'
       }).when('/accounts/show/:accountId/tab/:accountTab', {
@@ -77,24 +78,29 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'OpportunityShowCtrl',        
         templateUrl:'/views/opportunities/show'
 
-      }).when('/leads/p/:page', {
-        controller: 'LeadListCtrl',
-        resolve: {
-          leads: ["MultiLeadLoader", function(MultiLeadLoader) {
-            return MultiLeadLoader();
-          }]
-        },
-        
+      }).when('/leads/', {
+        controller: 'LeadListCtrl',        
         templateUrl:'/views/leads/list'
-      }).when('/leads/show/:leadId', {
-        controller: 'LeadShowCtrl',
-        resolve: {
-          lead: ["LeadLoader", function(LeadLoader) {
-            return LeadLoader();
-          }]
-        },
         
+      }).when('/leads/show/:leadId', {
+        controller: 'LeadShowCtrl',        
         templateUrl:'/views/leads/show'
+
+      }).when('/cases/', {
+        controller: 'CaseListCtrl',        
+        templateUrl:'/views/cases/list'
+        
+      }).when('/cases/show/:caseId', {
+        controller: 'CaseShowCtrl',        
+        templateUrl:'/views/cases/show'
+
+      }).when('/campaigns/', {
+        controller: 'CampaignListCtrl',        
+        templateUrl:'/views/campaigns/list'
+        
+      }).when('/campaigns/show/:campaignId', {
+        controller: 'CampaignShowCtrl',        
+        templateUrl:'/views/campaigns/show'
 
       }).when('/accounts/show/:accountId/notes/:noteId', {
         controller: 'NoteShowCtrl',

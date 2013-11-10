@@ -1,8 +1,8 @@
-app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAccountLoader','Account',
-    function($scope,$route,$location,Conf,MultiAccountLoader,Account) {
-     console.log('i am in account list controller');
+app.controller('CampaignListCtrl', ['$scope','$route','$location','Conf','Campaign',
+    function($scope,$route,$location,Conf,Campaign) {
+     console.log('i am in campaign list controller');
 
-     $("#id_Accounts").addClass("active");
+     $("#id_Campaigns").addClass("active");
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -12,7 +12,7 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
      $scope.currentPage = 01;
      $scope.pages = [];
      
-     $scope.accounts = [];
+     $scope.campaigns = [];
      
      
 
@@ -48,7 +48,7 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
           }
           console.log('in listNextPageItems');
           $scope.currentPage = $scope.currentPage + 1 ; 
-          Account.list($scope,params);
+          Campaign.list($scope,params);
      }
      $scope.listPrevPageItems = function(){
        
@@ -62,7 +62,7 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
             params = {'limit':7}
           }
           $scope.currentPage = $scope.currentPage - 1 ;
-          Account.list($scope,params);
+          Campaign.list($scope,params);
      }
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
@@ -83,7 +83,7 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
           // Call the backend to get the list of accounts
           
           var params = {'limit':7}
-          Account.list($scope,params);
+          Campaign.list($scope,params);
 
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
@@ -99,12 +99,12 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
      $scope.renderSignIn();
      $scope.showModal = function(){
         console.log('button clicked');
-        $('#addAccountModal').modal('show');
+        $('#addCampaignModal').modal('show');
 
       };
       
-    $scope.save = function(account){
-      Account.insert(account);
+    $scope.save = function(campaign){
+      Campaign.insert(campaign);
     };
      
      
@@ -112,10 +112,10 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
 
     
 }]);
-app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Conf','Account', 'Topic','Note','Task','Event','WhoHasAccess','User',
-    function($scope,$filter,$route,$location,Conf,Account,Topic,Note,Task,Event,WhoHasAccess,User) {
+app.controller('CampaignShowCtrl', ['$scope','$filter', '$route','$location','Conf','Campaign', 'Topic','Note','Task','Event','WhoHasAccess','User',
+    function($scope,$filter,$route,$location,Conf,Campaign,Topic,Note,Task,Event,WhoHasAccess,User) {
       console.log('i am in account list controller');
-      $("#id_Accounts").addClass("active");
+      $("#id_Campaigns").addClass("active");
       var tab = $route.current.params.accountTab;
       switch (tab)
         {
@@ -149,9 +149,10 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
      $scope.currentPage = 01;
      $scope.pages = [];
      
-     $scope.accounts = [];
+     $scope.campaigns = [];
      
      
+     //HKA 09.11.2013 Add a new Task
      $scope.addTask = function(task){
       
         $('#myModal').modal('hide');
@@ -166,14 +167,14 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
             dueDate = dueDate +'T00:00:00.000000'
             params ={'title': task.title,
                       'due': dueDate,
-                      'about_kind':'Account',
-                      'about_item':$scope.account.id
+                      'about_kind':'Campaign',
+                      'about_item':$scope.campaign.id
             }
             console.log(dueDate);
         }else{
             params ={'title': task.title,
-                     'about_kind':'Account',
-                     'about_item':$scope.account.id}
+                     'about_kind':'Campaign',
+                     'about_item':$scope.campaign.id}
         };
         Task.insert($scope,params);
      }
@@ -185,14 +186,15 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
        
      }
      $scope.listTasks = function(){
-        var params = {'about_kind':'Account',
-                      'about_item':$scope.account.id,
+        var params = {'about_kind':'Campaign',
+                      'about_item':$scope.campaign.id,
                       'order': '-updated_at',
                       'limit': 5
                       };
         Task.list($scope,params);
 
      }
+     
      $scope.addEvent = function(ioevent){
       
         $('#newEventModal').modal('hide');
@@ -331,8 +333,8 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
           window.authResult = authResult;
           // Call the backend to get the list of accounts
           
-          var accountid = {'id':$route.current.params.accountId};
-          Account.get($scope,accountid);
+          var campaignid = {'id':$route.current.params.campaignId};
+          Campaign.get($scope,campaignid);
 
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
@@ -370,8 +372,8 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
 
 
 
-    $scope.editaccount = function() {
-       $('#EditAccountModal').modal('show');
+    $scope.editcampaign = function() {
+       $('#EditCampaignModal').modal('show');
     }
 
       

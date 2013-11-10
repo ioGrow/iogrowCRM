@@ -30,6 +30,8 @@ accountservices.factory('Account', function($http) {
                $scope.account = resp;
                $scope.isContentLoaded = true;
                $scope.listTopics(resp);
+               $scope.listTasks();
+               $scope.listEvents();
                // Call the method $apply to make the update on the scope
                //$scope.apply();
 

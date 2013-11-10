@@ -12,8 +12,6 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Opp
      
      $scope.opportunities = [];
      
-     
-
      $scope.renderSignIn = function() {
           console.log('$scope.renderSignIn #start_debug');
           if (window.is_signed_in){
@@ -105,34 +103,73 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Opp
 
       };
       
-      $scope.opportunity = new Opportunity();
-      $scope.save = function(opportunity){
-        
-        
-        var created_opportunity = $scope.opportunity.create();
-        created_opportunity.then(function(account){
-          
-          $('#addAccountModal').modal('hide');
-          $location.path('/opportunities/show/'+opportunity.id);
+     
+     $scope.save = function(opportunity){
+     Opportunity.insert(opportunity);
 
-        });
-        
-
-
-      };
+     }
 
 
       
 }]);
 
-app.controller('OpportunityShowCtrl', ['$scope','$route','$location','Conf','Opportunity',
-    function($scope,$route,$location,Conf,Opportunity) {
+app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','Conf','Task','Opportunity',
+    function($scope,$filter,$route,$location,Conf,Task,Opportunity) {
  
       $("#id_Opportunities").addClass("active");
+      
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.isContentLoaded = false;
-     $scope.accounts = [];
+     $scope.opportunities = [];
+     //HKA 09.11.2013 Add a new Task
+     $scope.addTask = function(task){
+      
+        $('#myModal').modal('hide');
+        var params ={}
+
+        console.log('adding a new task');
+        console.log(task);
+        
+        if (task.due){
+
+            var dueDate= $filter('date')(task.due,['yyyy-MM-dd']);
+            dueDate = dueDate +'T00:00:00.000000'
+            params ={'title': task.title,
+                      'due': dueDate,
+                      'about_kind':'Opportunity',
+                      'about_item':$scope.opportunity.id
+            }
+            console.log(dueDate);
+        }else{
+            params ={'title': task.title,
+                     'about_kind':'Opportunity',
+                     'about_item':$scope.opportunity.id}
+        };
+        Task.insert($scope,params);
+     }
+
+     $scope.hilightTask = function(){
+        console.log('Should higll');
+        $('#task_0').effect("highlight","slow");
+        $('#task_0').effect( "bounce", "slow" );
+       
+     }
+     $scope.listTasks = function(){
+        var params = {'about_kind':'Opportunity',
+                      'about_item':$scope.opportunity.id,
+                      'order': '-updated_at',
+                      'limit': 5
+                      };
+        Task.list($scope,params);
+
+     }
+     $scope.editOpp = function(){
+      $('#EditOpportunityModal').modal('show')
+     }
+     
+     
+
      $scope.renderSignIn = function() {
           console.log('$scope.renderSignIn #start_debug');
           if (window.is_signed_in){

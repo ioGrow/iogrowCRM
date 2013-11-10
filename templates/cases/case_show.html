@@ -42,14 +42,13 @@
                 </div>
                 
             <h2>
-            <a href="/#/opportunities/" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
-            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>    {{_("Opportunities")}} > <%=opportunity.description %></h2>
+            <a href="/#/cases/" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Cases")}} > <%=casee.description %></h2>
             
 
-           <span class="opportunity-amount" >$<%=opportunity.amount %></span><span> {{_("associated with")}} </span><span><a class="tag" href="#">#<%=opportunity.name %></a></span>
-            <br><span>{{_("Stage")}}: </span><span><span><a class="tag" href="#">#<%=opportunity.stage %></a></span>
-            <br><span>{{_("Category")}}: </span><span><span><a class="tag" href="#">#appengine</a></span> <br>
-            <span class="page-meta"><i class="icon-pencil"><a ng-click="editOpp()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="delete(opportunity)" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
+           <span>{{_("Status")}}: </span><span><span><a class="tag" href="#">#<%=casee.status %></a></span>
+            <br><span>{{_("Type")}}: </span><span><span><a class="tag" href="#">#<%=casee.type_case %></a></span> <br>
+            <span class="page-meta"><i class="icon-pencil"><a ng-click="editcase()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="delete(case)" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
 
            
             
@@ -65,9 +64,10 @@
               <!-- BEGIN PORTLET-->
               <div class="portlet paddingless">
                 <div class="portlet-title line">
-                  <div class="caption">{{_("Opportunity Feeds")}}</div>
+                  <div class="caption">{{_("Case Feeds")}}</div>
                   
                 </div>
+           
                 <div class="portlet-body">
                   <div class="row-fluid">
                   <div class="span12 margin-bottom-10">
@@ -101,11 +101,10 @@
                               </li>                           
 
                              </ul>     
-                </div>
-              
               </div>
-              <!-- END PORTLET-->
-            </div>
+              </div>
+              </div>
+              
             <div class="span4">
               <!-- BEGIN PORTLET-->
               <div class="portlet">
@@ -236,42 +235,42 @@
         
         <!-- END PAGE CONTENT-->
       </div>
-      <!--HKA 11.10.2013 Edit Opportunity -->
-             <div id="EditOpportunityModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <!--HKA 09.11.2013 Edit Case -->
+             <div id="EditCaseModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("Edit Opportunity")}}</h3>
+                <h3 id="myModalLabel">{{_("Edit Case")}}</h3>
               </div>
 
               <div class="modal-body">
-                 <form id="editAccount" name="editlead" ng-submit="put(opportunity)" class="form-horizontal"> 
+                 <form id="editAccount" name="editlead" ng-submit="put(account)" class="form-horizontal"> 
                 
 
                   <div class="control-group">
-                        <label  class="required control-label">{{_("Description")}} *</label>
+                        <label  class="required control-label">{{_("Name")}} *</label>
                        
                         <div class="controls">
-                          <input type="text" required id="id_description" ng-model="opportunity.description">
+                          <input type="text" required id="id_lastname" ng-model="casee.name">
                           
                         </div>
                     </div>
                     <div class="control-group">
-                        <label  class="required control-label">{{_( "Amount")}} </label>
+                        <label  class="required control-label">{{_("Type")}}</label>
                        
                         <div class="controls">
-                          <input type="text"  id="id_amount" ng-model="opportunity.amount">
+                          <input type="text"  id="id_type" ng-model="casee.type_case">
                           
                         </div>
                     </div>
                     <div class="control-group">
-                        <label  class="required control-label">{{_("Stage")}} *</label>
+                        <label  class="required control-label">{{_("Status")}} *</label>
                        
                         <div class="controls">
-                          <input type="text"  required id="id_stage" ng-model="opportunity.stage">
+                          <input type="text"  required id="id_status" ng-model="casee.status">
                           
                         </div>
-                    </div>                     
+                    </div>                      
                   
                      
                     

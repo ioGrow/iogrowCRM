@@ -1,7 +1,22 @@
 var leadservices = angular.module('crmEngine.leadservices',[]);
- /*****************HKA 22.08.2013 Lead services ****************/
-//HKA 22.08.2013  Base sercice (create, delete, get)
-
+// Base sercice (create, delete, get)
+contactservices.factory('Conf', function($location) {
+      function getRootUrl() {
+        var rootUrl = $location.protocol() + '://' + $location.host();
+        if ($location.port())
+          rootUrl += ':' + $location.port();
+        return rootUrl;
+      };
+      return {
+        'clientId': '330861492018.apps.googleusercontent.com',
+        'apiBase': '/api/',
+        'rootUrl': getRootUrl(),
+        'scopes': 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email',
+        'requestvisibleactions': 'http://schemas.google.com/AddActivity ' +
+                'http://schemas.google.com/ReviewActivity',
+         'cookiepolicy': 'single_host_origin'
+      };
+});
 leadservices.factory('Lead', function($http) {
   
   var Lead = function(data) {
@@ -9,66 +24,75 @@ leadservices.factory('Lead', function($http) {
   }
 
   
-  Lead.get = function(id) {
-    return $http.get('/api/leads/' + id).then(function(response) {
-      return new Lead(response.data);
-    });
-  };
-  Lead.list = function(page){
-  	return $http.get('/api/leads/?page='+page).then(function(response) {
-      var results = {}
-      results.leads = response.data.results;
-      results.count = response.data.count;
+  Lead.get = function($scope,id) {
+          gapi.client.crmengine.leads.get(id).execute(function(resp) {
+            if(!resp.code){
+               $scope.lead = resp;
+               $scope.isContentLoaded = true;
+                $scope.listTasks();
+               // Call the method $apply to make the update on the scope
+               $scope.$apply();
 
-      return results;
-    });
-
+            }else {
+               alert("Error, response is: " + angular.toJson(resp));
+            }
+            console.log('gapi #end_execute');
+          });
   };
-  Lead.prototype.create = function() {
+  Lead.list = function($scope,params){
+      gapi.client.crmengine.leads.list(params).execute(function(resp) {
+
+              if(!resp.code){
+                 $scope.leads = resp.items;
+                 if (resp.nextPageToken){
+                   $scope.prevPageToken = $scope.nextPageToken;
+                   $scope.nextPageToken = resp.nextPageToken;
+
+                   $scope.pagination.next = true;
+                   $scope.pagination.prev = true;
+                 }else{
+                  $scope.pagination.next = false;
+                 }
+                 // Call the method $apply to make the update on the scope
+                 $scope.isLoading = false;
+                 $scope.$apply();
+                 
+
+              }else {
+                 alert("Error, response is: " + angular.toJson(resp));
+              }
+              console.log('gapi #end_execute');
+        });
     
-    var lead = this;
-    return $http.post('/api/leads/', lead).then(function(response) {
-      
-      lead.id = response.data.id;
-      return lead;
-    });
+  	
+
   };
-
-   //HKA 25.08.2013 Add update function put
- Lead.prototype.put  = function(lead){
-    return $http.put('/api/leads/'+lead.id, lead).then(function(response) {
-       
-      return lead;
-    });
-};
-
-//HKA 25.08.2013 Delete lead
-Lead.prototype.delete = function(lead){
-  return $http.delete('/api/leads/'+lead.id).then(function(response) {
-       
-      //return lead;
-    });
-}
-
+  Lead.insert = function(lead){
+      gapi.client.crmengine.leads.insert(lead).execute(function(resp) {
+         console.log('in insert resp');
+         console.log(resp);
+         if(!resp.code){
+          $('#addLeadModal').modal('hide');
+          window.location.replace('#/leads/show/'+resp.id);
+          
+         }else{
+          console.log(resp.code);
+         }
+      });
+  };
+  
 
 return Lead;
 });
 
-//HKA 22.08.2013  retrive list of leads
 
-leadservices.factory('MultiLeadLoader', ['Lead','$route', '$q',
-    function(Lead,$route, $q) {
-  return function() {
-    return Lead.list($route.current.params.page);
-  };
-}]);
-
-//HKA 22.08.2013 retrieve a lead
-leadservices.factory('LeadLoader', ['Lead', '$route', '$q',
+// retrieve a contact
+contactservices.factory('LeadLoader', ['Lead', '$route', '$q',
     function(Lead, $route, $q) {
   return function() {
     var delay = $q.defer();
     
+    var leadId = $route.current.params.leadId;
     
     
     return Lead.get($route.current.params.leadId);

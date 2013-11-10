@@ -7,7 +7,6 @@ class Opportunity(EndpointsModel):
   
   owner = ndb.KeyProperty()
   organization = ndb.KeyProperty()
-
   account = ndb.KeyProperty()
   name = ndb.StringProperty(required=True)
   description = ndb.StringProperty()

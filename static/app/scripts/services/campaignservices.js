@@ -1,6 +1,6 @@
-var contactservices = angular.module('crmEngine.contactservices',[]);
+var campaignservices = angular.module('crmEngine.campaignservices',[]);
 // Base sercice (create, delete, get)
-contactservices.factory('Conf', function($location) {
+campaignservices.factory('Conf', function($location) {
       function getRootUrl() {
         var rootUrl = $location.protocol() + '://' + $location.host();
         if ($location.port())
@@ -17,21 +17,23 @@ contactservices.factory('Conf', function($location) {
          'cookiepolicy': 'single_host_origin'
       };
 });
-accountservices.factory('Contact', function($http) {
+campaignservices.factory('Campaign', function($http) {
   
-  var Contact = function(data) {
+  var Campaign = function(data) {
     angular.extend(this, data);
   }
 
   
-  Contact.get = function($scope,id) {
-          gapi.client.crmengine.contacts.get(id).execute(function(resp) {
+  Campaign.get = function($scope,id) {
+          gapi.client.crmengine.campaigns.get(id).execute(function(resp) {
             if(!resp.code){
-               $scope.contact = resp;
+               $scope.campaign = resp;
                $scope.isContentLoaded = true;
+               $scope.listTopics(resp);
                $scope.listTasks();
+               $scope.listEvents();
                // Call the method $apply to make the update on the scope
-               $scope.$apply();
+               //$scope.apply();
 
             }else {
                alert("Error, response is: " + angular.toJson(resp));
@@ -39,41 +41,41 @@ accountservices.factory('Contact', function($http) {
             console.log('gapi #end_execute');
           });
   };
-  Contact.list = function($scope,params){
-      gapi.client.crmengine.contacts.list(params).execute(function(resp) {
-
+  Campaign.list = function($scope,params){
+      $scope.isLoading = true;
+      gapi.client.crmengine.campaigns.list(params).execute(function(resp) {
               if(!resp.code){
-                 $scope.contacts = resp.items;
+                 $scope.campaigns = resp.items;
+                 if ($scope.currentPage>1){
+                      $scope.pagination.prev = true;
+                   }else{
+                       $scope.pagination.prev = false;
+                   }
                  if (resp.nextPageToken){
-                   $scope.prevPageToken = $scope.nextPageToken;
-                   $scope.nextPageToken = resp.nextPageToken;
-
+                   var nextPage = $scope.currentPage + 1;
+                   // Store the nextPageToken
+                   $scope.pages[nextPage] = resp.nextPageToken;
                    $scope.pagination.next = true;
-                   $scope.pagination.prev = true;
+                   
                  }else{
                   $scope.pagination.next = false;
                  }
-                 // Call the method $apply to make the update on the scope
+                 // Loaded succefully
                  $scope.isLoading = false;
+                 // Call the method $apply to make the update on the scope
                  $scope.$apply();
-                 
-
               }else {
                  alert("Error, response is: " + angular.toJson(resp));
               }
-              console.log('gapi #end_execute');
-        });
-    
-  	
-
+      });
   };
-  Contact.insert = function(contact){
-      gapi.client.crmengine.contacts.insert(contact).execute(function(resp) {
+  Campaign.insert = function(campaign){
+      gapi.client.crmengine.campaigns.insert(campaign).execute(function(resp) {
          console.log('in insert resp');
          console.log(resp);
          if(!resp.code){
-          $('#addAContactModal').modal('hide');
-          window.location.replace('#/contacts/show/'+resp.id);
+          $('#addCampaignModal').modal('hide');
+          window.location.replace('#/campaigns/show/'+resp.id);
           
          }else{
           console.log(resp.code);
@@ -82,15 +84,15 @@ accountservices.factory('Contact', function($http) {
   };
   
 
-return Contact;
+return Campaign;
 });
 
-// retrieve list account
-contactservices.factory('MultiContactLoader', ['Account','$route', '$q',
-    function(Account, $route, $q) {
+
+campaignservices.factory('MultiCampaignLoader', ['Campaign','$route', '$q',
+    function(Campaign, $route, $q) {
     return function() {
     var delay = $q.defer();
-    gapi.client.crmengine.contacts.list().execute(function(resp) {
+    gapi.client.crmengine.campaigns.list().execute(function(resp) {
             console.log('after execution');
            // console.log(resp);
             
@@ -106,22 +108,17 @@ contactservices.factory('MultiContactLoader', ['Account','$route', '$q',
     
     return delay.promise;
     };
-
-   // function(Account,$route, $q) {
-  //return function() {
-   // return Account.list($route.current.params.page);
- // };
 }]);
 
-// retrieve a contact
-contactservices.factory('ContactLoader', ['Contact', '$route', '$q',
-    function(Contact, $route, $q) {
+// retrieve an account
+accountservices.factory('CampaignLoader', ['Campaign', '$route', '$q',
+    function(Campaign, $route, $q) {
   return function() {
     var delay = $q.defer();
     
-    var contactId = $route.current.params.contactId;
+    var campaignId = $route.current.params.campaignId;
     
     
-    return Contact.get($route.current.params.contactId);
+    return Campaign.get($route.current.params.campaignId);
   };
 }]);
