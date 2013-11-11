@@ -213,6 +213,7 @@ class AccountListHandler(BaseHandler, SessionEnabledHandler):
             template_values = {'tabs':tabs}
             template = jinja_environment.get_template('templates/accounts/list.html')
             self.response.out.write(template.render(template_values))
+
 class AccountShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
@@ -248,6 +249,34 @@ class ContactShowHandler(BaseHandler,SessionEnabledHandler):
       template = jinja_environment.get_template('templates/contacts/show.html')
       self.response.out.write(template.render(template_values))
 
+class ShowListHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+      if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            tabs = user.get_user_active_tabs()
+
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            # Render the template
+            template_values = {'tabs':tabs}
+            template = jinja_environment.get_template('templates/shows/list.html')
+            self.response.out.write(template.render(template_values))
+class ShowShowHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+      if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            tabs = user.get_user_active_tabs()
+
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            # Render the template
+            template_values = {'tabs':tabs}
+            template = jinja_environment.get_template('templates/shows/show.html')
+            self.response.out.write(template.render(template_values))
 class UserListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
@@ -1304,6 +1333,8 @@ routes = [
     ('/views/accounts/show',AccountShowHandler),
     ('/views/contacts/list',ContactListHandler),
     ('/views/contacts/show',ContactShowHandler),
+    ('/views/shows/list',ShowListHandler),
+    ('/views/shows/show',ShowShowHandler),
     ('/views/admin/users/list',UserListHandler),
     ('/views/admin/groups/list',GroupListHandler),
     ('/views/admin/groups/show',GroupShowHandler),

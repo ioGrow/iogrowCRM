@@ -588,6 +588,18 @@ background-color: #fff;
 
 
 }
+.cards-show{
+   height: 150px;
+  text-rendering: optimizeLegibility;
+-webkit-box-shadow: 0 0 6px rgba(0,0,0,0.3);
+-moz-box-shadow: 0 0 6px rgba(0,0,0,0.3);
+box-shadow: 0 0 6px rgba(0,0,0,0.3);
+-webkit-border-radius: 3px;
+-moz-border-radius: 3px;
+border-radius: 3px;
+background-color: #fff;
+
+}
 .cards-small{
    height: 120px;
   text-rendering: optimizeLegibility;
