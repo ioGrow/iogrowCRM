@@ -29,7 +29,9 @@ leadservices.factory('Lead', function($http) {
             if(!resp.code){
                $scope.lead = resp;
                $scope.isContentLoaded = true;
+                $scope.listTopics(resp);
                 $scope.listTasks();
+                $scope.listEvents();
                // Call the method $apply to make the update on the scope
                $scope.$apply();
 

@@ -53,6 +53,7 @@ class Note(EndpointsModel):
       topic.excerpt = self.content
       topic.about_kind = self.about_kind
       topic.about_item = self.about_item
+      topic.updated_at = self.updated_at
       topic.note = self.key
       topic.organization = self.organization
       topic.put()

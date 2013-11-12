@@ -7,11 +7,7 @@ topicservices.factory('Topic', function($http) {
   }
 
   
-  Topic.get = function(id) {
-    return $http.get('/api/topics/' + id).then(function(response) {
-      return new Topic(response.data);
-    });
-  };
+  
   Topic.list = function($scope,params){
       console.log('in topics.list');
       console.log(params);
@@ -20,25 +16,25 @@ topicservices.factory('Topic', function($http) {
       gapi.client.crmengine.topics.list(params).execute(function(resp) {
               if(!resp.code){
                 console.log('in topics.list looking for pagingation');
-                console.log($scope.currentPage);
+                console.log('CurrentPage   is '+$scope.currentPage);
 
                  $scope.topics = resp.items;
-                 if ($scope.currentPage>1){
+                  if ($scope.currentPage>1){
                       console.log('Should show PREV');
-                      $scope.pagination.prev = true;
-                   }else{
-                       $scope.pagination.prev = false;
+                    $scope.pagination.prev = true;
+                  }else{
+                      $scope.pagination.prev= false;
                    }
                  if (resp.nextPageToken){
                    var nextPage = $scope.currentPage + 1;
-                   // Store the nextPageToken
+                    // Store the nextPageToken
                    $scope.pages[nextPage] = resp.nextPageToken;
                    $scope.pagination.next = true;
 
-                 }else{
+                   }else{
                   $scope.pagination.next = false;
                  }
-                 // Loaded succefully
+                 //Loaded succefully
                  $scope.isLoading = false;
 
                  // Call the method $apply to make the update on the scope
@@ -49,15 +45,7 @@ topicservices.factory('Topic', function($http) {
               }
       });
   };
-  Topic.prototype.create = function() {
-    
-    var topic = this;
-    return $http.post('/api/accounts/', topic).then(function(response) {
-      
-      topic.id = response.data.id;
-      return topic;
-    });
-  } 
+  
 
 return Topic;
 });
@@ -155,7 +143,7 @@ topicservices.factory('Note', function($http) {
           $scope.listTopics($scope.account);
           $scope.isLoading = false;
 
-          $scope.apply();
+          $scope.$apply();
          // $('#addAccountModal').modal('hide');
          // window.location.replace('#/accounts/show/'+resp.id);
           

@@ -33,7 +33,9 @@ opportunityservices.factory('Opportunity', function($http) {
       if(!resp.code){
         $scope.opportunity = resp;
         $scope.isContentLoaded = true;
+        $scope.listTopics(resp);
         $scope.listTasks();
+        $scope.listEvents();
         $scope.$apply();
 
       }else {

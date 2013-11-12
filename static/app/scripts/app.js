@@ -103,7 +103,7 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'CampaignShowCtrl',        
         templateUrl:'/views/campaigns/show'
 
-      }).when('/accounts/show/:accountId/notes/:noteId', {
+      })/*.when('/accounts/show/:accountId/notes/:noteId', {
         controller: 'NoteShowCtrl',
         resolve: {
           note: ["NoteLoader", function(NoteLoader) {
@@ -113,7 +113,7 @@ app.config(['$routeProvider', function($routeProvider) {
         
         templateUrl:'/views/accounts/notes/show'
 
-      }).when('/admin/users', {
+      })*/.when('/admin/users', {
         controller: 'UserListCtrl',        
         templateUrl:'/views/admin/users/list'
       }).when('/admin/groups', {

@@ -113,14 +113,17 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Opp
       
 }]);
 
-app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','Conf','Task','Opportunity',
-    function($scope,$filter,$route,$location,Conf,Task,Opportunity) {
+app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','Conf','Task','Event','Topic','Note','Opportunity',
+    function($scope,$filter,$route,$location,Conf,Task,Event,Topic,Note,Opportunity) {
  
       $("#id_Opportunities").addClass("active");
       
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.isContentLoaded = false;
+     $scope.pagination = {};
+     $scope.currentPage = 01;
+     $scope.pages = [];
      $scope.opportunities = [];
      //HKA 09.11.2013 Add a new Task
      $scope.addTask = function(task){
@@ -167,6 +170,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
      $scope.editOpp = function(){
       $('#EditOpportunityModal').modal('show')
      }
+
      
      
 
@@ -191,10 +195,67 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
           
 
      }
+     $scope.listNextPageItems = function(){
+        
+        
+        var nextPage = $scope.currentPage + 1;
+        var params = {};
+          if ($scope.pages[nextPage]){
+            params = {'about_kind':'Opportunity',
+                      'about_item':$scope.opportunity.id,
+                      'order': '-updated_at',
+                      'limit': 5,
+                      'pageToken':$scope.pages[nextPage]
+                     }
+          }else{
+            params = {'about_kind':'Opportunity',
+                      'about_item':$scope.opportunity.id,
+                      'order': '-updated_at',
+                      'limit': 5}
+          }
+          console.log('in listNextPageItems');
+          $scope.currentPage = $scope.currentPage + 1 ; 
+          Topic.list($scope,params);
+     }
+     $scope.listPrevPageItems = function(){
+       
+       var prevPage = $scope.currentPage - 1;
+       var params = {};
+          if ($scope.pages[prevPage]){
+            params = {'about_kind':'Opportunity',
+                      'about_item':$scope.opportunity.id,
+                      'order': '-updated_at',
+                      'limit': 5,
+                      'pageToken':$scope.pages[prevPage]
+                     }
+          }else{
+            params = {'about_kind':'Opportunity',
+                      'about_item':$scope.opportunity.id,
+                      'order': '-updated_at',
+                      'limit': 5}
+          }
+          $scope.currentPage = $scope.currentPage - 1 ;
+          Topic.list($scope,params);
+          console.log()
+     }
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
         $scope.processAuth(authResult);
         
+     }
+     $scope.listTopics = function(opportunity){
+        var params = {'about_kind':'Opportunity',
+                      'about_item':$scope.opportunity.id,
+                      'order': '-updated_at',
+                      'limit': 5
+                      };
+        Topic.list($scope,params);
+
+     }
+     $scope.hilightTopic = function(){
+        console.log('Should higll');
+       $('#topic_0').effect( "bounce", "slow" );
+       $('#topic_0 .message').effect("highlight","slow");
      }
 
 
@@ -222,6 +283,63 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
         }
      }
      $scope.renderSignIn();
+
+//HKA 11.11.2013 Add new Event
+ $scope.addEvent = function(ioevent){
+      
+        $('#newEventModal').modal('hide');
+        var params ={}       
+        
+        if (ioevent.starts_at){
+            if (ioevent.ends_at){
+              params ={'title': ioevent.title,
+                      'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                      'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                      'where': ioevent.where,
+                      'about_kind':'Opportunity',
+                      'about_item':$scope.opportunity.id
+              }
+
+            }else{
+              params ={'title': ioevent.title,
+                      'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                      'where': ioevent.where,
+                      'about_kind':'Opportunity',
+                      'about_item':$scope.opportunity.id
+              }
+            }
+            console.log('inserting the event');
+            console.log(params);
+            Event.insert($scope,params);
+
+            
+        };
+     };
+     $scope.hilightEvent = function(){
+        console.log('Should higll');
+        $('#event_0').effect("highlight","slow");
+        $('#event_0').effect( "bounce", "slow" );
+       
+     };
+     $scope.listEvents = function(){
+        var params = {'about_kind':'Opportunity',
+                      'about_item':$scope.opportunity.id,
+                      'order': 'starts_at',
+                      'limit': 5
+                      };
+        Event.list($scope,params);
+
+     };
+ //HKA 11.11.2013 Add Note
+  $scope.addNote = function(note){
+    var params = {'title':$scope.note.title,
+                  'content':$scope.note.content,
+                  'about_item':$scope.opportunity.id,
+                  'about_kind':'Opportunity' };
+    Note.insert($scope,params);
+    $scope.note.title='';
+    $scope.note.content='';
+  }
     
 
 

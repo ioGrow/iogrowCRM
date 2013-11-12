@@ -42,7 +42,7 @@
                 </div>
                 
             <h2>
-            <a href="/#/opportunities/" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
+            <a href="/#/opportunities/" data-toggle="tooltip" data-placement="bottom" title="Back to Opportunities">
             <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>    {{_("Opportunities")}} > <%=opportunity.description %></h2>
             
 
@@ -71,36 +71,56 @@
                 <div class="portlet-body">
                   <div class="row-fluid">
                   <div class="span12 margin-bottom-10">
-                  <p class⁼"lead"=""><strong>Just add notes to remember what's important :</strong> </p>
-                      <form id="addNote" ng-submit="addNote(note)" class="ng-pristine ng-valid">
+                 <p class⁼"lead"=""><strong>Just add notes to remember what's important :</strong> </p>
+                          <form id="addNote" ng-submit="addNote(note)" class="ng-pristine ng-valid">
                                             
-                      <input class="input-block-level ng-pristine ng-valid" autofocus type="text" placeholder="Add a new subject" id="messageSubject" ng-model="note.title">
-                      <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="note.content"></textarea>
-                      <input ng-init="note.organization=1" required="" id="id_organization" type="hidden" name="organization" value="1"> 
+                                            <input class="input-block-level ng-pristine ng-valid" autofocus type="text" placeholder="Add a new subject" id="messageSubject" ng-model="note.title">
+
+                                         
+                                            
+                                            <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="note.content"></textarea>
+                                            <!--input ng-init="note.organization=1" required="" id="id_organization" type="hidden" name="organization" value="1"--> 
                                   
-                      <input type="hidden" id="id_related_object" ng-init="note.related_object=1" value="1">
+                                            <!--input type="hidden" id="id_related_object" ng-init="note.related_object=1" value="1"-->
                                           
                                          
-                      <div class="pull-right">
-                      <input type="submit" class="btn green" value="Add this note">
-                      </div>
+                                         <div class="pull-right">
+                                         <!-- <input type="submit" class="btn btn-primary" value="Attach file">-->
+                                          <input ng-hide="isLoading" type="submit" class="btn green" value="Add this note">
+                                          <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                                          </div>
                       </form>
                       </div>
                    </div>
                    <ul class="chats">
-                              <li class="in">
-                                <img class="avatar" alt="" src="static/img/avatar.jpg.png  " />
+                              <li class="in" ng-repeat="topic in topics" id="topic_<%=$index%>">
+                                <img class="avatar" alt="" src="static/img/avatar.jpg.png" />
                                 <div class="message">
                                   <span class="arrow"></span>
-                                  <a href="#" class="name">Hakim Karriche</a>
-                                  <span class="datetime">at Jul 25, 2012 11:09</span>
+                                  <a href="#" class="name"><%= topic.last_updater.google_display_name%></a>
+                                  <span class="datetime">at <%=topic.updated_at %></span>
                                   <span class="body">
-                                  <a href="#/accounts/show/1/notes/22" class="discussion-content"><strong class="ng-binding">Note works</strong><span class="excerpt ng-binding"> - we success to add notes</span><span class="chat-meta pull-right"><i class="icon-comment"></i> 3 comments</span></a>
+                                  <a href="#/accounts/show/1/notes/22" class="discussion-content"><strong class="ng-binding"><%= topic.title%></strong><span class="excerpt ng-binding"> - <%= topic.excerpt%></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <%= topic.comments%> comments</span></a>
                                   </span>
                                 </div>
-                              </li>                           
-
-                             </ul>     
+                              </li>
+                              
+                  </ul>
+                  <div class="row-fluid">
+                                <div class="pagination pull-right" ng-hide="isLoading">
+                                      
+                                      <ul>
+                                        <li ng-show="pagination.prev"><button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                        {{_("Prev")}} 
+                                        </button></li>
+                                        
+                                        <li  ng-show="pagination.next"><button ng-click="listNextPageItems()"  class="btn">
+                                        {{_("Next")}} 
+                                        </button></li>
+                                      </ul>
+                                </div>
+                        <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                  </div>   
                 </div>
               
               </div>
