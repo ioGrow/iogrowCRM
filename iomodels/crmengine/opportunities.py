@@ -33,7 +33,7 @@ class Opportunity(EndpointsModel):
             search.TextField(name=u'type', value=u'Opportunity'),
             #search.TextField(name='owner', value=self.owner.name),
             #search.TextField(name='organization', value = self.organization ),
-            search.TextField(name='name', value = empty_string(self.name) ),
+            search.TextField(name='title', value = empty_string(self.name) ),
             search.TextField(name='description', value = empty_string(self.description)),
             search.NumberField(name='amount', value = self.amount),
             #search.DateField(name='closed_date', value = self.closed_date),

@@ -26,7 +26,7 @@ class Campaign(EndpointsModel):
             search.TextField(name=u'type', value=u'Campaign'),
             #search.TextField(name='owner', value=self.owner.name),
             #search.TextField(name='organization', value = self.organization ),
-            search.TextField(name='name', value = empty_string(self.name) ),
+            search.TextField(name='title', value = empty_string(self.name) ),
             search.TextField(name='status', value = empty_string(self.status)),
             search.DateField(name='creationTime', value = self.creationTime),
            ])

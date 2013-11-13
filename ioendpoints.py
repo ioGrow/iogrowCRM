@@ -1,5 +1,7 @@
 import endpoints
 from google.appengine.ext import ndb
+from google.appengine.api import search 
+
 from protorpc import remote
 from endpoints_proto_datastore.ndb import EndpointsAliasProperty
 from endpoints_proto_datastore.ndb import EndpointsModel
@@ -42,19 +44,14 @@ class SearchResult(messages.Message):
     """Greeting that stores a message."""
     id = messages.StringField(1)
     title = messages.StringField(2)
-    kind = messages.StringField(3)
+    type = messages.StringField(3)
+    rank = messages.StringField(4)
 
 
 class SearchResults(messages.Message):
     """Collection of Greetings."""
     items = messages.MessageField(SearchResult, 1, repeated=True)
 
-
-TEST_RESULTS = SearchResults(items=[
-    SearchResult(id='2358',title='Goolge',kind='Account'),
-    SearchResult(id='9852',title='Assem Chelli',kind='Contact'),
-
-])
 
 @endpoints.api(name='crmengine', version='v1', description='I/Ogrow CRM APIs',allowed_client_ids=[CLIENT_ID,
                                    endpoints.API_EXPLORER_CLIENT_ID],scopes=SCOPES)
@@ -483,5 +480,24 @@ clicking on the link below:
   @endpoints.method(SearchRequest, SearchResults,
                       path='search', http_method='GET',
                       name='search')
-  def search_method(self, unused_request):
-        return TEST_RESULTS
+  def search_method(self, request):
+      index = search.Index(name="GlobalIndex")
+      query_string = request.q
+      search_results = []
+      try:
+          results = index.search(query_string) 
+          # Iterate over the documents in the results
+          for scored_document in results:
+              kwargs = {
+                        "id" : scored_document.doc_id, 
+                        "rank" : scored_document.rank
+                        }
+              for e in scored_document.fields:
+                  if e.name in ["title","type"]:
+                      kwargs[e.name]=e.value
+              search_results.append(SearchResult(**kwargs))
+              # handle results
+              pass
+      except search.Error:
+          logging.exception('Search failed')
+      return SearchResults(items = search_results)

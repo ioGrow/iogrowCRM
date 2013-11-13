@@ -29,7 +29,7 @@ class Account(EndpointsModel):
             search.TextField(name=u'type', value=u'Account'),
             #search.TextField(name='owner', value=self.owner.name),
             #search.TextField(name='organization', value = self.organization ),
-            search.TextField(name='name', value = empty_string(self.name) ),
+            search.TextField(name='title', value = empty_string(self.name) ),
             search.TextField(name='account_type', value = empty_string(self.account_type)),
             search.TextField(name='industry', value = empty_string(self.industry)),
             search.DateField(name='creationTime', value = self.creationTime),
