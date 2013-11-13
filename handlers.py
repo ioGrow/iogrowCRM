@@ -171,6 +171,27 @@ class SignInHandler(BaseHandler, SessionEnabledHandler):
             self.response.out.write(template.render(template_values))
           
 class SignUpHandler(BaseHandler, SessionEnabledHandler):
+    
+    @staticmethod
+    def init_drive_folder(credentials,folder_name,parent=None):
+      """Return the public Google+ profile data for the given user."""
+      http = httplib2.Http()
+      driveservice = build('drive', 'v2', http=http)
+      credentials.authorize(http)
+      folder = {
+                'title': folder_name,
+                'mimeType': 'application/vnd.google-apps.folder'          
+      }
+      if parent:
+        folder['parents'] = [{'id': parent}]
+      try:
+        created_folder = driveservice.files().insert(body=folder).execute()
+        return created_folder['id']
+      except errors.HttpError, error:
+        print 'An error occured: %s' % error
+        return None   
+      
+      
     def get(self):
           if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
@@ -192,7 +213,23 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
             user = self.get_user_from_session()
             org_name = self.request.get('org_name')
             mob_phone = self.request.get('mob_phone')
-            organization = model.Organization(name=org_name)
+            # init organization folders in Google drive
+            credentials = user.google_credentials
+            org_folder = self.init_drive_folder(credentials,org_name+' (ioGrow)')
+            accounts_folder = self.init_drive_folder(credentials,'Accounts', org_folder)
+            contacts_folder = self.init_drive_folder(credentials,'Contacts', org_folder)
+            leads_folder = self.init_drive_folder(credentials,'Leads', org_folder)
+            opportunities_folder = self.init_drive_folder(credentials,'Opportunities', org_folder)
+            cases_folder = self.init_drive_folder(credentials,'Cases', org_folder)
+            shows_folder = self.init_drive_folder(credentials,'Shows', org_folder)
+            organization = model.Organization(name=org_name,
+                                              org_folder=org_folder,
+                                              accounts_folder=accounts_folder,
+                                              contacts_folder=contacts_folder,
+                                              leads_folder=leads_folder,
+                                              opportunities_folder=opportunities_folder,
+                                              cases_folder=cases_folder,
+                                              shows_folder=shows_folder)
             organization.put()
             profile = model.Profile.query(model.Profile.name=='Super Administrator', model.Profile.organization==organization.key).get()
             user.init_user_config(organization.key,profile.key)

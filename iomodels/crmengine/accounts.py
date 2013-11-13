@@ -14,6 +14,7 @@ class Account(EndpointsModel):
   industry = ndb.StringProperty()
   creationTime = ndb.DateTimeProperty(auto_now_add=True)
   address = ndb.StringProperty()
+  drive_folder = ndb.StringProperty()
 
   
 

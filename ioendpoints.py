@@ -14,14 +14,66 @@ from model import User,Group,Member
 import model
 import auth_util
 from google.appengine.api import mail
+import httplib2
+from apiclient.discovery import build
+from apiclient import errors
+from protorpc import messages
+from protorpc import message_types
+
+
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
 CLIENT_ID = '330861492018.apps.googleusercontent.com'
+SCOPES = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/drive']
 
+
+class SearchRequest(messages.Message):
+    """Greeting that stores a message."""
+    q = messages.StringField(1)
+
+class SearchResult(messages.Message):
+    """Greeting that stores a message."""
+    id = messages.StringField(1)
+    title = messages.StringField(2)
+    kind = messages.StringField(3)
+
+
+class SearchResults(messages.Message):
+    """Collection of Greetings."""
+    items = messages.MessageField(SearchResult, 1, repeated=True)
+
+
+TEST_RESULTS = SearchResults(items=[
+    SearchResult(id='2358',title='Goolge',kind='Account'),
+    SearchResult(id='9852',title='Assem Chelli',kind='Contact'),
+
+])
 
 @endpoints.api(name='crmengine', version='v1', description='I/Ogrow CRM APIs',allowed_client_ids=[CLIENT_ID,
-                                   endpoints.API_EXPLORER_CLIENT_ID])
+                                   endpoints.API_EXPLORER_CLIENT_ID],scopes=SCOPES)
 class CrmEngineApi(remote.Service):
+  
+  @staticmethod
+  def init_drive_folder(credentials,folder_name,parent=None):
+      """Return the public Google+ profile data for the given user."""
+      http = httplib2.Http()
+      driveservice = build('drive', 'v2', http=http)
+      print credentials
+      credentials.authorize(http)
+
+      folder = {
+                'title': folder_name,
+                'mimeType': 'application/vnd.google-apps.folder'          
+      }
+      if parent:
+        folder['parents'] = [{'id': parent}]
+      try:
+        created_folder = driveservice.files().insert(body=folder).execute()
+        return created_folder['id']
+      except errors.HttpError, error:
+        print 'An error occured: %s' % error
+        return None
+  
   # TEDJ_29_10_write annotation to reference wich model for example @Account to refernce Account model
   @Contact.method(user_required=True,path='contacts', http_method='POST', name='contacts.insert')
   def ContactInsert(self, my_model):
@@ -85,6 +137,16 @@ class CrmEngineApi(remote.Service):
       raise endpoints.UnauthorizedException('You must sign-in!' )
     # Todo: Check permissions
     my_model.owner = user_from_email.key
+    # get the accounts folder id 
+    organization = user_from_email.organization.get()
+    all_accounts_folder = organization.accounts_folder
+    # init folder for this account
+    credentials = user_from_email.google_credentials
+
+    drive_folder = self.init_drive_folder(credentials,my_model.name,all_accounts_folder)
+    my_model.drive_folder = drive_folder
+
+
     my_model.put()
     return my_model
 
@@ -97,6 +159,7 @@ class CrmEngineApi(remote.Service):
   @Account.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='accounts', name='accounts.list')
   def AccountList(self, query):
     return query
+
 
 
 
@@ -339,3 +402,11 @@ clicking on the link below:
     if not my_model.from_datastore:
       raise endpoints.NotFoundException('Show not found.')
     return my_model
+
+
+  ################################### Search API ################################
+  @endpoints.method(SearchRequest, SearchResults,
+                      path='search', http_method='GET',
+                      name='search')
+  def search_method(self, unused_request):
+        return TEST_RESULTS

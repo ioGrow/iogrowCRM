@@ -375,3 +375,47 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
 
 
 }]);
+app.controller('SearchFormController', ['$scope','$route','$location','Conf','User',
+    function($scope,$route,$location,Conf,User) {
+     console.log('Search Form Controller');
+     var params ={};
+     $scope.result = undefined;
+     $scope.searchresults = function(q) {
+        console.log('searchResults ');
+        console.log(q);
+        
+        console.log("just before calling the usersearch api");
+        gapi.client.crmengine.search().execute(function(resp) {
+          console.log("in usersearch api");
+          $scope.results = resp.items;
+          //$scope.$apply();
+        });
+        
+        return $scope.results;
+
+      };
+      $scope.selectResult = function(){
+        console.log('slecting result yeaaah');
+        console.log($scope.searchQuery);
+        //$scope.user = $scope.slected_memeber.google_display_name;
+
+     };
+     $scope.executeSearch = function(searchQuery){
+      console.log('execyte ssearcg query');
+      console.log(searchQuery);
+      if (typeof(searchQuery)=='string'){
+         window.location.replace('#/search/'+searchQuery);
+      }else{
+        window.location.replace('#/accounts/show/'+searchQuery.id);
+      }
+      $scope.searchQuery='';
+     }
+
+
+
+     
+     
+   
+
+    
+}]);

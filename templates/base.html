@@ -47,11 +47,11 @@
         <a href="javascript:;" class="btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
         <img src="static/img/menu-toggler.png" alt="" />
         </a>   
-             <ul class="nav search-form-top"> 
+             <ul class="nav search-form-top" ng-controller="SearchFormController"> 
                   <li>    
-                    <form class="form-inline ng-pristine ng-valid">
+                    <form class="form-inline ng-pristine ng-valid" ng-submit="executeSearch(searchQuery)">
                       <div class="input-append row-fluid">
-                        <input type="text" class="input-xxlarge" placeholder="Search">
+                        <input type="text" ng-model="searchQuery" typeahead="result as result.title + ' (' + result.kind + ')' for result in searchresults($viewValue) | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="input-xlarge" placeholder="Search">
                        <button class="gbqfb gbqfb-hvr"><span class="gbqfi"></span></button>
                       </div>
                     </form>

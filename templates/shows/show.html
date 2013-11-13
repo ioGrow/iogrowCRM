@@ -49,6 +49,8 @@
             <span ng-repeat="tag in show.tags"><a class="tag" href="#"> <%=tag%> </a></span>
             
              </br>
+              <span class="page-meta"><strong>youtube-url:</strong> Add youtube-url when show is ready </span>
+              <br>
              <span class="page-meta"><i class="icon-pencil"><a ng-click="editaccount()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |  <i class="icon-trash"><a ng-click="delete(account)" class="btn-link addAnotherPhone">  {{_("Delete")}}</a></i></span>
 
            
@@ -74,9 +76,9 @@
                     <ul class="nav nav-tabs">
                       <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;" >Notes</a></li>
                       <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;">About</a></li>
-                      <li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">Contacts</a></li>
-                      <li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">Opportunities</a></li>
-                      <li class="ng-tab"  ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">Cases</a></li>
+                      <li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">Leads</a></li>
+                      <li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">Documents</a></li>
+                      
                     </ul>
                     <div class="tab-content">
                       <div class="tab-pane active" id="tab_1_1" ng-show="selectedTab == 1">
@@ -142,72 +144,25 @@
                           <div class="span6">
                             
                                 <div class="news-blocks blank-card blank-card-yellow">
-                                <h3>Account Informations</h3>
-                                <div class="news-block-tags">
-                                  <strong>Phone</strong>
-                                 
-                                </div>
-                                  <ul class="unstyled contact-infos">
-                                    <li>(415) 663-4433  <a href="#"><img class="ctodeal" src="static/img/phone-icon.png" /></a></li>
-                                    <li>(415) 663-4433 <a href="#"><img class="ctodeal" src="static/img/phone-icon.png" /></a></li>
-                                    <li>(415) 663-4433 <a href="#"><img class="ctodeal" src="static/img/phone-icon.png"/></a></li>
-                                    <li><a href="#"><i class="icon-plus"></i> Add a new phone number </a></li>
-
-                                  </ul>
-                                <div class="news-block-tags">
-                                  <strong>Email</strong>
-                                 
-                                </div>
-                                  <ul class="unstyled contact-infos">
-                                    <li>contact@clicandcal.com  </li>
-                                    <li>sales@clicandcal.com </li>
-                                    <li>support@clicandcal.com </li>
-                                    <li><a href="#"><i class="icon-plus"></i> Add a new email address </a></li>
-
-                                  </ul>
-                                <div class="news-block-tags">
-                                  <strong>Address</strong>
-                                 
-                                </div>
-                                 <ul class="unstyled contact-infos">
-                                    <li>760 Market Street, 11th Floor San Francisco, CA 94102  </li>
-                                    
-                                    <li><a href="#"><i class="icon-plus"></i> Add a new address </a></li>
-
-                                  </ul>
-
+                                <h3>The show on youtube</h3>
+                                <img src="static/img/gdl-stay-tuned.png"/>
+                               
                                                               
                                                           
                               </div>
-                              <div class="news-blocks blank-card blank-card-bluep">
-                                <h3>Links</h3>
-                                <div class="news-block-tags">
-                                  <strong>Website</strong>
-                                  
-                                </div>
-                                <ul class="unstyled contact-infos">
-                                    <li><a href="#">www.clicandcal.com</a> </li>
-                                </ul> 
-                                <div class="news-block-tags">
-                                  <strong>Social Links</strong>
-                                  
-                                </div>
-                                <ul class="unstyled contact-infos">
-                                    <li><a href="#">facebook.com/clicandcal</a> </li>
-                                </ul>                       
-                              </div>
+                              
                           </div>
                           <div class="span6">
                           
                             <div class="news-blocks blank-card blank-card-red">
-                                <h3>Story</h3>
+                                <h3>About</h3>
                                 <div class="news-block-tags">
-                                  <strong>Tagline</strong>
-                                  
+                                  <strong>When: </strong>
+                                    Nov. 12 1 p.m.-1:25 p.m. (CST)
                                 </div>
-                                <p>Accelerating the Cloud Powered Business</p>
+                                <p></p>
                                 <div class="news-block-tags">
-                                  <strong>Introduction</strong>
+                                  <strong>Short description</strong>
                                   
                                 </div>
                                 <p>Appirio is a global technology-enabled services provider, helping companies power their business with cloud, social and mobile technologies from leaders like salesforce.com, Google and Workday. Appirio has worked with more than 400 enterprise customers including organizations like the City of Los Angeles, Facebook, Flextronics, International Hotels Group, Japan Post Network, Ltd., L'Oreal, NetApp, NYU, Starbucks, Thomson Reuters and VMware. Appirio's technology-enabled professional services are supported by a team of 600 cloud experts and CloudSpokes, a more than 70,000 person-strong global cloud developer community. The company's expertise and innovation have been recognized by organizations such as the World Economic Forum, Bloomberg BusinessWeek, The Wall Street Journal, InformationWeek and IDC. Appirio has offices that span the U.S., Europe and Asia Pacific, and is backed by Sequoia Capital, GGV Capital and General Atlantic.</p>                         
@@ -389,77 +344,7 @@
                               </div>
                             </div>
                       </div>
-                      <div class="tab-pane active" id="tab_1_5" ng-show="selectedTab == 5">
-                          
-                         <div class="row-fluid cards-container">
-                         <div class="btn-group relbutton">
-            
-                                <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
-                                {{_("Add a new case")}} <i class="icon-plus"></i>
-                                </button>
-                          </div>
-                            <div class="inner-cards-container">
-                            
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Database Isue on Website
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">status: open</span> <span class="updated-on">Updated on Oct 05 at 2:33 pm</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#database</a>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                             
-                              
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Database Isue on Website
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">status: open</span> <span class="updated-on">Updated on Oct 05 at 2:33 pm</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#database</a>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Database Isue on Website
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">status: open</span> <span class="updated-on">Updated on Oct 05 at 2:33 pm</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#database</a>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-
-                              </div>
-                            </div>
-                      </div>
+                      
                     </div>
                   </div>
                   <!--END TABS-->
