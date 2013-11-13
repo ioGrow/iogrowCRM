@@ -34,22 +34,28 @@
           <div class="span12">
             <div class="pull-right sharebuttonDiv"> 
                   <a href="" class="btn blue jfk-button jfk-button-action">
-                    <i class="icon-lock"></i> {{_("Share")}}
+                    <i class="icon-lock"></i> Share
                   </a>
-                       
+                        
                         
                      
                 </div>
                 
             <h2>
-            <a href="/#/contacts/" data-toggle="tooltip" data-placement="bottom" title="Back to Contacts">
-            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>   {{_("Contacts")}} > <%=contact.firstname%> <%=contact.lastname%></h2>
+            <a href="/#/contacts/p/1" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     Contacts > <%= contact.firstname %></h2>
             
 
-            <span ><a class="tag" href="#">#<%=contact.title%> </a></span><span> {{_("at")}} </span><span><a class="tag" href="#">#<%=contact.company%></a></span> <br>
-            <span class="page-meta"><i class="icon-pencil"><a ng-click="editacontact()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="delete(contact)" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
+            <ul class="unstyled inline blog-tags">
+                        <li>
+                           
+                          <a class="tag" href="#">#Technology</a> 
+                          <a class="tag" href="#">#Education</a>
+                          <a class="tag" href="#">#Internet</a>
+                        </li>
+            </ul>
 
-           
+            
             
             <hr/>
             
@@ -63,7 +69,7 @@
               <!-- BEGIN PORTLET-->
               <div class="portlet paddingless">
                 <div class="portlet-title line">
-                  <div class="caption">{{_("Contact Feeds")}}</div>
+                  <div class="caption">Contact Feeds</div>
                   
                 </div>
                 <div class="portlet-body">
@@ -72,7 +78,7 @@
                     <ul class="nav nav-tabs">
                       <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;" >Notes</a></li>
                       <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;">About</a></li>
-                      <!--li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">Contacts</a></li-->
+                      <li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">Contacts</a></li>
                       <li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">Opportunities</a></li>
                       <li class="ng-tab"  ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">Cases</a></li>
                     </ul>
@@ -89,15 +95,14 @@
                                          
                                             
                                             <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="note.content"></textarea>
-                                            <!--input ng-init="note.organization=1" required="" id="id_organization" type="hidden" name="organization" value="1"--> 
+                                            <input ng-init="note.organization=1" required="" id="id_organization" type="hidden" name="organization" value="1"> 
                                   
-                                            <!--input type="hidden" id="id_related_object" ng-init="note.related_object=1" value="1"-->
+                                            <input type="hidden" id="id_related_object" ng-init="note.related_object=1" value="1">
                                           
                                          
                                          <div class="pull-right">
                                          <!-- <input type="submit" class="btn btn-primary" value="Attach file">-->
-                                          <input ng-hide="isLoading" type="submit" class="btn green" value="Add this note">
-                                          <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                                          <input type="submit" class="btn green" value="Add this note">
                                           </div>
                                         </form>
                                        </div>
@@ -105,35 +110,63 @@
 
                                         
                             <ul class="chats">
-                              <li class="in" ng-repeat="topic in topics" id="topic_<%=$index%>">
+                              <li class="in">
                                 <img class="avatar" alt="" src="static/img/avatar.jpg.png" />
                                 <div class="message">
                                   <span class="arrow"></span>
-                                  <a href="#" class="name"><%= topic.last_updater.google_display_name%></a>
-                                  <span class="datetime">at <%=topic.updated_at %></span>
+                                  <a href="#" class="name">Hakim Karriche</a>
+                                  <span class="datetime">at Jul 25, 2012 11:09</span>
                                   <span class="body">
-                                  <a href="#/accounts/show/1/notes/22" class="discussion-content"><strong class="ng-binding"><%= topic.title%></strong><span class="excerpt ng-binding"> - <%= topic.excerpt%></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <%= topic.comments%> comments</span></a>
+                                  <a href="#/accounts/show/1/notes/22" class="discussion-content"><strong class="ng-binding">Note works</strong><span class="excerpt ng-binding"> - we success to add notes</span><span class="chat-meta pull-right"><i class="icon-comment"></i> 3 comments</span></a>
                                   </span>
                                 </div>
                               </li>
-                              
+                              <li class="in">
+                                <img class="avatar" alt="" src="static/img/avatar.jpg.png" />
+                                <div class="message">
+                                  <span class="arrow"></span>
+                                  <a href="#" class="name">Hakim Karriche</a>
+                                  <span class="datetime">at Jul 25, 2012 11:09</span>
+                                  <span class="body">
+                                  <a href="#/accounts/show/1/notes/22" class="discussion-content"><strong class="ng-binding">Note works</strong><span class="excerpt ng-binding"> - we success to add notes</span><span class="chat-meta pull-right"><i class="icon-comment"></i> 3 comments</span></a>
+                                  </span>
+                                </div>
+                              </li><li class="in">
+                                <img class="avatar" alt="" src="static/img/avatar.jpg.png" />
+                                <div class="message">
+                                  <span class="arrow"></span>
+                                  <a href="#" class="name">Hakim Karriche</a>
+                                  <span class="datetime">at Jul 25, 2012 11:09</span>
+                                  <span class="body">
+                                  <a href="#/accounts/show/1/notes/22" class="discussion-content"><strong class="ng-binding">Note works</strong><span class="excerpt ng-binding"> - we success to add notes</span><span class="chat-meta pull-right"><i class="icon-comment"></i> 3 comments</span></a>
+                                  </span>
+                                </div>
+                              </li><li class="in">
+                                <img class="avatar" alt="" src="static/img/avatar.jpg.png" />
+                                <div class="message">
+                                  <span class="arrow"></span>
+                                  <a href="#" class="name">Hakim Karriche</a>
+                                  <span class="datetime">at Jul 25, 2012 11:09</span>
+                                  <span class="body">
+                                  <a href="#/accounts/show/1/notes/22" class="discussion-content"><strong class="ng-binding">Note works</strong><span class="excerpt ng-binding"> - we success to add notes</span><span class="chat-meta pull-right"><i class="icon-comment"></i> 3 comments</span></a>
+                                  </span>
+                                </div>
+                              </li><li class="in">
+                                <img class="avatar" alt="" src="static/img/avatar.jpg.png" />
+                                <div class="message">
+                                  <span class="arrow"></span>
+                                  <a href="#" class="name">Hakim Karriche</a>
+                                  <span class="datetime">at Jul 25, 2012 11:09</span>
+                                  <span class="body">
+                                  <a href="#/accounts/show/1/notes/22" class="discussion-content"><strong class="ng-binding">Note works</strong><span class="excerpt ng-binding"> - we success to add notes</span><span class="chat-meta pull-right"><i class="icon-comment"></i> 3 comments</span></a>
+                                  </span>
+                                </div>
+                              </li>
                             </ul>
-                            <div class="row-fluid">
-                                <div class="pagination pull-right" ng-hide="isLoading">
-                                      
-                                      <ul>
-                                        <li ng-show="pagination.prev"><button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
-                                        {{_("Prev")}} 
-                                        </button></li>
-                                        
-                                        <li  ng-show="pagination.next"><button ng-click="listNextPageItems()"  class="btn">
-                                        {{_("Next")}} 
-                                        </button></li>
-                                      </ul>
-                                    </div>
-                                    <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
-                              </div>
-                            </div>
+                  
+                          
+                        
+                      </div>
                       <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
                         
                         <div class="row-fluid">
@@ -217,7 +250,7 @@
                           
                         
                       </div>
-                      <!--div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3">
+                      <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3">
                           
                          <div class="row-fluid cards-container">
                          <div class="btn-group relbutton">
@@ -299,7 +332,7 @@
                               </div>
                               </div>
                             </div>
-                      </div-->
+                      </div>
                        <div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 4">
                           
                          <div class="row-fluid cards-container">
@@ -475,14 +508,29 @@
                 <div class="portlet-body" id="chats">
                   <div class="scroller" style="height:200x" data-always-visible="1" data-rail-visible="0">
                     <div id="newTask">
-                                <p><strong>Tasks:</strong><a href="#"> [View all(25)]</a></p>
+                                <p><strong>Tasks:</strong></p>
 
                                  
                                   <ul id="tasks" class="unstyled">
-                                    <li ng-repeat="task in tasks" id="task_<%=$index%>">
+                                    <li>
                                       <input value="check1" type="checkbox">
                                       <!-- Name -->
-                                    <span><a href="/tasks/1" class="discussion-content"><%= task.title%> <span ng-show="task.due"> [before: <%= task.due | date:'yyyy-MM-dd '%>]</span></a></span>
+                                    <span><a href="/tasks/1" class="discussion-content"> Prepare a commercial offer for salesforce training [before: 20/08/2013]</a></span>
+                                    </li>
+                                    <li>
+                                      <input value="check1" type="checkbox">
+                                      <!-- Name -->
+                                    <span><a href="/tasks/1" class="discussion-content"> Talk with Teacher</a></span>
+                                    </li>
+                                    <li>
+                                      <input value="check1" type="checkbox">
+                                      <!-- Name -->
+                                    <span><a href="/tasks/1" class="discussion-content"> Find interns</a></span>
+                                    </li>
+                                    <li>
+                                      <input value="check1" type="checkbox">
+                                      <!-- Name -->
+                                    <span><a href="/tasks/1" class="discussion-content"> Pepare plan to migrate</a></span>
                                     </li>
                                     
                                     <li><a href="#myModal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new task</a></li>
@@ -493,11 +541,6 @@
 
                                  
                                   <ul id="tasks" class="unstyled">
-                                    <li ng-repeat="event in events" id="event_<%=$index%>">
-                                      <input value="check1" type="checkbox">
-                                      <!-- Name -->
-                                    <span><a href="/tasks/1" class="discussion-content"><%= event.title%> <span ng-show="event.starts_at"> [<%= event.starts_at | date:'yyyy-MM-dd '%>]</span></a></span>
-                                    </li>
                                    
                                     
 
@@ -511,55 +554,89 @@
           <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 id="myModalLabel">Add a new Task</h3>
+              <h3 id="myModalLabel">New Task</h3>
             </div>
-            <div class="modal-body pickerin">
+            <div class="modal-body">
                      <div class="controls controls-row">
-                                          <form id="addTask" ng-submit="addTask(task)" class="ng-pristine ng-valid">
-                                                  <input class="input-block-level" autofocus type="text" placeholder="Add a new task" id="taskTitle" ng-model="task.title">
+                                                  <input class="input-block-level" autofocus="" type="text" placeholder="Add a new task" id="taskTitle">
+                                                  <p>When's it due?</p>
+                                                
+                                                        <div id="datetimepicker2" class="input-append">
+                                                          <input placeholder="dd/MM/yyyy" data-format="MM/dd/yyyy HH:mm:ss PP" type="text">
+                                                          <span class="add-on">
+                                                            <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                                                            </i>
+                                                          </span>
+                                                        </div>
+
+                                                    <p>Who's responsible?</p>
+
+                                                   <!--<p>Who's responsible?</p>
+          >>>>>>> 803fd0d019c8ca6e8b1fd7a1dd6462b38c06b49f
+                                                    <select id="task_owner_id" name="task[owner_id]"><option value="889860" selected="selected">Me</option>
+                                                      <option value="922510">Hakim Karriche</option></select>
+                                                     <p>Choose a category</p>
+                                                     <p>
+                                                    <select id="category_task" name="task[category_id]" onchange="Tasks.changeCategory(this)">
+                                                                      <option value="" selected="selected">None</option>
+                                                                      <option value="4377192">Call</option>
+                                                                      <option value="4377193">Demo</option>
+                                                                      <option value="4377194">Email</option>
+                                                                      <option value="4377195">Fax</option>
+                                                                      <option value="4377196">Follow-up</option>
+                                                                      <option value="4377197">Lunch</option>
+                                                                      <option value="4377198">Meeting</option>
+                                                                      <option value="4561547">new one</option>
+                                                                      <option value="4377199">Ship</option>
+                                                                      <option value="4377200">Thank-you</option>
+                                                                      <option value="new">New category...</option>
+                                                    </select>
+
+                                                    <a href="/task_categories" behavior="return_to" class="edit_categories">Edit categories</a>
+                                                    </p>
+
+                                                    <a href="/task_categories" behavior="return_to" class="edit_categories">Edit categories</a>
+                                                    </p>!-->
+
+                        
+                                               
+
                                                   
-                                                  <p><strong>When's it due?</strong></p>
-                                                  <center>
-                                                    <datetimepicker data-ng-model="task.due"
-                                                    data-datetimepicker-config="{ startView:'day', minView:'day' }" />
-                                                  </center>
-                     </div>
+                  </div>
             </div>
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-              
-               <input ng-hide="isLoading" type="submit" class="btn green" value="Add this task">
-                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
-                                        
-            </form>
+              <button class="btn btn-primary">Add this task</button>
             </div>
           </div>
 
           <!--Event Modal -->
-          <div id="newEventModal" class="modal  hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div id="newEventModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
               <h3 id="myModalLabel">New Event</h3>
             </div>
             <div class="modal-body">
                      <div class="controls controls-row">
-                            <form id="addTask" ng-submit="addEvent(ioevent)" class="ng-pristine ng-valid">
-                                                  <input class="input-block-level" autofocus type="text" placeholder="Add a new event" id="taskTitle" ng-model="ioevent.title">
-                                                  <p><strong>When?</strong></p>
-                                                <div class="row-fluid">
-                                                  <div class="span6">
-                                                    <p> <strong>Starts</strong>: <%=ioevent.starts_at | date:'MMMM dd, yyyy, HH:mm'%></p>
-                                                        <datetimepicker data-ng-model="ioevent.starts_at"
-                                                    data-datetimepicker-config="{ startView:'day', minView:'minute' }" />
-                                                  </div>
-                                                  <div class="span6">
-                                                  <p><strong>Ends</strong>: <%=ioevent.ends_at | date:'MMMM dd, yyyy, HH:mm'%></p>
-                                                        <datetimepicker data-ng-model="ioevent.ends_at"
-                                                    data-datetimepicker-config="{ startView:'day', minView:'minute' }" />
-                                                  </div>
-                                                </div>
-                                                    <input class="input-block-level" autofocus="" type="text" placeholder="Where?" id="taskTitle" ng-model="ioevent.where">
-                                                    
+                                                  <input class="input-block-level" autofocus="" type="text" placeholder="Add a new event" id="taskTitle">
+                                                  <p>When?</p>
+                                                
+                                                        <div id="event_start_date" class="input-append">
+                                                          <input placeholder="Start" data-format="MM/dd/yyyy HH:mm:ss PP" type="text">
+                                                          <span class="add-on">
+                                                            <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                                                            </i>
+                                                          </span>
+                                                        </div>
+                                                        <div id="event_end_date" class="input-append">
+                                                          <input placeholder="End" data-format="MM/dd/yyyy HH:mm:ss PP" type="text">
+                                                          <span class="add-on">
+                                                            <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                                                            </i>
+                                                          </span>
+                                                        </div>
+                                                    <input class="input-block-level" autofocus="" type="text" placeholder="Where?" id="taskTitle">
+                                                    <textarea class="input-block-level" placeholder="Description"></textarea>
                                                     
                                                     
                                                
@@ -569,11 +646,7 @@
             </div>
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-              
-               <input ng-hide="isLoading" type="submit" class="btn green" value="Add this event">
-                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
-                                        
-            </form>
+              <button class="btn btn-primary">Add this event</button>
             </div>
           </div>
                                     
@@ -588,77 +661,11 @@
               <!-- END PORTLET-->
             </div>
             </div>
-
           
             
           
         
         <!-- END PAGE CONTENT-->
       </div>
-      <!--HKA 11.10.2013 Edit Contact -->
-             <div id="EditContactModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("Edit Contact")}}</h3>
-              </div>
-
-              <div class="modal-body">
-                 <form id="editAccount" name="editlead" ng-submit="put(contact)" class="form-horizontal"> 
-                
-
-                  <div class="control-group">
-                        <label  class="required control-label">{{_("First Name")}} *</label>
-                       
-                        <div class="controls">
-                          <input type="text" required id="id_firstname" ng-model="contact.firstname">
-                          
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Last Name")}}</label>
-                       
-                        <div class="controls">
-                          <input type="text"  id="id_type" ng-model="contact.lastname">
-                          
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Tittle")}} *</label>
-                       
-                        <div class="controls">
-                          <input type="text"  required id="id_Tittle" ng-model="contact.tittle">
-                          
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Company")}} </label>
-                       
-                        <div class="controls">
-                          <input type="text"   id="id_Company" ng-model="contact.company">
-                          
-                        </div>
-                    </div>                     
-                  
-                     
-                    
-                  
-                
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
-                <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
-              </div>
-               </form>
-              </div> 
-        </div>
       <!-- END PAGE CONTAINER-->
 </div>
-<script type="text/javascript">
-  $(function() {
-    $('#datetimepicker2').datetimepicker({
-      language: 'fr',
-      pickTime: false
-    });
-  });
-</script>

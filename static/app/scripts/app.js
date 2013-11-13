@@ -1,4 +1,5 @@
-var app = angular.module('crmEngine',['ui.bootstrap.datetimepicker','ui.bootstrap','crmEngine.accountservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.eventservices', 'crmEngine.leadservices','crmEngine.userservices','crmEngine.groupservices','crmEngine.showservices']);
+
+var app = angular.module('crmEngine',['ui.bootstrap.datetimepicker','ui.bootstrap','crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.eventservices', 'crmEngine.leadservices','crmEngine.opportunityservices','crmEngine.caseservices','crmEngine.campaignservices','crmEngine.userservices','crmEngine.groupservices']);
 
 
 
@@ -42,7 +43,7 @@ app.config(function($httpProvider) {
 });
 app.config(['$routeProvider', function($routeProvider) {
      $routeProvider.
-      when('/accounts/p/:page', {
+      when('/accounts/', {
         controller: 'AccountListCtrl',        
         templateUrl:'/views/accounts/list'
       }).when('/accounts/show/:accountId/tab/:accountTab', {
@@ -63,60 +64,44 @@ app.config(['$routeProvider', function($routeProvider) {
         templateUrl:'http://localhost:8090/accounts/'
 
         
-      }).when('/contacts/p/:page', {
+      }).when('/contacts/', {
         controller: 'ContactListCtrl',      
         templateUrl:'/views/contacts/list'
         //HKA 22.08.13 Step 1 create route
       }).when('/contacts/show/:contactId', {
         controller: 'ContactShowCtrl',        
         templateUrl:'/views/contacts/show'
-      }).when('/opportunities/p/:page', {
-        controller: 'OpportunityListCtrl',
-        resolve: {
-          accounts: ["MultiAccountLoader", function(MultiAccountLoader) {
-            return MultiAccountLoader();
-          }]
-        },
+      }).when('/opportunities/', {
+        controller: 'OpportunityListCtrl',        
+        templateUrl:'/views/opportunities/list'
         
-        templateUrl:'/opportunities/'
-        //HKA 22.08.13 Step 1 create route
-      }).when('/opportunities/show/:accountId', {
-        controller: 'OpportunityShowCtrl',
-        resolve: {
-          account: ["AccountLoader", function(AccountLoader) {
-            return AccountLoader();
-          }]
-        },
-        
+      }).when('/opportunities/show/:opportunityId', {
+        controller: 'OpportunityShowCtrl',        
         templateUrl:'/views/opportunities/show'
-      }).when('/leads/p/:page', {
-        controller: 'LeadListCtrl',
-        resolve: {
-          leads: ["MultiLeadLoader", function(MultiLeadLoader) {
-            return MultiLeadLoader();
-          }]
-        },
-        
+
+      }).when('/leads/', {
+        controller: 'LeadListCtrl',        
         templateUrl:'/views/leads/list'
-      }).when('/leads/show/:leadId', {
-        controller: 'LeadShowCtrl',
-        resolve: {
-          lead: ["LeadLoader", function(LeadLoader) {
-            return LeadLoader();
-          }]
-        },
         
+      }).when('/leads/show/:leadId', {
+        controller: 'LeadShowCtrl',        
         templateUrl:'/views/leads/show'
 
-      }).when('/accounts/show/:accountId/notes/:noteId', {
-        controller: 'NoteShowCtrl',
-        resolve: {
-          note: ["NoteLoader", function(NoteLoader) {
-            return NoteLoader();
-          }]
-        },
+      }).when('/cases/', {
+        controller: 'CaseListCtrl',        
+        templateUrl:'/views/cases/list'
         
-        templateUrl:'/views/accounts/notes/show'
+      }).when('/cases/show/:caseId', {
+        controller: 'CaseShowCtrl',        
+        templateUrl:'/views/cases/show'
+
+      }).when('/campaigns/', {
+        controller: 'CampaignListCtrl',        
+        templateUrl:'/views/campaigns/list'
+        
+      }).when('/campaigns/show/:campaignId', {
+        controller: 'CampaignShowCtrl',        
+        templateUrl:'/views/campaigns/show'
 
       }).when('/shows', {
         controller: 'ShowListCtrl',        
@@ -125,6 +110,9 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'ShowShowCtrl',        
         templateUrl:'/views/shows/show'
       }).when('/admin/users', {
+
+    
+
         controller: 'UserListCtrl',        
         templateUrl:'/views/admin/users/list'
       }).when('/admin/groups', {

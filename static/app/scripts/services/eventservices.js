@@ -1,6 +1,6 @@
-var topicservices = angular.module('crmEngine.eventservices',[]);
+var eventservices = angular.module('crmEngine.eventservices',[]);
 
-topicservices.factory('Event', function($http) {
+eventservices.factory('Event', function($http) {
   
   var Event = function(data) {
     angular.extend(this, data);
@@ -61,7 +61,7 @@ topicservices.factory('Event', function($http) {
           $scope.listEvents();
           $scope.isLoading = false;
 
-          $scope.apply();
+          $scope.$apply();
          // $('#addAccountModal').modal('hide');
          // window.location.replace('#/accounts/show/'+resp.id);
           

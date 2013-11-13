@@ -36,47 +36,58 @@
               </span>
         </div>
       </div>
-      <div id="addAccountModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div id="addCaseModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("New Account")}}</h3>
+                <h3 id="myModalLabel">{{_("New Case")}}</h3>
               </div>
               <div class="modal-body">
-                 <form id="addAccount" name="addaccount" ng-submit="save(account)" class="form-horizontal"> 
+                 <form id="addCase" name="addCase" ng-submit="save(casee)" class="form-horizontal"> 
                   <fieldset>
                   
                     
 
                     <div class="control-group">
-                        <label  class="required control-label">{{_("Name")}} *</label>
+                        <label  class="required control-label">{{_("Description")}} </label>
                        
                         <div class="controls">
-                          <input type="text" required id="id_name" ng-model="account.name">
+                          <input type="text"  id="id_description" ng-model="casee.description">
                           
                         </div>
                     </div>
                     <div class="control-group">
-                        <label  class="required control-label">{{_("Type")}}</label>
+                        <label  class="required control-label">{{_("Type")}} </label>
                        
                         <div class="controls">
-                          <input type="text"  id="id_name" ng-model="account.account_type">
+                          <input type="text"  id="id_type" ng-model="casee.type">
                           
                         </div>
                     </div>
                     <div class="control-group">
-                        <label  class="required control-label">{{_("Industry")}} </label>
+                        <label  class="required control-label">{{_("Name")}} </label>
                        
                         <div class="controls">
-                          <input type="text"  id="id_name" ng-model="account.industry">
+                          <input type="text"  id="id_name" ng-model="casee.name">
                           
                         </div>
                     </div>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Status")}}</label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_status" ng-model="casee.status">
+                          
+                        </div>
+                      
+                    </div>
+                   
+
                     </fieldset>
                 
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button  type="submit" class="btn blue addContactNow">{{_("Add Account")}}</button>
+                <button  type="submit" class="btn blue addContactNow">{{_("Add Case")}}</button>
               </div>
                </form>
        </div>
@@ -87,12 +98,12 @@
         <div class="row-fluid">
           
           <div class="span12">
-            <h2>{{ _("Accounts") }} </h2>
+            <h2>{{ _("Cases") }} </h2>
             
             <div class="btn-group">
             
                     <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
-                    {{ _("New Account") }} <i class="icon-plus"></i>
+                    {{ _("New Case") }} <i class="icon-plus"></i>
                     </button>
             </div>
                
@@ -105,22 +116,27 @@
             <div class="row-fluid cards-container">
             <div class="inner-cards-container">
             
-              <div ng-repeat="account in accounts" class="span3 responsive" data-tablet="span6" data-desktop="span3">
+              <div class="inner-cards-container">
+              <div  ng-repeat="casee in cases" class="span3 responsive" data-tablet="span6" data-desktop="span3">
                 <div class="dashboard-stat cards">
                   
                   <div class="details">
-                    <a href="/#/accounts/show/<%= account.id %>"><h2 class="cardTitle">
-                      <%= account.name %>
-                    </h2></a>
+                    <a href="/#/cases/show/<%= casee.id %>"><h3 class="relatedcardOppTitle">
+                       <%=casee.description %>
+                    </h3></a>
                     <div class="desc">                           
-                      
-                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#<%=account.industry%></a>
-                    </div>
+                                    <span class="contact-title"><%=casee.status %> - </span>
+                                    <a  class="desc" href="/#/cases/industry/<%=cases.type%>">#<%=casee.type_case %></a>  
+                                    
+                                    </div>
                   </div>
-                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                  View more <i class="m-icon-swapright m-icon-white"></i>
+                  <a class="more" href="/#/cases/show/<%= casee.id %>">
+                  {{ _("View more") }} <i class="m-icon-swapright m-icon-white"></i>
                   </a>                 
                 </div>
+              </div>
+            
+          
               </div>
               </div>
             </div>
@@ -131,7 +147,7 @@
                     <li ng-show="pagination.prev"><button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
                     {{_("Prev")}} 
                     </button></li>
-                    <li ng-repeat="page in pagination.pages" ng-class='{active: page.isCurrent}'><a  href="#/accounts/"><%= page.id %></a></li>
+                    <li ng-repeat="page in pagination.pages" ng-class='{active: page.isCurrent}'><a  href="#/cases/"><%= page.id %></a></li>
                     <li  ng-show="pagination.next"><button ng-click="listNextPageItems()"  class="btn">
                     {{_("Next")}} 
                     </button></li>

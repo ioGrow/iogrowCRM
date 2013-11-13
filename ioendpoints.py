@@ -8,10 +8,17 @@ from iomodels.crmengine.contacts import Contact
 from iomodels.crmengine.campaigns import Campaign
 from iomodels.crmengine.notes import Note,Topic
 from iomodels.crmengine.tasks import Task
+from iomodels.crmengine.opportunities import Opportunity
 from iomodels.crmengine.events import Event
+
 from iomodels.crmengine.shows import Show
+
+from iomodels.crmengine.leads import Lead
+from iomodels.crmengine.cases import Case
+
 from model import User,Group,Member
 import model
+import logging
 import auth_util
 from google.appengine.api import mail
 import httplib2
@@ -53,26 +60,7 @@ TEST_RESULTS = SearchResults(items=[
                                    endpoints.API_EXPLORER_CLIENT_ID],scopes=SCOPES)
 class CrmEngineApi(remote.Service):
   
-  @staticmethod
-  def init_drive_folder(credentials,folder_name,parent=None):
-      """Return the public Google+ profile data for the given user."""
-      http = httplib2.Http()
-      driveservice = build('drive', 'v2', http=http)
-      print credentials
-      credentials.authorize(http)
-
-      folder = {
-                'title': folder_name,
-                'mimeType': 'application/vnd.google-apps.folder'          
-      }
-      if parent:
-        folder['parents'] = [{'id': parent}]
-      try:
-        created_folder = driveservice.files().insert(body=folder).execute()
-        return created_folder['id']
-      except errors.HttpError, error:
-        print 'An error occured: %s' % error
-        return None
+  
   
   # TEDJ_29_10_write annotation to reference wich model for example @Account to refernce Account model
   @Contact.method(user_required=True,path='contacts', http_method='POST', name='contacts.insert')
@@ -137,14 +125,7 @@ class CrmEngineApi(remote.Service):
       raise endpoints.UnauthorizedException('You must sign-in!' )
     # Todo: Check permissions
     my_model.owner = user_from_email.key
-    # get the accounts folder id 
-    organization = user_from_email.organization.get()
-    all_accounts_folder = organization.accounts_folder
-    # init folder for this account
-    credentials = user_from_email.google_credentials
-
-    drive_folder = self.init_drive_folder(credentials,my_model.name,all_accounts_folder)
-    my_model.drive_folder = drive_folder
+    
 
 
     my_model.put()
@@ -237,6 +218,30 @@ class CrmEngineApi(remote.Service):
   def TaskList(self, query):
     
     return query
+
+  # HKA 4.11.2013 Add Opportuity APIs
+  @Opportunity.method(user_required=True,path='opportunities',http_method='POST',name='opportunities.insert')
+  def OpportunityInsert(self, my_model):
+    user = endpoints.get_current_user()
+    if user is  None :
+      raise endpoints.UnauthorizedException('You must be aunthenticated')
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is  None :
+      raise endpoints.UnauthorizedException('You must sign-in ')
+    my_model.owner = user_from_email.key
+    my_model.put()
+    return my_model
+  
+  @Opportunity.method(request_fields=('id',),path='opportunities/{id}', http_method='GET', name='opportunities.get')
+  def OpportunityGet(self, my_model):
+    if not my_model.from_datastore:
+      raise endpoints.NotFoundException('Opportunity not found')
+    return my_model
+  
+  @Opportunity.query_method(user_required=True,query_fields=('description','amount','limit', 'order', 'pageToken'),path='opportunities',name='opportunities.list')
+  def OpportunityList(self,query):
+     return query
+
   ################################ Events API ##################################
   @Event.method(user_required=True,path='events', http_method='POST', name='events.insert')
   def EventInsert(self, my_model):
@@ -267,7 +272,76 @@ class CrmEngineApi(remote.Service):
   @Event.query_method(user_required=True,query_fields=('about_kind','about_item','status', 'starts_at','ends_at', 'limit', 'order', 'pageToken'),path='events', name='events.list')
   def EventList(self, query):
     
+
     return query
+
+# HKA 06.11.2013 Add Opportuity APIs
+  @Lead.method(user_required=True,path='leads',http_method='POST',name='leads.insert')
+  def LeadInsert(self, my_model):
+    user = endpoints.get_current_user()
+    if user is  None :
+      raise endpoints.UnauthorizedException('You must be aunthenticated')
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in ')
+    my_model.owner = user_from_email.key
+    my_model.put()
+    return my_model
+  
+  @Lead.method(request_fields=('id',),path='leads/{id}', http_method='GET', name='leads.get')
+  def LeadGet(self, my_model):
+    if not my_model.from_datastore:
+      raise endpoints.NotFoundException('Lead not found')
+    return my_model
+  
+  @Lead.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='leads',name='leads.list')
+  def LeadList(self,query):
+     return query
+# HKA 07.11.2013 Add Cases APIs
+  @Case.method(user_required=True,path='cases',http_method='POST',name='cases.insert')
+  def CaseInsert(self, my_model):
+    user = endpoints.get_current_user()
+    if user is  None :
+      raise endpoints.UnauthorizedException('You must be aunthenticated')
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in ')
+    my_model.owner = user_from_email.key
+    my_model.put()
+    return my_model
+  
+  @Case.method(request_fields=('id',),path='cases/{id}', http_method='GET', name='cases.get')
+  def CaseGet(self, my_model):
+    if not my_model.from_datastore:
+      raise endpoints.NotFoundException('Case not found')
+    return my_model
+  
+  @Case.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='cases',name='cases.list')
+  def CaseList(self,query):
+     return query
+#HKA 07.11.2013   Add Campaign APIs
+  @Campaign.method(user_required=True,path='campaigns',http_method='POST',name='campaigns.insert')
+  def CampaignInsert(self, my_model):
+    user = endpoints.get_current_user()
+    if user is  None :
+      raise endpoints.UnauthorizedException('You must be aunthenticated')
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in ')
+    my_model.owner = user_from_email.key
+    my_model.put()
+    return my_model
+  
+  @Campaign.method(request_fields=('id',),path='campaigns/{id}', http_method='GET', name='campaigns.get')
+  def CampaignGet(self, my_model):
+    if not my_model.from_datastore:
+      raise endpoints.NotFoundException('Case not found')
+    return my_model
+  
+  @Campaign.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='campaigns',name='campaigns.list')
+  def CampaignList(self,query):
+     return query
+
 ###################################### Users API ################################################
   @User.method(user_required=True,path='users', http_method='POST', name='users.insert')
   def UserInsert(self, my_model):
@@ -365,6 +439,7 @@ clicking on the link below:
   @Member.query_method(user_required=True,query_fields=('limit', 'order','groupKey', 'pageToken'),path='members', name='members.list')
   def MemberList(self, query):
     return query
+
 ###################################### Shows API ################################
 ################################ Events API ##################################
   @Show.method(user_required=True,path='shows', http_method='POST', name='shows.insert')

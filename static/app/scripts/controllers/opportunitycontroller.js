@@ -1,267 +1,351 @@
-app.controller('OpportunityListCtrl', ['$scope','$route','$location','Account','accounts',
-    function($scope,$route,$location,Account,accounts) {
+app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Opportunity',
+    function($scope,$route,$location,Conf,Opportunity) {
       $("#id_Opportunities").addClass("active");
-      
-      console.log('i am in account list controller');
-    	
-      $scope.accounts = accounts.accounts;
-      // pagination
-      var pagesCount = Math.ceil(accounts.count / 7);
-    console.log('Number of page'+pagesCount);
-      var pagination = {};
-      pagination.pages = [];
-      pagination.current = $route.current.params.page;
-      if ((pagination.current-1)<1){
-        pagination.prev = false;
+      $scope.isSignedIn = false;
+     $scope.immediateFailed = false;
+     $scope.nextPageToken = undefined;
+     $scope.prevPageToken = undefined;
+     $scope.isLoading = false;
+     $scope.pagination = {};
+     $scope.currentPage = 01;
+     $scope.pages = [];
+     
+     $scope.opportunities = [];
+     
+     $scope.renderSignIn = function() {
+          console.log('$scope.renderSignIn #start_debug');
+          if (window.is_signed_in){
+              console.log('I am signed-in so you can continue');
+              $scope.processAuth(window.authResult);
+          }else{
+            console.log('I am  not signed-in so render Button');
+            gapi.signin.render('myGsignin', {
+            'callback': $scope.signIn,
+            'clientid': Conf.clientId,
+            'requestvisibleactions': Conf.requestvisibleactions,
+            'scope': Conf.scopes,
+            'theme': 'dark',
+            'cookiepolicy': Conf.cookiepolicy,
+            'accesstype': 'offline'
+            });
+          }
       }
-      else{
-        pagination.prev =  pagination.current-1
-      }
-      if ((pagesCount-parseInt(pagination.current))>0){
-        pagination.next =  parseInt(pagination.current)+1;
-      }
-      else{
-        pagination.next = false;
-      }
-      for (var i = 1; i <= pagesCount; i++) {
-        var page = {}
-        page.id = i;
-        page.isCurrent = (i===parseInt($route.current.params.page));
-        pagination.pages.push(page);
-      }
-
-      $scope.pagination = pagination;
-     // console.log(pagination);
-      // Todo add next and prev to pagination
-
-      // new account
-      $scope.showModal = function(){
-        $('#addAccountModal').modal('show');
-
-      };
-      
-      $scope.account = new Account();
-      $scope.save = function(account){
+     $scope.listNextPageItems = function(){
         
         
-        var created_account = $scope.account.create();
-        created_account.then(function(account){
+        var nextPage = $scope.currentPage + 1;
+        var params = {};
+          if ($scope.pages[nextPage]){
+            params = {'limit':7,
+                      'pageToken':$scope.pages[nextPage]
+                     }
+          }else{
+            params = {'limit':7}
+          }
+          console.log('in listNextPageItems');
+          $scope.currentPage = $scope.currentPage + 1 ; 
+          Opportunity.list($scope,params);
+     }
+     $scope.listPrevPageItems = function(){
+       
+       var prevPage = $scope.currentPage - 1;
+       var params = {};
+          if ($scope.pages[prevPage]){
+            params = {'limit':7,
+                      'pageToken':$scope.pages[prevPage]
+                     }
+          }else{
+            params = {'limit':7}
+          }
+          $scope.currentPage = $scope.currentPage - 1 ;
+          Opportunity.list($scope,params);
+     }
+     $scope.signIn = function(authResult) {
+        console.log('signIn callback #start_debug');
+        $scope.processAuth(authResult);
+        
+     }
+
+     $scope.processAuth = function(authResult) {
+        console.log('process Auth #startdebug');
+        $scope.immediateFailed = true;
+        if (authResult['access_token']) {
+          // User is signed-in
+          console.log('User is signed-in');
+          $scope.immediateFailed = false;
+          $scope.isSignedIn = true;
+          window.is_signed_in = true;
+          window.authResult = authResult;
+          // Call the backend to get the list of accounts
           
-          $('#addAccountModal').modal('hide');
-          $location.path('/accounts/show/'+account.id);
+          var params = {'limit':7}
+          Opportunity.list($scope,params);
 
-        });
-        
+        } else if (authResult['error']) {
+          if (authResult['error'] == 'immediate_failed') {
+            $scope.immediateFailed = true;
 
-
-      };
-
-
-      
-}]);
-app.controller('OpportunityShowCtrl', ['$scope','$route','$location','account','Topic','Note','WhoHasAccess','User',
-    function($scope,$route,$location,account,Topic,Note,WhoHasAccess,User) {
-      $("#id_Opportunities").addClass("active");
-      var tab = $route.current.params.accountTab;
-      switch (tab)
-        {
-        case 'notes':
-         $scope.selectedTab = 1;
-          break;
-        case 'about':
-         $scope.selectedTab = 2;
-          break;
-        case 'contacts':
-         $scope.selectedTab = 3;
-          break;
-        case 'opportunities':
-         $scope.selectedTab = 4;
-          break;
-        case 'cases':
-         $scope.selectedTab = 5;
-          break;
-        default:
-        $scope.selectedTab = 1;
-
+            window.location.replace('/sign-in');
+            console.log('Immediate Failed');
+          } else {
+            console.log('Error:' + authResult['error']);
+          }
         }
+     }
+     $scope.renderSignIn();
+      
+  
       
 
-      $scope.account = account;
-      var prop = {}
-      prop.topicaboutkind = 'Account';
-      prop.topicaboutitem = account.id;
-      
-      prop.page = 1;
-      var topic = new Topic(prop);
-      console.log(topic);
-      $scope.note = new Note();
-      var propsharing = {};
-      console.log(account);
-      propsharing.obj = account.related_object;
-      propsharing.itemid = account.id;
-      var who = new WhoHasAccess(propsharing);
-      $scope.selectedinvitee = undefined;
-
-      
-
-      $scope.showSharingSettings = function () {
-            var ac_list = who.get();
-            var whohasaccess = [];
-            var inv = new User();
-      
-            ac_list.then(function(ac){
-                
-                console.log(ac);
-                var ownerac = {}
-                ownerac.name = account.ownername;
-                ownerac.email = account.owner;
-                ownerac.role = 'owner';
-                ac.whohasaccess.push(ownerac);
-                $scope.whohasaccess = ac.whohasaccess;
-                console.log(ac.is_public);
-
-                $scope.ispublic = ac.is_public;
-            });
-            var inv_list = inv.list();
-            inv_list.then(function(invitees){
-              console.log('in invitees');
-              console.log(invitees);
-              $scope.users = invitees;
-
-            });
-            /*
-            user = new User();
-        user.organization = $scope.organization;
-        console.log(user);
-        
-            var user_list = user.list();
-      
-            user_list.then(function(users){
-                
-                console.log(users);
-                $scope.users = users.users;
-                
-                
-                //var arr = $.map(users.users, function (value, key) { return value; });
-                
-               // console.log(arr);
-                
-           });*/
-
-
-
-
-            
-            $scope.sharingSettingsShouldBeOpen = true;
-       };
-
-      $scope.closeSharingSettings = function () {
-        
-        $scope.sharingSettingsShouldBeOpen = false;
-      };
-      $scope.shareObject = function (selectedinvitee) {
-        console.log(selectedinvitee);
-        
-      };
-      $scope.opts = {
-          backdropFade: true,
-          dialogFade:true
-      };
-
-      $scope.addNote = function(note){
-        note.noteaboutkind = 'Account';
-        note.noteaboutitemid = $scope.account.id;
-        
-        
-        var created_note = $scope.note.create();
-        created_note.then(function(note){
-          
-          console.log('/accounts/show/'+$scope.account.id+'/notes/'+note.id);
-        $location.path('/accounts/show/'+$scope.account.id+'/notes/'+note.id);
-        $location.replace();
-
-      });
-      };
-      
-      $scope.paginator = function(topics){
-          var pagesCount = Math.ceil(topics.count / 7);
-          console.log(pagesCount);
-          var pagination = {};
-          pagination.pages = [];
-          pagination.current = topic.page;
-          if ((pagination.current-1)<1){
-            pagination.prev = false;
-          }
-          else{
-            pagination.prev =  pagination.current-1
-          }
-          if ((pagesCount-parseInt(pagination.current))>0){
-            pagination.next =  parseInt(pagination.current)+1;
-          }
-          else{
-            pagination.next = false;
-          }
-          for (var i = 1; i <= pagesCount; i++) {
-            var page = {}
-            page.id = i;
-            page.isCurrent = (i===parseInt(topic.page));
-            pagination.pages.push(page);
-          }
-
-
-
-            return pagination;
-
-      };
-      $scope.refreshTopics = function(page){
-            topic.page = page;
-            var topic_list = topic.list();
-      
-            topic_list.then(function(topics){
-                
-                console.log(topics);
-                
-                $scope.pagination = $scope.paginator(topics);
-                
-                $scope.topics = topics;
-                
-               
-
-              });
-            
-
-          //  $scope.pagination = $scope.paginator();
-
-
-      };
-      $scope.refreshTopics(1);
-     //console.log($scope.topics);
-      $("#id_Accounts").addClass("current");
-    	
-}]);
-
-app.controller('AccountNewCtrl', ['$scope','$location','Account',
-    function($scope,$location,Account) {
-      $("#id_Accounts").addClass("current");
+      // new opportunity
       $scope.showModal = function(){
-        $('#addAccountModal').modal('show');
+        $('#addOpportunityModal').modal('show');
 
       };
       
-      $scope.account = new Account();
-      $scope.save = function(account){
-        
-        var created_account = $scope.account.create();
-        created_account.then(function(account){
-          
-          $('#addAccountModal').modal('hide');
-          $location.path('/accounts/show/'+account.id);
+     
+     $scope.save = function(opportunity){
+     Opportunity.insert(opportunity);
 
-        });
-        
+     }
 
 
-      };
-      $scope.showModal();
-    	
+      
 }]);
+
+app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','Conf','Task','Event','Topic','Note','Opportunity',
+    function($scope,$filter,$route,$location,Conf,Task,Event,Topic,Note,Opportunity) {
+ 
+      $("#id_Opportunities").addClass("active");
+      
+     $scope.isSignedIn = false;
+     $scope.immediateFailed = false;
+     $scope.isContentLoaded = false;
+     $scope.pagination = {};
+     $scope.currentPage = 01;
+     $scope.pages = [];
+     $scope.opportunities = [];
+     //HKA 09.11.2013 Add a new Task
+     $scope.addTask = function(task){
+      
+        $('#myModal').modal('hide');
+        var params ={}
+
+        console.log('adding a new task');
+        console.log(task);
+        
+        if (task.due){
+
+            var dueDate= $filter('date')(task.due,['yyyy-MM-dd']);
+            dueDate = dueDate +'T00:00:00.000000'
+            params ={'title': task.title,
+                      'due': dueDate,
+                      'about_kind':'Opportunity',
+                      'about_item':$scope.opportunity.id
+            }
+            console.log(dueDate);
+        }else{
+            params ={'title': task.title,
+                     'about_kind':'Opportunity',
+                     'about_item':$scope.opportunity.id}
+        };
+        Task.insert($scope,params);
+     }
+
+     $scope.hilightTask = function(){
+        console.log('Should higll');
+        $('#task_0').effect("highlight","slow");
+        $('#task_0').effect( "bounce", "slow" );
+       
+     }
+     $scope.listTasks = function(){
+        var params = {'about_kind':'Opportunity',
+                      'about_item':$scope.opportunity.id,
+                      'order': '-updated_at',
+                      'limit': 5
+                      };
+        Task.list($scope,params);
+
+     }
+     $scope.editOpp = function(){
+      $('#EditOpportunityModal').modal('show')
+     }
+
+     
+     
+
+     $scope.renderSignIn = function() {
+          console.log('$scope.renderSignIn #start_debug');
+          if (window.is_signed_in){
+              console.log('I am signed-in so you can continue');
+              $scope.processAuth(window.authResult);
+          }else{
+            console.log('I am  not signed-in so render Button');
+            gapi.signin.render('myGsignin', {
+            'callback': $scope.signIn,
+            'clientid': Conf.clientId,
+            'requestvisibleactions': Conf.requestvisibleactions,
+            'scope': Conf.scopes,
+            'theme': 'dark',
+            'cookiepolicy': Conf.cookiepolicy,
+            'accesstype': 'offline'
+            });
+
+          }
+          
+
+     }
+     $scope.listNextPageItems = function(){
+        
+        
+        var nextPage = $scope.currentPage + 1;
+        var params = {};
+          if ($scope.pages[nextPage]){
+            params = {'about_kind':'Opportunity',
+                      'about_item':$scope.opportunity.id,
+                      'order': '-updated_at',
+                      'limit': 5,
+                      'pageToken':$scope.pages[nextPage]
+                     }
+          }else{
+            params = {'about_kind':'Opportunity',
+                      'about_item':$scope.opportunity.id,
+                      'order': '-updated_at',
+                      'limit': 5}
+          }
+          console.log('in listNextPageItems');
+          $scope.currentPage = $scope.currentPage + 1 ; 
+          Topic.list($scope,params);
+     }
+     $scope.listPrevPageItems = function(){
+       
+       var prevPage = $scope.currentPage - 1;
+       var params = {};
+          if ($scope.pages[prevPage]){
+            params = {'about_kind':'Opportunity',
+                      'about_item':$scope.opportunity.id,
+                      'order': '-updated_at',
+                      'limit': 5,
+                      'pageToken':$scope.pages[prevPage]
+                     }
+          }else{
+            params = {'about_kind':'Opportunity',
+                      'about_item':$scope.opportunity.id,
+                      'order': '-updated_at',
+                      'limit': 5}
+          }
+          $scope.currentPage = $scope.currentPage - 1 ;
+          Topic.list($scope,params);
+          console.log()
+     }
+     $scope.signIn = function(authResult) {
+        console.log('signIn callback #start_debug');
+        $scope.processAuth(authResult);
+        
+     }
+     $scope.listTopics = function(opportunity){
+        var params = {'about_kind':'Opportunity',
+                      'about_item':$scope.opportunity.id,
+                      'order': '-updated_at',
+                      'limit': 5
+                      };
+        Topic.list($scope,params);
+
+     }
+     $scope.hilightTopic = function(){
+        console.log('Should higll');
+       $('#topic_0').effect( "bounce", "slow" );
+       $('#topic_0 .message').effect("highlight","slow");
+     }
+
+
+     $scope.processAuth = function(authResult) {
+        console.log('process Auth #startdebug');
+        $scope.immediateFailed = true;
+        if (authResult['access_token']) {
+          // User is signed-in
+          console.log('User is signed-in');
+          $scope.immediateFailed = false;
+          $scope.isSignedIn = true;
+          window.is_signed_in = true;
+          window.authResult = authResult;
+          // Call the backend to get the list of contact
+          var opportunityid = {'id':$route.current.params.opportunityId};
+          Opportunity.get($scope,opportunityid);
+        } else if (authResult['error']) {
+          if (authResult['error'] == 'immediate_failed') {
+            $scope.immediateFailed = true;
+
+            console.log('Immediate Failed');
+          } else {
+            console.log('Error:' + authResult['error']);
+          }
+        }
+     }
+     $scope.renderSignIn();
+
+//HKA 11.11.2013 Add new Event
+ $scope.addEvent = function(ioevent){
+      
+        $('#newEventModal').modal('hide');
+        var params ={}       
+        
+        if (ioevent.starts_at){
+            if (ioevent.ends_at){
+              params ={'title': ioevent.title,
+                      'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                      'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                      'where': ioevent.where,
+                      'about_kind':'Opportunity',
+                      'about_item':$scope.opportunity.id
+              }
+
+            }else{
+              params ={'title': ioevent.title,
+                      'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                      'where': ioevent.where,
+                      'about_kind':'Opportunity',
+                      'about_item':$scope.opportunity.id
+              }
+            }
+            console.log('inserting the event');
+            console.log(params);
+            Event.insert($scope,params);
+
+            
+        };
+     };
+     $scope.hilightEvent = function(){
+        console.log('Should higll');
+        $('#event_0').effect("highlight","slow");
+        $('#event_0').effect( "bounce", "slow" );
+       
+     };
+     $scope.listEvents = function(){
+        var params = {'about_kind':'Opportunity',
+                      'about_item':$scope.opportunity.id,
+                      'order': 'starts_at',
+                      'limit': 5
+                      };
+        Event.list($scope,params);
+
+     };
+ //HKA 11.11.2013 Add Note
+  $scope.addNote = function(note){
+    var params = {'title':$scope.note.title,
+                  'content':$scope.note.content,
+                  'about_item':$scope.opportunity.id,
+                  'about_kind':'Opportunity' };
+    Note.insert($scope,params);
+    $scope.note.title='';
+    $scope.note.content='';
+  }
+    
+
+
+}]);
+
+
+
+
+

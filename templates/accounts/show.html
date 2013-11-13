@@ -42,7 +42,7 @@
                 </div>
                 
             <h2>
-            <a href="/#/accounts/p/1" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
+            <a href="/#/accounts/" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
             <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Accounts")}} > <%= account.name %></h2>
             
 
@@ -91,9 +91,9 @@
                                          
                                             
                                             <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="note.content"></textarea>
-                                            <input ng-init="note.organization=1" required="" id="id_organization" type="hidden" name="organization" value="1"> 
+                                            <!--input ng-init="note.organization=1" required="" id="id_organization" type="hidden" name="organization" value="1"--> 
                                   
-                                            <input type="hidden" id="id_related_object" ng-init="note.related_object=1" value="1">
+                                            <!--input type="hidden" id="id_related_object" ng-init="note.related_object=1" value="1"-->
                                           
                                          
                                          <div class="pull-right">
@@ -112,7 +112,7 @@
                                 <div class="message">
                                   <span class="arrow"></span>
                                   <a href="#" class="name"><%= topic.last_updater.google_display_name%></a>
-                                  <span class="datetime">at Jul 25, 2012 11:09</span>
+                                  <span class="datetime">at <%=topic.updated_at %></span>
                                   <span class="body">
                                   <a href="#/accounts/show/1/notes/22" class="discussion-content"><strong class="ng-binding"><%= topic.title%></strong><span class="excerpt ng-binding"> - <%= topic.excerpt%></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <%= topic.comments%> comments</span></a>
                                   </span>
@@ -561,13 +561,7 @@
                                                   </div>
                                                 </div>
                                                     <input class="input-block-level" autofocus="" type="text" placeholder="Where?" id="taskTitle" ng-model="ioevent.where">
-                                                    
-                                                    
-                                                    
-                                               
-
-                                                  
-                  </div>
+                                                </div>
             </div>
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>

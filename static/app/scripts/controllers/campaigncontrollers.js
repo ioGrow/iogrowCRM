@@ -1,8 +1,8 @@
-app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAccountLoader','Account',
-    function($scope,$route,$location,Conf,MultiAccountLoader,Account) {
-     console.log('i am in account list controller');
+app.controller('CampaignListCtrl', ['$scope','$route','$location','Conf','Campaign',
+    function($scope,$route,$location,Conf,Campaign) {
+     console.log('i am in campaign list controller');
 
-     $("#id_Accounts").addClass("active");
+     $("#id_Campaigns").addClass("active");
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -12,7 +12,7 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
      $scope.currentPage = 01;
      $scope.pages = [];
      
-     $scope.accounts = [];
+     $scope.campaigns = [];
      
      
 
@@ -48,7 +48,7 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
           }
           console.log('in listNextPageItems');
           $scope.currentPage = $scope.currentPage + 1 ; 
-          Account.list($scope,params);
+          Campaign.list($scope,params);
      }
      $scope.listPrevPageItems = function(){
        
@@ -62,7 +62,7 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
             params = {'limit':7}
           }
           $scope.currentPage = $scope.currentPage - 1 ;
-          Account.list($scope,params);
+          Campaign.list($scope,params);
      }
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
@@ -83,7 +83,7 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
           // Call the backend to get the list of accounts
           
           var params = {'limit':7}
-          Account.list($scope,params);
+          Campaign.list($scope,params);
 
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
@@ -99,12 +99,12 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
      $scope.renderSignIn();
      $scope.showModal = function(){
         console.log('button clicked');
-        $('#addAccountModal').modal('show');
+        $('#addCampaignModal').modal('show');
 
       };
       
-    $scope.save = function(account){
-      Account.insert(account);
+    $scope.save = function(campaign){
+      Campaign.insert(campaign);
     };
      
      
@@ -112,10 +112,10 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
 
     
 }]);
-app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Conf','Account', 'Topic','Note','Task','Event','WhoHasAccess','User',
-    function($scope,$filter,$route,$location,Conf,Account,Topic,Note,Task,Event,WhoHasAccess,User) {
-      console.log('i am in account Show controller');
-      $("#id_Accounts").addClass("active");
+app.controller('CampaignShowCtrl', ['$scope','$filter', '$route','$location','Conf','Campaign', 'Topic','Note','Task','Event','WhoHasAccess','User',
+    function($scope,$filter,$route,$location,Conf,Campaign,Topic,Note,Task,Event,WhoHasAccess,User) {
+      console.log('i am in account list controller');
+      $("#id_Campaigns").addClass("active");
       var tab = $route.current.params.accountTab;
       switch (tab)
         {
@@ -149,9 +149,97 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
      $scope.currentPage = 01;
      $scope.pages = [];
      
-     $scope.accounts = [];  
+     $scope.campaigns = [];
+     
+     
+     //HKA 09.11.2013 Add a new Task
+     $scope.addTask = function(task){
+      
+        $('#myModal').modal('hide');
+        var params ={}
 
- 
+        console.log('adding a new task');
+        console.log(task);
+        
+        if (task.due){
+
+            var dueDate= $filter('date')(task.due,['yyyy-MM-dd']);
+            dueDate = dueDate +'T00:00:00.000000'
+            params ={'title': task.title,
+                      'due': dueDate,
+                      'about_kind':'Campaign',
+                      'about_item':$scope.campaign.id
+            }
+            console.log(dueDate);
+        }else{
+            params ={'title': task.title,
+                     'about_kind':'Campaign',
+                     'about_item':$scope.campaign.id}
+        };
+        Task.insert($scope,params);
+     }
+
+     $scope.hilightTask = function(){
+        console.log('Should higll');
+        $('#task_0').effect("highlight","slow");
+        $('#task_0').effect( "bounce", "slow" );
+       
+     }
+     $scope.listTasks = function(){
+        var params = {'about_kind':'Campaign',
+                      'about_item':$scope.campaign.id,
+                      'order': '-updated_at',
+                      'limit': 5
+                      };
+        Task.list($scope,params);
+
+     }
+     
+     $scope.addEvent = function(ioevent){
+      
+        $('#newEventModal').modal('hide');
+        var params ={}
+
+        console.log('adding a new event');
+        
+        
+        if (ioevent.starts_at){
+            if (ioevent.ends_at){
+              params ={'title': ioevent.title,
+                      'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                      'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                      'where': ioevent.where
+              }
+
+            }else{
+              params ={'title': task.title,
+                      'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                      'where': ioevent.where
+              }
+            }
+            console.log('inserting the event');
+            console.log(params);
+            Event.insert($scope,params);
+
+            
+        };
+     }
+     $scope.hilightEvent = function(){
+        console.log('Should higll');
+        $('#event_0').effect("highlight","slow");
+        $('#event_0').effect( "bounce", "slow" );
+       
+     }
+     $scope.listEvents = function(){
+        var params = {/*'about_kind':'Account',
+                      'about_item':$scope.account.id,*/
+                      'order': 'starts_at',
+                      'limit': 5
+                      };
+        Event.list($scope,params);
+
+     }
+
      $scope.renderSignIn = function() {
           console.log('$scope.renderSignIn #start_debug');
           if (window.is_signed_in){
@@ -220,7 +308,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
      }
      $scope.listTopics = function(account){
         var params = {'about_kind':'Account',
-                      'about_item':$scope.account.id,
+                      'about_item':account.id,
                       'order': '-updated_at',
                       'limit': 5
                       };
@@ -245,8 +333,8 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
           window.authResult = authResult;
           // Call the backend to get the list of accounts
           
-          var accountid = {'id':$route.current.params.accountId};
-          Account.get($scope,accountid);
+          var campaignid = {'id':$route.current.params.campaignId};
+          Campaign.get($scope,campaignid);
 
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
@@ -284,148 +372,12 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
 
 
 
-    $scope.editaccount = function() {
-       $('#EditAccountModal').modal('show');
-    };
-    //HKA 09.11.2013 Add a new Tasks
-   $scope.addTask = function(task){
-      
-        $('#myModal').modal('hide');
-        var params ={'about_kind':'Account',
-                      'about_item':$scope.account.id}
-
-        console.log('adding a new task');
-        console.log(task);
-        
-        if (task.due){
-
-            var dueDate= $filter('date')(task.due,['yyyy-MM-dd']);
-            dueDate = dueDate +'T00:00:00.000000'
-            params ={'title': task.title,
-                      'due': dueDate,
-                      'about_kind':'Account',
-                      'about_item':$scope.account.id
-            }
-            console.log(dueDate);
-            
-        }else{
-            params ={'title': task.title,
-                     'about_kind':'Account',
-                     'about_item':$scope.account.id}
-        };
-       
-        Task.insert($scope,params);
-     };
-
-     $scope.hilightTask = function(){
-        console.log('Should higll');
-        $('#task_0').effect("highlight","slow");
-        $('#task_0').effect( "bounce", "slow" );
-       
-     };
-     $scope.listTasks = function(){
-        var params = {'about_kind':'Account',
-                      'about_item':$scope.account.id,
-                      'order': '-updated_at',
-                      'limit': 5
-                      };
-        Task.list($scope,params);
-
-     };
-//HKA 11.11.2013 Add new Event
- $scope.addEvent = function(ioevent){
-      
-        $('#newEventModal').modal('hide');
-        var params ={}       
-        
-        if (ioevent.starts_at){
-            if (ioevent.ends_at){
-              params ={'title': ioevent.title,
-                      'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'where': ioevent.where,
-                      'about_kind':'Account',
-                      'about_item':$scope.account.id
-              }
-
-            }else{
-              params ={'title': ioevent.title,
-                      'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'where': ioevent.where,
-                      'about_kind':'Account',
-                      'about_item':$scope.account.id
-              }
-            }
-            console.log('inserting the event');
-            console.log(params);
-            Event.insert($scope,params);
-
-            
-        };
-     };
-     $scope.hilightEvent = function(){
-        console.log('Should higll');
-        $('#event_0').effect("highlight","slow");
-        $('#event_0').effect( "bounce", "slow" );
-       
-     };
-     $scope.listEvents = function(){
-        var params = {'about_kind':'Account',
-                      'about_item':$scope.account.id,
-                      'order': 'starts_at',
-                      'limit': 5
-                      };
-        Event.list($scope,params);
-
-     };
-
+    $scope.editcampaign = function() {
+       $('#EditCampaignModal').modal('show');
+    }
 
       
 
 
 
-}]);
-app.controller('SearchFormController', ['$scope','$route','$location','Conf','User',
-    function($scope,$route,$location,Conf,User) {
-     console.log('Search Form Controller');
-     var params ={};
-     $scope.result = undefined;
-     $scope.searchresults = function(q) {
-        console.log('searchResults ');
-        console.log(q);
-        
-        console.log("just before calling the usersearch api");
-        gapi.client.crmengine.search().execute(function(resp) {
-          console.log("in usersearch api");
-          $scope.results = resp.items;
-          //$scope.$apply();
-        });
-        
-        return $scope.results;
-
-      };
-      $scope.selectResult = function(){
-        console.log('slecting result yeaaah');
-        console.log($scope.searchQuery);
-        //$scope.user = $scope.slected_memeber.google_display_name;
-
-     };
-     $scope.executeSearch = function(searchQuery){
-      console.log('execyte ssearcg query');
-      console.log(searchQuery);
-      if (typeof(searchQuery)=='string'){
-         window.location.replace('#/search/'+searchQuery);
-      }else{
-        window.location.replace('#/accounts/show/'+searchQuery.id);
-      }
-      $scope.searchQuery='';
-     }
-
-
-
-     
-     
-   
-
-    
 }]);

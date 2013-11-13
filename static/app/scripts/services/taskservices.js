@@ -61,7 +61,7 @@ topicservices.factory('Task', function($http) {
           $scope.listTasks();
           $scope.isLoading = false;
 
-          $scope.apply();
+          $scope.$apply();
          // $('#addAccountModal').modal('hide');
          // window.location.replace('#/accounts/show/'+resp.id);
           

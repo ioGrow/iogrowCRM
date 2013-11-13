@@ -34,20 +34,23 @@
           <div class="span12">
             <div class="pull-right sharebuttonDiv"> 
                   <a href="" class="btn blue jfk-button jfk-button-action">
-                    <i class="icon-lock"></i> {{_("Share")}}
+                    <i class="icon-lock"></i> Share
                   </a>
-                       
+                        
                         
                      
                 </div>
                 
             <h2>
-            <a href="/#/contacts/" data-toggle="tooltip" data-placement="bottom" title="Back to Contacts">
-            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>   {{_("Contacts")}} > <%=contact.firstname%> <%=contact.lastname%></h2>
+            <a href="/#/leads" data-toggle="tooltip" data-placement="bottom" title="Back to Leads">
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Leads")}} > <%= lead.firstname %> <%= lead.lastname %></h2>
             
 
-            <span ><a class="tag" href="#">#<%=contact.title%> </a></span><span> {{_("at")}} </span><span><a class="tag" href="#">#<%=contact.company%></a></span> <br>
-            <span class="page-meta"><i class="icon-pencil"><a ng-click="editacontact()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="delete(contact)" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
+          
+              <span>{{_("Company")}} :</span> <a class="tag"> #<%= lead.company %></a> <br> 
+              
+            </ul>  </br>
+             <span class="page-meta"><i class="icon-pencil"><a ng-click="editLead()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="delete(lead)" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
 
            
             
@@ -63,7 +66,7 @@
               <!-- BEGIN PORTLET-->
               <div class="portlet paddingless">
                 <div class="portlet-title line">
-                  <div class="caption">{{_("Contact Feeds")}}</div>
+                  <div class="caption">Account Feeds</div>
                   
                 </div>
                 <div class="portlet-body">
@@ -73,8 +76,8 @@
                       <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;" >Notes</a></li>
                       <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;">About</a></li>
                       <!--li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">Contacts</a></li-->
-                      <li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">Opportunities</a></li>
-                      <li class="ng-tab"  ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">Cases</a></li>
+                      <!--li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">Opportunities</a></li-->
+                      <!--li class="ng-tab"  ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">Cases</a></li-->
                     </ul>
                     <div class="tab-content">
                       <div class="tab-pane active" id="tab_1_1" ng-show="selectedTab == 1">
@@ -89,9 +92,9 @@
                                          
                                             
                                             <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="note.content"></textarea>
-                                            <!--input ng-init="note.organization=1" required="" id="id_organization" type="hidden" name="organization" value="1"--> 
+                                            <input ng-init="note.organization=1" required="" id="id_organization" type="hidden" name="organization" value="1"> 
                                   
-                                            <!--input type="hidden" id="id_related_object" ng-init="note.related_object=1" value="1"-->
+                                            <input type="hidden" id="id_related_object" ng-init="note.related_object=1" value="1">
                                           
                                          
                                          <div class="pull-right">
@@ -110,7 +113,7 @@
                                 <div class="message">
                                   <span class="arrow"></span>
                                   <a href="#" class="name"><%= topic.last_updater.google_display_name%></a>
-                                  <span class="datetime">at <%=topic.updated_at %></span>
+                                  <span class="datetime">at Jul 25, 2012 11:09</span>
                                   <span class="body">
                                   <a href="#/accounts/show/1/notes/22" class="discussion-content"><strong class="ng-binding"><%= topic.title%></strong><span class="excerpt ng-binding"> - <%= topic.excerpt%></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <%= topic.comments%> comments</span></a>
                                   </span>
@@ -300,7 +303,7 @@
                               </div>
                             </div>
                       </div-->
-                       <div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 4">
+                       <!--div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 4">
                           
                          <div class="row-fluid cards-container">
                          <div class="btn-group relbutton">
@@ -386,8 +389,8 @@
                               </div>
                               </div>
                             </div>
-                      </div>
-                      <div class="tab-pane active" id="tab_1_5" ng-show="selectedTab == 5">
+                      </div-->
+                      <!--div class="tab-pane active" id="tab_1_5" ng-show="selectedTab == 5">
                           
                          <div class="row-fluid cards-container">
                          <div class="btn-group relbutton">
@@ -457,7 +460,7 @@
 
                               </div>
                             </div>
-                      </div>
+                      </div-->
                     </div>
                   </div>
                   <!--END TABS-->
@@ -595,23 +598,23 @@
         
         <!-- END PAGE CONTENT-->
       </div>
-      <!--HKA 11.10.2013 Edit Contact -->
-             <div id="EditContactModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <!--HKA 11.10.2013 Edit Lead -->
+             <div id="EditLeadModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("Edit Contact")}}</h3>
+                <h3 id="myModalLabel">{{_("Edit Lead")}}</h3>
               </div>
 
               <div class="modal-body">
-                 <form id="editAccount" name="editlead" ng-submit="put(contact)" class="form-horizontal"> 
+                 <form id="editLead" name="editlead" ng-submit="put(lead)" class="form-horizontal"> 
                 
 
                   <div class="control-group">
                         <label  class="required control-label">{{_("First Name")}} *</label>
                        
                         <div class="controls">
-                          <input type="text" required id="id_firstname" ng-model="contact.firstname">
+                          <input type="text" required id="id_firstname" ng-model="lead.firstname">
                           
                         </div>
                     </div>
@@ -619,26 +622,18 @@
                         <label  class="required control-label">{{_("Last Name")}}</label>
                        
                         <div class="controls">
-                          <input type="text"  id="id_type" ng-model="contact.lastname">
+                          <input type="text"  id="id_lastname" ng-model="lead.lastname">
                           
                         </div>
                     </div>
                     <div class="control-group">
-                        <label  class="required control-label">{{_("Tittle")}} *</label>
+                        <label  class="required control-label">{{_("Company")}} *</label>
                        
                         <div class="controls">
-                          <input type="text"  required id="id_Tittle" ng-model="contact.tittle">
+                          <input type="text"  required id="id_company" ng-model="lead.company">
                           
                         </div>
-                    </div>
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Company")}} </label>
-                       
-                        <div class="controls">
-                          <input type="text"   id="id_Company" ng-model="contact.company">
-                          
-                        </div>
-                    </div>                     
+                    </div>                      
                   
                      
                     

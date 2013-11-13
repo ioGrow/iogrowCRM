@@ -113,6 +113,7 @@ app.controller('UserListCtrl', ['$scope','$route','$location','Conf','User',
 
     
 }]);
+/*
 app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Conf','Account', 'Topic','Note','Task','Event','WhoHasAccess','User',
     function($scope,$filter,$route,$location,Conf,Account,Topic,Note,Task,Event,WhoHasAccess,User) {
       console.log('i am in account list controller');
@@ -183,7 +184,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
      }
      $scope.listTasks = function(){
         var params = {/*'about_kind':'Account',
-                      'about_item':$scope.account.id,*/
+                      'about_item':$scope.account.id,
                       'order': '-updated_at',
                       'limit': 5
                       };
@@ -227,7 +228,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
      }
      $scope.listEvents = function(){
         var params = {/*'about_kind':'Account',
-                      'about_item':$scope.account.id,*/
+                      'about_item':$scope.account.id,
                       'order': 'starts_at',
                       'limit': 5
                       };
@@ -375,4 +376,4 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
 
 
 
-}]);
+}]);*/

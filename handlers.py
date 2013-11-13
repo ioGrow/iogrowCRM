@@ -285,6 +285,89 @@ class ContactShowHandler(BaseHandler,SessionEnabledHandler):
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/contacts/show.html')
       self.response.out.write(template.render(template_values))
+class OpportunityListHandler(BaseHandler,SessionEnabledHandler):
+  def get(self):
+    if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+      user = self.get_user_from_session()
+      self.set_user_locale()
+      tabs = user.get_user_active_tabs()
+      self.set_user_locale()
+      template_values = {'tabs':tabs}
+      template = jinja_environment.get_template('templates/opportunities/opportunity_list.html')
+      self.response.out.write(template.render(template_values))
+class OpportunityShowHandler(BaseHandler,SessionEnabledHandler):
+  def get (self):
+    if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+      user = self.get_user_from_session()
+      self.set_user_locale()
+      tabs = user.get_user_active_tabs()
+      self.set_user_locale()
+      template_values={'tabs':tabs}
+      template = jinja_environment.get_template('templates/opportunities/opportunity_show.html')
+      self.response.out.write(template.render(template_values))
+
+class LeadListHandler(BaseHandler,SessionEnabledHandler):
+  def get(self):
+    if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+      user = self.get_user_from_session()
+      self.set_user_locale()
+      tabs = user.get_user_active_tabs()
+      self.set_user_locale()
+      template_values = {'tabs':tabs}
+      template = jinja_environment.get_template('templates/leads/lead_list.html')
+      self.response.out.write(template.render(template_values))
+class LeadShowHandler(BaseHandler,SessionEnabledHandler):
+  def get (self):
+    if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+      user = self.get_user_from_session()
+      self.set_user_locale()
+      tabs = user.get_user_active_tabs()
+      self.set_user_locale()
+      template_values={'tabs':tabs}
+      template = jinja_environment.get_template('templates/leads/lead_show.html')
+      self.response.out.write(template.render(template_values))
+
+class CaseListHandler(BaseHandler,SessionEnabledHandler):
+  def get(self):
+    if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+      user = self.get_user_from_session()
+      self.set_user_locale()
+      tabs = user.get_user_active_tabs()
+      self.set_user_locale()
+      template_values = {'tabs':tabs}
+      template = jinja_environment.get_template('templates/cases/case_list.html')
+      self.response.out.write(template.render(template_values))
+class CaseShowHandler(BaseHandler,SessionEnabledHandler):
+  def get (self):
+    if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+      user = self.get_user_from_session()
+      self.set_user_locale()
+      tabs = user.get_user_active_tabs()
+      self.set_user_locale()
+      template_values={'tabs':tabs}
+      template = jinja_environment.get_template('templates/cases/case_show.html')
+      self.response.out.write(template.render(template_values))
+class CampaignListHandler(BaseHandler,SessionEnabledHandler):
+  def get(self):
+    if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+      user = self.get_user_from_session()
+      self.set_user_locale()
+      tabs = user.get_user_active_tabs()
+      self.set_user_locale()
+      template_values = {'tabs':tabs}
+      template = jinja_environment.get_template('templates/campaigns/campaign_list.html')
+      self.response.out.write(template.render(template_values))
+class CampaignShowHandler(BaseHandler,SessionEnabledHandler):
+  def get (self):
+    if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+      user = self.get_user_from_session()
+      self.set_user_locale()
+      tabs = user.get_user_active_tabs()
+      self.set_user_locale()
+      template_values={'tabs':tabs}
+      template = jinja_environment.get_template('templates/campaigns/campaign_show.html')
+      self.response.out.write(template.render(template_values))
+   
 
 class ShowListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -1370,13 +1453,22 @@ routes = [
     ('/views/accounts/show',AccountShowHandler),
     ('/views/contacts/list',ContactListHandler),
     ('/views/contacts/show',ContactShowHandler),
+
     ('/views/shows/list',ShowListHandler),
     ('/views/shows/show',ShowShowHandler),
+
+    ('/views/opportunities/list',OpportunityListHandler),
+    ('/views/opportunities/show',OpportunityShowHandler),
+    ('/views/leads/list',LeadListHandler),
+    ('/views/leads/show',LeadShowHandler),
+    ('/views/cases/list',CaseListHandler),
+    ('/views/cases/show',CaseShowHandler),
+    ('/views/campaigns/list',CampaignListHandler),
+    ('/views/campaigns/show',CampaignShowHandler),
+
     ('/views/admin/users/list',UserListHandler),
     ('/views/admin/groups/list',GroupListHandler),
     ('/views/admin/groups/show',GroupShowHandler),
-    
-    
     ('/hello',HelloWorldHandler),
     ('/sign-in',SignInHandler),
     ('/sign-up',SignUpHandler),
