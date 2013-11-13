@@ -1,21 +1,25 @@
 from google.appengine.ext import ndb
-from endpoints_proto_datastore.ndb import EndpointsModel
 from google.appengine.api import search 
+from endpoints_proto_datastore.ndb import EndpointsModel
+# HKA 04.11.2013 Opportunity Model
 
-class Case(EndpointsModel):
-    _message_fields_schema = ('id', 'name','description','status','type_case')
-
+class Opportunity(EndpointsModel):
+    _message_fields_schema = ('id', 'name','description','amount')
     owner = ndb.KeyProperty()
     organization = ndb.KeyProperty()
+    account = ndb.KeyProperty()
     name = ndb.StringProperty(required=True)
-    status = ndb.StringProperty()
     description = ndb.StringProperty()
-    type_case = ndb.StringProperty()
     industry = ndb.StringProperty()
-    creationTime = ndb.DateTimeProperty(auto_now_add=True)
-    last_modified_at = ndb.DateTimeProperty(auto_now=True)
+    amount = ndb.FloatProperty(default=0)
+    stage = ndb.KeyProperty()
+    closed_date = ndb.DateTimeProperty()
+    reason_lost = ndb.DateTimeProperty()
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
     created_by = ndb.KeyProperty()
-
+    last_modified_by = ndb.KeyProperty()
+    address = ndb.StringProperty()
+    
     def put(self, **kwargs):
         ndb.Model.put(self, **kwargs)
         self.put_index()
@@ -26,19 +30,16 @@ class Case(EndpointsModel):
         my_document = search.Document(
         doc_id = str(self.key.id()),
         fields=[
-            search.TextField(name=u'type', value=u'Case'),
+            search.TextField(name=u'type', value=u'Opportunity'),
             #search.TextField(name='owner', value=self.owner.name),
             #search.TextField(name='organization', value = self.organization ),
             search.TextField(name='name', value = empty_string(self.name) ),
-            search.TextField(name='status', value = empty_string(self.status)),
             search.TextField(name='description', value = empty_string(self.description)),
-            search.DateField(name='creationTime', value = self.creationTime),
-            search.DateField(name='last_modified_at', value = self.last_modified_at),
-            search.TextField(name='industry', value = empty_string(self.industry)),
-            search.TextField(name='type_case', value = empty_string(self.type_case))
+            search.NumberField(name='amount', value = self.amount),
+            #search.DateField(name='closed_date', value = self.closed_date),
+            search.DateField(name='created_at', value = self.created_at),
+            #search.DateField(name='reason_lost', value = self.reason_lost),
+            search.TextField(name='address', value = empty_string(self.address)),
            ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)
-    
-
-  
