@@ -109,6 +109,12 @@ app.config(['$routeProvider', function($routeProvider) {
       }).when('/shows/show/:showId', {
         controller: 'ShowShowCtrl',        
         templateUrl:'/views/shows/show'
+      }).when('/search/:q', {
+
+    
+
+        controller: 'SearchShowController',        
+        templateUrl:'/views/search/list'
       }).when('/admin/users', {
 
     

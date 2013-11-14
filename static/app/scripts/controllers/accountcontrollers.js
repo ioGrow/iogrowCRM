@@ -390,23 +390,28 @@ app.controller('SearchFormController', ['$scope','$route','$location','Conf','Us
      console.log('Search Form Controller');
      var params ={};
      $scope.result = undefined;
-     $scope.searchresults = function(q) {
-        console.log('searchResults ');
-        console.log(q);
-        
-        console.log("just before calling the usersearch api");
-        gapi.client.crmengine.search().execute(function(resp) {
-          console.log("in usersearch api");
-          $scope.results = resp.items;
-          //$scope.$apply();
-        });
-        
-        return $scope.results;
-
-      };
+     $scope.q = undefined;
+     
+      $scope.$watch('searchQuery', function() {
+         params['q'] = $scope.searchQuery;
+         console.log('params');
+         console.log(params);
+         gapi.client.crmengine.search(params).execute(function(resp) {
+            console.log("in search api");
+            //console.log(resp);
+            if (resp.items){
+              $scope.results = resp.items;
+              console.log($scope.results);
+              $scope.$apply();
+            };
+            
+          });
+         console.log($scope.results);
+      });
       $scope.selectResult = function(){
         console.log('slecting result yeaaah');
         console.log($scope.searchQuery);
+        window.location.replace('#/accounts/show/'+$scope.searchQuery.id);
         //$scope.user = $scope.slected_memeber.google_display_name;
 
      };
@@ -423,6 +428,126 @@ app.controller('SearchFormController', ['$scope','$route','$location','Conf','Us
 
 
 
+     
+     
+   
+
+    
+}]);
+
+app.controller('SearchShowController', ['$scope','$route','$location','Conf','Search','Account',
+    function($scope,$route,$location,Conf,Search,Account) {
+     console.log('i am in account list controller');
+
+     $("#id_Accounts").addClass("active");
+     $scope.isSignedIn = false;
+     $scope.immediateFailed = false;
+     $scope.nextPageToken = undefined;
+     $scope.prevPageToken = undefined;
+     $scope.isLoading = false;
+     $scope.pagination = {};
+     $scope.currentPage = 01;
+     $scope.pages = [];
+     
+     $scope.accounts = [];
+     
+     
+
+     $scope.renderSignIn = function() {
+          console.log('$scope.renderSignIn #start_debug');
+          if (window.is_signed_in){
+              console.log('I am signed-in so you can continue');
+              $scope.processAuth(window.authResult);
+          }else{
+            console.log('I am  not signed-in so render Button');
+            gapi.signin.render('myGsignin', {
+            'callback': $scope.signIn,
+            'clientid': Conf.clientId,
+            'requestvisibleactions': Conf.requestvisibleactions,
+            'scope': Conf.scopes,
+            'theme': 'dark',
+            'cookiepolicy': Conf.cookiepolicy,
+            'accesstype': 'offline'
+            });
+          }
+      }
+     $scope.listNextPageItems = function(){
+        
+        
+        var nextPage = $scope.currentPage + 1;
+        var params = {};
+          if ($scope.pages[nextPage]){
+            params = {'q':$route.current.params.q,
+                      'limit':7,
+                      'pageToken':$scope.pages[nextPage]
+                     }
+          }else{
+            params = {'q':$route.current.params.q,
+                      'limit':7}
+          }
+          console.log('in listNextPageItems');
+          $scope.currentPage = $scope.currentPage + 1 ; 
+          Search.list($scope,params);
+     }
+     $scope.listPrevPageItems = function(){
+       
+       var prevPage = $scope.currentPage - 1;
+       var params = {};
+          if ($scope.pages[prevPage]){
+            params = { 'q':$route.current.params.q,
+                      'limit':7,
+
+                      'pageToken':$scope.pages[prevPage]
+                     }
+          }else{
+            params = {'q':$route.current.params.q,
+                      'limit':7}
+          }
+          $scope.currentPage = $scope.currentPage - 1 ;
+          Search.list($scope,params);
+     }
+     $scope.signIn = function(authResult) {
+        console.log('signIn callback #start_debug');
+        $scope.processAuth(authResult);
+        
+     }
+
+     $scope.processAuth = function(authResult) {
+        console.log('process Auth #startdebug');
+        $scope.immediateFailed = true;
+        if (authResult['access_token']) {
+          // User is signed-in
+          console.log('User is signed-in');
+          $scope.immediateFailed = false;
+          $scope.isSignedIn = true;
+          window.is_signed_in = true;
+          window.authResult = authResult;
+          // Call the backend to get the list of accounts
+          
+          var params = {'limit':7,'q':$route.current.params.q}
+          Search.list($scope,params);
+
+        } else if (authResult['error']) {
+          if (authResult['error'] == 'immediate_failed') {
+            $scope.immediateFailed = true;
+
+            window.location.replace('/sign-in');
+            console.log('Immediate Failed');
+          } else {
+            console.log('Error:' + authResult['error']);
+          }
+        }
+     }
+     $scope.renderSignIn();
+     $scope.showModal = function(){
+        console.log('button clicked');
+        $('#addAccountModal').modal('show');
+
+      };
+      
+    $scope.save = function(account){
+      Account.insert(account);
+    };
      
      
    

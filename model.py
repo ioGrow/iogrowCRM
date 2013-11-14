@@ -236,8 +236,19 @@ class Organization(EndpointsModel):
    
           
 
-
+class Permission(EndpointsModel):
+    about_kind = ndb.StringProperty(required=True)
+    about_item = ndb.StringProperty(required=True)
+    # is it writer, readonly,...
+    role = ndb.StringProperty(required=True)
+    additionalRoles = ndb.StringProperty(repeated=True)
+    # is it a group or user
+    type = ndb.StringProperty(required=True)
     
+    value = ndb.StringProperty(required=True)
+    created_by = ndb.KeyProperty()
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
+        
 # We use the Profile model to describe what each user can do?
 class Profile(EndpointsModel):
     name = ndb.StringProperty(required=True)

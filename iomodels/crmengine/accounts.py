@@ -1,19 +1,22 @@
 from google.appengine.ext import ndb
 from endpoints_proto_datastore.ndb import EndpointsModel
 from google.appengine.api import search 
-
+from model import Userinfo
 class Account(EndpointsModel):
 
     _message_fields_schema = ('id','entityKey', 'name','owner','account_type','industry','address')
+    # Sharing fields
     owner = ndb.KeyProperty()
-    # a key reference to the account's organization
-    # Should be required
+    collaborators = ndb.StructuredProperty(Userinfo)
+    collaborators_key = ndb.KeyProperty(repeated=True)
+    is_private = ndb.BooleanProperty(default=False)
     organization = ndb.KeyProperty()
     name = ndb.StringProperty(required=True)
     account_type = ndb.StringProperty()
     industry = ndb.StringProperty()
     creationTime = ndb.DateTimeProperty(auto_now_add=True)
     address = ndb.StringProperty()
+    
 
 
     def put(self, **kwargs):

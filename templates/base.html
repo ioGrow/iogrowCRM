@@ -51,7 +51,7 @@
                   <li>    
                     <form class="form-inline ng-pristine ng-valid" ng-submit="executeSearch(searchQuery)">
                       <div class="input-append row-fluid">
-                        <input type="text" ng-model="searchQuery" typeahead="result as result.title + ' (' + result.kind + ')' for result in searchresults($viewValue) | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="input-xlarge" placeholder="Search">
+                        <input type="text" ng-model="searchQuery" typeahead="result as result.title + ' (' + result.type + ')' for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="input-xlarge" placeholder="Search">
                        <button class="gbqfb gbqfb-hvr"><span class="gbqfi"></span></button>
                       </div>
                     </form>

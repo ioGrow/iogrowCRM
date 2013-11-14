@@ -906,6 +906,21 @@ class DisconnectHandler(JsonRestHandler, SessionEnabledHandler):
       self.send_error(500, e.msg)
       return
 
+class SearchListHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+      if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            tabs = user.get_user_active_tabs()
+
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            # Render the template
+            template_values = {'tabs':tabs}
+            template = jinja_environment.get_template('templates/search/list.html')
+            self.response.out.write(template.render(template_values))
+
 class IndexHandler(BaseHandler,SessionEnabledHandler):
   def get(self):
         
@@ -1465,6 +1480,8 @@ routes = [
     ('/views/cases/show',CaseShowHandler),
     ('/views/campaigns/list',CampaignListHandler),
     ('/views/campaigns/show',CampaignShowHandler),
+    ('/views/search/list',SearchListHandler),
+    
 
     ('/views/admin/users/list',UserListHandler),
     ('/views/admin/groups/list',GroupListHandler),

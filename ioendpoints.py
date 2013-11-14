@@ -39,18 +39,21 @@ SCOPES = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googlea
 class SearchRequest(messages.Message):
     """Greeting that stores a message."""
     q = messages.StringField(1)
+    limit = messages.IntegerField(2)
+    pageToken = messages.StringField(3)
 
 class SearchResult(messages.Message):
     """Greeting that stores a message."""
     id = messages.StringField(1)
     title = messages.StringField(2)
     type = messages.StringField(3)
-    rank = messages.StringField(4)
+    rank = messages.IntegerField(4)
 
 
 class SearchResults(messages.Message):
     """Collection of Greetings."""
     items = messages.MessageField(SearchResult, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
 
 
 @endpoints.api(name='crmengine', version='v1', description='I/Ogrow CRM APIs',allowed_client_ids=[CLIENT_ID,
@@ -478,26 +481,54 @@ clicking on the link below:
 
   ################################### Search API ################################
   @endpoints.method(SearchRequest, SearchResults,
-                      path='search', http_method='GET',
+                      path='search', http_method='POST',
                       name='search')
   def search_method(self, request):
+
       index = search.Index(name="GlobalIndex")
       query_string = request.q
       search_results = []
+      count = 1
+      limit = request.limit
+      next_cursor = None
+      if request.pageToken:
+          cursor = search.Cursor(web_safe_string=request.pageToken)
+      else:
+          cursor = search.Cursor(per_result=True)
+      if limit:
+          options = search.QueryOptions(limit=limit,cursor=cursor)
+      else:
+          options = search.QueryOptions(cursor=cursor)    
+      query = search.Query(query_string=query_string,options=options)
       try:
-          results = index.search(query_string) 
-          # Iterate over the documents in the results
-          for scored_document in results:
-              kwargs = {
-                        "id" : scored_document.doc_id, 
-                        "rank" : scored_document.rank
-                        }
-              for e in scored_document.fields:
-                  if e.name in ["title","type"]:
-                      kwargs[e.name]=e.value
-              search_results.append(SearchResult(**kwargs))
-              # handle results
-              pass
+          if query:
+              results = index.search(query)
+              total_matches = results.number_found
+              
+              # Iterate over the documents in the results
+              for scored_document in results:
+                  kwargs = {
+                      "id" : scored_document.doc_id, 
+                      "rank" : scored_document.rank
+                  }
+                  for e in scored_document.fields:
+                      if e.name in ["title","type"]:
+                          kwargs[e.name]=e.value
+                  search_results.append(SearchResult(**kwargs))
+                  
+                  next_cursor = scored_document.cursor.web_safe_string
+              next_query_options = search.QueryOptions(limit=1,cursor=scored_document.cursor)
+              next_query = search.Query(query_string=query_string,options=next_query_options)
+              if next_query:
+                  next_results = index.search(next_query)
+                  if len(next_results.results)==0:
+                      next_cursor = None
+
+
+                      
+                      
+               
       except search.Error:
           logging.exception('Search failed')
-      return SearchResults(items = search_results)
+      return SearchResults(items = search_results,nextPageToken=next_cursor)
+
