@@ -18,7 +18,7 @@ from iomodels.crmengine.shows import Show
 from iomodels.crmengine.leads import Lead
 from iomodels.crmengine.cases import Case
 
-from model import User,Group,Member
+from model import User,Group,Member,Permission
 import model
 import logging
 import auth_util
@@ -130,7 +130,43 @@ class CrmEngineApi(remote.Service):
 
     my_model.put()
     return my_model
+  
+  @Account.method(user_required=True,
+                http_method='PUT', path='accounts/{id}', name='accounts.update')
+  def AccountUpdate(self, my_model):
 
+    
+    
+    user = endpoints.get_current_user()
+    if user is None:
+        raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in!' )
+    # Todo: Check permissions
+    my_model.owner = user_from_email.key
+    
+
+
+    my_model.put()
+    return my_model
+
+  @Account.method(user_required=True,
+                http_method='PATCH', path='accounts/{id}', name='accounts.patch')
+  def AccountPatch(self, my_model):
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+        raise endpoints.UnauthorizedException('You must sign-in!' )
+      # Todo: Check permissions
+      
+      
+
+
+      my_model.put()
+      return my_model
   @Account.method(request_fields=('id',),path='accounts/{id}', http_method='GET', name='accounts.get')
   def AccountGet(self, my_model):
     if not my_model.from_datastore:
@@ -532,3 +568,40 @@ clicking on the link below:
           logging.exception('Search failed')
       return SearchResults(items = search_results,nextPageToken=next_cursor)
 
+################################### Permissions API ############################
+###################################Not completed yet###########################""
+  @Permission.method(user_required=True,path='permissions', http_method='POST', name='permissions.insert')
+  def PermissionInsert(self, my_model):
+
+    
+    
+    user = endpoints.get_current_user()
+    if user is None:
+        raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in!' )
+    # Todo: Check permissions
+    my_model.organization = user_from_email.organization
+    my_model.created_by = user_from_email.key
+    #Check if the user has permission to invite people
+    perm = model.Permission.get_user_perm(user_from_email,my_model.about_kind,my_model.about_item)
+    if perm is None or perm.role == 'readonly':
+            raise endpoints.UnauthorizedException('You dont have permission to share this')
+    if my_model.type == 'user':
+        #try to get informations about this user and check if is in the same organization
+        invited_user = model.User.query(model.User.email == my_model.value,model.User.organization==user_from_email.organization).get()
+        if invited_user is None:
+            raise endpoints.UnauthorizedException('The user does not exist')
+        #Check if he hasn't permission before, if so modify it
+        #Prepare the new perm
+    #Check if type is group
+
+
+
+    
+    my_model.put()
+    
+    return my_model
+
+  

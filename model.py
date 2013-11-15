@@ -246,8 +246,33 @@ class Permission(EndpointsModel):
     type = ndb.StringProperty(required=True)
     
     value = ndb.StringProperty(required=True)
+    name = ndb.StringProperty()
+    photoLink = ndb.StringProperty()
     created_by = ndb.KeyProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
+    organization = ndb.KeyProperty()
+
+    def get_user_perm(self,user,about_kind,about_item):
+        #check if has permission with type = user
+        perm = Permission.query(Permission.type=='user',
+                                Permission.value== user.email,
+                                Permission.about_kind== about_kind,
+                                Permission.about_item == about_item).get()
+        if perm:
+            return perm
+
+        #check if has permission with type = group
+        list_of_groups = user.get_user_groups()
+        perm = Permission.query(Permission.type=='group',
+                                Permission.value in list_of_groups,
+                                Permission.about_kind== about_kind,
+                                Permission.about_item == about_item).get()
+        if perm:
+            return perm
+        return None
+
+
+        
         
 # We use the Profile model to describe what each user can do?
 class Profile(EndpointsModel):
@@ -341,6 +366,14 @@ class User(EndpointsModel):
           self.active_tabs = tabs
           self.put()
           return ndb.get_multi(active_app.tabs)
+
+    def get_user_groups(self):
+        list_of_groups = list()
+        results = Member.query(Member.memberKey==self.key).fetch()
+        for group in results:
+            list_of_groups.append(group.groupKey)
+        return list_of_groups
+
 
 
 
