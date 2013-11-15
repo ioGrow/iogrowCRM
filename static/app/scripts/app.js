@@ -121,5 +121,8 @@ app.config(['$routeProvider', function($routeProvider) {
       }).when('/admin/groups/show/:groupId', {
         controller: 'GroupShowCtrl',        
         templateUrl:'/views/admin/groups/show'
+      }).when('/notes/show/:noteId',{
+      controller : 'NoteShowController',
+      templateUrl:'/views/notes/show'
       });
 }]);
