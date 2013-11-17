@@ -1,12 +1,12 @@
 from google.appengine.ext import ndb
 from google.appengine.api import search 
 from endpoints_proto_datastore.ndb import EndpointsModel
-from model import User
+from model import Userinfo
 import pprint
 
 
 class Topic(EndpointsModel):
-    last_updater = ndb.StructuredProperty(User)
+    last_updater = ndb.StructuredProperty(Userinfo)
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
     title = ndb.StringProperty(required=True)
@@ -19,11 +19,12 @@ class Topic(EndpointsModel):
     about_item = ndb.StringProperty()
     # a key reference to the account's organization
     # Should be required
-    note = ndb.KeyProperty()
+    discussionKind = ndb.StringProperty()
+    discussionId = ndb.StringProperty()
     organization = ndb.KeyProperty()
 
 class Note(EndpointsModel):
-    author = ndb.StructuredProperty(User)
+    author = ndb.StructuredProperty(Userinfo)
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
     title = ndb.StringProperty(required=True)
@@ -37,6 +38,7 @@ class Note(EndpointsModel):
     # Should be required
     organization = ndb.KeyProperty()
 
+    
     def put(self, **kwargs):
         ndb.Model.put(self, **kwargs)
         self._setup()
@@ -70,7 +72,8 @@ class Note(EndpointsModel):
         topic.about_kind = self.about_kind
         topic.about_item = self.about_item
         topic.updated_at = self.updated_at
-        topic.note = self.key
+        topic.discussionKind = 'Note'
+        topic.discussionId = str(self.key.id())
         topic.organization = self.organization
         topic.put()
 

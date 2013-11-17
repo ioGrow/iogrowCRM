@@ -37,13 +37,11 @@ SCOPES = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googlea
 OBJECTS = {'Account': Account,'Contact': Contact}
 
 class SearchRequest(messages.Message):
-    """Greeting that stores a message."""
     q = messages.StringField(1)
     limit = messages.IntegerField(2)
     pageToken = messages.StringField(3)
 
 class SearchResult(messages.Message):
-    """Greeting that stores a message."""
     id = messages.StringField(1)
     title = messages.StringField(2)
     type = messages.StringField(3)
@@ -51,15 +49,42 @@ class SearchResult(messages.Message):
 
 
 class SearchResults(messages.Message):
-    """Collection of Greetings."""
+   
     items = messages.MessageField(SearchResult, 1, repeated=True)
     nextPageToken = messages.StringField(2)
+
+class AuthorSchema(messages.Message):
+
+    google_user_id = messages.StringField(1)
+    display_name = messages.StringField(2)
+    google_public_profile_url = messages.StringField(3)
+    photo = messages.StringField(4)
+
+class DiscussionAboutSchema(messages.Message):
+
+    kind = messages.StringField(1)
+    id = messages.IntegerField(2)
+    name = messages.StringField(3)
+    
+# Customized Discussion Response for notes.get API
+class DiscussionResponse(messages.Message):
+    
+    id = messages.IntegerField(1)
+    entityKey = messages.StringField(2)
+    title = messages.StringField(3)
+    content = messages.StringField(4)
+    comments = messages.IntegerField(5)
+    about = messages.MessageField(DiscussionAboutSchema,6)
+    author = messages.MessageField(AuthorSchema,7)
 
 
 @endpoints.api(name='crmengine', version='v1', description='I/Ogrow CRM APIs',allowed_client_ids=[CLIENT_ID,
                                    endpoints.API_EXPLORER_CLIENT_ID],scopes=SCOPES)
 class CrmEngineApi(remote.Service):
-  
+
+  ID_RESOURCE = endpoints.ResourceContainer(
+            message_types.VoidMessage,
+            id=messages.IntegerField(1, variant=messages.Variant.INT32))
   
   
   # TEDJ_29_10_write annotation to reference wich model for example @Account to refernce Account model
@@ -210,13 +235,62 @@ class CrmEngineApi(remote.Service):
     if user_from_email is None:
       raise endpoints.UnauthorizedException('You must sign-in!' )
     # Todo: Check permissions
-    note_author = model.User()
-    note_author.google_display_name = user_from_email.google_display_name
+    note_author = model.Userinfo()
+    note_author.display_name = user_from_email.google_display_name
+    note_author.photo = user_from_email.google_public_profile_photo_url
     my_model.author = note_author
     my_model.put()
     
 
     return my_model
+  
+  @endpoints.method(ID_RESOURCE, DiscussionResponse,
+                      path='notes/{id}', http_method='GET',
+                      name='notes.get')
+  def NoteGet(self, request):
+        user = endpoints.get_current_user()
+        if user is None:
+            raise endpoints.UnauthorizedException('You must authenticate!' )
+        user_from_email = model.User.query(model.User.email == user.email()).get()
+        if user_from_email is None:
+          raise endpoints.UnauthorizedException('You must sign-in!' )
+        try:
+            note = Note.get_by_id(request.id)
+            about_item_id = int(note.about_item)
+            try:
+                about_object = OBJECTS[note.about_kind].get_by_id(about_item_id)
+                if note.about_kind == 'Contact' or note.about_kind == 'Lead':
+                    about_name = about_object.firstname + ' ' + about_object.lastname
+                else:
+                    about_name = about_object.name
+                about_response = DiscussionAboutSchema(kind=note.about_kind,
+                                                       id=about_item_id,
+                                                       name=about_name)
+                author = AuthorSchema(google_user_id = note.author.google_user_id,
+                                      display_name = note.author.display_name,
+                                      google_public_profile_url = note.author.google_public_profile_url,
+                                      photo = note.author.photo)
+                
+
+                response = DiscussionResponse(id=request.id,
+                                              entityKey=str(note.key),
+                                              title= note.title,
+                                              content= note.content,
+                                              comments=note.comments,
+                                              about=about_response,
+                                              author= author)
+                return response
+            except (IndexError, TypeError):
+                raise endpoints.NotFoundException('About object %s not found.' %
+                                                  (request.id,))
+            
+            
+
+            
+        except (IndexError, TypeError):
+            raise endpoints.NotFoundException('Note %s not found.' %
+                                              (request.id,))
+
 
   ################################ Topic API ##################################
   @Topic.query_method(user_required=True,query_fields=('about_kind','about_item', 'limit', 'order', 'pageToken'),path='topics', name='topics.list')
