@@ -4,10 +4,10 @@ from google.appengine.api import search
 import model
 class Account(EndpointsModel):
 
-    _message_fields_schema = ('id','entityKey','access','collaborators_ids','name','owner','account_type','industry','address')
+    _message_fields_schema = ('id','entityKey','access','collaborators_list', 'collaborators_ids','name','owner','account_type','industry','address')
     # Sharing fields
     owner = ndb.StringProperty()
-    collaborators = ndb.StructuredProperty(model.Userinfo)
+    collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
     collaborators_ids = ndb.StringProperty(repeated=True)
     is_private = ndb.BooleanProperty(default=False)
     organization = ndb.KeyProperty()

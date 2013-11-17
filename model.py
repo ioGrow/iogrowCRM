@@ -297,6 +297,16 @@ class Userinfo(EndpointsModel):
     display_name = ndb.StringProperty()
     google_public_profile_url = ndb.StringProperty()
     photo = ndb.StringProperty()
+
+    def get_basic_info(self,user):
+        
+        self.email = user.email
+        self.display_name= user.google_display_name
+        self.google_user_id = user.google_user_id
+        self.google_public_profile_url= user.google_public_profile_url
+        self.photo = user.google_public_profile_photo_url
+                            
+        return self
     
     
 class User(EndpointsModel):
@@ -327,6 +337,10 @@ class User(EndpointsModel):
     app_changed = ndb.BooleanProperty(default=True)
 
     
+    google_user_id = ndb.StringProperty()
+    display_name = ndb.StringProperty()
+    google_public_profile_url = ndb.StringProperty()
+    photo = ndb.StringProperty()
     def init_user_config(self,org_key,profile_key):
         profile = profile_key.get()
         # Get Apps for this profile:

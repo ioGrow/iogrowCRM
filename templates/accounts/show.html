@@ -25,6 +25,67 @@
               </span>
         </div>
       </div>
+      <div id="sharingSettingsModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("Sharing Settings")}}</h3>
+              </div>
+              <div class="modal-body">
+                 <form id="addMember" name="addaccount" ng-submit="share(slected_memeber)" class="form-horizontal"> 
+                  <fieldset>
+                  
+                    <p>Who has access:</p>
+                    <div class='container-fluid'>
+
+                     
+                          
+                            <label class="radio line">
+                            <input type="radio" name="optionsRadios2" value="option1" />
+                            public: Anyone within your organization can access and find
+                            </label>
+                            <label class="radio line">
+                            <input type="radio" name="optionsRadios2" value="option2" checked />
+                            private: only you and your collaborators
+                            </label>  
+                           
+                       
+                      
+                    </div>
+                    <hr/>
+                    <div class='container-fluid'>
+                    <p>Collaborators:</p>
+                        <div ng-repeat="collaborator in account.collaborators_list" class="invitation">
+                          <img class="google-avatar" src="<%=collaborator.photo%>"/>
+                           <%=collaborator.display_name%> < <%=collaborator.email%> >
+                        </div>
+                        
+                    </div>
+                    <hr/>
+
+                    <div class='container-fluid'>
+                    <p>Invited user:</p>
+                    <div class="invitation" ng-show="slected_memeber">
+                      <img class="google-avatar" src="<%= slected_memeber.google_public_profile_photo_url%>"/>
+                        <strong> <%= slected_memeber.google_display_name %> < <%=slected_memeber.email%> ></strong>
+                      <hr/>
+                    </div>
+                    
+                    <p>Invite collaborators:</p>
+                    <div class="control-group">
+                      <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="input-block-level" placeholder="Enter name or email addresse to add people to this group">
+                    </div>
+                    
+                      </div>
+                    
+                    </fieldset>
+                
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <button  type="submit" class="btn blue addContactNow">{{_("Share")}}</button>
+              </div>
+               </form>
+       </div>
       <div class="container-fluid" ng-show="isContentLoaded">
         
         <!-- END PAGE HEADER-->
@@ -33,7 +94,7 @@
           
           <div class="span12">
             <div class="pull-right sharebuttonDiv"> 
-                  <a href="" class="btn blue jfk-button jfk-button-action">
+                  <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
                     <i class="icon-lock"></i> Share
                   </a>
                         

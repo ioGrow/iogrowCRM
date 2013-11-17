@@ -71,3 +71,29 @@ accountservices.factory('User', function($http) {
 
 return User;
 });
+
+accountservices.factory('Permission', function($http) {
+  
+  var Permission = function(data) {
+    angular.extend(this, data);
+  }
+
+  
+  
+  Permission.insert = function($scope,params){
+      console.log(params);
+      gapi.client.crmengine.permissions.insert(params).execute(function(resp) {
+         console.log('in insert resp');
+         console.log(resp);
+         if(!resp.code){
+              $scope.updateCollaborators();
+          
+         }else{
+          console.log(resp.code);
+         }
+      });
+  };
+  
+
+return Permission;
+});

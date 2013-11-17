@@ -18,7 +18,7 @@ from iomodels.crmengine.shows import Show
 from iomodels.crmengine.leads import Lead
 from iomodels.crmengine.cases import Case
 
-from model import User,Group,Member,Permission
+from model import User,Userinfo,Group,Member,Permission
 import model
 import logging
 import auth_util
@@ -685,11 +685,22 @@ clicking on the link below:
               #update collaborators on this objects:
           item_id = int(my_model.about_item)
           item = OBJECTS[my_model.about_kind].get_by_id(item_id)
-          if item.collaborators:
-            item.collaborators.append(invited_user.google_user_id)
+          userinfo = Userinfo()
+          if item.collaborators_ids:
+            item.collaborators_ids.append(invited_user.google_user_id)
+            new_collaborator = userinfo.get_basic_info(invited_user)
+            item.collaborators_list.append(new_collaborator)
+
           else:
-            collaborators = list()
-            collaborators.append(invited_user.google_user_id)
+            collaborators_ids = list()
+            collaborators= list()
+            collaborators_ids.append(invited_user.google_user_id)
+            item.collaborators_ids = collaborators_ids
+            new_collaborator = userinfo.get_basic_info(invited_user)
+            collaborators.append(new_collaborator)
+            item.collaborators_list = collaborators
+
+          print item
           item.put()
       #Todo Check if type is group
       return my_model
