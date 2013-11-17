@@ -87,14 +87,9 @@
         <div class="row-fluid">
           
           <div class="span12">
-            <h2>{{ _("Accounts") }} </h2>
+            <h2>{{ _("Search results") }} </h2>
             
-            <div class="btn-group">
-            
-                    <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
-                    {{ _("New Account") }} <i class="icon-plus"></i>
-                    </button>
-            </div>
+           
                
             <hr/>
             
@@ -105,19 +100,20 @@
             <div class="row-fluid cards-container">
             <div class="inner-cards-container">
             
-              <div ng-repeat="account in accounts" class="span3 responsive" data-tablet="span6" data-desktop="span3">
+              <div ng-repeat="result in searchResults" class="span3 responsive" data-tablet="span6" data-desktop="span3">
                 <div class="dashboard-stat cards">
                   
                   <div class="details">
-                    <a href="/#/accounts/show/<%= account.id %>"><h2 class="cardTitle">
-                      <%= account.name %>
-                    </h2></a>
+                    <a href="<%=result.url%>">
+                    <p class="card-small-title" >
+                      <%= result.title %>
+                    </p></a>
                     <div class="desc">                           
                       
-                    <a ng-show="account.industry" class="desc" href="/#/search/type:Account <%=account.industry%>">#<%=account.industry%></a>
+                       <p>(<%=result.type%>)</p>
                     </div>
                   </div>
-                  <a class="more" href="/#/accounts/show/<%= account.id %>">
+                  <a class="more" href="<%=result.url%>">
                   View more <i class="m-icon-swapright m-icon-white"></i>
                   </a>                 
                 </div>

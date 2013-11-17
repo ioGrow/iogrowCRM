@@ -18,7 +18,7 @@ from iomodels.crmengine.shows import Show
 from iomodels.crmengine.leads import Lead
 from iomodels.crmengine.cases import Case
 
-from model import User,Group,Member
+from model import User,Group,Member,Permission
 import model
 import logging
 import auth_util
@@ -39,18 +39,21 @@ SCOPES = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googlea
 class SearchRequest(messages.Message):
     """Greeting that stores a message."""
     q = messages.StringField(1)
+    limit = messages.IntegerField(2)
+    pageToken = messages.StringField(3)
 
 class SearchResult(messages.Message):
     """Greeting that stores a message."""
     id = messages.StringField(1)
     title = messages.StringField(2)
     type = messages.StringField(3)
-    rank = messages.StringField(4)
+    rank = messages.IntegerField(4)
 
 
 class SearchResults(messages.Message):
     """Collection of Greetings."""
     items = messages.MessageField(SearchResult, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
 
 
 @endpoints.api(name='crmengine', version='v1', description='I/Ogrow CRM APIs',allowed_client_ids=[CLIENT_ID,
@@ -127,7 +130,43 @@ class CrmEngineApi(remote.Service):
 
     my_model.put()
     return my_model
+  
+  @Account.method(user_required=True,
+                http_method='PUT', path='accounts/{id}', name='accounts.update')
+  def AccountUpdate(self, my_model):
 
+    
+    
+    user = endpoints.get_current_user()
+    if user is None:
+        raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in!' )
+    # Todo: Check permissions
+    my_model.owner = user_from_email.key
+    
+
+
+    my_model.put()
+    return my_model
+
+  @Account.method(user_required=True,
+                http_method='PATCH', path='accounts/{id}', name='accounts.patch')
+  def AccountPatch(self, my_model):
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+        raise endpoints.UnauthorizedException('You must sign-in!' )
+      # Todo: Check permissions
+      
+      
+
+
+      my_model.put()
+      return my_model
   @Account.method(request_fields=('id',),path='accounts/{id}', http_method='GET', name='accounts.get')
   def AccountGet(self, my_model):
     if not my_model.from_datastore:
@@ -183,6 +222,17 @@ class CrmEngineApi(remote.Service):
   def TopicList(self, query):
     
     return query
+  @Topic.method(request_fields=('id',),path='topics/{id}', http_method='GET', name='topics.get')
+  def TopicGet(self, my_model):
+    if not my_model.from_datastore:
+      raise endpoints.NotFoundException('Topic not found.')
+    return my_model
+
+  @Note.method(request_fields=('id',),path='notes/{id}', http_method='GET', name='nots.get')
+  def NoteGet(self, my_model):
+    if not my_model.from_datastore:
+      raise endpoints.NotFoundException('Note not found.')
+    return my_model
 
   ################################ Tasks API ##################################
   @Task.method(user_required=True,path='tasks', http_method='POST', name='tasks.insert')
@@ -478,26 +528,91 @@ clicking on the link below:
 
   ################################### Search API ################################
   @endpoints.method(SearchRequest, SearchResults,
-                      path='search', http_method='GET',
+                      path='search', http_method='POST',
                       name='search')
   def search_method(self, request):
+
       index = search.Index(name="GlobalIndex")
       query_string = request.q
       search_results = []
+      count = 1
+      limit = request.limit
+      next_cursor = None
+      if request.pageToken:
+          cursor = search.Cursor(web_safe_string=request.pageToken)
+      else:
+          cursor = search.Cursor(per_result=True)
+      if limit:
+          options = search.QueryOptions(limit=limit,cursor=cursor)
+      else:
+          options = search.QueryOptions(cursor=cursor)    
+      query = search.Query(query_string=query_string,options=options)
       try:
-          results = index.search(query_string) 
-          # Iterate over the documents in the results
-          for scored_document in results:
-              kwargs = {
-                        "id" : scored_document.doc_id, 
-                        "rank" : scored_document.rank
-                        }
-              for e in scored_document.fields:
-                  if e.name in ["title","type"]:
-                      kwargs[e.name]=e.value
-              search_results.append(SearchResult(**kwargs))
-              # handle results
-              pass
+          if query:
+              results = index.search(query)
+              total_matches = results.number_found
+              
+              # Iterate over the documents in the results
+              for scored_document in results:
+                  kwargs = {
+                      "id" : scored_document.doc_id, 
+                      "rank" : scored_document.rank
+                  }
+                  for e in scored_document.fields:
+                      if e.name in ["title","type"]:
+                          kwargs[e.name]=e.value
+                  search_results.append(SearchResult(**kwargs))
+                  
+                  next_cursor = scored_document.cursor.web_safe_string
+              next_query_options = search.QueryOptions(limit=1,cursor=scored_document.cursor)
+              next_query = search.Query(query_string=query_string,options=next_query_options)
+              if next_query:
+                  next_results = index.search(next_query)
+                  if len(next_results.results)==0:
+                      next_cursor = None
+
+
+                      
+                      
+               
       except search.Error:
           logging.exception('Search failed')
-      return SearchResults(items = search_results)
+      return SearchResults(items = search_results,nextPageToken=next_cursor)
+
+################################### Permissions API ############################
+###################################Not completed yet###########################""
+  @Permission.method(user_required=True,path='permissions', http_method='POST', name='permissions.insert')
+  def PermissionInsert(self, my_model):
+
+    
+    
+    user = endpoints.get_current_user()
+    if user is None:
+        raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in!' )
+    # Todo: Check permissions
+    my_model.organization = user_from_email.organization
+    my_model.created_by = user_from_email.key
+    #Check if the user has permission to invite people
+    perm = model.Permission.get_user_perm(user_from_email,my_model.about_kind,my_model.about_item)
+    if perm is None or perm.role == 'readonly':
+            raise endpoints.UnauthorizedException('You dont have permission to share this')
+    if my_model.type == 'user':
+        #try to get informations about this user and check if is in the same organization
+        invited_user = model.User.query(model.User.email == my_model.value,model.User.organization==user_from_email.organization).get()
+        if invited_user is None:
+            raise endpoints.UnauthorizedException('The user does not exist')
+        #Check if he hasn't permission before, if so modify it
+        #Prepare the new perm
+    #Check if type is group
+
+
+
+    
+    my_model.put()
+    
+    return my_model
+
+  

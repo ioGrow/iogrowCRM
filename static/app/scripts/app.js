@@ -1,5 +1,5 @@
 
-var app = angular.module('crmEngine',['ui.bootstrap.datetimepicker','ui.bootstrap','crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.eventservices', 'crmEngine.leadservices','crmEngine.opportunityservices','crmEngine.caseservices','crmEngine.campaignservices','crmEngine.userservices','crmEngine.groupservices']);
+var app = angular.module('crmEngine',['ui.bootstrap.datetimepicker','ui.bootstrap','crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.eventservices', 'crmEngine.leadservices','crmEngine.opportunityservices','crmEngine.caseservices','crmEngine.campaignservices','crmEngine.userservices','crmEngine.groupservices','crmEngine.noteservices']);
 
 
 
@@ -109,6 +109,12 @@ app.config(['$routeProvider', function($routeProvider) {
       }).when('/shows/show/:showId', {
         controller: 'ShowShowCtrl',        
         templateUrl:'/views/shows/show'
+      }).when('/search/:q', {
+
+    
+
+        controller: 'SearchShowController',        
+        templateUrl:'/views/search/list'
       }).when('/admin/users', {
 
     

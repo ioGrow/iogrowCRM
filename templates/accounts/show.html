@@ -46,7 +46,7 @@
             <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Accounts")}} > <%= account.name %></h2>
             
 
-           <span>{{_("Type")}}: </span><span><span><a class="tag" href="#">#<%=account.account_type%></a></span>
+           <span>{{_("Type")}}: </span><span><span><a class="tag" href="/#/search/type:Account <%=account.account_type%>">#<%=account.account_type%></a></span>
             <br><span>{{_("Industry")}}: </span><span><span><a class="tag" href="#">#<%=account.industry%></a></span> 
              </br>
              <span class="page-meta"><i class="icon-pencil"><a ng-click="editaccount()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |  <i class="icon-trash"><a ng-click="delete(account)" class="btn-link addAnotherPhone">  {{_("Delete")}}</a></i></span>
@@ -112,9 +112,9 @@
                                 <div class="message">
                                   <span class="arrow"></span>
                                   <a href="#" class="name"><%= topic.last_updater.google_display_name%></a>
-                                  <span class="datetime">at <%=topic.updated_at %></span>
+                                  <span class="datetime">at <%=topic.updated_at %> </span>
                                   <span class="body">
-                                  <a href="#/accounts/show/1/notes/22" class="discussion-content"><strong class="ng-binding"><%= topic.title%></strong><span class="excerpt ng-binding"> - <%= topic.excerpt%></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <%= topic.comments%> comments</span></a>
+                                  <a href="/#/notes/show/<%=topic.id%>" class="discussion-content"><strong class="ng-binding"><%= topic.title%></strong><span class="excerpt ng-binding"> - <%= topic.excerpt%></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <%= topic.comments%> comments</span></a>
                                   </span>
                                 </div>
                               </li>

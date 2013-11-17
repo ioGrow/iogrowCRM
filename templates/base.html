@@ -51,7 +51,7 @@
                   <li>    
                     <form class="form-inline ng-pristine ng-valid" ng-submit="executeSearch(searchQuery)">
                       <div class="input-append row-fluid">
-                        <input type="text" ng-model="searchQuery" typeahead="result as result.title + ' (' + result.kind + ')' for result in searchresults($viewValue) | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="input-xlarge" placeholder="Search">
+                        <input type="text" ng-model="searchQuery" typeahead="result as result.title + ' (' + result.type + ')' for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="input-xlarge" placeholder="Search">
                        <button class="gbqfb gbqfb-hvr"><span class="gbqfi"></span></button>
                       </div>
                     </form>
@@ -177,7 +177,7 @@
   <!-- BEGIN FOOTER -->
   <div class="footer">
     <div class="footer-inner">
-      2013 &copy; Metronic by keenthemes.
+      2013 &copy; i/oGrow.
     </div>
     <div class="footer-tools">
       <!--span class="go-top">
@@ -297,6 +297,7 @@
   <script src="static/app/scripts/services/userservices.js"></script>
   <script src="static/app/scripts/services/groupservices.js"></script>
   <script src="static/app/scripts/services/showservices.js" ></script>
+  <script src="static/app/scripts/services/noteservices.js" ></script>
 
   <script src="static/app/scripts/app.js" ></script>
   <script src="static/app/scripts/controllers/accountcontrollers.js" ></script>

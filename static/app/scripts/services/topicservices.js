@@ -45,6 +45,24 @@ topicservices.factory('Topic', function($http) {
               }
       });
   };
+
+  Topic.get = function($scope,id) {
+          gapi.client.crmengine.topics.get(id).execute(function(resp) {
+            if(!resp.code){
+               $scope.topic = resp;
+               // $scope.isContentLoaded = true;
+               // $scope.listTopics(resp);
+               // $scope.listTasks();
+               // $scope.listEvents();
+               // Call the method $apply to make the update on the scope
+                $scope.$apply();
+
+            }else {
+               alert("Error, response is: " + angular.toJson(resp));
+            }
+            console.log('gapi #end_execute');
+          });
+  };
   
 
 return Topic;
@@ -108,50 +126,50 @@ topicservices.factory('WhoHasAccess', function($http) {
    
   return WhoHasAccess;
 });
-topicservices.factory('Note', function($http) {
+// topicservices.factory('Note', function($http) {
   
-  var Note = function(data) {
-    angular.extend(this, data);
-  }
+//   var Note = function(data) {
+//     angular.extend(this, data);
+//   }
 
   
-  Note.get = function(id) {
-    return $http.get('/api/notes/' + id).then(function(response) {
-      return new Note(response.data);
-    });
-  };
-  Note.prototype.list = function(search,page){
-    var topic = this;
-    return $http.get('/api/topics/?topicaboutkind='+topic.topicaboutkind+'&topicaboutitem='+topic.topicaboutitem+'&page='+topic.page).then(function(response) {
-      var results = {}
-      results.topics = response.data.results;
-      results.count = response.data.count;
+//   Note.get = function(id) {
+//     return $http.get('/api/notes/' + id).then(function(response) {
+//       return new Note(response.data);
+//     });
+//   };
+//   Note.prototype.list = function(search,page){
+//     var topic = this;
+//     return $http.get('/api/topics/?topicaboutkind='+topic.topicaboutkind+'&topicaboutitem='+topic.topicaboutitem+'&page='+topic.page).then(function(response) {
+//       var results = {}
+//       results.topics = response.data.results;
+//       results.count = response.data.count;
 
-      return results;
-    });
+//       return results;
+//     });
 
-  };
+//   };
 
-  Note.insert = function($scope,note){
-      $scope.isLoading = true;
-      gapi.client.crmengine.notes.insert(note).execute(function(resp) {
-         console.log('in insert resp');
-         console.log(resp);
-         if(!resp.code){
-          console.log(resp);
-          // TME_02_11_13 when a note is inserted reload topics
-          $scope.listTopics($scope.account);
-          $scope.isLoading = false;
+//   Note.insert = function($scope,note){
+//       $scope.isLoading = true;
+//       gapi.client.crmengine.notes.insert(note).execute(function(resp) {
+//          console.log('in insert resp');
+//          console.log(resp);
+//          if(!resp.code){
+//           console.log(resp);
+//           // TME_02_11_13 when a note is inserted reload topics
+//           $scope.listTopics($scope.account);
+//           $scope.isLoading = false;
 
-          $scope.$apply();
-         // $('#addAccountModal').modal('hide');
-         // window.location.replace('#/accounts/show/'+resp.id);
+//           $scope.$apply();
+//          // $('#addAccountModal').modal('hide');
+//          // window.location.replace('#/accounts/show/'+resp.id);
           
-         }else{
-          console.log(resp.code);
-         }
-      });
-  };
+//          }else{
+//           console.log(resp.code);
+//          }
+//       });
+//   };
 
-return Note;
-});
+// return Note;
+// });

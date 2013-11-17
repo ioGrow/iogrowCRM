@@ -11,7 +11,15 @@
       <!-- END SIDEBAR MENU -->
 </div>
 <div  class="page-content">
-    <div class="container-fluid">
+<div class="container-fluid" ng-show="immediateFailed">
+         <div class="span12">  
+          <h1>Sign-in Button;</h1>
+              <span id="signin">
+                  <span id="myGsignin"></span>
+              </span>
+        </div>
+      </div>
+    <div class="container-fluid" >
       <div class="row-fluid">
          <div class="span12">
          <div>
@@ -22,7 +30,7 @@
             </div>
             <h2>
             <a href="/#/" data-toggle="tooltip" data-placement="bottom" title="Back to Opportunities">
-            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>    {{_("Accounts")}} > Goolge <!--%=opportunity.description %--></h2>
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>    {{_("Accounts")}} > <%=topic.title%> <%=topic.note%> <!--%=opportunity.description %--></h2>
             
 
            
@@ -40,19 +48,19 @@
             
             <div class="portlet">
             <div class="portlet-title line">
-              <div class="caption"><i class="fa fa-comments"></i>Tittle of the Note</div>
+              <div class="caption"><i class="fa fa-comments"></i><%=topic.title%></div>
             </div>
             <div class="portlet-body" id="chats">
               <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 435px;"><div class="scroller" style="height: 435px; overflow: hidden; width: auto;" data-always-visible="1" data-rail-visible1="1">
                 <ul class="chats">
                   <li class="in">
                     <img class="avatar" alt="" src="static/img/avatar.jpg.png" />
-                    <div class="message">
+                    <div class="">
                       <span class="arrow"></span>
-                      <a href="#" class="name">Bob Nilson</a>
-                      <span class="datetime">at Jul 25, 2012 11:09</span>
+                      <a href="#" class="name"><%= topic.last_updater.google_display_name%></a>
+                      <span class="datetime">at <%=topic.updated_at %> </span><br>
                       <span class="body">
-                      Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                      <%= topic.excerpt%>
                       </span>
                     </div>
                   </li>
@@ -82,35 +90,9 @@
                       </div>
               
             </div>
-              </div>
-              </div>
-              
-          </div>
-
-              <div class="portlet paddingless">
-                <div class="portlet-title line">
-                 
-                  
-                    <!--span class="page-meta pull-left"><i class="icon-pencil"><a ng-click="editNote()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="delete(note)" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span-->
-                  
-                  
-                </div>
-                <div class="portlet-body">
-                  
-                   </div>
-                   <div class="portlet">
-            <div class="portlet-title line">
-              <div class="caption"><i class="fa fa-comments"></i>Comments</div>
-              <!--div class="tools">
-                <a href="" class="collapse"></a>
-                <a href="#portlet-config" data-toggle="modal" class="config"></a>
-                <a href="" class="reload"></a>
-                <a href="" class="remove"></a>
-              </div-->
-            </div>
-            <div class="portlet-body" id="chats">
-              <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 435px;"><div class="scroller" style="height: 435px; overflow: hidden; width: auto;" data-always-visible="1" data-rail-visible1="1">
-                <ul class="chats">
+            <div class="caption"><i class="fa fa-comments pull-right"></i><h3>Comments  :</h3></div>
+            
+                  <ul class="chats">
                   <li class="in">
                     <img class="avatar" alt="" src="static/img/avatar.jpg.png" />
                     <div class="message">
@@ -124,45 +106,7 @@
                   </li>
                   
                 </ul>
-              </div>
-              </div>
-              
-            </div>
-          </div>
-
-                   <!--ul class="chats">
-                              <li class="in">
-                              <img class="avatar" alt="" src="static/img/avatar.jpg.png" />
-                              <div class="message">
-                              <span class="arrow"></span>
-                              <span class="body">
-                                  <a href="#/accounts/show/1/notes/22" class="discussion-content"><strong class="ng-binding">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpa</strong><span class="excerpt ng-binding"> - <yyey</span>
-
-                              </div>                                
-                              </li>
-                              <li class="in">
-                              <img class="avatar" alt="" src="static/img/avatar.jpg.png" />
-                              <div class="message">
-                              <span class="arrow"></span>
-                              <span class="body">
-                                  <a href="#/accounts/show/1/notes/22" class="discussion-content"><strong class="ng-binding">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpa</strong><span class="excerpt ng-binding"> <yyey</span>
-
-                              </div>                                
-                              </li>
-                              <!--li class="in" ng-repeat="topic in topics" id="topic_<%=$index%>">
-                                <img class="avatar" alt="" src="static/img/avatar.jpg.png" />
-                                <div class="message">
-                                  <span class="arrow"></span>
-                                  <a href="#" class="name"><%= topic.last_updater.google_display_name%></a>
-                                  <span class="datetime">at <%=topic.updated_at %></span>
-                                  <span class="body">
-                                  <a href="#/accounts/show/1/notes/22" class="discussion-content"><strong class="ng-binding"><%= topic.title%></strong><span class="excerpt ng-binding"> - <%= topic.excerpt%></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <%= topic.comments%> comments</span></a>
-                                  </span>
-                                </div>
-                              </li-->
-                              
-                  </ul-->
-                  <div class="row-fluid">
+                            <div class="row-fluid">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
                                       <ul>
@@ -174,10 +118,16 @@
                                         {{_("Next")}} 
                                         </button></li>
                                       </ul>
-                                </div>
-                        <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
-                  </div>   
-                </div>
+                                    </div>
+                                    <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                              </div>
+
+              </div>
+              </div>
+              
+          </div>
+
+              
               
               </div>
          
@@ -191,10 +141,15 @@
                 </div>
                 <div class="portlet-body">
                 <ul class="chats">
-                  <li class="in">User One</li>
-                  <li class="in">User 2</li>
-                  <li class="in">User 3</li>
-                  <li><a href="#myModal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new Attendee</a></li>
+                  <li class="in">
+                    <img class="avatar" alt="" src="static/img/avatar.jpg.png" />
+                    <div class="message">
+                      <span class="arrow"></span>
+                      <a href="#" class="name">Hakim  Karriche</a>
+                    </div>
+                  </li>
+
+                  <li><a href="#addAttendee"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new Attendee</a></li>
                 </ul>
                 </div>
                 
@@ -203,6 +158,51 @@
 
 
          
+       </div>
+
+        <div id="addAttendee" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("New User")}}</h3>
+              </div>
+              <div class="modal-body">
+                 <form id="addAccount" name="addaccount" ng-submit="addNewUser(user)" class="form-horizontal"> 
+                  <fieldset>
+                  
+                    <p>Invite people from your team and start working together in seconds. Everyone you invite will receive a welcome email.</p>
+
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Email")}} *</label>
+                       
+                        <div class="controls">
+                          <input type="text" required id="id_name" ng-model="user.email">
+                          
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Profile")}}</label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_name" ng-model="account.account_type">
+                          
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Role")}} </label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_name" ng-model="account.industry">
+                          
+                        </div>
+                    </div>
+                    </fieldset>
+                
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <button  type="submit" class="btn blue addContactNow">{{_("Add Atendee")}}</button>
+              </div>
+               </form>
        </div>
       
     </div>
