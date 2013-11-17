@@ -248,25 +248,30 @@ class Permission(EndpointsModel):
     value = ndb.StringProperty(required=True)
     name = ndb.StringProperty()
     photoLink = ndb.StringProperty()
-    created_by = ndb.KeyProperty()
+    created_by = ndb.StringProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     organization = ndb.KeyProperty()
 
+    
+
+
     def get_user_perm(self,user,about_kind,about_item):
         #check if has permission with type = user
-        perm = Permission.query(Permission.type=='user',
-                                Permission.value== user.email,
-                                Permission.about_kind== about_kind,
-                                Permission.about_item == about_item).get()
+        print 'i am in get_user_perm'
+        print about_item
+        perm = Permission.query(ndb.AND(Permission.type == 'user',
+                                Permission.value == user.google_user_id,
+                                Permission.about_kind == about_kind,
+                                Permission.about_item == about_item)).get()
         if perm:
             return perm
 
         #check if has permission with type = group
         list_of_groups = user.get_user_groups()
-        perm = Permission.query(Permission.type=='group',
+        perm = Permission.query(ndb.AND(Permission.type=='group',
                                 Permission.value in list_of_groups,
                                 Permission.about_kind== about_kind,
-                                Permission.about_item == about_item).get()
+                                Permission.about_item == about_item)).get()
         if perm:
             return perm
         return None

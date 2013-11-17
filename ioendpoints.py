@@ -34,16 +34,14 @@ from protorpc import message_types
 # This client_id could be generated on the Google API console
 CLIENT_ID = '330861492018.apps.googleusercontent.com'
 SCOPES = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/drive']
-
+OBJECTS = {'Account': Account,'Contact': Contact}
 
 class SearchRequest(messages.Message):
-    """Greeting that stores a message."""
     q = messages.StringField(1)
     limit = messages.IntegerField(2)
     pageToken = messages.StringField(3)
 
 class SearchResult(messages.Message):
-    """Greeting that stores a message."""
     id = messages.StringField(1)
     title = messages.StringField(2)
     type = messages.StringField(3)
@@ -51,15 +49,42 @@ class SearchResult(messages.Message):
 
 
 class SearchResults(messages.Message):
-    """Collection of Greetings."""
+   
     items = messages.MessageField(SearchResult, 1, repeated=True)
     nextPageToken = messages.StringField(2)
+
+class AuthorSchema(messages.Message):
+
+    google_user_id = messages.StringField(1)
+    display_name = messages.StringField(2)
+    google_public_profile_url = messages.StringField(3)
+    photo = messages.StringField(4)
+
+class DiscussionAboutSchema(messages.Message):
+
+    kind = messages.StringField(1)
+    id = messages.IntegerField(2)
+    name = messages.StringField(3)
+    
+# Customized Discussion Response for notes.get API
+class DiscussionResponse(messages.Message):
+    
+    id = messages.IntegerField(1)
+    entityKey = messages.StringField(2)
+    title = messages.StringField(3)
+    content = messages.StringField(4)
+    comments = messages.IntegerField(5)
+    about = messages.MessageField(DiscussionAboutSchema,6)
+    author = messages.MessageField(AuthorSchema,7)
 
 
 @endpoints.api(name='crmengine', version='v1', description='I/Ogrow CRM APIs',allowed_client_ids=[CLIENT_ID,
                                    endpoints.API_EXPLORER_CLIENT_ID],scopes=SCOPES)
 class CrmEngineApi(remote.Service):
-  
+
+  ID_RESOURCE = endpoints.ResourceContainer(
+            message_types.VoidMessage,
+            id=messages.IntegerField(1, variant=messages.Variant.INT32))
   
   
   # TEDJ_29_10_write annotation to reference wich model for example @Account to refernce Account model
@@ -114,22 +139,17 @@ class CrmEngineApi(remote.Service):
 
   @Account.method(user_required=True,path='accounts', http_method='POST', name='accounts.insert')
   def AccountInsert(self, my_model):
-
-    
-    
-    user = endpoints.get_current_user()
-    if user is None:
-        raise endpoints.UnauthorizedException('You must authenticate!' )
-    user_from_email = model.User.query(model.User.email == user.email()).get()
-    if user_from_email is None:
-      raise endpoints.UnauthorizedException('You must sign-in!' )
-    # Todo: Check permissions
-    my_model.owner = user_from_email.key
-    
-
-
-    my_model.put()
-    return my_model
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+        raise endpoints.UnauthorizedException('You must sign-in!' )
+      # Todo: Check permissions
+      my_model.owner = user_from_email.google_user_id
+      my_model.organization = user_from_email.organization
+      my_model.put()
+      return my_model
   
   @Account.method(user_required=True,
                 http_method='PUT', path='accounts/{id}', name='accounts.update')
@@ -175,7 +195,13 @@ class CrmEngineApi(remote.Service):
 
   @Account.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='accounts', name='accounts.list')
   def AccountList(self, query):
-    return query
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+        raise endpoints.UnauthorizedException('You must sign-in!' )
+      return query.filter(ndb.OR(Account.owner==user_from_email.google_user_id,Account.collaborators_ids==user_from_email.google_user_id)).order(Account._key)
 
 
 
@@ -209,13 +235,62 @@ class CrmEngineApi(remote.Service):
     if user_from_email is None:
       raise endpoints.UnauthorizedException('You must sign-in!' )
     # Todo: Check permissions
-    note_author = model.User()
-    note_author.google_display_name = user_from_email.google_display_name
+    note_author = model.Userinfo()
+    note_author.display_name = user_from_email.google_display_name
+    note_author.photo = user_from_email.google_public_profile_photo_url
     my_model.author = note_author
     my_model.put()
     
 
     return my_model
+  
+  @endpoints.method(ID_RESOURCE, DiscussionResponse,
+                      path='notes/{id}', http_method='GET',
+                      name='notes.get')
+  def NoteGet(self, request):
+        user = endpoints.get_current_user()
+        if user is None:
+            raise endpoints.UnauthorizedException('You must authenticate!' )
+        user_from_email = model.User.query(model.User.email == user.email()).get()
+        if user_from_email is None:
+          raise endpoints.UnauthorizedException('You must sign-in!' )
+        try:
+            note = Note.get_by_id(request.id)
+            about_item_id = int(note.about_item)
+            try:
+                about_object = OBJECTS[note.about_kind].get_by_id(about_item_id)
+                if note.about_kind == 'Contact' or note.about_kind == 'Lead':
+                    about_name = about_object.firstname + ' ' + about_object.lastname
+                else:
+                    about_name = about_object.name
+                about_response = DiscussionAboutSchema(kind=note.about_kind,
+                                                       id=about_item_id,
+                                                       name=about_name)
+                author = AuthorSchema(google_user_id = note.author.google_user_id,
+                                      display_name = note.author.display_name,
+                                      google_public_profile_url = note.author.google_public_profile_url,
+                                      photo = note.author.photo)
+                
+
+                response = DiscussionResponse(id=request.id,
+                                              entityKey=str(note.key),
+                                              title= note.title,
+                                              content= note.content,
+                                              comments=note.comments,
+                                              about=about_response,
+                                              author= author)
+                return response
+            except (IndexError, TypeError):
+                raise endpoints.NotFoundException('About object %s not found.' %
+                                                  (request.id,))
+            
+            
+
+            
+        except (IndexError, TypeError):
+            raise endpoints.NotFoundException('Note %s not found.' %
+                                              (request.id,))
+
 
   ################################ Topic API ##################################
   @Topic.query_method(user_required=True,query_fields=('about_kind','about_item', 'limit', 'order', 'pageToken'),path='topics', name='topics.list')
@@ -531,9 +606,19 @@ clicking on the link below:
                       path='search', http_method='POST',
                       name='search')
   def search_method(self, request):
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+          raise endpoints.UnauthorizedException('You must sign-in!' )
+      organization = str(user_from_email.organization.id())
+
 
       index = search.Index(name="GlobalIndex")
-      query_string = request.q
+      #Show only objects where you have permissions
+      query_string = request.q + ' AND (organization:' +organization+ ' AND (access:public OR (owner:'+ user_from_email.google_user_id +' OR collaborators:'+ user_from_email.google_user_id+')))'
+      print query_string
       search_results = []
       count = 1
       limit = request.limit
@@ -564,12 +649,13 @@ clicking on the link below:
                   search_results.append(SearchResult(**kwargs))
                   
                   next_cursor = scored_document.cursor.web_safe_string
-              next_query_options = search.QueryOptions(limit=1,cursor=scored_document.cursor)
-              next_query = search.Query(query_string=query_string,options=next_query_options)
-              if next_query:
-                  next_results = index.search(next_query)
-                  if len(next_results.results)==0:
-                      next_cursor = None
+              if next_cursor:
+                  next_query_options = search.QueryOptions(limit=1,cursor=scored_document.cursor)
+                  next_query = search.Query(query_string=query_string,options=next_query_options)
+                  if next_query:
+                      next_results = index.search(next_query)
+                      if len(next_results.results)==0:
+                          next_cursor = None
 
 
                       
@@ -583,36 +669,51 @@ clicking on the link below:
 ###################################Not completed yet###########################""
   @Permission.method(user_required=True,path='permissions', http_method='POST', name='permissions.insert')
   def PermissionInsert(self, my_model):
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+        raise endpoints.UnauthorizedException('You must sign-in!' )
+      
+      my_model.organization = user_from_email.organization
+      my_model.created_by = user_from_email.google_user_id
+      #Check if the user has permission to invite people
+      perm_object = Permission()
+      perm = perm_object.get_user_perm(user_from_email,my_model.about_kind,my_model.about_item)
+      print perm
+      if perm is None or perm.role == 'readonly':
+          raise endpoints.UnauthorizedException('You dont have permission to share this')
+      if my_model.type == 'user':
+          #try to get informations about this user and check if is in the same organization
+          invited_user = model.User.query(model.User.email == my_model.value,model.User.organization==user_from_email.organization).get()
+          if invited_user is None:
+              raise endpoints.UnauthorizedException('The user does not exist')
+         
+          my_model.value = invited_user.google_user_id
+          my_model.organization = user_from_email.organization
+          my_model.put()
+              #update collaborators on this objects:
+          item_id = int(my_model.about_item)
+          item = OBJECTS[my_model.about_kind].get_by_id(item_id)
+          if item.collaborators:
+            item.collaborators.append(invited_user.google_user_id)
+          else:
+            collaborators = list()
+            collaborators.append(invited_user.google_user_id)
+          item.put()
+      #Todo Check if type is group
+      return my_model
 
-    
-    
-    user = endpoints.get_current_user()
-    if user is None:
-        raise endpoints.UnauthorizedException('You must authenticate!' )
-    user_from_email = model.User.query(model.User.email == user.email()).get()
-    if user_from_email is None:
-      raise endpoints.UnauthorizedException('You must sign-in!' )
-    # Todo: Check permissions
-    my_model.organization = user_from_email.organization
-    my_model.created_by = user_from_email.key
-    #Check if the user has permission to invite people
-    perm = model.Permission.get_user_perm(user_from_email,my_model.about_kind,my_model.about_item)
-    if perm is None or perm.role == 'readonly':
-            raise endpoints.UnauthorizedException('You dont have permission to share this')
-    if my_model.type == 'user':
-        #try to get informations about this user and check if is in the same organization
-        invited_user = model.User.query(model.User.email == my_model.value,model.User.organization==user_from_email.organization).get()
-        if invited_user is None:
-            raise endpoints.UnauthorizedException('The user does not exist')
-        #Check if he hasn't permission before, if so modify it
-        #Prepare the new perm
-    #Check if type is group
+
+          
+      
 
 
 
-    
-    my_model.put()
-    
-    return my_model
+      
+      
+      
+      
 
   
