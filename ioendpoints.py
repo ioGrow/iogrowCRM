@@ -273,7 +273,7 @@ class CrmEngineApi(remote.Service):
                 
 
                 response = DiscussionResponse(id=request.id,
-                                              entityKey=str(note.key),
+                                              entityKey= note.key.urlsafe(),
                                               title= note.title,
                                               content= note.content,
                                               comments=note.comments,
