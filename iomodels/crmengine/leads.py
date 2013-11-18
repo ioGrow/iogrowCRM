@@ -57,6 +57,7 @@ class Lead(EndpointsModel):
         doc_id = str(self.key.id()),
         fields=[
             search.TextField(name=u'type', value=u'Lead'),
+            search.TextField(name='title', value = empty_string(self.firstname) + " " + empty_string(self.lastname)),
             search.TextField(name='organization', value = empty_string(organization) ),
             search.TextField(name='access', value = empty_string(self.access) ),
             search.TextField(name='owner', value = empty_string(self.owner) ),
@@ -65,7 +66,7 @@ class Lead(EndpointsModel):
             search.TextField(name='lastname', value = empty_string(self.lastname)),
             search.TextField(name='company', value = empty_string(self.company)),
             search.TextField(name='industry', value = empty_string(self.industry)),
-            search.TextField(name='title', value = empty_string(self.title)),
+            search.TextField(name='position', value = empty_string(self.title)),
             search.TextField(name='department', value = empty_string(self.department)),
             search.TextField(name='mobile', value = empty_string(self.mobile)),
             search.TextField(name='address', value = empty_string(self.address)),
