@@ -9,15 +9,14 @@ class Account(EndpointsModel):
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
     collaborators_ids = ndb.StringProperty(repeated=True)
-    is_private = ndb.BooleanProperty(default=False)
     organization = ndb.KeyProperty()
-    name = ndb.StringProperty(required=True)
+    name = ndb.StringProperty()
     account_type = ndb.StringProperty()
     industry = ndb.StringProperty()
     creationTime = ndb.DateTimeProperty(auto_now_add=True)
     address = ndb.StringProperty()
     # public or private
-    access = ndb.StringProperty(default="public")
+    access = ndb.StringProperty()
     
 
 

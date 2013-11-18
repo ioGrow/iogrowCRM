@@ -40,11 +40,11 @@
                      
                           
                             <label class="radio line">
-                            <input type="radio" name="optionsRadios2" value="option1" />
+                            <input type="radio" value="public" ng-model="account.access" />
                             public: Anyone within your organization can access and find
                             </label>
                             <label class="radio line">
-                            <input type="radio" name="optionsRadios2" value="option2" checked />
+                            <input type="radio"  value="private" ng-model="account.access" />
                             private: only you and your collaborators
                             </label>  
                            
@@ -138,6 +138,7 @@
                       <li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">Contacts</a></li>
                       <li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">Opportunities</a></li>
                       <li class="ng-tab"  ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">Cases</a></li>
+                      <li class="ng-tab"  ng-class="{active: selectedTab == 6}"><a ng-click="selectedTab = 6;">Documents</a></li>
                     </ul>
                     <div class="tab-content">
                       <div class="tab-pane active" id="tab_1_1" ng-show="selectedTab == 1">
@@ -521,6 +522,104 @@
                               </div>
                             </div>
                       </div>
+                      <div class="tab-pane active" id="tab_1_6" ng-show="selectedTab == 6">
+                          
+                         <div class="row-fluid cards-container">
+                         <div class="btn-group relbutton">
+            
+                                <div class="btn-group">
+                                    <a class="btn red" href="#" data-toggle="dropdown">
+                                    <i class="icon-plus"></i> Create
+                                    <i class="icon-angle-down"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                      <li><a href="#newDocument" data-toggle="modal"><i class="icon-plus"></i> Document</a></li>
+                                      <li><a href="#"><i class="icon-plus"></i> Presentation</a></li>
+                                      <li><a href="#"><i class="icon-plus"></i> Spreadsheet</a></li>
+                                     
+                                    </ul>
+                                </div>
+                                <div class="btn-group">
+                                    <button  ng-click="createPickerUploader()" id="sample_editable_1_new" class="btn red">
+                                    <i class="icon-upload-alt"></i>
+                                    </button>
+
+                                </div>
+                          </div>
+                            <div class="inner-cards-container">
+                            
+                              <div  class="span3 responsive" data-tablet="span6" data-desktop="span3">
+                                <div class="dashboard-stat cards">
+                                  
+                                  <div class="details">
+                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardTitle">
+                                     Ben Belfodhil
+                                    </h3></a>
+                                    <div class="desc">                           
+                                    <span class="contact-title">CEO</span>  
+                                    
+                                    </div>
+                                  </div>
+                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
+                                  View more <i class="m-icon-swapright m-icon-white"></i>
+                                  </a>                 
+                                </div>
+                              </div>
+                              <div  class="span3 responsive" data-tablet="span6" data-desktop="span3">
+                                <div class="dashboard-stat cards">
+                                  
+                                  <div class="details">
+                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardTitle">
+                                     Hakim Karriche
+                                    </h3></a>
+                                    <div class="desc">                           
+                                    <span class="contact-title">CTO</span>  
+                                    
+                                    </div>
+                                  </div>
+                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
+                                  View more <i class="m-icon-swapright m-icon-white"></i>
+                                  </a>                 
+                                </div>
+                              </div>
+                              <div  class="span3 responsive" data-tablet="span6" data-desktop="span3">
+                                <div class="dashboard-stat cards">
+                                  
+                                  <div class="details">
+                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardTitle">
+                                     Eric Joe
+                                    </h3></a>
+                                    <div class="desc">                           
+                                    <span class="contact-title">CCO</span>  
+                                    
+                                    </div>
+                                  </div>
+                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
+                                  View more <i class="m-icon-swapright m-icon-white"></i>
+                                  </a>                 
+                                </div>
+                              </div>
+                              <div  class="span3 responsive" data-tablet="span6" data-desktop="span3">
+                                <div class="dashboard-stat cards">
+                                  
+                                  <div class="details">
+                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardTitle">
+                                     Ben Belfodhil
+                                    </h3></a>
+                                    <div class="desc">    
+                                                             
+                                        <span class="contact-title">CEO</span>  
+                                    
+                                    </div>
+                                  </div>
+                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
+                                  View more <i class="m-icon-swapright m-icon-white"></i>
+                                  </a>                 
+                                </div>
+                              </div>
+                              </div>
+                            </div>
+                      </div>
                     </div>
                   </div>
                   <!--END TABS-->
@@ -592,6 +691,28 @@
               <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
               
                <input ng-hide="isLoading" type="submit" class="btn green" value="Add this task">
+                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                                        
+            </form>
+            </div>
+          </div>
+          <div id="newDocument" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h3 id="myModalLabel">Create a new document</h3>
+            </div>
+            <div class="modal-body">
+                     <div class="controls controls-row">
+                                          <form id="addTask" ng-submit="createDocument(document)" class="ng-pristine ng-valid">
+                                                  <input class="input-block-level" autofocus type="text" placeholder="Enter a new document name" id="taskTitle" ng-model="document.title">
+                                                  
+                                                  
+                     </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              
+               <input ng-hide="isLoading" type="submit" class="btn green" value="Create this document">
                 <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
                                         
             </form>

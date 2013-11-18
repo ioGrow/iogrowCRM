@@ -271,9 +271,51 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
         $scope.user = $scope.slected_memeber.google_display_name;
 
      };
+     $scope.createPickerUploader = function() {
+          var projectfolder = $("#projectdrivefolder").val(); 
+          var picker = new google.picker.PickerBuilder().
+              addView(new google.picker.DocsUploadView().setParent(projectfolder)).
+              setCallback($scope.uploaderCallback).
+              setAppId(12345).
+                enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
+              build();
+          picker.setVisible(true);
+      };
+      // A simple callback implementation.
+      $scope.uploaderCallback = function(data) {
+
+          var projectdid = $("#projectdid").val(); 
+          var driveuploadersourcepage = $("#driveuploadersourcepage").val(); 
+          var url = '/uploadfiles?projectid='+projectdid;
+               if (data.action == google.picker.Action.PICKED) {
+                var fileIds = [];
+                var filenames = [];
+              var fileUrls = [];
+                 $.each(data.docs, function(index) {
+                
+                      fileIds.push(data.docs[index].id);
+                      filenames.push(data.docs[index].name);
+                fileurls.push(data.docs[index].url);
+            
+                     
+                    
+                  });
+                    
+                     $.post(url, { fileids: fileIds , filenames: filenames ,fileurls:fileUrls} );
+                }
+      }
      $scope.share = function(slected_memeber){
         console.log('permissions.insert share');
         console.log(slected_memeber);
+        $scope.$watch($scope.account.access, function() {
+         var body = {'access':$scope.account.access};
+         var id = $scope.account.id;
+         var params ={'id':id,
+                      'access':$scope.account.access}
+         Account.patch($scope,params);
+        });
+        $('#sharingSettingsModal').modal('hide');
+
         if (slected_memeber.email){
         var params = {  'type': 'user',
                         'role': 'writer',
@@ -285,12 +327,14 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
           };
           Permission.insert($scope,params); 
           
-          $('#sharingSettingsModal').modal('hide');
+          
         }else{ 
           alert('select a user to be invited');
-        }
+        };
+
 
      };
+     
      $scope.updateCollaborators = function(){
           var accountid = {'id':$route.current.params.accountId};
           Account.get($scope,accountid);

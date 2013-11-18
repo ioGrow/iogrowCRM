@@ -12,6 +12,7 @@ from iomodels.crmengine.notes import Note,Topic
 from iomodels.crmengine.tasks import Task
 from iomodels.crmengine.opportunities import Opportunity
 from iomodels.crmengine.events import Event
+from iomodels.crmengine.documents import Document
 
 from iomodels.crmengine.shows import Show
 
@@ -201,7 +202,8 @@ class CrmEngineApi(remote.Service):
       user_from_email = model.User.query(model.User.email == user.email()).get()
       if user_from_email is None:
         raise endpoints.UnauthorizedException('You must sign-in!' )
-      return query.filter(ndb.OR(Account.owner==user_from_email.google_user_id,Account.collaborators_ids==user_from_email.google_user_id)).order(Account._key)
+      print user_from_email
+      return query.filter(ndb.OR(ndb.AND(Account.access=='public',Account.organization==user_from_email.organization),Account.owner==user_from_email.google_user_id, Account.collaborators_ids==user_from_email.google_user_id)).order(Account._key)
 
 
 
@@ -492,7 +494,14 @@ clicking on the link below:
 
   @User.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='users', name='users.list')
   def UserList(self, query):
-    return query
+    user = endpoints.get_current_user()
+    if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+        raise endpoints.UnauthorizedException('You must sign-in!' )
+    organization = user_from_email.organization
+    return query.filter(model.User.organization == organization)
 
 ###################################### Groups API ################################################
   @Group.method(user_required=True,path='groups', http_method='POST', name='groups.insert')
@@ -707,7 +716,38 @@ clicking on the link below:
 
 
           
-      
+################################ Documents API ##################################
+  @Document.method(user_required=True,path='documents', http_method='POST', name='documents.insert')
+  def DocumentInsert(self, my_model):
+
+    # Here, since the schema includes an ID, it is possible that the entity
+    # my_model has an ID, hence we could be specifying a new ID in the datastore
+    # or overwriting an existing entity. If no ID is included in the ProtoRPC
+    # request, then no key will be set in the model and the ID will be set after
+    # the put completes, as in basic/main.py.
+
+    # In either case, the datastore ID from the entity will be returned in the
+    # ProtoRPC response message.
+
+    user = endpoints.get_current_user()
+    if user is None:
+        raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in!' )
+    # Todo: Check permissions
+    task_owner = model.User()
+    task_owner.google_display_name = user_from_email.google_display_name
+    my_model.owner = task_owner
+    my_model.put()
+    
+
+    return my_model
+  @Document.query_method(user_required=True,query_fields=('about_kind','about_item', 'limit', 'order', 'pageToken'),path='documents', name='documents.list')
+  def DocumentList(self, query):
+    
+
+    return query      
 
 
 
