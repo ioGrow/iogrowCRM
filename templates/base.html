@@ -254,7 +254,7 @@
 
     function signin(mode, callback) {
       gapi.auth.authorize({client_id: "{{CLIENT_ID}}",
-        scope: "https://www.googleapis.com/auth/userinfo.email", immediate: mode},
+        scope: "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive", immediate: mode},
         callback);
     }
     

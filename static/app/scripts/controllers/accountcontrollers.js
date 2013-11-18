@@ -271,6 +271,21 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
         $scope.user = $scope.slected_memeber.google_display_name;
 
      };
+     $scope.createDocument = function(newdocument){
+        var mimeType = 'application/vnd.google-apps.' + 'document';
+        var params = {'title':newdocument.title,
+                      'mimeType':mimeType };
+
+        gapi.client.drive.files.insert(params).execute(function(resp) {
+            console.log("in google drive api");
+            console.log(resp);
+             $('#newDocument').modal('hide');
+
+           
+            
+          });
+
+     };
      $scope.createPickerUploader = function() {
           var projectfolder = $("#projectdrivefolder").val(); 
           var picker = new google.picker.PickerBuilder().
