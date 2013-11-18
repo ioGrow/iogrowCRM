@@ -29,6 +29,7 @@ from apiclient.discovery import build
 from apiclient import errors
 from protorpc import messages
 from protorpc import message_types
+from google.appengine.api import memcache
 
 
 # The ID of javascript client authorized to access to our api
@@ -36,6 +37,7 @@ from protorpc import message_types
 CLIENT_ID = '330861492018.apps.googleusercontent.com'
 SCOPES = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/drive']
 OBJECTS = {'Account': Account,'Contact': Contact}
+FOLDERS = {'Account': 'accounts_folder','Contact': 'contacts_folder'}
 
 class SearchRequest(messages.Message):
     q = messages.StringField(1)
@@ -149,6 +151,25 @@ class CrmEngineApi(remote.Service):
       # Todo: Check permissions
       my_model.owner = user_from_email.google_user_id
       my_model.organization = user_from_email.organization
+      credentials = user_from_email.google_credentials
+      http = credentials.authorize(httplib2.Http(memcache))
+      service = build('drive', 'v2', http=http)
+      credentials.authorize(http)
+      organization = user_from_email.organization.get()
+
+      # prepare params to insert
+      folder_params = {
+                  'title': my_model.name,
+                  'mimeType':  'application/vnd.google-apps.folder'         
+      }#get the accounts_folder or contacts_folder or .. 
+      
+      parent_folder = organization.accounts_folder
+      if parent_folder:
+          folder_params['parents'] = [{'id': parent_folder}]
+      
+      # execute files.insert and get resource_id
+      created_folder = service.files().insert(body=folder_params).execute()
+      my_model.folder = created_folder['id']
       my_model.put()
       return my_model
   
@@ -735,10 +756,31 @@ clicking on the link below:
     user_from_email = model.User.query(model.User.email == user.email()).get()
     if user_from_email is None:
       raise endpoints.UnauthorizedException('You must sign-in!' )
-    # Todo: Check permissions
-    task_owner = model.User()
-    task_owner.google_display_name = user_from_email.google_display_name
-    my_model.owner = task_owner
+    # prepare google drive service
+    credentials = user_from_email.google_credentials
+    http = httplib2.Http()
+    service = build('drive', 'v2', http=http)
+    credentials.authorize(http)
+    organization = user_from_email.organization.get()
+
+    # prepare params to insert
+    document = {
+                'title': my_model.title,
+                'mimeType': my_model.mimeType        
+    }#get the accounts_folder or contacts_folder or .. 
+    about_item_id = int(my_model.about_item)
+    parent_object = OBJECTS[my_model.about_kind].get_by_id(about_item_id)
+    if parent_object:
+        parent_folder = parent_object.folder
+        if parent_folder:
+            document['parents'] = [{'id': parent_folder}]
+    
+    # execute files.insert and get resource_id
+    created_document = service.files().insert(body=document).execute()
+    my_model.resource_id = created_document['id']
+    # insert in the datastore
+    
+    
     my_model.put()
     
 

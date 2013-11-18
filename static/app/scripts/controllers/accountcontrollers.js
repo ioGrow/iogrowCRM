@@ -271,14 +271,22 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
         $scope.user = $scope.slected_memeber.google_display_name;
 
      };
+     $scope.showCreateDocument = function(type){
+        
+        $scope.mimeType = type;
+        $('#newDocument').modal('show');
+     };
      $scope.createDocument = function(newdocument){
-        var mimeType = 'application/vnd.google-apps.' + 'document';
-        var params = {'title':newdocument.title,
+        var mimeType = 'application/vnd.google-apps.' + $scope.mimeType;
+        var params = {'about_kind':'Account',
+                      'about_item': $scope.account.id,
+                      'title':newdocument.title,
                       'mimeType':mimeType };
 
-        gapi.client.drive.files.insert(params).execute(function(resp) {
+        gapi.client.crmengine.documents.insert(params).execute(function(resp) {
             console.log("in google drive api");
             console.log(resp);
+            //console.log(params);
              $('#newDocument').modal('hide');
 
            

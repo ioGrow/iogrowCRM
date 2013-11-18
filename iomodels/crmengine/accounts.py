@@ -10,6 +10,7 @@ class Account(EndpointsModel):
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
     collaborators_ids = ndb.StringProperty(repeated=True)
     organization = ndb.KeyProperty()
+    folder = ndb.StringProperty()
     name = ndb.StringProperty()
     account_type = ndb.StringProperty()
     industry = ndb.StringProperty()

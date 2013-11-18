@@ -533,9 +533,9 @@
                                     <i class="icon-angle-down"></i>
                                     </a>
                                     <ul class="dropdown-menu">
-                                      <li><a href="#newDocument" data-toggle="modal"><i class="icon-plus"></i> Document</a></li>
-                                      <li><a href="#"><i class="icon-plus"></i> Presentation</a></li>
-                                      <li><a href="#"><i class="icon-plus"></i> Spreadsheet</a></li>
+                                      <li><a  ng-click="showCreateDocument('document')" href="#" data-toggle="modal"><i class="icon-plus"></i> Document</a></li>
+                                      <li><a ng-click="showCreateDocument('presentation')" href="#" data-toggle="modal"><i class="icon-plus"></i> Presentation</a></li>
+                                      <li><a ng-click="showCreateDocument('spreadsheet')" href="#" data-toggle="modal"><i class="icon-plus"></i> Spreadsheet</a></li>
                                      
                                     </ul>
                                 </div>
@@ -699,12 +699,12 @@
           <div id="newDocument" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 id="myModalLabel">Create a new document</h3>
+              <h3 id="myModalLabel">Create a new <%=mimeType%></h3>
             </div>
             <div class="modal-body">
                      <div class="controls controls-row">
                                           <form id="addTask" ng-submit="createDocument(newdocument)" class="ng-pristine ng-valid">
-                                                  <input class="input-block-level" autofocus type="text" placeholder="Enter a new document name" id="taskTitle" ng-model="newdocument.title" required>
+                                                  <input class="input-block-level" autofocus type="text" placeholder="Enter a new <%=mimeType%> name" id="taskTitle" ng-model="newdocument.title" required>
                                                   
                                                   
                      </div>
