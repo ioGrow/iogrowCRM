@@ -1,24 +1,27 @@
-var noteservices = angular.module('crmEngine.noteservices',[]);
+var commentservices = angular.module('crmEngine.commentservices',[]);
 
-noteservices.factory('Note', function($http) {
+commentservices.factory('Comment', function($http) {
   
-  var Note = function(data) {
+  var Comment = function(data) {
     angular.extend(this, data);
   }
 
   
   
-  Note.list = function($scope,params){
+  Comment.list = function($scope,params){
       console.log('in notes.list');
       console.log(params);
 
       $scope.isLoading = true;
-      gapi.client.crmengine.notes.list(params).execute(function(resp) {
+      gapi.client.crmengine.comments.list(params).execute(function(resp) {
               if(!resp.code){
                 console.log('in topics.list looking for pagingation');
                 console.log('CurrentPage   is '+$scope.currentPage);
 
-                 $scope.notes = resp.items;
+                 $scope.comments = resp.items;
+             
+                 console.log($scope.comments);
+
                   if ($scope.currentPage>1){
                       console.log('Should show PREV');
                     $scope.pagination.prev = true;
@@ -39,21 +42,22 @@ noteservices.factory('Note', function($http) {
 
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
-                 $scope.hilightTopic();
+                 //$scope.hilightComment();
               }else {
                  alert("Error, response is: " + angular.toJson(resp));
               }
       });
   };
 
-  Note.get = function($scope,id) {
-          gapi.client.crmengine.notes.get(id).execute(function(resp) {
+  Comment.get = function($scope,id) {
+          gapi.client.crmengine.comments.get(id).execute(function(resp) {
             if(!resp.code){
-               $scope.note = resp;
-               $scope.ListComments();
-               var url = Note.getUrl($scope.note.about.kind,$scope.note.about.id);
-               $scope.uri =url;
-               console.log($scope.uri);
+               $scope.comment = resp;
+              
+               // $scope.isContentLoaded = true;
+               // $scope.listTopics(resp);
+               // $scope.listTasks();
+               // $scope.listEvents();
                // Call the method $apply to make the update on the scope
                 $scope.$apply();
 
@@ -64,55 +68,28 @@ noteservices.factory('Note', function($http) {
           });
   };
 
-Note.insert = function($scope,note){
+Comment.insert = function($scope,comment){
       $scope.isLoading = true;
-      gapi.client.crmengine.notes.insert(note).execute(function(resp) {
+      gapi.client.crmengine.comments.insert(comment).execute(function(resp) {
          console.log('in insert resp');
          console.log(resp);
          if(!resp.code){
           console.log(resp);
           // TME_02_11_13 when a note is inserted reload topics
-          $scope.listTopics();
+          //$scope.listTopics();
           $scope.isLoading = false;
+           
 
           $scope.$apply();
-         // $('#addAccountModal').modal('hide');
-         // window.location.replace('#/accounts/show/'+resp.id);
-          
+          //$scope.hilightComment();
+         
+     
          }else{
           console.log(resp.code);
          }
       });
   };
- Note.getUrl = function(type,id){
-  var base_url = undefined;
-    switch (type)
-        {
-        case 'Account':
-          base_url = '/#/accounts/show/';
-          break;
-        case 'Contact':
-          base_url = '/#/contacts/show/';
-          break;
-        case 'Lead':
-          base_url = '/#/leads/show/';
-          break;
-        case 'Opportunity':
-          base_url = '/#/opportunities/show/';
-          break;
-        case 'Case':
-          base_url = '/#/cases/show/';
-          break;
-        case 'Show':
-          base_url = '/#/shows/show/';
-          break;
-        }
-
-    return base_url+id;
-
- }
-
   
 
-return Note;
+return Comment;
 });

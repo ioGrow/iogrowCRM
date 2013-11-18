@@ -315,6 +315,8 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
         };
        
         Task.insert($scope,params);
+        $scope.task.title='';
+        $scope.task.dueDate='0000-00-00T00:00:00-00:00';
      };
 
      $scope.hilightTask = function(){
@@ -359,6 +361,9 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
             console.log('inserting the event');
             console.log(params);
             Event.insert($scope,params);
+            $scope.ioevent.title='';
+            $scope.ioevent.where='';
+            $scope.ioevent.starts_at='T00:00:00.000000';
 
             
         };

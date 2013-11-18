@@ -29,8 +29,8 @@
                   </a>     
             </div>
             <h2>
-            <a href="/#/" data-toggle="tooltip" data-placement="bottom" title="Back to Opportunities">
-            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>    {{_("Accounts")}} > <%=topic.title%> <%=topic.note%> <!--%=opportunity.description %--></h2>
+            <a href="<%=uri%>" data-toggle="tooltip" data-placement="bottom" title="Back to <%=note.about.kind%>">
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>    <%=note.about.kind%> > <%=note.about.name%>  </h2>
             
 
            
@@ -48,19 +48,19 @@
             
             <div class="portlet">
             <div class="portlet-title line">
-              <div class="caption"><i class="fa fa-comments"></i><%=topic.title%></div>
+              <div class="caption"><i class="fa fa-comments"></i><%=note.title%></div>
             </div>
             <div class="portlet-body" id="chats">
               <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 435px;"><div class="scroller" style="height: 435px; overflow: hidden; width: auto;" data-always-visible="1" data-rail-visible1="1">
                 <ul class="chats">
                   <li class="in">
-                    <img class="avatar" alt="" src="static/img/avatar.jpg.png" />
+                    <img class="avatar" alt="" ng-src="<%=note.author.photo %>" />
                     <div class="">
                       <span class="arrow"></span>
-                      <a href="#" class="name"><%= topic.last_updater.google_display_name%></a>
-                      <span class="datetime">at <%=topic.updated_at %> </span><br>
+                      <a href="#" class="name"><%= note.author.display_name%></a>
+                      <span class="datetime"><!--at <%= note.created_at %> --></span><br>
                       <span class="body">
-                      <%= topic.excerpt%>
+                      <%= note.content%>
                       </span>
                     </div>
                   </li>
@@ -93,14 +93,14 @@
             <div class="caption"><i class="fa fa-comments pull-right"></i><h3>Comments  :</h3></div>
             
                   <ul class="chats">
-                  <li class="in">
-                    <img class="avatar" alt="" src="static/img/avatar.jpg.png" />
+                  <li class="in" ng-repeat="comment in comments" id="comment_<%=$index%>>
+                    <img class="avatar" alt="" ng-src="static/img/avatar.jpg.png" />
                     <div class="message">
                       <span class="arrow"></span>
-                      <a href="#" class="name">Bob Nilson</a>
-                      <span class="datetime">at Jul 25, 2012 11:09</span>
+                      <a href="#" class="name"><%=comment.last_update%></a>
+                      <span class="datetime">at <%=comment.updated_at | date:'yyyy-MM-dd - HH:mm:ss '%></span>
                       <span class="body">
-                      Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                      <%=comment.content%>
                       </span>
                     </div>
                   </li>

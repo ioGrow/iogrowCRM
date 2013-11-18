@@ -17,6 +17,7 @@ from iomodels.crmengine.shows import Show
 
 from iomodels.crmengine.leads import Lead
 from iomodels.crmengine.cases import Case
+from iomodels.crmengine.comments import Comment
 
 from model import User,Group,Member,Permission
 import model
@@ -34,7 +35,7 @@ from protorpc import message_types
 # This client_id could be generated on the Google API console
 CLIENT_ID = '330861492018.apps.googleusercontent.com'
 SCOPES = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/drive']
-OBJECTS = {'Account': Account,'Contact': Contact}
+OBJECTS = {'Account': Account,'Contact': Contact,'Case':Case,'Lead':Lead,'Opportunity':Opportunity}
 
 class SearchRequest(messages.Message):
     q = messages.StringField(1)
@@ -303,11 +304,7 @@ class CrmEngineApi(remote.Service):
       raise endpoints.NotFoundException('Topic not found.')
     return my_model
 
-  @Note.method(request_fields=('id',),path='notes/{id}', http_method='GET', name='nots.get')
-  def NoteGet(self, my_model):
-    if not my_model.from_datastore:
-      raise endpoints.NotFoundException('Note not found.')
-    return my_model
+
 
   ################################ Tasks API ##################################
   @Task.method(user_required=True,path='tasks', http_method='POST', name='tasks.insert')
@@ -704,7 +701,30 @@ clicking on the link below:
           item.put()
       #Todo Check if type is group
       return my_model
-
+# HKA 17.11.2013 Add Cases APIs
+  @Comment.method(user_required=True,path='comments',http_method='POST',name='comments.insert')
+  def CommentInsert(self, my_model):
+    user = endpoints.get_current_user()
+    if user is  None :
+      raise endpoints.UnauthorizedException('You must be aunthenticated')
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in ')
+    #discussion_key = ndb.Key(urlsafe=my_model.discussion)
+    #my_model.discussion = discussion_key
+    my_model.owner = user_from_email.key
+    my_model.put()
+    return my_model
+  
+  @Comment.method(request_fields=('id',),path='comments/{id}', http_method='GET', name='comments.get')
+  def CommentGet(self, my_model):
+    if not my_model.from_datastore:
+      raise endpoints.NotFoundException('Comment not found')
+    return my_model
+  
+  @Comment.query_method(user_required=True,query_fields=('limit', 'order','discussion', 'pageToken'),path='comments',name='comments.list')
+  def CommentList(self,query):
+     return query
 
           
       

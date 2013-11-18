@@ -7,7 +7,7 @@ import pprint
 
 class Topic(EndpointsModel):
 
-    #_message_fields_schema = ('id','title')
+    _message_fields_schema = ('id','title','updated_at','last_updater','excerpt','discussionId','created_at')
     
 
     last_updater = ndb.StructuredProperty(Userinfo)
@@ -30,10 +30,7 @@ class Topic(EndpointsModel):
 
 class Note(EndpointsModel):
 
-
     #_message_fields_schema = ('id','title')
-    
-   
     author = ndb.StructuredProperty(Userinfo)
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)

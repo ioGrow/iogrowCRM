@@ -1,5 +1,5 @@
-app.controller('NoteShowController',['$scope','$route','$location','Conf','Note','Topic',
-	 function($scope,$route,$location,Conf,Note,Topic) {
+app.controller('NoteShowController',['$scope','$filter','$route','$location','Conf','Note','Topic','Comment',
+	 function($scope,$filter,$route,$location,Conf,Note,Topic,Comment) {
 //HKA 14.11.2013 Controller to show Notes and add comments
 	 $scope.isSignedIn = false;
      $scope.immediateFailed = false;
@@ -51,8 +51,9 @@ app.controller('NoteShowController',['$scope','$route','$location','Conf','Note'
           window.authResult = authResult;
           // Call the backend to get the list of accounts
           
-          var topicid = {'id':$route.current.params.noteId};
-          Topic.get($scope,topicid);
+          var noteid = {'id':$route.current.params.noteId};
+          Note.get($scope,noteid);
+
 
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
@@ -72,4 +73,56 @@ app.controller('NoteShowController',['$scope','$route','$location','Conf','Note'
 
       };
 
-	}])
+    $scope.addComment = function(comment){
+
+      var params ={
+        'discussion':$scope.note.entityKey,
+        'content':$scope.comment.content
+      };
+      Comment.insert($scope,params);
+      $scope.comment.content='';
+      $scope.ListComments();
+    };
+    $scope.ListComments = function(){
+      var params = {'discussion':$scope.note.entityKey,
+                     'limit':5,
+                      'order':'-updated_at'};
+      Comment.list($scope,params);
+    };
+  //HKA 18.11.2013 get the parent's note
+  $scope.getUrlNote = function(type,id){
+    var base_url = undefined;
+    switch (type)
+        {
+        case 'Account':
+          base_url = '/#/accounts/show/';
+          break;
+        case 'Contact':
+          base_url = '/#/contacts/show/';
+          break;
+        case 'Lead':
+          base_url = '/#/leads/show/';
+          break;
+        case 'Opportunity':
+          base_url = '/#/opportunities/show/';
+          break;
+        case 'Case':
+          base_url = '/#/cases/show/';
+          break;
+        case 'Show':
+          base_url = '/#/shows/show/';
+          break;
+        
+
+        };
+  //HKA 18.11.2013 highlight the comment
+   $scope.hilightComment = function(){
+        console.log('Should higll');
+       $('#comment_0').effect( "bounce", "slow" );
+       $('#comment_0 .message').effect("highlight","slow");
+     }
+
+    return base_url+id;
+  }
+
+	}]);
