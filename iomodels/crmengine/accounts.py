@@ -38,12 +38,8 @@ class Account(EndpointsModel):
     def put_index(self):
         """ index the element at each"""
         empty_string = lambda x: x if x else ""
-        collaborators_ids = self.collaborators_ids
-        collaborators = ""
-        for collaborator in collaborators_ids:
-            collaborators = collaborators + " " + collaborator
+        collaborators = " ".join(self.collaborators_ids)
         organization = str(self.organization.id())
-
         my_document = search.Document(
         doc_id = str(self.key.id()),
         fields=[
