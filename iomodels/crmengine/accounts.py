@@ -1,7 +1,9 @@
 from google.appengine.ext import ndb
 from endpoints_proto_datastore.ndb import EndpointsModel
 from google.appengine.api import search 
+
 import model
+
 class Account(EndpointsModel):
 
     _message_fields_schema = ('id','entityKey','access','collaborators_list', 'collaborators_ids','name','owner','account_type','industry','address')
@@ -18,8 +20,6 @@ class Account(EndpointsModel):
     # public or private
     access = ndb.StringProperty()
     
-
-
     def put(self, **kwargs):
         ndb.Model.put(self, **kwargs)
         self.put_index()
