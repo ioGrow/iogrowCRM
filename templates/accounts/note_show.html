@@ -18,11 +18,11 @@
                   <span id="myGsignin"></span>
               </span>
         </div>
-      </div>
+ </div>
     <div class="container-fluid" >
       <div class="row-fluid">
          <div class="span12">
-         <div>
+         
             <div class="pull-right sharebuttonDiv"> 
                   <a href="" class="btn blue jfk-button jfk-button-action">
                     <i class="icon-lock"></i> Share
@@ -36,23 +36,20 @@
            
               
           <hr>
-        </div>
       </div>
     </div>
-
+      <!--HKA 19.11.2013 Begin  row-fluid-2 who is involved -->
     <div class="row-fluid">
-       <div class="span8">
 
-
-              <!-- BEGIN PORTLET-->
-            
-            <div class="portlet">
-            <div class="portlet-title line">
+    <!--HKA 19.11.2013 BEGIN Span comments-->
+      <div class="span8">
+      <!-- BEGIN PORTLET-->
+        <div class="portlet">
+          <div class="portlet-title line">
               <div class="caption"><i class="fa fa-comments"></i><%=note.title%></div>
-            </div>
-            <div class="portlet-body" id="chats">
-              <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 435px;"><div class="scroller" style="height: 435px; overflow: hidden; width: auto;" data-always-visible="1" data-rail-visible1="1">
-                <ul class="chats">
+          </div>
+          <div class="portlet-body">
+             <ul class="chats">
                   <li class="in">
                     <img class="avatar" alt="" ng-src="<%=note.author.photo %>" />
                     <div class="">
@@ -66,34 +63,31 @@
                   </li>
                   
                 </ul>
-                <div class="row-fluid">
+          </div>
+
+       
+         
+        </div>
+      <!-- End Portlet -->
+      <div class="row-fluid">
                   <div class="span12 margin-bottom-10">
                  <p class⁼"lead"=""><strong>Just add comments to remember what's important :</strong> </p>
                           <form id="addComment" ng-submit="addComment(comment)" class="ng-pristine ng-valid">
-                                            
-                                            <!--input class="input-block-level ng-pristine ng-valid" autofocus type="text" placeholder="Add a new subject" id="messageSubject" ng-model="comment.title"-->
-
-                                         
-                                            
                                             <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="comment.content"></textarea>
-                                            <!--input ng-init="note.organization=1" required="" id="id_organization" type="hidden" name="organization" value="1"--> 
-                                  
-                                            <!--input type="hidden" id="id_related_object" ng-init="note.related_object=1" value="1"-->
+                                          
                                           
                                          
                                          <div class="pull-right">
-                                         <!-- <input type="submit" class="btn btn-primary" value="Attach file">-->
+                                        
                                           <input ng-hide="isLoading" type="submit" class="btn green" value="Add comment">
                                           <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
                                           </div>
                       </form>
                       </div>
               
-            </div>
-            <div class="caption"><i class="fa fa-comments pull-right"></i><h3>Comments  :</h3></div>
-            
-                  <ul class="chats">
-                  <li class="in" ng-repeat="comment in comments" id="comment_<%=$index%>>
+        </div>
+      <ul class="chats">
+                  <li class="in" ng-repeat="comment in comments" id="comment_<%=$index%>">
                     <img class="avatar" alt="" ng-src="static/img/avatar.jpg.png" />
                     <div class="message">
                       <span class="arrow"></span>
@@ -105,8 +99,8 @@
                     </div>
                   </li>
                   
-                </ul>
-                            <div class="row-fluid">
+        </ul>
+        <div class="row-fluid">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
                                       <ul>
@@ -122,19 +116,15 @@
                                     <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
                               </div>
 
-              </div>
-              </div>
-              
-          </div>
+        
+      </div>
+    <!--HKA 19.11.2013 END Span comments-->
 
-              
-              
-              </div>
-         
-       </div>
 
-       <div class="span4">
-       <div class="portlet">
+
+  <!--HKA 19.11.2013 BEGIN Span who is involved -->
+      <div class="span4">
+        <div class="portlet">
                 <div class="portlet-title line">
                   <div class="caption"><i class="icon-tasks"></i>Who's involved</div>
                   
@@ -153,11 +143,6 @@
                 </ul>
                 </div>
                 
-       </div>
-
-
-
-         
        </div>
 
         <div id="addAttendee" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -204,13 +189,20 @@
               </div>
                </form>
        </div>
-      
-    </div>
 
 
-    </div>
-
-
-
-</div>
+      </div>
+  <!--HKA 19.11.2013 END Span who is involved -->
     
+
+
+    </div>
+    <!--HKA 19.11.2013 END row-fluid-2 Span who is involved -->
+
+
+
+
+    </div>
+    </div>
+
+   

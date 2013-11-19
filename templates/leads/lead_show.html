@@ -113,7 +113,7 @@
                                 <div class="message">
                                   <span class="arrow"></span>
                                   <a href="#" class="name"><%= topic.last_updater.google_display_name%></a>
-                                  <span class="datetime">at Jul 25, 2012 11:09</span>
+                                  <span class="datetime">at <%=topic.updated_at | date:'yyyy-MM-dd - HH:mm:ss' %></span>
                                   <span class="body">
                                   <a href="/#/notes/show/<%=topic.discussionId%>" class="discussion-content"><strong class="ng-binding"><%= topic.title%></strong><span class="excerpt ng-binding"> - <%= topic.excerpt%></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <%= topic.comments%> comments</span></a>
                                   </span>

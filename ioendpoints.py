@@ -12,6 +12,7 @@ from iomodels.crmengine.notes import Note,Topic
 from iomodels.crmengine.tasks import Task
 from iomodels.crmengine.opportunities import Opportunity
 from iomodels.crmengine.events import Event
+from iomodels.crmengine.documents import Document
 
 from iomodels.crmengine.shows import Show
 
@@ -19,7 +20,7 @@ from iomodels.crmengine.leads import Lead
 from iomodels.crmengine.cases import Case
 from iomodels.crmengine.comments import Comment
 
-from model import User,Group,Member,Permission
+from model import User,Userinfo,Group,Member,Permission
 import model
 import logging
 import auth_util
@@ -108,7 +109,8 @@ class CrmEngineApi(remote.Service):
     if user_from_email is None:
       raise endpoints.UnauthorizedException('You must sign-in!' )
     # Todo: Check permissions
-    my_model.owner = user_from_email.key
+    my_model.owner = user_from_email.google_user_id
+    my_model.organization =  user_from_email.organization
     my_model.put()
     return my_model
 
@@ -165,9 +167,8 @@ class CrmEngineApi(remote.Service):
     if user_from_email is None:
       raise endpoints.UnauthorizedException('You must sign-in!' )
     # Todo: Check permissions
-    my_model.owner = user_from_email.key
-    
-
+    my_model.owner = user_from_email.google_user_id
+    my_model.organization =  user_from_email.organization
 
     my_model.put()
     return my_model
@@ -202,7 +203,8 @@ class CrmEngineApi(remote.Service):
       user_from_email = model.User.query(model.User.email == user.email()).get()
       if user_from_email is None:
         raise endpoints.UnauthorizedException('You must sign-in!' )
-      return query.filter(ndb.OR(Account.owner==user_from_email.google_user_id,Account.collaborators_ids==user_from_email.google_user_id)).order(Account._key)
+      print user_from_email
+      return query.filter(ndb.OR(ndb.AND(Account.access=='public',Account.organization==user_from_email.organization),Account.owner==user_from_email.google_user_id, Account.collaborators_ids==user_from_email.google_user_id)).order(Account._key)
 
 
 
@@ -226,9 +228,6 @@ class CrmEngineApi(remote.Service):
     # In either case, the datastore ID from the entity will be returned in the
     # ProtoRPC response message.
 
-
-
-    
     user = endpoints.get_current_user()
     if user is None:
         raise endpoints.UnauthorizedException('You must authenticate!' )
@@ -240,6 +239,8 @@ class CrmEngineApi(remote.Service):
     note_author.display_name = user_from_email.google_display_name
     note_author.photo = user_from_email.google_public_profile_photo_url
     my_model.author = note_author
+    my_model.owner = user_from_email.google_user_id
+    my_model.organization =  user_from_email.organization
     my_model.put()
     
 
@@ -328,7 +329,8 @@ class CrmEngineApi(remote.Service):
     # Todo: Check permissions
     task_owner = model.User()
     task_owner.google_display_name = user_from_email.google_display_name
-    my_model.owner = task_owner
+    my_model.owner = user_from_email.google_user_id
+    my_model.organization =  user_from_email.organization
     my_model.put()
     
 
@@ -347,7 +349,8 @@ class CrmEngineApi(remote.Service):
     user_from_email = model.User.query(model.User.email == user.email()).get()
     if user_from_email is  None :
       raise endpoints.UnauthorizedException('You must sign-in ')
-    my_model.owner = user_from_email.key
+    my_model.owner = user_from_email.google_user_id
+    my_model.organization =  user_from_email.organization
     my_model.put()
     return my_model
   
@@ -383,7 +386,8 @@ class CrmEngineApi(remote.Service):
     # Todo: Check permissions
     task_owner = model.User()
     task_owner.google_display_name = user_from_email.google_display_name
-    my_model.owner = task_owner
+    my_model.owner = user_from_email.google_user_id
+    my_model.organization =  user_from_email.organization
     my_model.put()
     
 
@@ -403,7 +407,8 @@ class CrmEngineApi(remote.Service):
     user_from_email = model.User.query(model.User.email == user.email()).get()
     if user_from_email is None:
       raise endpoints.UnauthorizedException('You must sign-in ')
-    my_model.owner = user_from_email.key
+    my_model.owner = user_from_email.google_user_id
+    my_model.organization =  user_from_email.organization
     my_model.put()
     return my_model
   
@@ -425,7 +430,8 @@ class CrmEngineApi(remote.Service):
     user_from_email = model.User.query(model.User.email == user.email()).get()
     if user_from_email is None:
       raise endpoints.UnauthorizedException('You must sign-in ')
-    my_model.owner = user_from_email.key
+    my_model.owner = user_from_email.google_user_id
+    my_model.organization =  user_from_email.organization
     my_model.put()
     return my_model
   
@@ -447,7 +453,8 @@ class CrmEngineApi(remote.Service):
     user_from_email = model.User.query(model.User.email == user.email()).get()
     if user_from_email is None:
       raise endpoints.UnauthorizedException('You must sign-in ')
-    my_model.owner = user_from_email.key
+    my_model.owner = user_from_email.google_user_id
+    my_model.organization =  user_from_email.organization
     my_model.put()
     return my_model
   
@@ -500,7 +507,14 @@ clicking on the link below:
 
   @User.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='users', name='users.list')
   def UserList(self, query):
-    return query
+    user = endpoints.get_current_user()
+    if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+        raise endpoints.UnauthorizedException('You must sign-in!' )
+    organization = user_from_email.organization
+    return query.filter(model.User.organization == organization)
 
 ###################################### Groups API ################################################
   @Group.method(user_required=True,path='groups', http_method='POST', name='groups.insert')
@@ -582,7 +596,9 @@ clicking on the link below:
     # Todo: Check permissions
     task_owner = model.User()
     task_owner.google_display_name = user_from_email.google_display_name
-    my_model.owner = task_owner
+    my_model.author = task_owner
+    my_model.owner = user_from_email.google_user_id
+    my_model.organization =  user_from_email.organization
     my_model.put()
     
 
@@ -693,11 +709,22 @@ clicking on the link below:
               #update collaborators on this objects:
           item_id = int(my_model.about_item)
           item = OBJECTS[my_model.about_kind].get_by_id(item_id)
-          if item.collaborators:
-            item.collaborators.append(invited_user.google_user_id)
+          userinfo = Userinfo()
+          if item.collaborators_ids:
+            item.collaborators_ids.append(invited_user.google_user_id)
+            new_collaborator = userinfo.get_basic_info(invited_user)
+            item.collaborators_list.append(new_collaborator)
+
           else:
-            collaborators = list()
-            collaborators.append(invited_user.google_user_id)
+            collaborators_ids = list()
+            collaborators= list()
+            collaborators_ids.append(invited_user.google_user_id)
+            item.collaborators_ids = collaborators_ids
+            new_collaborator = userinfo.get_basic_info(invited_user)
+            collaborators.append(new_collaborator)
+            item.collaborators_list = collaborators
+
+          print item
           item.put()
       #Todo Check if type is group
       return my_model
@@ -727,7 +754,39 @@ clicking on the link below:
      return query
 
           
-      
+################################ Documents API ##################################
+  @Document.method(user_required=True,path='documents', http_method='POST', name='documents.insert')
+  def DocumentInsert(self, my_model):
+
+    # Here, since the schema includes an ID, it is possible that the entity
+    # my_model has an ID, hence we could be specifying a new ID in the datastore
+    # or overwriting an existing entity. If no ID is included in the ProtoRPC
+    # request, then no key will be set in the model and the ID will be set after
+    # the put completes, as in basic/main.py.
+
+    # In either case, the datastore ID from the entity will be returned in the
+    # ProtoRPC response message.
+
+    user = endpoints.get_current_user()
+    if user is None:
+        raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in!' )
+    # Todo: Check permissions
+    task_owner = model.User()
+    task_owner.google_display_name = user_from_email.google_display_name
+    my_model.owner = user_from_email.google_user_id
+    my_model.organization = user_from_email.organization
+    my_model.put()
+    
+
+    return my_model
+  @Document.query_method(user_required=True,query_fields=('about_kind','about_item', 'limit', 'order', 'pageToken'),path='documents', name='documents.list')
+  def DocumentList(self, query):
+    
+
+    return query      
 
 
 

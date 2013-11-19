@@ -112,11 +112,12 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
 
     
 }]);
-app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Conf','Account', 'Topic','Note','Task','Event','WhoHasAccess','User',
-    function($scope,$filter,$route,$location,Conf,Account,Topic,Note,Task,Event,WhoHasAccess,User) {
+app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Conf','Account', 'Topic','Note','Task','Event','Permission','User',
+    function($scope,$filter,$route,$location,Conf,Account,Topic,Note,Task,Event,Permission,User) {
       console.log('i am in account Show controller');
       $("#id_Accounts").addClass("active");
       var tab = $route.current.params.accountTab;
+
       switch (tab)
         {
         case 'notes':
@@ -150,6 +151,9 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
      $scope.pages = [];
      
      $scope.accounts = [];  
+     $scope.users = [];
+     $scope.user = undefined;
+     $scope.slected_memeber = undefined;
 
  
      $scope.renderSignIn = function() {
@@ -247,6 +251,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
           
           var accountid = {'id':$route.current.params.accountId};
           Account.get($scope,accountid);
+          User.list($scope,{});
 
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
@@ -260,6 +265,81 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
         }
      }
      $scope.renderSignIn();
+     $scope.selectMember = function(){
+        console.log('slecting user yeaaah');
+        $scope.slected_memeber = $scope.user;
+        $scope.user = $scope.slected_memeber.google_display_name;
+
+     };
+     $scope.createPickerUploader = function() {
+          var projectfolder = $("#projectdrivefolder").val(); 
+          var picker = new google.picker.PickerBuilder().
+              addView(new google.picker.DocsUploadView().setParent(projectfolder)).
+              setCallback($scope.uploaderCallback).
+              setAppId(12345).
+                enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
+              build();
+          picker.setVisible(true);
+      };
+      // A simple callback implementation.
+      $scope.uploaderCallback = function(data) {
+
+          var projectdid = $("#projectdid").val(); 
+          var driveuploadersourcepage = $("#driveuploadersourcepage").val(); 
+          var url = '/uploadfiles?projectid='+projectdid;
+               if (data.action == google.picker.Action.PICKED) {
+                var fileIds = [];
+                var filenames = [];
+              var fileUrls = [];
+                 $.each(data.docs, function(index) {
+                
+                      fileIds.push(data.docs[index].id);
+                      filenames.push(data.docs[index].name);
+                fileurls.push(data.docs[index].url);
+            
+                     
+                    
+                  });
+                    
+                     $.post(url, { fileids: fileIds , filenames: filenames ,fileurls:fileUrls} );
+                }
+      }
+     $scope.share = function(slected_memeber){
+        console.log('permissions.insert share');
+        console.log(slected_memeber);
+        $scope.$watch($scope.account.access, function() {
+         var body = {'access':$scope.account.access};
+         var id = $scope.account.id;
+         var params ={'id':id,
+                      'access':$scope.account.access}
+         Account.patch($scope,params);
+        });
+        $('#sharingSettingsModal').modal('hide');
+
+        if (slected_memeber.email){
+        var params = {  'type': 'user',
+                        'role': 'writer',
+                        'value': slected_memeber.email,
+                        'about_kind': 'Account',
+                        'about_item': $scope.account.id
+
+                        
+          };
+          Permission.insert($scope,params); 
+          
+          
+        }else{ 
+          alert('select a user to be invited');
+        };
+
+
+     };
+     
+     $scope.updateCollaborators = function(){
+          var accountid = {'id':$route.current.params.accountId};
+          Account.get($scope,accountid);
+
+     };
      $scope.showModal = function(){
         console.log('button clicked');
         $('#addAccountModal').modal('show');
@@ -383,12 +463,23 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
         Event.list($scope,params);
 
      };
+  //HKA 18.11.2013 Show modal Related list (Contact)
 
+  $scope.addContactModal = function(){
+    $('#addContactModal').modal('show');
+  };
 
-      
+  // HKA 18.11.2013 Show modal Related list (Opportunity)
+  $scope.addOppModal = function(){
+    $('#addOpportunitytModal').modal('show');
+  };
 
+  //HKA 18.11.2013 Show modal Related list (Case)
+  $scope.addCaseModal = function(){
+    $('#addCaseModal').modal('show');
+  };
 
-
+  
 }]);
 app.controller('SearchFormController', ['$scope','$route','$location','Conf','User',
     function($scope,$route,$location,Conf,User) {

@@ -1,7 +1,8 @@
 app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Opportunity',
     function($scope,$route,$location,Conf,Opportunity) {
-      $("#id_Opportunities").addClass("active");
-      $scope.isSignedIn = false;
+      //$("#id_Opportunities").addClass("active");
+      console.log('I am in opportunity controller');
+     $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;

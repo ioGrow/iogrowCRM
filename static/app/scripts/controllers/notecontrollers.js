@@ -31,7 +31,36 @@ app.controller('NoteShowController',['$scope','$filter','$route','$location','Co
             });
           }
       }
-   
+   $scope.listNextPageItems = function(){
+        
+        
+        var nextPage = $scope.currentPage + 1;
+        var params = {};
+          if ($scope.pages[nextPage]){
+            params = {'limit':5,
+                      'pageToken':$scope.pages[nextPage]
+                     }
+          }else{
+            params = {'limit':5}
+          }
+          console.log('in listNextPageItems');
+          $scope.currentPage = $scope.currentPage + 1 ; 
+          Comment.list($scope,params);
+     }
+     $scope.listPrevPageItems = function(){
+       
+       var prevPage = $scope.currentPage - 1;
+       var params = {};
+          if ($scope.pages[prevPage]){
+            params = {'limit':5,
+                      'pageToken':$scope.pages[prevPage]
+                     }
+          }else{
+            params = {'limit':5}
+          }
+          $scope.currentPage = $scope.currentPage - 1 ;
+          omment.list($scope,params);
+     }
    
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
@@ -81,14 +110,17 @@ app.controller('NoteShowController',['$scope','$filter','$route','$location','Co
       };
       Comment.insert($scope,params);
       $scope.comment.content='';
-      $scope.ListComments();
+      hilightComment();
+      
     };
     $scope.ListComments = function(){
       var params = {'discussion':$scope.note.entityKey,
                      'limit':5,
                       'order':'-updated_at'};
       Comment.list($scope,params);
+      
     };
+
   //HKA 18.11.2013 get the parent's note
   $scope.getUrlNote = function(type,id){
     var base_url = undefined;

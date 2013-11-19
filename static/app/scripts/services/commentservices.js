@@ -9,7 +9,7 @@ commentservices.factory('Comment', function($http) {
   
   
   Comment.list = function($scope,params){
-      console.log('in notes.list');
+      console.log('in comments.list');
       console.log(params);
 
       $scope.isLoading = true;
@@ -81,7 +81,7 @@ Comment.insert = function($scope,comment){
            
 
           $scope.$apply();
-          //$scope.hilightComment();
+          $scope.hilightComment();
          
      
          }else{
