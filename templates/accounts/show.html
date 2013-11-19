@@ -104,11 +104,11 @@
                 
             <h2>
             <a href="/#/accounts/" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
-            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Accounts")}} > <%= account.name %></h2>
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Accounts")}} > <%= account.name %> </h2>
             
 
            <span>{{_("Type")}}: </span><span><span><a class="tag" href="/#/search/type:Account <%=account.account_type%>">#<%=account.account_type%></a></span>
-            <br><span>{{_("Industry")}}: </span><span><span><a class="tag" href="#">#<%=account.industry%></a></span> 
+            <br><span>{{_("Industry")}}: </span><span><span><a class="tag" href="/#/search/type:Account <%=account.industry%>">#<%=account.industry%></a></span> 
              </br>
              <span class="page-meta"><i class="icon-pencil"><a ng-click="editaccount()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |  <i class="icon-trash"><a ng-click="delete(account)" class="btn-link addAnotherPhone">  {{_("Delete")}}</a></i></span>
 
@@ -174,9 +174,9 @@
                                 <div class="message">
                                   <span class="arrow"></span>
                                   <a href="#" class="name"><%= topic.last_updater.google_display_name%></a>
-                                  <span class="datetime">at <%=topic.updated_at %></span>
+                                  <span class="datetime">at <%=topic.updated_at | date:'yyyy-MM-dd - HH:mm:ss '  %> </span>
                                   <span class="body">
-                                  <a href="#/accounts/show/1/notes/22" class="discussion-content"><strong class="ng-binding"><%= topic.title%></strong><span class="excerpt ng-binding"> - <%= topic.excerpt%></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <%= topic.comments%> comments</span></a>
+                                  <a href="/#/notes/show/<%=topic.discussionId%>" class="discussion-content"><strong class="ng-binding"><%= topic.title%></strong><span class="excerpt ng-binding"> - <%= topic.excerpt%></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <%= topic.comments%> comments</span></a>
                                   </span>
                                 </div>
                               </li>
@@ -213,7 +213,7 @@
                                     <li>(415) 663-4433  <a href="#"><img class="ctodeal" src="static/img/phone-icon.png" /></a></li>
                                     <li>(415) 663-4433 <a href="#"><img class="ctodeal" src="static/img/phone-icon.png" /></a></li>
                                     <li>(415) 663-4433 <a href="#"><img class="ctodeal" src="static/img/phone-icon.png"/></a></li>
-                                    <li><a href="#"><i class="icon-plus"></i> Add a new phone number </a></li>
+                                    <li><a href="#phonemodal"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new Phone</a></li>
 
                                   </ul>
                                 <div class="news-block-tags">
@@ -224,7 +224,7 @@
                                     <li>contact@clicandcal.com  </li>
                                     <li>sales@clicandcal.com </li>
                                     <li>support@clicandcal.com </li>
-                                    <li><a href="#"><i class="icon-plus"></i> Add a new email address </a></li>
+                                    <li><a href="#emailmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new email address </a></li>
 
                                   </ul>
                                 <div class="news-block-tags">
@@ -234,8 +234,9 @@
                                  <ul class="unstyled contact-infos">
                                     <li>760 Market Street, 11th Floor San Francisco, CA 94102  </li>
                                     
-                                    <li><a href="#"><i class="icon-plus"></i> Add a new address </a></li>
+                                    <li><a href="#addressmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new address </a></li>
 
+                  
                                   </ul>
 
                                                               
@@ -249,6 +250,7 @@
                                 </div>
                                 <ul class="unstyled contact-infos">
                                     <li><a href="#">www.clicandcal.com</a> </li>
+                                    <li><a href="#websitemodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new Website </a></li>
                                 </ul> 
                                 <div class="news-block-tags">
                                   <strong>Social Links</strong>
@@ -256,6 +258,7 @@
                                 </div>
                                 <ul class="unstyled contact-infos">
                                     <li><a href="#">facebook.com/clicandcal</a> </li>
+                                    <li><a href="#socialmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new social links </a></li>
                                 </ul>                       
                               </div>
                           </div>
@@ -267,7 +270,8 @@
                                   <strong>Tagline</strong>
                                   
                                 </div>
-                                <p>Accelerating the Cloud Powered Business</p>
+                                <p>Accelerating the Cloud Powered Business </p>
+
                                 <div class="news-block-tags">
                                   <strong>Introduction</strong>
                                   
@@ -286,9 +290,10 @@
                          <div class="row-fluid cards-container">
                          <div class="btn-group relbutton">
             
-                                <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
+                                <button  ng-click="addContactModal()" id="sample_editable_1_new" class="btn red">
                                {{_("Add a person to this account")}}<i class="icon-plus"></i>
                                 </button>
+                                
                           </div>
                             <div class="inner-cards-container">
                             
@@ -298,6 +303,7 @@
                                   <div class="details">
                                     <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardTitle">
                                      Ben Belfodhil
+
                                     </h3></a>
                                     <div class="desc">                           
                                     <span class="contact-title">CEO</span>  
@@ -363,13 +369,59 @@
                               </div>
                               </div>
                             </div>
+                        <!--HKA 18.11.2013 Add Contact modal -->
+
+                    <div id="addContactModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-header">
+                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                          <h3 id="myModalLabel">{{_("New Contact")}}</h3>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addContact" name="addcontact" ng-submit="save(contact)" class="form-horizontal"> 
+                            <fieldset>
+                            <div class="control-group">
+                              <label  class="required control-label">{{_("First Name")}} *</label>
+                       
+                              <div class="controls">
+                              <input type="text" required id="id_firstname" ng-model="contact.firstname">
+                          
+                               </div>
+                            </div>
+                           <div class="control-group">
+                              <label  class="required control-label">{{_("Last Name")}}</label>
+                              <div class="controls">
+                              <input type="text"  id="id_lastname" ng-model="contact.lastname">
+                          
+                              </div>
+                           </div>
+                           <div class="control-group">
+                             <label  class="required control-label">{{_("Position")}} </label>
+                       
+                             <div class="controls">
+                              <input type="text"  id="id_account" ng-model="contact.account">
+                          
+                              </div>
+                           </div>
+                    </fieldset>
+                
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <button  type="submit" class="btn blue addContactNow">{{_("Add Contact")}}</button>
+              </div>
+               </form>
+       </div>
+    <!--End Contact Modal -->
+
+
                       </div>
                        <div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 4">
                           
                          <div class="row-fluid cards-container">
+                         
                          <div class="btn-group relbutton">
             
-                                <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
+                                <button  ng-click="addOppModal()" id="sample_editable_1_new" class="btn red">
                                 {{_("Add a new opportunity")}} <i class="icon-plus"></i>
                                 </button>
                           </div>
@@ -450,13 +502,63 @@
                               </div>
                               </div>
                             </div>
+
+
+                        <!--HKA 19.11.2013 Opportunity Modal -->
+
+              <div id="addOpportunitytModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                 <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                     <h3 id="myModalLabel">{{_("New Opportunity")}}</h3>
+                  </div>
+                 <div class="modal-body">
+                     <form id="addOpportunity" name="addOpportunity" ng-submit="save(opportunity)" class="form-horizontal"> 
+                     <fieldset>
+                      <div class="control-group">
+                          <label  class="required control-label">{{_("Name")}} *</label>
+                       
+                          <div class="controls">
+                          <input type="text" required id="id_name" ng-model="opportunity.name">
+                          </div>
+                      </div>
+                      <div class="control-group">
+                        <label  class="required control-label">{{_("Description")}} </label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_description" ng-model="opportunity.description">
+                        </div>
+                      </div>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Amount")}} </label>
+                        <div class="controls">
+                          <input type="text"  id="id_amount" ng-model="opportunity.amount">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Stage")}} </label>
+                        <div class="controls">
+                        <input type="text"  id="id_stage" ng-model="opportunity.stage">
+                        </div>
+                    </div>                 
+                    </fieldset>
+                
+              </div>
+                    <div class="modal-footer">
+                     <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                      <button  type="submit" class="btn blue addContactNow">{{_("Add Opportunity")}}</button>
+                     </div>
+                   </form>
+          </div>
+
+                <!--HKA 19.11.2013 End Of Opportunity Modal -->
+
                       </div>
                       <div class="tab-pane active" id="tab_1_5" ng-show="selectedTab == 5">
                           
                          <div class="row-fluid cards-container">
                          <div class="btn-group relbutton">
             
-                                <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
+                                <button  ng-click="addCaseModal()" id="sample_editable_1_new" class="btn red">
                                 {{_("Add a new case")}} <i class="icon-plus"></i>
                                 </button>
                           </div>
@@ -521,6 +623,56 @@
 
                               </div>
                             </div>
+                      <!--HKA 19.11.2013 Case Modal -->
+
+               <div id="addCaseModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                   <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="myModalLabel">{{_("New Case")}}</h3>
+                   </div>
+                  <div class="modal-body">
+                         <form id="addCase" name="addCase" ng-submit="save(casee)" class="form-horizontal"> 
+                         <fieldset>                
+                        <div class="control-group">
+                            <label  class="required control-label">{{_("Description")}} </label>
+                            <div class="controls">
+                               <input type="text"  id="id_description" ng-model="casee.description">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                             <label  class="required control-label">{{_("Type")}} </label>
+                       
+                              <div class="controls">
+                               <input type="text"  id="id_type" ng-model="casee.type">
+                          
+                               </div>
+                        </div>
+                       <div class="control-group">
+                             <label  class="required control-label">{{_("Name")}} </label>
+                       
+                             <div class="controls">
+                             <input type="text"  id="id_name" ng-model="casee.name">
+                          
+                               </div>
+                        </div>
+                        <div class="control-group">
+                              <label  class="required control-label">{{_("Status")}}</label>
+                       
+                             <div class="controls">
+                                <input type="text"  id="id_status" ng-model="casee.status">
+                             </div>
+                      
+                          </div>                 
+                        </fieldset>
+                
+                   </div>
+                   <div class="modal-footer">
+                          <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                          <button  type="submit" class="btn blue addContactNow">{{_("Add Case")}}</button>
+                    </div>
+                      </form>
+               </div>
+                      <!--HKA 19.11.2013  End Case Modal -->
                       </div>
                       <div class="tab-pane active" id="tab_1_6" ng-show="selectedTab == 6">
                           
@@ -808,20 +960,183 @@
                           <input type="text"  required id="id_industry" ng-model="account.industry">
                           
                         </div>
-                    </div>                      
-                  
-                     
-                    
-                  
-                
+                    </div>                
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
                 <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
               </div>
                </form>
-              </div> 
+            </div>
+
+
+      <!--HKA 18.11.2013 Add Phone Modal -->
+
+
+    <div id="phonemodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("Add Phone")}}</h3>
+            </div>
+            <div class="modal-body">
+                  <form id="addPhone" name="addphone" ng-submit="save(phone)" class="form-horizontal"> 
+                  <fieldset>
+                    <div class="control-group">
+                        <label  class="control-label">{{_("Type")}} </label>
+                        <div class="controls">
+                          <input type="text" placeholder="home, work, mobile, other..." required id="id_name" ng-model="phone.typr">
+                        </div>
+                     </div>
+                     <div class="control-group">
+                        <label  class="required control-label">{{_("Number")}}</label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_name" ng-model="phone.number">
+                          
+                        </div>
+                     </div>
+              </div>
+              <div class="modal-footer">
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              
+                  <input ng-hide="isLoading" type="submit" class="btn green" value="Add this phone">
+                  <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+              </div>
+                </form>
+    </div>
+
+
+ <!--HKA 18.11.2013 Add Email -->
+
+     <div id="emailmodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("Add Email")}}</h3>
+            </div>
+            <div class="modal-body">
+                  <form id="addEmail" name="addemail" ng-submit="save(email)" class="form-horizontal"> 
+                  <fieldset>
+                    <div class="control-group">
+                        <label  class="control-label">{{_("Email")}} </label>
+                        <div class="controls">
+                          <input type="text" placeholder="Email" required id="id_email" ng-model="email.">
+                        </div>
+                     </div>
+              </div>
+              <div class="modal-footer">
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              
+                  <input ng-hide="isLoading" type="submit" class="btn green" value="Add this phone">
+                  <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+              </div>
+                </form>
         </div>
+
+      <!--HKA 18.11.2013  Adresse Modal  -->
+
+    <div id="addressmodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("Add Address")}}</h3>
+            </div>
+            <div class="modal-body">
+                  <form id="addEmail" name="addemail" ng-submit="save(email)" class="form-horizontal"> 
+                  <fieldset>
+                    <div class="control-group">
+                        <label  class="control-label">{{_("Street")}} </label>
+                        <div class="controls">
+                          <input type="text"   id="id_street" ng-model="address.street">
+                        </div>
+                     </div>
+                     <div class="control-group">
+                        <label  class="control-label">{{_("City")}} </label>
+                        <div class="controls">
+                          <input type="text"   id="id_city" ng-model="address.email">
+                        </div>
+                     </div>
+                     <div class="control-group">
+                        <label  class="control-label">{{_("State/Province")}} </label>
+                        <div class="controls">
+                          <input type="text"  id="id_state" ng-model="address.state">
+                        </div>
+                     </div>
+                     <div class="control-group">
+                        <label  class="control-label">{{_("Postal Code")}} </label>
+                        <div class="controls">
+                          <input type="text"   id="id_postal" ng-model="address.postal">
+                        </div>
+                     </div>
+                     <div class="control-group">
+                        <label  class="control-label">{{_("Country")}} </label>
+                        <div class="controls">
+                          <input type="text"   id="id_country" ng-model="address.country">
+                        </div>
+                     </div>
+              </div>
+              <div class="modal-footer">
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              
+                  <input ng-hide="isLoading" type="submit" class="btn green" value="Add this address">
+                  <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+              </div>
+                </form>
+        </div>
+
+    <!--HKA 18.11.2013 Website Modal -->
+
+
+    <div id="websitemodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("Add Website")}}</h3>
+            </div>
+            <div class="modal-body">
+                  <form id="addWebsite" name="addwebsite" ng-submit="save(website)" class="form-horizontal"> 
+                  <fieldset>
+                    <div class="control-group">
+                        <label  class="control-label">{{_("Website")}} </label>
+                        <div class="controls">
+                          <input type="text" placeholder="Website" required id="id_website" ng-model="website.name">
+                        </div>
+                     </div>
+              </div>
+              <div class="modal-footer">
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              
+                  <input ng-hide="isLoading" type="submit" class="btn green" value="Add this Website">
+                  <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+              </div>
+                </form>
+        </div>
+
+    <!--HKA 18.11.2013 Social modal -->
+
+
+    <div id="socialmodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("Add Social link")}}</h3>
+            </div>
+            <div class="modal-body">
+                  <form id="addSocial" name="addsocial" ng-submit="save(website)" class="form-horizontal"> 
+                  <fieldset>
+                    <div class="control-group">
+                        <label  class="control-label">{{_("Social link")}} </label>
+                        <div class="controls">
+                          <input type="text" placeholder="Social link"  required id="id_social" ng-model="social.name">
+                        </div>
+                     </div>
+              </div>
+              <div class="modal-footer">
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              
+                  <input ng-hide="isLoading" type="submit" class="btn green" value="Add this Social link">
+                  <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+              </div>
+                </form>
+        </div>
+
+      </div>
       <!-- END PAGE CONTAINER-->
 </div>
 <script type="text/javascript">

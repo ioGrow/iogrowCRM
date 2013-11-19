@@ -368,6 +368,16 @@ class CampaignShowHandler(BaseHandler,SessionEnabledHandler):
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/campaigns/campaign_show.html')
       self.response.out.write(template.render(template_values))
+class NoteShowHandler (BaseHandler,SessionEnabledHandler):
+  def get(self):
+    if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+      user = self.get_user_from_session()
+      self.set_user_locale()
+      tabs = user.get_user_active_tabs()
+      self.set_user_locale()
+      template_values={'tabs':tabs}
+      template = jinja_environment.get_template('templates/accounts/note_show.html')
+      self.response.out.write(template.render(template_values))
    
 
 class ShowListHandler(BaseHandler, SessionEnabledHandler):
@@ -1252,9 +1262,9 @@ routes = [
     ('/views/cases/show',CaseShowHandler),
     ('/views/campaigns/list',CampaignListHandler),
     ('/views/campaigns/show',CampaignShowHandler),
+    ('/views/notes/show',NoteShowHandler),
     ('/views/search/list',SearchListHandler),
     
-
     ('/views/admin/users/list',UserListHandler),
     ('/views/admin/groups/list',GroupListHandler),
     ('/views/admin/groups/show',GroupShowHandler),

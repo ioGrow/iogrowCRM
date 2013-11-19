@@ -68,6 +68,7 @@ accountservices.factory('Account', function($http) {
       $scope.isLoading = true;
       gapi.client.crmengine.accounts.list(params).execute(function(resp) {
               if(!resp.code){
+                
                  $scope.accounts = resp.items;
                  if ($scope.currentPage>1){
                       $scope.pagination.prev = true;

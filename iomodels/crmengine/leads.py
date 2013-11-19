@@ -63,7 +63,7 @@ class Lead(EndpointsModel):
             search.TextField(name='owner', value = empty_string(self.owner) ),
             search.TextField(name='collaborators', value = collaborators ),
             search.TextField(name='firstname', value = empty_string(self.firstname) ),
-            search.TextField(name='lastname', value = empty_string(self.lastname)),
+            search.TextField(name='title', value = empty_string(self.lastname)),
             search.TextField(name='company', value = empty_string(self.company)),
             search.TextField(name='industry', value = empty_string(self.industry)),
             search.TextField(name='position', value = empty_string(self.title)),

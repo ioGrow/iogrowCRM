@@ -6,7 +6,7 @@ import model
 
 class Account(EndpointsModel):
 
-    _message_fields_schema = ('id','entityKey','access','collaborators_list', 'collaborators_ids','name','owner','account_type','industry','address')
+    _message_fields_schema = ('id','entityKey','access','collaborators_list', 'collaborators_ids','name','owner','account_type','industry','address','tagline','introduction')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
@@ -17,6 +17,8 @@ class Account(EndpointsModel):
     account_type = ndb.StringProperty()
     industry = ndb.StringProperty()
     creationTime = ndb.DateTimeProperty(auto_now_add=True)
+    tagline = ndb.StringProperty()
+    introduction =ndb.StringProperty()
     address = ndb.StringProperty()
     # public or private
     access = ndb.StringProperty()
@@ -54,6 +56,8 @@ class Account(EndpointsModel):
             search.TextField(name='industry', value = empty_string(self.industry)),
             search.DateField(name='creationTime', value = self.creationTime),
             search.TextField(name='industry', value = empty_string(self.industry)),
+            search.TextField(name='tagline', value = empty_string(self.tagline)),
+            search.TextField(name='introduction', value = empty_string(self.introduction)),
             search.TextField(name='address', value = empty_string(self.address))
            ])
         my_index = search.Index(name="GlobalIndex")

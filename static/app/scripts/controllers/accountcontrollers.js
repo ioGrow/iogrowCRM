@@ -418,6 +418,8 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
         };
        
         Task.insert($scope,params);
+        $scope.task.title='';
+        $scope.task.dueDate='0000-00-00T00:00:00-00:00';
      };
 
      $scope.hilightTask = function(){
@@ -462,6 +464,9 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
             console.log('inserting the event');
             console.log(params);
             Event.insert($scope,params);
+            $scope.ioevent.title='';
+            $scope.ioevent.where='';
+            $scope.ioevent.starts_at='T00:00:00.000000';
 
             
         };
@@ -481,12 +486,23 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
         Event.list($scope,params);
 
      };
+  //HKA 18.11.2013 Show modal Related list (Contact)
 
+  $scope.addContactModal = function(){
+    $('#addContactModal').modal('show');
+  };
 
-      
+  // HKA 18.11.2013 Show modal Related list (Opportunity)
+  $scope.addOppModal = function(){
+    $('#addOpportunitytModal').modal('show');
+  };
 
+  //HKA 18.11.2013 Show modal Related list (Case)
+  $scope.addCaseModal = function(){
+    $('#addCaseModal').modal('show');
+  };
 
-
+  
 }]);
 app.controller('SearchFormController', ['$scope','$route','$location','Conf','User',
     function($scope,$route,$location,Conf,User) {
