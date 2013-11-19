@@ -84,7 +84,7 @@
               <li><a href="page_calendar.html"><i class="icon-calendar"></i> My Calendar</a></li>
               <li><a href="inbox.html"><i class="icon-envelope"></i> My Inbox <span class="badge badge-important">3</span></a></li>
               <li><a href="#"><i class="icon-tasks"></i> My Tasks <span class="badge badge-success">8</span></a></li>
-              <li class="divider"></li>
+              <li class="divider"></li>/
               <li><a href="javascript:;" id="trigger_fullscreen"><i class="icon-move"></i> Full Screen</a></li>
               <li><a href="extra_lock.html"><i class="icon-lock"></i> Lock Screen</a></li>
               <li><a href="login.html"><i class="icon-key"></i> Log Out</a></li>
@@ -247,9 +247,14 @@
       
     }
     function apiLoaded(){
+
       // When the API is loaded start angularJS app
       var $injector = angular.bootstrap(document, ['crmEngine']); 
             console.log('angular bootstraped');
+      console.log('before redirection');
+      if (!window.location.hash){
+      window.location.replace('{{active_app.url}}');
+      };
     }
 
     function signin(mode, callback) {

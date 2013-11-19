@@ -110,7 +110,8 @@ class CrmEngineApi(remote.Service):
     if user_from_email is None:
       raise endpoints.UnauthorizedException('You must sign-in!' )
     # Todo: Check permissions
-    my_model.owner = user_from_email.key
+    my_model.owner = user_from_email.google_user_id
+    my_model.organization =  user_from_email.organization
     my_model.put()
     return my_model
 
@@ -186,9 +187,8 @@ class CrmEngineApi(remote.Service):
     if user_from_email is None:
       raise endpoints.UnauthorizedException('You must sign-in!' )
     # Todo: Check permissions
-    my_model.owner = user_from_email.key
-    
-
+    my_model.owner = user_from_email.google_user_id
+    my_model.organization =  user_from_email.organization
 
     my_model.put()
     return my_model
@@ -248,9 +248,6 @@ class CrmEngineApi(remote.Service):
     # In either case, the datastore ID from the entity will be returned in the
     # ProtoRPC response message.
 
-
-
-    
     user = endpoints.get_current_user()
     if user is None:
         raise endpoints.UnauthorizedException('You must authenticate!' )
@@ -262,6 +259,8 @@ class CrmEngineApi(remote.Service):
     note_author.display_name = user_from_email.google_display_name
     note_author.photo = user_from_email.google_public_profile_photo_url
     my_model.author = note_author
+    my_model.owner = user_from_email.google_user_id
+    my_model.organization =  user_from_email.organization
     my_model.put()
     
 
@@ -343,7 +342,8 @@ class CrmEngineApi(remote.Service):
     # Todo: Check permissions
     task_owner = model.User()
     task_owner.google_display_name = user_from_email.google_display_name
-    my_model.owner = task_owner
+    my_model.owner = user_from_email.google_user_id
+    my_model.organization =  user_from_email.organization
     my_model.put()
     
 
@@ -362,7 +362,8 @@ class CrmEngineApi(remote.Service):
     user_from_email = model.User.query(model.User.email == user.email()).get()
     if user_from_email is  None :
       raise endpoints.UnauthorizedException('You must sign-in ')
-    my_model.owner = user_from_email.key
+    my_model.owner = user_from_email.google_user_id
+    my_model.organization =  user_from_email.organization
     my_model.put()
     return my_model
   
@@ -398,7 +399,8 @@ class CrmEngineApi(remote.Service):
     # Todo: Check permissions
     task_owner = model.User()
     task_owner.google_display_name = user_from_email.google_display_name
-    my_model.owner = task_owner
+    my_model.owner = user_from_email.google_user_id
+    my_model.organization =  user_from_email.organization
     my_model.put()
     
 
@@ -418,7 +420,8 @@ class CrmEngineApi(remote.Service):
     user_from_email = model.User.query(model.User.email == user.email()).get()
     if user_from_email is None:
       raise endpoints.UnauthorizedException('You must sign-in ')
-    my_model.owner = user_from_email.key
+    my_model.owner = user_from_email.google_user_id
+    my_model.organization =  user_from_email.organization
     my_model.put()
     return my_model
   
@@ -440,7 +443,8 @@ class CrmEngineApi(remote.Service):
     user_from_email = model.User.query(model.User.email == user.email()).get()
     if user_from_email is None:
       raise endpoints.UnauthorizedException('You must sign-in ')
-    my_model.owner = user_from_email.key
+    my_model.owner = user_from_email.google_user_id
+    my_model.organization =  user_from_email.organization
     my_model.put()
     return my_model
   
@@ -462,7 +466,8 @@ class CrmEngineApi(remote.Service):
     user_from_email = model.User.query(model.User.email == user.email()).get()
     if user_from_email is None:
       raise endpoints.UnauthorizedException('You must sign-in ')
-    my_model.owner = user_from_email.key
+    my_model.owner = user_from_email.google_user_id
+    my_model.organization =  user_from_email.organization
     my_model.put()
     return my_model
   
@@ -604,7 +609,9 @@ clicking on the link below:
     # Todo: Check permissions
     task_owner = model.User()
     task_owner.google_display_name = user_from_email.google_display_name
-    my_model.owner = task_owner
+    my_model.author = task_owner
+    my_model.owner = user_from_email.google_user_id
+    my_model.organization =  user_from_email.organization
     my_model.put()
     
 
@@ -756,6 +763,7 @@ clicking on the link below:
     user_from_email = model.User.query(model.User.email == user.email()).get()
     if user_from_email is None:
       raise endpoints.UnauthorizedException('You must sign-in!' )
+
     # prepare google drive service
     credentials = user_from_email.google_credentials
     http = httplib2.Http()
@@ -781,6 +789,12 @@ clicking on the link below:
     # insert in the datastore
     
     
+
+    # Todo: Check permissions
+    task_owner = model.User()
+    task_owner.google_display_name = user_from_email.google_display_name
+    my_model.owner = user_from_email.google_user_id
+    my_model.organization = user_from_email.organization
     my_model.put()
     
 
