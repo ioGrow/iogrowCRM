@@ -369,7 +369,8 @@ class User(EndpointsModel):
       if app_key in self.apps:
         self.active_app = app_key
         self.app_changed = True
-        self.put_async()
+        future = self.put_async()
+        return future
 
     
     
