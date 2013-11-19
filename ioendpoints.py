@@ -26,6 +26,8 @@ import auth_util
 from google.appengine.api import mail
 import httplib2
 from apiclient.discovery import build
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.tools import run
 from apiclient import errors
 from protorpc import messages
 from protorpc import message_types
@@ -484,30 +486,70 @@ class CrmEngineApi(remote.Service):
 ###################################### Users API ################################################
   @User.method(user_required=True,path='users', http_method='POST', name='users.insert')
   def UserInsert(self, my_model):
-
-    
-    
     user = endpoints.get_current_user()
     if user is None:
         raise endpoints.UnauthorizedException('You must authenticate!' )
     user_from_email = model.User.query(model.User.email == user.email()).get()
     if user_from_email is None:
-      raise endpoints.UnauthorizedException('You must sign-in!' )
-    # Todo: Check permissions
-    my_model.organization = user_from_email.organization
-    my_model.status = 'invited'
-    profile = model.Profile.query(model.Profile.name=='Standard User', model.Profile.organization==user_from_email.organization).get()
-    my_model.init_user_config(user_from_email.organization,profile.key)
-    my_model.put()
-    confirmation_url = "http://iogrow-dev.appspot.com/sign-in?id=" + str(my_model.id) + '&'
+        raise endpoints.UnauthorizedException('You must sign-in!' )
+    # OAuth flow
+    try:
+        oauth_flow = flow_from_clientsecrets('client_secrets.json',
+            scope=SCOPES)
+
+        
+        credentials = user_from_email.google_credentials
+        
+        
+        if credentials is None or credentials.invalid:
+            new_credentials = run(flow, credentials)
+        else:
+            new_credentials = credentials
+        http = new_credentials.authorize(httplib2.Http(memcache))
+    except:
+        raise endpoints.UnauthorizedException('Invalid grant' )
+
+    invited_user = model.User.query(model.User.email == my_model.email).get()
+    
+    if invited_user is not None:
+        if invited_user.organization == user_from_email.organization or invited_user.organization is None:
+            invited_user.organization = user_from_email.organization
+            invited_user.status = 'invited'
+            profile = model.Profile.query(model.Profile.name=='Standard User', model.Profile.organization==user_from_email.organization).get()
+            invited_user.init_user_config(user_from_email.organization,profile.key)
+            invited_user_id = invited_user.key.id()
+            my_model.id = invited_user_id
+            invited_user.put()  
+            
+    else:
+        my_model.organization = user_from_email.organization
+        my_model.status = 'invited'
+        profile = model.Profile.query(model.Profile.name=='Standard User', model.Profile.organization==user_from_email.organization).get()
+        my_model.init_user_config(user_from_email.organization,profile.key)
+        
+        my_model.put()
+        invited_user_id = my_model.id
+        
+    
+
+    organization = user_from_email.organization.get()
+    folderid = organization.org_folder
+    new_permission = {
+                     'value': my_model.email,
+                     'type': 'user',
+                     'role': 'writer'                  
+    }
+    service = build('drive', 'v2', http=http)
+    service.permissions().insert(fileId=folderid,sendNotificationEmails= False, body=new_permission).execute()
+    confirmation_url = "http://iogrow-dev.appspot.com/sign-in?id=" + str(invited_user_id) + '&'
     sender_address = "ioGrow notifications <notifications@iogrow-dev.appspotmail.com>"
     subject = "Confirm your registration"
     body = """
-Thank you for creating an account! Please confirm your email address by
-clicking on the link below:
+    Thank you for creating an account! Please confirm your email address by
+    clicking on the link below:
 
-%s
-""" % confirmation_url
+    %s
+    """ % confirmation_url
 
     mail.send_mail(sender_address, my_model.email , subject, body)
     return my_model
