@@ -8,6 +8,8 @@ import pprint
 import model
 
 class Task(EndpointsModel):
+    _message_fields_schema = ('id','owner','created_at','updated_at','title','due','status','completed_by','comments','about_kind','about_item','organization')
+
     author = ndb.StructuredProperty(User)
     # Sharing fields
     owner = ndb.StringProperty()

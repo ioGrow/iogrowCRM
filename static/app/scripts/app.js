@@ -130,5 +130,11 @@ app.config(['$routeProvider', function($routeProvider) {
       }).when('/notes/show/:noteId',{
       controller : 'NoteShowController',
       templateUrl:'/views/notes/show'
+      }).when('/events/show/:eventId',{
+      controller : 'EventShowController',
+      templateUrl:'/views/events/show'
+      }).when('/tasks/show/:taskId',{
+      controller : 'TaskShowController',
+      templateUrl:'/views/tasks/show'
       });
 }]);

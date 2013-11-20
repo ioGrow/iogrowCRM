@@ -378,6 +378,34 @@ class NoteShowHandler (BaseHandler,SessionEnabledHandler):
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/accounts/note_show.html')
       self.response.out.write(template.render(template_values))
+class TaskShowHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+      if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            tabs = user.get_user_active_tabs()
+
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            # Render the template
+            template_values = {'tabs':tabs}
+            template = jinja_environment.get_template('templates/activities/task_show.html')
+            self.response.out.write(template.render(template_values))
+class EventShowHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+      if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            tabs = user.get_user_active_tabs()
+
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            # Render the template
+            template_values = {'tabs':tabs}
+            template = jinja_environment.get_template('templates/activities/event_show.html')
+            self.response.out.write(template.render(template_values))
    
 
 class ShowListHandler(BaseHandler, SessionEnabledHandler):
@@ -1264,6 +1292,8 @@ routes = [
     ('/views/campaigns/show',CampaignShowHandler),
     ('/views/notes/show',NoteShowHandler),
     ('/views/search/list',SearchListHandler),
+    ('/views/tasks/show',TaskShowHandler),
+    ('/views/events/show',EventShowHandler),
     
     ('/views/admin/users/list',UserListHandler),
     ('/views/admin/groups/list',GroupListHandler),

@@ -412,10 +412,15 @@ class CrmEngineApi(remote.Service):
     
 
     return my_model
-  @Task.query_method(user_required=True,query_fields=('about_kind','about_item','status', 'due', 'limit', 'order', 'pageToken'),path='tasks', name='tasks.list')
+  @Task.query_method(user_required=True,query_fields=('about_kind','about_item','status','id', 'due', 'limit', 'order', 'pageToken'),path='tasks', name='tasks.list')
   def TaskList(self, query):
     
     return query
+  @Task.method(request_fields=('id',),path='tasks/{id}', http_method='GET', name='tasks.get')
+  def TaskGet(self, my_model):
+    if not my_model.from_datastore:
+      raise endpoints.NotFoundException('Topic not found.')
+    return my_model
 
   # HKA 4.11.2013 Add Opportuity APIs
   @Opportunity.method(user_required=True,path='opportunities',http_method='POST',name='opportunities.insert')
