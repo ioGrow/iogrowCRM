@@ -4,9 +4,9 @@ from endpoints_proto_datastore import MessageFieldsSchema
 from google.appengine.api import search 
 
 import model
-class Account(EndpointsModel):
+class Product(EndpointsModel):
 
-    _message_fields_schema = ('id','entityKey','access','collaborators_list','phones','emails','adresses','websites','sociallinks', 'collaborators_ids','name','owner','account_type','industry','address','tagline','introduction')
+    _message_fields_schema = ('id','entityKey','folder', 'access','collaborators_list','collaborators_ids','name','owner')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
@@ -14,19 +14,10 @@ class Account(EndpointsModel):
     organization = ndb.KeyProperty()
     folder = ndb.StringProperty()
     name = ndb.StringProperty()
-    account_type = ndb.StringProperty()
-    industry = ndb.StringProperty()
-    creationTime = ndb.DateTimeProperty(auto_now_add=True)
-    tagline = ndb.StringProperty()
-    introduction =ndb.StringProperty()
-    address = ndb.StringProperty()
+    
     # public or private
     access = ndb.StringProperty()
-    phones = ndb.StructuredProperty(model.Phone,repeated=True)
-    emails = ndb.StructuredProperty(model.Email,repeated=True)
-    adresses = ndb.StructuredProperty(model.Address,repeated=True)
-    websites = ndb.StructuredProperty(model.Website,repeated=True)
-    sociallinks= ndb.StructuredProperty(model.Social,repeated=True)
+    
 
     
     
@@ -38,7 +29,7 @@ class Account(EndpointsModel):
     def set_perm(self):
         about_item = str(self.key.id())
 
-        perm = model.Permission(about_kind='Account',
+        perm = model.Permission(about_kind='Product',
                          about_item=about_item,
                          type = 'user',
                          role = 'owner',
@@ -53,19 +44,13 @@ class Account(EndpointsModel):
         my_document = search.Document(
         doc_id = str(self.key.id()),
         fields=[
-            search.TextField(name=u'type', value=u'Account'),
+            search.TextField(name=u'type', value=u'Product'),
             search.TextField(name='organization', value = empty_string(organization) ),
             search.TextField(name='access', value = empty_string(self.access) ),
             search.TextField(name='owner', value = empty_string(self.owner) ),
             search.TextField(name='collaborators', value = collaborators ),
             search.TextField(name='title', value = empty_string(self.name) ),
-            search.TextField(name='account_type', value = empty_string(self.account_type)),
-            search.TextField(name='industry', value = empty_string(self.industry)),
-            search.DateField(name='creationTime', value = self.creationTime),
-            search.TextField(name='industry', value = empty_string(self.industry)),
-            search.TextField(name='tagline', value = empty_string(self.tagline)),
-            search.TextField(name='introduction', value = empty_string(self.introduction)),
-            search.TextField(name='address', value = empty_string(self.address))
+            
            ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)

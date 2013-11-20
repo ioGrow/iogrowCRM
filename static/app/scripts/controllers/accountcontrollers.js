@@ -23,6 +23,7 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
               $scope.processAuth(window.authResult);
           }else{
             console.log('I am  not signed-in so render Button');
+            console.log(Conf.clientId);
             gapi.signin.render('myGsignin', {
             'callback': $scope.signIn,
             'clientid': Conf.clientId,

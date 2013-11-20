@@ -166,6 +166,7 @@ class Organization(EndpointsModel):
     instance_created = ndb.BooleanProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     org_folder = ndb.StringProperty()
+    products_folder = ndb.StringProperty()
     accounts_folder = ndb.StringProperty()
     contacts_folder = ndb.StringProperty()
     leads_folder = ndb.StringProperty()
