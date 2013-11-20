@@ -6,7 +6,7 @@ import model
 
 class Account(EndpointsModel):
 
-    _message_fields_schema = ('id','entityKey','access','collaborators_list', 'collaborators_ids','name','owner','account_type','industry','address','tagline','introduction')
+    _message_fields_schema = ('id','entityKey','access','collaborators_list','phones','emails','adresses','websites','sociallinks', 'collaborators_ids','name','owner','account_type','industry','address','tagline','introduction')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
@@ -22,6 +22,11 @@ class Account(EndpointsModel):
     address = ndb.StringProperty()
     # public or private
     access = ndb.StringProperty()
+    phones = ndb.StructuredProperty(model.Phone,repeated=True)
+    emails = ndb.StructuredProperty(model.Email,repeated=True)
+    adresses = ndb.StructuredProperty(model.Address,repeated=True)
+    websites = ndb.StructuredProperty(model.Website,repeated=True)
+    sociallinks= ndb.StructuredProperty(model.Social,repeated=True)
     
     def put(self, **kwargs):
         ndb.Model.put(self, **kwargs)
@@ -62,4 +67,5 @@ class Account(EndpointsModel):
            ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)
+
 

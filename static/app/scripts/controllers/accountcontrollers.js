@@ -112,8 +112,8 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
 
     
 }]);
-app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Conf','Account', 'Topic','Note','Task','Event','Permission','User',
-    function($scope,$filter,$route,$location,Conf,Account,Topic,Note,Task,Event,Permission,User) {
+app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Conf','Account','Contact','Case','Opportunity', 'Topic','Note','Task','Event','Permission','User',
+    function($scope,$filter,$route,$location,Conf,Account,Contact,Case,Opportunity,Topic,Note,Task,Event,Permission,User) {
       console.log('i am in account Show controller');
       $("#id_Accounts").addClass("active");
       var tab = $route.current.params.accountTab;
@@ -501,6 +501,91 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
   $scope.addCaseModal = function(){
     $('#addCaseModal').modal('show');
   };
+  //HKA 19.11.2013 Add Contact related to account
+
+    $scope.savecontact = function(contact){
+      console.log('hahahahahah');
+      console.log($scope.account.entityKey);
+         var params = {'lastname':contact.lastname,
+                      'firstname':contact.firstname,
+                      'title': contact.title,
+                      'account':$scope.account.entityKey
+                      };
+        
+        Contact.insert(params);
+        $('#addContactModal').modal('hide');
+      };
+
+  // HKA 19.11.2013 Add Opportunty related to account
+    $scope.saveOpp = function(opportunity){
+
+      Opportunity.insert(opportunity);
+      $('#addOpportunitytModal').modal('hide');
+    };
+
+  // HKA 19.11.2013 Add Case related to account
+    $scope.saveCase = function(casee){
+
+      Case.insert(casee);
+      $('#addCaseModal').modal('hide');
+    };
+//HKA 19.11.2013 Add Phone
+ $scope.addPhone = function(phone){
+  //HKA 19.11.2013  Concatenate old phones with new phone
+  var phonesArray = undefined;
+  
+  if ($scope.account.phones){
+    phonesArray = new Array();
+    phonesArray = $scope.account.phones;
+    phonesArray.push(phone);
+  }else{
+    phonesArray = phone;
+  }
+
+  params = {'id':$scope.account.id,
+            'phones':phonesArray
+            };
+  Account.patch($scope,params);
+  $('#phonemodal').modal('hide');
+  };
+
+//HKA 20.11.2013 Add Email
+$scope.addEmail = function(email){
+  var emailsArray = undefined;
+  
+  if ($scope.account.emails){
+    emailsArray = new Array();
+    emailsArray = $scope.account.emails;
+    emailsArray.push(email);
+  }else{
+    emailsArray = email;
+  }
+
+  params = {'id':$scope.account.id,
+            'emails':emailsArray
+            };
+  Account.patch($scope,params);
+  $('#emailmodal').modal('hide');
+  };
+  
+//HKA 20.11.2013 Add Addresse
+$scope.addAddress = function(address){
+  var addressArray = undefined;
+  if ($scope.account.adresses){
+    addressArray = new Array();
+    addressArray = $scope.account.adresses;
+    addressArray.push(address);
+
+  }else{ 
+    addressArray = address;
+  }
+  params = {'id':$scope.account.id,
+             'addresses':addressArray}
+  Account.patch($scope,params);
+  $('#addressmodal').modal('hide');
+};
+
+
 
   
 }]);
@@ -554,7 +639,7 @@ app.controller('SearchFormController', ['$scope','$route','$location','Conf','Us
     
 }]);
 
-app.controller('SearchShowController', ['$scope','$route','$location','Conf','Search','Account',
+app.controller('SearchShowController', ['$scope','$route','$location','Contact','Conf','Search','Account',
     function($scope,$route,$location,Conf,Search,Account) {
      console.log('i am in account list controller');
 
@@ -663,13 +748,5 @@ app.controller('SearchShowController', ['$scope','$route','$location','Conf','Se
         $('#addAccountModal').modal('show');
 
       };
-      
-    $scope.save = function(account){
-      Account.insert(account);
-    };
-     
-     
-   
-
     
 }]);

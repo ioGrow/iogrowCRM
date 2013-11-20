@@ -210,9 +210,8 @@
                                  
                                 </div>
                                   <ul class="unstyled contact-infos">
-                                    <li>(415) 663-4433  <a href="#"><img class="ctodeal" src="static/img/phone-icon.png" /></a></li>
-                                    <li>(415) 663-4433 <a href="#"><img class="ctodeal" src="static/img/phone-icon.png" /></a></li>
-                                    <li>(415) 663-4433 <a href="#"><img class="ctodeal" src="static/img/phone-icon.png"/></a></li>
+                                    <li ng-repeat="phone in account.phones"> <%=phone.number%> - <%=phone.type_number%> <a ><img class="ctodeal" src="static/img/phone-icon.png" /></a></li>
+          
                                     <li><a href="#phonemodal"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new Phone</a></li>
 
                                   </ul>
@@ -221,9 +220,8 @@
                                  
                                 </div>
                                   <ul class="unstyled contact-infos">
-                                    <li>contact@clicandcal.com  </li>
-                                    <li>sales@clicandcal.com </li>
-                                    <li>support@clicandcal.com </li>
+                                    <li ng-repeat="email in account.emails"> <%=email.email %>   </li>
+                                    
                                     <li><a href="#emailmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new email address </a></li>
 
                                   </ul>
@@ -232,7 +230,7 @@
                                  
                                 </div>
                                  <ul class="unstyled contact-infos">
-                                    <li>760 Market Street, 11th Floor San Francisco, CA 94102  </li>
+                                    <li ng-repeat="addr in account.adresses"><%=addr.street%>, <%=addr.city%> <%=addr.state%>, <%=addr.street%> <%=addr.postal_code%>  </li>
                                     
                                     <li><a href="#addressmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new address </a></li>
 
@@ -371,13 +369,13 @@
                             </div>
                         <!--HKA 18.11.2013 Add Contact modal -->
 
-                    <div id="addContactModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div id="addContactModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
                         <div class="modal-header">
                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                           <h3 id="myModalLabel">{{_("New Contact")}}</h3>
                         </div>
                         <div class="modal-body">
-                            <form id="addContact" name="addcontact" ng-submit="save(contact)" class="form-horizontal"> 
+                            <form id="addContact" name="addcontact"  ng-submit="savecontact(contact)" class="form-horizontal"> 
                             <fieldset>
                             <div class="control-group">
                               <label  class="required control-label">{{_("First Name")}} *</label>
@@ -398,9 +396,12 @@
                              <label  class="required control-label">{{_("Position")}} </label>
                        
                              <div class="controls">
-                              <input type="text"  id="id_account" ng-model="contact.account">
+                              <input type="text"  id="id_account" ng-model="contact.title">
                           
                               </div>
+
+
+
                            </div>
                     </fieldset>
                 
@@ -512,7 +513,7 @@
                      <h3 id="myModalLabel">{{_("New Opportunity")}}</h3>
                   </div>
                  <div class="modal-body">
-                     <form id="addOpportunity" name="addOpportunity" ng-submit="save(opportunity)" class="form-horizontal"> 
+                     <form id="addOpportunity" name="addOpportunity" ng-submit="saveOpp(opportunity)" class="form-horizontal"> 
                      <fieldset>
                       <div class="control-group">
                           <label  class="required control-label">{{_("Name")}} *</label>
@@ -631,7 +632,7 @@
                         <h3 id="myModalLabel">{{_("New Case")}}</h3>
                    </div>
                   <div class="modal-body">
-                         <form id="addCase" name="addCase" ng-submit="save(casee)" class="form-horizontal"> 
+                         <form id="addCase" name="addCase" ng-submit="saveCase(casee)" class="form-horizontal"> 
                          <fieldset>                
                         <div class="control-group">
                             <label  class="required control-label">{{_("Description")}} </label>
@@ -979,12 +980,12 @@
                 <h3 id="myModalLabel">{{_("Add Phone")}}</h3>
             </div>
             <div class="modal-body">
-                  <form id="addPhone" name="addphone" ng-submit="save(phone)" class="form-horizontal"> 
+                  <form id="addPhone" name="addphone" ng-submit="addPhone(phone)" class="form-horizontal"> 
                   <fieldset>
                     <div class="control-group">
                         <label  class="control-label">{{_("Type")}} </label>
                         <div class="controls">
-                          <input type="text" placeholder="home, work, mobile, other..." required id="id_name" ng-model="phone.typr">
+                          <input type="text" placeholder="home, work, mobile, other..." required id="id_name" ng-model="phone.type_number">
                         </div>
                      </div>
                      <div class="control-group">
@@ -1014,12 +1015,12 @@
                 <h3 id="myModalLabel">{{_("Add Email")}}</h3>
             </div>
             <div class="modal-body">
-                  <form id="addEmail" name="addemail" ng-submit="save(email)" class="form-horizontal"> 
+                  <form id="addEmail" name="addemail" ng-submit="addEmail(emaill)" class="form-horizontal"> 
                   <fieldset>
                     <div class="control-group">
                         <label  class="control-label">{{_("Email")}} </label>
                         <div class="controls">
-                          <input type="text" placeholder="Email" required id="id_email" ng-model="email.">
+                          <input type="text" placeholder="Email" required id="id_email" ng-model="emaill.email">
                         </div>
                      </div>
               </div>
@@ -1032,7 +1033,7 @@
                 </form>
         </div>
 
-      <!--HKA 18.11.2013  Adresse Modal  -->
+      <!--HKA 18.11.2013  Addresse Modal  -->
 
     <div id="addressmodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-header">
@@ -1040,7 +1041,7 @@
                 <h3 id="myModalLabel">{{_("Add Address")}}</h3>
             </div>
             <div class="modal-body">
-                  <form id="addEmail" name="addemail" ng-submit="save(email)" class="form-horizontal"> 
+                  <form id="addAddress" name="addemail" ng-submit="addAddress(address)" class="form-horizontal"> 
                   <fieldset>
                     <div class="control-group">
                         <label  class="control-label">{{_("Street")}} </label>

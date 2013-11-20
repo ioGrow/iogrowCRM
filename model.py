@@ -512,7 +512,6 @@ class Theme(db.Model, Jsonifiable):
     return Theme.all().filter('start >=', start).filter(
         'start <', end).order('-start').get()
 
-
 class Vote(db.Model, Jsonifiable):
   """Represents a vote case by a PhotoHunt user."""
   jsonkind = 'photohunt#vote'
@@ -534,3 +533,23 @@ class UploadUrl(Jsonifiable):
 
   def __init__(self, url):
     self.url = url
+#HKA 19.11.2013 Class for Phone on all Object
+class Phone(EndpointsModel) :
+    type_number = ndb.StringProperty()
+    number = ndb.StringProperty()
+# HKA 19.11.2013 Class for email
+class Email(EndpointsModel):
+  email = ndb.StringProperty()
+# HKA 19.11.2013 Class for Address
+class Address(EndpointsModel):
+  street = ndb.StringProperty()
+  city = ndb.StringProperty()
+  state = ndb.StringProperty()
+  postal_code = ndb.StringProperty()
+  country = ndb.StringProperty()
+# HKA 19.11.2013 Add Website class
+class Website(EndpointsModel):
+  website = ndb.StringProperty()
+# HKA 19.11.2013 Add Social links
+class Social(EndpointsModel):
+  sociallink = ndb.StringProperty()

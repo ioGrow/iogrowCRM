@@ -35,6 +35,8 @@ accountservices.factory('Account', function($http) {
           gapi.client.crmengine.accounts.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.account = resp;
+               console.log('list of phones:');
+               console.log(resp.phones);
                $scope.isContentLoaded = true;
                $scope.listTopics(resp);
                $scope.listTasks();
