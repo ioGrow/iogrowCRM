@@ -2,7 +2,7 @@ app.controller('UserListCtrl', ['$scope','$route','$location','Conf','User',
     function($scope,$route,$location,Conf,User) {
      console.log('i am in user list controller');
 
-     $("#id_Accounts").addClass("active");
+     $("#id_Users").addClass("active");
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -105,7 +105,7 @@ app.controller('UserListCtrl', ['$scope','$route','$location','Conf','User',
       
     $scope.addNewUser = function(user){
       
-      User.insert(user);
+      User.insert($scope,user);
     };
      
      

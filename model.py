@@ -37,8 +37,8 @@ STANDARD_TABS = [{'name': 'Accounts','label': 'Accounts','url':'/#/accounts/'},{
 STANDARD_PROFILES = ['Super Administrator', 'Standard User', 'Sales User', 'Marketing User', 'Read Only', 'Support User', 'Contract Manager','Read Only']
 STANDARD_APPS = [{'name': 'sales', 'label': 'Sales', 'url':'/#/accounts/'},{'name': 'marketing', 'label':'Marketing', 'url':'/#/compaigns/'},{'name':'call_center','label': 'Call Center','url':'/#/cases/'}]
 STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
-
-
+ADMIN_TABS = [{'name': 'Users','label': 'Users','url':'/#/admin/users'},{'name': 'Groups','label': 'Groups','url':'/#/admin/groups'}]
+ADMIN_APP = {'name': 'admin', 'label': 'Admin Console', 'url':'/#/admin/users'}
 class JsonifiableEncoder(json.JSONEncoder):
   """JSON encoder which provides a convenient extension point for custom JSON
   encoding of Jsonifiable subclasses.
@@ -199,7 +199,12 @@ class Organization(EndpointsModel):
             created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],organization=org_key)
             created_tab.put()
             created_tabs.append(created_tab.key)
-          
+          admin_tabs = list()
+          for tab in ADMIN_TABS:
+              created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],organization=org_key)
+              created_tab.put()
+              admin_tabs.append(created_tab.key)
+
           # Add apps:
           created_apps = list()
           sales_app = None
@@ -217,7 +222,11 @@ class Organization(EndpointsModel):
             if app['name']=='call_center':
               support_app = created_app.key
             created_apps.append(created_app.key)
+          app = ADMIN_APP
+          admin_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=admin_tabs,organization=org_key)
+          admin_app.put()
 
+          
           # Add profiles
           
           
@@ -227,6 +236,10 @@ class Organization(EndpointsModel):
               default_app = marketing_app
             elif profile=='Support User':
               default_app = support_app
+            elif profile=='Super Administrator':
+              created_apps.append(admin_app.key)
+              created_tabs.extend(admin_tabs)
+
 
 
             created_profile = Profile(name=profile,apps=created_apps,default_app=default_app,tabs=created_tabs,organization=org_key)

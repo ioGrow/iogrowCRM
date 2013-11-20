@@ -27,6 +27,8 @@ import auth_util
 from google.appengine.api import mail
 import httplib2
 from apiclient.discovery import build
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.tools import run
 from apiclient import errors
 from protorpc import messages
 from protorpc import message_types
@@ -39,7 +41,6 @@ CLIENT_ID = '330861492018.apps.googleusercontent.com'
 SCOPES = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/drive']
 OBJECTS = {'Account': Account,'Contact': Contact,'Case':Case,'Lead':Lead,'Opportunity':Opportunity}
 FOLDERS = {'Account': 'accounts_folder','Contact': 'contacts_folder','Lead':'leads_folder','Opportunity':'opportunities_folder','Case':'cases_folder','Show':'shows_folder'}
-
 
 class SearchRequest(messages.Message):
     q = messages.StringField(1)
@@ -118,7 +119,35 @@ class CrmEngineApi(remote.Service):
     return my_model
 
 
+  @Contact.method(user_required=True,
+                http_method='PUT', path='contacts/{id}', name='contacts.update')
+  def ContactUpdate(self, my_model):
+    user = endpoints.get_current_user()
+    if user is None:
+        raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in!' )
+    # Todo: Check permissions
+    #my_model.owner = user_from_email.google_user_id
+    #my_model.organization =  user_from_email.organization
 
+    my_model.put()
+    return my_model
+
+  @Contact.method(user_required=True,
+                http_method='PATCH', path='contacts/{id}', name='contacts.patch')
+  def ContactPatch(self, my_model):
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+        raise endpoints.UnauthorizedException('You must sign-in!' )
+      # Todo: Check permissions
+
+      my_model.put()
+      return my_model
          
   @Contact.method(request_fields=('id',),
                   path='contacts/{id}', http_method='GET', name='contacts.get')
@@ -179,9 +208,6 @@ class CrmEngineApi(remote.Service):
   @Account.method(user_required=True,
                 http_method='PUT', path='accounts/{id}', name='accounts.update')
   def AccountUpdate(self, my_model):
-
-    
-    
     user = endpoints.get_current_user()
     if user is None:
         raise endpoints.UnauthorizedException('You must authenticate!' )
@@ -189,8 +215,8 @@ class CrmEngineApi(remote.Service):
     if user_from_email is None:
       raise endpoints.UnauthorizedException('You must sign-in!' )
     # Todo: Check permissions
-    my_model.owner = user_from_email.google_user_id
-    my_model.organization =  user_from_email.organization
+    #my_model.owner = user_from_email.google_user_id
+    #my_model.organization =  user_from_email.organization
 
     my_model.put()
     return my_model
@@ -205,12 +231,10 @@ class CrmEngineApi(remote.Service):
       if user_from_email is None:
         raise endpoints.UnauthorizedException('You must sign-in!' )
       # Todo: Check permissions
-      
-      
-
 
       my_model.put()
       return my_model
+
   @Account.method(request_fields=('id',),path='accounts/{id}', http_method='GET', name='accounts.get')
   def AccountGet(self, my_model):
     if not my_model.from_datastore:
@@ -267,7 +291,38 @@ class CrmEngineApi(remote.Service):
     
 
     return my_model
-  
+
+  @Note.method(user_required=True,
+                http_method='PUT', path='notes/{id}', name='notes.update')
+  def NoteUpdate(self, my_model):
+    user = endpoints.get_current_user()
+    if user is None:
+        raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in!' )
+    # Todo: Check permissions
+    #my_model.owner = user_from_email.google_user_id
+    #my_model.organization =  user_from_email.organization
+
+    my_model.put()
+    return my_model
+
+  @Note.method(user_required=True,
+                http_method='PATCH', path='notes/{id}', name='notes.patch')
+  def NotePatch(self, my_model):
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+        raise endpoints.UnauthorizedException('You must sign-in!' )
+      # Todo: Check permissions
+
+      my_model.put()
+      return my_model
+         
+
   @endpoints.method(ID_RESOURCE, DiscussionResponse,
                       path='notes/{id}', http_method='GET',
                       name='notes.get')
@@ -375,7 +430,36 @@ class CrmEngineApi(remote.Service):
     my_model.organization =  user_from_email.organization
     my_model.put()
     return my_model
-  
+
+  @Opportunity.method(user_required=True,
+                http_method='PUT', path='opportunities/{id}', name='opportunities.update')
+  def OpportunityUpdate(self, my_model):
+    user = endpoints.get_current_user()
+    if user is None:
+        raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in!' )
+    # Todo: Check permissions
+    #my_model.owner = user_from_email.google_user_id
+    #my_model.organization =  user_from_email.organization
+
+    my_model.put()
+    return my_model
+
+  @Opportunity.method(user_required=True,
+                http_method='PATCH', path='opportunities/{id}', name='opportunities.patch')
+  def OpportunityPatch(self, my_model):
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+        raise endpoints.UnauthorizedException('You must sign-in!')
+      # Todo: Check permissions
+      my_model.put()
+      return my_model
+
   @Opportunity.method(request_fields=('id',),path='opportunities/{id}', http_method='GET', name='opportunities.get')
   def OpportunityGet(self, my_model):
     if not my_model.from_datastore:
@@ -433,7 +517,36 @@ class CrmEngineApi(remote.Service):
     my_model.organization =  user_from_email.organization
     my_model.put()
     return my_model
-  
+
+  @Lead.method(user_required=True,
+                http_method='PUT', path='leads/{id}', name='leads.update')
+  def LeadUpdate(self, my_model):
+    user = endpoints.get_current_user()
+    if user is None:
+        raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in!' )
+    # Todo: Check permissions
+    #my_model.owner = user_from_email.google_user_id
+    #my_model.organization =  user_from_email.organization
+
+    my_model.put()
+    return my_model
+
+  @Lead.method(user_required=True,
+                http_method='PATCH', path='leads/{id}', name='leads.patch')
+  def LeadPatch(self, my_model):
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+        raise endpoints.UnauthorizedException('You must sign-in!')
+      # Todo: Check permissions
+      my_model.put()
+      return my_model
+
   @Lead.method(request_fields=('id',),path='leads/{id}', http_method='GET', name='leads.get')
   def LeadGet(self, my_model):
     if not my_model.from_datastore:
@@ -456,7 +569,36 @@ class CrmEngineApi(remote.Service):
     my_model.organization =  user_from_email.organization
     my_model.put()
     return my_model
-  
+
+  @Case.method(user_required=True,
+                http_method='PUT', path='cases/{id}', name='cases.update')
+  def CaseUpdate(self, my_model):
+    user = endpoints.get_current_user()
+    if user is None:
+        raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in!' )
+    # Todo: Check permissions
+    #my_model.owner = user_from_email.google_user_id
+    #my_model.organization =  user_from_email.organization
+
+    my_model.put()
+    return my_model
+
+  @Case.method(user_required=True,
+                http_method='PATCH', path='cases/{id}', name='cases.patch')
+  def CasePatch(self, my_model):
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+        raise endpoints.UnauthorizedException('You must sign-in!')
+      # Todo: Check permissions
+      my_model.put()
+      return my_model
+
   @Case.method(request_fields=('id',),path='cases/{id}', http_method='GET', name='cases.get')
   def CaseGet(self, my_model):
     if not my_model.from_datastore:
@@ -479,7 +621,36 @@ class CrmEngineApi(remote.Service):
     my_model.organization =  user_from_email.organization
     my_model.put()
     return my_model
-  
+
+  @Campaign.method(user_required=True,
+                http_method='PUT', path='campaigns/{id}', name='campaigns.update')
+  def CampaignUpdate(self, my_model):
+    user = endpoints.get_current_user()
+    if user is None:
+        raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in!' )
+    # Todo: Check permissions
+    #my_model.owner = user_from_email.google_user_id
+    #my_model.organization =  user_from_email.organization
+
+    my_model.put()
+    return my_model
+
+  @Campaign.method(user_required=True,
+                http_method='PATCH', path='campaigns/{id}', name='campaigns.patch')
+  def CampaignPatch(self, my_model):
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+        raise endpoints.UnauthorizedException('You must sign-in!')
+      # Todo: Check permissions
+      my_model.put()
+      return my_model
+
   @Campaign.method(request_fields=('id',),path='campaigns/{id}', http_method='GET', name='campaigns.get')
   def CampaignGet(self, my_model):
     if not my_model.from_datastore:
@@ -493,9 +664,76 @@ class CrmEngineApi(remote.Service):
 ###################################### Users API ################################################
   @User.method(user_required=True,path='users', http_method='POST', name='users.insert')
   def UserInsert(self, my_model):
+    user = endpoints.get_current_user()
+    if user is None:
+        raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+        raise endpoints.UnauthorizedException('You must sign-in!' )
+    # OAuth flow
+    try:
+        oauth_flow = flow_from_clientsecrets('client_secrets.json',
+            scope=SCOPES)
 
+        
+        credentials = user_from_email.google_credentials
+
+        if credentials is None or credentials.invalid:
+            new_credentials = run(flow, credentials)
+        else:
+            new_credentials = credentials
+        http = new_credentials.authorize(httplib2.Http(memcache))
+    except:
+        raise endpoints.UnauthorizedException('Invalid grant' )
+
+    invited_user = model.User.query(model.User.email == my_model.email).get()
     
+    if invited_user is not None:
+        if invited_user.organization == user_from_email.organization or invited_user.organization is None:
+            invited_user.organization = user_from_email.organization
+            invited_user.status = 'invited'
+            profile = model.Profile.query(model.Profile.name=='Standard User', model.Profile.organization==user_from_email.organization).get()
+            invited_user.init_user_config(user_from_email.organization,profile.key)
+            invited_user_id = invited_user.key.id()
+            my_model.id = invited_user_id
+            invited_user.put()  
+            
+    else:
+        my_model.organization = user_from_email.organization
+        my_model.status = 'invited'
+        profile = model.Profile.query(model.Profile.name=='Standard User', model.Profile.organization==user_from_email.organization).get()
+        my_model.init_user_config(user_from_email.organization,profile.key)
+        
+        my_model.put()
+        invited_user_id = my_model.id
+        
     
+
+    organization = user_from_email.organization.get()
+    folderid = organization.org_folder
+    new_permission = {
+                     'value': my_model.email,
+                     'type': 'user',
+                     'role': 'writer'                  
+    }
+    service = build('drive', 'v2', http=http)
+    service.permissions().insert(fileId=folderid,sendNotificationEmails= False, body=new_permission).execute()
+    confirmation_url = "http://iogrow-dev.appspot.com/sign-in?id=" + str(invited_user_id) + '&'
+    sender_address = "ioGrow notifications <notifications@iogrow-dev.appspotmail.com>"
+    subject = "Confirm your registration"
+    body = """
+    Thank you for creating an account! Please confirm your email address by
+    clicking on the link below:
+
+    %s
+    """ % confirmation_url
+
+    mail.send_mail(sender_address, my_model.email , subject, body)
+    return my_model
+
+  @User.method(user_required=True,
+                http_method='PUT', path='users/{id}', name='users.update')
+  def UserUpdate(self, my_model):
     user = endpoints.get_current_user()
     if user is None:
         raise endpoints.UnauthorizedException('You must authenticate!' )
@@ -503,24 +741,26 @@ class CrmEngineApi(remote.Service):
     if user_from_email is None:
       raise endpoints.UnauthorizedException('You must sign-in!' )
     # Todo: Check permissions
-    my_model.organization = user_from_email.organization
-    my_model.status = 'invited'
-    profile = model.Profile.query(model.Profile.name=='Standard User', model.Profile.organization==user_from_email.organization).get()
-    my_model.init_user_config(user_from_email.organization,profile.key)
+    #my_model.owner = user_from_email.google_user_id
+    #my_model.organization =  user_from_email.organization
+
     my_model.put()
-    confirmation_url = "http://iogrow-dev.appspot.com/sign-in?id=" + str(my_model.id) + '&'
-    sender_address = "ioGrow notifications <notifications@iogrow-dev.appspotmail.com>"
-    subject = "Confirm your registration"
-    body = """
-Thank you for creating an account! Please confirm your email address by
-clicking on the link below:
-
-%s
-""" % confirmation_url
-
-    mail.send_mail(sender_address, my_model.email , subject, body)
     return my_model
 
+  @User.method(user_required=True,
+                http_method='PATCH', path='users/{id}', name='users.patch')
+  def UserPatch(self, my_model):
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+        raise endpoints.UnauthorizedException('You must sign-in!')
+      # Todo: Check permissions
+      my_model.put()
+      return my_model
+  
+  
   @User.method(request_fields=('id',),path='users/{id}', http_method='GET', name='users.get')
   def UserGet(self, my_model):
     if not my_model.from_datastore:
@@ -557,6 +797,35 @@ clicking on the link below:
     
     return my_model
 
+  @Group.method(user_required=True,
+                http_method='PUT', path='groups/{id}', name='groups.update')
+  def GroupUpdate(self, my_model):
+    user = endpoints.get_current_user()
+    if user is None:
+        raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in!' )
+    # Todo: Check permissions
+    #my_model.owner = user_from_email.google_user_id
+    #my_model.organization =  user_from_email.organization
+
+    my_model.put()
+    return my_model
+
+  @Group.method(user_required=True,
+                http_method='PATCH', path='groups/{id}', name='groups.patch')
+  def GroupPatch(self, my_model):
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+        raise endpoints.UnauthorizedException('You must sign-in!')
+      # Todo: Check permissions
+      my_model.put()
+      return my_model
+
   @Group.method(request_fields=('id',),path='groups/{id}', http_method='GET', name='groups.get')
   def GroupGet(self, my_model):
     if not my_model.from_datastore:
@@ -569,9 +838,6 @@ clicking on the link below:
 ###################################### Members API ################################################
   @Member.method(user_required=True,path='members', http_method='POST', name='members.insert')
   def MemberInsert(self, my_model):
-
-    
-    
     user = endpoints.get_current_user()
     if user is None:
         raise endpoints.UnauthorizedException('You must authenticate!' )
@@ -584,6 +850,36 @@ clicking on the link below:
     my_model.put()
     
     return my_model
+
+  @Member.method(user_required=True,
+                http_method='PUT', path='members/{id}', name='members.update')
+  def MemberUpdate(self, my_model):
+    user = endpoints.get_current_user()
+    if user is None:
+        raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in!' )
+    # Todo: Check permissions
+    #my_model.owner = user_from_email.google_user_id
+    #my_model.organization =  user_from_email.organization
+
+    my_model.put()
+    return my_model
+
+  @Member.method(user_required=True,
+                http_method='PATCH', path='members/{id}', name='members.patch')
+  def MemberPatch(self, my_model):
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+        raise endpoints.UnauthorizedException('You must sign-in!')
+      # Todo: Check permissions
+      my_model.put()
+      return my_model
+
 
   @Member.method(request_fields=('id',),path='members/{id}', http_method='GET', name='members.get')
   def MemberGet(self, my_model):
@@ -622,9 +918,39 @@ clicking on the link below:
     my_model.owner = user_from_email.google_user_id
     my_model.organization =  user_from_email.organization
     my_model.put()
-    
 
     return my_model
+
+  @Show.method(user_required=True,
+                http_method='PUT', path='shows/{id}', name='shows.update')
+  def ShowUpdate(self, my_model):
+    user = endpoints.get_current_user()
+    if user is None:
+        raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in!' )
+    # Todo: Check permissions
+    #my_model.owner = user_from_email.google_user_id
+    #my_model.organization =  user_from_email.organization
+
+    my_model.put()
+    return my_model
+
+  @Show.method(user_required=True,
+                http_method='PATCH', path='shows/{id}', name='shows.patch')
+  def ShowPatch(self, my_model):
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+        raise endpoints.UnauthorizedException('You must sign-in!')
+      # Todo: Check permissions
+      my_model.put()
+      return my_model
+
+
   @Show.query_method(user_required=True,query_fields=('is_published','status', 'starts_at','ends_at', 'limit', 'order', 'pageToken'),path='shows', name='shows.list')
   def ShowList(self, query):
     
@@ -750,6 +1076,47 @@ clicking on the link below:
           item.put()
       #Todo Check if type is group
       return my_model
+
+
+  @Permission.method(user_required=True,
+                http_method='PUT', path='permissions/{id}', name='permissions.update')
+  def PermissionUpdate(self, my_model):
+    user = endpoints.get_current_user()
+    if user is None:
+        raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in!' )
+    # Todo: Check permissions
+    #my_model.owner = user_from_email.google_user_id
+    #my_model.organization =  user_from_email.organization
+
+    my_model.put()
+    return my_model
+
+  @Permission.method(user_required=True,
+                http_method='PATCH', path='permissions/{id}', name='permissions.patch')
+  def PermissionPatch(self, my_model):
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+        raise endpoints.UnauthorizedException('You must sign-in!')
+      # Todo: Check permissions
+      my_model.put()
+      return my_model
+  
+  @Permission.method(request_fields=('id',),path='permissions/{id}', http_method='GET', name='permissions.get')
+  def PermissionGet(self, my_model):
+    if not my_model.from_datastore:
+      raise endpoints.NotFoundException('Permission not found')
+    return my_model
+  
+  @Permission.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='permissions',name='permissions.list')
+  def PermissionList(self,query):
+     return query
+
 # HKA 17.11.2013 Add Cases APIs
   @Comment.method(user_required=True,path='comments',http_method='POST',name='comments.insert')
   def CommentInsert(self, my_model):
@@ -764,7 +1131,38 @@ clicking on the link below:
     my_model.owner = user_from_email.key
     my_model.put()
     return my_model
-  
+
+
+  @Comment.method(user_required=True,
+                http_method='PUT', path='comments/{id}', name='comments.update')
+  def CommentUpdate(self, my_model):
+    user = endpoints.get_current_user()
+    if user is None:
+        raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in!' )
+    # Todo: Check permissions
+    #my_model.owner = user_from_email.google_user_id
+    #my_model.organization =  user_from_email.organization
+
+    my_model.put()
+    return my_model
+
+  @Comment.method(user_required=True,
+                http_method='PATCH', path='comments/{id}', name='comments.patch')
+  def CommentPatch(self, my_model):
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+        raise endpoints.UnauthorizedException('You must sign-in!')
+      # Todo: Check permissions
+      my_model.put()
+      return my_model
+
+
   @Comment.method(request_fields=('id',),path='comments/{id}', http_method='GET', name='comments.get')
   def CommentGet(self, my_model):
     if not my_model.from_datastore:
@@ -820,8 +1218,6 @@ clicking on the link below:
     my_model.resource_id = created_document['id']
     # insert in the datastore
     
-    
-
     # Todo: Check permissions
     task_owner = model.User()
     task_owner.google_display_name = user_from_email.google_display_name
@@ -829,19 +1225,38 @@ clicking on the link below:
     my_model.organization = user_from_email.organization
     my_model.put()
     
-
     return my_model
+
+  @Document.method(user_required=True,
+                http_method='PUT', path='documents/{id}', name='documents.update')
+  def DocumentUpdate(self, my_model):
+    user = endpoints.get_current_user()
+    if user is None:
+        raise endpoints.UnauthorizedException('You must authenticate!' )
+    user_from_email = model.User.query(model.User.email == user.email()).get()
+    if user_from_email is None:
+      raise endpoints.UnauthorizedException('You must sign-in!' )
+    # Todo: Check permissions
+    #my_model.owner = user_from_email.google_user_id
+    #my_model.organization =  user_from_email.organization
+
+    my_model.put()
+    return my_model
+
+  @Document.method(user_required=True,
+                http_method='PATCH', path='documents/{id}', name='documents.patch')
+  def DocumentPatch(self, my_model):
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+        raise endpoints.UnauthorizedException('You must sign-in!')
+      # Todo: Check permissions
+      my_model.put()
+      return my_model
+
+
   @Document.query_method(user_required=True,query_fields=('about_kind','about_item', 'limit', 'order', 'pageToken'),path='documents', name='documents.list')
   def DocumentList(self, query):
-    
-
     return query      
-
-
-
-      
-      
-      
-      
-
-  

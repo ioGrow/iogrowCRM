@@ -39,9 +39,11 @@ from google.appengine.api.app_identity import get_default_version_hostname
 import oauth2client
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
+from oauth2client.tools import run
 from webapp2_extras import sessions
 import jinja2
 from webapp2_extras import i18n
+from google.appengine.api import users
 
 jinja_environment = jinja2.Environment(
   loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),cache_size=0,
@@ -53,7 +55,7 @@ CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 
 SCOPES = [
-    'https://www.googleapis.com/auth/plus.login'
+    'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive'
 ]
 
 VISIBLE_ACTIONS = [
@@ -157,10 +159,7 @@ class HelloWorldHandler(BaseHandler, SessionEnabledHandler):
             self.redirect('/sign-in')
 class SignInHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
-        if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
-            user = self.get_user_from_session()
-            if user:
-                self.redirect('/')
+        
         
         # Set the user locale from user's settings
         self.set_user_locale()
@@ -470,7 +469,7 @@ class GooglePlusConnect(SessionEnabledHandler):
         FlowExchangeException Failed to exchange code (code invalid).
       """
       oauth_flow = flow_from_clientsecrets('client_secrets.json',
-        scope='')
+        scope=SCOPES)
       oauth_flow.request_visible_actions = ' '.join(VISIBLE_ACTIONS)
       oauth_flow.redirect_uri = 'postmessage'
       credentials = oauth_flow.step2_exchange(code)
@@ -513,8 +512,7 @@ class GooglePlusConnect(SessionEnabledHandler):
         user = model.User.get_by_id(user_id)
         profile = GooglePlusConnect.get_user_profile(credentials)
         email = GooglePlusConnect.get_user_email(credentials)
-
-        
+        user.status = 'active'
         user.google_user_id = profile.get('id')
         user.google_display_name = profile.get('displayName')
         user.google_public_profile_url = profile.get('url')
@@ -580,9 +578,7 @@ class GooglePlusConnect(SessionEnabledHandler):
         if invited_user_id_request:
             invited_user_id = long(invited_user_id_request)
         user = model.User.query(model.User.google_user_id == token_info.get('user_id')).get()
-        isNewUser = False
-        if user is None:
-            isNewUser = True
+        
         # Store our credentials with in the datastore with our user.
         if invited_user_id:
 
@@ -592,8 +588,10 @@ class GooglePlusConnect(SessionEnabledHandler):
 
           user = GooglePlusConnect.save_token_for_user(token_info.get('user_id'),
                                                   credentials)
-        # if user does not exist redirect him to sign-up
-        
+        # if user doesn't have organization redirect him to sign-up
+        isNewUser = False
+        if user.organization is None:
+            isNewUser = True
 
         # Store the user ID in the session for later use.
         self.session[self.CURRENT_USER_SESSION_KEY] = token_info.get('user_id')
@@ -700,15 +698,25 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                 # Set the user locale from user's settings
                 self.set_user_locale()
                 apps = user.get_user_apps()
-                active_app = user.get_user_active_app()
-                print active_app
+                admin_app = None
                 
+                active_app = user.get_user_active_app()
+                for app in apps:
+                    if app.name=='admin':
+                        admin_app = app
+                
+                logout_url = users.create_logout_url('/sign-in')
 
                 template_values = {
+
+                  'user':user,
+                  'logout_url' : logout_url,
                   'CLIENT_ID': CLIENT_ID,
                   'active_app':active_app,
-                                  'apps': apps,
+                  'apps': apps,
                 }
+                if admin_app:
+                    template_values['admin_app']=admin_app
                 template = jinja_environment.get_template('templates/base.html')
                 self.response.out.write(template.render(template_values))
             except UserNotAuthorizedException as e:

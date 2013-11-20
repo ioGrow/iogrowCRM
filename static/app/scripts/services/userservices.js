@@ -54,16 +54,19 @@ accountservices.factory('User', function($http) {
               }
       });
   };
-  User.insert = function(user){
-      gapi.client.crmengine.users.insert(user).execute(function(resp) {
+  User.insert = function($scope,params){
+      gapi.client.crmengine.users.insert(params).execute(function(resp) {
          console.log('in insert resp');
          console.log(resp);
          if(!resp.code){
+
           $('#addAccountModal').modal('hide');
-          window.location.replace('#/accounts/show/'+resp.id);
+          
+          User.list($scope,params);
           
          }else{
-          console.log(resp.code);
+          //console.log(resp.code);
+          window.location.replace('/sign-in');
          }
       });
   };
