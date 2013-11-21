@@ -1,7 +1,7 @@
-app.controller('NoteShowController',['$scope','$filter','$route','$location','Conf','Note','Topic','Comment',
-	 function($scope,$filter,$route,$location,Conf,Note,Topic,Comment) {
+app.controller('EventShowController',['$scope','$filter','$route','$location','Conf','Note','Event','Task','Topic','Comment',
+   function($scope,$filter,$route,$location,Conf,Note,Event,Task,Topic,Comment) {
 //HKA 14.11.2013 Controller to show Notes and add comments
-	 $scope.isSignedIn = false;
+   $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
@@ -41,7 +41,7 @@ app.controller('NoteShowController',['$scope','$filter','$route','$location','Co
         var params = {};
           if ($scope.pages[nextPage]){
             params = {'limit':5,
-                      'discussion':$scope.note.entityKey,
+                      //'discussion':$scope.note.entityKey,
                       'pageToken':$scope.pages[nextPage]
 
                      }
@@ -58,7 +58,7 @@ app.controller('NoteShowController',['$scope','$filter','$route','$location','Co
        var params = {};
           if ($scope.pages[prevPage]){
             params = {'limit':5,
-                      'discussion':$scope.note.entityKey,
+                      //'discussion':$scope.note.entityKey,
                       'pageToken':$scope.pages[prevPage]
                      }
           }else{
@@ -86,8 +86,8 @@ app.controller('NoteShowController',['$scope','$filter','$route','$location','Co
           window.authResult = authResult;
           // Call the backend to get the list of accounts
           
-          var noteid = {'id':$route.current.params.noteId};
-          Note.get($scope,noteid);
+          var eventid = {'id':$route.current.params.eventId};
+          Event.get($scope,eventid);
 
 
         } else if (authResult['error']) {
@@ -111,7 +111,7 @@ app.controller('NoteShowController',['$scope','$filter','$route','$location','Co
     $scope.addComment = function(comment){
 
       var params ={
-        'discussion':$scope.note.entityKey,
+        //'discussion':$scope.note.entityKey,
         'content':$scope.comment.content
       };
       Comment.insert($scope,params);
@@ -120,7 +120,7 @@ app.controller('NoteShowController',['$scope','$filter','$route','$location','Co
       
     };
     $scope.ListComments = function(){
-      var params = {'discussion':$scope.note.entityKey,
+      var params = {//'discussion':$scope.note.entityKey,
                      'limit':5,
                       'order':'-updated_at'};
       Comment.list($scope,params);
@@ -132,6 +132,6 @@ app.controller('NoteShowController',['$scope','$filter','$route','$location','Co
         console.log('Should higll');
        $('#comment_0').effect( "bounce", "slow" );
        $('#comment_0 .message').effect("highlight","slow");
-     }
+     };
 
-	}]);
+  }]);

@@ -5,7 +5,7 @@ from google.appengine.api import search
 import model
 
 class Case(EndpointsModel):
-    _message_fields_schema = ('id', 'name','description','status','type_case')
+    _message_fields_schema = ('id', 'name','description','type_case','priority')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
@@ -16,6 +16,7 @@ class Case(EndpointsModel):
     description = ndb.StringProperty()
     type_case = ndb.StringProperty()
     industry = ndb.StringProperty()
+    priority = ndb.StringProperty()
     creationTime = ndb.DateTimeProperty(auto_now_add=True)
     last_modified_at = ndb.DateTimeProperty(auto_now=True)
     created_by = ndb.KeyProperty()
@@ -54,6 +55,7 @@ class Case(EndpointsModel):
             search.TextField(name='title', value = empty_string(self.name) ),
             search.TextField(name='status', value = empty_string(self.status)),
             search.TextField(name='description', value = empty_string(self.description)),
+            search.TextField(name='priority', value = empty_string(self.priority)),
             search.DateField(name='creationTime', value = self.creationTime),
             search.DateField(name='last_modified_at', value = self.last_modified_at),
             search.TextField(name='industry', value = empty_string(self.industry)),

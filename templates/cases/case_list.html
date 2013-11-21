@@ -47,22 +47,7 @@
                   
                     
 
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Description")}} </label>
-                       
-                        <div class="controls">
-                          <input type="text"  id="id_description" ng-model="casee.description">
-                          
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Type")}} </label>
-                       
-                        <div class="controls">
-                          <input type="text"  id="id_type" ng-model="casee.type">
-                          
-                        </div>
-                    </div>
+                    
                     <div class="control-group">
                         <label  class="required control-label">{{_("Name")}} </label>
                        
@@ -72,6 +57,15 @@
                         </div>
                     </div>
                     <div class="control-group">
+                        <label  class="required control-label">{{_("Priority")}} </label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_priority" ng-model="casee.priority">
+                          
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
                         <label  class="required control-label">{{_("Status")}}</label>
                        
                         <div class="controls">
@@ -79,6 +73,14 @@
                           
                         </div>
                       
+                    </div>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Labels")}} </label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_description" ng-model="casee.type_case">
+                          
+                        </div>
                     </div>
                    
 
@@ -122,11 +124,13 @@
                   
                   <div class="details">
                     <a href="/#/cases/show/<%= casee.id %>"><h3 class="relatedcardOppTitle">
-                       <%=casee.description %>
+                       <%=casee.name %>
                     </h3></a>
                     <div class="desc">                           
-                                    <span class="contact-title"><%=casee.status %> - </span>
-                                    <a  class="desc" href="/#/cases/industry/<%=cases.type%>">#<%=casee.type_case %></a>  
+                                    <span class="contact-title" ><a class="desc" href="/#/search/type:Case <%=casee.status%>"># <%=casee.status %></a>  - </span>
+                                    <span><a  class="desc" href="/#/search/type:Case <%=casee.priority%>"># <%=casee.priority %></span> <span> - </span>
+                                    <a  class="desc" href="/#/search/type:Case <%=casee.type_case%>"># <%=casee.type_case %></a>
+                                    
                                     
                                     </div>
                   </div>

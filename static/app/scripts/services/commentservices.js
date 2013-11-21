@@ -15,7 +15,7 @@ commentservices.factory('Comment', function($http) {
       $scope.isLoading = true;
       gapi.client.crmengine.comments.list(params).execute(function(resp) {
               if(!resp.code){
-                console.log('in topics.list looking for pagingation');
+                console.log('in comments.list looking for pagingation');
                 console.log('CurrentPage   is '+$scope.currentPage);
 
                  $scope.comments = resp.items;
@@ -40,8 +40,10 @@ commentservices.factory('Comment', function($http) {
                  //Loaded succefully
                  $scope.isLoading = false;
 
+
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
+                 $scope.hilightComment();
                  //$scope.hilightComment();
               }else {
                  alert("Error, response is: " + angular.toJson(resp));
@@ -81,7 +83,8 @@ Comment.insert = function($scope,comment){
            
 
           $scope.$apply();
-          $scope.hilightComment();
+         $scope.ListComments();
+          
          
      
          }else{

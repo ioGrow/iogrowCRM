@@ -635,32 +635,32 @@
                          <form id="addCase" name="addCase" ng-submit="saveCase(casee)" class="form-horizontal"> 
                          <fieldset>                
                         <div class="control-group">
-                            <label  class="required control-label">{{_("Description")}} </label>
+                            <label  class="required control-label">{{_("Name")}} </label>
                             <div class="controls">
-                               <input type="text"  id="id_description" ng-model="casee.description">
+                               <input type="text"  id="id_name" ng-model="casee.name">
                             </div>
                         </div>
                         <div class="control-group">
-                             <label  class="required control-label">{{_("Type")}} </label>
+                             <label  class="required control-label">{{_("Priority")}} </label>
                        
                               <div class="controls">
-                               <input type="text"  id="id_type" ng-model="casee.type">
+                               <input type="text"  id="id_priority" ng-model="casee.priority">
                           
                                </div>
                         </div>
                        <div class="control-group">
-                             <label  class="required control-label">{{_("Name")}} </label>
+                             <label  class="required control-label">{{_("Status")}} </label>
                        
                              <div class="controls">
-                             <input type="text"  id="id_name" ng-model="casee.name">
+                             <input type="text"  id="id_status" ng-model="casee.status">
                           
                                </div>
                         </div>
                         <div class="control-group">
-                              <label  class="required control-label">{{_("Status")}}</label>
+                              <label  class="required control-label">{{_("Labels")}}</label>
                        
                              <div class="controls">
-                                <input type="text"  id="id_status" ng-model="casee.status">
+                                <input type="text"  id="id_status" ng-model="casee.type_case">
                              </div>
                       
                           </div>                 
@@ -797,7 +797,7 @@
                                     <li ng-repeat="task in tasks" id="task_<%=$index%>">
                                       <input value="check1" type="checkbox">
                                       <!-- Name -->
-                                    <span><a href="/#/tasks/show/<%=task.id%>" class="discussion-content"><%= task.title%> <%=task.id%> <%= task.title%> <span ng-show="task.due"> [before: <%= task.due | date:'yyyy-MM-dd '%>]</span></a></span>
+                                    <span><a href="/#/tasks/show/<%=task.id%>" class="discussion-content"><%= task.title%> <span ng-show="task.due"> [before: <%= task.due | date:'yyyy-MM-dd '%>]</span></a></span>
                                     </li>
                                     
                                     <li><a href="#myModal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new task</a></li>

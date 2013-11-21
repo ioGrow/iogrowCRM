@@ -132,10 +132,10 @@
                 <div class="portlet-body">
                 <ul class="chats">
                   <li class="in">
-                    <img class="avatar" alt="" src="static/img/avatar.jpg.png" />
+                    <img class="avatar" alt="" ng-src="<%=note.author.photo %>" />
                     <div class="message">
                       <span class="arrow"></span>
-                      <a href="#" class="name">Hakim  Karriche</a>
+                      <a  class="name"><%= note.author.display_name%></a>
                     </div>
                   </li>
 

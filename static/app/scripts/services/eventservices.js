@@ -6,11 +6,24 @@ eventservices.factory('Event', function($http) {
     angular.extend(this, data);
   }
 
-  
-  Event.get = function(id) {
-    return $http.get('/api/topics/' + id).then(function(response) {
-      return new Topic(response.data);
-    });
+  Event.get = function($scope,id) {
+          gapi.client.crmengine.events.get(id).execute(function(resp) {
+            if(!resp.code){
+               $scope.eventt = resp;
+               var url = Event.getUrl($scope.eventt.about_kind,$scope.eventt.about_item);
+               $scope.uri =url;
+               // $scope.isContentLoaded = true;
+               // $scope.listTopics(resp);
+               // $scope.listTasks();
+               // $scope.listEvents();
+               // Call the method $apply to make the update on the scope
+                $scope.$apply();
+
+            }else {
+               alert("Error, response is: " + angular.toJson(resp));
+            }
+            console.log('gapi #end_execute');
+          });
   };
   Event.list = function($scope,params){
       console.log('in events.list');
@@ -70,6 +83,33 @@ eventservices.factory('Event', function($http) {
          }
       });
   };
+Event.getUrl = function(type,id){
+  var base_url = undefined;
+    switch (type)
+        {
+        case 'Account':
+          base_url = '/#/accounts/show/';
+          break;
+        case 'Contact':
+          base_url = '/#/contacts/show/';
+          break;
+        case 'Lead':
+          base_url = '/#/leads/show/';
+          break;
+        case 'Opportunity':
+          base_url = '/#/opportunities/show/';
+          break;
+        case 'Case':
+          base_url = '/#/cases/show/';
+          break;
+        case 'Show':
+          base_url = '/#/shows/show/';
+          break;
+        }
+
+    return base_url+id;
+
+ };
 
   
 

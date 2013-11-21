@@ -613,6 +613,12 @@ class CrmEngineApi(remote.Service):
     
 
     return query
+  @Event.method(request_fields=('id',),path='events/{id}', http_method='GET', name='events.get')
+  def EventGet(self, my_model):
+    if not my_model.from_datastore:
+      raise endpoints.NotFoundException('Event not found')
+    return my_model
+  
 
 # HKA 06.11.2013 Add Opportuity APIs
   @Lead.method(user_required=True,path='leads',http_method='POST',name='leads.insert')
@@ -1279,7 +1285,7 @@ class CrmEngineApi(remote.Service):
       raise endpoints.NotFoundException('Comment not found')
     return my_model
   
-  @Comment.query_method(user_required=True,query_fields=('limit', 'order','discussion', 'pageToken'),path='comments',name='comments.list')
+  @Comment.query_method(user_required=True,query_fields=('limit', 'order','discussion','updated_at', 'pageToken'),path='comments',name='comments.list')
   def CommentList(self,query):
      return query
 

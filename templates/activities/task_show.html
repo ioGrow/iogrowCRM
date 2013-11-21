@@ -29,8 +29,8 @@
                   </a>     
             </div>
             <h2>
-            <a href="<%=uri%>" data-toggle="tooltip" data-placement="bottom" title="Back to <%=note.about.kind%>">
-            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>    <%=note.about.kind%> > <%=note.about.name%>  </h2>
+            <a href="<%=uri%>" data-toggle="tooltip" data-placement="bottom" title="Back to <%=task.about_kind%>">
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>    <%=task.about_kind%> > <%=task.status%>  </h2>
             
 
            
@@ -46,18 +46,18 @@
       <!-- BEGIN PORTLET-->
         <div class="portlet">
           <div class="portlet-title line">
-              <div class="caption"><i class="fa fa-comments"></i><%=note.title%></div>
+              <div class="caption"><i class="fa fa-comments"></i><%=task.title%></div>
           </div>
           <div class="portlet-body">
              <ul class="chats">
                   <li class="in">
-                    <img class="avatar" alt="" ng-src="<%=note.author.photo %>" />
+                    <img class="avatar" alt="" ng-src="" />
                     <div class="">
                       <span class="arrow"></span>
-                      <a href="#" class="name"><%= note.author.display_name%></a>
+                      <a href="#" class="name"><%=task.status%></a>
                       <span class="datetime"><!--at <%= note.created_at %> --></span><br>
                       <span class="body">
-                      <%= note.content%>
+                      <%=task.status%>
                       </span>
                     </div>
                   </li>
