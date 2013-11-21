@@ -581,11 +581,44 @@ $scope.addAddress = function(address){
     addressArray = address;
   }
   params = {'id':$scope.account.id,
-             'addresses':addressArray}
+             'adresses':addressArray}
   Account.patch($scope,params);
   $('#addressmodal').modal('hide');
 };
 
+//HKA 22.11.2013 Add Website
+$scope.addWebsite = function(website){
+  var websiteArray = undefined;
+  if ($scope.account.websites){
+    websiteArray = new Array();
+    websiteArray = $scope.account.websites;
+    websiteArray.push(website);
+
+  }else{ 
+    websiteArray = website;
+  }
+  params = {'id':$scope.account.id,
+             'websites':websiteArray}
+  Account.patch($scope,params);
+  $('#websitemodal').modal('hide');
+};
+
+//HKA 22.11.2013 Add Website
+$scope.addSocial = function(social){
+  var socialArray = undefined;
+  if ($scope.account.sociallinks){
+    socialArray = new Array();
+    socialArray = $scope.account.sociallinks;
+    socialArray.push(social);
+
+  }else{ 
+    socialArray = social;
+  }
+  params = {'id':$scope.account.id,
+             'sociallinks':socialArray}
+  Account.patch($scope,params);
+  $('#socialmodal').modal('hide');
+};
 
 
   
