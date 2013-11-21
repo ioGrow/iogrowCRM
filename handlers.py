@@ -44,6 +44,7 @@ from webapp2_extras import sessions
 import jinja2
 from webapp2_extras import i18n
 from google.appengine.api import users
+from google.appengine.api import memcache
 
 jinja_environment = jinja2.Environment(
   loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),cache_size=0,
@@ -174,11 +175,11 @@ class SignInHandler(BaseHandler, SessionEnabledHandler):
 class SignUpHandler(BaseHandler, SessionEnabledHandler):
     
     @staticmethod
-    def init_drive_folder(credentials,folder_name,parent=None):
+    def init_drive_folder(http,folder_name,parent=None):
       """Return the public Google+ profile data for the given user."""
-      http = httplib2.Http()
+      
       driveservice = build('drive', 'v2', http=http)
-      credentials.authorize(http)
+      
       folder = {
                 'title': folder_name,
                 'mimeType': 'application/vnd.google-apps.folder'          
@@ -216,13 +217,15 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
             mob_phone = self.request.get('mob_phone')
             # init organization folders in Google drive
             credentials = user.google_credentials
-            org_folder = self.init_drive_folder(credentials,org_name+' (ioGrow)')
-            accounts_folder = self.init_drive_folder(credentials,'Accounts', org_folder)
-            contacts_folder = self.init_drive_folder(credentials,'Contacts', org_folder)
-            leads_folder = self.init_drive_folder(credentials,'Leads', org_folder)
-            opportunities_folder = self.init_drive_folder(credentials,'Opportunities', org_folder)
-            cases_folder = self.init_drive_folder(credentials,'Cases', org_folder)
-            shows_folder = self.init_drive_folder(credentials,'Shows', org_folder)
+            http = credentials.authorize(httplib2.Http(memcache))
+            org_folder = self.init_drive_folder(http,org_name+' (ioGrow)')
+            accounts_folder = self.init_drive_folder(http,'Accounts', org_folder)
+            contacts_folder = self.init_drive_folder(http,'Contacts', org_folder)
+            leads_folder = self.init_drive_folder(http,'Leads', org_folder)
+            opportunities_folder = self.init_drive_folder(http,'Opportunities', org_folder)
+            cases_folder = self.init_drive_folder(http,'Cases', org_folder)
+            shows_folder = self.init_drive_folder(http,'Shows', org_folder)
+            products_folder = self.init_drive_folder(http,'Products', org_folder)
             organization = model.Organization(name=org_name,
                                               org_folder=org_folder,
                                               accounts_folder=accounts_folder,
@@ -230,7 +233,8 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
                                               leads_folder=leads_folder,
                                               opportunities_folder=opportunities_folder,
                                               cases_folder=cases_folder,
-                                              shows_folder=shows_folder)
+                                              shows_folder=shows_folder,
+                                              products_folder=products_folder)
             organization.put()
             profile = model.Profile.query(model.Profile.name=='Super Administrator', model.Profile.organization==organization.key).get()
             user.init_user_config(organization.key,profile.key)
@@ -378,8 +382,9 @@ class NoteShowHandler (BaseHandler,SessionEnabledHandler):
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/accounts/note_show.html')
       self.response.out.write(template.render(template_values))
+
 class TaskShowHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
+  def get(self):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             # Set the user locale from user's settings
@@ -393,7 +398,7 @@ class TaskShowHandler(BaseHandler, SessionEnabledHandler):
             template = jinja_environment.get_template('templates/activities/task_show.html')
             self.response.out.write(template.render(template_values))
 class EventShowHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
+  def get(self):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             # Set the user locale from user's settings
@@ -406,8 +411,63 @@ class EventShowHandler(BaseHandler, SessionEnabledHandler):
             template_values = {'tabs':tabs}
             template = jinja_environment.get_template('templates/activities/event_show.html')
             self.response.out.write(template.render(template_values))
-   
+class ProductListHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+      if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            tabs = user.get_user_active_tabs()
 
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            # Render the template
+            template_values = {'tabs':tabs}
+            template = jinja_environment.get_template('templates/products/list.html')
+            self.response.out.write(template.render(template_values))
+class RoadMapListHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+      if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            tabs = user.get_user_active_tabs()
+
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            # Render the template
+            template_values = {'tabs':tabs}
+            template = jinja_environment.get_template('templates/products/roadmaps/list.html')
+            self.response.out.write(template.render(template_values))
+class FeatureListHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+      if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            tabs = user.get_user_active_tabs()
+
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            # Render the template
+            template_values = {'tabs':tabs}
+            template = jinja_environment.get_template('templates/products/features/list.html')
+            self.response.out.write(template.render(template_values))
+class FeatureShowHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+      if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            tabs = user.get_user_active_tabs()
+
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            # Render the template
+            template_values = {'tabs':tabs}
+
+            template = jinja_environment.get_template('templates/products/features/show.html')
+            self.response.out.write(template.render(template_values))
 class ShowListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
@@ -1281,6 +1341,12 @@ routes = [
 
     ('/views/shows/list',ShowListHandler),
     ('/views/shows/show',ShowShowHandler),
+    
+    ('/views/products/list',ProductListHandler),
+    ('/views/roadmaps/list',RoadMapListHandler),
+    ('/views/features/list',FeatureListHandler),
+    ('/views/features/show',FeatureShowHandler),
+    
 
     ('/views/opportunities/list',OpportunityListHandler),
     ('/views/opportunities/show',OpportunityShowHandler),

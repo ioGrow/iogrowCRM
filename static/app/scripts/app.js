@@ -1,5 +1,5 @@
 
-var app = angular.module('crmEngine',['ui.bootstrap.datetimepicker','ui.bootstrap','crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.eventservices', 'crmEngine.leadservices','crmEngine.opportunityservices','crmEngine.caseservices','crmEngine.campaignservices','crmEngine.userservices','crmEngine.groupservices','crmEngine.noteservices','crmEngine.commentservices']);
+var app = angular.module('crmEngine',['ui.bootstrap.datetimepicker','ui.bootstrap','crmEngine.productservices', 'crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.eventservices', 'crmEngine.leadservices','crmEngine.opportunityservices','crmEngine.caseservices','crmEngine.campaignservices','crmEngine.userservices','crmEngine.groupservices','crmEngine.noteservices','crmEngine.commentservices']);
 
 
 
@@ -43,6 +43,16 @@ app.config(function($httpProvider) {
 });
 app.config(['$routeProvider', function($routeProvider) {
      $routeProvider.
+      when('/products/', {
+        controller: 'ProductListCtrl',        
+        templateUrl:'/views/products/list'
+      }).when('/products/show/:productId', {
+        controller: 'RoadMapListCtrl',        
+        templateUrl:'/views/roadmaps/list'
+      }).when('/roadmaps/show/:roadmapId', {
+        controller: 'RoadMapShowCtrl',        
+        templateUrl:'/views/features/list'
+      }).
       when('/accounts/', {
         controller: 'AccountListCtrl',        
         templateUrl:'/views/accounts/list'

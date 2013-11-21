@@ -1,22 +1,6 @@
 var caseservices = angular.module('crmEngine.caseservices',[]);
 // Base sercice (create, delete, get)
-caseservices.factory('Conf', function($location) {
-      function getRootUrl() {
-        var rootUrl = $location.protocol() + '://' + $location.host();
-        if ($location.port())
-          rootUrl += ':' + $location.port();
-        return rootUrl;
-      };
-      return {
-        'clientId': '330861492018.apps.googleusercontent.com',
-        'apiBase': '/api/',
-        'rootUrl': getRootUrl(),
-        'scopes': 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email',
-        'requestvisibleactions': 'http://schemas.google.com/AddActivity ' +
-                'http://schemas.google.com/ReviewActivity',
-         'cookiepolicy': 'single_host_origin'
-      };
-});
+
 accountservices.factory('Case', function($http) {
   
   var Case = function(data) {
