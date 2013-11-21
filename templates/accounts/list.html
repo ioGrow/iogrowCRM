@@ -59,7 +59,7 @@
                         <label  class="required control-label">{{_("Type")}}</label>
                        
                         <div class="controls">
-                          <input type="text"  id="id_name" ng-model="account.account_type">
+                          <input type="text"  id="id_name" ng-model="account.account_type" placeholder="eg: customer, partner, investor">
                           
                         </div>
                     </div>
@@ -67,9 +67,27 @@
                         <label  class="required control-label">{{_("Industry")}} </label>
                        
                         <div class="controls">
-                          <input type="text"  id="id_name" ng-model="account.industry">
+                          <input type="text"  id="id_name" ng-model="account.industry" placeholder="eg: tech, health, energy">
                           
                         </div>
+                    </div>
+                    <hr/>
+                    <p>Who can access?</p>
+                     <div class='container-fluid'>
+
+                     
+                          
+                            <label class="radio line">
+                            <input type="radio" value="public" ng-model="account.access" />
+                            public: Anyone within your organization
+                            </label>
+                            <label class="radio line">
+                            <input type="radio"  value="private" ng-model="account.access" />
+                            private: only you and your collaborators
+                            </label>  
+                           
+                       
+                      
                     </div>
                     </fieldset>
                 

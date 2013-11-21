@@ -13,8 +13,8 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
      $scope.pages = [];
      
      $scope.accounts = [];
-     
-     
+     $scope.account = {};
+     $scope.account.access ='public';
 
      $scope.renderSignIn = function() {
           console.log('$scope.renderSignIn #start_debug');
@@ -673,8 +673,8 @@ app.controller('SearchFormController', ['$scope','$route','$location','Conf','Us
     
 }]);
 
-app.controller('SearchShowController', ['$scope','$route','$location','Contact','Conf','Search','Account',
-    function($scope,$route,$location,Conf,Search,Account) {
+app.controller('SearchShowController', ['$scope','$route','$location','Conf','Search',
+    function($scope,$route,$location,Conf,Search) {
      console.log('i am in account list controller');
 
      $("#id_Accounts").addClass("active");
@@ -762,7 +762,7 @@ app.controller('SearchShowController', ['$scope','$route','$location','Contact',
           window.authResult = authResult;
           // Call the backend to get the list of accounts
           
-          var params = {'limit':7,'q':$route.current.params.q}
+          var params = {'limit':7,'q':$route.current.params.q};
           Search.list($scope,params);
 
         } else if (authResult['error']) {
