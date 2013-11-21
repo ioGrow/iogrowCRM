@@ -187,7 +187,7 @@ accountservices.factory('Search', function($http) {
         }
 
     return base_url+id;
-  }
+  };
 
   
   Search.list = function($scope,params){
