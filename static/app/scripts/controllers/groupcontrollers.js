@@ -2,7 +2,7 @@ app.controller('GroupListCtrl', ['$scope','$route','$location','Conf','Group',
     function($scope,$route,$location,Conf,Group) {
      console.log('i am in user list controller');
 
-     $("#id_Accounts").addClass("active");
+     $("#id_Groups").addClass("active");
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -99,13 +99,13 @@ app.controller('GroupListCtrl', ['$scope','$route','$location','Conf','Group',
      $scope.renderSignIn();
      $scope.showModal = function(){
         console.log('button clicked');
-        $('#addAccountModal').modal('show');
+        $('#addGroupModal').modal('show');
 
       };
       
-    $scope.addNewUser = function(user){
+    $scope.addGroup = function(group){
       
-      Group.insert(user);
+      Group.insert($scope,group);
     };
      
      
@@ -118,7 +118,7 @@ app.controller('GroupShowCtrl', ['$scope','$route','$location','Conf','User', 'G
     function($scope,$route,$location,Conf,User,Group,Member) {
      console.log('i am in user list controller');
 
-     $("#id_Accounts").addClass("active");
+     $("#id_Groups").addClass("active");
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;

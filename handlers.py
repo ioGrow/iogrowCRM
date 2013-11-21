@@ -619,6 +619,7 @@ class GooglePlusConnect(SessionEnabledHandler):
         email = GooglePlusConnect.get_user_email(credentials)
 
         user = model.User()
+        user.status = 'active'
         user.google_user_id = profile.get('id')
         user.google_display_name = profile.get('displayName')
         user.google_public_profile_url = profile.get('url')

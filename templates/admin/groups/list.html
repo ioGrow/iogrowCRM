@@ -36,47 +36,32 @@
               </span>
         </div>
       </div>
-      <div id="addAccountModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div id="addGroupModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("New User")}}</h3>
+                <h3 id="myModalLabel">{{_("New Group")}}</h3>
               </div>
               <div class="modal-body">
-                 <form id="addAccount" name="addaccount" ng-submit="addNewUser(user)" class="form-horizontal"> 
+                 <form id="addAccount" name="addaccount" ng-submit="addGroup(group)" class="form-horizontal"> 
                   <fieldset>
                   
-                    <p>Invite people from your team and start working together in seconds. Everyone you invite will receive a welcome email.</p>
+                   
 
                     <div class="control-group">
-                        <label  class="required control-label">{{_("Email")}} *</label>
+                        <label  class="required control-label">{{_("Group Name")}} *</label>
                        
                         <div class="controls">
-                          <input type="text" required id="id_name" ng-model="user.email">
+                          <input type="text" required id="id_name" ng-model="group.name">
                           
                         </div>
                     </div>
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Profile")}}</label>
-                       
-                        <div class="controls">
-                          <input type="text"  id="id_name" ng-model="account.account_type">
-                          
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Role")}} </label>
-                       
-                        <div class="controls">
-                          <input type="text"  id="id_name" ng-model="account.industry">
-                          
-                        </div>
-                    </div>
+                    
                     </fieldset>
                 
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button  type="submit" class="btn blue addContactNow">{{_("Add Account")}}</button>
+                <button  type="submit" class="btn blue addContactNow">{{_("Add this group")}}</button>
               </div>
                </form>
        </div>
@@ -118,14 +103,9 @@
                    
                     </a>
                   </div>
-                    <div class="desc">                           
-                      
-                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#<%=account.industry%></a>
-                    </div>
+                    
                   </div>
-                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                  View more <i class="m-icon-swapright m-icon-white"></i>
-                  </a>                 
+                                  
                 </div>
               </div>
               </div>

@@ -57,13 +57,13 @@ accountservices.factory('Group', function($http) {
               }
       });
   };
-  Group.insert = function(user){
-      gapi.client.crmengine.groups.insert(user).execute(function(resp) {
+  Group.insert = function($scope,params){
+      gapi.client.crmengine.groups.insert(params).execute(function(resp) {
          console.log('in insert resp');
          console.log(resp);
          if(!resp.code){
-          $('#addAccountModal').modal('hide');
-          window.location.replace('#/accounts/show/'+resp.id);
+          $('#addGroupModal').modal('hide');
+          window.location.replace('#/admin/groups/show/'+resp.id);
           
          }else{
           console.log(resp.code);

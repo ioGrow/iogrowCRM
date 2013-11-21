@@ -59,14 +59,21 @@ accountservices.factory('User', function($http) {
          console.log('in insert resp');
          console.log(resp);
          if(!resp.code){
-
+          $scope.user.email = '';
           $('#addAccountModal').modal('hide');
           
           User.list($scope,params);
           
          }else{
-          //console.log(resp.code);
-          window.location.replace('/sign-in');
+              console.log(resp.message);
+               $('#addAccountModal').modal('hide');
+                $('#errorModal').modal('show');
+              if(resp.message=="Invalid grant"){
+              window.location.replace('/sign-in');
+            };
+              // To do add custom error handler
+
+
          }
       });
   };
