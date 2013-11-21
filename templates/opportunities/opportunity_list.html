@@ -1,3 +1,5 @@
+
+
 <div class="page-sidebar nav-collapse collapse">
       <!-- BEGIN SIDEBAR MENU -->        
         <ul class="page-sidebar-menu">
@@ -26,7 +28,7 @@
       </div>
       <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
       <!-- BEGIN PAGE CONTAINER-->
-      <div class="container-fluid" ng-show="immediateFailed">
+      <div class="container-fluid"ng-show="immediateFailed">
          <div class="span12">  
           <h1>Sign-in Button;</h1>
               <span id="signin">
@@ -34,7 +36,7 @@
               </span>
         </div>
       </div>
-      <div id="addOpportunityModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+       <div id="addOpportunityModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3 id="myModalLabel">{{_("New Opportunity")}}</h3>
@@ -114,20 +116,19 @@
             <div class="row-fluid cards-container">
             <div class="inner-cards-container">
             
-              <div ng-repeat="opportunity in opportunities" class="span3 responsive" data-tablet="span6" data-desktop="span3">
+              <div ng-repeat="opp in opportunities" class="span3 responsive" data-tablet="span6" data-desktop="span3">
                 <div class="dashboard-stat cards">
                   
                   <div class="details">
-                    <a href="/#/opportunities/show/<%= opportunity.id %>"><h2 class="cardTitle">
-                       <%=opportunity.description %>
+                    <a href="/#/opportunities/show/<%= opp.id %>"><h2 class="cardTitle">
+                      <%= opp.name %> 
                     </h2></a>
                     <div class="desc">                           
-                                    <span class="contact-title">$<%=opportunity.amount %> - <%=opportunity.stage %></span>
-                                    <a  class="desc" href="/#/opportunities/industry/<%=opportunity.name%>">#<%=opportunity.name %></a>  
-                                    
-                                    </div>
+                      
+                    <a class="desc" href="/#/">#<%=opp.company%></a>
+                    </div>
                   </div>
-                  <a class="more" href="/#/opportunities/show/<%= opportunity.id %>">
+                  <a class="more" href="/#/opportunities/show/<%= opp.id %>">
                   {{ _("View more") }} <i class="m-icon-swapright m-icon-white"></i>
                   </a>                 
                 </div>
@@ -135,14 +136,13 @@
               </div>
             </div>
           <div class="row-fluid">
-          
             <div class="pagination pull-right" ng-hide="isLoading">
                   
                   <ul>
                     <li ng-show="pagination.prev"><button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
                     {{_("Prev")}} 
                     </button></li>
-                    <li ng-repeat="page in pagination.pages" ng-class='{active: page.isCurrent}'><a  href="#/accounts/"><%= page.id %></a></li>
+                    <li ng-repeat="page in pagination.pages" ng-class='{active: page.isCurrent}'><a  href="#/leads/"><%= page.id %></a></li>
                     <li  ng-show="pagination.next"><button ng-click="listNextPageItems()"  class="btn">
                     {{_("Next")}} 
                     </button></li>

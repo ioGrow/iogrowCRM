@@ -35,7 +35,8 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 
 STANDARD_TABS = [{'name': 'Accounts','label': 'Accounts','url':'/#/accounts/'},{'name': 'Contacts','label': 'Contacts','url':'/#/contacts/'},{'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/'},{'name': 'Leads','label': 'Leads','url':'/#/leads/'},{'name': 'Cases','label': 'Cases','url':'/#/cases/'}]
 STANDARD_PROFILES = ['Super Administrator', 'Standard User', 'Sales User', 'Marketing User', 'Read Only', 'Support User', 'Contract Manager','Read Only']
-STANDARD_APPS = [{'name': 'sales', 'label': 'Sales', 'url':'/#/accounts/'},{'name': 'marketing', 'label':'Marketing', 'url':'/#/compaigns/'},{'name':'call_center','label': 'Call Center','url':'/#/cases/'}]
+STANDARD_APPS = [{'name': 'sales', 'label': 'Sales', 'url':'/#/accounts/'},#{'name': 'marketing', 'label':'Marketing', 'url':'/#/compaigns/'},
+{'name':'call_center','label': 'Customer Support','url':'/#/cases/'}]
 STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
 ADMIN_TABS = [{'name': 'Users','label': 'Users','url':'/#/admin/users'},{'name': 'Groups','label': 'Groups','url':'/#/admin/groups'}]
 ADMIN_APP = {'name': 'admin', 'label': 'Admin Console', 'url':'/#/admin/users'}
@@ -208,7 +209,7 @@ class Organization(EndpointsModel):
           # Add apps:
           created_apps = list()
           sales_app = None
-          marketing_app = None
+          #marketing_app = None
           support_app = None
           for app in STANDARD_APPS:
 
@@ -217,8 +218,8 @@ class Organization(EndpointsModel):
             if app['name']=='sales':
 
               sales_app = created_app.key
-            if app['name']=='marketing':
-              marketing_app = created_app.key
+            #if app['name']=='marketing':
+              #marketing_app = created_app.key
             if app['name']=='call_center':
               support_app = created_app.key
             created_apps.append(created_app.key)
@@ -232,9 +233,9 @@ class Organization(EndpointsModel):
           
           for profile in STANDARD_PROFILES:
             default_app = sales_app
-            if profile=='Marketing User':
-              default_app = marketing_app
-            elif profile=='Support User':
+            #if profile=='Marketing User':
+             # default_app = marketing_app
+            if profile=='Support User':
               default_app = support_app
             elif profile=='Super Administrator':
               created_apps.append(admin_app.key)

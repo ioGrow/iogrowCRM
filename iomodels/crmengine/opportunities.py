@@ -17,7 +17,7 @@ class Opportunity(EndpointsModel):
     description = ndb.StringProperty()
     industry = ndb.StringProperty()
     amount = ndb.FloatProperty(default=0.00)
-    stage = ndb.KeyProperty()
+    stage = ndb.StringProperty()
     closed_date = ndb.DateTimeProperty()
     reason_lost = ndb.DateTimeProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)

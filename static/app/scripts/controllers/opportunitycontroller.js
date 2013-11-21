@@ -1,6 +1,8 @@
 app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Opportunity',
     function($scope,$route,$location,Conf,Opportunity) {
-      //$("#id_Opportunities").addClass("active");
+      
+      $("#id_Opportunities").addClass("active");
+
       console.log('I am in opportunity controller');
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
@@ -29,36 +31,35 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Opp
             'cookiepolicy': Conf.cookiepolicy,
             'accesstype': 'offline'
             });
+
           }
-      }
+          
+
+     }
      $scope.listNextPageItems = function(){
-        
-        
-        var nextPage = $scope.currentPage + 1;
-        var params = {};
-          if ($scope.pages[nextPage]){
+        $scope.isLoading = true;
+       var params = {};
+          if ($scope.nextPageToken){
             params = {'limit':7,
-                      'pageToken':$scope.pages[nextPage]
+                      'pageToken':$scope.nextPageToken
                      }
           }else{
             params = {'limit':7}
           }
           console.log('in listNextPageItems');
-          $scope.currentPage = $scope.currentPage + 1 ; 
+          console.log($scope);
           Opportunity.list($scope,params);
      }
      $scope.listPrevPageItems = function(){
-       
-       var prevPage = $scope.currentPage - 1;
+       $scope.isLoading = true;
        var params = {};
-          if ($scope.pages[prevPage]){
+          if ($scope.nextPageToken){
             params = {'limit':7,
-                      'pageToken':$scope.pages[prevPage]
+                      'pageToken':$scope.prevPageToken
                      }
           }else{
             params = {'limit':7}
           }
-          $scope.currentPage = $scope.currentPage - 1 ;
           Opportunity.list($scope,params);
      }
      $scope.signIn = function(authResult) {
@@ -78,10 +79,8 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Opp
           window.is_signed_in = true;
           window.authResult = authResult;
           // Call the backend to get the list of accounts
-          
-          var params = {'limit':7}
-          Opportunity.list($scope,params);
 
+          $scope.listNextPageItems();
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
             $scope.immediateFailed = true;
@@ -94,7 +93,6 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Opp
         }
      }
      $scope.renderSignIn();
-      
   
       
 
