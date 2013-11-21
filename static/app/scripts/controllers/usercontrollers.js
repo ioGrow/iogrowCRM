@@ -105,6 +105,7 @@ app.controller('UserListCtrl', ['$scope','$route','$location','Conf','User',
       
     $scope.addNewUser = function(user){
       
+      
       User.insert($scope,user);
     };
      

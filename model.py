@@ -326,7 +326,7 @@ class Userinfo(EndpointsModel):
     
 class User(EndpointsModel):
     # General informations about the user
-    _message_fields_schema = ('id','email','entityKey', 'google_user_id','google_display_name','google_public_profile_photo_url','language')
+    _message_fields_schema = ('id','email','entityKey', 'google_user_id','google_display_name','google_public_profile_photo_url','language','status')
     email = ndb.StringProperty()
     google_user_id = ndb.StringProperty()
     google_display_name = ndb.StringProperty()
@@ -341,6 +341,7 @@ class User(EndpointsModel):
     type_of_user = ndb.StringProperty()
     # If the user is a business user, we store the informations about him 
     organization = ndb.KeyProperty()
+    status = ndb.StringProperty()
     profile = ndb.KeyProperty()
     role = ndb.KeyProperty()
     is_admin = ndb.BooleanProperty()

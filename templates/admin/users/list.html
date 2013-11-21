@@ -36,6 +36,27 @@
               </span>
         </div>
       </div>
+      <div id="errorModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("Error")}}</h3>
+              </div>
+              <div class="modal-body">
+                
+                  
+                    <p>An error was occured. Please try again</p>
+
+                  
+                    
+                    </fieldset>
+                
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <button  type="submit" class="btn blue addContactNow">{{_("Ok")}}</button>
+              </div>
+              
+       </div>
       <div id="addAccountModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -51,32 +72,17 @@
                         <label  class="required control-label">{{_("Email")}} *</label>
                        
                         <div class="controls">
-                          <input type="text" required id="id_name" ng-model="user.email">
+                          <input type="email" required id="id_name" ng-model="user.email">
                           
                         </div>
                     </div>
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Profile")}}</label>
-                       
-                        <div class="controls">
-                          <input type="text"  id="id_name" ng-model="account.account_type">
-                          
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Role")}} </label>
-                       
-                        <div class="controls">
-                          <input type="text"  id="id_name" ng-model="account.industry">
-                          
-                        </div>
-                    </div>
+                    
                     </fieldset>
                 
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button  type="submit" class="btn blue addContactNow">{{_("Add Account")}}</button>
+                <button  type="submit" class="btn blue addContactNow">{{_("Add this user")}}</button>
               </div>
                </form>
        </div>
@@ -101,6 +107,7 @@
           </div>
         </div>
 
+
             
             <div class="row-fluid cards-container">
             <div class="inner-cards-container">
@@ -110,24 +117,22 @@
                   
                   <div class="details">
                     <div class="inner-small-card">
-                    <a href="/#/accounts/show/<%= account.id %>">
-                    <center><img class="google-avatar" src="https://lh4.googleusercontent.com/-CdY0riHIgKI/AAAAAAAAAAI/AAAAAAAAAes/3scnRwBMezQ/photo.jpg?sz=50"></center>
+                    
+                    <center><a href="<%=user.google_public_profile_url%>" target="_blank"><img ng-show="user.google_public_profile_photo_url" class="google-avatar" ng-src="<%= user.google_public_profile_photo_url %>"></a></center>
                     <p class="card-small-title" ng-show="user.google_display_name">
                       <%= user.google_display_name %>
                     </p>
                     <p class="card-small-title" ng-hide="user.google_display_name">
                       <%= user.email %>
                     </p>
-                    </a>
+                  
                   </div>
-                    <div class="desc">                           
+                    <div class="desc bottom">                           
                       
-                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#<%=account.industry%></a>
+                    status:<%= user.status %>
                     </div>
                   </div>
-                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                  View more <i class="m-icon-swapright m-icon-white"></i>
-                  </a>                 
+                                  
                 </div>
               </div>
               </div>

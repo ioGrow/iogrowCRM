@@ -793,8 +793,18 @@ class CrmEngineApi(remote.Service):
         else:
             new_credentials = credentials
         http = new_credentials.authorize(httplib2.Http(memcache))
+        organization = user_from_email.organization.get()
+        folderid = organization.org_folder
+        new_permission = {
+                         'value': my_model.email,
+                         'type': 'user',
+                         'role': 'writer'                  
+        }
+        service = build('drive', 'v2', http=http)
+        service.permissions().insert(fileId=folderid,sendNotificationEmails= False, body=new_permission).execute()
     except:
         raise endpoints.UnauthorizedException('Invalid grant' )
+        return 
 
     invited_user = model.User.query(model.User.email == my_model.email).get()
     
@@ -806,7 +816,11 @@ class CrmEngineApi(remote.Service):
             invited_user.init_user_config(user_from_email.organization,profile.key)
             invited_user_id = invited_user.key.id()
             my_model.id = invited_user_id
-            invited_user.put()  
+            invited_user.put()
+        elif invited_user.organization is not None:
+            raise endpoints.UnauthorizedException('User exist within another organization' )
+            return
+
             
     else:
         my_model.organization = user_from_email.organization
@@ -817,18 +831,7 @@ class CrmEngineApi(remote.Service):
         my_model.put()
         invited_user_id = my_model.id
         
-    
-
-    organization = user_from_email.organization.get()
-    folderid = organization.org_folder
-    new_permission = {
-                     'value': my_model.email,
-                     'type': 'user',
-                     'role': 'writer'                  
-    }
-    service = build('drive', 'v2', http=http)
-    service.permissions().insert(fileId=folderid,sendNotificationEmails= False, body=new_permission).execute()
-    confirmation_url = "http://iogrow-dev.appspot.com/sign-in?id=" + str(invited_user_id) + '&'
+    confirmation_url = "http://gcdc2013-iogrow.appspot.com//sign-in?id=" + str(invited_user_id) + '&'
     sender_address = "ioGrow notifications <notifications@iogrow-dev.appspotmail.com>"
     subject = "Confirm your registration"
     body = """
