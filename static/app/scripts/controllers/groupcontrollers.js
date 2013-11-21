@@ -109,9 +109,6 @@ app.controller('GroupListCtrl', ['$scope','$route','$location','Conf','Group',
     };
      
      
-   
-
-    
 }]);
 
 app.controller('GroupShowCtrl', ['$scope','$route','$location','Conf','User', 'Group', 'Member',
