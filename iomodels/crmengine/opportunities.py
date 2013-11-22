@@ -6,7 +6,7 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 import model
 
 class Opportunity(EndpointsModel):
-    _message_fields_schema = ('id', 'name','description','amount')
+    _message_fields_schema = ('id', 'name','description','amount','account')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)

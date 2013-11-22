@@ -41,6 +41,7 @@ accountservices.factory('Account', function($http) {
                $scope.listTopics(resp);
                $scope.listTasks();
                $scope.listEvents();
+               $scope.listContacts();
                // Call the method $apply to make the update on the scope
                 $scope.$apply();
 

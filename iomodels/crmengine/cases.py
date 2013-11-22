@@ -5,12 +5,13 @@ from google.appengine.api import search
 import model
 
 class Case(EndpointsModel):
-    _message_fields_schema = ('id', 'name','description','type_case','priority')
+    _message_fields_schema = ('id', 'name','description','type_case','priority','account')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
     collaborators_ids = ndb.StringProperty(repeated=True)
     organization = ndb.KeyProperty()
+    account = ndb.KeyProperty()
     name = ndb.StringProperty(required=True)
     status = ndb.StringProperty()
     description = ndb.StringProperty()
