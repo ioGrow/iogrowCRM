@@ -255,118 +255,16 @@ class CrmEngineApi(remote.Service):
     return my_model
 
   @Account.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='accounts', name='accounts.list')
-  def AccountList(self, query):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!' )
-      print user_from_email
-      return query.filter(ndb.OR(ndb.AND(Account.access=='public',Account.organization==user_from_email.organization),Account.owner==user_from_email.google_user_id, Account.collaborators_ids==user_from_email.google_user_id)).order(Account._key)
-  @Product.method(user_required=True,path='products', http_method='POST', name='products.insert')
-  def ProductInsert(self, my_model):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!' )
-      # Todo: Check permissions
-      my_model.owner = user_from_email.google_user_id
-      my_model.organization = user_from_email.organization
-      credentials = user_from_email.google_credentials
-      http = credentials.authorize(httplib2.Http(memcache))
-      service = build('drive', 'v2', http=http)
-      credentials.authorize(http)
-      organization = user_from_email.organization.get()
-
-      # prepare params to insert
-      folder_params = {
-                  'title': my_model.name,
-                  'mimeType':  'application/vnd.google-apps.folder'         
-      }#get the accounts_folder or contacts_folder or .. 
-      
-      parent_folder = organization.products_folder
-      if parent_folder:
-          folder_params['parents'] = [{'id': parent_folder}]
-      
-      # execute files.insert and get resource_id
-      created_folder = service.files().insert(body=folder_params).execute()
-      my_model.folder = created_folder['id']
-      my_model.put()
-      return my_model
   
-  @Product.method(user_required=True,
-                http_method='PUT', path='products/{id}', name='products.update')
-  def ProductUpdate(self, my_model):
-    user = endpoints.get_current_user()
-    if user is None:
-        raise endpoints.UnauthorizedException('You must authenticate!' )
-    user_from_email = model.User.query(model.User.email == user.email()).get()
-    if user_from_email is None:
-      raise endpoints.UnauthorizedException('You must sign-in!' )
-    # Todo: Check permissions
-    #my_model.owner = user_from_email.google_user_id
-    #my_model.organization =  user_from_email.organization
-
-    my_model.put()
-    return my_model
-
-  @Product.method(user_required=True,
-                http_method='PATCH', path='products/{id}', name='products.patch')
-  def ProductPatch(self, my_model):
+  def Account_List(self, query):
       user = endpoints.get_current_user()
       if user is None:
           raise endpoints.UnauthorizedException('You must authenticate!' )
       user_from_email = model.User.query(model.User.email == user.email()).get()
       if user_from_email is None:
         raise endpoints.UnauthorizedException('You must sign-in!' )
-      # Todo: Check permissions
-      if not my_model.from_datastore:
-          raise endpoints.NotFoundException('Account not found.')
-      patched_model_key = my_model.entityKey
-      patched_model = ndb.Key(urlsafe=patched_model_key).get()
-      print patched_model
-      print my_model
-      properties = Account().__class__.__dict__
-      for p in properties.keys():
-         
-            if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p)):
-                exec('patched_model.'+p+'= my_model.'+p)
-      
-
-      patched_model.put()
-      return patched_model
-
-  @Product.method(request_fields=('id',),path='products/{id}', http_method='GET', name='products.get')
-  def ProductGet(self, my_model):
-    if not my_model.from_datastore:
-      raise endpoints.NotFoundException('Account not found.')
-    return my_model
-
-  @Product.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='products', name='products.list')
-  def ProductList(self, query):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!' )
-      print user_from_email
       return query.filter(ndb.OR(ndb.AND(Account.access=='public',Account.organization==user_from_email.organization),Account.owner==user_from_email.google_user_id, Account.collaborators_ids==user_from_email.google_user_id)).order(Account._key)
-
-
-
-
-
-
-
-
-  
-
-
-  ##############################Notes API##################################""""
+##############################Notes API##################################""""
   @Note.method(user_required=True,path='notes', http_method='POST', name='notes.insert')
   def NoteInsert(self, my_model):
 
@@ -576,9 +474,18 @@ class CrmEngineApi(remote.Service):
       raise endpoints.NotFoundException('Opportunity not found')
     return my_model
   
-  @Opportunity.query_method(user_required=True,query_fields=('description','amount','limit', 'order', 'pageToken'),path='opportunities',name='opportunities.list')
-  def OpportunityList(self,query):
-     return query
+  
+  @Opportunity.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='opportunities', name='opportunities.list')
+  def AccountList(self, query):
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+        raise endpoints.UnauthorizedException('You must sign-in!' )
+      print user_from_email
+      return query.filter(ndb.OR(ndb.AND(Opportunity.access=='public',Opportunity.organization==user_from_email.organization),Opportunity.owner==user_from_email.google_user_id, Opportunity.collaborators_ids==user_from_email.google_user_id)).order(Opportunity._key)
+
 
   ################################ Events API ##################################
   @Event.method(user_required=True,path='events', http_method='POST', name='events.insert')

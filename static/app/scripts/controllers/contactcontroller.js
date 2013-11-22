@@ -14,6 +14,8 @@ app.controller('ContactListCtrl', ['$scope','$route','$location','Conf','MultiCo
      $scope.pages = [];
     	
       $scope.contacts = [];
+      $scope.contact = {};
+      $scope.contact.access = 'public';
 
       $scope.renderSignIn = function() {
           console.log('$scope.renderSignIn #start_debug');
@@ -81,7 +83,8 @@ app.controller('ContactListCtrl', ['$scope','$route','$location','Conf','MultiCo
           window.authResult = authResult;
           // Call the backend to get the list of accounts
 
-          $scope.listNextPageItems();
+          var params = {'limit':7}
+          Contact.list($scope,params);
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
             $scope.immediateFailed = true;
@@ -110,8 +113,8 @@ app.controller('ContactListCtrl', ['$scope','$route','$location','Conf','MultiCo
 
       
 }]);
-app.controller('ContactShowCtrl', ['$scope','$filter','$route','$location','Conf','Task','Event','Note','Topic','Contact','WhoHasAccess','User',
-    function($scope,$filter,$route,$location,Conf,Task,Event,Note,Topic,Contact,WhoHasAccess,User) {
+app.controller('ContactShowCtrl', ['$scope','$filter','$route','$location','Conf','Task','Event','Note','Topic','Contact','Permission','User',
+    function($scope,$filter,$route,$location,Conf,Task,Event,Note,Topic,Contact,Permission,User) {
  console.log('I am in ContactShowCtrl');
       $("#id_Contacts").addClass("active");
       var tab = $route.current.params.accountTab;
@@ -244,6 +247,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','$location','Conf
           // Call the backend to get the list of contact
           var contactid = {'id':$route.current.params.contactId};
           Contact.get($scope,contactid);
+          User.list($scope,{});
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
             $scope.immediateFailed = true;
@@ -255,7 +259,47 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','$location','Conf
         }
      }
      $scope.renderSignIn();
-     //$('#addContactModal').modal('show');
+     $scope.selectMember = function(){
+        console.log('slecting user yeaaah');
+        $scope.slected_memeber = $scope.user;
+        $scope.user = $scope.slected_memeber.google_display_name;
+
+     };
+     $scope.updateCollaborators = function(){
+          var contactid = {'id':$route.current.params.contactId};
+          Contact.get($scope,contactid);
+
+     };
+      $scope.share = function(slected_memeber){
+        console.log('permissions.insert share');
+        console.log(slected_memeber);
+        $scope.$watch($scope.contact.access, function() {
+         var body = {'access':$scope.contact.access};
+         var id = $scope.contact.id;
+         var params ={'id':id,
+                      'access':$scope.contact.access}
+         Contact.patch($scope,params);
+        });
+        $('#sharingSettingsModal').modal('hide');
+
+        if (slected_memeber.email){
+        var params = {  'type': 'user',
+                        'role': 'writer',
+                        'value': slected_memeber.email,
+                        'about_kind': 'Contact',
+                        'about_item': $scope.contact.id
+
+                        
+          };
+          Permission.insert($scope,params); 
+          
+          
+        }else{ 
+          alert('select a user to be invited');
+        };
+
+
+     };
 
   $scope.editacontact = function(){
     $('#EditContactModal').modal('show');

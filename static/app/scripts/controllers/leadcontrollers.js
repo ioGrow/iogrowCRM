@@ -12,6 +12,8 @@ app.controller('LeadListCtrl', ['$scope','$route','$location','Conf','Lead',
      $scope.pagination = {};
     	
       $scope.leads = [];
+      $scope.lead = {};
+      $scope.lead.access ='public';
 
       $scope.renderSignIn = function() {
           console.log('$scope.renderSignIn #start_debug');
@@ -107,8 +109,8 @@ app.controller('LeadListCtrl', ['$scope','$route','$location','Conf','Lead',
 
       
 }]);
-app.controller('LeadShowCtrl', ['$scope','$filter','$route','$location','Conf','Task','Event','Topic','Note','Lead',
-    function($scope,$filter,$route,$location,Conf,Task,Event,Topic,Note,Lead) {
+app.controller('LeadShowCtrl', ['$scope','$filter','$route','$location','Conf','Task','Event','Topic','Note','Lead','Permission','User',
+    function($scope,$filter,$route,$location,Conf,Task,Event,Topic,Note,Lead,Permission,User) {
  console.log('I am in LeadShowCtrl f');
 
       $("#id_Leads").addClass("active");
@@ -145,6 +147,10 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','$location','Conf','
      $scope.currentPage = 01;
      $scope.pages = [];
      $scope.leads = [];
+     $scope.users = [];
+     $scope.user = undefined;
+     $scope.slected_memeber = undefined;
+
        
      $scope.renderSignIn = function() {
           console.log('$scope.renderSignIn #start_debug');
@@ -223,6 +229,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','$location','Conf','
                       };
         Topic.list($scope,params);
 
+
      }
      $scope.hilightTopic = function(){
         console.log('Should higll');
@@ -243,6 +250,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','$location','Conf','
           // Call the backend to get the list of lead
           var leadid = {'id':$route.current.params.leadId};
           Lead.get($scope,leadid);
+          User.list($scope,{});
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
             $scope.immediateFailed = true;
@@ -254,6 +262,49 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','$location','Conf','
         }
      }
      $scope.renderSignIn();
+     $scope.selectMember = function(){
+        console.log('slecting user yeaaah');
+        $scope.slected_memeber = $scope.user;
+        $scope.user = $scope.slected_memeber.google_display_name;
+
+     };
+     $scope.share = function(slected_memeber){
+        console.log('permissions.insert share');
+        console.log(slected_memeber);
+        $scope.$watch($scope.lead.access, function() {
+         var body = {'access':$scope.lead.access};
+         var id = $scope.account.id;
+         var params ={'id':id,
+                      'access':$scope.lead.access}
+         Lead.patch($scope,params);
+        });
+        $('#sharingSettingsModal').modal('hide');
+
+        if (slected_memeber.email){
+        var params = {  'type': 'user',
+                        'role': 'writer',
+                        'value': slected_memeber.email,
+                        'about_kind': 'Lead',
+                        'about_item': $scope.lead.id
+
+                        
+          };
+          Permission.insert($scope,params); 
+          
+          
+        }else{ 
+          alert('select a user to be invited');
+        };
+
+
+     };
+
+     
+     $scope.updateCollaborators = function(){
+          
+          Lead.get($scope,$scope.lead.id);
+
+     };
      //$('#addLeadModal').modal('show');
   //HKA 09.11.2013 Add a new Task
    $scope.addTask = function(task){

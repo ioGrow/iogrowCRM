@@ -26,6 +26,13 @@ indexes:
 
 - kind: Event
   properties:
+  - name: about_kind
+  - name: comments
+  - name: status
+  - name: starts_at
+
+- kind: Event
+  properties:
   - name: comments
   - name: status
   - name: starts_at
@@ -46,6 +53,14 @@ indexes:
 
 - kind: Task
   properties:
+  - name: about_kind
+  - name: comments
+  - name: status
+  - name: updated_at
+    direction: desc
+
+- kind: Task
+  properties:
   - name: comments
   - name: status
   - name: updated_at
@@ -54,6 +69,13 @@ indexes:
 - kind: Topic
   properties:
   - name: about_item
+  - name: about_kind
+  - name: comments
+  - name: updated_at
+    direction: desc
+
+- kind: Topic
+  properties:
   - name: about_kind
   - name: comments
   - name: updated_at

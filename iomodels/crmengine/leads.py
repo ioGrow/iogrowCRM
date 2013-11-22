@@ -6,7 +6,7 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 import model
 
 class Lead(EndpointsModel):
-    _message_fields_schema = ('id', 'firstname','lastname','company')
+    _message_fields_schema = ('id','entityKey','access','collaborators_list','collaborators_ids', 'firstname','lastname','company')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
@@ -40,7 +40,7 @@ class Lead(EndpointsModel):
     def set_perm(self):
         about_item = str(self.key.id())
 
-        perm = model.Permission(about_kind='Account',
+        perm = model.Permission(about_kind='Lead',
                          about_item=about_item,
                          type = 'user',
                          role = 'owner',

@@ -24,6 +24,22 @@ leadservices.factory('Lead', function($http) {
             console.log('gapi #end_execute');
           });
   };
+  Lead.patch = function($scope,params) {
+          console.log('in accounts.patch service');
+          console.log(params);
+          gapi.client.crmengine.leads.patch(params).execute(function(resp) {
+            if(!resp.code){
+               $scope.lead = resp;
+               
+               // Call the method $apply to make the update on the scope
+                $scope.$apply();
+
+            }else {
+               alert("Error, response is: " + angular.toJson(resp));
+            }
+            console.log('accounts.patch gapi #end_execute');
+          });
+  };
   Lead.list = function($scope,params){
       gapi.client.crmengine.leads.list(params).execute(function(resp) {
 

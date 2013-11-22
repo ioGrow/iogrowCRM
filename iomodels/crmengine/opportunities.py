@@ -6,14 +6,18 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 import model
 
 class Opportunity(EndpointsModel):
+<<<<<<< HEAD
     _message_fields_schema = ('id', 'name','description','amount','account')
+=======
+    _message_fields_schema = ('id','entityKey','access','collaborators_list','collaborators_ids', 'name','description','amount')
+>>>>>>> 7a631da538bb8a905f845c8730e76cfe44ea0aa4
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
     collaborators_ids = ndb.StringProperty(repeated=True)
     organization = ndb.KeyProperty()
     account = ndb.KeyProperty()
-    name = ndb.StringProperty(required=True)
+    name = ndb.StringProperty()
     description = ndb.StringProperty()
     industry = ndb.StringProperty()
     amount = ndb.FloatProperty(default=0.00)
@@ -35,7 +39,7 @@ class Opportunity(EndpointsModel):
     def set_perm(self):
         about_item = str(self.key.id())
 
-        perm = model.Permission(about_kind='Account',
+        perm = model.Permission(about_kind='Opportunity',
                          about_item=about_item,
                          type = 'user',
                          role = 'owner',

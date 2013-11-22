@@ -32,6 +32,7 @@ opportunityservices.factory('Opportunity', function($http) {
   Opportunity.list = function($scope,params){
     gapi.client.crmengine.opportunities.list(params).execute(function(resp){
       if(!resp.code){
+        
         $scope.opportunities = resp.items;
 
         if (resp.nextPageToken){
@@ -48,6 +49,22 @@ opportunityservices.factory('Opportunity', function($http) {
       }
     });
     };
+    Opportunity.patch = function($scope,params) {
+          console.log('in opportunities.patch service');
+          console.log(params);
+          gapi.client.crmengine.opportunities.patch(params).execute(function(resp) {
+            if(!resp.code){
+               $scope.opportunity = resp;
+               
+               // Call the method $apply to make the update on the scope
+                $scope.$apply();
+
+            }else {
+               alert("Error, response is: " + angular.toJson(resp));
+            }
+            console.log('accounts.patch gapi #end_execute');
+          });
+  };
     //HKA 09.11.2013 Add an opportunity
     Opportunity.insert = function(opportunity){
       gapi.client.crmengine.opportunities.insert(opportunity).execute(function(resp){
