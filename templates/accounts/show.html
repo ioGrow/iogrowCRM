@@ -246,18 +246,21 @@
                                   <strong>Website</strong>
                                   
                                 </div>
-                                <ul class="unstyled contact-infos">
-                                    <li><a href="#">www.clicandcal.com</a> </li>
+                                <ul class="unstyled contact-infos" >
+                                    <li ng-repeat="web in account.websites"><a href="<%=web.website%>"><%=web.website%></a> </li>
                                     <li><a href="#websitemodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new Website </a></li>
-                                </ul> 
+                                    
+                                </ul>
+                                 
                                 <div class="news-block-tags">
                                   <strong>Social Links</strong>
                                   
                                 </div>
-                                <ul class="unstyled contact-infos">
-                                    <li><a href="#">facebook.com/clicandcal</a> </li>
-                                    <li><a href="#socialmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new social links </a></li>
-                                </ul>                       
+                                <ul class="unstyled contact-infos" >
+                                    <li ng-repeat="social in account.sociallinks"><a href="<%=social.sociallink%>"></a> <%=social.sociallink%> </li>
+                                  <li><a href="#socialmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new social links </a></li>    
+                                </ul>
+                                                    
                               </div>
                           </div>
                           <div class="span6">
@@ -265,16 +268,18 @@
                             <div class="news-blocks blank-card blank-card-red">
                                 <h3>Story</h3>
                                 <div class="news-block-tags">
-                                  <strong>Tagline</strong>
-                                  
+                                  <strong>Tagline </strong>
+                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="edittagline()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
                                 </div>
-                                <p>Accelerating the Cloud Powered Business </p>
+                                <p><%=account.tagline%> </p>
+                                
 
                                 <div class="news-block-tags">
                                   <strong>Introduction</strong>
+                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="editintro(account)" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
                                   
                                 </div>
-                                <p>Appirio is a global technology-enabled services provider, helping companies power their business with cloud, social and mobile technologies from leaders like salesforce.com, Google and Workday. Appirio has worked with more than 400 enterprise customers including organizations like the City of Los Angeles, Facebook, Flextronics, International Hotels Group, Japan Post Network, Ltd., L'Oreal, NetApp, NYU, Starbucks, Thomson Reuters and VMware. Appirio's technology-enabled professional services are supported by a team of 600 cloud experts and CloudSpokes, a more than 70,000 person-strong global cloud developer community. The company's expertise and innovation have been recognized by organizations such as the World Economic Forum, Bloomberg BusinessWeek, The Wall Street Journal, InformationWeek and IDC. Appirio has offices that span the U.S., Europe and Asia Pacific, and is backed by Sequoia Capital, GGV Capital and General Atlantic.</p>                         
+                                <p><%=account.introduction%></p>                         
                               </div>
                             
                           </div>
@@ -970,6 +975,63 @@
                </form>
             </div>
 
+      <!--HKA 11.10.2013 Edit Tagline -->
+             <div id="EditTagModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("Edit Account")}}</h3>
+              </div>
+
+              <div class="modal-body">
+                 <form id="editTagline" name="editlead" ng-submit="updateTagline(account)" class="form-horizontal"> 
+                
+
+                  <div class="control-group">
+                        <label  class=" control-label">{{_("Tagline")}} </label>
+                       
+                        <div class="controls">
+                          <!--textarea rows="2" cols="50"  id="id_tagline" ng-model="account.tagline"/-->
+                           <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="account.tagline"></textarea>
+
+                        </div>
+                    </div>             
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
+                <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+              </div>
+               </form>
+            </div>
+
+  <!--HKA 11.10.2013 Edit Introduction  -->
+             <div id="EditIntroModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("Edit Account")}}</h3>
+              </div>
+
+              <div class="modal-body">
+                 <form id="editTagline" name="editlead" ng-submit="updateintro(account)" class="form-horizontal"> 
+                
+
+                  <div class="control-group">
+                        <label  class=" control-label">{{_("Introduction")}} </label>
+                       
+                        <div class="controls">
+                         
+                           <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="account.introduction"></textarea>
+
+                        </div>
+                    </div>             
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
+                <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+              </div>
+               </form>
+            </div>
 
       <!--HKA 18.11.2013 Add Phone Modal -->
 
@@ -1092,12 +1154,12 @@
                 <h3 id="myModalLabel">{{_("Add Website")}}</h3>
             </div>
             <div class="modal-body">
-                  <form id="addWebsite" name="addwebsite" ng-submit="save(website)" class="form-horizontal"> 
+                  <form id="addWebsite" name="addwebsite" ng-submit="addWebsite(website)" class="form-horizontal"> 
                   <fieldset>
                     <div class="control-group">
                         <label  class="control-label">{{_("Website")}} </label>
                         <div class="controls">
-                          <input type="text" placeholder="Website" required id="id_website" ng-model="website.name">
+                          <input type="text" placeholder="Website" required id="id_website" ng-model="website.website">
                         </div>
                      </div>
               </div>
@@ -1119,12 +1181,12 @@
                 <h3 id="myModalLabel">{{_("Add Social link")}}</h3>
             </div>
             <div class="modal-body">
-                  <form id="addSocial" name="addsocial" ng-submit="save(website)" class="form-horizontal"> 
+                  <form id="addSocial" name="addsocial" ng-submit="addSocial(social)" class="form-horizontal"> 
                   <fieldset>
                     <div class="control-group">
                         <label  class="control-label">{{_("Social link")}} </label>
                         <div class="controls">
-                          <input type="text" placeholder="Social link"  required id="id_social" ng-model="social.name">
+                          <input type="text" placeholder="Social link"  required id="id_social" ng-model="social.sociallink">
                         </div>
                      </div>
               </div>

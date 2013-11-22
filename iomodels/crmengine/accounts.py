@@ -17,8 +17,8 @@ class Account(EndpointsModel):
     account_type = ndb.StringProperty()
     industry = ndb.StringProperty()
     creationTime = ndb.DateTimeProperty(auto_now_add=True)
-    tagline = ndb.StringProperty()
-    introduction =ndb.StringProperty()
+    tagline = ndb.TextProperty()
+    introduction =ndb.TextProperty()
     address = ndb.StringProperty()
     # public or private
     access = ndb.StringProperty()
