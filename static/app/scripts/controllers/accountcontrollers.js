@@ -391,6 +391,18 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
     $scope.editaccount = function() {
        $('#EditAccountModal').modal('show');
     };
+    //HKA 22.11.2013 Edit tagline of Account
+    $scope.edittagline = function() {
+       $('#EditTagModal').modal('show');
+    };
+    //HKA Edit Introduction on Account
+    $scope.editintro = function() {
+       $('#EditIntroModal').modal('show');
+    };
+  $scope.updateTagline = function(account){
+    Account.update(account);
+  }
+
     //HKA 09.11.2013 Add a new Tasks
    $scope.addTask = function(task){
       
@@ -505,8 +517,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
   //HKA 19.11.2013 Add Contact related to account
 
     $scope.savecontact = function(contact){
-      console.log('hahahahahah');
-      console.log($scope.account.entityKey);
+      
          var params = {'lastname':contact.lastname,
                       'firstname':contact.firstname,
                       'title': contact.title,
@@ -603,7 +614,7 @@ $scope.addWebsite = function(website){
   $('#websitemodal').modal('hide');
 };
 
-//HKA 22.11.2013 Add Website
+//HKA 22.11.2013 Add Social
 $scope.addSocial = function(social){
   var socialArray = undefined;
   if ($scope.account.sociallinks){
@@ -618,6 +629,24 @@ $scope.addSocial = function(social){
              'sociallinks':socialArray}
   Account.patch($scope,params);
   $('#socialmodal').modal('hide');
+};
+
+//HKA 22.11.2013 Add Tagline
+$scope.updateTagline = function(account){
+ 
+  params = {'id':$scope.account.id,
+             'tagline':account.tagline}
+  Account.patch($scope,params);
+  $('#EditTagModal').modal('hide');
+};
+
+//HKA 22.11.2013 Add Introduction
+$scope.updateintro = function(account){
+ 
+  params = {'id':$scope.account.id,
+             'introduction':account.introduction}
+  Account.patch($scope,params);
+  $('#EditIntroModal').modal('hide');
 };
 
 

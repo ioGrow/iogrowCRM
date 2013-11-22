@@ -268,13 +268,15 @@
                             <div class="news-blocks blank-card blank-card-red">
                                 <h3>Story</h3>
                                 <div class="news-block-tags">
-                                  <strong>Tagline</strong>
-                                  
+                                  <strong>Tagline </strong>
+                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="edittagline()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
                                 </div>
                                 <p><%=account.tagline%> </p>
+                                
 
                                 <div class="news-block-tags">
                                   <strong>Introduction</strong>
+                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="editintro(account)" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
                                   
                                 </div>
                                 <p><%=account.introduction%></p>                         
@@ -973,6 +975,63 @@
                </form>
             </div>
 
+      <!--HKA 11.10.2013 Edit Tagline -->
+             <div id="EditTagModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("Edit Account")}}</h3>
+              </div>
+
+              <div class="modal-body">
+                 <form id="editTagline" name="editlead" ng-submit="updateTagline(account)" class="form-horizontal"> 
+                
+
+                  <div class="control-group">
+                        <label  class=" control-label">{{_("Tagline")}} </label>
+                       
+                        <div class="controls">
+                          <!--textarea rows="2" cols="50"  id="id_tagline" ng-model="account.tagline"/-->
+                           <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="account.tagline"></textarea>
+
+                        </div>
+                    </div>             
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
+                <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+              </div>
+               </form>
+            </div>
+
+  <!--HKA 11.10.2013 Edit Introduction  -->
+             <div id="EditIntroModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("Edit Account")}}</h3>
+              </div>
+
+              <div class="modal-body">
+                 <form id="editTagline" name="editlead" ng-submit="updateintro(account)" class="form-horizontal"> 
+                
+
+                  <div class="control-group">
+                        <label  class=" control-label">{{_("Introduction")}} </label>
+                       
+                        <div class="controls">
+                         
+                           <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="account.introduction"></textarea>
+
+                        </div>
+                    </div>             
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
+                <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+              </div>
+               </form>
+            </div>
 
       <!--HKA 18.11.2013 Add Phone Modal -->
 
