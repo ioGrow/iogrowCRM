@@ -208,18 +208,18 @@
        window.is_signed_in = false;
        window.authResult = undefined;
        var apisToLoad;
-       var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+       var ROOT = '/_ah/api';
        var callback = function() {
         if (--apisToLoad == 0) {
           apiLoaded();
         }
        }
 
-      apisToLoad = 3; // must match number of calls to gapi.client.load()
+      apisToLoad = 2; // must match number of calls to gapi.client.load()
       console.log('before loading');
       gapi.client.load('crmengine', 'v1', callback, ROOT);
       gapi.load('picker', {'callback': callback});
-      gapi.client.load('drive','v2', callback);
+      
       
     }
     function apiLoaded(){

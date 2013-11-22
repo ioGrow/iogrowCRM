@@ -1,9 +1,7 @@
 app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Opportunity',
     function($scope,$route,$location,Conf,Opportunity) {
       
-      $("#id_Opportunities").addClass("active");
-
-      console.log('I am in opportunity controller');
+     $("#id_Opportunities").addClass("active");
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -15,7 +13,8 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Opp
      
      $scope.opportunities = [];
      $scope.opportunity = {};
-     $scope.opportunity.access = 'public';
+     $scope.opportunity.access ='public';
+
      $scope.renderSignIn = function() {
           console.log('$scope.renderSignIn #start_debug');
           if (window.is_signed_in){
@@ -23,6 +22,7 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Opp
               $scope.processAuth(window.authResult);
           }else{
             console.log('I am  not signed-in so render Button');
+            console.log(Conf.clientId);
             gapi.signin.render('myGsignin', {
             'callback': $scope.signIn,
             'clientid': Conf.clientId,
@@ -32,37 +32,37 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Opp
             'cookiepolicy': Conf.cookiepolicy,
             'accesstype': 'offline'
             });
-
           }
-          
-
-     }
+      }
      $scope.listNextPageItems = function(){
-        $scope.isLoading = true;
-       var params = {};
-          if ($scope.nextPageToken){
+        
+        
+        var nextPage = $scope.currentPage + 1;
+        var params = {};
+          if ($scope.pages[nextPage]){
             params = {'limit':7,
-                      'pageToken':$scope.nextPageToken
+                      'pageToken':$scope.pages[nextPage]
                      }
           }else{
             params = {'limit':7}
           }
           console.log('in listNextPageItems');
-          console.log($scope);
+          $scope.currentPage = $scope.currentPage + 1 ; 
           Opportunity.list($scope,params);
      }
      $scope.listPrevPageItems = function(){
-       $scope.isLoading = true;
+       
+       var prevPage = $scope.currentPage - 1;
        var params = {};
-          if ($scope.nextPageToken){
+          if ($scope.pages[prevPage]){
             params = {'limit':7,
-                      'pageToken':$scope.prevPageToken
+                      'pageToken':$scope.pages[prevPage]
                      }
           }else{
             params = {'limit':7}
           }
+          $scope.currentPage = $scope.currentPage - 1 ;
           Opportunity.list($scope,params);
-
      }
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
@@ -75,14 +75,15 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Opp
         $scope.immediateFailed = true;
         if (authResult['access_token']) {
           // User is signed-in
-          console.log('User is signed-in');
+          
           $scope.immediateFailed = false;
           $scope.isSignedIn = true;
           window.is_signed_in = true;
-          window.authResult = authResult;
-          // Call the backend to get the list of accounts
+         
 
-          var params = {'limit':7}
+          // Call the backend to get the list of accounts
+          
+          var params = {'limit':7};
           Opportunity.list($scope,params);
 
         } else if (authResult['error']) {
@@ -97,20 +98,16 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Opp
         }
      }
      $scope.renderSignIn();
-  
-      
-
-      // new opportunity
-      $scope.showModal = function(){
+     $scope.showModal = function(){
+        console.log('button clicked');
         $('#addOpportunityModal').modal('show');
 
       };
       
+    $scope.save = function(opportunity){
+      Opportunity.insert(opportunity);
+    };
      
-     $scope.save = function(opportunity){
-     Opportunity.insert(opportunity);
-
-     }
 
 
       

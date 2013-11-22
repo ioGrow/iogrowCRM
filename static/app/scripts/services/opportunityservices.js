@@ -30,25 +30,34 @@ opportunityservices.factory('Opportunity', function($http) {
 
   //HKA 05.11.2013 Add list function
   Opportunity.list = function($scope,params){
-    gapi.client.crmengine.opportunities.list(params).execute(function(resp){
-      if(!resp.code){
-        
-        $scope.opportunities = resp.items;
-
-        if (resp.nextPageToken){
-          $scope.prevPageToken = $scope.nextPageToken;
-          $scope.nextPageToken = resp.nextPageToken;
-          $scope.pagination.next = true;
-          $scope.pagination.prev = true;
-        }else{
-          $scope.isLoading = false;
-          $scope.$apply();
-        }
-      }else {
-        alert("Error, response is: " + angular.toJson(resp));
-      }
-    });
-    };
+      $scope.isLoading = true;
+      gapi.client.crmengine.opportunities.list(params).execute(function(resp) {
+              if(!resp.code){
+                
+                 $scope.opportunities = resp.items;
+                 if ($scope.currentPage>1){
+                      $scope.pagination.prev = true;
+                   }else{
+                       $scope.pagination.prev = false;
+                   }
+                 if (resp.nextPageToken){
+                   var nextPage = $scope.currentPage + 1;
+                   // Store the nextPageToken
+                   $scope.pages[nextPage] = resp.nextPageToken;
+                   $scope.pagination.next = true;
+                   
+                 }else{
+                  $scope.pagination.next = false;
+                 }
+                 // Loaded succefully
+                 $scope.isLoading = false;
+                 // Call the method $apply to make the update on the scope
+                 $scope.$apply();
+              }else {
+                 alert("Error, response is: " + angular.toJson(resp));
+              }
+      });
+  };
     Opportunity.patch = function($scope,params) {
           console.log('in opportunities.patch service');
           console.log(params);
@@ -67,22 +76,19 @@ opportunityservices.factory('Opportunity', function($http) {
   };
     //HKA 09.11.2013 Add an opportunity
     Opportunity.insert = function(opportunity){
-      gapi.client.crmengine.opportunities.insert(opportunity).execute(function(resp){
-        if(!resp.code){
+      gapi.client.crmengine.opportunities.insert(opportunity).execute(function(resp) {
+         console.log('in insert resp');
+         console.log(resp);
+         if(!resp.code){
           $('#addOpportunityModal').modal('hide');
           window.location.replace('#/opportunities/show/'+resp.id);
           
          }else{
           console.log(resp.code);
          }
-
-
-      })}
+      });
+  };
   
-
-
-
-
 
 return Opportunity;
 });
