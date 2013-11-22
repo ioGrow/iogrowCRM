@@ -576,9 +576,18 @@ class CrmEngineApi(remote.Service):
       raise endpoints.NotFoundException('Opportunity not found')
     return my_model
   
-  @Opportunity.query_method(user_required=True,query_fields=('description','amount','limit', 'order', 'pageToken'),path='opportunities',name='opportunities.list')
-  def OpportunityList(self,query):
-     return query
+  
+  @Opportunity.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='opportunities', name='opportunities.list')
+  def AccountList(self, query):
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+        raise endpoints.UnauthorizedException('You must sign-in!' )
+      print user_from_email
+      return query.filter(ndb.OR(ndb.AND(Opportunity.access=='public',Opportunity.organization==user_from_email.organization),Opportunity.owner==user_from_email.google_user_id, Opportunity.collaborators_ids==user_from_email.google_user_id)).order(Opportunity._key)
+
 
   ################################ Events API ##################################
   @Event.method(user_required=True,path='events', http_method='POST', name='events.insert')

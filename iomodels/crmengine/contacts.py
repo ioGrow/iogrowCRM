@@ -5,7 +5,7 @@ from google.appengine.api import search
 import model
 
 class Contact(EndpointsModel):
-    _message_fields_schema = ('id', 'firstname','lastname','title','company')
+    _message_fields_schema = ('id','entityKey','access','collaborators_list','collaborators_ids', 'firstname','lastname','title','company')
 
     # Sharing fields
     owner = ndb.StringProperty()
@@ -35,7 +35,7 @@ class Contact(EndpointsModel):
     def set_perm(self):
         about_item = str(self.key.id())
 
-        perm = model.Permission(about_kind='Account',
+        perm = model.Permission(about_kind='Contact',
                          about_item=about_item,
                          type = 'user',
                          role = 'owner',

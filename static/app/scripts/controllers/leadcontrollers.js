@@ -12,6 +12,8 @@ app.controller('LeadListCtrl', ['$scope','$route','$location','Conf','Lead',
      $scope.pagination = {};
     	
       $scope.leads = [];
+      $scope.lead = {};
+      $scope.lead.access ='public';
 
       $scope.renderSignIn = function() {
           console.log('$scope.renderSignIn #start_debug');

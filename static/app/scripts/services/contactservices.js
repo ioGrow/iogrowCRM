@@ -25,6 +25,22 @@ accountservices.factory('Contact', function($http) {
             console.log('gapi #end_execute');
           });
   };
+  Contact.patch = function($scope,params) {
+          console.log('in accounts.patch service');
+          console.log(params);
+          gapi.client.crmengine.contacts.patch(params).execute(function(resp) {
+            if(!resp.code){
+               $scope.contact = resp;
+               
+               // Call the method $apply to make the update on the scope
+                $scope.$apply();
+
+            }else {
+               alert("Error, response is: " + angular.toJson(resp));
+            }
+            console.log('accounts.patch gapi #end_execute');
+          });
+  };
   Contact.list = function($scope,params){
       gapi.client.crmengine.contacts.list(params).execute(function(resp) {
 

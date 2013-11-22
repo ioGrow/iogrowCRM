@@ -14,7 +14,8 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Opp
      $scope.pages = [];
      
      $scope.opportunities = [];
-     
+     $scope.opportunity = {};
+     $scope.opportunity.access = 'public';
      $scope.renderSignIn = function() {
           console.log('$scope.renderSignIn #start_debug');
           if (window.is_signed_in){
@@ -61,6 +62,7 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Opp
             params = {'limit':7}
           }
           Opportunity.list($scope,params);
+
      }
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
@@ -80,7 +82,9 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Opp
           window.authResult = authResult;
           // Call the backend to get the list of accounts
 
-          $scope.listNextPageItems();
+          var params = {'limit':7}
+          Opportunity.list($scope,params);
+
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
             $scope.immediateFailed = true;
@@ -112,8 +116,8 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Opp
       
 }]);
 
-app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','Conf','Task','Event','Topic','Note','Opportunity',
-    function($scope,$filter,$route,$location,Conf,Task,Event,Topic,Note,Opportunity) {
+app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','Conf','Task','Event','Topic','Note','Opportunity','Permission','User',
+    function($scope,$filter,$route,$location,Conf,Task,Event,Topic,Note,Opportunity,Permission,User) {
  
       $("#id_Opportunities").addClass("active");
       
@@ -124,6 +128,9 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
      $scope.currentPage = 01;
      $scope.pages = [];
      $scope.opportunities = [];
+     $scope.users = [];
+     $scope.user = undefined;
+     $scope.slected_memeber = undefined;
      //HKA 09.11.2013 Add a new Task
      $scope.addTask = function(task){
       
@@ -271,6 +278,8 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
           // Call the backend to get the list of contact
           var opportunityid = {'id':$route.current.params.opportunityId};
           Opportunity.get($scope,opportunityid);
+          User.list($scope,{});
+
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
             $scope.immediateFailed = true;
@@ -282,6 +291,48 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
         }
      }
      $scope.renderSignIn();
+     $scope.selectMember = function(){
+        console.log('slecting user yeaaah');
+        $scope.slected_memeber = $scope.user;
+        $scope.user = $scope.slected_memeber.google_display_name;
+
+     };
+     $scope.share = function(slected_memeber){
+        console.log('permissions.insert share');
+        console.log(slected_memeber);
+        $scope.$watch($scope.opportunity.access, function() {
+         var body = {'access':$scope.opportunity.access};
+         var id = $scope.opportunity.id;
+         var params ={'id':id,
+                      'access':$scope.opportunity.access}
+         Opportunity.patch($scope,params);
+        });
+        $('#sharingSettingsModal').modal('hide');
+
+        if (slected_memeber.email){
+        var params = {  'type': 'user',
+                        'role': 'writer',
+                        'value': slected_memeber.email,
+                        'about_kind': 'Opportunity',
+                        'about_item': $scope.opportunity.id
+
+                        
+          };
+          Permission.insert($scope,params); 
+          
+          
+        }else{ 
+          alert('select a user to be invited');
+        };
+
+
+     };
+     
+     $scope.updateCollaborators = function(){
+          var opportunityid = {'id':$scope.opportunity.id};
+          Opportunity.get($scope,opportunityid);
+
+     };
 
 //HKA 11.11.2013 Add new Event
  $scope.addEvent = function(ioevent){
