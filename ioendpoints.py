@@ -475,8 +475,8 @@ class CrmEngineApi(remote.Service):
     return my_model
   
   
-  @Opportunity.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='opportunities', name='opportunities.list')
-  def AccountList(self, query):
+  @Opportunity.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken','account'),path='opportunities', name='opportunities.list')
+  def OpportunityList(self, query):
       user = endpoints.get_current_user()
       if user is None:
           raise endpoints.UnauthorizedException('You must authenticate!' )
@@ -515,7 +515,7 @@ class CrmEngineApi(remote.Service):
     
 
     return my_model
-  @Event.query_method(user_required=True,query_fields=('about_kind','about_item','status', 'starts_at','ends_at', 'limit', 'order', 'pageToken'),path='events', name='events.list')
+  @Event.query_method(user_required=True,query_fields=('about_kind','about_item','id','status', 'starts_at','ends_at', 'limit', 'order', 'pageToken'),path='events', name='events.list')
   def EventList(self, query):
     
 
@@ -628,7 +628,7 @@ class CrmEngineApi(remote.Service):
       raise endpoints.NotFoundException('Case not found')
     return my_model
   
-  @Case.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='cases',name='cases.list')
+  @Case.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken','account','description','type_case','priority','status'),path='cases',name='cases.list')
   def CaseList(self,query):
      return query
 #HKA 07.11.2013   Add Campaign APIs

@@ -532,59 +532,22 @@
                                 </button>
                           </div>
                             <div class="inner-cards-container">
-                            
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
+                                                        
+                             <div  class="span4 responsive" ng-repeat="casee in cases" data-tablet="span6" data-desktop="span4">
                                 <div class="dashboard-stat cards-med">
                                   
                                   <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Database Isue on Website
+                                    <a href="/#/cases/show/<%= casee.id %>"><h3 class="relatedcardOppTitle">
+                                     <%=casee.name%>
                                     </h3></a>
                                     <div class="desc">                           
-                                    <span class="contact-title">status: open</span> <span class="updated-on">Updated on Oct 05 at 2:33 pm</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#database</a>  
+                                    <span class="contact-title">status: <%=casee.status%></span> 
+                                    <span class="updated-on">Priority:<%=casee.priority%> </span>
+                                    <a  class="desc" href="">#<%=casee.description%></a>  
                                     
                                     </div>
                                   </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                             
-                              
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Database Isue on Website
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">status: open</span> <span class="updated-on">Updated on Oct 05 at 2:33 pm</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#database</a>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Database Isue on Website
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">status: open</span> <span class="updated-on">Updated on Oct 05 at 2:33 pm</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#database</a>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
+                                  <a class="more" href="/#/cases/show/<%=casee.name%>">
                                   View more <i class="m-icon-swapright m-icon-white"></i>
                                   </a>                 
                                 </div>
@@ -593,54 +556,64 @@
                               </div>
                             </div>
                       <!--HKA 19.11.2013 Case Modal -->
+                <div id="addCaseModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("New Case")}}</h3>
+              </div>
+              <div class="modal-body">
+                 <form id="addCase" name="addCase" ng-submit="saveCase(casee)" class="form-horizontal"> 
+                  <fieldset>
+                  
+                    
 
-               <div id="addCaseModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                   <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h3 id="myModalLabel">{{_("New Case")}}</h3>
-                   </div>
-                  <div class="modal-body">
-                         <form id="addCase" name="addCase" ng-submit="saveCase(casee)" class="form-horizontal"> 
-                         <fieldset>                
-                        <div class="control-group">
-                            <label  class="required control-label">{{_("Name")}} </label>
-                            <div class="controls">
-                               <input type="text"  id="id_name" ng-model="casee.name">
-                            </div>
-                        </div>
-                        <div class="control-group">
-                             <label  class="required control-label">{{_("Priority")}} </label>
+                    
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Name")}} </label>
                        
-                              <div class="controls">
-                               <input type="text"  id="id_priority" ng-model="casee.priority">
+                        <div class="controls">
+                          <input type="text"  id="id_name" ng-model="casee.name">
                           
-                               </div>
                         </div>
-                       <div class="control-group">
-                             <label  class="required control-label">{{_("Status")}} </label>
-                       
-                             <div class="controls">
-                             <input type="text"  id="id_status" ng-model="casee.status">
-                          
-                               </div>
-                        </div>
-                        <div class="control-group">
-                              <label  class="required control-label">{{_("Labels")}}</label>
-                       
-                             <div class="controls">
-                                <input type="text"  id="id_status" ng-model="casee.type_case">
-                             </div>
-                      
-                          </div>                 
-                        </fieldset>
-                
-                   </div>
-                   <div class="modal-footer">
-                          <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                          <button  type="submit" class="btn blue addContactNow">{{_("Add Case")}}</button>
                     </div>
-                      </form>
-               </div>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Priority")}} </label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_priority" ng-model="casee.priority">
+                          
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Status")}}</label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_status" ng-model="casee.status">
+                          
+                        </div>
+                      
+                    </div>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Labels")}} </label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_description" ng-model="casee.type_case">
+                          
+                        </div>
+                    </div>
+                   
+
+                    </fieldset>
+                
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <button  type="submit" class="btn blue addContactNow">{{_("Add Case")}}</button>
+              </div>
+               </form>
+       </div>
+               
                       <!--HKA 19.11.2013  End Case Modal -->
                       </div>
                       <div class="tab-pane active" id="tab_1_6" ng-show="selectedTab == 6">

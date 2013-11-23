@@ -508,14 +508,41 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
 
   // HKA 18.11.2013 Show modal Related list (Opportunity)
   $scope.addOppModal = function(){
-    $('#addOpportunitytModal').modal('show');
+    $('#addOpportunityModal').modal('show');
   };
 
   //HKA 18.11.2013 Show modal Related list (Case)
   $scope.addCaseModal = function(){
     $('#addCaseModal').modal('show');
   };
-  //HKA 19.11.2013 Add Contact related to account
+  
+  //HKA 22.11.2013 List of Contacts related to account
+   $scope.listContacts = function(){
+    var params = {'account':$scope.account.entityKey,
+                   'limit':7
+                      };
+         Contact.list($scope,params);
+   };
+
+  //HKA 22.11.2013 List of Opportunities related to account
+   $scope.listOpportunities = function(){
+    var params = {'account':$scope.account.entityKey,
+                   'limit':7
+                      };
+         Opportunity.list($scope,params);
+   };
+
+  //HKA 22.11.2013 List of Cases related to account
+   $scope.listCases = function(){
+
+    var params = {'account':$scope.account.entityKey,
+                   'limit':7
+                      };
+         Case.list($scope,params);
+         console
+   };
+
+//HKA 19.11.2013 Add Contact related to account
 
     $scope.savecontact = function(contact){
       
@@ -528,29 +555,30 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
         Contact.insert(params);
         $('#addContactModal').modal('hide');
       };
-  //HKA 22.11.2013 List of Contacts related to account
-   $scope.listContacts = function(){
-
-    var params = {'account':$scope.account.entityKey,
-                   'limit':5
-                      };
-        
-        Contact.list($scope,params);
-
-   };
-
-
   // HKA 19.11.2013 Add Opportunty related to account
     $scope.saveOpp = function(opportunity){
 
+       var params = {'name':opportunity.name,
+                      'description':opportunity.description,
+                      'amount': opportunity.amount,
+                      'stage':opportunity.stage,
+                      'account':$scope.account.entityKey
+                      };
+
       Opportunity.insert(opportunity);
-      $('#addOpportunitytModal').modal('hide');
+      $('#addOpportunityModal').modal('hide');
     };
 
   // HKA 19.11.2013 Add Case related to account
     $scope.saveCase = function(casee){
-
-      Case.insert(casee);
+        
+        var params = {'name':casee.name,
+                      'priority':casee.priority,
+                      'status': casee.status,
+                      'description':casee.description,
+                      'account':$scope.account.entityKey
+                      };
+      Case.insert(params);
       $('#addCaseModal').modal('hide');
     };
 //HKA 19.11.2013 Add Phone
