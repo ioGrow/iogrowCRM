@@ -499,6 +499,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
         Event.list($scope,params);
 
      };
+
   //HKA 18.11.2013 Show modal Related list (Contact)
 
   $scope.addContactModal = function(){
@@ -527,6 +528,17 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
         Contact.insert(params);
         $('#addContactModal').modal('hide');
       };
+  //HKA 22.11.2013 List of Contacts related to account
+   $scope.listContacts = function(){
+
+    var params = {'account':$scope.account.entityKey,
+                   'limit':5
+                      };
+        
+        Contact.list($scope,params);
+
+   };
+
 
   // HKA 19.11.2013 Add Opportunty related to account
     $scope.saveOpp = function(opportunity){
@@ -647,6 +659,16 @@ $scope.updateintro = function(account){
              'introduction':account.introduction}
   Account.patch($scope,params);
   $('#EditIntroModal').modal('hide');
+};
+//HKA 22.11.2013 Add Account
+$scope.updatAccountHeader = function(account){
+ 
+  params = {'id':$scope.account.id,
+             'name':account.name,
+           'account_type':account.account_type,
+           'industry':account.industry}
+  Account.patch($scope,params);
+  $('#EditAccountModal').modal('hide');
 };
 
 
