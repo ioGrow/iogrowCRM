@@ -557,7 +557,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
       };
   // HKA 19.11.2013 Add Opportunty related to account
     $scope.saveOpp = function(opportunity){
-
+         
        var params = {'name':opportunity.name,
                       'description':opportunity.description,
                       'amount': opportunity.amount,
@@ -571,11 +571,11 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
 
   // HKA 19.11.2013 Add Case related to account
     $scope.saveCase = function(casee){
-        
+          
         var params = {'name':casee.name,
                       'priority':casee.priority,
-                      'status': casee.status,
-                      'description':casee.description,
+                      'status': casee.statuss,
+                      'type_case':casee.type_case,
                       'account':$scope.account.entityKey
                       };
       Case.insert(params);

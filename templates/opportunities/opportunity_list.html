@@ -142,8 +142,9 @@
                       <%= opp.name %> 
                     </h2></a>
                     <div class="desc">                           
-                      
-                    <a class="desc" href="/#/">#<%=opp.company%></a>
+                    <a class="desc" href="/#/search/type:Opportunity <%=opp.amount%>" ng-show="opp.amount">#<%=opp.amount%></a> 
+                    <a class="desc" href="/#/search/type:Opportunity <%=opp.stage%>" ng-show="opp.stage">- #<%=opp.stage%></a><br>
+                    <a class="desc" href="/#/search/type:Opportunity <%=opp.description%>" ng-show="opp.description">#<%=opp.description%></a>
                     </div>
                   </div>
                   <a class="more" href="/#/opportunities/show/<%= opp.id %>">

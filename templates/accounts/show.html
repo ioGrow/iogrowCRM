@@ -308,7 +308,7 @@
                                     </h3></a>
                                     <div class="desc">    
                                                              
-                                        <span class="contact-title"><%=contact.title%></span>  
+                                        <span class="contact-title" ng-show="contact.title" > <a href="/#/search/type:Contact <%=contact.title%>">#<%=contact.title%></a>  </span>  
                                     
                                     </div>
                                   </div>
@@ -394,17 +394,17 @@
                                 {{_("Add a new opportunity")}} <i class="icon-plus"></i>
                                 </button>
                           </div>
-                            <div class="inner-cards-container" ng-repeat="opp in opportunities">
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
+                            <div class="inner-cards-container" >
+                              <div  class="span4 responsive" ng-repeat="opp in opportunities" data-tablet="span6" data-desktop="span4">
                                 <div class="dashboard-stat cards-med">
                                   
                                   <div class="details">
                                     <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                    <%=opp.name%> 
-                                    </h3></a>
+                                     <%=opp.name%></h3></a>
                                     <div class="desc">                           
-                                    <span class="contact-title">$<%=opp.amount%> - <%=opp.stage%></span>
-                                    <a ng-show="opp.description" class="desc" href="">#<%=opp.industry%></a>  
+                                     <span><a  class="desc" href="/#/search/type:Opportunity <%=opp.amount%>"># <%=opp.amount%></a> - </span>
+                                    <span ng-show="opp.stage" class="contact-title" ><a class="desc" href="/#/search/type:Oportunity <%=opp.stage%>">#<%=opp.stage%> </a></span><br>
+                                    <a ng-show="opp.description" class="desc" href="/#/search/type:Opportunity <%=opp.description%>">#<%=opp.description%></a>  
                                     
                                     </div>
                                   </div>
@@ -450,10 +450,10 @@
                           </div>
                       </div>
                       <div class="control-group">
-                        <label  class="required control-label">{{_("Description")}} </label>
+                        <label  class="required control-label">{{_("Labels")}} </label>
                        
                         <div class="controls">
-                          <input type="text"  id="id_description" ng-model="opportunity.description">
+                          <input type="text"  id="id_label" ng-model="opportunity.description">
                         </div>
                       </div>
                     <div class="control-group">
@@ -500,9 +500,9 @@
                                      <%=casee.name%>
                                     </h3></a>
                                     <div class="desc">                           
-                                    <span class="contact-title">status:<a  class="desc" href=""># <%=casee.status%></a></span> 
-                                    <span class="updated-on"> Priority:<a  class="desc" href="">#<%=casee.priority%> </a></span>
-                                    <a  class="desc" href="">#<%=casee.description%></a>  
+                                    <span class="contact-title" ng-show="casee.status">Status:<a  class="desc" href="/#/search/type:Case <%=casee.status%>"># <%=casee.status%></a></span> <br>
+                                    <span ng-show="casee.priority" class="contact-title" >Priority:<a class="desc" href="/#/search/type:Case <%=casee.priority%>">#<%=casee.priority%> </a></span><br>
+                                      <span ng-show="casee.type_case" class="contact-title" >Labels :<a class="desc" href="/#/search/type:Case <%=casee.type_case%>">#<%=casee.type_case%></a>  </span>
                                     
                                     </div>
                                   </div>
@@ -548,7 +548,7 @@
                         <label  class="required control-label">{{_("Status")}}</label>
                        
                         <div class="controls">
-                          <input type="text"  id="id_status" ng-model="casee.status">
+                          <input type="text"  id="id_status" ng-model="casee.statuss">
                           
                         </div>
                       
@@ -645,7 +645,7 @@
                                     <li ng-repeat="task in tasks" id="task_<%=$index%>">
                                       <input value="check1" type="checkbox">
                                       <!-- Name -->
-                                    <span><a href="/#/tasks/show/<%=task.id%>" class="discussion-content"><%= task.title%> <span ng-show="task.due"> [before: <%= task.due | date:'yyyy-MM-dd '%>]</span></a></span>
+                                    <span><a href="/#/tasks/show/<%=task.id%>" class="discussion-content"><%= task.title%> </a> <span ng-show="task.due"> [before: <%= task.due | date:'yyyy-MM-dd '%>]</span></span>
                                     </li>
                                     
                                     <li><a href="#myModal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new task</a></li>
@@ -856,7 +856,7 @@
               </div>
 
               <div class="modal-body">
-                 <form id="editTagline" name="editlead" ng-submit="updateintro(account)" class="form-horizontal"> 
+                 <form id="editTagline" name="edittag" ng-submit="updateintro(account)" class="form-horizontal"> 
                 
 
                   <div class="control-group">
