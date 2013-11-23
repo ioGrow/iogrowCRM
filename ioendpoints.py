@@ -303,7 +303,7 @@ class CrmEngineApi(remote.Service):
       else:
           limit = 10
 
-      query = Account.query(ndb.AND(Account.name>=query_string,Account.name<query_string_next))
+      query = Account.query(ndb.AND(Account.name>=query_string,Account.name<query_string_next,ndb.OR(ndb.AND(Account.access=='public',Account.organization==user_from_email.organization),Account.owner==user_from_email.google_user_id, Account.collaborators_ids==user_from_email.google_user_id))).order(Account.name,Account._key)
       if request.pageToken:
           curs = Cursor(urlsafe=request.pageToken)
           results, next_curs, more = query.fetch_page(limit, start_cursor=curs)
