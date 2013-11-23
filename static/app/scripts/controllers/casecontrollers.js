@@ -13,6 +13,8 @@ app.controller('CaseListCtrl', ['$scope','$route','$location','Conf','Case',
      $scope.pages = [];
      
      $scope.cases = [];
+     $scope.casee = {};
+     $scope.casee.access ='public';
      
      
 
@@ -112,8 +114,8 @@ app.controller('CaseListCtrl', ['$scope','$route','$location','Conf','Case',
 
     
 }]);
-app.controller('CaseShowCtrl', ['$scope','$filter', '$route','$location','Conf','Case', 'Topic','Note','Task','Event','WhoHasAccess','User',
-    function($scope,$filter,$route,$location,Conf,Case,Topic,Note,Task,Event,WhoHasAccess,User) {
+app.controller('CaseShowCtrl', ['$scope','$filter', '$route','$location','Conf','Case', 'Topic','Note','Task','Event','Permission','User',
+    function($scope,$filter,$route,$location,Conf,Case,Topic,Note,Task,Event,Permission,User) {
       console.log('i am in account list controller');
       $("#id_Cases").addClass("active");
       
@@ -126,8 +128,10 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','$location','Conf',
      $scope.pagination = {};
      $scope.currentPage = 01;
      $scope.pages = [];
-     
      $scope.cases = [];
+     $scope.users = [];
+     $scope.user = undefined;
+     $scope.slected_memeber = undefined;
      
    
      $scope.renderSignIn = function() {
@@ -225,6 +229,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','$location','Conf',
           
           var caseid = {'id':$route.current.params.caseId};
           Case.get($scope,caseid);
+          User.list($scope,{});
 
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
@@ -238,6 +243,48 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','$location','Conf',
         }
      }
      $scope.renderSignIn();
+     $scope.selectMember = function(){
+        console.log('slecting user yeaaah');
+        $scope.slected_memeber = $scope.user;
+        $scope.user = $scope.slected_memeber.google_display_name;
+
+     };
+     $scope.share = function(slected_memeber){
+        console.log('permissions.insert share');
+        console.log(slected_memeber);
+        $scope.$watch($scope.casee.access, function() {
+         var body = {'access':$scope.casee.access};
+         var id = $scope.account.id;
+         var params ={'id':id,
+                      'access':$scope.casee.access}
+         Case.patch($scope,params);
+        });
+        $('#sharingSettingsModal').modal('hide');
+
+        if (slected_memeber.email){
+        var params = {  'type': 'user',
+                        'role': 'writer',
+                        'value': slected_memeber.email,
+                        'about_kind': 'Case',
+                        'about_item': $scope.account.id
+
+                        
+          };
+          Permission.insert($scope,params); 
+          
+          
+        }else{ 
+          alert('select a user to be invited');
+        };
+
+
+     };
+     
+     $scope.updateCollaborators = function(){
+         
+          Case.get($scope,$scope.case.id);
+
+     };
      $scope.showModal = function(){
         console.log('button clicked');
         $('#addCaseModal').modal('show');

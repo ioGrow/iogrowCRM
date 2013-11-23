@@ -5,7 +5,7 @@ from google.appengine.api import search
 import model
 
 class Case(EndpointsModel):
-    _message_fields_schema = ('id', 'name','description','type_case','priority','account')
+    _message_fields_schema = ('id','entityKey','access','collaborators_list','collaborators_ids',  'name','description','type_case','priority','account')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
@@ -32,7 +32,7 @@ class Case(EndpointsModel):
     def set_perm(self):
         about_item = str(self.key.id())
 
-        perm = model.Permission(about_kind='Account',
+        perm = model.Permission(about_kind='Case',
                          about_item=about_item,
                          type = 'user',
                          role = 'owner',
