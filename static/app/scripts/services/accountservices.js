@@ -96,13 +96,12 @@ accountservices.factory('Account', function($http) {
               }
       });
   };
-  Account.insert = function(account){
-      gapi.client.crmengine.accounts.insert(account).execute(function(resp) {
+  Account.insert = function($scope,params){
+      gapi.client.crmengine.accounts.insert(params).execute(function(resp) {
          console.log('in insert resp');
          console.log(resp);
          if(!resp.code){
-          $('#addAccountModal').modal('hide');
-          window.location.replace('#/accounts/show/'+resp.id);
+            $scope.accountInserted(resp);
           
          }else{
           console.log(resp.code);

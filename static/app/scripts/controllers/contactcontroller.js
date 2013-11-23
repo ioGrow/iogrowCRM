@@ -1,5 +1,5 @@
-app.controller('ContactListCtrl', ['$scope','$route','$location','Conf','MultiContactLoader','Contact',
-    function($scope,$route,$location,Conf,MultiContactLoader,Contact) {
+app.controller('ContactListCtrl', ['$scope','$route','$location','Conf','Account','Contact',
+    function($scope,$route,$location,Conf,Account,Contact) {
       $("#id_Contacts").addClass("active");
       
       console.log('i am in contact list controller');
@@ -106,9 +106,57 @@ app.controller('ContactListCtrl', ['$scope','$route','$location','Conf','MultiCo
       
     
       $scope.save = function(contact){
-        Contact.insert(contact);
+        console.log(contact);
+        var params = {};
+        if (typeof(contact.account)=='object'){
+          contact.account = contact.account.entityKey;
+          console.log(contact);
+          Contact.insert(contact);
+
+        }else if($scope.searchAccountQuery.length>0){
+            // create a new account with this account name
+            var params = {'name': $scope.searchAccountQuery,
+                          'access': contact.access
+            };
+            $scope.contact = contact;
+            Account.insert($scope,params);
+
+
+        };
+
+        
         $('#addContactModal').modal('hide')
       };
+      $scope.accountInserted = function(resp){
+          $scope.contact.account = resp;
+          $scope.save($scope.contact);
+      };
+      
+     var params_search_account ={};
+     $scope.result = undefined;
+     $scope.q = undefined;
+     
+      $scope.$watch('searchAccountQuery', function() {
+         params_search_account['q'] = $scope.searchAccountQuery;
+         gapi.client.crmengine.accounts.search(params_search_account).execute(function(resp) {
+            console.log("in accouts.search api");
+            console.log(params_search_account);
+
+            console.log(resp);
+            if (resp.items){
+              $scope.results = resp.items;
+              console.log($scope.results);
+              $scope.$apply();
+            };
+            
+          });
+         console.log($scope.results);
+      });
+      $scope.selectAccount = function(){
+        $scope.contact.account = $scope.searchAccountQuery;
+
+     };
+     
 
 
       

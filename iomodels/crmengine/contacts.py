@@ -6,7 +6,7 @@ import model
 
 class Contact(EndpointsModel):
 
-    _message_fields_schema = ('id', 'firstname','lastname','title','company',)
+    
 
     _message_fields_schema = ('id','entityKey','access','collaborators_list','collaborators_ids', 'firstname','lastname','title','company','account')
 

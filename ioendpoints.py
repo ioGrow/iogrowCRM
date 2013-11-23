@@ -3,6 +3,7 @@ from google.appengine.ext import ndb
 from google.appengine.api import search 
 
 from protorpc import remote
+from google.appengine.datastore.datastore_query import Cursor
 from endpoints_proto_datastore.ndb import EndpointsAliasProperty
 from endpoints_proto_datastore.ndb import EndpointsModel
 from iomodels.crmengine.accounts import Account
@@ -60,6 +61,18 @@ class SearchResults(messages.Message):
     items = messages.MessageField(SearchResult, 1, repeated=True)
     nextPageToken = messages.StringField(2)
 
+class AccountSearchResult(messages.Message):
+    id = messages.StringField(1)
+    entityKey  = messages.StringField(2)
+    name = messages.StringField(3)
+
+class AccountSearchResults(messages.Message):
+   
+    items = messages.MessageField(AccountSearchResult, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
+   
+
+
 class AuthorSchema(messages.Message):
 
     google_user_id = messages.StringField(1)
@@ -112,7 +125,7 @@ class CrmEngineApi(remote.Service):
         raise endpoints.UnauthorizedException('You must authenticate!' )
     user_from_email = model.User.query(model.User.email == user.email()).get()
     if user_from_email is None:
-      raise endpoints.UnauthorizedException('You must sign-in!' )
+        raise endpoints.UnauthorizedException('You must sign-in!' )
     # Todo: Check permissions
     my_model.owner = user_from_email.google_user_id
     my_model.organization =  user_from_email.organization
@@ -270,6 +283,46 @@ class CrmEngineApi(remote.Service):
       if user_from_email is None:
         raise endpoints.UnauthorizedException('You must sign-in!' )
       return query.filter(ndb.OR(ndb.AND(Account.access=='public',Account.organization==user_from_email.organization),Account.owner==user_from_email.google_user_id, Account.collaborators_ids==user_from_email.google_user_id)).order(Account._key)
+
+  @endpoints.method(SearchRequest, AccountSearchResults,
+                      path='accounts/search', http_method='POST',
+                      name='accounts.search')
+  def account_search(self, request):
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+          raise endpoints.UnauthorizedException('You must sign-in!' )
+      
+      #prepare the query
+      query_string = request.q 
+      query_string_next = unicode(request.q) + u"\ufffd"
+      if request.limit:
+          limit = int(request.limit)
+      else:
+          limit = 10
+
+      query = Account.query(ndb.AND(Account.name>=query_string,Account.name<query_string_next))
+      if request.pageToken:
+          curs = Cursor(urlsafe=request.pageToken)
+          results, next_curs, more = query.fetch_page(limit, start_cursor=curs)
+      else:
+          results, next_curs, more = query.fetch_page(limit)
+
+      search_results = []
+      for result in results:
+          kwargs = {'id':str(result.key.id()),
+                  'entityKey': result.key.urlsafe(),
+                  'name': result.name}
+          search_results.append(AccountSearchResult(**kwargs))
+
+      nextPageToken = None
+      if more and next_curs:
+          nextPageToken = next_curs.urlsafe()
+        
+      return AccountSearchResults(items = search_results,nextPageToken=nextPageToken) 
+                               
 ##############################Notes API##################################""""
   @Note.method(user_required=True,path='notes', http_method='POST', name='notes.insert')
   def NoteInsert(self, my_model):
