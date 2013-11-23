@@ -36,7 +36,7 @@
               </span>
         </div>
       </div>
-       <div id="addOpportunityModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+       <div id="addOpportunityModal" class="modal fade" tabindex="-1" role="basic" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3 id="myModalLabel">{{_("New Opportunity")}}</h3>
@@ -142,8 +142,9 @@
                       <%= opp.name %> 
                     </h2></a>
                     <div class="desc">                           
-                      
-                    <a class="desc" href="/#/">#<%=opp.company%></a>
+                    <a class="desc" href="/#/search/type:Opportunity <%=opp.amount%>" ng-show="opp.amount">#<%=opp.amount%></a> 
+                    <a class="desc" href="/#/search/type:Opportunity <%=opp.stage%>" ng-show="opp.stage">- #<%=opp.stage%></a><br>
+                    <a class="desc" href="/#/search/type:Opportunity <%=opp.description%>" ng-show="opp.description">#<%=opp.description%></a>
                     </div>
                   </div>
                   <a class="more" href="/#/opportunities/show/<%= opp.id %>">

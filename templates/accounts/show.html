@@ -308,7 +308,7 @@
                                     </h3></a>
                                     <div class="desc">    
                                                              
-                                        <span class="contact-title"><%=contact.title%></span>  
+                                        <span class="contact-title" ng-show="contact.title" > <a href="/#/search/type:Contact <%=contact.title%>">#<%=contact.title%></a>  </span>  
                                     
                                     </div>
                                   </div>
@@ -394,88 +394,47 @@
                                 {{_("Add a new opportunity")}} <i class="icon-plus"></i>
                                 </button>
                           </div>
-                            <div class="inner-cards-container">
-                            
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
+                            <div class="inner-cards-container" >
+                              <div  class="span4 responsive" ng-repeat="opp in opportunities" data-tablet="span6" data-desktop="span4">
                                 <div class="dashboard-stat cards-med">
                                   
                                   <div class="details">
                                     <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Migration vers Google App Engine
-                                    </h3></a>
+                                     <%=opp.name%></h3></a>
                                     <div class="desc">                           
-                                    <span class="contact-title">$20.000 - Needs Analysis</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#<%=account.industry%></a>  
+                                     <span><a  class="desc" href="/#/search/type:Opportunity <%=opp.amount%>"># <%=opp.amount%></a> - </span>
+                                    <span ng-show="opp.stage" class="contact-title" ><a class="desc" href="/#/search/type:Oportunity <%=opp.stage%>">#<%=opp.stage%> </a></span><br>
+                                    <a ng-show="opp.description" class="desc" href="/#/search/type:Opportunity <%=opp.description%>">#<%=opp.description%></a>  
                                     
                                     </div>
                                   </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
+                                  <a class="more" href="/#/opportunities/show/<%= opp.id %>">
                                   View more <i class="m-icon-swapright m-icon-white"></i>
                                   </a>                 
                                 </div>
                               </div>
-                             
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Migration vers Google App Engine
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">$20.000 - Needs Analysis</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#<%=account.industry%></a>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
                               </div>
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                    Google App Engine
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">$20.000 - Needs Analysis</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#<%=account.industry%></a>  
-                                    
+                              <div class="row-fluid">
+                                <div class="pagination pull-right" ng-hide="isLoading">
+                                      
+                                      <ul>
+                                        <li ng-show="pagination.prev"><button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                        {{_("Prev")}} 
+                                        </button></li>
+                                        
+                                        <li  ng-show="pagination.next"><button ng-click="listNextPageItems()"  class="btn">
+                                        {{_("Next")}} 
+                                        </button></li>
+                                      </ul>
                                     </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Migration 
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">$20.000 - Needs Analysis</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#<%=account.industry%></a>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
+                                    <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
                               </div>
                             </div>
 
 
                         <!--HKA 19.11.2013 Opportunity Modal -->
 
-              <div id="addOpportunitytModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div id="addOpportunityModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                  <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                      <h3 id="myModalLabel">{{_("New Opportunity")}}</h3>
@@ -491,10 +450,10 @@
                           </div>
                       </div>
                       <div class="control-group">
-                        <label  class="required control-label">{{_("Description")}} </label>
+                        <label  class="required control-label">{{_("Labels")}} </label>
                        
                         <div class="controls">
-                          <input type="text"  id="id_description" ng-model="opportunity.description">
+                          <input type="text"  id="id_label" ng-model="opportunity.description">
                         </div>
                       </div>
                     <div class="control-group">
@@ -532,59 +491,22 @@
                                 </button>
                           </div>
                             <div class="inner-cards-container">
-                            
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
+                                                        
+                             <div  class="span4 responsive" ng-repeat="casee in cases" data-tablet="span6" data-desktop="span4">
                                 <div class="dashboard-stat cards-med">
                                   
                                   <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Database Isue on Website
+                                    <a href="/#/cases/show/<%= casee.id %>"><h3 class="relatedcardOppTitle">
+                                     <%=casee.name%>
                                     </h3></a>
                                     <div class="desc">                           
-                                    <span class="contact-title">status: open</span> <span class="updated-on">Updated on Oct 05 at 2:33 pm</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#database</a>  
+                                    <span class="contact-title" ng-show="casee.status">Status:<a  class="desc" href="/#/search/type:Case <%=casee.status%>"># <%=casee.status%></a></span> <br>
+                                    <span ng-show="casee.priority" class="contact-title" >Priority:<a class="desc" href="/#/search/type:Case <%=casee.priority%>">#<%=casee.priority%> </a></span><br>
+                                      <span ng-show="casee.type_case" class="contact-title" >Labels :<a class="desc" href="/#/search/type:Case <%=casee.type_case%>">#<%=casee.type_case%></a>  </span>
                                     
                                     </div>
                                   </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                             
-                              
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Database Isue on Website
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">status: open</span> <span class="updated-on">Updated on Oct 05 at 2:33 pm</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#database</a>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Database Isue on Website
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">status: open</span> <span class="updated-on">Updated on Oct 05 at 2:33 pm</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#database</a>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
+                                  <a class="more" href="/#/cases/show/<%=casee.id%>">
                                   View more <i class="m-icon-swapright m-icon-white"></i>
                                   </a>                 
                                 </div>
@@ -593,54 +515,64 @@
                               </div>
                             </div>
                       <!--HKA 19.11.2013 Case Modal -->
+                <div id="addCaseModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("New Case")}}</h3>
+              </div>
+              <div class="modal-body">
+                 <form id="addCase" name="addCase" ng-submit="saveCase(casee)" class="form-horizontal"> 
+                  <fieldset>
+                  
+                    
 
-               <div id="addCaseModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                   <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h3 id="myModalLabel">{{_("New Case")}}</h3>
-                   </div>
-                  <div class="modal-body">
-                         <form id="addCase" name="addCase" ng-submit="saveCase(casee)" class="form-horizontal"> 
-                         <fieldset>                
-                        <div class="control-group">
-                            <label  class="required control-label">{{_("Name")}} </label>
-                            <div class="controls">
-                               <input type="text"  id="id_name" ng-model="casee.name">
-                            </div>
-                        </div>
-                        <div class="control-group">
-                             <label  class="required control-label">{{_("Priority")}} </label>
+                    
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Name")}} </label>
                        
-                              <div class="controls">
-                               <input type="text"  id="id_priority" ng-model="casee.priority">
+                        <div class="controls">
+                          <input type="text"  id="id_name" ng-model="casee.name">
                           
-                               </div>
                         </div>
-                       <div class="control-group">
-                             <label  class="required control-label">{{_("Status")}} </label>
-                       
-                             <div class="controls">
-                             <input type="text"  id="id_status" ng-model="casee.status">
-                          
-                               </div>
-                        </div>
-                        <div class="control-group">
-                              <label  class="required control-label">{{_("Labels")}}</label>
-                       
-                             <div class="controls">
-                                <input type="text"  id="id_status" ng-model="casee.type_case">
-                             </div>
-                      
-                          </div>                 
-                        </fieldset>
-                
-                   </div>
-                   <div class="modal-footer">
-                          <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                          <button  type="submit" class="btn blue addContactNow">{{_("Add Case")}}</button>
                     </div>
-                      </form>
-               </div>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Priority")}} </label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_priority" ng-model="casee.priority">
+                          
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Status")}}</label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_status" ng-model="casee.statuss">
+                          
+                        </div>
+                      
+                    </div>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Labels")}} </label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_description" ng-model="casee.type_case">
+                          
+                        </div>
+                    </div>
+                   
+
+                    </fieldset>
+                
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <button  type="submit" class="btn blue addContactNow">{{_("Add Case")}}</button>
+              </div>
+               </form>
+       </div>
+               
                       <!--HKA 19.11.2013  End Case Modal -->
                       </div>
                       <div class="tab-pane active" id="tab_1_6" ng-show="selectedTab == 6">
@@ -667,60 +599,8 @@
 
                                 </div>
                           </div>
-                            <div class="inner-cards-container">
-                            
-                              <div  class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                                <div class="dashboard-stat cards">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardTitle">
-                                     Ben Belfodhil
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">CEO</span>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                              <div  class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                                <div class="dashboard-stat cards">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardTitle">
-                                     Hakim Karriche
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">CTO</span>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                              <div  class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                                <div class="dashboard-stat cards">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardTitle">
-                                     Eric Joe
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">CCO</span>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                              <div  class="span3 responsive" data-tablet="span6" data-desktop="span3">
+                            <div class="inner-cards-container">                            
+                             <!--div  class="span3 responsive" data-tablet="span6" data-desktop="span3">
                                 <div class="dashboard-stat cards">
                                   
                                   <div class="details">
@@ -737,7 +617,7 @@
                                   View more <i class="m-icon-swapright m-icon-white"></i>
                                   </a>                 
                                 </div>
-                              </div>
+                              </div-->
                               </div>
                             </div>
                       </div>
@@ -765,7 +645,7 @@
                                     <li ng-repeat="task in tasks" id="task_<%=$index%>">
                                       <input value="check1" type="checkbox">
                                       <!-- Name -->
-                                    <span><a href="/#/tasks/show/<%=task.id%>" class="discussion-content"><%= task.title%> <span ng-show="task.due"> [before: <%= task.due | date:'yyyy-MM-dd '%>]</span></a></span>
+                                    <span><a href="/#/tasks/show/<%=task.id%>" class="discussion-content"><%= task.title%> </a> <span ng-show="task.due"> [before: <%= task.due | date:'yyyy-MM-dd '%>]</span></span>
                                     </li>
                                     
                                     <li><a href="#myModal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new task</a></li>
@@ -976,7 +856,7 @@
               </div>
 
               <div class="modal-body">
-                 <form id="editTagline" name="editlead" ng-submit="updateintro(account)" class="form-horizontal"> 
+                 <form id="editTagline" name="edittag" ng-submit="updateintro(account)" class="form-horizontal"> 
                 
 
                   <div class="control-group">
