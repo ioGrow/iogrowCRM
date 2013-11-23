@@ -25,6 +25,7 @@ accountservices.factory('Case', function($http) {
             console.log('gapi #end_execute');
           });
   };
+
   Case.list = function($scope,params){
       $scope.isLoading = true;
       gapi.client.crmengine.cases.list(params).execute(function(resp) {
@@ -65,6 +66,22 @@ accountservices.factory('Case', function($http) {
           console.log(resp.code);
          }
       });
+  };
+  Case.patch = function($scope,params) {
+          console.log('in cases.patch service');
+          console.log(params);
+          gapi.client.crmengine.cases.patch(params).execute(function(resp) {
+            if(!resp.code){
+               $scope.casee = resp;
+               
+               // Call the method $apply to make the update on the scope
+                $scope.$apply();
+
+            }else {
+               alert("Error, response is: " + angular.toJson(resp));
+            }
+            console.log('accounts.patch gapi #end_execute');
+          });
   };
   
 

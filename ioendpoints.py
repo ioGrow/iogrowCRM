@@ -171,7 +171,13 @@ class CrmEngineApi(remote.Service):
  
   @Contact.query_method(user_required=True,query_fields=('limit', 'order','account', 'pageToken'),path='contacts', name='contacts.list')
   def ContactList(self, query):
-    return query
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+        raise endpoints.UnauthorizedException('You must sign-in!' )
+      return query.filter(ndb.OR(ndb.AND(Contact.access=='public',Contact.organization==user_from_email.organization),Contact.owner==user_from_email.google_user_id, Contact.collaborators_ids==user_from_email.google_user_id)).order(Contact._key)
 
   @Account.method(user_required=True,path='accounts', http_method='POST', name='accounts.insert')
   def AccountInsert(self, my_model):
@@ -576,7 +582,13 @@ class CrmEngineApi(remote.Service):
   
   @Lead.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='leads',name='leads.list')
   def LeadList(self,query):
-     return query
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+        raise endpoints.UnauthorizedException('You must sign-in!' )
+      return query.filter(ndb.OR(ndb.AND(Lead.access=='public',Lead.organization==user_from_email.organization),Lead.owner==user_from_email.google_user_id, Lead.collaborators_ids==user_from_email.google_user_id)).order(Lead._key)
 # HKA 07.11.2013 Add Cases APIs
   @Case.method(user_required=True,path='cases',http_method='POST',name='cases.insert')
   def CaseInsert(self, my_model):
@@ -628,7 +640,13 @@ class CrmEngineApi(remote.Service):
   
   @Case.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='cases',name='cases.list')
   def CaseList(self,query):
-     return query
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+        raise endpoints.UnauthorizedException('You must sign-in!' )
+      return query.filter(ndb.OR(ndb.AND(Case.access=='public',Case.organization==user_from_email.organization),Case.owner==user_from_email.google_user_id, Case.collaborators_ids==user_from_email.google_user_id)).order(Case._key)
 #HKA 07.11.2013   Add Campaign APIs
   @Campaign.method(user_required=True,path='campaigns',http_method='POST',name='campaigns.insert')
   def CampaignInsert(self, my_model):
