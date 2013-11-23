@@ -394,88 +394,47 @@
                                 {{_("Add a new opportunity")}} <i class="icon-plus"></i>
                                 </button>
                           </div>
-                            <div class="inner-cards-container">
-                            
+                            <div class="inner-cards-container" ng-repeat="opp in opportunities">
                               <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
                                 <div class="dashboard-stat cards-med">
                                   
                                   <div class="details">
                                     <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Migration vers Google App Engine
+                                    <%=opp.name%> 
                                     </h3></a>
                                     <div class="desc">                           
-                                    <span class="contact-title">$20.000 - Needs Analysis</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#<%=account.industry%></a>  
+                                    <span class="contact-title">$<%=opp.amount%> - <%=opp.stage%></span>
+                                    <a ng-show="opp.description" class="desc" href="">#<%=opp.industry%></a>  
                                     
                                     </div>
                                   </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
+                                  <a class="more" href="/#/opportunities/show/<%= opp.id %>">
                                   View more <i class="m-icon-swapright m-icon-white"></i>
                                   </a>                 
                                 </div>
                               </div>
-                             
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Migration vers Google App Engine
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">$20.000 - Needs Analysis</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#<%=account.industry%></a>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
                               </div>
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                    Google App Engine
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">$20.000 - Needs Analysis</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#<%=account.industry%></a>  
-                                    
+                              <div class="row-fluid">
+                                <div class="pagination pull-right" ng-hide="isLoading">
+                                      
+                                      <ul>
+                                        <li ng-show="pagination.prev"><button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                        {{_("Prev")}} 
+                                        </button></li>
+                                        
+                                        <li  ng-show="pagination.next"><button ng-click="listNextPageItems()"  class="btn">
+                                        {{_("Next")}} 
+                                        </button></li>
+                                      </ul>
                                     </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Migration 
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">$20.000 - Needs Analysis</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#<%=account.industry%></a>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
+                                    <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
                               </div>
                             </div>
 
 
                         <!--HKA 19.11.2013 Opportunity Modal -->
 
-              <div id="addOpportunitytModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div id="addOpportunityModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                  <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                      <h3 id="myModalLabel">{{_("New Opportunity")}}</h3>
@@ -541,13 +500,13 @@
                                      <%=casee.name%>
                                     </h3></a>
                                     <div class="desc">                           
-                                    <span class="contact-title">status: <%=casee.status%></span> 
-                                    <span class="updated-on">Priority:<%=casee.priority%> </span>
+                                    <span class="contact-title">status:<a  class="desc" href=""># <%=casee.status%></a></span> 
+                                    <span class="updated-on"> Priority:<a  class="desc" href="">#<%=casee.priority%> </a></span>
                                     <a  class="desc" href="">#<%=casee.description%></a>  
                                     
                                     </div>
                                   </div>
-                                  <a class="more" href="/#/cases/show/<%=casee.name%>">
+                                  <a class="more" href="/#/cases/show/<%=casee.id%>">
                                   View more <i class="m-icon-swapright m-icon-white"></i>
                                   </a>                 
                                 </div>
@@ -640,60 +599,8 @@
 
                                 </div>
                           </div>
-                            <div class="inner-cards-container">
-                            
-                              <div  class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                                <div class="dashboard-stat cards">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardTitle">
-                                     Ben Belfodhil
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">CEO</span>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                              <div  class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                                <div class="dashboard-stat cards">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardTitle">
-                                     Hakim Karriche
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">CTO</span>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                              <div  class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                                <div class="dashboard-stat cards">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardTitle">
-                                     Eric Joe
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">CCO</span>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                              <div  class="span3 responsive" data-tablet="span6" data-desktop="span3">
+                            <div class="inner-cards-container">                            
+                             <!--div  class="span3 responsive" data-tablet="span6" data-desktop="span3">
                                 <div class="dashboard-stat cards">
                                   
                                   <div class="details">
@@ -710,7 +617,7 @@
                                   View more <i class="m-icon-swapright m-icon-white"></i>
                                   </a>                 
                                 </div>
-                              </div>
+                              </div-->
                               </div>
                             </div>
                       </div>

@@ -191,7 +191,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
             params = {'about_kind':'Account',
                       'about_item':$scope.account.id,
                       'order': '-updated_at',
-                      'limit': 5}
+                      'limit': 7}
           }
           console.log('in listNextPageItems');
           $scope.currentPage = $scope.currentPage + 1 ; 
@@ -205,14 +205,14 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
             params = {'about_kind':'Account',
                       'about_item':$scope.account.id,
                       'order': '-updated_at',
-                      'limit': 5,
+                      'limit': 7,
                       'pageToken':$scope.pages[prevPage]
                      }
           }else{
             params = {'about_kind':'Account',
                       'about_item':$scope.account.id,
                       'order': '-updated_at',
-                      'limit': 5}
+                      'limit': 7}
           }
           $scope.currentPage = $scope.currentPage - 1 ;
           Topic.list($scope,params);
@@ -227,7 +227,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
         var params = {'about_kind':'Account',
                       'about_item':$scope.account.id,
                       'order': '-updated_at',
-                      'limit': 5
+                      'limit': 7
                       };
         Topic.list($scope,params);
 
@@ -445,7 +445,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
         var params = {'about_kind':'Account',
                       'about_item':$scope.account.id,
                       'order': '-updated_at',
-                      'limit': 5
+                      'limit': 7
                       };
         Task.list($scope,params);
 
@@ -494,7 +494,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
         var params = {'about_kind':'Account',
                       'about_item':$scope.account.id,
                       'order': 'starts_at',
-                      'limit': 5
+                      'limit': 7
                       };
         Event.list($scope,params);
 
@@ -565,7 +565,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
                       'account':$scope.account.entityKey
                       };
 
-      Opportunity.insert(opportunity);
+      Opportunity.insert(params);
       $('#addOpportunityModal').modal('hide');
     };
 

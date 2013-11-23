@@ -473,19 +473,17 @@ class CrmEngineApi(remote.Service):
     if not my_model.from_datastore:
       raise endpoints.NotFoundException('Opportunity not found')
     return my_model
-  
-  
   @Opportunity.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken','account'),path='opportunities', name='opportunities.list')
-  def OpportunityList(self, query):
+  def opportunity_list(self, query):
+
       user = endpoints.get_current_user()
       if user is None:
           raise endpoints.UnauthorizedException('You must authenticate!' )
       user_from_email = model.User.query(model.User.email == user.email()).get()
       if user_from_email is None:
         raise endpoints.UnauthorizedException('You must sign-in!' )
-      print user_from_email
+      
       return query.filter(ndb.OR(ndb.AND(Opportunity.access=='public',Opportunity.organization==user_from_email.organization),Opportunity.owner==user_from_email.google_user_id, Opportunity.collaborators_ids==user_from_email.google_user_id)).order(Opportunity._key)
-
 
   ################################ Events API ##################################
   @Event.method(user_required=True,path='events', http_method='POST', name='events.insert')
@@ -745,7 +743,7 @@ class CrmEngineApi(remote.Service):
         invited_user_id = my_model.id
         
     confirmation_url = "http://gcdc2013-iogrow.appspot.com//sign-in?id=" + str(invited_user_id) + '&'
-    sender_address = "ioGrow notifications <notifications@iogrow-dev.appspotmail.com>"
+    sender_address = "ioGrow notifications <notifications@gcdc2013-iogrow.appspotmail.com>"
     subject = "Confirm your registration"
     body = """
     Thank you for creating an account! Please confirm your email address by
