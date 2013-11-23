@@ -10,6 +10,22 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
+- kind: Account
+  properties:
+  - name: access
+  - name: organization
+  - name: name
+
+- kind: Account
+  properties:
+  - name: collaborators_ids
+  - name: name
+
+- kind: Account
+  properties:
+  - name: owner
+  - name: name
+
 - kind: Comment
   properties:
   - name: discussion

@@ -105,8 +105,13 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
       };
       
     $scope.save = function(account){
-      Account.insert(account);
+      Account.insert($scope,account);
     };
+
+     $scope.accountInserted = function(resp){
+          $('#addAccountModal').modal('hide');
+          window.location.replace('#/accounts/show/'+resp.id);
+     };
      
      
    

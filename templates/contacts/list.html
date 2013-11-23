@@ -51,7 +51,7 @@
                         <label  class="required control-label">{{_("First Name")}} *</label>
                        
                         <div class="controls">
-                          <input type="text" required id="id_firstname" ng-model="contact.firstname">
+                          <input type="text" required id="id_firstname" class="input-xlarge" ng-model="contact.firstname">
                           
                         </div>
                     </div>
@@ -59,7 +59,15 @@
                         <label  class="required control-label">{{_("Last Name")}}</label>
                        
                         <div class="controls">
-                          <input type="text"  id="id_lastname" ng-model="contact.lastname">
+                          <input type="text"  id="id_lastname" class="input-xlarge" ng-model="contact.lastname">
+                          
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Title")}}</label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_lastname" class="input-xlarge" ng-model="contact.title">
                           
                         </div>
                     </div>
@@ -67,7 +75,7 @@
                         <label  class="required control-label">{{_("Account")}} </label>
                        
                         <div class="controls">
-                          <input type="text"  id="id_account" ng-model="contact.account">
+                          <input type="text" required ng-model="searchAccountQuery" typeahead="result as result.name  for result in results | filter:$viewValue | limitTo:10" typeahead-on-select="selectAccount()" class="input-xlarge" placeholder="Search">
                           
                         </div>
                     </div>
