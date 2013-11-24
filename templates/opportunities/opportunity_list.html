@@ -141,8 +141,9 @@
                     <a href="/#/opportunities/show/<%= opp.id %>"><h2 class="cardTitle">
                       <%= opp.name %> 
                     </h2></a>
-                    <div class="desc">                           
-                    <span ng-show="opp.amount" class="desc"><a  href="/#/search/type:Opportunity <%=opp.amount%>"> #<%=opp.amount%></a></span>
+                    <div class="desc">
+
+                  <a class="desc" ng-show="opp.amount"  href="/#/search/type:Opportunity <%=opp.amount%>"> #<%=opp.amount%></a>
                      
                     <a class="desc" href="/#/search/type:Opportunity <%=opp.stage%>" ng-show="opp.stage">- #<%=opp.stage%></a><br>
                     <a class="desc" href="/#/search/type:Opportunity <%=opp.description%>" ng-show="opp.description">#<%=opp.description%></a>

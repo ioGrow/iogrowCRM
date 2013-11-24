@@ -15,7 +15,8 @@ class Contact(EndpointsModel):
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
     collaborators_ids = ndb.StringProperty(repeated=True)
-    account = ndb.KeyProperty() 
+    account = ndb.KeyProperty()
+    account_name = ndb.StringProperty() 
     organization = ndb.KeyProperty()
     firstname = ndb.StringProperty()
     lastname = ndb.StringProperty()
@@ -70,6 +71,7 @@ class Contact(EndpointsModel):
             search.TextField(name='address', value = empty_string(self.address)),
             search.TextField(name='department', value = empty_string(self.department)),
             search.TextField(name='mobile', value = empty_string(self.mobile)),
+            search.TextField(name='account_name',value=empty_string(self.account_name))
             search.TextField(name='email', value = empty_string(self.email)),
             search.TextField(name='description', value = empty_string(self.description))
            ])

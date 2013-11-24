@@ -110,6 +110,7 @@ app.controller('ContactListCtrl', ['$scope','$route','$location','Conf','Account
         var params = {};
         if (typeof(contact.account)=='object'){
           contact.account = contact.account.entityKey;
+          contact.account_name = contact.account.name;
           console.log(contact);
           Contact.insert(contact);
 
