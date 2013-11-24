@@ -70,6 +70,16 @@ class AccountSearchResults(messages.Message):
    
     items = messages.MessageField(AccountSearchResult, 1, repeated=True)
     nextPageToken = messages.StringField(2)
+
+class ContactSearchResult(messages.Message):
+    id = messages.StringField(1)
+    entityKey  = messages.StringField(2)
+    name = messages.StringField(3)
+
+class ContactSearchResults(messages.Message):
+   
+    items = messages.MessageField(AccountSearchResult, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
    
 
 
@@ -191,6 +201,45 @@ class CrmEngineApi(remote.Service):
       if user_from_email is None:
         raise endpoints.UnauthorizedException('You must sign-in!' )
       return query.filter(ndb.OR(ndb.AND(Contact.access=='public',Contact.organization==user_from_email.organization),Contact.owner==user_from_email.google_user_id, Contact.collaborators_ids==user_from_email.google_user_id)).order(Contact._key)
+
+  @endpoints.method(SearchRequest, AccountSearchResults,
+                      path='contacts/search', http_method='POST',
+                      name='contacts.search')
+  def contact_search(self, request):
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+          raise endpoints.UnauthorizedException('You must sign-in!' )
+      
+      #prepare the query
+      query_string = request.q 
+      query_string_next = unicode(request.q) + u"\ufffd"
+      if request.limit:
+          limit = int(request.limit)
+      else:
+          limit = 10
+
+      query = Contact.query(ndb.AND(ndb.OR(Contact.firstname>=query_string,Contact.firstname<query_string_next,Contact.lastname>=query_string,Contact.lastname<query_string_next),ndb.OR(ndb.AND(Contact.access=='public',Contact.organization==user_from_email.organization),Contact.owner==user_from_email.google_user_id, Contact.collaborators_ids==user_from_email.google_user_id))).order(Contact.firstname,Contact._key)
+      if request.pageToken:
+          curs = Cursor(urlsafe=request.pageToken)
+          results, next_curs, more = query.fetch_page(limit, start_cursor=curs)
+      else:
+          results, next_curs, more = query.fetch_page(limit)
+
+      search_results = []
+      for result in results:
+          kwargs = {'id':str(result.key.id()),
+                  'entityKey': result.key.urlsafe(),
+                  'name': result.name}
+          search_results.append(AccountSearchResult(**kwargs))
+
+      nextPageToken = None
+      if more and next_curs:
+          nextPageToken = next_curs.urlsafe()
+        
+      return AccountSearchResults(items = search_results,nextPageToken=nextPageToken)
 
   @Account.method(user_required=True,path='accounts', http_method='POST', name='accounts.insert')
   def AccountInsert(self, my_model):
