@@ -404,9 +404,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
     $scope.editintro = function() {
        $('#EditIntroModal').modal('show');
     };
-  $scope.updateTagline = function(account){
-    Account.update(account);
-  }
+  
 
     //HKA 09.11.2013 Add a new Tasks
    $scope.addTask = function(task){
