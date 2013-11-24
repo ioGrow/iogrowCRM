@@ -83,13 +83,13 @@ class AuthorSchema(messages.Message):
 class DiscussionAboutSchema(messages.Message):
 
     kind = messages.StringField(1)
-    id = messages.IntegerField(2)
+    id = messages.StringField(2)
     name = messages.StringField(3)
     
 # Customized Discussion Response for notes.get API
 class DiscussionResponse(messages.Message):
     
-    id = messages.IntegerField(1)
+    id = messages.StringField(1)
     entityKey = messages.StringField(2)
     title = messages.StringField(3)
     content = messages.StringField(4)
@@ -396,7 +396,7 @@ class CrmEngineApi(remote.Service):
         if user_from_email is None:
           raise endpoints.UnauthorizedException('You must sign-in!' )
         try:
-            note = Note.get_by_id(request.id)
+            note = Note.get_by_id(int(request.id))
             about_item_id = int(note.about_item)
             try:
                 about_object = OBJECTS[note.about_kind].get_by_id(about_item_id)

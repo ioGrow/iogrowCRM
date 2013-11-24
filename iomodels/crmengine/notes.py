@@ -33,7 +33,7 @@ class Topic(EndpointsModel):
 
 class Note(EndpointsModel):
 
-    _message_fields_schema = ('id','title','entityKey')
+    #_message_fields_schema = ('id','title')
     author = ndb.StructuredProperty(Userinfo)
     # Sharing fields
     owner = ndb.StringProperty()

@@ -85,9 +85,10 @@ app.controller('NoteShowController',['$scope','$filter','$route','$location','Co
           window.is_signed_in = true;
           window.authResult = authResult;
           // Call the backend to get the list of accounts
-          
-          var noteid = {'id':$route.current.params.noteId};
-          Note.get($scope,noteid);
+          var noteId = parseInt($route.current.params.noteId);
+          var params = {'id':noteId};
+
+          Note.get($scope,params);
 
 
         } else if (authResult['error']) {
