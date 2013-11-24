@@ -1,5 +1,5 @@
-app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Opportunity',
-    function($scope,$route,$location,Conf,Opportunity) {
+app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Account','Opportunity',
+    function($scope,$route,$location,Conf,Account,Opportunity) {
       
      $("#id_Opportunities").addClass("active");
      $scope.isSignedIn = false;

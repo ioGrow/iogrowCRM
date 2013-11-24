@@ -577,7 +577,7 @@
                       </div>
                       <div class="tab-pane active" id="tab_1_6" ng-show="selectedTab == 6">
                           
-                         <div class="row-fluid cards-container">
+                         <div class="row-fluid cards-container iodrive">
                          <div class="btn-group relbutton">
             
                                 <div class="btn-group">
@@ -599,25 +599,28 @@
 
                                 </div>
                           </div>
-                            <div class="inner-cards-container">                            
-                             <!--div  class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                                <div class="dashboard-stat cards">
+                            <div class="inner-cards-container">
+                                                        
+                             <div  class="span4 responsive" ng-repeat="attachment in documents" data-tablet="span6" data-desktop="span4">
+                                <div class="dashboard-stat cards-med">
                                   
                                   <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardTitle">
-                                     Ben Belfodhil
+                                    <a href="/#/documents/show/<%= attachment.id %>"><h3 class="relatedcardOppTitle">
+                                     <%=attachment.title%>
                                     </h3></a>
-                                    <div class="desc">    
-                                                             
-                                        <span class="contact-title">CEO</span>  
+                                    <!--<div class="desc">                           
+                                    <span class="contact-title" ng-show="casee.status">Status:<a  class="desc" href="/#/search/type:Case <%=casee.status%>"># <%=casee.status%></a></span> <br>
+                                    <span ng-show="casee.priority" class="contact-title" >Priority:<a class="desc" href="/#/search/type:Case <%=casee.priority%>">#<%=casee.priority%> </a></span><br>
+                                      <span ng-show="casee.type_case" class="contact-title" >Labels :<a class="desc" href="/#/search/type:Case <%=casee.type_case%>">#<%=casee.type_case%></a>  </span>
                                     
-                                    </div>
+                                    </div>-->
                                   </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
+                                  <a class="more" href="/#/cases/show/<%=casee.id%>">
                                   View more <i class="m-icon-swapright m-icon-white"></i>
                                   </a>                 
                                 </div>
-                              </div-->
+                              </div>
+
                               </div>
                             </div>
                       </div>

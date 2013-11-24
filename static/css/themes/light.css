@@ -644,6 +644,9 @@ background-color: #fff;
   padding-top: 10px;
   padding-left: 10px;
 }
+.iodrive{
+  min-height: 300px;
+}
 .opportunity-amount{
   font-size: 14px;
   font-weight: bold;

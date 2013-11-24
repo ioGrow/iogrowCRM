@@ -124,26 +124,40 @@ class CrmEngineApi(remote.Service):
   @Contact.method(user_required=True,path='contacts', http_method='POST', name='contacts.insert')
   def ContactInsert(self, my_model):
 
-    # Here, since the schema includes an ID, it is possible that the entity
-    # my_model has an ID, hence we could be specifying a new ID in the datastore
-    # or overwriting an existing entity. If no ID is included in the ProtoRPC
-    # request, then no key will be set in the model and the ID will be set after
-    # the put completes, as in basic/main.py.
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+          raise endpoints.UnauthorizedException('You must sign-in!' )
+      # OAuth flow
+      try:
+          credentials = user_from_email.google_credentials
+          http = credentials.authorize(httplib2.Http(memcache))
+          service = build('drive', 'v2', http=http)
+          organization = user_from_email.organization.get()
 
-    # In either case, the datastore ID from the entity will be returned in the
-    # ProtoRPC response message.
-    
-    user = endpoints.get_current_user()
-    if user is None:
-        raise endpoints.UnauthorizedException('You must authenticate!' )
-    user_from_email = model.User.query(model.User.email == user.email()).get()
-    if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!' )
-    # Todo: Check permissions
-    my_model.owner = user_from_email.google_user_id
-    my_model.organization =  user_from_email.organization
-    my_model.put()
-    return my_model
+          # prepare params to insert
+          folder_params = {
+                      'title': my_model.firstname + ' ' + my_model.lastname,
+                      'mimeType':  'application/vnd.google-apps.folder'         
+          }#get the accounts_folder or contacts_folder or .. 
+          
+          parent_folder = organization.contacts_folder
+          if parent_folder:
+              folder_params['parents'] = [{'id': parent_folder}]
+          
+          # execute files.insert and get resource_id
+          created_folder = service.files().insert(body=folder_params).execute()
+      except:
+          raise endpoints.UnauthorizedException('Invalid grant' )
+          return
+      # Todo: Check permissions
+      my_model.owner = user_from_email.google_user_id
+      my_model.organization = user_from_email.organization
+      my_model.folder = created_folder['id']
+      my_model.put()
+      return my_model
 
 
   @Contact.method(user_required=True,
@@ -254,28 +268,32 @@ class CrmEngineApi(remote.Service):
           raise endpoints.UnauthorizedException('You must authenticate!' )
       user_from_email = model.User.query(model.User.email == user.email()).get()
       if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!' )
+          raise endpoints.UnauthorizedException('You must sign-in!' )
+      # OAuth flow
+      try:
+          credentials = user_from_email.google_credentials
+          http = credentials.authorize(httplib2.Http(memcache))
+          service = build('drive', 'v2', http=http)
+          organization = user_from_email.organization.get()
+
+          # prepare params to insert
+          folder_params = {
+                      'title': my_model.name,
+                      'mimeType':  'application/vnd.google-apps.folder'         
+          }#get the accounts_folder or contacts_folder or .. 
+          
+          parent_folder = organization.accounts_folder
+          if parent_folder:
+              folder_params['parents'] = [{'id': parent_folder}]
+          
+          # execute files.insert and get resource_id
+          created_folder = service.files().insert(body=folder_params).execute()
+      except:
+          raise endpoints.UnauthorizedException('Invalid grant' )
+          return
       # Todo: Check permissions
       my_model.owner = user_from_email.google_user_id
       my_model.organization = user_from_email.organization
-      credentials = user_from_email.google_credentials
-      http = credentials.authorize(httplib2.Http(memcache))
-      service = build('drive', 'v2', http=http)
-      credentials.authorize(http)
-      organization = user_from_email.organization.get()
-
-      # prepare params to insert
-      folder_params = {
-                  'title': my_model.name,
-                  'mimeType':  'application/vnd.google-apps.folder'         
-      }#get the accounts_folder or contacts_folder or .. 
-      
-      parent_folder = organization.accounts_folder
-      if parent_folder:
-          folder_params['parents'] = [{'id': parent_folder}]
-      
-      # execute files.insert and get resource_id
-      created_folder = service.files().insert(body=folder_params).execute()
       my_model.folder = created_folder['id']
       my_model.put()
       return my_model
@@ -542,16 +560,40 @@ class CrmEngineApi(remote.Service):
   # HKA 4.11.2013 Add Opportuity APIs
   @Opportunity.method(user_required=True,path='opportunities',http_method='POST',name='opportunities.insert')
   def OpportunityInsert(self, my_model):
-    user = endpoints.get_current_user()
-    if user is  None :
-      raise endpoints.UnauthorizedException('You must be aunthenticated')
-    user_from_email = model.User.query(model.User.email == user.email()).get()
-    if user_from_email is  None :
-      raise endpoints.UnauthorizedException('You must sign-in ')
-    my_model.owner = user_from_email.google_user_id
-    my_model.organization =  user_from_email.organization
-    my_model.put()
-    return my_model
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+          raise endpoints.UnauthorizedException('You must sign-in!' )
+      # OAuth flow
+      try:
+          credentials = user_from_email.google_credentials
+          http = credentials.authorize(httplib2.Http(memcache))
+          service = build('drive', 'v2', http=http)
+          organization = user_from_email.organization.get()
+
+          # prepare params to insert
+          folder_params = {
+                      'title': my_model.name,
+                      'mimeType':  'application/vnd.google-apps.folder'         
+          }#get the accounts_folder or contacts_folder or .. 
+          
+          parent_folder = organization.opportunities_folder
+          if parent_folder:
+              folder_params['parents'] = [{'id': parent_folder}]
+          
+          # execute files.insert and get resource_id
+          created_folder = service.files().insert(body=folder_params).execute()
+      except:
+          raise endpoints.UnauthorizedException('Invalid grant' )
+          return
+      # Todo: Check permissions
+      my_model.owner = user_from_email.google_user_id
+      my_model.organization = user_from_email.organization
+      my_model.folder = created_folder['id']
+      my_model.put()
+      return my_model
 
   @Opportunity.method(user_required=True,
                 http_method='PUT', path='opportunities/{id}', name='opportunities.update')
@@ -642,16 +684,40 @@ class CrmEngineApi(remote.Service):
 # HKA 06.11.2013 Add Opportuity APIs
   @Lead.method(user_required=True,path='leads',http_method='POST',name='leads.insert')
   def LeadInsert(self, my_model):
-    user = endpoints.get_current_user()
-    if user is  None :
-      raise endpoints.UnauthorizedException('You must be aunthenticated')
-    user_from_email = model.User.query(model.User.email == user.email()).get()
-    if user_from_email is None:
-      raise endpoints.UnauthorizedException('You must sign-in ')
-    my_model.owner = user_from_email.google_user_id
-    my_model.organization =  user_from_email.organization
-    my_model.put()
-    return my_model
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+          raise endpoints.UnauthorizedException('You must sign-in!' )
+      # OAuth flow
+      try:
+          credentials = user_from_email.google_credentials
+          http = credentials.authorize(httplib2.Http(memcache))
+          service = build('drive', 'v2', http=http)
+          organization = user_from_email.organization.get()
+
+          # prepare params to insert
+          folder_params = {
+                      'title': my_model.firstname + ' ' + my_model.lastname,
+                      'mimeType':  'application/vnd.google-apps.folder'         
+          }#get the accounts_folder or contacts_folder or .. 
+          
+          parent_folder = organization.leads_folder
+          if parent_folder:
+              folder_params['parents'] = [{'id': parent_folder}]
+          
+          # execute files.insert and get resource_id
+          created_folder = service.files().insert(body=folder_params).execute()
+      except:
+          raise endpoints.UnauthorizedException('Invalid grant' )
+          return
+      # Todo: Check permissions
+      my_model.owner = user_from_email.google_user_id
+      my_model.organization = user_from_email.organization
+      my_model.folder = created_folder['id']
+      my_model.put()
+      return my_model
 
   @Lead.method(user_required=True,
                 http_method='PUT', path='leads/{id}', name='leads.update')
@@ -700,16 +766,40 @@ class CrmEngineApi(remote.Service):
 # HKA 07.11.2013 Add Cases APIs
   @Case.method(user_required=True,path='cases',http_method='POST',name='cases.insert')
   def CaseInsert(self, my_model):
-    user = endpoints.get_current_user()
-    if user is  None :
-      raise endpoints.UnauthorizedException('You must be aunthenticated')
-    user_from_email = model.User.query(model.User.email == user.email()).get()
-    if user_from_email is None:
-      raise endpoints.UnauthorizedException('You must sign-in ')
-    my_model.owner = user_from_email.google_user_id
-    my_model.organization =  user_from_email.organization
-    my_model.put()
-    return my_model
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+          raise endpoints.UnauthorizedException('You must sign-in!' )
+      # OAuth flow
+      try:
+          credentials = user_from_email.google_credentials
+          http = credentials.authorize(httplib2.Http(memcache))
+          service = build('drive', 'v2', http=http)
+          organization = user_from_email.organization.get()
+
+          # prepare params to insert
+          folder_params = {
+                      'title': my_model.name,
+                      'mimeType':  'application/vnd.google-apps.folder'         
+          }#get the accounts_folder or contacts_folder or .. 
+          
+          parent_folder = organization.cases_folder
+          if parent_folder:
+              folder_params['parents'] = [{'id': parent_folder}]
+          
+          # execute files.insert and get resource_id
+          created_folder = service.files().insert(body=folder_params).execute()
+      except:
+          raise endpoints.UnauthorizedException('Invalid grant' )
+          return
+      # Todo: Check permissions
+      my_model.owner = user_from_email.google_user_id
+      my_model.organization = user_from_email.organization
+      my_model.folder = created_folder['id']
+      my_model.put()
+      return my_model
 
   @Case.method(user_required=True,
                 http_method='PUT', path='cases/{id}', name='cases.update')

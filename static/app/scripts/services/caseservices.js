@@ -63,7 +63,12 @@ accountservices.factory('Case', function($http) {
           window.location.replace('#/cases/show/'+resp.id);
           
          }else{
-          console.log(resp.code);
+          console.log(resp.message);
+             $('#addCaseModal').modal('hide');
+             $('#errorModal').modal('show');
+             if(resp.message=="Invalid grant"){
+                window.location.replace('/sign-in');
+             };
          }
       });
   };

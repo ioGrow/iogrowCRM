@@ -118,8 +118,8 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
 
     
 }]);
-app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Conf','Account','Contact','Case','Opportunity', 'Topic','Note','Task','Event','Permission','User',
-    function($scope,$filter,$route,$location,Conf,Account,Contact,Case,Opportunity,Topic,Note,Task,Event,Permission,User) {
+app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Conf','Account','Contact','Case','Opportunity', 'Topic','Note','Task','Event','Permission','User','Attachement',
+    function($scope,$filter,$route,$location,Conf,Account,Contact,Case,Opportunity,Topic,Note,Task,Event,Permission,User,Attachement) {
       console.log('i am in account Show controller');
       $("#id_Accounts").addClass("active");
       var tab = $route.current.params.accountTab;
@@ -235,6 +235,15 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
                       'limit': 7
                       };
         Topic.list($scope,params);
+
+     }
+     $scope.listDocuments = function(account){
+        var params = {'about_kind':'Account',
+                      'about_item':$scope.account.id,
+                      'order': '-updated_at',
+                      'limit': 7
+                      };
+        Attachement.list($scope,params);
 
      }
      $scope.hilightTopic = function(){

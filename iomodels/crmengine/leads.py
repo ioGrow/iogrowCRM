@@ -6,12 +6,13 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 import model
 
 class Lead(EndpointsModel):
-    _message_fields_schema = ('id','entityKey','access','collaborators_list','collaborators_ids', 'firstname','lastname','company')
+    _message_fields_schema = ('id','entityKey','folder', 'access','collaborators_list','collaborators_ids', 'firstname','lastname','company')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
     collaborators_ids = ndb.StringProperty(repeated=True)
     organization = ndb.KeyProperty()
+    folder = ndb.StringProperty()
     firstname = ndb.StringProperty(required=True)
     lastname = ndb.StringProperty()
     company = ndb.StringProperty()
