@@ -116,7 +116,7 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Opp
         }else if($scope.searchAccountQuery.length>0){
             // create a new account with this account name
             var params = {'name': $scope.searchAccountQuery,
-                          'access': contact.access
+                          'access': opportunity.access
             };
             $scope.opportunity = opportunity;
             Account.insert($scope,params);
@@ -144,7 +144,7 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Opp
             console.log(resp);
             if (resp.items){
               $scope.results = resp.items;
-              console.log($scope.results);
+              console.log($scope.accountsResults);
               $scope.$apply();
             };
             

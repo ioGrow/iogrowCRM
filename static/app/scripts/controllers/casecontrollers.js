@@ -1,5 +1,5 @@
-app.controller('CaseListCtrl', ['$scope','$route','$location','Conf','Case',
-    function($scope,$route,$location,Conf,Case) {
+app.controller('CaseListCtrl', ['$scope','$route','$location','Conf','Case','Account',
+    function($scope,$route,$location,Conf,Case,Account) {
      console.log('i am in case list controller');
 
      $("#id_Cases").addClass("active");
@@ -15,6 +15,7 @@ app.controller('CaseListCtrl', ['$scope','$route','$location','Conf','Case',
      $scope.cases = [];
      $scope.casee = {};
      $scope.casee.access ='public';
+     $scope.casee.status = 'pending';
      
      
 
@@ -105,9 +106,88 @@ app.controller('CaseListCtrl', ['$scope','$route','$location','Conf','Case',
 
       };
       
+    
     $scope.save = function(casee){
-      Case.insert(casee);
-    };
+        
+        
+        
+        if (typeof(casee.account)=='object'){
+          casee.account = casee.account.entityKey;
+          casee.account_name = casee.account.name;
+          if (typeof(casee.contact)=='object'){
+              casee.contact = casee.contact.entityKey;
+              casee.contact_name = casee.contact.firstname + ' '+ casee.contact.lastname ;
+          }
+          Case.insert(casee);
+
+        }else if($scope.searchAccountQuery.length>0){
+            // create a new account with this account name
+            var params = {'name': $scope.searchAccountQuery,
+                          'access': casee.access
+            };
+            $scope.casee = casee;
+            Account.insert($scope,params);
+
+
+        };
+
+        
+        $('#addCaseModal').modal('hide');
+      };
+      $scope.accountInserted = function(resp){
+          $scope.casee.account = resp;
+          $scope.save($scope.casee);
+      };
+      
+     var params_search_account ={};
+     $scope.contactResult = undefined;
+     $scope.accountResult = undefined;
+     $scope.q = undefined;
+     
+      $scope.$watch('searchAccountQuery', function() {
+        if ($scope.searchAccountQuery.length>1){
+         params_search_account['q'] = $scope.searchAccountQuery;
+         gapi.client.crmengine.accounts.search(params_search_account).execute(function(resp) {
+            console.log("in accouts.search api");
+            console.log(params_search_account);
+
+            console.log(resp);
+            if (resp.items){
+              $scope.accountsResults = resp.items;
+              
+              $scope.$apply();
+            };
+            
+          });
+         }
+      });
+      $scope.selectAccount = function(){
+        $scope.casee.account = $scope.searchAccountQuery;
+
+     };
+     var params_search_contact ={};
+     $scope.$watch('searchContactQuery', function() {
+        if($scope.searchContactQuery.length>1){
+         params_search_contact['q'] = $scope.searchContactQuery;
+         gapi.client.crmengine.contacts.search(params_search_contact).execute(function(resp) {
+            
+            if (resp.items){
+              $scope.contactsResults = resp.items;
+              
+              $scope.$apply();
+            };
+            
+          });
+         }
+        
+      });
+     $scope.selectContact = function(){
+        $scope.casee.contact = $scope.searchContactQuery;
+        var account = {'entityKey':$scope.searchContactQuery.account,
+                      'name':$scope.searchContactQuery.account_name};
+        $scope.casee.account = account;
+        $scope.searchAccountQuery = $scope.searchContactQuery.account_name;
+      };
      
      
    

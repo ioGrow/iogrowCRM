@@ -765,7 +765,7 @@ app.controller('SearchShowController', ['$scope','$route','$location','Conf','Se
     function($scope,$route,$location,Conf,Search) {
      console.log('i am in account list controller');
 
-     $("#id_Accounts").addClass("active");
+    
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;

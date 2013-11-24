@@ -52,33 +52,42 @@
                         <label  class="required control-label">{{_("Name")}} </label>
                        
                         <div class="controls">
-                          <input type="text"  id="id_name" ng-model="casee.name">
+                          <input type="text"  id="id_name" required class="input-xlarge" ng-model="casee.name">
                           
                         </div>
                     </div>
+
                     <div class="control-group">
                         <label  class="required control-label">{{_("Priority")}} </label>
                        
                         <div class="controls">
-                          <input type="text"  id="id_priority" ng-model="casee.priority">
+                          <input type="text"  id="id_priority" placeholder="High,Medium,Low" required class="input-xlarge" ng-model="casee.priority">
                           
                         </div>
                     </div>
                     
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Status")}}</label>
-                       
-                        <div class="controls">
-                          <input type="text"  id="id_status" ng-model="casee.status">
-                          
-                        </div>
-                      
-                    </div>
+                    
                     <div class="control-group">
                         <label  class="required control-label">{{_("Labels")}} </label>
                        
                         <div class="controls">
-                          <input type="text"  id="id_description" ng-model="casee.type_case">
+                          <input type="text"  id="id_description" placeholder="Add #hashtags to categorize your cases" class="input-xlarge" ng-model="casee.type_case">
+                          
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Contact")}}</label>
+                       
+                         <div class="controls">
+                          <input type="text"  ng-model="searchContactQuery" typeahead="contactResult as contactResult.firstname + ' '+  contactResult.lastname for contactResult in contactsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectContact()" class="input-xlarge" placeholder="Search">
+                          
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Account")}} </label>
+                       
+                        <div class="controls">
+                          <input type="text" required  ng-model="searchAccountQuery" typeahead="accountResult as accountResult.name  for accountResult in accountsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectAccount()" class="input-xlarge" placeholder="Search">
                           
                         </div>
                     </div>
@@ -145,9 +154,11 @@
                        <%=casee.name %>
                     </h3></a>
                     <div class="desc">                           
-                                    <span class="contact-title" ><a class="desc" href="/#/search/type:Case <%=casee.status%>"># <%=casee.status %></a>  - </span>
-                                    <span><a  class="desc" href="/#/search/type:Case <%=casee.priority%>"># <%=casee.priority %></span> <span> - </span>
-                                    <a  class="desc" href="/#/search/type:Case <%=casee.type_case%>"># <%=casee.type_case %></a>
+                                    <span ng-show="casee.status" class="contact-title" ><a class="desc" href="/#/search/type:Case <%=casee.status%>"> <%=casee.status %></a>  - </span>
+                                    <span ng-show="casee.priority"><a  class="desc" href="/#/search/type:Case <%=casee.priority%>"><%=casee.priority %></span> - 
+                                    <span ng-show="casee.type_case">
+                                    <a  class="desc" href="/#/search/type:Case <%=casee.type_case%>"><%=casee.type_case %></a>
+                                    </span>
                                     
                                     
                                     </div>
