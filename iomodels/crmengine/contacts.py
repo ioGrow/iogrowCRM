@@ -71,7 +71,7 @@ class Contact(EndpointsModel):
             search.TextField(name='address', value = empty_string(self.address)),
             search.TextField(name='department', value = empty_string(self.department)),
             search.TextField(name='mobile', value = empty_string(self.mobile)),
-            search.TextField(name='account_name',value=empty_string(self.account_name))
+            search.TextField(name='account_name',value=empty_string(self.account_name)),
             search.TextField(name='email', value = empty_string(self.email)),
             search.TextField(name='description', value = empty_string(self.description))
            ])
