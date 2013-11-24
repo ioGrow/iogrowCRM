@@ -111,6 +111,7 @@ app.controller('ContactListCtrl', ['$scope','$route','$location','Conf','Account
         if (typeof(contact.account)=='object'){
           contact.account = contact.account.entityKey;
           contact.account_name = contact.account.name;
+          console.log('hahahahahahahah');
           console.log(contact);
           Contact.insert(contact);
 
@@ -456,7 +457,35 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','$location','Conf
     Note.insert($scope,params);
     $scope.note.title='';
     $scope.note.content='';
-  }
+  };
+//HKA 22.11.2013 Edit tagline of Account
+    $scope.edittagline = function() {
+       $('#EditTagModal').modal('show');
+    };
+//HKA Edit Introduction on Account
+    $scope.editintro = function() {
+       $('#EditIntroModal').modal('show');
+    };
+
+// HKA 18.11.2013 Show modal Related list (Opportunity)
+  $scope.addOppModal = function(){
+    $('#addOpportunityModal').modal('show');
+  };
+  
+//HKA 18.11.2013 Show modal Related list (Case)
+  $scope.addCaseModal = function(){
+    $('#addCaseModal').modal('show');
+  };
+//HKA 22.11.2013 Edit  Tagline
+ $scope.updateTagline = function(contact){
+ 
+  params = {'id':$scope.contact.id
+             //'tagline':contact.tagline
+           }
+  Account.patch($scope,params);
+  $('#EditTagModal').modal('hide');
+};
+
   
 
 

@@ -182,7 +182,7 @@ class CrmEngineApi(remote.Service):
   # ProtoRPC schema for the model now includes "id", all the values in "items"
   # will also contain an "id".
  
-  @Contact.query_method(user_required=True,query_fields=('limit', 'order','account', 'pageToken'),path='contacts', name='contacts.list')
+  @Contact.query_method(user_required=True,query_fields=('limit', 'order','account','account_name', 'pageToken'),path='contacts', name='contacts.list')
   def ContactList(self, query):
       user = endpoints.get_current_user()
       if user is None:

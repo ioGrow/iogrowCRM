@@ -8,7 +8,7 @@ class Contact(EndpointsModel):
 
     
 
-    _message_fields_schema = ('id','entityKey','access','collaborators_list','collaborators_ids', 'firstname','lastname','title','company','account')
+    _message_fields_schema = ('id','entityKey','access','collaborators_list','collaborators_ids', 'firstname','lastname','title','company','account','account_name')
 
 
     # Sharing fields
