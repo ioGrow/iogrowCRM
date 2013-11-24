@@ -117,7 +117,7 @@ class CrmEngineApi(remote.Service):
 
   ID_RESOURCE = endpoints.ResourceContainer(
             message_types.VoidMessage,
-            id=messages.IntegerField(1, variant=messages.Variant.INT32))
+            id=messages.StringField(1))
   
   
   # TEDJ_29_10_write annotation to reference wich model for example @Account to refernce Account model
@@ -460,7 +460,7 @@ class CrmEngineApi(remote.Service):
                 else:
                     about_name = about_object.name
                 about_response = DiscussionAboutSchema(kind=note.about_kind,
-                                                       id=about_item_id,
+                                                       id=note.about_item,
                                                        name=about_name)
                 author = AuthorSchema(google_user_id = note.author.google_user_id,
                                       display_name = note.author.display_name,
