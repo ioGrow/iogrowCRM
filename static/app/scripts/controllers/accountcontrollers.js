@@ -550,12 +550,18 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
 //HKA 19.11.2013 Add Contact related to account
 
     $scope.savecontact = function(contact){
-      
+        var contact_name = new Array();
+        contact_name.push(contact.firstname);
+        contact_name.push(contact.lastname);
+        
          var params = {'lastname':contact.lastname,
                       'firstname':contact.firstname,
                       'title': contact.title,
-                      'account':$scope.account.entityKey
+                      'account':$scope.account.entityKey,
+                      'display_name': contact_name
                       };
+
+        console.log(params);
         
         Contact.insert(params);
         $('#addContactModal').modal('hide');

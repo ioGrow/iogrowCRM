@@ -32,6 +32,92 @@ indexes:
   - name: updated_at
     direction: desc
 
+- kind: Contact
+  properties:
+  - name: access
+  - name: organization
+  - name: display_name
+
+- kind: Contact
+  properties:
+  - name: access
+  - name: organization
+  - name: firstname
+
+- kind: Contact
+  properties:
+  - name: access
+  - name: organization
+  - name: firstname
+  - name: lastname
+
+- kind: Contact
+  properties:
+  - name: access
+  - name: organization
+  - name: lastname
+  - name: firstname
+
+- kind: Contact
+  properties:
+  - name: access
+  - name: organization
+  - name: name
+
+- kind: Contact
+  properties:
+  - name: collaborators_ids
+  - name: display_name
+
+- kind: Contact
+  properties:
+  - name: collaborators_ids
+  - name: firstname
+
+- kind: Contact
+  properties:
+  - name: collaborators_ids
+  - name: firstname
+  - name: lastname
+
+- kind: Contact
+  properties:
+  - name: collaborators_ids
+  - name: lastname
+  - name: firstname
+
+- kind: Contact
+  properties:
+  - name: collaborators_ids
+  - name: name
+
+- kind: Contact
+  properties:
+  - name: owner
+  - name: display_name
+
+- kind: Contact
+  properties:
+  - name: owner
+  - name: firstname
+
+- kind: Contact
+  properties:
+  - name: owner
+  - name: firstname
+  - name: lastname
+
+- kind: Contact
+  properties:
+  - name: owner
+  - name: lastname
+  - name: firstname
+
+- kind: Contact
+  properties:
+  - name: owner
+  - name: name
+
 - kind: Event
   properties:
   - name: about_item

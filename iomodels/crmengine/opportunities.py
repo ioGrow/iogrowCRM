@@ -15,6 +15,7 @@ class Opportunity(EndpointsModel):
     collaborators_ids = ndb.StringProperty(repeated=True)
     organization = ndb.KeyProperty()
     account = ndb.KeyProperty()
+    account_name = ndb.StringProperty()
     name = ndb.StringProperty()
     description = ndb.StringProperty()
     industry = ndb.StringProperty()
