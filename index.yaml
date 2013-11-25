@@ -122,7 +122,6 @@ indexes:
   properties:
   - name: about_item
   - name: about_kind
-  - name: comments
   - name: updated_at
     direction: desc
 

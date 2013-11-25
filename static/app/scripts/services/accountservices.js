@@ -283,6 +283,22 @@ accountservices.factory('Attachement', function($http) {
       });
       
   };
+  Attachement.get = function($scope,id) {
+          gapi.client.crmengine.documents.get(id).execute(function(resp) {
+            if(!resp.code){
+               $scope.attachment = resp;
+               
+               $scope.isContentLoaded = true;
+               
+               // Call the method $apply to make the update on the scope
+                $scope.$apply();
+
+            }else {
+               alert("Error, response is: " + angular.toJson(resp));
+            }
+            console.log('gapi #end_execute');
+          });
+  };
   
 
 return Attachement;

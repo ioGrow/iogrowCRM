@@ -237,7 +237,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
         Topic.list($scope,params);
 
      }
-     $scope.listDocuments = function(account){
+     $scope.listDocuments = function(){
         var params = {'about_kind':'Account',
                       'about_item':$scope.account.id,
                       'order': '-updated_at',
@@ -298,11 +298,17 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
                       'title':newdocument.title,
                       'mimeType':mimeType };
 
+        //Todo incule this as a service
+        $scope.isLoading = true;
         gapi.client.crmengine.documents.insert(params).execute(function(resp) {
             console.log("in google drive api");
             console.log(resp);
             //console.log(params);
+            // 
              $('#newDocument').modal('hide');
+             $scope.listDocuments();
+             $scope.isLoading = false;
+             $scope.$apply();
 
            
             
@@ -310,7 +316,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
 
      };
      $scope.createPickerUploader = function() {
-          var projectfolder = $("#projectdrivefolder").val(); 
+          var projectfolder = $scope.account.folder;
           var picker = new google.picker.PickerBuilder().
               addView(new google.picker.DocsUploadView().setParent(projectfolder)).
               setCallback($scope.uploaderCallback).
@@ -321,25 +327,40 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
       };
       // A simple callback implementation.
       $scope.uploaderCallback = function(data) {
+        
 
-          var projectdid = $("#projectdid").val(); 
-          var driveuploadersourcepage = $("#driveuploadersourcepage").val(); 
-          var url = '/uploadfiles?projectid='+projectdid;
-               if (data.action == google.picker.Action.PICKED) {
-                var fileIds = [];
-                var filenames = [];
-              var fileUrls = [];
+        if (data.action == google.picker.Action.PICKED) {
+                var params = {'about_kind': 'Account',
+                                      'about_item':$scope.account.id};
+                params.items = new Array();
+               
                  $.each(data.docs, function(index) {
+                      console.log(data.docs);
+                      /*
+                      {'about_kind':'Account',
+                      'about_item': $scope.account.id,
+                      'title':newdocument.title,
+                      'mimeType':mimeType };
+                      */
+                      var item = { 'id':data.docs[index].id,
+                                  'title':data.docs[index].name,
+                                  'mimeType': data.docs[index].mimeType,
+                                  'embedLink': data.docs[index].url
+
+                      };
+                      params.items.push(item);
                 
-                      fileIds.push(data.docs[index].id);
-                      filenames.push(data.docs[index].name);
-                fileurls.push(data.docs[index].url);
-            
+                  });
+                  gapi.client.crmengine.documents.attachfiles(params).execute(function(resp) {
+                    //console.log("files inserted");
+                    //console.log(resp);
                      
+                     $scope.listDocuments();
                     
                   });
                     
-                     $.post(url, { fileids: fileIds , filenames: filenames ,fileurls:fileUrls} );
+                    console.log('after uploading files');
+                    console.log(params);
                 }
       }
      $scope.share = function(slected_memeber){

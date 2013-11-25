@@ -9,6 +9,7 @@ import model
 
 class Document(EndpointsModel):
     # Sharing fields
+    _message_fields_schema = ('id','entityKey','mimeType', 'title','about_kind','about_item', 'embedLink', 'updated_at','created_at')
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
     collaborators_ids = ndb.StringProperty(repeated=True)
@@ -23,7 +24,7 @@ class Document(EndpointsModel):
     mimeType = ndb.StringProperty()
 
     # number of comments in this topic
-    comments = ndb.IntegerProperty(default=0)
+    comments = ndb.IntegerProperty()
     # A Topic is attached to an object for example Account or Opportunity..
     about_kind = ndb.StringProperty()
     about_item = ndb.StringProperty()
@@ -51,6 +52,8 @@ class Document(EndpointsModel):
 
     def put_index(self):
         """ index the element at each"""
+        if self.comments is None:
+            self.comments = 0
         empty_string = lambda x: x if x else ""
         collaborators = " ".join(self.collaborators_ids)
         organization = str(self.organization.id())

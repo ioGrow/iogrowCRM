@@ -49,6 +49,17 @@ class SearchRequest(messages.Message):
     limit = messages.IntegerField(2)
     pageToken = messages.StringField(3)
 
+class AttachmentSchema(messages.Message):
+    id = messages.StringField(1)
+    title = messages.StringField(2)
+    mimeType = messages.StringField(3)
+    embedLink = messages.StringField(4)
+class MultipleAttachmentRequest(messages.Message):
+    about_kind = messages.StringField(1)
+    about_item = messages.StringField(2)
+    items = messages.MessageField(AttachmentSchema, 3, repeated=True)
+
+
 class SearchResult(messages.Message):
     id = messages.StringField(1)
     title = messages.StringField(2)
@@ -1415,6 +1426,12 @@ class CrmEngineApi(remote.Service):
 
           
 ################################ Documents API ##################################
+  @Document.method(request_fields=('id',),path='documents/{id}', http_method='GET', name='documents.get')
+  def TaskGet(self, my_model):
+      if not my_model.from_datastore:
+        raise endpoints.NotFoundException('Document not found.')
+      return my_model
+
   @Document.method(user_required=True,path='documents', http_method='POST', name='documents.insert')
   def DocumentInsert(self, my_model):
 
@@ -1456,6 +1473,7 @@ class CrmEngineApi(remote.Service):
     # execute files.insert and get resource_id
     created_document = service.files().insert(body=document).execute()
     my_model.resource_id = created_document['id']
+    my_model.embedLink = created_document['embedLink']
     # insert in the datastore
     
     # Todo: Check permissions
@@ -1466,6 +1484,38 @@ class CrmEngineApi(remote.Service):
     my_model.put()
     
     return my_model
+
+  @endpoints.method(MultipleAttachmentRequest, message_types.VoidMessage,
+                      path='documents/attachfiles', http_method='POST',
+                      name='documents.attachfiles')
+  def attach_files(self, request):
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+        raise endpoints.UnauthorizedException('You must sign-in!' )
+      # Todo: Check permissions
+      items = request.items
+      author = model.Userinfo()
+      author.display_name = user_from_email.google_display_name
+      author.photo = user_from_email.google_public_profile_photo_url
+      for item in items:
+          document = Document(about_kind = request.about_kind,
+                              about_item = request.about_item,
+                              title = item.title,
+                              resource_id = item.id,
+                              mimeType = item.mimeType,
+                              embedLink = item.embedLink,
+                              owner = user_from_email.google_user_id,
+                              organization = user_from_email.organization,
+                              author=author,
+                              comments = 0
+                              )
+          document.put()
+      return message_types.VoidMessage()
+
+
 
   @Document.method(user_required=True,
                 http_method='PUT', path='documents/{id}', name='documents.update')

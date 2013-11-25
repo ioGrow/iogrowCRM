@@ -647,6 +647,9 @@ background-color: #fff;
 .iodrive{
   min-height: 300px;
 }
+.google-drive-icon{
+  height: 50px;
+}
 .opportunity-amount{
   font-size: 14px;
   font-weight: bold;
