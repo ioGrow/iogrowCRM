@@ -138,8 +138,8 @@ app.controller('NoteShowController',['$scope','$filter','$route','$location','Co
 
 	}]);
 
-app.controller('DocumentShowController',['$scope','$filter','$route','$location','Conf','Attachement','Topic','Comment',
-   function($scope,$filter,$route,$location,Conf,Attachement,Topic,Comment) {
+app.controller('DocumentShowController',['$scope','$filter','$route','$location','Conf','Attachement','Note','Comment',
+   function($scope,$filter,$route,$location,Conf,Attachement,Note,Comment) {
 //HKA 14.11.2013 Controller to show Notes and add comments
    $scope.isSignedIn = false;
      $scope.immediateFailed = false;
@@ -213,7 +213,12 @@ app.controller('DocumentShowController',['$scope','$filter','$route','$location'
         $scope.processAuth(authResult);
         
      }
+     $scope.prepareUrls = function(){
 
+               var url = Note.getUrl($scope.attachment.about.kind,$scope.attachment.about.id);
+               $scope.uri =url;
+               $scope.attachment.embedLink;
+     };
      $scope.processAuth = function(authResult) {
         console.log('process Auth #startdebug');
         $scope.immediateFailed = true;

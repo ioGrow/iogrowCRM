@@ -836,10 +836,23 @@ class CrmEngineApi(remote.Service):
           raise endpoints.UnauthorizedException('You must authenticate!' )
       user_from_email = model.User.query(model.User.email == user.email()).get()
       if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!')
+        raise endpoints.UnauthorizedException('You must sign-in!' )
       # Todo: Check permissions
-      my_model.put()
-      return my_model
+      if not my_model.from_datastore:
+          raise endpoints.NotFoundException('Account not found.')
+      patched_model_key = my_model.entityKey
+      patched_model = ndb.Key(urlsafe=patched_model_key).get()
+      print patched_model
+      print my_model
+      properties = Case().__class__.__dict__
+      for p in properties.keys():
+         
+            if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p)):
+                exec('patched_model.'+p+'= my_model.'+p)
+      
+
+      patched_model.put()
+      return patched_model
 
   @Case.method(request_fields=('id',),path='cases/{id}', http_method='GET', name='cases.get')
   def CaseGet(self, my_model):

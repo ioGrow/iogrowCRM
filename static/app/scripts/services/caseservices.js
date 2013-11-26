@@ -77,6 +77,8 @@ accountservices.factory('Case', function($http) {
           console.log(params);
           gapi.client.crmengine.cases.patch(params).execute(function(resp) {
             if(!resp.code){
+                console.log('in cases.patch');
+                console.log(resp);
                $scope.casee = resp;
                
                // Call the method $apply to make the update on the scope

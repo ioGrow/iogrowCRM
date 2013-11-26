@@ -16,7 +16,7 @@ class Case(EndpointsModel):
     account_name = ndb.StringProperty()
     contact = ndb.KeyProperty()
     contact_name = ndb.StringProperty()
-    name = ndb.StringProperty(required=True)
+    name = ndb.StringProperty()
     status = ndb.StringProperty()
     description = ndb.StringProperty()
     type_case = ndb.StringProperty()
