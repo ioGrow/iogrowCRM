@@ -118,8 +118,8 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
 
     
 }]);
-app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Conf','Account','Contact','Case','Opportunity', 'Topic','Note','Task','Event','Permission','User',
-    function($scope,$filter,$route,$location,Conf,Account,Contact,Case,Opportunity,Topic,Note,Task,Event,Permission,User) {
+app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Conf','Account','Contact','Case','Opportunity', 'Topic','Note','Task','Event','Permission','User','Attachement',
+    function($scope,$filter,$route,$location,Conf,Account,Contact,Case,Opportunity,Topic,Note,Task,Event,Permission,User,Attachement) {
       console.log('i am in account Show controller');
       $("#id_Accounts").addClass("active");
       var tab = $route.current.params.accountTab;
@@ -237,6 +237,15 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
         Topic.list($scope,params);
 
      }
+     $scope.listDocuments = function(){
+        var params = {'about_kind':'Account',
+                      'about_item':$scope.account.id,
+                      'order': '-updated_at',
+                      'limit': 7
+                      };
+        Attachement.list($scope,params);
+
+     }
      $scope.hilightTopic = function(){
         console.log('Should higll');
        $('#topic_0').effect( "bounce", "slow" );
@@ -289,11 +298,17 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
                       'title':newdocument.title,
                       'mimeType':mimeType };
 
+        //Todo incule this as a service
+        $scope.isLoading = true;
         gapi.client.crmengine.documents.insert(params).execute(function(resp) {
             console.log("in google drive api");
             console.log(resp);
             //console.log(params);
+            // 
              $('#newDocument').modal('hide');
+             $scope.listDocuments();
+             $scope.isLoading = false;
+             $scope.$apply();
 
            
             
@@ -301,7 +316,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
 
      };
      $scope.createPickerUploader = function() {
-          var projectfolder = $("#projectdrivefolder").val(); 
+          var projectfolder = $scope.account.folder;
           var picker = new google.picker.PickerBuilder().
               addView(new google.picker.DocsUploadView().setParent(projectfolder)).
               setCallback($scope.uploaderCallback).
@@ -312,25 +327,40 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
       };
       // A simple callback implementation.
       $scope.uploaderCallback = function(data) {
+        
 
-          var projectdid = $("#projectdid").val(); 
-          var driveuploadersourcepage = $("#driveuploadersourcepage").val(); 
-          var url = '/uploadfiles?projectid='+projectdid;
-               if (data.action == google.picker.Action.PICKED) {
-                var fileIds = [];
-                var filenames = [];
-              var fileUrls = [];
+        if (data.action == google.picker.Action.PICKED) {
+                var params = {'about_kind': 'Account',
+                                      'about_item':$scope.account.id};
+                params.items = new Array();
+               
                  $.each(data.docs, function(index) {
+                      console.log(data.docs);
+                      /*
+                      {'about_kind':'Account',
+                      'about_item': $scope.account.id,
+                      'title':newdocument.title,
+                      'mimeType':mimeType };
+                      */
+                      var item = { 'id':data.docs[index].id,
+                                  'title':data.docs[index].name,
+                                  'mimeType': data.docs[index].mimeType,
+                                  'embedLink': data.docs[index].url
+
+                      };
+                      params.items.push(item);
                 
-                      fileIds.push(data.docs[index].id);
-                      filenames.push(data.docs[index].name);
-                fileurls.push(data.docs[index].url);
-            
+                  });
+                  gapi.client.crmengine.documents.attachfiles(params).execute(function(resp) {
+                    //console.log("files inserted");
+                    //console.log(resp);
                      
+                     $scope.listDocuments();
                     
                   });
                     
-                     $.post(url, { fileids: fileIds , filenames: filenames ,fileurls:fileUrls} );
+                    console.log('after uploading files');
+                    console.log(params);
                 }
       }
      $scope.share = function(slected_memeber){
@@ -548,12 +578,18 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
 //HKA 19.11.2013 Add Contact related to account
 
     $scope.savecontact = function(contact){
-      
+        var contact_name = new Array();
+        contact_name.push(contact.firstname);
+        contact_name.push(contact.lastname);
+        
          var params = {'lastname':contact.lastname,
                       'firstname':contact.firstname,
                       'title': contact.title,
-                      'account':$scope.account.entityKey
+                      'account':$scope.account.entityKey,
+                      'display_name': contact_name
                       };
+
+        console.log(params);
         
         Contact.insert(params);
         $('#addContactModal').modal('hide');
@@ -759,7 +795,7 @@ app.controller('SearchShowController', ['$scope','$route','$location','Conf','Se
     function($scope,$route,$location,Conf,Search) {
      console.log('i am in account list controller');
 
-     $("#id_Accounts").addClass("active");
+    
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;

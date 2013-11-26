@@ -383,6 +383,18 @@ class NoteShowHandler (BaseHandler,SessionEnabledHandler):
       template = jinja_environment.get_template('templates/accounts/note_show.html')
       self.response.out.write(template.render(template_values))
 
+class DocumentShowHandler(BaseHandler,SessionEnabledHandler):
+  def get(self):
+    if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+      user = self.get_user_from_session()
+      self.set_user_locale()
+      tabs = user.get_user_active_tabs()
+      self.set_user_locale()
+      template_values={'tabs':tabs}
+      template = jinja_environment.get_template('templates/documents/show.html')
+      self.response.out.write(template.render(template_values))
+
+
 class TaskShowHandler(BaseHandler, SessionEnabledHandler):
   def get(self):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
@@ -1358,6 +1370,8 @@ routes = [
     ('/views/campaigns/list',CampaignListHandler),
     ('/views/campaigns/show',CampaignShowHandler),
     ('/views/notes/show',NoteShowHandler),
+    ('/views/documents/show',DocumentShowHandler),
+    
     ('/views/search/list',SearchListHandler),
     ('/views/tasks/show',TaskShowHandler),
     ('/views/events/show',EventShowHandler),

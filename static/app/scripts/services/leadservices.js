@@ -77,7 +77,12 @@ leadservices.factory('Lead', function($http) {
           window.location.replace('#/leads/show/'+resp.id);
           
          }else{
-          console.log(resp.code);
+            console.log(resp.message);
+             $('#addLeadModal').modal('hide');
+             $('#errorModal').modal('show');
+             if(resp.message=="Invalid grant"){
+                window.location.replace('/sign-in');
+             };
          }
       });
   };

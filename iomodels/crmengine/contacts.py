@@ -8,7 +8,9 @@ class Contact(EndpointsModel):
 
     
 
-    _message_fields_schema = ('id','entityKey','access','collaborators_list','collaborators_ids', 'firstname','lastname','title','company','account','account_name')
+
+    _message_fields_schema = ('id','entityKey','folder',  'access','collaborators_list','collaborators_ids','display_name', 'firstname','lastname','title','company','account','account_name')
+
 
 
     # Sharing fields
@@ -18,8 +20,10 @@ class Contact(EndpointsModel):
     account = ndb.KeyProperty()
     account_name = ndb.StringProperty() 
     organization = ndb.KeyProperty()
+    folder = ndb.StringProperty() 
     firstname = ndb.StringProperty()
     lastname = ndb.StringProperty()
+    display_name = ndb.StringProperty(repeated=True)
     title = ndb.StringProperty()
     company = ndb.StringProperty()
     creationTime = ndb.DateTimeProperty(auto_now_add=True)
@@ -33,6 +37,7 @@ class Contact(EndpointsModel):
     access = ndb.StringProperty()
 
     def put(self, **kwargs):
+        
         ndb.Model.put(self, **kwargs)
         self.put_index()
         self.set_perm()

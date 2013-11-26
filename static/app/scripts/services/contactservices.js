@@ -78,7 +78,12 @@ accountservices.factory('Contact', function($http) {
           window.location.replace('#/contacts/show/'+resp.id);
           
          }else{
-          console.log(resp.code);
+            console.log(resp.message);
+             $('#addAContactModal').modal('hide');
+             $('#errorModal').modal('show');
+             if(resp.message=="Invalid grant"){
+                window.location.replace('/sign-in');
+             };
          }
       });
   };

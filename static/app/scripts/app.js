@@ -146,5 +146,8 @@ app.config(['$routeProvider', function($routeProvider) {
       }).when('/tasks/show/:taskId',{
       controller : 'TaskShowController',
       templateUrl:'/views/tasks/show'
+      }).when('/documents/show/:documentId',{
+      controller : 'DocumentShowController',
+      templateUrl:'/views/documents/show'
       });
 }]);

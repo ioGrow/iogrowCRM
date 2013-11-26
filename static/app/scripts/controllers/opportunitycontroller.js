@@ -1,5 +1,5 @@
-app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Opportunity',
-    function($scope,$route,$location,Conf,Opportunity) {
+app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Account','Opportunity',
+    function($scope,$route,$location,Conf,Account,Opportunity) {
       
      $("#id_Opportunities").addClass("active");
      $scope.isSignedIn = false;
@@ -105,8 +105,56 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Opp
       };
       
     $scope.save = function(opportunity){
-      Opportunity.insert(opportunity);
+      var params = {};
+        
+        if (typeof(opportunity.account)=='object'){
+          opportunity.account = opportunity.account.entityKey;
+          opportunity.account_name = opportunity.account.name;
+          
+          Opportunity.insert(opportunity);
+
+        }else if($scope.searchAccountQuery.length>0){
+            // create a new account with this account name
+            var params = {'name': $scope.searchAccountQuery,
+                          'access': opportunity.access
+            };
+            $scope.opportunity = opportunity;
+            Account.insert($scope,params);
+
+
+        };
+
+     
     };
+    $scope.accountInserted = function(resp){
+          $scope.opportunity.account = resp;
+          $scope.save($scope.opportunity);
+      };
+      
+    var params_search_account ={};
+     $scope.result = undefined;
+     $scope.q = undefined;
+     
+      $scope.$watch('searchAccountQuery', function() {
+         params_search_account['q'] = $scope.searchAccountQuery;
+         gapi.client.crmengine.accounts.search(params_search_account).execute(function(resp) {
+            console.log("in accouts.search api");
+            console.log(params_search_account);
+
+            console.log(resp);
+            if (resp.items){
+              $scope.results = resp.items;
+              console.log($scope.accountsResults);
+              $scope.$apply();
+            };
+            
+          });
+         console.log($scope.results);
+      });
+      $scope.selectAccount = function(){
+        $scope.opportunity.account = $scope.searchAccountQuery;
+
+     };
      
 
 
