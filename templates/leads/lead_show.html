@@ -170,10 +170,10 @@
                                         
                             <ul class="chats">
                               <li class="in" ng-repeat="topic in topics" id="topic_<%=$index%>">
-                                <img class="avatar" alt="" src="static/img/avatar.jpg.png" />
+                                <img class="avatar" alt="" src="<%= topic.last_updater.photo%>" />
                                 <div class="message">
                                   <span class="arrow"></span>
-                                  <a href="#" class="name"><%= topic.last_updater.google_display_name%></a>
+                                  <a href="#" class="name"><%= topic.last_updater.display_name%></a>
                                   <span class="datetime">at <%=topic.updated_at | date:'yyyy-MM-dd - HH:mm:ss' %></span>
                                   <span class="body">
                                   <a href="/#/notes/show/<%=topic.discussionId%>" class="discussion-content"><strong class="ng-binding"><%= topic.title%></strong><span class="excerpt ng-binding"> - <%= topic.excerpt%></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <%= topic.comments%> comments</span></a>
