@@ -411,6 +411,18 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','$location','Conf',
     $scope.note.content='';
   }
 
+//HKA 22.11.2013 Update Case
+$scope.updatCasetHeader = function(casee){
+ 
+  params = {'id':$scope.casee.id,
+             'name':casee.name,
+             'priority' :casee.priority,
+           'casee.status':casee.status,
+           'type_case':casee.type_case}
+  Case.patch($scope,params);
+ $('#EditCaseModal').modal('hide');
+};
+
       
 
 
