@@ -1426,11 +1426,56 @@ class CrmEngineApi(remote.Service):
 
           
 ################################ Documents API ##################################
-  @Document.method(request_fields=('id',),path='documents/{id}', http_method='GET', name='documents.get')
-  def TaskGet(self, my_model):
-      if not my_model.from_datastore:
-        raise endpoints.NotFoundException('Document not found.')
-      return my_model
+  @endpoints.method(ID_RESOURCE, DiscussionResponse,
+                      path='documents/{id}', http_method='GET',
+                      name='documents.get')
+  def document_get(self, request):
+        user = endpoints.get_current_user()
+        if user is None:
+            raise endpoints.UnauthorizedException('You must authenticate!' )
+        user_from_email = model.User.query(model.User.email == user.email()).get()
+        if user_from_email is None:
+          raise endpoints.UnauthorizedException('You must sign-in!' )
+        try:
+            document = Document.get_by_id(int(request.id))
+            if document is None:
+                raise endpoints.NotFoundException('Document not found.' %
+                                              (request.id,))
+
+            about_item_id = int(document.about_item)
+            try:
+                about_object = OBJECTS[document.about_kind].get_by_id(about_item_id)
+                if document.about_kind == 'Contact' or document.about_kind == 'Lead':
+                    about_name = about_object.firstname + ' ' + about_object.lastname
+                else:
+                    about_name = about_object.name
+                about_response = DiscussionAboutSchema(kind=document.about_kind,
+                                                       id=document.about_item,
+                                                       name=about_name)
+                author = AuthorSchema(google_user_id = document.author.google_user_id,
+                                      display_name = document.author.display_name,
+                                      google_public_profile_url = document.author.google_public_profile_url,
+                                      photo = document.author.photo)
+                
+
+                response = DiscussionResponse(id=request.id,
+                                              entityKey= document.key.urlsafe(),
+                                              title= document.title,
+                                              content= document.embedLink,
+                                              comments=document.comments,
+                                              about=about_response,
+                                              author= author)
+                return response
+            except (IndexError, TypeError):
+                raise endpoints.NotFoundException('About object %s not found.' %
+                                                  (request.id,))
+            
+            
+
+            
+        except (IndexError, TypeError):
+            raise endpoints.NotFoundException('Note %s not found.' %
+                                              (request.id,))
 
   @Document.method(user_required=True,path='documents', http_method='POST', name='documents.insert')
   def DocumentInsert(self, my_model):
