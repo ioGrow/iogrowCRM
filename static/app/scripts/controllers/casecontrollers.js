@@ -502,6 +502,19 @@ $scope.updatCasetHeader = function(casee){
            'status':casee.status,
            'type_case':casee.type_case}
   Case.patch($scope,params);
+  $scope.$watch($scope.casee.status, function() {
+      var paramsNote = {
+                  'about_kind': 'Case',
+                  'about_item': $scope.casee.id,
+                  'title': 'status updated to '+ casee.status
+                  
+      };
+      console.log('inserting a new note');
+      console.log(paramsNote);
+      
+      Note.insert($scope,paramsNote);
+   });
+  
  $('#EditCaseModal').modal('hide');
 };
 
