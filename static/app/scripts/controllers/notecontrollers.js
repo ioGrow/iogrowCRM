@@ -217,7 +217,7 @@ app.controller('DocumentShowController',['$scope','$filter','$route','$location'
 
                var url = Note.getUrl($scope.attachment.about.kind,$scope.attachment.about.id);
                $scope.uri =url;
-               $scope.attachment.embedLink;
+               $scope.attachment.embedLink = $scope.attachment.content;
      };
      $scope.processAuth = function(authResult) {
         console.log('process Auth #startdebug');

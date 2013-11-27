@@ -680,11 +680,11 @@ class CrmEngineApi(remote.Service):
     
 
     return my_model
-  @Event.query_method(user_required=True,query_fields=('about_kind','about_item','id','status', 'starts_at','ends_at', 'limit', 'order', 'pageToken'),path='events', name='events.list')
+  
+  @Event.query_method(user_required=True,query_fields=('about_kind','about_item', 'starts_at','ends_at', 'limit', 'order', 'pageToken'),path='events', name='events.list')
   def EventList(self, query):
-    
-
-    return query
+      return query
+      
   @Event.method(request_fields=('id',),path='events/{id}', http_method='GET', name='events.get')
   def EventGet(self, my_model):
     if not my_model.from_datastore:
@@ -1535,9 +1535,11 @@ class CrmEngineApi(remote.Service):
     # insert in the datastore
     
     # Todo: Check permissions
-    task_owner = model.User()
-    task_owner.google_display_name = user_from_email.google_display_name
+    author = model.Userinfo()
+    author.display_name = user_from_email.google_display_name
+    author.photo = user_from_email.google_public_profile_photo_url
     my_model.owner = user_from_email.google_user_id
+    my_model.author = author
     my_model.organization = user_from_email.organization
     my_model.put()
     
