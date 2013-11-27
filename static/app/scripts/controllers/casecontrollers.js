@@ -336,7 +336,9 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','$location','Conf',
          var body = {'access':$scope.casee.access};
          var id = $scope.account.id;
          var params ={'id':id,
-                      'access':$scope.casee.access}
+                      'access':$scope.casee.access};
+          console.log('patching');
+          console.log(params);
          Case.patch($scope,params);
         });
         $('#sharingSettingsModal').modal('hide');
@@ -497,9 +499,22 @@ $scope.updatCasetHeader = function(casee){
   params = {'id':$scope.casee.id,
              'name':casee.name,
              'priority' :casee.priority,
-           'casee.status':casee.statuss,
+           'status':casee.status,
            'type_case':casee.type_case}
   Case.patch($scope,params);
+  $scope.$watch($scope.casee.status, function() {
+      var paramsNote = {
+                  'about_kind': 'Case',
+                  'about_item': $scope.casee.id,
+                  'title': 'status updated to '+ casee.status
+                  
+      };
+      console.log('inserting a new note');
+      console.log(paramsNote);
+      
+      Note.insert($scope,paramsNote);
+   });
+  
  $('#EditCaseModal').modal('hide');
 };
 
