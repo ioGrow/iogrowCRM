@@ -434,7 +434,17 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
     Note.insert($scope,params);
     $scope.note.title='';
     $scope.note.content='';
-  }
+  };
+// 26.11.2013 Update Opportunity
+ $scope.UpdateOpportunity = function(opportunity){
+  var params = {'id':$scope.opportunity.id,
+                'name':opportunity.name,
+                 'stage':opportunity.stage,
+                'amount':opportunity.amount,
+                'description':opportunity.description};
+  Opportunity.patch($scope,params);
+  $('#EditOpportunityModal').modal('hide');
+ }
     
 
 

@@ -497,7 +497,7 @@ $scope.updatCasetHeader = function(casee){
   params = {'id':$scope.casee.id,
              'name':casee.name,
              'priority' :casee.priority,
-           'casee.status':casee.status,
+           'casee.status':casee.statuss,
            'type_case':casee.type_case}
   Case.patch($scope,params);
  $('#EditCaseModal').modal('hide');

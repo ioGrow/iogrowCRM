@@ -58,7 +58,7 @@
                         <label  class="required control-label">{{_("Account")}} *</label>
                        
                         <div class="controls">
-                          <input type="text" required ng-model="searchAccountQuery" typeahead="result as result.name  for result in results | filter:$viewValue | limitTo:10" typeahead-on-select="selectAccount()" class="input-xlarge" placeholder="Search">
+                          <input type="text"  ng-model="searchAccountQuery" typeahead="result as result.name  for result in results | filter:$viewValue | limitTo:10" typeahead-on-select="selectAccount()" class="input-xlarge" placeholder="Search">
                           
                         </div>
                     </div>

@@ -109,7 +109,7 @@
 
            <span class="opportunity-amount" >$<%=opportunity.amount %></span><span> {{_("associated with")}} </span><span><a class="tag" href="#">#<%=opportunity.name %></a></span>
             <br><span>{{_("Stage")}}: </span><span><span><a class="tag" href="#">#<%=opportunity.stage %></a></span>
-            <br><span>{{_("Category")}}: </span><span><span><a class="tag" href="#">#appengine</a></span> <br>
+            <br><span>{{_("Labels")}}: </span><span><span><a class="tag" href="#">#<%=opportunity.description %></a></span> <br>
             <span class="page-meta"><i class="icon-pencil"><a ng-click="editOpp()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="delete(opportunity)" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
 
            
@@ -326,14 +326,22 @@
               </div>
 
               <div class="modal-body">
-                 <form id="editAccount" name="editlead" ng-submit="put(opportunity)" class="form-horizontal"> 
+                 <form id="editAccount" name="editlead" ng-submit="UpdateOpportunity(opportunity)" class="form-horizontal"> 
                 
 
                   <div class="control-group">
-                        <label  class="required control-label">{{_("Description")}} *</label>
+                        <label  class="required control-label">{{_("Name")}} *</label>
                        
                         <div class="controls">
-                          <input type="text" required id="id_description" ng-model="opportunity.description">
+                          <input type="text" required id="id_name" ng-model="opportunity.name">
+                          
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_( "Labels")}} </label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_amount" ng-model="opportunity.description">
                           
                         </div>
                     </div>
@@ -346,7 +354,7 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label  class="required control-label">{{_("Stage")}} *</label>
+                        <label  class="required control-label">{{_("Stage")}} </label>
                        
                         <div class="controls">
                           <input type="text"  required id="id_stage" ng-model="opportunity.stage">

@@ -460,8 +460,19 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','$location','Conf
     Note.insert($scope,params);
     $scope.note.title='';
     $scope.note.content='';
-  }
-  
+
+};
+//HKA 26.11.2013 Update Case
+$scope.updatContactHeader = function(contact){
+ 
+  params = {'id':$scope.contact.id,
+             'name':contact.name,
+             'priority' :casee.priority,
+           'status':casee.status,
+           'type_case':casee.type_case};
+  Case.patch($scope,params);
+ $('#EditCaseModal').modal('hide');
+  };
 
 
 }]);
