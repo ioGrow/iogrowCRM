@@ -354,9 +354,20 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','$location','Conf
 
      };
 
-  $scope.editacontact = function(){
+  $scope.editacontact = function(contact){
     $('#EditContactModal').modal('show');
   }
+  //HKA 27.11.2013 Update Contact updatecontact
+  $scope.updatecontact = function(contact){
+    var params={'id':$scope.contact.id,
+                'firstname':contact.firstname,
+                'lastname':contact.lastname,
+                'title':contact.title};
+        Contact.patch($scope,params);
+        $('#EditContactModal').modal('hide')
+
+  };
+
  //HKA 09.11.2013 Add a new Task
    $scope.addTask = function(task){
       

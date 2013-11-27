@@ -403,7 +403,17 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','$location','Conf','
     Note.insert($scope,params);
     $scope.note.title='';
     $scope.note.content='';
-  }
+  };
+//HKA 27.11.2013 Update Lead
+  $scope.updatelead = function(lead){
+    var params={'id':$scope.lead.id,
+                'firstname':lead.firstname,
+                'lastname':lead.lastname,
+                'company':lead.company};
+        Lead.patch($scope,params);
+        $('#EditLeadModal').modal('hide')
+
+  };
   
 
      

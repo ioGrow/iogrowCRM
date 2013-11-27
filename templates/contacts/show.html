@@ -594,7 +594,7 @@
               </div>
 
               <div class="modal-body">
-                 <form id="editAccount" name="editlead" ng-submit="put(contact)" class="form-horizontal"> 
+                 <form id="editAccount" name="editlead" ng-submit="updatecontact(contact)" class="form-horizontal"> 
                 
 
                   <div class="control-group">
@@ -617,7 +617,7 @@
                         <label  class="required control-label">{{_("Tittle")}} *</label>
                        
                         <div class="controls">
-                          <input type="text"  required id="id_Tittle" ng-model="contact.tittle">
+                          <input type="text"  required id="id_Title" ng-model="contact.title">
                           
                         </div>
                     </div>
