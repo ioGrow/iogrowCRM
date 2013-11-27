@@ -19,10 +19,6 @@ class Lead(EndpointsModel):
     industry = ndb.StringProperty()
     title = ndb.StringProperty()
     department = ndb.StringProperty()
-    mobile = ndb.StringProperty()
-    address = ndb.StringProperty()
-    city = ndb.StringProperty()
-    country = ndb.StringProperty()
     description = ndb.TextProperty()
     source = ndb.StringProperty()
     status = ndb.StringProperty()
@@ -32,6 +28,12 @@ class Lead(EndpointsModel):
     created_by = ndb.KeyProperty()
     # public or private
     access = ndb.StringProperty()
+    phones = ndb.StructuredProperty(model.Phone,repeated=True)
+    emails = ndb.StructuredProperty(model.Email,repeated=True)
+    addresses = ndb.StructuredProperty(model.Address,repeated=True)
+    websites = ndb.StructuredProperty(model.Website,repeated=True)
+    sociallinks= ndb.StructuredProperty(model.Social,repeated=True)
+
 
     def put(self, **kwargs):
         ndb.Model.put(self, **kwargs)
@@ -54,6 +56,10 @@ class Lead(EndpointsModel):
         empty_string = lambda x: x if x else ""
         collaborators = " ".join(self.collaborators_ids)
         organization = str(self.organization.id())
+        emails = " ".join(map(lambda x: x.email,  self.emails))
+        phones = " ".join(map(lambda x: x.number,  self.phones))
+        websites = " ".join(map(lambda x: x.website,  self.websites))
+        addresses = " \n".join(map(lambda x: " ".join([x.street,x.city,x.state, x.postal_code, x.country]), self.addresses))
         my_document = search.Document(
         doc_id = str(self.key.id()),
         fields=[
@@ -69,17 +75,16 @@ class Lead(EndpointsModel):
             search.TextField(name='industry', value = empty_string(self.industry)),
             search.TextField(name='position', value = empty_string(self.title)),
             search.TextField(name='department', value = empty_string(self.department)),
-            search.TextField(name='mobile', value = empty_string(self.mobile)),
-            search.TextField(name='address', value = empty_string(self.address)),
-            search.TextField(name='city', value = empty_string(self.city)),
-            search.TextField(name='country', value = empty_string(self.country)),
             search.TextField(name='description', value = empty_string(self.description)),
             search.TextField(name='source', value = empty_string(self.source)),
             search.TextField(name='status', value = empty_string(self.status)),
             search.TextField(name='style', value = empty_string(self.style)),
             search.DateField(name='created_at', value = self.created_at),
             search.DateField(name='updated_at', value = self.updated_at),
-
+            search.TextField(name='emails', value = empty_string(emails)),
+            search.TextField(name='phones', value = empty_string(phones)),
+            search.TextField(name='websites', value = empty_string(websites)),
+            search.TextField(name='addresses', value = empty_string(addresses)),
            ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)

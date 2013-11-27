@@ -28,13 +28,15 @@ class Contact(EndpointsModel):
     company = ndb.StringProperty()
     creationTime = ndb.DateTimeProperty(auto_now_add=True)
     lastmodification = ndb.DateTimeProperty(auto_now=True)
-    address = ndb.StringProperty()
     department = ndb.StringProperty()
-    mobile = ndb.StringProperty()
-    email = ndb.StringProperty()
     description = ndb.StringProperty()
     # public or private
     access = ndb.StringProperty()
+    phones = ndb.StructuredProperty(model.Phone,repeated=True)
+    emails = ndb.StructuredProperty(model.Email,repeated=True)
+    addresses = ndb.StructuredProperty(model.Address,repeated=True)
+    websites = ndb.StructuredProperty(model.Website,repeated=True)
+    sociallinks= ndb.StructuredProperty(model.Social,repeated=True)
 
     def put(self, **kwargs):
         
@@ -58,6 +60,10 @@ class Contact(EndpointsModel):
         empty_string = lambda x: x if x else ""
         collaborators = " ".join(self.collaborators_ids)
         organization = str(self.organization.id())
+        emails = " ".join(map(lambda x: x.email,  self.emails))
+        phones = " ".join(map(lambda x: x.number,  self.phones))
+        websites = " ".join(map(lambda x: x.website,  self.websites))
+        addresses = " \n".join(map(lambda x: " ".join([x.street,x.city,x.state, x.postal_code, x.country]), self.addresses))
         my_document = search.Document(
         doc_id = str(self.key.id()),
         fields=[
@@ -73,12 +79,13 @@ class Contact(EndpointsModel):
             search.DateField(name='creationTime', value = self.creationTime),
             search.DateField(name='lastmodification', value = self.lastmodification),
             search.TextField(name='company', value = empty_string(self.company)),
-            search.TextField(name='address', value = empty_string(self.address)),
             search.TextField(name='department', value = empty_string(self.department)),
-            search.TextField(name='mobile', value = empty_string(self.mobile)),
             search.TextField(name='account_name',value=empty_string(self.account_name)),
-            search.TextField(name='email', value = empty_string(self.email)),
-            search.TextField(name='description', value = empty_string(self.description))
+            search.TextField(name='description', value = empty_string(self.description)),
+            search.TextField(name='emails', value = empty_string(emails)),
+            search.TextField(name='phones', value = empty_string(phones)),
+            search.TextField(name='websites', value = empty_string(websites)),
+            search.TextField(name='addresses', value = empty_string(addresses)),
            ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)
