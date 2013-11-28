@@ -669,16 +669,16 @@ $scope.addEmail = function(email){
 //HKA 20.11.2013 Add Addresse
 $scope.addAddress = function(address){
   var addressArray = undefined;
-  if ($scope.account.adresses){
+  if ($scope.account.addresses){
     addressArray = new Array();
-    addressArray = $scope.account.adresses;
+    addressArray = $scope.account.addresses;
     addressArray.push(address);
 
   }else{ 
     addressArray = address;
   }
   params = {'id':$scope.account.id,
-             'adresses':addressArray}
+             'addresses':addressArray}
   Account.patch($scope,params);
   $('#addressmodal').modal('hide');
 };

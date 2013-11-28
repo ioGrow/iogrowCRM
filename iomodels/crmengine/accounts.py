@@ -5,8 +5,7 @@ from google.appengine.api import search
 
 import model
 class Account(EndpointsModel):
-
-    _message_fields_schema = ('id','entityKey','folder','access','collaborators_list','phones','emails','adresses','websites','sociallinks', 'collaborators_ids','name','owner','account_type','industry','address','tagline','introduction')
+    _message_fields_schema = ('id','entityKey','folder','access','collaborators_list','phones','emails','addresses','websites','sociallinks', 'collaborators_ids','name','owner','account_type','industry','tagline','introduction')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
@@ -19,17 +18,15 @@ class Account(EndpointsModel):
     creationTime = ndb.DateTimeProperty(auto_now_add=True)
     tagline = ndb.TextProperty()
     introduction =ndb.TextProperty()
-    address = ndb.StringProperty()
     # public or private
     access = ndb.StringProperty()
     phones = ndb.StructuredProperty(model.Phone,repeated=True)
     emails = ndb.StructuredProperty(model.Email,repeated=True)
-    adresses = ndb.StructuredProperty(model.Address,repeated=True)
+    addresses = ndb.StructuredProperty(model.Address,repeated=True)
     websites = ndb.StructuredProperty(model.Website,repeated=True)
     sociallinks= ndb.StructuredProperty(model.Social,repeated=True)
 
-    
-    
+
     def put(self, **kwargs):
         ndb.Model.put(self, **kwargs)
         self.put_index()
@@ -50,6 +47,10 @@ class Account(EndpointsModel):
         empty_string = lambda x: x if x else ""
         collaborators = " ".join(self.collaborators_ids)
         organization = str(self.organization.id())
+        emails = " ".join(map(lambda x: x.email,  self.emails))
+        phones = " ".join(map(lambda x: x.number,  self.phones))
+        websites =  " ".join(map(lambda x: x.website,  self.websites))
+        addresses = " \n".join(map(lambda x: " ".join([x.street,x.city,x.state, x.postal_code, x.country]), self.addresses))
         my_document = search.Document(
         doc_id = str(self.key.id()),
         fields=[
@@ -65,7 +66,10 @@ class Account(EndpointsModel):
             search.TextField(name='industry', value = empty_string(self.industry)),
             search.TextField(name='tagline', value = empty_string(self.tagline)),
             search.TextField(name='introduction', value = empty_string(self.introduction)),
-            search.TextField(name='address', value = empty_string(self.address))
+            search.TextField(name='emails', value = empty_string(emails)),
+            search.TextField(name='phones', value = empty_string(phones)),
+            search.TextField(name='websites', value = empty_string(websites)),
+            search.TextField(name='addresses', value = empty_string(addresses)),
            ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)
