@@ -120,6 +120,18 @@ class DiscussionResponse(messages.Message):
     comments = messages.IntegerField(5)
     about = messages.MessageField(DiscussionAboutSchema,6)
     author = messages.MessageField(AuthorSchema,7)
+# Customized Task Response for tasks.get API
+class TaskResponse(messages.Message):
+    
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    title = messages.StringField(3)
+    due = messages.StringField(4)
+    status = messages.StringField(5)
+    comments = messages.IntegerField(6)
+    about = messages.MessageField(DiscussionAboutSchema,7)
+    author = messages.MessageField(AuthorSchema,8)
+    completed_by = messages.MessageField(AuthorSchema,9)
 
 
 @endpoints.api(name='crmengine', version='v1', description='I/Ogrow CRM APIs',allowed_client_ids=[CLIENT_ID,
@@ -550,10 +562,14 @@ class CrmEngineApi(remote.Service):
     if user_from_email is None:
       raise endpoints.UnauthorizedException('You must sign-in!' )
     # Todo: Check permissions
-    task_owner = model.User()
-    task_owner.google_display_name = user_from_email.google_display_name
+    
     my_model.owner = user_from_email.google_user_id
     my_model.organization =  user_from_email.organization
+    author = model.Userinfo()
+    author.google_user_id = user_from_email.google_user_id
+    author.display_name = user_from_email.google_display_name
+    author.photo = user_from_email.google_public_profile_photo_url
+    my_model.author = author
     my_model.put()
     
 
@@ -562,11 +578,61 @@ class CrmEngineApi(remote.Service):
   def TaskList(self, query):
     
     return query
-  @Task.method(request_fields=('id',),path='tasks/{id}', http_method='GET', name='tasks.get')
-  def TaskGet(self, my_model):
-    if not my_model.from_datastore:
-      raise endpoints.NotFoundException('Topic not found.')
-    return my_model
+  @endpoints.method(ID_RESOURCE, TaskResponse,
+                      path='tasks/{id}', http_method='GET',
+                      name='tasks.get')
+  def task_get(self, request):
+        user = endpoints.get_current_user()
+        if user is None:
+            raise endpoints.UnauthorizedException('You must authenticate!' )
+        user_from_email = model.User.query(model.User.email == user.email()).get()
+        if user_from_email is None:
+          raise endpoints.UnauthorizedException('You must sign-in!' )
+        try:
+            task = Task.get_by_id(int(request.id))
+            about_item_id = int(task.about_item)
+            try:
+                about_object = OBJECTS[task.about_kind].get_by_id(about_item_id)
+                if task.about_kind == 'Contact' or task.about_kind == 'Lead':
+                    about_name = about_object.firstname + ' ' + about_object.lastname
+                else:
+                    about_name = about_object.name
+                about_response = DiscussionAboutSchema(kind=task.about_kind,
+                                                       id=task.about_item,
+                                                       name=about_name)
+                author = AuthorSchema(google_user_id = task.author.google_user_id,
+                                      display_name = task.author.display_name,
+                                      google_public_profile_url = task.author.google_public_profile_url,
+                                      photo = task.author.photo)
+                completed_by = None
+                if completed_by:
+                    completed_by = AuthorSchema(google_user_id = task.completed_by.google_user_id,
+                                      display_name = task.completed_by.display_name,
+                                      google_public_profile_url = task.completed_by.google_public_profile_url,
+                                      photo = task.completed_by.photo)
+
+                
+
+                response = TaskResponse(id=request.id,
+                                              entityKey = task.key.urlsafe(),
+                                              title = task.title,
+                                              due = task.due.isoformat(),
+                                              status = task.status,
+                                              comments = task.comments,
+                                              about = about_response,
+                                              author = author,
+                                              completed_by = completed_by )
+                return response
+            except (IndexError, TypeError):
+                raise endpoints.NotFoundException('About object %s not found.' %
+                                                  (request.id,))
+            
+            
+
+            
+        except (IndexError, TypeError):
+            raise endpoints.NotFoundException('Note %s not found.' %
+                                              (request.id,))
 
   # HKA 4.11.2013 Add Opportuity APIs
   @Opportunity.method(user_required=True,path='opportunities',http_method='POST',name='opportunities.insert')
