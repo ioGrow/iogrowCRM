@@ -9,7 +9,7 @@ import model
 
 
 class Event(EndpointsModel):
-    _message_fields_schema = ('id','entityKey','owner','author','collaborators_ids','collaborators_list','created_at','updated_at', 'starts_at','ends_at','title','where')
+    _message_fields_schema = ('id','entityKey','owner','author','collaborators_ids','collaborators_list','created_at','updated_at', 'starts_at','ends_at','title','where','about_kind','about_item')
     author = ndb.StructuredProperty(Userinfo)
     # Sharing fields
     owner = ndb.StringProperty()
@@ -41,7 +41,7 @@ class Event(EndpointsModel):
     def set_perm(self):
         about_item = str(self.key.id())
 
-        perm = model.Permission(about_kind='Account',
+        perm = model.Permission(about_kind='Event',
                          about_item=about_item,
                          type = 'user',
                          role = 'owner',

@@ -40,7 +40,7 @@ class Task(EndpointsModel):
     def set_perm(self):
         about_item = str(self.key.id())
 
-        perm = model.Permission(about_kind='Account',
+        perm = model.Permission(about_kind='Task',
                          about_item=about_item,
                          type = 'user',
                          role = 'owner',

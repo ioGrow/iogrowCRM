@@ -163,7 +163,7 @@ indexes:
   - name: about_kind
   - name: updated_at
     direction: desc
-    
+
 - kind: Topic
   properties:
   - name: about_item

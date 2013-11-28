@@ -30,10 +30,12 @@ eventservices.factory('Event', function($http) {
       console.log(params);
 
       $scope.isLoading = true;
+
       gapi.client.crmengine.events.list(params).execute(function(resp) {
+              console.log(resp);
               if(!resp.code){
-                console.log('in topics.list looking for pagingation');
-                console.log($scope.currentPage);
+               
+                  console.log(resp);
 
                  $scope.events = resp.items;
                  /*if ($scope.currentPage>1){
@@ -65,9 +67,12 @@ eventservices.factory('Event', function($http) {
   };
    Event.insert = function($scope,params){
       $scope.isLoading = true;
+      console.log('**************before events.insert*********************');
+      console.log(params);
       gapi.client.crmengine.events.insert(params).execute(function(resp) {
          console.log('in insert Event resp');
          console.log(resp);
+         console.log('after resp');
          if(!resp.code){
           console.log(resp);
           // TME_02_11_13 when a note is inserted reload topics
