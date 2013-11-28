@@ -29,8 +29,8 @@
                   </a>     
             </div>
             <h2>
-            <a href="<%=uri%>" data-toggle="tooltip" data-placement="bottom" title="Back to <%=task.about_kind%>">
-            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>    <%=eventt.about_kind%> > <%=eventt.status%>  </h2>
+            <a href="<%=uri%>" data-toggle="tooltip" data-placement="bottom" title="Back to <%=eventt.about.name%>">
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>    <%=eventt.about.kind%> > <%=eventt.about.name%>  </h2>
             
 
            
@@ -46,18 +46,19 @@
       <!-- BEGIN PORTLET-->
         <div class="portlet">
           <div class="portlet-title line">
-              <div class="caption"><i class="fa fa-comments"></i><%=eventt.title%></div>
+              <div class="caption"><i class="fa fa-comments"></i>Event  > <%=eventt.ends_at | date:'yyyy-MM-dd '%> </div>
           </div>
           <div class="portlet-body">
              <ul class="chats">
                   <li class="in">
-                    <img class="avatar" alt="" ng-src="" />
+                    <img class="avatar" alt="" ng-src="<%=eventt.author.photo%>" />
                     <div class="">
                       <span class="arrow"></span>
-                      <a href="#" class="name"><%=eventt.status%></a>
-                      <span class="datetime"><!--at <%= note.created_at %> --></span><br>
+                      <a href="#" class="name"><%=eventt.author.display_name%></a>
+                      <span class="datetime">  </span><br>
                       <span class="body">
-                      <%=eventt.status%>
+                      <%=eventt.title%><br>
+                      at <%= eventt.where %>
                       </span>
                     </div>
                   </li>
@@ -71,7 +72,7 @@
       <!-- End Portlet -->
       <div class="row-fluid">
                   <div class="span12 margin-bottom-10">
-                 <p class⁼"lead"=""><strong>Just add comments to remember what's important :</strong> </p>
+                 <p class⁼"lead"=""><strong>Discuss this event:</strong> </p>
                           <form id="addComment" ng-submit="addComment(comment)" class="ng-pristine ng-valid">
                                             <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="comment.content"></textarea>
                                           
@@ -131,13 +132,13 @@
                 </div>
                 <div class="portlet-body">
                 <ul class="chats">
-                  <li class="in">
+                  <!--<li class="in">
                     <img class="avatar" alt="" src="static/img/avatar.jpg.png" />
                     <div class="message">
                       <span class="arrow"></span>
                       <a href="#" class="name">Hakim  Karriche</a>
                     </div>
-                  </li>
+                  </li>-->
 
                   <li><a href="#addAttendee"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new Attendee</a></li>
                 </ul>

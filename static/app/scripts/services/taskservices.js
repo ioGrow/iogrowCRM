@@ -13,6 +13,7 @@ topicservices.factory('Task', function($http) {
                $scope.task = resp;
                var url = Task.getUrl($scope.task.about.kind,$scope.task.about.id);
                $scope.uri =url;
+               $scope.ListComments($scope.task.entityKey);
                // $scope.isContentLoaded = true;
                // $scope.listTopics(resp);
                // $scope.listTasks();

@@ -1,6 +1,6 @@
 app.controller('EventShowController',['$scope','$filter','$route','$location','Conf','Note','Event','Task','Topic','Comment',
    function($scope,$filter,$route,$location,Conf,Note,Event,Task,Topic,Comment) {
-//HKA 14.11.2013 Controller to show Notes and add comments
+//HKA 14.11.2013 Controller to show Events and add comments
    $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;

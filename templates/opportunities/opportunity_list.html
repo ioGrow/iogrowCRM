@@ -145,23 +145,20 @@
             <div class="inner-cards-container">
             
               <div ng-repeat="opp in opportunities" class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                <div class="dashboard-stat cards">
+                <div class="dashboard-stat cards-small">
                   
                   <div class="details">
-                    <a href="/#/opportunities/show/<%= opp.id %>"><h2 class="cardTitle">
-                      <%= opp.name %> 
-                    </h2></a>
-                    <div class="desc">
-
-                  <a class="desc" ng-show="opp.amount"  href="/#/search/type:Opportunity <%=opp.amount%>"> #<%=opp.amount%></a>
-                     
-                    <a class="desc" href="/#/search/type:Opportunity <%=opp.stage%>" ng-show="opp.stage">- #<%=opp.stage%></a><br>
-                    <a class="desc" href="/#/search/type:Opportunity <%=opp.description%>" ng-show="opp.description">#<%=opp.description%></a>
+                    <a href="/#/opportunities/show/<%= opp.id %>"><h3 class="relatedcardOppTitle">
+                       <%=opp.name %>
+                    </h3></a>
+                    <div class="desc">                           
+                                     <span class="contact-title" ng-show="opp.amount">amount: <%=opp.amount%> </span>
+                                    <span ng-show="opp.stage" class="contact-title" ><br>stage: <a class="desc" href="/#/search/type:Opportunity stage:<%=opp.stage%>">#<%=opp.stage%> </a></span><br>
+                                    <a ng-show="opp.description" class="desc" href="/#/search/type:Opportunity <%=opp.description%>">#<%=opp.description%></a>  
+                                    
                     </div>
                   </div>
-                  <a class="more" href="/#/opportunities/show/<%= opp.id %>">
-                  {{ _("View more") }} <i class="m-icon-swapright m-icon-white"></i>
-                  </a>                 
+                                  
                 </div>
               </div>
               </div>

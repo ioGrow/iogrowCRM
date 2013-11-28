@@ -133,6 +133,20 @@ class TaskResponse(messages.Message):
     author = messages.MessageField(AuthorSchema,8)
     completed_by = messages.MessageField(AuthorSchema,9)
 
+# Customized Event Response for events.get API
+class EventResponse(messages.Message):
+    
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    title = messages.StringField(3)
+    starts_at = messages.StringField(4)
+    ends_at = messages.StringField(5)
+    where = messages.StringField(6)
+    comments = messages.IntegerField(7)
+    about = messages.MessageField(DiscussionAboutSchema,8)
+    author = messages.MessageField(AuthorSchema,9)
+    
+
 
 @endpoints.api(name='crmengine', version='v1', description='I/Ogrow CRM APIs',allowed_client_ids=[CLIENT_ID,
                                    endpoints.API_EXPLORER_CLIENT_ID],scopes=SCOPES)
@@ -738,8 +752,12 @@ class CrmEngineApi(remote.Service):
     if user_from_email is None:
       raise endpoints.UnauthorizedException('You must sign-in!' )
     # Todo: Check permissions
-    task_owner = model.User()
-    task_owner.google_display_name = user_from_email.google_display_name
+    author = model.Userinfo()
+    author.google_user_id = user_from_email.google_user_id
+    author.display_name = user_from_email.google_display_name
+    author.photo = user_from_email.google_public_profile_photo_url
+    my_model.author = author
+    my_model.comments = 0
     my_model.owner = user_from_email.google_user_id
     my_model.organization =  user_from_email.organization
     my_model.put()
@@ -748,14 +766,55 @@ class CrmEngineApi(remote.Service):
     return my_model
   @Event.query_method(user_required=True,query_fields=('about_kind','about_item','id','status', 'starts_at','ends_at', 'limit', 'order', 'pageToken'),path='events', name='events.list')
   def EventList(self, query):
+
     
 
-    return query
-  @Event.method(request_fields=('id',),path='events/{id}', http_method='GET', name='events.get')
-  def EventGet(self, my_model):
-    if not my_model.from_datastore:
-      raise endpoints.NotFoundException('Event not found')
-    return my_model
+    return query     
+  
+  @endpoints.method(ID_RESOURCE, EventResponse,
+                      path='events/{id}', http_method='GET',
+                      name='events.get')
+  def event_get(self, request):
+        user = endpoints.get_current_user()
+        if user is None:
+            raise endpoints.UnauthorizedException('You must authenticate!' )
+        user_from_email = model.User.query(model.User.email == user.email()).get()
+        if user_from_email is None:
+          raise endpoints.UnauthorizedException('You must sign-in!' )
+        try:
+            event = Event.get_by_id(int(request.id))
+            about_item_id = int(event.about_item)
+            try:
+                about_object = OBJECTS[event.about_kind].get_by_id(about_item_id)
+                if event.about_kind == 'Contact' or event.about_kind == 'Lead':
+                    about_name = about_object.firstname + ' ' + about_object.lastname
+                else:
+                    about_name = about_object.name
+                about_response = DiscussionAboutSchema(kind=event.about_kind,
+                                                       id=event.about_item,
+                                                       name=about_name)
+                author = AuthorSchema(google_user_id = event.author.google_user_id,
+                                      display_name = event.author.display_name,
+                                      google_public_profile_url = event.author.google_public_profile_url,
+                                      photo = event.author.photo)
+                response = EventResponse(id=request.id,
+                                              entityKey = event.key.urlsafe(),
+                                              title = event.title,
+                                              starts_at = event.starts_at.isoformat(),
+                                              ends_at = event.ends_at.isoformat(),
+                                              where = event.where,
+                                              comments = event.comments,
+                                              about = about_response,
+                                              author = author)
+                return response
+            except (IndexError, TypeError):
+                raise endpoints.NotFoundException('About object %s not found.' %
+                                                  (request.id,))
+               
+        except (IndexError, TypeError):
+            raise endpoints.NotFoundException('EVent %s not found.' %
+                                              (request.id,))
+
   
 
 # HKA 06.11.2013 Add Opportuity APIs
