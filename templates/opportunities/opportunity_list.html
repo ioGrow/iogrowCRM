@@ -148,9 +148,9 @@
                 <div class="dashboard-stat cards-small">
                   
                   <div class="details">
-                    <a href="/#/opportunities/show/<%= opp.id %>"><h2 class="cardTitle">
-                      <%= opp.name %> 
-                    </h2></a>
+                    <a href="/#/opportunities/show/<%= opp.id %>"><h3 class="relatedcardOppTitle">
+                       <%=opp.name %>
+                    </h3></a>
                     <div class="desc">                           
                                      <span class="contact-title" ng-show="opp.amount">amount: <%=opp.amount%> </span>
                                     <span ng-show="opp.stage" class="contact-title" ><br>stage: <a class="desc" href="/#/search/type:Opportunity stage:<%=opp.stage%>">#<%=opp.stage%> </a></span><br>
