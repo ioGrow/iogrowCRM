@@ -108,8 +108,10 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Acc
       var params = {};
         
         if (typeof(opportunity.account)=='object'){
-          opportunity.account = opportunity.account.entityKey;
           opportunity.account_name = opportunity.account.name;
+          opportunity.account_id = opportunity.account.id;
+          opportunity.account = opportunity.account.entityKey;
+
           
           Opportunity.insert(opportunity);
 
@@ -442,6 +444,18 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
                  'stage':opportunity.stage,
                 'amount':opportunity.amount,
                 'description':opportunity.description};
+  $scope.$watch(opportunity.stage, function() {
+      var paramsNote = {
+                  'about_kind': 'Opportunity',
+                  'about_item': $scope.opportunity.id,
+                  'title': 'stage updated to '+ opportunity.stage
+                  
+      };
+      console.log('inserting a new note');
+      console.log(paramsNote);
+      
+      Note.insert($scope,paramsNote);
+   });              
   Opportunity.patch($scope,params);
   $('#EditOpportunityModal').modal('hide');
  }

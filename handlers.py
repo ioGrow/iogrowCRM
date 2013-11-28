@@ -298,7 +298,7 @@ class OpportunityListHandler(BaseHandler,SessionEnabledHandler):
       tabs = user.get_user_active_tabs()
       self.set_user_locale()
       template_values = {'tabs':tabs}
-      template = jinja_environment.get_template('templates/opportunities/opportunity_list.html')
+      template = jinja_environment.get_template('templates/opportunities/list.html')
       self.response.out.write(template.render(template_values))
 class OpportunityShowHandler(BaseHandler,SessionEnabledHandler):
   def get (self):

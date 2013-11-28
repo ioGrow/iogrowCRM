@@ -107,9 +107,12 @@
             <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>    {{_("Opportunities")}} > <%=opportunity.name %></h2>
             
 
-           <span class="opportunity-amount" >$<%=opportunity.amount %></span><span> {{_("associated with")}} </span><span><a class="tag" href="#">#<%=opportunity.name %></a></span>
-            <br><span>{{_("Stage")}}: </span><span><span><a class="tag" href="#">#<%=opportunity.stage %></a></span>
-            <br><span>{{_("Labels")}}: </span><span><span><a class="tag" href="#">#<%=opportunity.description %></a></span> <br>
+           <span class="opportunity-amount" >$<%=opportunity.amount %></span><span>
+           <span ng-show="opportunity.contact_name">{{_("associated with")}}: <a class="tag" href="/#/accounts/show/<%=opportunity.account_id %>">#<%=opportunity.contact_name %></a> from <a class="tag" href="#">#<%=opportunity.account_name %></a></span>
+            <span ng-show="opportunity.account_name" ng-hide="opportunity.contact_name">{{_("associated with")}}:  <a class="tag" href="/#/accounts/show/<%=opportunity.account_id %>">#<%=opportunity.account_name %></a></span>
+           
+            <br><span ng-show="opportunity.stage">{{_("Stage")}}: <a class="tag" href="/#/search/type:Opportunity <%=opportunity.stage %>">#<%=opportunity.stage %></a></span>
+            <br><span>{{_("Labels")}}: <a class="tag" href="/#/search/type:Opportunity <%=opportunity.description %>">#<%=opportunity.description %></a></span> <br>
             <span class="page-meta"><i class="icon-pencil"><a ng-click="editOpp()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="delete(opportunity)" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
 
            
@@ -197,7 +200,7 @@
                 <div class="portlet-body" id="chats">
                   <div class="scroller" style="height:200x" data-always-visible="1" data-rail-visible="0">
                     <div id="newTask">
-                                <p><strong>Tasks:</strong><a href="#"> [View all(25)]</a></p>
+                                <p><strong>Tasks:</strong></p>
 
                                  
                                   <ul id="tasks" class="unstyled">
@@ -218,7 +221,7 @@
                                     <li ng-repeat="event in events" id="event_<%=$index%>">
                                       <input value="check1" type="checkbox">
                                       <!-- Name -->
-                                    <span><a href="/tasks/1" class="discussion-content"><%= event.title%> <span ng-show="event.starts_at"> [<%= event.starts_at | date:'yyyy-MM-dd '%>]</span></a></span>
+                                    <span><a href="/#/events/show/<%=event.id%>" class="discussion-content"><%= event.title%> <span ng-show="event.starts_at"> [<%= event.starts_at | date:'yyyy-MM-dd '%>]</span></a></span>
                                     </li>
                                    
                                     
