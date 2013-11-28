@@ -764,11 +764,12 @@ class CrmEngineApi(remote.Service):
     
 
     return my_model
-  
-  @Event.query_method(user_required=True,query_fields=('about_kind','about_item', 'starts_at','ends_at', 'limit', 'order', 'pageToken'),path='events', name='events.list')
+  @Event.query_method(user_required=True,query_fields=('about_kind','about_item','id','status', 'starts_at','ends_at', 'limit', 'order', 'pageToken'),path='events', name='events.list')
   def EventList(self, query):
-      return query
-      
+
+    
+
+    return query     
   
   @endpoints.method(ID_RESOURCE, EventResponse,
                       path='events/{id}', http_method='GET',
@@ -809,13 +810,11 @@ class CrmEngineApi(remote.Service):
             except (IndexError, TypeError):
                 raise endpoints.NotFoundException('About object %s not found.' %
                                                   (request.id,))
-            
-            
-
-            
+               
         except (IndexError, TypeError):
-            raise endpoints.NotFoundException('Note %s not found.' %
+            raise endpoints.NotFoundException('EVent %s not found.' %
                                               (request.id,))
+
   
 
 # HKA 06.11.2013 Add Opportuity APIs
@@ -1661,11 +1660,9 @@ class CrmEngineApi(remote.Service):
     # insert in the datastore
     
     # Todo: Check permissions
-    author = model.Userinfo()
-    author.display_name = user_from_email.google_display_name
-    author.photo = user_from_email.google_public_profile_photo_url
+    task_owner = model.User()
+    task_owner.google_display_name = user_from_email.google_display_name
     my_model.owner = user_from_email.google_user_id
-    my_model.author = author
     my_model.organization = user_from_email.organization
     my_model.put()
     

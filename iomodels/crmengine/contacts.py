@@ -30,6 +30,11 @@ class Contact(EndpointsModel):
     lastmodification = ndb.DateTimeProperty(auto_now=True)
     department = ndb.StringProperty()
     description = ndb.StringProperty()
+    phones = ndb.StructuredProperty(model.Phone,repeated=True)
+    emails = ndb.StructuredProperty(model.Email,repeated=True)
+    addresses = ndb.StructuredProperty(model.Address,repeated=True)
+    websites = ndb.StructuredProperty(model.Website,repeated=True)
+    sociallinks= ndb.StructuredProperty(model.Social,repeated=True)
     # public or private
     access = ndb.StringProperty()
     phones = ndb.StructuredProperty(model.Phone,repeated=True)
@@ -86,6 +91,7 @@ class Contact(EndpointsModel):
             search.TextField(name='phones', value = empty_string(phones)),
             search.TextField(name='websites', value = empty_string(websites)),
             search.TextField(name='addresses', value = empty_string(addresses)),
+
            ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)

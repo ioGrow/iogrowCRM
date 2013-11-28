@@ -9,7 +9,9 @@ import model
 
 
 class Event(EndpointsModel):
+
     _message_fields_schema = ('id','entityKey','owner','author','collaborators_ids','collaborators_list','created_at','updated_at', 'starts_at','ends_at','title','where','about_kind','about_item')
+
     author = ndb.StructuredProperty(Userinfo)
     # Sharing fields
     owner = ndb.StringProperty()

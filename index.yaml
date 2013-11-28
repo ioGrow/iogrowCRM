@@ -161,6 +161,15 @@ indexes:
   properties:
   - name: about_item
   - name: about_kind
+  - name: comments
+  - name: status
+  - name: updated_at
+    direction: desc
+
+- kind: Task
+  properties:
+  - name: about_item
+  - name: about_kind
   - name: updated_at
     direction: desc
 

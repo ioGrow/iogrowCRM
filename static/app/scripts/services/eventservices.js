@@ -10,7 +10,7 @@ eventservices.factory('Event', function($http) {
           gapi.client.crmengine.events.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.eventt = resp;
-               var url = Event.getUrl($scope.eventt.about_kind,$scope.eventt.about_item);
+               var url = Event.getUrl($scope.eventt.about.kind,$scope.eventt.about.id);
                $scope.uri =url;
                // $scope.isContentLoaded = true;
                // $scope.listTopics(resp);

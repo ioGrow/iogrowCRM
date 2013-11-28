@@ -119,8 +119,8 @@ app.controller('TaskShowController',['$scope','$filter','$route','$location','Co
      
       
     };
-    $scope.ListComments = function(){
-      var params = {//'discussion':$scope.note.entityKey,
+    $scope.ListComments = function(entityK){
+      var params = {'discussion':entityK,
                      'limit':5,
                       'order':'-updated_at'};
       Comment.list($scope,params);
