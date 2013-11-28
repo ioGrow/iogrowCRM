@@ -11,7 +11,7 @@ topicservices.factory('Task', function($http) {
           gapi.client.crmengine.tasks.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.task = resp;
-               var url = Task.getUrl($scope.task.about_kind,$scope.task.about_item);
+               var url = Task.getUrl($scope.task.about.kind,$scope.task.about.id);
                $scope.uri =url;
                // $scope.isContentLoaded = true;
                // $scope.listTopics(resp);
