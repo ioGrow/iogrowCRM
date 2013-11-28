@@ -28,11 +28,13 @@ class Contact(EndpointsModel):
     company = ndb.StringProperty()
     creationTime = ndb.DateTimeProperty(auto_now_add=True)
     lastmodification = ndb.DateTimeProperty(auto_now=True)
-    address = ndb.StringProperty()
     department = ndb.StringProperty()
-    mobile = ndb.StringProperty()
-    email = ndb.StringProperty()
     description = ndb.StringProperty()
+    phones = ndb.StructuredProperty(model.Phone,repeated=True)
+    emails = ndb.StructuredProperty(model.Email,repeated=True)
+    addresses = ndb.StructuredProperty(model.Address,repeated=True)
+    websites = ndb.StructuredProperty(model.Website,repeated=True)
+    sociallinks= ndb.StructuredProperty(model.Social,repeated=True)
     # public or private
     access = ndb.StringProperty()
 
@@ -73,11 +75,8 @@ class Contact(EndpointsModel):
             search.DateField(name='creationTime', value = self.creationTime),
             search.DateField(name='lastmodification', value = self.lastmodification),
             search.TextField(name='company', value = empty_string(self.company)),
-            search.TextField(name='address', value = empty_string(self.address)),
             search.TextField(name='department', value = empty_string(self.department)),
-            search.TextField(name='mobile', value = empty_string(self.mobile)),
             search.TextField(name='account_name',value=empty_string(self.account_name)),
-            search.TextField(name='email', value = empty_string(self.email)),
             search.TextField(name='description', value = empty_string(self.description))
            ])
         my_index = search.Index(name="GlobalIndex")

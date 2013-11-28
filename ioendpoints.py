@@ -565,7 +565,7 @@ class CrmEngineApi(remote.Service):
   @Task.method(request_fields=('id',),path='tasks/{id}', http_method='GET', name='tasks.get')
   def TaskGet(self, my_model):
     if not my_model.from_datastore:
-      raise endpoints.NotFoundException('Task not found.')
+      raise endpoints.NotFoundException('Topic not found.')
     return my_model
 
   # HKA 4.11.2013 Add Opportuity APIs

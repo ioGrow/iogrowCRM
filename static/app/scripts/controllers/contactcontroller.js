@@ -485,5 +485,113 @@ $scope.updatContactHeader = function(contact){
  $('#EditCaseModal').modal('hide');
   };
 
+  //HKA 19.11.2013 Add Phone
+ $scope.addPhone = function(phone){
+  //HKA 19.11.2013  Concatenate old phones with new phone
+  var phonesArray = undefined;
+  
+  if ($scope.contact.phones){
+    phonesArray = new Array();
+    phonesArray = $scope.contact.phones;
+    phonesArray.push(phone);
+  }else{
+    phonesArray = phone;
+  }
+
+  params = {'id':$scope.contact.id,
+            'phones':phonesArray
+            };
+  Contact.patch($scope,params);
+  $('#phonemodal').modal('hide');
+  };
+
+//HKA 20.11.2013 Add Email
+$scope.addEmail = function(email){
+  var emailsArray = undefined;
+  
+  if ($scope.contact.emails){
+    emailsArray = new Array();
+    emailsArray = $scope.account.emails;
+    emailsArray.push(email);
+  }else{
+    emailsArray = email;
+  }
+
+  params = {'id':$scope.account.id,
+            'emails':emailsArray
+            };
+  Contact.patch($scope,params);
+  $('#emailmodal').modal('hide');
+  };
+  
+//HKA 20.11.2013 Add Addresse
+$scope.addAddress = function(address){
+  var addressArray = undefined;
+  if ($scope.contact.addresses){
+    addressArray = new Array();
+    addressArray = $scope.contact.addresses;
+    addressArray.push(address);
+
+  }else{ 
+    addressArray = address;
+  }
+  params = {'id':$scope.contact.id,
+             'addresses':addressArray}
+  Contact.patch($scope,params);
+  $('#addressmodal').modal('hide');
+};
+
+//HKA 22.11.2013 Add Website
+$scope.addWebsite = function(website){
+  var websiteArray = undefined;
+  if ($scope.account.websites){
+    websiteArray = new Array();
+    websiteArray = $scope.account.websites;
+    websiteArray.push(website);
+
+  }else{ 
+    websiteArray = website;
+  }
+  params = {'id':$scope.account.id,
+             'websites':websiteArray}
+  Account.patch($scope,params);
+  $('#websitemodal').modal('hide');
+};
+
+//HKA 22.11.2013 Add Social
+$scope.addSocial = function(social){
+  var socialArray = undefined;
+  if ($scope.account.sociallinks){
+    socialArray = new Array();
+    socialArray = $scope.account.sociallinks;
+    socialArray.push(social);
+
+  }else{ 
+    socialArray = social;
+  }
+  params = {'id':$scope.account.id,
+             'sociallinks':socialArray}
+  Account.patch($scope,params);
+  $('#socialmodal').modal('hide');
+};
+
+//HKA 22.11.2013 Add Tagline
+$scope.updateTagline = function(account){
+ 
+  params = {'id':$scope.account.id,
+             'tagline':account.tagline}
+  Account.patch($scope,params);
+  $('#EditTagModal').modal('hide');
+};
+
+//HKA 22.11.2013 Add Introduction
+$scope.updateintro = function(account){
+ 
+  params = {'id':$scope.account.id,
+             'introduction':account.introduction}
+  Account.patch($scope,params);
+  $('#EditIntroModal').modal('hide');
+};
+
 
 }]);

@@ -48,7 +48,7 @@
                     
 
                     <div class="control-group">
-                        <label  class="required control-label">{{_("First Name")}} *</label>
+                        <label  class="required control-label">{{_("First Name")}} </label>
                        
                         <div class="controls">
                           <input type="text" required id="id_firstname" class="input-xlarge" ng-model="contact.firstname">
@@ -59,7 +59,7 @@
                         <label  class="required control-label">{{_("Last Name")}}</label>
                        
                         <div class="controls">
-                          <input type="text"  id="id_lastname" class="input-xlarge" ng-model="contact.lastname">
+                          <input type="text"  required id="id_lastname" class="input-xlarge" ng-model="contact.lastname">
                           
                         </div>
                     </div>
@@ -132,7 +132,7 @@
             <div class="inner-cards-container">
             
               <div ng-repeat="contact in contacts" class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                <div class="dashboard-stat cards">
+                <div class="dashboard-stat cards-small">
                   
                   <div class="details">
                     <a href="/#/contacts/show/<%= contact.id %>"><h2 class="cardTitle">
@@ -140,7 +140,7 @@
                     </h2></a>
                     <div class="desc">                           
                       
-                    <a  class="desc" href="/#/contacts/industry/<%=contact.industry%>">#<%=contact.title%></a> at <a  class="desc" href="/#/contacts/industry/<%=contact.industry%>">#<%=contact.account_name%></a>
+                    <span ng-show="contact.title"><a  class="desc" href="/#/contacts/industry/<%=contact.industry%>">#<%=contact.title%></a></span><span ng-show="contact.account_name"> <span ng-show="contact.account_name + contact.title" class="contact-title">at </span> <a  class="desc" href="/#/contacts/industry/<%=contact.industry%>">#<%=contact.account_name%></a></span>
                     </div>
                   </div>
                   <a class="more" href="/#/contacts/show/<%= contact.id %>">
