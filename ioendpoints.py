@@ -1660,8 +1660,12 @@ class CrmEngineApi(remote.Service):
     # insert in the datastore
     
     # Todo: Check permissions
-    task_owner = model.User()
-    task_owner.google_display_name = user_from_email.google_display_name
+    author = model.Userinfo()
+    author.google_user_id = user_from_email.google_user_id
+    author.display_name = user_from_email.google_display_name
+    author.photo = user_from_email.google_public_profile_photo_url
+    my_model.author = author
+    my_model.comments = 0
     my_model.owner = user_from_email.google_user_id
     my_model.organization = user_from_email.organization
     my_model.put()
@@ -1681,8 +1685,10 @@ class CrmEngineApi(remote.Service):
       # Todo: Check permissions
       items = request.items
       author = model.Userinfo()
+      author.google_user_id = user_from_email.google_user_id
       author.display_name = user_from_email.google_display_name
       author.photo = user_from_email.google_public_profile_photo_url
+      
       for item in items:
           document = Document(about_kind = request.about_kind,
                               about_item = request.about_item,
