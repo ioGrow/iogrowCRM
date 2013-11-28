@@ -135,6 +135,12 @@ indexes:
 
 - kind: Event
   properties:
+  - name: about_item
+  - name: about_kind
+  - name: starts_at
+
+- kind: Event
+  properties:
   - name: about_kind
   - name: comments
   - name: status
@@ -155,23 +161,6 @@ indexes:
   properties:
   - name: about_item
   - name: about_kind
-  - name: comments
-  - name: status
-  - name: updated_at
-    direction: desc
-
-- kind: Task
-  properties:
-  - name: about_kind
-  - name: comments
-  - name: status
-  - name: updated_at
-    direction: desc
-
-- kind: Task
-  properties:
-  - name: comments
-  - name: status
   - name: updated_at
     direction: desc
 

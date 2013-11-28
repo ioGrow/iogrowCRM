@@ -107,8 +107,8 @@
             <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Accounts")}} > <%= account.name %> </h2>
             
 
-           <span>{{_("Type")}}: </span><span><span><a class="tag" href="/#/search/type:Account <%=account.account_type%>">#<%=account.account_type%></a></span>
-            <br><span>{{_("Industry")}}: </span><span><span><a class="tag" href="/#/search/type:Account <%=account.industry%>">#<%=account.industry%></a></span> 
+           <span ng-show="account.account_type">{{_("Type")}}: <a class="tag" href="/#/search/type:Account <%=account.account_type%>">#<%=account.account_type%></a></span>
+          <span ng-show="account.industry">{{_("Industry")}}: <a class="tag" href="/#/search/type:Account <%=account.industry%>">#<%=account.industry%></a></span> 
              </br>
              <span class="page-meta"><i class="icon-pencil"><a ng-click="editaccount()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |  <i class="icon-trash"><a ng-click="delete(account)" class="btn-link addAnotherPhone">  {{_("Delete")}}</a></i></span>
 
@@ -247,7 +247,7 @@
                                   
                                 </div>
                                 <ul class="unstyled contact-infos" >
-                                    <li ng-repeat="web in account.websites"><a href="<%=web.website%>"><%=web.website%></a> </li>
+                                    <li ng-repeat="web in account.websites"><a href="http://<%=web.website%>" target="_blank"><%=web.website%></a> </li>
                                     <li><a href="#websitemodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new Website </a></li>
                                     
                                 </ul>
@@ -257,7 +257,7 @@
                                   
                                 </div>
                                 <ul class="unstyled contact-infos" >
-                                    <li ng-repeat="social in account.sociallinks"><a href="<%=social.sociallink%>"></a> <%=social.sociallink%> </li>
+                                    <li ng-repeat="social in account.sociallinks"><a href="<%=social.sociallink%>" target="_blank"> <%=social.sociallink%> </a></li>
                                   <li><a href="#socialmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new social links </a></li>    
                                 </ul>
                                                     
@@ -308,7 +308,7 @@
                                     </h3></a>
                                     <div class="desc">    
                                                              
-                                        <span class="contact-title" ng-show="contact.title" > <a href="/#/search/type:Contact <%=contact.title%>">#<%=contact.title%></a>  </span>  
+                                        <span class="contact-title" ng-show="contact.title" > <a href="/#/search/type:Contact position:<%=contact.title%>">#<%=contact.title%></a>  </span>  
                                     
                                     </div>
                                   </div>
@@ -399,11 +399,12 @@
                                 <div class="dashboard-stat cards-med">
                                   
                                   <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
+                                    <a href="/#/opportunities/show/<%= opp.id %>"><h3 class="relatedcardOppTitle">
                                      <%=opp.name%></h3></a>
+                                     <!-- <span class="contact-title" ng-show="casee.status">Status:<a  class="desc" href="/#/search/type:Case <%=casee.status%>"># <%=casee.status%></a></span>-->
                                     <div class="desc">                           
-                                     <span><a  class="desc" href="/#/search/type:Opportunity <%=opp.amount%>"># <%=opp.amount%></a> - </span>
-                                    <span ng-show="opp.stage" class="contact-title" ><a class="desc" href="/#/search/type:Oportunity <%=opp.stage%>">#<%=opp.stage%> </a></span><br>
+                                     <span class="contact-title" ng-show="opp.amount">amount: <%=opp.amount%> </span>
+                                    <span ng-show="opp.stage" class="contact-title" ><br>stage: <a class="desc" href="/#/search/type:Opportunity stage:<%=opp.stage%>">#<%=opp.stage%> </a></span><br>
                                     <a ng-show="opp.description" class="desc" href="/#/search/type:Opportunity <%=opp.description%>">#<%=opp.description%></a>  
                                     
                                     </div>

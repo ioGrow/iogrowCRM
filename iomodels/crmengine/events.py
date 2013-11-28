@@ -2,28 +2,28 @@ from google.appengine.ext import ndb
 from google.appengine.api import search 
 from endpoints_proto_datastore.ndb import EndpointsModel
 from iomodels.crmengine.notes import Topic
-from model import User
+from model import Userinfo
 import pprint
 
 import model
 
 
 class Event(EndpointsModel):
-    _message_fiels_schema = ('id','owner','created_at','updated_at','title','entityKey')
-    author = ndb.StructuredProperty(User)
+    _message_fields_schema = ('id','entityKey','owner','author','collaborators_ids','collaborators_list','created_at','updated_at', 'starts_at','ends_at','title','where','about_kind','about_item')
+    author = ndb.StructuredProperty(Userinfo)
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
     collaborators_ids = ndb.StringProperty(repeated=True)
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
-    title = ndb.StringProperty(required=True)
+    title = ndb.StringProperty()
     where = ndb.StringProperty()
     starts_at = ndb.DateTimeProperty()
     ends_at = ndb.DateTimeProperty()
-    status = ndb.StringProperty(default='open')
+    status = ndb.StringProperty()
     # number of comments in this topic
-    comments = ndb.IntegerProperty(default=0)
+    comments = ndb.IntegerProperty()
     # A Topic is attached to an object for example Account or Opportunity..
     about_kind = ndb.StringProperty()
     about_item = ndb.StringProperty()
@@ -41,7 +41,7 @@ class Event(EndpointsModel):
     def set_perm(self):
         about_item = str(self.key.id())
 
-        perm = model.Permission(about_kind='Account',
+        perm = model.Permission(about_kind='Event',
                          about_item=about_item,
                          type = 'user',
                          role = 'owner',

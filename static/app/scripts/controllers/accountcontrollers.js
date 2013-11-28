@@ -246,6 +246,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
         Attachement.list($scope,params);
 
      }
+     
      $scope.hilightTopic = function(){
         console.log('Should higll');
        $('#topic_0').effect( "bounce", "slow" );
@@ -586,7 +587,9 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
                       'firstname':contact.firstname,
                       'title': contact.title,
                       'account':$scope.account.entityKey,
-                      'display_name': contact_name
+                      'account_name': $scope.account.name,
+                      'display_name': contact_name,
+                      'access': $scope.account.access
                       };
 
         console.log(params);
@@ -601,7 +604,9 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
                       'description':opportunity.description,
                       'amount': opportunity.amount,
                       'stage':opportunity.stage,
-                      'account':$scope.account.entityKey
+                      'account':$scope.account.entityKey,
+                      'account_name': $scope.account.name,
+                      'access': $scope.account.access
                       };
 
       Opportunity.insert(params);
@@ -615,7 +620,9 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
                       'priority':casee.priority,
                       'status': casee.statuss,
                       'type_case':casee.type_case,
-                      'account':$scope.account.entityKey
+                      'account':$scope.account.entityKey,
+                      'account_name': $scope.account.name,
+                      'access': $scope.account.access
                       };
       Case.insert(params);
       $('#addCaseModal').modal('hide');
