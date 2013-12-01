@@ -140,7 +140,7 @@
                     </h2></a>
                     <div class="desc">                           
                       
-                    <span ng-show="contact.title"><a  class="desc" href="/#/contacts/industry/<%=contact.industry%>">#<%=contact.title%></a></span><span ng-show="contact.account_name"> <span ng-show="contact.account_name + contact.title" class="contact-title">at </span> <a  class="desc" href="/#/contacts/industry/<%=contact.industry%>">#<%=contact.account_name%></a></span>
+                    <span ng-show="contact.title"><a  class="desc" ng-show="contact.title" href="/#/search/type:Contact <%=contact.title%>">#<%=contact.title%></a></span><span ng-show="contact.account_name"> <span ng-show="contact.account_name + contact.title" class="contact-title">at </span> <a  class="desc" href="/#/search/type:Contact <%=contact.account_name%>">#<%=contact.account_name%></a></span>
                     </div>
                   </div>
                                   

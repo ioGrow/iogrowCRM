@@ -9,7 +9,7 @@ class Contact(EndpointsModel):
     
 
 
-    _message_fields_schema = ('id','entityKey','folder',  'access','collaborators_list','collaborators_ids','display_name', 'firstname','lastname','title','company','account','account_name')
+    _message_fields_schema = ('id','entityKey','folder',  'access','collaborators_list','collaborators_ids','display_name', 'firstname','lastname','title','company','account','account_name','introduction','tagline','phones','emails','addresses','websites','sociallinks')
 
 
 
@@ -37,6 +37,8 @@ class Contact(EndpointsModel):
     sociallinks= ndb.StructuredProperty(model.Social,repeated=True)
     # public or private
     access = ndb.StringProperty()
+    tagline = ndb.StringProperty()
+    introduction = ndb.StringProperty()
     phones = ndb.StructuredProperty(model.Phone,repeated=True)
     emails = ndb.StructuredProperty(model.Email,repeated=True)
     addresses = ndb.StructuredProperty(model.Address,repeated=True)
@@ -87,6 +89,8 @@ class Contact(EndpointsModel):
             search.TextField(name='department', value = empty_string(self.department)),
             search.TextField(name='account_name',value=empty_string(self.account_name)),
             search.TextField(name='description', value = empty_string(self.description)),
+            search.TextField(name='tagline', value = empty_string(self.tagline)),
+            search.TextField(name='introduction', value = empty_string(self.introduction)),
             search.TextField(name='emails', value = empty_string(emails)),
             search.TextField(name='phones', value = empty_string(phones)),
             search.TextField(name='websites', value = empty_string(websites)),

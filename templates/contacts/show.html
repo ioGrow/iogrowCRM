@@ -107,11 +107,10 @@
             <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>   {{_("Contacts")}} > <%=contact.firstname%> <%=contact.lastname%></h2>
             
 
-            <span ng-show="contact.title"><a class="tag" href="#">#<%=contact.title%> </a></span>
-            <span ng-show="contact.account_name">{{_("at")}} <a class="tag" href="#">#<%=contact.account_name%></a></span> <br>
+            <span ng-show="contact.title"><a class="tag" href="/#/search/type:Contact <%=contact.title%>">#<%=contact.title%> </a></span>
+            <span ng-show="contact.account_name">{{_("at")}} <a class="tag" href="/#/search/type:Contact <%=contact.account_name%>">#<%=contact.account_name%></a></span> <br>
             <span class="page-meta"><i class="icon-pencil"><a ng-click="editacontact()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="delete(contact)" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
 
-           
             
             <hr/>
             
@@ -190,7 +189,7 @@
                                  
                                 </div>
                                   <ul class="unstyled contact-infos">
-                                    <li ng-repeat="phone in account.phones"> <%=phone.number%> - <%=phone.type_number%> <a ><img class="ctodeal" src="static/img/phone-icon.png" /></a></li>
+                                    <li ng-repeat="phone in contact.phones"> <%=phone.number%> - <%=phone.type_number%> <a ><img class="ctodeal" src="static/img/phone-icon.png" /></a></li>
           
                                     <li><a href="#phonemodal"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new Phone</a></li>
 
@@ -202,7 +201,7 @@
                                  
                                 </div>
                                   <ul class="unstyled contact-infos">
-                                    <li ng-repeat="email in account.emails"> <%=email.email %>   </li>
+                                    <li ng-repeat="email in contact.emails"> <%=email.email %>   </li>
                                     
                                     <li><a href="#emailmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new email address </a></li>
 
@@ -212,7 +211,7 @@
                                  
                                 </div>
                                  <ul class="unstyled contact-infos">
-                                    <li ng-repeat="addr in account.addresses"><%=addr.street%>, <%=addr.city%> <%=addr.state%>, <%=addr.street%> <%=addr.postal_code%>  </li>
+                                    <li ng-repeat="addr in contact.addresses"><%=addr.street%>, <%=addr.city%> <%=addr.state%>, <%=addr.street%> <%=addr.postal_code%>  </li>
                                     
                                     <li><a href="#addressmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new address </a></li>
 
@@ -229,7 +228,7 @@
                                   
                                 </div>
                                 <ul class="unstyled contact-infos" >
-                                    <li ng-repeat="web in account.websites"><a href="<%=web.website%>"><%=web.website%></a> </li>
+                                    <li ng-repeat="web in contact.websites"><a href="<%=web.website%>"><%=web.website%></a> </li>
                                     <li><a href="#websitemodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new Website </a></li>
                                     
                                 </ul> 
@@ -238,7 +237,7 @@
                                   
                                 </div>
                                 <ul class="unstyled contact-infos" >
-                                    <li ng-repeat="social in account.sociallinks"><a href="<%=social.sociallink%>"></a> <%=social.sociallink%> </li>
+                                    <li ng-repeat="social in contact.sociallinks"><a href="<%=social.sociallink%>"></a> <%=social.sociallink%> </li>
                                   <li><a href="#socialmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new social links </a></li>    
                                 </ul>
                                                              
@@ -259,7 +258,7 @@
                                   <span class="page-meta"><i class="icon-pencil"><a ng-click="editintro()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
                                   
                                 </div>
-                                <p> <%=contact.introduction%>   </p>                         
+                                <p> <%=contact.introduction%></p>                         
                               </div>
                             
                           </div>
@@ -651,7 +650,7 @@
               </div>
 
               <div class="modal-body">
-                 <form id="editTagline" name="editlead" ng-submit="updateTagline(account)" class="form-horizontal"> 
+                 <form id="editTagline" name="editlead" ng-submit="updateTagline(contact)" class="form-horizontal"> 
                 
 
                   <div class="control-group">
@@ -659,7 +658,7 @@
                        
                         <div class="controls">
                           <!--textarea rows="2" cols="50"  id="id_tagline" ng-model="account.tagline"/-->
-                           <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="account.tagline"></textarea>
+                           <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="contact.tagline"></textarea>
 
                         </div>
                     </div>             
@@ -680,7 +679,7 @@
               </div>
 
               <div class="modal-body">
-                 <form id="editTagline" name="edittag" ng-submit="updateintro(account)" class="form-horizontal"> 
+                 <form id="editTagline" name="edittag" ng-submit="updateintro(contact)" class="form-horizontal"> 
                 
 
                   <div class="control-group">
@@ -688,7 +687,7 @@
                        
                         <div class="controls">
                          
-                           <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="account.introduction"></textarea>
+                           <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="contact.introduction"></textarea>
 
                         </div>
                     </div>             
@@ -756,7 +755,7 @@
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
               
-                  <input ng-hide="isLoading" type="submit" class="btn green" value="Add this phone">
+                  <input ng-hide="isLoading" type="submit" class="btn green" value="Add this email">
                   <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
               </div>
                 </form>
