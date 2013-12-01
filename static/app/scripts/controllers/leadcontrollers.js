@@ -414,6 +414,125 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','$location','Conf','
         $('#EditLeadModal').modal('hide')
 
   };
+
+   
+//HKA 01.12.2013 Add Phone
+ $scope.addPhone = function(phone){
+  //HKA 01.12.2013  Concatenate old phones with new phone
+  var phonesArray = undefined;
+  
+  if ($scope.lead.phones){
+    phonesArray = new Array();
+    phonesArray = $scope.lead.phones;
+    phonesArray.push(phone);
+  }else{
+    phonesArray = phone;
+  }
+
+  params = {'id':$scope.lead.id,
+            'phones':phonesArray
+            };
+  Lead.patch($scope,params);
+  $('#phonemodal').modal('hide');
+  };
+
+//HKA 01.12.2013 Add Email
+$scope.addEmail = function(email){
+  var emailsArray = undefined;
+  
+  if ($scope.lead.emails){
+    emailsArray = new Array();
+    emailsArray = $scope.lead.emails;
+    emailsArray.push(email);
+  }else{
+    emailsArray = email;
+  }
+
+  params = {'id':$scope.lead.id,
+            'emails':emailsArray
+            };
+  Lead.patch($scope,params);
+  $('#emailmodal').modal('hide');
+
+  };
+  
+//HKA 01.12.2013 Add Addresse
+$scope.addAddress = function(address){
+  var addressArray = undefined;
+  if ($scope.lead.addresses){
+    addressArray = new Array();
+    addressArray = $scope.lead.addresses;
+    addressArray.push(address);
+
+  }else{ 
+    addressArray = address;
+  }
+  params = {'id':$scope.lead.id,
+             'addresses':addressArray}
+  Lead.patch($scope,params);
+  $('#addressmodal').modal('hide');
+};
+
+//HKA 01.12.2013 Add Website
+$scope.addWebsite = function(website){
+  var websiteArray = undefined;
+  if ($scope.lead.websites){
+    websiteArray = new Array();
+    websiteArray = $scope.lead.websites;
+    websiteArray.push(website);
+
+  }else{ 
+    websiteArray = website;
+  }
+  params = {'id':$scope.lead.id,
+             'websites':websiteArray}
+  Lead.patch($scope,params);
+  $('#websitemodal').modal('hide');
+};
+
+//HKA 01.12.2013 Add Social
+$scope.addSocial = function(social){
+  var socialArray = undefined;
+  if ($scope.lead.sociallinks){
+    socialArray = new Array();
+    socialArray = $scope.lead.sociallinks;
+    socialArray.push(social);
+
+  }else{ 
+    socialArray = social;
+  }
+  params = {'id':$scope.lead.id,
+             'sociallinks':socialArray}
+  Lead.patch($scope,params);
+  $('#socialmodal').modal('hide');
+};
+
+//HKA 22.11.2013 Edit tagline of Account
+$scope.edittagline = function() {
+       $('#EditTagModal').modal('show');
+    };
+    //HKA Edit Introduction on Account
+$scope.editintro = function() {
+       $('#EditIntroModal').modal('show');
+    };
+
+//HKA 22.11.2013 Add Tagline
+$scope.updateTagline = function(lead){
+ 
+  params = {'id':$scope.lead.id,
+             'tagline':lead.tagline}
+  Lead.patch($scope,params);
+  $('#EditTagModal').modal('hide');
+};
+
+//HKA 22.11.2013 Add Introduction
+$scope.updateintro = function(lead){
+ 
+  params = {'id':$scope.lead.id,
+             'introduction':lead.introduction}
+  Lead.patch($scope,params);
+  $('#EditIntroModal').modal('hide');
+};
   
 
      

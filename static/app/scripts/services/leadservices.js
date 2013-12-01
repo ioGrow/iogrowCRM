@@ -37,7 +37,7 @@ leadservices.factory('Lead', function($http) {
             }else {
                alert("Error, response is: " + angular.toJson(resp));
             }
-            console.log('accounts.patch gapi #end_execute');
+            console.log('leads.patch gapi #end_execute');
           });
   };
   Lead.list = function($scope,params){

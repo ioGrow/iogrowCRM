@@ -6,14 +6,14 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 import model
 
 class Lead(EndpointsModel):
-    _message_fields_schema = ('id','entityKey','folder', 'access','collaborators_list','collaborators_ids', 'firstname','lastname','company')
+    _message_fields_schema = ('id','entityKey','folder', 'access','collaborators_list','collaborators_ids', 'firstname','lastname','company','tagline','introduction','phones','emails','addresses','websites','sociallinks')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
     collaborators_ids = ndb.StringProperty(repeated=True)
     organization = ndb.KeyProperty()
     folder = ndb.StringProperty()
-    firstname = ndb.StringProperty(required=True)
+    firstname = ndb.StringProperty()
     lastname = ndb.StringProperty()
     company = ndb.StringProperty()
     industry = ndb.StringProperty()
@@ -28,6 +28,8 @@ class Lead(EndpointsModel):
     created_by = ndb.KeyProperty()
     # public or private
     access = ndb.StringProperty()
+    tagline = ndb.StringProperty()
+    introduction = ndb.StringProperty()
     phones = ndb.StructuredProperty(model.Phone,repeated=True)
     emails = ndb.StructuredProperty(model.Email,repeated=True)
     addresses = ndb.StructuredProperty(model.Address,repeated=True)
@@ -81,6 +83,8 @@ class Lead(EndpointsModel):
             search.TextField(name='style', value = empty_string(self.style)),
             search.DateField(name='created_at', value = self.created_at),
             search.DateField(name='updated_at', value = self.updated_at),
+            search.TextField(name='tagline', value = empty_string(self.tagline)),
+            search.TextField(name='introduction', value = empty_string(self.introduction)),
             search.TextField(name='emails', value = empty_string(emails)),
             search.TextField(name='phones', value = empty_string(phones)),
             search.TextField(name='websites', value = empty_string(websites)),
