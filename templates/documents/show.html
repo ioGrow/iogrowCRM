@@ -57,6 +57,9 @@
                       <a href="#" class="name"><%= attachment.author.display_name%></a>
                       <span class="datetime"><!--at <%= note.created_at %> --></span><br>
                       <span class="body">
+                      <br>
+                        <span class="desc"><a href="<%=attachment.embedLink%>" target="_blank"><img src="/static/img/drive_icon.png" width="25"> open with Google Drive</a></span>
+                        <br>
                        <iframe src="<%=attachment.embedLink%>"  class="span12" height="300"></iframe> 
                       </span>
                     </div>

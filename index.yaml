@@ -118,6 +118,12 @@ indexes:
   - name: owner
   - name: name
 
+- kind: Contributor
+  properties:
+  - name: discussionKey
+  - name: created_at
+    direction: desc
+
 - kind: Document
   properties:
   - name: about_item
