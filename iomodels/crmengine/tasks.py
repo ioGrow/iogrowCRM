@@ -8,7 +8,7 @@ import pprint
 import model
 
 class Task(EndpointsModel):
-    _message_fields_schema = ('id','owner','created_at','updated_at','title','due','status','completed_by','comments','about_kind','about_item','organization')
+    _message_fields_schema = ('id','owner','created_at','updated_at','title','due','status','completed_by','comments','about_kind','about_item','organization','involved_ids','involved_list')
 
     author = ndb.StructuredProperty(Userinfo)
     # Sharing fields
@@ -21,6 +21,8 @@ class Task(EndpointsModel):
     due = ndb.DateTimeProperty()
     status = ndb.StringProperty()
     completed_by = ndb.StructuredProperty(Userinfo)
+    involved_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
+    involved_ids = ndb.StringProperty(repeated=True)
     # number of comments in this topic
     comments = ndb.IntegerProperty()
     # A Topic is attached to an object for example Account or Opportunity..

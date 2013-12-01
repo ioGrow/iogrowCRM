@@ -14,6 +14,7 @@ topicservices.factory('Task', function($http) {
                var url = Task.getUrl($scope.task.about.kind,$scope.task.about.id);
                $scope.uri =url;
                $scope.ListComments($scope.task.entityKey);
+               $scope.listContributors();
                // $scope.isContentLoaded = true;
                // $scope.listTopics(resp);
                // $scope.listTasks();
@@ -117,4 +118,59 @@ topicservices.factory('Task', function($http) {
   
 
 return Task;
+});
+topicservices.factory('Contributor', function($http) {
+  
+  var Contributor = function(data) {
+    angular.extend(this, data);
+  }
+
+
+  Contributor.list = function($scope,params){
+      console.log('in tasks.list');
+      console.log(params);
+
+      $scope.isLoading = true;
+      gapi.client.crmengine.contributors.list(params).execute(function(resp) {
+              if(!resp.code){
+                
+                console.log($scope.currentPage);
+
+                 $scope.contributors = resp.items;
+                
+                 $scope.isLoading = false;
+
+                 // Call the method $apply to make the update on the scope
+                 $scope.$apply();
+                 
+              }else {
+                 alert("Error, response is: " + angular.toJson(resp));
+              }
+      });
+  };
+   Contributor.insert = function($scope,params){
+      $scope.isLoading = true;
+      gapi.client.crmengine.contributors.insert(params).execute(function(resp) {
+         console.log('in insert contributors resp');
+         console.log(resp);
+         if(!resp.code){
+          console.log(resp);
+          // TME_02_11_13 when a note is inserted reload topics
+          $scope.listContributors();
+          $scope.isLoading = false;
+
+          $scope.$apply();
+         // $('#addAccountModal').modal('hide');
+         // window.location.replace('#/accounts/show/'+resp.id);
+          
+         }else{
+          console.log(resp.code);
+         }
+      });
+  };
+
+
+  
+
+return Contributor;
 });

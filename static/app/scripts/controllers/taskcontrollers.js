@@ -1,5 +1,5 @@
-app.controller('TaskShowController',['$scope','$filter','$route','$location','Conf','Note','Task','Topic','Comment',
-   function($scope,$filter,$route,$location,Conf,Note,Task,Topic,Comment) {
+app.controller('TaskShowController',['$scope','$filter','$route','$location','Conf','Note','Task','Topic','Comment','User','Contributor',
+   function($scope,$filter,$route,$location,Conf,Note,Task,Topic,Comment,User,Contributor) {
 //HKA 14.11.2013 Controller to show Notes and add comments
    $scope.isSignedIn = false;
      $scope.immediateFailed = false;
@@ -11,6 +11,10 @@ app.controller('TaskShowController',['$scope','$filter','$route','$location','Co
      $scope.pages = [];
      
      $scope.notes = [];  
+     $scope.users = [];
+     $scope.user = undefined;
+     $scope.slected_memeber = undefined;
+     $scope.role= 'participant';
 
  
      $scope.renderSignIn = function() {
@@ -88,6 +92,8 @@ app.controller('TaskShowController',['$scope','$filter','$route','$location','Co
           
           var taskid = {'id':$route.current.params.taskId};
           Task.get($scope,taskid);
+          
+          User.list($scope,{});
 
 
         } else if (authResult['error']) {
@@ -106,6 +112,42 @@ app.controller('TaskShowController',['$scope','$filter','$route','$location','Co
         console.log('button clicked');
         $('#addAccountModal').modal('show');
 
+      };
+      $scope.selectMember = function(){
+        
+        $scope.slected_memeber = $scope.user;
+        $scope.user = $scope.slected_memeber.google_display_name;
+
+     };
+     $scope.addNewContributor = function(selected_user,role){
+      console.log('*************** selected user ***********************');
+      console.log(selected_user);
+      
+      var params = {   
+                      'discussionKey': $scope.task.entityKey,
+
+                      'type': 'user',
+                      'value': selected_user.email,
+                      'name': selected_user.google_display_name,
+                      'photoLink': selected_user.google_public_profile_photo_url,
+                      'role': role
+
+
+                      // Create Contributor Service
+                      // Create contributors.list api
+                      //list all contributors after getting the task.
+                     
+                      
+        }  
+        console.log('selected member');
+        console.log(params); 
+        Contributor.insert($scope,params);
+     $('#addContributor').modal('hide');
+     };
+     $scope.listContributors = function(){
+      var params = {'discussionKey':$scope.task.entityKey,
+                     'order':'-created_at'};
+      Contributor.list($scope,params);
       };
 
     $scope.addComment = function(comment){

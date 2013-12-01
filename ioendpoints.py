@@ -22,7 +22,7 @@ from iomodels.crmengine.cases import Case
 from iomodels.crmengine.products import Product
 from iomodels.crmengine.comments import Comment
 
-from model import User,Userinfo,Group,Member,Permission
+from model import User,Userinfo,Group,Member,Permission,Contributor
 import model
 import logging
 import auth_util
@@ -43,7 +43,7 @@ CLIENT_ID = '987765099891.apps.googleusercontent.com'
 SCOPES = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/drive']
 OBJECTS = {'Account': Account,'Contact': Contact,'Case':Case,'Lead':Lead,'Opportunity':Opportunity}
 FOLDERS = {'Account': 'accounts_folder','Contact': 'contacts_folder','Lead':'leads_folder','Opportunity':'opportunities_folder','Case':'cases_folder','Show':'shows_folder'}
-
+DISCUSSIONS= {'Task':{'title':'task','url':'/#/tasks/show/'},'Event':{'title':'event','url':'/#/events/show/'},'Note':{'title':'discussion','url': '/#/notes/show'}}
 class SearchRequest(messages.Message):
     q = messages.StringField(1)
     limit = messages.IntegerField(2)
@@ -555,6 +555,50 @@ class CrmEngineApi(remote.Service):
     return my_model
 
 
+  ################################# Contributors API###########################
+  @Contributor.method(user_required=True,path='contributors', http_method='POST', name='contributors.insert')
+  def insert_contributor(self, my_model):
+      user = endpoints.get_current_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('You must authenticate!' )
+      user_from_email = model.User.query(model.User.email == user.email()).get()
+      if user_from_email is None:
+          raise endpoints.UnauthorizedException('You must sign-in!' )
+      
+      # Todo: Check permissions
+      my_model.created_by = user_from_email.google_user_id
+      my_model.organization = user_from_email.organization
+      discussion_key = my_model.discussionKey
+      discussion_kind = discussion_key.kind() 
+      discussion =  discussion_key.get()
+
+      
+      my_model.put()
+      confirmation_url = "http://gcdc2013-iogrow.appspot.com"+DISCUSSIONS[discussion_kind]['url']+str(discussion_key.id())
+      print confirmation_url
+      sender_address =  my_model.name + " <notifications@gcdc2013-iogrow.appspotmail.com>"
+      subject = "You're involved in this "+ DISCUSSIONS[discussion_kind]['title'] +": "+discussion.title
+      print subject
+      body = """
+      %s involved you in this %s 
+
+      %s
+      """ % (user_from_email.google_display_name,DISCUSSIONS[discussion_kind]['title'],confirmation_url)
+      
+      
+
+      mail.send_mail(sender_address, my_model.value , subject, body)
+      return my_model
+
+  @Contributor.query_method(user_required=True,query_fields=('discussionKey', 'limit', 'order', 'pageToken'),path='contributors', name='contributors.list')
+  def contributor_list(self, query):
+    
+    return query
+  @Topic.method(request_fields=('id',),path='topics/{id}', http_method='GET', name='topics.get')
+  def TopicGet(self, my_model):
+    if not my_model.from_datastore:
+      raise endpoints.NotFoundException('Topic not found.')
+    return my_model
 
   ################################ Tasks API ##################################
   @Task.method(user_required=True,path='tasks', http_method='POST', name='tasks.insert')

@@ -267,6 +267,20 @@ class Permission(EndpointsModel):
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     organization = ndb.KeyProperty()
 
+class Contributor(EndpointsModel):
+    discussionKey = ndb.KeyProperty()
+    # is it responsible, participant, invited,follower...
+    role = ndb.StringProperty(required=True)
+    additionalRoles = ndb.StringProperty(repeated=True)
+    # is it a group or user
+    type = ndb.StringProperty(required=True)
+    
+    value = ndb.StringProperty(required=True)
+    name = ndb.StringProperty()
+    photoLink = ndb.StringProperty()
+    created_by = ndb.StringProperty()
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
+    organization = ndb.KeyProperty()
     
 
 
