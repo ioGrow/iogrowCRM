@@ -202,7 +202,7 @@
                                     <li ng-repeat="event in events" id="event_<%=$index%>">
                                       <input value="check1" type="checkbox">
                                       <!-- Name -->
-                                    <span><a href="/tasks/1" class="discussion-content"><%= event.title%> <span ng-show="event.starts_at"> [<%= event.starts_at | date:'yyyy-MM-dd '%>]</span></a></span>
+                                    <span><a href="/#/events/show/<%=event.id%>" class="discussion-content"><%= event.title%> <span ng-show="event.starts_at"> [<%= event.starts_at | date:'yyyy-MM-dd '%>]</span></a></span>
                                     </li>
                                    
                                     

@@ -367,6 +367,14 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','$location','Conf
         $('#EditContactModal').modal('hide')
 
   };
+  //HKA 01.12.2013 Edit tagline of Account
+    $scope.edittagline = function() {
+       $('#EditTagModal').modal('show');
+    };
+    //HKA 01.12.2013 Edit Introduction on Account
+    $scope.editintro = function() {
+       $('#EditIntroModal').modal('show');
+    };
 
  //HKA 09.11.2013 Add a new Task
    $scope.addTask = function(task){
@@ -511,13 +519,13 @@ $scope.addEmail = function(email){
   
   if ($scope.contact.emails){
     emailsArray = new Array();
-    emailsArray = $scope.account.emails;
+    emailsArray = $scope.contact.emails;
     emailsArray.push(email);
   }else{
     emailsArray = email;
   }
 
-  params = {'id':$scope.account.id,
+  params = {'id':$scope.contact.id,
             'emails':emailsArray
             };
   Contact.patch($scope,params);
@@ -541,55 +549,55 @@ $scope.addAddress = function(address){
   $('#addressmodal').modal('hide');
 };
 
-//HKA 22.11.2013 Add Website
+//HKA 01.12.2013 Add Website
 $scope.addWebsite = function(website){
   var websiteArray = undefined;
-  if ($scope.account.websites){
+  if ($scope.contact.websites){
     websiteArray = new Array();
-    websiteArray = $scope.account.websites;
+    websiteArray = $scope.contact.websites;
     websiteArray.push(website);
 
   }else{ 
     websiteArray = website;
   }
-  params = {'id':$scope.account.id,
+  params = {'id':$scope.contact.id,
              'websites':websiteArray}
-  Account.patch($scope,params);
+  Contact.patch($scope,params);
   $('#websitemodal').modal('hide');
 };
 
-//HKA 22.11.2013 Add Social
+//HKA 01.12.2013 Add Social
 $scope.addSocial = function(social){
   var socialArray = undefined;
-  if ($scope.account.sociallinks){
+  if ($scope.contact.sociallinks){
     socialArray = new Array();
-    socialArray = $scope.account.sociallinks;
+    socialArray = $scope.contact.sociallinks;
     socialArray.push(social);
 
   }else{ 
     socialArray = social;
   }
-  params = {'id':$scope.account.id,
+  params = {'id':$scope.contact.id,
              'sociallinks':socialArray}
-  Account.patch($scope,params);
+  Contact.patch($scope,params);
   $('#socialmodal').modal('hide');
 };
 
-//HKA 22.11.2013 Add Tagline
-$scope.updateTagline = function(account){
+//HKA 01.12.2013 Add Tagline
+$scope.updateTagline = function(contact){
  
-  params = {'id':$scope.account.id,
-             'tagline':account.tagline}
-  Account.patch($scope,params);
+  params = {'id':$scope.contact.id,
+             'tagline':contact.tagline}
+  Contact.patch($scope,params);
   $('#EditTagModal').modal('hide');
 };
 
-//HKA 22.11.2013 Add Introduction
-$scope.updateintro = function(account){
+//HKA 01.12.2013 Add Introduction
+$scope.updateintro = function(contact){
  
-  params = {'id':$scope.account.id,
-             'introduction':account.introduction}
-  Account.patch($scope,params);
+  params = {'id':$scope.contact.id,
+             'introduction':contact.introduction}
+  Contact.patch($scope,params);
   $('#EditIntroModal').modal('hide');
 };
 

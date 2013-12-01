@@ -108,7 +108,7 @@
             
 
           
-              <span>{{_("Company")}} :</span> <a class="tag"> #<%= lead.company %></a> <br> 
+              <span>{{_("Company")}} :</span> <a   href="/#/search/type:Lead <%=lead.company%>" class="tag" ng-show="lead.company"> #<%= lead.company %></a> <br> 
               
             </ul>  </br>
              <span class="page-meta"><i class="icon-pencil"><a ng-click="editLead()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="delete(lead)" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
@@ -210,10 +210,9 @@
                                  
                                 </div>
                                   <ul class="unstyled contact-infos">
-                                    <li>(415) 663-4433  <a href="#"><img class="ctodeal" src="static/img/phone-icon.png" /></a></li>
-                                    <li>(415) 663-4433 <a href="#"><img class="ctodeal" src="static/img/phone-icon.png" /></a></li>
-                                    <li>(415) 663-4433 <a href="#"><img class="ctodeal" src="static/img/phone-icon.png"/></a></li>
-                                    <li><a href="#"><i class="icon-plus"></i> Add a new phone number </a></li>
+                                    <li ng-repeat="phone in lead.phones"> <%=phone.number%> - <%=phone.type_number%> <a ><img class="ctodeal" src="static/img/phone-icon.png" /></a></li>
+          
+                                    <li><a href="#phonemodal"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new Phone</a></li>
 
                                   </ul>
                                 <div class="news-block-tags">
@@ -221,10 +220,9 @@
                                  
                                 </div>
                                   <ul class="unstyled contact-infos">
-                                    <li>contact@clicandcal.com  </li>
-                                    <li>sales@clicandcal.com </li>
-                                    <li>support@clicandcal.com </li>
-                                    <li><a href="#"><i class="icon-plus"></i> Add a new email address </a></li>
+                                    <li ng-repeat="email in lead.emails"> <%=email.email %>   </li>
+                                    
+                                    <li><a href="#emailmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new email address </a></li>
 
                                   </ul>
                                 <div class="news-block-tags">
@@ -232,10 +230,11 @@
                                  
                                 </div>
                                  <ul class="unstyled contact-infos">
-                                    <li>760 Market Street, 11th Floor San Francisco, CA 94102  </li>
+                                    <li ng-repeat="addr in lead.addresses"><%=addr.street%>, <%=addr.city%> <%=addr.state%>, <%=addr.street%> <%=addr.postal_code%>  </li>
                                     
-                                    <li><a href="#"><i class="icon-plus"></i> Add a new address </a></li>
+                                    <li><a href="#addressmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new address </a></li>
 
+                  
                                   </ul>
 
                                                               
@@ -247,16 +246,19 @@
                                   <strong>Website</strong>
                                   
                                 </div>
-                                <ul class="unstyled contact-infos">
-                                    <li><a href="#">www.clicandcal.com</a> </li>
-                                </ul> 
+                                <ul class="unstyled contact-infos" >
+                                    <li ng-repeat="web in lead.websites"><a href="http://<%=web.website%>" target="_blank"><%=web.website%></a> </li>
+                                    <li><a href="#websitemodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new Website </a></li>
+                                    
+                                </ul>
                                 <div class="news-block-tags">
                                   <strong>Social Links</strong>
                                   
                                 </div>
-                                <ul class="unstyled contact-infos">
-                                    <li><a href="#">facebook.com/clicandcal</a> </li>
-                                </ul>                       
+                                <ul class="unstyled contact-infos" >
+                                    <li ng-repeat="social in lead.sociallinks"><a href="<%=social.sociallink%>" target="_blank"> <%=social.sociallink%> </a></li>
+                                  <li><a href="#socialmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new social links </a></li>    
+                                </ul>                      
                               </div>
                           </div>
                           <div class="span6">
@@ -264,15 +266,17 @@
                             <div class="news-blocks blank-card blank-card-red">
                                 <h3>Story</h3>
                                 <div class="news-block-tags">
-                                  <strong>Tagline</strong>
+                                  <strong>Tagline </strong>
+                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="edittagline()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
                                   
                                 </div>
-                                <p>Accelerating the Cloud Powered Business</p>
+                                <p><%=lead.tagline%> </p>
                                 <div class="news-block-tags">
                                   <strong>Introduction</strong>
+                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="editintro()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
                                   
                                 </div>
-                                <p>Appirio is a global technology-enabled services provider, helping companies power their business with cloud, social and mobile technologies from leaders like salesforce.com, Google and Workday. Appirio has worked with more than 400 enterprise customers including organizations like the City of Los Angeles, Facebook, Flextronics, International Hotels Group, Japan Post Network, Ltd., L'Oreal, NetApp, NYU, Starbucks, Thomson Reuters and VMware. Appirio's technology-enabled professional services are supported by a team of 600 cloud experts and CloudSpokes, a more than 70,000 person-strong global cloud developer community. The company's expertise and innovation have been recognized by organizations such as the World Economic Forum, Bloomberg BusinessWeek, The Wall Street Journal, InformationWeek and IDC. Appirio has offices that span the U.S., Europe and Asia Pacific, and is backed by Sequoia Capital, GGV Capital and General Atlantic.</p>                         
+                                <p><%=lead.introduction%></p>                        
                               </div>
                             
                           </div>
@@ -281,247 +285,7 @@
                           
                         
                       </div>
-                      <!--div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3">
-                          
-                         <div class="row-fluid cards-container">
-                         <div class="btn-group relbutton">
-            
-                                <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
-                               {{_("Add a person to this account")}}<i class="icon-plus"></i>
-                                </button>
-                          </div>
-                            <div class="inner-cards-container">
-                            
-                              <div  class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                                <div class="dashboard-stat cards">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardTitle">
-                                     Ben Belfodhil
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">CEO</span>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                              <div  class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                                <div class="dashboard-stat cards">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardTitle">
-                                     Hakim Karriche
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">CTO</span>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                              <div  class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                                <div class="dashboard-stat cards">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardTitle">
-                                     Eric Joe
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">CCO</span>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                              <div  class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                                <div class="dashboard-stat cards">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardTitle">
-                                     Ben Belfodhil
-                                    </h3></a>
-                                    <div class="desc">    
-                                                             
-                                        <span class="contact-title">CEO</span>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                              </div>
-                            </div>
-                      </div-->
-                       <!--div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 4">
-                          
-                         <div class="row-fluid cards-container">
-                         <div class="btn-group relbutton">
-            
-                                <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
-                                {{_("Add a new opportunity")}} <i class="icon-plus"></i>
-                                </button>
-                          </div>
-                            <div class="inner-cards-container">
-                            
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Migration vers Google App Engine
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">$20.000 - Needs Analysis</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#<%=account.industry%></a>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                             
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Migration vers Google App Engine
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">$20.000 - Needs Analysis</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#<%=account.industry%></a>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                    Google App Engine
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">$20.000 - Needs Analysis</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#<%=account.industry%></a>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Migration 
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">$20.000 - Needs Analysis</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#<%=account.industry%></a>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                              </div>
-                            </div>
-                      </div-->
-                      <!--div class="tab-pane active" id="tab_1_5" ng-show="selectedTab == 5">
-                          
-                         <div class="row-fluid cards-container">
-                         <div class="btn-group relbutton">
-            
-                                <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
-                                {{_("Add a new case")}} <i class="icon-plus"></i>
-                                </button>
-                          </div>
-                            <div class="inner-cards-container">
-                            
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Database Isue on Website
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">status: open</span> <span class="updated-on">Updated on Oct 05 at 2:33 pm</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#database</a>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                             
-                              
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Database Isue on Website
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">status: open</span> <span class="updated-on">Updated on Oct 05 at 2:33 pm</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#database</a>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Database Isue on Website
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">status: open</span> <span class="updated-on">Updated on Oct 05 at 2:33 pm</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#database</a>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-
-                              </div>
-                            </div>
-                      </div-->
+                    
                     </div>
                   </div>
                   <!--END TABS-->
@@ -539,7 +303,7 @@
                 <div class="portlet-body" id="chats">
                   <div class="scroller" style="height:200x" data-always-visible="1" data-rail-visible="0">
                     <div id="newTask">
-                                <p><strong>Tasks:</strong><a href="#"> [View all(25)]</a></p>
+                                <p><strong>Tasks:</strong><!--a href="#"> [View all(25)]</a--></p>
 
                                  
                                   <ul id="tasks" class="unstyled">
@@ -560,7 +324,7 @@
                                     <li ng-repeat="event in events" id="event_<%=$index%>">
                                       <input value="check1" type="checkbox">
                                       <!-- Name -->
-                                    <span><a href="/tasks/1" class="discussion-content"><%= event.title%> <span ng-show="event.starts_at"> [<%= event.starts_at | date:'yyyy-MM-dd '%>]</span></a></span>
+                                    <span><a href="/#/events/show/<%=event.id%>" class="discussion-content"><%= event.title%> <span ng-show="event.starts_at"> [<%= event.starts_at | date:'yyyy-MM-dd '%>]</span></a></span>
                                     </li>
                                    
                                     
@@ -708,6 +472,229 @@
                </form>
               </div> 
         </div>
+        <!--HKA 01.12.2013 Add Phone Modal -->
+
+
+    <div id="phonemodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("Add Phone")}}</h3>
+            </div>
+            <div class="modal-body">
+                  <form id="addPhone" name="addphone" ng-submit="addPhone(phone)" class="form-horizontal"> 
+                  <fieldset>
+                    <div class="control-group">
+                        <label  class="control-label">{{_("Type")}} </label>
+                        <div class="controls">
+                          <input type="text" placeholder="home, work, mobile, other..." required id="id_name" ng-model="phone.type_number">
+                        </div>
+                     </div>
+                     <div class="control-group">
+                        <label  class="required control-label">{{_("Number")}}</label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_name" ng-model="phone.number">
+                          
+                        </div>
+                     </div>
+              </div>
+              <div class="modal-footer">
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              
+                  <input ng-hide="isLoading" type="submit" class="btn green" value="Add this phone">
+                  <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+              </div>
+                </form>
+    </div>
+     <!--HKA 18.11.2013 Add Email -->
+
+     <div id="emailmodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("Add Email")}}</h3>
+            </div>
+            <div class="modal-body">
+                  <form id="addEmail" name="addemail" ng-submit="addEmail(emaill)" class="form-horizontal"> 
+                  <fieldset>
+                    <div class="control-group">
+                        <label  class="control-label">{{_("Email")}} </label>
+                        <div class="controls">
+                          <input type="text" placeholder="Email" required id="id_email" ng-model="emaill.email">
+                        </div>
+                     </div>
+              </div>
+              <div class="modal-footer">
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              
+                  <input ng-hide="isLoading" type="submit" class="btn green" value="Add this email">
+                  <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+              </div>
+                </form>
+        </div>
+
+      <!--HKA 18.11.2013  Addresse Modal  -->
+
+    <div id="addressmodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("Add Address")}}</h3>
+            </div>
+            <div class="modal-body">
+                  <form id="addAddress" name="addemail" ng-submit="addAddress(address)" class="form-horizontal"> 
+                  <fieldset>
+                    <div class="control-group">
+                        <label  class="control-label">{{_("Street")}} </label>
+                        <div class="controls">
+                          <input type="text"   id="id_street" ng-model="address.street">
+                        </div>
+                     </div>
+                     <div class="control-group">
+                        <label  class="control-label">{{_("City")}} </label>
+                        <div class="controls">
+                          <input type="text"   id="id_city" ng-model="address.email">
+                        </div>
+                     </div>
+                     <div class="control-group">
+                        <label  class="control-label">{{_("State/Province")}} </label>
+                        <div class="controls">
+                          <input type="text"  id="id_state" ng-model="address.state">
+                        </div>
+                     </div>
+                     <div class="control-group">
+                        <label  class="control-label">{{_("Postal Code")}} </label>
+                        <div class="controls">
+                          <input type="text"   id="id_postal" ng-model="address.postal">
+                        </div>
+                     </div>
+                     <div class="control-group">
+                        <label  class="control-label">{{_("Country")}} </label>
+                        <div class="controls">
+                          <input type="text"   id="id_country" ng-model="address.country">
+                        </div>
+                     </div>
+              </div>
+              <div class="modal-footer">
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              
+                  <input ng-hide="isLoading" type="submit" class="btn green" value="Add this address">
+                  <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+              </div>
+                </form>
+        </div>
+
+    <!--HKA 18.11.2013 Website Modal -->
+
+
+    <div id="websitemodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("Add Website")}}</h3>
+            </div>
+            <div class="modal-body">
+                  <form id="addWebsite" name="addwebsite" ng-submit="addWebsite(website)" class="form-horizontal"> 
+                  <fieldset>
+                    <div class="control-group">
+                        <label  class="control-label">{{_("Website")}} </label>
+                        <div class="controls">
+                          <input type="text" placeholder="Website" required id="id_website" ng-model="website.website">
+                        </div>
+                     </div>
+              </div>
+              <div class="modal-footer">
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              
+                  <input ng-hide="isLoading" type="submit" class="btn green" value="Add this Website">
+                  <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+              </div>
+                </form>
+        </div>
+  <!--HKA 18.11.2013 Social modal -->
+
+
+    <div id="socialmodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("Add Social link")}}</h3>
+            </div>
+              <div class="modal-body">
+                  <form id="addSocial" name="addsocial" ng-submit="addSocial(social)" class="form-horizontal"> 
+                  <fieldset>
+                    <div class="control-group">
+                        <label  class="control-label">{{_("Social link")}} </label>
+                        <div class="controls">
+                          <input type="text" placeholder="Social link"  required id="id_social" ng-model="social.sociallink">
+                        </div>
+                     </div>
+              </div>
+              <div class="modal-footer">
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              
+                  <input ng-hide="isLoading" type="submit" class="btn green" value="Add this Social link">
+                  <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+              </div>
+                </form>
+    </div>
+
+  <!--HKA 11.10.2013 Edit Tagline -->
+             <div id="EditTagModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("Edit Lead")}}</h3>
+              </div>
+
+              <div class="modal-body">
+                 <form id="editTagline" name="editlead" ng-submit="updateTagline(lead)" class="form-horizontal"> 
+                
+
+                  <div class="control-group">
+                        <label  class=" control-label">{{_("Tagline")}} </label>
+                       
+                        <div class="controls">
+                          <!--textarea rows="2" cols="50"  id="id_tagline" ng-model="account.tagline"/-->
+                           <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="lead.tagline"></textarea>
+
+                        </div>
+                    </div>             
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
+                <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+              </div>
+               </form>
+            </div>
+
+  <!--HKA 11.10.2013 Edit Introduction  -->
+             <div id="EditIntroModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("Edit Lead")}}</h3>
+              </div>
+
+              <div class="modal-body">
+                 <form id="editTagline" name="edittag" ng-submit="updateintro(lead)" class="form-horizontal"> 
+                
+
+                  <div class="control-group">
+                        <label  class=" control-label">{{_("Introduction")}} </label>
+                       
+                        <div class="controls">
+                         
+                           <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="lead.introduction"></textarea>
+
+                        </div>
+                    </div>             
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
+                <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+              </div>
+               </form>
+            </div>
+
+    </div>
+
       <!-- END PAGE CONTAINER-->
 </div>
 <script type="text/javascript">
