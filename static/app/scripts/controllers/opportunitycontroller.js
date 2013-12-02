@@ -427,6 +427,8 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
         Event.list($scope,params);
 
      };
+
+
  //HKA 11.11.2013 Add Note
   $scope.addNote = function(note){
     var params = {'title':$scope.note.title,

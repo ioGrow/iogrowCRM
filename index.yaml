@@ -26,6 +26,82 @@ indexes:
   - name: owner
   - name: name
 
+- kind: Case
+  properties:
+  - name: access
+  - name: contact
+  - name: organization
+  - name: creationTime
+
+- kind: Case
+  properties:
+  - name: access
+  - name: contact
+  - name: organization
+  - name: creationTime
+    direction: desc
+
+- kind: Case
+  properties:
+  - name: access
+  - name: organization
+  - name: creationTime
+
+- kind: Case
+  properties:
+  - name: access
+  - name: organization
+  - name: creationTime
+    direction: desc
+
+- kind: Case
+  properties:
+  - name: collaborators_ids
+  - name: contact
+  - name: creationTime
+
+- kind: Case
+  properties:
+  - name: collaborators_ids
+  - name: contact
+  - name: creationTime
+    direction: desc
+
+- kind: Case
+  properties:
+  - name: collaborators_ids
+  - name: creationTime
+
+- kind: Case
+  properties:
+  - name: collaborators_ids
+  - name: creationTime
+    direction: desc
+
+- kind: Case
+  properties:
+  - name: contact
+  - name: owner
+  - name: creationTime
+
+- kind: Case
+  properties:
+  - name: contact
+  - name: owner
+  - name: creationTime
+    direction: desc
+
+- kind: Case
+  properties:
+  - name: owner
+  - name: creationTime
+
+- kind: Case
+  properties:
+  - name: owner
+  - name: creationTime
+    direction: desc
+
 - kind: Comment
   properties:
   - name: discussion
@@ -162,6 +238,47 @@ indexes:
   properties:
   - name: groupKey
   - name: role
+
+- kind: Opportunity
+  properties:
+  - name: access
+  - name: contact
+  - name: organization
+  - name: created_at
+
+- kind: Opportunity
+  properties:
+  - name: access
+  - name: contact
+  - name: organization
+  - name: created_at
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: collaborators_ids
+  - name: contact
+  - name: created_at
+
+- kind: Opportunity
+  properties:
+  - name: collaborators_ids
+  - name: contact
+  - name: created_at
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: contact
+  - name: owner
+  - name: created_at
+
+- kind: Opportunity
+  properties:
+  - name: contact
+  - name: owner
+  - name: created_at
+    direction: desc
 
 - kind: Task
   properties:

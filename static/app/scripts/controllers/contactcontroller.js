@@ -166,8 +166,8 @@ app.controller('ContactListCtrl', ['$scope','$route','$location','Conf','Account
 
       
 }]);
-app.controller('ContactShowCtrl', ['$scope','$filter','$route','$location','Conf','Task','Event','Note','Topic','Contact','Permission','User',
-    function($scope,$filter,$route,$location,Conf,Task,Event,Note,Topic,Contact,Permission,User) {
+app.controller('ContactShowCtrl', ['$scope','$filter','$route','$location','Conf','Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User',
+    function($scope,$filter,$route,$location,Conf,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User) {
  console.log('I am in ContactShowCtrl');
       $("#id_Contacts").addClass("active");
       var tab = $route.current.params.accountTab;
@@ -469,7 +469,25 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','$location','Conf
                       };
         Event.list($scope,params);
 
-     }
+     };
+  //HKA 02.12.2013 List Opportunities related to Contact
+     $scope.listOpportunities = function(){
+        var params = {'contact':$scope.contact.entityKey,
+                      'order': '-created_at',
+                      'limit': 5
+                      };
+        Opportunity.list($scope,params);
+
+     };
+
+  //HKA 02.12.2013 List Cases related to Contact
+  $scope.listCases = function(){
+    var params ={'contact':$scope.contact.entityKey,
+                  'order':'-creationTime',
+                  'limit':5};
+
+    Case.list($scope,params)
+  };
      //HKA 11.11.2013 Add Note
   $scope.addNote = function(note){
     var params = {'title':$scope.note.title,
@@ -493,7 +511,53 @@ $scope.updatContactHeader = function(contact){
  $('#EditCaseModal').modal('hide');
   };
 
-  //HKA 19.11.2013 Add Phone
+
+  // HKA 01.12.2013 Show modal Related list (Opportunity)
+  $scope.addOppModal = function(){
+    $('#addOpportunityModal').modal('show');
+  };
+
+  //HKA 01.12.2013 Show modal Related list (Case)
+  $scope.addCaseModal = function(){
+    $('#addCaseModal').modal('show');
+  };
+  // HKA 02.12.2013 Add Opportunty related to Contact
+    $scope.saveOpp = function(opportunity){
+      console.log('hahahahhahahahaaha');
+      console.log($scope.contact.account);
+       var params = {'name':opportunity.name,
+                      'description':opportunity.description,
+                      'amount': opportunity.amount,
+                      'stage':opportunity.stage,
+                      'account':$scope.contact.account,
+                      'account_name':$scope.contact.account_name,
+                      'contact':$scope.contact.entityKey,
+                      'contact_name': $scope.contact.firstname+' '+$scope.contact.lastname,
+                      'access': $scope.contact.access
+                      };
+
+      Opportunity.insert(params);
+      $('#addOpportunityModal').modal('hide');
+    };
+
+  // HKA 01.12.2013 Add Case related to Contact
+    $scope.saveCase = function(casee){
+          
+        var params = {'name':casee.name,
+                      'priority':casee.priority,
+                      'status': casee.statuss,
+                      'type_case':casee.type_case,
+                      'account':$scope.contact.account,
+                      'account_name':$scope.contact.account_name,
+                      'contact':$scope.contact.entityKey,
+                      'contact_name': $scope.contact.firstname+' '+$scope.contact.lastname,
+                      'access': $scope.contact.access
+                      };
+      Case.insert(params);
+      $('#addCaseModal').modal('hide');
+    };
+
+  //HKA 01.12.2013 Add Phone
  $scope.addPhone = function(phone){
   //HKA 19.11.2013  Concatenate old phones with new phone
   var phonesArray = undefined;

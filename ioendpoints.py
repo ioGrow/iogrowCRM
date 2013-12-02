@@ -764,7 +764,7 @@ class CrmEngineApi(remote.Service):
     if not my_model.from_datastore:
       raise endpoints.NotFoundException('Opportunity not found')
     return my_model
-  @Opportunity.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken','account'),path='opportunities', name='opportunities.list')
+  @Opportunity.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken','account','account_name','contact'),path='opportunities', name='opportunities.list')
   def opportunity_list(self, query):
 
       user = endpoints.get_current_user()
@@ -1029,7 +1029,7 @@ class CrmEngineApi(remote.Service):
       raise endpoints.NotFoundException('Case not found')
     return my_model
   
-  @Case.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken','account','description','type_case','priority','status'),path='cases',name='cases.list')
+  @Case.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken','account','description','type_case','priority','status','contact'),path='cases',name='cases.list')
   def CaseList(self,query):
       user = endpoints.get_current_user()
       if user is None:

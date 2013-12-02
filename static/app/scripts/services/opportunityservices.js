@@ -19,6 +19,7 @@ opportunityservices.factory('Opportunity', function($http) {
         $scope.listTopics(resp);
         $scope.listTasks();
         $scope.listEvents();
+       
         $scope.$apply();
 
       }else {

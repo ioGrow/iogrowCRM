@@ -16,6 +16,8 @@ accountservices.factory('Contact', function($http) {
                $scope.listTopics(resp);
                $scope.listTasks();
                $scope.listEvents();
+               $scope.listOpportunities();
+               $scope.listCases();
                // Call the method $apply to make the update on the scope
                $scope.$apply();
 
