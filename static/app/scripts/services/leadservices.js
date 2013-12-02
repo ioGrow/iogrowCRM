@@ -44,6 +44,9 @@ leadservices.factory('Lead', function($http) {
       gapi.client.crmengine.leads.list(params).execute(function(resp) {
 
               if(!resp.code){
+                if (!resp.items){
+                    $scope.blankState = true;
+                  }
                  $scope.leads = resp.items;
                  if (resp.nextPageToken){
                    $scope.prevPageToken = $scope.nextPageToken;

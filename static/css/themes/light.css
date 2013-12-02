@@ -714,3 +714,8 @@ background-color: #fff;
 .invitation{
   padding-bottom: 10px;
 }
+
+.blank_slate_body{
+  text-align: center;
+padding: 10px 50px 50px 50px;
+}

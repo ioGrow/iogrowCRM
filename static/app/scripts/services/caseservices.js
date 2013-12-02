@@ -30,6 +30,9 @@ accountservices.factory('Case', function($http) {
       $scope.isLoading = true;
       gapi.client.crmengine.cases.list(params).execute(function(resp) {
               if(!resp.code){
+                  if (!resp.items){
+                    $scope.blankState = true;
+                  }
                  $scope.cases = resp.items;
                  if ($scope.currentPage>1){
                       $scope.pagination.prev = true;
