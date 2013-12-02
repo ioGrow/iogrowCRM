@@ -1092,7 +1092,7 @@ class CrmEngineApi(remote.Service):
      return query
 
 ###################################### Users API ################################################
-  @User.method(user_required=True,path='users', http_method='POST', name='users.insert')
+  @User.method(path='users', http_method='POST', name='users.insert')
   def UserInsert(self, my_model):
     user = endpoints.get_current_user()
     if user is None:
