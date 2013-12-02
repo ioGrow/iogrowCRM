@@ -16,6 +16,8 @@ accountservices.factory('Contact', function($http) {
                $scope.listTopics(resp);
                $scope.listTasks();
                $scope.listEvents();
+               $scope.listOpportunities();
+               $scope.listCases();
                // Call the method $apply to make the update on the scope
                $scope.$apply();
 
@@ -45,6 +47,9 @@ accountservices.factory('Contact', function($http) {
       gapi.client.crmengine.contacts.list(params).execute(function(resp) {
 
               if(!resp.code){
+                  if (!resp.items){
+                    $scope.blankState = true;
+                  }
                  $scope.contacts = resp.items;
                  if (resp.nextPageToken){
                    $scope.prevPageToken = $scope.nextPageToken;

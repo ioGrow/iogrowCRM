@@ -19,6 +19,7 @@ opportunityservices.factory('Opportunity', function($http) {
         $scope.listTopics(resp);
         $scope.listTasks();
         $scope.listEvents();
+       
         $scope.$apply();
 
       }else {
@@ -33,7 +34,9 @@ opportunityservices.factory('Opportunity', function($http) {
       $scope.isLoading = true;
       gapi.client.crmengine.opportunities.list(params).execute(function(resp) {
               if(!resp.code){
-                
+                if (!resp.items){
+                    $scope.blankState = true;
+                  }
                  $scope.opportunities = resp.items;
                  if ($scope.currentPage>1){
                       $scope.pagination.prev = true;

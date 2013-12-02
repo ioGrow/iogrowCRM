@@ -108,8 +108,8 @@
             
 
            <span class="opportunity-amount" >$<%=opportunity.amount %></span><span>
-           <span ng-show="opportunity.contact_name">{{_("associated with")}}: <a class="tag" href="/#/accounts/show/<%=opportunity.account_id %>">#<%=opportunity.contact_name %></a> from <a class="tag" href="#">#<%=opportunity.account_name %></a></span>
-            <span ng-show="opportunity.account_name" ng-hide="opportunity.contact_name">{{_("associated with")}}:  <a class="tag" href="/#/accounts/show/<%=opportunity.account_id %>">#<%=opportunity.account_name %></a></span>
+           <span ng-show="opportunity.contact_name">{{_("associated with")}}: <a class="tag" href="/#/search/type:Opportunity <%=opportunity.contact_name %>">#<%=opportunity.contact_name %></a> from <a class="tag" ng-show="opportunity.account_name" href="/#/search/type:Opportunity <%=opportunity.contact_name %>">#<%=opportunity.account_name %></a></span>
+            <span ng-show="opportunity.account_name" ng-hide="opportunity.account_name">{{_("associated with")}}:  <a class="tag" href="/#/accounts/show/<%=opportunity.account_id %>">#<%=opportunity.account_name %></a></span>
            
             <br><span ng-show="opportunity.stage">{{_("Stage")}}: <a class="tag" href="/#/search/type:Opportunity <%=opportunity.stage %>">#<%=opportunity.stage %></a></span>
             <br><span>{{_("Labels")}}: <a class="tag" href="/#/search/type:Opportunity <%=opportunity.description %>">#<%=opportunity.description %></a></span> <br>
