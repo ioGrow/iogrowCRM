@@ -132,64 +132,63 @@
                 </div>
                 <div class="portlet-body">
                 <ul class="chats">
-                  <!--<li class="in">
-                    <img class="avatar" alt="" src="static/img/avatar.jpg.png" />
-                    <div class="message">
-                      <span class="arrow"></span>
-                      <a href="#" class="name">Hakim  Karriche</a>
-                    </div>
-                  </li>-->
+                 
+                 <li  ng-repeat="contributor in contributors">
+                    <img class="avatar" alt="" src="<%=contributor.photoLink%>" />
+                    
+                      <span class="arrow"><%=contributor.name%> : [<%=contributor.role%>]</span>
+                     
+                   
+                  </li>
+                  <li><a href="#addContributor"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new assignee</a></li>
 
-                  <li><a href="#addAttendee"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new Attendee</a></li>
+                 
                 </ul>
                 </div>
                 
        </div>
 
-        <div id="addAttendee" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+         <div id="addContributor" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("New User")}}</h3>
+                <h3 id="myModalLabel">{{_("Involve new contributors")}}</h3>
               </div>
               <div class="modal-body">
-                 <form id="addAccount" name="addaccount" ng-submit="addNewUser(user)" class="form-horizontal"> 
+                 <form id="addAccount" name="addaccount" ng-submit="addNewContributor(slected_memeber,role)" class="form-horizontal"> 
                   <fieldset>
                   
-                    <p>Invite people from your team and start working together in seconds. Everyone you invite will receive a welcome email.</p>
+                    <p>Invite people from your team and start working together on this event. Everyone you invite will receive an email.</p>
 
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Email")}} *</label>
-                       
-                        <div class="controls">
-                          <input type="text" required id="id_name" ng-model="user.email">
-                          
-                        </div>
+                    <div class='container-fluid'>
+                    <div class="invitation" ng-show="slected_memeber">
+                      <img class="google-avatar" src="<%= slected_memeber.google_public_profile_photo_url%>"/>
+                        <strong> <%= slected_memeber.google_display_name %> < <%=slected_memeber.email%> ></strong>
                     </div>
                     <div class="control-group">
-                        <label  class="required control-label">{{_("Profile")}}</label>
-                       
-                        <div class="controls">
-                          <input type="text"  id="id_name" ng-model="account.account_type">
-                          
-                        </div>
+                      <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="input-block-level" placeholder="Enter name or email addresse to involve people in this discussion">
                     </div>
                     <div class="control-group">
-                        <label  class="required control-label">{{_("Role")}} </label>
-                       
-                        <div class="controls">
-                          <input type="text"  id="id_name" ng-model="account.industry">
-                          
+                          <label class="control-label">Add as:</label>
+                          <div class="controls">
+                            <select class="medium m-wrap" tabindex="1" ng-model="role">
+                              <option value="responsible">Responsible</option>
+                              <option value="participant">Participant</option>
+                              <option value="invited">Invited</option>
+                              
+                            </select>
+                          </div>
                         </div>
-                    </div>
+                      </div>
                     </fieldset>
                 
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button  type="submit" class="btn blue addContactNow">{{_("Add Atendee")}}</button>
+                <button  type="submit" class="btn blue addContactNow">{{_("Involve")}}</button>
               </div>
                </form>
        </div>
+
 
 
       </div>

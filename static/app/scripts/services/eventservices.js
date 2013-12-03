@@ -12,6 +12,7 @@ eventservices.factory('Event', function($http) {
                $scope.eventt = resp;
                var url = Event.getUrl($scope.eventt.about.kind,$scope.eventt.about.id);
                $scope.uri =url;
+               $scope.listContributors();
                // $scope.isContentLoaded = true;
                // $scope.listTopics(resp);
                // $scope.listTasks();

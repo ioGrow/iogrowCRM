@@ -53,7 +53,7 @@ noteservices.factory('Note', function($http) {
                $scope.ListComments();
                var url = Note.getUrl($scope.note.about.kind,$scope.note.about.id);
                $scope.uri =url;
-               console.log($scope.uri);
+               $scope.listContributors();
                // Call the method $apply to make the update on the scope
                 $scope.$apply();
 

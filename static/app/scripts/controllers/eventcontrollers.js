@@ -1,5 +1,5 @@
-app.controller('EventShowController',['$scope','$filter','$route','$location','Conf','Note','Event','Task','Topic','Comment',
-   function($scope,$filter,$route,$location,Conf,Note,Event,Task,Topic,Comment) {
+app.controller('EventShowController',['$scope','$filter','$route','$location','Conf','Note','Event','Task','Topic','Comment','User','Contributor',
+   function($scope,$filter,$route,$location,Conf,Note,Event,Task,Topic,Comment,User,Contributor) {
 //HKA 14.11.2013 Controller to show Events and add comments
    $scope.isSignedIn = false;
      $scope.immediateFailed = false;
@@ -10,7 +10,11 @@ app.controller('EventShowController',['$scope','$filter','$route','$location','C
      $scope.currentPage = 01;
      $scope.pages = [];
      
-     $scope.notes = [];  
+     $scope.notes = [];
+     $scope.users = [];
+     $scope.user = undefined;
+     $scope.slected_memeber = undefined;
+     $scope.role= 'participant';  
 
  
      $scope.renderSignIn = function() {
@@ -88,6 +92,7 @@ app.controller('EventShowController',['$scope','$filter','$route','$location','C
           
           var eventid = {'id':$route.current.params.eventId};
           Event.get($scope,eventid);
+          User.list($scope,{});
 
 
         } else if (authResult['error']) {
@@ -133,5 +138,46 @@ app.controller('EventShowController',['$scope','$filter','$route','$location','C
        $('#comment_0').effect( "bounce", "slow" );
        $('#comment_0 .message').effect("highlight","slow");
      };
+
+ //HKA 02.12.2013 Add Contributor
+
+    $scope.addNewContributor = function(selected_user,role){
+      console.log('*************** selected user ***********************');
+      console.log(selected_user);
+      
+      var params = {   
+                      'discussionKey': $scope.eventt.entityKey,
+
+                      'type': 'user',
+                      'value': selected_user.email,
+                      'name': selected_user.google_display_name,
+                      'photoLink': selected_user.google_public_profile_photo_url,
+                      'role': role
+
+
+                      // Create Contributor Service
+                      // Create contributors.list api
+                      //list all contributors after getting the task.
+                     
+                      
+        }  
+        console.log('selected member');
+        console.log(params); 
+        Contributor.insert($scope,params);
+     $('#addContributor').modal('hide');
+     };
+//HKA 02.12.2013 Select member
+$scope.selectMember = function(){
+        
+        $scope.slected_memeber = $scope.user;
+        $scope.user = $scope.slected_memeber.google_display_name;
+
+     };
+//HKA 02.12.2013 List contributors
+$scope.listContributors = function(){
+      var params = {'discussionKey':$scope.eventt.entityKey,
+                     'order':'-created_at'};
+      Contributor.list($scope,params);
+      };
 
   }]);
