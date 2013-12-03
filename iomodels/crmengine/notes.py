@@ -9,7 +9,7 @@ import model
 
 class Topic(EndpointsModel):
 
-    _message_fields_schema = ('id','title','updated_at','last_updater','excerpt','discussionId','created_at')
+    _message_fields_schema = ('id','title','entityKey','updated_at','last_updater','excerpt','discussionId','created_at')
     
 
     last_updater = ndb.StructuredProperty(Userinfo)
