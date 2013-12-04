@@ -106,7 +106,6 @@ app.controller('ContactListCtrl', ['$scope','$route','$location','Conf','Account
       
     
       $scope.save = function(contact){
-        console.log(contact);
         var params = {};
         var contact_name = new Array();
         contact_name.push(contact.firstname);
@@ -115,8 +114,8 @@ app.controller('ContactListCtrl', ['$scope','$route','$location','Conf','Account
         if (typeof(contact.account)=='object'){
           contact.account_name = contact.account.name;
           contact.account = contact.account.entityKey;
-          console.log(contact);
-          Contact.insert(contact);
+          
+          Contact.insert($scope,contact);
 
         }else if($scope.searchAccountQuery.length>0){
             // create a new account with this account name
@@ -132,6 +131,13 @@ app.controller('ContactListCtrl', ['$scope','$route','$location','Conf','Account
         
         $('#addContactModal').modal('hide');
       };
+      $scope.addContactOnKey = function(contact){
+      if(event.keyCode == 13 && contact){
+          $scope.save(contact);
+      }
+      
+      
+    };
       $scope.accountInserted = function(resp){
           $scope.contact.account = resp;
           $scope.save($scope.contact);

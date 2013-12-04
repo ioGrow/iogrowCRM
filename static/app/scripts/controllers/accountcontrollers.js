@@ -105,7 +105,15 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
       };
       
     $scope.save = function(account){
+     
       Account.insert($scope,account);
+    };
+    $scope.addAccountOnKey = function(account){
+      if(event.keyCode == 13 && account){
+          $scope.save(account);
+      }
+      
+      
     };
 
      $scope.accountInserted = function(resp){
@@ -514,9 +522,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
             $scope.ioevent.title='';
             $scope.ioevent.where='';
             $scope.ioevent.starts_at='T00:00:00.000000';
-
-            
-        };
+          };
      };
      $scope.hilightEvent = function(){
         console.log('Should higll');

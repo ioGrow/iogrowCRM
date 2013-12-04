@@ -103,11 +103,14 @@ accountservices.factory('Account', function($http) {
       });
   };
   Account.insert = function($scope,params){
+      $scope.isLoading = true;
       gapi.client.crmengine.accounts.insert(params).execute(function(resp) {
-         console.log('in insert resp');
-         console.log(resp);
+         
+         
          if(!resp.code){
             $scope.accountInserted(resp);
+            $scope.isLoading = false;
+            $scope.$apply();
           
          }else{
              console.log(resp.message);

@@ -118,7 +118,7 @@ app.controller('CaseListCtrl', ['$scope','$route','$location','Conf','Case','Acc
               casee.contact = casee.contact.entityKey;
               casee.contact_name = casee.contact.firstname + ' '+ casee.contact.lastname ;
           }
-          Case.insert(casee);
+          Case.insert($scope,casee);
 
         }else if($scope.searchAccountQuery.length>0){
             // create a new account with this account name
@@ -133,6 +133,11 @@ app.controller('CaseListCtrl', ['$scope','$route','$location','Conf','Case','Acc
 
         
         $('#addCaseModal').modal('hide');
+      };
+      $scope.addCaseOnKey = function(casee){
+        if(event.keyCode == 13 && casee){
+            $scope.save(casee);
+        }
       };
       $scope.accountInserted = function(resp){
           $scope.casee.account = resp;

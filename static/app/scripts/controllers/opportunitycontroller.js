@@ -78,10 +78,9 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Acc
           
           $scope.immediateFailed = false;
           $scope.isSignedIn = true;
+          
           window.is_signed_in = true;
-         
-
-          // Call the backend to get the list of accounts
+          window.authResult = authResult;
           
           var params = {'limit':7};
           Opportunity.list($scope,params);
@@ -113,7 +112,7 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Acc
           opportunity.account = opportunity.account.entityKey;
 
           
-          Opportunity.insert(opportunity);
+          Opportunity.insert($scope,opportunity);
 
         }else if($scope.searchAccountQuery.length>0){
             // create a new account with this account name
@@ -127,6 +126,13 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Acc
         };
 
      
+    };
+    $scope.addOpportunityOnKey = function(opportunity){
+      if(event.keyCode == 13 && opportunity.amount){
+          $scope.save(opportunity);
+      }
+      
+      
     };
     $scope.accountInserted = function(resp){
           $scope.opportunity.account = resp;

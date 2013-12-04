@@ -71,11 +71,13 @@ leadservices.factory('Lead', function($http) {
   	
 
   };
-  Lead.insert = function(lead){
+  Lead.insert = function($scope,lead){
+      $scope.isLoading = true;
       gapi.client.crmengine.leads.insert(lead).execute(function(resp) {
          console.log('in insert resp');
          console.log(resp);
          if(!resp.code){
+          $scope.isLoading = false;
           $('#addLeadModal').modal('hide');
           window.location.replace('#/leads/show/'+resp.id);
           

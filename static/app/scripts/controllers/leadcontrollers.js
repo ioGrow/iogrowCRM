@@ -102,8 +102,13 @@ app.controller('LeadListCtrl', ['$scope','$route','$location','Conf','Lead',
       
     
       $scope.save = function(lead){
-        Lead.insert(lead);
+        Lead.insert($scope,lead);
         $('#addLeadModal').modal('hide')
+      };
+      $scope.addLeadOnKey = function(lead){
+        if(event.keyCode == 13 && lead){
+            $scope.save(lead);
+        }
       };
 
 
