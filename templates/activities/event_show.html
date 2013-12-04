@@ -89,10 +89,10 @@
         </div>
       <ul class="chats">
                   <li class="in" ng-repeat="comment in comments" id="comment_<%=$index%>">
-                    <img class="avatar" alt="" ng-src="static/img/avatar.jpg.png" />
+                    <img class="avatar" alt="" ng-src="<%=comment.author.photo%>" />
                     <div class="message">
                       <span class="arrow"></span>
-                      <a href="#" class="name"><%=comment.last_update%></a>
+                      <a href="#" class="name"><%=comment.author.display_name%></a>
                       <span class="datetime">at <%=comment.updated_at | date:'yyyy-MM-dd - HH:mm:ss '%></span>
                       <span class="body">
                       <%=comment.content%>
