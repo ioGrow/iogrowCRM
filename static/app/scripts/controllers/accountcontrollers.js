@@ -358,22 +358,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
                       'about_item': $scope.account.id,
                       'title':newdocument.title,
                       'mimeType':mimeType };
-
-        //Todo incule this as a service
-        $scope.isLoading = true;
-        gapi.client.crmengine.documents.insert(params).execute(function(resp) {
-            console.log("in google drive api");
-            console.log(resp);
-            //console.log(params);
-            // 
-             $('#newDocument').modal('hide');
-             $scope.listDocuments();
-             $scope.isLoading = false;
-             $scope.$apply();
-
-           
-            
-          });
+        Attachement.insert($scope,params);
 
      };
      $scope.createPickerUploader = function() {
@@ -412,13 +397,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
                       params.items.push(item);
                 
                   });
-                  gapi.client.crmengine.documents.attachfiles(params).execute(function(resp) {
-                    //console.log("files inserted");
-                    //console.log(resp);
-                     
-                     $scope.listDocuments();
-                    
-                  });
+                 Attachement.attachfiles($scope,params);
                     
                     console.log('after uploading files');
                     console.log(params);

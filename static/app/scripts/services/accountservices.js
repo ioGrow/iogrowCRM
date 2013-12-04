@@ -308,6 +308,49 @@ accountservices.factory('Attachement', function($http) {
             console.log('gapi #end_execute');
           });
   };
+  Attachement.insert = function($scope,params){
+      $scope.isLoading = true;
+      gapi.client.crmengine.documents.insert(params).execute(function(resp) {
+            if(!resp.code){ 
+             $('#newDocument').modal('hide');
+             $scope.listDocuments();
+             $scope.isLoading = false;
+             $scope.$apply();
+            }else{
+               console.log(resp.message);
+               $('#newDocument').modal('hide');
+               $('#errorModal').modal('show');
+               if(resp.message=="Invalid grant"){
+                  $scope.refreshToken();
+                  $scope.isLoading = false;
+                  $scope.$apply();
+               };
+         }
+     });
+      
+  };
+  Attachement.attachfiles = function($scope,params){
+      $scope.isLoading = true;
+      
+      gapi.client.crmengine.documents.attachfiles(params).execute(function(resp) {
+            if(!resp.code){ 
+            
+             $scope.listDocuments();
+             $scope.isLoading = false;
+             $scope.$apply();
+            }else{
+               console.log(resp.message);
+               
+               $('#errorModal').modal('show');
+               if(resp.message=="Invalid grant"){
+                  $scope.refreshToken();
+                  $scope.isLoading = false;
+                  $scope.$apply();
+               };
+         }
+     });
+      
+  };
   
 
 return Attachement;
