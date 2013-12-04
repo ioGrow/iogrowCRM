@@ -45,7 +45,7 @@ app.controller('EventShowController',['$scope','$filter','$route','$location','C
         var params = {};
           if ($scope.pages[nextPage]){
             params = {'limit':5,
-                      //'discussion':$scope.note.entityKey,
+                      'discussion':$scope.eventt.entityKey,
                       'pageToken':$scope.pages[nextPage]
 
                      }
@@ -116,7 +116,7 @@ app.controller('EventShowController',['$scope','$filter','$route','$location','C
     $scope.addComment = function(comment){
 
       var params ={
-        //'discussion':$scope.note.entityKey,
+        'discussion':$scope.eventt.entityKey,
         'content':$scope.comment.content
       };
       Comment.insert($scope,params);
@@ -125,7 +125,7 @@ app.controller('EventShowController',['$scope','$filter','$route','$location','C
       
     };
     $scope.ListComments = function(){
-      var params = {//'discussion':$scope.note.entityKey,
+      var params = {'discussion':$scope.eventt.entityKey,
                      'limit':5,
                       'order':'-updated_at'};
       Comment.list($scope,params);
