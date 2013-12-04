@@ -230,14 +230,12 @@
        window.authResult = undefined;
        var apisToLoad;
 
-    var ROOT = '/_ah/api';
+    //var ROOT = '/_ah/api';
 
+   
 
+    var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 
-
-    
-
-    //var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 
 
 
@@ -268,7 +266,7 @@
 
     function signin(mode, callback) {
       gapi.auth.authorize({client_id: "{{CLIENT_ID}}",
-        scope: "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive", immediate: mode},
+        scope: "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar", immediate: mode},
         callback);
     }
     

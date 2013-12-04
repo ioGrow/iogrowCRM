@@ -40,7 +40,7 @@ from google.appengine.api import memcache
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
 CLIENT_ID = '987765099891.apps.googleusercontent.com'
-SCOPES = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/drive']
+SCOPES = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/drive','https://www.googleapis.com/auth/calendar']
 OBJECTS = {'Account': Account,'Contact': Contact,'Case':Case,'Lead':Lead,'Opportunity':Opportunity}
 FOLDERS = {'Account': 'accounts_folder','Contact': 'contacts_folder','Lead':'leads_folder','Opportunity':'opportunities_folder','Case':'cases_folder','Show':'shows_folder'}
 DISCUSSIONS= {'Task':{'title':'task','url':'/#/tasks/show/'},'Event':{'title':'event','url':'/#/events/show/'},'Note':{'title':'discussion','url': '/#/notes/show/'}}
@@ -620,6 +620,31 @@ class CrmEngineApi(remote.Service):
     if user_from_email is None:
       raise endpoints.UnauthorizedException('You must sign-in!' )
     # Todo: Check permissions
+    if my_model.due:
+        #insert an event on google calendar
+        try:
+              credentials = user_from_email.google_credentials
+              http = credentials.authorize(httplib2.Http(memcache))
+              service = build('calendar', 'v3', http=http)
+              # prepare params to insert
+              params = {
+               "start": 
+                {
+                  "date": my_model.due.strftime("%Y-%m-%d")
+                },
+               "end": 
+                {
+                  "date": my_model.due.strftime("%Y-%m-%d")
+                },
+                "summary": my_model.title,
+                
+                              
+              }
+              
+              created_event = service.events().insert(calendarId='primary',body=params).execute()
+        except:
+              raise endpoints.UnauthorizedException('Invalid grant' )
+              return
     
     my_model.owner = user_from_email.google_user_id
     my_model.organization =  user_from_email.organization
@@ -796,6 +821,44 @@ class CrmEngineApi(remote.Service):
     if user_from_email is None:
       raise endpoints.UnauthorizedException('You must sign-in!' )
     # Todo: Check permissions
+    #insert an event on google calendar
+    #insert an event on google calendar
+    try:
+        credentials = user_from_email.google_credentials
+        http = credentials.authorize(httplib2.Http(memcache))
+        service = build('calendar', 'v3', http=http)
+              # prepare params to insert
+        
+        params = {
+               "start": 
+                {
+                  "dateTime": my_model.starts_at.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
+                },
+               "end": 
+                {
+                  "dateTime": my_model.ends_at.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
+                },
+                "summary": my_model.title,
+                "location": my_model.where,
+                "reminders": 
+                {
+                  "overrides": 
+                  [
+                    {
+                      "method": 'email',
+                      "minutes": 30
+                    }
+                  ],
+                  "useDefault": False
+                }
+
+        }
+        
+        created_event = service.events().insert(calendarId='primary',body=params).execute()
+        
+    except:
+        raise endpoints.UnauthorizedException('Invalid grant' )
+        return    
     author = model.Userinfo()
     author.google_user_id = user_from_email.google_user_id
     author.display_name = user_from_email.google_display_name

@@ -11,7 +11,7 @@ accountservices.factory('Conf', function($location) {
         'clientId': '987765099891.apps.googleusercontent.com',
         'apiBase': '/api/',
         'rootUrl': getRootUrl(),
-        'scopes': 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive',
+        'scopes': 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar',
         'requestvisibleactions': 'http://schemas.google.com/AddActivity ' +
                 'http://schemas.google.com/ReviewActivity',
          'cookiepolicy': 'single_host_origin',
