@@ -1,7 +1,5 @@
 app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAccountLoader','Account',
     function($scope,$route,$location,Conf,MultiAccountLoader,Account) {
-     console.log('i am in account list controller');
-
      $("#id_Accounts").addClass("active");
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
@@ -11,7 +9,6 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
      $scope.pagination = {};
      $scope.currentPage = 01;
      $scope.pages = [];
-     
      $scope.accounts = [];
      $scope.account = {};
      $scope.account.access ='public';
@@ -23,7 +20,7 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
               $scope.processAuth(window.authResult);
           }else{
             console.log('I am  not signed-in so render Button');
-            console.log(Conf.clientId);
+            
             gapi.signin.render('myGsignin', {
             'callback': $scope.signIn,
             'clientid': Conf.clientId,
@@ -33,7 +30,19 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
             'cookiepolicy': Conf.cookiepolicy,
             'accesstype': 'offline'
             });
+            console.log('########## rendred tatrttttttaa');
           }
+      }
+      $scope.refreshToken = function() {
+          gapi.auth.signIn({
+            'callback': $scope.connectServer,
+            'clientid': Conf.clientId,
+            'requestvisibleactions': Conf.requestvisibleactions,
+            'scope': Conf.scopes,
+            'immediate': true,
+            'cookiepolicy': Conf.cookiepolicy,
+            'accesstype': 'offline'
+          });
       }
      $scope.listNextPageItems = function(){
         
@@ -67,10 +76,25 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
      }
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
+        $scope.connectServer(authResult);
         $scope.processAuth(authResult);
         
      }
-
+     $scope.connectServer = function(authResult) {
+      console.log('I will contact the serveer');
+      console.log(authResult.code);
+      
+      $.ajax({
+        type: 'POST',
+        url: '/gconnect',
+        
+        success: function(result) {
+          console.log('i am in connectServer show me result please');
+          console.log(result);
+         },
+        data: {code:authResult.code}
+      });
+    }
      $scope.processAuth = function(authResult) {
         console.log('process Auth #startdebug');
         $scope.immediateFailed = true;
@@ -186,8 +210,35 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
             'cookiepolicy': Conf.cookiepolicy,
             'accesstype': 'offline'
             });
+            console.log('sign-in button rendred');
           }
       }
+     $scope.refreshToken = function() {
+          gapi.auth.signIn({
+            'callback': $scope.connectServer,
+            'clientid': Conf.clientId,
+            'requestvisibleactions': Conf.requestvisibleactions,
+            'scope': Conf.scopes,
+            'immediate': true,
+            'cookiepolicy': Conf.cookiepolicy,
+            'accesstype': 'offline'
+          });
+      }
+      $scope.connectServer = function(authResult) {
+      console.log('I will contact the serveer');
+      console.log(authResult.code);
+      
+      $.ajax({
+        type: 'POST',
+        url: '/gconnect',
+        
+        success: function(result) {
+          console.log('i am in connectServer show me result please');
+          console.log(result);
+         },
+        data: {code:authResult.code}
+      });
+    }
      $scope.listNextPageItems = function(){
         
         
@@ -233,6 +284,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
      }
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
+        $scope.connectServer(authResult);
         $scope.processAuth(authResult);
         
      }

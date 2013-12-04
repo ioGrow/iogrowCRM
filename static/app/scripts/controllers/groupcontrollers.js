@@ -66,6 +66,7 @@ app.controller('GroupListCtrl', ['$scope','$route','$location','Conf','Group',
      }
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
+        $scope.connectServer(authResult);
         $scope.processAuth(authResult);
         
      }
@@ -206,6 +207,7 @@ app.controller('GroupShowCtrl', ['$scope','$route','$location','Conf','User', 'G
      }
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
+        $scope.connectServer(authResult);
         $scope.processAuth(authResult);
         
      }

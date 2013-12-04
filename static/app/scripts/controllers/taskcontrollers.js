@@ -74,6 +74,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','$location','Co
    
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
+        $scope.connectServer(authResult);
         $scope.processAuth(authResult);
         
      }

@@ -66,6 +66,7 @@ app.controller('UserListCtrl', ['$scope','$route','$location','Conf','User',
      }
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
+        $scope.connectServer(authResult);
         $scope.processAuth(authResult);
         
      }

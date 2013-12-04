@@ -86,7 +86,9 @@ leadservices.factory('Lead', function($http) {
              $('#addLeadModal').modal('hide');
              $('#errorModal').modal('show');
              if(resp.message=="Invalid grant"){
-                window.location.replace('/sign-in');
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
              };
          }
       });

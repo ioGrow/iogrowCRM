@@ -74,6 +74,7 @@ app.controller('NoteShowController',['$scope','$filter','$route','$location','Co
    
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
+        $scope.connectServer(authResult);
         $scope.processAuth(authResult);
         
      }
@@ -253,6 +254,7 @@ app.controller('DocumentShowController',['$scope','$filter','$route','$location'
    
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
+        $scope.connectServer(authResult);
         $scope.processAuth(authResult);
         
      }

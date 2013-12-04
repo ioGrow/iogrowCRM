@@ -74,6 +74,7 @@ app.controller('EventShowController',['$scope','$filter','$route','$location','C
    
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
+        $scope.connectServer(authResult);
         $scope.processAuth(authResult);
         
      }
