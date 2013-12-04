@@ -1561,11 +1561,15 @@ class CrmEngineApi(remote.Service):
       raise endpoints.UnauthorizedException('You must sign-in ')
     #discussion_key = ndb.Key(urlsafe=my_model.discussion)
     #my_model.discussion = discussion_key
-    my_model.owner = user_from_email.key
+    comment_author = model.Userinfo()
+    comment_author.display_name = user_from_email.google_display_name
+    comment_author.photo = user_from_email.google_public_profile_photo_url
+    my_model.author = comment_author
+    my_model.owner = user_from_email.google_user_id
     my_model.put()
     return my_model
 
-
+    
   @Comment.method(user_required=True,
                 http_method='PUT', path='comments/{id}', name='comments.update')
   def CommentUpdate(self, my_model):
