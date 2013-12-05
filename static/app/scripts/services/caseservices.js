@@ -57,11 +57,13 @@ accountservices.factory('Case', function($http) {
               }
       });
   };
-  Case.insert = function(casee){
+  Case.insert = function($scope,casee){
+     $scope.isLoading = true;
       gapi.client.crmengine.cases.insert(casee).execute(function(resp) {
          console.log('in insert resp');
          console.log(resp);
          if(!resp.code){
+          $scope.isLoading = false;
           $('#addCaseModal').modal('hide');
           window.location.replace('#/cases/show/'+resp.id);
           
@@ -70,7 +72,9 @@ accountservices.factory('Case', function($http) {
              $('#addCaseModal').modal('hide');
              $('#errorModal').modal('show');
              if(resp.message=="Invalid grant"){
-                window.location.replace('/sign-in');
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
              };
          }
       });

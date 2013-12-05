@@ -35,9 +35,33 @@ app.controller('ContactListCtrl', ['$scope','$route','$location','Conf','Account
             });
 
           }
-          
-
-     }
+      }
+      $scope.refreshToken = function() {
+          gapi.auth.signIn({
+            'callback': $scope.connectServer,
+            'clientid': Conf.clientId,
+            'requestvisibleactions': Conf.requestvisibleactions,
+            'scope': Conf.scopes,
+            'immediate': true,
+            'cookiepolicy': Conf.cookiepolicy,
+            'accesstype': 'offline'
+          });
+      }
+      $scope.connectServer = function(authResult) {
+      console.log('I will contact the serveer');
+      console.log(authResult.code);
+      
+      $.ajax({
+        type: 'POST',
+        url: '/gconnect',
+        
+        success: function(result) {
+          console.log('i am in connectServer show me result please');
+          console.log(result);
+         },
+        data: {code:authResult.code}
+      });
+    }
      $scope.listNextPageItems = function(){
         $scope.isLoading = true;
        var params = {};
@@ -67,6 +91,7 @@ app.controller('ContactListCtrl', ['$scope','$route','$location','Conf','Account
      }
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
+        $scope.connectServer(authResult);
         $scope.processAuth(authResult);
         
      }
@@ -106,7 +131,6 @@ app.controller('ContactListCtrl', ['$scope','$route','$location','Conf','Account
       
     
       $scope.save = function(contact){
-        console.log(contact);
         var params = {};
         var contact_name = new Array();
         contact_name.push(contact.firstname);
@@ -115,8 +139,8 @@ app.controller('ContactListCtrl', ['$scope','$route','$location','Conf','Account
         if (typeof(contact.account)=='object'){
           contact.account_name = contact.account.name;
           contact.account = contact.account.entityKey;
-          console.log(contact);
-          Contact.insert(contact);
+          
+          Contact.insert($scope,contact);
 
         }else if($scope.searchAccountQuery.length>0){
             // create a new account with this account name
@@ -132,6 +156,13 @@ app.controller('ContactListCtrl', ['$scope','$route','$location','Conf','Account
         
         $('#addContactModal').modal('hide');
       };
+      $scope.addContactOnKey = function(contact){
+      if(event.keyCode == 13 && contact){
+          $scope.save(contact);
+      }
+      
+      
+    };
       $scope.accountInserted = function(resp){
           $scope.contact.account = resp;
           $scope.save($scope.contact);
@@ -220,6 +251,32 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','$location','Conf
           
 
      }
+     $scope.refreshToken = function() {
+          gapi.auth.signIn({
+            'callback': $scope.connectServer,
+            'clientid': Conf.clientId,
+            'requestvisibleactions': Conf.requestvisibleactions,
+            'scope': Conf.scopes,
+            'immediate': true,
+            'cookiepolicy': Conf.cookiepolicy,
+            'accesstype': 'offline'
+          });
+      }
+      $scope.connectServer = function(authResult) {
+      console.log('I will contact the serveer');
+      console.log(authResult.code);
+      
+      $.ajax({
+        type: 'POST',
+        url: '/gconnect',
+        
+        success: function(result) {
+          console.log('i am in connectServer show me result please');
+          console.log(result);
+         },
+        data: {code:authResult.code}
+      });
+    }
      //HKA 11.11.2013 
      $scope.listNextPageItems = function(){
         
@@ -266,6 +323,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','$location','Conf
      }
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
+        $scope.connectServer(authResult);
         $scope.processAuth(authResult);
         
      }

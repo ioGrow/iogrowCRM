@@ -37,6 +37,32 @@ app.controller('CaseListCtrl', ['$scope','$route','$location','Conf','Case','Acc
             });
           }
       }
+      $scope.refreshToken = function() {
+          gapi.auth.signIn({
+            'callback': $scope.connectServer,
+            'clientid': Conf.clientId,
+            'requestvisibleactions': Conf.requestvisibleactions,
+            'scope': Conf.scopes,
+            'immediate': true,
+            'cookiepolicy': Conf.cookiepolicy,
+            'accesstype': 'offline'
+          });
+      }
+      $scope.connectServer = function(authResult) {
+      console.log('I will contact the serveer');
+      console.log(authResult.code);
+      
+      $.ajax({
+        type: 'POST',
+        url: '/gconnect',
+        
+        success: function(result) {
+          console.log('i am in connectServer show me result please');
+          console.log(result);
+         },
+        data: {code:authResult.code}
+      });
+    }
      $scope.listNextPageItems = function(){
         
         
@@ -69,6 +95,7 @@ app.controller('CaseListCtrl', ['$scope','$route','$location','Conf','Case','Acc
      }
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
+        $scope.connectServer(authResult);
         $scope.processAuth(authResult);
         
      }
@@ -118,7 +145,7 @@ app.controller('CaseListCtrl', ['$scope','$route','$location','Conf','Case','Acc
               casee.contact = casee.contact.entityKey;
               casee.contact_name = casee.contact.firstname + ' '+ casee.contact.lastname ;
           }
-          Case.insert(casee);
+          Case.insert($scope,casee);
 
         }else if($scope.searchAccountQuery.length>0){
             // create a new account with this account name
@@ -133,6 +160,11 @@ app.controller('CaseListCtrl', ['$scope','$route','$location','Conf','Case','Acc
 
         
         $('#addCaseModal').modal('hide');
+      };
+      $scope.addCaseOnKey = function(casee){
+        if(event.keyCode == 13 && casee.name){
+            $scope.save(casee);
+        }
       };
       $scope.accountInserted = function(resp){
           $scope.casee.account = resp;
@@ -232,6 +264,32 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','$location','Conf',
             });
           }
       }
+      $scope.refreshToken = function() {
+          gapi.auth.signIn({
+            'callback': $scope.connectServer,
+            'clientid': Conf.clientId,
+            'requestvisibleactions': Conf.requestvisibleactions,
+            'scope': Conf.scopes,
+            'immediate': true,
+            'cookiepolicy': Conf.cookiepolicy,
+            'accesstype': 'offline'
+          });
+      }
+      $scope.connectServer = function(authResult) {
+      console.log('I will contact the serveer');
+      console.log(authResult.code);
+      
+      $.ajax({
+        type: 'POST',
+        url: '/gconnect',
+        
+        success: function(result) {
+          console.log('i am in connectServer show me result please');
+          console.log(result);
+         },
+        data: {code:authResult.code}
+      });
+    }
      $scope.listNextPageItems = function(){
         
         
@@ -277,6 +335,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','$location','Conf',
      }
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
+        $scope.connectServer(authResult);
         $scope.processAuth(authResult);
         
      }

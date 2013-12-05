@@ -34,6 +34,32 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Acc
             });
           }
       }
+      $scope.refreshToken = function() {
+          gapi.auth.signIn({
+            'callback': $scope.connectServer,
+            'clientid': Conf.clientId,
+            'requestvisibleactions': Conf.requestvisibleactions,
+            'scope': Conf.scopes,
+            'immediate': true,
+            'cookiepolicy': Conf.cookiepolicy,
+            'accesstype': 'offline'
+          });
+      }
+      $scope.connectServer = function(authResult) {
+      console.log('I will contact the serveer');
+      console.log(authResult.code);
+      
+      $.ajax({
+        type: 'POST',
+        url: '/gconnect',
+        
+        success: function(result) {
+          console.log('i am in connectServer show me result please');
+          console.log(result);
+         },
+        data: {code:authResult.code}
+      });
+    }
      $scope.listNextPageItems = function(){
         
         
@@ -66,6 +92,7 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Acc
      }
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
+        $scope.connectServer(authResult);
         $scope.processAuth(authResult);
         
      }
@@ -78,10 +105,9 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Acc
           
           $scope.immediateFailed = false;
           $scope.isSignedIn = true;
+          
           window.is_signed_in = true;
-         
-
-          // Call the backend to get the list of accounts
+          window.authResult = authResult;
           
           var params = {'limit':7};
           Opportunity.list($scope,params);
@@ -113,7 +139,7 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Acc
           opportunity.account = opportunity.account.entityKey;
 
           
-          Opportunity.insert(opportunity);
+          Opportunity.insert($scope,opportunity);
 
         }else if($scope.searchAccountQuery.length>0){
             // create a new account with this account name
@@ -127,6 +153,13 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Acc
         };
 
      
+    };
+    $scope.addOpportunityOnKey = function(opportunity){
+      if(event.keyCode == 13 && opportunity.amount){
+          $scope.save(opportunity);
+      }
+      
+      
     };
     $scope.accountInserted = function(resp){
           $scope.opportunity.account = resp;
@@ -248,6 +281,32 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
           
 
      }
+     $scope.refreshToken = function() {
+          gapi.auth.signIn({
+            'callback': $scope.connectServer,
+            'clientid': Conf.clientId,
+            'requestvisibleactions': Conf.requestvisibleactions,
+            'scope': Conf.scopes,
+            'immediate': true,
+            'cookiepolicy': Conf.cookiepolicy,
+            'accesstype': 'offline'
+          });
+      }
+      $scope.connectServer = function(authResult) {
+      console.log('I will contact the serveer');
+      console.log(authResult.code);
+      
+      $.ajax({
+        type: 'POST',
+        url: '/gconnect',
+        
+        success: function(result) {
+          console.log('i am in connectServer show me result please');
+          console.log(result);
+         },
+        data: {code:authResult.code}
+      });
+    }
      $scope.listNextPageItems = function(){
         
         
@@ -293,6 +352,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
      }
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
+        $scope.connectServer(authResult);
         $scope.processAuth(authResult);
         
      }

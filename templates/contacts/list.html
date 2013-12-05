@@ -42,7 +42,7 @@
                 <h3 id="myModalLabel">{{_("New Contact")}}</h3>
               </div>
               <div class="modal-body">
-                 <form id="addContact" name="addcontact" ng-submit="save(contact)" class="form-horizontal"> 
+                 <form id="addContact" name="addcontact" ng-keyup="addContactOnKey(contact)" class="form-horizontal"> 
                   <fieldset>
                   
                     
@@ -101,8 +101,10 @@
                 
               </div>
               <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button  type="submit" class="btn blue addContactNow">{{_("Add Contact")}}</button>
+                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                
+                <input ng-hide="isLoading" ng-click="save(contact)" type="submit" class="btn green" value="Add this contact">
+                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
               </div>
                </form>
        </div>

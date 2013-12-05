@@ -74,11 +74,12 @@ accountservices.factory('Contact', function($http) {
   	
 
   };
-  Contact.insert = function(contact){
-      gapi.client.crmengine.contacts.insert(contact).execute(function(resp) {
-         console.log('in insert resp');
-         console.log(resp);
+  Contact.insert = function($scope,params){
+      $scope.isLoading = true;
+      gapi.client.crmengine.contacts.insert(params).execute(function(resp) {
+         
          if(!resp.code){
+          $scope.isLoading = false;
           $('#addAContactModal').modal('hide');
           window.location.replace('#/contacts/show/'+resp.id);
           
@@ -87,7 +88,9 @@ accountservices.factory('Contact', function($http) {
              $('#addAContactModal').modal('hide');
              $('#errorModal').modal('show');
              if(resp.message=="Invalid grant"){
-                window.location.replace('/sign-in');
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
              };
          }
       });
