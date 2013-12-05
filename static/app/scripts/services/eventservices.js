@@ -68,24 +68,23 @@ eventservices.factory('Event', function($http) {
   };
    Event.insert = function($scope,params){
       $scope.isLoading = true;
-      console.log('**************before events.insert*********************');
-      console.log(params);
+      
       gapi.client.crmengine.events.insert(params).execute(function(resp) {
-         console.log('in insert Event resp');
-         console.log(resp);
-         console.log('after resp');
-         if(!resp.code){
-          console.log(resp);
-          // TME_02_11_13 when a note is inserted reload topics
-          $scope.listEvents();
-          $scope.isLoading = false;
+          if(!resp.code){
+            $scope.listEvents();
+            $scope.isLoading = false;
 
-          $scope.$apply();
-         // $('#addAccountModal').modal('hide');
-         // window.location.replace('#/accounts/show/'+resp.id);
+            $scope.$apply();
           
          }else{
-          console.log(resp.code);
+             console.log(resp.message);
+             $('#newEventModal').modal('hide');
+             $('#errorModal').modal('show');
+             if(resp.message=="Invalid grant"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+             };
          }
       });
   };
