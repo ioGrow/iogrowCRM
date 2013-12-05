@@ -631,7 +631,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
 
         console.log(params);
         
-        Contact.insert(params);
+        Contact.insert($scope,params);
         $('#addContactModal').modal('hide');
       };
   // HKA 19.11.2013 Add Opportunty related to account
@@ -646,7 +646,8 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
                       'access': $scope.account.access
                       };
 
-      Opportunity.insert(params);
+
+      Opportunity.insert($scope,params);
       $('#addOpportunityModal').modal('hide');
     };
 
@@ -661,7 +662,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
                       'account_name': $scope.account.name,
                       'access': $scope.account.access
                       };
-      Case.insert(params);
+      Case.insert($scope,params);
       $('#addCaseModal').modal('hide');
     };
 //HKA 19.11.2013 Add Phone

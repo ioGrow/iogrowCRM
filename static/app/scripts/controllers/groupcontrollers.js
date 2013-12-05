@@ -34,6 +34,32 @@ app.controller('GroupListCtrl', ['$scope','$route','$location','Conf','Group',
             });
           }
       }
+      $scope.refreshToken = function() {
+          gapi.auth.signIn({
+            'callback': $scope.connectServer,
+            'clientid': Conf.clientId,
+            'requestvisibleactions': Conf.requestvisibleactions,
+            'scope': Conf.scopes,
+            'immediate': true,
+            'cookiepolicy': Conf.cookiepolicy,
+            'accesstype': 'offline'
+          });
+      }
+      $scope.connectServer = function(authResult) {
+      console.log('I will contact the serveer');
+      console.log(authResult.code);
+      
+      $.ajax({
+        type: 'POST',
+        url: '/gconnect',
+        
+        success: function(result) {
+          console.log('i am in connectServer show me result please');
+          console.log(result);
+         },
+        data: {code:authResult.code}
+      });
+    }
      $scope.listNextPageItems = function(){
         
         
@@ -170,6 +196,32 @@ app.controller('GroupShowCtrl', ['$scope','$route','$location','Conf','User', 'G
             });
           }
       }
+      $scope.refreshToken = function() {
+          gapi.auth.signIn({
+            'callback': $scope.connectServer,
+            'clientid': Conf.clientId,
+            'requestvisibleactions': Conf.requestvisibleactions,
+            'scope': Conf.scopes,
+            'immediate': true,
+            'cookiepolicy': Conf.cookiepolicy,
+            'accesstype': 'offline'
+          });
+      }
+      $scope.connectServer = function(authResult) {
+      console.log('I will contact the serveer');
+      console.log(authResult.code);
+      
+      $.ajax({
+        type: 'POST',
+        url: '/gconnect',
+        
+        success: function(result) {
+          console.log('i am in connectServer show me result please');
+          console.log(result);
+         },
+        data: {code:authResult.code}
+      });
+    }
      $scope.listNextPageItems = function(){
         
         
