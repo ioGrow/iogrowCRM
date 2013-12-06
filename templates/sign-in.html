@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8" ng-app="crmEngine"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9" ng-app="crmEngine"> <![endif]-->
+<!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+  <meta charset="utf-8" />
+  <title>i/oGrow Engine Platform</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta content="" name="description" />
+  <meta content="" name="author" />
+  <!-- BEGIN GLOBAL MANDATORY STYLES -->
+  <link href="static/plugins/bootstrap/css/bootstrap.min.css"  rel="stylesheet" type="text/css"/>
+  <link href="static/plugins/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css"/>
+  <link href="static/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+  <link href="static/css/style-metro.css"  rel="stylesheet" type="text/css"/>
+  <link href="static/css/style.css"  rel="stylesheet" type="text/css"/>
+  <link href="static/css/style-responsive.css" rel="stylesheet" type="text/css"/>
+  <link href="static/css/themes/light.css"  rel="stylesheet" type="text/css" id="style_color"/>
+  <link href="static/plugins/uniform/css/uniform.default.css"  rel="stylesheet" type="text/css"/>
+  <!-- END GLOBAL MANDATORY STYLES -->
+  <link rel="shortcut icon" href="favicon.ico" />
+  <script type="text/javascript">
+  (function() {
+    var po = document.createElement('script');
+    po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://plus.google.com/js/client:plusone.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(po, s);
+  })();
+  </script>
+   <script src="static/plugins/jquery-1.10.1.min.js"  type="text/javascript"></script>
+  <script src="static/plugins/jquery-migrate-1.2.1.min.js"  type="text/javascript"></script>
+  <script type="text/javascript">
+var helper = (function() {
+  var authResult = undefined;
+
+  return {
+    /**
+     * Hides the sign-in button and connects the server-side app after
+     * the user successfully signs in.
+     *
+     * @param {Object} authResult An Object which contains the access token and
+     *   other authentication information.
+     */
+    onSignInCallback: function(authResult) {
+      $('#authResult').html('Auth Result:<br/>');
+     
+      if (authResult['access_token']) {
+        // The user is signed in
+        this.authResult = authResult;
+        helper.connectServer();
+        // After we load the Google+ API, render the profile data from Google+.
+        //gapi.client.load('plus','v1',this.renderProfile);
+
+
+      } else if (authResult['error']) {
+        // There was an error, which means the user is not signed in.
+        // As an example, you can troubleshoot by writing to the console:
+        console.log('There was an error: ' + authResult['error']);
+        $('#authResult').append('Logged out');
+        $('#authOps').hide('slow');
+        $('#gConnect').show();
+      }
+      console.log('authResult', authResult);
+    },
+    /**
+     * Retrieves and renders the authenticated user's Google+ profile.
+     */
+    renderProfile: function() {
+      var request = gapi.client.plus.people.get( {'userId' : 'me'} );
+      request.execute( function(profile) {
+          $('#profile').empty();
+          if (profile.error) {
+            $('#profile').append(profile.error);
+            return;
+          }
+          $('#profile').append(
+              $('<p><img src=\"' + profile.image.url + '\"></p>'));
+          $('#profile').append(
+              $('<p>Hello ' + profile.displayName + '!<br />Tagline: ' +
+              profile.tagline + '<br />About: ' + profile.aboutMe + '</p>'));
+          if (profile.cover && profile.coverPhoto) {
+            $('#profile').append(
+                $('<p><img src=\"' + profile.cover.coverPhoto.url + '\"></p>'));
+          }
+        });
+      $('#authOps').show('slow');
+      $('#gConnect').hide();
+    },
+    /**
+     * Calls the server endpoint to disconnect the app for the user.
+     */
+    disconnectServer: function() {
+      // Revoke the server tokens
+      $.ajax({
+        type: 'POST',
+        url: window.location.href + '/disconnect',
+        async: false,
+        success: function(result) {
+          console.log('revoke response: ' + result);
+          $('#authOps').hide();
+          $('#profile').empty();
+          $('#visiblePeople').empty();
+          $('#authResult').empty();
+          $('#gConnect').show();
+        },
+        error: function(e) {
+          console.log(e);
+        }
+      });
+    },
+    /**
+     * Calls the server endpoint to connect the app for the user. The client
+     * sends the one-time authorization code to the server and the server
+     * exchanges the code for its own tokens to use for offline API access.
+     * For more information, see:
+     *   https://developers.google.com/+/web/signin/server-side-flow
+     */
+    connectServer: function() {
+      console.log(this.authResult.code);
+      var userId = '{{ID}}';
+      $.ajax({
+        type: 'POST',
+        url: '/gconnect',
+        
+        success: function(result) {
+          console.log('i am in connectServer show me result please');
+          console.log(result);
+          if (result==true){
+             window.location.replace('/sign-up');
+          }
+          else{
+            window.location.replace('/');
+          }
+         // helper.people();
+        },
+        
+        
+
+        data: {code:this.authResult.code, id: userId}
+      });
+    },
+    /**
+     * Calls the server endpoint to get the list of people visible to this app.
+     */
+    people: function() {
+      $.ajax({
+        type: 'GET',
+        url: window.location.href + '/people',
+        contentType: 'application/octet-stream; charset=utf-8',
+        success: function(result) {
+          helper.appendCircled(result);
+        },
+        processData: false
+      });
+    },
+    /**
+     * Displays visible People retrieved from server.
+     *
+     * @param {Object} people A list of Google+ Person resources.
+     */
+    appendCircled: function(people) {
+      $('#visiblePeople').empty();
+
+      $('#visiblePeople').append('Number of people visible to this app: ' +
+          people.totalItems + '<br/>');
+      for (var personIndex in people.items) {
+        person = people.items[personIndex];
+        $('#visiblePeople').append('<img src="' + person.image.url + '">');
+      }
+    },
+  };
+})();
+
+/**
+ * Perform jQuery initialization and check to ensure that you updated your
+ * client ID.
+ */
+
+function onSignInCallback(authResult) {
+  helper.onSignInCallback(authResult);
+}
+/**
+ * Calls the helper method that handles the authentication flow.
+ *
+ * @param {Object} authResult An Object which contains the access token and
+ *   other authentication information.
+ */
+
+</script>
+</head>
+
+<body class="page-header-fixed">
+  <!-- BEGIN HEADER -->   
+  <div class="header navbar navbar-inverse navbar-fixed-top">
+    <!-- BEGIN TOP NAVIGATION BAR -->
+    <div class="navbar-inner">
+      <div class="container-fluid">
+        <!-- BEGIN LOGO -->
+        <a class="brand" href="/">
+        <img src="static/img/IO_Grow.png" width="125" alt="logo"  /> 
+        </a>
+        <!-- END LOGO -->
+        <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+        <a href="javascript:;" class="btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
+        <img src="static/img/menu-toggler.png" alt="" />
+        </a>   
+        <div class="create-google pull-right">
+             Don't have a Google Account?
+             <a href="https://accounts.google.com/SignUp" target="_blank" class="">CREATE A GOOGLE ACCOUNT</a>
+        </div>
+            
+
+           
+       
+        
+        
+        <!-- END TOP NAVIGATION MENU --> 
+      </div>
+    </div>
+    <!-- END TOP NAVIGATION BAR -->
+  </div>
+<div ng-view class="page-container row-fluid">
+      <div class="inner-product-info">
+              <div class="container">
+                <div class="row-fluid margin-bottom-20">
+                  <div class="span8 margin-bottom-20 product-info">
+                    <h2>i/oGrow Platform</h2>
+                    
+                    <ul>
+                    <li>i/oGrow is a platform targeted startups and small companies to grow their business, assisting them to build and manage an effective eco-system of customers, partners and organizations. </li>
+<li>We believe that simplicity, speed, ease of use, and clarity are very important on a daily business work.</li>
+<li>i/oGrow is API-first platfrom, designed  for developers, independent software vendors and customers aiming to connect different applications and third-party services. Google Cloud Endpoints allows us to build an API that feels and behaves like Google services APIs such as Google Drive API; That helps developers to understand the API easier. <a href="/_ah/api/explorer" target="_blank">(i/oGrow API explorer)</a></li>
+                    </ul>
+                  </div>
+                  <div class="span4 margin-bottom-20">
+                     <div class="signin-box"> 
+                      <div id="gConnect">
+                          <button class="g-signin"
+                              data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar"
+                              data-requestvisibleactions="http://schemas.google.com/AddActivity"
+                              data-clientId="{{ CLIENT_ID }}"
+                              data-accesstype="offline"
+                              data-callback="onSignInCallback"
+                              data-theme="dark"
+                              data-cookiepolicy="single_host_origin"
+                              data-width="wide"
+                              data-height="tall">
+                          </button>
+                      </div>
+                     </div>
+                  </div>
+                </div>
+                
+                
+              </div>
+            </div>
+    
+
+    
+          
+    
+    <!-- END PAGE -->    
+  </div>
+  <!-- END CONTAINER -->
+  <!-- BEGIN FOOTER -->
+  <div class="footer">
+    <div class="footer-inner">
+      2013 &copy; i/oGrow.
+    </div>
+   
+  </div>
+  <!-- END FOOTER -->
+  <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+  <!-- BEGIN CORE PLUGINS -->   
+ 
+
+  <!-- END CORE PLUGINS -->
+  
+
+ 
+  <!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>
