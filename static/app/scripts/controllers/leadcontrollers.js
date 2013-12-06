@@ -9,7 +9,9 @@ app.controller('LeadListCtrl', ['$scope','$route','$location','Conf','Lead',
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
-     $scope.pagination = {};
+     $scope.leadpagination = {};
+     $scope.currentPage = 01;
+     $scope.pages = [];
     	
       $scope.leads = [];
       $scope.lead = {};
@@ -61,29 +63,33 @@ app.controller('LeadListCtrl', ['$scope','$route','$location','Conf','Lead',
       });
     }
      $scope.listNextPageItems = function(){
-        $scope.isLoading = true;
-       var params = {};
-          if ($scope.nextPageToken){
+        
+        
+        var nextPage = $scope.currentPage + 1;
+        var params = {};
+          if ($scope.pages[nextPage]){
             params = {'limit':7,
-                      'pageToken':$scope.nextPageToken
+                      'pageToken':$scope.pages[nextPage]
                      }
           }else{
             params = {'limit':7}
           }
           console.log('in listNextPageItems');
-          console.log($scope);
+          $scope.currentPage = $scope.currentPage + 1 ; 
           Lead.list($scope,params);
      }
      $scope.listPrevPageItems = function(){
-       $scope.isLoading = true;
+       
+       var prevPage = $scope.currentPage - 1;
        var params = {};
-          if ($scope.nextPageToken){
+          if ($scope.pages[prevPage]){
             params = {'limit':7,
-                      'pageToken':$scope.prevPageToken
+                      'pageToken':$scope.pages[prevPage]
                      }
           }else{
             params = {'limit':7}
           }
+          $scope.currentPage = $scope.currentPage - 1 ;
           Lead.list($scope,params);
      }
      $scope.signIn = function(authResult) {
@@ -103,9 +109,11 @@ app.controller('LeadListCtrl', ['$scope','$route','$location','Conf','Lead',
           $scope.isSignedIn = true;
           window.is_signed_in = true;
           window.authResult = authResult;
-          // Call the backend to get the list of accounts
+          // Call the backend to get the list of leads
+          var params = {'limit':7};
+          Lead.list($scope,params);
 
-          $scope.listNextPageItems();
+          
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
             $scope.immediateFailed = true;

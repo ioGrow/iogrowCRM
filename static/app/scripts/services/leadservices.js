@@ -48,14 +48,19 @@ leadservices.factory('Lead', function($http) {
                     $scope.blankState = true;
                   }
                  $scope.leads = resp.items;
+                  if ($scope.currentPage>1){
+                      $scope.leadpagination.prev = true;
+                   }else{
+                       $scope.leadpagination.prev = false;
+                   }
                  if (resp.nextPageToken){
-                   $scope.prevPageToken = $scope.nextPageToken;
-                   $scope.nextPageToken = resp.nextPageToken;
-
-                   $scope.pagination.next = true;
-                   $scope.pagination.prev = true;
+                   var nextPage = $scope.currentPage + 1;
+                   // Store the nextPageToken
+                   $scope.pages[nextPage] = resp.nextPageToken;
+                   $scope.leadpagination.next = true;
+                   
                  }else{
-                  $scope.pagination.next = false;
+                  $scope.leadpagination.next = false;
                  }
                  // Call the method $apply to make the update on the scope
                  $scope.isLoading = false;

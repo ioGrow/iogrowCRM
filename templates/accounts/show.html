@@ -316,25 +316,27 @@
                                   View more <i class="m-icon-swapright m-icon-white"></i>
                                   </a>                 
                                 </div>
+                              </div><br>
+                              
+                              
                               </div>
-                              <div class="row-fluid">
+                              
+                            </div>
+                            <div class="row-fluid">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
                                       <ul>
-                                        <li ng-show="pagination.prev"><button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                        <li ng-show="contactpagination.prev"><button ng-click="ContactlistPrevPageItems()" id="sample_editable_1_new" class="btn">
                                         {{_("Prev")}} 
                                         </button></li>
                                         
-                                        <li  ng-show="pagination.next"><button ng-click="listNextPageItems()"  class="btn">
+                                        <li  ng-show="contactpagination.next"><button ng-click="ContactlistNextPageItems()"  class="btn">
                                         {{_("Next")}} 
                                         </button></li>
                                       </ul>
                                     </div>
                                     <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
                               </div>
-                              
-                              </div>
-                            </div>
                         <!--HKA 18.11.2013 Add Contact modal -->
 
                     <div id="addContactModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >

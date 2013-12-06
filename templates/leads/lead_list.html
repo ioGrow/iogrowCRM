@@ -161,11 +161,11 @@
             <div class="pagination pull-right" ng-hide="isLoading">
                   
                   <ul>
-                    <li ng-show="pagination.prev"><button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
+                    <li ng-show="leadpagination.prev"><button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
                     {{_("Prev")}} 
                     </button></li>
-                    <li ng-repeat="page in pagination.pages" ng-class='{active: page.isCurrent}'><a  href="#/leads/"><%= page.id %></a></li>
-                    <li  ng-show="pagination.next"><button ng-click="listNextPageItems()"  class="btn">
+                    <li ng-repeat="page in leadpagination.pages" ng-class='{active: page.isCurrent}'><a  href="#/leads/"><%= page.id %></a></li>
+                    <li  ng-show="leadpagination.next"><button ng-click="listNextPageItems()"  class="btn">
                     {{_("Next")}} 
                     </button></li>
                   </ul>

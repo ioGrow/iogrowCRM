@@ -185,6 +185,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
      $scope.pagination = {};
+     $scope.contactpagination={};
      $scope.currentPage = 01;
      $scope.pages = [];
      
@@ -233,12 +234,14 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
         url: '/gconnect',
         
         success: function(result) {
+        
           console.log('i am in connectServer show me result please');
           console.log(result);
          },
         data: {code:authResult.code}
       });
     }
+    //HKA 06.12.2013  Manage Next & Prev Page of Topics
      $scope.listNextPageItems = function(){
         
         
@@ -282,6 +285,45 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
           Topic.list($scope,params);
           console.log()
      }
+//HKA 06.12.2013 Manage Prev & Next Page on Related List Contact
+$scope.ContactlistNextPageItems = function(){
+        
+        
+        var nextPage = $scope.currentPage + 1;
+        var params = {};
+          if ($scope.pages[nextPage]){
+            params = {'limit':7,
+                      'account':$scope.account.entityKey,
+                      'pageToken':$scope.pages[nextPage]
+                     }
+          }else{
+            params = {'limit':7,
+            'account':$scope.account.entityKey}
+          }
+          console.log('in listNextPageItems');
+          $scope.currentPage = $scope.currentPage + 1 ; 
+          Contact.list($scope,params);
+     }
+     $scope.ContactlistPrevPageItems = function(){
+       
+       var prevPage = $scope.currentPage - 1;
+       var params = {};
+          if ($scope.pages[prevPage]){
+            params = {'limit':7,
+                      'account':$scope.account.entityKey,
+                      'pageToken':$scope.pages[prevPage]
+                     }
+          }else{
+            params = {'limit':7,
+                      'account':$scope.account.entityKey}
+          }
+          $scope.currentPage = $scope.currentPage - 1 ;
+          console.log('HKA Fix issues');
+          console.log('');
+          Contact.list($scope,params);
+     }
+
+
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
         $scope.connectServer(authResult);

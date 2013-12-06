@@ -51,17 +51,23 @@ accountservices.factory('Contact', function($http) {
                     $scope.blankState = true;
                   }
                  $scope.contacts = resp.items;
+                 if ($scope.currentPage>1){
+                      $scope.contactpagination.prev = true;
+                   }else{
+                       $scope.contactpagination.prev = false;
+                   }
                  if (resp.nextPageToken){
-                   $scope.prevPageToken = $scope.nextPageToken;
-                   $scope.nextPageToken = resp.nextPageToken;
-
-                   $scope.pagination.next = true;
-                   $scope.pagination.prev = true;
+                   var nextPage = $scope.currentPage + 1;
+                   // Store the nextPageToken
+                   $scope.pages[nextPage] = resp.nextPageToken;
+                   $scope.contactpagination.next = true;
+                   
                  }else{
-                  $scope.pagination.next = false;
+                  $scope.contactpagination.next = false;
                  }
-                 // Call the method $apply to make the update on the scope
+                 // Loaded succefully
                  $scope.isLoading = false;
+                 // Call the method $apply to make the update on the scope
                  $scope.$apply();
                  
 
