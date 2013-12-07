@@ -1,10 +1,8 @@
-
 <div class="page-sidebar nav-collapse collapse">
       <!-- BEGIN SIDEBAR MENU -->        
       <ul class="page-sidebar-menu">
-        
         {% for tab in tabs %}
-           <li id="id_{{tab.name}}"  ><a href="{{ tab.url }}"><i class="icon-cogs"></i><span class="title">{{tab.label}}</span></a></li>
+           <li id="id_{{tab.name}}"  ><a href="{{ tab.url }}"><i class="icon-cogs"></i><span class="title">     {{tab.label}}</span></a></li>
           {% endfor %}
 
       </ul>   
@@ -40,13 +38,15 @@
     </div>
       <!--HKA 19.11.2013 Begin  row-fluid-2 who is involved -->
     <div class="row-fluid">
-
     <!--HKA 19.11.2013 BEGIN Span comments-->
       <div class="span8">
       <!-- BEGIN PORTLET-->
         <div class="portlet">
           <div class="portlet-title line">
-              <div class="caption"><i class="fa fa-comments"></i>Note > <%=note.title%></div>
+          <div class="caption">
+                <i class="fa fa-comments"></i>
+                    <%=note.title%>
+          </div>
           </div>
           <div class="portlet-body">
              <ul class="chats">

@@ -9,7 +9,7 @@ app.controller('ContactListCtrl', ['$scope','$route','$location','Conf','Account
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
-     $scope.pagination = {};
+     $scope.contactpagination = {};
      $scope.currentPage = 01;
      $scope.pages = [];
     	
@@ -63,30 +63,33 @@ app.controller('ContactListCtrl', ['$scope','$route','$location','Conf','Account
       });
     }
      $scope.listNextPageItems = function(){
-        $scope.isLoading = true;
-       var params = {};
-          if ($scope.nextPageToken){
-            params = {'limit':7,
-                      'pageToken':$scope.nextPageToken
+        
+        
+        var nextPage = $scope.currentPage + 1;
+        var params = {};
+          if ($scope.pages[nextPage]){
+            params = {'limit':2,
+                      'pageToken':$scope.pages[nextPage]
                      }
           }else{
-            params = {'limit':7}
+            params = {'limit':2}
           }
           console.log('in listNextPageItems');
-          console.log($scope);
+          $scope.currentPage = $scope.currentPage + 1 ; 
           Contact.list($scope,params);
-
      }
      $scope.listPrevPageItems = function(){
-       $scope.isLoading = true;
+       
+       var prevPage = $scope.currentPage - 1;
        var params = {};
-          if ($scope.nextPageToken){
-            params = {'limit':7,
-                      'pageToken':$scope.prevPageToken
+          if ($scope.pages[prevPage]){
+            params = {'limit':2,
+                      'pageToken':$scope.pages[prevPage]
                      }
           }else{
-            params = {'limit':7}
+            params = {'limit':2}
           }
+          $scope.currentPage = $scope.currentPage - 1 ;
           Contact.list($scope,params);
      }
      $scope.signIn = function(authResult) {
@@ -108,7 +111,7 @@ app.controller('ContactListCtrl', ['$scope','$route','$location','Conf','Account
           window.authResult = authResult;
           // Call the backend to get the list of accounts
 
-          var params = {'limit':7}
+          var params = {'limit':2}
           Contact.list($scope,params);
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {

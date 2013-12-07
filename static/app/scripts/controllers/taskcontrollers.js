@@ -71,7 +71,11 @@ app.controller('TaskShowController',['$scope','$filter','$route','$location','Co
         var params = {};
           if ($scope.pages[nextPage]){
             params = {'limit':5,
+<<<<<<< HEAD
                       'discussion':$scope.task.entityKey,
+=======
+                      //'discussion':$scope.note.entityKey,
+>>>>>>> 074795d4b2ba033c03ec00e86fa0f481275c16c5
                       'pageToken':$scope.pages[nextPage]
 
                      }
@@ -180,7 +184,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','$location','Co
     $scope.addComment = function(comment){
 
       var params ={
-        'discussion':$scope.task.entityKey,
+        //'discussion':$scope.note.entityKey,
         'content':$scope.comment.content
       };
       Comment.insert($scope,params);
@@ -188,8 +192,8 @@ app.controller('TaskShowController',['$scope','$filter','$route','$location','Co
      
       
     };
-    $scope.ListComments = function(){
-      var params = {'discussion':$scope.task.entityKey,
+    $scope.ListComments = function(entityK){
+      var params = {'discussion':entityK,
                      'limit':5,
                       'order':'-updated_at'};
       Comment.list($scope,params);
