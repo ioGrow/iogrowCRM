@@ -143,6 +143,30 @@ class EndpointsHelper(EndpointsModel):
             raise endpoints.UnauthorizedException(cls.NO_ACCOUNT)
         return user_from_email
 
+    @classmethod
+    def insert_folder(cls,user,folder_name):
+        try:
+            credentials = user.google_credentials
+            http = credentials.authorize(httplib2.Http(memcache))
+            service = build('drive', 'v2', http=http)
+            organization = user.organization.get()
+
+            # prepare params to insert
+            folder_params = {
+                        'title': folder_name,
+                        'mimeType':  'application/vnd.google-apps.folder'         
+            }#get the accounts_folder or contacts_folder or .. 
+            
+            parent_folder = organization.accounts_folder
+            if parent_folder:
+                folder_params['parents'] = [{'id': parent_folder}]
+            
+            # execute files.insert and get resource_id
+            created_folder = service.files().insert(body=folder_params).execute()
+        except:
+            raise endpoints.UnauthorizedException(cls.INVALID_GRANT)
+        return created_folder
+
     
 @endpoints.api(name='crmengine', version='v1', description='I/Ogrow CRM APIs',allowed_client_ids=[CLIENT_ID,
                                    endpoints.API_EXPLORER_CLIENT_ID],scopes=SCOPES)
@@ -155,29 +179,8 @@ class CrmEngineApi(remote.Service):
   # accounts.insert api
   @Account.method(user_required=True,path='accounts', http_method='POST', name='accounts.insert')
   def AccountInsert(self, my_model):
-      user_from_email = EndpointsHelper.require_iogrow_user()()
-      # OAuth flow
-      try:
-          credentials = user_from_email.google_credentials
-          http = credentials.authorize(httplib2.Http(memcache))
-          service = build('drive', 'v2', http=http)
-          organization = user_from_email.organization.get()
-
-          # prepare params to insert
-          folder_params = {
-                      'title': my_model.name,
-                      'mimeType':  'application/vnd.google-apps.folder'         
-          }#get the accounts_folder or contacts_folder or .. 
-          
-          parent_folder = organization.accounts_folder
-          if parent_folder:
-              folder_params['parents'] = [{'id': parent_folder}]
-          
-          # execute files.insert and get resource_id
-          created_folder = service.files().insert(body=folder_params).execute()
-      except:
-          raise endpoints.UnauthorizedException('Invalid grant' )
-          return
+      user_from_email = EndpointsHelper.require_iogrow_user()
+      created_folder = EndpointsHelper.insert_folder(user_from_email,my_model.name)
       # Todo: Check permissions
       my_model.owner = user_from_email.google_user_id
       my_model.organization = user_from_email.organization
@@ -187,7 +190,7 @@ class CrmEngineApi(remote.Service):
   # accounts.list api
   @Account.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='accounts', name='accounts.list')
   def Account_List(self, query):
-      user_from_email = EndpointsHelper.require_iogrow_user()()
+      user_from_email = EndpointsHelper.require_iogrow_user()
       return query.filter(ndb.OR(ndb.AND(Account.access=='public',Account.organization==user_from_email.organization),Account.owner==user_from_email.google_user_id, Account.collaborators_ids==user_from_email.google_user_id)).order(Account._key)
   # accounts.get api
   @Account.method(request_fields=('id',),path='accounts/{id}', http_method='GET', name='accounts.get')
@@ -199,7 +202,7 @@ class CrmEngineApi(remote.Service):
   @Account.method(user_required=True,
                 http_method='PUT', path='accounts/{id}', name='accounts.update')
   def AccountUpdate(self, my_model):
-    user_from_email = EndpointsHelper.require_iogrow_user()()
+    user_from_email = EndpointsHelper.require_iogrow_user()
     # Todo: Check permissions
     #my_model.owner = user_from_email.google_user_id
     #my_model.organization =  user_from_email.organization
@@ -210,7 +213,7 @@ class CrmEngineApi(remote.Service):
   @Account.method(user_required=True,
                 http_method='PATCH', path='accounts/{id}', name='accounts.patch')
   def AccountPatch(self, my_model):
-      user_from_email = EndpointsHelper.require_iogrow_user()()
+      user_from_email = EndpointsHelper.require_iogrow_user()
       # Todo: Check permissions
       if not my_model.from_datastore:
           raise endpoints.NotFoundException('Account not found.')
@@ -231,7 +234,7 @@ class CrmEngineApi(remote.Service):
                       path='accounts/search', http_method='POST',
                       name='accounts.search')
   def account_search(self, request):
-      user_from_email = EndpointsHelper.require_iogrow_user()()
+      user_from_email = EndpointsHelper.require_iogrow_user()
       
       #prepare the query
       query_string = request.q 
@@ -264,29 +267,10 @@ class CrmEngineApi(remote.Service):
   # contacts.insert api
   @Contact.method(user_required=True,path='contacts', http_method='POST', name='contacts.insert')
   def ContactInsert(self, my_model):
-      user_from_email = EndpointsHelper.require_iogrow_user()()
+      user_from_email = EndpointsHelper.require_iogrow_user()
       # OAuth flow
-      try:
-          credentials = user_from_email.google_credentials
-          http = credentials.authorize(httplib2.Http(memcache))
-          service = build('drive', 'v2', http=http)
-          organization = user_from_email.organization.get()
-
-          # prepare params to insert
-          folder_params = {
-                      'title': my_model.firstname + ' ' + my_model.lastname,
-                      'mimeType':  'application/vnd.google-apps.folder'         
-          }#get the accounts_folder or contacts_folder or .. 
-          
-          parent_folder = organization.contacts_folder
-          if parent_folder:
-              folder_params['parents'] = [{'id': parent_folder}]
-          
-          # execute files.insert and get resource_id
-          created_folder = service.files().insert(body=folder_params).execute()
-      except:
-          raise endpoints.UnauthorizedException('Invalid grant' )
-          return
+      folder_name = my_model.firstname + ' ' + my_model.lastname
+      created_folder = EndpointsHelper.insert_folder(user_from_email,folder_name)
       # Todo: Check permissions
       my_model.owner = user_from_email.google_user_id
       my_model.organization = user_from_email.organization
@@ -296,7 +280,7 @@ class CrmEngineApi(remote.Service):
   # contacts.list api
   @Contact.query_method(user_required=True,query_fields=('limit', 'order','account','account_name', 'pageToken'),path='contacts', name='contacts.list')
   def ContactList(self, query):
-      user_from_email = EndpointsHelper.require_iogrow_user()()
+      user_from_email = EndpointsHelper.require_iogrow_user()
       return query.filter(ndb.OR(ndb.AND(Contact.access=='public',Contact.organization==user_from_email.organization),Contact.owner==user_from_email.google_user_id, Contact.collaborators_ids==user_from_email.google_user_id)).order(Contact._key)
   # contacts.get api        
   @Contact.method(request_fields=('id',),
@@ -309,7 +293,7 @@ class CrmEngineApi(remote.Service):
   @Contact.method(user_required=True,
                 http_method='PUT', path='contacts/{id}', name='contacts.update')
   def ContactUpdate(self, my_model):
-    user_from_email = EndpointsHelper.require_iogrow_user()()
+    user_from_email = EndpointsHelper.require_iogrow_user()
     # Todo: Check permissions
     #my_model.owner = user_from_email.google_user_id
     #my_model.organization =  user_from_email.organization
@@ -371,27 +355,7 @@ class CrmEngineApi(remote.Service):
   def OpportunityInsert(self, my_model):
       user_from_email = EndpointsHelper.require_iogrow_user()
       # OAuth flow
-      try:
-          credentials = user_from_email.google_credentials
-          http = credentials.authorize(httplib2.Http(memcache))
-          service = build('drive', 'v2', http=http)
-          organization = user_from_email.organization.get()
-
-          # prepare params to insert
-          folder_params = {
-                      'title': my_model.name,
-                      'mimeType':  'application/vnd.google-apps.folder'         
-          }#get the accounts_folder or contacts_folder or .. 
-          
-          parent_folder = organization.opportunities_folder
-          if parent_folder:
-              folder_params['parents'] = [{'id': parent_folder}]
-          
-          # execute files.insert and get resource_id
-          created_folder = service.files().insert(body=folder_params).execute()
-      except:
-          raise endpoints.UnauthorizedException('Invalid grant' )
-          return
+      created_folder = EndpointsHelper.insert_folder(user_from_email,my_model.name)
       # Todo: Check permissions
       my_model.owner = user_from_email.google_user_id
       my_model.organization = user_from_email.organization
@@ -434,27 +398,8 @@ class CrmEngineApi(remote.Service):
   def LeadInsert(self, my_model):
       user_from_email = EndpointsHelper.require_iogrow_user()
       # OAuth flow
-      try:
-          credentials = user_from_email.google_credentials
-          http = credentials.authorize(httplib2.Http(memcache))
-          service = build('drive', 'v2', http=http)
-          organization = user_from_email.organization.get()
-
-          # prepare params to insert
-          folder_params = {
-                      'title': my_model.firstname + ' ' + my_model.lastname,
-                      'mimeType':  'application/vnd.google-apps.folder'         
-          }#get the accounts_folder or contacts_folder or .. 
-          
-          parent_folder = organization.leads_folder
-          if parent_folder:
-              folder_params['parents'] = [{'id': parent_folder}]
-          
-          # execute files.insert and get resource_id
-          created_folder = service.files().insert(body=folder_params).execute()
-      except:
-          raise endpoints.UnauthorizedException('Invalid grant' )
-          return
+      folder_name = my_model.firstname + ' ' + my_model.lastname
+      created_folder = EndpointsHelper.insert_folder(user_from_email,folder_name)
       # Todo: Check permissions
       my_model.owner = user_from_email.google_user_id
       my_model.organization = user_from_email.organization
@@ -497,28 +442,7 @@ class CrmEngineApi(remote.Service):
   @Case.method(user_required=True,path='cases',http_method='POST',name='cases.insert')
   def CaseInsert(self, my_model):
       user_from_email = EndpointsHelper.require_iogrow_user()
-      # OAuth flow
-      try:
-          credentials = user_from_email.google_credentials
-          http = credentials.authorize(httplib2.Http(memcache))
-          service = build('drive', 'v2', http=http)
-          organization = user_from_email.organization.get()
-
-          # prepare params to insert
-          folder_params = {
-                      'title': my_model.name,
-                      'mimeType':  'application/vnd.google-apps.folder'         
-          }#get the accounts_folder or contacts_folder or .. 
-          
-          parent_folder = organization.cases_folder
-          if parent_folder:
-              folder_params['parents'] = [{'id': parent_folder}]
-          
-          # execute files.insert and get resource_id
-          created_folder = service.files().insert(body=folder_params).execute()
-      except:
-          raise endpoints.UnauthorizedException('Invalid grant' )
-          return
+      created_folder = EndpointsHelper.insert_folder(user_from_email,my_model.name)
       # Todo: Check permissions
       my_model.owner = user_from_email.google_user_id
       my_model.organization = user_from_email.organization
