@@ -7,7 +7,6 @@ from endpoints_proto_datastore.ndb import EndpointsAliasProperty
 from endpoints_proto_datastore.ndb import EndpointsModel
 from iomodels.crmengine.accounts import Account
 from iomodels.crmengine.contacts import Contact
-from iomodels.crmengine.campaigns import Campaign
 from iomodels.crmengine.notes import Note,Topic
 from iomodels.crmengine.tasks import Task
 from iomodels.crmengine.opportunities import Opportunity
