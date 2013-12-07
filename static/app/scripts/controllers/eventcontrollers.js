@@ -152,7 +152,9 @@ app.controller('EventShowController',['$scope','$filter','$route','$location','C
       
     };
     $scope.ListComments = function(){
-      var params = {//'discussion':$scope.note.entityKey,
+
+      var params = {
+                        //'discussion':$scope.note.entityKey,
                      'limit':5,
                       'order':'-updated_at'};
       Comment.list($scope,params);

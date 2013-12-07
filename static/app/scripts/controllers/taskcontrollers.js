@@ -71,7 +71,11 @@ app.controller('TaskShowController',['$scope','$filter','$route','$location','Co
         var params = {};
           if ($scope.pages[nextPage]){
             params = {'limit':5,
-                      //'discussion':$scope.note.entityKey,
+
+                      'discussion':$scope.task.entityKey,
+
+                     
+
                       'pageToken':$scope.pages[nextPage]
 
                      }

@@ -128,6 +128,21 @@ class EventResponse(messages.Message):
     comments = messages.IntegerField(7)
     about = messages.MessageField(DiscussionAboutSchema,8)
     author = messages.MessageField(AuthorSchema,9)
+
+class EndpointsHelper(EndpointsModel):
+    INVALID_TOKEN = 'Invalid token'
+    INVALID_GRANT = 'Invalid grant'
+    NO_ACCOUNT = 'You don\'t have a i/oGrow account'
+    @classmethod
+    def require_iogrow_user(cls):
+        user = endpoints.get_current_user()
+        if user is None:
+            raise endpoints.UnauthorizedException(cls.INVALID_TOKEN)
+        user_from_email = model.User.query(model.User.email == user.email()).get()
+        if user_from_email is None:
+            raise endpoints.UnauthorizedException(cls.NO_ACCOUNT)
+        return user_from_email
+
     
 @endpoints.api(name='crmengine', version='v1', description='I/Ogrow CRM APIs',allowed_client_ids=[CLIENT_ID,
                                    endpoints.API_EXPLORER_CLIENT_ID],scopes=SCOPES)
@@ -140,12 +155,7 @@ class CrmEngineApi(remote.Service):
   # accounts.insert api
   @Account.method(user_required=True,path='accounts', http_method='POST', name='accounts.insert')
   def AccountInsert(self, my_model):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-          raise endpoints.UnauthorizedException('You must sign-in!' )
+      user_from_email = EndpointsHelper.require_iogrow_user()()
       # OAuth flow
       try:
           credentials = user_from_email.google_credentials
@@ -177,12 +187,7 @@ class CrmEngineApi(remote.Service):
   # accounts.list api
   @Account.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='accounts', name='accounts.list')
   def Account_List(self, query):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!' )
+      user_from_email = EndpointsHelper.require_iogrow_user()()
       return query.filter(ndb.OR(ndb.AND(Account.access=='public',Account.organization==user_from_email.organization),Account.owner==user_from_email.google_user_id, Account.collaborators_ids==user_from_email.google_user_id)).order(Account._key)
   # accounts.get api
   @Account.method(request_fields=('id',),path='accounts/{id}', http_method='GET', name='accounts.get')
@@ -194,12 +199,7 @@ class CrmEngineApi(remote.Service):
   @Account.method(user_required=True,
                 http_method='PUT', path='accounts/{id}', name='accounts.update')
   def AccountUpdate(self, my_model):
-    user = endpoints.get_current_user()
-    if user is None:
-        raise endpoints.UnauthorizedException('You must authenticate!' )
-    user_from_email = model.User.query(model.User.email == user.email()).get()
-    if user_from_email is None:
-      raise endpoints.UnauthorizedException('You must sign-in!' )
+    user_from_email = EndpointsHelper.require_iogrow_user()()
     # Todo: Check permissions
     #my_model.owner = user_from_email.google_user_id
     #my_model.organization =  user_from_email.organization
@@ -210,12 +210,7 @@ class CrmEngineApi(remote.Service):
   @Account.method(user_required=True,
                 http_method='PATCH', path='accounts/{id}', name='accounts.patch')
   def AccountPatch(self, my_model):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!' )
+      user_from_email = EndpointsHelper.require_iogrow_user()()
       # Todo: Check permissions
       if not my_model.from_datastore:
           raise endpoints.NotFoundException('Account not found.')
@@ -236,12 +231,7 @@ class CrmEngineApi(remote.Service):
                       path='accounts/search', http_method='POST',
                       name='accounts.search')
   def account_search(self, request):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-          raise endpoints.UnauthorizedException('You must sign-in!' )
+      user_from_email = EndpointsHelper.require_iogrow_user()()
       
       #prepare the query
       query_string = request.q 
@@ -274,12 +264,7 @@ class CrmEngineApi(remote.Service):
   # contacts.insert api
   @Contact.method(user_required=True,path='contacts', http_method='POST', name='contacts.insert')
   def ContactInsert(self, my_model):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-          raise endpoints.UnauthorizedException('You must sign-in!' )
+      user_from_email = EndpointsHelper.require_iogrow_user()()
       # OAuth flow
       try:
           credentials = user_from_email.google_credentials
@@ -311,12 +296,7 @@ class CrmEngineApi(remote.Service):
   # contacts.list api
   @Contact.query_method(user_required=True,query_fields=('limit', 'order','account','account_name', 'pageToken'),path='contacts', name='contacts.list')
   def ContactList(self, query):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!' )
+      user_from_email = EndpointsHelper.require_iogrow_user()()
       return query.filter(ndb.OR(ndb.AND(Contact.access=='public',Contact.organization==user_from_email.organization),Contact.owner==user_from_email.google_user_id, Contact.collaborators_ids==user_from_email.google_user_id)).order(Contact._key)
   # contacts.get api        
   @Contact.method(request_fields=('id',),
@@ -329,12 +309,7 @@ class CrmEngineApi(remote.Service):
   @Contact.method(user_required=True,
                 http_method='PUT', path='contacts/{id}', name='contacts.update')
   def ContactUpdate(self, my_model):
-    user = endpoints.get_current_user()
-    if user is None:
-        raise endpoints.UnauthorizedException('You must authenticate!' )
-    user_from_email = model.User.query(model.User.email == user.email()).get()
-    if user_from_email is None:
-      raise endpoints.UnauthorizedException('You must sign-in!' )
+    user_from_email = EndpointsHelper.require_iogrow_user()()
     # Todo: Check permissions
     #my_model.owner = user_from_email.google_user_id
     #my_model.organization =  user_from_email.organization
@@ -346,12 +321,7 @@ class CrmEngineApi(remote.Service):
   @Contact.method(user_required=True,
                 http_method='PATCH', path='contacts/{id}', name='contacts.patch')
   def ContactPatch(self, my_model):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!' )
+      user_from_email = EndpointsHelper.require_iogrow_user()
       # Todo: Check permissions
 
       my_model.put()
@@ -362,12 +332,7 @@ class CrmEngineApi(remote.Service):
                       path='contacts/search', http_method='POST',
                       name='contacts.search')
   def contact_search(self, request):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-          raise endpoints.UnauthorizedException('You must sign-in!' )
+      user_from_email = EndpointsHelper.require_iogrow_user()
       
       #prepare the query
       query_string = request.q 
@@ -404,12 +369,7 @@ class CrmEngineApi(remote.Service):
   # opportunities.insert
   @Opportunity.method(user_required=True,path='opportunities',http_method='POST',name='opportunities.insert')
   def OpportunityInsert(self, my_model):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-          raise endpoints.UnauthorizedException('You must sign-in!' )
+      user_from_email = EndpointsHelper.require_iogrow_user()
       # OAuth flow
       try:
           credentials = user_from_email.google_credentials
@@ -441,13 +401,7 @@ class CrmEngineApi(remote.Service):
   # opportunities.list api
   @Opportunity.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken','account','account_name','contact'),path='opportunities', name='opportunities.list')
   def opportunity_list(self, query):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!' )
-      
+      user_from_email = EndpointsHelper.require_iogrow_user()      
       return query.filter(ndb.OR(ndb.AND(Opportunity.access=='public',Opportunity.organization==user_from_email.organization),Opportunity.owner==user_from_email.google_user_id, Opportunity.collaborators_ids==user_from_email.google_user_id)).order(Opportunity._key)
   # opportunities.get api
   @Opportunity.method(request_fields=('id',),path='opportunities/{id}', http_method='GET', name='opportunities.get')
@@ -459,12 +413,7 @@ class CrmEngineApi(remote.Service):
   @Opportunity.method(user_required=True,
                 http_method='PUT', path='opportunities/{id}', name='opportunities.update')
   def OpportunityUpdate(self, my_model):
-    user = endpoints.get_current_user()
-    if user is None:
-        raise endpoints.UnauthorizedException('You must authenticate!' )
-    user_from_email = model.User.query(model.User.email == user.email()).get()
-    if user_from_email is None:
-      raise endpoints.UnauthorizedException('You must sign-in!' )
+    user_from_email = EndpointsHelper.require_iogrow_user()
     # Todo: Check permissions
     #my_model.owner = user_from_email.google_user_id
     #my_model.organization =  user_from_email.organization
@@ -475,12 +424,7 @@ class CrmEngineApi(remote.Service):
   @Opportunity.method(user_required=True,
                 http_method='PATCH', path='opportunities/{id}', name='opportunities.patch')
   def OpportunityPatch(self, my_model):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!')
+      user_from_email = EndpointsHelper.require_iogrow_user()
       # Todo: Check permissions
       my_model.put()
       return my_model
@@ -488,12 +432,7 @@ class CrmEngineApi(remote.Service):
   # leads.insert api
   @Lead.method(user_required=True,path='leads',http_method='POST',name='leads.insert')
   def LeadInsert(self, my_model):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-          raise endpoints.UnauthorizedException('You must sign-in!' )
+      user_from_email = EndpointsHelper.require_iogrow_user()
       # OAuth flow
       try:
           credentials = user_from_email.google_credentials
@@ -526,12 +465,7 @@ class CrmEngineApi(remote.Service):
   # leads.list api
   @Lead.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='leads',name='leads.list')
   def LeadList(self,query):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!' )
+      user_from_email = EndpointsHelper.require_iogrow_user()
       return query.filter(ndb.OR(ndb.AND(Lead.access=='public',Lead.organization==user_from_email.organization),Lead.owner==user_from_email.google_user_id, Lead.collaborators_ids==user_from_email.google_user_id)).order(Lead._key)
   # leads.get api
   @Lead.method(request_fields=('id',),path='leads/{id}', http_method='GET', name='leads.get')
@@ -543,12 +477,7 @@ class CrmEngineApi(remote.Service):
   @Lead.method(user_required=True,
                 http_method='PUT', path='leads/{id}', name='leads.update')
   def LeadUpdate(self, my_model):
-    user = endpoints.get_current_user()
-    if user is None:
-        raise endpoints.UnauthorizedException('You must authenticate!' )
-    user_from_email = model.User.query(model.User.email == user.email()).get()
-    if user_from_email is None:
-      raise endpoints.UnauthorizedException('You must sign-in!' )
+    user_from_email = EndpointsHelper.require_iogrow_user()
     # Todo: Check permissions
     #my_model.owner = user_from_email.google_user_id
     #my_model.organization =  user_from_email.organization
@@ -559,12 +488,7 @@ class CrmEngineApi(remote.Service):
   @Lead.method(user_required=True,
                 http_method='PATCH', path='leads/{id}', name='leads.patch')
   def LeadPatch(self, my_model):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!')
+      user_from_email = EndpointsHelper.require_iogrow_user()
       # Todo: Check permissions
       my_model.put()
       return my_model
@@ -572,12 +496,7 @@ class CrmEngineApi(remote.Service):
   # cases.insert api 
   @Case.method(user_required=True,path='cases',http_method='POST',name='cases.insert')
   def CaseInsert(self, my_model):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-          raise endpoints.UnauthorizedException('You must sign-in!' )
+      user_from_email = EndpointsHelper.require_iogrow_user()
       # OAuth flow
       try:
           credentials = user_from_email.google_credentials
@@ -609,12 +528,7 @@ class CrmEngineApi(remote.Service):
   # cases.list api
   @Case.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken','account','description','type_case','priority','status','contact'),path='cases',name='cases.list')
   def CaseList(self,query):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!' )
+      user_from_email = EndpointsHelper.require_iogrow_user()
       return query.filter(ndb.OR(ndb.AND(Case.access=='public',Case.organization==user_from_email.organization),Case.owner==user_from_email.google_user_id, Case.collaborators_ids==user_from_email.google_user_id)).order(Case._key)
   # cases.get api
   @Case.method(request_fields=('id',),path='cases/{id}', http_method='GET', name='cases.get')
@@ -626,12 +540,7 @@ class CrmEngineApi(remote.Service):
   @Case.method(user_required=True,
                 http_method='PUT', path='cases/{id}', name='cases.update')
   def CaseUpdate(self, my_model):
-    user = endpoints.get_current_user()
-    if user is None:
-        raise endpoints.UnauthorizedException('You must authenticate!' )
-    user_from_email = model.User.query(model.User.email == user.email()).get()
-    if user_from_email is None:
-      raise endpoints.UnauthorizedException('You must sign-in!' )
+    user_from_email = EndpointsHelper.require_iogrow_user()
     # Todo: Check permissions
     #my_model.owner = user_from_email.google_user_id
     #my_model.organization =  user_from_email.organization
@@ -642,12 +551,7 @@ class CrmEngineApi(remote.Service):
   @Case.method(user_required=True,
                 http_method='PATCH', path='cases/{id}', name='cases.patch')
   def CasePatch(self, my_model):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!' )
+      user_from_email = EndpointsHelper.require_iogrow_user()
       # Todo: Check permissions
       if not my_model.from_datastore:
           raise endpoints.NotFoundException('Account not found.')
@@ -671,12 +575,7 @@ class CrmEngineApi(remote.Service):
   # comments.insert api 
   @Comment.method(user_required=True,path='comments',http_method='POST',name='comments.insert')
   def CommentInsert(self, my_model):
-      user = endpoints.get_current_user()
-      if user is  None :
-        raise endpoints.UnauthorizedException('You must be aunthenticated')
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in ')
+      user_from_email = EndpointsHelper.require_iogrow_user()
       #discussion_key = ndb.Key(urlsafe=my_model.discussion)
       #my_model.discussion = discussion_key
       comment_author = model.Userinfo()
@@ -686,7 +585,10 @@ class CrmEngineApi(remote.Service):
       my_model.owner = user_from_email.google_user_id
       my_model.put()
       return my_model
-
+  # comments.list api
+  @Comment.query_method(user_required=True,query_fields=('limit', 'order','discussion','updated_at', 'pageToken'),path='comments',name='comments.list')
+  def CommentList(self,query):
+     return query
   # comments.get api
   @Comment.method(request_fields=('id',),path='comments/{id}', http_method='GET', name='comments.get')
   def CommentGet(self, my_model):
@@ -698,12 +600,7 @@ class CrmEngineApi(remote.Service):
   @Comment.method(user_required=True,
                 http_method='PUT', path='comments/{id}', name='comments.update')
   def CommentUpdate(self, my_model):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!' )
+      user_from_email = EndpointsHelper.require_iogrow_user()
       # Todo: Check permissions
       #my_model.owner = user_from_email.google_user_id
       #my_model.organization =  user_from_email.organization
@@ -714,24 +611,15 @@ class CrmEngineApi(remote.Service):
   @Comment.method(user_required=True,
                 http_method='PATCH', path='comments/{id}', name='comments.patch')
   def CommentPatch(self, my_model):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!')
+      user_from_email = EndpointsHelper.require_iogrow_user()
       # Todo: Check permissions
       my_model.put()
       return my_model
+
   # contributors.insert api
   @Contributor.method(user_required=True,path='contributors', http_method='POST', name='contributors.insert')
   def insert_contributor(self, my_model):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-          raise endpoints.UnauthorizedException('You must sign-in!' )
+      user_from_email = EndpointsHelper.require_iogrow_user()
       
       # Todo: Check permissions
       my_model.created_by = user_from_email.google_user_id
@@ -760,12 +648,7 @@ class CrmEngineApi(remote.Service):
   # notes.insert api
   @Note.method(user_required=True,path='notes', http_method='POST', name='notes.insert')
   def NoteInsert(self, my_model):
-    user = endpoints.get_current_user()
-    if user is None:
-        raise endpoints.UnauthorizedException('You must authenticate!' )
-    user_from_email = model.User.query(model.User.email == user.email()).get()
-    if user_from_email is None:
-      raise endpoints.UnauthorizedException('You must sign-in!' )
+    user_from_email = EndpointsHelper.require_iogrow_user()
     # Todo: Check permissions
     note_author = model.Userinfo()
     note_author.display_name = user_from_email.google_display_name
@@ -782,12 +665,7 @@ class CrmEngineApi(remote.Service):
                       path='notes/{id}', http_method='GET',
                       name='notes.get')
   def NoteGet(self, request):
-        user = endpoints.get_current_user()
-        if user is None:
-            raise endpoints.UnauthorizedException('You must authenticate!' )
-        user_from_email = model.User.query(model.User.email == user.email()).get()
-        if user_from_email is None:
-          raise endpoints.UnauthorizedException('You must sign-in!' )
+        user_from_email = EndpointsHelper.require_iogrow_user()
         try:
             note = Note.get_by_id(int(request.id))
             about_item_id = int(note.about_item)
@@ -829,12 +707,7 @@ class CrmEngineApi(remote.Service):
   @Note.method(user_required=True,
                 http_method='PUT', path='notes/{id}', name='notes.update')
   def NoteUpdate(self, my_model):
-    user = endpoints.get_current_user()
-    if user is None:
-        raise endpoints.UnauthorizedException('You must authenticate!' )
-    user_from_email = model.User.query(model.User.email == user.email()).get()
-    if user_from_email is None:
-      raise endpoints.UnauthorizedException('You must sign-in!' )
+    user_from_email = EndpointsHelper.require_iogrow_user()
     # Todo: Check permissions
     #my_model.owner = user_from_email.google_user_id
     #my_model.organization =  user_from_email.organization
@@ -845,12 +718,7 @@ class CrmEngineApi(remote.Service):
   @Note.method(user_required=True,
                 http_method='PATCH', path='notes/{id}', name='notes.patch')
   def NotePatch(self, my_model):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!' )
+      user_from_email = EndpointsHelper.require_iogrow_user()
       # Todo: Check permissions
 
       my_model.put()
@@ -859,13 +727,7 @@ class CrmEngineApi(remote.Service):
   # documents.insert api
   @Document.method(user_required=True,path='documents', http_method='POST', name='documents.insert')
   def DocumentInsert(self, my_model):
-    user = endpoints.get_current_user()
-    if user is None:
-        raise endpoints.UnauthorizedException('You must authenticate!' )
-    user_from_email = model.User.query(model.User.email == user.email()).get()
-    if user_from_email is None:
-      raise endpoints.UnauthorizedException('You must sign-in!' )
-
+    user_from_email = EndpointsHelper.require_iogrow_user()
     # prepare google drive service
     credentials = user_from_email.google_credentials
     http = httplib2.Http()
@@ -908,12 +770,7 @@ class CrmEngineApi(remote.Service):
                       path='documents/attachfiles', http_method='POST',
                       name='documents.attachfiles')
   def attach_files(self, request):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!' )
+      user_from_email = EndpointsHelper.require_iogrow_user()
       # Todo: Check permissions
       items = request.items
       author = model.Userinfo()
@@ -945,12 +802,7 @@ class CrmEngineApi(remote.Service):
                       path='documents/{id}', http_method='GET',
                       name='documents.get')
   def document_get(self, request):
-        user = endpoints.get_current_user()
-        if user is None:
-            raise endpoints.UnauthorizedException('You must authenticate!' )
-        user_from_email = model.User.query(model.User.email == user.email()).get()
-        if user_from_email is None:
-          raise endpoints.UnauthorizedException('You must sign-in!' )
+        user_from_email = EndpointsHelper.require_iogrow_user()
         try:
             document = Document.get_by_id(int(request.id))
             if document is None:
@@ -995,12 +847,7 @@ class CrmEngineApi(remote.Service):
   @Document.method(user_required=True,
                 http_method='PUT', path='documents/{id}', name='documents.update')
   def DocumentUpdate(self, my_model):
-    user = endpoints.get_current_user()
-    if user is None:
-        raise endpoints.UnauthorizedException('You must authenticate!' )
-    user_from_email = model.User.query(model.User.email == user.email()).get()
-    if user_from_email is None:
-      raise endpoints.UnauthorizedException('You must sign-in!' )
+    user_from_email = EndpointsHelper.require_iogrow_user()
     # Todo: Check permissions
     #my_model.owner = user_from_email.google_user_id
     #my_model.organization =  user_from_email.organization
@@ -1011,12 +858,7 @@ class CrmEngineApi(remote.Service):
   @Document.method(user_required=True,
                 http_method='PATCH', path='documents/{id}', name='documents.patch')
   def DocumentPatch(self, my_model):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!')
+      user_from_email = EndpointsHelper.require_iogrow_user()
       # Todo: Check permissions
       my_model.put()
       return my_model
@@ -1024,12 +866,7 @@ class CrmEngineApi(remote.Service):
   # tasks.insert api
   @Task.method(user_required=True,path='tasks', http_method='POST', name='tasks.insert')
   def TaskInsert(self, my_model):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!' )
+      user_from_email = EndpointsHelper.require_iogrow_user()
       # Todo: Check permissions
       if my_model.due:
           #insert an event on google calendar
@@ -1075,12 +912,7 @@ class CrmEngineApi(remote.Service):
                       path='tasks/{id}', http_method='GET',
                       name='tasks.get')
   def task_get(self, request):
-        user = endpoints.get_current_user()
-        if user is None:
-            raise endpoints.UnauthorizedException('You must authenticate!' )
-        user_from_email = model.User.query(model.User.email == user.email()).get()
-        if user_from_email is None:
-          raise endpoints.UnauthorizedException('You must sign-in!' )
+        user_from_email = EndpointsHelper.require_iogrow_user()
         try:
             task = Task.get_by_id(int(request.id))
             about_item_id = int(task.about_item)
@@ -1129,12 +961,7 @@ class CrmEngineApi(remote.Service):
   # events.insert api
   @Event.method(user_required=True,path='events', http_method='POST', name='events.insert')
   def EventInsert(self, my_model):
-    user = endpoints.get_current_user()
-    if user is None:
-        raise endpoints.UnauthorizedException('You must authenticate!' )
-    user_from_email = model.User.query(model.User.email == user.email()).get()
-    if user_from_email is None:
-      raise endpoints.UnauthorizedException('You must sign-in!' )
+    user_from_email = EndpointsHelper.require_iogrow_user()
     # Todo: Check permissions
     #insert an event on google calendar
     #insert an event on google calendar
@@ -1195,12 +1022,7 @@ class CrmEngineApi(remote.Service):
                       path='events/{id}', http_method='GET',
                       name='events.get')
   def event_get(self, request):
-        user = endpoints.get_current_user()
-        if user is None:
-            raise endpoints.UnauthorizedException('You must authenticate!' )
-        user_from_email = model.User.query(model.User.email == user.email()).get()
-        if user_from_email is None:
-          raise endpoints.UnauthorizedException('You must sign-in!' )
+        user_from_email = EndpointsHelper.require_iogrow_user()
         try:
             event = Event.get_by_id(int(request.id))
             about_item_id = int(event.about_item)
@@ -1239,12 +1061,7 @@ class CrmEngineApi(remote.Service):
   # users.insert api
   @User.method(path='users', http_method='POST', name='users.insert')
   def UserInsert(self, my_model):
-    user = endpoints.get_current_user()
-    if user is None:
-        raise endpoints.UnauthorizedException('You must authenticate!' )
-    user_from_email = model.User.query(model.User.email == user.email()).get()
-    if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!' )
+    user_from_email = EndpointsHelper.require_iogrow_user()
     # OAuth flow
     try:
         oauth_flow = flow_from_clientsecrets('client_secrets.json',
@@ -1311,12 +1128,7 @@ class CrmEngineApi(remote.Service):
   # users.list api
   @User.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='users', name='users.list')
   def UserList(self, query):
-    user = endpoints.get_current_user()
-    if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-    user_from_email = model.User.query(model.User.email == user.email()).get()
-    if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!' )
+    user_from_email = EndpointsHelper.require_iogrow_user()
     organization = user_from_email.organization
     return query.filter(model.User.organization == organization)
   # users.get api
@@ -1329,12 +1141,7 @@ class CrmEngineApi(remote.Service):
   @User.method(user_required=True,
                 http_method='PUT', path='users/{id}', name='users.update')
   def UserUpdate(self, my_model):
-    user = endpoints.get_current_user()
-    if user is None:
-        raise endpoints.UnauthorizedException('You must authenticate!' )
-    user_from_email = model.User.query(model.User.email == user.email()).get()
-    if user_from_email is None:
-      raise endpoints.UnauthorizedException('You must sign-in!' )
+    user_from_email = EndpointsHelper.require_iogrow_user()
     # Todo: Check permissions
     #my_model.owner = user_from_email.google_user_id
     #my_model.organization =  user_from_email.organization
@@ -1345,12 +1152,7 @@ class CrmEngineApi(remote.Service):
   @User.method(user_required=True,
                 http_method='PATCH', path='users/{id}', name='users.patch')
   def UserPatch(self, my_model):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!')
+      user_from_email = EndpointsHelper.require_iogrow_user()
       # Todo: Check permissions
       my_model.put()
       return my_model
@@ -1358,12 +1160,7 @@ class CrmEngineApi(remote.Service):
   # groups.insert api
   @Group.method(user_required=True,path='groups', http_method='POST', name='groups.insert')
   def GroupInsert(self, my_model):
-    user = endpoints.get_current_user()
-    if user is None:
-        raise endpoints.UnauthorizedException('You must authenticate!' )
-    user_from_email = model.User.query(model.User.email == user.email()).get()
-    if user_from_email is None:
-      raise endpoints.UnauthorizedException('You must sign-in!' )
+    user_from_email = EndpointsHelper.require_iogrow_user()
     # Todo: Check permissions
     my_model.organization = user_from_email.organization
     
@@ -1384,12 +1181,7 @@ class CrmEngineApi(remote.Service):
   @Group.method(user_required=True,
                 http_method='PUT', path='groups/{id}', name='groups.update')
   def GroupUpdate(self, my_model):
-    user = endpoints.get_current_user()
-    if user is None:
-        raise endpoints.UnauthorizedException('You must authenticate!' )
-    user_from_email = model.User.query(model.User.email == user.email()).get()
-    if user_from_email is None:
-      raise endpoints.UnauthorizedException('You must sign-in!' )
+    user_from_email = EndpointsHelper.require_iogrow_user()
     # Todo: Check permissions
     #my_model.owner = user_from_email.google_user_id
     #my_model.organization =  user_from_email.organization
@@ -1400,24 +1192,14 @@ class CrmEngineApi(remote.Service):
   @Group.method(user_required=True,
                 http_method='PATCH', path='groups/{id}', name='groups.patch')
   def GroupPatch(self, my_model):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!')
+      user_from_email = EndpointsHelper.require_iogrow_user()
       # Todo: Check permissions
       my_model.put()
       return my_model
   # members.insert api
   @Member.method(user_required=True,path='members', http_method='POST', name='members.insert')
   def MemberInsert(self, my_model):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!' )
+      user_from_email = EndpointsHelper.require_iogrow_user()
       # Todo: Check permissions
       my_model.organization = user_from_email.organization
       
@@ -1438,12 +1220,7 @@ class CrmEngineApi(remote.Service):
   @Member.method(user_required=True,
                 http_method='PUT', path='members/{id}', name='members.update')
   def MemberUpdate(self, my_model):
-    user = endpoints.get_current_user()
-    if user is None:
-        raise endpoints.UnauthorizedException('You must authenticate!' )
-    user_from_email = model.User.query(model.User.email == user.email()).get()
-    if user_from_email is None:
-      raise endpoints.UnauthorizedException('You must sign-in!' )
+    user_from_email = EndpointsHelper.require_iogrow_user()
     # Todo: Check permissions
     #my_model.owner = user_from_email.google_user_id
     #my_model.organization =  user_from_email.organization
@@ -1454,12 +1231,7 @@ class CrmEngineApi(remote.Service):
   @Member.method(user_required=True,
                 http_method='PATCH', path='members/{id}', name='members.patch')
   def MemberPatch(self, my_model):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!')
+      user_from_email = EndpointsHelper.require_iogrow_user()
       # Todo: Check permissions
       my_model.put()
       return my_model
@@ -1467,12 +1239,7 @@ class CrmEngineApi(remote.Service):
   # permissions.insert api
   @Permission.method(user_required=True,path='permissions', http_method='POST', name='permissions.insert')
   def PermissionInsert(self, my_model):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!' )
+      user_from_email = EndpointsHelper.require_iogrow_user()
       
       my_model.organization = user_from_email.organization
       my_model.created_by = user_from_email.google_user_id
@@ -1528,12 +1295,7 @@ class CrmEngineApi(remote.Service):
   @Permission.method(user_required=True,
                 http_method='PUT', path='permissions/{id}', name='permissions.update')
   def PermissionUpdate(self, my_model):
-    user = endpoints.get_current_user()
-    if user is None:
-        raise endpoints.UnauthorizedException('You must authenticate!' )
-    user_from_email = model.User.query(model.User.email == user.email()).get()
-    if user_from_email is None:
-      raise endpoints.UnauthorizedException('You must sign-in!' )
+    user_from_email = EndpointsHelper.require_iogrow_user()
     # Todo: Check permissions
     #my_model.owner = user_from_email.google_user_id
     #my_model.organization =  user_from_email.organization
@@ -1544,12 +1306,7 @@ class CrmEngineApi(remote.Service):
   @Permission.method(user_required=True,
                 http_method='PATCH', path='permissions/{id}', name='permissions.patch')
   def PermissionPatch(self, my_model):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-        raise endpoints.UnauthorizedException('You must sign-in!')
+      user_from_email = EndpointsHelper.require_iogrow_user()
       # Todo: Check permissions
       my_model.put()
       return my_model
@@ -1558,12 +1315,7 @@ class CrmEngineApi(remote.Service):
                       path='search', http_method='POST',
                       name='search')
   def search_method(self, request):
-      user = endpoints.get_current_user()
-      if user is None:
-          raise endpoints.UnauthorizedException('You must authenticate!' )
-      user_from_email = model.User.query(model.User.email == user.email()).get()
-      if user_from_email is None:
-          raise endpoints.UnauthorizedException('You must sign-in!' )
+      user_from_email = EndpointsHelper.require_iogrow_user()
       organization = str(user_from_email.organization.id())
 
 
