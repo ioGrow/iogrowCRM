@@ -2,7 +2,6 @@ from google.appengine.ext import ndb
 from google.appengine.api import search 
 from endpoints_proto_datastore.ndb import EndpointsModel
 from model import Userinfo
-import pprint
 
 import model
 
