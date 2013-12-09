@@ -67,7 +67,7 @@ class Opportunity(EndpointsModel):
             search.TextField(name='collaborators', value = collaborators ),
             search.TextField(name='title', value = empty_string(self.name) ),
             search.TextField(name='description', value = empty_string(self.description)),
-            search.NumberField(name='amount', value = self.amount),
+            #search.NumberField(name='amount', value = self.amount),
             search.TextField(name='stage', value = self.stage),
             #search.DateField(name='closed_date', value = self.closed_date),
             search.DateField(name='created_at', value = self.created_at),

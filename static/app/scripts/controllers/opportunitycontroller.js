@@ -8,6 +8,7 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Acc
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
      $scope.pagination = {};
+     $scope.opppagination = {};
      $scope.currentPage = 01;
      $scope.pages = [];
      
@@ -205,6 +206,9 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
      $scope.immediateFailed = false;
      $scope.isContentLoaded = false;
      $scope.pagination = {};
+     $scope.topicpagination={};
+     $scope.nextPageToken = undefined;
+     $scope.prevPageToken = undefined;
      $scope.currentPage = 01;
      $scope.pages = [];
      $scope.opportunities = [];
@@ -307,7 +311,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
         data: {code:authResult.code}
       });
     }
-     $scope.listNextPageItems = function(){
+     $scope.TopiclistNextPageItems = function(){
         
         
         var nextPage = $scope.currentPage + 1;
@@ -329,7 +333,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
           $scope.currentPage = $scope.currentPage + 1 ; 
           Topic.list($scope,params);
      }
-     $scope.listPrevPageItems = function(){
+     $scope.TopiclistPrevPageItems = function(){
        
        var prevPage = $scope.currentPage - 1;
        var params = {};

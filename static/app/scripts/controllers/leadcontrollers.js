@@ -183,6 +183,9 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','$location','Conf','
      $scope.isContentLoaded = false;
      $scope.pagination = {};
      $scope.currentPage = 01;
+     $scope.topicpagination={};
+     $scope.nextPageToken = undefined;
+     $scope.prevPageToken = undefined;
      $scope.pages = [];
      $scope.leads = [];
      $scope.users = [];
@@ -235,7 +238,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','$location','Conf','
         data: {code:authResult.code}
       });
     }
-     $scope.listNextPageItems = function(){
+     $scope.TopiclistNextPageItems = function(){
         
         
         var nextPage = $scope.currentPage + 1;
@@ -257,7 +260,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','$location','Conf','
           $scope.currentPage = $scope.currentPage + 1 ; 
           Topic.list($scope,params);
      }
-     $scope.listPrevPageItems = function(){
+     $scope.TopiclistPrevPageItems = function(){
        
        var prevPage = $scope.currentPage - 1;
        var params = {};

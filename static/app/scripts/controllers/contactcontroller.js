@@ -230,6 +230,11 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','$location','Conf
      $scope.immediateFailed = false;
      $scope.isContentLoaded = false;
      $scope.pagination = {};
+     $scope.topicpagination={};
+     $scope.opppagination={};
+     $scope.casepagination={};
+     $scope.nextPageToken = undefined;
+     $scope.prevPageToken = undefined;
      $scope.currentPage = 01;
      $scope.pages = [];
      $scope.accounts = [];
@@ -281,7 +286,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','$location','Conf
       });
     }
      //HKA 11.11.2013 
-     $scope.listNextPageItems = function(){
+     $scope.TopiclistNextPageItems = function(){
         
         
         var nextPage = $scope.currentPage + 1;
@@ -303,7 +308,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','$location','Conf
           $scope.currentPage = $scope.currentPage + 1 ; 
           Topic.list($scope,params);
      }
-     $scope.listPrevPageItems = function(){
+     $scope.TopiclistPrevPageItems = function(){
        
        var prevPage = $scope.currentPage - 1;
        var params = {};
@@ -315,14 +320,14 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','$location','Conf
                       'pageToken':$scope.pages[prevPage]
                      }
           }else{
-            params = {'about_kind':'Account',
+            params = {'about_kind':'Contact',
                       'about_item':$scope.contact.id,
                       'order': '-updated_at',
                       'limit': 5}
           }
           $scope.currentPage = $scope.currentPage - 1 ;
           Topic.list($scope,params);
-          console.log()
+          
      }
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
@@ -586,6 +591,7 @@ $scope.updatContactHeader = function(contact){
     $scope.saveOpp = function(opportunity){
       console.log('hahahahhahahahaaha');
       console.log($scope.contact.account);
+      console.log(opportunity.amount);
        var params = {'name':opportunity.name,
                       'description':opportunity.description,
                       'amount': opportunity.amount,
@@ -596,6 +602,7 @@ $scope.updatContactHeader = function(contact){
                       'contact_name': $scope.contact.firstname+' '+$scope.contact.lastname,
                       'access': $scope.contact.access
                       };
+        console.log(params);
 
       Opportunity.insert(params);
       $('#addOpportunityModal').modal('hide');

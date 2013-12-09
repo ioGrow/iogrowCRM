@@ -39,18 +39,18 @@ opportunityservices.factory('Opportunity', function($http) {
                   }
                  $scope.opportunities = resp.items;
                  if ($scope.currentPage>1){
-                      $scope.pagination.prev = true;
+                      $scope.opppagination.prev = true;
                    }else{
-                       $scope.pagination.prev = false;
+                       $scope.opppagination.prev = false;
                    }
                  if (resp.nextPageToken){
                    var nextPage = $scope.currentPage + 1;
                    // Store the nextPageToken
                    $scope.pages[nextPage] = resp.nextPageToken;
-                   $scope.pagination.next = true;
+                   $scope.opppagination.next = true;
                    
                  }else{
-                  $scope.pagination.next = false;
+                  $scope.opppagination.next = false;
                  }
                  // Loaded succefully
                  $scope.isLoading = false;

@@ -186,6 +186,9 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
      $scope.isLoading = false;
      $scope.pagination = {};
      $scope.contactpagination={};
+     $scope.opppagination = {};
+     $scope.casepagination = {};
+     $scope.topicpagination={};
      $scope.currentPage = 01;
      $scope.pages = [];
      
@@ -242,7 +245,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
       });
     }
     //HKA 06.12.2013  Manage Next & Prev Page of Topics
-     $scope.listNextPageItems = function(){
+     $scope.TopiclistNextPageItems = function(){
         
         
         var nextPage = $scope.currentPage + 1;
@@ -251,20 +254,20 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
             params = {'about_kind':'Account',
                       'about_item':$scope.account.id,
                       'order': '-updated_at',
-                      'limit': 5,
+                      'limit': 7,
                       'pageToken':$scope.pages[nextPage]
                      }
           }else{
             params = {'about_kind':'Account',
                       'about_item':$scope.account.id,
                       'order': '-updated_at',
-                      'limit': 7}
+                      'limit':7}
           }
           console.log('in listNextPageItems');
           $scope.currentPage = $scope.currentPage + 1 ; 
           Topic.list($scope,params);
      }
-     $scope.listPrevPageItems = function(){
+     $scope.TopiclistPrevPageItems = function(){
        
        var prevPage = $scope.currentPage - 1;
        var params = {};
@@ -318,11 +321,79 @@ $scope.ContactlistNextPageItems = function(){
                       'account':$scope.account.entityKey}
           }
           $scope.currentPage = $scope.currentPage - 1 ;
-          console.log('HKA Fix issues');
-          console.log('');
-          Contact.list($scope,params);
+            Contact.list($scope,params);
      }
+//HKA 07.12.2013 Manage Prev & Next Page on Related List Opportunities
+$scope.OpplistNextPageItems = function(){
+        
+        
+        var nextPage = $scope.currentPage + 1;
+        var params = {};
+          if ($scope.pages[nextPage]){
+            params = {'limit':7,
+                      'account':$scope.account.entityKey,
+                      'pageToken':$scope.pages[nextPage]
+                     }
+          }else{
+            params = {'limit':7,
+            'account':$scope.account.entityKey}
+          }
+          console.log('in listNextPageItems');
+          $scope.currentPage = $scope.currentPage + 1 ; 
+          Opportunity.list($scope,params);
+     }
+     $scope.OppPrevPageItems = function(){
+       
+       var prevPage = $scope.currentPage - 1;
+       var params = {};
+          if ($scope.pages[prevPage]){
+            params = {'limit':7,
+                      'account':$scope.account.entityKey,
+                      'pageToken':$scope.pages[prevPage]
+                     }
+          }else{
+            params = {'limit':7,
+                      'account':$scope.account.entityKey}
+          }
+          $scope.currentPage = $scope.currentPage - 1 ;
+            Opportunity.list($scope,params);
+     };
 
+     //HKA 07.12.2013 Manage Prev & Next Page on Related List Cases
+$scope.CaselistNextPageItems = function(){
+        
+        
+        var nextPage = $scope.currentPage + 1;
+        var params = {};
+          if ($scope.pages[nextPage]){
+            params = {'limit':7,
+                      'account':$scope.account.entityKey,
+                      'pageToken':$scope.pages[nextPage]
+                     }
+          }else{
+            params = {'limit':7,
+            'account':$scope.account.entityKey}
+          }
+          console.log('in listNextPageItems');
+          $scope.currentPage = $scope.currentPage + 1 ; 
+          Case.list($scope,params);
+     }
+     $scope.CasePrevPageItems = function(){
+       
+       var prevPage = $scope.currentPage - 1;
+       var params = {};
+          if ($scope.pages[prevPage]){
+            params = {'limit':7,
+                      'account':$scope.account.entityKey,
+                      'pageToken':$scope.pages[prevPage]
+                     }
+          }else{
+            params = {'limit':7,
+                      'account':$scope.account.entityKey}
+          }
+          $scope.currentPage = $scope.currentPage - 1 ;
+            Case.list($scope,params);
+     };
 
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');

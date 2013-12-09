@@ -9,6 +9,7 @@ app.controller('CaseListCtrl', ['$scope','$route','$location','Conf','Case','Acc
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
      $scope.pagination = {};
+     $scope.casepagination={};
      $scope.currentPage = 01;
      $scope.pages = [];
      
@@ -238,6 +239,9 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','$location','Conf',
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
      $scope.pagination = {};
+     $scope.topicpagination={};
+     $scope.nextPageToken = undefined;
+     $scope.prevPageToken = undefined;
      $scope.currentPage = 01;
      $scope.pages = [];
      $scope.cases = [];
@@ -290,7 +294,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','$location','Conf',
         data: {code:authResult.code}
       });
     }
-     $scope.listNextPageItems = function(){
+     $scope.TopiclistNextPageItems = function(){
         
         
         var nextPage = $scope.currentPage + 1;
@@ -312,7 +316,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','$location','Conf',
           $scope.currentPage = $scope.currentPage + 1 ; 
           Topic.list($scope,params);
      }
-     $scope.listPrevPageItems = function(){
+     $scope.TopiclistPrevPageItems = function(){
        
        var prevPage = $scope.currentPage - 1;
        var params = {};
