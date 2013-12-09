@@ -1,3 +1,4 @@
+*~
 *.py[cod]
 
 # C extensions
@@ -7,7 +8,6 @@
 *.egg
 *.egg-info
 dist
-build
 eggs
 parts
 bin
@@ -15,8 +15,8 @@ var
 sdist
 develop-eggs
 .installed.cfg
-lib
-lib64
+
+
 __pycache__
 
 # Installer logs
@@ -34,3 +34,4 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+>>>>>>> 074795d4b2ba033c03ec00e86fa0f481275c16c5

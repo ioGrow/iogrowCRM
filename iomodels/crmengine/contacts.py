@@ -5,14 +5,7 @@ from google.appengine.api import search
 import model
 
 class Contact(EndpointsModel):
-
-    
-
-
     _message_fields_schema = ('id','entityKey','folder',  'access','collaborators_list','collaborators_ids','display_name', 'firstname','lastname','title','company','account','account_name','introduction','tagline','phones','emails','addresses','websites','sociallinks')
-
-
-
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)

@@ -69,9 +69,8 @@ accountservices.factory('Contact', function($http) {
                  $scope.isLoading = false;
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
-                 
 
-              }else {
+              } else {
                  alert("Error, response is: " + angular.toJson(resp));
               }
               console.log('gapi #end_execute');

@@ -6,7 +6,6 @@ leadservices.factory('Lead', function($http) {
     angular.extend(this, data);
   }
 
-  
   Lead.get = function($scope,id) {
           gapi.client.crmengine.leads.get(id).execute(function(resp) {
             if(!resp.code){
@@ -17,7 +16,6 @@ leadservices.factory('Lead', function($http) {
                 $scope.listEvents();
                // Call the method $apply to make the update on the scope
                $scope.$apply();
-
             }else {
                alert("Error, response is: " + angular.toJson(resp));
             }

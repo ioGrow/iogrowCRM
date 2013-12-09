@@ -237,7 +237,6 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
         url: '/gconnect',
         
         success: function(result) {
-        
           console.log('i am in connectServer show me result please');
           console.log(result);
          },
@@ -288,6 +287,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Con
           Topic.list($scope,params);
           console.log()
      }
+
 //HKA 06.12.2013 Manage Prev & Next Page on Related List Contact
 $scope.ContactlistNextPageItems = function(){
         

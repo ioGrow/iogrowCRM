@@ -113,7 +113,6 @@ app.controller('LeadListCtrl', ['$scope','$route','$location','Conf','Lead',
           var params = {'limit':7};
           Lead.list($scope,params);
 
-          
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
             $scope.immediateFailed = true;
