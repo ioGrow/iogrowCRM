@@ -166,8 +166,24 @@
                                 </div>
                               </li>
                               
-                  </ul>    
+                  </ul> 
+
               </div>
+                <div class="row-fluid">
+                                <div class="pagination pull-right" ng-hide="isLoading">
+                                      
+                                      <ul>
+                                        <li ng-show="topicpagination.prev"><button ng-click="TopiclistPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                        {{_("Prev")}} 
+                                        </button></li>
+                                        
+                                        <li  ng-show="topicpagination.next"><button ng-click="TopiclistNextPageItems()"  class="btn">
+                                        {{_("Next")}} 
+                                        </button></li>
+                                      </ul>
+                                    </div>
+                                    <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                              </div>
               </div>
               </div>
               

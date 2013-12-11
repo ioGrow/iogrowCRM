@@ -9,14 +9,14 @@ import model
 
 class Topic(EndpointsModel):
 
-    _message_fields_schema = ('id','title','entityKey','updated_at','last_updater','excerpt','discussionId','created_at')
+    _message_fields_schema = ('id','title','entityKey','last_updater','updated_at','excerpt','discussionId','created_at')
     
 
     last_updater = ndb.StructuredProperty(Userinfo)
 
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
-    title = ndb.StringProperty(required=True)
+    title = ndb.StringProperty()
     # about 100 characters from the beginning of this topic
     excerpt = ndb.StringProperty()
     # number of comments in this topic

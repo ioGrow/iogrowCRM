@@ -10,7 +10,11 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Acc
      $scope.pagination = {};
      $scope.currentPage = 01;
      $scope.pages = [];
-     
+     //HKA 11.12.2013 var Opportunity to manage Next & Prev
+     $scope.opppagination = {};
+     $scope.oppCurrentPage=01;
+     $scope.opppages=[];
+
      $scope.opportunities = [];
      $scope.opportunity = {};
      $scope.opportunity.access ='public';
@@ -62,32 +66,31 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Acc
     }
      $scope.listNextPageItems = function(){
         
-        
-        var nextPage = $scope.currentPage + 1;
+        var nextPage = $scope.oppCurrentPage + 1;
         var params = {};
-          if ($scope.pages[nextPage]){
+          if ($scope.opppages[nextPage]){
             params = {'limit':7,
-                      'pageToken':$scope.pages[nextPage]
+                      'pageToken':$scope.opppages[nextPage]
                      }
           }else{
             params = {'limit':7}
           }
           console.log('in listNextPageItems');
-          $scope.currentPage = $scope.currentPage + 1 ; 
+          $scope.oppCurrentPage = $scope.oppCurrentPage + 1 ; 
           Opportunity.list($scope,params);
      }
      $scope.listPrevPageItems = function(){
-       
-       var prevPage = $scope.currentPage - 1;
+
+       var prevPage = $scope.oppCurrentPage - 1;
        var params = {};
-          if ($scope.pages[prevPage]){
+          if ($scope.opppages[prevPage]){
             params = {'limit':7,
-                      'pageToken':$scope.pages[prevPage]
+                      'pageToken':$scope.opppages[prevPage]
                      }
           }else{
             params = {'limit':7}
           }
-          $scope.currentPage = $scope.currentPage - 1 ;
+          $scope.oppCurrentPage = $scope.oppCurrentPage - 1 ;
           Opportunity.list($scope,params);
      }
      $scope.signIn = function(authResult) {
@@ -205,6 +208,12 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
      $scope.immediateFailed = false;
      $scope.isContentLoaded = false;
      $scope.pagination = {};
+     //HKA 10.12.2013 Var topic to manage Next & Prev
+     $scope.topicCurrentPage=01;
+     $scope.topicpagination={};
+     $scope.topicpages = [];
+     $scope.nextPageToken = undefined;
+     $scope.prevPageToken = undefined;
      $scope.currentPage = 01;
      $scope.pages = [];
      $scope.opportunities = [];
@@ -307,17 +316,17 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
         data: {code:authResult.code}
       });
     }
-     $scope.listNextPageItems = function(){
+     $scope.TopiclistNextPageItems = function(){
         
         
-        var nextPage = $scope.currentPage + 1;
+        var nextPage = $scope.topicCurrentPage + 1;
         var params = {};
-          if ($scope.pages[nextPage]){
+          if ($scope.topicpages[nextPage]){
             params = {'about_kind':'Opportunity',
                       'about_item':$scope.opportunity.id,
                       'order': '-updated_at',
                       'limit': 5,
-                      'pageToken':$scope.pages[nextPage]
+                      'pageToken':$scope.topicpages[nextPage]
                      }
           }else{
             params = {'about_kind':'Opportunity',
@@ -326,19 +335,19 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
                       'limit': 5}
           }
           console.log('in listNextPageItems');
-          $scope.currentPage = $scope.currentPage + 1 ; 
+          $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ; 
           Topic.list($scope,params);
      }
-     $scope.listPrevPageItems = function(){
+     $scope.TopiclistPrevPageItems = function(){
        
-       var prevPage = $scope.currentPage - 1;
+       var prevPage = $scope.topicCurrentPage - 1;
        var params = {};
-          if ($scope.pages[prevPage]){
+          if ($scope.topicpages[prevPage]){
             params = {'about_kind':'Opportunity',
                       'about_item':$scope.opportunity.id,
                       'order': '-updated_at',
                       'limit': 5,
-                      'pageToken':$scope.pages[prevPage]
+                      'pageToken':$scope.topicpages[prevPage]
                      }
           }else{
             params = {'about_kind':'Opportunity',
@@ -346,9 +355,9 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
                       'order': '-updated_at',
                       'limit': 5}
           }
-          $scope.currentPage = $scope.currentPage - 1 ;
+          $scope.topicCurrentPage = $scope.topicCurrentPage - 1 ;
           Topic.list($scope,params);
-          console.log()
+          
      }
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
