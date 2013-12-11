@@ -12,7 +12,11 @@ app.controller('CaseListCtrl', ['$scope','$route','$location','Conf','Case','Acc
      $scope.casepagination={};
      $scope.currentPage = 01;
      $scope.pages = [];
-     
+     //HKA 11.12.2013 Manage Next & Prev
+     $scope.casepagination = {};
+     $scope.caseCurrentPage=01;
+     $scope.casepages=[];
+
      $scope.cases = [];
      $scope.casee = {};
      $scope.casee.access ='public';
@@ -65,33 +69,32 @@ app.controller('CaseListCtrl', ['$scope','$route','$location','Conf','Case','Acc
       });
     }
      $scope.listNextPageItems = function(){
-        
-        
-        var nextPage = $scope.currentPage + 1;
+                    
+        var nextPage = $scope.caseCurrentPage + 1;
         var params = {};
-          if ($scope.pages[nextPage]){
+          if ($scope.casepages[nextPage]){
             params = {'limit':7,
-                      'pageToken':$scope.pages[nextPage]
+                      'pageToken':$scope.casepages[nextPage]
                      }
           }else{
             params = {'limit':7}
           }
           console.log('in listNextPageItems');
-          $scope.currentPage = $scope.currentPage + 1 ; 
+          $scope.caseCurrentPage = $scope.caseCurrentPage + 1 ; 
           Case.list($scope,params);
      }
      $scope.listPrevPageItems = function(){
-       
-       var prevPage = $scope.currentPage - 1;
+                
+       var prevPage = $scope.caseCurrentPage - 1;
        var params = {};
-          if ($scope.pages[prevPage]){
+          if ($scope.casepages[prevPage]){
             params = {'limit':7,
-                      'pageToken':$scope.pages[prevPage]
+                      'pageToken':$scope.casepages[prevPage]
                      }
           }else{
             params = {'limit':7}
           }
-          $scope.currentPage = $scope.currentPage - 1 ;
+          $scope.caseCurrentPage = $scope.caseCurrentPage - 1 ;
           Case.list($scope,params);
      }
      $scope.signIn = function(authResult) {
@@ -239,7 +242,10 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','$location','Conf',
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
      $scope.pagination = {};
+      //HKA 10.12.2013 Var topic to manage Next & Prev
+     $scope.topicCurrentPage=01;
      $scope.topicpagination={};
+     $scope.topicpages = [];
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.currentPage = 01;
@@ -295,16 +301,16 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','$location','Conf',
       });
     }
      $scope.TopiclistNextPageItems = function(){
+         
         
-        
-        var nextPage = $scope.currentPage + 1;
+        var nextPage = $scope.topicCurrentPage + 1;
         var params = {};
-          if ($scope.pages[nextPage]){
+          if ($scope.topicpages[nextPage]){
             params = {'about_kind':'Case',
                       'about_item':$scope.casee.id,
                       'order': '-updated_at',
                       'limit': 5,
-                      'pageToken':$scope.pages[nextPage]
+                      'pageToken':$scope.topicpages[nextPage]
                      }
           }else{
             params = {'about_kind':'Case',
@@ -313,19 +319,19 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','$location','Conf',
                       'limit': 5}
           }
           console.log('in listNextPageItems');
-          $scope.currentPage = $scope.currentPage + 1 ; 
+          $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ; 
           Topic.list($scope,params);
      }
      $scope.TopiclistPrevPageItems = function(){
        
-       var prevPage = $scope.currentPage - 1;
+       var prevPage = $scope.topicCurrentPage - 1;
        var params = {};
-          if ($scope.pages[prevPage]){
+          if ($scope.topicpages[prevPage]){
             params = {'about_kind':'Case',
                       'about_item':$scope.casee.id,
                       'order': '-updated_at',
                       'limit': 5,
-                      'pageToken':$scope.pages[prevPage]
+                      'pageToken':$scope.topicpages[prevPage]
                      }
           }else{
             params = {'about_kind':'Case',
@@ -333,9 +339,9 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','$location','Conf',
                       'order': '-updated_at',
                       'limit': 5}
           }
-          $scope.currentPage = $scope.currentPage - 1 ;
+          $scope.topicCurrentPage = $scope.topicCurrentPage - 1 ;
           Topic.list($scope,params);
-          console.log()
+          
      }
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');

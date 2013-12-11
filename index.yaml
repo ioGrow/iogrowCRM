@@ -256,6 +256,14 @@ indexes:
 
 - kind: Opportunity
   properties:
+  - name: access
+  - name: contact
+  - name: organization
+  - name: updated_at
+    direction: desc
+
+- kind: Opportunity
+  properties:
   - name: collaborators_ids
   - name: contact
   - name: created_at
@@ -269,6 +277,13 @@ indexes:
 
 - kind: Opportunity
   properties:
+  - name: collaborators_ids
+  - name: contact
+  - name: updated_at
+    direction: desc
+
+- kind: Opportunity
+  properties:
   - name: contact
   - name: owner
   - name: created_at
@@ -278,6 +293,13 @@ indexes:
   - name: contact
   - name: owner
   - name: created_at
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: contact
+  - name: owner
+  - name: updated_at
     direction: desc
 
 - kind: Task

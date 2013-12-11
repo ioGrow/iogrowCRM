@@ -38,15 +38,15 @@ opportunityservices.factory('Opportunity', function($http) {
                     $scope.blankState = true;
                   }
                  $scope.opportunities = resp.items;
-                 if ($scope.currentPage>1){
+                 if ($scope.oppCurrentPage>1){
                       $scope.opppagination.prev = true;
                    }else{
                        $scope.opppagination.prev = false;
                    }
                  if (resp.nextPageToken){
-                   var nextPage = $scope.currentPage + 1;
+                   var nextPage = $scope.oppCurrentPage + 1;
                    // Store the nextPageToken
-                   $scope.pages[nextPage] = resp.nextPageToken;
+                   $scope.opppages[nextPage] = resp.nextPageToken;
                    $scope.opppagination.next = true;
                    
                  }else{

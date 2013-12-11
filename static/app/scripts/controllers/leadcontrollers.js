@@ -182,7 +182,10 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','$location','Conf','
      $scope.isContentLoaded = false;
      $scope.pagination = {};
      $scope.currentPage = 01;
+     //HKA 10.12.2013 Var topic to manage Next & Prev
+     $scope.topicCurrentPage=01;
      $scope.topicpagination={};
+     $scope.topicpages = [];
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.pages = [];
@@ -240,14 +243,14 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','$location','Conf','
      $scope.TopiclistNextPageItems = function(){
         
         
-        var nextPage = $scope.currentPage + 1;
+        var nextPage = $scope.topicCurrentPage + 1;
         var params = {};
-          if ($scope.pages[nextPage]){
+          if ($scope.topicpages[nextPage]){
             params = {'about_kind':'Lead',
                       'about_item':$scope.lead.id,
                       'order': '-updated_at',
                       'limit': 5,
-                      'pageToken':$scope.pages[nextPage]
+                      'pageToken':$scope.topicpages[nextPage]
                      }
           }else{
             params = {'about_kind':'Lead',
@@ -256,19 +259,19 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','$location','Conf','
                       'limit': 5}
           }
           console.log('in listNextPageItems');
-          $scope.currentPage = $scope.currentPage + 1 ; 
+          $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ; 
           Topic.list($scope,params);
      }
      $scope.TopiclistPrevPageItems = function(){
        
-       var prevPage = $scope.currentPage - 1;
+       var prevPage = $scope.topicCurrentPage - 1;
        var params = {};
-          if ($scope.pages[prevPage]){
+          if ($scope.topicpages[prevPage]){
             params = {'about_kind':'Lead',
                       'about_item':$scope.lead.id,
                       'order': '-updated_at',
                       'limit': 5,
-                      'pageToken':$scope.pages[prevPage]
+                      'pageToken':$scope.topicpages[prevPage]
                      }
           }else{
             params = {'about_kind':'Lead',
@@ -276,9 +279,9 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','$location','Conf','
                       'order': '-updated_at',
                       'limit': 5}
           }
-          $scope.currentPage = $scope.currentPage - 1 ;
+          $scope.topicCurrentPage = $scope.topicCurrentPage - 1 ;
           Topic.list($scope,params);
-          console.log()
+          
      }
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');

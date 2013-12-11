@@ -7,7 +7,7 @@ import model
 
 class Opportunity(EndpointsModel):
 
-    _message_fields_schema = ('id','entityKey','folder', 'access','collaborators_list','collaborators_ids', 'name','stage','description','amount','account','account_name','account_id','contact','contact_name','contact_id')
+    _message_fields_schema = ('id','entityKey','folder', 'access','collaborators_list','collaborators_ids', 'name','stage','description','amount','account','account_name','account_id','contact','contact_name','contact_id','updated_at')
 
     # Sharing fields
     owner = ndb.StringProperty()
@@ -29,6 +29,7 @@ class Opportunity(EndpointsModel):
     closed_date = ndb.DateTimeProperty()
     reason_lost = ndb.DateTimeProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
+    updated_at = ndb.DateTimeProperty(auto_now=True)
     created_by = ndb.KeyProperty()
     last_modified_by = ndb.KeyProperty()
     address = ndb.StringProperty()

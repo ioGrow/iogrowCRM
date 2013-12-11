@@ -34,15 +34,16 @@ accountservices.factory('Case', function($http) {
                     $scope.blankState = true;
                   }
                  $scope.cases = resp.items;
-                 if ($scope.currentPage>1){
+                         
+                 if ($scope.caseCurrentPage>1){
                       $scope.casepagination.prev = true;
                    }else{
                        $scope.casepagination.prev = false;
                    }
                  if (resp.nextPageToken){
-                   var nextPage = $scope.currentPage + 1;
+                   var nextPage = $scope.caseCurrentPage + 1;
                    // Store the nextPageToken
-                   $scope.pages[nextPage] = resp.nextPageToken;
+                   $scope.casepages[nextPage] = resp.nextPageToken;
                    $scope.casepagination.next = true;
                    
                  }else{
