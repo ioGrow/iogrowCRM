@@ -167,6 +167,25 @@ class EndpointsHelper(EndpointsModel):
             raise endpoints.UnauthorizedException(cls.INVALID_GRANT)
         return created_folder
 
+@endpoints.api(name='iogrowlive', version='v1', description='i/oGrow Live APIs',allowed_client_ids=[CLIENT_ID,
+                                   endpoints.API_EXPLORER_CLIENT_ID],scopes=SCOPES)
+class LiveApi(remote.Service):
+
+  ID_RESOURCE = endpoints.ResourceContainer(
+            message_types.VoidMessage,
+            id=messages.StringField(1))
+  # Accounts APIs
+  # accounts.insert api
+  @Account.method(user_required=True,path='accounts', http_method='POST', name='accounts.insert')
+  def AccountInsert(self, my_model):
+      user_from_email = EndpointsHelper.require_iogrow_user()
+      created_folder = EndpointsHelper.insert_folder(user_from_email,my_model.name)
+      # Todo: Check permissions
+      my_model.owner = user_from_email.google_user_id
+      my_model.organization = user_from_email.organization
+      my_model.folder = created_folder['id']
+      my_model.put()
+      return my_model
     
 @endpoints.api(name='crmengine', version='v1', description='I/Ogrow CRM APIs',allowed_client_ids=[CLIENT_ID,
                                    endpoints.API_EXPLORER_CLIENT_ID],scopes=SCOPES)

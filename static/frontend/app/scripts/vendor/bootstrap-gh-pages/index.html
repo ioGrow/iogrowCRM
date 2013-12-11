@@ -1,0 +1,2395 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="bootstrapDemoApp" id="top">
+<head>
+    <meta charset="utf-8">
+    <title>Angular directives for Twitter's Bootstrap</title>
+    <meta name="description" content="AngularJS (Angular) native directives for Twitter Bootstrap. Small footprint (5kB gzipped!), no 3rd party JS dependencies (jQuery, bootstrap JS) required! Widgets: Accordion, Alert, Buttons, Carousel, Collapse, Datepicker, Dialog, Dropdown Toggle, Modal, Pagination, Popover, Progressbar, Rating, Tabs, Timepicker, Tooltip, Typeahead, ">
+    <meta name="google-site-verification" content="7lc5HyceLDqpV_6oNHteYFfxDJH7-S3DwnJKtNUKcRg" />
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js"></script>
+    <script src="ui-bootstrap-tpls-0.5.0.js"></script>
+    <script src="assets/select2.js"></script>
+    <script src="assets/ui-select2.js"></script>
+    <script src="assets/plunker.js"></script>
+    <script src="assets/app.js"></script>
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="assets/rainbow.css"/>
+    <link rel="stylesheet" href="assets/demo.css"/>
+    <link rel="stylesheet" href="assets/select2.css"/>
+
+    <link rel="author" href="https://github.com/angular-ui/bootstrap/graphs/contributors">
+</head>
+<body class="ng-cloak" ng-controller="MainCtrl">
+<header class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+    <div class="container">
+      <div class="dropdown pull-left">
+        <a class="brand dropdown-toggle" role="button" data-toggle="dropdown" href="#"> 
+          UI Bootstrap
+          <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+          <li><a href="https://github.com/angular-ui/"><strong>Related Projects:</strong></a></li>
+          <li class="divider"></li>
+          <li><a href="http://angular-ui.github.io/">AngularUI</a></li>
+          <li><a href="http://angular-ui.github.io/ng-grid/">Grid</a></li>
+          <li><a href="https://github.com/angular-ui/AngularJs.tmbundle">AngularJS.tmbundle</a></li>
+          <li><a href="https://github.com/angular-ui/ui-router">Router <span class="label label-success">New!</span></a></li>
+        </ul>
+      </div>
+      <div class="nav-collapse">
+        <ul class="nav">
+           <li>
+               <a href="#" role="button" class="dropdown-toggle">
+                   Directives <b class="caret"></b>
+               </a>
+               <ul class="dropdown-menu">
+                   
+                   <li><a href="#accordion">Accordion</a></li>
+                   
+                   <li><a href="#alert">Alert</a></li>
+                   
+                   <li><a href="#buttons">Buttons</a></li>
+                   
+                   <li><a href="#carousel">Carousel</a></li>
+                   
+                   <li><a href="#collapse">Collapse</a></li>
+                   
+                   <li><a href="#datepicker">Datepicker</a></li>
+                   
+                   <li><a href="#dialog">Dialog</a></li>
+                   
+                   <li><a href="#dropdownToggle">Dropdown Toggle</a></li>
+                   
+                   <li><a href="#modal">Modal</a></li>
+                   
+                   <li><a href="#pagination">Pagination</a></li>
+                   
+                   <li><a href="#popover">Popover</a></li>
+                   
+                   <li><a href="#progressbar">Progressbar</a></li>
+                   
+                   <li><a href="#rating">Rating</a></li>
+                   
+                   <li><a href="#tabs">Tabs</a></li>
+                   
+                   <li><a href="#timepicker">Timepicker</a></li>
+                   
+                   <li><a href="#tooltip">Tooltip</a></li>
+                   
+                   <li><a href="#typeahead">Typeahead</a></li>
+                   
+               </ul>
+           </li>
+           <li><a href="#getting_started">Getting started</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>
+<div style="margin: 32px;"></div>
+<div role="main">
+
+    <header class="hero-unit" id="overview">
+        <div class="container">
+            <h1>
+                UI Bootstrap
+            </h1>
+
+            <p>Bootstrap components written in pure <strong><a href="http://angularjs.org">AngularJS</a></strong> by the <strong><a
+                    href="http://angular-ui.github.io">AngularUI Team</a></strong></p>
+
+            <p class="btn-group">
+                <a class="btn" href="https://github.com/angular-ui/bootstrap"><i class="icon-github"></i> Code on Github</a>
+                <a class="btn btn-primary" href="https://github.com/angular-ui/bootstrap/tree/gh-pages">
+                    <i class="icon-download-alt icon-white"></i> Download <small>(0.5.0)</small>
+                </a>
+                <a class="btn" ng-click="showBuildModal()"><i class="icon-wrench"></i> Create a Build</a>
+            </p>
+        </div>
+        <div class="bs-docs-social">
+            <div class="container">
+                <ul class="bs-docs-social-buttons">
+                    <li>
+                        <iframe src="http://ghbtns.com/github-btn.html?user=angular-ui&repo=bootstrap&type=watch&count=true"
+                                allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+                    </li>
+                    <li>
+                        <iframe src="http://ghbtns.com/github-btn.html?user=angular-ui&repo=bootstrap&type=fork&count=true"
+                                allowtransparency="true" frameborder="0" scrolling="0" width="95" height="20"></iframe>
+                    </li>
+                    <li>
+                        <a href="https://twitter.com/share" class="twitter-share-button"
+                           data-hashtags="angularjs">Tweet</a>
+                        <script>!function (d, s, id) {
+                            var js, fjs = d.getElementsByTagName(s)[0];
+                            if (!d.getElementById(id)) {
+                                js = d.createElement(s);
+                                js.id = id;
+                                js.src = "//platform.twitter.com/widgets.js";
+                                fjs.parentNode.insertBefore(js, fjs);
+                            }
+                        }(document, "script", "twitter-wjs");</script>
+                    </li>
+                    <li>
+                        <!-- Place this tag where you want the +1 button to render. -->
+                        <div class="g-plusone" data-size="medium"></div>
+
+                        <!-- Place this tag after the last +1 button tag. -->
+                        <script type="text/javascript">
+                            (function () {
+                                var po = document.createElement('script');
+                                po.type = 'text/javascript';
+                                po.async = true;
+                                po.src = 'https://apis.google.com/js/plusone.js';
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(po, s);
+                            })();
+                        </script>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <section id="getting_started">
+            <div class="page-header">
+                <h1>Getting started</h1>
+            </div>
+            <div class="row">
+                <div class="span12">
+                    <h3>Dependencies</h3>
+                    <p>
+                        This repository contains a set of <strong>native AngularJS directives</strong> based on
+                        Twitter Bootstrap's markup and CSS. As a result no dependency on jQuery or Bootstrap's
+                        JavaScript is required. The <strong>only required dependencies</strong> are:
+                    </p>
+                    <ul>
+                        <li>AngularJS (minimal version 1.0.4 or 1.1.2)</li>
+                        <li>Bootstrap CSS</li>
+                    </ul>
+                    <h3>Files to download</h3>
+                    <p>
+                        Build files for all directives are distributed in several flavours: minified for production usage, un-minified
+                        for development, with or without templates. All the options are described and can be
+                        <a href="https://github.com/angular-ui/bootstrap/tree/gh-pages">downloaded from here</a>.
+                    </p>
+                    <p>Alternativelly, if you are only interested in a subset of directives, you can
+                        <a ng-click="showBuildModal()">create your own build</a>.
+                    </p>
+                    <p>Whichever method you choose the good news that the overall size of a download is very small:
+                       &lt;20kB for all directives (~5kB with gzip compression!)</p>
+                    <h3>Installation</h3>
+                    <p>As soon as you've got all the files downloaded and included in your page you just need to declare
+                       a dependency on the <code>ui.bootstrap</code> <a href="http://docs.angularjs.org/guide/module">module</a>:<br>
+                       <code>angular.module('myModule', ['ui.bootstrap']);</code>
+                    </p>
+                    <p>You can fork one of the plunkers from this page to see a working example of what is described here.</p>
+                </div>
+            </div>
+        </section>
+
+    
+      <section id="accordion">
+        <div class="page-header">
+          <h1>Accordion<small>
+              (<a target="_blank" href="https://github.com/angular-ui/bootstrap/tree/master/src/accordion">ui.bootstrap.accordion</a>)
+          </small></h1>
+        </div>
+        <div class="row">
+            <div class="span6">
+                <div ng-controller="AccordionDemoCtrl">
+  <label class="checkbox">
+    <input type="checkbox" ng-model="oneAtATime">
+    Open only one at a time
+  </label>
+
+  <accordion close-others="oneAtATime">
+    <accordion-group heading="Static Header">
+      This content is straight in the template.
+    </accordion-group>
+    <accordion-group heading="{{group.title}}" ng-repeat="group in groups">
+      {{group.content}}
+    </accordion-group>
+    <accordion-group heading="Dynamic Body Content">
+      <p>The body of the accordion group grows to fit the contents</p>
+        <button class="btn btn-small" ng-click="addItem()">Add Item</button>
+        <div ng-repeat="item in items">{{item}}</div>
+    </accordion-group>
+    <accordion-group>
+        <accordion-heading>
+            I can have markup, too! <i class="icon-check"></i>
+        </accordion-heading>
+        This is just some content to illustrate fancy headings.
+    </accordion-group>
+  </accordion>
+</div>
+            </div>
+            <div class="span6">
+                <p>The <strong>accordion directive</strong> builds on top of the collapse directive to provide a list of items, with collapsible bodies that are collapsed or expanded by clicking on the item's header.</p>
+
+<p>We can control whether expanding an item will cause the other items to close, using the <code>close-others</code> attribute on accordion.</p>
+
+<p>The body of each accordion group is transcluded in to the body of the collapsible element.</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="span12" ng-controller="PlunkerCtrl">
+                <div class="pull-right">
+                    <button class="btn btn-info" id="plunk-btn" ng-click="edit('1.0.5', '2.3.1', '0.5.0', 'accordion')"><i class="icon-edit icon-white"></i> Edit in plunker</button>
+                </div>
+                <tabset>
+                    <tab heading="Markup">
+                        <div plunker-content="markup">
+                            <pre ng-non-bindable><code data-language="html">&lt;div ng-controller=&quot;AccordionDemoCtrl&quot;&gt;
+  &lt;label class=&quot;checkbox&quot;&gt;
+    &lt;input type=&quot;checkbox&quot; ng-model=&quot;oneAtATime&quot;&gt;
+    Open only one at a time
+  &lt;/label&gt;
+
+  &lt;accordion close-others=&quot;oneAtATime&quot;&gt;
+    &lt;accordion-group heading=&quot;Static Header&quot;&gt;
+      This content is straight in the template.
+    &lt;/accordion-group&gt;
+    &lt;accordion-group heading=&quot;{{group.title}}&quot; ng-repeat=&quot;group in groups&quot;&gt;
+      {{group.content}}
+    &lt;/accordion-group&gt;
+    &lt;accordion-group heading=&quot;Dynamic Body Content&quot;&gt;
+      &lt;p&gt;The body of the accordion group grows to fit the contents&lt;/p&gt;
+        &lt;button class=&quot;btn btn-small&quot; ng-click=&quot;addItem()&quot;&gt;Add Item&lt;/button&gt;
+        &lt;div ng-repeat=&quot;item in items&quot;&gt;{{item}}&lt;/div&gt;
+    &lt;/accordion-group&gt;
+    &lt;accordion-group&gt;
+        &lt;accordion-heading&gt;
+            I can have markup, too! &lt;i class=&quot;icon-check&quot;&gt;&lt;/i&gt;
+        &lt;/accordion-heading&gt;
+        This is just some content to illustrate fancy headings.
+    &lt;/accordion-group&gt;
+  &lt;/accordion&gt;
+&lt;/div&gt;</code></pre>
+                        </div>
+                    </tab>
+                    <tab heading="JavaScript">
+                        <div plunker-content="javascript">
+                            <pre ng-non-bindable><code data-language="javascript">function AccordionDemoCtrl($scope) {
+  $scope.oneAtATime = true;
+
+  $scope.groups = [
+    {
+      title: &quot;Dynamic Group Header - 1&quot;,
+      content: &quot;Dynamic Group Body - 1&quot;
+    },
+    {
+      title: &quot;Dynamic Group Header - 2&quot;,
+      content: &quot;Dynamic Group Body - 2&quot;
+    }
+  ];
+
+  $scope.items = [&#x27;Item 1&#x27;, &#x27;Item 2&#x27;, &#x27;Item 3&#x27;];
+
+  $scope.addItem = function() {
+    var newItemNo = $scope.items.length + 1;
+    $scope.items.push(&#x27;Item &#x27; + newItemNo);
+  };
+}
+</code></pre>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+      </section>
+      <script>function AccordionDemoCtrl($scope) {
+  $scope.oneAtATime = true;
+
+  $scope.groups = [
+    {
+      title: "Dynamic Group Header - 1",
+      content: "Dynamic Group Body - 1"
+    },
+    {
+      title: "Dynamic Group Header - 2",
+      content: "Dynamic Group Body - 2"
+    }
+  ];
+
+  $scope.items = ['Item 1', 'Item 2', 'Item 3'];
+
+  $scope.addItem = function() {
+    var newItemNo = $scope.items.length + 1;
+    $scope.items.push('Item ' + newItemNo);
+  };
+}
+</script>
+    
+      <section id="alert">
+        <div class="page-header">
+          <h1>Alert<small>
+              (<a target="_blank" href="https://github.com/angular-ui/bootstrap/tree/master/src/alert">ui.bootstrap.alert</a>)
+          </small></h1>
+        </div>
+        <div class="row">
+            <div class="span6">
+                <div ng-controller="AlertDemoCtrl">
+  <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+  <button class='btn' ng-click="addAlert()">Add Alert</button>
+</div>
+
+            </div>
+            <div class="span6">
+                <p>Alert is an AngularJS-version of bootstrap's alert.</p>
+
+<p>This directive can be used to generate alerts from the dynamic model data (using the ng-repeat directive);</p>
+
+<p>The presence of the "close" attribute determines if a close button is displayed</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="span12" ng-controller="PlunkerCtrl">
+                <div class="pull-right">
+                    <button class="btn btn-info" id="plunk-btn" ng-click="edit('1.0.5', '2.3.1', '0.5.0', 'alert')"><i class="icon-edit icon-white"></i> Edit in plunker</button>
+                </div>
+                <tabset>
+                    <tab heading="Markup">
+                        <div plunker-content="markup">
+                            <pre ng-non-bindable><code data-language="html">&lt;div ng-controller=&quot;AlertDemoCtrl&quot;&gt;
+  &lt;alert ng-repeat=&quot;alert in alerts&quot; type=&quot;alert.type&quot; close=&quot;closeAlert($index)&quot;&gt;{{alert.msg}}&lt;/alert&gt;
+  &lt;button class=&#x27;btn&#x27; ng-click=&quot;addAlert()&quot;&gt;Add Alert&lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+                        </div>
+                    </tab>
+                    <tab heading="JavaScript">
+                        <div plunker-content="javascript">
+                            <pre ng-non-bindable><code data-language="javascript">function AlertDemoCtrl($scope) {
+  $scope.alerts = [
+    { type: &#x27;error&#x27;, msg: &#x27;Oh snap! Change a few things up and try submitting again.&#x27; }, 
+    { type: &#x27;success&#x27;, msg: &#x27;Well done! You successfully read this important alert message.&#x27; }
+  ];
+
+  $scope.addAlert = function() {
+    $scope.alerts.push({msg: &quot;Another alert!&quot;});
+  };
+
+  $scope.closeAlert = function(index) {
+    $scope.alerts.splice(index, 1);
+  };
+
+}</code></pre>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+      </section>
+      <script>function AlertDemoCtrl($scope) {
+  $scope.alerts = [
+    { type: 'error', msg: 'Oh snap! Change a few things up and try submitting again.' }, 
+    { type: 'success', msg: 'Well done! You successfully read this important alert message.' }
+  ];
+
+  $scope.addAlert = function() {
+    $scope.alerts.push({msg: "Another alert!"});
+  };
+
+  $scope.closeAlert = function(index) {
+    $scope.alerts.splice(index, 1);
+  };
+
+}</script>
+    
+      <section id="buttons">
+        <div class="page-header">
+          <h1>Buttons<small>
+              (<a target="_blank" href="https://github.com/angular-ui/bootstrap/tree/master/src/buttons">ui.bootstrap.buttons</a>)
+          </small></h1>
+        </div>
+        <div class="row">
+            <div class="span6">
+                <div ng-controller="ButtonsCtrl">
+    <h4>Single toggle</h4>
+    <pre>{{singleModel}}</pre>
+    <button type="button" class="btn btn-primary" ng-model="singleModel" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+        Single Toggle
+    </button>
+    <h4>Checkbox</h4>
+    <pre>{{checkModel}}</pre>
+    <div class="btn-group">
+        <button type="button" class="btn btn-primary" ng-model="checkModel.left" btn-checkbox>Left</button>
+        <button type="button" class="btn btn-primary" ng-model="checkModel.middle" btn-checkbox>Middle</button>
+        <button type="button" class="btn btn-primary" ng-model="checkModel.right" btn-checkbox>Right</button>
+    </div>
+    <h4>Radio</h4>
+    <pre>{{radioModel}}</pre>
+    <div class="btn-group">
+        <button type="button" class="btn btn-primary" ng-model="radioModel" btn-radio="'Left'">Left</button>
+        <button type="button" class="btn btn-primary" ng-model="radioModel" btn-radio="'Middle'">Middle</button>
+        <button type="button" class="btn btn-primary" ng-model="radioModel" btn-radio="'Right'">Right</button>
+    </div>
+</div>
+            </div>
+            <div class="span6">
+                <p>There are 2 directives that can make a group of buttons to behave like a set of checkboxes or radio buttons.</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="span12" ng-controller="PlunkerCtrl">
+                <div class="pull-right">
+                    <button class="btn btn-info" id="plunk-btn" ng-click="edit('1.0.5', '2.3.1', '0.5.0', 'buttons')"><i class="icon-edit icon-white"></i> Edit in plunker</button>
+                </div>
+                <tabset>
+                    <tab heading="Markup">
+                        <div plunker-content="markup">
+                            <pre ng-non-bindable><code data-language="html">&lt;div ng-controller=&quot;ButtonsCtrl&quot;&gt;
+    &lt;h4&gt;Single toggle&lt;/h4&gt;
+    &lt;pre&gt;{{singleModel}}&lt;/pre&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn btn-primary&quot; ng-model=&quot;singleModel&quot; btn-checkbox btn-checkbox-true=&quot;1&quot; btn-checkbox-false=&quot;0&quot;&gt;
+        Single Toggle
+    &lt;/button&gt;
+    &lt;h4&gt;Checkbox&lt;/h4&gt;
+    &lt;pre&gt;{{checkModel}}&lt;/pre&gt;
+    &lt;div class=&quot;btn-group&quot;&gt;
+        &lt;button type=&quot;button&quot; class=&quot;btn btn-primary&quot; ng-model=&quot;checkModel.left&quot; btn-checkbox&gt;Left&lt;/button&gt;
+        &lt;button type=&quot;button&quot; class=&quot;btn btn-primary&quot; ng-model=&quot;checkModel.middle&quot; btn-checkbox&gt;Middle&lt;/button&gt;
+        &lt;button type=&quot;button&quot; class=&quot;btn btn-primary&quot; ng-model=&quot;checkModel.right&quot; btn-checkbox&gt;Right&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;h4&gt;Radio&lt;/h4&gt;
+    &lt;pre&gt;{{radioModel}}&lt;/pre&gt;
+    &lt;div class=&quot;btn-group&quot;&gt;
+        &lt;button type=&quot;button&quot; class=&quot;btn btn-primary&quot; ng-model=&quot;radioModel&quot; btn-radio=&quot;&#x27;Left&#x27;&quot;&gt;Left&lt;/button&gt;
+        &lt;button type=&quot;button&quot; class=&quot;btn btn-primary&quot; ng-model=&quot;radioModel&quot; btn-radio=&quot;&#x27;Middle&#x27;&quot;&gt;Middle&lt;/button&gt;
+        &lt;button type=&quot;button&quot; class=&quot;btn btn-primary&quot; ng-model=&quot;radioModel&quot; btn-radio=&quot;&#x27;Right&#x27;&quot;&gt;Right&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                        </div>
+                    </tab>
+                    <tab heading="JavaScript">
+                        <div plunker-content="javascript">
+                            <pre ng-non-bindable><code data-language="javascript">var ButtonsCtrl = function ($scope) {
+
+  $scope.singleModel = 1;
+
+  $scope.radioModel = &#x27;Middle&#x27;;
+
+  $scope.checkModel = {
+    left: false,
+    middle: true,
+    right: false
+  };
+};</code></pre>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+      </section>
+      <script>var ButtonsCtrl = function ($scope) {
+
+  $scope.singleModel = 1;
+
+  $scope.radioModel = 'Middle';
+
+  $scope.checkModel = {
+    left: false,
+    middle: true,
+    right: false
+  };
+};</script>
+    
+      <section id="carousel">
+        <div class="page-header">
+          <h1>Carousel<small>
+              (<a target="_blank" href="https://github.com/angular-ui/bootstrap/tree/master/src/carousel">ui.bootstrap.carousel</a>)
+          </small></h1>
+        </div>
+        <div class="row">
+            <div class="span6">
+                <div ng-controller="CarouselDemoCtrl">
+  <carousel interval="myInterval">
+    <slide ng-repeat="slide in slides" active="slide.active">
+      <img ng-src="{{slide.image}}" style="margin:auto;">
+      <div class="carousel-caption">
+        <h4>Slide {{$index}}</h4>
+        <p>{{slide.text}}</p>
+      </div>
+    </slide>
+  </carousel>
+  <div class="row-fluid">
+    <div class="span6">
+      <ul>
+        <li ng-repeat="slide in slides">
+          <button class="btn btn-mini" ng-class="{'btn-info': !slide.active, 'btn-success': slide.active}" ng-disabled="slide.active" ng-click="slide.active = true">select</button>
+          {{$index}}: {{slide.text}}
+        </li>
+      </ul>
+      <a class="btn" ng-click="addSlide()">Add Slide</a>
+    </div>
+    <div class="span6">
+      Interval, in milliseconds: <input type="number" ng-model="myInterval">
+      <br />Enter a negative number to stop the interval.
+    </div>
+  </div>
+</div>
+
+            </div>
+            <div class="span6">
+                <p>Carousel creates a carousel similar to bootstrap's image carousel.</p>
+
+<p>Use a <code>&lt;carousel&gt;</code> element with <code>&lt;slide&gt;</code> elements inside it.  It will automatically cycle through the slides at a given rate, and a current-index variable will be kept in sync with the currently visible slide.</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="span12" ng-controller="PlunkerCtrl">
+                <div class="pull-right">
+                    <button class="btn btn-info" id="plunk-btn" ng-click="edit('1.0.5', '2.3.1', '0.5.0', 'carousel')"><i class="icon-edit icon-white"></i> Edit in plunker</button>
+                </div>
+                <tabset>
+                    <tab heading="Markup">
+                        <div plunker-content="markup">
+                            <pre ng-non-bindable><code data-language="html">&lt;div ng-controller=&quot;CarouselDemoCtrl&quot;&gt;
+  &lt;carousel interval=&quot;myInterval&quot;&gt;
+    &lt;slide ng-repeat=&quot;slide in slides&quot; active=&quot;slide.active&quot;&gt;
+      &lt;img ng-src=&quot;{{slide.image}}&quot; style=&quot;margin:auto;&quot;&gt;
+      &lt;div class=&quot;carousel-caption&quot;&gt;
+        &lt;h4&gt;Slide {{$index}}&lt;/h4&gt;
+        &lt;p&gt;{{slide.text}}&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/slide&gt;
+  &lt;/carousel&gt;
+  &lt;div class=&quot;row-fluid&quot;&gt;
+    &lt;div class=&quot;span6&quot;&gt;
+      &lt;ul&gt;
+        &lt;li ng-repeat=&quot;slide in slides&quot;&gt;
+          &lt;button class=&quot;btn btn-mini&quot; ng-class=&quot;{&#x27;btn-info&#x27;: !slide.active, &#x27;btn-success&#x27;: slide.active}&quot; ng-disabled=&quot;slide.active&quot; ng-click=&quot;slide.active = true&quot;&gt;select&lt;/button&gt;
+          {{$index}}: {{slide.text}}
+        &lt;/li&gt;
+      &lt;/ul&gt;
+      &lt;a class=&quot;btn&quot; ng-click=&quot;addSlide()&quot;&gt;Add Slide&lt;/a&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;span6&quot;&gt;
+      Interval, in milliseconds: &lt;input type=&quot;number&quot; ng-model=&quot;myInterval&quot;&gt;
+      &lt;br /&gt;Enter a negative number to stop the interval.
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+                        </div>
+                    </tab>
+                    <tab heading="JavaScript">
+                        <div plunker-content="javascript">
+                            <pre ng-non-bindable><code data-language="javascript">function CarouselDemoCtrl($scope) {
+  $scope.myInterval = 5000;
+  var slides = $scope.slides = [];
+  $scope.addSlide = function() {
+    var newWidth = 200 + ((slides.length + (25 * slides.length)) % 150);
+    slides.push({
+      image: &#x27;http://placekitten.com/&#x27; + newWidth + &#x27;/200&#x27;,
+      text: [&#x27;More&#x27;,&#x27;Extra&#x27;,&#x27;Lots of&#x27;,&#x27;Surplus&#x27;][slides.length % 4] + &#x27; &#x27; +
+        [&#x27;Cats&#x27;, &#x27;Kittys&#x27;, &#x27;Felines&#x27;, &#x27;Cutes&#x27;][slides.length % 4]
+    });
+  };
+  for (var i=0; i&lt;4; i++) {
+    $scope.addSlide();
+  }
+}
+</code></pre>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+      </section>
+      <script>function CarouselDemoCtrl($scope) {
+  $scope.myInterval = 5000;
+  var slides = $scope.slides = [];
+  $scope.addSlide = function() {
+    var newWidth = 200 + ((slides.length + (25 * slides.length)) % 150);
+    slides.push({
+      image: 'http://placekitten.com/' + newWidth + '/200',
+      text: ['More','Extra','Lots of','Surplus'][slides.length % 4] + ' ' +
+        ['Cats', 'Kittys', 'Felines', 'Cutes'][slides.length % 4]
+    });
+  };
+  for (var i=0; i<4; i++) {
+    $scope.addSlide();
+  }
+}
+</script>
+    
+      <section id="collapse">
+        <div class="page-header">
+          <h1>Collapse<small>
+              (<a target="_blank" href="https://github.com/angular-ui/bootstrap/tree/master/src/collapse">ui.bootstrap.collapse</a>)
+          </small></h1>
+        </div>
+        <div class="row">
+            <div class="span6">
+                <div ng-controller="CollapseDemoCtrl">
+	<button class="btn" ng-click="isCollapsed = !isCollapsed">Toggle collapse</button>
+	<hr>
+	<div collapse="isCollapsed">
+		<div class="well well-large">Some content</div> 
+	</div>
+</div>
+            </div>
+            <div class="span6">
+                <p>AngularJS version of twitter's collapse plugin. 
+Provides a simple way to hide and show an element with a css transition</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="span12" ng-controller="PlunkerCtrl">
+                <div class="pull-right">
+                    <button class="btn btn-info" id="plunk-btn" ng-click="edit('1.0.5', '2.3.1', '0.5.0', 'collapse')"><i class="icon-edit icon-white"></i> Edit in plunker</button>
+                </div>
+                <tabset>
+                    <tab heading="Markup">
+                        <div plunker-content="markup">
+                            <pre ng-non-bindable><code data-language="html">&lt;div ng-controller=&quot;CollapseDemoCtrl&quot;&gt;
+	&lt;button class=&quot;btn&quot; ng-click=&quot;isCollapsed = !isCollapsed&quot;&gt;Toggle collapse&lt;/button&gt;
+	&lt;hr&gt;
+	&lt;div collapse=&quot;isCollapsed&quot;&gt;
+		&lt;div class=&quot;well well-large&quot;&gt;Some content&lt;/div&gt; 
+	&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                        </div>
+                    </tab>
+                    <tab heading="JavaScript">
+                        <div plunker-content="javascript">
+                            <pre ng-non-bindable><code data-language="javascript">function CollapseDemoCtrl($scope) {
+  $scope.isCollapsed = false;
+}
+</code></pre>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+      </section>
+      <script>function CollapseDemoCtrl($scope) {
+  $scope.isCollapsed = false;
+}
+</script>
+    
+      <section id="datepicker">
+        <div class="page-header">
+          <h1>Datepicker<small>
+              (<a target="_blank" href="https://github.com/angular-ui/bootstrap/tree/master/src/datepicker">ui.bootstrap.datepicker</a>)
+          </small></h1>
+        </div>
+        <div class="row">
+            <div class="span6">
+                <div ng-controller="DatepickerDemoCtrl">
+    <pre>Selected date is: <em>{{dt | date:'fullDate' }}</em></pre>
+
+    <div class="well well-small pull-left" ng-model="dt">
+        <datepicker min="minDate" show-weeks="showWeeks"></datepciker>
+    </div>
+
+    <div class="form-horizontal">
+        <input type="text" datepicker-popup="dd-MMMM-yyyy" ng-model="dt" open="opened" min="minDate" max="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" />
+        <button class="btn" ng-click="open()"><i class="icon-calendar"></i></button>
+    </div>
+
+    <hr />
+    <button class="btn btn-small btn-inverse" ng-click="today()">Today</button>
+    <button class="btn btn-small btn-inverse" ng-click="dt = '2009-08-24'">2009-08-24</button>
+    <button class="btn btn-small btn-success" ng-click="toggleWeeks()" tooltip="For inline datepicker">Toggle Weeks</button>
+    <button class="btn btn-small btn-danger" ng-click="clear()">Clear</button>
+    <button class="btn btn-small" ng-click="toggleMin()" tooltip="After today restriction">Min date</button>
+</div>
+            </div>
+            <div class="span6">
+                <p>A clean, flexible, and fully customizable date picker.</p>
+
+<p>User can navigate through months and years.
+The datepicker shows dates that come from other than the main month being displayed. These other dates are also selectable.</p>
+
+<p>Everything is formatted using the <a href="http://docs.angularjs.org/api/ng.filter:date">date filter</a> and thus is also localized.</p>
+
+<h3>Settings</h3>
+
+<p>All settings can be provided as attributes in the <code>&lt;datepicker&gt;</code> or globally configured through the <code>datepickerConfig</code>.</p>
+
+<ul>
+<li><p><code>ng-model</code> <i class="icon-eye-open"></i>
+ :
+ The date object.</p></li>
+<li><p><code>show-weeks</code> <i class="icon-eye-open"></i>
+ <em>(Defaults: true)</em> :
+ Whether to display week numbers.</p></li>
+<li><p><code>starting-day</code>
+ <em>(Defaults: 0)</em> :
+ Starting day of the week from 0-6 (0=Sunday, ..., 6=Saturday).</p></li>
+<li><p><code>min</code> <i class="icon-eye-open"></i>
+ <em>(Default: null)</em> :
+ Defines the minimum available date.</p></li>
+<li><p><code>max</code> <i class="icon-eye-open"></i>
+ <em>(Default: null)</em> :
+ Defines the maximum available date.</p></li>
+<li><p><code>date-disabled (date, mode)</code>
+ <em>(Default: null)</em> :
+ An optional expression to disable visible options based on passing date and current mode <em>(day|month|year)</em>.</p></li>
+<li><p><code>day-format</code>
+ <em>(Default: 'dd')</em> :
+ Format of day in month.</p></li>
+<li><p><code>month-format</code>
+ <em>(Default: 'MMMM')</em> :
+ Format of month in year.</p></li>
+<li><p><code>year-format</code>
+ <em>(Default: 'yyyy')</em> :
+ Format of year in year range.</p></li>
+<li><p><code>year-range</code>
+ <em>(Default: 20)</em> :
+ Number of years displayed in year selection.</p></li>
+<li><p><code>day-header-format</code>
+ <em>(Default: 'EEE')</em> :
+ Format of day in week header.</p></li>
+<li><p><code>day-title-format</code>
+ <em>(Default: 'MMMM yyyy')</em> :
+ Format of title when selecting day.</p></li>
+<li><p><code>month-title-format</code>
+ <em>(Default: 'yyyy')</em> :
+ Format of title when selecting month.</p></li>
+</ul>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="span12" ng-controller="PlunkerCtrl">
+                <div class="pull-right">
+                    <button class="btn btn-info" id="plunk-btn" ng-click="edit('1.0.5', '2.3.1', '0.5.0', 'datepicker')"><i class="icon-edit icon-white"></i> Edit in plunker</button>
+                </div>
+                <tabset>
+                    <tab heading="Markup">
+                        <div plunker-content="markup">
+                            <pre ng-non-bindable><code data-language="html">&lt;div ng-controller=&quot;DatepickerDemoCtrl&quot;&gt;
+    &lt;pre&gt;Selected date is: &lt;em&gt;{{dt | date:&#x27;fullDate&#x27; }}&lt;/em&gt;&lt;/pre&gt;
+
+    &lt;div class=&quot;well well-small pull-left&quot; ng-model=&quot;dt&quot;&gt;
+        &lt;datepicker min=&quot;minDate&quot; show-weeks=&quot;showWeeks&quot;&gt;&lt;/datepciker&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;form-horizontal&quot;&gt;
+        &lt;input type=&quot;text&quot; datepicker-popup=&quot;dd-MMMM-yyyy&quot; ng-model=&quot;dt&quot; open=&quot;opened&quot; min=&quot;minDate&quot; max=&quot;&#x27;2015-06-22&#x27;&quot; datepicker-options=&quot;dateOptions&quot; date-disabled=&quot;disabled(date, mode)&quot; ng-required=&quot;true&quot; /&gt;
+        &lt;button class=&quot;btn&quot; ng-click=&quot;open()&quot;&gt;&lt;i class=&quot;icon-calendar&quot;&gt;&lt;/i&gt;&lt;/button&gt;
+    &lt;/div&gt;
+
+    &lt;hr /&gt;
+    &lt;button class=&quot;btn btn-small btn-inverse&quot; ng-click=&quot;today()&quot;&gt;Today&lt;/button&gt;
+    &lt;button class=&quot;btn btn-small btn-inverse&quot; ng-click=&quot;dt = &#x27;2009-08-24&#x27;&quot;&gt;2009-08-24&lt;/button&gt;
+    &lt;button class=&quot;btn btn-small btn-success&quot; ng-click=&quot;toggleWeeks()&quot; tooltip=&quot;For inline datepicker&quot;&gt;Toggle Weeks&lt;/button&gt;
+    &lt;button class=&quot;btn btn-small btn-danger&quot; ng-click=&quot;clear()&quot;&gt;Clear&lt;/button&gt;
+    &lt;button class=&quot;btn btn-small&quot; ng-click=&quot;toggleMin()&quot; tooltip=&quot;After today restriction&quot;&gt;Min date&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+                        </div>
+                    </tab>
+                    <tab heading="JavaScript">
+                        <div plunker-content="javascript">
+                            <pre ng-non-bindable><code data-language="javascript">var DatepickerDemoCtrl = function ($scope, $timeout) {
+  $scope.today = function() {
+    $scope.dt = new Date();
+  };
+  $scope.today();
+
+  $scope.showWeeks = true;
+  $scope.toggleWeeks = function () {
+    $scope.showWeeks = ! $scope.showWeeks;
+  };
+
+  $scope.clear = function () {
+    $scope.dt = null;
+  };
+
+  // Disable weekend selection
+  $scope.disabled = function(date, mode) {
+    return ( mode === &#x27;day&#x27; &amp;&amp; ( date.getDay() === 0 || date.getDay() === 6 ) );
+  };
+
+  $scope.toggleMin = function() {
+    $scope.minDate = ( $scope.minDate ) ? null : new Date();
+  };
+  $scope.toggleMin();
+
+  $scope.open = function() {
+    $timeout(function() {
+      $scope.opened = true;
+    });
+  };
+
+  $scope.dateOptions = {
+    &#x27;year-format&#x27;: &quot;&#x27;yy&#x27;&quot;,
+    &#x27;starting-day&#x27;: 1
+  };
+};
+</code></pre>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+      </section>
+      <script>var DatepickerDemoCtrl = function ($scope, $timeout) {
+  $scope.today = function() {
+    $scope.dt = new Date();
+  };
+  $scope.today();
+
+  $scope.showWeeks = true;
+  $scope.toggleWeeks = function () {
+    $scope.showWeeks = ! $scope.showWeeks;
+  };
+
+  $scope.clear = function () {
+    $scope.dt = null;
+  };
+
+  // Disable weekend selection
+  $scope.disabled = function(date, mode) {
+    return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+  };
+
+  $scope.toggleMin = function() {
+    $scope.minDate = ( $scope.minDate ) ? null : new Date();
+  };
+  $scope.toggleMin();
+
+  $scope.open = function() {
+    $timeout(function() {
+      $scope.opened = true;
+    });
+  };
+
+  $scope.dateOptions = {
+    'year-format': "'yy'",
+    'starting-day': 1
+  };
+};
+</script>
+    
+      <section id="dialog">
+        <div class="page-header">
+          <h1>Dialog<small>
+              (<a target="_blank" href="https://github.com/angular-ui/bootstrap/tree/master/src/dialog">ui.bootstrap.dialog</a>)
+          </small></h1>
+        </div>
+        <div class="row">
+            <div class="span6">
+                <div ng-controller="DialogDemoCtrl">
+    <div class="row-fluid">
+        <div class="span6">
+            <label class="checkbox"><input type=checkbox ng-model="opts.backdrop">Show backdrop</label>
+            <label class="checkbox"><input type=checkbox ng-model="opts.dialogFade">Fade modal dialog </label>
+            <label class="checkbox"><input type=checkbox ng-disabled="!opts.backdrop" ng-model="opts.backdropFade">Fade Backdrop</label>
+            <hr>
+            <label class="checkbox"><input type=checkbox ng-model="opts.keyboard">Close on Escape</label>
+            <label class="checkbox"><input type=checkbox ng-disabled="!opts.backdrop" ng-model="opts.backdropClick">Close on backdrop click</label>
+        </div>
+        <div class="span6">
+            <p>Change options at will and press the open dialog button below!</p>
+            <p><button class="btn btn-primary" ng-click="openDialog()">Open Dialog</button></p>
+
+            <p>Alternatively open a simple message box:</p>
+            <p><button class="btn btn-primary" ng-click="openMessageBox()">Open Message Box</button></p>
+        </div>
+    </div>
+</div>
+
+            </div>
+            <div class="span6">
+                <p>The <code>$dialog</code> service allows you to open dialogs and message boxes from within your controllers. Very useful in case loading dialog content in the DOM up-front is tedious or not desired.</p>
+
+<p>Creating custom dialogs is straightforward: create a partial view, its controller and reference them when using the service.
+Generic message boxes (title, message and buttons) are also provided for your convenience.</p>
+
+<p>For more information, see the <a href="https://github.com/angular-ui/bootstrap/blob/master/src/dialog/README.md">dialog readme</a> on github.</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="span12" ng-controller="PlunkerCtrl">
+                <div class="pull-right">
+                    <button class="btn btn-info" id="plunk-btn" ng-click="edit('1.0.5', '2.3.1', '0.5.0', 'dialog')"><i class="icon-edit icon-white"></i> Edit in plunker</button>
+                </div>
+                <tabset>
+                    <tab heading="Markup">
+                        <div plunker-content="markup">
+                            <pre ng-non-bindable><code data-language="html">&lt;div ng-controller=&quot;DialogDemoCtrl&quot;&gt;
+    &lt;div class=&quot;row-fluid&quot;&gt;
+        &lt;div class=&quot;span6&quot;&gt;
+            &lt;label class=&quot;checkbox&quot;&gt;&lt;input type=checkbox ng-model=&quot;opts.backdrop&quot;&gt;Show backdrop&lt;/label&gt;
+            &lt;label class=&quot;checkbox&quot;&gt;&lt;input type=checkbox ng-model=&quot;opts.dialogFade&quot;&gt;Fade modal dialog &lt;/label&gt;
+            &lt;label class=&quot;checkbox&quot;&gt;&lt;input type=checkbox ng-disabled=&quot;!opts.backdrop&quot; ng-model=&quot;opts.backdropFade&quot;&gt;Fade Backdrop&lt;/label&gt;
+            &lt;hr&gt;
+            &lt;label class=&quot;checkbox&quot;&gt;&lt;input type=checkbox ng-model=&quot;opts.keyboard&quot;&gt;Close on Escape&lt;/label&gt;
+            &lt;label class=&quot;checkbox&quot;&gt;&lt;input type=checkbox ng-disabled=&quot;!opts.backdrop&quot; ng-model=&quot;opts.backdropClick&quot;&gt;Close on backdrop click&lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;span6&quot;&gt;
+            &lt;p&gt;Change options at will and press the open dialog button below!&lt;/p&gt;
+            &lt;p&gt;&lt;button class=&quot;btn btn-primary&quot; ng-click=&quot;openDialog()&quot;&gt;Open Dialog&lt;/button&gt;&lt;/p&gt;
+
+            &lt;p&gt;Alternatively open a simple message box:&lt;/p&gt;
+            &lt;p&gt;&lt;button class=&quot;btn btn-primary&quot; ng-click=&quot;openMessageBox()&quot;&gt;Open Message Box&lt;/button&gt;&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+                        </div>
+                    </tab>
+                    <tab heading="JavaScript">
+                        <div plunker-content="javascript">
+                            <pre ng-non-bindable><code data-language="javascript">function DialogDemoCtrl($scope, $dialog){
+
+  // Inlined template for demo
+  var t = &#x27;&lt;div class=&quot;modal-header&quot;&gt;&#x27;+
+          &#x27;&lt;h3&gt;This is the title&lt;/h3&gt;&#x27;+
+          &#x27;&lt;/div&gt;&#x27;+
+          &#x27;&lt;div class=&quot;modal-body&quot;&gt;&#x27;+
+          &#x27;&lt;p&gt;Enter a value to pass to &lt;code&gt;close&lt;/code&gt; as the result: &lt;input ng-model=&quot;result&quot; /&gt;&lt;/p&gt;&#x27;+
+          &#x27;&lt;/div&gt;&#x27;+
+          &#x27;&lt;div class=&quot;modal-footer&quot;&gt;&#x27;+
+          &#x27;&lt;button ng-click=&quot;close(result)&quot; class=&quot;btn btn-primary&quot; &gt;Close&lt;/button&gt;&#x27;+
+          &#x27;&lt;/div&gt;&#x27;;
+
+  $scope.opts = {
+    backdrop: true,
+    keyboard: true,
+    backdropClick: true,
+    template:  t, // OR: templateUrl: &#x27;path/to/view.html&#x27;,
+    controller: &#x27;TestDialogController&#x27;
+  };
+
+  $scope.openDialog = function(){
+    var d = $dialog.dialog($scope.opts);
+    d.open().then(function(result){
+      if(result)
+      {
+        alert(&#x27;dialog closed with result: &#x27; + result);
+      }
+    });
+  };
+
+  $scope.openMessageBox = function(){
+    var title = &#x27;This is a message box&#x27;;
+    var msg = &#x27;This is the content of the message box&#x27;;
+    var btns = [{result:&#x27;cancel&#x27;, label: &#x27;Cancel&#x27;}, {result:&#x27;ok&#x27;, label: &#x27;OK&#x27;, cssClass: &#x27;btn-primary&#x27;}];
+
+    $dialog.messageBox(title, msg, btns)
+      .open()
+      .then(function(result){
+        alert(&#x27;dialog closed with result: &#x27; + result);
+    });
+  };
+}
+
+// the dialog is injected in the specified controller
+function TestDialogController($scope, dialog){
+  $scope.close = function(result){
+    dialog.close(result);
+  };
+}
+</code></pre>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+      </section>
+      <script>function DialogDemoCtrl($scope, $dialog){
+
+  // Inlined template for demo
+  var t = '<div class="modal-header">'+
+          '<h3>This is the title</h3>'+
+          '</div>'+
+          '<div class="modal-body">'+
+          '<p>Enter a value to pass to <code>close</code> as the result: <input ng-model="result" /></p>'+
+          '</div>'+
+          '<div class="modal-footer">'+
+          '<button ng-click="close(result)" class="btn btn-primary" >Close</button>'+
+          '</div>';
+
+  $scope.opts = {
+    backdrop: true,
+    keyboard: true,
+    backdropClick: true,
+    template:  t, // OR: templateUrl: 'path/to/view.html',
+    controller: 'TestDialogController'
+  };
+
+  $scope.openDialog = function(){
+    var d = $dialog.dialog($scope.opts);
+    d.open().then(function(result){
+      if(result)
+      {
+        alert('dialog closed with result: ' + result);
+      }
+    });
+  };
+
+  $scope.openMessageBox = function(){
+    var title = 'This is a message box';
+    var msg = 'This is the content of the message box';
+    var btns = [{result:'cancel', label: 'Cancel'}, {result:'ok', label: 'OK', cssClass: 'btn-primary'}];
+
+    $dialog.messageBox(title, msg, btns)
+      .open()
+      .then(function(result){
+        alert('dialog closed with result: ' + result);
+    });
+  };
+}
+
+// the dialog is injected in the specified controller
+function TestDialogController($scope, dialog){
+  $scope.close = function(result){
+    dialog.close(result);
+  };
+}
+</script>
+    
+      <section id="dropdownToggle">
+        <div class="page-header">
+          <h1>Dropdown Toggle<small>
+              (<a target="_blank" href="https://github.com/angular-ui/bootstrap/tree/master/src/dropdownToggle">ui.bootstrap.dropdownToggle</a>)
+          </small></h1>
+        </div>
+        <div class="row">
+            <div class="span6">
+                <li class="dropdown" ng-controller="DropdownCtrl">
+  <a class="dropdown-toggle">
+    Click me for a dropdown, yo!
+  </a>
+  <ul class="dropdown-menu">
+    <li ng-repeat="choice in items">
+      <a>{{choice}}</a>
+    </li>
+  </ul>
+</li>
+
+            </div>
+            <div class="span6">
+                <p>DropdownToggle is a simple directive which will toggle a dropdown link on click.  Simply put it on the <code>&lt;a&gt;</code> tag of the toggler-element, and it will find the nearest dropdown menu and toggle it when the <code>&lt;a dropdown-toggle&gt;</code> is clicked.</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="span12" ng-controller="PlunkerCtrl">
+                <div class="pull-right">
+                    <button class="btn btn-info" id="plunk-btn" ng-click="edit('1.0.5', '2.3.1', '0.5.0', 'dropdownToggle')"><i class="icon-edit icon-white"></i> Edit in plunker</button>
+                </div>
+                <tabset>
+                    <tab heading="Markup">
+                        <div plunker-content="markup">
+                            <pre ng-non-bindable><code data-language="html">&lt;li class=&quot;dropdown&quot; ng-controller=&quot;DropdownCtrl&quot;&gt;
+  &lt;a class=&quot;dropdown-toggle&quot;&gt;
+    Click me for a dropdown, yo!
+  &lt;/a&gt;
+  &lt;ul class=&quot;dropdown-menu&quot;&gt;
+    &lt;li ng-repeat=&quot;choice in items&quot;&gt;
+      &lt;a&gt;{{choice}}&lt;/a&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/li&gt;
+</code></pre>
+                        </div>
+                    </tab>
+                    <tab heading="JavaScript">
+                        <div plunker-content="javascript">
+                            <pre ng-non-bindable><code data-language="javascript">function DropdownCtrl($scope) {
+  $scope.items = [
+    &quot;The first choice!&quot;,
+    &quot;And another choice for you.&quot;,
+    &quot;but wait! A third!&quot;
+  ];
+}
+</code></pre>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+      </section>
+      <script>function DropdownCtrl($scope) {
+  $scope.items = [
+    "The first choice!",
+    "And another choice for you.",
+    "but wait! A third!"
+  ];
+}
+</script>
+    
+      <section id="modal">
+        <div class="page-header">
+          <h1>Modal<small>
+              (<a target="_blank" href="https://github.com/angular-ui/bootstrap/tree/master/src/modal">ui.bootstrap.modal</a>)
+          </small></h1>
+        </div>
+        <div class="row">
+            <div class="span6">
+                <div ng-controller="ModalDemoCtrl">
+    <button class="btn" ng-click="open()">Open me!</button>
+    <div modal="shouldBeOpen" close="close()" options="opts">
+        <div class="modal-header">
+            <h3>I'm a modal!</h3>
+        </div>
+        <div class="modal-body">
+            <ul>
+                <li ng-repeat="item in items">{{item}}</li>
+            </ul>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-warning cancel" ng-click="close()">Cancel</button>
+        </div>
+    </div>
+</div>
+            </div>
+            <div class="span6">
+                <p><code>modal</code> is a directive that reuses <code>$dialog</code> service to provide simple creation of modals that are already in your DOM without the hassle of creating partial views and controllers.</p>
+
+<p>The directive shares <code>$dialog</code> global options.</p>
+
+<p>For more information, see the <a href="https://github.com/angular-ui/bootstrap/blob/master/src/dialog/README.md">dialog readme</a> on github.</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="span12" ng-controller="PlunkerCtrl">
+                <div class="pull-right">
+                    <button class="btn btn-info" id="plunk-btn" ng-click="edit('1.0.5', '2.3.1', '0.5.0', 'modal')"><i class="icon-edit icon-white"></i> Edit in plunker</button>
+                </div>
+                <tabset>
+                    <tab heading="Markup">
+                        <div plunker-content="markup">
+                            <pre ng-non-bindable><code data-language="html">&lt;div ng-controller=&quot;ModalDemoCtrl&quot;&gt;
+    &lt;button class=&quot;btn&quot; ng-click=&quot;open()&quot;&gt;Open me!&lt;/button&gt;
+    &lt;div modal=&quot;shouldBeOpen&quot; close=&quot;close()&quot; options=&quot;opts&quot;&gt;
+        &lt;div class=&quot;modal-header&quot;&gt;
+            &lt;h3&gt;I&#x27;m a modal!&lt;/h3&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;modal-body&quot;&gt;
+            &lt;ul&gt;
+                &lt;li ng-repeat=&quot;item in items&quot;&gt;{{item}}&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;modal-footer&quot;&gt;
+            &lt;button class=&quot;btn btn-warning cancel&quot; ng-click=&quot;close()&quot;&gt;Cancel&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                        </div>
+                    </tab>
+                    <tab heading="JavaScript">
+                        <div plunker-content="javascript">
+                            <pre ng-non-bindable><code data-language="javascript">var ModalDemoCtrl = function ($scope) {
+
+  $scope.open = function () {
+    $scope.shouldBeOpen = true;
+  };
+
+  $scope.close = function () {
+    $scope.closeMsg = &#x27;I was closed at: &#x27; + new Date();
+    $scope.shouldBeOpen = false;
+  };
+
+  $scope.items = [&#x27;item1&#x27;, &#x27;item2&#x27;];
+
+  $scope.opts = {
+    backdropFade: true,
+    dialogFade:true
+  };
+
+};</code></pre>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+      </section>
+      <script>var ModalDemoCtrl = function ($scope) {
+
+  $scope.open = function () {
+    $scope.shouldBeOpen = true;
+  };
+
+  $scope.close = function () {
+    $scope.closeMsg = 'I was closed at: ' + new Date();
+    $scope.shouldBeOpen = false;
+  };
+
+  $scope.items = ['item1', 'item2'];
+
+  $scope.opts = {
+    backdropFade: true,
+    dialogFade:true
+  };
+
+};</script>
+    
+      <section id="pagination">
+        <div class="page-header">
+          <h1>Pagination<small>
+              (<a target="_blank" href="https://github.com/angular-ui/bootstrap/tree/master/src/pagination">ui.bootstrap.pagination</a>)
+          </small></h1>
+        </div>
+        <div class="row">
+            <div class="span6">
+                <div ng-controller="PaginationDemoCtrl" class="well well-small">
+    <h4>Default</h4>
+
+    <pagination num-pages="noOfPages" current-page="currentPage"></pagination>
+    <pagination boundary-links="true" num-pages="noOfPages" current-page="currentPage" class="pagination-small" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+    <pagination direction-links="false" boundary-links="true" num-pages="noOfPages" current-page="currentPage"></pagination>
+    <pagination direction-links="false" num-pages="noOfPages" current-page="currentPage"></pagination>
+
+    <button class="btn" ng-click="setPage(3)">Set current page to: 3</button>
+    The selected page no: {{currentPage}}
+
+    <hr />
+    <h4>Pager</h4>
+    <pager num-pages="noOfPages" current-page="currentPage"></pager>
+
+    <hr />
+    <h4>Limit the maximimum visible page-buttons</h4>
+    <pagination num-pages="bigNoOfPages" current-page="bigCurrentPage" max-size="maxSize" class="pagination-small" boundary-links="true"></pagination>
+    <pagination rotate="false" num-pages="bigNoOfPages" current-page="bigCurrentPage" max-size="maxSize" class="pagination-small" boundary-links="true"></pagination>
+</div>
+
+            </div>
+            <div class="span6">
+                <p>A lightweight pagination directive that is focused on ... providing pagination &amp; will take care of visualising a pagination bar and enable / disable buttons correctly!</p>
+
+<h3>Pagination Settings</h3>
+
+<p>Settings can be provided as attributes in the <code>&lt;pagination&gt;</code> or globally configured through the <code>paginationConfig</code>.</p>
+
+<ul>
+<li><p><code>num-pages</code> <i class="icon-eye-open"></i>
+ :
+ Number of total pages.</p></li>
+<li><p><code>current-page</code> <i class="icon-eye-open"></i>
+ :
+ Current page number.</p></li>
+<li><p><code>max-size</code> <i class="icon-eye-open"></i>
+ <em>(Defaults: null)</em> :
+ Limit number for pagination size.</p></li>
+<li><p><code>rotate</code>
+ <em>(Defaults: true)</em> :
+ Whether to keep current page in the middle of the visible ones.</p></li>
+<li><p><code>on-select-page (page)</code>
+ <em>(Default: null)</em> :
+ An optional expression called when a page is selected having the page number as argument.</p></li>
+<li><p><code>direction-links</code>
+ <em>(Default: true)</em> :
+ Whether to display Previous / Next buttons.</p></li>
+<li><p><code>previous-text</code>
+ <em>(Default: 'Previous')</em> :
+ Text for Previous button.</p></li>
+<li><p><code>next-text</code>
+ <em>(Default: 'Next')</em> :
+ Text for Next button.</p></li>
+<li><p><code>boundary-links</code>
+ <em>(Default: false)</em> :
+ Whether to display First / Last buttons.</p></li>
+<li><p><code>first-text</code>
+ <em>(Default: 'First')</em> :
+ Text for First button.</p></li>
+<li><p><code>last-text</code>
+ <em>(Default: 'Last')</em> :
+ Text for Last button.</p></li>
+</ul>
+
+<h3>Pager Settings</h3>
+
+<p>Settings can be provided as attributes in the <code>&lt;pager&gt;</code> or globally configured through the <code>pagerConfig</code>. <br />
+For <code>num-pages</code>,  <code>current-page</code> and <code>on-select-page (page)</code> see pagination settings. Other settings are:</p>
+
+<ul>
+<li><p><code>align</code>
+ <em>(Default: true)</em> :
+ Whether to align each link to the sides.</p></li>
+<li><p><code>previous-text</code>
+ <em>(Default: '« Previous')</em> :
+ Text for Previous button.</p></li>
+<li><p><code>next-text</code>
+ <em>(Default: 'Next »')</em> :
+ Text for Next button.</p></li>
+</ul>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="span12" ng-controller="PlunkerCtrl">
+                <div class="pull-right">
+                    <button class="btn btn-info" id="plunk-btn" ng-click="edit('1.0.5', '2.3.1', '0.5.0', 'pagination')"><i class="icon-edit icon-white"></i> Edit in plunker</button>
+                </div>
+                <tabset>
+                    <tab heading="Markup">
+                        <div plunker-content="markup">
+                            <pre ng-non-bindable><code data-language="html">&lt;div ng-controller=&quot;PaginationDemoCtrl&quot; class=&quot;well well-small&quot;&gt;
+    &lt;h4&gt;Default&lt;/h4&gt;
+
+    &lt;pagination num-pages=&quot;noOfPages&quot; current-page=&quot;currentPage&quot;&gt;&lt;/pagination&gt;
+    &lt;pagination boundary-links=&quot;true&quot; num-pages=&quot;noOfPages&quot; current-page=&quot;currentPage&quot; class=&quot;pagination-small&quot; previous-text=&quot;&amp;lsaquo;&quot; next-text=&quot;&amp;rsaquo;&quot; first-text=&quot;&amp;laquo;&quot; last-text=&quot;&amp;raquo;&quot;&gt;&lt;/pagination&gt;
+    &lt;pagination direction-links=&quot;false&quot; boundary-links=&quot;true&quot; num-pages=&quot;noOfPages&quot; current-page=&quot;currentPage&quot;&gt;&lt;/pagination&gt;
+    &lt;pagination direction-links=&quot;false&quot; num-pages=&quot;noOfPages&quot; current-page=&quot;currentPage&quot;&gt;&lt;/pagination&gt;
+
+    &lt;button class=&quot;btn&quot; ng-click=&quot;setPage(3)&quot;&gt;Set current page to: 3&lt;/button&gt;
+    The selected page no: {{currentPage}}
+
+    &lt;hr /&gt;
+    &lt;h4&gt;Pager&lt;/h4&gt;
+    &lt;pager num-pages=&quot;noOfPages&quot; current-page=&quot;currentPage&quot;&gt;&lt;/pager&gt;
+
+    &lt;hr /&gt;
+    &lt;h4&gt;Limit the maximimum visible page-buttons&lt;/h4&gt;
+    &lt;pagination num-pages=&quot;bigNoOfPages&quot; current-page=&quot;bigCurrentPage&quot; max-size=&quot;maxSize&quot; class=&quot;pagination-small&quot; boundary-links=&quot;true&quot;&gt;&lt;/pagination&gt;
+    &lt;pagination rotate=&quot;false&quot; num-pages=&quot;bigNoOfPages&quot; current-page=&quot;bigCurrentPage&quot; max-size=&quot;maxSize&quot; class=&quot;pagination-small&quot; boundary-links=&quot;true&quot;&gt;&lt;/pagination&gt;
+&lt;/div&gt;
+</code></pre>
+                        </div>
+                    </tab>
+                    <tab heading="JavaScript">
+                        <div plunker-content="javascript">
+                            <pre ng-non-bindable><code data-language="javascript">var PaginationDemoCtrl = function ($scope) {
+  $scope.noOfPages = 7;
+  $scope.currentPage = 4;
+  $scope.maxSize = 5;
+  
+  $scope.setPage = function (pageNo) {
+    $scope.currentPage = pageNo;
+  };
+
+  $scope.bigNoOfPages = 18;
+  $scope.bigCurrentPage = 1;
+};
+</code></pre>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+      </section>
+      <script>var PaginationDemoCtrl = function ($scope) {
+  $scope.noOfPages = 7;
+  $scope.currentPage = 4;
+  $scope.maxSize = 5;
+  
+  $scope.setPage = function (pageNo) {
+    $scope.currentPage = pageNo;
+  };
+
+  $scope.bigNoOfPages = 18;
+  $scope.bigCurrentPage = 1;
+};
+</script>
+    
+      <section id="popover">
+        <div class="page-header">
+          <h1>Popover<small>
+              (<a target="_blank" href="https://github.com/angular-ui/bootstrap/tree/master/src/popover">ui.bootstrap.popover</a>)
+          </small></h1>
+        </div>
+        <div class="row">
+            <div class="span6">
+                <div ng-controller="PopoverDemoCtrl">
+  <div class="well">
+    <div>
+      <h4>Dynamic</h4>
+      <div>Dynamic Popover : <input type="text" ng-model="dynamicPopoverText"></div>
+      <div>Dynamic Popover Popup Text: <input type="text" ng-model="dynamicPopover"></div>
+      <div>Dynamic Popover Popup Title: <input type="text" ng-model="dynamicPopoverTitle"></div>
+      <div><button popover="{{dynamicPopover}}" popover-title="{{dynamicPopoverTitle}}" class="btn">{{dynamicPopoverText}}</button></div>
+    </div>
+    <div>
+      <h4>Positional</h4>
+      <button popover-placement="top" popover="On the Top!" class="btn">Top</button>
+      <button popover-placement="left" popover="On the Left!" class="btn">Left</button>
+      <button popover-placement="right" popover="On the Right!" class="btn">Right</button>
+      <button popover-placement="bottom" popover="On the Bottom!" class="btn">Bottom</button>
+      <button popover-placement="mouse" popover="relative to mouse" class="btn">Mouse</button>
+    </div>
+    <div>
+      <h4>Triggers</h4>
+      <button popover="I appeared on mouse enter!" popover-trigger="mouseenter" class="btn">Mouseenter</button>
+      <input type="text" value="Click me!" 
+        popover="I appeared on focus! Click away and I'll vanish..." 
+        popover-trigger="focus" />
+    </div>
+    <div>
+      <h4>Other</h4>
+      <button Popover-animation="true" popover="I fade in and out!" class="btn">fading</button>
+      <button popover="I have a title!" popover-title="The title." class="btn">title</button>
+    </div>
+  </div>
+</div>
+
+            </div>
+            <div class="span6">
+                <p>A lightweight, extensible directive for fancy popover creation. The popover
+directive supports multiple placements, optional transition animation, and more.</p>
+
+<p>Like the Twitter Bootstrap jQuery plugin, the popover <strong>requires</strong> the tooltip
+module.</p>
+
+<p>The popover directives provides several optional attributes to control how it
+will display:</p>
+
+<ul>
+<li><code>popover-title</code>: A string to display as a fancy title.</li>
+<li><code>popover-placement</code>: Where to place it? Defaults to "top", but also accepts
+"bottom", "left", "right", or "mouse".</li>
+<li><code>popover-animation</code>: Should it fade in and out? Defaults to "true".</li>
+<li><code>popover-popup-delay</code>: For how long should the user have to have the mouse
+over the element before the popover shows (in milliseconds)? Defaults to 0.</li>
+<li><code>popover-trigger</code>: What should trigger the show of the popover? See the
+<code>tooltip</code> directive for supported values.</li>
+<li><code>popover-append-to-body</code>: Should the tooltip be appended to <code>$body</code> instead of
+the parent element?</li>
+</ul>
+
+<p>The popover directives require the <code>$position</code> service.</p>
+
+<p>The popover directive also supports various default configurations through the
+$tooltipProvider. See the <a href="#tooltip">tooltip</a> section for more information.</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="span12" ng-controller="PlunkerCtrl">
+                <div class="pull-right">
+                    <button class="btn btn-info" id="plunk-btn" ng-click="edit('1.0.5', '2.3.1', '0.5.0', 'popover')"><i class="icon-edit icon-white"></i> Edit in plunker</button>
+                </div>
+                <tabset>
+                    <tab heading="Markup">
+                        <div plunker-content="markup">
+                            <pre ng-non-bindable><code data-language="html">&lt;div ng-controller=&quot;PopoverDemoCtrl&quot;&gt;
+  &lt;div class=&quot;well&quot;&gt;
+    &lt;div&gt;
+      &lt;h4&gt;Dynamic&lt;/h4&gt;
+      &lt;div&gt;Dynamic Popover : &lt;input type=&quot;text&quot; ng-model=&quot;dynamicPopoverText&quot;&gt;&lt;/div&gt;
+      &lt;div&gt;Dynamic Popover Popup Text: &lt;input type=&quot;text&quot; ng-model=&quot;dynamicPopover&quot;&gt;&lt;/div&gt;
+      &lt;div&gt;Dynamic Popover Popup Title: &lt;input type=&quot;text&quot; ng-model=&quot;dynamicPopoverTitle&quot;&gt;&lt;/div&gt;
+      &lt;div&gt;&lt;button popover=&quot;{{dynamicPopover}}&quot; popover-title=&quot;{{dynamicPopoverTitle}}&quot; class=&quot;btn&quot;&gt;{{dynamicPopoverText}}&lt;/button&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+      &lt;h4&gt;Positional&lt;/h4&gt;
+      &lt;button popover-placement=&quot;top&quot; popover=&quot;On the Top!&quot; class=&quot;btn&quot;&gt;Top&lt;/button&gt;
+      &lt;button popover-placement=&quot;left&quot; popover=&quot;On the Left!&quot; class=&quot;btn&quot;&gt;Left&lt;/button&gt;
+      &lt;button popover-placement=&quot;right&quot; popover=&quot;On the Right!&quot; class=&quot;btn&quot;&gt;Right&lt;/button&gt;
+      &lt;button popover-placement=&quot;bottom&quot; popover=&quot;On the Bottom!&quot; class=&quot;btn&quot;&gt;Bottom&lt;/button&gt;
+      &lt;button popover-placement=&quot;mouse&quot; popover=&quot;relative to mouse&quot; class=&quot;btn&quot;&gt;Mouse&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+      &lt;h4&gt;Triggers&lt;/h4&gt;
+      &lt;button popover=&quot;I appeared on mouse enter!&quot; popover-trigger=&quot;mouseenter&quot; class=&quot;btn&quot;&gt;Mouseenter&lt;/button&gt;
+      &lt;input type=&quot;text&quot; value=&quot;Click me!&quot; 
+        popover=&quot;I appeared on focus! Click away and I&#x27;ll vanish...&quot; 
+        popover-trigger=&quot;focus&quot; /&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+      &lt;h4&gt;Other&lt;/h4&gt;
+      &lt;button Popover-animation=&quot;true&quot; popover=&quot;I fade in and out!&quot; class=&quot;btn&quot;&gt;fading&lt;/button&gt;
+      &lt;button popover=&quot;I have a title!&quot; popover-title=&quot;The title.&quot; class=&quot;btn&quot;&gt;title&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+                        </div>
+                    </tab>
+                    <tab heading="JavaScript">
+                        <div plunker-content="javascript">
+                            <pre ng-non-bindable><code data-language="javascript">var PopoverDemoCtrl = function ($scope) {
+  $scope.dynamicPopover = &quot;Hello, World!&quot;;
+  $scope.dynamicPopoverText = &quot;dynamic&quot;;
+  $scope.dynamicPopoverTitle = &quot;Title&quot;;
+};
+</code></pre>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+      </section>
+      <script>var PopoverDemoCtrl = function ($scope) {
+  $scope.dynamicPopover = "Hello, World!";
+  $scope.dynamicPopoverText = "dynamic";
+  $scope.dynamicPopoverTitle = "Title";
+};
+</script>
+    
+      <section id="progressbar">
+        <div class="page-header">
+          <h1>Progressbar<small>
+              (<a target="_blank" href="https://github.com/angular-ui/bootstrap/tree/master/src/progressbar">ui.bootstrap.progressbar</a>)
+          </small></h1>
+        </div>
+        <div class="row">
+            <div class="span6">
+                <div ng-controller="ProgressDemoCtrl" class="well">
+    <h2>Static</h2>
+    <div class="row-fluid">
+        <div class="span4"><progress percent="55"></progress></div>
+        <div class="span4"><progress percent="22" class="progress-warning progress-striped"></progress></div>
+        <div class="span4"><progress percent="88" class="progress-danger progress-striped active"></div>
+    </div>
+    
+    <h2>Dynamic <button class="btn btn-primary" type="button" ng-click="random()">Randomize</button></h2>
+    <pre>Value: {{dynamic}}</pre>
+    <progress percent="dynamic"></progress>
+    
+    <small><em>No animation</em></small>
+    <progress percent="dynamic" class="progress-success" animate="false"></progress>
+
+    <small><em>Object (changes type based on value)</em></small>
+    <progress percent="dynamicObject" class="progress-striped active"></progress>
+    
+    <h2>Stacked <button class="btn btn-primary" type="button" ng-click="randomStacked()">Randomize</button></h2>
+    <small><em>Array values with automatic types</em></small>
+    <pre>Value: {{stackedArray}}</pre>
+    <progress percent="stackedArray" auto-type="true"></progress>
+    
+    <small><em>Objects</em></small>
+    <pre>Value: {{stacked}}</pre>
+    <progress percent="stacked"></progress>
+</div>
+            </div>
+            <div class="span6">
+                <p>A lightweight progress bar directive that is focused on providing progress visualization! </p>
+
+<p>The progress bar directive supports multiple (stacked) bars into the same element, optional transition animation, event handler for full &amp; empty state and many more.</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="span12" ng-controller="PlunkerCtrl">
+                <div class="pull-right">
+                    <button class="btn btn-info" id="plunk-btn" ng-click="edit('1.0.5', '2.3.1', '0.5.0', 'progressbar')"><i class="icon-edit icon-white"></i> Edit in plunker</button>
+                </div>
+                <tabset>
+                    <tab heading="Markup">
+                        <div plunker-content="markup">
+                            <pre ng-non-bindable><code data-language="html">&lt;div ng-controller=&quot;ProgressDemoCtrl&quot; class=&quot;well&quot;&gt;
+    &lt;h2&gt;Static&lt;/h2&gt;
+    &lt;div class=&quot;row-fluid&quot;&gt;
+        &lt;div class=&quot;span4&quot;&gt;&lt;progress percent=&quot;55&quot;&gt;&lt;/progress&gt;&lt;/div&gt;
+        &lt;div class=&quot;span4&quot;&gt;&lt;progress percent=&quot;22&quot; class=&quot;progress-warning progress-striped&quot;&gt;&lt;/progress&gt;&lt;/div&gt;
+        &lt;div class=&quot;span4&quot;&gt;&lt;progress percent=&quot;88&quot; class=&quot;progress-danger progress-striped active&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;h2&gt;Dynamic &lt;button class=&quot;btn btn-primary&quot; type=&quot;button&quot; ng-click=&quot;random()&quot;&gt;Randomize&lt;/button&gt;&lt;/h2&gt;
+    &lt;pre&gt;Value: {{dynamic}}&lt;/pre&gt;
+    &lt;progress percent=&quot;dynamic&quot;&gt;&lt;/progress&gt;
+    
+    &lt;small&gt;&lt;em&gt;No animation&lt;/em&gt;&lt;/small&gt;
+    &lt;progress percent=&quot;dynamic&quot; class=&quot;progress-success&quot; animate=&quot;false&quot;&gt;&lt;/progress&gt;
+
+    &lt;small&gt;&lt;em&gt;Object (changes type based on value)&lt;/em&gt;&lt;/small&gt;
+    &lt;progress percent=&quot;dynamicObject&quot; class=&quot;progress-striped active&quot;&gt;&lt;/progress&gt;
+    
+    &lt;h2&gt;Stacked &lt;button class=&quot;btn btn-primary&quot; type=&quot;button&quot; ng-click=&quot;randomStacked()&quot;&gt;Randomize&lt;/button&gt;&lt;/h2&gt;
+    &lt;small&gt;&lt;em&gt;Array values with automatic types&lt;/em&gt;&lt;/small&gt;
+    &lt;pre&gt;Value: {{stackedArray}}&lt;/pre&gt;
+    &lt;progress percent=&quot;stackedArray&quot; auto-type=&quot;true&quot;&gt;&lt;/progress&gt;
+    
+    &lt;small&gt;&lt;em&gt;Objects&lt;/em&gt;&lt;/small&gt;
+    &lt;pre&gt;Value: {{stacked}}&lt;/pre&gt;
+    &lt;progress percent=&quot;stacked&quot;&gt;&lt;/progress&gt;
+&lt;/div&gt;</code></pre>
+                        </div>
+                    </tab>
+                    <tab heading="JavaScript">
+                        <div plunker-content="javascript">
+                            <pre ng-non-bindable><code data-language="javascript">var ProgressDemoCtrl = function ($scope) {
+   
+  $scope.random = function() {
+    var value = Math.floor((Math.random()*100)+1);
+    var type;
+
+    if (value &lt; 25) {
+      type = &#x27;success&#x27;;
+    } else if (value &lt; 50) {
+      type = &#x27;info&#x27;;
+    } else if (value &lt; 75) {
+      type = &#x27;warning&#x27;;
+    } else {
+      type = &#x27;danger&#x27;;
+    }
+
+    $scope.dynamic = value;
+    $scope.dynamicObject = {
+      value: value,
+      type: type
+    };
+  };
+  $scope.random();
+  
+  var types = [&#x27;success&#x27;, &#x27;info&#x27;, &#x27;warning&#x27;, &#x27;danger&#x27;];
+  $scope.randomStacked = function() {
+    $scope.stackedArray = [];
+    $scope.stacked = [];
+    
+    var n = Math.floor((Math.random()*4)+1);
+
+    for (var i=0; i &lt; n; i++) {
+        var value = Math.floor((Math.random()*30)+1);
+        $scope.stackedArray.push(value);
+        
+        var index = Math.floor((Math.random()*4));
+        $scope.stacked.push({
+          value: value,
+          type: types[index]
+        });
+    }
+  };
+  $scope.randomStacked();
+};
+</code></pre>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+      </section>
+      <script>var ProgressDemoCtrl = function ($scope) {
+   
+  $scope.random = function() {
+    var value = Math.floor((Math.random()*100)+1);
+    var type;
+
+    if (value < 25) {
+      type = 'success';
+    } else if (value < 50) {
+      type = 'info';
+    } else if (value < 75) {
+      type = 'warning';
+    } else {
+      type = 'danger';
+    }
+
+    $scope.dynamic = value;
+    $scope.dynamicObject = {
+      value: value,
+      type: type
+    };
+  };
+  $scope.random();
+  
+  var types = ['success', 'info', 'warning', 'danger'];
+  $scope.randomStacked = function() {
+    $scope.stackedArray = [];
+    $scope.stacked = [];
+    
+    var n = Math.floor((Math.random()*4)+1);
+
+    for (var i=0; i < n; i++) {
+        var value = Math.floor((Math.random()*30)+1);
+        $scope.stackedArray.push(value);
+        
+        var index = Math.floor((Math.random()*4));
+        $scope.stacked.push({
+          value: value,
+          type: types[index]
+        });
+    }
+  };
+  $scope.randomStacked();
+};
+</script>
+    
+      <section id="rating">
+        <div class="page-header">
+          <h1>Rating<small>
+              (<a target="_blank" href="https://github.com/angular-ui/bootstrap/tree/master/src/rating">ui.bootstrap.rating</a>)
+          </small></h1>
+        </div>
+        <div class="row">
+            <div class="span6">
+                <div ng-controller="RatingDemoCtrl">
+    <rating value="rate" max="max" readonly="isReadonly" on-hover="hoveringOver(value)" on-leave="overStar = null"></rating>
+    <span class="badge badge-inverse" ng-show="overStar && !isReadonly">{{overStar}} / {{max}}</span>
+
+    <hr/>
+    <pre>Rate: <b>{{rate}}</b> - Readonly is: <i>{{isReadonly}}</i> - Hovering over: <b>{{overStar || "none"}}</b></pre>
+
+    <hr/>
+    <button class="btn btn-small btn-danger" ng-click="rate = 0" ng-disabled="isReadonly">Clear</button>
+    <button class="btn btn-small" ng-click="isReadonly = ! isReadonly">Toggle Readonly</button>
+</div>
+            </div>
+            <div class="span6">
+                <p>Rating directive that will take care of visualising a star rating bar.</p>
+
+<p>It also provides optional attributes: <code>max</code> to vary the number of stars, <code>readonly</code> to disable user's interaction, <code>on-hover</code> to signal when the user's mouse is over a particular star, and <code>on-leave</code> to signal when the mouse leaves the control altogether.</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="span12" ng-controller="PlunkerCtrl">
+                <div class="pull-right">
+                    <button class="btn btn-info" id="plunk-btn" ng-click="edit('1.0.5', '2.3.1', '0.5.0', 'rating')"><i class="icon-edit icon-white"></i> Edit in plunker</button>
+                </div>
+                <tabset>
+                    <tab heading="Markup">
+                        <div plunker-content="markup">
+                            <pre ng-non-bindable><code data-language="html">&lt;div ng-controller=&quot;RatingDemoCtrl&quot;&gt;
+    &lt;rating value=&quot;rate&quot; max=&quot;max&quot; readonly=&quot;isReadonly&quot; on-hover=&quot;hoveringOver(value)&quot; on-leave=&quot;overStar = null&quot;&gt;&lt;/rating&gt;
+    &lt;span class=&quot;badge badge-inverse&quot; ng-show=&quot;overStar &amp;&amp; !isReadonly&quot;&gt;{{overStar}} / {{max}}&lt;/span&gt;
+
+    &lt;hr/&gt;
+    &lt;pre&gt;Rate: &lt;b&gt;{{rate}}&lt;/b&gt; - Readonly is: &lt;i&gt;{{isReadonly}}&lt;/i&gt; - Hovering over: &lt;b&gt;{{overStar || &quot;none&quot;}}&lt;/b&gt;&lt;/pre&gt;
+
+    &lt;hr/&gt;
+    &lt;button class=&quot;btn btn-small btn-danger&quot; ng-click=&quot;rate = 0&quot; ng-disabled=&quot;isReadonly&quot;&gt;Clear&lt;/button&gt;
+    &lt;button class=&quot;btn btn-small&quot; ng-click=&quot;isReadonly = ! isReadonly&quot;&gt;Toggle Readonly&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+                        </div>
+                    </tab>
+                    <tab heading="JavaScript">
+                        <div plunker-content="javascript">
+                            <pre ng-non-bindable><code data-language="javascript">var RatingDemoCtrl = function ($scope) {
+  $scope.rate = 7;
+  $scope.max = 10;
+  $scope.isReadonly = false;
+  $scope.hoveringOver = function(value) {
+    $scope.overStar = value;
+  };
+};
+</code></pre>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+      </section>
+      <script>var RatingDemoCtrl = function ($scope) {
+  $scope.rate = 7;
+  $scope.max = 10;
+  $scope.isReadonly = false;
+  $scope.hoveringOver = function(value) {
+    $scope.overStar = value;
+  };
+};
+</script>
+    
+      <section id="tabs">
+        <div class="page-header">
+          <h1>Tabs<small>
+              (<a target="_blank" href="https://github.com/angular-ui/bootstrap/tree/master/src/tabs">ui.bootstrap.tabs</a>)
+          </small></h1>
+        </div>
+        <div class="row">
+            <div class="span6">
+                <div ng-controller="TabsDemoCtrl">
+  Select a tab by setting active binding to true:
+  <br />
+  <button class="btn btn-small" ng-click="tabs[0].active = true">Select second tab</button>
+  <button class="btn btn-small" ng-click="tabs[1].active = true">Select third tab</button>
+  <button class="btn btn-small" ng-click="tabs[1].disabled = ! tabs[1].disabled">Enable / Disable third tab</button>
+  <hr />
+
+  <tabset>
+    <tab heading="Static title">Static content</tab>
+    <tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active" disabled="tab.disabled">
+      {{tab.content}}
+    </tab>
+    <tab select="alertMe()">
+      <tab-heading>
+        <i class="icon-bell"></i> Select me for alert!
+      </tab-heading>
+      I've got an HTML heading, and a select callback. Pretty cool!
+    </tab>
+  </tabset>
+
+  <hr />
+
+  <tabset vertical="true" type="navType">
+    <tab heading="Vertical 1">Vertical content 1</tab>
+    <tab heading="Vertical 2">Vertical content 2</tab>
+  </tabset>
+</div>
+
+            </div>
+            <div class="span6">
+                <p>AngularJS version of the tabs directive.</p>
+
+<h3>Settings</h3>
+
+<h4><code>&lt;tabset&gt;</code></h4>
+
+<ul>
+<li><p><code>vertical</code>
+ <em>(Defaults: false)</em> :
+ Whether tabs appear vertically stacked.</p></li>
+<li><p><code>type</code>
+ <em>(Defaults: 'tabs')</em> :
+ Navigation type. Possible values are 'tabs' and 'pills'.</p></li>
+</ul>
+
+<h4><code>&lt;tab&gt;</code></h4>
+
+<ul>
+<li><p><code>heading</code> or <code>&lt;tab-heading&gt;</code>
+ :
+ Heading text or HTML markup.</p></li>
+<li><p><code>active</code> <i class="icon-eye-open"></i>
+ <em>(Defaults: false)</em> :
+ Whether tab is currently selected.</p></li>
+<li><p><code>disabled</code> <i class="icon-eye-open"></i>
+ <em>(Defaults: false)</em> :
+ Whether tab is clickable and can be activated.</p></li>
+<li><p><code>select()</code>
+ <em>(Defaults: null)</em> :
+ An optional expression called when tab is activated.</p></li>
+</ul>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="span12" ng-controller="PlunkerCtrl">
+                <div class="pull-right">
+                    <button class="btn btn-info" id="plunk-btn" ng-click="edit('1.0.5', '2.3.1', '0.5.0', 'tabs')"><i class="icon-edit icon-white"></i> Edit in plunker</button>
+                </div>
+                <tabset>
+                    <tab heading="Markup">
+                        <div plunker-content="markup">
+                            <pre ng-non-bindable><code data-language="html">&lt;div ng-controller=&quot;TabsDemoCtrl&quot;&gt;
+  Select a tab by setting active binding to true:
+  &lt;br /&gt;
+  &lt;button class=&quot;btn btn-small&quot; ng-click=&quot;tabs[0].active = true&quot;&gt;Select second tab&lt;/button&gt;
+  &lt;button class=&quot;btn btn-small&quot; ng-click=&quot;tabs[1].active = true&quot;&gt;Select third tab&lt;/button&gt;
+  &lt;button class=&quot;btn btn-small&quot; ng-click=&quot;tabs[1].disabled = ! tabs[1].disabled&quot;&gt;Enable / Disable third tab&lt;/button&gt;
+  &lt;hr /&gt;
+
+  &lt;tabset&gt;
+    &lt;tab heading=&quot;Static title&quot;&gt;Static content&lt;/tab&gt;
+    &lt;tab ng-repeat=&quot;tab in tabs&quot; heading=&quot;{{tab.title}}&quot; active=&quot;tab.active&quot; disabled=&quot;tab.disabled&quot;&gt;
+      {{tab.content}}
+    &lt;/tab&gt;
+    &lt;tab select=&quot;alertMe()&quot;&gt;
+      &lt;tab-heading&gt;
+        &lt;i class=&quot;icon-bell&quot;&gt;&lt;/i&gt; Select me for alert!
+      &lt;/tab-heading&gt;
+      I&#x27;ve got an HTML heading, and a select callback. Pretty cool!
+    &lt;/tab&gt;
+  &lt;/tabset&gt;
+
+  &lt;hr /&gt;
+
+  &lt;tabset vertical=&quot;true&quot; type=&quot;navType&quot;&gt;
+    &lt;tab heading=&quot;Vertical 1&quot;&gt;Vertical content 1&lt;/tab&gt;
+    &lt;tab heading=&quot;Vertical 2&quot;&gt;Vertical content 2&lt;/tab&gt;
+  &lt;/tabset&gt;
+&lt;/div&gt;
+</code></pre>
+                        </div>
+                    </tab>
+                    <tab heading="JavaScript">
+                        <div plunker-content="javascript">
+                            <pre ng-non-bindable><code data-language="javascript">var TabsDemoCtrl = function ($scope) {
+  $scope.tabs = [
+    { title:&quot;Dynamic Title 1&quot;, content:&quot;Dynamic content 1&quot; },
+    { title:&quot;Dynamic Title 2&quot;, content:&quot;Dynamic content 2&quot;, disabled: true }
+  ];
+
+  $scope.alertMe = function() {
+    setTimeout(function() {
+      alert(&quot;You&#x27;ve selected the alert tab!&quot;);
+    });
+  };
+
+  $scope.navType = &#x27;pills&#x27;;
+};
+</code></pre>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+      </section>
+      <script>var TabsDemoCtrl = function ($scope) {
+  $scope.tabs = [
+    { title:"Dynamic Title 1", content:"Dynamic content 1" },
+    { title:"Dynamic Title 2", content:"Dynamic content 2", disabled: true }
+  ];
+
+  $scope.alertMe = function() {
+    setTimeout(function() {
+      alert("You've selected the alert tab!");
+    });
+  };
+
+  $scope.navType = 'pills';
+};
+</script>
+    
+      <section id="timepicker">
+        <div class="page-header">
+          <h1>Timepicker<small>
+              (<a target="_blank" href="https://github.com/angular-ui/bootstrap/tree/master/src/timepicker">ui.bootstrap.timepicker</a>)
+          </small></h1>
+        </div>
+        <div class="row">
+            <div class="span6">
+                <div ng-controller="TimepickerDemoCtrl">
+  <timepicker ng-model="mytime" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+
+  <pre>Time is: {{mytime | date:'shortTime' }}</pre>
+
+  <div>Hours step is: <select ng-model="hstep" ng-options="opt for opt in options.hstep"></select></div>
+  <div>Minutes step is: <select ng-model="mstep" ng-options="opt for opt in options.mstep"></select></div>
+
+  <button class="btn" ng-click="toggleMode()">12H / 24H</button>
+  <button class="btn" ng-click="update()">Set to 14:00</button>
+  <button class="btn btn-danger" ng-click="clear()">Clear</button>
+</div>
+            </div>
+            <div class="span6">
+                <p>A lightweight &amp; configurable timepicker directive.</p>
+
+<h3>Settings</h3>
+
+<p>All settings can be provided as attributes in the <code>&lt;timepicker&gt;</code> or globally configured through the <code>timepickerConfig</code>.</p>
+
+<ul>
+<li><p><code>ng-model</code> <i class="icon-eye-open"></i>
+ :
+ The Date object that provides the time state.</p></li>
+<li><p><code>hour-step</code> <i class="icon-eye-open"></i>
+ <em>(Defaults: 1)</em> :
+  Number of hours to increase or decrease when using a button.</p></li>
+<li><p><code>minute-step</code> <i class="icon-eye-open"></i>
+ <em>(Defaults: 1)</em> :
+  Number of minutes to increase or decrease when using a button.</p></li>
+<li><p><code>show-meridian</code> <i class="icon-eye-open"></i>
+ <em>(Defaults: true)</em> :
+ Whether to display 12H or 24H mode.</p></li>
+<li><p><code>meridians</code>
+ <em>(Defaults: ['AM', 'PM'])</em> :
+  Meridian labels</p></li>
+<li><p><code>readonly-input</code>
+ <em>(Defaults: false)</em> :
+  Whether user can type inside the hours &amp; minutes input.</p></li>
+<li><p><code>mousewheel</code>
+ <em>(Defaults: true)</em> :
+  Whether user can scroll inside the hours &amp; minutes input to increase or decrease it's values.</p></li>
+</ul>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="span12" ng-controller="PlunkerCtrl">
+                <div class="pull-right">
+                    <button class="btn btn-info" id="plunk-btn" ng-click="edit('1.0.5', '2.3.1', '0.5.0', 'timepicker')"><i class="icon-edit icon-white"></i> Edit in plunker</button>
+                </div>
+                <tabset>
+                    <tab heading="Markup">
+                        <div plunker-content="markup">
+                            <pre ng-non-bindable><code data-language="html">&lt;div ng-controller=&quot;TimepickerDemoCtrl&quot;&gt;
+  &lt;timepicker ng-model=&quot;mytime&quot; hour-step=&quot;hstep&quot; minute-step=&quot;mstep&quot; show-meridian=&quot;ismeridian&quot;&gt;&lt;/timepicker&gt;
+
+  &lt;pre&gt;Time is: {{mytime | date:&#x27;shortTime&#x27; }}&lt;/pre&gt;
+
+  &lt;div&gt;Hours step is: &lt;select ng-model=&quot;hstep&quot; ng-options=&quot;opt for opt in options.hstep&quot;&gt;&lt;/select&gt;&lt;/div&gt;
+  &lt;div&gt;Minutes step is: &lt;select ng-model=&quot;mstep&quot; ng-options=&quot;opt for opt in options.mstep&quot;&gt;&lt;/select&gt;&lt;/div&gt;
+
+  &lt;button class=&quot;btn&quot; ng-click=&quot;toggleMode()&quot;&gt;12H / 24H&lt;/button&gt;
+  &lt;button class=&quot;btn&quot; ng-click=&quot;update()&quot;&gt;Set to 14:00&lt;/button&gt;
+  &lt;button class=&quot;btn btn-danger&quot; ng-click=&quot;clear()&quot;&gt;Clear&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+                        </div>
+                    </tab>
+                    <tab heading="JavaScript">
+                        <div plunker-content="javascript">
+                            <pre ng-non-bindable><code data-language="javascript">var TimepickerDemoCtrl = function ($scope) {
+  $scope.mytime = new Date();
+
+  $scope.hstep = 1;
+  $scope.mstep = 15;
+
+  $scope.options = {
+    hstep: [1, 2, 3],
+    mstep: [1, 5, 10, 15, 25, 30]
+  };
+
+  $scope.ismeridian = true;
+  $scope.toggleMode = function() {
+    $scope.ismeridian = ! $scope.ismeridian;
+  };
+
+  $scope.update = function() {
+    var d = new Date();
+    d.setHours( 14 );
+    d.setMinutes( 0 );
+    $scope.mytime = d;
+  };
+
+  $scope.clear = function() {
+    $scope.mytime = null;
+  };
+};
+</code></pre>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+      </section>
+      <script>var TimepickerDemoCtrl = function ($scope) {
+  $scope.mytime = new Date();
+
+  $scope.hstep = 1;
+  $scope.mstep = 15;
+
+  $scope.options = {
+    hstep: [1, 2, 3],
+    mstep: [1, 5, 10, 15, 25, 30]
+  };
+
+  $scope.ismeridian = true;
+  $scope.toggleMode = function() {
+    $scope.ismeridian = ! $scope.ismeridian;
+  };
+
+  $scope.update = function() {
+    var d = new Date();
+    d.setHours( 14 );
+    d.setMinutes( 0 );
+    $scope.mytime = d;
+  };
+
+  $scope.clear = function() {
+    $scope.mytime = null;
+  };
+};
+</script>
+    
+      <section id="tooltip">
+        <div class="page-header">
+          <h1>Tooltip<small>
+              (<a target="_blank" href="https://github.com/angular-ui/bootstrap/tree/master/src/tooltip">ui.bootstrap.tooltip</a>)
+          </small></h1>
+        </div>
+        <div class="row">
+            <div class="span6">
+                <div ng-controller="TooltipDemoCtrl">
+  <div class="well">
+    <div>Dynamic Tooltip Text: <input type="text" ng-model="dynamicTooltipText"></div>
+    <div>Dynamic Tooltip Popup Text: <input type="text" ng-model="dynamicTooltip"></div>
+    <p>
+      Pellentesque <a><span tooltip="{{dynamicTooltip}}">{{dynamicTooltipText}}</span></a>,
+      sit amet venenatis urna cursus eget nunc scelerisque viverra mauris, in
+      aliquam. Tincidunt lobortis feugiat vivamus at 
+      <a><span tooltip-placement="left" tooltip="On the Left!">left</span></a> eget
+      arcu dictum varius duis at consectetur lorem. Vitae elementum curabitur
+      <a><span tooltip-placement="right" tooltip="On the Right!">right</span></a> 
+      nunc sed velit dignissim sodales ut eu sem integer vitae. Turpis egestas 
+      <a><span tooltip-placement="bottom" tooltip="On the Bottom!">bottom</span></a> 
+      pharetra convallis posuere morbi leo urna, 
+      <a><span tooltip-placement="mouse" tooltip="relative to mouse">mouse</span></a> 
+      blah blah blah, 
+      <a><span tooltip-animation="false" tooltip="I don't fade. :-(">fading</span></a> 
+      at elementum eu, facilisis sed odio morbi quis commodo odio. In cursus
+      <a><span tooltip-popup-delay='1000' tooltip='appears with delay'>delayed</span></a> turpis massa tincidunt dui ut.
+    </p>
+
+    <p>
+      I can even contain HTML. <a><span tooltip-html-unsafe="{{htmlTooltip}}">Check me out!</span></a>
+    </p>
+    <p>
+      Or use custom triggers, like focus: 
+      <input type="text" value="Click me!"
+        tooltip="See? Now click away..." 
+        tooltip-trigger="focus"
+        tooltip-placement="right" />
+    </p>
+  </div>
+</div>
+
+            </div>
+            <div class="span6">
+                <p>A lightweight, extensible directive for fancy tooltip creation. The tooltip
+directive supports multiple placements, optional transition animation, and more.</p>
+
+<p>There are two versions of the tooltip: <code>tooltip</code> and <code>tooltip-html-unsafe</code>. The
+former takes text only and will escape any HTML provided. The latter takes
+whatever HTML is provided and displays it in a tooltip; it called "unsafe"
+because the HTML is not sanitized. <em>The user is responsible for ensuring the
+content is safe to put into the DOM!</em></p>
+
+<p>The tooltip directives provide several optional attributes to control how they
+will display:</p>
+
+<ul>
+<li><code>tooltip-placement</code>: Where to place it? Defaults to "top", but also accepts
+"bottom", "left", "right", or "mouse".</li>
+<li><code>tooltip-animation</code>: Should it fade in and out? Defaults to "true".</li>
+<li><code>tooltip-popup-delay</code>: For how long should the user have to have the mouse
+over the element before the tooltip shows (in milliseconds)? Defaults to 0.</li>
+<li><code>tooltip-trigger</code>: What should trigger a show of the tooltip?</li>
+<li><code>tooltip-append-to-body</code>: Should the tooltip be appended to <code>$body</code> instead of
+the parent element?</li>
+</ul>
+
+<p>The tooltip directives require the <code>$position</code> service.</p>
+
+<p><strong>Triggers</strong></p>
+
+<p>The following show triggers are supported out of the box, along with their
+provided hide triggers:</p>
+
+<ul>
+<li><code>mouseenter</code>: <code>mouseleave</code></li>
+<li><code>click</code>: <code>click</code></li>
+<li><code>focus</code>: <code>blur</code></li>
+</ul>
+
+<p>For any non-supported value, the trigger will be used to both show and hide the
+tooltip.</p>
+
+<p><strong>$tooltipProvider</strong></p>
+
+<p>Through the <code>$tooltipProvider</code>, you can change the way tooltips and popovers
+behave by default; the attributes above always take precedence. The following
+methods are available:</p>
+
+<ul>
+<li><code>setTriggers( obj )</code>: Extends the default trigger mappings mentioned above
+with mappings of your own. E.g. <code>{ 'openTrigger': 'closeTrigger' }</code>.</li>
+<li><p><code>options( obj )</code>: Provide a set of defaults for certain tooltip and popover
+attributes. Currently supports 'placement', 'animation', 'popupDelay', and
+<code>appendToBody</code>. Here are the defaults:</p>
+
+<pre>
+placement: 'top',
+animation: true,
+popupDelay: 0,
+appendToBody: false
+</pre></li>
+</ul>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="span12" ng-controller="PlunkerCtrl">
+                <div class="pull-right">
+                    <button class="btn btn-info" id="plunk-btn" ng-click="edit('1.0.5', '2.3.1', '0.5.0', 'tooltip')"><i class="icon-edit icon-white"></i> Edit in plunker</button>
+                </div>
+                <tabset>
+                    <tab heading="Markup">
+                        <div plunker-content="markup">
+                            <pre ng-non-bindable><code data-language="html">&lt;div ng-controller=&quot;TooltipDemoCtrl&quot;&gt;
+  &lt;div class=&quot;well&quot;&gt;
+    &lt;div&gt;Dynamic Tooltip Text: &lt;input type=&quot;text&quot; ng-model=&quot;dynamicTooltipText&quot;&gt;&lt;/div&gt;
+    &lt;div&gt;Dynamic Tooltip Popup Text: &lt;input type=&quot;text&quot; ng-model=&quot;dynamicTooltip&quot;&gt;&lt;/div&gt;
+    &lt;p&gt;
+      Pellentesque &lt;a&gt;&lt;span tooltip=&quot;{{dynamicTooltip}}&quot;&gt;{{dynamicTooltipText}}&lt;/span&gt;&lt;/a&gt;,
+      sit amet venenatis urna cursus eget nunc scelerisque viverra mauris, in
+      aliquam. Tincidunt lobortis feugiat vivamus at 
+      &lt;a&gt;&lt;span tooltip-placement=&quot;left&quot; tooltip=&quot;On the Left!&quot;&gt;left&lt;/span&gt;&lt;/a&gt; eget
+      arcu dictum varius duis at consectetur lorem. Vitae elementum curabitur
+      &lt;a&gt;&lt;span tooltip-placement=&quot;right&quot; tooltip=&quot;On the Right!&quot;&gt;right&lt;/span&gt;&lt;/a&gt; 
+      nunc sed velit dignissim sodales ut eu sem integer vitae. Turpis egestas 
+      &lt;a&gt;&lt;span tooltip-placement=&quot;bottom&quot; tooltip=&quot;On the Bottom!&quot;&gt;bottom&lt;/span&gt;&lt;/a&gt; 
+      pharetra convallis posuere morbi leo urna, 
+      &lt;a&gt;&lt;span tooltip-placement=&quot;mouse&quot; tooltip=&quot;relative to mouse&quot;&gt;mouse&lt;/span&gt;&lt;/a&gt; 
+      blah blah blah, 
+      &lt;a&gt;&lt;span tooltip-animation=&quot;false&quot; tooltip=&quot;I don&#x27;t fade. :-(&quot;&gt;fading&lt;/span&gt;&lt;/a&gt; 
+      at elementum eu, facilisis sed odio morbi quis commodo odio. In cursus
+      &lt;a&gt;&lt;span tooltip-popup-delay=&#x27;1000&#x27; tooltip=&#x27;appears with delay&#x27;&gt;delayed&lt;/span&gt;&lt;/a&gt; turpis massa tincidunt dui ut.
+    &lt;/p&gt;
+
+    &lt;p&gt;
+      I can even contain HTML. &lt;a&gt;&lt;span tooltip-html-unsafe=&quot;{{htmlTooltip}}&quot;&gt;Check me out!&lt;/span&gt;&lt;/a&gt;
+    &lt;/p&gt;
+    &lt;p&gt;
+      Or use custom triggers, like focus: 
+      &lt;input type=&quot;text&quot; value=&quot;Click me!&quot;
+        tooltip=&quot;See? Now click away...&quot; 
+        tooltip-trigger=&quot;focus&quot;
+        tooltip-placement=&quot;right&quot; /&gt;
+    &lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+                        </div>
+                    </tab>
+                    <tab heading="JavaScript">
+                        <div plunker-content="javascript">
+                            <pre ng-non-bindable><code data-language="javascript">var TooltipDemoCtrl = function ($scope) {
+  $scope.dynamicTooltip = &quot;Hello, World!&quot;;
+  $scope.dynamicTooltipText = &quot;dynamic&quot;;
+  $scope.htmlTooltip = &quot;I&#x27;ve been made &lt;b&gt;bold&lt;/b&gt;!&quot;;
+};
+</code></pre>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+      </section>
+      <script>var TooltipDemoCtrl = function ($scope) {
+  $scope.dynamicTooltip = "Hello, World!";
+  $scope.dynamicTooltipText = "dynamic";
+  $scope.htmlTooltip = "I've been made <b>bold</b>!";
+};
+</script>
+    
+      <section id="typeahead">
+        <div class="page-header">
+          <h1>Typeahead<small>
+              (<a target="_blank" href="https://github.com/angular-ui/bootstrap/tree/master/src/typeahead">ui.bootstrap.typeahead</a>)
+          </small></h1>
+        </div>
+        <div class="row">
+            <div class="span6">
+                <div class='container-fluid' ng-controller="TypeaheadCtrl">
+    <pre>Model: {{selected| json}}</pre>
+    <input type="text" ng-model="selected" typeahead="state for state in states | filter:$viewValue | limitTo:8">
+</div>
+            </div>
+            <div class="span6">
+                <p>Typeahead is a AngularJS version of <a href="http://twitter.github.com/bootstrap/javascript.html#typeahead">Twitter Bootstrap typeahead plugin</a>.
+This directive can be used to quickly create elegant typeheads with any form text input.</p>
+
+<p>It is very well integrated into the AngularJS as it uses subset of the
+<a href="http://docs.angularjs.org/api/ng.directive:select">select directive</a> syntax, which is very flexible. Supported expressions:</p>
+
+<ul>
+<li><em>label</em> for <em>value</em> in <em>sourceArray</em></li>
+<li><em>select</em> as <em>label</em> for <em>value</em> in <em>sourceArray</em></li>
+</ul>
+
+<p>The <code>sourceArray</code> expression can use a special <code>$viewValue</code> variable that corresponds to a value entered inside input by a user.</p>
+
+<p>Also this directive works with promises and it means that you can retrieve matches using the <code>$http</code> service with minimal effort.</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="span12" ng-controller="PlunkerCtrl">
+                <div class="pull-right">
+                    <button class="btn btn-info" id="plunk-btn" ng-click="edit('1.0.5', '2.3.1', '0.5.0', 'typeahead')"><i class="icon-edit icon-white"></i> Edit in plunker</button>
+                </div>
+                <tabset>
+                    <tab heading="Markup">
+                        <div plunker-content="markup">
+                            <pre ng-non-bindable><code data-language="html">&lt;div class=&#x27;container-fluid&#x27; ng-controller=&quot;TypeaheadCtrl&quot;&gt;
+    &lt;pre&gt;Model: {{selected| json}}&lt;/pre&gt;
+    &lt;input type=&quot;text&quot; ng-model=&quot;selected&quot; typeahead=&quot;state for state in states | filter:$viewValue | limitTo:8&quot;&gt;
+&lt;/div&gt;</code></pre>
+                        </div>
+                    </tab>
+                    <tab heading="JavaScript">
+                        <div plunker-content="javascript">
+                            <pre ng-non-bindable><code data-language="javascript">function TypeaheadCtrl($scope) {
+
+  $scope.selected = undefined;
+  $scope.states = [&#x27;Alabama&#x27;, &#x27;Alaska&#x27;, &#x27;Arizona&#x27;, &#x27;Arkansas&#x27;, &#x27;California&#x27;, &#x27;Colorado&#x27;, &#x27;Connecticut&#x27;, &#x27;Delaware&#x27;, &#x27;Florida&#x27;, &#x27;Georgia&#x27;, &#x27;Hawaii&#x27;, &#x27;Idaho&#x27;, &#x27;Illinois&#x27;, &#x27;Indiana&#x27;, &#x27;Iowa&#x27;, &#x27;Kansas&#x27;, &#x27;Kentucky&#x27;, &#x27;Louisiana&#x27;, &#x27;Maine&#x27;, &#x27;Maryland&#x27;, &#x27;Massachusetts&#x27;, &#x27;Michigan&#x27;, &#x27;Minnesota&#x27;, &#x27;Mississippi&#x27;, &#x27;Missouri&#x27;, &#x27;Montana&#x27;, &#x27;Nebraska&#x27;, &#x27;Nevada&#x27;, &#x27;New Hampshire&#x27;, &#x27;New Jersey&#x27;, &#x27;New Mexico&#x27;, &#x27;New York&#x27;, &#x27;North Dakota&#x27;, &#x27;North Carolina&#x27;, &#x27;Ohio&#x27;, &#x27;Oklahoma&#x27;, &#x27;Oregon&#x27;, &#x27;Pennsylvania&#x27;, &#x27;Rhode Island&#x27;, &#x27;South Carolina&#x27;, &#x27;South Dakota&#x27;, &#x27;Tennessee&#x27;, &#x27;Texas&#x27;, &#x27;Utah&#x27;, &#x27;Vermont&#x27;, &#x27;Virginia&#x27;, &#x27;Washington&#x27;, &#x27;West Virginia&#x27;, &#x27;Wisconsin&#x27;, &#x27;Wyoming&#x27;];
+}</code></pre>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+      </section>
+      <script>function TypeaheadCtrl($scope) {
+
+  $scope.selected = undefined;
+  $scope.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
+}</script>
+    
+  </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p>Designed and built by <a href="https://github.com/angular-ui?tab=members" target="_blank">Angular-UI team</a> and <a href="https://github.com/angular-ui/bootstrap/graphs/contributors" target="_blank">contributors</a>.</p>
+        <p>Code licensed under <a href="https://github.com/angular-ui/bootstrap/blob/master/LICENSE">MIT License</a>.</p>
+        <p><a href="https://github.com/angular-ui/bootstrap/issues?state=open">Issues</a></p>
+    </div>
+</footer>
+<script src="assets/rainbow.js"></script>
+<script src="assets/rainbow-generic.js"></script>
+<script src="assets/rainbow-javascript.js"></script>
+<script src="assets/rainbow-html.js"></script>
+<div modal="buildModalShown" class="fade">
+  <div class="modal-header"><h2>Create a Custom Build</h2></div>
+  <div class="modal-body">
+    <div ng-show="buildErrorText">
+      <h3 style="text-align: center;">{{buildErrorText}}</h3>
+    </div>
+    <div ng-hide="buildErrorText">
+      <label>Select the modules you wish to download:
+      <select style="width: 100%;" ui-select2 multiple 
+        ui-options="{multiple: true}"
+        ng-model="selectedModules">
+        
+          <option value="transition">Transition</option>
+        
+          <option value="collapse">Collapse</option>
+        
+          <option value="accordion">Accordion</option>
+        
+          <option value="alert">Alert</option>
+        
+          <option value="buttons">Buttons</option>
+        
+          <option value="carousel">Carousel</option>
+        
+          <option value="position">Position</option>
+        
+          <option value="datepicker">Datepicker</option>
+        
+          <option value="dialog">Dialog</option>
+        
+          <option value="dropdownToggle">Dropdown Toggle</option>
+        
+          <option value="modal">Modal</option>
+        
+          <option value="pagination">Pagination</option>
+        
+          <option value="tooltip">Tooltip</option>
+        
+          <option value="popover">Popover</option>
+        
+          <option value="progressbar">Progressbar</option>
+        
+          <option value="rating">Rating</option>
+        
+          <option value="tabs">Tabs</option>
+        
+          <option value="timepicker">Timepicker</option>
+        
+          <option value="typeahead">Typeahead</option>
+        
+      </select></label>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="btn btn-primary" ng-disabled="!selectedModules.length" ng-click="selectedModules.length && downloadBuild()"><i class="icon-download-alt icon-white"></i> Download {{selectedModules.length}} Modules</a>
+    <a class="btn" ng-click="buildModalShown = false">Cancel</a>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-37467169-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+</script>
+</body>
+</html>

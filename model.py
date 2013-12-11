@@ -229,7 +229,7 @@ class User(EndpointsModel):
     language = ndb.StringProperty()
     timezone = ndb.StringProperty()
     # Is the user a public user or business user
-    type_of_user = ndb.StringProperty()
+    type = ndb.StringProperty()
     # If the user is a business user, we store the informations about him 
     organization = ndb.KeyProperty()
     status = ndb.StringProperty()
