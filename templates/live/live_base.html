@@ -76,9 +76,9 @@
                             
                         </a>
                         {% else %}
-                        <a ng-show="userinfo" href="<%=userinfo.google_public_profile_url%>" target="_blank" class="dropdown-toggle" >
-                          <img alt="" src="<%=userinfo.photo%>" width="29" />
-                          <span class="username"><%=userinfo.display_name%></span>
+                        <a ng-show="userinfo" ng-href="<%=userinfo.google_public_profile_url%>" target="_blank" class="dropdown-toggle" >
+                          <img alt="" ng-src="<%=userinfo.photo%>" width="29" />
+                          <span class="username"ng-bind="userinfo.display_name"></span>
                         </a>
 
                         <div id="gConnect" ng-hide="userinfo">
