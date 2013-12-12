@@ -14,6 +14,7 @@
                      <button  ng-click="showModal()" id="sample_editable_1_new" class="btn green">
                     Share
                     </button>
+                    
                 </div>
             </div>
         </div>
@@ -40,11 +41,12 @@
                 <h2>About</h2>
                 {% if show.description %}
                 <p>{{show.description}}</p>
-                {}
+                {% else %}
+                No description available.
                 {% endif %}
 
                 <h2>When?</h2>
-                    <p>Oct. 1 3 p.m.-3:30 p.m. (PDT)</p>
+                    <p>{{show.starts_at}} - {{show.ends_at}}</p>
                     <p><a class="add-calendar" href="http://www.google.com/calendar/event?action=TEMPLATE&amp;text=Google%20Compute%20Engine%20Load%20Balancing%2C%20a%20quick%20introduction%20&amp;dates=20131001T220000Z/20131001T223000Z&amp;sprop=name%3AGoogle%20Developers&amp;sprop=website%3Adevelopers.google.com&amp;details=https%3A//developers.google.com/live/shows/4603780578410496" target="_blank" data-event="None Google Compute Engine Load Balancing, a quick introduction ">
 
         
@@ -52,6 +54,9 @@
                 Add to calendar
                 </a></p>
                <button class="btn green">Ask a question or give a feedback</button>
+               <br><br>
+               <div class="g-ytsubscribe" data-layout="full" data-channel="googledevelopers">
+               </div>
                
             
                

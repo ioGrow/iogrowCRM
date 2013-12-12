@@ -49,8 +49,10 @@
             <span ng-repeat="tag in show.tags"><a class="tag" href="#"> <%=tag%> </a></span>
             
              </br>
-              <span class="page-meta"><img src="/static/img/youtube.png"/>: <strong>Add youtube-url when this show is ready </strong></span>
+              <span class="page-meta"><img src="/static/img/youtube.png" ng-click="createYoutubePicker()"/>: <strong>Add youtube-url when this show is ready </strong></span>
               </br>
+              <iframe id="widget" type="text/html" width="640" height="390"
+  src="https://www.youtube.com/upload_embed" frameborder="0"></iframe>
               <span class="page-meta"><strong>The show page on i/oGrow Live:</strong> <a href="/live/shows/<%=show.id%>">preview</a> </span>
               </br>
               <span class="page-meta"><strong>Publish this show on i/oGrow Live: </strong> <input type="checkbox" checked class="toggle"/>  </span>
