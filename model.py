@@ -23,7 +23,7 @@ import re
 import string
 import datetime
 import types
-import handlers
+
 from apiclient.discovery import build
 from google.appengine.api import images
 
@@ -259,6 +259,7 @@ class User(EndpointsModel):
         self.profile = profile_key
         self.apps = apps
         self.active_app = active_app
+        self.type = 'business_user'
         # Put it 
         self.put()
     

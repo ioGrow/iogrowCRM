@@ -39,6 +39,7 @@ import jinja2
 from webapp2_extras import i18n
 from google.appengine.api import users
 from google.appengine.api import memcache
+from iomodels.crmengine.shows import Show
 
 jinja_environment = jinja2.Environment(
   loader=jinja2.FileSystemLoader(os.getcwd()),
@@ -775,12 +776,15 @@ class PublicLiveCompanyPageHandler(BaseHandler, SessionEnabledHandler):
             self.response.out.write(template.render(template_values))
 class PublicLiveShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self,id):
-      
-            
-            # Render the template
-            template_values = {}
-            template = jinja_environment.get_template('templates/live/live_show_page.html')
-            self.response.out.write(template.render(template_values))
+            show_id = int(id)
+            show = Show.get_by_id(show_id)
+            if show.is_published:
+                # Render the template
+                organization_key = show.organization
+                organization_id = organization_key.id()
+                template_values = {'organization_id':organization_id, 'show': show}
+                template = jinja_environment.get_template('templates/live/live_show_page.html')
+                self.response.out.write(template.render(template_values))
 
 class IndexHandler(BaseHandler,SessionEnabledHandler):
   def get(self):

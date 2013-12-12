@@ -44,7 +44,7 @@
             <div class="modal-body">
                      <div class="controls controls-row">
                             <form id="addTask" ng-submit="scheduleShow(ioevent)" class="ng-pristine ng-valid">
-                                                  <input class="input-block-level" autofocus type="text" placeholder="Add a new show" id="taskTitle" ng-model="ioevent.title">
+                                                  <input class="input-block-level" autofocus type="text" placeholder="Add a new show" id="taskTitle" ng-model="ioevent.name">
                                                   <p><strong>When?</strong></p>
                                                 <div class="row-fluid">
                                                   <div class="span6">
@@ -107,7 +107,7 @@
                   
                   <div class="details">
                     <a href="/#/shows/show/<%= show.id %>"><h3 class="relatedcardOppTitle">
-                                    <%= show.title%>
+                                    <%= show.name%>
                                     </h3></a>
                     <div class="desc">                           
                       
