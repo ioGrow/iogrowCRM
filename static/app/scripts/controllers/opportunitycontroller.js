@@ -1,5 +1,5 @@
-app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Account','Opportunity',
-    function($scope,$route,$location,Conf,Account,Opportunity) {
+app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Account','Opportunity','Opportunitystage',
+    function($scope,$route,$location,Conf,Account,Opportunity,Opportunitystage) {
       
      $("#id_Opportunities").addClass("active");
      $scope.isSignedIn = false;
@@ -16,6 +16,7 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Acc
      $scope.opppages=[];
 
      $scope.opportunities = [];
+     $scope.stage_selected={};
      $scope.opportunity = {};
      $scope.opportunity.access ='public';
 
@@ -114,6 +115,7 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Acc
           
           var params = {'limit':7};
           Opportunity.list($scope,params);
+          Opportunitystage.list($scope,params);
 
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
@@ -135,12 +137,19 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Acc
       
     $scope.save = function(opportunity){
       var params = {};
+      console.log('I am here on this method');
+          console.log($scope.stage_selected.name);
+          console.log($scope.stage_selected.probability);
+
+       opportunity.stage_name= $scope.stage_selected.name;
+       opportunity.stage_probability= $scope.stage_selected.probability;
         
         if (typeof(opportunity.account)=='object'){
           opportunity.account_name = opportunity.account.name;
           opportunity.account_id = opportunity.account.id;
           opportunity.account = opportunity.account.entityKey;
-
+          
+           
           
           Opportunity.insert($scope,opportunity);
 

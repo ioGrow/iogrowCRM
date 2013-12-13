@@ -1,0 +1,352 @@
+
+<div class="page-sidebar nav-collapse collapse">
+      <!-- BEGIN SIDEBAR MENU -->        
+        <ul class="page-sidebar-menu">
+        
+        {% for tab in tabs %}
+           <li id="id_{{tab.name}}"  ><a href="{{tab.url}}"><i class="icon-cogs"></i><span class="title">{{tab.label}}</span></a></li>
+          {% endfor %}
+        </ul>
+     
+     
+      <!-- END SIDEBAR MENU -->
+</div>
+<!--HKA 11.12.2013 Content PAge -->
+<div  class="page-content">
+<div class="container-fluid" ng-show="immediateFailed">
+         <div class="span12">  
+          <h1>Sign-in Button;</h1>
+              <span id="signin">
+                  <span id="myGsignin"></span>
+              </span>
+        </div>
+</div>
+<div class="container-fluid"   >
+<!--HKA 11.12.2013 Settings  -->
+  <div class="row-fluid">
+     <div class="span12">
+                            
+            <h2>
+            <a href="/#/accounts/" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
+           </a>   {{_("Settings")}}</h2>      
+            <hr/>
+            
+          </div>
+  </div>
+  <!--HKA 11.12.2013 Tabs -->
+  <div class="row-fluid" >
+       <div class="span12">
+              <!-- BEGIN PORTLET-->
+              <div class="portlet paddingless">
+                 <div class="portlet-body">
+                  <!--BEGIN TABS-->
+                  <div class="tabbable tabbable-custom">
+                    <ul class="nav nav-tabs">
+                    <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;" >Opportunity Stages</a></li>
+                      <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;">Case Status</a></li>
+                      <li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">Lead Status</a></li>
+                    </ul>
+                    <div class="tab-content">
+                      <div class="tab-pane active" id="tab_1_1" ng-show="selectedTab == 1">
+                        
+                            <div class="row-fluid cards-container">
+                         <div class="btn-group relbutton">
+            
+                                <button  ng-click="addOppStagetModal()" id="sample_editable_1_new" class="btn red">
+                               {{_("Add a new stage")}}<i class="icon-plus"></i>
+                                </button>
+                                
+                          </div>
+                            <div class="inner-cards-container">
+                              <div  class="span3 responsive" ng-repeat="stage in opportunitystages" data-tablet="span6" data-desktop="span3">
+                                <div class="dashboard-stat cards">
+                                  
+                                  <div class="details">
+                                    <a href="/#/contacts/show/<%= contact.id %>"><h3 class="relatedcardTitle">
+                                     <%=stage.name%> <%=stage.probability%>
+                                    </h3></a>
+                                    <div class="desc">    
+                                                             
+                                        <span class="contact-title"  > <a href="/#/search/type:Contact position:<%=contact.title%>">#<%=contact.title%></a>  </span>  
+                                    
+                                    </div>
+                                  </div>
+                                  <a class="more" href="#addOppStagetModal">
+                                  View more <i class="m-icon-swapright m-icon-white"></i>
+                                  </a>                 
+                                </div>
+                              </div>
+                              
+                              
+                              </div>
+                              
+                            </div>
+                            <div class="row-fluid">
+                                <div class="pagination pull-right" ng-hide="isLoading">
+                                      
+                                      <ul>
+                                        <li ng-show="oppstagepagination.prev"><button ng-click="OppstagelistPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                        {{_("Prev")}} 
+                                        </button></li>
+                                        
+                                        <li  ng-show="oppstagepagination.next"><button ng-click="OpplistNextPageItems()"  class="btn">
+                                        {{_("Next")}} 
+                                        </button></li>
+                                      </ul>
+                                    </div>
+                                    <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                        </div>
+                       
+
+                    <div id="addOppStagetModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+                        <div class="modal-header">
+                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                          <h3 id="myModalLabel">{{_("New Stage")}}</h3>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addOppStage" name="addOppStage"  ng-submit="saveOppStage(oppstage)" class="form-horizontal"> 
+                            <fieldset>
+                            <div class="control-group">
+                              <label  class="required control-label">{{_("Name")}} *</label>
+                       
+                              <div class="controls">
+                              <input type="text" required id="id_firstname" ng-model="oppstage.name">
+                          
+                               </div>
+                            </div>
+                           <div class="control-group">
+                              <label  class=" control-label">{{_("Probability")}}</label>
+                              <div class="controls">
+                              <input type="text"  id="id_lastname" ng-model="oppstage.probability">
+                          
+                              </div>
+                           </div>
+                          
+                    </fieldset>
+                
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <button  type="submit" class="btn green">{{_("Add a new Opportunity stage")}}</button>
+              </div>
+               </form>
+       </div>
+    <!--End Contact Modal -->
+                      </div>
+                      <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
+                        
+                           <div class="row-fluid cards-container">
+                         <div class="btn-group relbutton">
+            
+                                <button  ng-click="addCasestatustModal()" id="sample_editable_1_new" class="btn red">
+                               {{_("Add a Case status")}}<i class="icon-plus"></i>
+                                </button>
+                                
+                          </div>
+                            <div class="inner-cards-container">
+                              <div  class="span3 responsive"  data-tablet="span6" data-desktop="span3">
+                                <div class="dashboard-stat cards">
+                                  
+                                  <div class="details">
+                                    <a href="/#/contacts/show/<%= contact.id %>"><h3 class="relatedcardTitle">
+                                     Staus : Open
+                                    </h3></a>
+                                    <div class="desc">    
+                                                             
+                                        <span class="contact-title" ng-show="contact.title" > <a href="/#/search/type:Contact position:<%=contact.title%>">#<%=contact.title%></a>  </span>  
+                                    
+                                    </div>
+                                  </div>
+                                  <a class="more" href="/#/contacts/show/<%= contact.id %>">
+                                  View more <i class="m-icon-swapright m-icon-white"></i>
+                                  </a>                 
+                                </div>
+                              </div><br>
+                              
+                              
+                              </div>
+                              
+                            </div>
+                            <div class="row-fluid">
+                                <div class="pagination pull-right" ng-hide="isLoading">
+                                      
+                                      <ul>
+                                        <li ng-show="contactpagination.prev"><button ng-click="ContactlistPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                        {{_("Prev")}} 
+                                        </button></li>
+                                        
+                                        <li  ng-show="contactpagination.next"><button ng-click="ContactlistNextPageItems()"  class="btn">
+                                        {{_("Next")}} 
+                                        </button></li>
+                                      </ul>
+                                    </div>
+                                    <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                        </div>
+                        <!--HKA 18.11.2013 Add Contact modal -->
+
+                    <div id="addCasestatustModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+                        <div class="modal-header">
+                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                          <h3 id="myModalLabel">{{_("New Contact")}}</h3>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addContact" name="addcontact"  ng-submit="savecontact(contact)" class="form-horizontal"> 
+                            <fieldset>
+                            <div class="control-group">
+                              <label  class="required control-label">{{_("Case Status")}} *</label>
+                       
+                              <div class="controls">
+                              <input type="text" required id="id_firstname" ng-model="contact.firstname">
+                          
+                               </div>
+                            </div>
+                          
+                    </fieldset>
+                
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <button  type="submit" class="btn green">{{_("Add Contact")}}</button>
+              </div>
+               </form>
+       </div>
+
+                        
+                      </div>
+                      <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3">
+                          
+                         <div class="row-fluid cards-container">
+                         <div class="btn-group relbutton">
+            
+                                <button  ng-click="addLeadstatustModal()" id="sample_editable_1_new" class="btn red">
+                               {{_("Add a Lead status")}}<i class="icon-plus"></i>
+                                </button>
+                                
+                          </div>
+                            <div class="inner-cards-container">
+                              <div  class="span3 responsive"  data-tablet="span6" data-desktop="span3">
+                                <div class="dashboard-stat cards">
+                                  
+                                  <div class="details">
+                                    <a href="/#/contacts/show/<%= contact.id %>"><h3 class="relatedcardTitle">
+                                     Lead Status : New
+                                    </h3></a>
+                                    <div class="desc">    
+                                                             
+                                        <span class="contact-title" ng-show="contact.title" > <a href="/#/search/type:Contact position:<%=contact.title%>">#<%=contact.title%></a>  </span>  
+                                    
+                                    </div>
+                                  </div>
+                                  <a class="more" href="/#/contacts/show/<%= contact.id %>">
+                                  View more <i class="m-icon-swapright m-icon-white"></i>
+                                  </a>                 
+                                </div>
+                              </div><br>
+                              
+                              
+                              </div>
+                              
+                            </div>
+                            <div class="row-fluid">
+                                <div class="pagination pull-right" ng-hide="isLoading">
+                                      
+                                      <ul>
+                                        <li ng-show="contactpagination.prev"><button ng-click="ContactlistPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                        {{_("Prev")}} 
+                                        </button></li>
+                                        
+                                        <li  ng-show="contactpagination.next"><button ng-click="ContactlistNextPageItems()"  class="btn">
+                                        {{_("Next")}} 
+                                        </button></li>
+                                      </ul>
+                                    </div>
+                                    <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                        </div>
+                        <!--HKA 18.11.2013 Add Contact modal -->
+
+                    <div id="addLeadstatustModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+                        <div class="modal-header">
+                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                          <h3 id="myModalLabel">{{_("New Contact")}}</h3>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addContact" name="addcontact"  ng-submit="savecontact(contact)" class="form-horizontal"> 
+                            <fieldset>
+                            <div class="control-group">
+                              <label  class="required control-label">{{_("Lead Status")}} *</label>
+                       
+                              <div class="controls">
+                              <input type="text" required id="id_firstname" ng-model="contact.firstname">
+                          
+                               </div>
+                            </div>
+                           
+                           
+                    </fieldset>
+                
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <button  type="submit" class="btn green">{{_("Add Lead Status")}}</button>
+              </div>
+               </form>
+       </div>
+    <!--End Contact Modal -->
+
+
+                      </div>
+                      <!--div class="tab-pane active" id="tab_1_6" ng-show="selectedTab == 6">
+                          
+                         <div class="row-fluid cards-container iodrive">
+                         <div class="btn-group relbutton">
+            
+                                <div class="btn-group">
+                                    <a class="btn red" href="#" data-toggle="dropdown">
+                                    <i class="icon-plus"></i> Create
+                                    <i class="icon-angle-down"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                      <li><a  ng-click="showCreateDocument('document')" href="#" data-toggle="modal"><i class="icon-plus"></i> Document</a></li>
+                                      <li><a ng-click="showCreateDocument('presentation')" href="#" data-toggle="modal"><i class="icon-plus"></i> Presentation</a></li>
+                                      <li><a ng-click="showCreateDocument('spreadsheet')" href="#" data-toggle="modal"><i class="icon-plus"></i> Spreadsheet</a></li>
+                                     
+                                    </ul>
+                                </div>
+                                <div class="btn-group">
+                                    <button  ng-click="createPickerUploader()" id="sample_editable_1_new" class="btn red">
+                                    <i class="icon-upload-alt"></i>
+                                    </button>
+
+                                </div>
+                          </div>
+                            <div class="inner-cards-container">
+                                                        
+                             <div  class="span4 responsive" ng-repeat="attachment in documents" data-tablet="span6" data-desktop="span4">
+                                <div class="dashboard-stat cards-med">
+                                  
+                                  <div class="details">
+                                    <a href="/#/documents/show/<%= attachment.id %>"><h3 class="relatedcardOppTitle">
+                                     <%=attachment.title%>
+                                    </h3></a>
+                                    <div class="desc">                           
+                                    <center> <span class="contact-title" ><img class="google-drive-icon" ng-src="/static/img/google_drive/<%=attachment.mimeType%>.png"/></span> </center>
+                                    
+                                    </div>
+                                  </div>
+                                                 
+                                </div>
+                              </div>
+
+                              </div>
+                            </div>
+                      </div-->
+                    </div>
+                  </div>
+                  <!--END TABS-->
+                </div>
+              </div>
+    
+  </div>
+</div>
+
+</div>

@@ -38,7 +38,7 @@ STANDARD_PROFILES = ['Super Administrator', 'Standard User', 'Sales User', 'Mark
 STANDARD_APPS = [{'name': 'sales', 'label': 'Sales', 'url':'/#/accounts/'},#{'name': 'marketing', 'label':'Marketing', 'url':'/#/compaigns/'},
 {'name':'call_center','label': 'Customer Support','url':'/#/cases/'}]
 STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
-ADMIN_TABS = [{'name': 'Users','label': 'Users','url':'/#/admin/users'},{'name': 'Groups','label': 'Groups','url':'/#/admin/groups'}]
+ADMIN_TABS = [{'name': 'Users','label': 'Users','url':'/#/admin/users'},{'name': 'Groups','label': 'Groups','url':'/#/admin/groups'},{'name': 'Settings','label': 'Settings','url':'/#/admin/settings'}]
 ADMIN_APP = {'name': 'admin', 'label': 'Admin Console', 'url':'/#/admin/users'}
 
 

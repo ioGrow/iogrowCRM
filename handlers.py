@@ -516,7 +516,20 @@ class GroupShowHandler(BaseHandler, SessionEnabledHandler):
             template_values = {'tabs':tabs}
             template = jinja_environment.get_template('templates/admin/groups/show.html')
             self.response.out.write(template.render(template_values))
+class settingsShowHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+      if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            tabs = user.get_user_active_tabs()
 
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            # Render the template
+            template_values = {'tabs':tabs}
+            template = jinja_environment.get_template('templates/admin/settings/settings.html')
+            self.response.out.write(template.render(template_values))
 class GooglePlusConnect(SessionEnabledHandler):
     @staticmethod
     def exchange_code(code):
@@ -796,6 +809,7 @@ routes = [
     ('/views/admin/users/list',UserListHandler),
     ('/views/admin/groups/list',GroupListHandler),
     ('/views/admin/groups/show',GroupShowHandler),
+    ('/views/admin/settings',settingsShowHandler),
     # Applications settings
     (r'/apps/(\d+)', ChangeActiveAppHandler),
     # Authentication Handlers

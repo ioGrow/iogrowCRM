@@ -1,5 +1,5 @@
 
-var app = angular.module('crmEngine',['ui.bootstrap.datetimepicker','ui.bootstrap','crmEngine.productservices', 'crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.eventservices', 'crmEngine.leadservices','crmEngine.opportunityservices','crmEngine.caseservices','crmEngine.userservices','crmEngine.groupservices','crmEngine.noteservices','crmEngine.commentservices']);
+var app = angular.module('crmEngine',['ui.bootstrap.datetimepicker','ui.bootstrap','crmEngine.productservices', 'crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.eventservices', 'crmEngine.leadservices','crmEngine.opportunityservices','crmEngine.caseservices','crmEngine.userservices','crmEngine.groupservices','crmEngine.noteservices','crmEngine.commentservices','crmEngine.settingservices']);
 app.config(function($interpolateProvider){
   $interpolateProvider.startSymbol('<%=');
   $interpolateProvider.endSymbol('%>');
@@ -82,5 +82,9 @@ app.config(['$routeProvider', function($routeProvider) {
       }).when('/admin/groups/show/:groupId', {
         controller: 'GroupShowCtrl',        
         templateUrl:'/views/admin/groups/show'
+      }).when('/admin/settings',{
+        controller:'SettingsShowCtrl',
+        templateUrl:'/views/admin/settings'
+
       });
 }]);

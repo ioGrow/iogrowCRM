@@ -82,10 +82,13 @@
                     </div>
                     <div class="control-group">
                         <label  class="required control-label">{{_("Stage")}} </label>
-                       
+                        
                         <div class="controls">
-                          <input type="text"  id="id_stage" class="input-xlarge" ng-model="opportunity.stage">
-                          
+                          <select ng-model="stage_selected" ng-options="opps.name for opps in opportunitystages" class="input-xlarge">
+                            <option value="">-- choose Stage --</option>
+                            <option value=""><%=stage_selected.name%></option>
+                          </select>
+                         
                         </div>
 
                           

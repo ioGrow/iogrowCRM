@@ -17,6 +17,7 @@ from iomodels.crmengine.leads import Lead
 from iomodels.crmengine.cases import Case
 from iomodels.crmengine.products import Product
 from iomodels.crmengine.comments import Comment
+from iomodels.crmengine.opportunitystage import Opportunitystage
 from model import User,Userinfo,Group,Member,Permission,Contributor
 import model
 import logging
@@ -392,6 +393,26 @@ class CrmEngineApi(remote.Service):
       # Todo: Check permissions
       my_model.put()
       return my_model
+  #HKA 11.12.2013 Opportunitystage APIs
+  @Opportunitystage.method(user_required=True,path='opportunitystage',http_method='POST',name='opportunitystages.insert')
+  def OpportunitystageInsert(self,my_model):
+    user_from_email = EndpointsHelper.require_iogrow_user()
+    my_model.owner = user_from_email.google_user_id
+    my_model.organization = user_from_email.organization
+    my_model.put()
+    return my_model
+  @Opportunitystage.query_method(user_required=True,query_fields=('limit','order','pageToken'),path='opportunitystage',name='opportunitystages.list')
+  def OpportunitystageList(self,query):
+    user_from_email = EndpointsHelper.require_iogrow_user()
+    return query
+  @Opportunitystage.method(user_required=True,
+    http_method='PATCH',path='opportunitystage/{id}',name='opportunitystages.patch')
+  def OpportuntystagePatch(self,my_model):
+    user_from_email = EndpointsHelper.require_iogrow_user()
+    my_model.put()
+    return my_model
+
+
   # Leads APIs
   # leads.insert api
   @Lead.method(user_required=True,path='leads',http_method='POST',name='leads.insert')
