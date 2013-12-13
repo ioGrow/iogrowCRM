@@ -1,0 +1,316 @@
+/***
+Import fonts
+***/
+
+/*** load open sans font from Google Fonts
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
+***/
+
+/* load open sans font from local */
+@import url(../fonts/font.css);
+
+/* General body settings */
+body { 
+  color: #000; 
+  font-size:13px; 
+  direction: ltr;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-family: 'Open Sans' !important;
+}
+
+/*********************
+ GENERAL UI COLORS 
+*********************/
+
+/***
+Colors
+***/
+.color-red { color: #e02222;}
+.color-blue { color: #0da3e2;}
+.color-grey { color: #555555;}
+.color-green { color: #35aa47;}
+.color-yellow { color: #ffb848;}
+.color-purple { color: #852b99;}
+.color-light-red { color: #ff5400;}
+.color-light-blue { color: #bfd5fa;}
+.color-light-grey { color: #fafafa;}
+.color-light-green { color: #78df1d;}
+
+/*********************
+ GENERAL RESET & SETUP 
+*********************/
+
+/***
+General typography 
+***/
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 300;
+}
+
+h1.block, h2.block, h3.block, h4.block, h5.block, h6.block {
+  padding-bottom: 10px;
+}
+
+h2, h2 a {
+  color: #444;
+  font-size: 21px;
+  font-weight: 400;
+  line-height: 26px;
+  text-decoration: none;
+}
+
+h2 a:hover {
+  color: #0da3e2;
+  text-decoration: none;
+  transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -webkit-transition: all 0.5s ease;        
+ }
+ 
+h3 {
+  color: #222;
+}
+
+/***
+Apply fix for font awesome icons.
+***/
+[class^="icon-"],
+[class*=" icon-"],
+[class^="icon-"]:hover, 
+[class*=" icon-"]:hover { 
+  background: none !important;
+}
+
+/***
+Make font awesome icons fixed width(latest version issue)
+***/
+li [class^="icon-"],
+li [class*=" icon-"] {
+  display: inline-block;
+  width: 1.25em;
+  text-align: center;
+}
+li [class^="icon-"].icon-large,
+li [class*=" icon-"].icon-large {
+  /* increased font size for icon-large */
+  width: 1.5625em;
+}
+
+/***
+ie8 & ie9 modes
+***/
+.visible-ie8 {
+  display: none;
+}
+
+.ie8 .visible-ie8 {
+  display: inherit !important;
+}
+
+.visible-ie9 {
+  display: none;
+}
+
+.ie9 .visible-ie9 {
+  display: inherit !important;
+}
+
+.hidden-ie8 {
+  display: inherit;
+}
+
+.ie8 .hidden-ie8 {
+  display: none !important;
+}
+
+.hidden-ie9 {
+  display: inherit;
+}
+
+.ie9 .hidden-ie9 {
+  display: none !important;
+}
+
+/***
+General More Link
+***/
+a.more {
+  font-size: 13px;
+  font-weight: 400 !important;
+  font-family: 'Open Sans' !important;
+}
+
+a.more i {
+  font-size: 12px;
+}
+
+/***
+Fix link outlines after click
+***/
+a,a:focus, a:hover, a:active {
+  outline: 0;
+}
+
+/***
+IE8 fix for form input height in fluid rows
+***/
+.ie8 .row-fluid [class*="span"] {
+    min-height: 20px !important;
+}
+
+/***
+Fix grid offset used for reponsive layout handling(refer app.js=>handleResponsive)
+***/
+.fix-offset {
+  margin-left: 0px !important;
+}
+
+/***
+Misc tools
+***/
+.clearfix {
+  clear: both;
+}
+
+.visible-ie8 {
+  display: none
+}
+
+.no-padding {
+  padding: 0px !important;
+}
+
+.no-margin {
+  margin: 0px !important;
+}
+
+.no-bottom-space {
+  padding-bottom:0px !important;
+  margin-bottom: 0px !important;
+}
+
+.no-top-space {
+  padding-top:0px !important;
+  margin-top: 0px !important;
+}
+
+.space5 {
+  display: block;
+  height: 5px !important;
+  clear: both;
+}
+
+.space7 {
+  height: 7px !important;
+  clear: both;
+}
+
+.space10 {
+  height: 10px !important;
+  clear: both;
+}
+
+.space12 {
+  height: 12px !important;
+  clear: both;
+}
+
+.space15 {
+  height: 15px !important;
+  clear: both;
+}
+
+.space20 {
+  height: 20px !important;
+  clear: both;
+}
+
+.no-space {
+  margin: 0px !important;
+  padding: 0px !important;
+}
+
+.no-text-shadow {
+  text-shadow: none !important;
+}
+
+.no-left-padding {
+  padding-left: 0 !important;
+}
+
+.no-left-margin {
+  margin-left: 0 !important;
+}
+
+.margin-bottom-10 {
+  margin-bottom: 10px !important;
+}
+
+.margin-top-10 {
+  margin-top: 10px !important;
+}
+
+.margin-bottom-15 {
+  margin-bottom: 15px !important;
+}
+
+.margin-bottom-20 {
+  margin-bottom: 20px !important;
+}
+
+.margin-bottom-30 {
+  margin-bottom: 30px !important;
+}
+
+.margin-bottom-40 {
+  margin-bottom: 40px !important;
+}
+
+.margin-top-20 {
+  margin-top: 20px !important;
+}
+
+.margin-bottom-25 {
+  margin-bottom: 25px !important;
+}
+
+.margin-right-10 {
+  margin-right: 10px !important;
+}
+
+.margin-right-20 {
+  margin-right: 20px !important;
+}
+
+.margin-left-10 {
+  margin-left: 10px !important;
+}
+
+.hide {
+  display: none;
+}
+
+.bold {
+  font-weight:600 !important;
+}
+
+.fix-margin {
+  margin-left: 0px !important
+}
+
+.border {
+  border: 1px solid #ddd
+}
+
+.inline {
+  display: inline;
+}
+
+hr {
+  margin: 20px 0;
+  border: 0;
+  border-top: 1px solid #E0DFDF;
+  border-bottom: 1px solid #FEFEFE;
+}

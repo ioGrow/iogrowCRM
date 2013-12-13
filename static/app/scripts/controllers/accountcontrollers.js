@@ -76,6 +76,8 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
      }
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
+        console.log('this is the authResult');
+        console.log(authResult);
         $scope.connectServer(authResult);
         $scope.processAuth(authResult);
         

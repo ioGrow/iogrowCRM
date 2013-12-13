@@ -30,6 +30,8 @@ topicservices.factory('Show', function($http) {
 
       $scope.isLoading = true;
       gapi.client.crmengine.shows.list(params).execute(function(resp) {
+              console.log('Shows');
+              console.log(resp);
               if(!resp.code){
                 console.log('in topics.list looking for pagingation');
                 console.log($scope.currentPage);

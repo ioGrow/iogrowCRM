@@ -23,7 +23,7 @@ import re
 import string
 import datetime
 import types
-import handlers
+
 from apiclient.discovery import build
 from google.appengine.api import images
 
@@ -229,7 +229,7 @@ class User(EndpointsModel):
     language = ndb.StringProperty()
     timezone = ndb.StringProperty()
     # Is the user a public user or business user
-    type_of_user = ndb.StringProperty()
+    type = ndb.StringProperty()
     # If the user is a business user, we store the informations about him 
     organization = ndb.KeyProperty()
     status = ndb.StringProperty()
@@ -259,6 +259,7 @@ class User(EndpointsModel):
         self.profile = profile_key
         self.apps = apps
         self.active_app = active_app
+        self.type = 'business_user'
         # Put it 
         self.put()
     

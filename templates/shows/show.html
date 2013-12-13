@@ -42,15 +42,25 @@
                 </div>
                 
             <h2>
-            <a href="/#/accounts/p/1" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
-            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Shows")}} > <%= show.title %></h2>
+            <a href="/#/shows/" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Shows")}} > <%= show.name %></h2>
             
 
             <span ng-repeat="tag in show.tags"><a class="tag" href="#"> <%=tag%> </a></span>
             
              </br>
-              <span class="page-meta"><strong>youtube-url:</strong> Add youtube-url when show is ready </span>
-              <br>
+              <span class="page-meta"><img src="/static/img/youtube.png" ng-click="createYoutubePicker()"/>: <strong>Add youtube-url when this show is ready </strong></span>
+              </br>
+              <iframe id="widget" type="text/html" width="640" height="390"
+  src="https://www.youtube.com/upload_embed" frameborder="0"></iframe>
+              <span class="page-meta"><strong>The show page on i/oGrow Live:</strong> <a href="/live/shows/<%=show.id%>">preview</a> </span>
+              </br>
+              <span class="page-meta"><strong>Publish this show on i/oGrow Live: </strong> <input type="checkbox" checked class="toggle"/>  </span>
+              
+             
+                       
+              
+              </br>
              <span class="page-meta"><i class="icon-pencil"><a ng-click="editaccount()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |  <i class="icon-trash"><a ng-click="delete(account)" class="btn-link addAnotherPhone">  {{_("Delete")}}</a></i></span>
 
            
@@ -76,12 +86,14 @@
                     <ul class="nav nav-tabs">
                       <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;" >Notes</a></li>
                       <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;">About</a></li>
-                      <li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">Leads</a></li>
-                      <li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">Documents</a></li>
+                      <li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">Feedbacks</a></li>
+                      <li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">Leads</a></li>
+                      <li class="ng-tab" ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">Documents</a></li>
+
                       
                     </ul>
                     <div class="tab-content">
-                      <div class="tab-pane active" id="tab_1_1" ng-show="selectedTab == 1">
+                      <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 1">
                         
                          <div class="row-fluid">
                            <div class="span12 margin-bottom-10"> 

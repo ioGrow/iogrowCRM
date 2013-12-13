@@ -168,6 +168,25 @@ class EndpointsHelper(EndpointsModel):
             raise endpoints.UnauthorizedException(cls.INVALID_GRANT)
         return created_folder
 
+@endpoints.api(name='iogrowlive', version='v1', description='i/oGrow Live APIs',allowed_client_ids=[CLIENT_ID,
+                                   endpoints.API_EXPLORER_CLIENT_ID],scopes=SCOPES)
+class LiveApi(remote.Service):
+
+  ID_RESOURCE = endpoints.ResourceContainer(
+            message_types.VoidMessage,
+            id=messages.StringField(1))
+  # Accounts APIs
+  # accounts.insert api
+  @Account.method(user_required=True,path='accounts', http_method='POST', name='accounts.insert')
+  def AccountInsert(self, my_model):
+      user_from_email = EndpointsHelper.require_iogrow_user()
+      created_folder = EndpointsHelper.insert_folder(user_from_email,my_model.name)
+      # Todo: Check permissions
+      my_model.owner = user_from_email.google_user_id
+      my_model.organization = user_from_email.organization
+      my_model.folder = created_folder['id']
+      my_model.put()
+      return my_model
     
 @endpoints.api(name='crmengine', version='v1', description='I/Ogrow CRM APIs',allowed_client_ids=[CLIENT_ID,
                                    endpoints.API_EXPLORER_CLIENT_ID],scopes=SCOPES)
@@ -505,6 +524,53 @@ class CrmEngineApi(remote.Service):
       print patched_model
       print my_model
       properties = Case().__class__.__dict__
+      for p in properties.keys():
+         
+            if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p)):
+                exec('patched_model.'+p+'= my_model.'+p)
+      
+
+      patched_model.put()
+      return patched_model
+  # Shows API
+  # shows.insert api
+  @Show.method(user_required=True,path='shows',http_method='POST',name='shows.insert')
+  def shows_insert(self, my_model):
+      user_from_email = EndpointsHelper.require_iogrow_user()
+      # OAuth flow
+      created_folder = EndpointsHelper.insert_folder(user_from_email,my_model.name)
+      # Todo: Check permissions
+      my_model.owner = user_from_email.google_user_id
+      my_model.organization = user_from_email.organization
+      organization = user_from_email.organization.get()
+      my_model.organization_name = organization.name
+      my_model.folder = created_folder['id']
+      my_model.put()
+      return my_model
+  # shows.list api
+  @Show.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='shows', name='shows.list')
+  def shows_list(self, query):
+      user_from_email = EndpointsHelper.require_iogrow_user()      
+      return query.filter(ndb.OR(ndb.AND(Show.access=='public',Show.organization==user_from_email.organization),Show.owner==user_from_email.google_user_id, Show.collaborators_ids==user_from_email.google_user_id)).order(Show._key)
+  # shows.get api
+  @Show.method(request_fields=('id',),path='shows/{id}', http_method='GET', name='shows.get')
+  def shows_get(self, my_model):
+    if not my_model.from_datastore:
+      raise endpoints.NotFoundException('Show not found.')
+    return my_model
+  # shows.patch api
+  @Show.method(user_required=True,
+                http_method='PATCH', path='shows/{id}', name='shows.patch')
+  def shows_patch(self, my_model):
+      user_from_email = EndpointsHelper.require_iogrow_user()
+      # Todo: Check permissions
+      if not my_model.from_datastore:
+          raise endpoints.NotFoundException('Show not found.')
+      patched_model_key = my_model.entityKey
+      patched_model = ndb.Key(urlsafe=patched_model_key).get()
+      print patched_model
+      print my_model
+      properties = Show().__class__.__dict__
       for p in properties.keys():
          
             if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p)):

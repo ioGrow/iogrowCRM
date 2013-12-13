@@ -1,0 +1,73 @@
+{% extends "/templates/live/live_base.html" %}
+
+
+{% block title %} Home {%endblock%}
+{% block content %}
+     <div class="row-fluid breadcrumbs margin-bottom-40">
+        <div class="container">
+            <div class="span8">
+                <h1><a href="/#/accounts/p/1" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     <a href="#" >Companies</a> > <a href="/live/companies/{{organization_id}}">{{show.organization_name}}</a> > {{show.name}}</h1>
+            </div>
+            <div class="span4">
+                <div class="pull-right get-in">
+                     <button  ng-click="showModal()" id="sample_editable_1_new" class="btn green">
+                    Share
+                    </button>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END BREADCRUMBS -->
+
+    <!-- BEGIN CONTAINER -->   
+    <div class="container min-hight">
+        <!-- BEGIN PORTFOLIO ITEM -->
+        <div class="row-fluid margin-bottom-30">
+            <!-- BEGIN CAROUSEL -->            
+            <div class="span8">
+            {% if show.youtube_url %}
+              <iframe width="100%" height="450" src="http://www.youtube.com/embed/{{show.youtube_url}}?rel=0" frameborder="0" allowfullscreen></iframe>  
+            {% else %}
+              <img src="/static/img/gdl-stay-tuned.png" height="450"/>
+            {% endif %}           
+            </div>
+            <!-- END CAROUSEL -->                             
+
+            <!-- BEGIN PORTFOLIO DESCRIPTION -->            
+            <div class="span4">
+                
+                <h2>About</h2>
+                {% if show.description %}
+                <p>{{show.description}}</p>
+                {% else %}
+                No description available.
+                {% endif %}
+
+                <h2>When?</h2>
+                    <p>{{show.starts_at}} - {{show.ends_at}}</p>
+                    <p><a class="add-calendar" href="http://www.google.com/calendar/event?action=TEMPLATE&amp;text=Google%20Compute%20Engine%20Load%20Balancing%2C%20a%20quick%20introduction%20&amp;dates=20131001T220000Z/20131001T223000Z&amp;sprop=name%3AGoogle%20Developers&amp;sprop=website%3Adevelopers.google.com&amp;details=https%3A//developers.google.com/live/shows/4603780578410496" target="_blank" data-event="None Google Compute Engine Load Balancing, a quick introduction ">
+
+        
+                <img class="small-cal-icon" src="https://developers.google.com/_static/a39d39a910/images/calendar-42.png" width="25" alt="Add to calendar">
+                Add to calendar
+                </a></p>
+               <button class="btn green">Ask a question or give a feedback</button>
+               <br><br>
+               <div class="g-ytsubscribe" data-layout="full" data-channel="googledevelopers">
+               </div>
+               
+            
+               
+            </div>
+            <!-- END PORTFOLIO DESCRIPTION -->            
+        </div>
+        <!-- END PORTFOLIO ITEM --> 
+
+        
+
+          
+        <!-- END RECENT WORKS --> 
+    </div>
+{% endblock %}
