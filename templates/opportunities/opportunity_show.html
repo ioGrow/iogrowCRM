@@ -107,11 +107,11 @@
             <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>    {{_("Opportunities")}} > <%=opportunity.name %></h2>
             
 
-           <span class="opportunity-amount" >$<%=opportunity.amount %></span><span>
+           <span class="opportunity-amount" >$<%=opportunity.amount %>  </span><span>
            <span ng-show="opportunity.contact_name">{{_("associated with")}}: <a class="tag" href="/#/search/type:Opportunity <%=opportunity.contact_name %>">#<%=opportunity.contact_name %></a> from <a class="tag" ng-show="opportunity.account_name" href="/#/search/type:Opportunity <%=opportunity.contact_name %>">#<%=opportunity.account_name %></a></span>
             <span ng-show="opportunity.account_name" ng-hide="opportunity.account_name">{{_("associated with")}}:  <a class="tag" href="/#/accounts/show/<%=opportunity.account_id %>">#<%=opportunity.account_name %></a></span>
            
-            <br><span ng-show="opportunity.stage">{{_("Stage")}}: <a class="tag" href="/#/search/type:Opportunity <%=opportunity.stage %>">#<%=opportunity.stage %></a></span>
+            <br><span ng-show="opportunity.stagename">{{_("Stage")}}: <a class="tag" href="/#/search/type:Opportunity <%=opportunity.stage %>">#<%=opportunity.stagename %> </a>| <%=opportunity.stage_probability %> %</span>
             <br><span>{{_("Labels")}}: <a class="tag" href="/#/search/type:Opportunity <%=opportunity.description %>">#<%=opportunity.description %></a></span> <br>
             <span class="page-meta"><i class="icon-pencil"><a ng-click="editOpp()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="delete(opportunity)" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
 
@@ -358,12 +358,18 @@
                     </div>
                     <div class="control-group">
                         <label  class="required control-label">{{_("Stage")}} </label>
-                       
+                        
                         <div class="controls">
-                          <input type="text"  required id="id_stage" ng-model="opportunity.stage">
-                          
+                          <select ng-model="stage_selected" ng-options="opps.name for opps in opportunitystages | orderBy: 'name':true"  class="input-xlarge">
+                            <option value=""><%=opportunity.stagename%> </option>
+                            <!--option value=""><%=stage_selected.name%></option-->
+                          </select>
+                         
                         </div>
-                    </div>                     
+
+                       
+                          
+                    </div>               
                   
                      
                     

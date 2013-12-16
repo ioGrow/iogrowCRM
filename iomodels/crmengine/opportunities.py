@@ -7,7 +7,7 @@ import model
 
 class Opportunity(EndpointsModel):
 
-    _message_fields_schema = ('id','entityKey','folder', 'access','collaborators_list','collaborators_ids', 'name','stage','description','amount','account','account_name','account_id','contact','contact_name','contact_id','updated_at')
+    _message_fields_schema = ('id','entityKey','folder', 'access','collaborators_list','collaborators_ids', 'name','description','amount','account','account_name','account_id','contact','contact_name','contact_id','updated_at','stagename','stage_probability')
 
     # Sharing fields
     owner = ndb.StringProperty()
@@ -25,7 +25,6 @@ class Opportunity(EndpointsModel):
     description = ndb.StringProperty()
     industry = ndb.StringProperty()
     amount = ndb.IntegerProperty()
-    stage = ndb.StringProperty()
     closed_date = ndb.DateTimeProperty()
     reason_lost = ndb.DateTimeProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
@@ -33,6 +32,8 @@ class Opportunity(EndpointsModel):
     created_by = ndb.KeyProperty()
     last_modified_by = ndb.KeyProperty()
     address = ndb.StringProperty()
+    stagename = ndb.StringProperty()
+    stage_probability = ndb.StringProperty()
     
     # public or private
     access = ndb.StringProperty()
@@ -67,9 +68,10 @@ class Opportunity(EndpointsModel):
             search.TextField(name='owner', value = empty_string(self.owner) ),
             search.TextField(name='collaborators', value = collaborators ),
             search.TextField(name='title', value = empty_string(self.name) ),
+            search.TextField(name='stagename', value = empty_string(self.stagename) ),
+            search.TextField(name='stage_probability', value = empty_string(self.stage_probability) ),
             search.TextField(name='description', value = empty_string(self.description)),
             #search.NumberField(name='amount', value = self.amount),
-            search.TextField(name='stage', value = self.stage),
             #search.DateField(name='closed_date', value = self.closed_date),
             search.DateField(name='created_at', value = self.created_at),
             #search.DateField(name='reason_lost', value = self.reason_lost),
