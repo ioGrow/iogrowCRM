@@ -135,8 +135,10 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
       };
       
     $scope.save = function(account){
-     
-      Account.insert($scope,account);
+     if (account.name) {
+    	 Account.insert($scope,account);
+     }
+      
     };
     $scope.addAccountOnKey = function(account){
       if(event.keyCode == 13 && account){
