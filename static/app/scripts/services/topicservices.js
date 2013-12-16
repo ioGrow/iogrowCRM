@@ -16,23 +16,24 @@ topicservices.factory('Topic', function($http) {
       gapi.client.crmengine.topics.list(params).execute(function(resp) {
               if(!resp.code){
                 console.log('in topics.list looking for pagingation');
-                console.log('CurrentPage   is '+$scope.currentPage);
+                console.log('topicCurrentPage   is '+$scope.topicCurrentPage);
 
                  $scope.topics = resp.items;
-                  if ($scope.currentPage>1){
+                 
+                  if ($scope.topicCurrentPage >1){
                       console.log('Should show PREV');
-                    $scope.pagination.prev = true;
+                    $scope.topicpagination.prev = true;
                   }else{
-                      $scope.pagination.prev= false;
+                      $scope.topicpagination.prev= false;
                    }
                  if (resp.nextPageToken){
-                   var nextPage = $scope.currentPage + 1;
+                   var nextPage = $scope.topicCurrentPage + 1;
                     // Store the nextPageToken
-                   $scope.pages[nextPage] = resp.nextPageToken;
-                   $scope.pagination.next = true;
+                   $scope.topicpages[nextPage] = resp.nextPageToken;
+                   $scope.topicpagination.next = true;
 
                    }else{
-                  $scope.pagination.next = false;
+                  $scope.topicpagination.next = false;
                  }
                  //Loaded succefully
                  $scope.isLoading = false;

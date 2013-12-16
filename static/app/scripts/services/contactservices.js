@@ -46,20 +46,21 @@ accountservices.factory('Contact', function($http) {
   Contact.list = function($scope,params){
       gapi.client.crmengine.contacts.list(params).execute(function(resp) {
 
+    
               if(!resp.code){
                   if (!resp.items){
                     $scope.blankState = true;
                   }
                  $scope.contacts = resp.items;
-                 if ($scope.currentPage>1){
+                 if ($scope.contactCurrentPage>1){
                       $scope.contactpagination.prev = true;
                    }else{
                        $scope.contactpagination.prev = false;
                    }
                  if (resp.nextPageToken){
-                   var nextPage = $scope.currentPage + 1;
+                   var nextPage = $scope.contactCurrentPage + 1;
                    // Store the nextPageToken
-                   $scope.pages[nextPage] = resp.nextPageToken;
+                   $scope.contactpages[nextPage] = resp.nextPageToken;
                    $scope.contactpagination.next = true;
                    
                  }else{

@@ -39,10 +39,11 @@ import jinja2
 from webapp2_extras import i18n
 from google.appengine.api import users
 from google.appengine.api import memcache
+from iomodels.crmengine.shows import Show
 
 jinja_environment = jinja2.Environment(
-  loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),cache_size=0,
-  extensions=['jinja2.ext.i18n'])
+  loader=jinja2.FileSystemLoader(os.getcwd()),
+  extensions=['jinja2.ext.i18n'],cache_size=0)
 
 jinja_environment.install_gettext_translations(i18n)
 
@@ -516,7 +517,20 @@ class GroupShowHandler(BaseHandler, SessionEnabledHandler):
             template_values = {'tabs':tabs}
             template = jinja_environment.get_template('templates/admin/groups/show.html')
             self.response.out.write(template.render(template_values))
+class settingsShowHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+      if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            tabs = user.get_user_active_tabs()
 
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            # Render the template
+            template_values = {'tabs':tabs}
+            template = jinja_environment.get_template('templates/admin/settings/settings.html')
+            self.response.out.write(template.render(template_values))
 class GooglePlusConnect(SessionEnabledHandler):
     @staticmethod
     def exchange_code(code):
@@ -595,6 +609,7 @@ class GooglePlusConnect(SessionEnabledHandler):
         email = GooglePlusConnect.get_user_email(credentials)
 
         user = model.User()
+        user.type = 'business_user'
         user.status = 'active'
         user.google_user_id = profile.get('id')
         user.google_display_name = profile.get('displayName')
@@ -642,7 +657,7 @@ class GooglePlusConnect(SessionEnabledHandler):
         invited_user_id_request = self.request.get("id")
         if invited_user_id_request:
             invited_user_id = long(invited_user_id_request)
-        user = model.User.query(model.User.google_user_id == token_info.get('user_id')).get()
+        #user = model.User.query(model.User.google_user_id == token_info.get('user_id')).get()
         
         # Store our credentials with in the datastore with our user.
         if invited_user_id:
@@ -663,6 +678,80 @@ class GooglePlusConnect(SessionEnabledHandler):
         self.response.headers['Content-Type'] = 'application/json'  
         self.response.out.write(json.dumps(isNewUser))
 
+class PublicUsersHandler(SessionEnabledHandler):
+    @staticmethod
+    def save_token_for_user(google_user_id, credentials):
+      """Creates a user for the given ID and credential or updates the existing
+      user with the existing credential.
+
+      Args:
+        google_user_id: Google user ID to update.
+        credentials: Credential to set for the user.
+
+      Returns:
+        Updated User.
+      """
+      user = model.User.query(model.User.google_user_id == google_user_id).get()     
+      if user is None:
+        
+        # Couldn't find User in datastore.  Register a new user.
+        profile = GooglePlusConnect.get_user_profile(credentials)
+        email = GooglePlusConnect.get_user_email(credentials)
+
+        user = model.User()
+        user.type = 'public_user'
+        user.status = 'active'
+        user.google_user_id = profile.get('id')
+        user.google_display_name = profile.get('displayName')
+        user.google_public_profile_url = profile.get('url')
+        user.email = email.get('email')
+        image = profile.get('image')
+        if image is not None:
+          user.google_public_profile_photo_url = image.get('url')
+      user.google_credentials = credentials
+      user.put()
+      return user
+
+  
+    def post(self):
+        #try to get the user credentials from the code
+        credentials = None
+        code = self.request.get("code")
+        try:
+            credentials = GooglePlusConnect.exchange_code(code)
+        except FlowExchangeError:
+            return
+        token_info = GooglePlusConnect.get_token_info(credentials)
+        if token_info.status_code != 200:
+            return
+        token_info = json.loads(token_info.content)
+        # If there was an error in the token info, abort.
+        if token_info.get('error') is not None:
+            return
+        # Make sure the token we got is for our app.
+        expr = re.compile("(\d*)(.*).apps.googleusercontent.com")
+        issued_to_match = expr.match(token_info.get('issued_to'))
+        local_id_match = expr.match(CLIENT_ID)
+        if (not issued_to_match
+            or not local_id_match
+            or issued_to_match.group(1) != local_id_match.group(1)):
+          
+            return
+        user = PublicUsersHandler.save_token_for_user(token_info.get('user_id'),
+                                                  credentials)
+        # if user doesn't have organization redirect him to sign-up
+        userinfo = {}
+        userinfo['display_name']= user.google_display_name
+        userinfo['google_user_id'] = user.google_user_id
+        userinfo['google_public_profile_url']= user.google_public_profile_url
+        userinfo['photo'] = user.google_public_profile_photo_url
+
+        # Store the user ID in the session for later use.
+        self.session[self.CURRENT_USER_SESSION_KEY] = token_info.get('user_id')
+        self.response.headers['Content-Type'] = 'application/json'  
+        self.response.out.write(json.dumps(userinfo))
+
+
 class SearchListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
@@ -677,6 +766,38 @@ class SearchListHandler(BaseHandler, SessionEnabledHandler):
             template_values = {'tabs':tabs}
             template = jinja_environment.get_template('templates/search/list.html')
             self.response.out.write(template.render(template_values))
+class PublicLiveHomeHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+            # Render the template
+            user = None
+            if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+                try:
+                    user = self.get_user_from_session()
+                except:
+                    user = None
+
+            template_values = {'user': user}
+            template = jinja_environment.get_template('templates/live/live_index.html')
+            self.response.out.write(template.render(template_values))
+class PublicLiveCompanyPageHandler(BaseHandler, SessionEnabledHandler):
+    def get(self,id):
+      
+            
+            # Render the template
+            template_values = {}
+            template = jinja_environment.get_template('templates/live/live_company_page.html')
+            self.response.out.write(template.render(template_values))
+class PublicLiveShowHandler(BaseHandler, SessionEnabledHandler):
+    def get(self,id):
+            show_id = int(id)
+            show = Show.get_by_id(show_id)
+            if show.is_published:
+                # Render the template
+                organization_key = show.organization
+                organization_id = organization_key.id()
+                template_values = {'organization_id':organization_id, 'show': show}
+                template = jinja_environment.get_template('templates/live/live_show_page.html')
+                self.response.out.write(template.render(template_values))
 
 class IndexHandler(BaseHandler,SessionEnabledHandler):
   def get(self):
@@ -796,12 +917,18 @@ routes = [
     ('/views/admin/users/list',UserListHandler),
     ('/views/admin/groups/list',GroupListHandler),
     ('/views/admin/groups/show',GroupShowHandler),
+    ('/views/admin/settings',settingsShowHandler),
     # Applications settings
     (r'/apps/(\d+)', ChangeActiveAppHandler),
+    # ioGrow Live
+    ('/live',PublicLiveHomeHandler),
+    (r'/live/companies/(\d+)',PublicLiveCompanyPageHandler),
+    (r'/live/shows/(\d+)',PublicLiveShowHandler),
     # Authentication Handlers
     ('/sign-in',SignInHandler),
     ('/sign-up',SignUpHandler),
-    ('/gconnect',GooglePlusConnect)
+    ('/gconnect',GooglePlusConnect),
+    ('/gconnectpublic',PublicUsersHandler)
     ]
 config = {}
 config['webapp2_extras.sessions'] = {

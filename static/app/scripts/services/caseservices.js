@@ -34,19 +34,20 @@ accountservices.factory('Case', function($http) {
                     $scope.blankState = true;
                   }
                  $scope.cases = resp.items;
-                 if ($scope.currentPage>1){
-                      $scope.pagination.prev = true;
+                         
+                 if ($scope.caseCurrentPage>1){
+                      $scope.casepagination.prev = true;
                    }else{
-                       $scope.pagination.prev = false;
+                       $scope.casepagination.prev = false;
                    }
                  if (resp.nextPageToken){
-                   var nextPage = $scope.currentPage + 1;
+                   var nextPage = $scope.caseCurrentPage + 1;
                    // Store the nextPageToken
-                   $scope.pages[nextPage] = resp.nextPageToken;
-                   $scope.pagination.next = true;
+                   $scope.casepages[nextPage] = resp.nextPageToken;
+                   $scope.casepagination.next = true;
                    
                  }else{
-                  $scope.pagination.next = false;
+                  $scope.casepagination.next = false;
                  }
                  // Loaded succefully
                  $scope.isLoading = false;

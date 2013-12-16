@@ -87,14 +87,15 @@ app.controller('ShowListCtrl', ['$scope','$filter','$route','$location','Conf','
             if (ioevent.ends_at){
               var starts_at = $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']);
               var ends_at = $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']);
-              params ={'title': ioevent.title,
+              params ={'name': ioevent.name,
                       'starts_at': starts_at,
                       'ends_at':ends_at ,
+                      'is_published': true,
                       'tags': tags
               }
 
             }else{
-              params ={'title': ioevent.title,
+              params ={'name': ioevent.name,
                       'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
                       'tags': tags
               }
@@ -194,6 +195,17 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','$location','Conf',
      
      $scope.accounts = [];
      
+     
+
+
+     $scope.createYoutubePicker = function() {
+          console.log('ok should create youtube picker');
+          var picker = new google.picker.PickerBuilder().
+          addView(google.picker.ViewId.YOUTUBE).
+         
+          build();
+          picker.setVisible(true);
+      };
      
      $scope.addTask = function(task){
       

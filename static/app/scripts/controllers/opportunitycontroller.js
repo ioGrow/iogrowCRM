@@ -1,5 +1,5 @@
-app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Account','Opportunity',
-    function($scope,$route,$location,Conf,Account,Opportunity) {
+app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Account','Opportunity','Opportunitystage',
+    function($scope,$route,$location,Conf,Account,Opportunity,Opportunitystage) {
       
      $("#id_Opportunities").addClass("active");
      $scope.isSignedIn = false;
@@ -10,8 +10,13 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Acc
      $scope.pagination = {};
      $scope.currentPage = 01;
      $scope.pages = [];
-     
+     //HKA 11.12.2013 var Opportunity to manage Next & Prev
+     $scope.opppagination = {};
+     $scope.oppCurrentPage=01;
+     $scope.opppages=[];
+
      $scope.opportunities = [];
+     $scope.stage_selected={};
      $scope.opportunity = {};
      $scope.opportunity.access ='public';
 
@@ -62,32 +67,31 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Acc
     }
      $scope.listNextPageItems = function(){
         
-        
-        var nextPage = $scope.currentPage + 1;
+        var nextPage = $scope.oppCurrentPage + 1;
         var params = {};
-          if ($scope.pages[nextPage]){
+          if ($scope.opppages[nextPage]){
             params = {'limit':7,
-                      'pageToken':$scope.pages[nextPage]
+                      'pageToken':$scope.opppages[nextPage]
                      }
           }else{
             params = {'limit':7}
           }
           console.log('in listNextPageItems');
-          $scope.currentPage = $scope.currentPage + 1 ; 
+          $scope.oppCurrentPage = $scope.oppCurrentPage + 1 ; 
           Opportunity.list($scope,params);
      }
      $scope.listPrevPageItems = function(){
-       
-       var prevPage = $scope.currentPage - 1;
+
+       var prevPage = $scope.oppCurrentPage - 1;
        var params = {};
-          if ($scope.pages[prevPage]){
+          if ($scope.opppages[prevPage]){
             params = {'limit':7,
-                      'pageToken':$scope.pages[prevPage]
+                      'pageToken':$scope.opppages[prevPage]
                      }
           }else{
             params = {'limit':7}
           }
-          $scope.currentPage = $scope.currentPage - 1 ;
+          $scope.oppCurrentPage = $scope.oppCurrentPage - 1 ;
           Opportunity.list($scope,params);
      }
      $scope.signIn = function(authResult) {
@@ -111,6 +115,7 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Acc
           
           var params = {'limit':7};
           Opportunity.list($scope,params);
+          Opportunitystage.list($scope,params);
 
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
@@ -132,12 +137,19 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Acc
       
     $scope.save = function(opportunity){
       var params = {};
+      console.log('I am here on this method');
+          console.log($scope.stage_selected.name);
+          console.log($scope.stage_selected.probability);
+
+       opportunity.stagename= $scope.stage_selected.name;
+       opportunity.stage_probability= $scope.stage_selected.probability;
         
         if (typeof(opportunity.account)=='object'){
           opportunity.account_name = opportunity.account.name;
           opportunity.account_id = opportunity.account.id;
           opportunity.account = opportunity.account.entityKey;
-
+          
+           
           
           Opportunity.insert($scope,opportunity);
 
@@ -196,8 +208,8 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Acc
       
 }]);
 
-app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','Conf','Task','Event','Topic','Note','Opportunity','Permission','User',
-    function($scope,$filter,$route,$location,Conf,Task,Event,Topic,Note,Opportunity,Permission,User) {
+app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','Conf','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage',
+    function($scope,$filter,$route,$location,Conf,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage) {
  
       $("#id_Opportunities").addClass("active");
       
@@ -205,12 +217,19 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
      $scope.immediateFailed = false;
      $scope.isContentLoaded = false;
      $scope.pagination = {};
+     //HKA 10.12.2013 Var topic to manage Next & Prev
+     $scope.topicCurrentPage=01;
+     $scope.topicpagination={};
+     $scope.topicpages = [];
+     $scope.nextPageToken = undefined;
+     $scope.prevPageToken = undefined;
      $scope.currentPage = 01;
      $scope.pages = [];
      $scope.opportunities = [];
      $scope.users = [];
      $scope.user = undefined;
      $scope.slected_memeber = undefined;
+      $scope.stage_selected={};
      //HKA 09.11.2013 Add a new Task
      $scope.addTask = function(task){
       
@@ -307,17 +326,17 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
         data: {code:authResult.code}
       });
     }
-     $scope.listNextPageItems = function(){
+     $scope.TopiclistNextPageItems = function(){
         
         
-        var nextPage = $scope.currentPage + 1;
+        var nextPage = $scope.topicCurrentPage + 1;
         var params = {};
-          if ($scope.pages[nextPage]){
+          if ($scope.topicpages[nextPage]){
             params = {'about_kind':'Opportunity',
                       'about_item':$scope.opportunity.id,
                       'order': '-updated_at',
                       'limit': 5,
-                      'pageToken':$scope.pages[nextPage]
+                      'pageToken':$scope.topicpages[nextPage]
                      }
           }else{
             params = {'about_kind':'Opportunity',
@@ -326,19 +345,19 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
                       'limit': 5}
           }
           console.log('in listNextPageItems');
-          $scope.currentPage = $scope.currentPage + 1 ; 
+          $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ; 
           Topic.list($scope,params);
      }
-     $scope.listPrevPageItems = function(){
+     $scope.TopiclistPrevPageItems = function(){
        
-       var prevPage = $scope.currentPage - 1;
+       var prevPage = $scope.topicCurrentPage - 1;
        var params = {};
-          if ($scope.pages[prevPage]){
+          if ($scope.topicpages[prevPage]){
             params = {'about_kind':'Opportunity',
                       'about_item':$scope.opportunity.id,
                       'order': '-updated_at',
                       'limit': 5,
-                      'pageToken':$scope.pages[prevPage]
+                      'pageToken':$scope.topicpages[prevPage]
                      }
           }else{
             params = {'about_kind':'Opportunity',
@@ -346,9 +365,9 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
                       'order': '-updated_at',
                       'limit': 5}
           }
-          $scope.currentPage = $scope.currentPage - 1 ;
+          $scope.topicCurrentPage = $scope.topicCurrentPage - 1 ;
           Topic.list($scope,params);
-          console.log()
+          
      }
      $scope.signIn = function(authResult) {
         console.log('signIn callback #start_debug');
@@ -386,6 +405,8 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
           var opportunityid = {'id':$route.current.params.opportunityId};
           Opportunity.get($scope,opportunityid);
           User.list($scope,{});
+          //HKA 13.12.2013 to retrieve the opportunities's stages
+           Opportunitystage.list($scope,{});
 
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
@@ -503,14 +524,15 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
  $scope.UpdateOpportunity = function(opportunity){
   var params = {'id':$scope.opportunity.id,
                 'name':opportunity.name,
-                 'stage':opportunity.stage,
+                 'stagename':$scope.stage_selected.name,
+                 'stage_probability':$scope.stage_selected.probability,
                 'amount':opportunity.amount,
                 'description':opportunity.description};
-  $scope.$watch(opportunity.stage, function() {
+  $scope.$watch(opportunity.amount, function() {
       var paramsNote = {
                   'about_kind': 'Opportunity',
                   'about_item': $scope.opportunity.id,
-                  'title': 'stage updated to '+ opportunity.stage
+                  'title': 'stage updated to '+ opportunity.amount
                   
       };
       console.log('inserting a new note');

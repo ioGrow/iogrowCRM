@@ -17,6 +17,9 @@ from iomodels.crmengine.leads import Lead
 from iomodels.crmengine.cases import Case
 from iomodels.crmengine.products import Product
 from iomodels.crmengine.comments import Comment
+from iomodels.crmengine.opportunitystage import Opportunitystage
+from iomodels.crmengine.leadstatuses import Leadstatus
+from iomodels.crmengine.casestatuses import Casestatus
 from model import User,Userinfo,Group,Member,Permission,Contributor
 import model
 import logging
@@ -167,6 +170,25 @@ class EndpointsHelper(EndpointsModel):
             raise endpoints.UnauthorizedException(cls.INVALID_GRANT)
         return created_folder
 
+@endpoints.api(name='iogrowlive', version='v1', description='i/oGrow Live APIs',allowed_client_ids=[CLIENT_ID,
+                                   endpoints.API_EXPLORER_CLIENT_ID],scopes=SCOPES)
+class LiveApi(remote.Service):
+
+  ID_RESOURCE = endpoints.ResourceContainer(
+            message_types.VoidMessage,
+            id=messages.StringField(1))
+  # Accounts APIs
+  # accounts.insert api
+  @Account.method(user_required=True,path='accounts', http_method='POST', name='accounts.insert')
+  def AccountInsert(self, my_model):
+      user_from_email = EndpointsHelper.require_iogrow_user()
+      created_folder = EndpointsHelper.insert_folder(user_from_email,my_model.name)
+      # Todo: Check permissions
+      my_model.owner = user_from_email.google_user_id
+      my_model.organization = user_from_email.organization
+      my_model.folder = created_folder['id']
+      my_model.put()
+      return my_model
     
 @endpoints.api(name='crmengine', version='v1', description='I/Ogrow CRM APIs',allowed_client_ids=[CLIENT_ID,
                                    endpoints.API_EXPLORER_CLIENT_ID],scopes=SCOPES)
@@ -392,6 +414,26 @@ class CrmEngineApi(remote.Service):
       # Todo: Check permissions
       my_model.put()
       return my_model
+  #HKA 11.12.2013 Opportunitystage APIs
+  @Opportunitystage.method(user_required=True,path='opportunitystage',http_method='POST',name='opportunitystages.insert')
+  def OpportunitystageInsert(self,my_model):
+    user_from_email = EndpointsHelper.require_iogrow_user()
+    my_model.owner = user_from_email.google_user_id
+    my_model.organization = user_from_email.organization
+    my_model.put()
+    return my_model
+  @Opportunitystage.query_method(user_required=True,query_fields=('limit','order','pageToken'),path='opportunitystage',name='opportunitystages.list')
+  def OpportunitystageList(self,query):
+    user_from_email = EndpointsHelper.require_iogrow_user()
+    return query
+  @Opportunitystage.method(user_required=True,
+    http_method='PATCH',path='opportunitystage/{id}',name='opportunitystages.patch')
+  def OpportuntystagePatch(self,my_model):
+    user_from_email = EndpointsHelper.require_iogrow_user()
+    my_model.put()
+    return my_model
+
+
   # Leads APIs
   # leads.insert api
   @Lead.method(user_required=True,path='leads',http_method='POST',name='leads.insert')
@@ -437,6 +479,25 @@ class CrmEngineApi(remote.Service):
       # Todo: Check permissions
       my_model.put()
       return my_model
+
+  #HKA 14.12.2013 Lead status APIs
+  @Leadstatus.method(user_required=True,path='leadstatuses',http_method='POST',name='leadstatuses.insert')
+  def LeadstatusInsert(self,my_model):
+    user_from_email = EndpointsHelper.require_iogrow_user()
+    my_model.owner = user_from_email.google_user_id
+    my_model.organization = user_from_email.organization
+    my_model.put()
+    return my_model
+  @Leadstatus.query_method(user_required=True,query_fields=('limit','order','pageToken'),path='leadstatuses',name='leadstatuses.list')
+  def LeadstatusList(self,query):
+    user_from_email = EndpointsHelper.require_iogrow_user()
+    return query
+  @Leadstatus.method(user_required=True,
+    http_method='PATCH',path='leadstatuses/{id}',name='leadstatuses.patch')
+  def LeadstatusPatch(self,my_model):
+    user_from_email = EndpointsHelper.require_iogrow_user()
+    my_model.put()
+    return my_model
   # Cases API 
   # cases.insert api 
   @Case.method(user_required=True,path='cases',http_method='POST',name='cases.insert')
@@ -484,6 +545,72 @@ class CrmEngineApi(remote.Service):
       print patched_model
       print my_model
       properties = Case().__class__.__dict__
+      for p in properties.keys():
+         
+            if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p)):
+                exec('patched_model.'+p+'= my_model.'+p)
+      
+
+      patched_model.put()
+      return patched_model
+      #*******************************************#
+  #HKA 14.12.2013 Case status APIs
+  @Casestatus.method(user_required=True,path='casestatuses',http_method='POST',name='casestatuses.insert')
+  def CasestatusInsert(self,my_model):
+    user_from_email = EndpointsHelper.require_iogrow_user()
+    my_model.owner = user_from_email.google_user_id
+    my_model.organization = user_from_email.organization
+    my_model.put()
+    return my_model
+  @Casestatus.query_method(user_required=True,query_fields=('limit','order','pageToken'),path='casestatuses',name='casestatuses.list')
+  def CasestatusList(self,query):
+    user_from_email = EndpointsHelper.require_iogrow_user()
+    return query
+  @Casestatus.method(user_required=True,
+    http_method='PATCH',path='casestatuses/{id}',name='casestatuses.patch')
+  def CasestatusPatch(self,my_model):
+    user_from_email = EndpointsHelper.require_iogrow_user()
+    my_model.put()
+    return my_model
+  # Shows API
+  # shows.insert api
+  @Show.method(user_required=True,path='shows',http_method='POST',name='shows.insert')
+  def shows_insert(self, my_model):
+      user_from_email = EndpointsHelper.require_iogrow_user()
+      # OAuth flow
+      created_folder = EndpointsHelper.insert_folder(user_from_email,my_model.name)
+      # Todo: Check permissions
+      my_model.owner = user_from_email.google_user_id
+      my_model.organization = user_from_email.organization
+      organization = user_from_email.organization.get()
+      my_model.organization_name = organization.name
+      my_model.folder = created_folder['id']
+      my_model.put()
+      return my_model
+  # shows.list api
+  @Show.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='shows', name='shows.list')
+  def shows_list(self, query):
+      user_from_email = EndpointsHelper.require_iogrow_user()      
+      return query.filter(ndb.OR(ndb.AND(Show.access=='public',Show.organization==user_from_email.organization),Show.owner==user_from_email.google_user_id, Show.collaborators_ids==user_from_email.google_user_id)).order(Show._key)
+  # shows.get api
+  @Show.method(request_fields=('id',),path='shows/{id}', http_method='GET', name='shows.get')
+  def shows_get(self, my_model):
+    if not my_model.from_datastore:
+      raise endpoints.NotFoundException('Show not found.')
+    return my_model
+  # shows.patch api
+  @Show.method(user_required=True,
+                http_method='PATCH', path='shows/{id}', name='shows.patch')
+  def shows_patch(self, my_model):
+      user_from_email = EndpointsHelper.require_iogrow_user()
+      # Todo: Check permissions
+      if not my_model.from_datastore:
+          raise endpoints.NotFoundException('Show not found.')
+      patched_model_key = my_model.entityKey
+      patched_model = ndb.Key(urlsafe=patched_model_key).get()
+      print patched_model
+      print my_model
+      properties = Show().__class__.__dict__
       for p in properties.keys():
          
             if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p)):

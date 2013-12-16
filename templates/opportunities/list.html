@@ -82,10 +82,14 @@
                     </div>
                     <div class="control-group">
                         <label  class="required control-label">{{_("Stage")}} </label>
-                       
+                        
                         <div class="controls">
-                          <input type="text"  id="id_stage" class="input-xlarge" ng-model="opportunity.stage">
+                          <select ng-model="stage_selected" ng-options="opps.name for opps in opportunitystages | orderBy: 'name':true" class="input-xlarge">
+                            <option value="">-- choose Stage --</option>
                           
+                          </select>
+                          
+                         
                         </div>
 
                           
@@ -182,11 +186,11 @@
             <div class="pagination pull-right" ng-hide="isLoading">
                   
                   <ul>
-                    <li ng-show="pagination.prev"><button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
+                    <li ng-show="opppagination.prev"><button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
                     {{_("Prev")}} 
                     </button></li>
-                    <li ng-repeat="page in pagination.pages" ng-class='{active: page.isCurrent}'><a  href="#/accounts/"><%= page.id %></a></li>
-                    <li  ng-show="pagination.next"><button ng-click="listNextPageItems()"  class="btn">
+                    <li ng-repeat="page in opppagination.pages" ng-class='{active: page.isCurrent}'><a  href="#/accounts/"><%= page.id %></a></li>
+                    <li  ng-show="opppagination.next"><button ng-click="listNextPageItems()"  class="btn">
                     {{_("Next")}} 
                     </button></li>
                   </ul>

@@ -8,7 +8,7 @@ import pprint
 import model
 
 class Show(EndpointsModel):
-    _message_fields_schema = ('id', 'title','starts_at','ends_at','description','tags','youtube_url','is_published','status')
+    _message_fields_schema = ('id', 'name','starts_at','ends_at','description','tags','youtube_url','is_published','status')
     author = ndb.StructuredProperty(User)
     # Sharing fields
     owner = ndb.StringProperty()
@@ -16,7 +16,7 @@ class Show(EndpointsModel):
     collaborators_ids = ndb.StringProperty(repeated=True)
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
-    title = ndb.StringProperty(required=True)
+    name = ndb.StringProperty()
     starts_at = ndb.DateTimeProperty()
     ends_at = ndb.DateTimeProperty()
     description = ndb.TextProperty()
@@ -28,6 +28,8 @@ class Show(EndpointsModel):
     # a key reference to the account's organization
     # Should be required
     organization = ndb.KeyProperty()
+    organization_name = ndb.StringProperty()
+
     # public or private
     access = ndb.StringProperty()
 
@@ -62,7 +64,7 @@ class Show(EndpointsModel):
             search.TextField(name='collaborators', value = collaborators ),
             search.DateField(name='created_at', value = self.created_at),
             search.DateField(name='updated_at', value = self.updated_at),
-            search.TextField(name='title', value = empty_string(self.title)),
+            search.TextField(name='title', value = empty_string(self.name)),
             search.TextField(name='description', value = empty_string(self.description)),
             search.TextField(name='status', value = empty_string(self.status)),
            ])

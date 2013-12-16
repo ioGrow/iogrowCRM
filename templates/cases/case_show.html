@@ -106,8 +106,8 @@
             <a href="/#/cases/" data-toggle="tooltip" data-placement="bottom" title="Back to Cases">
             <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Cases")}} > <%=casee.name %></h2>
             
-           <span ng-show="casee.priority">{{_("Priority")}}: <a class="tag" href="/#/search/type:Case <%=casee.priority%>"><%=casee.priority %></a></span>
-           <span ng-show="casee.status">{{_("Status")}}: <a class="tag" href="/#/search/type:Case <%=casee.status%>"><%=casee.status %></a></span>
+           <span ng-show="casee.priority">{{_("Priority")}}: <a class="tag" href="/#/search/type:Case <%=casee.priority%>"><%=casee.priority %></a></span><br>
+           <span ng-show="casee.status">{{_("Status")}}: <a class="tag" href="/#/search/type:Case <%=casee.status%>"><%=casee.status %></a></span><br>
             <span ng-show="casee.type_case">{{_("Type")}}: <a class="tag" href="/#/search/type:Case <%=casee.type_case%>"><%=casee.type_case %></a></span> <br>
             <span class="page-meta"><i class="icon-pencil"><a ng-click="editcase()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="delete(case)" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
 
@@ -166,8 +166,24 @@
                                 </div>
                               </li>
                               
-                  </ul>    
+                  </ul> 
+
               </div>
+                <div class="row-fluid">
+                                <div class="pagination pull-right" ng-hide="isLoading">
+                                      
+                                      <ul>
+                                        <li ng-show="topicpagination.prev"><button ng-click="TopiclistPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                        {{_("Prev")}} 
+                                        </button></li>
+                                        
+                                        <li  ng-show="topicpagination.next"><button ng-click="TopiclistNextPageItems()"  class="btn">
+                                        {{_("Next")}} 
+                                        </button></li>
+                                      </ul>
+                                    </div>
+                                    <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                              </div>
               </div>
               </div>
               
@@ -329,14 +345,14 @@
                           
                         </div>
                     </div>
-                    <div class="control-group">
+                    <!--div class="control-group">
                         <label  class="required control-label">{{_("Status")}} </label>
                        
                         <div class="controls">
                           <input type="text"  required id="id_status" ng-model="casee.status">
                           
                         </div>
-                    </div>
+                    </div-->
                     <div class="control-group">
                         <label  class="required control-label">{{_("Labels")}} </label>
                        
@@ -344,7 +360,19 @@
                           <input type="text"  required id="id_type_case" ng-model="casee.type_case">
                           
                         </div>
-                    </div>                       
+                    </div>
+                 <div class="control-group">
+                        <label  class="required control-label">{{_("Status")}} </label>
+                        
+                        <div class="controls">
+                          <select ng-model="status_selected" ng-options="stat.status for stat in casesatuses"  class="input-xlarge">
+                            <option value=""><%=casee.status%> </option>
+                            <!--option value=""><%=status_selected.status%></option-->
+                          </select>
+                         
+                        </div>                       
+                          
+                   </div>                         
                   
                      
                     
