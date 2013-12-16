@@ -141,7 +141,7 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Acc
           console.log($scope.stage_selected.name);
           console.log($scope.stage_selected.probability);
 
-       opportunity.stage_name= $scope.stage_selected.name;
+       opportunity.stagename= $scope.stage_selected.name;
        opportunity.stage_probability= $scope.stage_selected.probability;
         
         if (typeof(opportunity.account)=='object'){
@@ -208,8 +208,8 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Acc
       
 }]);
 
-app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','Conf','Task','Event','Topic','Note','Opportunity','Permission','User',
-    function($scope,$filter,$route,$location,Conf,Task,Event,Topic,Note,Opportunity,Permission,User) {
+app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','Conf','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage',
+    function($scope,$filter,$route,$location,Conf,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage) {
  
       $("#id_Opportunities").addClass("active");
       
@@ -229,6 +229,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
      $scope.users = [];
      $scope.user = undefined;
      $scope.slected_memeber = undefined;
+      $scope.stage_selected={};
      //HKA 09.11.2013 Add a new Task
      $scope.addTask = function(task){
       
@@ -404,6 +405,8 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
           var opportunityid = {'id':$route.current.params.opportunityId};
           Opportunity.get($scope,opportunityid);
           User.list($scope,{});
+          //HKA 13.12.2013 to retrieve the opportunities's stages
+           Opportunitystage.list($scope,{});
 
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
@@ -521,14 +524,15 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
  $scope.UpdateOpportunity = function(opportunity){
   var params = {'id':$scope.opportunity.id,
                 'name':opportunity.name,
-                 'stage':opportunity.stage,
+                 'stagename':$scope.stage_selected.name,
+                 'stage_probability':$scope.stage_selected.probability,
                 'amount':opportunity.amount,
                 'description':opportunity.description};
-  $scope.$watch(opportunity.stage, function() {
+  $scope.$watch(opportunity.amount, function() {
       var paramsNote = {
                   'about_kind': 'Opportunity',
                   'about_item': $scope.opportunity.id,
-                  'title': 'stage updated to '+ opportunity.stage
+                  'title': 'stage updated to '+ opportunity.amount
                   
       };
       console.log('inserting a new note');

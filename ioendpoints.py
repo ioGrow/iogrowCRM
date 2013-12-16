@@ -18,6 +18,8 @@ from iomodels.crmengine.cases import Case
 from iomodels.crmengine.products import Product
 from iomodels.crmengine.comments import Comment
 from iomodels.crmengine.opportunitystage import Opportunitystage
+from iomodels.crmengine.leadstatuses import Leadstatus
+from iomodels.crmengine.casestatuses import Casestatus
 from model import User,Userinfo,Group,Member,Permission,Contributor
 import model
 import logging
@@ -477,6 +479,25 @@ class CrmEngineApi(remote.Service):
       # Todo: Check permissions
       my_model.put()
       return my_model
+
+  #HKA 14.12.2013 Lead status APIs
+  @Leadstatus.method(user_required=True,path='leadstatuses',http_method='POST',name='leadstatuses.insert')
+  def LeadstatusInsert(self,my_model):
+    user_from_email = EndpointsHelper.require_iogrow_user()
+    my_model.owner = user_from_email.google_user_id
+    my_model.organization = user_from_email.organization
+    my_model.put()
+    return my_model
+  @Leadstatus.query_method(user_required=True,query_fields=('limit','order','pageToken'),path='leadstatuses',name='leadstatuses.list')
+  def LeadstatusList(self,query):
+    user_from_email = EndpointsHelper.require_iogrow_user()
+    return query
+  @Leadstatus.method(user_required=True,
+    http_method='PATCH',path='leadstatuses/{id}',name='leadstatuses.patch')
+  def LeadstatusPatch(self,my_model):
+    user_from_email = EndpointsHelper.require_iogrow_user()
+    my_model.put()
+    return my_model
   # Cases API 
   # cases.insert api 
   @Case.method(user_required=True,path='cases',http_method='POST',name='cases.insert')
@@ -532,6 +553,25 @@ class CrmEngineApi(remote.Service):
 
       patched_model.put()
       return patched_model
+      #*******************************************#
+  #HKA 14.12.2013 Case status APIs
+  @Casestatus.method(user_required=True,path='casestatuses',http_method='POST',name='casestatuses.insert')
+  def CasestatusInsert(self,my_model):
+    user_from_email = EndpointsHelper.require_iogrow_user()
+    my_model.owner = user_from_email.google_user_id
+    my_model.organization = user_from_email.organization
+    my_model.put()
+    return my_model
+  @Casestatus.query_method(user_required=True,query_fields=('limit','order','pageToken'),path='casestatuses',name='casestatuses.list')
+  def CasestatusList(self,query):
+    user_from_email = EndpointsHelper.require_iogrow_user()
+    return query
+  @Casestatus.method(user_required=True,
+    http_method='PATCH',path='casestatuses/{id}',name='casestatuses.patch')
+  def CasestatusPatch(self,my_model):
+    user_from_email = EndpointsHelper.require_iogrow_user()
+    my_model.put()
+    return my_model
   # Shows API
   # shows.insert api
   @Show.method(user_required=True,path='shows',http_method='POST',name='shows.insert')

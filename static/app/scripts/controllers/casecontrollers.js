@@ -230,8 +230,8 @@ app.controller('CaseListCtrl', ['$scope','$route','$location','Conf','Case','Acc
 
     
 }]);
-app.controller('CaseShowCtrl', ['$scope','$filter', '$route','$location','Conf','Case', 'Topic','Note','Task','Event','Permission','User',
-    function($scope,$filter,$route,$location,Conf,Case,Topic,Note,Task,Event,Permission,User) {
+app.controller('CaseShowCtrl', ['$scope','$filter', '$route','$location','Conf','Case', 'Topic','Note','Task','Event','Permission','User','Casestatus',
+    function($scope,$filter,$route,$location,Conf,Case,Topic,Note,Task,Event,Permission,User,Casestatus) {
       console.log('i am in account list controller');
       $("#id_Cases").addClass("active");
       
@@ -248,6 +248,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','$location','Conf',
      $scope.topicpages = [];
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
+     $scope.status_selected={};
      $scope.currentPage = 01;
      $scope.pages = [];
      $scope.cases = [];
@@ -379,6 +380,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','$location','Conf',
           var caseid = {'id':$route.current.params.caseId};
           Case.get($scope,caseid);
           User.list($scope,{});
+          Casestatus.list($scope,{});
 
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
@@ -568,14 +570,14 @@ $scope.updatCasetHeader = function(casee){
   params = {'id':$scope.casee.id,
              'name':casee.name,
              'priority' :casee.priority,
-           'status':casee.status,
+           'status':$scope.status_selected.status,
            'type_case':casee.type_case}
   Case.patch($scope,params);
-  $scope.$watch($scope.casee.status, function() {
+  $scope.$watch($scope.casee.priority, function() {
       var paramsNote = {
                   'about_kind': 'Case',
                   'about_item': $scope.casee.id,
-                  'title': 'status updated to '+ casee.status
+                  'title': 'status updated to '+ casee.priority
                   
       };
       console.log('inserting a new note');

@@ -49,7 +49,68 @@ Opportunitystage.list = function($scope,params){
   )};
 return Opportunitystage;
 });
+//HKA 14.12.2013 Case status Services
+settingservices.factory('Casestatus',function($http){
+  var Casestatus = function(data){
+    angular.extend(this,data);
+  };
+  //HKA 14.12.2013 Case status Insert
+  Casestatus.insert = function($scope,params){
+    gapi.client.crmengine.casestatuses.insert(params).execute(function(resp){
+     
+    }
+     )};
+  //HKA 14.12.2013 Case status list
+  Casestatus.list = function($scope,params){
+    gapi.client.crmengine.casestatuses.list(params).execute(function(resp){
+      if(!resp.code){
+        $scope.casesatuses = resp.items;
+        $scope.$apply();
+
+      }
+
+        else{
+          alert("Error, response is:"+angular.toJson(resp));
+        }
+
+    }
+    )};
   
 
+
+   return Casestatus;
+  });
+
+//HKA 14.12.2013 Case status Services
+settingservices.factory('Leadstatus',function($http){
+  var Leadstatus = function(data){
+    angular.extend(this,data);
+  };
+  //HKA 14.12.2013 Case status Insert
+  Leadstatus.insert = function($scope,params){
+    gapi.client.crmengine.leadstatuses.insert(params).execute(function(resp){
+     
+    }
+     )};
+  //HKA 14.12.2013 Case status list
+  Leadstatus.list = function($scope,params){
+    gapi.client.crmengine.leadstatuses.list(params).execute(function(resp){
+      if(!resp.code){
+        $scope.leadstatuses = resp.items;
+        $scope.$apply();
+
+      }
+
+        else{
+          alert("Error, response is:"+angular.toJson(resp));
+        }
+
+    }
+    )};
   
+
+
+   return Leadstatus;
+  });
+
  

@@ -1,5 +1,5 @@
-app.controller('SettingsShowCtrl',['$scope','$route','$location','Conf','Contact','Opportunitystage',
-	function($scope,$route,$location,Conf,Contact,Opportunitystage){
+app.controller('SettingsShowCtrl',['$scope','$route','$location','Conf','Contact','Opportunitystage','Casestatus','Leadstatus',
+	function($scope,$route,$location,Conf,Contact,Opportunitystage,Casestatus,Leadstatus){
 //HKA 11.12.2013 Controller to manage Opportunity stage, Case Status, Company profile, personnel Settings, Lead Status
 		$("#id_Settings").addClass("active");
 
@@ -88,8 +88,10 @@ app.controller('SettingsShowCtrl',['$scope','$route','$location','Conf','Contact
           window.authResult = authResult;
           // Call the backend to get the list of accounts
           
-          var params = {'limit':7}
-          Opportunitystage.list($scope,params);
+          
+          Opportunitystage.list($scope,{});
+          Casestatus.list($scope,{});
+          Leadstatus.list($scope,{});
 
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
@@ -103,13 +105,15 @@ app.controller('SettingsShowCtrl',['$scope','$route','$location','Conf','Contact
         }
      }
      $scope.renderSignIn();
-  //HKA 12.12.2013 Add a new Stage
+  //HKA 12.12.2013 Add a new Opportunity Stage
   $scope.addOppStagetModal = function(){
     $("#addOppStagetModal").modal('show')
   };
+  //HKA 12.12.2013 Add a new Case Status
   $scope.addCasestatustModal = function(){
     $("#addCasestatustModal").modal('show')
   };
+   //HKA 12.12.2013 Add a new Lead Status
   $scope.addLeadstatustModal = function(){
     $("#addLeadstatustModal").modal('show')
   }
@@ -121,8 +125,41 @@ app.controller('SettingsShowCtrl',['$scope','$route','$location','Conf','Contact
     };
    Opportunitystage.insert($scope,params);
    $('#addOppStagetModal').modal('hide');
-   var paramse = {'limit':20};
-   window.location.replace('#/admin/settings');
+     $scope.renderSignIn();
+     $scope.oppstage.name='';
+     $scope.oppstage.probability='';
+   //window.location.replace('#/admin/settings');
+   
+  };
+  //HKA 15.12.2013 Edit opportunity stage
+  $scope.editopportunitystage = function(){
+    $('#EditOppsStage').modal('show');
+   
+  };
+
+
+  //HKA 12.12.2013 Add a new Case Status
+
+  $scope.saveCaseStatus = function(casestatus){
+    var params={'status':casestatus.status
+
+    };
+   Casestatus.insert($scope,params);
+   $('#addCasestatustModal').modal('hide');
+   
+   $scope.casestatus.status='';
+
+   
+  } 
+   //HKA 12.12.2013 Add a new Lead status
+  $scope.saveLeadtatus = function(lead){
+    var params={'status':lead.status
+
+    };
+   Leadstatus.insert($scope,params);
+   $('#addLeadstatustModal').modal('hide');
+   $scope.lead.status='';
+   
    
   } 
 
