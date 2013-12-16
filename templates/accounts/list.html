@@ -129,8 +129,8 @@
                                     <i class="icon-angle-down"></i>
                                     </a>
                                     <ul class="dropdown-menu">
-                                      <li><a  ng-click="showCreateDocument('document')" href="#" data-toggle="modal"><strong>All accounts</strong></a></li>
-                                      <li><a ng-click="showCreateDocument('presentation')" href="#" data-toggle="modal"> My accounts</a></li>
+                                      <li><a  ng-click="filterByOwner()" href="#" data-toggle="modal">All accounts</a></li>
+                                      <li><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal"> My accounts</a></li>
                                       
                                      
                                     </ul>
@@ -138,11 +138,11 @@
               </div>
             </div>
             <div class="span7">
-              <ul class="nav search-form-top" ng-controller="SearchFormController"> 
+              <ul class="nav search-form-top"> 
                   <li>    
                     <form class="form-inline ng-pristine ng-valid" ng-submit="executeSearch(searchQuery)">
                       <div class="input-append row-fluid">
-                        <input type="text" ng-model="searchQuery" typeahead="result as result.title + ' (' + result.type + ')' for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="input-xxlarge" placeholder="Quick Filtering">
+                        <input type="text" ng-model="searchQuery" typeahead="result as result.name  for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="input-xxlarge" placeholder="Quick Filtering">
                        <button class="gbqfb gbqfb-hvr"><span class="gbqfi"></span></button>
                       </div>
                     </form>
@@ -158,8 +158,8 @@
                                     <i class="icon-angle-down"></i>
                                     </a>
                                     <ul class="dropdown-menu">
-                                      <li><a  ng-click="showCreateDocument('document')" href="#" data-toggle="modal"><strong>Last modified</strong></a></li>
-                                      <li><a ng-click="showCreateDocument('presentation')" href="#" data-toggle="modal">Name</a></li>
+                                      <li><a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">Last modified</a></li>
+                                      <li><a ng-click="orderBy('name')" href="#" data-toggle="modal">Name</a></li>
                                       
                                      
                                     </ul>

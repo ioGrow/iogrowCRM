@@ -18,13 +18,47 @@ indexes:
 
 - kind: Account
   properties:
+  - name: access
+  - name: organization
+  - name: owner
+  - name: updated_at
+    direction: desc
+
+- kind: Account
+  properties:
+  - name: access
+  - name: organization
+  - name: updated_at
+    direction: desc
+
+- kind: Account
+  properties:
   - name: collaborators_ids
   - name: name
 
 - kind: Account
   properties:
+  - name: collaborators_ids
+  - name: owner
+  - name: updated_at
+    direction: desc
+
+- kind: Account
+  properties:
+  - name: collaborators_ids
+  - name: updated_at
+    direction: desc
+
+- kind: Account
+  properties:
   - name: owner
   - name: name
+
+- kind: Account
+  properties:
+  - name: owner
+  - name: updated_at
+    direction: desc
 
 - kind: Case
   properties:
