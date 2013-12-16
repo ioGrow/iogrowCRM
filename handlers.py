@@ -217,7 +217,7 @@ class AccountListHandler(BaseHandler, SessionEnabledHandler):
             # Set the user locale from user's settings
             self.set_user_locale()
             # Render the template
-            template_values = {'tabs':tabs}
+            template_values = {'ME':user.google_user_id,'tabs':tabs}
             template = jinja_environment.get_template('templates/accounts/list.html')
             self.response.out.write(template.render(template_values))
 
@@ -232,7 +232,8 @@ class AccountShowHandler(BaseHandler, SessionEnabledHandler):
             # Set the user locale from user's settings
             self.set_user_locale()
             # Render the template
-            template_values = {'tabs':tabs}
+            template_values = {'ME':user.google_user_id,
+             'tabs':tabs}
             template = jinja_environment.get_template('templates/accounts/show.html')
             self.response.out.write(template.render(template_values))
 class ContactListHandler(BaseHandler, SessionEnabledHandler):
