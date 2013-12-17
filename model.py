@@ -43,7 +43,7 @@ STANDARD_APPS = [{'name': 'sales', 'label': 'Sales', 'url':'/#/accounts/'},#{'na
 STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
 ADMIN_TABS = [{'name': 'Users','label': 'Users','url':'/#/admin/users'},{'name': 'Groups','label': 'Groups','url':'/#/admin/groups'},{'name': 'Settings','label': 'Settings','url':'/#/admin/settings'}]
 ADMIN_APP = {'name': 'admin', 'label': 'Admin Console', 'url':'/#/admin/users'}
-Default_Opp_Stages = [{'name':'incoming','probability':'5'},{'name':'qualified','probability':'10'},{'name':'Need Analysis','probability':'40'},{'name':'Negociating','probability':'80'},{'name':'Clos won','probability':'100'},{'name':'Clos lost','probability':'0'}]
+Default_Opp_Stages = [{'name':'incoming','probability':'5'},{'name':'Qualified','probability':'10'},{'name':'Need Analysis','probability':'40'},{'name':'Negociating','probability':'80'},{'name':'Clos won','probability':'100'},{'name':'Clos lost','probability':'0'}]
 Default_Case_Status =[{'status':'New'},{'status':'Working'},{'status':'Escalated'}]
 Default_Lead_Status =[{'status':'New'},{'status':'Working'},{'status':'Unqualified'},{'status':'Closed converted'}]
 
