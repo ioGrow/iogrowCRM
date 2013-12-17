@@ -12,6 +12,7 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
      $scope.accounts = [];
      $scope.account = {};
      $scope.account.access ='public';
+     $scope.order = '-updated_at';
 
      $scope.renderSignIn = function() {
           console.log('$scope.renderSignIn #start_debug');
@@ -51,10 +52,11 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
         var params = {};
           if ($scope.pages[nextPage]){
             params = {'limit':7,
+                      'order' : $scope.order,
                       'pageToken':$scope.pages[nextPage]
                      }
           }else{
-            params = {'limit':7}
+            params = {'order' : $scope.order,'limit':7}
           }
           console.log('in listNextPageItems');
           $scope.currentPage = $scope.currentPage + 1 ; 
@@ -66,10 +68,11 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
        var params = {};
           if ($scope.pages[prevPage]){
             params = {'limit':7,
+                      'order' : $scope.order,
                       'pageToken':$scope.pages[prevPage]
                      }
           }else{
-            params = {'limit':7}
+            params = {'order' : $scope.order,'limit':7}
           }
           $scope.currentPage = $scope.currentPage - 1 ;
           Account.list($scope,params);
@@ -109,7 +112,8 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
           window.authResult = authResult;
           // Call the backend to get the list of accounts
           
-          var params = {'limit':7}
+          var params = { 'order': $scope.order,
+                        'limit':7}
           Account.list($scope,params);
 
         } else if (authResult['error']) {
@@ -131,8 +135,10 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
       };
       
     $scope.save = function(account){
-     
-      Account.insert($scope,account);
+     if (account.name) {
+    	 Account.insert($scope,account);
+     }
+      
     };
     $scope.addAccountOnKey = function(account){
       if(event.keyCode == 13 && account){
@@ -147,10 +153,52 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
           window.location.replace('#/accounts/show/'+resp.id);
      };
      
+     // Quick Filtering
+     var searchParams ={};
+     $scope.result = undefined;
+     $scope.q = undefined;
      
-   
+     $scope.$watch('searchQuery', function() {
+         searchParams['q'] = $scope.searchQuery;
+         Account.search($scope,searchParams);
+     });
+     $scope.selectResult = function(){
+          window.location.replace('#/accounts/show/'+$scope.searchQuery.id);
+     };
+     $scope.executeSearch = function(searchQuery){
+        if (typeof(searchQuery)=='string'){
+           var goToSearch = 'type:Account ' + searchQuery;
+           window.location.replace('#/search/'+goToSearch);
+        }else{
+          window.location.replace('#/accounts/show/'+searchQuery.id);
+        }
+        $scope.searchQuery=' ';
+        $scope.$apply();
+     };
+     // Sorting
+     $scope.orderBy = function(order){
+        var params = { 'order': order,
+                        'limit':7};
+        $scope.order = order;
+        Account.list($scope,params);
+     };
+     $scope.filterByOwner = function(filter){
+        if (filter){
+          var params = { 'owner': filter,
+                         'order': $scope.order, 
+                         'limit':7}
+        }
+        else{
+          var params = {
+              'order': $scope.order, 
+              
+              'limit':7}
+        };
+        console.log('Filtering by');
+        console.log(params);
+        Account.list($scope,params);
+     };
 
-    
 }]);
 app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Conf','Account','Contact','Case','Opportunity', 'Topic','Note','Task','Event','Permission','User','Attachement',
     function($scope,$filter,$route,$location,Conf,Account,Contact,Case,Opportunity,Topic,Note,Task,Event,Permission,User,Attachement) {
@@ -1011,13 +1059,14 @@ app.controller('SearchShowController', ['$scope','$route','$location','Conf','Se
           if ($scope.pages[nextPage]){
             params = {'q':$route.current.params.q,
                       'limit':7,
+                      
                       'pageToken':$scope.pages[nextPage]
                      }
           }else{
             params = {'q':$route.current.params.q,
                       'limit':7}
           }
-          console.log('in listNextPageItems');
+
           $scope.currentPage = $scope.currentPage + 1 ; 
           Search.list($scope,params);
      }

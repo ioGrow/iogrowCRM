@@ -210,7 +210,7 @@ class CrmEngineApi(remote.Service):
       my_model.put()
       return my_model
   # accounts.list api
-  @Account.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='accounts', name='accounts.list')
+  @Account.query_method(user_required=True,query_fields=('owner', 'limit', 'order', 'pageToken'),path='accounts', name='accounts.list')
   def Account_List(self, query):
       user_from_email = EndpointsHelper.require_iogrow_user()
       return query.filter(ndb.OR(ndb.AND(Account.access=='public',Account.organization==user_from_email.organization),Account.owner==user_from_email.google_user_id, Account.collaborators_ids==user_from_email.google_user_id)).order(Account._key)

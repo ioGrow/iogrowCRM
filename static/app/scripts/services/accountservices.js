@@ -102,6 +102,16 @@ accountservices.factory('Account', function($http) {
               }
       });
   };
+  Account.search = function($scope,params){
+      gapi.client.crmengine.accounts.search(params).execute(function(resp) {
+           if (resp.items){
+              $scope.results = resp.items;
+              
+              $scope.$apply();
+            };
+            
+      });
+  };
   Account.insert = function($scope,params){
       $scope.isLoading = true;
       gapi.client.crmengine.accounts.insert(params).execute(function(resp) {

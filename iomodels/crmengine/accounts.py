@@ -5,7 +5,7 @@ from google.appengine.api import search
 
 import model
 class Account(EndpointsModel):
-    _message_fields_schema = ('id','entityKey','folder','access','collaborators_list','phones','emails','addresses','websites','sociallinks', 'collaborators_ids','name','owner','account_type','industry','tagline','introduction')
+    _message_fields_schema = ('id','entityKey','created_at','updated_at', 'folder','access','collaborators_list','phones','emails','addresses','websites','sociallinks', 'collaborators_ids','name','owner','account_type','industry','tagline','introduction')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
@@ -15,7 +15,8 @@ class Account(EndpointsModel):
     name = ndb.StringProperty()
     account_type = ndb.StringProperty()
     industry = ndb.StringProperty()
-    creationTime = ndb.DateTimeProperty(auto_now_add=True)
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
+    updated_at = ndb.DateTimeProperty(auto_now=True)
     tagline = ndb.TextProperty()
     introduction =ndb.TextProperty()
     # public or private
@@ -62,7 +63,8 @@ class Account(EndpointsModel):
             search.TextField(name='title', value = empty_string(self.name) ),
             search.TextField(name='account_type', value = empty_string(self.account_type)),
             search.TextField(name='industry', value = empty_string(self.industry)),
-            search.DateField(name='creationTime', value = self.creationTime),
+            search.DateField(name='created_at', value = self.created_at),
+            search.DateField(name='updated_at', value = self.updated_at),
             search.TextField(name='industry', value = empty_string(self.industry)),
             search.TextField(name='tagline', value = empty_string(self.tagline)),
             search.TextField(name='introduction', value = empty_string(self.introduction)),

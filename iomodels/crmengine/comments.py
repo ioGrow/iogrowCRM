@@ -3,6 +3,7 @@ from google.appengine.api import search
 from endpoints_proto_datastore.ndb import EndpointsModel
 from model import User
 from model import Userinfo
+import model
 import pprint
 
 class Comment(EndpointsModel):
