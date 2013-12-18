@@ -426,6 +426,7 @@ class CrmEngineApi(remote.Service):
   def OpportunitystageList(self,query):
     user_from_email = EndpointsHelper.require_iogrow_user()
     return query
+    return query.filter(Opportunitystage.organization==user_from_email.organization)
   @Opportunitystage.method(user_required=True,
     http_method='PATCH',path='opportunitystage/{id}',name='opportunitystages.patch')
   def OpportuntystagePatch(self,my_model):
@@ -491,7 +492,7 @@ class CrmEngineApi(remote.Service):
   @Leadstatus.query_method(user_required=True,query_fields=('limit','order','pageToken'),path='leadstatuses',name='leadstatuses.list')
   def LeadstatusList(self,query):
     user_from_email = EndpointsHelper.require_iogrow_user()
-    return query
+    return query.filter(Leadstatus.organization==user_from_email.organization)
   @Leadstatus.method(user_required=True,
     http_method='PATCH',path='leadstatuses/{id}',name='leadstatuses.patch')
   def LeadstatusPatch(self,my_model):
@@ -565,7 +566,7 @@ class CrmEngineApi(remote.Service):
   @Casestatus.query_method(user_required=True,query_fields=('limit','order','pageToken'),path='casestatuses',name='casestatuses.list')
   def CasestatusList(self,query):
     user_from_email = EndpointsHelper.require_iogrow_user()
-    return query
+    return query.filter(Casestatus.organization==user_from_email.organization)
   @Casestatus.method(user_required=True,
     http_method='PATCH',path='casestatuses/{id}',name='casestatuses.patch')
   def CasestatusPatch(self,my_model):

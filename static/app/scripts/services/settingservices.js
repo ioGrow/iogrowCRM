@@ -32,6 +32,7 @@ Opportunitystage.list = function($scope,params){
 	gapi.client.crmengine.opportunitystages.list(params).execute(function(resp){
 		if(!resp.code){
 			$scope.opportunitystages = resp.items;
+      console.log($scope.opportunitystages)
 			$scope.$apply();
 
 		}

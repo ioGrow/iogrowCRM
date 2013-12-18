@@ -365,7 +365,7 @@
                         <label  class="required control-label">{{_("Status")}} </label>
                         
                         <div class="controls">
-                          <select ng-model="status_selected" ng-options="stat.status for stat in casesatuses"  class="input-xlarge">
+                          <select ng-model="status_selected" ng-options="stat.status for stat in casesatuses" >
                             <option value=""><%=casee.status%> </option>
                             <!--option value=""><%=status_selected.status%></option-->
                           </select>

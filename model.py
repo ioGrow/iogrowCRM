@@ -32,6 +32,9 @@ from google.appengine.ext import blobstore
 from oauth2client.appengine import CredentialsNDBProperty
 from google.appengine.ext import ndb
 from endpoints_proto_datastore.ndb import EndpointsModel
+from iomodels.crmengine.opportunitystage import Opportunitystage
+from iomodels.crmengine.leadstatuses import Leadstatus 
+from iomodels.crmengine.casestatuses import Casestatus
 
 STANDARD_TABS = [{'name': 'Accounts','label': 'Accounts','url':'/#/accounts/'},{'name': 'Contacts','label': 'Contacts','url':'/#/contacts/'},{'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/'},{'name': 'Leads','label': 'Leads','url':'/#/leads/'},{'name': 'Cases','label': 'Cases','url':'/#/cases/'}]
 STANDARD_PROFILES = ['Super Administrator', 'Standard User', 'Sales User', 'Marketing User', 'Read Only', 'Support User', 'Contract Manager','Read Only']
@@ -40,7 +43,11 @@ STANDARD_APPS = [{'name': 'sales', 'label': 'Sales', 'url':'/#/accounts/'},#{'na
 STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
 ADMIN_TABS = [{'name': 'Users','label': 'Users','url':'/#/admin/users'},{'name': 'Groups','label': 'Groups','url':'/#/admin/groups'},{'name': 'Settings','label': 'Settings','url':'/#/admin/settings'}]
 ADMIN_APP = {'name': 'admin', 'label': 'Admin Console', 'url':'/#/admin/users'}
+Default_Opp_Stages = [{'name':'incoming','probability':'5'},{'name':'Qualified','probability':'10'},{'name':'Need Analysis','probability':'40'},{'name':'Negociating','probability':'80'},{'name':'Close won','probability':'100'},{'name':'Close lost','probability':'0'}]
+Default_Case_Status =[{'status':'New'},{'status':'Working'},{'status':'Escalated'}]
+Default_Lead_Status =[{'status':'New'},{'status':'Working'},{'status':'Unqualified'},{'status':'Closed converted'}]
 
+ 
 
 # Models for Appcfg
 # The Object class will be useful to manage Default Sharing setting to each organization
@@ -156,7 +163,18 @@ class Organization(EndpointsModel):
 
             created_profile = Profile(name=profile,apps=created_apps,default_app=default_app,tabs=created_tabs,organization=org_key)
             created_profile.put()
-            
+        #HKA 17.12.2013 Add an opportunity stage
+        for oppstage in Default_Opp_Stages:
+          created_opp_stage = Opportunitystage(name=oppstage['name'],probability=oppstage['probability'],organization=org_key)
+          created_opp_stage.put()
+        #HKA 17.12.2013 Add an Case status
+        for casestat in Default_Case_Status:
+          created_case_status = Casestatus(status=casestat['status'],organization=org_key)
+          created_case_status.put()
+        #HKA 17.12.2013 Add an Lead status
+        for leadstat in Default_Lead_Status:
+          created_lead_stat = Leadstatus(status=leadstat['status'],organization=org_key)
+          created_lead_stat.put()
 class Permission(EndpointsModel):
     about_kind = ndb.StringProperty(required=True)
     about_item = ndb.StringProperty(required=True)

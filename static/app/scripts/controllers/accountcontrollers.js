@@ -136,7 +136,7 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
       
     $scope.save = function(account){
      if (account.name) {
-    	 Account.insert($scope,account);
+       Account.insert($scope,account);
      }
       
     };
