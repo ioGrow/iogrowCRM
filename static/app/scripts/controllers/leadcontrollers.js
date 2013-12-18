@@ -146,8 +146,8 @@ app.controller('LeadListCtrl', ['$scope','$route','$location','Conf','Lead',
 
       
 }]);
-app.controller('LeadShowCtrl', ['$scope','$filter','$route','$location','Conf','Task','Event','Topic','Note','Lead','Permission','User',
-    function($scope,$filter,$route,$location,Conf,Task,Event,Topic,Note,Lead,Permission,User) {
+app.controller('LeadShowCtrl', ['$scope','$filter','$route','$location','Conf','Task','Event','Topic','Note','Lead','Permission','User','Leadstatus',
+    function($scope,$filter,$route,$location,Conf,Task,Event,Topic,Note,Lead,Permission,User,Leadstatus) {
  console.log('I am in LeadShowCtrl f');
 
       $("#id_Leads").addClass("active");
@@ -190,6 +190,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','$location','Conf','
      $scope.prevPageToken = undefined;
      $scope.pages = [];
      $scope.leads = [];
+     $scope.status_selected={};
      $scope.users = [];
      $scope.user = undefined;
      $scope.slected_memeber = undefined;
@@ -319,6 +320,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','$location','Conf','
           var leadid = {'id':$route.current.params.leadId};
           Lead.get($scope,leadid);
           User.list($scope,{});
+          Leadstatus.list($scope,{});
         } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
             $scope.immediateFailed = true;
@@ -477,7 +479,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','$location','Conf','
     var params={'id':$scope.lead.id,
                 'firstname':lead.firstname,
                 'lastname':lead.lastname,
-                'company':lead.company};
+                'company':lead.company,
+                'status':$scope.status_selected.status};
         Lead.patch($scope,params);
         $('#EditLeadModal').modal('hide')
 

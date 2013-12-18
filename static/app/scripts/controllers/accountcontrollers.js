@@ -70,7 +70,16 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
       	     Account.insert($scope,account);
            };
       };
-    // after insertion redirect the user to the account page
+
+    $scope.addAccountOnKey = function(account){
+      if(event.keyCode == 13 && account){
+          $scope.save(account);
+      }
+      
+      
+    };
+
+
      $scope.accountInserted = function(resp){
           $('#addAccountModal').modal('hide');
           window.location.replace('#/accounts/show/'+resp.id);
@@ -795,4 +804,3 @@ $scope.updatAccountHeader = function(account){
      Auth.init($scope);
   
 }]);
-

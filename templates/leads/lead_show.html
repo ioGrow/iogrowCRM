@@ -108,8 +108,9 @@
             
 
           
-              <span>{{_("Company")}} :</span> <a   href="/#/search/type:Lead <%=lead.company%>" class="tag" ng-show="lead.company"> #<%= lead.company %></a> <br> 
-              
+              <span>{{_("Company")}} :</span> <a   href="/#/search/type:Lead <%=lead.company%>" class="tag" ng-show="lead.company"> #<%= lead.company %></a> <br>
+              <span>{{_("Lead Status")}} : </span>
+              <a   href="/#/search/type:Lead <%=lead.status%>" class="tag" ng-show="lead.company"> #<%= lead.status %></a> <br>
             </ul>  </br>
              <span class="page-meta"><i class="icon-pencil"><a ng-click="editLead()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="delete(lead)" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
 
@@ -458,6 +459,15 @@
                           <input type="text"  required id="id_company" ng-model="lead.company">
                           
                         </div>
+                    </div>
+                    <div class="control-group">
+                        <label  class=" control-label">{{_("Status")}} </label>
+                          <div class="controls">
+                             <select ng-model="status_selected" ng-options="leadstat.status for leadstat in leadstatuses |   orderBy: 'status':true" >
+                              <option value=""><%=lead.status%> </option>
+                            <!--option value=""><%=stage_selected.name%></option-->
+                             </select>
+                          </div>
                     </div>                      
                   
                      

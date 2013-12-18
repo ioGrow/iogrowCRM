@@ -1,174 +1,92 @@
-app.controller('ContactListCtrl', ['$scope','$route','$location','Conf','Account','Contact',
-    function($scope,$route,$location,Conf,Account,Contact) {
-      $("#id_Contacts").addClass("active");
-      
-      console.log('i am in contact list controller');
-       $("#id_Contacts").addClass("active");
-     $scope.isSignedIn = false;
-     $scope.immediateFailed = false;
-     $scope.nextPageToken = undefined;
-     $scope.prevPageToken = undefined;
-     $scope.isLoading = false;
-     $scope.contactpagination = {};
-     $scope.currentPage = 01;
-     //HKA 10.12.2013 Var Contact to manage Next & Prev
-     $scope.contactpagination={};
-     $scope.contactCurrentPage=01;
-     $scope.contactpages = [];
-     $scope.pages = [];
-    	
-      $scope.contacts = [];
-      $scope.contact = {};
-      $scope.contact.access = 'public';
-
-      $scope.renderSignIn = function() {
-          console.log('$scope.renderSignIn #start_debug');
-          if (window.is_signed_in){
-              console.log('I am signed-in so you can continue');
-              $scope.processAuth(window.authResult);
-          }else{
-            console.log('I am  not signed-in so render Button');
-            gapi.signin.render('myGsignin', {
-            'callback': $scope.signIn,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'theme': 'dark',
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-            });
-
-          }
-      }
-      $scope.refreshToken = function() {
-          gapi.auth.signIn({
-            'callback': $scope.connectServer,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'immediate': true,
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-          });
-      }
-      $scope.connectServer = function(authResult) {
-      console.log('I will contact the serveer');
-      console.log(authResult.code);
-      
-      $.ajax({
-        type: 'POST',
-        url: '/gconnect',
+app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
+    function($scope,Auth,Account,Contact) {
+        $("#id_Contacts").addClass("active");
+        $scope.isSignedIn = false;
+        $scope.immediateFailed = false;
+        $scope.nextPageToken = undefined;
+        $scope.prevPageToken = undefined;
+        $scope.isLoading = false;
+        $scope.contactpagination = {};
+        $scope.currentPage = 01;
+        //HKA 10.12.2013 Var Contact to manage Next & Prev
+        $scope.contactpagination={};
+        $scope.contactCurrentPage=01;
+        $scope.contactpages = [];
+        $scope.pages = [];
+      	$scope.contacts = [];
+        $scope.contact = {};
+        $scope.contact.access = 'public';
         
-        success: function(result) {
-          console.log('i am in connectServer show me result please');
-          console.log(result);
-         },
-        data: {code:authResult.code}
-      });
-    }
-     $scope.listNextPageItems = function(){
-        
-        var nextPage = $scope.contactCurrentPage + 1;
-        var params = {};
-          if ($scope.contactpages[nextPage]){
-            params = {'limit':7,
-                      'pageToken':$scope.contactpages[nextPage]
-                     }
-          }else{
-            params = {'limit':7}
-          }
-          console.log('in listNextPageItems');
-          $scope.contactCurrentPage = $scope.contactCurrentPage + 1 ; 
-          Contact.list($scope,params);
-     }
-     $scope.listPrevPageItems = function(){
-       
-       var prevPage = $scope.contactCurrentPage - 1;
-       var params = {};
-          if ($scope.contactpages[prevPage]){
-            params = {'limit':7,
-                      'pageToken':$scope.contactpages[prevPage]
-                     }
-          }else{
-            params = {'limit':7}
-          }
-          $scope.contactCurrentPage = $scope.contactCurrentPage - 1 ;
-          Contact.list($scope,params);
-     }
-     $scope.signIn = function(authResult) {
-        console.log('signIn callback #start_debug');
-        $scope.connectServer(authResult);
-        $scope.processAuth(authResult);
-        
-     }
-
-     $scope.processAuth = function(authResult) {
-        console.log('process Auth #startdebug');
-        $scope.immediateFailed = true;
-        if (authResult['access_token']) {
-          // User is signed-in
-          console.log('User is signed-in');
-          $scope.immediateFailed = false;
-          $scope.isSignedIn = true;
-          window.is_signed_in = true;
-          window.authResult = authResult;
-          // Call the backend to get the list of accounts
-
-          var params = {'limit':7}
-          Contact.list($scope,params);
-        } else if (authResult['error']) {
-          if (authResult['error'] == 'immediate_failed') {
-            $scope.immediateFailed = true;
-
-            window.location.replace('/sign-in');
-            console.log('Immediate Failed');
-          } else {
-            console.log('Error:' + authResult['error']);
-          }
-        }
-     }
-     $scope.renderSignIn();
-    
+        // What to do after authentication
+       $scope.runTheProcess = function(){
+            var params = {'limit':7}
+            Contact.list($scope,params);
+       };
+        // We need to call this to refresh token when user credentials are invalid
+       $scope.refreshToken = function() {
+            Auth.refreshToken();
+       };
+       $scope.listNextPageItems = function(){
+          
+          var nextPage = $scope.contactCurrentPage + 1;
+          var params = {};
+            if ($scope.contactpages[nextPage]){
+              params = {'limit':7,
+                        'pageToken':$scope.contactpages[nextPage]
+                       }
+            }else{
+              params = {'limit':7}
+            }
+            console.log('in listNextPageItems');
+            $scope.contactCurrentPage = $scope.contactCurrentPage + 1 ; 
+            Contact.list($scope,params);
+       };
+       $scope.listPrevPageItems = function(){
+         
+         var prevPage = $scope.contactCurrentPage - 1;
+         var params = {};
+            if ($scope.contactpages[prevPage]){
+              params = {'limit':7,
+                        'pageToken':$scope.contactpages[prevPage]
+                       }
+            }else{
+              params = {'limit':7}
+            }
+            $scope.contactCurrentPage = $scope.contactCurrentPage - 1 ;
+            Contact.list($scope,params);
+       };
       // new Contact
       $scope.showModal = function(){
         $('#addContactModal').modal('show');
 
       };
-      
-    
       $scope.save = function(contact){
-        var params = {};
-        var contact_name = new Array();
-        contact_name.push(contact.firstname);
-        contact_name.push(contact.lastname);
-        contact.display_name = contact_name;
-        if (typeof(contact.account)=='object'){
-          contact.account_name = contact.account.name;
-          contact.account = contact.account.entityKey;
-          
-          Contact.insert($scope,contact);
+          var params = {};
+          var contact_name = new Array();
+          contact_name.push(contact.firstname);
+          contact_name.push(contact.lastname);
+          contact.display_name = contact_name;
+          if (typeof(contact.account)=='object'){
+            contact.account_name = contact.account.name;
+            contact.account = contact.account.entityKey;
+            
+            Contact.insert($scope,contact);
 
-        }else if($scope.searchAccountQuery.length>0){
-            // create a new account with this account name
-            var params = {'name': $scope.searchAccountQuery,
-                          'access': contact.access
-            };
-            $scope.contact = contact;
-            Account.insert($scope,params);
-
-
-        };
-
-        
-        $('#addContactModal').modal('hide');
+          }else if($scope.searchAccountQuery.length>0){
+              // create a new account with this account name
+              var params = {'name': $scope.searchAccountQuery,
+                            'access': contact.access
+              };
+              $scope.contact = contact;
+              Account.insert($scope,params);
+          };
+          $('#addContactModal').modal('hide');
       };
       $scope.addContactOnKey = function(contact){
-      if(event.keyCode == 13 && contact){
-          $scope.save(contact);
-      }
-      
-      
-    };
+          if(event.keyCode == 13 && contact){
+              $scope.save(contact);
+          }
+      };
       $scope.accountInserted = function(resp){
           $scope.contact.account = resp;
           $scope.save($scope.contact);
@@ -177,8 +95,7 @@ app.controller('ContactListCtrl', ['$scope','$route','$location','Conf','Account
      var params_search_account ={};
      $scope.result = undefined;
      $scope.q = undefined;
-     
-      $scope.$watch('searchAccountQuery', function() {
+     $scope.$watch('searchAccountQuery', function() {
          params_search_account['q'] = $scope.searchAccountQuery;
          gapi.client.crmengine.accounts.search(params_search_account).execute(function(resp) {
             console.log("in accouts.search api");
@@ -198,13 +115,11 @@ app.controller('ContactListCtrl', ['$scope','$route','$location','Conf','Account
         $scope.contact.account = $scope.searchAccountQuery;
 
      };
-     
-
-
-      
+     // Google+ Authentication 
+     Auth.init($scope);
 }]);
-app.controller('ContactShowCtrl', ['$scope','$filter','$route','$location','Conf','Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User',
-    function($scope,$filter,$route,$location,Conf,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User) {
+app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User',
+    function($scope,$filter,$route,Auth,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User) {
  console.log('I am in ContactShowCtrl');
       $("#id_Contacts").addClass("active");
       var tab = $route.current.params.accountTab;
@@ -250,54 +165,17 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','$location','Conf
      $scope.caseCurrentPage=01;
      $scope.casepages=[];
 
-     $scope.accounts = [];
-     $scope.renderSignIn = function() {
-          console.log('$scope.renderSignIn #start_debug');
-          if (window.is_signed_in){
-              console.log('I am signed-in so you can continue');
-              $scope.processAuth(window.authResult);
-          }else{
-            console.log('I am  not signed-in so render Button');
-            gapi.signin.render('myGsignin', {
-            'callback': $scope.signIn,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'theme': 'dark',
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-            });
-
-          }
-          
-
-     }
-     $scope.refreshToken = function() {
-          gapi.auth.signIn({
-            'callback': $scope.connectServer,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'immediate': true,
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-          });
-      }
-      $scope.connectServer = function(authResult) {
-      console.log('I will contact the serveer');
-      console.log(authResult.code);
-      
-      $.ajax({
-        type: 'POST',
-        url: '/gconnect',
-        
-        success: function(result) {
-          console.log('i am in connectServer show me result please');
-          console.log(result);
-         },
-        data: {code:authResult.code}
-      });
-    }
+      $scope.accounts = [];
+      // What to do after authentication
+      $scope.runTheProcess = function(){
+          var contactid = {'id':$route.current.params.contactId};
+          Contact.get($scope,contactid);
+          User.list($scope,{});
+      };
+        // We need to call this to refresh token when user credentials are invalid
+      $scope.refreshToken = function() {
+            Auth.refreshToken();
+      };
      //HKA 11.11.2013 
     $scope.TopiclistNextPageItems = function(){
         
@@ -342,12 +220,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','$location','Conf
           Topic.list($scope,params);
           console.log()
      }
-     $scope.signIn = function(authResult) {
-        console.log('signIn callback #start_debug');
-        $scope.connectServer(authResult);
-        $scope.processAuth(authResult);
-        
-     }
+     
      $scope.listTopics = function(contact){
         var params = {'about_kind':'Contact',
                       'about_item':$scope.contact.id,
@@ -439,31 +312,7 @@ $scope.CaselistNextPageItems = function(){
 
 
 
-     $scope.processAuth = function(authResult) {
-        console.log('process Auth #startdebug');
-        $scope.immediateFailed = true;
-        if (authResult['access_token']) {
-          // User is signed-in
-          console.log('User is signed-in');
-          $scope.immediateFailed = false;
-          $scope.isSignedIn = true;
-          window.is_signed_in = true;
-          window.authResult = authResult;
-          // Call the backend to get the list of contact
-          var contactid = {'id':$route.current.params.contactId};
-          Contact.get($scope,contactid);
-          User.list($scope,{});
-        } else if (authResult['error']) {
-          if (authResult['error'] == 'immediate_failed') {
-            $scope.immediateFailed = true;
-
-            console.log('Immediate Failed');
-          } else {
-            console.log('Error:' + authResult['error']);
-          }
-        }
-     }
-     $scope.renderSignIn();
+    
      $scope.selectMember = function(){
         console.log('slecting user yeaaah');
         $scope.slected_memeber = $scope.user;
@@ -820,5 +669,6 @@ $scope.updateintro = function(contact){
   $('#EditIntroModal').modal('hide');
 };
 
-
+     // Google+ Authentication 
+     Auth.init($scope);
 }]);

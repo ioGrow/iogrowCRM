@@ -26,7 +26,7 @@ def put_index(self):
         my_document = search.Document(
         doc_id = str(self.key.id()),
         fields=[
-            search.TextField(name=u'type', value=u'Opportunitystage'),
+            search.TextField(name=u'type', value=u'Casestatus'),
             search.TextField(name='organization', value = empty_string(organization) ),
             search.TextField(name='owner', value = empty_string(self.owner) ),
             search.TextField(name='title', value = empty_string(self.status) ),

@@ -20,17 +20,17 @@
       <div id="portlet-config" class="modal hide">
         <div class="modal-header">
           <button data-dismiss="modal" class="close" type="button"></button>
-          <h3>portlet Settings</h3>
+          <h3>{{ _("Portlet Settings") }}</h3>
         </div>
         <div class="modal-body">
-          <p>Here will be a configuration form</p>
+          <p>{{ _("Here will be a configuration form") }}</p>
         </div>
       </div>
       <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
       <!-- BEGIN PAGE CONTAINER-->
       <div class="container-fluid"ng-show="immediateFailed">
          <div class="span12">  
-          <h1>Sign-in Button;</h1>
+          <h1>{{ _("Sign-in Button;") }}</h1>
               <span id="signin">
                   <span id="myGsignin"></span>
               </span>
@@ -59,7 +59,7 @@
                         <label  class="required control-label">{{_("Type")}}</label>
                        
                         <div class="controls">
-                          <input type="text"   ng-model="account.account_type" placeholder="eg: customer, partner, investor">
+                          <input type="text"   ng-model="account.account_type" placeholder="{{ _('eg: customer, partner, investor') }}">
                           
                         </div>
                     </div>
@@ -67,23 +67,23 @@
                         <label  class="required control-label">{{_("Industry")}} </label>
                        
                         <div class="controls">
-                          <input type="text"   ng-model="account.industry" placeholder="eg: tech, health, energy">
+                          <input type="text"   ng-model="account.industry" placeholder="{{ _('eg: tech, health, energy') }}">
                           
                         </div>
                     </div>
                     <hr/>
-                    <p>Who can access?</p>
+                    <p> {{ _('Who can access?') }}</p>
                      <div class='container-fluid'>
 
                      
                           
                             <label class="radio line">
                             <input type="radio" value="public" ng-model="account.access" />
-                            public: Anyone within your organization
+                             {{ _('public: Anyone within your organization') }}
                             </label>
                             <label class="radio line">
                             <input type="radio"  value="private" ng-model="account.access" />
-                            private: only you and your collaborators
+                            {{ _('private: only you and your collaborators') }}
                             </label>  
                            
                        
@@ -95,8 +95,8 @@
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
                 
-                <input ng-hide="isLoading" ng-click="save(account)" type="submit" class="btn green" value="Add this account">
-                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                <input ng-hide="isLoading" ng-click="save(account)" type="submit" class="btn green" value="{{ _('Add this account') }}">
+                <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
               </div>
                </form>
        </div>
@@ -126,16 +126,14 @@
             <div class="span2">
               <div class="btn-group">
                                     <a class="btn" href="#" data-toggle="dropdown">
-                                      Filter by
+                                      {{ _('Filter by') }}
                                     <i class="icon-angle-down"></i>
                                     </a>
                                     <ul class="dropdown-menu">
-                                      <li><a  ng-click="filterByOwner()" href="#" data-toggle="modal">All accounts</a></li>
-                                      <li><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal"> My accounts</a></li>
-                                      
-                                     
+                                      <li><a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All accounts') }}</a></li>
+                                      <li><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My accounts') }}</a></li>
                                     </ul>
-                                    Views
+                                    {{ _('Views') }}
               </div>
             </div>
             <div class="span7">
@@ -143,7 +141,9 @@
                   <li>    
                     <form class="form-inline ng-pristine ng-valid" ng-submit="executeSearch(searchQuery)">
                       <div class="input-append row-fluid">
+
                         <input type="text" ng-model="searchQuery" typeahead="result as result.name  for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="input-xxlarge" placeholder="Quick Filtering">
+
                        <button class="gbqfb gbqfb-hvr"><i class="icon-filter"></i></button>
                       </div>
                     </form>
@@ -157,8 +157,8 @@
                                     <i class="icon-angle-down"></i>
                                     </a>
                                     <ul class="dropdown-menu">
-                                      <li><a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">Last modified</a></li>
-                                      <li><a ng-click="orderBy('name')" href="#" data-toggle="modal">Name</a></li>
+                                      <li><a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a></li>
+                                      <li><a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a></li>
                                       
                                      
                                     </ul>
@@ -196,7 +196,7 @@
                   <div class="blank_slate_arrow"></div>
                   <div class="blank_slate_body">
                       <img src="/static/img/accounts_blank.png">
-                      <p class="lead">Accounts  pages includes a detailed page for each customer, partner, or investor in your ecosystem. You and your co-workers can collaborate to get a deep understanding.</p>
+                      <p class="lead">{{ _('Accounts  pages includes a detailed page for each customer, partner, or investor in your ecosystem. You and your co-workers can collaborate to get a deep understanding.') }}</p>
                   </div>
                
                                   
@@ -217,7 +217,7 @@
                     </button></li>
                   </ul>
                 </div>
-                <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                <h3 class="pagination pull-right" ng-show="isLoading">{{ _('Loading') }}...</h3>
           </div>
             
           

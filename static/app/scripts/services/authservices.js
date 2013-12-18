@@ -43,8 +43,6 @@ accountservices.factory('Auth', function($http) {
           window.is_signed_in = true;
           window.authResult = authResult;
           // run the process
-          console.log('ok');
-          console.log(Auth.$scope);
           Auth.$scope.runTheProcess();
       } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
