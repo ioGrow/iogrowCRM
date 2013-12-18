@@ -5,12 +5,12 @@ from google.appengine.api import search
 import model
 
 class Phone (EndpointsModel):
-	_message_fields_schema =('id')
-	owner = ndb.StringProperty()
-	organization = ndb.KeyProperty()
-	number = ndb.StringProperty()
-	type_number = ndb.StringProperty()
-	creationTime = ndb.DateTimeProperty(auto_now_add=True)
+    _message_fields_schema =('id')
+    owner = ndb.StringProperty()
+    organization = ndb.KeyProperty()
+    number = ndb.StringProperty()
+    type_number = ndb.StringProperty()
+    creationTime = ndb.DateTimeProperty(auto_now_add=True)
     lastmodification = ndb.DateTimeProperty(auto_now=True)
 
     def put(self,**kwargs):
