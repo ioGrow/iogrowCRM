@@ -121,6 +121,7 @@
             
           </div>
         </div>
+          <!-- Filtering and sorting -->
           <div class="row-fluid" ng-show="accounts">
             <div class="span2">
               <div class="btn-group">
@@ -142,15 +143,13 @@
                   <li>    
                     <form class="form-inline ng-pristine ng-valid" ng-submit="executeSearch(searchQuery)">
                       <div class="input-append row-fluid">
-                        <input type="text" ng-model="searchQuery" typeahead="result as result.title + ' (' + result.type + ')' for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="input-xxlarge" placeholder="Quick Filtering">
+                        <input type="text" ng-model="searchQuery" typeahead="result as result.name  for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="input-xxlarge" placeholder="Quick Filtering">
                        <button class="gbqfb gbqfb-hvr"><i class="icon-filter"></i></button>
                       </div>
                     </form>
                   </li> 
               </ul>
             </div>
-
-           
             <div class="span3">
               <div class="btn-group pull-right">
                                     <a class="btn" href="#" data-toggle="dropdown">

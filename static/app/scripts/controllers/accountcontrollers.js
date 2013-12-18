@@ -1,5 +1,5 @@
-app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAccountLoader','Account',
-    function($scope,$route,$location,Conf,MultiAccountLoader,Account) {
+app.controller('AccountListCtrl', ['$scope','Auth','Account',
+    function($scope,Auth,Account) {
      $("#id_Accounts").addClass("active");
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
@@ -13,146 +13,68 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
      $scope.account = {};
      $scope.account.access ='public';
      $scope.order = '-updated_at';
-
-     $scope.renderSignIn = function() {
-          console.log('$scope.renderSignIn #start_debug');
-          if (window.is_signed_in){
-              console.log('I am signed-in so you can continue');
-              $scope.processAuth(window.authResult);
-          }else{
-            console.log('I am  not signed-in so render Button');
-            
-            gapi.signin.render('myGsignin', {
-            'callback': $scope.signIn,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'theme': 'dark',
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-            });
-            console.log('########## rendred tatrttttttaa');
-          }
-      }
-      $scope.refreshToken = function() {
-          gapi.auth.signIn({
-            'callback': $scope.connectServer,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'immediate': true,
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-          });
-      }
+     
+     // What to do after authentication
+     $scope.runTheProcess = function(){
+          var params = { 'order': $scope.order,
+                        'limit':7}
+          Account.list($scope,params);
+     };
+     // We need to call this to refresh token when user credentials are invalid
+     $scope.refreshToken = function() {
+          Auth.refreshToken();
+     };
+     // Next and Prev pagination
      $scope.listNextPageItems = function(){
-        
-        
         var nextPage = $scope.currentPage + 1;
         var params = {};
           if ($scope.pages[nextPage]){
             params = {'limit':7,
                       'order' : $scope.order,
                       'pageToken':$scope.pages[nextPage]
-                     }
+            }
           }else{
             params = {'order' : $scope.order,'limit':7}
           }
-          console.log('in listNextPageItems');
           $scope.currentPage = $scope.currentPage + 1 ; 
           Account.list($scope,params);
-     }
+     };
      $scope.listPrevPageItems = function(){
-       
        var prevPage = $scope.currentPage - 1;
        var params = {};
           if ($scope.pages[prevPage]){
             params = {'limit':7,
                       'order' : $scope.order,
                       'pageToken':$scope.pages[prevPage]
-                     }
+            }
           }else{
             params = {'order' : $scope.order,'limit':7}
           }
           $scope.currentPage = $scope.currentPage - 1 ;
           Account.list($scope,params);
-     }
-     $scope.signIn = function(authResult) {
-        console.log('signIn callback #start_debug');
-        console.log('this is the authResult');
-        console.log(authResult);
-        $scope.connectServer(authResult);
-        $scope.processAuth(authResult);
-        
-     }
-     $scope.connectServer = function(authResult) {
-      console.log('I will contact the serveer');
-      console.log(authResult.code);
-      
-      $.ajax({
-        type: 'POST',
-        url: '/gconnect',
-        
-        success: function(result) {
-          console.log('i am in connectServer show me result please');
-          console.log(result);
-         },
-        data: {code:authResult.code}
-      });
-    }
-     $scope.processAuth = function(authResult) {
-        console.log('process Auth #startdebug');
-        $scope.immediateFailed = true;
-        if (authResult['access_token']) {
-          // User is signed-in
-          console.log('User is signed-in');
-          $scope.immediateFailed = false;
-          $scope.isSignedIn = true;
-          window.is_signed_in = true;
-          window.authResult = authResult;
-          // Call the backend to get the list of accounts
-          
-          var params = { 'order': $scope.order,
-                        'limit':7}
-          Account.list($scope,params);
-
-        } else if (authResult['error']) {
-          if (authResult['error'] == 'immediate_failed') {
-            $scope.immediateFailed = true;
-
-            window.location.replace('/sign-in');
-            console.log('Immediate Failed');
-          } else {
-            console.log('Error:' + authResult['error']);
-          }
-        }
-     }
-     $scope.renderSignIn();
+     };
+     // Add a new account methods
+     // Show the modal 
      $scope.showModal = function(){
-        console.log('button clicked');
         $('#addAccountModal').modal('show');
-
+     };
+     // Insert the account if enter button is pressed
+     $scope.addAccountOnKey = function(account){
+        if(event.keyCode == 13 && account){
+            $scope.save(account);
+        };
+     };
+     // inserting the account  
+     $scope.save = function(account){
+          if (account.name) {
+      	     Account.insert($scope,account);
+           };
       };
-      
-    $scope.save = function(account){
-     if (account.name) {
-    	 Account.insert($scope,account);
-     }
-      
-    };
-    $scope.addAccountOnKey = function(account){
-      if(event.keyCode == 13 && account){
-          $scope.save(account);
-      }
-      
-      
-    };
-
+    // after insertion redirect the user to the account page
      $scope.accountInserted = function(resp){
           $('#addAccountModal').modal('hide');
           window.location.replace('#/accounts/show/'+resp.id);
      };
-     
      // Quick Filtering
      var searchParams ={};
      $scope.result = undefined;
@@ -199,114 +121,53 @@ app.controller('AccountListCtrl', ['$scope','$route','$location','Conf','MultiAc
         Account.list($scope,params);
      };
 
+     // Google+ Authentication 
+     Auth.init($scope);
+
 }]);
-app.controller('AccountShowCtrl', ['$scope','$filter', '$route','$location','Conf','Account','Contact','Case','Opportunity', 'Topic','Note','Task','Event','Permission','User','Attachement',
-    function($scope,$filter,$route,$location,Conf,Account,Contact,Case,Opportunity,Topic,Note,Task,Event,Permission,User,Attachement) {
-      console.log('i am in account Show controller');
-      $("#id_Accounts").addClass("active");
-      var tab = $route.current.params.accountTab;
+app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account','Contact','Case','Opportunity', 'Topic','Note','Task','Event','Permission','User','Attachement',
+    function($scope,$filter,$route,Auth,Account,Contact,Case,Opportunity,Topic,Note,Task,Event,Permission,User,Attachement) {
+       $("#id_Accounts").addClass("active");
+       $scope.selectedTab = 1;
+       $scope.isSignedIn = false;
+       $scope.immediateFailed = false;
+       $scope.nextPageToken = undefined;
+       $scope.prevPageToken = undefined;
+       $scope.isLoading = false;
+       $scope.pagination = {};
+       $scope.currentPage = 01;
+       //HKA 10.12.2013 Var topic to manage Next & Prev
+       $scope.topicCurrentPage=01;
+       $scope.topicpagination={};
+       $scope.topicpages = [];
+       //HKA 10.12.2013 Var Contact to manage Next & Prev
+       $scope.contactpagination={};
+       $scope.contactCurrentPage=01;
+       $scope.contactpages = [];
+       //HKA 11.12.2013 var Opportunity to manage Next & Prev
+       $scope.opppagination = {};
+       $scope.oppCurrentPage=01;
+       $scope.opppages=[];
+       //HKA 11.12.2013 var Case to manage Next & Prev
+       $scope.casepagination = {};
+       $scope.caseCurrentPage=01;
+       $scope.casepages=[];
+       $scope.pages = [];
+       $scope.accounts = [];  
+       $scope.users = [];
+       $scope.user = undefined;
+       $scope.slected_memeber = undefined;
 
-      switch (tab)
-        {
-        case 'notes':
-         $scope.selectedTab = 1;
-          break;
-        case 'about':
-         $scope.selectedTab = 2;
-          break;
-        case 'contacts':
-         $scope.selectedTab = 3;
-          break;
-        case 'opportunities':
-         $scope.selectedTab = 4;
-          break;
-        case 'cases':
-         $scope.selectedTab = 5;
-          break;
-        default:
-        $scope.selectedTab = 1;
-
-        }
-
-     
-     $scope.isSignedIn = false;
-     $scope.immediateFailed = false;
-     $scope.nextPageToken = undefined;
-     $scope.prevPageToken = undefined;
-     $scope.isLoading = false;
-     $scope.pagination = {};
-     $scope.currentPage = 01;
-     //HKA 10.12.2013 Var topic to manage Next & Prev
-     $scope.topicCurrentPage=01;
-     $scope.topicpagination={};
-     $scope.topicpages = [];
-     //HKA 10.12.2013 Var Contact to manage Next & Prev
-     $scope.contactpagination={};
-     $scope.contactCurrentPage=01;
-     $scope.contactpages = [];
-     //HKA 11.12.2013 var Opportunity to manage Next & Prev
-     $scope.opppagination = {};
-     $scope.oppCurrentPage=01;
-     $scope.opppages=[];
-     //HKA 11.12.2013 var Case to manage Next & Prev
-     $scope.casepagination = {};
-     $scope.caseCurrentPage=01;
-     $scope.casepages=[];
-
-     $scope.pages = [];
-
-     
-     $scope.accounts = [];  
-     $scope.users = [];
-     $scope.user = undefined;
-     $scope.slected_memeber = undefined;
-
- 
-     $scope.renderSignIn = function() {
-          console.log('$scope.renderSignIn #start_debug');
-          if (window.is_signed_in){
-              console.log('I am signed-in so you can continue');
-              $scope.processAuth(window.authResult);
-          }else{
-            console.log('I am  not signed-in so render Button');
-            gapi.signin.render('myGsignin', {
-            'callback': $scope.signIn,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'theme': 'dark',
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-            });
-            console.log('sign-in button rendred');
-          }
-      }
-     $scope.refreshToken = function() {
-          gapi.auth.signIn({
-            'callback': $scope.connectServer,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'immediate': true,
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-          });
-      }
-      $scope.connectServer = function(authResult) {
-      console.log('I will contact the serveer');
-      console.log(authResult.code);
-      
-      $.ajax({
-        type: 'POST',
-        url: '/gconnect',
-        
-        success: function(result) {
-          console.log('i am in connectServer show me result please');
-          console.log(result);
-         },
-        data: {code:authResult.code}
-      });
-    }
+       // What to do after authentication
+       $scope.runTheProcess = function(){
+          var accountid = {'id':$route.current.params.accountId};
+          Account.get($scope,accountid);
+          User.list($scope,{});
+       };
+       // We need to call this to refresh token when user credentials are invalid
+       $scope.refreshToken = function() {
+            Auth.refreshToken();
+       };
     //HKA 06.12.2013  Manage Next & Prev Page of Topics
      $scope.TopiclistNextPageItems = function(){
         
@@ -461,12 +322,7 @@ $scope.CaselistNextPageItems = function(){
             Case.list($scope,params);
      };
 
-     $scope.signIn = function(authResult) {
-        console.log('signIn callback #start_debug');
-        $scope.connectServer(authResult);
-        $scope.processAuth(authResult);
-        
-     }
+     
      $scope.listTopics = function(account){
         var params = {'about_kind':'Account',
                       'about_item':$scope.account.id,
@@ -492,34 +348,7 @@ $scope.CaselistNextPageItems = function(){
        $('#topic_0 .message').effect("highlight","slow");
      }
 
-     $scope.processAuth = function(authResult) {
-        console.log('process Auth #startdebug');
-        $scope.immediateFailed = true;
-        if (authResult['access_token']) {
-          // User is signed-in
-          console.log('User is signed-in');
-          $scope.immediateFailed = false;
-          $scope.isSignedIn = true;
-          window.is_signed_in = true;
-          window.authResult = authResult;
-          // Call the backend to get the list of accounts
-          
-          var accountid = {'id':$route.current.params.accountId};
-          Account.get($scope,accountid);
-          User.list($scope,{});
-
-        } else if (authResult['error']) {
-          if (authResult['error'] == 'immediate_failed') {
-            $scope.immediateFailed = true;
-
-            window.location.replace('/sign-in');
-            console.log('Immediate Failed');
-          } else {
-            console.log('Error:' + authResult['error']);
-          }
-        }
-     }
-     $scope.renderSignIn();
+     
      $scope.selectMember = function(){
         console.log('slecting user yeaaah');
         $scope.slected_memeber = $scope.user;
@@ -962,168 +791,8 @@ $scope.updatAccountHeader = function(account){
   $('#EditAccountModal').modal('hide');
 };
 
-
+     // Google+ Authentication 
+     Auth.init($scope);
   
 }]);
-app.controller('SearchFormController', ['$scope','$route','$location','Conf','User',
-    function($scope,$route,$location,Conf,User) {
-     console.log('Search Form Controller');
-     var params ={};
-     $scope.result = undefined;
-     $scope.q = undefined;
-     
-      $scope.$watch('searchQuery', function() {
-         params['q'] = $scope.searchQuery;
-         console.log('params');
-         console.log(params);
-         gapi.client.crmengine.search(params).execute(function(resp) {
-            console.log("in search api");
-            //console.log(resp);
-            if (resp.items){
-              $scope.results = resp.items;
-              console.log($scope.results);
-              $scope.$apply();
-            };
-            
-          });
-         console.log($scope.results);
-      });
-      $scope.selectResult = function(){
-        console.log('slecting result yeaaah');
-        console.log($scope.searchQuery);
-        window.location.replace('#/accounts/show/'+$scope.searchQuery.id);
-        //$scope.user = $scope.slected_memeber.google_display_name;
 
-     };
-     $scope.executeSearch = function(searchQuery){
-      console.log('execyte ssearcg query');
-      console.log(searchQuery);
-      if (typeof(searchQuery)=='string'){
-         window.location.replace('#/search/'+searchQuery);
-      }else{
-        window.location.replace('#/accounts/show/'+searchQuery.id);
-      }
-      $scope.searchQuery='';
-     }
-
-
-
-     
-     
-   
-
-    
-}]);
-
-app.controller('SearchShowController', ['$scope','$route','$location','Conf','Search',
-    function($scope,$route,$location,Conf,Search) {
-     console.log('i am in account list controller');
-
-    
-     $scope.isSignedIn = false;
-     $scope.immediateFailed = false;
-     $scope.nextPageToken = undefined;
-     $scope.prevPageToken = undefined;
-     $scope.isLoading = false;
-     $scope.pagination = {};
-     $scope.currentPage = 01;
-     $scope.pages = [];
-     
-     $scope.accounts = [];
-     
-     
-
-     $scope.renderSignIn = function() {
-          console.log('$scope.renderSignIn #start_debug');
-          if (window.is_signed_in){
-              console.log('I am signed-in so you can continue');
-              $scope.processAuth(window.authResult);
-          }else{
-            console.log('I am  not signed-in so render Button');
-            gapi.signin.render('myGsignin', {
-            'callback': $scope.signIn,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'theme': 'dark',
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-            });
-          }
-      }
-     $scope.listNextPageItems = function(){
-        
-        
-        var nextPage = $scope.currentPage + 1;
-        var params = {};
-          if ($scope.pages[nextPage]){
-            params = {'q':$route.current.params.q,
-                      'limit':7,
-                      
-                      'pageToken':$scope.pages[nextPage]
-                     }
-          }else{
-            params = {'q':$route.current.params.q,
-                      'limit':7}
-          }
-
-          $scope.currentPage = $scope.currentPage + 1 ; 
-          Search.list($scope,params);
-     }
-     $scope.listPrevPageItems = function(){
-       
-       var prevPage = $scope.currentPage - 1;
-       var params = {};
-          if ($scope.pages[prevPage]){
-            params = { 'q':$route.current.params.q,
-                      'limit':7,
-
-                      'pageToken':$scope.pages[prevPage]
-                     }
-          }else{
-            params = {'q':$route.current.params.q,
-                      'limit':7}
-          }
-          $scope.currentPage = $scope.currentPage - 1 ;
-          Search.list($scope,params);
-     }
-     $scope.signIn = function(authResult) {
-        console.log('signIn callback #start_debug');
-        $scope.processAuth(authResult);
-        
-     }
-
-     $scope.processAuth = function(authResult) {
-        console.log('process Auth #startdebug');
-        $scope.immediateFailed = true;
-        if (authResult['access_token']) {
-          // User is signed-in
-          console.log('User is signed-in');
-          $scope.immediateFailed = false;
-          $scope.isSignedIn = true;
-          window.is_signed_in = true;
-          window.authResult = authResult;
-          // Call the backend to get the list of accounts
-          
-          var params = {'limit':7,'q':$route.current.params.q};
-          Search.list($scope,params);
-
-        } else if (authResult['error']) {
-          if (authResult['error'] == 'immediate_failed') {
-            $scope.immediateFailed = true;
-
-            window.location.replace('/sign-in');
-            console.log('Immediate Failed');
-          } else {
-            console.log('Error:' + authResult['error']);
-          }
-        }
-     }
-     $scope.renderSignIn();
-     $scope.showModal = function(){
-        console.log('button clicked');
-        $('#addAccountModal').modal('show');
-
-      };
-    
-}]);
