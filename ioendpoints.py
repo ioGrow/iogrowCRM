@@ -425,7 +425,6 @@ class CrmEngineApi(remote.Service):
   @Opportunitystage.query_method(user_required=True,query_fields=('limit','order','pageToken'),path='opportunitystage',name='opportunitystages.list')
   def OpportunitystageList(self,query):
     user_from_email = EndpointsHelper.require_iogrow_user()
-    return query
     return query.filter(Opportunitystage.organization==user_from_email.organization)
   @Opportunitystage.method(user_required=True,
     http_method='PATCH',path='opportunitystage/{id}',name='opportunitystages.patch')
