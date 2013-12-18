@@ -432,6 +432,19 @@ class CrmEngineApi(remote.Service):
     user_from_email = EndpointsHelper.require_iogrow_user()
     my_model.put()
     return my_model
+  @Opportunitystage.method(request_fields=('id',),path='opportunitystage/{id}',http_method='GET',name='opportunitystages.get')
+  def OpportunitystageGet(self,my_model):
+    if not my_model.from_datastore:
+      raise('Opportunity stage not found')
+    return my_model
+
+  @Opportunitystage.method(user_required=True,http_method ='DELETE',
+    path='opportunitystage/{id}',name='opportunitystages.delete'
+    )
+  def OpportunitystageDelete(self,my_model):
+    user_from_email=EndpointsHelper.require_iogrow_user()
+    my_model.key.delete()
+    return my_model
 
 
   # Leads APIs
@@ -492,12 +505,23 @@ class CrmEngineApi(remote.Service):
   def LeadstatusList(self,query):
     user_from_email = EndpointsHelper.require_iogrow_user()
     return query.filter(Leadstatus.organization==user_from_email.organization)
+  @Leadstatus.method(request_fields=('id',),path='leadstatuses/{id}',http_method='GET',name='leadstatuses.get')
+  def LeadstatusGet(self,my_model):
+    if not my_model.from_datastore:
+      raise('Lead status not found')
+    return my_model
   @Leadstatus.method(user_required=True,
     http_method='PATCH',path='leadstatuses/{id}',name='leadstatuses.patch')
   def LeadstatusPatch(self,my_model):
     user_from_email = EndpointsHelper.require_iogrow_user()
     my_model.put()
     return my_model
+  @Leadstatus.method(user_required=True,path='leadstatuses/{id}',http_method ='DELETE',name='leadstatuses.delete')
+  def LeadstatusDelete(self,my_model):
+    user_from_email=EndpointsHelper.require_iogrow_user()
+    my_model.key.delete()
+    return my_model
+
   # Cases API 
   # cases.insert api 
   @Case.method(user_required=True,path='cases',http_method='POST',name='cases.insert')
@@ -566,11 +590,21 @@ class CrmEngineApi(remote.Service):
   def CasestatusList(self,query):
     user_from_email = EndpointsHelper.require_iogrow_user()
     return query.filter(Casestatus.organization==user_from_email.organization)
+  @Casestatus.method(request_fields=('id',),path='casestatuses/{id}',http_method='GET',name='casestatuses.get')
+  def CasestatusGet(self,my_model):
+    if not my_model.from_datastore:
+      raise('Case status not found')
+    return my_model
   @Casestatus.method(user_required=True,
     http_method='PATCH',path='casestatuses/{id}',name='casestatuses.patch')
   def CasestatusPatch(self,my_model):
     user_from_email = EndpointsHelper.require_iogrow_user()
     my_model.put()
+    return my_model
+  @Casestatus.method(user_required=True,path='casestatuses/{id}',http_method='DELETE',name='casestatuses.delete')
+  def CasestatusDelete(self,my_model):
+    user_from_email=EndpointsHelper.require_iogrow_user()
+    my_model.key.delete()
     return my_model
   # Shows API
   # shows.insert api

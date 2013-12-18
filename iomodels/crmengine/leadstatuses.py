@@ -6,13 +6,14 @@ import model
 
 
 class Leadstatus (EndpointsModel):
-	owner = ndb.StringProperty()
-	organization = ndb.KeyProperty()
-	created_at = ndb.DateTimeProperty(auto_now_add=True)
-	updated_at = ndb.DateTimeProperty(auto_now=True)
-	status = ndb.StringProperty()
-	created_by = ndb.KeyProperty()
-	last_modified_by = ndb.KeyProperty()
+    _message_fields_schema = ('id','entityKey','created_at','updated_at','status','owner','organization')
+    owner = ndb.StringProperty()
+    organization = ndb.KeyProperty()
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
+    updated_at = ndb.DateTimeProperty(auto_now=True)
+    status = ndb.StringProperty()
+    created_by = ndb.KeyProperty()
+    last_modified_by = ndb.KeyProperty()
     #created_by = ndb.KeyProperty()
     #last_modified_by = ndb.KeyProperty()
 def put(self, **kwargs):

@@ -140,7 +140,7 @@
                   <li>    
                     <form class="form-inline ng-pristine ng-valid" ng-submit="executeSearch(searchQuery)">
                       <div class="input-append row-fluid">
-                        <input type="text" ng-model="searchQuery" typeahead="result as result.title + ' (' + result.type + ')' for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="input-xxlarge" placeholder="{{ _('Quick Filtering') }}">
+                        <input type="text" ng-model="searchQuery" typeahead="result as result.name  for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="input-xxlarge" placeholder="{{ _('Quick Filtering') }}">
                        <button class="gbqfb gbqfb-hvr"><i class="icon-filter"></i></button>
                       </div>
                     </form>
