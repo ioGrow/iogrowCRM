@@ -1,7 +1,5 @@
-app.controller('GroupListCtrl', ['$scope','$route','$location','Conf','Group',
-    function($scope,$route,$location,Conf,Group) {
-     console.log('i am in user list controller');
-
+app.controller('GroupListCtrl', ['$scope','Auth','Group',
+    function($scope,Auth,Group) {
      $("#id_Groups").addClass("active");
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
@@ -11,58 +9,17 @@ app.controller('GroupListCtrl', ['$scope','$route','$location','Conf','Group',
      $scope.pagination = {};
      $scope.currentPage = 01;
      $scope.pages = [];
-     
      $scope.users = [];
-     
-     
-
-     $scope.renderSignIn = function() {
-          console.log('$scope.renderSignIn #start_debug');
-          if (window.is_signed_in){
-              console.log('I am signed-in so you can continue');
-              $scope.processAuth(window.authResult);
-          }else{
-            console.log('I am  not signed-in so render Button');
-            gapi.signin.render('myGsignin', {
-            'callback': $scope.signIn,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'theme': 'dark',
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-            });
-          }
-      }
-      $scope.refreshToken = function() {
-          gapi.auth.signIn({
-            'callback': $scope.connectServer,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'immediate': true,
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-          });
-      }
-      $scope.connectServer = function(authResult) {
-      console.log('I will contact the serveer');
-      console.log(authResult.code);
-      
-      $.ajax({
-        type: 'POST',
-        url: '/gconnect',
-        
-        success: function(result) {
-          console.log('i am in connectServer show me result please');
-          console.log(result);
-         },
-        data: {code:authResult.code}
-      });
-    }
+     // What to do after authentication
+     $scope.runTheProcess = function(){
+          var params = {'limit':7}
+          Group.list($scope,params);
+     };
+     // We need to call this to refresh token when user credentials are invalid
+     $scope.refreshToken = function() {
+            Auth.refreshToken();
+     };
      $scope.listNextPageItems = function(){
-        
-        
         var nextPage = $scope.currentPage + 1;
         var params = {};
           if ($scope.pages[nextPage]){
@@ -90,40 +47,9 @@ app.controller('GroupListCtrl', ['$scope','$route','$location','Conf','Group',
           $scope.currentPage = $scope.currentPage - 1 ;
           Group.list($scope,params);
      }
-     $scope.signIn = function(authResult) {
-        console.log('signIn callback #start_debug');
-        $scope.connectServer(authResult);
-        $scope.processAuth(authResult);
-        
-     }
+     
 
-     $scope.processAuth = function(authResult) {
-        console.log('process Auth #startdebug');
-        $scope.immediateFailed = true;
-        if (authResult['access_token']) {
-          // User is signed-in
-          console.log('User is signed-in');
-          $scope.immediateFailed = false;
-          $scope.isSignedIn = true;
-          window.is_signed_in = true;
-          window.authResult = authResult;
-          // Call the backend to get the list of accounts
-          
-          var params = {'limit':7}
-          Group.list($scope,params);
-
-        } else if (authResult['error']) {
-          if (authResult['error'] == 'immediate_failed') {
-            $scope.immediateFailed = true;
-
-            window.location.replace('/sign-in');
-            console.log('Immediate Failed');
-          } else {
-            console.log('Error:' + authResult['error']);
-          }
-        }
-     }
-     $scope.renderSignIn();
+    
      $scope.showModal = function(){
         console.log('button clicked');
         $('#addGroupModal').modal('show');
@@ -134,13 +60,15 @@ app.controller('GroupListCtrl', ['$scope','$route','$location','Conf','Group',
       
       Group.insert($scope,group);
     };
+    // Google+ Authentication 
+    Auth.init($scope);
      
      
 }]);
 
-app.controller('GroupShowCtrl', ['$scope','$route','$location','Conf','User', 'Group', 'Member',
-    function($scope,$route,$location,Conf,User,Group,Member) {
-     console.log('i am in user list controller');
+app.controller('GroupShowCtrl', ['$scope','$route','Auth','User', 'Group', 'Member',
+    function($scope,$route,Auth,User,Group,Member) {
+    
 
      $("#id_Groups").addClass("active");
      $scope.isSignedIn = false;
@@ -156,6 +84,17 @@ app.controller('GroupShowCtrl', ['$scope','$route','$location','Conf','User', 'G
      $scope.user = undefined;
      $scope.slected_memeber = undefined;
      $scope.role= 'member';
+
+     // What to do after authentication
+     $scope.runTheProcess = function(){
+          var params = {'id':$route.current.params.groupId};
+          Group.get($scope,params);
+          User.list($scope,{});
+     };
+     // We need to call this to refresh token when user credentials are invalid
+     $scope.refreshToken = function() {
+            Auth.refreshToken();
+     };
 
      $scope.selectMember = function(){
         console.log('slecting user yeaaah');
@@ -178,50 +117,7 @@ app.controller('GroupShowCtrl', ['$scope','$route','$location','Conf','User', 'G
      $('#addMemberModal').modal('hide');
      }
      
-     $scope.renderSignIn = function() {
-          console.log('$scope.renderSignIn #start_debug');
-          if (window.is_signed_in){
-              console.log('I am signed-in so you can continue');
-              $scope.processAuth(window.authResult);
-          }else{
-            console.log('I am  not signed-in so render Button');
-            gapi.signin.render('myGsignin', {
-            'callback': $scope.signIn,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'theme': 'dark',
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-            });
-          }
-      }
-      $scope.refreshToken = function() {
-          gapi.auth.signIn({
-            'callback': $scope.connectServer,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'immediate': true,
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-          });
-      }
-      $scope.connectServer = function(authResult) {
-      console.log('I will contact the serveer');
-      console.log(authResult.code);
-      
-      $.ajax({
-        type: 'POST',
-        url: '/gconnect',
-        
-        success: function(result) {
-          console.log('i am in connectServer show me result please');
-          console.log(result);
-         },
-        data: {code:authResult.code}
-      });
-    }
+     
      $scope.listNextPageItems = function(){
         
         
@@ -257,42 +153,6 @@ app.controller('GroupShowCtrl', ['$scope','$route','$location','Conf','User', 'G
         var params = {'id':$route.current.params.groupId};
         Group.get($scope,params);
      }
-     $scope.signIn = function(authResult) {
-        console.log('signIn callback #start_debug');
-        $scope.connectServer(authResult);
-        $scope.processAuth(authResult);
-        
-     }
-
-
-     $scope.processAuth = function(authResult) {
-        console.log('process Auth #startdebug');
-        $scope.immediateFailed = true;
-        if (authResult['access_token']) {
-          // User is signed-in
-          console.log('User is signed-in');
-          $scope.immediateFailed = false;
-          $scope.isSignedIn = true;
-          window.is_signed_in = true;
-          window.authResult = authResult;
-          // Call the backend to get the list of accounts
-          
-          var params = {'id':$route.current.params.groupId};
-          Group.get($scope,params);
-          User.list($scope,{});
-
-        } else if (authResult['error']) {
-          if (authResult['error'] == 'immediate_failed') {
-            $scope.immediateFailed = true;
-
-            window.location.replace('/sign-in');
-            console.log('Immediate Failed');
-          } else {
-            console.log('Error:' + authResult['error']);
-          }
-        }
-     }
-     $scope.renderSignIn();
      $scope.showModal = function(){
         console.log('button clicked');
         $('#addMemberModal').modal('show');
@@ -304,8 +164,6 @@ app.controller('GroupShowCtrl', ['$scope','$route','$location','Conf','User', 'G
       Group.insert(user);
     };
      
-     
-   
-
-    
+    // Google+ Authentication 
+    Auth.init($scope);
 }]);
