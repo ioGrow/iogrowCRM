@@ -1,5 +1,5 @@
-app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Account','Opportunity','Opportunitystage',
-    function($scope,$route,$location,Conf,Account,Opportunity,Opportunitystage) {
+app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','Opportunitystage',
+    function($scope,Auth,Account,Opportunity,Opportunitystage) {
       
      $("#id_Opportunities").addClass("active");
      $scope.isSignedIn = false;
@@ -20,51 +20,16 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Acc
      $scope.opportunity = {};
      $scope.opportunity.access ='public';
 
-     $scope.renderSignIn = function() {
-          console.log('$scope.renderSignIn #start_debug');
-          if (window.is_signed_in){
-              console.log('I am signed-in so you can continue');
-              $scope.processAuth(window.authResult);
-          }else{
-            console.log('I am  not signed-in so render Button');
-            console.log(Conf.clientId);
-            gapi.signin.render('myGsignin', {
-            'callback': $scope.signIn,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'theme': 'dark',
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-            });
-          }
-      }
-      $scope.refreshToken = function() {
-          gapi.auth.signIn({
-            'callback': $scope.connectServer,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'immediate': true,
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-          });
-      }
-      $scope.connectServer = function(authResult) {
-      console.log('I will contact the serveer');
-      console.log(authResult.code);
-      
-      $.ajax({
-        type: 'POST',
-        url: '/gconnect',
-        
-        success: function(result) {
-          console.log('i am in connectServer show me result please');
-          console.log(result);
-         },
-        data: {code:authResult.code}
-      });
-    }
+      // What to do after authentication
+       $scope.runTheProcess = function(){
+          var params = {'limit':7};
+          Opportunity.list($scope,params);
+          Opportunitystage.list($scope,{});
+       };
+        // We need to call this to refresh token when user credentials are invalid
+       $scope.refreshToken = function() {
+            Auth.refreshToken();
+       };
      $scope.listNextPageItems = function(){
         
         var nextPage = $scope.oppCurrentPage + 1;
@@ -94,41 +59,9 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Acc
           $scope.oppCurrentPage = $scope.oppCurrentPage - 1 ;
           Opportunity.list($scope,params);
      }
-     $scope.signIn = function(authResult) {
-        console.log('signIn callback #start_debug');
-        $scope.connectServer(authResult);
-        $scope.processAuth(authResult);
-        
-     }
+    
 
-     $scope.processAuth = function(authResult) {
-        console.log('process Auth #startdebug');
-        $scope.immediateFailed = true;
-        if (authResult['access_token']) {
-          // User is signed-in
-          
-          $scope.immediateFailed = false;
-          $scope.isSignedIn = true;
-          
-          window.is_signed_in = true;
-          window.authResult = authResult;
-          
-          var params = {'limit':7};
-          Opportunity.list($scope,params);
-          Opportunitystage.list($scope,params);
-
-        } else if (authResult['error']) {
-          if (authResult['error'] == 'immediate_failed') {
-            $scope.immediateFailed = true;
-
-            window.location.replace('/sign-in');
-            console.log('Immediate Failed');
-          } else {
-            console.log('Error:' + authResult['error']);
-          }
-        }
-     }
-     $scope.renderSignIn();
+     
      $scope.showModal = function(){
         console.log('button clicked');
         $('#addOpportunityModal').modal('show');
@@ -202,14 +135,12 @@ app.controller('OpportunityListCtrl', ['$scope','$route','$location','Conf','Acc
         $scope.opportunity.account = $scope.searchAccountQuery;
 
      };
-     
-
-
-      
+     // Google+ Authentication 
+     Auth.init($scope);
 }]);
 
-app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','Conf','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage',
-    function($scope,$filter,$route,$location,Conf,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage) {
+app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage',
+    function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage) {
  
       $("#id_Opportunities").addClass("active");
       
@@ -230,6 +161,19 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
      $scope.user = undefined;
      $scope.slected_memeber = undefined;
       $scope.stage_selected={};
+
+      // What to do after authentication
+       $scope.runTheProcess = function(){
+          var opportunityid = {'id':$route.current.params.opportunityId};
+          Opportunity.get($scope,opportunityid);
+          User.list($scope,{});
+          //HKA 13.12.2013 to retrieve the opportunities's stages
+          Opportunitystage.list($scope,{});
+       };
+        // We need to call this to refresh token when user credentials are invalid
+       $scope.refreshToken = function() {
+            Auth.refreshToken();
+       };
      //HKA 09.11.2013 Add a new Task
      $scope.addTask = function(task){
       
@@ -276,56 +220,6 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
       $('#EditOpportunityModal').modal('show')
      }
 
-     
-     
-
-     $scope.renderSignIn = function() {
-          console.log('$scope.renderSignIn #start_debug');
-          if (window.is_signed_in){
-              console.log('I am signed-in so you can continue');
-              $scope.processAuth(window.authResult);
-          }else{
-            console.log('I am  not signed-in so render Button');
-            gapi.signin.render('myGsignin', {
-            'callback': $scope.signIn,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'theme': 'dark',
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-            });
-
-          }
-          
-
-     }
-     $scope.refreshToken = function() {
-          gapi.auth.signIn({
-            'callback': $scope.connectServer,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'immediate': true,
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-          });
-      }
-      $scope.connectServer = function(authResult) {
-      console.log('I will contact the serveer');
-      console.log(authResult.code);
-      
-      $.ajax({
-        type: 'POST',
-        url: '/gconnect',
-        
-        success: function(result) {
-          console.log('i am in connectServer show me result please');
-          console.log(result);
-         },
-        data: {code:authResult.code}
-      });
-    }
      $scope.TopiclistNextPageItems = function(){
         
         
@@ -369,12 +263,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
           Topic.list($scope,params);
           
      }
-     $scope.signIn = function(authResult) {
-        console.log('signIn callback #start_debug');
-        $scope.connectServer(authResult);
-        $scope.processAuth(authResult);
-        
-     }
+    
      $scope.listTopics = function(opportunity){
         var params = {'about_kind':'Opportunity',
                       'about_item':$scope.opportunity.id,
@@ -391,34 +280,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
      }
 
 
-     $scope.processAuth = function(authResult) {
-        console.log('process Auth #startdebug');
-        $scope.immediateFailed = true;
-        if (authResult['access_token']) {
-          // User is signed-in
-          console.log('User is signed-in');
-          $scope.immediateFailed = false;
-          $scope.isSignedIn = true;
-          window.is_signed_in = true;
-          window.authResult = authResult;
-          // Call the backend to get the list of contact
-          var opportunityid = {'id':$route.current.params.opportunityId};
-          Opportunity.get($scope,opportunityid);
-          User.list($scope,{});
-          //HKA 13.12.2013 to retrieve the opportunities's stages
-           Opportunitystage.list($scope,{});
-
-        } else if (authResult['error']) {
-          if (authResult['error'] == 'immediate_failed') {
-            $scope.immediateFailed = true;
-
-            console.log('Immediate Failed');
-          } else {
-            console.log('Error:' + authResult['error']);
-          }
-        }
-     }
-     $scope.renderSignIn();
+     
      $scope.selectMember = function(){
         console.log('slecting user yeaaah');
         $scope.slected_memeber = $scope.user;
@@ -544,7 +406,8 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','$location','
   $('#EditOpportunityModal').modal('hide');
  }
     
-
+     // Google+ Authentication 
+     Auth.init($scope);
 
 }]);
 

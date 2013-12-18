@@ -1,5 +1,5 @@
-app.controller('NoteShowController',['$scope','$filter','$route','$location','Conf','Note','Topic','Comment','User','Contributor',
-	 function($scope,$filter,$route,$location,Conf,Note,Topic,Comment,User,Contributor) {
+app.controller('NoteShowController',['$scope','$filter','$route','Auth','Note','Topic','Comment','User','Contributor',
+	 function($scope,$filter,$route,Auth,Note,Topic,Comment,User,Contributor) {
 //HKA 14.11.2013 Controller to show Notes and add comments
 	 $scope.isSignedIn = false;
      $scope.immediateFailed = false;
@@ -17,55 +17,22 @@ app.controller('NoteShowController',['$scope','$filter','$route','$location','Co
      $scope.role= 'participant';
 
  
-     $scope.renderSignIn = function() {
-          console.log('$scope.renderSignIn #start_debug');
-          if (window.is_signed_in){
-              console.log('I am signed-in so you can continue');
-              $scope.processAuth(window.authResult);
-          }else{
-            console.log('I am  not signed-in so render Button');
-            gapi.signin.render('myGsignin', {
-            'callback': $scope.signIn,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'theme': 'dark',
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-            });
-          }
-      }
-      $scope.refreshToken = function() {
-          gapi.auth.signIn({
-            'callback': $scope.connectServer,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'immediate': true,
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-          });
-      }
-      $scope.connectServer = function(authResult) {
-      console.log('I will contact the serveer');
-      console.log(authResult.code);
-      
-      $.ajax({
-        type: 'POST',
-        url: '/gconnect',
-        
-        success: function(result) {
-          console.log('i am in connectServer show me result please');
-          console.log(result);
-         },
-        data: {code:authResult.code}
-      });
-    }
-   $scope.listNextPageItems= function(){
+      // What to do after authentication
+     $scope.runTheProcess = function(){
+          var noteId = $route.current.params.noteId;
+          var params = {'id':noteId};
+          Note.get($scope,params);
+          User.list($scope,{});
+     };
+     // We need to call this to refresh token when user credentials are invalid
+     $scope.refreshToken = function() {
+            Auth.refreshToken();
+     };
+     $scope.listNextPageItems= function(){
         
         
         var nextPage = $scope.currentPage + 1;
-        console.log('hahahahahahahah');
+        
         console.log(nextPage);
         console.log($scope.pages[nextPage])
         var params = {};
@@ -98,44 +65,7 @@ app.controller('NoteShowController',['$scope','$filter','$route','$location','Co
           Comment.list($scope,params);
      }
    
-     $scope.signIn = function(authResult) {
-        console.log('signIn callback #start_debug');
-        $scope.connectServer(authResult);
-        $scope.processAuth(authResult);
-        
-     }
-
-     $scope.processAuth = function(authResult) {
-        console.log('process Auth #startdebug');
-        $scope.immediateFailed = true;
-        if (authResult['access_token']) {
-          // User is signed-in
-          console.log('User is signed-in');
-          $scope.immediateFailed = false;
-          $scope.isSignedIn = true;
-          window.is_signed_in = true;
-          window.authResult = authResult;
-          // Call the backend to get the list of accounts
-          var noteId = $route.current.params.noteId;
-          var params = {'id':noteId};
-          console.log(params);
-
-          Note.get($scope,params);
-          User.list($scope,{});
-
-
-        } else if (authResult['error']) {
-          if (authResult['error'] == 'immediate_failed') {
-            $scope.immediateFailed = true;
-
-            window.location.replace('/sign-in');
-            console.log('Immediate Failed');
-          } else {
-            console.log('Error:' + authResult['error']);
-          }
-        }
-     }
-     $scope.renderSignIn();
+     
      $scope.showModal = function(){
         console.log('button clicked');
         $('#addAccountModal').modal('show');
@@ -206,10 +136,13 @@ app.controller('NoteShowController',['$scope','$filter','$route','$location','Co
       Contributor.list($scope,params);
       };
 
+    // Google+ Authentication 
+    Auth.init($scope);
+
 	}]);
 
-app.controller('DocumentShowController',['$scope','$filter','$route','$location','Conf','Attachement','Note','Comment',
-   function($scope,$filter,$route,$location,Conf,Attachement,Note,Comment) {
+app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Attachement','Note','Comment',
+   function($scope,$filter,$route,Auth,Attachement,Note,Comment) {
 //HKA 14.11.2013 Controller to show Notes and add comments
    $scope.isSignedIn = false;
      $scope.immediateFailed = false;
@@ -223,57 +156,20 @@ app.controller('DocumentShowController',['$scope','$filter','$route','$location'
      $scope.notes = [];  
 
  
-     $scope.renderSignIn = function() {
-          console.log('$scope.renderSignIn #start_debug');
-          if (window.is_signed_in){
-              console.log('I am signed-in so you can continue');
-              $scope.processAuth(window.authResult);
-          }else{
-            console.log('I am  not signed-in so render Button');
-            gapi.signin.render('myGsignin', {
-            'callback': $scope.signIn,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'theme': 'dark',
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-            });
-          }
-      }
-      $scope.refreshToken = function() {
-          gapi.auth.signIn({
-            'callback': $scope.connectServer,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'immediate': true,
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-          });
-      }
-      $scope.connectServer = function(authResult) {
-      console.log('I will contact the serveer');
-      console.log(authResult.code);
-      
-      $.ajax({
-        type: 'POST',
-        url: '/gconnect',
-        
-        success: function(result) {
-          console.log('i am in connectServer show me result please');
-          console.log(result);
-         },
-        data: {code:authResult.code}
-      });
-    }
+      // What to do after authentication
+     $scope.runTheProcess = function(){
+          var noteId = $route.current.params.noteId;
+          var params = {'id':$route.current.params.documentId};
+          Attachement.get($scope,params);
+     };
+     // We need to call this to refresh token when user credentials are invalid
+     $scope.refreshToken = function() {
+            Auth.refreshToken();
+     };
    $scope.listNextPageItems= function(){
         
         
         var nextPage = $scope.currentPage + 1;
-        console.log('hahahahahahahah');
-        console.log(nextPage);
-        console.log($scope.pages[nextPage])
         var params = {};
           if ($scope.pages[nextPage]){
             params = {'limit':5,
@@ -304,48 +200,13 @@ app.controller('DocumentShowController',['$scope','$filter','$route','$location'
           Comment.list($scope,params);
      }
    
-     $scope.signIn = function(authResult) {
-        console.log('signIn callback #start_debug');
-        $scope.connectServer(authResult);
-        $scope.processAuth(authResult);
-        
-     }
      $scope.prepareUrls = function(){
 
                var url = Note.getUrl($scope.attachment.about.kind,$scope.attachment.about.id);
                $scope.uri =url;
                $scope.attachment.embedLink = $scope.attachment.content;
      };
-     $scope.processAuth = function(authResult) {
-        console.log('process Auth #startdebug');
-        $scope.immediateFailed = true;
-        if (authResult['access_token']) {
-          // User is signed-in
-          console.log('User is signed-in');
-          $scope.immediateFailed = false;
-          $scope.isSignedIn = true;
-          window.is_signed_in = true;
-          window.authResult = authResult;
-          // Call the backend to get the list of accounts
-          var noteId = $route.current.params.noteId;
-          var params = {'id':$route.current.params.documentId};
-          console.log(params);
-
-          Attachement.get($scope,params);
-
-
-        } else if (authResult['error']) {
-          if (authResult['error'] == 'immediate_failed') {
-            $scope.immediateFailed = true;
-
-            window.location.replace('/sign-in');
-            console.log('Immediate Failed');
-          } else {
-            console.log('Error:' + authResult['error']);
-          }
-        }
-     }
-     $scope.renderSignIn();
+     
      $scope.showModal = function(){
         console.log('button clicked');
         $('#addAccountModal').modal('show');
@@ -379,6 +240,7 @@ app.controller('DocumentShowController',['$scope','$filter','$route','$location'
      };
 
 
-
+    // Google+ Authentication 
+    Auth.init($scope);
 
   }]);

@@ -1,5 +1,5 @@
-app.controller('SettingsShowCtrl',['$scope','$route','$location','Conf','Contact','Opportunitystage','Casestatus','Leadstatus',
-	function($scope,$route,$location,Conf,Contact,Opportunitystage,Casestatus,Leadstatus){
+app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','Casestatus','Leadstatus',
+	function($scope,$route,Auth,Opportunitystage,Casestatus,Leadstatus){
 //HKA 11.12.2013 Controller to manage Opportunity stage, Case Status, Company profile, personnel Settings, Lead Status
 		$("#id_Settings").addClass("active");
 
@@ -23,88 +23,17 @@ app.controller('SettingsShowCtrl',['$scope','$route','$location','Conf','Contact
         $scope.isSignedIn = false;
         $scope.immediateFailed = false;
          
-          $scope.renderSignIn = function() {
-          console.log('$scope.renderSignIn #start_debug');
-          if (window.is_signed_in){
-              console.log('I am signed-in so you can continue');
-              $scope.processAuth(window.authResult);
-          }else{
-            console.log('I am  not signed-in so render Button');
-            
-            gapi.signin.render('myGsignin', {
-            'callback': $scope.signIn,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'theme': 'dark',
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-            });
-            console.log('########## rendred tatrttttttaa');
-          }
-      }
-      $scope.refreshToken = function() {
-          gapi.auth.signIn({
-            'callback': $scope.connectServer,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'immediate': true,
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-          });
-      }
-
-       $scope.signIn = function(authResult) {
-        console.log('signIn callback #start_debug');
-        $scope.connectServer(authResult);
-        $scope.processAuth(authResult);
-        
-     }
-     $scope.connectServer = function(authResult) {
-      console.log('I will contact the serveer');
-      console.log(authResult.code);
-      
-      $.ajax({
-        type: 'POST',
-        url: '/gconnect',
-        
-        success: function(result) {
-          console.log('i am in connectServer show me result please');
-          console.log(result);
-         },
-        data: {code:authResult.code}
-      });
-    }
-     $scope.processAuth = function(authResult) {
-        console.log('process Auth #startdebug');
-        $scope.immediateFailed = true;
-        if (authResult['access_token']) {
-          // User is signed-in
-          console.log('User is signed-in');
-          $scope.immediateFailed = false;
-          $scope.isSignedIn = true;
-          window.is_signed_in = true;
-          window.authResult = authResult;
-          // Call the backend to get the list of accounts
-          
-          
-          Opportunitystage.list($scope,{});
+          // What to do after authentication
+     $scope.runTheProcess = function(){
+           Opportunitystage.list($scope,{});
           Casestatus.list($scope,{});
           Leadstatus.list($scope,{});
-
-        } else if (authResult['error']) {
-          if (authResult['error'] == 'immediate_failed') {
-            $scope.immediateFailed = true;
-
-            window.location.replace('/sign-in');
-            console.log('Immediate Failed');
-          } else {
-            console.log('Error:' + authResult['error']);
-          }
-        }
-     }
-     $scope.renderSignIn();
+     };
+     // We need to call this to refresh token when user credentials are invalid
+     $scope.refreshToken = function() {
+            Auth.refreshToken();
+     };
+     
   //HKA 12.12.2013 Add a new Opportunity Stage
   $scope.addOppStagetModal = function(){
     $("#addOppStagetModal").modal('show')
@@ -163,5 +92,6 @@ app.controller('SettingsShowCtrl',['$scope','$route','$location','Conf','Contact
    
   } 
 
-
+  // Google+ Authentication 
+    Auth.init($scope);
 	}]);

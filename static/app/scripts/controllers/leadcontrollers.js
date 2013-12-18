@@ -1,5 +1,5 @@
-app.controller('LeadListCtrl', ['$scope','$route','$location','Conf','Lead',
-    function($scope,$route,$location,Conf,Lead) {
+app.controller('LeadListCtrl', ['$scope','Auth','Lead',
+    function($scope,Auth,Lead) {
       $("#id_Leads").addClass("active");
       
       console.log('i am in lead list controller');
@@ -17,51 +17,15 @@ app.controller('LeadListCtrl', ['$scope','$route','$location','Conf','Lead',
       $scope.lead = {};
       $scope.lead.access ='public';
 
-      $scope.renderSignIn = function() {
-          console.log('$scope.renderSignIn #start_debug');
-          if (window.is_signed_in){
-              console.log('I am signed-in so you can continue');
-              $scope.processAuth(window.authResult);
-          }else{
-            console.log('I am  not signed-in so render Button');
-            gapi.signin.render('myGsignin', {
-            'callback': $scope.signIn,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'theme': 'dark',
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-            });
-
-          }
-      }
-      $scope.refreshToken = function() {
-          gapi.auth.signIn({
-            'callback': $scope.connectServer,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'immediate': true,
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-          });
-      }
-      $scope.connectServer = function(authResult) {
-      console.log('I will contact the serveer');
-      console.log(authResult.code);
-      
-      $.ajax({
-        type: 'POST',
-        url: '/gconnect',
-        
-        success: function(result) {
-          console.log('i am in connectServer show me result please');
-          console.log(result);
-         },
-        data: {code:authResult.code}
-      });
-    }
+      // What to do after authentication
+       $scope.runTheProcess = function(){
+            var params = {'limit':7};
+            Lead.list($scope,params);
+       };
+        // We need to call this to refresh token when user credentials are invalid
+       $scope.refreshToken = function() {
+            Auth.refreshToken();
+       };
      $scope.listNextPageItems = function(){
         
         
@@ -92,39 +56,6 @@ app.controller('LeadListCtrl', ['$scope','$route','$location','Conf','Lead',
           $scope.currentPage = $scope.currentPage - 1 ;
           Lead.list($scope,params);
      }
-     $scope.signIn = function(authResult) {
-        console.log('signIn callback #start_debug');
-        $scope.connectServer(authResult);
-        $scope.processAuth(authResult);
-        
-     }
-
-     $scope.processAuth = function(authResult) {
-        console.log('process Auth #startdebug');
-        $scope.immediateFailed = true;
-        if (authResult['access_token']) {
-          // User is signed-in
-          console.log('User is signed-in');
-          $scope.immediateFailed = false;
-          $scope.isSignedIn = true;
-          window.is_signed_in = true;
-          window.authResult = authResult;
-          // Call the backend to get the list of leads
-          var params = {'limit':7};
-          Lead.list($scope,params);
-
-        } else if (authResult['error']) {
-          if (authResult['error'] == 'immediate_failed') {
-            $scope.immediateFailed = true;
-
-            window.location.replace('/sign-in');
-            console.log('Immediate Failed');
-          } else {
-            console.log('Error:' + authResult['error']);
-          }
-        }
-     }
-     $scope.renderSignIn();
     
       // new Lead
       $scope.showModal = function(){
@@ -143,13 +74,13 @@ app.controller('LeadListCtrl', ['$scope','$route','$location','Conf','Lead',
         }
       };
 
+     // Google+ Authentication 
+     Auth.init($scope);
 
       
 }]);
-app.controller('LeadShowCtrl', ['$scope','$filter','$route','$location','Conf','Task','Event','Topic','Note','Lead','Permission','User','Leadstatus',
-    function($scope,$filter,$route,$location,Conf,Task,Event,Topic,Note,Lead,Permission,User,Leadstatus) {
- console.log('I am in LeadShowCtrl f');
-
+app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Lead','Permission','User','Leadstatus',
+    function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Lead,Permission,User,Leadstatus) {
       $("#id_Leads").addClass("active");
       var tab = $route.current.params.accountTab;
       switch (tab)
@@ -195,52 +126,18 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','$location','Conf','
      $scope.user = undefined;
      $scope.slected_memeber = undefined;
 
-       
-     $scope.renderSignIn = function() {
-          console.log('$scope.renderSignIn #start_debug');
-          if (window.is_signed_in){
-              console.log('I am signed-in so you can continue');
-              $scope.processAuth(window.authResult);
-          }else{
-            console.log('I am  not signed-in so render Button');
-            gapi.signin.render('myGsignin', {
-            'callback': $scope.signIn,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'theme': 'dark',
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-            });
-
-          }
-      }
+      // What to do after authentication
+      $scope.runTheProcess = function(){
+            var leadid = {'id':$route.current.params.leadId};
+            Lead.get($scope,leadid);
+            User.list($scope,{});
+            Leadstatus.list($scope,{}); 
+      };
+      // We need to call this to refresh token when user credentials are invalid
       $scope.refreshToken = function() {
-          gapi.auth.signIn({
-            'callback': $scope.connectServer,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'immediate': true,
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-          });
-      }
-      $scope.connectServer = function(authResult) {
-      console.log('I will contact the serveer');
-      console.log(authResult.code);
+              Auth.refreshToken();
+      };
       
-      $.ajax({
-        type: 'POST',
-        url: '/gconnect',
-        
-        success: function(result) {
-          console.log('i am in connectServer show me result please');
-          console.log(result);
-         },
-        data: {code:authResult.code}
-      });
-    }
      $scope.TopiclistNextPageItems = function(){
         
         
@@ -284,12 +181,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','$location','Conf','
           Topic.list($scope,params);
           
      }
-     $scope.signIn = function(authResult) {
-        console.log('signIn callback #start_debug');
-        $scope.connectServer(authResult);
-        $scope.processAuth(authResult);
-        
-     }
+    
      $scope.listTopics = function(lead){
         var params = {'about_kind':'Lead',
                       'about_item':$scope.lead.id,
@@ -306,32 +198,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','$location','Conf','
        $('#topic_0 .message').effect("highlight","slow");
      }
 
-     $scope.processAuth = function(authResult) {
-        console.log('process Auth #startdebug');
-        $scope.immediateFailed = true;
-        if (authResult['access_token']) {
-          // User is signed-in
-          console.log('User is signed-in');
-          $scope.immediateFailed = false;
-          $scope.isSignedIn = true;
-          window.is_signed_in = true;
-          window.authResult = authResult;
-          // Call the backend to get the list of lead
-          var leadid = {'id':$route.current.params.leadId};
-          Lead.get($scope,leadid);
-          User.list($scope,{});
-          Leadstatus.list($scope,{});
-        } else if (authResult['error']) {
-          if (authResult['error'] == 'immediate_failed') {
-            $scope.immediateFailed = true;
-
-            console.log('Immediate Failed');
-          } else {
-            console.log('Error:' + authResult['error']);
-          }
-        }
-     }
-     $scope.renderSignIn();
+    
      $scope.selectMember = function(){
         console.log('slecting user yeaaah');
         $scope.slected_memeber = $scope.user;
@@ -604,11 +471,7 @@ $scope.updateintro = function(lead){
   Lead.patch($scope,params);
   $('#EditIntroModal').modal('hide');
 };
-  
-
-     
-      
-
-
+    // Google+ Authentication 
+     Auth.init($scope);
 
 }]);
