@@ -32,7 +32,7 @@ app.controller('NoteShowController',['$scope','$filter','$route','Auth','Note','
         
         
         var nextPage = $scope.currentPage + 1;
-        console.log('hahahahahahahah');
+        
         console.log(nextPage);
         console.log($scope.pages[nextPage])
         var params = {};
