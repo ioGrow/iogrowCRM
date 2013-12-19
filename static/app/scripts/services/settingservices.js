@@ -42,8 +42,46 @@ Opportunitystage.list = function($scope,params){
 
 	})
 	};
+
+  Opportunitystage.get = function($scope,id){
+    gapi.client.crmengine.opportunitystages.get(params).execute(function(resp){
+      if(!resp.code){
+               $scope.oppstage = resp;
+             }
+
+    })
+    };
+  Opportunitystage.delete = function($scope,id){
+    
+    gapi.client.crmengine.opportunitystages.delete(id).execute(function(resp){
+     console.log('I am on delete services');
+     console.log(id);
+          $scope.$apply();
+    }) 
+  };
+  Opportunitystage.update= function($scope,params){
+     console.log(params);
+     gapi.client.crmengine.opportunitystages.patch(params).execute(function(resp){
+      if (!resp.code){
+        $scope.$apply();
+
+      }
+        else{
+           alert("Error, response is: " + angular.toJson(resp));
+
+        }
+
+    }
+
+      ) 
+
+  };
+  
+
+
   Opportunitystage.insert = function($scope,params){
     gapi.client.crmengine.opportunitystages.insert(params).execute(function(resp){
+
 
     }
 

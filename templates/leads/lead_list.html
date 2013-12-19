@@ -71,6 +71,19 @@
                           
                         </div>
                     </div>
+                     <div class="control-group">
+                        <label  class="control-label">{{_("Status")}} </label>
+                       
+                        <div class="controls">
+                          <select ng-model="stage_selected" ng-options="lead.status for opps in leads | orderBy: 'status':true"  >
+                            <option value="">-- choose Status --</option>
+                          
+                          </select>
+                          
+                         
+                        </div>
+                    </div>
+
                     <hr/>
                     <p>Who can access?</p>
                      <div class='container-fluid'>

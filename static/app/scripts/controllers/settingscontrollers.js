@@ -4,6 +4,7 @@ app.controller('SettingsShowCtrl',['$scope','$route','$location','Conf','Contact
 		$("#id_Settings").addClass("active");
 
 		var tab = $route.current.params.accountTab;
+     $scope.oppstage = {};
 
       switch (tab)
         {
@@ -132,10 +133,33 @@ app.controller('SettingsShowCtrl',['$scope','$route','$location','Conf','Contact
    
   };
   //HKA 15.12.2013 Edit opportunity stage
-  $scope.editopportunitystage = function(){
-    $('#EditOppsStage').modal('show');
+  $scope.editopportunitystage = function(stage){
+    console.log(stage);
+      $scope.oppstage.name = stage.name;
+      $scope.oppstage.probability = stage.probability;
+      $scope.oppstage.id=stage.id;
+       $('#EditOppsStage').modal('show');
+
+
    
   };
+  //18.12.2013 HKA  Update Opportunity stage
+  $scope.updateOppStage = function(oppstage){
+    console.log(oppstage);
+    var params ={'id':$scope.oppstage.id,
+                 'name':oppstage.name,
+                 'probability':oppstage.probability
+
+    }
+    Opportunitystage.update($scope,params)
+    $('#EditOppsStage').modal('hide');
+  };
+//HKA 18.12.2013 Delete Opportunity stage
+  $scope.deleteoppstage = function(oppstageId){
+    console.log(oppstageId);
+    Opportunitystage.delete($scope,oppstageId);
+
+  }
 
 
   //HKA 12.12.2013 Add a new Case Status

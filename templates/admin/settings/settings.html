@@ -63,11 +63,11 @@
                                   
                                   <div class="details">
                                     <a> <h3 class="relatedcardTitle">
-                                     <%=stage.name%>  |  <%=stage.probability%> %
+                                     <%=stage.name%>  :  <%=stage.probability%> %
                                     </h3></a>
                                     <div class="desc">    
                                                              
-                                        <span class="page-meta"><i class="icon-pencil"><a ng-click="editopportunitystage()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
+                                        <span class="page-meta"><i class="icon-pencil"><a ng-click="editopportunitystage(stage)" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |<i class="icon-trash"></i>  <a ng-click="deleteoppstage(stage.id)" class="btn-link addAnotherPhone">{{_("Delete")}}</a></span>
                                     
                                     </div>
                                   </div>
@@ -135,10 +135,10 @@
        <div id="EditOppsStage" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
                         <div class="modal-header">
                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                          <h3 id="myModalLabel">{{_("New Opportunity Stage")}}</h3>
+                          <h3 id="myModalLabel">{{_("Edit Opportunity Stage")}}</h3>
                         </div>
                 <div class="modal-body">
-                            <form id="addOppStage" name="addOppStage"  ng-submit="saveOppStage(oppstage)" class="form-horizontal"> 
+                            <form id="addOppStage" name="addOppStage"  ng-submit="updateOppStage(oppstage)" class="form-horizontal"> 
                             <fieldset>
                             <div class="control-group">
                               <label  class="required control-label">{{_("Name")}} *</label>
@@ -155,13 +155,15 @@
                           
                               </div>
                            </div>
+                           
                           
                           </fieldset>
                 
                   </div>
                   <div class="modal-footer">
                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                     <button  type="submit" class="btn green">{{_("Add a new Opportunity stage")}}</button>
+                     <button  type="submit" class="btn green">{{_("save")}}</button>
+                     
                    </div>
                    </form>
        </div>
