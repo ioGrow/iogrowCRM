@@ -19,7 +19,7 @@
 
       <div class="container-fluid" ng-show="immediateFailed">
          <div class="span12">  
-          <h1>Sign-in Button;</h1>
+          <h1>{{ _("Sign-in Button;") }}</h1>
               <span id="signin">
                   <span id="myGsignin"></span>
               </span>
@@ -34,18 +34,18 @@
                  <form id="addMember" name="addaccount" ng-submit="share(slected_memeber)" class="form-horizontal"> 
                   <fieldset>
                   
-                    <p>Who has access:</p>
+                    <p>{{ _("Who has access:") }}</p>
                     <div class='container-fluid'>
 
                      
                           
                             <label class="radio line">
                             <input type="radio" value="public" ng-model="account.access" />
-                            public: Anyone within your organization can access and find
+                            {{ _("public: Anyone within your organization can access and find") }}
                             </label>
                             <label class="radio line">
                             <input type="radio"  value="private" ng-model="account.access" />
-                            private: only you and your collaborators
+                            {{ _("private: only you and your collaborators") }}
                             </label>  
                            
                        
@@ -53,7 +53,7 @@
                     </div>
                     <hr/>
                     <div class='container-fluid'>
-                    <p>Collaborators:</p>
+                    <p>{{ _("Collaborators:") }}</p>
                         <div ng-repeat="collaborator in account.collaborators_list" class="invitation">
                           <img class="google-avatar" src="<%=collaborator.photo%>"/>
                            <%=collaborator.display_name%> < <%=collaborator.email%> >
@@ -63,16 +63,16 @@
                     <hr/>
 
                     <div class='container-fluid'>
-                    <p>Invited user:</p>
+                    <p>{{ _("Invited user:") }}</p>
                     <div class="invitation" ng-show="slected_memeber">
                       <img class="google-avatar" src="<%= slected_memeber.google_public_profile_photo_url%>"/>
                         <strong> <%= slected_memeber.google_display_name %> < <%=slected_memeber.email%> ></strong>
                       <hr/>
                     </div>
                     
-                    <p>Invite collaborators:</p>
+                    <p>{{ _("Invite collaborators:") }}</p>
                     <div class="control-group">
-                      <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="input-block-level" placeholder="Enter name or email addresse to add people to this group">
+                      <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="input-block-level" placeholder="{{ _('Enter name or email addresse to add people to this group') }}">
                     </div>
                     
                       </div>
@@ -95,7 +95,7 @@
           <div class="span12">
             <div class="pull-right sharebuttonDiv"> 
                   <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
-                    <i class="icon-lock"></i> Share
+                    <i class="icon-lock"></i> {{ _("Share") }}
                   </a>
                         
                         
@@ -126,29 +126,29 @@
               <!-- BEGIN PORTLET-->
               <div class="portlet paddingless">
                 <div class="portlet-title line">
-                  <div class="caption">Account Feeds</div>
+                  <div class="caption">{{ _("Account Feeds") }}</div>
                   
                 </div>
                 <div class="portlet-body">
                   <!--BEGIN TABS-->
                   <div class="tabbable tabbable-custom">
                     <ul class="nav nav-tabs">
-                      <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;" >Notes</a></li>
-                      <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;">About</a></li>
-                      <li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">Contacts</a></li>
-                      <li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">Opportunities</a></li>
-                      <li class="ng-tab"  ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">Cases</a></li>
-                      <li class="ng-tab"  ng-class="{active: selectedTab == 6}"><a ng-click="selectedTab = 6;">Documents</a></li>
+                      <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;" >{{ _("Notes") }}</a></li>
+                      <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;">{{ _("About") }}</a></li>
+                      <li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">{{ _("Contacts") }}</a></li>
+                      <li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">{{ _("Opportunities") }}</a></li>
+                      <li class="ng-tab"  ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">{{ _("Cases") }}</a></li>
+                      <li class="ng-tab"  ng-class="{active: selectedTab == 6}"><a ng-click="selectedTab = 6;">{{ _("Documents") }}</a></li>
                     </ul>
                     <div class="tab-content">
                       <div class="tab-pane active" id="tab_1_1" ng-show="selectedTab == 1">
                         
                          <div class="row-fluid">
                            <div class="span12 margin-bottom-10"> 
-                          <p class⁼"lead"=""><strong>Just add notes to remember what's important :</strong> </p>
+                          <p class⁼"lead"=""><strong>{{ _("Just add notes to remember what's important :") }}</strong> </p>
                           <form id="addNote" ng-submit="addNote(note)" class="ng-pristine ng-valid">
                                             
-                                            <input class="input-block-level ng-pristine ng-valid" autofocus type="text" placeholder="Add a new subject" id="messageSubject" ng-model="note.title">
+                                            <input class="input-block-level ng-pristine ng-valid" autofocus type="text" placeholder="{{ _('Add a new subject') }}" id="messageSubject" ng-model="note.title">
 
                                          
                                             
@@ -160,8 +160,8 @@
                                          
                                          <div class="pull-right">
                                          <!-- <input type="submit" class="btn btn-primary" value="Attach file">-->
-                                          <input ng-hide="isLoading" type="submit" class="btn green" value="Add this note">
-                                          <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                                          <input ng-hide="isLoading" type="submit" class="btn green" value="{{ _('Add this note') }}">
+                                          <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
                                           </div>
                                         </form>
                                        </div>
@@ -204,9 +204,9 @@
                           <div class="span6">
                             
                                 <div class="news-blocks blank-card blank-card-yellow">
-                                <h3>Account Informations</h3>
+                                <h3>{{ _('Account Informations') }}</h3>
                                 <div class="news-block-tags">
-                                  <strong>Phone</strong>
+                                  <strong>{{ _('Phone') }}</strong>
                                  
                                 </div>
                                   <ul class="unstyled contact-infos">
@@ -216,17 +216,17 @@
 
                                   </ul>
                                 <div class="news-block-tags">
-                                  <strong>Email</strong>
+                                  <strong>{{ _('Email') }}</strong>
                                  
                                 </div>
                                   <ul class="unstyled contact-infos">
                                     <li ng-repeat="email in account.emails"> <%=email.email %>   </li>
                                     
-                                    <li><a href="#emailmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new email address </a></li>
+                                    <li><a href="#emailmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new email address ') }}</a></li>
 
                                   </ul>
                                 <div class="news-block-tags">
-                                  <strong>Address</strong>
+                                  <strong>{{ _('Address') }}</strong>
                                  
                                 </div>
                                  <ul class="unstyled contact-infos">
@@ -241,9 +241,9 @@
                                                           
                               </div>
                               <div class="news-blocks blank-card blank-card-bluep">
-                                <h3>Links</h3>
+                                <h3>{{ _('Links') }}</h3>
                                 <div class="news-block-tags">
-                                  <strong>Website</strong>
+                                  <strong>{{ _('Website') }}</strong>
                                   
                                 </div>
                                 <ul class="unstyled contact-infos" >
@@ -253,7 +253,7 @@
                                 </ul>
                                  
                                 <div class="news-block-tags">
-                                  <strong>Social Links</strong>
+                                  <strong>{{ _('Social Links') }}</strong>
                                   
                                 </div>
                                 <ul class="unstyled contact-infos" >
@@ -266,16 +266,16 @@
                           <div class="span6">
                           
                             <div class="news-blocks blank-card blank-card-red">
-                                <h3>Story</h3>
+                                <h3>{{ _('Story') }}</h3>
                                 <div class="news-block-tags">
-                                  <strong>Tagline </strong>
+                                  <strong>{{ _('Tagline') }} </strong>
                                   <span class="page-meta"><i class="icon-pencil"><a ng-click="edittagline()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
                                 </div>
                                 <p><%=account.tagline%> </p>
                                 
 
                                 <div class="news-block-tags">
-                                  <strong>Introduction</strong>
+                                  <strong>{{ _('Introduction') }}</strong>
                                   <span class="page-meta"><i class="icon-pencil"><a ng-click="editintro()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
                                   
                                 </div>
@@ -313,7 +313,7 @@
                                     </div>
                                   </div>
                                   <a class="more" href="/#/contacts/show/<%= contact.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
+                                  {{ _('View more')}} <i class="m-icon-swapright m-icon-white"></i>
                                   </a>                 
                                 </div>
                               </div><br>
@@ -335,7 +335,7 @@
                                         </button></li>
                                       </ul>
                                     </div>
-                                    <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                                    <h3 class="pagination pull-right" ng-show="isLoading">{{ _("Loading...") }}</h3>
                               </div>
                         <!--HKA 18.11.2013 Add Contact modal -->
 
@@ -402,14 +402,14 @@
                                      <%=opp.name%></h3></a>
                                      <!-- <span class="contact-title" ng-show="casee.status">Status:<a  class="desc" href="/#/search/type:Case <%=casee.status%>"># <%=casee.status%></a></span>-->
                                     <div class="desc">                           
-                                     <span class="contact-title" ng-show="opp.amount">amount: <%=opp.amount%> </span>
-                                    <span ng-show="opp.stage" class="contact-title" ><br>stage: <a class="desc" href="/#/search/type:Opportunity stage:<%=opp.stage%>">#<%=opp.stage%> </a></span><br>
+                                     <span class="contact-title" ng-show="opp.amount">{{ _("amount:") }} <%=opp.amount%> </span>
+                                    <span ng-show="opp.stage" class="contact-title" ><br>{{ _("stage:") }} <a class="desc" href="/#/search/type:Opportunity stage:<%=opp.stage%>">#<%=opp.stage%> </a></span><br>
                                     <a ng-show="opp.description" class="desc" href="/#/search/type:Opportunity <%=opp.description%>">#<%=opp.description%></a>  
                                     
                                     </div>
                                   </div>
                                   <a class="more" href="/#/opportunities/show/<%= opp.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
+                                  {{ _("View more") }} <i class="m-icon-swapright m-icon-white"></i>
                                   </a>                 
                                 </div>
                               </div>
@@ -501,14 +501,14 @@
                                      <%=casee.name%>
                                     </h3></a>
                                     <div class="desc">                           
-                                    <span class="contact-title" ng-show="casee.status">Status:<a  class="desc" href="/#/search/type:Case <%=casee.status%>"># <%=casee.status%></a></span> <br>
-                                    <span ng-show="casee.priority" class="contact-title" >Priority:<a class="desc" href="/#/search/type:Case <%=casee.priority%>">#<%=casee.priority%> </a></span><br>
-                                      <span ng-show="casee.type_case" class="contact-title" >Labels :<a class="desc" href="/#/search/type:Case <%=casee.type_case%>">#<%=casee.type_case%></a>  </span>
+                                    <span class="contact-title" ng-show="casee.status">{{ _("Status:") }}<a  class="desc" href="/#/search/type:Case <%=casee.status%>"># <%=casee.status%></a></span> <br>
+                                    <span ng-show="casee.priority" class="contact-title" >{{ _("Priority:") }}<a class="desc" href="/#/search/type:Case <%=casee.priority%>">#<%=casee.priority%> </a></span><br>
+                                      <span ng-show="casee.type_case" class="contact-title" >{{ _("Labels :") }}<a class="desc" href="/#/search/type:Case <%=casee.type_case%>">#<%=casee.type_case%></a>  </span>
                                     
                                     </div>
                                   </div>
                                   <a class="more" href="/#/cases/show/<%=casee.id%>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
+                                  {{ _("View more") }} <i class="m-icon-swapright m-icon-white"></i>
                                   </a>                 
                                 </div>
                               </div>
@@ -528,7 +528,7 @@
                                         </button></li>
                                       </ul>
                                     </div>
-                                    <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                                    <h3 class="pagination pull-right" ng-show="isLoading">{{ _("Loading...") }}</h3>
                               </div>
 
                       <!--HKA 19.11.2013 Case Modal -->
@@ -648,7 +648,7 @@
               <!-- BEGIN PORTLET-->
               <div class="portlet">
                 <div class="portlet-title line">
-                  <div class="caption"><i class="icon-tasks"></i>Tasks & Events</div>
+                  <div class="caption"><i class="icon-tasks"></i>Loading...Tasks & Events</div>
                   
                 </div>
                 <div class="portlet-body" id="chats">
@@ -681,7 +681,7 @@
                                     
 
                                     
-                                    <li><a href="#newEventModal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new event</a></li>
+                                    <li><a href="#newEventModal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>{{_("Add a new event")}}</a></li>
 
 
                                   </ul>
@@ -690,14 +690,14 @@
           <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 id="myModalLabel">Add a new Task</h3>
+              <h3 id="myModalLabel">{{_("Add a new Task")}}</h3>
             </div>
             <div class="modal-body pickerin">
                      <div class="controls controls-row">
                                           <form id="addTask" ng-submit="addTask(task)" class="ng-pristine ng-valid">
                                                   <input class="input-block-level" autofocus type="text" placeholder="Add a new task" id="taskTitle" ng-model="task.title">
                                                   
-                                                  <p><strong>When's it due?</strong></p>
+                                                  <p><strong>{{_("When's it due?")}}</strong></p>
                                                   <center>
                                                     <datetimepicker data-ng-model="task.due"
                                                     data-datetimepicker-config="{ startView:'day', minView:'day' }" />
@@ -705,7 +705,7 @@
                      </div>
             </div>
             <div class="modal-footer">
-              <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
               
                <input ng-hide="isLoading" type="submit" class="btn green" value="Add this task">
                 <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
@@ -716,7 +716,7 @@
           <div id="newDocument" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 id="myModalLabel">Create a new <%=mimeType%></h3>
+              <h3 id="myModalLabel">{{_("Create a new")}} <%=mimeType%></h3>
             </div>
             <div class="modal-body">
                      <div class="controls controls-row">
@@ -740,33 +740,33 @@
           <div id="newEventModal" class="modal  hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 id="myModalLabel">New Event</h3>
+              <h3 id="myModalLabel">{{_("New Event")}}</h3>
             </div>
             <div class="modal-body">
                      <div class="controls controls-row">
                             <form id="addTask" ng-submit="addEvent(ioevent)" class="ng-pristine ng-valid">
-                                                  <input class="input-block-level" autofocus type="text" placeholder="Add a new event" id="taskTitle" ng-model="ioevent.title">
-                                                  <p><strong>When?</strong></p>
+                                                  <input class="input-block-level" autofocus type="text" placeholder="{{_('Add a new event')}}" id="taskTitle" ng-model="ioevent.title">
+                                                  <p><strong>{{_("When?")}}</strong></p>
                                                 <div class="row-fluid">
                                                   <div class="span6">
-                                                    <p> <strong>Starts</strong>: <%=ioevent.starts_at | date:'MMMM dd, yyyy, HH:mm'%></p>
+                                                    <p> <strong>{{_("Starts")}}</strong>: <%=ioevent.starts_at | date:'MMMM dd, yyyy, HH:mm'%></p>
                                                         <datetimepicker data-ng-model="ioevent.starts_at"
                                                     data-datetimepicker-config="{ startView:'day', minView:'minute' }" />
                                                   </div>
                                                   <div class="span6">
-                                                  <p><strong>Ends</strong>: <%=ioevent.ends_at | date:'MMMM dd, yyyy, HH:mm'%></p>
+                                                  <p><strong>{{_("Ends")}}</strong>: <%=ioevent.ends_at | date:'MMMM dd, yyyy, HH:mm'%></p>
                                                         <datetimepicker data-ng-model="ioevent.ends_at"
                                                     data-datetimepicker-config="{ startView:'day', minView:'minute' }" />
                                                   </div>
                                                 </div>
-                                                    <input class="input-block-level" autofocus="" type="text" placeholder="Where?" id="taskTitle" ng-model="ioevent.where">
+                                                    <input class="input-block-level" autofocus="" type="text" placeholder="{{_('Where?')}}" id="taskTitle" ng-model="ioevent.where">
                                                 </div>
             </div>
             <div class="modal-footer">
-              <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
               
-               <input ng-hide="isLoading" type="submit" class="btn green" value="Add this event">
-                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+               <input ng-hide="isLoading" type="submit" class="btn green" value="{{_('Add this event')}}">
+                <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
                                         
             </form>
             </div>
@@ -906,7 +906,7 @@
                     <div class="control-group">
                         <label  class="control-label">{{_("Type")}} </label>
                         <div class="controls">
-                          <input type="text" placeholder="home, work, mobile, other..." required id="id_name" ng-model="phone.type_number">
+                          <input type="text" placeholder="{{_('home')}},{{_('work')}},{{_('mobile')}},{{_('other')}} ..." required id="id_name" ng-model="phone.type_number">
                         </div>
                      </div>
                      <div class="control-group">
@@ -919,10 +919,10 @@
                      </div>
               </div>
               <div class="modal-footer">
-                  <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
               
-                  <input ng-hide="isLoading" type="submit" class="btn green" value="Add this phone">
-                  <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                  <input ng-hide="isLoading" type="submit" class="btn green" value="{{_('Add this phone')}}">
+                  <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
               </div>
                 </form>
     </div>
@@ -941,12 +941,12 @@
                     <div class="control-group">
                         <label  class="control-label">{{_("Email")}} </label>
                         <div class="controls">
-                          <input type="text" placeholder="Email" required id="id_email" ng-model="emaill.email">
+                          <input type="text" placeholder="{{_('Email')}}" required id="id_email" ng-model="emaill.email">
                         </div>
                      </div>
               </div>
               <div class="modal-footer">
-                  <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
               
                   <input ng-hide="isLoading" type="submit" class="btn green" value="Add this email">
                   <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
@@ -996,10 +996,10 @@
                      </div>
               </div>
               <div class="modal-footer">
-                  <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
               
-                  <input ng-hide="isLoading" type="submit" class="btn green" value="Add this address">
-                  <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                  <input ng-hide="isLoading" type="submit" class="btn green" value="{{_('Add this address')}}">
+                  <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
               </div>
                 </form>
         </div>
@@ -1023,10 +1023,10 @@
                      </div>
               </div>
               <div class="modal-footer">
-                  <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
               
-                  <input ng-hide="isLoading" type="submit" class="btn green" value="Add this Website">
-                  <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                  <input ng-hide="isLoading" type="submit" class="btn green" value="{{_('Add this Website')}}">
+                  <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
               </div>
                 </form>
         </div>
@@ -1045,15 +1045,15 @@
                     <div class="control-group">
                         <label  class="control-label">{{_("Social link")}} </label>
                         <div class="controls">
-                          <input type="text" placeholder="Social link"  required id="id_social" ng-model="social.sociallink">
+                          <input type="text" placeholder="{{_('Social link')}}"  required id="id_social" ng-model="social.sociallink">
                         </div>
                      </div>
               </div>
               <div class="modal-footer">
-                  <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
               
-                  <input ng-hide="isLoading" type="submit" class="btn green" value="Add this Social link">
-                  <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                  <input ng-hide="isLoading" type="submit" class="btn green" value="{{_('Add this Social link')}}">
+                  <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
               </div>
                 </form>
         </div>

@@ -1,8 +1,6 @@
-app.controller('ShowListCtrl', ['$scope','$filter','$route','$location','Conf','Show',
-    function($scope,$filter,$route,$location,Conf,Show) {
-     console.log('i am in account list controller');
-
-     $("#id_Accounts").addClass("active");
+app.controller('ShowListCtrl', ['$scope','Auth','Show',
+    function($scope,Auth,Show) {
+     $("#id_Shows").addClass("active");
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -16,24 +14,15 @@ app.controller('ShowListCtrl', ['$scope','$filter','$route','$location','Conf','
      
      
 
-     $scope.renderSignIn = function() {
-          console.log('$scope.renderSignIn #start_debug');
-          if (window.is_signed_in){
-              console.log('I am signed-in so you can continue');
-              $scope.processAuth(window.authResult);
-          }else{
-            console.log('I am  not signed-in so render Button');
-            gapi.signin.render('myGsignin', {
-            'callback': $scope.signIn,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'theme': 'dark',
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-            });
-          }
-      }
+     // What to do after authentication
+     $scope.runTheProcess = function(){
+          var params = {'limit':7};
+          Show.list($scope,params);
+     };
+     // We need to call this to refresh token when user credentials are invalid
+     $scope.refreshToken = function() {
+            Auth.refreshToken();
+     };
      $scope.listNextPageItems = function(){
         
         
@@ -107,39 +96,8 @@ app.controller('ShowListCtrl', ['$scope','$filter','$route','$location','Conf','
             
         }
      }
-     $scope.signIn = function(authResult) {
-        console.log('signIn callback #start_debug');
-        $scope.processAuth(authResult);
-        
-     }
+     
 
-     $scope.processAuth = function(authResult) {
-        console.log('process Auth #startdebug');
-        $scope.immediateFailed = true;
-        if (authResult['access_token']) {
-          // User is signed-in
-          console.log('User is signed-in');
-          $scope.immediateFailed = false;
-          $scope.isSignedIn = true;
-          window.is_signed_in = true;
-          window.authResult = authResult;
-          // Call the backend to get the list of accounts
-          
-          var params = {'limit':7}
-          Show.list($scope,params);
-
-        } else if (authResult['error']) {
-          if (authResult['error'] == 'immediate_failed') {
-            $scope.immediateFailed = true;
-
-            window.location.replace('/sign-in');
-            console.log('Immediate Failed');
-          } else {
-            console.log('Error:' + authResult['error']);
-          }
-        }
-     }
-     $scope.renderSignIn();
      $scope.showModal = function(){
         console.log('button clicked');
         $('#newShowModal').modal('show');
@@ -151,14 +109,15 @@ app.controller('ShowListCtrl', ['$scope','$filter','$route','$location','Conf','
     };
      
      
-   
+   // Google+ Authentication 
+    Auth.init($scope);
 
     
 }]);
 
-app.controller('ShowShowCtrl', ['$scope','$filter', '$route','$location','Conf','Show', 'Topic','Note','Task','Event','WhoHasAccess','User',
-    function($scope,$filter,$route,$location,Conf,Show,Topic,Note,Task,Event,WhoHasAccess,User) {
-      console.log('i am in account list controller');
+app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Topic','Note','Task','Event','WhoHasAccess','User',
+    function($scope,$filter,$route,Auth,Show,Topic,Note,Task,Event,WhoHasAccess,User) {
+      
       $("#id_Accounts").addClass("active");
       var tab = $route.current.params.accountTab;
       switch (tab)
@@ -196,7 +155,15 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','$location','Conf',
      $scope.accounts = [];
      
      
-
+     // What to do after authentication
+     $scope.runTheProcess = function(){
+          var params = {'id':$route.current.params.showId};
+          Show.get($scope,params);
+     };
+     // We need to call this to refresh token when user credentials are invalid
+     $scope.refreshToken = function() {
+            Auth.refreshToken();
+     };
 
      $scope.createYoutubePicker = function() {
           console.log('ok should create youtube picker');
@@ -289,24 +256,7 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','$location','Conf',
 
      }
 
-     $scope.renderSignIn = function() {
-          console.log('$scope.renderSignIn #start_debug');
-          if (window.is_signed_in){
-              console.log('I am signed-in so you can continue');
-              $scope.processAuth(window.authResult);
-          }else{
-            console.log('I am  not signed-in so render Button');
-            gapi.signin.render('myGsignin', {
-            'callback': $scope.signIn,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'theme': 'dark',
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-            });
-          }
-      }
+     
      $scope.listNextPageItems = function(){
         
         
@@ -350,11 +300,7 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','$location','Conf',
           Topic.list($scope,params);
           console.log()
      }
-     $scope.signIn = function(authResult) {
-        console.log('signIn callback #start_debug');
-        $scope.processAuth(authResult);
-        
-     }
+     
      $scope.listTopics = function(account){
         var params = {'about_kind':'Account',
                       'about_item':account.id,
@@ -370,33 +316,7 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','$location','Conf',
        $('#topic_0 .message').effect("highlight","slow");
      }
 
-     $scope.processAuth = function(authResult) {
-        console.log('process Auth #startdebug');
-        $scope.immediateFailed = true;
-        if (authResult['access_token']) {
-          // User is signed-in
-          console.log('User is signed-in');
-          $scope.immediateFailed = false;
-          $scope.isSignedIn = true;
-          window.is_signed_in = true;
-          window.authResult = authResult;
-          // Call the backend to get the list of accounts
-          
-          var params = {'id':$route.current.params.showId};
-          Show.get($scope,params);
-
-        } else if (authResult['error']) {
-          if (authResult['error'] == 'immediate_failed') {
-            $scope.immediateFailed = true;
-
-            window.location.replace('/sign-in');
-            console.log('Immediate Failed');
-          } else {
-            console.log('Error:' + authResult['error']);
-          }
-        }
-     }
-     $scope.renderSignIn();
+    
      $scope.showModal = function(){
         console.log('button clicked');
         $('#addAccountModal').modal('show');
@@ -426,7 +346,8 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','$location','Conf',
     }
 
       
-
+// Google+ Authentication 
+    Auth.init($scope);
 
 
 }]);

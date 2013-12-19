@@ -1,6 +1,6 @@
-app.controller('CaseListCtrl', ['$scope','$route','$location','Conf','Case','Account',
-    function($scope,$route,$location,Conf,Case,Account) {
-     console.log('i am in case list controller');
+app.controller('CaseListCtrl', ['$scope','Auth','Case','Account',
+    function($scope,Auth,Case,Account) {
+    
 
      $("#id_Cases").addClass("active");
      $scope.isSignedIn = false;
@@ -22,52 +22,16 @@ app.controller('CaseListCtrl', ['$scope','$route','$location','Conf','Case','Acc
      $scope.casee.access ='public';
      $scope.casee.status = 'pending';
      
+      // What to do after authentication
+       $scope.runTheProcess = function(){
+            var params = {'limit':7}
+            Case.list($scope,params);
+       };
+        // We need to call this to refresh token when user credentials are invalid
+       $scope.refreshToken = function() {
+            Auth.refreshToken();
+       };
      
-
-     $scope.renderSignIn = function() {
-          console.log('$scope.renderSignIn #start_debug');
-          if (window.is_signed_in){
-              console.log('I am signed-in so you can continue');
-              $scope.processAuth(window.authResult);
-          }else{
-            console.log('I am  not signed-in so render Button');
-            gapi.signin.render('myGsignin', {
-            'callback': $scope.signIn,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'theme': 'dark',
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-            });
-          }
-      }
-      $scope.refreshToken = function() {
-          gapi.auth.signIn({
-            'callback': $scope.connectServer,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'immediate': true,
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-          });
-      }
-      $scope.connectServer = function(authResult) {
-      console.log('I will contact the serveer');
-      console.log(authResult.code);
-      
-      $.ajax({
-        type: 'POST',
-        url: '/gconnect',
-        
-        success: function(result) {
-          console.log('i am in connectServer show me result please');
-          console.log(result);
-         },
-        data: {code:authResult.code}
-      });
-    }
      $scope.listNextPageItems = function(){
                     
         var nextPage = $scope.caseCurrentPage + 1;
@@ -97,40 +61,9 @@ app.controller('CaseListCtrl', ['$scope','$route','$location','Conf','Case','Acc
           $scope.caseCurrentPage = $scope.caseCurrentPage - 1 ;
           Case.list($scope,params);
      }
-     $scope.signIn = function(authResult) {
-        console.log('signIn callback #start_debug');
-        $scope.connectServer(authResult);
-        $scope.processAuth(authResult);
-        
-     }
-
-     $scope.processAuth = function(authResult) {
-        console.log('process Auth #startdebug');
-        $scope.immediateFailed = true;
-        if (authResult['access_token']) {
-          // User is signed-in
-          console.log('User is signed-in');
-          $scope.immediateFailed = false;
-          $scope.isSignedIn = true;
-          window.is_signed_in = true;
-          window.authResult = authResult;
-          // Call the backend to get the list of accounts
-          
-          var params = {'limit':7}
-          Case.list($scope,params);
-
-        } else if (authResult['error']) {
-          if (authResult['error'] == 'immediate_failed') {
-            $scope.immediateFailed = true;
-
-            window.location.replace('/sign-in');
-            console.log('Immediate Failed');
-          } else {
-            console.log('Error:' + authResult['error']);
-          }
-        }
-     }
-     $scope.renderSignIn();
+     
+     
+     
      $scope.showModal = function(){
         console.log('button clicked');
         $('#addCaseModal').modal('show');
@@ -226,12 +159,13 @@ app.controller('CaseListCtrl', ['$scope','$route','$location','Conf','Case','Acc
       };
      
      
-   
+   // Google+ Authentication 
+     Auth.init($scope);
 
     
 }]);
-app.controller('CaseShowCtrl', ['$scope','$filter', '$route','$location','Conf','Case', 'Topic','Note','Task','Event','Permission','User','Casestatus',
-    function($scope,$filter,$route,$location,Conf,Case,Topic,Note,Task,Event,Permission,User,Casestatus) {
+app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Topic','Note','Task','Event','Permission','User','Casestatus',
+    function($scope,$filter,$route,Auth,Case,Topic,Note,Task,Event,Permission,User,Casestatus) {
       console.log('i am in account list controller');
       $("#id_Cases").addClass("active");
       
@@ -257,50 +191,17 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','$location','Conf',
      $scope.slected_memeber = undefined;
      
    
-     $scope.renderSignIn = function() {
-          console.log('$scope.renderSignIn #start_debug');
-          if (window.is_signed_in){
-              console.log('I am signed-in so you can continue');
-              $scope.processAuth(window.authResult);
-          }else{
-            console.log('I am  not signed-in so render Button');
-            gapi.signin.render('myGsignin', {
-            'callback': $scope.signIn,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'theme': 'dark',
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-            });
-          }
-      }
-      $scope.refreshToken = function() {
-          gapi.auth.signIn({
-            'callback': $scope.connectServer,
-            'clientid': Conf.clientId,
-            'requestvisibleactions': Conf.requestvisibleactions,
-            'scope': Conf.scopes,
-            'immediate': true,
-            'cookiepolicy': Conf.cookiepolicy,
-            'accesstype': 'offline'
-          });
-      }
-      $scope.connectServer = function(authResult) {
-      console.log('I will contact the serveer');
-      console.log(authResult.code);
-      
-      $.ajax({
-        type: 'POST',
-        url: '/gconnect',
-        
-        success: function(result) {
-          console.log('i am in connectServer show me result please');
-          console.log(result);
-         },
-        data: {code:authResult.code}
-      });
-    }
+     // What to do after authentication
+       $scope.runTheProcess = function(){
+          var caseid = {'id':$route.current.params.caseId};
+          Case.get($scope,caseid);
+          User.list($scope,{});
+          Casestatus.list($scope,{});
+       };
+        // We need to call this to refresh token when user credentials are invalid
+       $scope.refreshToken = function() {
+            Auth.refreshToken();
+       };
      $scope.TopiclistNextPageItems = function(){
          
         
@@ -344,12 +245,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','$location','Conf',
           Topic.list($scope,params);
           
      }
-     $scope.signIn = function(authResult) {
-        console.log('signIn callback #start_debug');
-        $scope.connectServer(authResult);
-        $scope.processAuth(authResult);
-        
-     }
+    
      $scope.listTopics = function(casee){
         var params = {'about_kind':'Case',
                       'about_item':$scope.casee.id,
@@ -365,35 +261,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','$location','Conf',
        $('#topic_0 .message').effect("highlight","slow");
      }
 
-     $scope.processAuth = function(authResult) {
-        console.log('process Auth #startdebug');
-        $scope.immediateFailed = true;
-        if (authResult['access_token']) {
-          // User is signed-in
-          console.log('User is signed-in');
-          $scope.immediateFailed = false;
-          $scope.isSignedIn = true;
-          window.is_signed_in = true;
-          window.authResult = authResult;
-          // Call the backend to get the list of accounts
-          
-          var caseid = {'id':$route.current.params.caseId};
-          Case.get($scope,caseid);
-          User.list($scope,{});
-          Casestatus.list($scope,{});
-
-        } else if (authResult['error']) {
-          if (authResult['error'] == 'immediate_failed') {
-            $scope.immediateFailed = true;
-
-            window.location.replace('/sign-in');
-            console.log('Immediate Failed');
-          } else {
-            console.log('Error:' + authResult['error']);
-          }
-        }
-     }
-     $scope.renderSignIn();
+    
      $scope.selectMember = function(){
         console.log('slecting user yeaaah');
         $scope.slected_memeber = $scope.user;
@@ -591,6 +459,7 @@ $scope.updatCasetHeader = function(casee){
 
       
 
-
+     // Google+ Authentication 
+     Auth.init($scope);
 
 }]);
