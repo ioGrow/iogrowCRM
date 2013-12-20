@@ -1,5 +1,5 @@
-app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','Opportunitystage',
-    function($scope,Auth,Account,Opportunity,Opportunitystage) {
+app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','Opportunitystage','Search',
+    function($scope,Auth,Account,Opportunity,Opportunitystage,Search) {
       
      $("#id_Opportunities").addClass("active");
      $scope.isSignedIn = false;
@@ -19,12 +19,13 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
      $scope.stage_selected={};
      $scope.opportunity = {};
      $scope.opportunity.access ='public';
+     $scope.order = '-updated_at';
 
       // What to do after authentication
        $scope.runTheProcess = function(){
-          var params = {'limit':7};
+          var params = {'order' : $scope.order,'limit':7};
           Opportunity.list($scope,params);
-          Opportunitystage.list($scope,{});
+          Opportunitystage.list($scope,{'order':'probability'});
        };
         // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
@@ -35,11 +36,12 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
         var nextPage = $scope.oppCurrentPage + 1;
         var params = {};
           if ($scope.opppages[nextPage]){
-            params = {'limit':7,
+            params = {'order' : $scope.order,
+                      'limit':7,
                       'pageToken':$scope.opppages[nextPage]
                      }
           }else{
-            params = {'limit':7}
+            params = {'order' : $scope.order,'limit':7}
           }
           console.log('in listNextPageItems');
           $scope.oppCurrentPage = $scope.oppCurrentPage + 1 ; 
@@ -50,11 +52,11 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
        var prevPage = $scope.oppCurrentPage - 1;
        var params = {};
           if ($scope.opppages[prevPage]){
-            params = {'limit':7,
+            params = {'order' : $scope.order,'limit':7,
                       'pageToken':$scope.opppages[prevPage]
                      }
           }else{
-            params = {'limit':7}
+            params = {'order' : $scope.order,'limit':7}
           }
           $scope.oppCurrentPage = $scope.oppCurrentPage - 1 ;
           Opportunity.list($scope,params);
@@ -117,6 +119,7 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
      
       $scope.$watch('searchAccountQuery', function() {
          params_search_account['q'] = $scope.searchAccountQuery;
+         if ($scope.searchAccountQuery){
          gapi.client.crmengine.accounts.search(params_search_account).execute(function(resp) {
             console.log("in accouts.search api");
             console.log(params_search_account);
@@ -129,14 +132,79 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
             };
             
           });
-         console.log($scope.results);
+         };
       });
       $scope.selectAccount = function(){
         $scope.opportunity.account = $scope.searchAccountQuery;
 
      };
+     // Quick Filtering
+     var searchParams ={};
+     $scope.result = undefined;
+     $scope.q = undefined;
+     
+     $scope.$watch('searchQuery', function() {
+         searchParams['q'] = $scope.searchQuery;
+         searchParams['limit'] = 7;
+         if ($scope.searchQuery){
+         Opportunity.search($scope,searchParams);
+       };
+     });
+     $scope.selectResult = function(){
+          window.location.replace('#/opportunities/show/'+$scope.searchQuery.id);
+     };
+     $scope.executeSearch = function(searchQuery){
+        if (typeof(searchQuery)=='string'){
+           var goToSearch = 'type:Opportunity ' + searchQuery;
+           window.location.replace('#/search/'+goToSearch);
+        }else{
+          window.location.replace('#/opportunities/show/'+searchQuery.id);
+        }
+        $scope.searchQuery=' ';
+        $scope.$apply();
+     };
+     // Sorting
+     $scope.orderBy = function(order){
+        var params = { 'order': order,
+                        'limit':7};
+        $scope.order = order;
+        Opportunity.list($scope,params);
+     };
+     $scope.filterByOwner = function(filter){
+        if (filter){
+          var params = { 'owner': filter,
+                         'order': $scope.order, 
+                         'limit':7}
+        }
+        else{
+          var params = {
+              'order': $scope.order, 
+              
+              'limit':7}
+        };
+        console.log('Filtering by');
+        console.log(params);
+        Opportunity.list($scope,params);
+     };
+     $scope.filterByStage = function(filter){
+        if (filter){
+          var params = { 'stagename': filter,
+                         'order': $scope.order, 
+                         'limit':7}
+        }
+        else{
+          var params = {
+              'order': $scope.order, 
+              
+              'limit':7}
+        };
+        
+        Opportunity.list($scope,params);
+     };
+
      // Google+ Authentication 
      Auth.init($scope);
+     
 }]);
 
 app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage',

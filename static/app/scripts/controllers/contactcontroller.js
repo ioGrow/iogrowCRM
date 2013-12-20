@@ -16,10 +16,11 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
       	$scope.contacts = [];
         $scope.contact = {};
         $scope.contact.access = 'public';
+        $scope.order = '-updated_at';
         
         // What to do after authentication
        $scope.runTheProcess = function(){
-            var params = {'limit':7}
+            var params = {'order' : $scope.order,'limit':7}
             Contact.list($scope,params);
        };
         // We need to call this to refresh token when user credentials are invalid
@@ -31,13 +32,13 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
           var nextPage = $scope.contactCurrentPage + 1;
           var params = {};
             if ($scope.contactpages[nextPage]){
-              params = {'limit':7,
+              params = {'order' : $scope.order,'limit':7,
                         'pageToken':$scope.contactpages[nextPage]
                        }
             }else{
-              params = {'limit':7}
+              params = {'order' : $scope.order,'limit':7}
             }
-            console.log('in listNextPageItems');
+            
             $scope.contactCurrentPage = $scope.contactCurrentPage + 1 ; 
             Contact.list($scope,params);
        };
@@ -50,7 +51,7 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
                         'pageToken':$scope.contactpages[prevPage]
                        }
             }else{
-              params = {'limit':7}
+              params = {'order' : $scope.order,'limit':7}
             }
             $scope.contactCurrentPage = $scope.contactCurrentPage - 1 ;
             Contact.list($scope,params);
@@ -115,6 +116,53 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
         $scope.contact.account = $scope.searchAccountQuery;
 
      };
+
+
+     // Quick Filtering
+     var searchParams ={};
+     $scope.result = undefined;
+     $scope.q = undefined;
+     
+     $scope.$watch('searchQuery', function() {
+         searchParams['q'] = $scope.searchQuery;
+         Contact.search($scope,searchParams);
+     });
+     $scope.selectResult = function(){
+          window.location.replace('#/contacts/show/'+$scope.searchQuery.id);
+     };
+     $scope.executeSearch = function(searchQuery){
+        if (typeof(searchQuery)=='string'){
+           var goToSearch = 'type:Contact ' + searchQuery;
+           window.location.replace('#/search/'+goToSearch);
+        }else{
+          window.location.replace('#/contacts/show/'+searchQuery.id);
+        }
+        $scope.searchQuery=' ';
+        $scope.$apply();
+     };
+     // Sorting
+     $scope.orderBy = function(order){
+        var params = { 'order': order,
+                        'limit':7};
+        $scope.order = order;
+        Contact.list($scope,params);
+     };
+     $scope.filterByOwner = function(filter){
+        if (filter){
+          var params = { 'owner': filter,
+                         'order': $scope.order, 
+                         'limit':7}
+        }
+        else{
+          var params = {
+              'order': $scope.order, 
+              
+              'limit':7}
+        };
+       
+        Contact.list($scope,params);
+     };
+
      // Google+ Authentication 
      Auth.init($scope);
 }]);

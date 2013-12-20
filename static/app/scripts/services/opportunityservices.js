@@ -61,6 +61,17 @@ opportunityservices.factory('Opportunity', function($http) {
               }
       });
   };
+  Opportunity.search = function($scope,params){
+      gapi.client.crmengine.opportunities.search(params).execute(function(resp) {
+          console.log(resp);
+           if (resp.items){
+              $scope.results = resp.items;
+              
+              $scope.$apply();
+            };
+            
+      });
+  };
     Opportunity.patch = function($scope,params) {
           console.log('in opportunities.patch service');
           console.log(params);

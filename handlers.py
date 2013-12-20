@@ -243,7 +243,8 @@ class ContactListHandler(BaseHandler, SessionEnabledHandler):
       self.set_user_locale()
       tabs = user.get_user_active_tabs()
       self.set_user_locale()
-      template_values={'tabs':tabs}
+      template_values = {'ME':user.google_user_id,
+             'tabs':tabs}
       template = jinja_environment.get_template('templates/contacts/list.html')
       self.response.out.write(template.render(template_values))
 class ContactShowHandler(BaseHandler,SessionEnabledHandler):
@@ -263,7 +264,8 @@ class OpportunityListHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       tabs = user.get_user_active_tabs()
       self.set_user_locale()
-      template_values = {'tabs':tabs}
+      template_values = {'ME':user.google_user_id,
+             'tabs':tabs}
       template = jinja_environment.get_template('templates/opportunities/list.html')
       self.response.out.write(template.render(template_values))
 class OpportunityShowHandler(BaseHandler,SessionEnabledHandler):

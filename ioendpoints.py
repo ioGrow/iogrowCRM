@@ -74,9 +74,21 @@ class ContactSearchResult(messages.Message):
     lastname = messages.StringField(4)
     account_name = messages.StringField(5)
     account = messages.StringField(6)
+    position = messages.StringField(7)
 # The message class that defines a set of contacts.search results
 class ContactSearchResults(messages.Message):
     items = messages.MessageField(ContactSearchResult, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
+# The message class that defines the opportunities.search response 
+class OpportunitySearchResult(messages.Message):
+    id = messages.StringField(1)
+    entityKey  = messages.StringField(2)
+    title = messages.StringField(3)
+    amount = messages.IntegerField(4)
+    account_name = messages.StringField(5)
+# The message class that defines a set of contacts.search results
+class OpportunitySearchResults(messages.Message):
+    items = messages.MessageField(OpportunitySearchResult, 1, repeated=True)
     nextPageToken = messages.StringField(2)
 # The message class that defines the schema of Attachment 
 class AttachmentSchema(messages.Message):
@@ -300,7 +312,7 @@ class CrmEngineApi(remote.Service):
       my_model.put()
       return my_model
   # contacts.list api
-  @Contact.query_method(user_required=True,query_fields=('limit', 'order','account','account_name', 'pageToken'),path='contacts', name='contacts.list')
+  @Contact.query_method(user_required=True,query_fields=('owner','limit', 'order','account','account_name', 'pageToken'),path='contacts', name='contacts.list')
   def ContactList(self, query):
       user_from_email = EndpointsHelper.require_iogrow_user()
       return query.filter(ndb.OR(ndb.AND(Contact.access=='public',Contact.organization==user_from_email.organization),Contact.owner==user_from_email.google_user_id, Contact.collaborators_ids==user_from_email.google_user_id)).order(Contact._key)
@@ -362,7 +374,8 @@ class CrmEngineApi(remote.Service):
                   'firstname': result.firstname,
                   'lastname':result.lastname,
                   'account_name':result.account_name,
-                  'account':result.account.urlsafe()}
+                  'account':result.account.urlsafe(),
+                  'position': result.title}
           search_results.append(ContactSearchResult(**kwargs))
 
       nextPageToken = None
@@ -385,7 +398,7 @@ class CrmEngineApi(remote.Service):
       my_model.put()
       return my_model
   # opportunities.list api
-  @Opportunity.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken','account','account_name','contact'),path='opportunities', name='opportunities.list')
+  @Opportunity.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken','owner','stagename', 'account','account_name','contact'),path='opportunities', name='opportunities.list')
   def opportunity_list(self, query):
       user_from_email = EndpointsHelper.require_iogrow_user()      
       return query.filter(ndb.OR(ndb.AND(Opportunity.access=='public',Opportunity.organization==user_from_email.organization),Opportunity.owner==user_from_email.google_user_id, Opportunity.collaborators_ids==user_from_email.google_user_id)).order(Opportunity._key)
@@ -406,7 +419,7 @@ class CrmEngineApi(remote.Service):
 
     my_model.put()
     return my_model
-  # opportunities.update api 
+  # opportunities.patch api 
   @Opportunity.method(user_required=True,
                 http_method='PATCH', path='opportunities/{id}', name='opportunities.patch')
   def OpportunityPatch(self, my_model):
@@ -414,6 +427,65 @@ class CrmEngineApi(remote.Service):
       # Todo: Check permissions
       my_model.put()
       return my_model
+  # opportunities.search api 
+  @endpoints.method(SearchRequest, OpportunitySearchResults,
+                      path='opportunities/search', http_method='POST',
+                      name='opportunities.search')
+  def opportunities_search(self, request):
+      user_from_email = EndpointsHelper.require_iogrow_user()
+      organization = str(user_from_email.organization.id())
+      
+      index = search.Index(name="GlobalIndex")
+      #Show only objects where you have permissions
+      query_string = request.q + ' type:Opportunity AND (organization:' +organization+ ' AND (access:public OR (owner:'+ user_from_email.google_user_id +' OR collaborators:'+ user_from_email.google_user_id+')))'
+      print query_string
+      search_results = []
+      count = 1
+      if request.limit:
+          limit = int(request.limit)
+      else:
+          limit = 10
+      next_cursor = None
+      if request.pageToken:
+          cursor = search.Cursor(web_safe_string=request.pageToken)
+      else:
+          cursor = search.Cursor(per_result=True)
+      if limit:
+          options = search.QueryOptions(limit=limit,cursor=cursor)
+      else:
+          options = search.QueryOptions(cursor=cursor)    
+      query = search.Query(query_string=query_string,options=options)
+      try:
+          if query:
+              results = index.search(query)
+              total_matches = results.number_found
+              
+              # Iterate over the documents in the results
+              for scored_document in results:
+                  kwargs = {
+                      'id' : scored_document.doc_id
+                  }
+                  for e in scored_document.fields:
+                      if e.name in ["title","amount","account_name"]:
+                          if e.name == "amount":
+                              kwargs[e.name]=int(e.value)
+                          else:    
+                              kwargs[e.name]=e.value
+                  
+                  search_results.append(OpportunitySearchResult(**kwargs))
+                  
+                  next_cursor = scored_document.cursor.web_safe_string
+              if next_cursor:
+                  next_query_options = search.QueryOptions(limit=1,cursor=scored_document.cursor)
+                  next_query = search.Query(query_string=query_string,options=next_query_options)
+                  if next_query:
+                      next_results = index.search(next_query)
+                      if len(next_results.results)==0:
+                          next_cursor = None            
+                                    
+      except search.Error:
+          logging.exception('Search failed')
+      return OpportunitySearchResults(items = search_results,nextPageToken=next_cursor)
   #HKA 11.12.2013 Opportunitystage APIs
   @Opportunitystage.method(user_required=True,path='opportunitystage',http_method='POST',name='opportunitystages.insert')
   def OpportunitystageInsert(self,my_model):
