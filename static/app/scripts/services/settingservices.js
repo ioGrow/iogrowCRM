@@ -114,6 +114,24 @@ settingservices.factory('Casestatus',function($http){
 
     }
     )};
+   Casestatus.update= function($scope,params){
+     console.log(params);
+     gapi.client.crmengine.casestatuses.patch(params).execute(function(resp){
+      if (!resp.code){
+        $scope.$apply();
+        window.location.replace('#/admin/settings');
+
+      }
+        else{
+           alert("Error, response is: " + angular.toJson(resp));
+
+        }
+
+    }
+
+      ) 
+
+  };
   
 
 

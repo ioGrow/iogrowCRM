@@ -189,13 +189,11 @@
                                     </h3></a>
                                     <div class="desc">    
                                                              
-                                        <span class="contact-title" ng-show="contact.title" > <a href="/#/search/type:Contact position:<%=contact.title%>"></a>  </span>  
+                                        <span class="page-meta"><i class="icon-pencil"><a ng-click="editcasestatus(casestate)" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |<i class="icon-trash"></i>  <a ng-click="deleteoppstage(stage.id)" class="btn-link addAnotherPhone">{{_("Delete")}}</a></span>
                                     
                                     </div>
                                   </div>
-                                  <a class="more" href="/#/contacts/show/<%= contact.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
+                                                 
                                 </div>
                               </div><br>
                               
@@ -218,7 +216,7 @@
                                     </div>
                                     <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
                         </div>
-                        <!--HKA 18.11.2013 Add Contact modal -->
+                        <!--HKA 18.11.2013 Add Case  modal -->
 
                     <div id="addCasestatustModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
                         <div class="modal-header">
@@ -226,7 +224,7 @@
                           <h3 id="myModalLabel">{{_("New Case Status")}}</h3>
                         </div>
                         <div class="modal-body">
-                            <form id="addcasestatus" name="addcasestatus"  ng-submit="saveCaseStatus(casestatus)" class="form-horizontal"> 
+                            <form id="addcasestatus" name="addcasestatus"  ng-submit="updateCasestatus(casestatus)" class="form-horizontal"> 
                             <fieldset>
                             <div class="control-group">
                               <label  class="required control-label">{{_("Case Status")}} *</label>
@@ -239,16 +237,46 @@
                           
                     </fieldset>
                 
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button  type="submit" class="btn green">{{_("Add Case Status")}}</button>
-              </div>
-               </form>
-       </div>
-
+                    </div>
+                         <div class="modal-footer">
+                           <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                           <button  type="submit" class="btn green">{{_("Add Case Status")}}</button>
+                         </div>
+                          </form>
+                    </div>
                         
                       </div>
+                       <!--HKA 19.12.2013 Edit Case status -->
+                       <div id="EditCaseStatus" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+                        <div class="modal-header">
+                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                          <h3 id="myModalLabel">{{_("Edit Case Status")}}</h3>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addcasestatus" name="addcasestatus"  ng-submit="updateCasestatus(casestatus)" class="form-horizontal"> 
+                   <fieldset>
+                            <div class="control-group">
+                              <label  class="required control-label">{{_("Case Status")}} *</label>
+                       
+                              <div class="controls">
+                              <input type="text" required id="id_firstname" ng-model="casestatus.status">
+                          
+                               </div>
+                            </div>
+                          
+                    </fieldset>
+                
+                    </div>
+                         <div class="modal-footer">
+                           <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                           <button  type="submit" class="btn green">{{_("Save")}}</button>
+                         </div>
+                          </form>
+                    </div>
+                        
+                      </div>
+                         
+                       
                       <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3">
                           
                          <div class="row-fluid cards-container">
@@ -265,17 +293,15 @@
                                   
                                   <div class="details">
                                     <a href="/#/contacts/show/<%= contact.id %>"><h3 class="relatedcardTitle">
-                                     Lead Status : <%=leadstat.status%>
+                                    <%=leadstat.status%>
                                     </h3></a>
                                     <div class="desc">    
                                                              
-                                        <span class="contact-title" ng-show="contact.title" > <a href="/#/search/type:Contact position:<%=contact.title%>">#<%=contact.title%></a>  </span>  
+                                        <span class="page-meta"><i class="icon-pencil"><a ng-click="editleadstatus(leadstat)" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |<i class="icon-trash"></i>  <a ng-click="deleteoppstage(stage.id)" class="btn-link addAnotherPhone">{{_("Delete")}}</a></span>
                                     
                                     </div>
                                   </div>
-                                  <a class="more" href="/#/contacts/show/<%= contact.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
+                                  
                                 </div>
                               </div><br>
                               
@@ -298,7 +324,7 @@
                                     </div>
                                     <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
                         </div>
-                        <!--HKA 18.11.2013 Add Contact modal -->
+                        <!--HKA 18.11.2013 Add Lead  modal -->
 
                     <div id="addLeadstatustModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
                         <div class="modal-header">
@@ -327,7 +353,36 @@
               </div>
                </form>
        </div>
-    <!--End Contact Modal -->
+
+    <!--End Lead Modal -->
+    <!-- HKA 19.12.2013 Edit Lead status -->
+         <div id="addLeadstatustModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+                        <div class="modal-header">
+                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                          <h3 id="myModalLabel">{{_("New Lead status")}}</h3>
+                        </div>
+                        <div class="modal-body">
+                            <form id="saveLeadtatus" name="addleadstatus"  ng-submit="saveLeadtatus(lead)" class="form-horizontal"> 
+                            <fieldset>
+                            <div class="control-group">
+                              <label  class="required control-label">{{_("Lead Status")}} *</label>
+                       
+                              <div class="controls">
+                              <input type="text" required id="id_firstname" ng-model="lead.status">
+                          
+                               </div>
+                            </div>
+                           
+                           
+                    </fieldset>
+                
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <button  type="submit" class="btn green">{{_("Add Lead Status")}}</button>
+              </div>
+               </form>
+       </div>
 
 
                       </div>
