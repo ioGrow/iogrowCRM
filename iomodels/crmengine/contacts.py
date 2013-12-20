@@ -5,7 +5,7 @@ from google.appengine.api import search
 import model
 
 class Contact(EndpointsModel):
-    _message_fields_schema = ('id','entityKey','folder',  'access','collaborators_list','collaborators_ids','display_name', 'firstname','lastname','title','company','account','account_name','introduction','tagline','phones','emails','addresses','websites','sociallinks')
+    _message_fields_schema = ('id','entityKey','owner', 'folder','created_at','updated_at',  'access','collaborators_list','collaborators_ids','display_name', 'firstname','lastname','title','company','account','account_name','introduction','tagline','phones','emails','addresses','websites','sociallinks')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
@@ -19,8 +19,8 @@ class Contact(EndpointsModel):
     display_name = ndb.StringProperty(repeated=True)
     title = ndb.StringProperty()
     company = ndb.StringProperty()
-    creationTime = ndb.DateTimeProperty(auto_now_add=True)
-    lastmodification = ndb.DateTimeProperty(auto_now=True)
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
+    updated_at = ndb.DateTimeProperty(auto_now=True)
     department = ndb.StringProperty()
     description = ndb.StringProperty()
     phones = ndb.StructuredProperty(model.Phone,repeated=True)
@@ -76,8 +76,8 @@ class Contact(EndpointsModel):
             search.TextField(name='firstname', value = empty_string(self.firstname) ),
             search.TextField(name='lastname', value = empty_string(self.lastname)),
             search.TextField(name='position', value = empty_string(self.title)),
-            search.DateField(name='creationTime', value = self.creationTime),
-            search.DateField(name='lastmodification', value = self.lastmodification),
+            search.DateField(name='created_at', value = self.created_at),
+            search.DateField(name='updated_at', value = self.updated_at),
             search.TextField(name='company', value = empty_string(self.company)),
             search.TextField(name='department', value = empty_string(self.department)),
             search.TextField(name='account_name',value=empty_string(self.account_name)),

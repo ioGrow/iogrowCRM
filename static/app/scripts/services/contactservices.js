@@ -80,6 +80,16 @@ accountservices.factory('Contact', function($http) {
   	
 
   };
+  Contact.search = function($scope,params){
+      gapi.client.crmengine.contacts.search(params).execute(function(resp) {
+           if (resp.items){
+              $scope.results = resp.items;
+              
+              $scope.$apply();
+            };
+            
+      });
+  };
   Contact.insert = function($scope,params){
       $scope.isLoading = true;
       gapi.client.crmengine.contacts.insert(params).execute(function(resp) {

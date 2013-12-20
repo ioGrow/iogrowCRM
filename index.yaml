@@ -146,6 +146,12 @@ indexes:
   properties:
   - name: access
   - name: organization
+  - name: account_name
+
+- kind: Contact
+  properties:
+  - name: access
+  - name: organization
   - name: display_name
 
 - kind: Contact
@@ -166,6 +172,12 @@ indexes:
   - name: access
   - name: organization
   - name: lastname
+
+- kind: Contact
+  properties:
+  - name: access
+  - name: organization
+  - name: lastname
   - name: firstname
 
 - kind: Contact
@@ -176,6 +188,32 @@ indexes:
 
 - kind: Contact
   properties:
+  - name: access
+  - name: organization
+  - name: owner
+  - name: updated_at
+    direction: desc
+
+- kind: Contact
+  properties:
+  - name: access
+  - name: organization
+  - name: title
+
+- kind: Contact
+  properties:
+  - name: access
+  - name: organization
+  - name: updated_at
+    direction: desc
+
+- kind: Contact
+  properties:
+  - name: collaborators_ids
+  - name: account_name
+
+- kind: Contact
+  properties:
   - name: collaborators_ids
   - name: display_name
 
@@ -194,12 +232,40 @@ indexes:
   properties:
   - name: collaborators_ids
   - name: lastname
+
+- kind: Contact
+  properties:
+  - name: collaborators_ids
+  - name: lastname
   - name: firstname
 
 - kind: Contact
   properties:
   - name: collaborators_ids
   - name: name
+
+- kind: Contact
+  properties:
+  - name: collaborators_ids
+  - name: owner
+  - name: updated_at
+    direction: desc
+
+- kind: Contact
+  properties:
+  - name: collaborators_ids
+  - name: title
+
+- kind: Contact
+  properties:
+  - name: collaborators_ids
+  - name: updated_at
+    direction: desc
+
+- kind: Contact
+  properties:
+  - name: owner
+  - name: account_name
 
 - kind: Contact
   properties:
@@ -221,12 +287,28 @@ indexes:
   properties:
   - name: owner
   - name: lastname
+
+- kind: Contact
+  properties:
+  - name: owner
+  - name: lastname
   - name: firstname
 
 - kind: Contact
   properties:
   - name: owner
   - name: name
+
+- kind: Contact
+  properties:
+  - name: owner
+  - name: title
+
+- kind: Contact
+  properties:
+  - name: owner
+  - name: updated_at
+    direction: desc
 
 - kind: Contributor
   properties:
@@ -298,6 +380,66 @@ indexes:
 
 - kind: Opportunity
   properties:
+  - name: access
+  - name: organization
+  - name: account_name
+
+- kind: Opportunity
+  properties:
+  - name: access
+  - name: organization
+  - name: amount
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: access
+  - name: organization
+  - name: name
+
+- kind: Opportunity
+  properties:
+  - name: access
+  - name: organization
+  - name: owner
+  - name: stage_probability
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: access
+  - name: organization
+  - name: stage_probability
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: access
+  - name: organization
+  - name: stagename
+  - name: stage_probability
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: access
+  - name: organization
+  - name: updated_at
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: collaborators_ids
+  - name: account_name
+
+- kind: Opportunity
+  properties:
+  - name: collaborators_ids
+  - name: amount
+    direction: desc
+
+- kind: Opportunity
+  properties:
   - name: collaborators_ids
   - name: contact
   - name: created_at
@@ -313,6 +455,37 @@ indexes:
   properties:
   - name: collaborators_ids
   - name: contact
+  - name: updated_at
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: collaborators_ids
+  - name: name
+
+- kind: Opportunity
+  properties:
+  - name: collaborators_ids
+  - name: owner
+  - name: stage_probability
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: collaborators_ids
+  - name: stage_probability
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: collaborators_ids
+  - name: stagename
+  - name: stage_probability
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: collaborators_ids
   - name: updated_at
     direction: desc
 
@@ -334,6 +507,52 @@ indexes:
   - name: contact
   - name: owner
   - name: updated_at
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: owner
+  - name: account_name
+
+- kind: Opportunity
+  properties:
+  - name: owner
+  - name: amount
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: owner
+  - name: name
+
+- kind: Opportunity
+  properties:
+  - name: owner
+  - name: stage_probability
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: owner
+  - name: stagename
+  - name: stage_probability
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: owner
+  - name: updated_at
+    direction: desc
+
+- kind: Opportunitystage
+  properties:
+  - name: organization
+  - name: probability
+
+- kind: Opportunitystage
+  properties:
+  - name: organization
+  - name: probability
     direction: desc
 
 - kind: Task
