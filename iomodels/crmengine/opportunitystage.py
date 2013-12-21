@@ -12,7 +12,7 @@ class Opportunitystage (EndpointsModel):
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
     name = ndb.StringProperty()
-    probability = ndb.StringProperty()
+    probability = ndb.IntegerProperty()
     created_by = ndb.KeyProperty()
     last_modified_by = ndb.KeyProperty()
     #created_by = ndb.KeyProperty()
