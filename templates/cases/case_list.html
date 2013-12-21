@@ -43,43 +43,12 @@
               </div>
               <div class="modal-body">
                  <form id="addCase" name="addCase" ng-keyup="addCaseOnKey(casee)" class="form-horizontal"> 
-                  <fieldset>
-                  
-                    
-
-                    
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Name")}} </label>
-                       
-                        <div class="controls">
-                          <input type="text"  id="id_name" required class="input-xlarge" ng-model="casee.name">
-                          
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Priority")}} </label>
-                       
-                        <div class="controls">
-                          <input type="text"  id="id_priority" placeholder="High,Medium,Low" required class="input-xlarge" ng-model="casee.priority">
-                          
-                        </div>
-                    </div>
-                    
-                    
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Labels")}} </label>
-                       
-                        <div class="controls">
-                          <input type="text"  id="id_description" placeholder="Add #hashtags to categorize your cases" class="input-xlarge" ng-model="casee.type_case">
-                          
-                        </div>
-                    </div>
+                 
                     <div class="control-group">
                         <label  class="required control-label">{{_("Contact")}}</label>
                        
                          <div class="controls">
-                          <input type="text"  ng-model="searchContactQuery" typeahead="contactResult as contactResult.firstname + ' '+  contactResult.lastname for contactResult in contactsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectContact()" class="input-xlarge" placeholder="Search">
+                          <input type="text" required ng-model="searchContactQuery" typeahead="contactResult as contactResult.firstname + ' '+  contactResult.lastname for contactResult in contactsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectContact()" class="input-xlarge" placeholder="Search">
                           
                         </div>
                     </div>
@@ -91,6 +60,59 @@
                           
                         </div>
                     </div>
+                    
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Subject")}} </label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_name" required class="input-xlarge" ng-model="casee.name">
+                          
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Priority")}} </label>
+                       
+                        <div class="controls">
+                          <select class="input-xlarge" ng-model="casee.priority">
+                            <option value="1">1 - Low</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10 - Critical</option>
+                          </select>
+                          
+                        </div>
+                        
+                    </div>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Status")}} </label>
+                       
+                        <div class="controls">
+                           <select class="input-xlarge" ng-model="status_selected" ng-options="stat.status for stat in casesatuses" >
+                            <option value=""><%=casee.status%> </option>
+                            <!--option value=""><%=status_selected.status%></option-->
+                          </select>
+                          
+                        </div>
+                        
+                    </div>
+                    
+                    
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Labels")}} </label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_description" placeholder="Add #hashtags to categorize your cases" class="input-xlarge" ng-model="casee.type_case">
+                          
+                        </div>
+                    </div>
+                    
                     <hr/>
                     <p>Who can access?</p>
                      <div class='container-fluid'>
@@ -111,7 +133,7 @@
                     </div>
                    
 
-                    </fieldset>
+                    
                 
               </div>
               <div class="modal-footer">
@@ -142,32 +164,87 @@
             
           </div>
         </div>
+            <!-- Filtering and sorting -->
+          <div class="row-fluid" ng-show="cases">
+            <div class="span2">
+              <div class="btn-group">
+                                    <a class="btn" href="#" data-toggle="dropdown">
+                                      {{ _('Filter by') }}
+                                    <i class="icon-angle-down"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                      <li><a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All cases') }}</a></li>
+                                      <li><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My cases') }}</a></li>
+                                      <li ng-repeat="status in casesatuses"><a ng-click="filterByStatus('<%=status.status%>')" href="#" data-toggle="modal"><%= status.status %></a></li>
+                                    </ul>
+                                    {{ _('Views') }}
+              </div>
+            </div>
+            <div class="span7">
+              <ul class="nav search-form-top"> 
+                  <li>    
+                    <form class="form-inline ng-pristine ng-valid" ng-submit="executeSearch(searchQuery)">
+                      <div class="input-append row-fluid">
 
+                        <input type="text" ng-model="searchQuery" typeahead="result as result.title + ' - (' + result.contact_name+ ' from ' + result.account_name  + ' - ' + result.status+ ')'   for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="input-xxlarge" placeholder="{{ _('Quick Filtering') }}">
+
+                       <button class="gbqfb gbqfb-hvr"><i class="icon-filter"></i></button>
+                      </div>
+                    </form>
+                  </li> 
+              </ul>
+            </div>
+            <div class="span3">
+              <div class="btn-group pull-right">
+                                    <a class="btn" href="#" data-toggle="dropdown">
+                                    Sort by
+                                    <i class="icon-angle-down"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                      <li><a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a></li>
+                                      <li><a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a></li>
+                                       <li><a ng-click="orderBy('-priority')" href="#" data-toggle="modal">{{ _('Priority') }}</a></li>
+                                       <li><a ng-click="orderBy('status')" href="#" data-toggle="modal">{{ _('Status') }}</a></li>
+                                      <li><a ng-click="orderBy('contact_name')" href="#" data-toggle="modal">{{ _('Contact') }}</a></li>
+                                      <li><a ng-click="orderBy('account_name')" href="#" data-toggle="modal">{{ _('Company') }}</a></li>
+                                      
+                                     
+                                    </ul>
+              </div>
+
+            </div>
+            <br>
+              <br>
+            
+          </div>
             
             <div class="row-fluid cards-container">
             <div class="inner-cards-container">
             
               <div class="inner-cards-container">
               <div  ng-repeat="casee in cases" class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                <div class="dashboard-stat cards">
+                <div class="dashboard-stat cards-med">
                   
                   <div class="details">
                     <a href="/#/cases/show/<%= casee.id %>"><h3 class="relatedcardOppTitle">
                        <%=casee.name %>
                     </h3></a>
-                    <div class="desc">                           
-                                    <span ng-show="casee.status" class="contact-title" ><a class="desc" href="/#/search/type:Case <%=casee.status%>"> <%=casee.status %></a>  - </span>
-                                    <span ng-show="casee.priority"><a  class="desc" href="/#/search/type:Case <%=casee.priority%>"><%=casee.priority %></span> - 
-                                    <span ng-show="casee.type_case">
-                                    <a  class="desc" href="/#/search/type:Case <%=casee.type_case%>"><%=casee.type_case %></a>
+                    <div class="desc">
+                                    <span ng-show="casee.status" class="contact-title" >Updated at:  <%=casee.updated_at | date:'yyyy-MM-dd - HH:mm:ss ' %> </span>                           
+                                    <span ng-show="casee.status" class="contact-title" >Status: <a class="desc" href="/#/search/type:Case <%=casee.status%>"> <%=casee.status %></a>  - </span>
+                                    <span ng-show="casee.priority" class="contact-title">Priority: <a  class="desc" href="/#/search/type:Case <%=casee.priority%>"><%=casee.priority %></span> 
+                                    <span ng-show="casee.contact_name" class="contact-title"> Customer:
+                                    <a  class="desc" href="/#/search/type:Case <%=casee.contact_name%>"><%=casee.contact_name %></a>
                                     </span>
+                                    <span ng-show="casee.account_name" class="contact-title"> from
+                                    <a  class="desc" href="/#/search/type:Case <%=casee.account_name%>"><%=casee.account_name %></a>
+                                    </span>
+                                    
                                     
                                     
                                     </div>
                   </div>
-                  <a class="more" href="/#/cases/show/<%= casee.id %>">
-                  {{ _("View more") }} <i class="m-icon-swapright m-icon-white"></i>
-                  </a>                 
+                                 
                 </div>
               </div>
                <div ng-show="blankState" class="span12 responsive" data-tablet="span6" data-desktop="span12">

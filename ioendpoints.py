@@ -90,6 +90,18 @@ class OpportunitySearchResult(messages.Message):
 class OpportunitySearchResults(messages.Message):
     items = messages.MessageField(OpportunitySearchResult, 1, repeated=True)
     nextPageToken = messages.StringField(2)
+# The message class that defines the cases.search response 
+class CaseSearchResult(messages.Message):
+    id = messages.StringField(1)
+    entityKey  = messages.StringField(2)
+    title = messages.StringField(3)
+    contact_name = messages.StringField(4)
+    account_name = messages.StringField(5)
+    status = messages.StringField(6)
+# The message class that defines a set of cases.search results
+class CaseSearchResults(messages.Message):
+    items = messages.MessageField(CaseSearchResult, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
 # The message class that defines the schema of Attachment 
 class AttachmentSchema(messages.Message):
     id = messages.StringField(1)
@@ -607,7 +619,7 @@ class CrmEngineApi(remote.Service):
       my_model.put()
       return my_model
   # cases.list api
-  @Case.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken','account','description','type_case','priority','status','contact'),path='cases',name='cases.list')
+  @Case.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken','account','type_case','priority','status','contact'),path='cases',name='cases.list')
   def CaseList(self,query):
       user_from_email = EndpointsHelper.require_iogrow_user()
       return query.filter(ndb.OR(ndb.AND(Case.access=='public',Case.organization==user_from_email.organization),Case.owner==user_from_email.google_user_id, Case.collaborators_ids==user_from_email.google_user_id)).order(Case._key)
@@ -649,6 +661,62 @@ class CrmEngineApi(remote.Service):
 
       patched_model.put()
       return patched_model
+  # cases.search api 
+  @endpoints.method(SearchRequest, CaseSearchResults,
+                      path='cases/search', http_method='POST',
+                      name='cases.search')
+  def cases_search(self, request):
+      user_from_email = EndpointsHelper.require_iogrow_user()
+      organization = str(user_from_email.organization.id())
+      
+      index = search.Index(name="GlobalIndex")
+      #Show only objects where you have permissions
+      query_string = request.q + ' type:Case AND (organization:' +organization+ ' AND (access:public OR (owner:'+ user_from_email.google_user_id +' OR collaborators:'+ user_from_email.google_user_id+')))'
+      print query_string
+      search_results = []
+      count = 1
+      if request.limit:
+          limit = int(request.limit)
+      else:
+          limit = 10
+      next_cursor = None
+      if request.pageToken:
+          cursor = search.Cursor(web_safe_string=request.pageToken)
+      else:
+          cursor = search.Cursor(per_result=True)
+      if limit:
+          options = search.QueryOptions(limit=limit,cursor=cursor)
+      else:
+          options = search.QueryOptions(cursor=cursor)    
+      query = search.Query(query_string=query_string,options=options)
+      try:
+          if query:
+              results = index.search(query)
+              total_matches = results.number_found
+              
+              # Iterate over the documents in the results
+              for scored_document in results:
+                  kwargs = {
+                      'id' : scored_document.doc_id
+                  }
+                  for e in scored_document.fields:
+                      if e.name in ["title","contact_name","account_name","status"]:
+                          kwargs[e.name]=e.value
+                  
+                  search_results.append(CaseSearchResult(**kwargs))
+                  
+                  next_cursor = scored_document.cursor.web_safe_string
+              if next_cursor:
+                  next_query_options = search.QueryOptions(limit=1,cursor=scored_document.cursor)
+                  next_query = search.Query(query_string=query_string,options=next_query_options)
+                  if next_query:
+                      next_results = index.search(next_query)
+                      if len(next_results.results)==0:
+                          next_cursor = None            
+                                    
+      except search.Error:
+          logging.exception('Search failed')
+      return CaseSearchResults(items = search_results,nextPageToken=next_cursor)
       #*******************************************#
   #HKA 14.12.2013 Case status APIs
   @Casestatus.method(user_required=True,path='casestatuses',http_method='POST',name='casestatuses.insert')

@@ -25,6 +25,17 @@ accountservices.factory('Case', function($http) {
             console.log('gapi #end_execute');
           });
   };
+  Case.search = function($scope,params){
+      gapi.client.crmengine.cases.search(params).execute(function(resp) {
+          console.log(resp);
+           if (resp.items){
+              $scope.results = resp.items;
+              
+              $scope.$apply();
+            };
+            
+      });
+  };
 
   Case.list = function($scope,params){
       $scope.isLoading = true;
