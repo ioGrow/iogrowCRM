@@ -544,8 +544,38 @@ class CompanyProfileHandlers(BaseHandler,SessionEnabledHandler):
       template_values = {'tabs':tabs}
       template = jinja_environment.get_template('templates/live/company_profile/comp_profile_show.html')
       self.response.out.write(template.render(template_values))
+class ProductVideosHandlers (BaseHandler,SessionEnabledHandler):
+  def get(self):
+    if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+      user = self.get_user_from_session()
+      self.set_user_locale()
+      tabs = user.get_user_active_tabs()
+      self.set_user_locale()
+      template_values = {'tabs':tabs}
+      template = jinja_environment.get_template('templates/live/product_videos/product_videos_list.html')
+      self.response.out.write(template.render(template_values))
+class CusomerStoriesHandlers (BaseHandler,SessionEnabledHandler):
+  def get(self):
+    if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+      user = self.get_user_from_session()
+      self.set_user_locale()
+      tabs = user.get_user_active_tabs()
+      self.set_user_locale()
+      template_values = {'tabs':tabs}
+      template = jinja_environment.get_template('templates/live/customer_stories/customer_stories_list.html')
+      self.response.out.write(template.render(template_values))
+class FeedBacksHandlers (BaseHandler,SessionEnabledHandler):
+  def get(self):
+    if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+      user = self.get_user_from_session()
+      self.set_user_locale()
+      tabs = user.get_user_active_tabs()
+      self.set_user_locale()
+      template_values = {'tabs':tabs}
+      template = jinja_environment.get_template('templates/live/feedbacks/feedbacks_list.html')
+      self.response.out.write(template.render(template_values))
 
-class GooglePlusConnect(SessionEnabledHandler):
+class GooglePlusConnect(SessionEnabledHandler): 
     @staticmethod
     def exchange_code(code):
       """Exchanges the `code` member of the given AccessToken object, and returns
@@ -934,6 +964,9 @@ routes = [
     ('/views/admin/settings',settingsShowHandler),
     #iogrow live App
     ('/views/live/company_profile',CompanyProfileHandlers),
+    ('/views/live/product_videos',ProductVideosHandlers),
+    ('/views/live/customer_stories',CusomerStoriesHandlers),
+    ('/views/live/feedbacks',FeedBacksHandlers),
     # Applications settings
     (r'/apps/(\d+)', ChangeActiveAppHandler),
     # ioGrow Live

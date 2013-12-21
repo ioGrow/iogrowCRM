@@ -102,14 +102,14 @@ app.config(['$routeProvider', function($routeProvider) {
 
       }).when('/live/product_videos',{
         controller:'ProductVideoListCtrl',
-        templateUrl:'/views/live/company_profile'
+        templateUrl:'/views/live/product_videos'
 
       }).when('/live/customer_stories',{
         controller:'CustomerStoriesListCtrl',
-        templateUrl:'/views/live/company_profile'
+        templateUrl:'/views/live/customer_stories'
 
       }).when('/live/feedbacks',{
         controller:'FeedBacksListCtrl',
-        templateUrl:'/views/live/company_profile'
+        templateUrl:'/views/live/feedbacks'
       });
 }]);

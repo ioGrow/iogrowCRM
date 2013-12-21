@@ -43,7 +43,7 @@ STANDARD_APPS = [{'name': 'sales', 'label': 'Sales', 'url':'/#/accounts/'},#{'na
 STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
 ADMIN_TABS = [{'name': 'Users','label': 'Users','url':'/#/admin/users'},{'name': 'Groups','label': 'Groups','url':'/#/admin/groups'},{'name': 'Settings','label': 'Settings','url':'/#/admin/settings'}]
 ADMIN_APP = {'name': 'admin', 'label': 'Admin Console', 'url':'/#/admin/users'}
-Iogrowlive_APP = {'name':'iogrowLive','label': 'i/o Grow Live','url':'/#/live/shows'}
+Iogrowlive_APP = {'name':'iogrowLive','label': 'i/oGrow Live','url':'/#/live/shows'}
 Iogrowlive_TABS = [{'name': 'Shows','label': 'Shows','url':'/#/live/shows'},{'name': 'Company_profile','label': 'Company Profile','url':'/#/live/company_profile'},
 {'name': 'Product_videos','label': 'Product Videos','url':'/#/live/product_videos'},{'name': 'Customer_Stories','label': 'Customer stories','url':'/#/live/customer_stories'},
 {'name': 'Feedbacks','label': 'Feed Backs','url':'/#/live/feedbacks'},{'name': 'Leads','label': 'Leads','url':'/#/leads/'}]
