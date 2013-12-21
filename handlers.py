@@ -542,7 +542,7 @@ class CompanyProfileHandlers(BaseHandler,SessionEnabledHandler):
       tabs = user.get_user_active_tabs()
       self.set_user_locale()
       template_values = {'tabs':tabs}
-      template = jinja_environment.get_template('templates/live/company_profile/comp_profile_list.html')
+      template = jinja_environment.get_template('templates/live/company_profile/comp_profile_show.html')
       self.response.out.write(template.render(template_values))
 
 class GooglePlusConnect(SessionEnabledHandler):

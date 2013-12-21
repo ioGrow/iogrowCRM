@@ -97,7 +97,7 @@ app.config(['$routeProvider', function($routeProvider) {
         templateUrl:'/views/shows/show'
         
       }).when('/live/company_profile',{
-        controller:'CompanyProfileListCtrl',
+        controller:'CompanyProfileShowCtrl',
         templateUrl:'/views/live/company_profile'
 
       }).when('/live/product_videos',{
