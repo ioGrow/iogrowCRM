@@ -1,20 +1,11 @@
 from google.appengine.ext import ndb
-from google.appengine.api import search 
+from google.appengine.api import search
+from search_helper import tokenize_autocomplete
 from endpoints_proto_datastore.ndb import EndpointsModel
+import model
 # HKA 04.11.2013 Opportunity Model
 
-import model
-def tokenize_autocomplete(phrase):
-        a = []
-        for word in phrase.split():
-            j = 1
-            while True:
-                for i in range(len(word) - j + 1):
-                    a.append(word[i:i + j])
-                if j == len(word):
-                    break
-                j += 1
-        return a
+
 class Opportunity(EndpointsModel):
 
     _message_fields_schema = ('id','entityKey','owner', 'created_at', 'updated_at', 'folder', 'access','collaborators_list','collaborators_ids', 'name','description','amount','account','account_name','account_id','contact','contact_name','contact_id','updated_at','stagename','stage_probability')

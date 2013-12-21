@@ -1,5 +1,5 @@
-app.controller('CaseListCtrl', ['$scope','Auth','Case','Account',
-    function($scope,Auth,Case,Account) {
+app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Casestatus',
+    function($scope,Auth,Case,Account,Contact,Casestatus) {
     
 
      $("#id_Cases").addClass("active");
@@ -21,11 +21,16 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account',
      $scope.casee = {};
      $scope.casee.access ='public';
      $scope.casee.status = 'pending';
+     $scope.casee.priority = 4;
+     $scope.casee.account_name = undefined;
+     $scope.casee.contact_name = undefined;
+     $scope.order = '-updated_at';
      
       // What to do after authentication
        $scope.runTheProcess = function(){
-            var params = {'limit':7}
+            var params = {'order' : $scope.order,'limit':7}
             Case.list($scope,params);
+            Casestatus.list($scope,{});
        };
         // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
@@ -37,11 +42,11 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account',
         var nextPage = $scope.caseCurrentPage + 1;
         var params = {};
           if ($scope.casepages[nextPage]){
-            params = {'limit':7,
+            params = {'order' : $scope.order,'limit':7,
                       'pageToken':$scope.casepages[nextPage]
                      }
           }else{
-            params = {'limit':7}
+            params = {'order' : $scope.order,'limit':7}
           }
           console.log('in listNextPageItems');
           $scope.caseCurrentPage = $scope.caseCurrentPage + 1 ; 
@@ -52,11 +57,11 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account',
        var prevPage = $scope.caseCurrentPage - 1;
        var params = {};
           if ($scope.casepages[prevPage]){
-            params = {'limit':7,
+            params = {'order' : $scope.order,'limit':7,
                       'pageToken':$scope.casepages[prevPage]
                      }
           }else{
-            params = {'limit':7}
+            params = {'order' : $scope.order,'limit':7}
           }
           $scope.caseCurrentPage = $scope.caseCurrentPage - 1 ;
           Case.list($scope,params);
@@ -76,11 +81,21 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account',
         
         
         if (typeof(casee.account)=='object'){
-          casee.account = casee.account.entityKey;
+          
           casee.account_name = casee.account.name;
+          casee.account = casee.account.entityKey;
+          console.log('in cases.save - account') ;
+          console.log(casee.account);
+          console.log(casee);
+          
           if (typeof(casee.contact)=='object'){
-              casee.contact = casee.contact.entityKey;
+              
               casee.contact_name = casee.contact.firstname + ' '+ casee.contact.lastname ;
+              casee.contact = casee.contact.entityKey;
+              console.log('in cases.save - contact');
+              console.log(casee.contact);
+              console.log(casee);
+
           }
           Case.insert($scope,casee);
 
@@ -157,7 +172,70 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account',
         $scope.casee.account = account;
         $scope.searchAccountQuery = $scope.searchContactQuery.account_name;
       };
+    // Quick Filtering
+     var searchParams ={};
+     $scope.result = undefined;
+     $scope.q = undefined;
      
+     $scope.$watch('searchQuery', function() {
+         searchParams['q'] = $scope.searchQuery;
+         searchParams['limit'] = 7;
+         if ($scope.searchQuery){
+         Case.search($scope,searchParams);
+       };
+     });
+     $scope.selectResult = function(){
+          window.location.replace('#/cases/show/'+$scope.searchQuery.id);
+     };
+     $scope.executeSearch = function(searchQuery){
+        if (typeof(searchQuery)=='string'){
+           var goToSearch = 'type:Case ' + searchQuery;
+           window.location.replace('#/search/'+goToSearch);
+        }else{
+          window.location.replace('#/cases/show/'+searchQuery.id);
+        }
+        $scope.searchQuery=' ';
+        $scope.$apply();
+     };
+     // Sorting
+     $scope.orderBy = function(order){
+        var params = { 'order': order,
+                        'limit':7};
+        $scope.order = order;
+        Case.list($scope,params);
+     };
+     $scope.filterByOwner = function(filter){
+        if (filter){
+          var params = { 'owner': filter,
+                         'order': $scope.order, 
+                         'limit':7}
+        }
+        else{
+          var params = {
+              'order': $scope.order, 
+              
+              'limit':7}
+        };
+        console.log('Filtering by');
+        console.log(params);
+        Case.list($scope,params);
+     };
+     $scope.filterByStatus = function(filter){
+        if (filter){
+          var params = { 'status': filter,
+                         'order': $scope.order, 
+                         'limit':7}
+        }
+        else{
+          var params = {
+              'order': $scope.order, 
+              
+              'limit':7}
+        };
+        
+        Case.list($scope,params);
+     };
+
      
    // Google+ Authentication 
      Auth.init($scope);

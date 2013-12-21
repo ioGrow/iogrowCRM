@@ -79,6 +79,18 @@ indexes:
   properties:
   - name: access
   - name: organization
+  - name: account_name
+
+- kind: Case
+  properties:
+  - name: access
+  - name: organization
+  - name: contact_name
+
+- kind: Case
+  properties:
+  - name: access
+  - name: organization
   - name: creationTime
 
 - kind: Case
@@ -90,6 +102,45 @@ indexes:
 
 - kind: Case
   properties:
+  - name: access
+  - name: organization
+  - name: name
+
+- kind: Case
+  properties:
+  - name: access
+  - name: organization
+  - name: priority
+    direction: desc
+
+- kind: Case
+  properties:
+  - name: access
+  - name: organization
+  - name: status
+
+- kind: Case
+  properties:
+  - name: access
+  - name: organization
+  - name: status
+  - name: updated_at
+    direction: desc
+
+- kind: Case
+  properties:
+  - name: access
+  - name: organization
+  - name: updated_at
+    direction: desc
+
+- kind: Case
+  properties:
+  - name: collaborators_ids
+  - name: account_name
+
+- kind: Case
+  properties:
   - name: collaborators_ids
   - name: contact
   - name: creationTime
@@ -104,6 +155,11 @@ indexes:
 - kind: Case
   properties:
   - name: collaborators_ids
+  - name: contact_name
+
+- kind: Case
+  properties:
+  - name: collaborators_ids
   - name: creationTime
 
 - kind: Case
@@ -114,6 +170,35 @@ indexes:
 
 - kind: Case
   properties:
+  - name: collaborators_ids
+  - name: name
+
+- kind: Case
+  properties:
+  - name: collaborators_ids
+  - name: priority
+    direction: desc
+
+- kind: Case
+  properties:
+  - name: collaborators_ids
+  - name: status
+
+- kind: Case
+  properties:
+  - name: collaborators_ids
+  - name: status
+  - name: updated_at
+    direction: desc
+
+- kind: Case
+  properties:
+  - name: collaborators_ids
+  - name: updated_at
+    direction: desc
+
+- kind: Case
+  properties:
   - name: contact
   - name: owner
   - name: creationTime
@@ -128,12 +213,51 @@ indexes:
 - kind: Case
   properties:
   - name: owner
+  - name: account_name
+
+- kind: Case
+  properties:
+  - name: owner
+  - name: contact_name
+
+- kind: Case
+  properties:
+  - name: owner
   - name: creationTime
 
 - kind: Case
   properties:
   - name: owner
   - name: creationTime
+    direction: desc
+
+- kind: Case
+  properties:
+  - name: owner
+  - name: name
+
+- kind: Case
+  properties:
+  - name: owner
+  - name: priority
+    direction: desc
+
+- kind: Case
+  properties:
+  - name: owner
+  - name: status
+
+- kind: Case
+  properties:
+  - name: owner
+  - name: status
+  - name: updated_at
+    direction: desc
+
+- kind: Case
+  properties:
+  - name: owner
+  - name: updated_at
     direction: desc
 
 - kind: Comment

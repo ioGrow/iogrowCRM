@@ -286,7 +286,7 @@ class LeadListHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       tabs = user.get_user_active_tabs()
       self.set_user_locale()
-      template_values = {'tabs':tabs}
+      template_values = {'ME':user.google_user_id,'tabs':tabs}
       template = jinja_environment.get_template('templates/leads/lead_list.html')
       self.response.out.write(template.render(template_values))
 class LeadShowHandler(BaseHandler,SessionEnabledHandler):
@@ -307,7 +307,7 @@ class CaseListHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       tabs = user.get_user_active_tabs()
       self.set_user_locale()
-      template_values = {'tabs':tabs}
+      template_values = {'ME':user.google_user_id,'tabs':tabs}
       template = jinja_environment.get_template('templates/cases/case_list.html')
       self.response.out.write(template.render(template_values))
 class CaseShowHandler(BaseHandler,SessionEnabledHandler):
