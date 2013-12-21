@@ -27,7 +27,8 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
          
           // What to do after authentication
      $scope.runTheProcess = function(){
-           Opportunitystage.list($scope,{});
+       var params ={'order':'probability'};
+          Opportunitystage.list($scope,params);
           Casestatus.list($scope,{});
           Leadstatus.list($scope,{});
      };
