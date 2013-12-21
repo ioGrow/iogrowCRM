@@ -1,5 +1,5 @@
-app.controller('LeadListCtrl', ['$scope','Auth','Lead',
-    function($scope,Auth,Lead) {
+app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus',
+    function($scope,Auth,Lead,Leadstatus) {
       $("#id_Leads").addClass("active");
       
       console.log('i am in lead list controller');
@@ -12,6 +12,7 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead',
      $scope.leadpagination = {};
      $scope.currentPage = 01;
      $scope.pages = [];
+     $scope.stage_selected={};
     	
       $scope.leads = [];
       $scope.lead = {};
@@ -21,6 +22,8 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead',
        $scope.runTheProcess = function(){
             var params = {'limit':7};
             Lead.list($scope,params);
+            Leadstatus.list($scope,{});
+
        };
         // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
@@ -65,7 +68,12 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead',
       
     
       $scope.save = function(lead){
-        Lead.insert($scope,lead);
+        var params ={'firstname':lead.firstname,
+                      'lastname':lead.lastname,
+                      'company':lead.company,
+                      'position':lead.position,
+                      'status':$scope.stage_selected.status};
+        Lead.insert($scope,params);
         $('#addLeadModal').modal('hide')
       };
       $scope.addLeadOnKey = function(lead){

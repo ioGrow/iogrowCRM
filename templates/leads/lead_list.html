@@ -71,6 +71,27 @@
                           
                         </div>
                     </div>
+                    <div class="control-group">
+                        <label  class=" control-label">{{_("Position")}} </label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_position" ng-model="lead.position">
+                          
+                        </div>
+                    </div>
+                     <div class="control-group">
+                        <label  class="control-label">{{_("Status")}} </label>
+                       
+                        <div class="controls">
+                          <select ng-model="stage_selected" ng-options="leadstat.status for leadstat in leadstatuses | orderBy: 'status':false"  >
+                            <option value="">-- choose Status --</option>
+                          
+                          </select>
+                          
+                         
+                        </div>
+                    </div>
+
                     <hr/>
                     <p>Who can access?</p>
                      <div class='container-fluid'>

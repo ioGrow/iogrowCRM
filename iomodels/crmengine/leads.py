@@ -17,7 +17,7 @@ class Lead(EndpointsModel):
     lastname = ndb.StringProperty()
     company = ndb.StringProperty()
     industry = ndb.StringProperty()
-    title = ndb.StringProperty()
+    position = ndb.StringProperty()
     department = ndb.StringProperty()
     description = ndb.TextProperty()
     source = ndb.StringProperty()
@@ -72,10 +72,10 @@ class Lead(EndpointsModel):
             search.TextField(name='owner', value = empty_string(self.owner) ),
             search.TextField(name='collaborators', value = collaborators ),
             search.TextField(name='firstname', value = empty_string(self.firstname) ),
-            search.TextField(name='title', value = empty_string(self.lastname)),
+            search.TextField(name='lastname', value = empty_string(self.lastname)),
             search.TextField(name='company', value = empty_string(self.company)),
             search.TextField(name='industry', value = empty_string(self.industry)),
-            search.TextField(name='position', value = empty_string(self.title)),
+            search.TextField(name='position', value = empty_string(self.position)),
             search.TextField(name='department', value = empty_string(self.department)),
             search.TextField(name='description', value = empty_string(self.description)),
             search.TextField(name='source', value = empty_string(self.source)),

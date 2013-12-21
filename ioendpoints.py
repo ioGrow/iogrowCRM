@@ -511,12 +511,12 @@ class CrmEngineApi(remote.Service):
     return my_model
 
   @Opportunitystage.method(user_required=True,http_method ='DELETE',
-    path='opportunitystage/{id}',name='opportunitystages.delete'
+    path='opportunitystage/{id}',response_message=message_types.VoidMessage,name='opportunitystages.delete'
     )
   def OpportunitystageDelete(self,my_model):
     user_from_email=EndpointsHelper.require_iogrow_user()
     my_model.key.delete()
-    return my_model
+    return message_types.VoidMessage()
 
 
   # Leads APIs
