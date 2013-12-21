@@ -73,7 +73,7 @@ topicservices.factory('Show', function($http) {
           console.log(resp);
           // TME_02_11_13 when a note is inserted reload topics
           $('#newShowModal').modal('hide');
-          window.location.replace('#/shows/show/'+resp.id);
+          window.location.replace('#/live/shows/show/'+resp.id);
          // $('#addAccountModal').modal('hide');
          // window.location.replace('#/accounts/show/'+resp.id);
           

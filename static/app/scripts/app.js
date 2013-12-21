@@ -48,14 +48,6 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'CaseShowCtrl',        
         templateUrl:'/views/cases/show'
       }).
-      //Shows
-      when('/shows/', {
-        controller: 'ShowListCtrl',        
-        templateUrl:'/views/shows/list'
-      }).when('/shows/show/:showId', {
-        controller: 'ShowShowCtrl',
-        templateUrl:'/views/shows/show'
-      }).
       // Notes
       when('/notes/show/:noteId',{
       controller : 'NoteShowController',
@@ -95,5 +87,29 @@ app.config(['$routeProvider', function($routeProvider) {
         controller:'SettingsShowCtrl',
         templateUrl:'/views/admin/settings'
 
+      }).
+      //Shows
+      when('/live/shows', {
+        controller: 'ShowListCtrl',        
+        templateUrl:'/views/shows/list'
+      }).when('/live/shows/show/:showId', {
+        controller: 'ShowShowCtrl',
+        templateUrl:'/views/shows/show'
+        
+      }).when('/live/company_profile',{
+        controller:'CompanyProfileListCtrl',
+        templateUrl:'/views/live/company_profile'
+
+      }).when('/live/product_videos',{
+        controller:'ProductVideoListCtrl',
+        templateUrl:'/views/live/company_profile'
+
+      }).when('/live/customer_stories',{
+        controller:'CustomerStoriesListCtrl',
+        templateUrl:'/views/live/company_profile'
+
+      }).when('/live/feedbacks',{
+        controller:'FeedBacksListCtrl',
+        templateUrl:'/views/live/company_profile'
       });
 }]);

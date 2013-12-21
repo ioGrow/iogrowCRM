@@ -1,5 +1,5 @@
-app.controller('ShowListCtrl', ['$scope','Auth','Show',
-    function($scope,Auth,Show) {
+app.controller('ShowListCtrl', ['$scope','$filter','Auth','Show',
+    function($scope,$filter,Auth,Show) {
      $("#id_Shows").addClass("active");
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
@@ -118,7 +118,7 @@ app.controller('ShowListCtrl', ['$scope','Auth','Show',
 app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Topic','Note','Task','Event','WhoHasAccess','User',
     function($scope,$filter,$route,Auth,Show,Topic,Note,Task,Event,WhoHasAccess,User) {
       
-      $("#id_Accounts").addClass("active");
+      $("#id_Shows").addClass("active");
       var tab = $route.current.params.accountTab;
       switch (tab)
         {

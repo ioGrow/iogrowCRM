@@ -43,10 +43,10 @@ STANDARD_APPS = [{'name': 'sales', 'label': 'Sales', 'url':'/#/accounts/'},#{'na
 STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
 ADMIN_TABS = [{'name': 'Users','label': 'Users','url':'/#/admin/users'},{'name': 'Groups','label': 'Groups','url':'/#/admin/groups'},{'name': 'Settings','label': 'Settings','url':'/#/admin/settings'}]
 ADMIN_APP = {'name': 'admin', 'label': 'Admin Console', 'url':'/#/admin/users'}
-Iogrowlive_APP = {'name':'iogrowLive','label': 'Iogrow Live','url':'/live'}
-Iogrowlive_TABS = [{'name': 'Shows','label': 'Shows','url':'/#/live/shows'},{'name': 'Company profile','label': 'Company Profile','url':'/#/live/company'},
-{'name': 'Product videos','label': 'Product Videos','url':'/#/live/product_viseos'},{'name': 'Customer Stories','label': 'Customer stories','url':'/#/live/cusomer_stories'},
-{'name': 'Feed Backs','label': 'Feed Backs','url':'/#/live/feedbacks'},{'name': 'Leads','label': 'Leads','url':'/#/leads/'}]
+Iogrowlive_APP = {'name':'iogrowLive','label': 'i/o Grow Live','url':'/#/live/shows'}
+Iogrowlive_TABS = [{'name': 'Shows','label': 'Shows','url':'/#/live/shows'},{'name': 'Company_profile','label': 'Company Profile','url':'/#/live/company_profile'},
+{'name': 'Product_videos','label': 'Product Videos','url':'/#/live/product_videos'},{'name': 'Customer_Stories','label': 'Customer stories','url':'/#/live/customer_stories'},
+{'name': 'Feedbacks','label': 'Feed Backs','url':'/#/live/feedbacks'},{'name': 'Leads','label': 'Leads','url':'/#/leads/'}]
 Default_Opp_Stages = [{'name':'Incoming','probability':'5'},{'name':'Qualified','probability':'10'},{'name':'Need Analysis','probability':'40'},{'name':'Negociating','probability':'80'},{'name':'Close won','probability':'100'},{'name':'Close lost','probability':'0'}]
 Default_Case_Status =[{'status':'New'},{'status':'Working'},{'status':'Escalated'}]
 Default_Lead_Status =[{'status':'New'},{'status':'Working'},{'status':'Unqualified'},{'status':'Closed converted'}]
@@ -149,13 +149,21 @@ class Organization(EndpointsModel):
               #marketing_app = created_app.key
             if app['name']=='call_center':
               support_app = created_app.key
+
             created_apps.append(created_app.key)
+          
+          
+          
           app = ADMIN_APP
           admin_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=admin_tabs,organization=org_key)
           admin_app.put()
           app = Iogrowlive_APP
           live_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=live_tabs,organization=org_key)
           live_app.put()
+          created_apps.append(live_app.key)
+          created_tabs.extend(live_tabs)
+          
+          
 
           
           # Add profiles
@@ -170,8 +178,7 @@ class Organization(EndpointsModel):
             elif profile=='Super Administrator':
               created_apps.append(admin_app.key)
               created_tabs.extend(admin_tabs)
-              created_apps.append(live_app.key)
-              created_tabs.extend(live_tabs)
+              
 
 
 

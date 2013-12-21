@@ -460,7 +460,7 @@ class ShowListHandler(BaseHandler, SessionEnabledHandler):
             self.set_user_locale()
             # Render the template
             template_values = {'tabs':tabs}
-            template = jinja_environment.get_template('templates/shows/list.html')
+            template = jinja_environment.get_template('templates/live/shows/list_show.html')
             self.response.out.write(template.render(template_values))
 class ShowShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -474,7 +474,7 @@ class ShowShowHandler(BaseHandler, SessionEnabledHandler):
             self.set_user_locale()
             # Render the template
             template_values = {'tabs':tabs}
-            template = jinja_environment.get_template('templates/shows/show.html')
+            template = jinja_environment.get_template('templates/live/shows/show.html')
             self.response.out.write(template.render(template_values))
 class UserListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -534,6 +534,17 @@ class settingsShowHandler(BaseHandler, SessionEnabledHandler):
             template_values = {'tabs':tabs}
             template = jinja_environment.get_template('templates/admin/settings/settings.html')
             self.response.out.write(template.render(template_values))
+class CompanyProfileHandlers(BaseHandler,SessionEnabledHandler):
+  def get(self):
+    if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+      user = self.get_user_from_session()
+      self.set_user_locale()
+      tabs = user.get_user_active_tabs()
+      self.set_user_locale()
+      template_values = {'tabs':tabs}
+      template = jinja_environment.get_template('templates/live/company_profile/comp_profile_list.html')
+      self.response.out.write(template.render(template_values))
+
 class GooglePlusConnect(SessionEnabledHandler):
     @staticmethod
     def exchange_code(code):
@@ -921,6 +932,8 @@ routes = [
     ('/views/admin/groups/list',GroupListHandler),
     ('/views/admin/groups/show',GroupShowHandler),
     ('/views/admin/settings',settingsShowHandler),
+    #iogrow live App
+    ('/views/live/company_profile',CompanyProfileHandlers),
     # Applications settings
     (r'/apps/(\d+)', ChangeActiveAppHandler),
     # ioGrow Live
