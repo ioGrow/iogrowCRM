@@ -6,6 +6,8 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
 		var tab = $route.current.params.accountTab;
      $scope.oppstage = {};
      $scope.casestatus={};
+     $scope.leadstat={};
+     $scope.isLoading = false;
 
       switch (tab)
         {
@@ -91,7 +93,12 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
     console.log(oppstageId);
     Opportunitystage.delete($scope,oppstageId);
 
-  }
+  };
+
+  $scope.listoppstage = function(){
+    var params ={'order':'probability'};
+    Opportunitystage.list($scope,params);
+  };
 
 
   //HKA 12.12.2013 Add a new Case Status
@@ -128,8 +135,11 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
     $('#EditCaseStatus').modal('hide');
 
   };
+  $scope.casestatuslist = function(){
+    Casestatus.list($scope,{});
+  }
 //HKA 18.12.2013 Delete case status
-  $scope.deleteoppstage = function(oppstageId){
+  $scope.deletecasestatus = function(oppstageId){
     console.log(oppstageId);
     Opportunitystage.delete($scope,oppstageId);
 
@@ -146,26 +156,25 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
     };
     //**************HKA 19.12.2013 Update, Delete Lead status****************************************
 
-    $scope.editleadstatus = function(leadstat){
+    $scope.editleadstatus = function(leadstatus){
     
-      $scope.oppstage.name = stage.name;
-      $scope.oppstage.probability = stage.probability;
-      $scope.oppstage.id=stage.id;
-       $('#EditOppsStage').modal('show');
+      $scope.leadstat.status = leadstatus.status;
+      
+      $scope.leadstat.id=leadstatus.id;
+       $('#EditLeadStatus').modal('show');
 
 
    
   };
   
-  $scope.updateLeadstatus = function(oppstage){
-    console.log(oppstage);
-    var params ={'id':$scope.oppstage.id,
-                 'name':oppstage.name,
-                 'probability':oppstage.probability
+  $scope.updateLeadstatus = function(stat){
+    
+    var params ={'id':$scope.leadstat.id,
+                 'status':stat.status
 
     }
     Leadstatus.update($scope,params)
-    $('#EditOppsStage').modal('hide');
+    $('#EditLeadStatus').modal('hide');
       
   };
 //HKA 18.12.2013 Delete Opportunity stage
@@ -173,7 +182,10 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
     console.log(oppstageId);
     Opportunitystage.delete($scope,oppstageId);
 
-  }
+  };
+  $scope.listleadstatus = function(){
+    Leadstatus.list($scope,{});
+  };
  
 
 

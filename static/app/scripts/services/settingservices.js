@@ -28,11 +28,12 @@ settingservices.factory('Opportunitystage', function($http) {
     angular.extend(this, data);
   }
 Opportunitystage.list = function($scope,params){
-	console.log( 'I amm in opportunitystage list services')
+	$scope.isLoading = true;
 	gapi.client.crmengine.opportunitystages.list(params).execute(function(resp){
 		if(!resp.code){
 			$scope.opportunitystages = resp.items;
-      console.log($scope.opportunitystages)
+     $scope.isLoading = false;
+
 			$scope.$apply();
 
 		}
@@ -60,9 +61,11 @@ Opportunitystage.list = function($scope,params){
     }) 
   };
   Opportunitystage.update= function($scope,params){
-     console.log(params);
+     $scope.isLoading = true;
      gapi.client.crmengine.opportunitystages.patch(params).execute(function(resp){
       if (!resp.code){
+        $scope.listoppstage();
+        $scope.isLoading = false;
         $scope.$apply();
 
       }
@@ -101,9 +104,11 @@ settingservices.factory('Casestatus',function($http){
      )};
   //HKA 14.12.2013 Case status list
   Casestatus.list = function($scope,params){
+    
     gapi.client.crmengine.casestatuses.list(params).execute(function(resp){
       if(!resp.code){
         $scope.casesatuses = resp.items;
+        
         $scope.$apply();
 
       }
@@ -115,11 +120,13 @@ settingservices.factory('Casestatus',function($http){
     }
     )};
    Casestatus.update= function($scope,params){
-     console.log(params);
+     $scope.isLoading = true;
      gapi.client.crmengine.casestatuses.patch(params).execute(function(resp){
       if (!resp.code){
+        $scope.casestatuslist();
+        $scope.isLoading = false;
         $scope.$apply();
-        window.location.replace('#/admin/settings');
+        
 
       }
         else{
@@ -151,9 +158,11 @@ settingservices.factory('Leadstatus',function($http){
      )};
   //HKA 14.12.2013 Case status list
   Leadstatus.list = function($scope,params){
+    
     gapi.client.crmengine.leadstatuses.list(params).execute(function(resp){
       if(!resp.code){
         $scope.leadstatuses = resp.items;
+        $scope.isLoading = false;
         $scope.$apply();
 
       }
@@ -164,7 +173,23 @@ settingservices.factory('Leadstatus',function($http){
 
     }
     )};
-  
+
+    Leadstatus.update = function($scope,params) {
+      $scope.isLoading = true;
+      gapi.client.crmengine.leadstatuses.patch(params).execute(function(resp){
+        if (!resp.code){
+          $scope.listleadstatus();
+          $scope.isLoading = false;
+          $scope.$apply();
+        }
+          else{
+            alert("Error, response is"+angular.toJson(resp));
+          }
+
+
+      }
+
+        )};
 
 
    return Leadstatus;

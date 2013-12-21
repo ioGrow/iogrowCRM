@@ -356,19 +356,19 @@
 
     <!--End Lead Modal -->
     <!-- HKA 19.12.2013 Edit Lead status -->
-         <div id="addLeadstatustModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+         <div id="EditLeadStatus" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
                         <div class="modal-header">
                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                          <h3 id="myModalLabel">{{_("New Lead status")}}</h3>
+                          <h3 id="myModalLabel">{{_("Edit Lead status")}}</h3>
                         </div>
                         <div class="modal-body">
-                            <form id="saveLeadtatus" name="addleadstatus"  ng-submit="saveLeadtatus(lead)" class="form-horizontal"> 
+                            <form id="saveLeadtatus" name="addleadstatus"  ng-submit="updateLeadstatus(leadstat)" class="form-horizontal"> 
                             <fieldset>
                             <div class="control-group">
                               <label  class="required control-label">{{_("Lead Status")}} *</label>
                        
                               <div class="controls">
-                              <input type="text" required id="id_firstname" ng-model="lead.status">
+                              <input type="text" required id="id_firstname" ng-model="leadstat.status">
                           
                                </div>
                             </div>
@@ -379,7 +379,7 @@
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button  type="submit" class="btn green">{{_("Add Lead Status")}}</button>
+                <button  type="submit" class="btn green">{{_("Save")}}</button>
               </div>
                </form>
        </div>
