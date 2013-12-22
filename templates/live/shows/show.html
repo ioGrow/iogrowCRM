@@ -42,7 +42,7 @@
                 </div>
                 
             <h2>
-            <a href="/#/live/shows/" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
+            <a href="/#/live/shows/" data-toggle="tooltip" data-placement="bottom" title="Back to Shows">
             <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Shows")}} > <%= show.name %></h2>
             
 
@@ -104,9 +104,7 @@
                                          
                                             
                                             <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="note.content"></textarea>
-                                            <input ng-init="note.organization=1" required="" id="id_organization" type="hidden" name="organization" value="1"> 
-                                  
-                                            <input type="hidden" id="id_related_object" ng-init="note.related_object=1" value="1">
+                                            
                                           
                                          
                                          <div class="pull-right">
@@ -121,11 +119,11 @@
                                         
                             <ul class="chats">
                               <li class="in" ng-repeat="topic in topics" id="topic_<%=$index%>">
-                                <img class="avatar" alt="" src="static/img/avatar.jpg.png" />
+                                <img class="avatar" alt="" src="<%= topic.last_updater.photo%>" />
                                 <div class="message">
                                   <span class="arrow"></span>
-                                  <a href="#" class="name"><%= topic.last_updater.google_display_name%></a>
-                                  <span class="datetime">at Jul 25, 2012 11:09</span>
+                                  <a href="#" class="name"><%= topic.last_updater.display_name%></a>
+                                  <span class="datetime">at <%=topic.updated_at | date:'yyyy-MM-dd - HH:mm '  %> </span>
                                   <span class="body">
                                   <a href="/#/notes/show/<%=topic.discussionId%>" class="discussion-content"><strong class="ng-binding"><%= topic.title%></strong><span class="excerpt ng-binding"> - <%= topic.excerpt%></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <%= topic.comments%> comments</span></a>
                                   </span>
@@ -137,11 +135,11 @@
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
                                       <ul>
-                                        <li ng-show="pagination.prev"><button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                        <li ng-show="topicpagination.prev"><button ng-click="TopiclistPrevPageItems()" id="sample_editable_1_new" class="btn">
                                         {{_("Prev")}} 
                                         </button></li>
                                         
-                                        <li  ng-show="pagination.next"><button ng-click="listNextPageItems()"  class="btn">
+                                        <li  ng-show="topicpagination.next"><button ng-click="TopiclistNextPageItems()"  class="btn">
                                         {{_("Next")}} 
                                         </button></li>
                                       </ul>
@@ -521,46 +519,27 @@
         <!-- END PAGE CONTENT-->
       </div>
       <!--HKA 11.10.2013 Edit Account -->
-             <div id="EditAccountModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+             <div id="EditShowModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("Edit Account")}}</h3>
+                <h3 id="myModalLabel">{{_("Edit Show")}}</h3>
               </div>
 
               <div class="modal-body">
-                 <form id="editAccount" name="editlead" ng-submit="put(account)" class="form-horizontal"> 
+                 <form id="editShow" name="editshow" ng-submit="saveshow(show)" class="form-horizontal"> 
                 
 
                   <div class="control-group">
                         <label  class="required control-label">{{_("Name")}} *</label>
                        
                         <div class="controls">
-                          <input type="text" required id="id_lastname" ng-model="account.name">
+                          <input type="text" required id="id_lastname" ng-model="show.name">
                           
                         </div>
                     </div>
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Type")}}</label>
-                       
-                        <div class="controls">
-                          <input type="text"  id="id_type" ng-model="account.account_type">
-                          
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Industry")}} *</label>
-                       
-                        <div class="controls">
-                          <input type="text"  required id="id_industry" ng-model="account.industry">
-                          
-                        </div>
-                    </div>                      
-                  
-                     
-                    
-                  
-                
+                                     
+                                                   
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
