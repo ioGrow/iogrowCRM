@@ -17,10 +17,11 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus',
       $scope.leads = [];
       $scope.lead = {};
       $scope.lead.access ='public';
+      $scope.order = '-updated_at';
 
       // What to do after authentication
        $scope.runTheProcess = function(){
-            var params = {'limit':7};
+            var params = {'order' : $scope.order,'limit':7};
             Lead.list($scope,params);
             Leadstatus.list($scope,{});
 
@@ -35,11 +36,11 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus',
         var nextPage = $scope.currentPage + 1;
         var params = {};
           if ($scope.pages[nextPage]){
-            params = {'limit':7,
+            params = {'order' : $scope.order,'limit':7,
                       'pageToken':$scope.pages[nextPage]
                      }
           }else{
-            params = {'limit':7}
+            params = {'order' : $scope.order,'limit':7}
           }
           console.log('in listNextPageItems');
           $scope.currentPage = $scope.currentPage + 1 ; 
@@ -50,11 +51,11 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus',
        var prevPage = $scope.currentPage - 1;
        var params = {};
           if ($scope.pages[prevPage]){
-            params = {'limit':7,
+            params = {'order' : $scope.order,'limit':7,
                       'pageToken':$scope.pages[prevPage]
                      }
           }else{
-            params = {'limit':7}
+            params = {'order' : $scope.order,'limit':7}
           }
           $scope.currentPage = $scope.currentPage - 1 ;
           Lead.list($scope,params);
@@ -71,7 +72,7 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus',
         var params ={'firstname':lead.firstname,
                       'lastname':lead.lastname,
                       'company':lead.company,
-                      'position':lead.position,
+                      'title':lead.title,
                       'status':$scope.stage_selected.status};
         Lead.insert($scope,params);
         $('#addLeadModal').modal('hide')
@@ -82,7 +83,73 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus',
         }
       };
 
-     // Google+ Authentication 
+
+     // Quick Filtering
+     var searchParams ={};
+     $scope.result = undefined;
+     $scope.q = undefined;
+     
+     $scope.$watch('searchQuery', function() {
+         searchParams['q'] = $scope.searchQuery;
+         searchParams['limit'] = 7;
+         if ($scope.searchQuery){
+         Lead.search($scope,searchParams);
+       };
+     });
+     $scope.selectResult = function(){
+          window.location.replace('#/leads/show/'+$scope.searchQuery.id);
+     };
+     $scope.executeSearch = function(searchQuery){
+        if (typeof(searchQuery)=='string'){
+           var goToSearch = 'type:Lead ' + searchQuery;
+           window.location.replace('#/search/'+goToSearch);
+        }else{
+          window.location.replace('#/leads/show/'+searchQuery.id);
+        }
+        $scope.searchQuery=' ';
+        $scope.$apply();
+     };
+     // Sorting
+     $scope.orderBy = function(order){
+        var params = { 'order': order,
+                        'limit':7};
+        $scope.order = order;
+        Lead.list($scope,params);
+     };
+     $scope.filterByOwner = function(filter){
+        if (filter){
+          var params = { 'owner': filter,
+                         'order': $scope.order, 
+                         'limit':7}
+        }
+        else{
+          var params = {
+              'order': $scope.order, 
+              
+              'limit':7}
+        };
+        console.log('Filtering by');
+        console.log(params);
+        Lead.list($scope,params);
+     };
+     $scope.filterByStatus = function(filter){
+        if (filter){
+          var params = { 'status': filter,
+                         'order': $scope.order, 
+                         'limit':7}
+        }
+        else{
+          var params = {
+              'order': $scope.order, 
+              
+              'limit':7}
+        };
+        
+        Lead.list($scope,params);
+     };
+
+     
+   // Google+ Authentication 
      Auth.init($scope);
 
       

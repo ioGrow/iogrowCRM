@@ -102,6 +102,19 @@ class CaseSearchResult(messages.Message):
 class CaseSearchResults(messages.Message):
     items = messages.MessageField(CaseSearchResult, 1, repeated=True)
     nextPageToken = messages.StringField(2)
+# The message class that defines the leads.search response 
+class LeadSearchResult(messages.Message):
+    id = messages.StringField(1)
+    entityKey  = messages.StringField(2)
+    firstname = messages.StringField(3)
+    lastname = messages.StringField(4)
+    company = messages.StringField(5)
+    position = messages.StringField(6)
+    status = messages.StringField(7)
+# The message class that defines a set of leads.search results
+class LeadSearchResults(messages.Message):
+    items = messages.MessageField(LeadSearchResult, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
 # The message class that defines the schema of Attachment 
 class AttachmentSchema(messages.Message):
     id = messages.StringField(1)
@@ -547,7 +560,7 @@ class CrmEngineApi(remote.Service):
       return my_model
 
   # leads.list api
-  @Lead.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='leads',name='leads.list')
+  @Lead.query_method(user_required=True,query_fields=('limit','owner','status', 'order', 'pageToken'),path='leads',name='leads.list')
   def LeadList(self,query):
       user_from_email = EndpointsHelper.require_iogrow_user()
       return query.filter(ndb.OR(ndb.AND(Lead.access=='public',Lead.organization==user_from_email.organization),Lead.owner==user_from_email.google_user_id, Lead.collaborators_ids==user_from_email.google_user_id)).order(Lead._key)
@@ -576,6 +589,62 @@ class CrmEngineApi(remote.Service):
       # Todo: Check permissions
       my_model.put()
       return my_model
+  # leads.search api 
+  @endpoints.method(SearchRequest, LeadSearchResults,
+                      path='leads/search', http_method='POST',
+                      name='leads.search')
+  def leads_search(self, request):
+      user_from_email = EndpointsHelper.require_iogrow_user()
+      organization = str(user_from_email.organization.id())
+      
+      index = search.Index(name="GlobalIndex")
+      #Show only objects where you have permissions
+      query_string = request.q + ' type:Lead AND (organization:' +organization+ ' AND (access:public OR (owner:'+ user_from_email.google_user_id +' OR collaborators:'+ user_from_email.google_user_id+')))'
+      print query_string
+      search_results = []
+      count = 1
+      if request.limit:
+          limit = int(request.limit)
+      else:
+          limit = 10
+      next_cursor = None
+      if request.pageToken:
+          cursor = search.Cursor(web_safe_string=request.pageToken)
+      else:
+          cursor = search.Cursor(per_result=True)
+      if limit:
+          options = search.QueryOptions(limit=limit,cursor=cursor)
+      else:
+          options = search.QueryOptions(cursor=cursor)    
+      query = search.Query(query_string=query_string,options=options)
+      try:
+          if query:
+              results = index.search(query)
+              total_matches = results.number_found
+              
+              # Iterate over the documents in the results
+              for scored_document in results:
+                  kwargs = {
+                      'id' : scored_document.doc_id
+                  }
+                  for e in scored_document.fields:
+                      if e.name in ["firstname","lastname","company","position", "status"]:
+                          kwargs[e.name]=e.value
+                  
+                  search_results.append(LeadSearchResult(**kwargs))
+                  
+                  next_cursor = scored_document.cursor.web_safe_string
+              if next_cursor:
+                  next_query_options = search.QueryOptions(limit=1,cursor=scored_document.cursor)
+                  next_query = search.Query(query_string=query_string,options=next_query_options)
+                  if next_query:
+                      next_results = index.search(next_query)
+                      if len(next_results.results)==0:
+                          next_cursor = None            
+                                    
+      except search.Error:
+          logging.exception('Search failed')
+      return LeadSearchResults(items = search_results,nextPageToken=next_cursor)
 
   #HKA 14.12.2013 Lead status APIs
   @Leadstatus.method(user_required=True,path='leadstatuses',http_method='POST',name='leadstatuses.insert')
