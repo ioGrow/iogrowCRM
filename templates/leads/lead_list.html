@@ -72,7 +72,7 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label  class=" control-label">{{_("Position")}} </label>
+                        <label  class=" control-label">{{_("Title")}} </label>
                        
                         <div class="controls">
                           <input type="text"  id="id_position" ng-model="lead.title">
@@ -153,7 +153,7 @@
                                     <ul class="dropdown-menu">
                                       <li><a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All leads') }}</a></li>
                                       <li><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My leads') }}</a></li>
-                                      <li ng-repeat="stage in opportunitystages"><a ng-click="filterByStage('<%=stage.name%>')" href="#" data-toggle="modal"><%= stage.name %></a></li>
+                                      <li ng-repeat="status in leadstatuses"><a ng-click="filterByStatus('<%=status.status%>')" href="#" data-toggle="modal"><%= status.status %></a></li>
                                     </ul>
                                     {{ _('Views') }}
               </div>
@@ -164,7 +164,7 @@
                     <form class="form-inline ng-pristine ng-valid" ng-submit="executeSearch(searchQuery)">
                       <div class="input-append row-fluid">
 
-                        <input type="text" ng-model="searchQuery" typeahead="result as result.title + ' - (' + result.amount + ' with ' + result.account_name + ' )'   for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="input-xxlarge" placeholder="{{ _('Quick Filtering') }}">
+                        <input type="text" ng-model="searchQuery" typeahead="result as result.firstname + ' ' + result.lastname + ' - (' + result.position + ' , ' + result.company +' -'+ result.status + ' )'   for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="input-xxlarge" placeholder="{{ _('Quick Filtering') }}">
 
                        <button class="gbqfb gbqfb-hvr"><i class="icon-filter"></i></button>
                       </div>
@@ -172,22 +172,22 @@
                   </li> 
               </ul>
             </div>
-            <div class="span3">
-              <div class="btn-group pull-right">
+            <div class="btn-group pull-right">
                                     <a class="btn" href="#" data-toggle="dropdown">
-                                    Sort by 
+                                    Sort by
                                     <i class="icon-angle-down"></i>
                                     </a>
                                     <ul class="dropdown-menu">
                                       <li><a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a></li>
-                                      <li><a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a></li>
-                                      <li><a ng-click="orderBy('-amount')" href="#" data-toggle="modal">{{ _('Amount') }}</a></li>
-                                      <li><a ng-click="orderBy('account_name')" href="#" data-toggle="modal">{{ _('Company') }}</a></li>
-                                      <li><a ng-click="orderBy('-stage_probability')" href="#" data-toggle="modal">{{ _('Stage probability') }}</a></li>
+                                      <li><a ng-click="orderBy('firstname')" href="#" data-toggle="modal">{{ _('First Name') }}</a></li>
+                                      <li><a ng-click="orderBy('lastname')" href="#" data-toggle="modal">{{ _('Last Name') }}</a></li>
+                                      <li><a ng-click="orderBy('title')" href="#" data-toggle="modal">{{ _('Title') }}</a></li>
+                                      <li><a ng-click="orderBy('company')" href="#" data-toggle="modal">{{ _('Company') }}</a></li>
+                                      <li><a ng-click="orderBy('status')" href="#" data-toggle="modal">{{ _('Status') }}</a></li>
+                                      
+                                     
                                     </ul>
               </div>
-
-            </div>
             <br>
               <br>
             
@@ -196,20 +196,21 @@
             <div class="inner-cards-container">
             
               <div ng-repeat="lead in leads" class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                <div class="dashboard-stat cards">
+                <div class="dashboard-stat cards-small">
                   
                   <div class="details">
                     <a href="/#/leads/show/<%= lead.id %>"><h2 class="cardTitle">
                       <%= lead.firstname %> <%= lead.lastname %>
                     </h2></a>
-                    <div class="desc">                           
-                      
-                    <a class="desc" href="/#/search/type:Lead <%=lead.company%>" ng-show="lead.company" >#<%=lead.company%></a>
+                    <div class="desc">
+                      <span ng-show="lead.status" class="contact-title" >Updated at:  <%=lead.updated_at | date:'yyyy-MM-dd - HH:mm:ss ' %> </span>
+                      <span ng-show="lead.status" class="contact-title" >Status: <a class="desc" href="/#/search/type:Lead <%=lead.status%>">#<%=lead.status %></a>  </span>
+                      <br>
+                      <span ng-show="lead.title"><a  class="desc" href="/#/search/type:Lead <%=lead.title%>">#<%=lead.title%></a></span>
+                      <span ng-show="lead.company"> <span ng-show="lead.title" class="contact-title">,</span> <a  class="desc" href="/#/search/type:Lead <%=lead.company%>">#<%=lead.company%></a></span>
                     </div>
                   </div>
-                  <a class="more" href="/#/leads/show/<%= lead.id %>">
-                  {{ _("View more") }} <i class="m-icon-swapright m-icon-white"></i>
-                  </a>                 
+                                  
                 </div>
               </div>
                <div ng-show="blankState" class="span12 responsive" data-tablet="span6" data-desktop="span12">

@@ -474,6 +474,127 @@ indexes:
   - name: status
   - name: starts_at
 
+- kind: Lead
+  properties:
+  - name: access
+  - name: organization
+  - name: company
+
+- kind: Lead
+  properties:
+  - name: access
+  - name: organization
+  - name: firstname
+
+- kind: Lead
+  properties:
+  - name: access
+  - name: organization
+  - name: lastname
+
+- kind: Lead
+  properties:
+  - name: access
+  - name: organization
+  - name: status
+
+- kind: Lead
+  properties:
+  - name: access
+  - name: organization
+  - name: status
+  - name: updated_at
+    direction: desc
+
+- kind: Lead
+  properties:
+  - name: access
+  - name: organization
+  - name: title
+
+- kind: Lead
+  properties:
+  - name: access
+  - name: organization
+  - name: updated_at
+    direction: desc
+
+- kind: Lead
+  properties:
+  - name: collaborators_ids
+  - name: company
+
+- kind: Lead
+  properties:
+  - name: collaborators_ids
+  - name: firstname
+
+- kind: Lead
+  properties:
+  - name: collaborators_ids
+  - name: lastname
+
+- kind: Lead
+  properties:
+  - name: collaborators_ids
+  - name: status
+
+- kind: Lead
+  properties:
+  - name: collaborators_ids
+  - name: status
+  - name: updated_at
+    direction: desc
+
+- kind: Lead
+  properties:
+  - name: collaborators_ids
+  - name: title
+
+- kind: Lead
+  properties:
+  - name: collaborators_ids
+  - name: updated_at
+    direction: desc
+
+- kind: Lead
+  properties:
+  - name: owner
+  - name: company
+
+- kind: Lead
+  properties:
+  - name: owner
+  - name: firstname
+
+- kind: Lead
+  properties:
+  - name: owner
+  - name: lastname
+
+- kind: Lead
+  properties:
+  - name: owner
+  - name: status
+
+- kind: Lead
+  properties:
+  - name: owner
+  - name: status
+  - name: updated_at
+    direction: desc
+
+- kind: Lead
+  properties:
+  - name: owner
+  - name: title
+
+- kind: Lead
+  properties:
+  - name: owner
+  - name: updated_at
+    direction: desc
+
 - kind: Member
   properties:
   - name: groupKey

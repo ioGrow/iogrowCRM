@@ -96,6 +96,17 @@ leadservices.factory('Lead', function($http) {
          }
       });
   };
+  Lead.search = function($scope,params){
+      gapi.client.crmengine.leads.search(params).execute(function(resp) {
+          console.log(resp);
+           if (resp.items){
+              $scope.results = resp.items;
+              
+              $scope.$apply();
+            };
+            
+      });
+  };
   
 
 return Lead;
