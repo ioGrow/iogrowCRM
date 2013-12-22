@@ -115,6 +115,9 @@ class LeadSearchResult(messages.Message):
 class LeadSearchResults(messages.Message):
     items = messages.MessageField(LeadSearchResult, 1, repeated=True)
     nextPageToken = messages.StringField(2)
+# The message class that defines a response for leads.convert api
+class ConvertedLead(messages.Message):
+    id = messages.IntegerField(1)
 # The message class that defines the schema of Attachment 
 class AttachmentSchema(messages.Message):
     id = messages.StringField(1)
@@ -184,7 +187,7 @@ class EndpointsHelper(EndpointsModel):
         return user_from_email
 
     @classmethod
-    def insert_folder(cls,user,folder_name):
+    def insert_folder(cls,user,folder_name,kind):
         try:
             credentials = user.google_credentials
             http = credentials.authorize(httplib2.Http(memcache))
@@ -196,16 +199,36 @@ class EndpointsHelper(EndpointsModel):
                         'title': folder_name,
                         'mimeType':  'application/vnd.google-apps.folder'         
             }#get the accounts_folder or contacts_folder or .. 
-            
-            parent_folder = organization.accounts_folder
+            parent_folder = eval('organization.'+FOLDERS[kind])
             if parent_folder:
                 folder_params['parents'] = [{'id': parent_folder}]
             
             # execute files.insert and get resource_id
-            created_folder = service.files().insert(body=folder_params).execute()
+            created_folder = service.files().insert(body=folder_params,fields='id').execute()
         except:
             raise endpoints.UnauthorizedException(cls.INVALID_GRANT)
         return created_folder
+    @classmethod
+    def move_folder(cls,user,folder,new_kind):
+        
+            credentials = user.google_credentials
+            http = credentials.authorize(httplib2.Http(memcache))
+            service = build('drive', 'v2', http=http)
+            organization = user.organization.get()
+            new_parent = eval('organization.'+FOLDERS[new_kind])
+            params = {
+              "parents": 
+              [
+                {
+                  "id": new_parent
+                }
+              ]
+            }
+
+            moved_folder = service.files().patch(fileId=folder,body=params,fields='id').execute()
+        
+            return moved_folder
+
 
 @endpoints.api(name='iogrowlive', version='v1', description='i/oGrow Live APIs',allowed_client_ids=[CLIENT_ID,
                                    endpoints.API_EXPLORER_CLIENT_ID],scopes=SCOPES)
@@ -214,19 +237,7 @@ class LiveApi(remote.Service):
   ID_RESOURCE = endpoints.ResourceContainer(
             message_types.VoidMessage,
             id=messages.StringField(1))
-  # Accounts APIs
-  # accounts.insert api
-  @Account.method(user_required=True,path='accounts', http_method='POST', name='accounts.insert')
-  def AccountInsert(self, my_model):
-      user_from_email = EndpointsHelper.require_iogrow_user()
-      created_folder = EndpointsHelper.insert_folder(user_from_email,my_model.name)
-      # Todo: Check permissions
-      my_model.owner = user_from_email.google_user_id
-      my_model.organization = user_from_email.organization
-      my_model.folder = created_folder['id']
-      my_model.put()
-      return my_model
-    
+
 @endpoints.api(name='crmengine', version='v1', description='I/Ogrow CRM APIs',allowed_client_ids=[CLIENT_ID,
                                    endpoints.API_EXPLORER_CLIENT_ID],scopes=SCOPES)
 class CrmEngineApi(remote.Service):
@@ -239,7 +250,7 @@ class CrmEngineApi(remote.Service):
   @Account.method(user_required=True,path='accounts', http_method='POST', name='accounts.insert')
   def AccountInsert(self, my_model):
       user_from_email = EndpointsHelper.require_iogrow_user()
-      created_folder = EndpointsHelper.insert_folder(user_from_email,my_model.name)
+      created_folder = EndpointsHelper.insert_folder(user_from_email,my_model.name,'Account')
       # Todo: Check permissions
       my_model.owner = user_from_email.google_user_id
       my_model.organization = user_from_email.organization
@@ -329,7 +340,7 @@ class CrmEngineApi(remote.Service):
       user_from_email = EndpointsHelper.require_iogrow_user()
       # OAuth flow
       folder_name = my_model.firstname + ' ' + my_model.lastname
-      created_folder = EndpointsHelper.insert_folder(user_from_email,folder_name)
+      created_folder = EndpointsHelper.insert_folder(user_from_email,folder_name,'Contact')
       # Todo: Check permissions
       my_model.owner = user_from_email.google_user_id
       my_model.organization = user_from_email.organization
@@ -415,7 +426,7 @@ class CrmEngineApi(remote.Service):
   def OpportunityInsert(self, my_model):
       user_from_email = EndpointsHelper.require_iogrow_user()
       # OAuth flow
-      created_folder = EndpointsHelper.insert_folder(user_from_email,my_model.name)
+      created_folder = EndpointsHelper.insert_folder(user_from_email,my_model.name,'Opportunity')
       # Todo: Check permissions
       my_model.owner = user_from_email.google_user_id
       my_model.organization = user_from_email.organization
@@ -551,7 +562,7 @@ class CrmEngineApi(remote.Service):
       user_from_email = EndpointsHelper.require_iogrow_user()
       # OAuth flow
       folder_name = my_model.firstname + ' ' + my_model.lastname
-      created_folder = EndpointsHelper.insert_folder(user_from_email,folder_name)
+      created_folder = EndpointsHelper.insert_folder(user_from_email,folder_name,'Lead')
       # Todo: Check permissions
       my_model.owner = user_from_email.google_user_id
       my_model.organization = user_from_email.organization
@@ -589,6 +600,57 @@ class CrmEngineApi(remote.Service):
       # Todo: Check permissions
       my_model.put()
       return my_model
+  # leads.convert api
+  @endpoints.method(ID_RESOURCE, ConvertedLead,
+                      path='leads/convert/{id}', http_method='POST',
+                      name='leads.convert')
+  def leads_convert(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        try:
+            lead = Lead.get_by_id(int(request.id))
+        except (IndexError, TypeError):
+                raise endpoints.NotFoundException('Lead %s not found.' %
+                                                  (request.id,))
+        moved_folder = EndpointsHelper.move_folder(user_from_email,lead.folder,'Contact')
+        contact = Contact(owner = lead.owner,
+                              organization = lead.organization,
+                              collaborators_ids = lead.collaborators_ids,
+                              collaborators_list = lead.collaborators_list,
+                              folder = moved_folder['id'],
+                              firstname = lead.firstname,
+                              lastname = lead.lastname,
+                              title = lead.title)
+        if lead.company:
+                created_folder = EndpointsHelper.insert_folder(user_from_email,lead.company,'Account')
+                account = Account(owner = lead.owner,
+                                  organization = lead.organization,
+                                  collaborators_ids = lead.collaborators_ids,
+                                  collaborators_list = lead.collaborators_list,
+                                  account_type = 'prospect',
+                                  name=lead.company,
+                                  folder = created_folder['id'])
+                account.put()
+                contact.account_name = lead.company
+                contact.account = account.key
+        contact.put()
+        notes = Note.query().filter(Note.about_kind=='Lead',Note.about_item==str(lead.key.id())).fetch()
+        for note in notes:
+            note.about_kind = 'Contact'
+            note.about_item = str(contact.key.id())
+            note.put()
+        tasks = Task.query().filter(Task.about_kind=='Lead',Task.about_item==str(lead.key.id())).fetch()
+        for task in tasks:
+            task.about_kind = 'Contact'
+            task.about_item = str(contact.key.id())
+            task.put()
+        events = Event.query().filter(Event.about_kind=='Lead',Event.about_item==str(lead.key.id())).fetch()
+        for event in events:
+            event.about_kind = 'Contact'
+            event.about_item = str(contact.key.id())
+            event.put()
+        lead.key.delete()
+        
+        return ConvertedLead(id = contact.key.id())
   # leads.search api 
   @endpoints.method(SearchRequest, LeadSearchResults,
                       path='leads/search', http_method='POST',
@@ -684,7 +746,7 @@ class CrmEngineApi(remote.Service):
   @Case.method(user_required=True,path='cases',http_method='POST',name='cases.insert')
   def CaseInsert(self, my_model):
       user_from_email = EndpointsHelper.require_iogrow_user()
-      created_folder = EndpointsHelper.insert_folder(user_from_email,my_model.name)
+      created_folder = EndpointsHelper.insert_folder(user_from_email,my_model.name,'Case')
       # Todo: Check permissions
       my_model.owner = user_from_email.google_user_id
       my_model.organization = user_from_email.organization
@@ -829,7 +891,7 @@ class CrmEngineApi(remote.Service):
   def shows_insert(self, my_model):
       user_from_email = EndpointsHelper.require_iogrow_user()
       # OAuth flow
-      created_folder = EndpointsHelper.insert_folder(user_from_email,my_model.name)
+      created_folder = EndpointsHelper.insert_folder(user_from_email,my_model.name,'Show')
       # Todo: Check permissions
       my_model.owner = user_from_email.google_user_id
       my_model.organization = user_from_email.organization
