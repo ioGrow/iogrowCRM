@@ -115,7 +115,7 @@ app.controller('ProductVideoListCtrl', ['$scope','$filter','Auth','Show',
     
 }]);
 
-app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Topic','Note','Task','Event','WhoHasAccess','User',
+app.controller('ProductVideoShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Topic','Note','Task','Event','WhoHasAccess','User',
     function($scope,$filter,$route,Auth,Show,Topic,Note,Task,Event,WhoHasAccess,User) {
       
       $("#id_Shows").addClass("active");

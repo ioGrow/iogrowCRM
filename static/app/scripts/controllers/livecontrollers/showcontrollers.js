@@ -341,9 +341,21 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Top
 
 
 
-    $scope.editaccount = function() {
-       $('#EditAccountModal').modal('show');
-    }
+    /*$scope.editaccount = function() {
+       $('#EditShowDescription').modal('show');
+    }*/
+
+ $scope.editdescription = function(){
+  $('#EditShowDescription').modal('show');
+}
+  
+ $scope.updateDescription = function(show){
+  var params = {'id':show.id,
+    'description':show.description};
+    Show.update($scope,params);
+   $('#EditShowDescription').modal('hide');
+ };
+
 
       
 // Google+ Authentication 

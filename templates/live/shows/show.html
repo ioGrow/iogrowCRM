@@ -76,7 +76,7 @@
               <!-- BEGIN PORTLET-->
               <div class="portlet paddingless">
                 <div class="portlet-title line">
-                  <div class="caption">Account Feeds</div>
+                  <div class="caption">Show Feeds</div>
                   
                 </div>
                 <div class="portlet-body">
@@ -169,21 +169,48 @@
                                 <h3>About</h3>
                                 <div class="news-block-tags">
                                   <strong>When: </strong>
-                                    Nov. 12 1 p.m.-1:25 p.m. (CST)
+                                   <%= show.starts_at | date:'MMM dd, yyyy, HH:mm'%> To <%=show.ends_at | date:'MMM dd, yyyy, HH:mm'%>
                                 </div>
                                 <p></p>
                                 <div class="news-block-tags">
                                   <strong>Short description</strong>
-                                  
+                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="editdescription()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
                                 </div>
-                                <p>Appirio is a global technology-enabled services provider, helping companies power their business with cloud, social and mobile technologies from leaders like salesforce.com, Google and Workday. Appirio has worked with more than 400 enterprise customers including organizations like the City of Los Angeles, Facebook, Flextronics, International Hotels Group, Japan Post Network, Ltd., L'Oreal, NetApp, NYU, Starbucks, Thomson Reuters and VMware. Appirio's technology-enabled professional services are supported by a team of 600 cloud experts and CloudSpokes, a more than 70,000 person-strong global cloud developer community. The company's expertise and innovation have been recognized by organizations such as the World Economic Forum, Bloomberg BusinessWeek, The Wall Street Journal, InformationWeek and IDC. Appirio has offices that span the U.S., Europe and Asia Pacific, and is backed by Sequoia Capital, GGV Capital and General Atlantic.</p>                         
+                                  
+                                <p><%=show.description %></p>                         
                               </div>
                             
                           </div>
                           
                         </div>
+                     
                           
                         
+                      </div>
+                        <!--HKA 22.12.2013 Edit  show description -->
+                      <div id="EditShowDescription" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                          <div class="modal-header">
+                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                               <h3 id="myModalLabel">{{_("Edit Description")}}</h3>
+                          </div>
+                       <div class="modal-body">
+                             <form id="editTagline" name="editlead" ng-submit="updateDescription(show)" class="form-horizontal">
+                          <div class="control-group">
+                            <label  class=" control-label">{{_("Description")}} </label>
+                       
+                            <div class="controls">
+                          
+                                <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="show.description"></textarea>
+                           </div>
+                        </div> 
+                            
+                      </div>
+                      <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
+                        <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+                        
+                      </div>
+                        </form> 
                       </div>
                       <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3">
                           

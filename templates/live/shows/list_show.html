@@ -107,11 +107,11 @@
                   
                   <div class="details">
                     <a href="/#/live/shows/show/<%= show.id %>"><h3 class="relatedcardOppTitle">
-                                    <%= show.name%> <%=show.organization_name%> 
+                                    <%= show.name%> 
                                     </h3></a>
                     <div class="desc">                           
                       
-                    <a  class="desc" href="/#/search/type:Show <%=show.organization_name%>"> <%=show.organization_name%> </a> 
+                    <span ng-repeat="tag in show.tags"><a class="tag" href="/#/search/type:Show <%=tag%>"> <%=tag%> </a></span>
                     </div>
                   </div>
                                   

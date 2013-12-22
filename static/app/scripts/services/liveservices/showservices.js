@@ -86,6 +86,13 @@ topicservices.factory('Show', function($http) {
       });
   };
 
+  Show.update = function($scope,params){
+    gapi.client.crmengine.shows.patch(params).execute(function(resp){
+
+    }
+
+      )};
+
   
 
 return Show;
