@@ -107,13 +107,26 @@
                   
                   <div class="details">
                     <a href="/#/live/shows/show/<%= show.id %>"><h3 class="relatedcardOppTitle">
-                                    <%= show.name%>
+                                    <%= show.name%> <%=show.organization_name%> 
                                     </h3></a>
                     <div class="desc">                           
                       
-                    <a ng-repeat="tag in show.tags" class="desc" href="/#/accounts/industry/<%=account.industry%>"> <%=tag%> </a> 
+                    <a  class="desc" href="/#/search/type:Show <%=show.organization_name%>"> <%=show.organization_name%> </a> 
                     </div>
                   </div>
+                                  
+                </div>
+              </div>
+              <div ng-show="blankState" class="span12 responsive" data-tablet="span6" data-desktop="span12">
+                <div class="dashboard-stat cards">
+                  
+                  
+                  <div class="blank_slate_arrow"></div>
+                  <div class="blank_slate_body">
+                      <img src="/static/img/accounts_blank.png">
+                      <p class="lead">{{ _('Shows pages  let you schedule your hangouts (classes), share your knowledge and be usefull.') }}</p>
+                  </div>
+               
                                   
                 </div>
               </div>
