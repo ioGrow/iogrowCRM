@@ -138,20 +138,20 @@
                           <h3 id="myModalLabel">{{_("Edit Opportunity Stage")}}</h3>
                         </div>
                 <div class="modal-body">
-                            <form id="addOppStage" name="addOppStage"  ng-submit="updateOppStage(oppstage)" class="form-horizontal"> 
+                            <form id="addOppStage" name="addOppStage"  ng-submit="updateOppStage(oppstageedit)" class="form-horizontal"> 
                             <fieldset>
                             <div class="control-group">
                               <label  class="required control-label">{{_("Name")}} *</label>
                        
                               <div class="controls">
-                              <input type="text" required id="id_firstname" ng-model="oppstage.name">
+                              <input type="text" required id="id_firstname" ng-model="oppstageedit.name">
                           
                                </div>
                             </div>
                            <div class="control-group">
                               <label  class=" control-label">{{_("Probability")}}</label>
                               <div class="controls">
-                              <input type="text"  id="id_lastname" ng-model="oppstage.probability">
+                              <input type="text"  id="id_lastname" ng-model="oppstageedit.probability">
                           
                               </div>
                            </div>
@@ -189,7 +189,7 @@
                                     </h3></a>
                                     <div class="desc">    
                                                              
-                                        <span class="page-meta"><i class="icon-pencil"><a ng-click="editcasestatus(casestate)" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |<i class="icon-trash"></i>  <a ng-click="deleteoppstage(stage.id)" class="btn-link addAnotherPhone">{{_("Delete")}}</a></span>
+                                        <span class="page-meta"><i class="icon-pencil"><a ng-click="editcasestatus(casestate)" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |<i class="icon-trash"></i>  <a ng-click="deletecasestatus(casestate)" class="btn-link addAnotherPhone">{{_("Delete")}}</a></span>
                                     
                                     </div>
                                   </div>
@@ -224,7 +224,7 @@
                           <h3 id="myModalLabel">{{_("New Case Status")}}</h3>
                         </div>
                         <div class="modal-body">
-                            <form id="addcasestatus" name="addcasestatus"  ng-submit="updateCasestatus(casestatus)" class="form-horizontal"> 
+                            <form id="addcasestatus" name="addcasestatus"  ng-submit="saveCaseStatus(casestatus)" class="form-horizontal"> 
                             <fieldset>
                             <div class="control-group">
                               <label  class="required control-label">{{_("Case Status")}} *</label>
@@ -253,13 +253,13 @@
                           <h3 id="myModalLabel">{{_("Edit Case Status")}}</h3>
                         </div>
                         <div class="modal-body">
-                            <form id="addcasestatus" name="addcasestatus"  ng-submit="updateCasestatus(casestatus)" class="form-horizontal"> 
+                            <form id="addcasestatus" name="addcasestatus"  ng-submit="updateCasestatus(casestatusedit)" class="form-horizontal"> 
                    <fieldset>
                             <div class="control-group">
                               <label  class="required control-label">{{_("Case Status")}} *</label>
                        
                               <div class="controls">
-                              <input type="text" required id="id_firstname" ng-model="casestatus.status">
+                              <input type="text" required id="id_firstname" ng-model="casestatusedit.status">
                           
                                </div>
                             </div>
@@ -297,7 +297,7 @@
                                     </h3></a>
                                     <div class="desc">    
                                                              
-                                        <span class="page-meta"><i class="icon-pencil"><a ng-click="editleadstatus(leadstat)" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |<i class="icon-trash"></i>  <a ng-click="deleteoppstage(stage.id)" class="btn-link addAnotherPhone">{{_("Delete")}}</a></span>
+                                        <span class="page-meta"><i class="icon-pencil"><a ng-click="editleadstatus(leadstat)" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |<i class="icon-trash"></i>  <a ng-click="deletleadstatus(leadstat)" class="btn-link addAnotherPhone">{{_("Delete")}}</a></span>
                                     
                                     </div>
                                   </div>
