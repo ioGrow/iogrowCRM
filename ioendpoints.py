@@ -521,9 +521,9 @@ class CrmEngineApi(remote.Service):
     if not my_model.from_datastore:
       raise('Opportunity stage not found')
     return my_model
-
-  @Opportunitystage.method(user_required=True,http_method ='DELETE',
-    path='opportunitystage/{id}',response_message=message_types.VoidMessage,name='opportunitystages.delete'
+  @Opportunitystage.method(request_fields=('id',),
+    response_message=message_types.VoidMessage,
+    http_method ='DELETE',path='opportunitystage/{id}',name='opportunitystages.delete'
     )
   def OpportunitystageDelete(self,my_model):
     user_from_email=EndpointsHelper.require_iogrow_user()

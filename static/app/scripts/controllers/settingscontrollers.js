@@ -89,9 +89,10 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
       
   };
 //HKA 18.12.2013 Delete Opportunity stage
-  $scope.deleteoppstage = function(oppstageId){
-    console.log(oppstageId);
-    Opportunitystage.delete($scope,oppstageId);
+  $scope.deleteoppstage = function(oppstage){
+    
+    var params={'id':oppstage.id};
+    Opportunitystage.delete($scope,params);
 
   };
 

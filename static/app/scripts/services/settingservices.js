@@ -53,10 +53,12 @@ Opportunitystage.list = function($scope,params){
     })
     };
   Opportunitystage.delete = function($scope,id){
-    
+     $scope.isLoading = true;
     gapi.client.crmengine.opportunitystages.delete(id).execute(function(resp){
      console.log('I am on delete services');
      console.log(id);
+     $scope.listoppstage();
+      $scope.isLoading = false;
           $scope.$apply();
     }) 
   };
