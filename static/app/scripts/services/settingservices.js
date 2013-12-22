@@ -85,7 +85,11 @@ Opportunitystage.list = function($scope,params){
 
 
   Opportunitystage.insert = function($scope,params){
+    $scope.isLoading = true;
     gapi.client.crmengine.opportunitystages.insert(params).execute(function(resp){
+      $scope.listoppstage();
+      $scope.isLoading = true;
+      $scope.$apply();
 
 
     }
@@ -100,7 +104,11 @@ settingservices.factory('Casestatus',function($http){
   };
   //HKA 14.12.2013 Case status Insert
   Casestatus.insert = function($scope,params){
+     $scope.isLoading = true;
     gapi.client.crmengine.casestatuses.insert(params).execute(function(resp){
+       $scope.casestatuslist();
+       $scope.isLoading = false;
+       $scope.$apply();
      
     }
      )};
@@ -136,10 +144,17 @@ settingservices.factory('Casestatus',function($http){
 
         }
 
-    }
+    })};
 
-      ) 
-
+  Casestatus.delete = function($scope,id){
+     $scope.isLoading = true;
+    gapi.client.crmengine.casestatuses.delete(id).execute(function(resp){
+       console.log('I am on casestatuses delete services');
+       
+       $scope.casestatuslist();
+       $scope.isLoading = false;
+       $scope.$apply();
+    }) 
   };
   
 
@@ -154,7 +169,18 @@ settingservices.factory('Leadstatus',function($http){
   };
   //HKA 14.12.2013 Case status Insert
   Leadstatus.insert = function($scope,params){
+    $scope.isLoading = true;
     gapi.client.crmengine.leadstatuses.insert(params).execute(function(resp){
+      if(!resp.code){
+        $scope.listleadstatus();
+        $scope.isLoading = false;
+        $scope.$apply();
+
+      }
+
+        else{
+          alert("Error, response is:"+angular.toJson(resp));
+        }
      
     }
      )};
@@ -192,6 +218,18 @@ settingservices.factory('Leadstatus',function($http){
       }
 
         )};
+
+
+  Leadstatus.delete = function($scope,id){
+     $scope.isLoading = true;
+    gapi.client.crmengine.leadstatuses.delete(id).execute(function(resp){
+      
+       
+        $scope.listleadstatus();
+       $scope.isLoading = false;
+       $scope.$apply();
+    }) 
+  };
 
 
    return Leadstatus;

@@ -600,11 +600,15 @@ class CrmEngineApi(remote.Service):
     user_from_email = EndpointsHelper.require_iogrow_user()
     my_model.put()
     return my_model
-  @Leadstatus.method(user_required=True,path='leadstatuses/{id}',http_method ='DELETE',name='leadstatuses.delete')
+  @Leadstatus.method(request_fields=('id',),
+    response_message=message_types.VoidMessage,
+    http_method ='DELETE',path='leadstatuses/{id}',name='leadstatuses.delete'
+    )
   def LeadstatusDelete(self,my_model):
     user_from_email=EndpointsHelper.require_iogrow_user()
     my_model.key.delete()
-    return my_model
+    return message_types.VoidMessage()
+  
 
   # Cases API 
   # cases.insert api 
@@ -741,11 +745,15 @@ class CrmEngineApi(remote.Service):
     user_from_email = EndpointsHelper.require_iogrow_user()
     my_model.put()
     return my_model
-  @Casestatus.method(user_required=True,path='casestatuses/{id}',http_method='DELETE',name='casestatuses.delete')
+  @Casestatus.method(request_fields=('id',),
+    response_message=message_types.VoidMessage,
+    http_method ='DELETE',path='casestatuses/{id}',name='casestatuses.delete'
+    )
   def CasestatusDelete(self,my_model):
     user_from_email=EndpointsHelper.require_iogrow_user()
     my_model.key.delete()
-    return my_model
+    return message_types.VoidMessage()
+  
   # Shows API
   # shows.insert api
   @Show.method(user_required=True,path='shows',http_method='POST',name='shows.insert')

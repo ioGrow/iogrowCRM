@@ -5,8 +5,11 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
 
 		var tab = $route.current.params.accountTab;
      $scope.oppstage = {};
+     $scope.oppstageedit = {};
      $scope.casestatus={};
+     $scope.casestatusedit={};
      $scope.leadstat={};
+     $scope.leadstatedit={};
      $scope.isLoading = false;
 
       switch (tab)
@@ -58,9 +61,8 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
 
     };
    Opportunitystage.insert($scope,params);
-   $('#addOppStagetModal').modal('hide');
-     $scope.renderSignIn();
-     $scope.oppstage.name='';
+    $('#addOppStagetModal').modal('hide');
+    $scope.oppstage.name='';
      $scope.oppstage.probability='';
    //window.location.replace('#/admin/settings');
    
@@ -68,9 +70,9 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
   //HKA 15.12.2013 Edit opportunity stage
   $scope.editopportunitystage = function(stage){
     console.log(stage);
-      $scope.oppstage.name = stage.name;
-      $scope.oppstage.probability = stage.probability;
-      $scope.oppstage.id=stage.id;
+      $scope.oppstageedit.name = stage.name;
+      $scope.oppstageedit.probability = stage.probability;
+      $scope.oppstageedit.id=stage.id;
        $('#EditOppsStage').modal('show');
 
 
@@ -79,13 +81,15 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
   //18.12.2013 HKA  Update Opportunity stage
   $scope.updateOppStage = function(oppstage){
     console.log(oppstage);
-    var params ={'id':$scope.oppstage.id,
+    var params ={'id':$scope.oppstageedit.id,
                  'name':oppstage.name,
                  'probability':oppstage.probability
 
     }
     Opportunitystage.update($scope,params)
     $('#EditOppsStage').modal('hide');
+    $scope.oppstage.name='';
+    $scope.oppstage.probability='';
       
   };
 //HKA 18.12.2013 Delete Opportunity stage
@@ -105,9 +109,7 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
   //HKA 12.12.2013 Add a new Case Status
 
   $scope.saveCaseStatus = function(casestatus){
-    var params={'status':casestatus.status
-
-    };
+    var params={'status':casestatus.status};
    Casestatus.insert($scope,params);
    $('#addCasestatustModal').modal('hide');
    
@@ -120,15 +122,15 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
   //HKA 15.12.2013 Edit case status
   $scope.editcasestatus = function(casestat){
       console.log('I am on edit case status');
-      $scope.casestatus.status = casestat.status;
-      $scope.casestatus.id=casestat.id;
+      $scope.casestatusedit.status = casestat.status;
+      $scope.casestatusedit.id=casestat.id;
        $('#EditCaseStatus').modal('show');
    
   };
   //18.12.2013 HKA  Update case status
   $scope.updateCasestatus = function(casestat){
     console.log('I am on update  case status');
-    var params ={'id':$scope.casestatus.id,
+    var params ={'id':$scope.casestatusedit.id,
                  'status':casestat.status
 
     }
@@ -140,9 +142,10 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
     Casestatus.list($scope,{});
   }
 //HKA 18.12.2013 Delete case status
-  $scope.deletecasestatus = function(oppstageId){
-    console.log(oppstageId);
-    Opportunitystage.delete($scope,oppstageId);
+  $scope.deletecasestatus = function(casestate){
+    
+     var params={'id':casestate.id};
+    Casestatus.delete($scope,params);
 
   };
    //HKA 12.12.2013 Add a new Lead status
@@ -178,12 +181,13 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
     $('#EditLeadStatus').modal('hide');
       
   };
-//HKA 18.12.2013 Delete Opportunity stage
-  $scope.deletleadstatus = function(oppstageId){
-    console.log(oppstageId);
-    Opportunitystage.delete($scope,oppstageId);
+//HKA 22.12.2013 Delete Lead status
+  $scope.deletleadstatus = function(leadstat){
+     var params={'id':leadstat.id};
+    Leadstatus.delete($scope,params);
 
   };
+  
   $scope.listleadstatus = function(){
     Leadstatus.list($scope,{});
   };
