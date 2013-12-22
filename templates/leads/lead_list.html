@@ -75,7 +75,7 @@
                         <label  class=" control-label">{{_("Position")}} </label>
                        
                         <div class="controls">
-                          <input type="text"  id="id_position" ng-model="lead.position">
+                          <input type="text"  id="id_position" ng-model="lead.title">
                           
                         </div>
                     </div>
@@ -142,7 +142,56 @@
           </div>
         </div>
 
+            <!-- Filtering and sorting -->
+          <div class="row-fluid" ng-show="leads">
+            <div class="span2">
+              <div class="btn-group">
+                                    <a class="btn" href="#" data-toggle="dropdown">
+                                      {{ _('Filter by') }}
+                                    <i class="icon-angle-down"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                      <li><a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All leads') }}</a></li>
+                                      <li><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My leads') }}</a></li>
+                                      <li ng-repeat="stage in opportunitystages"><a ng-click="filterByStage('<%=stage.name%>')" href="#" data-toggle="modal"><%= stage.name %></a></li>
+                                    </ul>
+                                    {{ _('Views') }}
+              </div>
+            </div>
+            <div class="span7">
+              <ul class="nav search-form-top"> 
+                  <li>    
+                    <form class="form-inline ng-pristine ng-valid" ng-submit="executeSearch(searchQuery)">
+                      <div class="input-append row-fluid">
+
+                        <input type="text" ng-model="searchQuery" typeahead="result as result.title + ' - (' + result.amount + ' with ' + result.account_name + ' )'   for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="input-xxlarge" placeholder="{{ _('Quick Filtering') }}">
+
+                       <button class="gbqfb gbqfb-hvr"><i class="icon-filter"></i></button>
+                      </div>
+                    </form>
+                  </li> 
+              </ul>
+            </div>
+            <div class="span3">
+              <div class="btn-group pull-right">
+                                    <a class="btn" href="#" data-toggle="dropdown">
+                                    Sort by 
+                                    <i class="icon-angle-down"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                      <li><a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a></li>
+                                      <li><a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a></li>
+                                      <li><a ng-click="orderBy('-amount')" href="#" data-toggle="modal">{{ _('Amount') }}</a></li>
+                                      <li><a ng-click="orderBy('account_name')" href="#" data-toggle="modal">{{ _('Company') }}</a></li>
+                                      <li><a ng-click="orderBy('-stage_probability')" href="#" data-toggle="modal">{{ _('Stage probability') }}</a></li>
+                                    </ul>
+              </div>
+
+            </div>
+            <br>
+              <br>
             
+          </div>
             <div class="row-fluid cards-container">
             <div class="inner-cards-container">
             
