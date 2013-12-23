@@ -66,6 +66,7 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus',
         $('#addLeadModal').modal('show');
 
       };
+
       
     
       $scope.save = function(lead){
@@ -546,6 +547,16 @@ $scope.updateintro = function(lead){
   Lead.patch($scope,params);
   $('#EditIntroModal').modal('hide');
 };
+
+      $scope.showConvertModal = function(){
+        $('#convertLeadModal').modal('show');
+
+      };
+      $scope.convert = function(){
+        var leadid = {'id':$route.current.params.leadId};
+        Lead.convert($scope,leadid);
+      }
+      
     // Google+ Authentication 
      Auth.init($scope);
 

@@ -96,6 +96,28 @@ leadservices.factory('Lead', function($http) {
          }
       });
   };
+  Lead.convert = function($scope,id){
+      $scope.isLoading = true;
+      gapi.client.crmengine.leads.convert(id).execute(function(resp) {
+         console.log('in insert resp');
+         console.log(resp);
+         if(!resp.code){
+          $scope.isLoading = false;
+          $('#convertLeadModal').modal('hide');
+          window.location.replace('#/contacts/show/'+resp.id);
+          
+         }else{
+            console.log(resp.message);
+             $('#addLeadModal').modal('hide');
+             $('#errorModal').modal('show');
+             if(resp.message=="Invalid grant"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+             };
+         }
+      });
+  };
   Lead.search = function($scope,params){
       gapi.client.crmengine.leads.search(params).execute(function(resp) {
           console.log(resp);
