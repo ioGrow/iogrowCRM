@@ -167,9 +167,10 @@
                                 <h3>About</h3>
                                 <div class="news-block-tags">
                                   <strong>When: </strong>
-                                   <%= show.starts_at | date:'MMM dd, yyyy, HH:mm'%> To <%=show.ends_at | date:'MMM dd, yyyy, HH:mm'%>
+                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="editdescription()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
+                                  
                                 </div>
-                                <p></p>
+                                <p> <%= show.starts_at | date:'MMM dd, yyyy, HH:mm'%> To <%=show.ends_at | date:'MMM dd, yyyy, HH:mm'%></p>
                                 <div class="news-block-tags">
                                   <strong>Short description</strong>
                                   <span class="page-meta"><i class="icon-pencil"><a ng-click="editdescription()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
@@ -410,14 +411,14 @@
                 <div class="portlet-body" id="chats">
                   <div class="scroller" style="height:200x" data-always-visible="1" data-rail-visible="0">
                     <div id="newTask">
-                                <p><strong>Tasks:</strong><a href="#"> [View all(25)]</a></p>
+                                <p><strong>Tasks:</strong><a href="#"> </a></p>
 
                                  
                                   <ul id="tasks" class="unstyled">
                                     <li ng-repeat="task in tasks" id="task_<%=$index%>">
                                       <input value="check1" type="checkbox">
                                       <!-- Name -->
-                                    <span><a href="/tasks/1" class="discussion-content"><%= task.title%> <span ng-show="task.due"> [before: <%= task.due | date:'yyyy-MM-dd '%>]</span></a></span>
+                                    <span><a href="/#/tasks/show/<%=task.id%>" class="discussion-content"><%= task.title%> <span ng-show="task.due"> [before: <%= task.due | date:'yyyy-MM-dd '%>]</span></a></span>
                                     </li>
                                     
                                     <li><a href="#myModal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new task</a></li>
@@ -431,7 +432,7 @@
                                     <li ng-repeat="event in events" id="event_<%=$index%>">
                                       <input value="check1" type="checkbox">
                                       <!-- Name -->
-                                    <span><a href="/tasks/1" class="discussion-content"><%= event.title%> <span ng-show="event.starts_at"> [<%= event.starts_at | date:'yyyy-MM-dd '%>]</span></a></span>
+                                    <span><a href="/#/events/show/<%=event.id%>" class="discussion-content"><%= event.title%> <span ng-show="event.starts_at"> [<%= event.starts_at | date:'yyyy-MM-dd '%>]</span></a></span>
                                     </li>
                                    
                                     

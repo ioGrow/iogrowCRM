@@ -128,17 +128,17 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Top
         case 'about':
          $scope.selectedTab = 2;
           break;
-        case 'contacts':
+        case 'Feedbacks':
          $scope.selectedTab = 3;
           break;
-        case 'opportunities':
+        case 'Leads':
          $scope.selectedTab = 4;
           break;
-        case 'cases':
+        case 'Documents':
          $scope.selectedTab = 5;
           break;
         default:
-        $scope.selectedTab = 1;
+        $scope.selectedTab = 2;
 
         }
 
@@ -186,21 +186,25 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Top
      $scope.addTask = function(task){
       
         $('#myModal').modal('hide');
-        var params ={}
+        var params ={'about_kind':'Show',
+                      'about_item':$scope.show.id}
 
-        console.log('adding a new task');
-        console.log(task);
+       
         
         if (task.due){
 
             var dueDate= $filter('date')(task.due,['yyyy-MM-dd']);
             dueDate = dueDate +'T00:00:00.000000'
             params ={'title': task.title,
-                      'due': dueDate
+                      'due': dueDate,
+                      'about_kind':'Show',
+                      'about_item':$scope.show.id
             }
             console.log(dueDate);
         }else{
-            params ={'title': task.title}
+            params ={'title': task.title,
+                      'about_kind':'Show',
+                      'about_item':$scope.show.id}
         };
         Task.insert($scope,params);
      }
@@ -212,8 +216,8 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Top
        
      }
      $scope.listTasks = function(){
-        var params = {/*'about_kind':'Account',
-                      'about_item':$scope.account.id,*/
+        var params = {'about_kind':'Show',
+                      'about_item':$scope.show.id,
                       'order': '-updated_at',
                       'limit': 5
                       };
@@ -233,13 +237,17 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Top
               params ={'title': ioevent.title,
                       'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
                       'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'where': ioevent.where
+                      'where': ioevent.where,
+                      'about_kind':'Show',
+                      'about_item':$scope.show.id
               }
 
             }else{
               params ={'title': task.title,
                       'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'where': ioevent.where
+                      'where': ioevent.where,
+                      'about_kind':'Show',
+                      'about_item':$scope.show.id
               }
             }
             console.log('inserting the event');
@@ -256,8 +264,8 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Top
        
      }
      $scope.listEvents = function(){
-        var params = {/*'about_kind':'Account',
-                      'about_item':$scope.account.id,*/
+        var params = {'about_kind':'Show',
+                      'about_item':$scope.show.id,
                       'order': 'starts_at',
                       'limit': 5
                       };
