@@ -5,7 +5,7 @@ from search_helper import tokenize_autocomplete
 import model
 
 class Lead(EndpointsModel):
-    _message_fields_schema = ('id','entityKey','folder', 'owner', 'access','collaborators_list','collaborators_ids', 'firstname','lastname','company' ,'title','tagline','introduction','phones','emails','addresses','websites','sociallinks','status','created_at','updated_at')
+    _message_fields_schema = ('id','entityKey','folder', 'owner', 'access','collaborators_list','collaborators_ids', 'firstname','lastname','company' ,'title','tagline','introduction','phones','emails','addresses','websites','sociallinks','status','created_at','updated_at','show','show_name')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
@@ -24,6 +24,8 @@ class Lead(EndpointsModel):
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
     created_by = ndb.KeyProperty()
+    show = ndb.KeyProperty()
+    show_name = ndb.StringProperty()
     # public or private
     access = ndb.StringProperty()
     tagline = ndb.StringProperty()
@@ -81,6 +83,7 @@ class Lead(EndpointsModel):
             search.TextField(name='status', value = empty_string(self.status)),
             search.DateField(name='created_at', value = self.created_at),
             search.DateField(name='updated_at', value = self.updated_at),
+            search.TextField(name='show_name', value = empty_string(self.show_name)),
             search.TextField(name='tagline', value = empty_string(self.tagline)),
             search.TextField(name='introduction', value = empty_string(self.introduction)),
             search.TextField(name='emails', value = empty_string(emails)),

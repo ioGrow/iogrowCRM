@@ -298,87 +298,99 @@
                          <div class="row-fluid cards-container">
                          <div class="btn-group relbutton">
             
-                                <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
-                                {{_("Add a new opportunity")}} <i class="icon-plus"></i>
+                                <button  ng-click="AddleadModal()" id="sample_editable_1_new" class="btn red">
+                                {{_("Add a new lead")}} <i class="icon-plus"></i>
                                 </button>
                           </div>
                             <div class="inner-cards-container">
-                            
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
+                                                                            
+                            <div  class="span4 responsive" data-tablet="span6" ng-repeat="lead in leads" data-desktop="span4">
                                 <div class="dashboard-stat cards-med">
                                   
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Migration vers Google App Engine
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">$20.000 - Needs Analysis</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#<%=account.industry%></a>  
-                                    
+                                <div class="details">
+                                         <a href="/#/leads/show/<%= lead.id %>"><h2 class="cardTitle">
+                                         <%= lead.firstname %> <%= lead.lastname %>
+                                        </h2></a>
+                                  <div class="desc">
+                                      <span ng-show="lead.status" class="contact-title" >Updated at:  <%=lead.updated_at | date:'yyyy-MM-dd - HH:mm:ss ' %> </span>
+                                       <span ng-show="lead.status" class="contact-title" >Status: <a class="desc" href="/#/search/type:Lead <%=lead.status%>">#<%=lead.status %></a>  </span>
+                                       <br>
+                                        <span ng-show="lead.title"><a  class="desc" href="/#/search/type:Lead <%=lead.title%>">#<%=lead.title%></a></span>
+                                       <span ng-show="lead.company"> <span ng-show="lead.title" class="contact-title">,</span> <a  class="desc" href="/#/search/type:Lead <%=lead.company%>">#<%=lead.company%></a></span>
                                     </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                             
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Migration vers Google App Engine
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">$20.000 - Needs Analysis</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#<%=account.industry%></a>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                    Google App Engine
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">$20.000 - Needs Analysis</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#<%=account.industry%></a>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Migration 
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">$20.000 - Needs Analysis</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#<%=account.industry%></a>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
+                                 </div>
+                                                  
                                 </div>
                               </div>
                               </div>
                             </div>
+          <div id="addLeadShow" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("New Lead")}}</h3>
+              </div>
+              <div class="modal-body">
+                 <form id="addLead" name="addlead" ng-keyup="addLeadOnKey(lead)" class="form-horizontal"> 
+                  <fieldset>
+                  
+                    
+
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("First Name")}} *</label>
+                       
+                        <div class="controls">
+                          <input type="text" required id="id_name" ng-model="lead.firstname">
+                          
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Last Name")}}</label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_lastname" ng-model="lead.lastname">
+                          
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Company")}} </label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_company" ng-model="lead.company">
+                          
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label  class=" control-label">{{_("Title")}} </label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_position" ng-model="lead.title">
+                          
+                        </div>
+                    </div>
+                     <div class="control-group">
+                        <label  class="control-label">{{_("Status")}} </label>
+                       
+                        <div class="controls">
+                          <select ng-model="stage_selected" ng-options="leadstat.status for leadstat in leadstatuses | orderBy: 'status':false"  >
+                            <option value="">-- choose Status --</option>
+                          
+                          </select>
+                          
+                         
+                        </div>
+                    </div>
+
+                   </fieldset>
+                
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                
+                <input ng-hide="isLoading" ng-click="save(lead)" type="submit" class="btn green" value="Add this lead">
+                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+              </div>
+               </form>
+       </div>
                       </div>
                       
                     </div>

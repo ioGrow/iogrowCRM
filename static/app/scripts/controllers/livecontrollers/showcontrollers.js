@@ -115,8 +115,8 @@ app.controller('ShowListCtrl', ['$scope','$filter','Auth','Show',
     
 }]);
 
-app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Topic','Note','Task','Event','WhoHasAccess','User',
-    function($scope,$filter,$route,Auth,Show,Topic,Note,Task,Event,WhoHasAccess,User) {
+app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Topic','Note','Task','Event','WhoHasAccess','User','Leadstatus','Lead',
+    function($scope,$filter,$route,Auth,Show,Topic,Note,Task,Event,WhoHasAccess,User,Leadstatus,Lead) {
       
       $("#id_Shows").addClass("active");
       var tab = $route.current.params.accountTab;
@@ -155,6 +155,10 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Top
       $scope.topicCurrentPage=01;
       $scope.topicpagination={};
       $scope.topicpages = [];
+      $scope.stage_selected={};
+      $scope.leadpagination = {};
+     
+      $scope.pages = [];
      
      $scope.accounts = [];
      
@@ -163,6 +167,7 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Top
      $scope.runTheProcess = function(){
           var params = {'id':$route.current.params.showId};
           Show.get($scope,params);
+           Leadstatus.list($scope,{});
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -365,6 +370,33 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Top
     Show.update($scope,params);
    $('#EditShowDescription').modal('hide');
  };
+
+//HKA 23.12.2013 Add a new lead to the Show
+ $scope.AddleadModal = function(){
+  $('#addLeadShow').modal('show');
+ };
+
+$scope.save = function(lead){
+        var params ={'firstname':lead.firstname,
+                      'lastname':lead.lastname,
+                      'company':lead.company,
+                      'title':lead.title,
+                      'show':$scope.show.entityKey,
+                      'show_name':$scope.show.name,
+                      'status':$scope.stage_selected.status};
+        Lead.insert($scope,params);
+        $('#addLeadShow').modal('hide')
+      };
+$scope.addLeadOnKey = function(lead){
+        if(event.keyCode == 13 && lead){
+            $scope.save(lead);
+        }
+      };
+$scope.listLead = function(){
+  var params = {'show':$scope.show.entityKey,
+                 'limit':5};
+  Lead.list($scope,params);
+};
 
 
       

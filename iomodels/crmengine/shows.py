@@ -8,7 +8,7 @@ import pprint
 import model
 
 class Show(EndpointsModel):
-    _message_fields_schema = ('id', 'name','starts_at','ends_at','description','tags','youtube_url','is_published','status')
+    _message_fields_schema = ('id','entityKey', 'name','starts_at','ends_at','description','tags','youtube_url','is_published','status')
     author = ndb.StructuredProperty(User)
     # Sharing fields
     owner = ndb.StringProperty()

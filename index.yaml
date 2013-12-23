@@ -511,6 +511,13 @@ indexes:
   - name: access
   - name: organization
   - name: status
+  - name: company
+
+- kind: Lead
+  properties:
+  - name: access
+  - name: organization
+  - name: status
   - name: updated_at
     direction: desc
 
@@ -558,6 +565,12 @@ indexes:
   properties:
   - name: collaborators_ids
   - name: status
+  - name: company
+
+- kind: Lead
+  properties:
+  - name: collaborators_ids
+  - name: status
   - name: updated_at
     direction: desc
 
@@ -591,6 +604,12 @@ indexes:
   properties:
   - name: owner
   - name: status
+
+- kind: Lead
+  properties:
+  - name: owner
+  - name: status
+  - name: company
 
 - kind: Lead
   properties:
