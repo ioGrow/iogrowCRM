@@ -932,6 +932,14 @@ class CrmEngineApi(remote.Service):
 
       patched_model.put()
       return patched_model
+  @Show.method(request_fields=('id',),
+    response_message=message_types.VoidMessage,
+    http_method ='DELETE',path='shows/{id}',name='shows.delete'
+    )
+  def ShowDelete(self,my_model):
+    user_from_email=EndpointsHelper.require_iogrow_user()
+    my_model.key.delete()
+    return message_types.VoidMessage()
   # topics.list api
   @Topic.query_method(user_required=True,query_fields=('about_kind','about_item', 'limit', 'order', 'pageToken'),path='topics', name='topics.list')
   def TopicList(self, query):

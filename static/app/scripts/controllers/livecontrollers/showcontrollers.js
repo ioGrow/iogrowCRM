@@ -433,6 +433,23 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Top
 
       };
 
+      $scope.editwhen = function(show){
+       
+
+        $('#Editwhen').modal('show');
+      };
+      $scope.saveModifTime = function(show){
+
+        var starts_at = $filter('date')(show.starts_at,['yyyy-MM-ddTHH:mm:00.000000']);
+         var ends_at = $filter('date')(show.ends_at,['yyyy-MM-ddTHH:mm:00.000000']);
+        
+       var  params ={'id':$scope.show.id,
+                     'starts_at':starts_at,
+                    'ends_at':ends_at};
+          Show.update($scope,params);
+         $('#Editwhen').modal('hide');
+      };
+
  $scope.editdescription = function(){
   $('#EditShowDescription').modal('show');
 }
@@ -470,7 +487,11 @@ $scope.listLead = function(){
                  'limit':5};
   Lead.list($scope,params);
 };
- 
+$scope.deleteshow = function(show){
+  var params={'id':$scope.show.id};
+  console.log(params);
+  Show.delete($scope,params);
+};
 
       
 // Google+ Authentication 

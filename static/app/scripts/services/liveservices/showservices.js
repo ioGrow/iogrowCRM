@@ -89,12 +89,20 @@ topicservices.factory('Show', function($http) {
 
   Show.update = function($scope,params){
     gapi.client.crmengine.shows.patch(params).execute(function(resp){
-
+      $scope.show=resp;
       $scope.$apply();
 
     }
 
       )};
+  Show.delete = function($scope,id){
+    gapi.client.crmengine.shows.delete(id).execute(function(resp){
+        window.location.replace('#/live/shows');
+      
+
+    }
+
+    )};
 
   
 

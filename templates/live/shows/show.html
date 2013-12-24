@@ -86,6 +86,7 @@
               </div>
                </form>
        </div>
+        
       <div class="container-fluid" ng-show="isContentLoaded">
         
         <!-- END PAGE HEADER-->
@@ -115,13 +116,13 @@
               
               <span class="page-meta"><strong>The show page on i/oGrow Live:</strong> <a href="/live/shows/<%=show.id%>">preview</a> </span>
               </br>
-              <span class="page-meta"><strong>Publish this show on i/oGrow Live: </strong> <input type="checkbox" ng-model="show.is_published" checked class="toggle"  ng-click="saveshow(show)" />  </span>
+              <span class="page-meta"><strong>Publish this show on i/oGrow Live: </strong> <input type="checkbox" ng-model="show.is_published" checked class="toggle"  ng-click="saveshowispublished(show)" />  </span>
               
              
                        
               
               </br>
-             <span class="page-meta"><i class="icon-pencil"><a ng-click="editshowdetail()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |  <i class="icon-trash"><a ng-click="delete(account)" class="btn-link addAnotherPhone">  {{_("Delete")}}</a></i></span>
+             <span class="page-meta"><i class="icon-pencil"><a ng-click="editshowdetail()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |  <i class="icon-trash"><a ng-click="deleteshow()" class="btn-link addAnotherPhone">  {{_("Delete")}}</a></i></span>
 
            
             
@@ -229,7 +230,7 @@
                                 <h3>About</h3>
                                 <div class="news-block-tags">
                                   <strong>When: </strong>
-                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="editdescription()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
+                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="editwhen(show)" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
                                   
                                 </div>
                                 <p> <%= show.starts_at | date:'MMM dd, yyyy, HH:mm'%> To <%=show.ends_at | date:'MMM dd, yyyy, HH:mm'%></p>
@@ -273,6 +274,39 @@
                       </div>
                         </form> 
                       </div>
+                       <div id="Editwhen" class="modal  hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h3 id="myModalLabel">Edit  show</h3>
+            </div>
+            <div class="modal-body">
+                     <div class="controls controls-row">
+                            <form id="addTask" ng-submit="saveModifTime(ioevent)" class="ng-pristine ng-valid">
+                                                 
+                                                  <p><strong>When?</strong></p>
+                                                <div class="row-fluid">
+                                                  <div class="span6">
+                                                    <p> <strong>Starts</strong>: <%=show.starts_at | date:'MMMM dd, yyyy, HH:mm'%></p>
+                                                        <datetimepicker data-ng-model="ioevent.starts_at"
+                                                    data-datetimepicker-config="{ startView:'day', minView:'minute'}" />
+                                                  </div>
+                                                  <div class="span6">
+                                                  <p><strong>Ends</strong>: <%=show.ends_at | date:'MMMM dd, yyyy, HH:mm'%></p>
+                                                        <datetimepicker data-ng-model="ioevent.ends_at"
+                                                    data-datetimepicker-config="{ startView:'day', minView:'minute' }" />
+                                                  </div>
+                                                </div>                                            
+                                                </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              
+               <input ng-hide="isLoading" type="submit" class="btn green" value="Save">
+                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                                        
+            </form>
+            </div>
+          </div>
                       <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3">
                           
                          <div class="row-fluid cards-container">
