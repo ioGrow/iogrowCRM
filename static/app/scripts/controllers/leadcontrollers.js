@@ -18,6 +18,7 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus',
       $scope.lead = {};
       $scope.lead.access ='public';
       $scope.order = '-updated_at';
+      $scope.status = 'new';
 
       // What to do after authentication
        $scope.runTheProcess = function(){

@@ -163,6 +163,8 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Top
       $scope.users = [];
       $scope.user = undefined;
       $scope.slected_memeber = undefined;
+      $scope.show = {};
+      $scope.show.edited_youtube_url = undefined;
      
      // What to do after authentication
      $scope.runTheProcess = function(){
@@ -348,30 +350,67 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Top
 
 /************************HKA 24.12.2013 Edit show *****************************************/
     $scope.editshowdetail = function() {
+       if ($scope.show.youtube_url){
+          $scope.show.edited_youtube_url = 'http://www.youtube.com/watch?v=' + $scope.show.youtube_url;
+       }
        $('#EditShowModal').modal('show');
     };
     $scope.saveshow = function(show){
-     
-      var params = {'id':show.id,
-    'name':show.name,
-     'youtube_url':show.youtube_url,
-      'is_published':show.is_published,};
-     Show.update($scope,params);
+      if (show.edited_youtube_url){
+        var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        var match = show.edited_youtube_url.match(regExp);
+        if (match&&match[2].length==11){
+            console.log(match);
+            var params = {'id':show.id,
+                          'name':show.name,
+                          'youtube_url':match[2],
+                         'is_published':show.is_published,};
+            Show.patch($scope,params);
+        }else{
+          console.log('invalid');
+          alert('invalid url');
+            //error
+        };
+      }
+      else{
+            var params = {'id':show.id,
+                          'name':show.name,
+                          'is_published':show.is_published,};
+            Show.patch($scope,params);
+      };
+      
    $('#EditShowModal').modal('hide');
     };
      $scope.saveshowispublished = function(show){
       var params = {'id':show.id,'is_published':show.is_published};
-     Show.update($scope,params);
+     Show.patch($scope,params);
 
      };
   //HKA 24.12.2013 Add youtube Url
       $scope.edityoutubeurl = function(){
+        if ($scope.show.youtube_url){
+          $scope.show.edited_youtube_url = 'http://www.youtube.com/watch?v=' + $scope.show.youtube_url;
+       };
         $('#AddYoutubeUrl').modal('show');
       };
       $scope.saveyoutubeurl = function(show){
-        var params = {'id':$scope.show.id,
-                'youtube_url':show.youtube_url};
-        Show.update($scope,params);
+        if (show.edited_youtube_url){
+          var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        var match = show.edited_youtube_url.match(regExp);
+        if (match&&match[2].length==11){
+            console.log(match);
+            var params = {'id':$scope.show.id,
+                'youtube_url':match[2]};
+                console.log()
+            Show.patch($scope,params);
+        }else{
+          console.log('invalid');
+          alert('invalid url');
+            //error
+        };
+          
+        }
+        
         $('#AddYoutubeUrl').modal('hide');
           };
 
@@ -380,10 +419,21 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Top
            $('#AddYoutubeUrl').modal('hide');
           var picker = new google.picker.PickerBuilder().
           addView(google.picker.ViewId.YOUTUBE).
+          setCallback($scope.youtubeCallback).
          
           build();
           picker.setVisible(true);
       };
+      $scope.youtubeCallback = function(data){
+          if (data.docs){
+              var params = {'id':$scope.show.id,
+                            'youtube_url':data.docs[0].id
+              };
+              Show.patch($scope,params);
+          };
+           
+      };
+
  //HKA 24.12.2013 Share the show
      $scope.selectMember = function(){
         console.log('slecting user yeaaah');
@@ -399,7 +449,7 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Top
          var id = $scope.show.id;
          var params ={'id':id,
                       'access':$scope.show.access}
-         Show.update($scope,params);
+         Show.patch($scope,params);
         });
         $('#sharingSettingsModal').modal('hide');
 
@@ -440,7 +490,7 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Top
  $scope.updateDescription = function(show){
   var params = {'id':show.id,
     'description':show.description};
-    Show.update($scope,params);
+    Show.patch($scope,params);
    $('#EditShowDescription').modal('hide');
  };
 

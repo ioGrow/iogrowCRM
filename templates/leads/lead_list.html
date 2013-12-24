@@ -85,7 +85,7 @@
                        
                         <div class="controls">
                           <select ng-model="stage_selected" ng-options="leadstat.status for leadstat in leadstatuses | orderBy: 'status':false"  >
-                            <option value="">-- choose Status --</option>
+                            <option value=""><%=status%></option>
                           
                           </select>
                           

@@ -110,7 +110,7 @@
             <span ng-repeat="tag in show.tags"><a class="tag" href="#"> <%=tag%> </a></span>
             
              </br>
-              <span class="page-meta"><img src="/static/img/youtube.png" ng-click="edityoutubeurl()"/>: <strong>Add/Edit youtube-url </strong></span>
+              <span class="page-meta"><a href="#" ng-click="edityoutubeurl()" data-toggle="modal" ><img src="/static/img/youtube.png" /><strong>Add/Edit youtube-url </strong></a></span>
               </br>
               
               <span class="page-meta"><strong>The show page on i/oGrow Live:</strong> <a href="/live/shows/<%=show.id%>">preview</a> </span>
@@ -215,7 +215,7 @@
                             
                                 <div class="news-blocks blank-card blank-card-yellow">
                                 <h3>The show on youtube</h3>
-                                <iframe width="100%" ng-show="show.youtube_url" height="250" src="http://www.youtube.com/embed/<%=show.youtube_ur%>?rel=0" frameborder="0" allowfullscreen></iframe>
+                                <iframe width="100%" ng-show="show.youtube_url" height="250" src="http://www.youtube.com/embed/<%=show.youtube_url%>?rel=0" frameborder="0" allowfullscreen></iframe>
                                 <img  ng-hide="show.youtube_url" src="static/img/gdl-stay-tuned.png"/>
                                
                                                               
@@ -617,7 +617,7 @@
                         <label  class="required control-label">{{_("Youtube Url")}} </label>
                        
                         <div class="controls">
-                          <input type="text"  id="id_youtube_url" ng-model="show.youtube_url">
+                          <input type="text"  id="id_youtube_url" ng-model="show.edited_youtube_url">
                           
                         </div>
                     </div>
@@ -651,7 +651,7 @@
 
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("Edit Youtube url")}}</h3>
+                <h3 id="myModalLabel"><img src="/static/img/youtube.png" ng-click="createYoutubePicker()"/>{{_("Edit Youtube url")}}</h3>
               </div>
 
               <div class="modal-body">
@@ -662,15 +662,15 @@
                         <!--label  class="required control-label">{{_("Name")}} *</label-->
                        
                         <div class="controls">
-                         <span class="page-meta"><img src="/static/img/youtube.png" ng-click="createYoutubePicker()"/>: <strong>Add youtube-url when this show is ready </strong></span>
+                         <span class="page-meta"><a href="#" ng-click="createYoutubePicker()" data-toggle="modal"><strong>Add from your youtube Channel</strong></a></span>
                           
                         </div>
                     </div>
                     <div class="control-group">
-                        <label  class="required control-label">{{_("Youtube Url")}} </label>
+                        <label  class="required control-label">Or Add {{_("Youtube Url")}}: </label>
                        
                         <div class="controls">
-                          <input type="text"  id="id_youtube_url" ng-model="show.youtube_url">
+                          <input type="text"  id="id_youtube_url" ng-model="show.edited_youtube_url">
                           
                         </div>
                     </div>
