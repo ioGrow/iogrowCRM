@@ -18,11 +18,14 @@ app.controller('ShowListCtrl', ['$scope','$filter','Auth','Show',
      $scope.runTheProcess = function(){
           var params = {'limit':7};
           Show.list($scope,params);
+          
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
             Auth.refreshToken();
      };
+
+
      $scope.listNextPageItems = function(){
         
         
@@ -104,9 +107,7 @@ app.controller('ShowListCtrl', ['$scope','$filter','Auth','Show',
 
       };
       
-    $scope.save = function(account){
-      Account.insert(account);
-    };
+    
      
      
    // Google+ Authentication 
@@ -115,8 +116,8 @@ app.controller('ShowListCtrl', ['$scope','$filter','Auth','Show',
     
 }]);
 
-app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Topic','Note','Task','Event','WhoHasAccess','User','Leadstatus','Lead',
-    function($scope,$filter,$route,Auth,Show,Topic,Note,Task,Event,WhoHasAccess,User,Leadstatus,Lead) {
+app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Topic','Note','Task','Event','WhoHasAccess','User','Leadstatus','Lead','Permission',
+    function($scope,$filter,$route,Auth,Show,Topic,Note,Task,Event,WhoHasAccess,User,Leadstatus,Lead,Permission) {
       
       $("#id_Shows").addClass("active");
       var tab = $route.current.params.accountTab;
@@ -159,29 +160,23 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Top
       $scope.leadpagination = {};
      
       $scope.pages = [];
-     
-     $scope.accounts = [];
-     
+      $scope.users = [];
+      $scope.user = undefined;
+      $scope.slected_memeber = undefined;
      
      // What to do after authentication
      $scope.runTheProcess = function(){
           var params = {'id':$route.current.params.showId};
           Show.get($scope,params);
-           Leadstatus.list($scope,{});
+          Leadstatus.list($scope,{});
+          User.list($scope,{});
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
             Auth.refreshToken();
      };
 
-     $scope.createYoutubePicker = function() {
-          console.log('ok should create youtube picker');
-          var picker = new google.picker.PickerBuilder().
-          addView(google.picker.ViewId.YOUTUBE).
-         
-          build();
-          picker.setVisible(true);
-      };
+     
      
      $scope.addTask = function(task){
       
@@ -333,13 +328,7 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Top
        $('#topic_0 .message').effect("highlight","slow");
      }
 
-    
-     $scope.showModal = function(){
-        console.log('button clicked');
-        $('#addAccountModal').modal('show');
-
-      };
-      
+         
     $scope.addNote = function(note){
       console.log('debug addNote');
       
@@ -357,16 +346,92 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Top
       
 
 
-
-    $scope.editaccount = function() {
+/************************HKA 24.12.2013 Edit show *****************************************/
+    $scope.editshowdetail = function() {
        $('#EditShowModal').modal('show');
     };
     $scope.saveshow = function(show){
+     
       var params = {'id':show.id,
-    'name':show.name};
+    'name':show.name,
+     'youtube_url':show.youtube_url,
+      'is_published':show.is_published,};
      Show.update($scope,params);
    $('#EditShowModal').modal('hide');
     };
+     $scope.saveshowispublished = function(show){
+      var params = {'id':show.id,'is_published':show.is_published};
+     Show.update($scope,params);
+
+     };
+  //HKA 24.12.2013 Add youtube Url
+      $scope.edityoutubeurl = function(){
+        $('#AddYoutubeUrl').modal('show');
+      };
+      $scope.saveyoutubeurl = function(show){
+        var params = {'id':$scope.show.id,
+                'youtube_url':show.youtube_url};
+        Show.update($scope,params);
+        $('#AddYoutubeUrl').modal('hide');
+          };
+
+     $scope.createYoutubePicker = function() {
+          console.log('ok should create youtube picker');
+           $('#AddYoutubeUrl').modal('hide');
+          var picker = new google.picker.PickerBuilder().
+          addView(google.picker.ViewId.YOUTUBE).
+         
+          build();
+          picker.setVisible(true);
+      };
+ //HKA 24.12.2013 Share the show
+     $scope.selectMember = function(){
+        console.log('slecting user yeaaah');
+        $scope.slected_memeber = $scope.user;
+        $scope.user = $scope.slected_memeber.google_display_name;
+
+     };
+     $scope.share = function(slected_memeber){
+        console.log('permissions.insert share');
+        console.log(slected_memeber);
+        $scope.$watch($scope.show.access, function() {
+         var body = {'access':$scope.show.access};
+         var id = $scope.show.id;
+         var params ={'id':id,
+                      'access':$scope.show.access}
+         Show.update($scope,params);
+        });
+        $('#sharingSettingsModal').modal('hide');
+
+        if (slected_memeber.email){
+        var params = {  'type': 'user',
+                        'role': 'writer',
+                        'value': slected_memeber.email,
+                        'about_kind': 'Show',
+                        'about_item': $scope.show.id
+
+                        
+          };
+          Permission.insert($scope,params); 
+          
+          
+        }else{ 
+          alert('select a user to be invited');
+        };
+
+
+     };
+     
+     $scope.updateCollaborators = function(){
+          var showid = {'id':$route.current.params.showId};
+          Show.get($scope,showid);
+
+     };
+     $scope.showModal = function(){
+        console.log('button clicked');
+        $('#addAccountModal').modal('show');
+
+      };
 
  $scope.editdescription = function(){
   $('#EditShowDescription').modal('show');
@@ -384,7 +449,7 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Top
   $('#addLeadShow').modal('show');
  };
 
-$scope.save = function(lead){
+$scope.savelead = function(lead){
         var params ={'firstname':lead.firstname,
                       'lastname':lead.lastname,
                       'company':lead.company,
@@ -405,7 +470,7 @@ $scope.listLead = function(){
                  'limit':5};
   Lead.list($scope,params);
 };
-
+ 
 
       
 // Google+ Authentication 

@@ -25,6 +25,67 @@
               </span>
         </div>
       </div>
+         <div id="sharingSettingsModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("Sharing Settings")}}</h3>
+              </div>
+              <div class="modal-body">
+                 <form id="addMember" name="addshow" ng-submit="share(slected_memeber)" class="form-horizontal"> 
+                  <fieldset>
+                  
+                    <p>{{ _("Who has access:") }}</p>
+                    <div class='container-fluid'>
+
+                     
+                          
+                            <label class="radio line">
+                            <input type="radio" value="public" ng-model="show.access" />
+                            {{ _("public: Anyone within your organization can access and find") }}
+                            </label>
+                            <label class="radio line">
+                            <input type="radio"  value="private" ng-model="show.access" />
+                            {{ _("private: only you and your collaborators") }}
+                            </label>  
+                           
+                       
+                      
+                    </div>
+                    <hr/>
+                    <div class='container-fluid'>
+                    <p>{{ _("Collaborators:") }}</p>
+                        <div ng-repeat="collaborator in account.collaborators_list" class="invitation">
+                          <img class="google-avatar" src="<%=collaborator.photo%>"/>
+                           <%=collaborator.display_name%> < <%=collaborator.email%> >
+                        </div>
+                        
+                    </div>
+                    <hr/>
+
+                    <div class='container-fluid'>
+                    <p>{{ _("Invited user:") }}</p>
+                    <div class="invitation" ng-show="slected_memeber">
+                      <img class="google-avatar" src="<%= slected_memeber.google_public_profile_photo_url%>"/>
+                        <strong> <%= slected_memeber.google_display_name %> < <%=slected_memeber.email%> ></strong>
+                      <hr/>
+                    </div>
+                    
+                    <p>{{ _("Invite collaborators:") }}</p>
+                    <div class="control-group">
+                      <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="input-block-level" placeholder="{{ _('Enter name or email addresse to add people to this group') }}">
+                    </div>
+                    
+                      </div>
+                    
+                    </fieldset>
+                
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <button  type="submit" class="btn blue addContactNow">{{_("Share")}}</button>
+              </div>
+               </form>
+       </div>
       <div class="container-fluid" ng-show="isContentLoaded">
         
         <!-- END PAGE HEADER-->
@@ -33,13 +94,13 @@
           
           <div class="span12">
             <div class="pull-right sharebuttonDiv"> 
-                  <a href="" class="btn blue jfk-button jfk-button-action">
-                    <i class="icon-lock"></i> Share
+                  <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
+                    <i class="icon-lock"></i> {{ _("Share") }}
                   </a>
                         
                         
                      
-                </div>
+            </div>
                 
             <h2>
             <a href="/#/live/shows/" data-toggle="tooltip" data-placement="bottom" title="Back to Shows">
@@ -49,18 +110,18 @@
             <span ng-repeat="tag in show.tags"><a class="tag" href="#"> <%=tag%> </a></span>
             
              </br>
-              <span class="page-meta"><img src="/static/img/youtube.png" ng-click="createYoutubePicker()"/>: <strong>Add youtube-url when this show is ready </strong></span>
+              <span class="page-meta"><img src="/static/img/youtube.png" ng-click="edityoutubeurl()"/>: <strong>Add/Edit youtube-url </strong></span>
               </br>
               
               <span class="page-meta"><strong>The show page on i/oGrow Live:</strong> <a href="/live/shows/<%=show.id%>">preview</a> </span>
               </br>
-              <span class="page-meta"><strong>Publish this show on i/oGrow Live: </strong> <input type="checkbox" checked class="toggle"/>  </span>
+              <span class="page-meta"><strong>Publish this show on i/oGrow Live: </strong> <input type="checkbox" ng-model="show.is_published" checked class="toggle"  ng-click="saveshow(show)" />  </span>
               
              
                        
               
               </br>
-             <span class="page-meta"><i class="icon-pencil"><a ng-click="editaccount()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |  <i class="icon-trash"><a ng-click="delete(account)" class="btn-link addAnotherPhone">  {{_("Delete")}}</a></i></span>
+             <span class="page-meta"><i class="icon-pencil"><a ng-click="editshowdetail()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |  <i class="icon-trash"><a ng-click="delete(account)" class="btn-link addAnotherPhone">  {{_("Delete")}}</a></i></span>
 
            
             
@@ -154,7 +215,8 @@
                             
                                 <div class="news-blocks blank-card blank-card-yellow">
                                 <h3>The show on youtube</h3>
-                                <img src="static/img/gdl-stay-tuned.png"/>
+                                <iframe width="100%" ng-show="show.youtube_url" height="250" src="http://www.youtube.com/embed/<%=show.youtube_ur%>?rel=0" frameborder="0" allowfullscreen></iframe>
+                                <img  ng-hide="show.youtube_url" src="static/img/gdl-stay-tuned.png"/>
                                
                                                               
                                                           
@@ -387,7 +449,7 @@
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
                 
-                <input ng-hide="isLoading" ng-click="save(lead)" type="submit" class="btn green" value="Add this lead">
+                <input ng-hide="isLoading" ng-click="savelead(lead)" type="submit" class="btn green" value="Add this lead">
                 <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
               </div>
                </form>
@@ -531,7 +593,7 @@
         
         <!-- END PAGE CONTENT-->
       </div>
-      <!--HKA 11.10.2013 Edit Account -->
+      <!--HKA 11.10.2013 Edit Show -->
              <div id="EditShowModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
               <div class="modal-header">
@@ -551,8 +613,68 @@
                           
                         </div>
                     </div>
-                                     
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Youtube Url")}} </label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_youtube_url" ng-model="show.youtube_url">
+                          
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Tags")}} </label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_tags" >                          
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Publish this show on i/oGrow Live: Url")}} </label>
+                       
+                        <div class="controls">
+                          <input type="checkbox" ng-model="show.is_published" checked class="toggle"/> 
+                          
+                        </div>
+                    </div> 
+                          
+                        
                                                    
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
+                <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+              </div>
+               </form>
+              </div> 
+              <!--HKA 24.12.2013 Youtube Url -->
+            <div id="AddYoutubeUrl" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("Edit Youtube url")}}</h3>
+              </div>
+
+              <div class="modal-body">
+                 <form id="editShow" name="editshow" ng-submit="saveyoutubeurl(show)" class="form-horizontal"> 
+                
+
+                   <div class="control-group">
+                        <!--label  class="required control-label">{{_("Name")}} *</label-->
+                       
+                        <div class="controls">
+                         <span class="page-meta"><img src="/static/img/youtube.png" ng-click="createYoutubePicker()"/>: <strong>Add youtube-url when this show is ready </strong></span>
+                          
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Youtube Url")}} </label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_youtube_url" ng-model="show.youtube_url">
+                          
+                        </div>
+                    </div>
+                                                     
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>

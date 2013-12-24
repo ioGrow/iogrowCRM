@@ -8,7 +8,7 @@ import pprint
 import model
 
 class Show(EndpointsModel):
-    _message_fields_schema = ('id','entityKey', 'name','starts_at','ends_at','description','tags','youtube_url','is_published','status')
+    _message_fields_schema = ('id','entityKey', 'name','starts_at','ends_at','description','access','tags','youtube_url','is_published','status','collaborators_list','collaborators_ids')
     author = ndb.StructuredProperty(User)
     # Sharing fields
     owner = ndb.StringProperty()
@@ -41,7 +41,7 @@ class Show(EndpointsModel):
     def set_perm(self):
         about_item = str(self.key.id())
 
-        perm = model.Permission(about_kind='Account',
+        perm = model.Permission(about_kind='Show',
                          about_item=about_item,
                          type = 'user',
                          role = 'owner',
