@@ -131,11 +131,11 @@
             <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Leads")}} > <%= lead.firstname %> <%= lead.lastname %></h2>
             
 
-          
-              <span>{{_("Company")}} :</span> <a   href="/#/search/type:Lead <%=lead.company%>" class="tag" ng-show="lead.company"> #<%= lead.company %></a> <br>
+              <span ng-show="lead.updated_at" class="contact-title" >Updated at:  <%=lead.updated_at | date:'yyyy-MM-dd - HH:mm:ss ' %> </span><br>
+              <span ng-show="lead.title">{{_("Title")}} : <a   href="/#/search/type:Lead <%=lead.title%>" class="tag" ng-show="lead.title"> #<%= lead.title %> </a></span><span ng-show="lead.company">{{_("Company")}} : <a   href="/#/search/type:Lead <%=lead.company%>" class="tag" ng-show="lead.company"> #<%= lead.company %></a></span> <br>
               <span>{{_("Lead Status")}} : </span>
               <a   href="/#/search/type:Lead <%=lead.status%>" class="tag" ng-show="lead.company"> #<%= lead.status %></a> <br>
-            </ul>  </br>
+            </ul>  
              <span class="page-meta"><i class="icon-refresh"><a ng-click="showConvertModal()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Convert")}}</a></i> | <i class="icon-pencil"><a ng-click="editLead()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="delete(lead)" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
 
            
