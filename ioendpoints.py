@@ -21,6 +21,7 @@ from iomodels.crmengine.opportunitystage import Opportunitystage
 from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.casestatuses import Casestatus
 from iomodels.crmengine.feedbacks import Feedback
+from iomodels.crmengine.tags import Tag
 from model import User,Userinfo,Group,Member,Permission,Contributor
 import model
 import logging
@@ -33,6 +34,7 @@ from apiclient import errors
 from protorpc import messages
 from protorpc import message_types
 from google.appengine.api import memcache
+import pprint
 
 
 # The ID of javascript client authorized to access to our api
@@ -290,15 +292,17 @@ class CrmEngineApi(remote.Service):
           raise endpoints.NotFoundException('Account not found.')
       patched_model_key = my_model.entityKey
       patched_model = ndb.Key(urlsafe=patched_model_key).get()
-      print patched_model
-      print my_model
+      print 'current model ***************'
+      pprint.pprint(patched_model) 
+      print 'to be updated ******************' 
+      pprint.pprint(my_model) 
       properties = Account().__class__.__dict__
       for p in properties.keys():
-         
-            if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p)):
+          if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p) and not(p in ['put','set_perm','put_index']) ):
                 exec('patched_model.'+p+'= my_model.'+p)
       patched_model.put()
       return patched_model
+  
   
   # accounts.search api
   @endpoints.method(SearchRequest, AccountSearchResults,
@@ -378,9 +382,16 @@ class CrmEngineApi(remote.Service):
   def ContactPatch(self, my_model):
       user_from_email = EndpointsHelper.require_iogrow_user()
       # Todo: Check permissions
-
-      my_model.put()
-      return my_model
+      if not my_model.from_datastore:
+          raise endpoints.NotFoundException('Contact not found.')
+      patched_model_key = my_model.entityKey
+      patched_model = ndb.Key(urlsafe=patched_model_key).get()
+      properties = Contact().__class__.__dict__
+      for p in properties.keys():
+          if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p) and not(p in ['put','set_perm','put_index']) ):
+                exec('patched_model.'+p+'= my_model.'+p)
+      patched_model.put()
+      return patched_model
   
   #contacts.search api
   @endpoints.method(SearchRequest, ContactSearchResults,
@@ -599,8 +610,16 @@ class CrmEngineApi(remote.Service):
   def LeadPatch(self, my_model):
       user_from_email = EndpointsHelper.require_iogrow_user()
       # Todo: Check permissions
-      my_model.put()
-      return my_model
+      if not my_model.from_datastore:
+          raise endpoints.NotFoundException('Lead not found.')
+      patched_model_key = my_model.entityKey
+      patched_model = ndb.Key(urlsafe=patched_model_key).get()
+      properties = Lead().__class__.__dict__
+      for p in properties.keys():
+          if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p) and not(p in ['put','set_perm','put_index']) ):
+                exec('patched_model.'+p+'= my_model.'+p)
+      patched_model.put()
+      return patched_model
   # leads.convert api
   @endpoints.method(ID_RESOURCE, ConvertedLead,
                       path='leads/convert/{id}', http_method='POST',
@@ -995,6 +1014,7 @@ class CrmEngineApi(remote.Service):
   @Topic.query_method(user_required=True,query_fields=('about_kind','about_item', 'limit', 'order', 'pageToken'),path='topics', name='topics.list')
   def TopicList(self, query):
       return query
+
   # comments.insert api 
   @Comment.method(user_required=True,path='comments',http_method='POST',name='comments.insert')
   def CommentInsert(self, my_model):
@@ -1082,7 +1102,11 @@ class CrmEngineApi(remote.Service):
     my_model.put()
     return my_model
 
-
+  # tags.list api
+  @Tag.query_method(user_required=True,query_fields=('about_kind','about_item', 'limit', 'order', 'pageToken'),path='tags', name='tags.list')
+  def tags_list(self, query):
+      user_from_email = EndpointsHelper.require_iogrow_user()
+      return query.filter(Tag.organization==user_from_email.organization)
   # notes.get api
   @endpoints.method(ID_RESOURCE, DiscussionResponse,
                       path='notes/{id}', http_method='GET',
