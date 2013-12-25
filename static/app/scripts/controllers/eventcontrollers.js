@@ -74,7 +74,7 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
     $scope.addComment = function(comment){
 
       var params ={
-        //'discussion':$scope.note.entityKey,
+        'discussion':$scope.eventt.entityKey,
         'content':$scope.comment.content
       };
       Comment.insert($scope,params);
@@ -85,7 +85,7 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
     $scope.ListComments = function(){
 
       var params = {
-                        //'discussion':$scope.note.entityKey,
+                     'discussion':$scope.eventt.entityKey,
                      'limit':5,
                       'order':'-updated_at'};
       Comment.list($scope,params);
