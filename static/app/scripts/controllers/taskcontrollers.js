@@ -7,8 +7,10 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
      $scope.pagination = {};
+     $scope.paginationcomment = {};
+     $scope.currentPagecomment = 01;
      $scope.currentPage = 01;
-     $scope.pages = [];
+     $scope.pagescomment = [];
      
      $scope.notes = [];  
      $scope.users = [];
@@ -21,51 +23,46 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      $scope.runTheProcess = function(){
           var taskid = {'id':$route.current.params.taskId};
           Task.get($scope,taskid);
-          
+
           User.list($scope,{});
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
             Auth.refreshToken();
      };
-   $scope.listNextPageItems= function(){
+   $scope.listNextPageItemscomment= function(){
         
         
-        var nextPage = $scope.currentPage + 1;
-        console.log('hahahahahahahah');
-        console.log(nextPage);
-        console.log($scope.pages[nextPage])
+        var nextPage = $scope.currentPagecomment + 1;
+        
         var params = {};
-          if ($scope.pages[nextPage]){
+          if ($scope.pagescomment[nextPage]){
             params = {'limit':5,
+                      'discussion':$scope.task.entityKey,                    
 
-                      'discussion':$scope.task.entityKey,
-
-                     
-
-                      'pageToken':$scope.pages[nextPage]
-
+                      'pageToken':$scope.pagescomment[nextPage]
                      }
           }else{
-            params = {'limit':5}
+            params = {'limit':5,
+                      'discussion':$scope.task.entityKey}
           }
           console.log('in listNextPageItems');
-          $scope.currentPage = $scope.currentPage + 1 ; 
+          $scope.currentPagecomment = $scope.currentPagecomment + 1 ; 
           Comment.list($scope,params);
      }
-     $scope.listPrevPageItems = function(){
+     $scope.listPrevPageItemscomment = function(){
        
-       var prevPage = $scope.currentPage - 1;
+       var prevPage = $scope.currentPagecomment - 1;
        var params = {};
-          if ($scope.pages[prevPage]){
+          if ($scope.pagescomment[prevPage]){
             params = {'limit':5,
-                      //'discussion':$scope.note.entityKey,
-                      'pageToken':$scope.pages[prevPage]
+                      'discussion':$scope.note.entityKey,
+                      'pageToken':$scope.pagescomment[prevPage]
                      }
           }else{
-            params = {'limit':5}
+            params = {'limit':5,'discussion':$scope.task.entityKey}
           }
-          $scope.currentPage = $scope.currentPage - 1 ;
+          $scope.currentPagecomment = $scope.currentPagecomment - 1 ;
           Comment.list($scope,params);
      }
    
@@ -116,8 +113,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
 
     $scope.addComment = function(comment){
 
-      var params ={
-        //'discussion':$scope.note.entityKey,
+      var params ={'discussion':$scope.task.entityKey,
         'content':$scope.comment.content
       };
       Comment.insert($scope,params);
@@ -125,8 +121,8 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      
       
     };
-    $scope.ListComments = function(entityK){
-      var params = {'discussion':entityK,
+    $scope.ListComments = function(){
+      var params = {'discussion':$scope.task.entityKey,
                      'limit':5,
                       'order':'-updated_at'};
       Comment.list($scope,params);

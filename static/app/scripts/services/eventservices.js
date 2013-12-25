@@ -13,10 +13,8 @@ eventservices.factory('Event', function($http) {
                var url = Event.getUrl($scope.eventt.about.kind,$scope.eventt.about.id);
                $scope.uri =url;
                $scope.listContributors();
-               // $scope.isContentLoaded = true;
-               // $scope.listTopics(resp);
-               // $scope.listTasks();
-               // $scope.listEvents();
+               $scope.ListComments();
+              
                // Call the method $apply to make the update on the scope
                 $scope.$apply();
 

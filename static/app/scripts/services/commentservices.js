@@ -15,27 +15,25 @@ commentservices.factory('Comment', function($http) {
       $scope.isLoading = true;
       gapi.client.crmengine.comments.list(params).execute(function(resp) {
               if(!resp.code){
-                console.log('in comments.list looking for pagingation');
-                console.log('CurrentPage   is '+$scope.currentPage);
-
+              
                  $scope.comments = resp.items;
              
                  console.log($scope.comments);
 
-                  if ($scope.currentPage>1){
+                  if ($scope.currentPagecomment>1){
                       console.log('Should show PREV');
-                    $scope.pagination.prev = true;
+                    $scope.paginationcomment.prev = true;
                   }else{
-                      $scope.pagination.prev= false;
+                      $scope.paginationcomment.prev= false;
                    }
                  if (resp.nextPageToken){
-                   var nextPage = $scope.currentPage + 1;
+                   var nextPage = $scope.currentPagecomment + 1;
                     // Store the nextPageToken
-                   $scope.pages[nextPage] = resp.nextPageToken;
-                   $scope.pagination.next = true;
+                   $scope.pagescomment[nextPage] = resp.nextPageToken;
+                   $scope.paginationcomment.next = true;
 
                    }else{
-                  $scope.pagination.next = false;
+                  $scope.paginationcomment.next = false;
                  }
                  //Loaded succefully
                  $scope.isLoading = false;
@@ -80,10 +78,10 @@ Comment.insert = function($scope,comment){
           // TME_02_11_13 when a note is inserted reload topics
           //$scope.listTopics();
           $scope.isLoading = false;
-           
+           $scope.ListComments();
 
           $scope.$apply();
-         $scope.ListComments();
+         
           
          
      
