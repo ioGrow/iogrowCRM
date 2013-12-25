@@ -30,7 +30,7 @@ feedbackservices.factory('Feedback', function($http) {
               
               if(!resp.code){
                  if (!resp.items){
-                    $scope.blankState = true;
+                    $scope.blankStatefeedback = true;
                   }
 
                  $scope.feedbacks = resp.items;

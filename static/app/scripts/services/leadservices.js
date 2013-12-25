@@ -39,11 +39,12 @@ leadservices.factory('Lead', function($http) {
           });
   };
   Lead.list = function($scope,params){
+     $scope.isLoading = true;
       gapi.client.crmengine.leads.list(params).execute(function(resp) {
 
               if(!resp.code){
                 if (!resp.items){
-                    $scope.blankState = true;
+                    $scope.blankStatelead = true;
                   }
                  $scope.leads = resp.items;
                   if ($scope.currentPage>1){

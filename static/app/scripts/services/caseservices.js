@@ -42,7 +42,7 @@ accountservices.factory('Case', function($http) {
       gapi.client.crmengine.cases.list(params).execute(function(resp) {
               if(!resp.code){
                   if (!resp.items){
-                    $scope.blankState = true;
+                    $scope.blankStatecase = true;
                   }
                  $scope.cases = resp.items;
                          

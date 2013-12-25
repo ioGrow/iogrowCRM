@@ -37,7 +37,7 @@ topicservices.factory('Show', function($http) {
                 console.log('in topics.list looking for pagingation');
                 console.log($scope.currentPage);
                 if (!resp.items){
-                    $scope.blankState = true;
+                    $scope.blankStateshow = true;
                   }
 
                  $scope.shows = resp.items;

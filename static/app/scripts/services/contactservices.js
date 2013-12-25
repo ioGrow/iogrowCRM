@@ -49,7 +49,7 @@ accountservices.factory('Contact', function($http) {
     
               if(!resp.code){
                   if (!resp.items){
-                    $scope.blankState = true;
+                    $scope.blankStatecontact = true;
                   }
                  $scope.contacts = resp.items;
                  if ($scope.contactCurrentPage>1){
