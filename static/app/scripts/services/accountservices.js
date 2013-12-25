@@ -140,46 +140,8 @@ return Account;
 });
 
 
-// retrieve list account
-accountservices.factory('MultiAccountLoader', ['Account','$route', '$q',
-    function(Account, $route, $q) {
-    return function() {
-    var delay = $q.defer();
-    gapi.client.crmengine.accounts.list().execute(function(resp) {
-            console.log('after execution');
-           // console.log(resp);
-            
-            delay.resolve(resp.items);
 
-            console.log('resoleved');
-            console.log(resp.items);
-            console.log('continue');
-      // pagination
-    
-    });
-    console.log('continued');
-    
-    return delay.promise;
-    };
 
-   // function(Account,$route, $q) {
-  //return function() {
-   // return Account.list($route.current.params.page);
- // };
-}]);
-
-// retrieve an account
-accountservices.factory('AccountLoader', ['Account', '$route', '$q',
-    function(Account, $route, $q) {
-  return function() {
-    var delay = $q.defer();
-    
-    var accountId = $route.current.params.accountId;
-    
-    
-    return Account.get($route.current.params.accountId);
-  };
-}]);
 
 accountservices.factory('Search', function($http) {
   

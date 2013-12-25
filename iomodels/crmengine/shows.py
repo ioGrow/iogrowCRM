@@ -16,6 +16,7 @@ class Show(EndpointsModel):
     collaborators_ids = ndb.StringProperty(repeated=True)
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
+    folder = ndb.StringProperty()
     name = ndb.StringProperty()
     starts_at = ndb.DateTimeProperty()
     ends_at = ndb.DateTimeProperty()

@@ -116,8 +116,8 @@ app.controller('ShowListCtrl', ['$scope','$filter','Auth','Show',
     
 }]);
 
-app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Topic','Note','Task','Event','WhoHasAccess','User','Leadstatus','Lead','Permission',
-    function($scope,$filter,$route,Auth,Show,Topic,Note,Task,Event,WhoHasAccess,User,Leadstatus,Lead,Permission) {
+app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Topic','Note','Task','Event','WhoHasAccess','User','Leadstatus','Lead','Permission','Attachement',
+    function($scope,$filter,$route,Auth,Show,Topic,Note,Task,Event,WhoHasAccess,User,Leadstatus,Lead,Permission,Attachement) {
       
       $("#id_Shows").addClass("active");
       var tab = $route.current.params.accountTab;
@@ -549,6 +549,68 @@ $scope.deleteshow = function(){
   Show.delete($scope,showid);
   $('#BeforedeleteShow').modal('hide');
 };
+
+//HKA 25.12.2013 Attach Document 
+$scope.createDocument = function(newdocument){
+        var mimeType = 'application/vnd.google-apps.' + $scope.mimeType;
+        var params = {'about_kind':'Show',
+                      'about_item': $scope.show.id,
+                      'title':newdocument.title,
+                      'mimeType':mimeType };
+        Attachement.insert($scope,params);
+
+     };
+$scope.showCreateDocument = function(type){
+        
+        $scope.mimeType = type;
+        $('#newDocument').modal('show');
+     };
+$scope.createPickerUploader = function() {
+          var projectfolder = $scope.show.folder;
+          var picker = new google.picker.PickerBuilder().
+              addView(new google.picker.DocsUploadView().setParent(projectfolder)).
+              setCallback($scope.uploaderCallback).
+              setAppId(12345).
+                enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
+              build();
+          picker.setVisible(true);
+      };
+// A simple callback implementation.
+      $scope.uploaderCallback = function(data) {
+        
+
+        if (data.action == google.picker.Action.PICKED) {
+                var params = {'about_kind': 'Show',
+                                      'about_item':$scope.show.id};
+                params.items = new Array();
+               
+                 $.each(data.docs, function(index) {
+                      console.log(data.docs);
+                      
+                      var item = { 'id':data.docs[index].id,
+                                  'title':data.docs[index].name,
+                                  'mimeType': data.docs[index].mimeType,
+                                  'embedLink': data.docs[index].url
+
+                      };
+                      params.items.push(item);
+                
+                  });
+                 Attachement.attachfiles($scope,params);
+                    
+                    console.log('after uploading files');
+                    console.log(params);
+                }
+      }
+$scope.listDocuments = function(){
+        var params = {'about_kind':'Show',
+                      'about_item':$scope.show.id,
+                      'order': '-updated_at',
+                      'limit': 5
+                      };
+        Attachement.list($scope,params);
+
+     }
 
       
 // Google+ Authentication 
