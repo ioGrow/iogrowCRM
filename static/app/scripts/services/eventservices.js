@@ -108,7 +108,7 @@ Event.getUrl = function(type,id){
           base_url = '/#/cases/show/';
           break;
         case 'Show':
-          base_url = '/#/shows/show/';
+          base_url = '/#/live/shows/show/';
           break;
         }
 

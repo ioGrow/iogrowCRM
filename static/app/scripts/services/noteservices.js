@@ -104,7 +104,7 @@ Note.insert = function($scope,note){
           base_url = '/#/cases/show/';
           break;
         case 'Show':
-          base_url = '/#/shows/show/';
+          base_url = '/#/live/shows/show/';
           break;
         }
 
