@@ -1103,7 +1103,7 @@ class CrmEngineApi(remote.Service):
     return my_model
 
   # tags.list api
-  @Tag.query_method(user_required=True,query_fields=('about_kind','about_item', 'limit', 'order', 'pageToken'),path='tags', name='tags.list')
+  @Tag.query_method(user_required=True,query_fields=('about_kind', 'limit', 'order', 'pageToken'),path='tags', name='tags.list')
   def tags_list(self, query):
       user_from_email = EndpointsHelper.require_iogrow_user()
       return query.filter(Tag.organization==user_from_email.organization)

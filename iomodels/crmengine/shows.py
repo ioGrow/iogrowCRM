@@ -2,6 +2,7 @@ from google.appengine.ext import ndb
 from google.appengine.api import search
 from endpoints_proto_datastore.ndb import EndpointsModel
 from model import User
+from iomodels.crmengine.tags import Tag
 import pprint
 
 
@@ -35,6 +36,13 @@ class Show(EndpointsModel):
     access = ndb.StringProperty()
 
     def put(self, **kwargs):
+        for tag in self.tags:
+            query_tags = Tag.query(ndb.AND(Tag.organization == self.organization,Tag.name == tag, Tag.about_kind=='Show')).fetch()
+            if query_tags:
+                print query_tags
+            else:
+                tag = Tag(organization = self.organization, about_kind='Show', name=tag)
+                tag.put()
         ndb.Model.put(self, **kwargs)
         self.put_index()
         self.set_perm()
