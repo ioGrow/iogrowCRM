@@ -20,6 +20,7 @@ from iomodels.crmengine.comments import Comment
 from iomodels.crmengine.opportunitystage import Opportunitystage
 from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.casestatuses import Casestatus
+from iomodels.crmengine.feedbacks import Feedback
 from model import User,Userinfo,Group,Member,Permission,Contributor
 import model
 import logging
@@ -937,6 +938,56 @@ class CrmEngineApi(remote.Service):
     http_method ='DELETE',path='shows/{id}',name='shows.delete'
     )
   def ShowDelete(self,my_model):
+    user_from_email=EndpointsHelper.require_iogrow_user()
+    my_model.key.delete()
+    return message_types.VoidMessage()
+  #feedbacks APIs
+  @Feedback.method(user_required=True,path='feedbacks',http_method='POST',name='feedbacks.insert')
+  def Feedbackinsert(self, my_model):
+      user_from_email = EndpointsHelper.require_iogrow_user()
+      my_model.owner = user_from_email.google_user_id
+      my_model.organization = user_from_email.organization
+      organization = user_from_email.organization.get()
+      my_model.organization_name = organization.name
+      my_model.put()
+      return my_model
+  # feedbacks.list api
+  @Feedback.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='feedbacks', name='feedbacks.list')
+  def feedbacks_list(self, query):
+      user_from_email = EndpointsHelper.require_iogrow_user()      
+      return query.filter(ndb.OR(ndb.AND(Feedback.access=='public',Feedback.organization==user_from_email.organization),Feedback.owner==user_from_email.google_user_id, Feedback.collaborators_ids==user_from_email.google_user_id)).order(Feedback._key)
+  # feedbacks.get api
+  @Feedback.method(request_fields=('id',),path='feedbacks/{id}', http_method='GET', name='feedbacks.get')
+  def feedbacks_get(self, my_model):
+    if not my_model.from_datastore:
+      raise endpoints.NotFoundException('Show not found.')
+    return my_model
+  # shows.patch api
+  @Feedback.method(user_required=True,
+                http_method='PATCH', path='feedbacks/{id}', name='feedbacks.patch')
+  def feedbacks_patch(self, my_model):
+      user_from_email = EndpointsHelper.require_iogrow_user()
+      # Todo: Check permissions
+      if not my_model.from_datastore:
+          raise endpoints.NotFoundException('Feedback not found.')
+      patched_model_key = my_model.entityKey
+      patched_model = ndb.Key(urlsafe=patched_model_key).get()
+      print patched_model
+      print my_model
+      properties = Feedback().__class__.__dict__
+      for p in properties.keys():
+         
+            if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p)):
+                exec('patched_model.'+p+'= my_model.'+p)
+      
+
+      patched_model.put()
+      return patched_model
+  @Feedback.method(request_fields=('id',),
+    response_message=message_types.VoidMessage,
+    http_method ='DELETE',path='feedbacks/{id}',name='feedbacks.delete'
+    )
+  def FeedbackDelete(self,my_model):
     user_from_email=EndpointsHelper.require_iogrow_user()
     my_model.key.delete()
     return message_types.VoidMessage()

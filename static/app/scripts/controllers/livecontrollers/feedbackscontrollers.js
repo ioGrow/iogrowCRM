@@ -1,5 +1,5 @@
-app.controller('FeedBacksListCtrl', ['$scope','$filter','Auth','Show',
-    function($scope,$filter,Auth,Show) {
+app.controller('FeedBacksListCtrl', ['$scope','$filter','Auth','Feedback',
+    function($scope,$filter,Auth,Feedback) {
      $("#id_Feedbacks").addClass("active");
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
@@ -10,14 +10,12 @@ app.controller('FeedBacksListCtrl', ['$scope','$filter','Auth','Show',
      $scope.currentPage = 01;
      $scope.pages = [];
      
-     $scope.accounts = [];
-     
-     
+         
 
      // What to do after authentication
      $scope.runTheProcess = function(){
           var params = {'limit':7};
-          Show.list($scope,params);
+          Feedback.list($scope,params);
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -37,7 +35,7 @@ app.controller('FeedBacksListCtrl', ['$scope','$filter','Auth','Show',
           }
           console.log('in listNextPageItems');
           $scope.currentPage = $scope.currentPage + 1 ; 
-          Show.list($scope,params);
+          Feedback.list($scope,params);
      }
      $scope.listPrevPageItems = function(){
        
@@ -51,51 +49,9 @@ app.controller('FeedBacksListCtrl', ['$scope','$filter','Auth','Show',
             params = {'limit':7}
           }
           $scope.currentPage = $scope.currentPage - 1 ;
-          Account.list($scope,params);
+          Feedback.list($scope,params);
      }
-      $scope.scheduleShow = function(ioevent){
       
-        $('#newShowModal').modal('hide');
-        var params ={}
-
-        console.log('adding a new show');
-        var tagsplit = ioevent.tags.split(' ');
-
-        var tags = [];
-        for (i=0; i<tagsplit.length; i++){
-        
-            tags.push(tagsplit[i]);
-      
-        }
-        console.log('# hastags');
-        console.log(tags);
-        console.log($filter);
-        
-        
-        if (ioevent.starts_at){
-            if (ioevent.ends_at){
-              var starts_at = $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']);
-              var ends_at = $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']);
-              params ={'name': ioevent.name,
-                      'starts_at': starts_at,
-                      'ends_at':ends_at ,
-                      'is_published': true,
-                      'tags': tags
-              }
-
-            }else{
-              params ={'name': ioevent.name,
-                      'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'tags': tags
-              }
-            }
-            console.log('inserting the event');
-            console.log(params);
-            Show.insert($scope,params);
-
-            
-        }
-     }
      
 
      $scope.showModal = function(){
@@ -104,9 +60,7 @@ app.controller('FeedBacksListCtrl', ['$scope','$filter','Auth','Show',
 
       };
       
-    $scope.save = function(account){
-      Account.insert(account);
-    };
+
      
      
    // Google+ Authentication 
