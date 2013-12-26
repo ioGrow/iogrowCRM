@@ -1009,7 +1009,7 @@ class CrmEngineApi(remote.Service):
       my_model.put()
       return my_model
   # comments.list api
-  @Comment.query_method(user_required=True,query_fields=('limit', 'order','discussion','updated_at', 'pageToken'),path='comments',name='comments.list')
+  @Comment.query_method(user_required=True,query_fields=('limit', 'order','discussion', 'pageToken'),path='comments',name='comments.list')
   def CommentList(self,query):
      return query
   # comments.get api

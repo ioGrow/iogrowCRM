@@ -39,12 +39,13 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
           if ($scope.pagescomment[nextPage]){
             params = {'limit':5,
                       'discussion':$scope.task.entityKey,                    
-
+                       'order':'-updated_at',
                       'pageToken':$scope.pagescomment[nextPage]
                      }
           }else{
             params = {'limit':5,
-                      'discussion':$scope.task.entityKey}
+                      'discussion':$scope.task.entityKey,
+                      'order':'-updated_at',}
           }
           console.log('in listNextPageItems');
           $scope.currentPagecomment = $scope.currentPagecomment + 1 ; 
@@ -56,11 +57,14 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
        var params = {};
           if ($scope.pagescomment[prevPage]){
             params = {'limit':5,
-                      'discussion':$scope.note.entityKey,
+                      'discussion':$scope.task.entityKey,
+                      'order':'-updated_at',
                       'pageToken':$scope.pagescomment[prevPage]
                      }
           }else{
-            params = {'limit':5,'discussion':$scope.task.entityKey}
+            params = {'limit':5,
+            'order':'-updated_at',
+            'discussion':$scope.task.entityKey}
           }
           $scope.currentPagecomment = $scope.currentPagecomment - 1 ;
           Comment.list($scope,params);
