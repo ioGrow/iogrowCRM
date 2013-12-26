@@ -9,7 +9,8 @@ app.controller('FeedBacksListCtrl', ['$scope','$filter','Auth','Feedback',
      $scope.pagination = {};
      $scope.currentPage = 01;
      $scope.pages = [];
-     
+     $scope.feedback = {};
+    
          
 
      // What to do after authentication
@@ -54,11 +55,32 @@ app.controller('FeedBacksListCtrl', ['$scope','$filter','Auth','Feedback',
       
      
 
-     $scope.showModal = function(){
+     $scope.showFeedbackModal = function(){
         console.log('button clicked');
-        $('#newShowModal').modal('show');
+       $scope.feedback.type_feedback = 1;
+       $scope.feedback.source = 4;
+       $scope.feedback.status = 8;
+        $('#addFeedModal').modal('show');
 
       };
+      /*$scope.addFeedbackOnKey = function(feedback){
+        if(event.keyCode == 13 && feedback){
+            $scope.savefeedback(feedback);
+        };
+     };*/
+     // inserting the feedback  
+     $scope.savefeedback = function(feedback){
+         
+            var params ={'name':feedback.name,
+                         'content':feedback.content,
+                         'type_feedback':feedback.type_feedback,
+                         'source':feedback.source,
+                         'status':feedback.status}
+             Feedback.insert($scope,params);
+             $('#addFeedModal').modal('hide');
+            };
+    
+
       
 
      
@@ -69,10 +91,10 @@ app.controller('FeedBacksListCtrl', ['$scope','$filter','Auth','Feedback',
     
 }]);
 
-app.controller('FeedBacksShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Topic','Note','Task','Event','WhoHasAccess','User',
-    function($scope,$filter,$route,Auth,Show,Topic,Note,Task,Event,WhoHasAccess,User) {
+app.controller('FeedBacksShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Topic','Note','Task','Event','WhoHasAccess','User','Feedback',
+    function($scope,$filter,$route,Auth,Show,Topic,Note,Task,Event,WhoHasAccess,User,Feedback) {
       
-      $("#id_Shows").addClass("active");
+      $("#id_Feedbacks").addClass("active");
       var tab = $route.current.params.accountTab;
       switch (tab)
         {
@@ -105,14 +127,15 @@ app.controller('FeedBacksShowCtrl', ['$scope','$filter', '$route','Auth','Show',
      $scope.pagination = {};
      $scope.currentPage = 01;
      $scope.pages = [];
+   
      
      $scope.accounts = [];
      
      
      // What to do after authentication
      $scope.runTheProcess = function(){
-          var params = {'id':$route.current.params.showId};
-          Show.get($scope,params);
+          var params = {'id':$route.current.params.feedbackId};
+          Feedback.get($scope,params);
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {

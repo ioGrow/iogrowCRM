@@ -534,7 +534,7 @@ class settingsShowHandler(BaseHandler, SessionEnabledHandler):
             template_values = {'tabs':tabs}
             template = jinja_environment.get_template('templates/admin/settings/settings.html')
             self.response.out.write(template.render(template_values))
-class CompanyProfileHandlers(BaseHandler,SessionEnabledHandler):
+class CompanyProfileListHandlers(BaseHandler,SessionEnabledHandler):
   def get(self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
       user = self.get_user_from_session()
@@ -544,7 +544,7 @@ class CompanyProfileHandlers(BaseHandler,SessionEnabledHandler):
       template_values = {'tabs':tabs}
       template = jinja_environment.get_template('templates/live/company_profile/comp_profile_show.html')
       self.response.out.write(template.render(template_values))
-class ProductVideosHandlers (BaseHandler,SessionEnabledHandler):
+class ProductVideosListHandlers (BaseHandler,SessionEnabledHandler):
   def get(self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
       user = self.get_user_from_session()
@@ -554,7 +554,7 @@ class ProductVideosHandlers (BaseHandler,SessionEnabledHandler):
       template_values = {'tabs':tabs}
       template = jinja_environment.get_template('templates/live/product_videos/product_videos_list.html')
       self.response.out.write(template.render(template_values))
-class CusomerStoriesHandlers (BaseHandler,SessionEnabledHandler):
+class CusomerStoriesListHandlers (BaseHandler,SessionEnabledHandler):
   def get(self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
       user = self.get_user_from_session()
@@ -564,7 +564,7 @@ class CusomerStoriesHandlers (BaseHandler,SessionEnabledHandler):
       template_values = {'tabs':tabs}
       template = jinja_environment.get_template('templates/live/customer_stories/customer_stories_list.html')
       self.response.out.write(template.render(template_values))
-class FeedBacksHandlers (BaseHandler,SessionEnabledHandler):
+class FeedBacksListHandlers (BaseHandler,SessionEnabledHandler):
   def get(self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
       user = self.get_user_from_session()
@@ -574,6 +574,20 @@ class FeedBacksHandlers (BaseHandler,SessionEnabledHandler):
       template_values = {'tabs':tabs}
       template = jinja_environment.get_template('templates/live/feedbacks/feedbacks_list.html')
       self.response.out.write(template.render(template_values))
+class FeedBacksShowHandlers(BaseHandler, SessionEnabledHandler):
+    def get(self):
+      if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            tabs = user.get_user_active_tabs()
+
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            # Render the template
+            template_values = {'tabs':tabs}
+            template = jinja_environment.get_template('templates/live/feedbacks/feedbacks_show.html')
+            self.response.out.write(template.render(template_values))
 
 class GooglePlusConnect(SessionEnabledHandler): 
     @staticmethod
@@ -963,10 +977,11 @@ routes = [
     ('/views/admin/groups/show',GroupShowHandler),
     ('/views/admin/settings',settingsShowHandler),
     #iogrow live App
-    ('/views/live/company_profile',CompanyProfileHandlers),
-    ('/views/live/product_videos',ProductVideosHandlers),
-    ('/views/live/customer_stories',CusomerStoriesHandlers),
-    ('/views/live/feedbacks',FeedBacksHandlers),
+    ('/views/live/company_profile',CompanyProfileListHandlers),
+    ('/views/live/product_videos',ProductVideosListHandlers),
+    ('/views/live/customer_stories',CusomerStoriesListHandlers),
+    ('/views/live/feedbacks',FeedBacksListHandlers),
+    ('/views/live/feedbacks/show',FeedBacksShowHandlers),
     # Applications settings
     (r'/apps/(\d+)', ChangeActiveAppHandler),
     # ioGrow Live

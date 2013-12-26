@@ -1,20 +1,26 @@
 from google.appengine.ext import ndb
 from endpoints_proto_datastore.ndb import EndpointsModel
 from endpoints_proto_datastore import MessageFieldsSchema
-from google.appengine.api import search 
+from google.appengine.api import search
+from model import Userinfo
 
 import model
 
 class Feedback(EndpointsModel):
-    _message_fields_schema = ('id','entityKey','created_at','updated_at', 'folder','access','collaborators_list','name')
+    _message_fields_schema = ('id','entityKey','created_at','updated_at', 'folder','access','collaborators_list','name','content','type_feedback','status','source')
 
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
     collaborators_ids = ndb.StringProperty(repeated=True)
     organization = ndb.KeyProperty()
     folder = ndb.StringProperty()
-    name = ndb.StringProperty()
+    name = ndb.StringProperty()  
     content = ndb.StringProperty()
+    type_feedback = ndb.StringProperty()
+    who = ndb.StructuredProperty(Userinfo)
+    source = ndb.StringProperty()
+    status = ndb.StringProperty()
+    related_to = ndb.KeyProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
     # public or private
@@ -50,6 +56,10 @@ class Feedback(EndpointsModel):
             search.TextField(name='collaborators', value = collaborators ),
             search.TextField(name='title', value = empty_string(self.name) ),
             search.TextField(name='content', value = empty_string(self.content) ),
+            search.TextField(name='type_feedback', value = empty_string(self.type_feedback) ),
+            search.TextField(name='source', value = empty_string(self.source) ),
+            search.TextField(name='status', value = empty_string(self.status) ),
+            search.TextField(name='related_to', value = empty_string(self.related_to) ),
             search.DateField(name='created_at', value = self.created_at),
             search.DateField(name='updated_at', value = self.updated_at),
                 ])

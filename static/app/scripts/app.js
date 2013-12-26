@@ -111,5 +111,8 @@ app.config(['$routeProvider', function($routeProvider) {
       }).when('/live/feedbacks',{
         controller:'FeedBacksListCtrl',
         templateUrl:'/views/live/feedbacks'
+      }).when('/live/feedbacks/feedback/:feedbackId',{
+        controller:'FeedBacksShowCtrl',
+        templateUrl:'/views/live/feedbacks/show'
       });
 }]);
