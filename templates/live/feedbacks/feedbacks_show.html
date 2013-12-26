@@ -44,17 +44,13 @@
             <h2>
             <a href="/#/live/feedbacks" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
             <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("FeedBacks")}} > <%= feedback.name %></h2>
-            
 
-            <span ng-repeat="tag in show.tags"><a class="tag" href="#"> <%=tag%> </a></span>
-            
-             </br>
-              <span class="page-meta"><img src="/static/img/youtube.png" ng-click="createYoutubePicker()"/>: <strong>Add youtube-url when this show is ready </strong></span>
+              <span class="page-meta">  <%=feedback.content %> </span>
               </br>
               
-              <span class="page-meta"><strong>The show page on i/oGrow Live:</strong> <a href="/live/shows/<%=show.id%>">preview</a> </span>
+              <span class="page-meta"><strong>Type:</strong> <a ></a> <%=feedback.feedback_type %></span>
               </br>
-              <span class="page-meta"><strong>Publish this show on i/oGrow Live: </strong> <input type="checkbox" checked class="toggle"/>  </span>
+              <span class="page-meta"><strong>Status: </strong> <a href="/live/shows/<%=show.id%>"><%=feedback.status%></a>   </span>
               
              
                        
@@ -387,13 +383,13 @@
 
                                   </ul>
                                  
-                                  <p><strong>Events:</strong></p>
+                                  <!--p><strong>Events:</strong></p>
 
                                  
                                   <ul id="tasks" class="unstyled">
                                     <li ng-repeat="event in events" id="event_<%=$index%>">
                                       <input value="check1" type="checkbox">
-                                      <!-- Name -->
+                                     
                                     <span><a href="/tasks/1" class="discussion-content"><%= event.title%> <span ng-show="event.starts_at"> [<%= event.starts_at | date:'yyyy-MM-dd '%>]</span></a></span>
                                     </li>
                                    
@@ -403,7 +399,7 @@
                                     <li><a href="#newEventModal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new event</a></li>
 
 
-                                  </ul>
+                                  </ul-->
 
                                   <!-- Modal -->
           <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
