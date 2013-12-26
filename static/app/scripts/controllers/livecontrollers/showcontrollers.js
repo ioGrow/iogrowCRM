@@ -165,6 +165,15 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Top
       $scope.slected_memeber = undefined;
       $scope.show = {};
       $scope.show.edited_youtube_url = undefined;
+      $scope.list_of_string = [];
+      $scope.select2Options = {
+          
+          'multiple': true,
+          'simple_tags': true,
+          'tags': ['grow'],
+          'tokenSeparators': [",", " " ,"#"]
+      };
+
      
      // What to do after authentication
      $scope.runTheProcess = function(){
