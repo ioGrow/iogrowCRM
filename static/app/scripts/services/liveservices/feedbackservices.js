@@ -88,7 +88,7 @@ feedbackservices.factory('Feedback', function($http) {
 
       )};
   Feedback.delete = function($scope,id){
-    gapi.client.crmengine.feedback.delete(id).execute(function(resp){
+    gapi.client.crmengine.feedbacks.delete(id).execute(function(resp){
         window.location.replace('#/live/feedbacks');
       
 

@@ -57,7 +57,7 @@ app.controller('FeedBacksListCtrl', ['$scope','$filter','Auth','Feedback',
 
      $scope.showFeedbackModal = function(){
         console.log('button clicked');
-       $scope.feedback.type_feedback = 'DADy';
+       $scope.feedback.type_feedback = 'Questions Q/A';
        $scope.feedback.source = 'Email';
        $scope.feedback.status = 'Pending';
         $('#addFeedModal').modal('show');
@@ -75,6 +75,7 @@ app.controller('FeedBacksListCtrl', ['$scope','$filter','Auth','Feedback',
                          'content':feedback.content,
                          'type_feedback':feedback.type_feedback,
                          'source':feedback.source,
+                         'access':feedback.access,
                          'status':feedback.status}
              Feedback.insert($scope,params);
              $('#addFeedModal').modal('hide');
@@ -91,8 +92,8 @@ app.controller('FeedBacksListCtrl', ['$scope','$filter','Auth','Feedback',
     
 }]);
 
-app.controller('FeedBacksShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Topic','Note','Task','Event','WhoHasAccess','User','Feedback','Leadstatus','Lead',
-    function($scope,$filter,$route,Auth,Show,Topic,Note,Task,Event,WhoHasAccess,User,Feedback,Leadstatus,Lead) {
+app.controller('FeedBacksShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Topic','Note','Task','Event','Permission','User','Feedback','Leadstatus','Lead',
+    function($scope,$filter,$route,Auth,Show,Topic,Note,Task,Event,Permission,User,Feedback,Leadstatus,Lead) {
       
       $("#id_Feedbacks").addClass("active");
       var tab = $route.current.params.accountTab;
@@ -151,15 +152,77 @@ app.controller('FeedBacksShowCtrl', ['$scope','$filter', '$route','Auth','Show',
      $scope.refreshToken = function() {
             Auth.refreshToken();
      };
+  //HKA 28.12.2013 Edit feedback
+     $scope.editFeedbackdetail = function(){
+      $('#EditFeedbackModal').modal('show');
+     };
 
-     $scope.createYoutubePicker = function() {
-          console.log('ok should create youtube picker');
-          var picker = new google.picker.PickerBuilder().
-          addView(google.picker.ViewId.YOUTUBE).
-         
-          build();
-          picker.setVisible(true);
-      };
+     $scope.savefeedback = function(feedback){
+
+      Feedback.patch($scope,feedback);
+      $('#EditFeedbackModal').modal('hide');
+
+     };
+
+
+
+     $scope.editbeforedelete = function(){
+ 
+  $('#BeforedeleteFeedback').modal('show');
+
+     };
+    $scope.deletefeedback = function(){
+ 
+  var feedbackid = {'id':$route.current.params.feedbackId};
+ 
+  Feedback.delete($scope,feedbackid);
+  $('#BeforedeleteFeedback').modal('hide');
+     };
+
+  //HKA 28.12.2013 Share Feedback
+
+    $scope.selectMember = function(){
+        console.log('slecting user yeaaah');
+        $scope.slected_memeber = $scope.user;
+        $scope.user = $scope.slected_memeber.google_display_name;
+
+     };
+     $scope.share = function(slected_memeber){
+        console.log('permissions.insert share');
+        console.log(slected_memeber);
+        $scope.$watch($scope.feedback.access, function() {
+         var body = {'access':$scope.feedback.access};
+         var id = $scope.feedback.id;
+         var params ={'id':id,
+                      'access':$scope.feedback.access}
+         Feedback.patch($scope,params);
+        });
+        $('#sharingSettingsModal').modal('hide');
+
+        if (slected_memeber.email){
+        var params = {  'type': 'user',
+                        'role': 'writer',
+                        'value': slected_memeber.email,
+                        'about_kind': 'Show',
+                        'about_item': $scope.feedback.id
+
+                        
+          };
+          Permission.insert($scope,params); 
+          
+          
+        }else{ 
+          alert('select a user to be invited');
+        };
+
+
+     };
+     
+     $scope.updateCollaborators = function(){
+          var showid = {'id':$route.current.params.showId};
+          Show.get($scope,showid);
+
+     };
      
      $scope.addTask = function(task){
       
@@ -201,42 +264,8 @@ app.controller('FeedBacksShowCtrl', ['$scope','$filter', '$route','Auth','Show',
                       };
         Task.list($scope,params);
 
-     }
-     $scope.addEvent = function(ioevent){
-      
-        $('#newEventModal').modal('hide');
-        var params ={}
-
-        console.log('adding a new event');
-        
-        
-        if (ioevent.starts_at){
-            if (ioevent.ends_at){
-              params ={'title': ioevent.title,
-                      'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'where': ioevent.where
-              }
-
-            }else{
-              params ={'title': task.title,
-                      'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'where': ioevent.where
-              }
-            }
-            console.log('inserting the event');
-            console.log(params);
-            Event.insert($scope,params);
-
-            
-        };
-     }
-     $scope.hilightEvent = function(){
-        console.log('Should higll');
-        $('#event_0').effect("highlight","slow");
-        $('#event_0').effect( "bounce", "slow" );
-       
-     }
+     };
+    
      
 
      
@@ -320,10 +349,30 @@ app.controller('FeedBacksShowCtrl', ['$scope','$filter', '$route','Auth','Show',
       $scope.note.title = '';
       $scope.note.content = '';
     };
-      
-//HKA 28.12.2013 Show Lead
+
+//HKA 28.12.2013 Add a new lead to the Feedback
+ $scope.AddleadModal = function(){
+  $('#addLeadShow').modal('show');
+ };
+
+$scope.savelead = function(lead){
+        var params ={'firstname':lead.firstname,
+                      'lastname':lead.lastname,
+                      'company':lead.company,
+                      'title':lead.title,
+                      'feedback':$scope.feedback.entityKey,
+                      'feedback_name':$scope.feedback.name,
+                      'status':$scope.stage_selected.status};
+        Lead.insert($scope,params);
+        $('#addLeadShow').modal('hide')
+      };
+$scope.addLeadOnKey = function(lead){
+        if(event.keyCode == 13 && lead){
+            $scope.save(lead);
+        }
+      };
 $scope.listLead = function(){
-  var params = {'show':$scope.feedback.entityKey,
+  var params = {'feedback':$scope.feedback.entityKey,
                  'limit':5};
   Lead.list($scope,params);
 };

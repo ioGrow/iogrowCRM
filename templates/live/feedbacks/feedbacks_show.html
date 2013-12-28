@@ -40,11 +40,11 @@
                      
                           
                             <label class="radio line">
-                            <input type="radio" value="public" ng-model="show.access" />
+                            <input type="radio" value="public" ng-model="feedback.access" />
                             {{ _("public: Anyone within your organization can access and find") }}
                             </label>
                             <label class="radio line">
-                            <input type="radio"  value="private" ng-model="show.access" />
+                            <input type="radio"  value="private" ng-model="feedback.access" />
                             {{ _("private: only you and your collaborators") }}
                             </label>  
                            
@@ -86,18 +86,18 @@
               </div>
                </form>
        </div>
-       <!--HKA 24.12.2013 Modal before Deleting show-->
+
+           <!--HKA 24.12.2013 Modal before Deleting Feedback-->
          <div id="BeforedeleteFeedback" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3 id="myModalLabel">Delete Feedback</h3>
-                
               </div>
               <div class="modal-body">
                  <form id="seletesho" name="deletesho" class="form-horizontal"> 
                   <fieldset>
 
-                  <p>{{_("Are you sure you want to delete")}} <%=feedback.name%> .</p>
+                  <p>{{_("Are you sure you want to delete")}} <%=feedback.name %> .</p>
                     
 
                     
@@ -107,11 +107,12 @@
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
                 
-                <input ng-hide="isLoading" ng-click="deletefeedback(feedback)" type="submit" class="btn red" value="Delet this Feedback">
+                <input ng-hide="isLoading" ng-click="deletefeedback(feedback)" type="submit" class="btn red" value="Delet this feedback">
                 <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
               </div>
                </form>
        </div>
+        
         
       <div class="container-fluid" ng-show="isContentLoaded">
         
@@ -135,12 +136,12 @@
             
 
             <span><a class="tag" href="#"> <%=feedback.content %></a></span>
-            
              </br>
                <span class="page-meta"><strong>Type: </strong> <a ></a> <%=feedback.type_feedback %></span>
               </br>
-            <span class="page-meta"><strong>Status: </strong> <a ><%=feedback.status%></a>   </span></br>
-              <span class="page-meta"><strong>Source: </strong> <a ><%=feedback.source%></a>   </span>
+            <span class="page-meta"><strong>Source: </strong> <a ><%=feedback.source%></a>   </span></br>
+            <span class="page-meta"><strong>Status: </strong> <a ><%=feedback.status%></a>   </span>
+              
             
               <!--span class="page-meta"><strong>Publish this show on i/oGrow Live: </strong> <input type="checkbox" ng-model="show.is_published" checked class="toggle"  ng-click="saveshowispublished(show)" />  </span-->
               
@@ -148,7 +149,7 @@
                        
               
               </br>
-             <span class="page-meta"><i class="icon-pencil"><a ng-click="editshowdetail()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |  <i class="icon-trash"><a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  {{_("Delete")}}</a></i></span>
+             <span class="page-meta"><i class="icon-pencil"><a ng-click="editFeedbackdetail()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |  <i class="icon-trash"><a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  {{_("Delete")}}</a></i></span>
 
            
             
@@ -675,7 +676,7 @@
         <!-- END PAGE CONTENT-->
       </div>
       <!--HKA 11.10.2013 Edit Show -->
-             <div id="EditShowModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+             <div id="EditFeedbackModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -683,42 +684,62 @@
               </div>
 
               <div class="modal-body">
-                 <form id="editShow" name="editshow" ng-submit="saveshow(show)" class="form-horizontal"> 
+                 <form id="editShow" name="editshow" ng-submit="savefeedback(feedback)" class="form-horizontal"> 
                 
 
-                  <div class="control-group">
-                        <label  class="required control-label">{{_("Name")}} *</label>
+                   <div class="control-group">
+                        <label  class="required control-label">{{_("Title")}} *</label>
                        
                         <div class="controls">
-                          <input type="text" required id="id_lastname" ng-model="show.name">
-                          
-                        </div>
-                    </div>
-                   
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Youtube Url")}} </label>
-                       
-                        <div class="controls">
-                          <input type="text"  id="id_youtube_url" ng-model="show.edited_youtube_url">
+                          <input type="text" required  ng-model="feedback.name">
                           
                         </div>
                     </div>
                     <div class="control-group">
-                        <label  class="required control-label">{{_("Tags")}} </label>
+                        <label  class="required control-label">{{_("Content")}} *</label>
                        
                         <div class="controls">
-                          <input type="text" class="span8" ui-select2="select2Options" ng-model="list_of_string"
-    >                         
+                          <textarea required  ng-model="feedback.content" rows="3">
+                          </textarea>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label  class="required control-label">{{_("Publish this show on i/oGrow Live: Url")}} </label>
+                        <label  class="control-label">{{_("Type")}}</label>
                        
                         <div class="controls">
-                          <input type="checkbox" ng-model="show.is_published" checked class="toggle"/> 
+                          <select ng-model="feedback.type_feedback">
+                            <option value="Questions Q/A">Questions Q/A</option>
+                            <option value="Features Request">Features Request</option>
+                            <option value="Others">Others</option>
+                           </select>
                           
                         </div>
-                    </div> 
+                    </div>
+                    <div class="control-group">
+                        <label  class=" control-label">{{_("Source")}}</label>
+                       
+                        <div class="controls">
+                          <select  ng-model="feedback.source">
+                            <option value="Email">Email</option>
+                            <option value="i/oGrow Live" >i/oGrow Live</option>
+                            <option value="Phone">Phone</option>
+                            <option value="Others">Others</option>
+                           </select>
+                          
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label  class=" control-label">{{_("Status")}}</label>
+                       
+                        <div class="controls">
+                          <select ng-model="feedback.status">
+                            <option value="Pending">Pending</option>
+                            <option value="Working">Working</option>
+                            <option value="Rejected">Rejected</option>
+                          </select>
+                          
+                        </div>
+                    </div>
                           
                         
                                                    

@@ -109,9 +109,10 @@
                     <a href="/#/live/shows/show/<%= show.id %>"><h3 class="relatedcardOppTitle">
                                     <%= show.name%> 
                                     </h3></a>
-                    <div class="desc">                           
+                    <div class="desc">
+                      <span  class="contact-title" >Show Date: From   <%=show.starts_at | date:'yyyy-MM-dd - HH:mm ' %> To <%=show.ends_at | date:'yyyy-MM-dd - HH:mm ' %> </span>
                       
-                    <span ng-repeat="tag in show.tags"><a class="tag" href="/#/search/type:Show <%=tag%>"> <%=tag%> </a></span>
+                     
                     </div>
                   </div>
                                   
