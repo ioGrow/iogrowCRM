@@ -25,6 +25,94 @@
               </span>
         </div>
       </div>
+         <div id="sharingSettingsModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("Sharing Settings")}}</h3>
+              </div>
+              <div class="modal-body">
+                 <form id="addMember" name="addshow" ng-submit="share(slected_memeber)" class="form-horizontal"> 
+                  <fieldset>
+                  
+                    <p>{{ _("Who has access:") }}</p>
+                    <div class='container-fluid'>
+
+                     
+                          
+                            <label class="radio line">
+                            <input type="radio" value="public" ng-model="show.access" />
+                            {{ _("public: Anyone within your organization can access and find") }}
+                            </label>
+                            <label class="radio line">
+                            <input type="radio"  value="private" ng-model="show.access" />
+                            {{ _("private: only you and your collaborators") }}
+                            </label>  
+                           
+                       
+                      
+                    </div>
+                    <hr/>
+                    <div class='container-fluid'>
+                    <p>{{ _("Collaborators:") }}</p>
+                        <div ng-repeat="collaborator in account.collaborators_list" class="invitation">
+                          <img class="google-avatar" src="<%=collaborator.photo%>"/>
+                           <%=collaborator.display_name%> < <%=collaborator.email%> >
+                        </div>
+                        
+                    </div>
+                    <hr/>
+
+                    <div class='container-fluid'>
+                    <p>{{ _("Invited user:") }}</p>
+                    <div class="invitation" ng-show="slected_memeber">
+                      <img class="google-avatar" src="<%= slected_memeber.google_public_profile_photo_url%>"/>
+                        <strong> <%= slected_memeber.google_display_name %> < <%=slected_memeber.email%> ></strong>
+                      <hr/>
+                    </div>
+                    
+                    <p>{{ _("Invite collaborators:") }}</p>
+                    <div class="control-group">
+                      <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="input-block-level" placeholder="{{ _('Enter name or email addresse to add people to this group') }}">
+                    </div>
+                    
+                      </div>
+                    
+                    </fieldset>
+                
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <button  type="submit" class="btn blue addContactNow">{{_("Share")}}</button>
+              </div>
+               </form>
+       </div>
+       <!--HKA 24.12.2013 Modal before Deleting show-->
+         <div id="BeforedeleteFeedback" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">Delete Feedback</h3>
+                
+              </div>
+              <div class="modal-body">
+                 <form id="seletesho" name="deletesho" class="form-horizontal"> 
+                  <fieldset>
+
+                  <p>{{_("Are you sure you want to delete")}} <%=feedback.name%> .</p>
+                    
+
+                    
+                    </fieldset>
+                
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                
+                <input ng-hide="isLoading" ng-click="deletefeedback(feedback)" type="submit" class="btn red" value="Delet this Feedback">
+                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+              </div>
+               </form>
+       </div>
+        
       <div class="container-fluid" ng-show="isContentLoaded">
         
         <!-- END PAGE HEADER-->
@@ -33,30 +121,34 @@
           
           <div class="span12">
             <div class="pull-right sharebuttonDiv"> 
-                  <a href="" class="btn blue jfk-button jfk-button-action">
-                    <i class="icon-lock"></i> Share
+                  <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
+                    <i class="icon-lock"></i> {{ _("Share") }}
                   </a>
                         
                         
                      
-                </div>
+            </div>
                 
             <h2>
-            <a href="/#/live/feedbacks" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
-            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("FeedBacks")}} > <%= feedback.name %></h2>
+            <a href="/#/live/feedbacks/" data-toggle="tooltip" data-placement="bottom" title="Back to Shows">
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Feedbacks")}} > <%= feedback.name %></h2>
+            
 
-              <span class="page-meta">  <%=feedback.content %> </span>
+            <span><a class="tag" href="#"> <%=feedback.content %></a></span>
+            
+             </br>
+               <span class="page-meta"><strong>Type:</strong> <a ></a> <%=feedback.feedback_type %></span>
               </br>
+            <span class="page-meta"><strong>Status: </strong> <a href="/live/shows/<%=show.id%>"><%=feedback.status%></a>   </span>
               
-              <span class="page-meta"><strong>Type:</strong> <a ></a> <%=feedback.feedback_type %></span>
-              </br>
-              <span class="page-meta"><strong>Status: </strong> <a href="/live/shows/<%=show.id%>"><%=feedback.status%></a>   </span>
+            
+              <!--span class="page-meta"><strong>Publish this show on i/oGrow Live: </strong> <input type="checkbox" ng-model="show.is_published" checked class="toggle"  ng-click="saveshowispublished(show)" />  </span-->
               
              
                        
               
               </br>
-             <span class="page-meta"><i class="icon-pencil"><a ng-click="editaccount()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |  <i class="icon-trash"><a ng-click="delete(account)" class="btn-link addAnotherPhone">  {{_("Delete")}}</a></i></span>
+             <span class="page-meta"><i class="icon-pencil"><a ng-click="editshowdetail()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |  <i class="icon-trash"><a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  {{_("Delete")}}</a></i></span>
 
            
             
@@ -72,7 +164,7 @@
               <!-- BEGIN PORTLET-->
               <div class="portlet paddingless">
                 <div class="portlet-title line">
-                  <div class="caption">Account Feeds</div>
+                  <div class="caption">Feedback Feeds</div>
                   
                 </div>
                 <div class="portlet-body">
@@ -80,9 +172,9 @@
                   <div class="tabbable tabbable-custom">
                     <ul class="nav nav-tabs">
                       <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;" >Notes</a></li>
-                      <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;">About</a></li>
+                      <!--li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;">About</a></li-->
                       <!--li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">Feedbacks</a></li-->
-                      <!--li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">Leads</a></li-->
+                      <li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">Leads</a></li>
                       <li class="ng-tab" ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">Documents</a></li>
 
                       
@@ -100,9 +192,7 @@
                                          
                                             
                                             <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="note.content"></textarea>
-                                            <input ng-init="note.organization=1" required="" id="id_organization" type="hidden" name="organization" value="1"> 
-                                  
-                                            <input type="hidden" id="id_related_object" ng-init="note.related_object=1" value="1">
+                                            
                                           
                                          
                                          <div class="pull-right">
@@ -117,11 +207,11 @@
                                         
                             <ul class="chats">
                               <li class="in" ng-repeat="topic in topics" id="topic_<%=$index%>">
-                                <img class="avatar" alt="" src="static/img/avatar.jpg.png" />
+                                <img class="avatar" alt="" src="<%= topic.last_updater.photo%>" />
                                 <div class="message">
                                   <span class="arrow"></span>
-                                  <a href="#" class="name"><%= topic.last_updater.google_display_name%></a>
-                                  <span class="datetime">at Jul 25, 2012 11:09</span>
+                                  <a href="#" class="name"><%= topic.last_updater.display_name%></a>
+                                  <span class="datetime">at <%=topic.updated_at | date:'yyyy-MM-dd - HH:mm '  %> </span>
                                   <span class="body">
                                   <a href="/#/notes/show/<%=topic.discussionId%>" class="discussion-content"><strong class="ng-binding"><%= topic.title%></strong><span class="excerpt ng-binding"> - <%= topic.excerpt%></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <%= topic.comments%> comments</span></a>
                                   </span>
@@ -133,11 +223,11 @@
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
                                       <ul>
-                                        <li ng-show="pagination.prev"><button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                        <li ng-show="topicpagination.prev"><button ng-click="TopiclistPrevPageItems()" id="sample_editable_1_new" class="btn">
                                         {{_("Prev")}} 
                                         </button></li>
                                         
-                                        <li  ng-show="pagination.next"><button ng-click="listNextPageItems()"  class="btn">
+                                        <li  ng-show="topicpagination.next"><button ng-click="TopiclistNextPageItems()"  class="btn">
                                         {{_("Next")}} 
                                         </button></li>
                                       </ul>
@@ -152,7 +242,8 @@
                             
                                 <div class="news-blocks blank-card blank-card-yellow">
                                 <h3>The show on youtube</h3>
-                                <img src="static/img/gdl-stay-tuned.png"/>
+                                <iframe width="100%" ng-show="show.youtube_url" height="250" src="http://www.youtube.com/embed/<%=show.youtube_url%>?rel=0" frameborder="0" allowfullscreen></iframe>
+                                <img  ng-hide="show.youtube_url" src="static/img/gdl-stay-tuned.png"/>
                                
                                                               
                                                           
@@ -165,85 +256,96 @@
                                 <h3>About</h3>
                                 <div class="news-block-tags">
                                   <strong>When: </strong>
-                                    Nov. 12 1 p.m.-1:25 p.m. (CST)
-                                </div>
-                                <p></p>
-                                <div class="news-block-tags">
-                                  <strong>Short description</strong>
+                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="editwhen(show)" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
                                   
                                 </div>
-                                <p>Appirio is a global technology-enabled services provider, helping companies power their business with cloud, social and mobile technologies from leaders like salesforce.com, Google and Workday. Appirio has worked with more than 400 enterprise customers including organizations like the City of Los Angeles, Facebook, Flextronics, International Hotels Group, Japan Post Network, Ltd., L'Oreal, NetApp, NYU, Starbucks, Thomson Reuters and VMware. Appirio's technology-enabled professional services are supported by a team of 600 cloud experts and CloudSpokes, a more than 70,000 person-strong global cloud developer community. The company's expertise and innovation have been recognized by organizations such as the World Economic Forum, Bloomberg BusinessWeek, The Wall Street Journal, InformationWeek and IDC. Appirio has offices that span the U.S., Europe and Asia Pacific, and is backed by Sequoia Capital, GGV Capital and General Atlantic.</p>                         
+                                <p> <%= show.starts_at | date:'MMM dd, yyyy, HH:mm'%> To <%=show.ends_at | date:'MMM dd, yyyy, HH:mm'%></p>
+                                <div class="news-block-tags">
+                                  <strong>Short description</strong>
+                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="editdescription()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
+                                </div>
+                                  
+                                <p><%=show.description %></p>                         
                               </div>
                             
                           </div>
                           
                         </div>
+                     
                           
                         
                       </div>
+                        <!--HKA 22.12.2013 Edit  show description -->
+                      <div id="EditShowDescription" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                          <div class="modal-header">
+                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                               <h3 id="myModalLabel">{{_("Edit Description")}}</h3>
+                          </div>
+                       <div class="modal-body">
+                             <form id="editTagline" name="editlead" ng-submit="updateDescription(show)" class="form-horizontal">
+                          <div class="control-group">
+                            <label  class=" control-label">{{_("Description")}} </label>
+                       
+                            <div class="controls">
+                          
+                                <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="show.description"></textarea>
+                           </div>
+                        </div> 
+                            
+                      </div>
+                      <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
+                        <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+                        
+                      </div>
+                        </form> 
+                      </div>
+                       <div id="Editwhen" class="modal  hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h3 id="myModalLabel">Edit  show</h3>
+            </div>
+            <div class="modal-body">
+                     <div class="controls controls-row">
+                            <form id="addTask" ng-submit="saveModifTime(ioevent)" class="ng-pristine ng-valid">
+                                                 
+                                                  <p><strong>When?</strong></p>
+                                                <div class="row-fluid">
+                                                  <div class="span6">
+                                                    <p> <strong>Starts</strong>: <%=show.starts_at | date:'MMMM dd, yyyy, HH:mm'%></p>
+                                                        <datetimepicker data-ng-model="ioevent.starts_at"
+                                                    data-datetimepicker-config="{ startView:'day', minView:'minute'}" />
+                                                  </div>
+                                                  <div class="span6">
+                                                  <p><strong>Ends</strong>: <%=show.ends_at | date:'MMMM dd, yyyy, HH:mm'%></p>
+                                                        <datetimepicker data-ng-model="ioevent.ends_at"
+                                                    data-datetimepicker-config="{ startView:'day', minView:'minute' }" />
+                                                  </div>
+                                                </div>                                            
+                                                </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              
+               <input ng-hide="isLoading" type="submit" class="btn green" value="Save">
+                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                                        
+            </form>
+            </div>
+          </div>
                       <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3">
                           
                          <div class="row-fluid cards-container">
                          <div class="btn-group relbutton">
             
                                 <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
-                               {{_("Add a person to this account")}}<i class="icon-plus"></i>
+                               {{_("Add feedbacks")}}<i class="icon-plus"></i>
                                 </button>
                           </div>
                             <div class="inner-cards-container">
                             
-                              <div  class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                                <div class="dashboard-stat cards">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardTitle">
-                                     Ben Belfodhil
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">CEO</span>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                              <div  class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                                <div class="dashboard-stat cards">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardTitle">
-                                     Hakim Karriche
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">CTO</span>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                              <div  class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                                <div class="dashboard-stat cards">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardTitle">
-                                     Eric Joe
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">CCO</span>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div>
-                              <div  class="span3 responsive" data-tablet="span6" data-desktop="span3">
+                                                          
+                            <!--div  class="span3 responsive" data-tablet="span6" data-desktop="span3">
                                 <div class="dashboard-stat cards">
                                   
                                   <div class="details">
@@ -260,7 +362,17 @@
                                   View more <i class="m-icon-swapright m-icon-white"></i>
                                   </a>                 
                                 </div>
-                              </div>
+                              </div-->
+                <div ng-show="blankStatefeedback" class="span12 responsive" data-tablet="span6" data-desktop="span12">
+                   <div class="dashboard-stat cards">
+                      <div class="blank_slate_arrow"></div>
+                       <div class="blank_slate_body">
+                         <img src="/static/img/customer-feedback.jpg" width="300">
+                         <p class="lead">{{ _('Feedbacks pages  let you receive a feedback from leads or customers ') }}</p>
+                       </div>                
+                </div>
+              </div>
+
                               </div>
                             </div>
                       </div>
@@ -269,88 +381,177 @@
                          <div class="row-fluid cards-container">
                          <div class="btn-group relbutton">
             
-                                <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
-                                {{_("Add a new opportunity")}} <i class="icon-plus"></i>
+                                <button  ng-click="AddleadModal()" id="sample_editable_1_new" class="btn red">
+                                {{_("Add a new lead")}} <i class="icon-plus"></i>
                                 </button>
                           </div>
                             <div class="inner-cards-container">
-                            
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
+                                                                            
+                            <div  class="span4 responsive" data-tablet="span6" ng-repeat="lead in leads" data-desktop="span4">
                                 <div class="dashboard-stat cards-med">
                                   
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Migration vers Google App Engine
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">$20.000 - Needs Analysis</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#<%=account.industry%></a>  
-                                    
+                                <div class="details">
+                                         <a href="/#/leads/show/<%= lead.id %>"><h2 class="cardTitle">
+                                         <%= lead.firstname %> <%= lead.lastname %>
+                                        </h2></a>
+                                  <div class="desc">
+                                      <span ng-show="lead.status" class="contact-title" >Updated at:  <%=lead.updated_at | date:'yyyy-MM-dd - HH:mm:ss ' %> </span>
+                                       <span ng-show="lead.status" class="contact-title" >Status: <a class="desc" href="/#/search/type:Lead <%=lead.status%>">#<%=lead.status %></a>  </span>
+                                       <br>
+                                        <span ng-show="lead.title"><a  class="desc" href="/#/search/type:Lead <%=lead.title%>">#<%=lead.title%></a></span>
+                                       <span ng-show="lead.company"> <span ng-show="lead.title" class="contact-title">,</span> <a  class="desc" href="/#/search/type:Lead <%=lead.company%>">#<%=lead.company%></a></span>
                                     </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
+                                 </div>
+                                                  
                                 </div>
                               </div>
-                             
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Migration vers Google App Engine
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">$20.000 - Needs Analysis</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#<%=account.industry%></a>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
+                            <div ng-show="blankStatelead" class="span12 responsive" data-tablet="span6" data-desktop="span12">
+                               <div class="dashboard-stat cards">
+                  
+                  
+                              <div class="blank_slate_arrow"></div>
+                             <div class="blank_slate_body">
+                                   <img src="/static/img/leads_blank.png">
+                                   <p class="lead">You have leads coming in from a wide variety of sources related to this show.i/oGrow help you organize informations about leads so they can be followed up on and qualified quickly.</p>
                               </div>
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
+               
                                   
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                    Google App Engine
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">$20.000 - Needs Analysis</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#<%=account.industry%></a>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
                               </div>
-                              <div  class="span4 responsive" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Migration 
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <span class="contact-title">$20.000 - Needs Analysis</span>
-                                    <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#<%=account.industry%></a>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
                               </div>
                               </div>
                             </div>
+          <div id="addLeadShow" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("New Lead")}}</h3>
+              </div>
+              <div class="modal-body">
+                 <form id="addLead" name="addlead" ng-keyup="addLeadOnKey(lead)" class="form-horizontal"> 
+                  <fieldset>
+                  
+                    
+
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("First Name")}} *</label>
+                       
+                        <div class="controls">
+                          <input type="text" required id="id_name" ng-model="lead.firstname">
+                          
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Last Name")}}</label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_lastname" ng-model="lead.lastname">
+                          
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Company")}} </label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_company" ng-model="lead.company">
+                          
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label  class=" control-label">{{_("Title")}} </label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_position" ng-model="lead.title">
+                          
+                        </div>
+                    </div>
+                     <div class="control-group">
+                        <label  class="control-label">{{_("Status")}} </label>
+                       
+                        <div class="controls">
+                          <select ng-model="stage_selected" ng-options="leadstat.status for leadstat in leadstatuses | orderBy: 'status':false"  >
+                            <option value="">-- choose Status --</option>
+                          
+                          </select>
+                          
+                         
+                        </div>
+                    </div>
+
+                   </fieldset>
+                
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                
+                <input ng-hide="isLoading" ng-click="savelead(lead)" type="submit" class="btn green" value="Add this lead">
+                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+              </div>
+               </form>
+       </div>
                       </div>
+                  <!--HKA 25.12.2013 Document -->
+                  <div class="tab-pane active" id="tab_1_5" ng-show="selectedTab == 5">
+                          
+                         <div class="row-fluid cards-container iodrive">
+                         <div class="btn-group relbutton">
+            
+                                <div class="btn-group">
+                                    <a class="btn red" href="#" data-toggle="dropdown">
+                                    <i class="icon-plus"></i> Create
+                                    <i class="icon-angle-down"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                      <li><a  ng-click="showCreateDocument('document')" href="#" data-toggle="modal"><i class="icon-plus"></i> Document</a></li>
+                                      <li><a ng-click="showCreateDocument('presentation')" href="#" data-toggle="modal"><i class="icon-plus"></i> Presentation</a></li>
+                                      <li><a ng-click="showCreateDocument('spreadsheet')" href="#" data-toggle="modal"><i class="icon-plus"></i> Spreadsheet</a></li>
+                                     
+                                    </ul>
+                                </div>
+                                <div class="btn-group">
+                                    <button  ng-click="createPickerUploader()" id="sample_editable_1_new" class="btn red">
+                                    <i class="icon-upload-alt"></i>
+                                    </button>
+
+                                </div>
+                          </div>
+                            <div class="inner-cards-container">
+                                                        
+                             <div  class="span4 responsive" ng-repeat="attachment in documents" data-tablet="span6" data-desktop="span4">
+                                <div class="dashboard-stat cards-med">
+                                  
+                                  <div class="details">
+                                    <a href="/#/documents/show/<%= attachment.id %>"><h3 class="relatedcardOppTitle">
+                                     <%=attachment.title%>
+                                    </h3></a>
+                                    <div class="desc">                           
+                                    <center> <span class="contact-title" ><img class="google-drive-icon" ng-src="/static/img/google_drive/<%=attachment.mimeType%>.png"/></span> </center>
+                                    
+                                    </div>
+                                  </div>
+                                                 
+                                </div>
+                              </div>
+
+                              </div>
+                            </div>
+                      </div>
+                      <div id="newDocument" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h3 id="myModalLabel">{{_("Create a new")}} <%=mimeType%></h3>
+            </div>
+            <div class="modal-body">
+                     <div class="controls controls-row">
+                                          <form id="addTask" ng-submit="createDocument(newdocument)" class="ng-pristine ng-valid">
+                                                  <input class="input-block-level" autofocus type="text" placeholder="Enter a new <%=mimeType%> name" id="taskTitle" ng-model="newdocument.title" required>                         
+                     </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        <input ng-hide="isLoading" type="submit" class="btn green" value="Create this document">
+                        <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>                       
+            </form>
+            </div>
+          </div>
                       
                     </div>
                   </div>
@@ -363,43 +564,27 @@
               <!-- BEGIN PORTLET-->
               <div class="portlet">
                 <div class="portlet-title line">
-                  <div class="caption"><i class="icon-tasks"></i>Tasks & Events</div>
+                  <div class="caption"><i class="icon-tasks"></i>Tasks </div>
                   
                 </div>
                 <div class="portlet-body" id="chats">
                   <div class="scroller" style="height:200x" data-always-visible="1" data-rail-visible="0">
                     <div id="newTask">
-                                <p><strong>Tasks:</strong><a href="#"> [View all(25)]</a></p>
+                                <p><strong>Tasks:</strong><a href="#"> </a></p>
 
                                  
                                   <ul id="tasks" class="unstyled">
                                     <li ng-repeat="task in tasks" id="task_<%=$index%>">
                                       <input value="check1" type="checkbox">
                                       <!-- Name -->
-                                    <span><a href="/tasks/1" class="discussion-content"><%= task.title%> <span ng-show="task.due"> [before: <%= task.due | date:'yyyy-MM-dd '%>]</span></a></span>
+                                    <span><a href="/#/tasks/show/<%=task.id%>" class="discussion-content"><%= task.title%> <span ng-show="task.due"> [before: <%= task.due | date:'yyyy-MM-dd '%>]</span></a></span>
                                     </li>
                                     
                                     <li><a href="#myModal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new task</a></li>
 
                                   </ul>
                                  
-                                  <!--p><strong>Events:</strong></p>
-
-                                 
-                                  <ul id="tasks" class="unstyled">
-                                    <li ng-repeat="event in events" id="event_<%=$index%>">
-                                      <input value="check1" type="checkbox">
-                                     
-                                    <span><a href="/tasks/1" class="discussion-content"><%= event.title%> <span ng-show="event.starts_at"> [<%= event.starts_at | date:'yyyy-MM-dd '%>]</span></a></span>
-                                    </li>
-                                   
-                                    
-
-                                    
-                                    <li><a href="#newEventModal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new event</a></li>
-
-
-                                  </ul-->
+                        
 
                                   <!-- Modal -->
           <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -489,47 +674,90 @@
         
         <!-- END PAGE CONTENT-->
       </div>
-      <!--HKA 11.10.2013 Edit Account -->
-             <div id="EditAccountModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <!--HKA 11.10.2013 Edit Show -->
+             <div id="EditShowModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("Edit Account")}}</h3>
+                <h3 id="myModalLabel">{{_("Edit Show")}}</h3>
               </div>
 
               <div class="modal-body">
-                 <form id="editAccount" name="editlead" ng-submit="put(account)" class="form-horizontal"> 
+                 <form id="editShow" name="editshow" ng-submit="saveshow(show)" class="form-horizontal"> 
                 
 
                   <div class="control-group">
                         <label  class="required control-label">{{_("Name")}} *</label>
                        
                         <div class="controls">
-                          <input type="text" required id="id_lastname" ng-model="account.name">
+                          <input type="text" required id="id_lastname" ng-model="show.name">
+                          
+                        </div>
+                    </div>
+                   
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Youtube Url")}} </label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_youtube_url" ng-model="show.edited_youtube_url">
                           
                         </div>
                     </div>
                     <div class="control-group">
-                        <label  class="required control-label">{{_("Type")}}</label>
+                        <label  class="required control-label">{{_("Tags")}} </label>
                        
                         <div class="controls">
-                          <input type="text"  id="id_type" ng-model="account.account_type">
-                          
+                          <input type="text" class="span8" ui-select2="select2Options" ng-model="list_of_string"
+    >                         
                         </div>
                     </div>
                     <div class="control-group">
-                        <label  class="required control-label">{{_("Industry")}} *</label>
+                        <label  class="required control-label">{{_("Publish this show on i/oGrow Live: Url")}} </label>
                        
                         <div class="controls">
-                          <input type="text"  required id="id_industry" ng-model="account.industry">
+                          <input type="checkbox" ng-model="show.is_published" checked class="toggle"/> 
                           
                         </div>
-                    </div>                      
-                  
-                     
-                    
-                  
+                    </div> 
+                          
+                        
+                                                   
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
+                <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+              </div>
+               </form>
+              </div> 
+              <!--HKA 24.12.2013 Youtube Url -->
+            <div id="AddYoutubeUrl" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel"><img src="/static/img/youtube.png" ng-click="createYoutubePicker()"/>{{_("Edit Youtube url")}}</h3>
+              </div>
+
+              <div class="modal-body">
+                 <form id="editShow" name="editshow" ng-submit="saveyoutubeurl(show)" class="form-horizontal"> 
                 
+
+                   <div class="control-group">
+                        <!--label  class="required control-label">{{_("Name")}} *</label-->
+                       
+                        <div class="controls">
+                         <span class="page-meta"><a href="#" ng-click="createYoutubePicker()" data-toggle="modal"><strong>Add from your youtube Channel</strong></a></span>
+                          
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label  class="required control-label">Or Add {{_("Youtube Url")}}: </label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_youtube_url" ng-model="show.edited_youtube_url">
+                          
+                        </div>
+                    </div>
+                                                     
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>

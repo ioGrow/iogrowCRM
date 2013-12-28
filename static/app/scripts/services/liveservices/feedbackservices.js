@@ -12,7 +12,9 @@ feedbackservices.factory('Feedback', function($http) {
             if(!resp.code){
                $scope.feedback = resp;
                $scope.isContentLoaded = true;
-               
+               $scope.listTasks();
+               $scope.listTopics();
+               $scope.listLead();
                // Call the method $apply to make the update on the scope
                $scope.$apply();
 

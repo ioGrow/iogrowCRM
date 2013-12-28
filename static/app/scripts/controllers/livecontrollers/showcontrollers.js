@@ -139,7 +139,7 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Top
          $scope.selectedTab = 5;
           break;
         default:
-        $scope.selectedTab = 2;
+        $scope.selectedTab = 1;
 
         }
 
