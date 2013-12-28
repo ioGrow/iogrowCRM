@@ -53,9 +53,7 @@
                       <span class="arrow"></span>
                       <a href="#" class="name"><%= note.author.display_name%></a>
                       <span class="datetime"><!--at <%= note.created_at %> --></span><br>
-                      <span class="body">
-                      <%= note.content%>
-                      </span>
+                      <span class="body" ng-bind-html-unsafe="note.content"></span>
                     </div>
                   </li>
                   

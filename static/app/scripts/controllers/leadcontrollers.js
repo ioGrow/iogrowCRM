@@ -156,9 +156,10 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus',
 
       
 }]);
-app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Lead','Permission','User','Leadstatus',
-    function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Lead,Permission,User,Leadstatus) {
+app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Topic','Note','Lead','Permission','User','Leadstatus',
+    function($scope,$filter,$route,Auth,Email,Task,Event,Topic,Note,Lead,Permission,User,Leadstatus) {
       $("#id_Leads").addClass("active");
+      
       var tab = $route.current.params.accountTab;
       switch (tab)
         {
@@ -202,6 +203,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Task','Event
      $scope.users = [];
      $scope.user = undefined;
      $scope.slected_memeber = undefined;
+     $scope.isLoading = false;
 
       // What to do after authentication
       $scope.runTheProcess = function(){
@@ -556,7 +558,31 @@ $scope.updateintro = function(lead){
       $scope.convert = function(){
         var leadid = {'id':$route.current.params.leadId};
         Lead.convert($scope,leadid);
-      }
+      };
+      $('#some-textarea').wysihtml5();
+      $scope.sendEmail = function(email){
+        email.body = $('#some-textarea').val();
+        console.log(email);
+        /*
+        to = messages.StringField(2)
+        cc = messages.StringField(3)
+        bcc = messages.StringField(4)
+        subject = messages.StringField(5)
+        body = messages.StringField(6)
+        about_kind = messages.StringField(7)
+        about_item = messages.StringField(8)
+        */
+        var params = {
+                  'to': email.to,
+                  'cc': email.cc,
+                  'bcc': email.bcc,
+                  'subject': email.subject,
+                  'body': email.body,
+
+                  'about_item':$scope.lead.id,
+                  'about_kind':'Lead' };
+        Email.send($scope,params);
+      };
       
     // Google+ Authentication 
      Auth.init($scope);

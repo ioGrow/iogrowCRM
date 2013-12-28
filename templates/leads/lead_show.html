@@ -1,3 +1,18 @@
+  <div id="sendingEmail" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              
+              <div class="modal-body">
+                
+                  
+                    <p ng-show="sending">Sending...</p>
+                    <p ng-show="emailSent">You email has been sent</p>
+
+
+                  
+                    
+                    </fieldset>
+                
+              </div>
+</div>
 
 <div class="page-sidebar nav-collapse collapse">
       <!-- BEGIN SIDEBAR MENU -->        
@@ -161,7 +176,7 @@
                     <ul class="nav nav-tabs">
                       <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;" >Notes</a></li>
                       <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;">About</a></li>
-                      <!--li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">Contacts</a></li-->
+                      <li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">Send an Email</a></li>
                       <!--li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">Opportunities</a></li-->
                       <!--li class="ng-tab"  ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">Cases</a></li-->
                     </ul>
@@ -201,7 +216,7 @@
                                   <a href="#" class="name"><%= topic.last_updater.display_name%></a>
                                   <span class="datetime">at <%=topic.updated_at | date:'yyyy-MM-dd - HH:mm:ss' %></span>
                                   <span class="body">
-                                  <a href="/#/notes/show/<%=topic.discussionId%>" class="discussion-content"><strong class="ng-binding"><%= topic.title%></strong><span class="excerpt ng-binding"> - <%= topic.excerpt%></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <%= topic.comments%> comments</span></a>
+                                  <a href="/#/notes/show/<%=topic.discussionId%>" class="discussion-content"><strong class="ng-binding"><%= topic.title%></strong> - <span class="excerpt ng-binding" ng-bind-html-unsafe="topic.excerpt"></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <%= topic.comments%> comments</span></a>
                                   </span>
                                 </div>
                               </li>
@@ -310,6 +325,35 @@
                           
                         
                       </div>
+                      <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3">
+                        
+                         <div class="row-fluid">
+                           <div class="span12 margin-bottom-10"> 
+                          <p class⁼"lead"=""><strong>Send an Email to :</strong> </p>
+                          <form  ng-submit="sendEmail(email)" class="ng-pristine ng-valid">
+                                            
+                                            <input required class="input-block-level ng-pristine ng-valid" autofocus type="text" placeholder="To" id="messageSubject" ng-model="email.to">
+                                            <input class="input-block-level ng-pristine ng-valid" autofocus type="text" placeholder="CC" id="messageSubject" ng-model="email.cc">
+                                            <input class="input-block-level ng-pristine ng-valid" autofocus type="text" placeholder="BCC" id="messageSubject" ng-model="email.bcc">
+                                             <input  required class="input-block-level ng-pristine ng-valid" autofocus type="text" placeholder="Add a subject" id="messageSubject" ng-model="email.subject">
+
+                                        
+                                            <textarea id="some-textarea" placeholder="Enter text ..." id="noteBody" class="input-block-level ng-pristine ng-valid" rows="7" ng-model="email.body"></textarea>
+                                           
+                                  
+                                          
+                                          
+                                         
+                                         <div class="pull-right">
+                                         
+                                            <input ng-hide="isLoading" type="submit" class="btn green" value="Send">
+
+                                          
+                                          </div>
+                                        </form>
+                                       </div>
+                                      </div>
+                                    </div>
                     
                     </div>
                   </div>
