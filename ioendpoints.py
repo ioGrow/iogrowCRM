@@ -21,6 +21,7 @@ from iomodels.crmengine.opportunitystage import Opportunitystage
 from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.casestatuses import Casestatus
 from iomodels.crmengine.feedbacks import Feedback
+from iomodels.crmengine.emails import IOEmail
 from iomodels.crmengine.tags import Tag
 from model import User,Userinfo,Group,Member,Permission,Contributor
 import model
@@ -45,6 +46,16 @@ OBJECTS = {'Account': Account,'Contact': Contact,'Case':Case,'Lead':Lead,'Opport
 FOLDERS = {'Account': 'accounts_folder','Contact': 'contacts_folder','Lead':'leads_folder','Opportunity':'opportunities_folder','Case':'cases_folder','Show':'shows_folder'}
 DISCUSSIONS= {'Task':{'title':'task','url':'/#/tasks/show/'},'Event':{'title':'event','url':'/#/events/show/'},'Note':{'title':'discussion','url': '/#/notes/show/'}}
 
+# The message class that defines the SendEmail Request attributes
+class EmailRequest(messages.Message):
+    sender = messages.StringField(1)
+    to = messages.StringField(2)
+    cc = messages.StringField(3)
+    bcc = messages.StringField(4)
+    subject = messages.StringField(5)
+    body = messages.StringField(6)
+    about_kind = messages.StringField(7)
+    about_item = messages.StringField(8)
 # The message class that defines the Search Request attributes
 class SearchRequest(messages.Message):
     q = messages.StringField(1)
@@ -1757,6 +1768,42 @@ class CrmEngineApi(remote.Service):
       # Todo: Check permissions
       my_model.put()
       return my_model
+
+  #emails.send api
+  @endpoints.method(EmailRequest, message_types.VoidMessage,
+                      path='emails/send', http_method='POST',
+                      name='emails.send')
+  def send_email(self, request):
+      user = EndpointsHelper.require_iogrow_user()
+      if user is None:
+          raise endpoints.UnauthorizedException('Invalid token.')
+      message = mail.EmailMessage()
+      message.sender = user.google_display_name + " < io-"+ user.google_user_id+"@gcdc2013-iogrow.appspotmail.com>"
+      message.reply_to = user.email
+      if not mail.is_email_valid(request.to):
+          raise endpoints.UnauthorizedException('Invalid email.')
+      message.to = request.to
+      if request.cc:
+          message.cc = request.cc
+      if request.bcc:
+          message.bcc = request.bcc
+      message.subject = request.subject
+      message.html = request.body
+      message.send()
+      note = Note()
+      note_author = model.Userinfo()
+      note_author.display_name = user.google_display_name
+      note_author.photo = user.google_public_profile_photo_url
+      note.author = note_author
+      note.owner = user.google_user_id
+      note.organization =  user.organization
+      note.title = 'Email: '+ request.subject
+      note.content = request.body
+      note.about_kind = request.about_kind
+      note.about_item = request.about_item
+      note.put()
+      
+      return message_types.VoidMessage()
   # Search API
   @endpoints.method(SearchRequest, SearchResults,
                       path='search', http_method='POST',

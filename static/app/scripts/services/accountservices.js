@@ -327,3 +327,45 @@ accountservices.factory('Attachement', function($http) {
 
 return Attachement;
 });
+
+accountservices.factory('Email', function() {
+  
+  var Email = function(data) {
+    angular.extend(this, data);
+  };
+  
+  Email.send = function($scope,params){
+      $scope.isLoading = true;
+      $scope.sending = true;
+      gapi.client.crmengine.emails.send(params).execute(function(resp) {
+            
+            $('#sendingEmail').modal('show');
+            if(!resp.code){ 
+             console.log('email sent thank you');
+             $scope.emailSent= true;
+             $scope.sending = false;
+             $scope.selectedTab = 1;
+             $scope.listTopics();
+             $scope.$apply();
+             $('#sendingEmail').modal('hide');
+
+
+            }else{
+               console.log(resp.message);
+
+               
+               $('#errorModal').modal('show');
+               if(resp.message=="Invalid grant"){
+                  $scope.refreshToken();
+                  $scope.isLoading = false;
+                  $scope.$apply();
+               };
+         }
+     });
+      
+  };
+ 
+  
+
+return Email;
+});
