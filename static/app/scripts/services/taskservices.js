@@ -109,6 +109,9 @@ topicservices.factory('Task', function($http) {
         case 'Show':
           base_url = '/#/live/shows/show/';
           break;
+          case 'Feedback':
+          base_url='/#/live/feedbacks/feedback/';
+          break;
         }
 
     return base_url+id;

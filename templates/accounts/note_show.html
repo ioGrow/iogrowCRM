@@ -21,11 +21,11 @@
       <div class="row-fluid">
          <div class="span12">
          
-            <div class="pull-right sharebuttonDiv"> 
+            <!--div class="pull-right sharebuttonDiv"> 
                   <a href="" class="<btn blue jfk-button jfk-button-action">
                     <i class="icon-lock"></i> {{ _("Share") }}
                   </a>     
-            </div>
+            </div-->
             <h2>
             <a href="<%=uri%>" data-toggle="tooltip" data-placement="bottom" title="Back to <%=note.about.kind%>">
             <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>    <%=note.about.kind%> > <%=note.about.name%>  </h2>
@@ -42,7 +42,7 @@
           <div class="portlet-title line">
           <div class="caption">
                 <i class="fa fa-comments"></i>
-                    <%=note.title%>
+                    Note > <%=note.title%>
           </div>
           </div>
           <div class="portlet-body">
@@ -97,11 +97,11 @@
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
                                       <ul>
-                                        <li ng-show="pagination.prev"><button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                        <li ng-show="paginationcomment.prev"><button ng-click="listPrevPageItemscomment()" id="sample_editable_1_new" class="btn">
                                         {{_("Prev")}} 
                                         </button></li>
                                         
-                                        <li  ng-show="pagination.next"><button ng-click="listNextPageItems()"  class="btn">
+                                        <li  ng-show="paginationcomment.next"><button ng-click="listNextPageItemscomment()"  class="btn">
                                         {{_("Next")}} 
                                         </button></li>
                                       </ul>

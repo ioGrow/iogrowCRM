@@ -338,13 +338,13 @@
                          <div class="btn-group relbutton">
             
                                 <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
-                               {{_("Add feddbacks")}}<i class="icon-plus"></i>
+                               {{_("Add feedbacks")}}<i class="icon-plus"></i>
                                 </button>
                           </div>
                             <div class="inner-cards-container">
                             
                                                           
-                            <div  class="span3 responsive" data-tablet="span6" data-desktop="span3">
+                            <!--div  class="span3 responsive" data-tablet="span6" data-desktop="span3">
                                 <div class="dashboard-stat cards">
                                   
                                   <div class="details">
@@ -361,7 +361,16 @@
                                   View more <i class="m-icon-swapright m-icon-white"></i>
                                   </a>                 
                                 </div>
-                              </div>
+                              </div-->
+                <div ng-show="blankStatefeedback" class="span12 responsive" data-tablet="span6" data-desktop="span12">
+                   <div class="dashboard-stat cards">
+                      <div class="blank_slate_arrow"></div>
+                       <div class="blank_slate_body">
+                         <img src="/static/img/customer-feedback.jpg" width="300">
+                         <p class="lead">{{ _('Feedbacks pages  let you receive a feedback from leads or customers ') }}</p>
+                       </div>                
+                </div>
+              </div>
 
                               </div>
                             </div>

@@ -46,7 +46,7 @@ ADMIN_APP = {'name': 'admin', 'label': 'Admin Console', 'url':'/#/admin/users'}
 Iogrowlive_APP = {'name':'iogrowLive','label': 'i/oGrow Live','url':'/#/live/shows'}
 Iogrowlive_TABS = [{'name': 'Shows','label': 'Shows','url':'/#/live/shows'},{'name': 'Company_profile','label': 'Company Profile','url':'/#/live/company_profile'},
 {'name': 'Product_videos','label': 'Product Videos','url':'/#/live/product_videos'},{'name': 'Customer_Stories','label': 'Customer stories','url':'/#/live/customer_stories'},
-{'name': 'Feedbacks','label': 'Feed Backs','url':'/#/live/feedbacks'},{'name': 'Leads','label': 'Leads','url':'/#/leads/'}]
+{'name': 'Feedbacks','label': 'Feedbacks','url':'/#/live/feedbacks'},{'name': 'Leads','label': 'Leads','url':'/#/leads/'}]
 Default_Opp_Stages = [{'name':'Incoming','probability':5},{'name':'Qualified','probability':10},{'name':'Need Analysis','probability':40},{'name':'Negociating','probability':80},{'name':'Close won','probability':100},{'name':'Close lost','probability':0}]
 Default_Case_Status =[{'status':'pending'},{'status':'open'},{'status':'closed'}]
 Default_Lead_Status =[{'status':'New'},{'status':'Working'},{'status':'Unqualified'},{'status':'Closed converted'}]

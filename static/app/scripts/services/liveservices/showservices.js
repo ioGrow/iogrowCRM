@@ -17,6 +17,7 @@ topicservices.factory('Show', function($http) {
                $scope.listEvents();
                $scope.listLead();
                $scope.listDocuments();
+               $scope.listFeedbacks();
                // Call the method $apply to make the update on the scope
                //$scope.apply();
 

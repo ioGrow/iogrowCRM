@@ -9,6 +9,9 @@ app.controller('NoteShowController',['$scope','$filter','$route','Auth','Note','
      $scope.pagination = {};
      $scope.currentPage = 01;
      $scope.pages = [];
+     $scope.paginationcomment = {};
+     $scope.currentPagecomment = 01;
+     $scope.pagescomment = [];
      
      $scope.notes = [];
      $scope.users = [];
@@ -28,40 +31,44 @@ app.controller('NoteShowController',['$scope','$filter','$route','Auth','Note','
      $scope.refreshToken = function() {
             Auth.refreshToken();
      };
-     $scope.listNextPageItems= function(){
+    $scope.listNextPageItemscomment= function(){
         
         
-        var nextPage = $scope.currentPage + 1;
-        
+        var nextPage = $scope.currentPagecomment + 1;
         console.log(nextPage);
-        console.log($scope.pages[nextPage])
         var params = {};
-          if ($scope.pages[nextPage]){
+          if ($scope.pagescomment[nextPage]){
             params = {'limit':5,
-                      'discussion':$scope.note.entityKey,
-                      'pageToken':$scope.pages[nextPage]
-
+                      'discussion':$scope.note.entityKey,                    
+                      'order':'-updated_at',
+                      'pageToken':$scope.pagescomment[nextPage]
                      }
+            console.log($scope.pagescomment[nextPage]);
           }else{
-            params = {'limit':5}
+            params = {'limit':5,
+                      'order':'-updated_at',
+                      'discussion':$scope.note.entityKey}
           }
           console.log('in listNextPageItems');
-          $scope.currentPage = $scope.currentPage + 1 ; 
+          $scope.currentPagecomment = $scope.currentPagecomment + 1 ; 
           Comment.list($scope,params);
      }
-     $scope.listPrevPageItems = function(){
+     $scope.listPrevPageItemscomment = function(){
        
-       var prevPage = $scope.currentPage - 1;
+       var prevPage = $scope.currentPagecomment - 1;
        var params = {};
-          if ($scope.pages[prevPage]){
+          if ($scope.pagescomment[prevPage]){
             params = {'limit':5,
                       'discussion':$scope.note.entityKey,
-                      'pageToken':$scope.pages[prevPage]
+                      'order':'-updated_at',
+                      'pageToken':$scope.pagescomment[prevPage]
                      }
           }else{
-            params = {'limit':5}
+            params = {'limit':5,
+            'discussion':$scope.note.entityKey,
+            'order':'-updated_at'}
           }
-          $scope.currentPage = $scope.currentPage - 1 ;
+          $scope.currentPagecomment = $scope.currentPagecomment - 1 ;
           Comment.list($scope,params);
      }
    

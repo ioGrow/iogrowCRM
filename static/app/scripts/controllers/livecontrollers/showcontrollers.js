@@ -116,8 +116,8 @@ app.controller('ShowListCtrl', ['$scope','$filter','Auth','Show',
     
 }]);
 
-app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Topic','Note','Task','Event','WhoHasAccess','User','Leadstatus','Lead','Permission','Attachement',
-    function($scope,$filter,$route,Auth,Show,Topic,Note,Task,Event,WhoHasAccess,User,Leadstatus,Lead,Permission,Attachement) {
+app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Topic','Note','Task','Event','WhoHasAccess','User','Leadstatus','Lead','Permission','Attachement','Feedback',
+    function($scope,$filter,$route,Auth,Show,Topic,Note,Task,Event,WhoHasAccess,User,Leadstatus,Lead,Permission,Attachement,Feedback) {
       
       $("#id_Shows").addClass("active");
       var tab = $route.current.params.accountTab;
@@ -139,7 +139,7 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Top
          $scope.selectedTab = 5;
           break;
         default:
-        $scope.selectedTab = 2;
+        $scope.selectedTab = 1;
 
         }
 
@@ -619,7 +619,11 @@ $scope.listDocuments = function(){
                       };
         Attachement.list($scope,params);
 
-     }
+     };
+$scope.listFeedbacks = function(){
+  Feedback.list($scope,{});
+
+};
 
       
 // Google+ Authentication 

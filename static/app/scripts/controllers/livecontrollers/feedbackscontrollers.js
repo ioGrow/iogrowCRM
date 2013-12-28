@@ -9,7 +9,8 @@ app.controller('FeedBacksListCtrl', ['$scope','$filter','Auth','Feedback',
      $scope.pagination = {};
      $scope.currentPage = 01;
      $scope.pages = [];
-     
+     $scope.feedback = {};
+    
          
 
      // What to do after authentication
@@ -54,11 +55,32 @@ app.controller('FeedBacksListCtrl', ['$scope','$filter','Auth','Feedback',
       
      
 
-     $scope.showModal = function(){
+     $scope.showFeedbackModal = function(){
         console.log('button clicked');
-        $('#newShowModal').modal('show');
+       $scope.feedback.type_feedback = 1;
+       $scope.feedback.source = 4;
+       $scope.feedback.status = 8;
+        $('#addFeedModal').modal('show');
 
       };
+      /*$scope.addFeedbackOnKey = function(feedback){
+        if(event.keyCode == 13 && feedback){
+            $scope.savefeedback(feedback);
+        };
+     };*/
+     // inserting the feedback  
+     $scope.savefeedback = function(feedback){
+         
+            var params ={'name':feedback.name,
+                         'content':feedback.content,
+                         'type_feedback':feedback.type_feedback,
+                         'source':feedback.source,
+                         'status':feedback.status}
+             Feedback.insert($scope,params);
+             $('#addFeedModal').modal('hide');
+            };
+    
+
       
 
      
@@ -69,10 +91,10 @@ app.controller('FeedBacksListCtrl', ['$scope','$filter','Auth','Feedback',
     
 }]);
 
-app.controller('FeedBacksShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Topic','Note','Task','Event','WhoHasAccess','User',
-    function($scope,$filter,$route,Auth,Show,Topic,Note,Task,Event,WhoHasAccess,User) {
+app.controller('FeedBacksShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Topic','Note','Task','Event','WhoHasAccess','User','Feedback','Leadstatus','Lead',
+    function($scope,$filter,$route,Auth,Show,Topic,Note,Task,Event,WhoHasAccess,User,Feedback,Leadstatus,Lead) {
       
-      $("#id_Shows").addClass("active");
+      $("#id_Feedbacks").addClass("active");
       var tab = $route.current.params.accountTab;
       switch (tab)
         {
@@ -103,16 +125,27 @@ app.controller('FeedBacksShowCtrl', ['$scope','$filter', '$route','Auth','Show',
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
      $scope.pagination = {};
+     $scope.feedback={};
      $scope.currentPage = 01;
      $scope.pages = [];
+     //HKA 22.12.2013 Var topic to manage Next & Prev
+      $scope.topicCurrentPage=01;
+      $scope.topicpagination={};
+      $scope.topicpages = [];
+      $scope.stage_selected={};
+      $scope.leadpagination = {};
+     
+   
      
      $scope.accounts = [];
      
      
      // What to do after authentication
      $scope.runTheProcess = function(){
-          var params = {'id':$route.current.params.showId};
-          Show.get($scope,params);
+          var params = {'id':$route.current.params.feedbackId};
+          Feedback.get($scope,params);
+          Leadstatus.list($scope,{});
+          User.list($scope,{});
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -131,21 +164,25 @@ app.controller('FeedBacksShowCtrl', ['$scope','$filter', '$route','Auth','Show',
      $scope.addTask = function(task){
       
         $('#myModal').modal('hide');
-        var params ={}
+       var params ={'about_kind':'Feedback',
+                      'about_item':$scope.feedback.id}
 
-        console.log('adding a new task');
-        console.log(task);
+       
         
         if (task.due){
 
             var dueDate= $filter('date')(task.due,['yyyy-MM-dd']);
             dueDate = dueDate +'T00:00:00.000000'
             params ={'title': task.title,
-                      'due': dueDate
+                      'due': dueDate,
+                      'about_kind':'Feedback',
+                      'about_item':$scope.feedback.id
             }
-            console.log(dueDate);
+     
         }else{
-            params ={'title': task.title}
+            params ={'title': task.title,
+                     'about_kind':'Feedback',
+                     'about_item':$scope.feedback.id}
         };
         Task.insert($scope,params);
      }
@@ -157,8 +194,8 @@ app.controller('FeedBacksShowCtrl', ['$scope','$filter', '$route','Auth','Show',
        
      }
      $scope.listTasks = function(){
-        var params = {/*'about_kind':'Account',
-                      'about_item':$scope.account.id,*/
+        var params = {'about_kind':'Feedback',
+                      'about_item':$scope.feedback.id,
                       'order': '-updated_at',
                       'limit': 5
                       };
@@ -200,70 +237,62 @@ app.controller('FeedBacksShowCtrl', ['$scope','$filter', '$route','Auth','Show',
         $('#event_0').effect( "bounce", "slow" );
        
      }
-     $scope.listEvents = function(){
-        var params = {/*'about_kind':'Account',
-                      'about_item':$scope.account.id,*/
-                      'order': 'starts_at',
-                      'limit': 5
-                      };
-        Event.list($scope,params);
-
-     }
+     
 
      
-     $scope.listNextPageItems = function(){
+    $scope.TopiclistNextPageItems = function(){
         
         
-        var nextPage = $scope.currentPage + 1;
+       var nextPage = $scope.topicCurrentPage + 1;
         var params = {};
-          if ($scope.pages[nextPage]){
-            params = {'about_kind':'Account',
-                      'about_item':$scope.account.id,
+           if ($scope.topicpages[nextPage]){
+            params = {'about_kind':'Feedback',
+                      'about_item':$scope.feedback.id,
                       'order': '-updated_at',
                       'limit': 5,
-                      'pageToken':$scope.pages[nextPage]
+                      'pageToken':$scope.topicpages[nextPage]
                      }
           }else{
-            params = {'about_kind':'Account',
-                      'about_item':$scope.account.id,
+            params = {'about_kind':'Feedback',
+                      'about_item':$scope.feedback.id,
                       'order': '-updated_at',
                       'limit': 5}
           }
-          console.log('in listNextPageItems');
-          $scope.currentPage = $scope.currentPage + 1 ; 
+          
+          $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ;  
           Topic.list($scope,params);
      }
-     $scope.listPrevPageItems = function(){
+     $scope.TopiclistPrevPageItems = function(){
        
-       var prevPage = $scope.currentPage - 1;
+       var prevPage = $scope.topicCurrentPage - 1;
        var params = {};
-          if ($scope.pages[prevPage]){
-            params = {'about_kind':'Account',
-                      'about_item':$scope.account.id,
+          if ($scope.topicpages[prevPage]){
+            params = {'about_kind':'Feedback',
+                      'about_item':$scope.feedback.id,
                       'order': '-updated_at',
                       'limit': 5,
-                      'pageToken':$scope.pages[prevPage]
+                      'pageToken':$scope.topicpages[prevPage]
                      }
           }else{
-            params = {'about_kind':'Account',
-                      'about_item':$scope.account.id,
+            params = {'about_kind':'Feedback',
+                      'about_item':$scope.feedback.id,
                       'order': '-updated_at',
                       'limit': 5}
           }
-          $scope.currentPage = $scope.currentPage - 1 ;
+          $scope.topicCurrentPage = $scope.topicCurrentPage - 1 ;
           Topic.list($scope,params);
-          console.log()
-     }
-     
-     $scope.listTopics = function(account){
-        var params = {'about_kind':'Account',
-                      'about_item':account.id,
+         
+     };
+    $scope.listTopics = function(){
+        var params = {'about_kind':'Feedback',
+                      'about_item':$scope.feedback.id,
                       'order': '-updated_at',
                       'limit': 5
                       };
         Topic.list($scope,params);
 
-     }
+     };
+     
      $scope.hilightTopic = function(){
         console.log('Should higll');
        $('#topic_0').effect( "bounce", "slow" );
@@ -281,8 +310,8 @@ app.controller('FeedBacksShowCtrl', ['$scope','$filter', '$route','Auth','Show',
       console.log('debug addNote');
       
       var params ={
-                  'about_kind': 'Account',
-                  'about_item': $scope.account.id,
+                  'about_kind': 'Feedback',
+                  'about_item': $scope.feedback.id,
                   'title': note.title,
                   'content': note.content
       };
@@ -292,12 +321,12 @@ app.controller('FeedBacksShowCtrl', ['$scope','$filter', '$route','Auth','Show',
       $scope.note.content = '';
     };
       
-
-
-
-    $scope.editaccount = function() {
-       $('#EditAccountModal').modal('show');
-    }
+//HKA 28.12.2013 Show Lead
+$scope.listLead = function(){
+  var params = {'show':$scope.feedback.entityKey,
+                 'limit':5};
+  Lead.list($scope,params);
+};
 
       
 // Google+ Authentication 

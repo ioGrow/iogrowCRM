@@ -42,7 +42,7 @@ import pprint
 # This client_id could be generated on the Google API console
 CLIENT_ID = '987765099891.apps.googleusercontent.com'
 SCOPES = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/drive','https://www.googleapis.com/auth/calendar']
-OBJECTS = {'Account': Account,'Contact': Contact,'Case':Case,'Lead':Lead,'Opportunity':Opportunity,'Show':Show}
+OBJECTS = {'Account': Account,'Contact': Contact,'Case':Case,'Lead':Lead,'Opportunity':Opportunity,'Show':Show,'Feedback':Feedback}
 FOLDERS = {'Account': 'accounts_folder','Contact': 'contacts_folder','Lead':'leads_folder','Opportunity':'opportunities_folder','Case':'cases_folder','Show':'shows_folder'}
 DISCUSSIONS= {'Task':{'title':'task','url':'/#/tasks/show/'},'Event':{'title':'event','url':'/#/events/show/'},'Note':{'title':'discussion','url': '/#/notes/show/'}}
 
@@ -1040,7 +1040,7 @@ class CrmEngineApi(remote.Service):
       my_model.put()
       return my_model
   # comments.list api
-  @Comment.query_method(user_required=True,query_fields=('limit', 'order','discussion','updated_at', 'pageToken'),path='comments',name='comments.list')
+  @Comment.query_method(user_required=True,query_fields=('limit', 'order','discussion', 'pageToken'),path='comments',name='comments.list')
   def CommentList(self,query):
      return query
   # comments.get api
