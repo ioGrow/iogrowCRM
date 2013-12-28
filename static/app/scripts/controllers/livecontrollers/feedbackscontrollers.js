@@ -57,9 +57,9 @@ app.controller('FeedBacksListCtrl', ['$scope','$filter','Auth','Feedback',
 
      $scope.showFeedbackModal = function(){
         console.log('button clicked');
-       $scope.feedback.type_feedback = 1;
-       $scope.feedback.source = 4;
-       $scope.feedback.status = 8;
+       $scope.feedback.type_feedback = 'DADy';
+       $scope.feedback.source = 'Email';
+       $scope.feedback.status = 'Pending';
         $('#addFeedModal').modal('show');
 
       };

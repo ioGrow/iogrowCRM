@@ -137,10 +137,10 @@
             <span><a class="tag" href="#"> <%=feedback.content %></a></span>
             
              </br>
-               <span class="page-meta"><strong>Type:</strong> <a ></a> <%=feedback.feedback_type %></span>
+               <span class="page-meta"><strong>Type: </strong> <a ></a> <%=feedback.type_feedback %></span>
               </br>
-            <span class="page-meta"><strong>Status: </strong> <a href="/live/shows/<%=show.id%>"><%=feedback.status%></a>   </span>
-              
+            <span class="page-meta"><strong>Status: </strong> <a ><%=feedback.status%></a>   </span></br>
+              <span class="page-meta"><strong>Source: </strong> <a ><%=feedback.source%></a>   </span>
             
               <!--span class="page-meta"><strong>Publish this show on i/oGrow Live: </strong> <input type="checkbox" ng-model="show.is_published" checked class="toggle"  ng-click="saveshowispublished(show)" />  </span-->
               
