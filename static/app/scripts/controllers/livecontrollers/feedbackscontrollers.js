@@ -92,8 +92,8 @@ app.controller('FeedBacksListCtrl', ['$scope','$filter','Auth','Feedback',
     
 }]);
 
-app.controller('FeedBacksShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Topic','Note','Task','Event','Permission','User','Feedback','Leadstatus','Lead',
-    function($scope,$filter,$route,Auth,Show,Topic,Note,Task,Event,Permission,User,Feedback,Leadstatus,Lead) {
+app.controller('FeedBacksShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Topic','Note','Task','Permission','User','Feedback','Leadstatus','Lead','Attachement',
+    function($scope,$filter,$route,Auth,Show,Topic,Note,Task,Permission,User,Feedback,Leadstatus,Lead,Attachement) {
       
       $("#id_Feedbacks").addClass("active");
       var tab = $route.current.params.accountTab;
@@ -203,7 +203,7 @@ app.controller('FeedBacksShowCtrl', ['$scope','$filter', '$route','Auth','Show',
         var params = {  'type': 'user',
                         'role': 'writer',
                         'value': slected_memeber.email,
-                        'about_kind': 'Show',
+                        'about_kind': 'Feedback',
                         'about_item': $scope.feedback.id
 
                         
@@ -376,7 +376,72 @@ $scope.listLead = function(){
                  'limit':5};
   Lead.list($scope,params);
 };
+//HKA 28.12.2013 Add document 
+ $scope.showCreateDocument = function(type){
+        
+        $scope.mimeType = type;
+        $('#newDocument').modal('show');
+     };
+     $scope.createDocument = function(newdocument){
+        var mimeType = 'application/vnd.google-apps.' + $scope.mimeType;
+        var params = {'about_kind':'Feedback',
+                      'about_item': $scope.feedback.id,
+                      'title':newdocument.title,
+                      'mimeType':mimeType };
+        Attachement.insert($scope,params);
 
+     };
+     $scope.createPickerUploader = function() {
+          var projectfolder = $scope.feedback.folder;
+          var picker = new google.picker.PickerBuilder().
+              addView(new google.picker.DocsUploadView().setParent(projectfolder)).
+              setCallback($scope.uploaderCallback).
+              setAppId(12345).
+                enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
+              build();
+          picker.setVisible(true);
+      };
+      // A simple callback implementation.
+      $scope.uploaderCallback = function(data) {
+        
+
+        if (data.action == google.picker.Action.PICKED) {
+                var params = {'about_kind': 'Feedback',
+                                      'about_item':$scope.feedback.id};
+                params.items = new Array();
+               
+                 $.each(data.docs, function(index) {
+                      console.log(data.docs);
+                      /*
+                      {'about_kind':'Account',
+                      'about_item': $scope.account.id,
+                      'title':newdocument.title,
+                      'mimeType':mimeType };
+                      */
+                      var item = { 'id':data.docs[index].id,
+                                  'title':data.docs[index].name,
+                                  'mimeType': data.docs[index].mimeType,
+                                  'embedLink': data.docs[index].url
+
+                      };
+                      params.items.push(item);
+                
+                  });
+                 Attachement.attachfiles($scope,params);
+                    
+                    console.log('after uploading files');
+                    console.log(params);
+                }
+      };
+ $scope.listDocuments = function(){
+        var params = {'about_kind':'Feedback',
+                      'about_item':$scope.feedback.id,
+                      'order': '-updated_at',
+                      'limit': 5
+                      };
+        Attachement.list($scope,params);
+
+     }
       
 // Google+ Authentication 
     Auth.init($scope);

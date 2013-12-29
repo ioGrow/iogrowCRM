@@ -98,6 +98,7 @@ class Organization(EndpointsModel):
     opportunities_folder = ndb.StringProperty()
     cases_folder = ndb.StringProperty()
     shows_folder = ndb.StringProperty()
+    feedbacks_folder = ndb.StringProperty()
 
     def put(self, **kwargs):
       ndb.Model.put(self, **kwargs)

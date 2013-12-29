@@ -139,7 +139,7 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Top
          $scope.selectedTab = 5;
           break;
         default:
-        $scope.selectedTab = 1;
+        $scope.selectedTab = 2;
 
         }
 
@@ -173,6 +173,7 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Top
           'tags': ['grow'],
           'tokenSeparators': [",", " " ,"#"]
       };
+      $scope.feedback = {};
 
      
      // What to do after authentication
@@ -559,6 +560,30 @@ $scope.deleteshow = function(){
   $('#BeforedeleteShow').modal('hide');
 };
 
+//HKA 29.12.2013 Add Feedback to Show
+$scope.showfeedback = function(){
+  $scope.feedback.type_feedback = 'Questions Q/A';
+  $scope.feedback.source = 'Email';
+  $scope.feedback.status = 'Pending';
+  $('#addFeedModal').modal('show');
+};
+$scope.savefeedback = function(feedback){
+  var params ={'name':feedback.name,
+                'content':feedback.content,
+                'related_to':$scope.show.entityKey,
+                'type_feedback':feedback.type_feedback,
+                'source':feedback.source,
+                'access':feedback.access,
+                'status':feedback.status}
+    Feedback.insert($scope,params);
+    $('#addFeedModal').modal('hide');
+};
+$scope.listFeedbacks = function(){
+  var params = {'related_to':$scope.show.entityKey};
+  Feedback.list($scope,params);
+
+};
+
 //HKA 25.12.2013 Attach Document 
 $scope.createDocument = function(newdocument){
         var mimeType = 'application/vnd.google-apps.' + $scope.mimeType;
@@ -620,10 +645,6 @@ $scope.listDocuments = function(){
         Attachement.list($scope,params);
 
      };
-$scope.listFeedbacks = function(){
-  Feedback.list($scope,{});
-
-};
 
       
 // Google+ Authentication 

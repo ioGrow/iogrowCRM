@@ -337,43 +337,134 @@
                          <div class="row-fluid cards-container">
                          <div class="btn-group relbutton">
             
-                                <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
+                                <button  ng-click="showfeedback()" id="sample_editable_1_new" class="btn red">
                                {{_("Add feedbacks")}}<i class="icon-plus"></i>
                                 </button>
                           </div>
                             <div class="inner-cards-container">
                             
-                                                          
-                            <!--div  class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                                <div class="dashboard-stat cards">
-                                  
-                                  <div class="details">
-                                    <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardTitle">
-                                     Ben Belfodhil
+                  <div ng-repeat="feedback in feedbacks" class="span3 responsive" data-tablet="span6" data-desktop="span3">
+                        <div class="dashboard-stat cards cards-show">
+                  
+                  <div class="details">
+                    <a href="/#/live/feedbacks/feedback/<%= feedback.id %>"><h3 class="relatedcardOppTitle">
+                                    <%= feedback.name%>
                                     </h3></a>
-                                    <div class="desc">    
-                                                             
-                                        <span class="contact-title">CEO</span>  
-                                    
-                                    </div>
-                                  </div>
-                                  <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
-                                </div>
-                              </div-->
-                <div ng-show="blankStatefeedback" class="span12 responsive" data-tablet="span6" data-desktop="span12">
-                   <div class="dashboard-stat cards">
-                      <div class="blank_slate_arrow"></div>
-                       <div class="blank_slate_body">
-                         <img src="/static/img/customer-feedback.jpg" width="300">
-                         <p class="lead">{{ _('Feedbacks pages  let you receive a feedback from leads or customers ') }}</p>
-                       </div>                
-                </div>
+                    <div class="desc">                           
+                      
+                    <a  class="desc" href="/#/accounts/industry/<%=account.industry%>"> </a> 
+                    </div>
+                     </div>
+                                  
+                   </div>
               </div>
+              <div ng-show="blankStatefeedback" class="span12 responsive" data-tablet="span6" data-desktop="span12">
+                <div class="dashboard-stat cards">
+                  
+                  
+                  <div class="blank_slate_arrow"></div>
+                  <div class="blank_slate_body">
+                      <img src="/static/img/customer-feedback.jpg" width="300">
+                      <p class="lead">{{ _('Feedbacks pages  let you receive a feedback from leads or customers ') }}</p>
+                  </div>
+               
+                                  
+                </div>
+              </div>                               
+                           
 
                               </div>
                             </div>
+          <div id="addFeedModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("New Feedback")}}</h3>
+              </div>
+              <div class="modal-body">
+                 <form id="addFeedback" name="addfeedback"  class="form-horizontal"  > 
+                  <fieldset>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Title")}} *</label>
+                       
+                        <div class="controls">
+                          <input type="text" required  ng-model="feedback.name">
+                          
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Content")}} *</label>
+                       
+                        <div class="controls">
+                          <textarea required  ng-model="feedback.content" rows="3">
+                          </textarea>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label  class="control-label">{{_("Type")}}</label>
+                       
+                        <div class="controls">
+                          <select ng-model="feedback.type_feedback">
+                            <option value="Questions Q/A">Questions Q/A</option>
+                            <option value="Features Request">Features Request</option>
+                            <option value="Others">Others</option>
+                           </select>
+                          
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label  class=" control-label">{{_("Source")}}</label>
+                       
+                        <div class="controls">
+                          <select  ng-model="feedback.source">
+                            <option value="Email">Email</option>
+                            <option value="i/oGrow Live" >i/oGrow Live</option>
+                            <option value="Phone">Phone</option>
+                            <option value="Others">Others</option>
+                           </select>
+                          
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label  class=" control-label">{{_("Status")}}</label>
+                       
+                        <div class="controls">
+                          <select ng-model="feedback.status">
+                            <option value="Pending">Pending</option>
+                            <option value="Working">Working</option>
+                            <option value="Rejected">Rejected</option>
+                          </select>
+                          
+                        </div>
+                    </div>
+                    <hr/>
+                    <p> {{ _('Who can access?') }}</p>
+                     <div class='container-fluid'>
+
+                     
+                          
+                            <label class="radio line">
+                            <input type="radio" value="public" ng-model="feedback.access" />
+                             {{ _('public: Anyone within your organization') }}
+                            </label>
+                            <label class="radio line">
+                            <input type="radio"  value="private" ng-model="feedback.access" />
+                            {{ _('private: only you and your collaborators') }}
+                            </label>  
+                           
+                       
+                      
+                    </div>
+                    </fieldset>
+                
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                
+                <input ng-hide="isLoading" ng-click="savefeedback(feedback)" type="submit" class="btn green" value="{{ _('Add this Feedback') }}">
+                <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
+              </div>
+               </form>
+       </div>
                       </div>
                        <div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 4">
                           

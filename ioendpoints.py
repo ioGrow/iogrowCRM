@@ -21,6 +21,7 @@ from iomodels.crmengine.opportunitystage import Opportunitystage
 from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.casestatuses import Casestatus
 from iomodels.crmengine.feedbacks import Feedback
+from iomodels.crmengine.companyprofiles import Companyprofile
 from iomodels.crmengine.emails import IOEmail
 from iomodels.crmengine.tags import Tag
 from model import User,Userinfo,Group,Member,Permission,Contributor
@@ -43,7 +44,7 @@ import pprint
 CLIENT_ID = '987765099891.apps.googleusercontent.com'
 SCOPES = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/drive','https://www.googleapis.com/auth/calendar']
 OBJECTS = {'Account': Account,'Contact': Contact,'Case':Case,'Lead':Lead,'Opportunity':Opportunity,'Show':Show,'Feedback':Feedback}
-FOLDERS = {'Account': 'accounts_folder','Contact': 'contacts_folder','Lead':'leads_folder','Opportunity':'opportunities_folder','Case':'cases_folder','Show':'shows_folder'}
+FOLDERS = {'Account': 'accounts_folder','Contact': 'contacts_folder','Lead':'leads_folder','Opportunity':'opportunities_folder','Case':'cases_folder','Show':'shows_folder','Feedback':'feedbacks_folder'}
 DISCUSSIONS= {'Task':{'title':'task','url':'/#/tasks/show/'},'Event':{'title':'event','url':'/#/events/show/'},'Note':{'title':'discussion','url': '/#/notes/show/'}}
 
 # The message class that defines the SendEmail Request attributes
@@ -1018,6 +1019,56 @@ class CrmEngineApi(remote.Service):
     http_method ='DELETE',path='feedbacks/{id}',name='feedbacks.delete'
     )
   def FeedbackDelete(self,my_model):
+    user_from_email=EndpointsHelper.require_iogrow_user()
+    my_model.key.delete()
+    return message_types.VoidMessage()
+  # HKA 29.12.2013 Companyprofile APIs
+  @Companyprofile.method(user_required=True,path='companyprofiles',http_method='POST',name='companyprofiles.insert')
+  def Companyprofileinsert(self, my_model):
+      user_from_email = EndpointsHelper.require_iogrow_user()
+      my_model.owner = user_from_email.google_user_id
+      my_model.organization = user_from_email.organization
+      organization = user_from_email.organization.get()
+      my_model.organization_name = organization.name
+      my_model.put()
+      return my_model
+  # companyprofiles.list api
+  @Companyprofile.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='companyprofiles', name='companyprofiles.list')
+  def companyprofiles_list(self, query):
+      user_from_email = EndpointsHelper.require_iogrow_user()      
+      return query.filter(ndb.OR(ndb.AND(Feedback.access=='public',Feedback.organization==user_from_email.organization),Feedback.owner==user_from_email.google_user_id, Feedback.collaborators_ids==user_from_email.google_user_id)).order(Feedback._key)
+  # companyprofiles.get api
+  @Companyprofile.method(request_fields=('id',),path='companyprofiles/{id}', http_method='GET', name='companyprofiles.get')
+  def companyprofiles_get(self, my_model):
+    if not my_model.from_datastore:
+      raise endpoints.NotFoundException('Companyprofile not found.')
+    return my_model
+  # companyprofiles.patch api
+  @Companyprofile.method(user_required=True,
+                http_method='PATCH', path='companyprofiles/{id}', name='companyprofiles.patch')
+  def companyprofiles_patch(self, my_model):
+      user_from_email = EndpointsHelper.require_iogrow_user()
+      # Todo: Check permissions
+      if not my_model.from_datastore:
+          raise endpoints.NotFoundException('Companyprofile not found.')
+      patched_model_key = my_model.entityKey
+      patched_model = ndb.Key(urlsafe=patched_model_key).get()
+      print patched_model
+      print my_model
+      properties = Companyprofile().__class__.__dict__
+      for p in properties.keys():
+         
+            if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p) and not(p in ['put','set_perm','put_index']) ):
+                exec('patched_model.'+p+'= my_model.'+p)
+      
+
+      patched_model.put()
+      return patched_model
+  @Companyprofile.method(request_fields=('id',),
+    response_message=message_types.VoidMessage,
+    http_method ='DELETE',path='companyprofiles/{id}',name='companyprofiles.delete'
+    )
+  def CompanyprofileDelete(self,my_model):
     user_from_email=EndpointsHelper.require_iogrow_user()
     my_model.key.delete()
     return message_types.VoidMessage()
