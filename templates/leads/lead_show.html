@@ -125,6 +125,31 @@
               </div>
                </form>
        </div>
+       <!--HKA 24.12.2013 Modal before Deleting Lead-->
+         <div id="BeforedeleteLead" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">Delete Lead</h3>
+              </div>
+              <div class="modal-body">
+                 <form id="seletesho" name="deletesho" class="form-horizontal"> 
+                  <fieldset>
+
+                  <p>{{_("Are you sure you want to delete")}} :  <%= lead.firstname %> <%= lead.lastname %> .</p>
+                    
+
+                    
+                    </fieldset>
+                
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                
+                <input ng-hide="isLoading" ng-click="deletelead()" type="submit" class="btn red" value="Delete this Lead">
+                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+              </div>
+               </form>
+       </div>
       <div class="container-fluid" ng-show="isContentLoaded">
         
         <!-- END PAGE HEADER-->
@@ -151,7 +176,7 @@
               <span>{{_("Lead Status")}} : </span>
               <a   href="/#/search/type:Lead <%=lead.status%>" class="tag" ng-show="lead.company"> #<%= lead.status %></a> <br>
             </ul>  
-             <span class="page-meta"><i class="icon-refresh"><a ng-click="showConvertModal()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Convert")}}</a></i> | <i class="icon-pencil"><a ng-click="editLead()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="delete(lead)" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
+             <span class="page-meta"><i class="icon-refresh"><a ng-click="showConvertModal()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Convert")}}</a></i> | <i class="icon-pencil"><a ng-click="editLead()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="editbeforedelete()" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
 
            
             

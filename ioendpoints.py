@@ -314,6 +314,14 @@ class CrmEngineApi(remote.Service):
                 exec('patched_model.'+p+'= my_model.'+p)
       patched_model.put()
       return patched_model
+  @Account.method(request_fields=('id',),
+    response_message=message_types.VoidMessage,
+    http_method ='DELETE',path='accounts/{id}',name='accounts.delete'
+    )
+  def AccountDelete(self,my_model):
+    user_from_email=EndpointsHelper.require_iogrow_user()
+    my_model.key.delete()
+    return message_types.VoidMessage()
   
   
   # accounts.search api
@@ -404,6 +412,14 @@ class CrmEngineApi(remote.Service):
                 exec('patched_model.'+p+'= my_model.'+p)
       patched_model.put()
       return patched_model
+  @Contact.method(request_fields=('id',),
+    response_message=message_types.VoidMessage,
+    http_method ='DELETE',path='contacts/{id}',name='contacts.delete'
+    )
+  def ContactDelete(self,my_model):
+    user_from_email=EndpointsHelper.require_iogrow_user()
+    my_model.key.delete()
+    return message_types.VoidMessage()
   
   #contacts.search api
   @endpoints.method(SearchRequest, ContactSearchResults,
@@ -487,6 +503,14 @@ class CrmEngineApi(remote.Service):
       # Todo: Check permissions
       my_model.put()
       return my_model
+  @Opportunity.method(request_fields=('id',),
+    response_message=message_types.VoidMessage,
+    http_method ='DELETE',path='opportunities/{id}',name='opportunities.delete'
+    )
+  def OpportunityDelete(self,my_model):
+    user_from_email=EndpointsHelper.require_iogrow_user()
+    my_model.key.delete()
+    return message_types.VoidMessage()
   # opportunities.search api 
   @endpoints.method(SearchRequest, OpportunitySearchResults,
                       path='opportunities/search', http_method='POST',
@@ -632,6 +656,14 @@ class CrmEngineApi(remote.Service):
                 exec('patched_model.'+p+'= my_model.'+p)
       patched_model.put()
       return patched_model
+  @Lead.method(request_fields=('id',),
+    response_message=message_types.VoidMessage,
+    http_method ='DELETE',path='leads/{id}',name='leads.delete'
+    )
+  def LeadDelete(self,my_model):
+    user_from_email=EndpointsHelper.require_iogrow_user()
+    my_model.key.delete()
+    return message_types.VoidMessage()  
   # leads.convert api
   @endpoints.method(ID_RESOURCE, ConvertedLead,
                       path='leads/convert/{id}', http_method='POST',
@@ -828,6 +860,14 @@ class CrmEngineApi(remote.Service):
 
       patched_model.put()
       return patched_model
+  @Case.method(request_fields=('id',),
+    response_message=message_types.VoidMessage,
+    http_method ='DELETE',path='cases/{id}',name='cases.delete'
+    )
+  def CaseDelete(self,my_model):
+    user_from_email=EndpointsHelper.require_iogrow_user()
+    my_model.key.delete()
+    return message_types.VoidMessage()
   # cases.search api 
   @endpoints.method(SearchRequest, CaseSearchResults,
                       path='cases/search', http_method='POST',

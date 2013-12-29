@@ -716,6 +716,15 @@ $scope.updateintro = function(contact){
   Contact.patch($scope,params);
   $('#EditIntroModal').modal('hide');
 };
+//HKA 29.12.2013 Delete Contact
+$scope.editbeforedelete = function(){
+     $('#BeforedeleteContact').modal('show');
+   };
+$scope.deletecontact = function(){
+     var contactid = {'id':$route.current.params.contactId};
+     Contact.delete($scope,contactid);
+     $('#BeforedeleteContact').modal('hide');
+     };
 
      // Google+ Authentication 
      Auth.init($scope);

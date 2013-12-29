@@ -119,6 +119,14 @@ leadservices.factory('Lead', function($http) {
          }
       });
   };
+
+
+ Lead.delete = function($scope,id){
+    gapi.client.crmengine.leads.delete(id).execute(function(resp){
+        window.location.replace('#/leads');
+      }
+    )};
+
   Lead.search = function($scope,params){
       gapi.client.crmengine.leads.search(params).execute(function(resp) {
           console.log(resp);

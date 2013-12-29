@@ -800,6 +800,14 @@ $scope.updatAccountHeader = function(account){
   $('#EditAccountModal').modal('hide');
 };
 
+$scope.editbeforedelete = function(){
+     $('#BeforedeleteAccount').modal('show');
+   };
+$scope.deleteaccount = function(){
+     var accountid = {'id':$route.current.params.accountId};
+     Account.delete($scope,accountid);
+     $('#BeforedeleteAccount').modal('hide');
+     };
      // Google+ Authentication 
      Auth.init($scope);
   

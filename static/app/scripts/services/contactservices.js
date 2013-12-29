@@ -111,6 +111,12 @@ accountservices.factory('Contact', function($http) {
          }
       });
   };
+Contact.delete = function($scope,id){
+    gapi.client.crmengine.contacts.delete(id).execute(function(resp){
+        window.location.replace('#/contacts');
+    }
+
+    )};
   
 
 return Contact;

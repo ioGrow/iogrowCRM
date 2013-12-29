@@ -472,7 +472,16 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
    });              
   Opportunity.patch($scope,params);
   $('#EditOpportunityModal').modal('hide');
- }
+ };
+ //HKA 29.12.2013 Delete Opportunity
+ $scope.editbeforedelete = function(){
+     $('#BeforedeleteOpportunity').modal('show');
+   };
+$scope.deleteopportunity= function(){
+     var opportunityid = {'id':$route.current.params.opportunityId};
+     Opportunity.delete($scope,opportunityid);
+     $('#BeforedeleteOpportunity').modal('hide');
+     };
     
      // Google+ Authentication 
      Auth.init($scope);

@@ -111,6 +111,11 @@ opportunityservices.factory('Opportunity', function($http) {
          }
       });
   };
+Opportunity.delete = function($scope,id){
+    gapi.client.crmengine.opportunities.delete(id).execute(function(resp){
+        window.location.replace('#/opportunities');
+    }
+    )};
   
 
 return Opportunity;

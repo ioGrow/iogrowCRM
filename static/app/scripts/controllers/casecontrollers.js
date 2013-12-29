@@ -535,6 +535,17 @@ $scope.updatCasetHeader = function(casee){
  $('#EditCaseModal').modal('hide');
 };
 
+
+//HKA 29.12.2013 Delet Case
+ $scope.editbeforedelete = function(){
+     $('#BeforedeleteCase').modal('show');
+   };
+$scope.deletecase = function(){
+     var caseid = {'id':$route.current.params.caseId};
+     Case.delete($scope,caseid);
+     $('#BeforedeleteCase').modal('hide');
+     };
+
       
 
      // Google+ Authentication 
