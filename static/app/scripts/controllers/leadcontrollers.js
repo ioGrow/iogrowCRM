@@ -588,6 +588,15 @@ $scope.updateintro = function(lead){
                   'about_kind':'Lead' };
         Email.send($scope,params);
       };
+//HKA 
+  $scope.editbeforedelete = function(){
+     $('#BeforedeleteLead').modal('show');
+   };
+$scope.deletelead = function(){
+     var leadid = {'id':$route.current.params.leadId};
+     Lead.delete($scope,leadid);
+     $('#BeforedeleteLead').modal('hide');
+     };
       
     // Google+ Authentication 
      Auth.init($scope);

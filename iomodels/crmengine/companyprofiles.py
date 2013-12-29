@@ -14,11 +14,18 @@ class Companyprofile(EndpointsModel):
     collaborators_ids = ndb.StringProperty(repeated=True)
     organization = ndb.KeyProperty()
     folder = ndb.StringProperty()
-    name = ndb.StringProperty()  
+    name = ndb.StringProperty()
+    tagline = ndb.TextProperty()
+    introduction =ndb.TextProperty() 
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
     # public or private
     access = ndb.StringProperty()
+    phones = ndb.StructuredProperty(model.Phone,repeated=True)
+    emails = ndb.StructuredProperty(model.Email,repeated=True)
+    addresses = ndb.StructuredProperty(model.Address,repeated=True)
+    websites = ndb.StructuredProperty(model.Website,repeated=True)
+    sociallinks= ndb.StructuredProperty(model.Social,repeated=True)
 
     def put(self, **kwargs):
         ndb.Model.put(self, **kwargs)

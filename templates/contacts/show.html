@@ -100,6 +100,31 @@
               </div>
                </form>
        </div>
+      <!--HKA 24.12.2013 Modal before Deleting Contact-->
+         <div id="BeforedeleteContact" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">Delete Contact</h3>
+              </div>
+              <div class="modal-body">
+                 <form id="seletesho" name="deletesho" class="form-horizontal"> 
+                  <fieldset>
+
+                  <p>{{_("Are you sure you want to delete")}} :  <%=contact.firstname%> <%=contact.lastname%>  .</p>
+                    
+
+                    
+                    </fieldset>
+                
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                
+                <input ng-hide="isLoading" ng-click="deletecontact(contact)" type="submit" class="btn red" value="Delete this Contact">
+                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+              </div>
+               </form>
+       </div>
       <div class="container-fluid" ng-show="isContentLoaded">
         
         <!-- END PAGE HEADER-->
@@ -123,7 +148,7 @@
 
             <span ng-show="contact.title"><a class="tag" href="/#/search/type:Contact <%=contact.title%>">#<%=contact.title%> </a></span>
             <span ng-show="contact.account_name">{{_("at")}} <a class="tag" href="/#/search/type:Contact <%=contact.account_name%>">#<%=contact.account_name%></a></span> <br>
-            <span class="page-meta"><i class="icon-pencil"><a ng-click="editacontact()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="delete(contact)" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
+            <span class="page-meta"><i class="icon-pencil"><a ng-click="editacontact()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="editbeforedelete()" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
 
             
             <hr/>

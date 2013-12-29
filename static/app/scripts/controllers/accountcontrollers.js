@@ -800,6 +800,7 @@ $scope.updatAccountHeader = function(account){
   Account.patch($scope,params);
   $('#EditAccountModal').modal('hide');
 };
+
     $('#some-textarea').wysihtml5();
       
       $scope.sendEmail = function(email){
@@ -817,6 +818,17 @@ $scope.updatAccountHeader = function(account){
         
         Email.send($scope,params);
       };
+
+
+$scope.editbeforedelete = function(){
+     $('#BeforedeleteAccount').modal('show');
+   };
+$scope.deleteaccount = function(){
+     var accountid = {'id':$route.current.params.accountId};
+     Account.delete($scope,accountid);
+     $('#BeforedeleteAccount').modal('hide');
+     };
+
      // Google+ Authentication 
      Auth.init($scope);
   

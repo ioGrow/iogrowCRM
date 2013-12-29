@@ -717,6 +717,7 @@ $scope.updateintro = function(contact){
   Contact.patch($scope,params);
   $('#EditIntroModal').modal('hide');
 };
+
      $('#some-textarea').wysihtml5();
       
       $scope.sendEmail = function(email){
@@ -737,13 +738,19 @@ $scope.updateintro = function(contact){
                   'bcc': email.bcc,
                   'subject': email.subject,
                   'body': email.body,
-
                   'about_item':$scope.contact.id,
                   'about_kind':'Contact' };
-        console.log('in sendEmail');
-        console.log(params);
+        
         Email.send($scope,params);
       };
+      $scope.editbeforedelete = function(){
+     $('#BeforedeleteContact').modal('show');
+   };
+   $scope.deletecontact = function(){
+     var contactid = {'id':$route.current.params.contactId};
+     Contact.delete($scope,contactid);
+     $('#BeforedeleteContact').modal('hide');
+     };
      // Google+ Authentication 
      Auth.init($scope);
 }]);

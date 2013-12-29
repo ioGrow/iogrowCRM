@@ -109,7 +109,12 @@ accountservices.factory('Case', function($http) {
             console.log('accounts.patch gapi #end_execute');
           });
   };
-  
+
+  Case.delete = function($scope,id){
+    gapi.client.crmengine.cases.delete(id).execute(function(resp){
+        window.location.replace('#/cases');
+      }
+    )};
 
 return Case;
 });

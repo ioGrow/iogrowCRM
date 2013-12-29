@@ -142,7 +142,11 @@ accountservices.factory('Account', function($http) {
          }
       });
   };
-  
+  Account.delete = function($scope,id){
+    gapi.client.crmengine.accounts.delete(id).execute(function(resp){
+        window.location.replace('#/accounts');
+      }
+    )};
 
 return Account;
 });
