@@ -2,6 +2,7 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
     function($scope,Auth,Account,Opportunity,Opportunitystage,Search) {
       
      $("#id_Opportunities").addClass("active");
+
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -207,11 +208,11 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
      
 }]);
 
-app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage',
-    function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage) {
+app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage','Email',
+    function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email) {
  
       $("#id_Opportunities").addClass("active");
-      
+      $scope.selectedTab = 1;
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.isContentLoaded = false;
@@ -229,6 +230,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
      $scope.user = undefined;
      $scope.slected_memeber = undefined;
       $scope.stage_selected={};
+      $scope.email = {};
 
       // What to do after authentication
        $scope.runTheProcess = function(){
@@ -472,7 +474,24 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
    });              
   Opportunity.patch($scope,params);
   $('#EditOpportunityModal').modal('hide');
- }
+ };
+      $('#some-textarea').wysihtml5();
+      
+      $scope.sendEmail = function(email){
+        email.body = $('#some-textarea').val();
+        
+        var params = {
+                  'to': email.to,
+                  'cc': email.cc,
+                  'bcc': email.bcc,
+                  'subject': email.subject,
+                  'body': email.body,
+
+                  'about_item':$scope.opportunity.id,
+                  'about_kind':'Opportunity' };
+        
+        Email.send($scope,params);
+      };
     
      // Google+ Authentication 
      Auth.init($scope);

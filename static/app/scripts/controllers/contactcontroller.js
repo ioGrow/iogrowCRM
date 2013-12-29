@@ -166,8 +166,8 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
      // Google+ Authentication 
      Auth.init($scope);
 }]);
-app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User',
-    function($scope,$filter,$route,Auth,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User) {
+app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User',
+    function($scope,$filter,$route,Auth,Email,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User) {
  console.log('I am in ContactShowCtrl');
       $("#id_Contacts").addClass("active");
       var tab = $route.current.params.accountTab;
@@ -214,6 +214,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Task','Ev
      $scope.casepages=[];
 
       $scope.accounts = [];
+      $scope.email = {};
       // What to do after authentication
       $scope.runTheProcess = function(){
           var contactid = {'id':$route.current.params.contactId};
@@ -716,7 +717,33 @@ $scope.updateintro = function(contact){
   Contact.patch($scope,params);
   $('#EditIntroModal').modal('hide');
 };
+     $('#some-textarea').wysihtml5();
+      
+      $scope.sendEmail = function(email){
+        email.body = $('#some-textarea').val();
+        console.log(email);
+        /*
+        to = messages.StringField(2)
+        cc = messages.StringField(3)
+        bcc = messages.StringField(4)
+        subject = messages.StringField(5)
+        body = messages.StringField(6)
+        about_kind = messages.StringField(7)
+        about_item = messages.StringField(8)
+        */
+        var params = {
+                  'to': email.to,
+                  'cc': email.cc,
+                  'bcc': email.bcc,
+                  'subject': email.subject,
+                  'body': email.body,
 
+                  'about_item':$scope.contact.id,
+                  'about_kind':'Contact' };
+        console.log('in sendEmail');
+        console.log(params);
+        Email.send($scope,params);
+      };
      // Google+ Authentication 
      Auth.init($scope);
 }]);

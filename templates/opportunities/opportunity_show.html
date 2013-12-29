@@ -133,6 +133,14 @@
                   
                 </div>
                 <div class="portlet-body">
+                <div class="tabbable tabbable-custom">
+                  <ul class="nav nav-tabs">
+                        <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;" >{{ _("Notes") }}</a></li>
+                        <li class="ng-tab"  ng-class="{active: selectedTab == 6}"><a ng-click="selectedTab = 6;">{{ _("Documents") }}</a></li>
+                        <li class="ng-tab"  ng-class="{active: selectedTab ==3}"><a ng-click="selectedTab = 3;">{{ _("Send an Email") }}</a></li>
+                  </ul>
+                <div class="tab-content">
+                <div class="tab-pane active" id="tab_1_1" ng-show="selectedTab == 1">
                   <div class="row-fluid">
                   <div class="span12 margin-bottom-10">
                  <p class⁼"lead"=""><strong>Just add notes to remember what's important :</strong> </p>
@@ -164,7 +172,7 @@
                                   <a href="#" class="name"><%= topic.last_updater.display_name%></a>
                                   <span class="datetime">at <%=topic.updated_at | date:'yyyy-MM-dd - HH:mm:ss' %></span>
                                   <span class="body">
-                                  <a href="/#/notes/show/<%=topic.discussionId%>" class="discussion-content"><strong class="ng-binding"><%= topic.title%></strong><span class="excerpt ng-binding"> - <%= topic.excerpt%></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <%= topic.comments%> comments</span></a>
+                                  <a href="/#/notes/show/<%=topic.discussionId%>" class="discussion-content"><strong class="ng-binding"><%= topic.title%></strong> - <span class="excerpt ng-binding" ng-bind-html-unsafe="topic.excerpt"></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <%= topic.comments%> comments</span></a>
                                   </span>
                                 </div>
                               </li>
@@ -184,7 +192,49 @@
                                       </ul>
                                 </div>
                         <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
-                  </div>   
+                  </div>
+                </div>
+                <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3">
+                        
+                         <div class="row-fluid">
+                           <div class="span12 margin-bottom-10"> 
+                          <p class⁼"lead"=""><strong>Send an Email to :</strong> </p>
+                          <form  ng-submit="sendEmail(email)" class="ng-pristine ng-valid">
+                                            
+                                            <input required class="input-block-level ng-pristine ng-valid" autofocus type="text" placeholder="To" id="messageSubject" ng-model="email.to">
+                                            <input class="input-block-level ng-pristine ng-valid" autofocus type="text" placeholder="CC" id="messageSubject" ng-model="email.cc">
+                                            <input class="input-block-level ng-pristine ng-valid" autofocus type="text" placeholder="BCC" id="messageSubject" ng-model="email.bcc">
+                                             <input  required class="input-block-level ng-pristine ng-valid" autofocus type="text" placeholder="Add a subject" id="messageSubject" ng-model="email.subject">
+
+                                        
+                                            <textarea id="some-textarea" placeholder="Enter text ..." id="noteBody" class="input-block-level ng-pristine ng-valid" rows="7" ng-model="email.body"></textarea>
+                                           
+                                  
+                                          
+                                          
+                                         
+                                         <div class="pull-right">
+                                         
+                                            <input ng-hide="isLoading" type="submit" class="btn green" value="Send">
+
+                                          
+                                          </div>
+                                        </form>
+                                       </div>
+                                      </div>
+                                    </div>
+              
+
+
+
+
+              </div>
+              </div>
+
+
+
+
+
                 </div>
               
               </div>

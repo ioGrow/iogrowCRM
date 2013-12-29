@@ -242,12 +242,12 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
 
     
 }]);
-app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Topic','Note','Task','Event','Permission','User','Casestatus',
-    function($scope,$filter,$route,Auth,Case,Topic,Note,Task,Event,Permission,User,Casestatus) {
+app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Topic','Note','Task','Event','Permission','User','Casestatus','Email',
+    function($scope,$filter,$route,Auth,Case,Topic,Note,Task,Event,Permission,User,Casestatus,Email) {
       console.log('i am in account list controller');
       $("#id_Cases").addClass("active");
       
-     
+     $scope.selectedTab = 1;
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -267,6 +267,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
      $scope.users = [];
      $scope.user = undefined;
      $scope.slected_memeber = undefined;
+     $scope.email = {};
      
    
      // What to do after authentication
@@ -534,6 +535,23 @@ $scope.updatCasetHeader = function(casee){
   
  $('#EditCaseModal').modal('hide');
 };
+    $('#some-textarea').wysihtml5();
+      
+      $scope.sendEmail = function(email){
+        email.body = $('#some-textarea').val();
+        
+        var params = {
+                  'to': email.to,
+                  'cc': email.cc,
+                  'bcc': email.bcc,
+                  'subject': email.subject,
+                  'body': email.body,
+
+                  'about_item':$scope.casee.id,
+                  'about_kind':'Case' };
+        
+        Email.send($scope,params);
+      };
 
       
 

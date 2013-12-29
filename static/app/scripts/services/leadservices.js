@@ -14,6 +14,11 @@ leadservices.factory('Lead', function($http) {
                 $scope.listTopics(resp);
                 $scope.listTasks();
                 $scope.listEvents();
+                $scope.email.to = '';
+                angular.forEach($scope.lead.emails, function(value, key){
+                  $scope.email.to = $scope.email.to + value.email + ',';
+                  
+                });
                // Call the method $apply to make the update on the scope
                $scope.$apply();
             }else {
@@ -28,6 +33,11 @@ leadservices.factory('Lead', function($http) {
           gapi.client.crmengine.leads.patch(params).execute(function(resp) {
             if(!resp.code){
                $scope.lead = resp;
+               $scope.email.to = '';
+                angular.forEach($scope.lead.emails, function(value, key){
+                  $scope.email.to = $scope.email.to + value.email + ',';
+                  
+                });
                
                // Call the method $apply to make the update on the scope
                 $scope.$apply();
