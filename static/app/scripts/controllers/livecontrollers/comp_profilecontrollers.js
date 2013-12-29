@@ -23,6 +23,14 @@ app.controller('CompanyProfileShowCtrl', ['$scope','$filter','Auth','Show',
      $scope.refreshToken = function() {
             Auth.refreshToken();
      };
+  //HKA 29.12.2013 Edit tagline of Company Profile
+    $scope.edittagline = function() {
+       $('#EditTagModal').modal('show');
+    };
+    //HKA 29.12.2013 Edit Introduction on Company Profile
+    $scope.editintro = function() {
+       $('#EditIntroModal').modal('show');
+    };
    // Google+ Authentication 
     Auth.init($scope);
 
