@@ -35,8 +35,6 @@ accountservices.factory('Account', function($http) {
           gapi.client.crmengine.accounts.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.account = resp;
-               console.log('list of phones:');
-               console.log(resp.phones);
                $scope.isContentLoaded = true;
                $scope.listTopics(resp);
                $scope.listTasks();
@@ -45,6 +43,11 @@ accountservices.factory('Account', function($http) {
                $scope.listOpportunities();
                $scope.listCases();
                $scope.listDocuments();
+               $scope.email.to = '';
+                angular.forEach($scope.account.emails, function(value, key){
+                  $scope.email.to = $scope.email.to + value.email + ',';
+                  
+                });
                // Call the method $apply to make the update on the scope
                 $scope.$apply();
 
@@ -60,6 +63,11 @@ accountservices.factory('Account', function($http) {
           gapi.client.crmengine.accounts.patch(params).execute(function(resp) {
             if(!resp.code){
                $scope.account = resp;
+               $scope.email.to = '';
+                angular.forEach($scope.account.emails, function(value, key){
+                  $scope.email.to = $scope.email.to + value.email + ',';
+                  
+                });
                
                // Call the method $apply to make the update on the scope
                 $scope.$apply();
@@ -350,7 +358,9 @@ accountservices.factory('Email', function() {
              $scope.sending = false;
              $scope.selectedTab = 1;
              $scope.listTopics();
+             $scope.email = {};
              $scope.$apply();
+
              $('#sendingEmail').modal('hide');
 
 

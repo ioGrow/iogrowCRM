@@ -7,7 +7,7 @@ from model import Userinfo
 import model
 
 class Companyprofile(EndpointsModel):
-    _message_fields_schema = ('id','entityKey','created_at','updated_at', 'folder','access','collaborators_list','name')
+    _message_fields_schema = ('id','entityKey','created_at','updated_at','access','collaborators_list','name')
 
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)

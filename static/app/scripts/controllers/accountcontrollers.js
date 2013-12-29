@@ -134,8 +134,8 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
      Auth.init($scope);
 
 }]);
-app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account','Contact','Case','Opportunity', 'Topic','Note','Task','Event','Permission','User','Attachement',
-    function($scope,$filter,$route,Auth,Account,Contact,Case,Opportunity,Topic,Note,Task,Event,Permission,User,Attachement) {
+app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account','Contact','Case','Opportunity', 'Topic','Note','Task','Event','Permission','User','Attachement','Email',
+    function($scope,$filter,$route,Auth,Account,Contact,Case,Opportunity,Topic,Note,Task,Event,Permission,User,Attachement,Email) {
        $("#id_Accounts").addClass("active");
        $scope.selectedTab = 1;
        $scope.isSignedIn = false;
@@ -166,6 +166,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        $scope.users = [];
        $scope.user = undefined;
        $scope.slected_memeber = undefined;
+       $scope.email = {};
 
        // What to do after authentication
        $scope.runTheProcess = function(){
@@ -800,6 +801,25 @@ $scope.updatAccountHeader = function(account){
   $('#EditAccountModal').modal('hide');
 };
 
+    $('#some-textarea').wysihtml5();
+      
+      $scope.sendEmail = function(email){
+        email.body = $('#some-textarea').val();
+        
+        var params = {
+                  'to': email.to,
+                  'cc': email.cc,
+                  'bcc': email.bcc,
+                  'subject': email.subject,
+                  'body': email.body,
+
+                  'about_item':$scope.account.id,
+                  'about_kind':'Account' };
+        
+        Email.send($scope,params);
+      };
+
+
 $scope.editbeforedelete = function(){
      $('#BeforedeleteAccount').modal('show');
    };
@@ -808,6 +828,7 @@ $scope.deleteaccount = function(){
      Account.delete($scope,accountid);
      $('#BeforedeleteAccount').modal('hide');
      };
+
      // Google+ Authentication 
      Auth.init($scope);
   

@@ -18,6 +18,12 @@ accountservices.factory('Contact', function($http) {
                $scope.listEvents();
                $scope.listOpportunities();
                $scope.listCases();
+
+              $scope.email.to = '';
+                angular.forEach($scope.contact.emails, function(value, key){
+                  $scope.email.to = $scope.email.to + value.email + ',';
+                  
+                });
                // Call the method $apply to make the update on the scope
                $scope.$apply();
 
@@ -33,6 +39,11 @@ accountservices.factory('Contact', function($http) {
           gapi.client.crmengine.contacts.patch(params).execute(function(resp) {
             if(!resp.code){
                $scope.contact = resp;
+               $scope.email.to = '';
+                angular.forEach($scope.contact.emails, function(value, key){
+                  $scope.email.to = $scope.email.to + value.email + ',';
+                  
+                });
                
                // Call the method $apply to make the update on the scope
                 $scope.$apply();

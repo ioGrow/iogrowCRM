@@ -16,6 +16,7 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus',
     	
       $scope.leads = [];
       $scope.lead = {};
+      
       $scope.lead.access ='public';
       $scope.order = '-updated_at';
       $scope.status = 'new';
@@ -25,6 +26,7 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus',
             var params = {'order' : $scope.order,'limit':7};
             Lead.list($scope,params);
             Leadstatus.list($scope,{});
+
 
        };
         // We need to call this to refresh token when user credentials are invalid
@@ -198,12 +200,13 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.pages = [];
-     $scope.leads = [];
+     $scope.lead = {};
      $scope.status_selected={};
      $scope.users = [];
      $scope.user = undefined;
      $scope.slected_memeber = undefined;
      $scope.isLoading = false;
+     $scope.email = {};
 
       // What to do after authentication
       $scope.runTheProcess = function(){
@@ -211,6 +214,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
             Lead.get($scope,leadid);
             User.list($scope,{});
             Leadstatus.list($scope,{}); 
+            
       };
       // We need to call this to refresh token when user credentials are invalid
       $scope.refreshToken = function() {
@@ -560,6 +564,7 @@ $scope.updateintro = function(lead){
         Lead.convert($scope,leadid);
       };
       $('#some-textarea').wysihtml5();
+      
       $scope.sendEmail = function(email){
         email.body = $('#some-textarea').val();
         console.log(email);
