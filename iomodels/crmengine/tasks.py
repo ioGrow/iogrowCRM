@@ -4,7 +4,7 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 from iomodels.crmengine.notes import Topic
 from model import Userinfo
 import pprint
-
+from datetime import date
 import model
 
 class Task(EndpointsModel):
@@ -52,6 +52,7 @@ class Task(EndpointsModel):
     def put_index(self):
         """ index the element at each"""
         empty_string = lambda x: x if x else ""
+        empty_date = lambda x: x if x else date(2999, 12, 31)
         collaborators = " ".join(self.collaborators_ids)
         organization = str(self.organization.id())
         my_document = search.Document(
@@ -64,7 +65,7 @@ class Task(EndpointsModel):
             search.TextField(name='collaborators', value = collaborators ),
             search.TextField(name='title', value = empty_string(self.title) ),
             search.TextField(name='status', value = empty_string(self.status)),
-            search.DateField(name='due', value = self.due),
+            search.DateField(name='due', value = empty_date(self.due)),
             search.TextField(name='about_kind', value = empty_string(self.about_kind)),
             search.TextField(name='about_item', value = empty_string(self.about_item)),
            ])

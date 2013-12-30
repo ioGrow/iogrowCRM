@@ -158,8 +158,8 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus',
 
       
 }]);
-app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Topic','Note','Lead','Permission','User','Leadstatus',
-    function($scope,$filter,$route,Auth,Email,Task,Event,Topic,Note,Lead,Permission,User,Leadstatus) {
+app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Topic','Note','Lead','Permission','User','Leadstatus','Attachement',
+    function($scope,$filter,$route,Auth,Email,Task,Event,Topic,Note,Lead,Permission,User,Leadstatus,Attachement) {
       $("#id_Leads").addClass("active");
       
       var tab = $route.current.params.accountTab;
@@ -597,6 +597,76 @@ $scope.deletelead = function(){
      Lead.delete($scope,leadid);
      $('#BeforedeleteLead').modal('hide');
      };
+
+     $scope.listDocuments = function(){
+        var params = {'about_kind':'Lead',
+                      'about_item':$scope.lead.id,
+                      'order': '-updated_at',
+                      'limit': 5
+                      };
+        Attachement.list($scope,params);
+
+     };
+     $scope.showCreateDocument = function(type){
+        
+        $scope.mimeType = type;
+        $('#newDocument').modal('show');
+     };
+     $scope.createDocument = function(newdocument){
+        var mimeType = 'application/vnd.google-apps.' + $scope.mimeType;
+        var params = {'about_kind':'Lead',
+                      'about_item': $scope.lead.id,
+                      'title':newdocument.title,
+                      'mimeType':mimeType };
+        Attachement.insert($scope,params);
+
+     };
+     $scope.createPickerUploader = function() {
+          var projectfolder = $scope.lead.folder;
+          var docsView = new google.picker.DocsView()
+              .setIncludeFolders(true) 
+              .setSelectFolderEnabled(true);
+          var picker = new google.picker.PickerBuilder().
+              addView(new google.picker.DocsUploadView().setParent(projectfolder)).
+              addView(docsView).
+              setCallback($scope.uploaderCallback).
+              setAppId(12345).
+                enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
+              build();
+          picker.setVisible(true);
+      };
+      // A simple callback implementation.
+      $scope.uploaderCallback = function(data) {
+        
+
+        if (data.action == google.picker.Action.PICKED) {
+                var params = {'about_kind': 'Lead',
+                                      'about_item':$scope.lead.id};
+                params.items = new Array();
+               
+                 $.each(data.docs, function(index) {
+                      console.log(data.docs);
+                      /*
+                      {'about_kind':'Account',
+                      'about_item': $scope.account.id,
+                      'title':newdocument.title,
+                      'mimeType':mimeType };
+                      */
+                      var item = { 'id':data.docs[index].id,
+                                  'title':data.docs[index].name,
+                                  'mimeType': data.docs[index].mimeType,
+                                  'embedLink': data.docs[index].url
+
+                      };
+                      params.items.push(item);
+                
+                  });
+                 Attachement.attachfiles($scope,params);
+                    
+                    console.log('after uploading files');
+                    console.log(params);
+                }
+      }
       
     // Google+ Authentication 
      Auth.init($scope);

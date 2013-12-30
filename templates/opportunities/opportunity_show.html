@@ -1,3 +1,40 @@
+  <div id="sendingEmail" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              
+              <div class="modal-body">
+                
+                  
+                    <p ng-show="sending">Sending...</p>
+                    <p ng-show="emailSent">You email has been sent</p>
+
+
+                  
+                    
+                    </fieldset>
+                
+              </div>
+</div>
+<div id="newDocument" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h3 id="myModalLabel">{{_("Create a new")}} <%=mimeType%></h3>
+            </div>
+            <div class="modal-body">
+                     <div class="controls controls-row">
+                                          <form id="addTask" ng-submit="createDocument(newdocument)" class="ng-pristine ng-valid">
+                                                  <input class="input-block-level" autofocus type="text" placeholder="Enter a new <%=mimeType%> name" id="taskTitle" ng-model="newdocument.title" required>
+                                                  
+                                                  
+                     </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              
+               <input ng-hide="isLoading" type="submit" class="btn green" value="Create this document">
+                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                                        
+            </form>
+            </div>
+</div>
 
 <div class="page-sidebar nav-collapse collapse">
       <!-- BEGIN SIDEBAR MENU -->        
@@ -161,7 +198,7 @@
                 <div class="tabbable tabbable-custom">
                   <ul class="nav nav-tabs">
                         <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;" >{{ _("Notes") }}</a></li>
-                        <li class="ng-tab"  ng-class="{active: selectedTab == 6}"><a ng-click="selectedTab = 6;">{{ _("Documents") }}</a></li>
+                        <li class="ng-tab"  ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;">{{ _("Attach Documents") }}</a></li>
                         <li class="ng-tab"  ng-class="{active: selectedTab ==3}"><a ng-click="selectedTab = 3;">{{ _("Send an Email") }}</a></li>
                   </ul>
                 <div class="tab-content">
@@ -219,6 +256,51 @@
                         <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
                   </div>
                 </div>
+                <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
+                          
+                         <div class="row-fluid cards-container iodrive">
+                         <div class="btn-group relbutton">
+            
+                                <div class="btn-group">
+                                    <a class="btn red" href="#" data-toggle="dropdown">
+                                    <i class="icon-plus"></i> Create
+                                    <i class="icon-angle-down"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                      <li><a  ng-click="showCreateDocument('document')" href="#" data-toggle="modal"><i class="icon-plus"></i> Document</a></li>
+                                      <li><a ng-click="showCreateDocument('presentation')" href="#" data-toggle="modal"><i class="icon-plus"></i> Presentation</a></li>
+                                      <li><a ng-click="showCreateDocument('spreadsheet')" href="#" data-toggle="modal"><i class="icon-plus"></i> Spreadsheet</a></li>
+                                     
+                                    </ul>
+                                </div>
+                                <div class="btn-group">
+                                    <button  ng-click="createPickerUploader()" id="sample_editable_1_new" class="btn red">
+                                    <i class="icon-upload-alt"></i>
+                                    </button>
+
+                                </div>
+                          </div>
+                            <div class="inner-cards-container">
+                                                        
+                             <div  class="span4 responsive" ng-repeat="attachment in documents" data-tablet="span6" data-desktop="span4">
+                                <div class="dashboard-stat cards-med">
+                                  
+                                  <div class="details">
+                                    <a href="/#/documents/show/<%= attachment.id %>"><h3 class="relatedcardOppTitle">
+                                     <%=attachment.title%>
+                                    </h3></a>
+                                    <div class="desc">                           
+                                    <center> <span class="contact-title" ><img class="google-drive-icon" ng-src="/static/img/google_drive/<%=attachment.mimeType%>.png"/></span> </center>
+                                    
+                                    </div>
+                                  </div>
+                                                 
+                                </div>
+                              </div>
+
+                              </div>
+                            </div>
+                      </div>
                 <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3">
                         
                          <div class="row-fluid">
