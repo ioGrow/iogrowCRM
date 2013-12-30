@@ -14,6 +14,7 @@ leadservices.factory('Lead', function($http) {
                 $scope.listTopics(resp);
                 $scope.listTasks();
                 $scope.listEvents();
+                $scope.listDocuments();
                 $scope.email.to = '';
                 angular.forEach($scope.lead.emails, function(value, key){
                   $scope.email.to = $scope.email.to + value.email + ',';

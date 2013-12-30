@@ -208,8 +208,8 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
      
 }]);
 
-app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage','Email',
-    function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email) {
+app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage','Email','Attachement',
+    function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email,Attachement) {
  
       $("#id_Opportunities").addClass("active");
       $scope.selectedTab = 1;
@@ -503,6 +503,76 @@ $scope.deleteopportunity= function(){
      Opportunity.delete($scope,opportunityid);
      $('#BeforedeleteOpportunity').modal('hide');
      };
+
+     $scope.listDocuments = function(){
+        var params = {'about_kind':'Opportunity',
+                      'about_item':$scope.opportunity.id,
+                      'order': '-updated_at',
+                      'limit': 5
+                      };
+        Attachement.list($scope,params);
+
+     };
+     $scope.showCreateDocument = function(type){
+        
+        $scope.mimeType = type;
+        $('#newDocument').modal('show');
+     };
+     $scope.createDocument = function(newdocument){
+        var mimeType = 'application/vnd.google-apps.' + $scope.mimeType;
+        var params = {'about_kind':'Opportunity',
+                      'about_item': $scope.opportunity.id,
+                      'title':newdocument.title,
+                      'mimeType':mimeType };
+        Attachement.insert($scope,params);
+
+     };
+     $scope.createPickerUploader = function() {
+          var projectfolder = $scope.opportunity.folder;
+          var docsView = new google.picker.DocsView()
+              .setIncludeFolders(true) 
+              .setSelectFolderEnabled(true);
+          var picker = new google.picker.PickerBuilder().
+              addView(new google.picker.DocsUploadView().setParent(projectfolder)).
+              addView(docsView).
+              setCallback($scope.uploaderCallback).
+              setAppId(12345).
+                enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
+              build();
+          picker.setVisible(true);
+      };
+      // A simple callback implementation.
+      $scope.uploaderCallback = function(data) {
+        
+
+        if (data.action == google.picker.Action.PICKED) {
+                var params = {'about_kind': 'Opportunity',
+                                      'about_item':$scope.opportunity.id};
+                params.items = new Array();
+               
+                 $.each(data.docs, function(index) {
+                      console.log(data.docs);
+                      /*
+                      {'about_kind':'Account',
+                      'about_item': $scope.account.id,
+                      'title':newdocument.title,
+                      'mimeType':mimeType };
+                      */
+                      var item = { 'id':data.docs[index].id,
+                                  'title':data.docs[index].name,
+                                  'mimeType': data.docs[index].mimeType,
+                                  'embedLink': data.docs[index].url
+
+                      };
+                      params.items.push(item);
+                
+                  });
+                 Attachement.attachfiles($scope,params);
+                    
+                    console.log('after uploading files');
+                    console.log(params);
+                }
+      }
 
     
      // Google+ Authentication 

@@ -18,6 +18,7 @@ accountservices.factory('Contact', function($http) {
                $scope.listEvents();
                $scope.listOpportunities();
                $scope.listCases();
+               $scope.listDocuments();
 
               $scope.email.to = '';
                 angular.forEach($scope.contact.emails, function(value, key){

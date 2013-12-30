@@ -16,6 +16,7 @@ accountservices.factory('Case', function($http) {
                $scope.listTopics(resp);
                $scope.listTasks();
                $scope.listEvents();
+               $scope.listDocuments();
                // Call the method $apply to make the update on the scope
                //$scope.apply();
 

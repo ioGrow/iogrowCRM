@@ -381,8 +381,12 @@ $scope.CaselistNextPageItems = function(){
      };
      $scope.createPickerUploader = function() {
           var projectfolder = $scope.account.folder;
+          var docsView = new google.picker.DocsView()
+              .setIncludeFolders(true) 
+              .setSelectFolderEnabled(true);
           var picker = new google.picker.PickerBuilder().
               addView(new google.picker.DocsUploadView().setParent(projectfolder)).
+              addView(docsView).
               setCallback($scope.uploaderCallback).
               setAppId(12345).
                 enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
