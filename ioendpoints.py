@@ -619,7 +619,7 @@ class CrmEngineApi(remote.Service):
       return my_model
 
   # leads.list api
-  @Lead.query_method(user_required=True,query_fields=('limit','owner','status', 'order', 'pageToken'),path='leads',name='leads.list')
+  @Lead.query_method(user_required=True,query_fields=('limit','owner','status','show','order', 'pageToken'),path='leads',name='leads.list')
   def LeadList(self,query):
       user_from_email = EndpointsHelper.require_iogrow_user()
       return query.filter(ndb.OR(ndb.AND(Lead.access=='public',Lead.organization==user_from_email.organization),Lead.owner==user_from_email.google_user_id, Lead.collaborators_ids==user_from_email.google_user_id)).order(Lead._key)
@@ -1023,7 +1023,7 @@ class CrmEngineApi(remote.Service):
       my_model.put()
       return my_model
   # feedbacks.list api
-  @Feedback.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='feedbacks', name='feedbacks.list')
+  @Feedback.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken','related_to'),path='feedbacks', name='feedbacks.list')
   def feedbacks_list(self, query):
       user_from_email = EndpointsHelper.require_iogrow_user()      
       return query.filter(ndb.OR(ndb.AND(Feedback.access=='public',Feedback.organization==user_from_email.organization),Feedback.owner==user_from_email.google_user_id, Feedback.collaborators_ids==user_from_email.google_user_id)).order(Feedback._key)

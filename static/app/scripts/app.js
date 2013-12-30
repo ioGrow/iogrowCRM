@@ -104,7 +104,7 @@ app.config(['$routeProvider', function($routeProvider) {
         controller:'ProductVideoListCtrl',
         templateUrl:'/views/live/product_videos'
 
-      }).when('/live/product_videos/product/:productId',{
+      }).when('/live/product_videos/product_video/:productId',{
         controller:'ProductVideoShowCtrl',
         templateUrl:'/views/live/product_videos/show'
         
