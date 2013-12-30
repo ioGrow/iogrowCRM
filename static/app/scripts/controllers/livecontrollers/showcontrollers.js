@@ -16,7 +16,8 @@ app.controller('ShowListCtrl', ['$scope','$filter','Auth','Show',
 
      // What to do after authentication
      $scope.runTheProcess = function(){
-          var params = {'limit':7};
+          var params = {'limit':7,
+                        'type_show':'Show'};
           Show.list($scope,params);
           
      };
@@ -33,10 +34,11 @@ app.controller('ShowListCtrl', ['$scope','$filter','Auth','Show',
         var params = {};
           if ($scope.pages[nextPage]){
             params = {'limit':7,
+                      'type_show':'Show',
                       'pageToken':$scope.pages[nextPage]
                      }
           }else{
-            params = {'limit':7}
+            params = {'limit':7,'type_show':'Show'}
           }
           console.log('in listNextPageItems');
           $scope.currentPage = $scope.currentPage + 1 ; 
@@ -48,10 +50,11 @@ app.controller('ShowListCtrl', ['$scope','$filter','Auth','Show',
        var params = {};
           if ($scope.pages[prevPage]){
             params = {'limit':7,
+                      'type_show':'Show',
                       'pageToken':$scope.pages[prevPage]
                      }
           }else{
-            params = {'limit':7}
+            params = {'limit':7,'type_show':'Show'}
           }
           $scope.currentPage = $scope.currentPage - 1 ;
           Account.list($scope,params);
@@ -83,12 +86,14 @@ app.controller('ShowListCtrl', ['$scope','$filter','Auth','Show',
                       'starts_at': starts_at,
                       'ends_at':ends_at ,
                       'is_published': true,
+                      'type_show':'Show',
                       'tags': tags
               }
 
             }else{
               params ={'name': ioevent.name,
                       'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                      'type_show':'Show',
                       'tags': tags
               }
             }

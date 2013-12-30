@@ -9,20 +9,23 @@ app.controller('ProductVideoListCtrl', ['$scope','$filter','Auth','Show',
      $scope.pagination = {};
      $scope.currentPage = 01;
      $scope.pages = [];
-     
-     $scope.accounts = [];
+   
      
      
 
-     // What to do after authentication
+      // What to do after authentication
      $scope.runTheProcess = function(){
-          var params = {'limit':7};
+          var params = {'limit':7,
+                        'type_show':'Product_Video'};
           Show.list($scope,params);
+          
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
             Auth.refreshToken();
      };
+
+
      $scope.listNextPageItems = function(){
         
         
@@ -58,7 +61,7 @@ app.controller('ProductVideoListCtrl', ['$scope','$filter','Auth','Show',
         $('#newShowModal').modal('hide');
         var params ={}
 
-        console.log('adding a new show');
+      
         var tagsplit = ioevent.tags.split(' ');
 
         var tags = [];
@@ -67,35 +70,21 @@ app.controller('ProductVideoListCtrl', ['$scope','$filter','Auth','Show',
             tags.push(tagsplit[i]);
       
         }
-        console.log('# hastags');
-        console.log(tags);
-        console.log($filter);
-        
-        
-        if (ioevent.starts_at){
-            if (ioevent.ends_at){
-              var starts_at = $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']);
-              var ends_at = $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']);
-              params ={'name': ioevent.name,
-                      'starts_at': starts_at,
-                      'ends_at':ends_at ,
-                      'is_published': true,
-                      'tags': tags
-              }
 
-            }else{
-              params ={'name': ioevent.name,
-                      'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'tags': tags
+       params ={'name': ioevent.name,
+                 'type_show': 'Product_Video',
+                'is_published': true,
+                'tags': tags
               }
-            }
-            console.log('inserting the event');
+        
+        
+                   console.log('inserting the show');
             console.log(params);
             Show.insert($scope,params);
 
             
-        }
-     }
+        };
+   
      
 
      $scope.showModal = function(){
@@ -104,9 +93,13 @@ app.controller('ProductVideoListCtrl', ['$scope','$filter','Auth','Show',
 
       };
       
-    $scope.save = function(account){
-      Account.insert(account);
-    };
+    
+     
+     
+   // Google+ Authentication 
+    Auth.init($scope);
+      
+    
      
      
    // Google+ Authentication 

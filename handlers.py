@@ -554,7 +554,7 @@ class ProductVideosListHandlers (BaseHandler,SessionEnabledHandler):
       template_values = {'tabs':tabs}
       template = jinja_environment.get_template('templates/live/product_videos/product_videos_list.html')
       self.response.out.write(template.render(template_values))
-class CusomerStoriesListHandlers (BaseHandler,SessionEnabledHandler):
+class CustomerStoriesListHandlers (BaseHandler,SessionEnabledHandler):
   def get(self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
       user = self.get_user_from_session()
@@ -979,7 +979,7 @@ routes = [
     #iogrow live App
     ('/views/live/company_profile',CompanyProfileListHandlers),
     ('/views/live/product_videos',ProductVideosListHandlers),
-    ('/views/live/customer_stories',CusomerStoriesListHandlers),
+    ('/views/live/customer_stories',CustomerStoriesListHandlers),
     ('/views/live/feedbacks',FeedBacksListHandlers),
     ('/views/live/feedbacks/show',FeedBacksShowHandlers),
     # Applications settings

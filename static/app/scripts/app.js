@@ -104,6 +104,10 @@ app.config(['$routeProvider', function($routeProvider) {
         controller:'ProductVideoListCtrl',
         templateUrl:'/views/live/product_videos'
 
+      }).when('/live/product_videos/product/:productId',{
+        controller:'ProductVideoShowCtrl',
+        templateUrl:'/views/live/product_videos/show'
+        
       }).when('/live/customer_stories',{
         controller:'CustomerStoriesListCtrl',
         templateUrl:'/views/live/customer_stories'

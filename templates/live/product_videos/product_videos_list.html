@@ -39,13 +39,13 @@
       <div id="newShowModal" class="modal  hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 id="myModalLabel">Schedule a show</h3>
+              <h3 id="myModalLabel">Add  a Product Video</h3>
             </div>
             <div class="modal-body">
                      <div class="controls controls-row">
                             <form id="addTask" ng-submit="scheduleShow(ioevent)" class="ng-pristine ng-valid">
-                                                  <input class="input-block-level" autofocus type="text" placeholder="Add a new show" id="taskTitle" ng-model="ioevent.name">
-                                                  <p><strong>When?</strong></p>
+                                                  <input class="input-block-level" autofocus type="text" placeholder="Add a new Product Videos" id="taskTitle" ng-model="ioevent.name">
+                                                  <!--p><strong>When?</strong></p>
                                                 <div class="row-fluid">
                                                   <div class="span6">
                                                     <p> <strong>Starts</strong>: <%=ioevent.starts_at | date:'MMMM dd, yyyy, HH:mm'%></p>
@@ -57,8 +57,8 @@
                                                         <datetimepicker data-ng-model="ioevent.ends_at"
                                                     data-datetimepicker-config="{ startView:'day', minView:'minute' }" />
                                                   </div>
-                                                </div>
-                                                    <input class="input-block-level" autofocus="" type="text" placeholder="Add #hashtags about this show" id="taskTitle" ng-model="ioevent.tags">
+                                                </div-->
+                                                    <input class="input-block-level" autofocus="" type="text" placeholder="Add #hashtags about this product" id="taskTitle" ng-model="ioevent.tags">
                                                     
                                                     
                                                     
@@ -70,7 +70,7 @@
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
               
-               <input ng-hide="isLoading" type="submit" class="btn green" value="Shedule this show">
+               <input ng-hide="isLoading" type="submit" class="btn green" value="Add this product">
                 <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
                                         
             </form>
@@ -106,7 +106,7 @@
                 <div class="dashboard-stat cards cards-show">
                   
                   <div class="details">
-                    <a href="/#/shows/show/<%= show.id %>"><h3 class="relatedcardOppTitle">
+                    <a href="/#/live/product_videos/product_video/<%= show.id %>"><h3 class="relatedcardOppTitle">
                                     <%= show.name%>
                                     </h3></a>
                     <div class="desc">                           
@@ -117,14 +117,14 @@
                                   
                 </div>
               </div>
-              <div ng-show="blankState" class="span12 responsive" data-tablet="span6" data-desktop="span12">
+              <div ng-show="blankStateshow" class="span12 responsive" data-tablet="span6" data-desktop="span12">
                 <div class="dashboard-stat cards">
                   
                   
                   <div class="blank_slate_arrow"></div>
                   <div class="blank_slate_body">
-                      <img src="/static/img/accounts_blank.png">
-                      <p class="lead">{{ _('Shows pages  let you schedule your hangouts (classes), share your knowledge and be usefull.') }}</p>
+                      <img src="/static/img/blankshow.png">
+                      <p class="lead">{{ _('Product Videos pages  let you present your product.') }}</p>
                   </div>
                
                                   
