@@ -973,7 +973,7 @@ class CrmEngineApi(remote.Service):
       my_model.put()
       return my_model
   # shows.list api
-  @Show.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='shows', name='shows.list')
+  @Show.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken','type_show'),path='shows', name='shows.list')
   def shows_list(self, query):
       user_from_email = EndpointsHelper.require_iogrow_user()      
       return query.filter(ndb.OR(ndb.AND(Show.access=='public',Show.organization==user_from_email.organization),Show.owner==user_from_email.google_user_id, Show.collaborators_ids==user_from_email.google_user_id)).order(Show._key)
@@ -1063,20 +1063,6 @@ class CrmEngineApi(remote.Service):
     my_model.key.delete()
     return message_types.VoidMessage()
   # HKA 29.12.2013 Companyprofile APIs
-  @Companyprofile.method(user_required=True,path='companyprofiles',http_method='POST',name='companyprofiles.insert')
-  def Companyprofileinsert(self, my_model):
-      user_from_email = EndpointsHelper.require_iogrow_user()
-      my_model.owner = user_from_email.google_user_id
-      my_model.organization = user_from_email.organization
-      organization = user_from_email.organization.get()
-      my_model.organization_name = organization.name
-      my_model.put()
-      return my_model
-  # companyprofiles.list api
-  @Companyprofile.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='companyprofiles', name='companyprofiles.list')
-  def companyprofiles_list(self, query):
-      user_from_email = EndpointsHelper.require_iogrow_user()      
-      return query.filter(ndb.OR(ndb.AND(Feedback.access=='public',Feedback.organization==user_from_email.organization),Feedback.owner==user_from_email.google_user_id, Feedback.collaborators_ids==user_from_email.google_user_id)).order(Feedback._key)
   # companyprofiles.get api
   @Companyprofile.method(request_fields=('id',),path='companyprofiles/{id}', http_method='GET', name='companyprofiles.get')
   def companyprofiles_get(self, my_model):
@@ -1104,14 +1090,6 @@ class CrmEngineApi(remote.Service):
 
       patched_model.put()
       return patched_model
-  @Companyprofile.method(request_fields=('id',),
-    response_message=message_types.VoidMessage,
-    http_method ='DELETE',path='companyprofiles/{id}',name='companyprofiles.delete'
-    )
-  def CompanyprofileDelete(self,my_model):
-    user_from_email=EndpointsHelper.require_iogrow_user()
-    my_model.key.delete()
-    return message_types.VoidMessage()
   # topics.list api
   @Topic.query_method(user_required=True,query_fields=('about_kind','about_item', 'limit', 'order', 'pageToken'),path='topics', name='topics.list')
   def TopicList(self, query):

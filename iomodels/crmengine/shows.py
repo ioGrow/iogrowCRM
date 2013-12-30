@@ -9,7 +9,7 @@ import pprint
 import model
 
 class Show(EndpointsModel):
-    _message_fields_schema = ('id','entityKey', 'name','starts_at','ends_at','description','access','tags','youtube_url','is_published','status','collaborators_list','collaborators_ids')
+    _message_fields_schema = ('id','entityKey', 'name','starts_at','ends_at','description','access','tags','youtube_url','is_published','status','collaborators_list','collaborators_ids','type_show')
     author = ndb.StructuredProperty(User)
     # Sharing fields
     owner = ndb.StringProperty()
@@ -19,6 +19,7 @@ class Show(EndpointsModel):
     updated_at = ndb.DateTimeProperty(auto_now=True)
     folder = ndb.StringProperty()
     name = ndb.StringProperty()
+    type_show = ndb.StringProperty()
     starts_at = ndb.DateTimeProperty()
     ends_at = ndb.DateTimeProperty()
     description = ndb.TextProperty()
