@@ -590,7 +590,7 @@ class CustomerStoriesShowHandlers(BaseHandler, SessionEnabledHandler):
             self.set_user_locale()
             # Render the template
             template_values = {'tabs':tabs}
-            template = jinja_environment.get_template('templates/live/feedbacks/feedbacks_show.html')
+            template = jinja_environment.get_template('templates/live/customer_stories/customer_stories_show.html')
             self.response.out.write(template.render(template_values))
 class FeedBacksListHandlers (BaseHandler,SessionEnabledHandler):
   def get(self):
@@ -1023,6 +1023,7 @@ routes = [
     ('/views/live/product_videos',ProductVideosListHandlers),
     ('/views/live/product_videos/show',ProductVideosShowHandlers),
     ('/views/live/customer_stories',CustomerStoriesListHandlers),
+    ('/views/live/customer_stories/show',CustomerStoriesShowHandlers),
     ('/views/live/feedbacks',FeedBacksListHandlers),
     ('/views/live/feedbacks/show',FeedBacksShowHandlers),
     # Applications settings

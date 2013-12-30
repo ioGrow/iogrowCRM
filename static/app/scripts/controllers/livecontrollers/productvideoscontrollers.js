@@ -33,10 +33,11 @@ app.controller('ProductVideoListCtrl', ['$scope','$filter','Auth','Show',
         var params = {};
           if ($scope.pages[nextPage]){
             params = {'limit':7,
+                       'type_show':'Product_Video',
                       'pageToken':$scope.pages[nextPage]
                      }
           }else{
-            params = {'limit':7}
+            params = {'limit':7,'type_show':'Product_Video'}
           }
           console.log('in listNextPageItems');
           $scope.currentPage = $scope.currentPage + 1 ; 
@@ -48,13 +49,14 @@ app.controller('ProductVideoListCtrl', ['$scope','$filter','Auth','Show',
        var params = {};
           if ($scope.pages[prevPage]){
             params = {'limit':7,
+                       'type_show':'Product_Video',
                       'pageToken':$scope.pages[prevPage]
                      }
           }else{
-            params = {'limit':7}
+            params = {'limit':7,'type_show':'Product_Video'}
           }
           $scope.currentPage = $scope.currentPage - 1 ;
-          Account.list($scope,params);
+          Show.list($scope,params);
      }
       $scope.scheduleShow = function(ioevent){
       
@@ -72,7 +74,7 @@ app.controller('ProductVideoListCtrl', ['$scope','$filter','Auth','Show',
         }
 
        params ={'name': ioevent.name,
-                 'type_show': 'Product_Video',
+                'type_show': 'Product_Video',
                 'is_published': true,
                 'tags': tags
               }

@@ -35,6 +35,9 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 from iomodels.crmengine.opportunitystage import Opportunitystage
 from iomodels.crmengine.leadstatuses import Leadstatus 
 from iomodels.crmengine.casestatuses import Casestatus
+from endpoints_proto_datastore import MessageFieldsSchema
+from google.appengine.api import search
+
 
 STANDARD_TABS = [{'name': 'Accounts','label': 'Accounts','url':'/#/accounts/'},{'name': 'Contacts','label': 'Contacts','url':'/#/contacts/'},{'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/'},{'name': 'Leads','label': 'Leads','url':'/#/leads/'},{'name': 'Cases','label': 'Cases','url':'/#/cases/'}]
 STANDARD_PROFILES = ['Super Administrator', 'Standard User', 'Sales User', 'Marketing User', 'Read Only', 'Support User', 'Contract Manager','Read Only']
@@ -197,6 +200,7 @@ class Organization(EndpointsModel):
         for leadstat in Default_Lead_Status:
           created_lead_stat = Leadstatus(status=leadstat['status'],organization=org_key)
           created_lead_stat.put()
+     
 class Permission(EndpointsModel):
     about_kind = ndb.StringProperty(required=True)
     about_item = ndb.StringProperty(required=True)
@@ -389,3 +393,61 @@ class Website(EndpointsModel):
 # HKA 19.11.2013 Add Social links
 class Social(EndpointsModel):
   sociallink = ndb.StringProperty()
+
+#HKA 30.12.2013 Manage Company Profile
+
+class Companyprofile(EndpointsModel):
+    _message_fields_schema = ('id','entityKey','created_at','updated_at','access','name')
+
+    owner = ndb.StringProperty()
+    collaborators_list = ndb.StructuredProperty(Userinfo,repeated=True)
+    collaborators_ids = ndb.StringProperty(repeated=True)
+    organization = ndb.KeyProperty()
+    organizationid = ndb.StringProperty()
+    name = ndb.StringProperty()
+    tagline = ndb.TextProperty()
+    introduction =ndb.TextProperty() 
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
+    updated_at = ndb.DateTimeProperty(auto_now=True)
+    # public or private
+    access = ndb.StringProperty()
+    phones = ndb.StructuredProperty(Phone,repeated=True)
+    emails = ndb.StructuredProperty(Email,repeated=True)
+    addresses = ndb.StructuredProperty(Address,repeated=True)
+    websites = ndb.StructuredProperty(Website,repeated=True)
+    sociallinks= ndb.StructuredProperty(Social,repeated=True)
+
+    def put(self, **kwargs):
+        ndb.Model.put(self, **kwargs)
+        self.put_index()
+        self.set_perm()
+
+    def set_perm(self):
+        about_item = str(self.key.id())
+
+        perm = model.Permission(about_kind='Companyprofile',
+                         about_item=about_item,
+                         type = 'user',
+                         role = 'owner',
+                         value = self.owner)
+        perm.put()
+
+    def put_index(self):
+        """ index the element at each"""
+        empty_string = lambda x: x if x else ""
+        collaborators = " ".join(self.collaborators_ids)
+        organization = str(self.organization.id())
+        my_document = search.Document(
+        doc_id = str(self.key.id()),
+        fields=[
+            search.TextField(name=u'type', value=u'Companyprofile'),
+            search.TextField(name='organization', value = empty_string(organization) ),
+            search.TextField(name='access', value = empty_string(self.access) ),
+            search.TextField(name='owner', value = empty_string(self.owner) ),
+            search.TextField(name='collaborators', value = collaborators ),
+            search.TextField(name='title', value = empty_string(self.name) ),
+            search.DateField(name='created_at', value = self.created_at),
+            search.DateField(name='updated_at', value = self.updated_at),
+                ])
+        my_index = search.Index(name="GlobalIndex")
+        my_index.put(my_document)

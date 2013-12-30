@@ -109,6 +109,9 @@ Note.insert = function($scope,note){
           case 'Feedback':
           base_url='/#/live/feedbacks/feedback/';
           break;
+          case 'ProductVideo':
+          base_url='/#/live/feedbacks/feedback/';
+          break;
 
         }
 

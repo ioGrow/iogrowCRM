@@ -57,7 +57,7 @@ app.controller('ShowListCtrl', ['$scope','$filter','Auth','Show',
             params = {'limit':7,'type_show':'Show'}
           }
           $scope.currentPage = $scope.currentPage - 1 ;
-          Account.list($scope,params);
+          Show.list($scope,params);
      }
       $scope.scheduleShow = function(ioevent){
       

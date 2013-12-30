@@ -112,6 +112,10 @@ app.config(['$routeProvider', function($routeProvider) {
         controller:'CustomerStoriesListCtrl',
         templateUrl:'/views/live/customer_stories'
 
+      }).when('/live/customer_stories/customer_story/:customerstoryId',{
+        controller:'CustomerStoriesShowCtrl',
+        templateUrl:'/views/live/customer_stories/show'
+        
       }).when('/live/feedbacks',{
         controller:'FeedBacksListCtrl',
         templateUrl:'/views/live/feedbacks'
