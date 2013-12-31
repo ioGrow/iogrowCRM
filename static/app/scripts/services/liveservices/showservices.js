@@ -1,6 +1,6 @@
-var topicservices = angular.module('crmEngine.showservices',[]);
+var showservices = angular.module('crmEngine.showservices',[]);
 
-topicservices.factory('Show', function($http) {
+showservices.factory('Show', function($http) {
   
   var Show = function(data) {
     angular.extend(this, data);

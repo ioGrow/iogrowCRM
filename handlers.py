@@ -201,6 +201,8 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
                                               shows_folder=shows_folder,
                                               products_folder=products_folder)
             organization.put()
+            comp_prof = model.Companyprofile(name=org_name,organization=organization.key,organizationid=organization.key.id())
+            comp_prof.put()
             profile = model.Profile.query(model.Profile.name=='Super Administrator', model.Profile.organization==organization.key).get()
             user.init_user_config(organization.key,profile.key)
             self.redirect('/')

@@ -1064,10 +1064,14 @@ class CrmEngineApi(remote.Service):
   # HKA 29.12.2013 Companyprofile APIs
   # companyprofiles.get api
   @Companyprofile.method(request_fields=('id',),path='companyprofiles/{id}', http_method='GET', name='companyprofiles.get')
-  def companyprofiles_get(self, my_model):
-    if not my_model.from_datastore:
-      raise endpoints.NotFoundException('Companyprofile not found.')
-    return my_model
+  def companyprofiles_get(self, request):
+    user_from_email = EndpointsHelper.require_iogrow_user()
+    orgid = request.id
+    companyprofilequery = Companyprofile.query(Companyprofile.organizationid == orgid).fetch()
+    if companyprofilequery is None:
+        raise endpoints.NotFoundException('Companyprofile not found.')
+    companyprofile = companyprofilequery[0]
+    return companyprofile
   # companyprofiles.patch api
   @Companyprofile.method(user_required=True,
                 http_method='PATCH', path='companyprofiles/{id}', name='companyprofiles.patch')

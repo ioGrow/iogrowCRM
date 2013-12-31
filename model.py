@@ -37,6 +37,7 @@ from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.casestatuses import Casestatus
 from endpoints_proto_datastore import MessageFieldsSchema
 from google.appengine.api import search
+from endpoints_proto_datastore import MessageFieldsSchema
 
 
 STANDARD_TABS = [{'name': 'Accounts','label': 'Accounts','url':'/#/accounts/'},{'name': 'Contacts','label': 'Contacts','url':'/#/contacts/'},{'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/'},{'name': 'Leads','label': 'Leads','url':'/#/leads/'},{'name': 'Cases','label': 'Cases','url':'/#/cases/'}]
@@ -47,7 +48,7 @@ STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
 ADMIN_TABS = [{'name': 'Users','label': 'Users','url':'/#/admin/users'},{'name': 'Groups','label': 'Groups','url':'/#/admin/groups'},{'name': 'Settings','label': 'Settings','url':'/#/admin/settings'}]
 ADMIN_APP = {'name': 'admin', 'label': 'Admin Console', 'url':'/#/admin/users'}
 Iogrowlive_APP = {'name':'iogrowLive','label': 'i/oGrow Live','url':'/#/live/shows'}
-Iogrowlive_TABS = [{'name': 'Shows','label': 'Shows','url':'/#/live/shows'},{'name': 'Company_profile','label': 'Company Profile','url':'/#/live/company_profile'},
+Iogrowlive_TABS = [{'name': 'Shows','label': 'Shows','url':'/#/live/shows'},{'name': 'Company_profile','label': 'Company Profile','url':'/#/live/company_profile/'},
 {'name': 'Product_videos','label': 'Product Videos','url':'/#/live/product_videos'},{'name': 'Customer_Stories','label': 'Customer stories','url':'/#/live/customer_stories'},
 {'name': 'Feedbacks','label': 'Feedbacks','url':'/#/live/feedbacks'},{'name': 'Leads','label': 'Leads','url':'/#/leads/'}]
 Default_Opp_Stages = [{'name':'Incoming','probability':5},{'name':'Qualified','probability':10},{'name':'Need Analysis','probability':40},{'name':'Negociating','probability':80},{'name':'Close won','probability':100},{'name':'Close lost','probability':0}]
@@ -111,6 +112,8 @@ class Organization(EndpointsModel):
         # Check if there is no instance for this organization
         if self.instance_created is None:
           org_key = self.key
+          org_id = str(self.key.id())
+          
           # Add standard objects:
           for obj in STANDARD_OBJECTS:
             created_object = Object(name=obj,organization=org_key)
@@ -133,9 +136,11 @@ class Organization(EndpointsModel):
               admin_tabs.append(created_tab.key)
           live_tabs = list()
           for tab in Iogrowlive_TABS:
+            if tab['name']=='Company_profile':
+              tab['url'] = "/#/live/company_profile/%s" % org_id
             created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],organization=org_key)
             created_tab.put()
-            live_tabs.append(created_tab.key)
+            live_tabs.append(created_tab.key) 
 
           # Add apps:
           created_apps = list()
@@ -397,57 +402,23 @@ class Social(EndpointsModel):
 #HKA 30.12.2013 Manage Company Profile
 
 class Companyprofile(EndpointsModel):
-    _message_fields_schema = ('id','entityKey','created_at','updated_at','access','name')
+  _message_fields_schema = ('id','entityKey','name','tagline','introduction','phones','emails','addresses','websites','sociallinks')
 
-    owner = ndb.StringProperty()
-    collaborators_list = ndb.StructuredProperty(Userinfo,repeated=True)
-    collaborators_ids = ndb.StringProperty(repeated=True)
-    organization = ndb.KeyProperty()
-    organizationid = ndb.StringProperty()
-    name = ndb.StringProperty()
-    tagline = ndb.TextProperty()
-    introduction =ndb.TextProperty() 
-    created_at = ndb.DateTimeProperty(auto_now_add=True)
-    updated_at = ndb.DateTimeProperty(auto_now=True)
+  owner = ndb.StringProperty()
+  collaborators_list = ndb.StructuredProperty(Userinfo,repeated=True)
+  collaborators_ids = ndb.StringProperty(repeated=True)
+  organization = ndb.KeyProperty()
+  organizationid = ndb.IntegerProperty()
+  name = ndb.StringProperty()
+  tagline = ndb.TextProperty()
+  introduction =ndb.TextProperty() 
+  created_at = ndb.DateTimeProperty(auto_now_add=True)
+  updated_at = ndb.DateTimeProperty(auto_now=True)
     # public or private
-    access = ndb.StringProperty()
-    phones = ndb.StructuredProperty(Phone,repeated=True)
-    emails = ndb.StructuredProperty(Email,repeated=True)
-    addresses = ndb.StructuredProperty(Address,repeated=True)
-    websites = ndb.StructuredProperty(Website,repeated=True)
-    sociallinks= ndb.StructuredProperty(Social,repeated=True)
-
-    def put(self, **kwargs):
-        ndb.Model.put(self, **kwargs)
-        self.put_index()
-        self.set_perm()
-
-    def set_perm(self):
-        about_item = str(self.key.id())
-
-        perm = model.Permission(about_kind='Companyprofile',
-                         about_item=about_item,
-                         type = 'user',
-                         role = 'owner',
-                         value = self.owner)
-        perm.put()
-
-    def put_index(self):
-        """ index the element at each"""
-        empty_string = lambda x: x if x else ""
-        collaborators = " ".join(self.collaborators_ids)
-        organization = str(self.organization.id())
-        my_document = search.Document(
-        doc_id = str(self.key.id()),
-        fields=[
-            search.TextField(name=u'type', value=u'Companyprofile'),
-            search.TextField(name='organization', value = empty_string(organization) ),
-            search.TextField(name='access', value = empty_string(self.access) ),
-            search.TextField(name='owner', value = empty_string(self.owner) ),
-            search.TextField(name='collaborators', value = collaborators ),
-            search.TextField(name='title', value = empty_string(self.name) ),
-            search.DateField(name='created_at', value = self.created_at),
-            search.DateField(name='updated_at', value = self.updated_at),
-                ])
-        my_index = search.Index(name="GlobalIndex")
-        my_index.put(my_document)
+  access = ndb.StringProperty()
+  phones = ndb.StructuredProperty(Phone,repeated=True)
+  emails = ndb.StructuredProperty(Email,repeated=True)
+  addresses = ndb.StructuredProperty(Address,repeated=True)
+  websites = ndb.StructuredProperty(Website,repeated=True)
+  sociallinks= ndb.StructuredProperty(Social,repeated=True)
+    
