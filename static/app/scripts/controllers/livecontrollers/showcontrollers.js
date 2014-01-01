@@ -57,7 +57,7 @@ app.controller('ShowListCtrl', ['$scope','$filter','Auth','Show',
             params = {'limit':7,'type_show':'Show'}
           }
           $scope.currentPage = $scope.currentPage - 1 ;
-          Account.list($scope,params);
+          Show.list($scope,params);
      }
       $scope.scheduleShow = function(ioevent){
       
@@ -560,9 +560,12 @@ $scope.editbeforedelete = function(){
 $scope.deleteshow = function(){
  console.log($scope.show.id);
   var showid = {'id':$route.current.params.showId};
- 
+
   Show.delete($scope,showid);
+  window.location.replace('#/live/shows');
   $('#BeforedeleteShow').modal('hide');
+
+ 
 };
 
 //HKA 29.12.2013 Add Feedback to Show

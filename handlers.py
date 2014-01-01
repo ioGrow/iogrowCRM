@@ -201,6 +201,8 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
                                               shows_folder=shows_folder,
                                               products_folder=products_folder)
             organization.put()
+            comp_prof = model.Companyprofile(name=org_name,organization=organization.key,organizationid=organization.key.id())
+            comp_prof.put()
             profile = model.Profile.query(model.Profile.name=='Super Administrator', model.Profile.organization==organization.key).get()
             user.init_user_config(organization.key,profile.key)
             self.redirect('/')
@@ -565,6 +567,20 @@ class ProductVideosListHandlers (BaseHandler,SessionEnabledHandler):
       template_values = {'tabs':tabs}
       template = jinja_environment.get_template('templates/live/product_videos/product_videos_list.html')
       self.response.out.write(template.render(template_values))
+class ProductVideosShowHandlers(BaseHandler, SessionEnabledHandler):
+    def get(self):
+      if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            tabs = user.get_user_active_tabs()
+
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            # Render the template
+            template_values = {'tabs':tabs}
+            template = jinja_environment.get_template('templates/live/product_videos/product_videos_show.html')
+            self.response.out.write(template.render(template_values))
 class CustomerStoriesListHandlers (BaseHandler,SessionEnabledHandler):
   def get(self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
@@ -575,6 +591,20 @@ class CustomerStoriesListHandlers (BaseHandler,SessionEnabledHandler):
       template_values = {'tabs':tabs}
       template = jinja_environment.get_template('templates/live/customer_stories/customer_stories_list.html')
       self.response.out.write(template.render(template_values))
+class CustomerStoriesShowHandlers(BaseHandler, SessionEnabledHandler):
+    def get(self):
+      if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            tabs = user.get_user_active_tabs()
+
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            # Render the template
+            template_values = {'tabs':tabs}
+            template = jinja_environment.get_template('templates/live/customer_stories/customer_stories_show.html')
+            self.response.out.write(template.render(template_values))
 class FeedBacksListHandlers (BaseHandler,SessionEnabledHandler):
   def get(self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
@@ -585,6 +615,20 @@ class FeedBacksListHandlers (BaseHandler,SessionEnabledHandler):
       template_values = {'tabs':tabs}
       template = jinja_environment.get_template('templates/live/feedbacks/feedbacks_list.html')
       self.response.out.write(template.render(template_values))
+class FeedBacksShowHandlers(BaseHandler, SessionEnabledHandler):
+    def get(self):
+      if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            tabs = user.get_user_active_tabs()
+
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            # Render the template
+            template_values = {'tabs':tabs}
+            template = jinja_environment.get_template('templates/live/feedbacks/feedbacks_show.html')
+            self.response.out.write(template.render(template_values))
 class FeedBacksShowHandlers(BaseHandler, SessionEnabledHandler):
     def get(self):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
@@ -993,7 +1037,9 @@ routes = [
     #iogrow live App
     ('/views/live/company_profile',CompanyProfileListHandlers),
     ('/views/live/product_videos',ProductVideosListHandlers),
+    ('/views/live/product_videos/show',ProductVideosShowHandlers),
     ('/views/live/customer_stories',CustomerStoriesListHandlers),
+    ('/views/live/customer_stories/show',CustomerStoriesShowHandlers),
     ('/views/live/feedbacks',FeedBacksListHandlers),
     ('/views/live/feedbacks/show',FeedBacksShowHandlers),
     # Applications settings

@@ -23,7 +23,7 @@
         </div>
       </div>
         
-      <div class="container-fluid" ng-show="isSignedIn">
+      <div class="container-fluid" >
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
@@ -39,12 +39,7 @@
                      
                 </div-->
                 
-            <h2> {{_("Buffer")}} </h2>
-            
-
-           <span ng-show="account.account_type">{{_("Type")}}: <a class="tag" href="/#/search/type:Account <%=account.account_type%>">#<%=account.account_type%></a></span>
-          <span ng-show="account.industry">{{_("Industry")}}: <a class="tag" href="/#/search/type:Account <%=account.industry%>">#<%=account.industry%></a></span> 
-             </br>
+            <h2> <%=companyprof.name%></h2>
              <span class="page-meta"><i class="icon-pencil"><a ng-click="editcompanyprofile()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> </span>
 
            
@@ -64,7 +59,7 @@
                                  
                                 </div>
                                   <ul class="unstyled contact-infos">
-                                    <li ng-repeat="phone in account.phones"> <%=phone.number%> - <%=phone.type_number%> <a ><img class="ctodeal" src="static/img/phone-icon.png" /></a></li>
+                                    <li ng-repeat="phone in companyprof.phones"> <%=phone.number%> - <%=phone.type_number%> <a ><img class="ctodeal" src="static/img/phone-icon.png" /></a></li>
           
                                     <li><a href="#phonemodal"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new Phone</a></li>
 
@@ -74,7 +69,7 @@
                                  
                                 </div>
                                   <ul class="unstyled contact-infos">
-                                    <li ng-repeat="email in account.emails"> <%=email.email %>   </li>
+                                    <li ng-repeat="email in companyprof.emails"> <%=email.email %>   </li>
                                     
                                     <li><a href="#emailmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new email address </a></li>
 
@@ -84,7 +79,7 @@
                                  
                                 </div>
                                  <ul class="unstyled contact-infos">
-                                    <li ng-repeat="addr in account.addresses"><%=addr.street%>, <%=addr.city%> <%=addr.state%>, <%=addr.street%> <%=addr.postal_code%>  </li>
+                                    <li ng-repeat="addr in companyprof.addresses"><%=addr.street%>, <%=addr.city%> <%=addr.state%>, <%=addr.street%> <%=addr.postal_code%>  </li>
                                     
                                     <li><a href="#addressmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new address </a></li>
 
@@ -101,7 +96,7 @@
                                   
                                 </div>
                                 <ul class="unstyled contact-infos" >
-                                    <li ng-repeat="web in account.websites"><a href="http://<%=web.website%>" target="_blank"><%=web.website%></a> </li>
+                                    <li ng-repeat="web in companyprof.websites"><a href="http://<%=web.website%>" target="_blank"><%=web.website%></a> </li>
                                     <li><a href="#websitemodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new Website </a></li>
                                     
                                 </ul>
@@ -111,7 +106,7 @@
                                   
                                 </div>
                                 <ul class="unstyled contact-infos" >
-                                    <li ng-repeat="social in account.sociallinks"><a href="<%=social.sociallink%>" target="_blank"> <%=social.sociallink%> </a></li>
+                                    <li ng-repeat="social in companyprof.sociallinks"><a href="<%=social.sociallink%>" target="_blank"> <%=social.sociallink%> </a></li>
                                   <li><a href="#socialmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new social links </a></li>    
                                 </ul>
                                                     
@@ -125,7 +120,7 @@
                                   <strong>Tagline </strong>
                                   <span class="page-meta"><i class="icon-pencil"><a ng-click="edittagline()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
                                 </div>
-                                <p><%=account.tagline%> </p>
+                                <p><%=companyprof.tagline%> </p>
                                 
 
                                 <div class="news-block-tags">
@@ -133,7 +128,7 @@
                                   <span class="page-meta"><i class="icon-pencil"><a ng-click="editintro()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
                                   
                                 </div>
-                                <p><%=account.introduction%></p>                         
+                                <p><%=companyprof.introduction%></p>                         
                               </div>
                             
                           </div>
@@ -142,8 +137,8 @@
            
          </div>
         </div>
-        <!--HKA 11.10.2013 Edit CompanyProfile -->
-             <div id="EditAccountModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <!--HKA 31.12.2013 Edit CompanyProfile -->
+             <div id="EditCompnayProfileModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -151,14 +146,14 @@
               </div>
 
               <div class="modal-body">
-                 <form id="editAccount" name="editlead" ng-submit="updatAccountHeader(account)" class="form-horizontal"> 
+                 <form id="editAccount" name="editlead" ng-submit="updatCompanyprofilename(companyprof)" class="form-horizontal"> 
                 
 
                   <div class="control-group">
                         <label  class="required control-label">{{_("Name")}} *</label>
                        
                         <div class="controls">
-                          <input type="text" required id="id_lastname" ng-model="account.name">
+                          <input type="text" required id="id_lastname" ng-model="companyprof.name">
                           
                         </div>
                     </div>
@@ -170,16 +165,16 @@
               </div>
                </form>
             </div>
-      <!--HKA 11.10.2013 Edit Tagline -->
+      <!--HKA 31.12.2013 Edit Tagline -->
              <div id="EditTagModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("Edit Account")}}</h3>
+                <h3 id="myModalLabel">{{_("Edit Company Profile")}}</h3>
               </div>
 
               <div class="modal-body">
-                 <form id="editTagline" name="editlead" ng-submit="updateTagline(account)" class="form-horizontal"> 
+                 <form id="editTagline" name="editlead" ng-submit="updateTagline(companyprof)" class="form-horizontal"> 
                 
 
                   <div class="control-group">
@@ -187,7 +182,7 @@
                        
                         <div class="controls">
                           <!--textarea rows="2" cols="50"  id="id_tagline" ng-model="account.tagline"/-->
-                           <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="account.tagline"></textarea>
+                           <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="companyprof.tagline"></textarea>
 
                         </div>
                     </div>             
@@ -208,7 +203,7 @@
               </div>
 
               <div class="modal-body">
-                 <form id="editTagline" name="edittag" ng-submit="updateintro(account)" class="form-horizontal"> 
+                 <form id="editTagline" name="edittag" ng-submit="updateintro(companyprof)" class="form-horizontal"> 
                 
 
                   <div class="control-group">
@@ -216,7 +211,7 @@
                        
                         <div class="controls">
                          
-                           <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="account.introduction"></textarea>
+                           <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="companyprof.introduction"></textarea>
 
                         </div>
                     </div>             

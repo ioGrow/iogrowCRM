@@ -1,6 +1,6 @@
-var topicservices = angular.module('crmEngine.showservices',[]);
+var showservices = angular.module('crmEngine.showservices',[]);
 
-topicservices.factory('Show', function($http) {
+showservices.factory('Show', function($http) {
   
   var Show = function(data) {
     angular.extend(this, data);
@@ -42,8 +42,8 @@ topicservices.factory('Show', function($http) {
                     $scope.blankStateshow = true;
                   }
 
-                 $scope.shows = resp.items;
-                 /*if ($scope.currentPage>1){
+                
+                if ($scope.currentPage>1){
                       console.log('Should show PREV');
                       $scope.pagination.prev = true;
                    }else{
@@ -58,7 +58,7 @@ topicservices.factory('Show', function($http) {
                  }else{
                   $scope.pagination.next = false;
                  }
-                 */
+                  $scope.shows = resp.items;
                  // Loaded succefully
                  $scope.isLoading = false;
 
@@ -79,9 +79,16 @@ topicservices.factory('Show', function($http) {
           console.log(resp);
           // TME_02_11_13 when a note is inserted reload topics
           $('#newShowModal').modal('hide');
-          window.location.replace('#/live/shows/show/'+resp.id);
-         // $('#addAccountModal').modal('hide');
-         // window.location.replace('#/accounts/show/'+resp.id);
+           if (resp.type_show=='Show'){
+             window.location.replace('#/live/shows/show/'+resp.id);
+           };
+           if (resp.type_show=='Product_Video'){
+             window.location.replace('#/live/product_videos/product_video/'+resp.id);
+           };
+           if (resp.type_show=='Customer_Story'){
+             window.location.replace('#/live/customer_stories/customer_story/'+resp.id);
+           };
+        
           
          }else{
           console.log(resp.code);
@@ -101,8 +108,7 @@ topicservices.factory('Show', function($http) {
       )};
   Show.delete = function($scope,id){
     gapi.client.crmengine.shows.delete(id).execute(function(resp){
-        window.location.replace('#/live/shows');
-      
+        
 
     }
 

@@ -25,7 +25,7 @@ from iomodels.crmengine.needs import Need
 from iomodels.crmengine.companyprofiles import Companyprofile
 from iomodels.crmengine.emails import IOEmail
 from iomodels.crmengine.tags import Tag
-from model import User,Userinfo,Group,Member,Permission,Contributor
+from model import User,Userinfo,Group,Member,Permission,Contributor,Companyprofile
 import model
 import logging
 from google.appengine.api import mail
@@ -620,7 +620,7 @@ class CrmEngineApi(remote.Service):
       return my_model
 
   # leads.list api
-  @Lead.query_method(user_required=True,query_fields=('limit','owner','status', 'order', 'pageToken'),path='leads',name='leads.list')
+  @Lead.query_method(user_required=True,query_fields=('limit','owner','status','show','order', 'pageToken'),path='leads',name='leads.list')
   def LeadList(self,query):
       user_from_email = EndpointsHelper.require_iogrow_user()
       return query.filter(ndb.OR(ndb.AND(Lead.access=='public',Lead.organization==user_from_email.organization),Lead.owner==user_from_email.google_user_id, Lead.collaborators_ids==user_from_email.google_user_id)).order(Lead._key)
@@ -1050,7 +1050,7 @@ class CrmEngineApi(remote.Service):
       my_model.put()
       return my_model
   # feedbacks.list api
-  @Feedback.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='feedbacks', name='feedbacks.list')
+  @Feedback.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken','related_to'),path='feedbacks', name='feedbacks.list')
   def feedbacks_list(self, query):
       user_from_email = EndpointsHelper.require_iogrow_user()      
       return query.filter(ndb.OR(ndb.AND(Feedback.access=='public',Feedback.organization==user_from_email.organization),Feedback.owner==user_from_email.google_user_id, Feedback.collaborators_ids==user_from_email.google_user_id)).order(Feedback._key)
@@ -1092,10 +1092,14 @@ class CrmEngineApi(remote.Service):
   # HKA 29.12.2013 Companyprofile APIs
   # companyprofiles.get api
   @Companyprofile.method(request_fields=('id',),path='companyprofiles/{id}', http_method='GET', name='companyprofiles.get')
-  def companyprofiles_get(self, my_model):
-    if not my_model.from_datastore:
-      raise endpoints.NotFoundException('Companyprofile not found.')
-    return my_model
+  def companyprofiles_get(self, request):
+    user_from_email = EndpointsHelper.require_iogrow_user()
+    orgid = request.id
+    companyprofilequery = Companyprofile.query(Companyprofile.organizationid == orgid).fetch()
+    if companyprofilequery is None:
+        raise endpoints.NotFoundException('Companyprofile not found.')
+    companyprofile = companyprofilequery[0]
+    return companyprofile
   # companyprofiles.patch api
   @Companyprofile.method(user_required=True,
                 http_method='PATCH', path='companyprofiles/{id}', name='companyprofiles.patch')
