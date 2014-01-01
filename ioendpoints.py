@@ -22,7 +22,6 @@ from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.casestatuses import Casestatus
 from iomodels.crmengine.feedbacks import Feedback
 from iomodels.crmengine.needs import Need
-from iomodels.crmengine.companyprofiles import Companyprofile
 from iomodels.crmengine.emails import IOEmail
 from iomodels.crmengine.tags import Tag
 from model import User,Userinfo,Group,Member,Permission,Contributor,Companyprofile
