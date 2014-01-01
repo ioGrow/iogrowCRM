@@ -896,9 +896,11 @@ class PublicLiveCompanyPageHandler(BaseHandler, SessionEnabledHandler):
     def get(self,id):
       org_id = int(id)
       companyprofile = model.Companyprofile.query(model.Companyprofile.organizationid==org_id).get()
-      print('**************************')
-      print(companyprofile)
-      template_values = {'companyprofile':companyprofile}
+      org_key = companyprofile.organization
+      productvideo = Show.query(Show.organization==org_key,Show.type_show =='Product_Video').fetch()
+      customerstory = Show.query(Show.organization==org_key,Show.type_show =='Customer_Story').fetch()
+      shows = Show.query(Show.organization==org_key,Show.type_show =='Show').fetch()
+      template_values = {'companyprofile':companyprofile,'productvideo':productvideo,'customerstory':customerstory,'shows':shows}
       template = jinja_environment.get_template('templates/live/live_company_page.html')
       self.response.out.write(template.render(template_values))
 class PublicLiveShowHandler(BaseHandler, SessionEnabledHandler):
