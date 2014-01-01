@@ -7,7 +7,7 @@
         <div class="container">
             <div class="span8">
                 <h1><a href="/#/accounts/p/1" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
-            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     <a href="#" >Companies</a> > <a href="#">Buffer</a> > Growing your business tips and techniques</h1>
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     <a href="#" >Companies</a> > <a href="#">{{companyprofile.name}}</a> > Growing your business tips and techniques</h1>
             </div>
             <div class="span4">
                 <div class="btn-group pull-right get-in">
@@ -133,15 +133,19 @@
                           <div class="span6">
                             
                                 <div class="news-blocks blank-card blank-card-yellow">
-                                <h3>Contact Information</h3>
+                                <h3>Company Profile Information</h3>
                                 <div class="news-block-tags">
                                   <strong>Phone</strong>
                                  
                                 </div>
                                   <ul class="unstyled contact-infos">
-                                    <li ng-repeat="phone in account.phones"> <%=phone.number%> - <%=phone.type_number%> <a ><img class="ctodeal" src="static/img/phone-icon.png" /></a></li>
+                                   {%for phone in companyprofile.phones%}
+                                    <li > {{phone.number}} - {{phone.type_number}} <a ><!--img class="ctodeal" src="static/img/phone-icon.png" /--></a>
+                                    </li>
+                                    {%endfor%}
+                                    <br>
           
-                                    <li><a href="#phonemodal"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new Phone</a></li>
+                                    <!--li><a href="#phonemodal"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new Phone</a></li-->
 
                                   </ul>
                                 <div class="news-block-tags">
@@ -149,9 +153,11 @@
                                  
                                 </div>
                                   <ul class="unstyled contact-infos">
-                                    <li ng-repeat="email in account.emails"> <%=email.email %>   </li>
-                                    
-                                    <li><a href="#emailmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new email address </a></li>
+                                    {%for email in companyprofile.emails%}
+                                    <li > {{email.email}}  
+                                    </li>
+                                    {%endfor%}
+                                    <br>
 
                                   </ul>
                                 <div class="news-block-tags">
@@ -159,14 +165,12 @@
                                  
                                 </div>
                                  <ul class="unstyled contact-infos">
-                                    <li ng-repeat="addr in account.addresses"><%=addr.street%>, <%=addr.city%> <%=addr.state%>, <%=addr.street%> <%=addr.postal_code%>  </li>
-                                    
-                                    <li><a href="#addressmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new address </a></li>
-
-                  
+                                   {%for addr in companyprofile.addresses%}
+                                    <li >{{addr.street}}, {{addr.city}} {{addr.state}}, {{addr.street}} {{addr.postal_code}}  </li>
+                                    {%endfor%}
+                 
                                   </ul>
-
-                                                              
+                                  <br>                                                              
                                                           
                               </div>
                               <div class="news-blocks blank-card blank-card-bluep">
@@ -176,8 +180,10 @@
                                   
                                 </div>
                                 <ul class="unstyled contact-infos" >
-                                    <li ng-repeat="web in account.websites"><a href="http://<%=web.website%>" target="_blank"><%=web.website%></a> </li>
-                                    <li><a href="#websitemodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new Website </a></li>
+                                    {%for web in companyprofile.websites%}
+                                    <li ><a href="{{web.website}}" target="new">{{web.website}}</a>  </li>
+                                    {%endfor%}
+                                    <br>
                                     
                                 </ul>
                                  
@@ -186,8 +192,10 @@
                                   
                                 </div>
                                 <ul class="unstyled contact-infos" >
-                                    <li ng-repeat="social in account.sociallinks"><a href="<%=social.sociallink%>" target="_blank"> <%=social.sociallink%> </a></li>
-                                  <li><a href="#socialmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new social links </a></li>    
+                                 {%for social in companyprofile.sociallinks%}
+                                    <li > <a href="{{social.sociallink}}" target="new" >{{social.sociallink}}</a>  </li>
+                                    {%endfor%}
+                                      
                                 </ul>
                                                     
                               </div>
@@ -198,17 +206,22 @@
                                 <h3>Story</h3>
                                 <div class="news-block-tags">
                                   <strong>Tagline </strong>
-                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="edittagline()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
+                                  <!--span class="page-meta"><i class="icon-pencil"><a ng-click="edittagline()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span-->
                                 </div>
-                                <p><%=account.tagline%> </p>
+                                
+                                {%if companyprofile.tagline %}
+                                <p>{{companyprofile.tagline}} </p>
+                                {%else%}
+                                No Tagline Available
+                                {%endif%}
                                 
 
                                 <div class="news-block-tags">
                                   <strong>Introduction</strong>
-                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="editintro()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
+                                  <!--span class="page-meta"><i class="icon-pencil"><a ng-click="editintro()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span-->
                                   
                                 </div>
-                                <p><%=account.introduction%></p>                         
+                                <p>{{companyprofile.introduction}}</p>                         
                               </div>
                             
                           </div>

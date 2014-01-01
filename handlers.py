@@ -883,12 +883,13 @@ class PublicLiveHomeHandler(BaseHandler, SessionEnabledHandler):
             self.response.out.write(template.render(template_values))
 class PublicLiveCompanyPageHandler(BaseHandler, SessionEnabledHandler):
     def get(self,id):
-      
-            
-            # Render the template
-            template_values = {}
-            template = jinja_environment.get_template('templates/live/live_company_page.html')
-            self.response.out.write(template.render(template_values))
+      org_id = int(id)
+      companyprofile = model.Companyprofile.query(model.Companyprofile.organizationid==org_id).get()
+      print('**************************')
+      print(companyprofile)
+      template_values = {'companyprofile':companyprofile}
+      template = jinja_environment.get_template('templates/live/live_company_page.html')
+      self.response.out.write(template.render(template_values))
 class PublicLiveShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self,id):
             show_id = int(id)

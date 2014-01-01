@@ -17,6 +17,7 @@ app.controller('CompanyProfileShowCtrl', ['$scope','$route','$filter','Auth','Co
      // What to do after authentication
      $scope.runTheProcess = function(){
          var params = {'id':$route.current.params.organizationId};
+         
         Companyprofile.get($scope,params);
    
      };
