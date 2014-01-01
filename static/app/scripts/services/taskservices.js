@@ -28,6 +28,31 @@ topicservices.factory('Task', function($http) {
             console.log('gapi #end_execute');
           });
   };
+  Task.patch = function($scope,params){
+      $scope.isLoading = true;
+      
+      gapi.client.crmengine.tasks.patch(params).execute(function(resp) {
+          if(!resp.code){
+            $scope.task = resp;
+            $scope.ListComments();
+            $scope.listContributors();
+            $scope.isLoading = false;
+
+            $scope.$apply();
+            $('#EditTaskModal').modal('hide');
+          
+         }else{
+             console.log(resp.message);
+             $('#EditTaskModal').modal('hide');
+             $('#errorModal').modal('show');
+             if(resp.message=="Invalid grant"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+             };
+         }
+      });
+  };
   Task.list = function($scope,params){
       console.log('in tasks.list');
       console.log(params);

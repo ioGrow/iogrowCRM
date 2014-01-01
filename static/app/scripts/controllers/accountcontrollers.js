@@ -134,8 +134,8 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
      Auth.init($scope);
 
 }]);
-app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account','Contact','Case','Opportunity', 'Topic','Note','Task','Event','Permission','User','Attachement','Email',
-    function($scope,$filter,$route,Auth,Account,Contact,Case,Opportunity,Topic,Note,Task,Event,Permission,User,Attachement,Email) {
+app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account','Contact','Case','Opportunity', 'Topic','Note','Task','Event','Permission','User','Attachement','Email','Need',
+    function($scope,$filter,$route,Auth,Account,Contact,Case,Opportunity,Topic,Note,Task,Event,Permission,User,Attachement,Email,Need) {
        $("#id_Accounts").addClass("active");
        $scope.selectedTab = 1;
        $scope.isSignedIn = false;
@@ -161,6 +161,9 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        $scope.casepagination = {};
        $scope.caseCurrentPage=01;
        $scope.casepages=[];
+       $scope.needspagination = {};
+       $scope.needsCurrentPage=01;
+       $scope.needspages=[];
        $scope.pages = [];
        $scope.accounts = [];  
        $scope.users = [];
@@ -330,6 +333,44 @@ $scope.CaselistNextPageItems = function(){
           }
           $scope.caseCurrentPage = $scope.caseCurrentPage - 1 ;
             Case.list($scope,params);
+     };
+     $scope.NeedlistNextPageItems = function(){
+        
+ 
+        var nextPage = $scope.needsCurrentPage + 1;
+        var params = {};
+          if ($scope.needspages[nextPage]){
+            params = {'limit':5,
+                      'about_kind':'Account',
+                      'about_item': $scope.account.id,
+                      'pageToken':$scope.needspages[nextPage]
+                     }
+          }else{
+            params = {'limit':5,
+                      'about_kind':'Account',
+                      'about_item': $scope.account.id}
+          }
+          console.log('in listNextPageItems');
+          $scope.needsCurrentPage = $scope.needsCurrentPage + 1 ; 
+          Need.list($scope,params);
+     }
+     $scope.NeedPrevPageItems = function(){
+            
+       var prevPage = $scope.needsCurrentPage - 1;
+       var params = {};
+          if ($scope.needspages[prevPage]){
+            params = {'limit':5,
+                      'about_kind':'Account',
+                      'about_item': $scope.account.id,
+                      'pageToken':$scope.needspages[prevPage]
+                     }
+          }else{
+            params = {'limit':5,
+                      'about_kind':'Account',
+                      'about_item': $scope.account.id}
+          }
+          $scope.needsCurrentPage = $scope.needsCurrentPage - 1 ;
+            Need.list($scope,params);
      };
 
      
@@ -608,6 +649,9 @@ $scope.CaselistNextPageItems = function(){
   $scope.addCaseModal = function(){
     $('#addCaseModal').modal('show');
   };
+  $scope.addNeedModal = function(){
+    $('#addNeedModal').modal('show');
+  };
   
   //HKA 22.11.2013 List of Contacts related to account
    $scope.listContacts = function(){
@@ -632,7 +676,16 @@ $scope.CaselistNextPageItems = function(){
                    'limit':5
                       };
          Case.list($scope,params);
-         console
+        
+   };
+   $scope.listNeeds = function(){
+
+    var params = {'about_kind':'Account',
+                  'about_item': $scope.account.id,
+                   'limit':5
+                      };
+         Need.list($scope,params);
+        
    };
 
 //HKA 19.11.2013 Add Contact related to account
@@ -686,6 +739,22 @@ $scope.CaselistNextPageItems = function(){
                       };
       Case.insert($scope,params);
       $('#addCaseModal').modal('hide');
+    };
+    $scope.saveNeed = function(need){
+          
+        var params = {'name':need.name,
+                      'description': need.description,
+                      'priority':need.priority,
+                      'status': need.status,
+                      'folder': $scope.account.folder,
+                      'about_kind':'Account',
+                      'about_item': $scope.account.id,
+                      'about_name': $scope.account.name,
+                      'access': $scope.account.access
+                      };
+     
+      Need.insert($scope,params);
+     
     };
 //HKA 19.11.2013 Add Phone
  $scope.addPhone = function(phone){

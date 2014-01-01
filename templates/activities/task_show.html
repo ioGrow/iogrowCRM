@@ -1,4 +1,58 @@
+<div id="EditTaskModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("Edit Task")}}</h3>
+              </div>
+
+              <div class="modal-body">
+                 <form id="editCase" name="editlead" ng-submit="updateTask(task)" class="form-horizontal"> 
+                
+
+                  <div class="control-group">
+                        <input class="input-block-level" autofocus type="text" placeholder="Add a new task" id="taskTitle" ng-model="task.title">
+                                                  
+                        <p><strong>When's it due?</strong></p>
+                        <center>
+                              <datetimepicker data-ng-model="task.due"
+                                                    data-datetimepicker-config="{ startView:'day', minView:'day' }" />
+                        </center>
+
+                         <div class="control-group">
+                            <label  class="required control-label">{{_("Status")}} </label>
+                            
+                            <div class="controls">
+                              <select class="input-xlarge" ng-model="task.status">
+                                    
+                                    <option value="pending">Pending</option>
+                                    <option value="working">Working</option>
+                                    <option value="closed">Closed</option>
+                                    
+                              </select>
+                         
+                        </div>                       
+                          
+                   </div>  
+                    </div>
+                   
+                 
+
+                    
+                    <div class="control-group">
+                        <input class="input-block-level" autofocus type="text" placeholder="Add labels to categorize your tasks" id="taskTitle" ng-model="task.tags">
+                    </div>                       
+                  
+                     
+                    
+                  
+                
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
+                <button  type="submit" class="btn btn-primary addContactNow green">{{_("Save")}} </button>
+              </div>
+               </form>
+  </div> 
 <div class="page-sidebar nav-collapse collapse">
       <!-- BEGIN SIDEBAR MENU -->        
       <ul class="page-sidebar-menu">
@@ -46,23 +100,12 @@
       <!-- BEGIN PORTLET-->
         <div class="portlet">
           <div class="portlet-title line">
-              <div class="caption"><i class="fa fa-comments"></i> Task > Before <%= task.due | date:'yyyy-MM-dd' %></div>
+              <div class="caption"><i class="fa fa-comments"></i>[task]: <%=task.title%></div>
           </div>
           <div class="portlet-body">
-             <ul class="chats">
-                  <li class="in">
-                    <img class="avatar"  ng-src="<%=task.author.photo%>" />
-                    <div class="">
-                      <span class="arrow"></span>
-                      <a  class="name"><%=task.author.display_name%></a>
-                      <span class="datetime"> </span><br>
-                      <span class="body">
-                      <%=task.title%>
-                      </span>
-                    </div>
-                  </li>
-                  
-                </ul>
+              <span ng-show="task.due" class="contact-title"><strong>{{_("Due on")}}: <%= task.due | date:'yyyy-MM-dd' %></strong><br> </span>
+              <span class="contact-title" ><strong>{{_("Status")}}: <%= task.status %></strong> <br><br></span>
+              <span class="page-meta"><i class="icon-pencil"><a ng-click="showEditTaskModal()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |  <i class="icon-trash"><a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  {{_("Delete")}}</a></i></span>
           </div>
 
        
