@@ -322,6 +322,17 @@ class CaseShowHandler(BaseHandler,SessionEnabledHandler):
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/cases/case_show.html')
       self.response.out.write(template.render(template_values))
+
+class NeedShowHandler(BaseHandler,SessionEnabledHandler):
+  def get (self):
+    if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+      user = self.get_user_from_session()
+      self.set_user_locale()
+      tabs = user.get_user_active_tabs()
+      self.set_user_locale()
+      template_values={'tabs':tabs}
+      template = jinja_environment.get_template('templates/needs/show.html')
+      self.response.out.write(template.render(template_values))
 class CampaignListHandler(BaseHandler,SessionEnabledHandler):
   def get(self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
@@ -1006,6 +1017,9 @@ routes = [
     # Cases Views
     ('/views/cases/list',CaseListHandler),
     ('/views/cases/show',CaseShowHandler),
+    # Needs Views
+    ('/views/needs/show',NeedShowHandler),
+    
     # Campaings Views
     ('/views/campaigns/list',CampaignListHandler),
     ('/views/campaigns/show',CampaignShowHandler),

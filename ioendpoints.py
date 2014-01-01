@@ -21,6 +21,7 @@ from iomodels.crmengine.opportunitystage import Opportunitystage
 from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.casestatuses import Casestatus
 from iomodels.crmengine.feedbacks import Feedback
+from iomodels.crmengine.needs import Need
 from iomodels.crmengine.emails import IOEmail
 from iomodels.crmengine.tags import Tag
 from model import User,Userinfo,Group,Member,Permission,Contributor,Companyprofile
@@ -802,7 +803,33 @@ class CrmEngineApi(remote.Service):
     user_from_email=EndpointsHelper.require_iogrow_user()
     my_model.key.delete()
     return message_types.VoidMessage()
-  
+  #Needs API
+  # needs.insert api 
+  @Need.method(user_required=True,path='needs',http_method='POST',name='needs.insert')
+  def need_insert(self, my_model):
+      user_from_email = EndpointsHelper.require_iogrow_user()
+      
+      # Todo: Check permissions
+      my_model.owner = user_from_email.google_user_id
+      my_model.organization = user_from_email.organization
+      #get the account or lead folder
+      #my_model.folder = created_folder['id']
+      my_model.put()
+      return my_model
+  # needs.get api
+  # cases.get api
+  @Need.method(request_fields=('id',),path='needs/{id}', http_method='GET', name='needs.get')
+  def need_get(self, my_model):
+    user_from_email = EndpointsHelper.require_iogrow_user()
+    if not my_model.from_datastore:
+      raise endpoints.NotFoundException('Need not found')
+    return my_model
+  # cases.list api
+  @Need.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken','about_kind','about_item', 'about_name',  'priority','status'),path='needs',name='needs.list')
+  def need_list(self,query):
+      user_from_email = EndpointsHelper.require_iogrow_user()
+      return query.filter(ndb.OR(ndb.AND(Need.access=='public',Need.organization==user_from_email.organization),Need.owner==user_from_email.google_user_id, Need.collaborators_ids==user_from_email.google_user_id)).order(Need._key)
+
 
   # Cases API 
   # cases.insert api 
@@ -1431,8 +1458,63 @@ class CrmEngineApi(remote.Service):
       author.display_name = user_from_email.google_display_name
       author.photo = user_from_email.google_public_profile_photo_url
       my_model.author = author
+      my_model.status = 'pending'
       my_model.put()
       return my_model
+  # tasks.patch api
+  @endpoints.method(ID_RESOURCE, TaskResponse,
+                      path='tasks/{id}', http_method='PATCH',
+                      name='tasks.patch')
+  def task_patch(self, my_model):
+      user_from_email = EndpointsHelper.require_iogrow_user()
+      # Todo: Check permissions
+      if not my_model.from_datastore:
+          raise endpoints.NotFoundException('Task not found.')
+      my_model.put()
+      task = my_model
+      about_item_id = int(task.about_item)
+      try:
+                about_object = OBJECTS[task.about_kind].get_by_id(about_item_id)
+                if task.about_kind == 'Contact' or task.about_kind == 'Lead':
+                    about_name = about_object.firstname + ' ' + about_object.lastname
+                else:
+                    about_name = about_object.name
+                about_response = DiscussionAboutSchema(kind=task.about_kind,
+                                                       id=task.about_item,
+                                                       name=about_name)
+                author = AuthorSchema(google_user_id = task.author.google_user_id,
+                                      display_name = task.author.display_name,
+                                      google_public_profile_url = task.author.google_public_profile_url,
+                                      photo = task.author.photo)
+                completed_by = None
+                if completed_by:
+                    completed_by = AuthorSchema(google_user_id = task.completed_by.google_user_id,
+                                      display_name = task.completed_by.display_name,
+                                      google_public_profile_url = task.completed_by.google_public_profile_url,
+                                      photo = task.completed_by.photo)
+
+                
+                if task.due:
+                    due_date = task.due.isoformat()
+                else:
+                    due_date = None
+                response = TaskResponse(id=request.id,
+                                              entityKey = task.key.urlsafe(),
+                                              title = task.title,
+                                              due = due_date,
+                                              status = task.status,
+                                              comments = task.comments,
+                                              about = about_response,
+                                              author = author,
+                                              completed_by = completed_by )
+                return response
+      except (IndexError, TypeError):
+                raise endpoints.NotFoundException('About object %s not found.' %
+                                                  (request.id,))
+            
+            
+
+            
   # tasks.list api
   @Task.query_method(user_required=True,query_fields=('about_kind','about_item','status','id', 'due', 'limit', 'order', 'pageToken'),path='tasks', name='tasks.list')
   def TaskList(self, query):
@@ -1467,11 +1549,14 @@ class CrmEngineApi(remote.Service):
                                       photo = task.completed_by.photo)
 
                 
-
+                if task.due:
+                    due_date = task.due.isoformat()
+                else:
+                    due_date = None
                 response = TaskResponse(id=request.id,
                                               entityKey = task.key.urlsafe(),
                                               title = task.title,
-                                              due = task.due.isoformat(),
+                                              due = due_date,
                                               status = task.status,
                                               comments = task.comments,
                                               about = about_response,
