@@ -51,7 +51,7 @@ class Account(EndpointsModel):
         emails = " ".join(map(lambda x: x.email,  self.emails))
         phones = " ".join(map(lambda x: x.number,  self.phones))
         websites =  " ".join(map(lambda x: x.website,  self.websites))
-        #addresses = " \n".join(map(lambda x: " ".join([x.street,x.city,x.state, x.postal_code, x.country]), self.addresses))
+        addresses = " \n".join(map(lambda x: " ".join([x.street,x.city,x.state, str(x.postal_code), x.country]) if x else "", self.addresses))
         my_document = search.Document(
         doc_id = str(self.key.id()),
         fields=[
@@ -71,7 +71,7 @@ class Account(EndpointsModel):
             search.TextField(name='emails', value = empty_string(emails)),
             search.TextField(name='phones', value = empty_string(phones)),
             search.TextField(name='websites', value = empty_string(websites)),
-            #search.TextField(name='addresses', value = empty_string(addresses)),
+            search.TextField(name='addresses', value = empty_string(addresses)),
            ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)
