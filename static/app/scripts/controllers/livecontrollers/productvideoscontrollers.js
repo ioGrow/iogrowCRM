@@ -64,19 +64,19 @@ app.controller('ProductVideoListCtrl', ['$scope','$filter','Auth','Show',
         var params ={}
 
       
-        var tagsplit = ioevent.tags.split(' ');
+        /*var tagsplit = ioevent.tags.split(' ');
 
         var tags = [];
         for (i=0; i<tagsplit.length; i++){
         
             tags.push(tagsplit[i]);
       
-        }
+        }*/
 
        params ={'name': ioevent.name,
                 'type_show': 'Product_Video',
-                'is_published': true,
-                'tags': tags
+                'is_published': true
+                //'tags': tags
               }
         
         
