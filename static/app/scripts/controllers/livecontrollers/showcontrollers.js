@@ -64,7 +64,7 @@ app.controller('ShowListCtrl', ['$scope','$filter','Auth','Show',
         $('#newShowModal').modal('hide');
         var params ={}
 
-        console.log('adding a new show');
+       /* console.log('adding a new show');
         var tagsplit = ioevent.tags.split(' ');
 
         var tags = [];
@@ -75,7 +75,7 @@ app.controller('ShowListCtrl', ['$scope','$filter','Auth','Show',
         }
         console.log('# hastags');
         console.log(tags);
-        console.log($filter);
+        console.log($filter);*/
         
         
         if (ioevent.starts_at){
@@ -86,15 +86,15 @@ app.controller('ShowListCtrl', ['$scope','$filter','Auth','Show',
                       'starts_at': starts_at,
                       'ends_at':ends_at ,
                       'is_published': true,
-                      'type_show':'Show',
-                      'tags': tags
+                      'type_show':'Show'
+                      //'tags': tags
               }
 
             }else{
               params ={'name': ioevent.name,
                       'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'type_show':'Show',
-                      'tags': tags
+                      'type_show':'Show'
+                      //'tags': tags
               }
             }
             console.log('inserting the event');
@@ -564,8 +564,9 @@ $scope.deleteshow = function(){
   Show.delete($scope,showid);
   window.location.replace('#/live/shows');
   $('#BeforedeleteShow').modal('hide');
-
- 
+  var params = {'limit':7,
+                        'type_show':'Show'};
+          Show.list($scope,params); 
 };
 
 //HKA 29.12.2013 Add Feedback to Show
