@@ -63,7 +63,7 @@ class Contact(EndpointsModel):
         emails = " ".join(map(lambda x: x.email,  self.emails))
         phones = " ".join(map(lambda x: x.number,  self.phones))
         websites = " ".join(map(lambda x: x.website,  self.websites))
-        addresses = " \n".join(map(lambda x: " ".join([x.street,x.city,x.state, x.postal_code, x.country]), self.addresses))
+        addresses = " \n".join(map(lambda x: " ".join([x.street,x.city,x.state, x.postal_code, x.country]) if x else "", self.addresses))
         my_document = search.Document(
         doc_id = str(self.key.id()),
         fields=[
