@@ -139,7 +139,29 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
        $('#comment_0').effect( "bounce", "slow" );
        $('#comment_0 .message').effect("highlight","slow");
      };
+    $scope.showEditTaskModal =function(){
+      $('#EditTaskModal').modal('show');
+      
+    };
+    $scope.updateTask = function(task){
+      if (task.due){
 
+            var dueDate= $filter('date')(task.due,['yyyy-MM-dd']);
+            dueDate = dueDate +'T00:00:00.000000'
+            params ={ 'id':$scope.task.id,
+                      'title': task.title,
+                      'due': dueDate,
+                      'status':task.status
+            };
+      }else{
+            params ={ 'id':$scope.task.id,
+                      'title': task.title,
+                      'status':task.status
+            };
+      }
+
+      Task.patch($scope,params);
+    };
   // Google+ Authentication 
     Auth.init($scope);
 

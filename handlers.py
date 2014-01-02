@@ -201,6 +201,8 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
                                               shows_folder=shows_folder,
                                               products_folder=products_folder)
             organization.put()
+            comp_prof = model.Companyprofile(name=org_name,organization=organization.key,organizationid=organization.key.id())
+            comp_prof.put()
             profile = model.Profile.query(model.Profile.name=='Super Administrator', model.Profile.organization==organization.key).get()
             user.init_user_config(organization.key,profile.key)
             self.redirect('/')
@@ -319,6 +321,17 @@ class CaseShowHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/cases/case_show.html')
+      self.response.out.write(template.render(template_values))
+
+class NeedShowHandler(BaseHandler,SessionEnabledHandler):
+  def get (self):
+    if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+      user = self.get_user_from_session()
+      self.set_user_locale()
+      tabs = user.get_user_active_tabs()
+      self.set_user_locale()
+      template_values={'tabs':tabs}
+      template = jinja_environment.get_template('templates/needs/show.html')
       self.response.out.write(template.render(template_values))
 class CampaignListHandler(BaseHandler,SessionEnabledHandler):
   def get(self):
@@ -881,12 +894,15 @@ class PublicLiveHomeHandler(BaseHandler, SessionEnabledHandler):
             self.response.out.write(template.render(template_values))
 class PublicLiveCompanyPageHandler(BaseHandler, SessionEnabledHandler):
     def get(self,id):
-      
-            
-            # Render the template
-            template_values = {}
-            template = jinja_environment.get_template('templates/live/live_company_page.html')
-            self.response.out.write(template.render(template_values))
+      org_id = int(id)
+      companyprofile = model.Companyprofile.query(model.Companyprofile.organizationid==org_id).get()
+      org_key = companyprofile.organization
+      productvideo = Show.query(Show.organization==org_key,Show.type_show =='Product_Video').fetch()
+      customerstory = Show.query(Show.organization==org_key,Show.type_show =='Customer_Story').fetch()
+      shows = Show.query(Show.organization==org_key,Show.type_show =='Show').fetch()
+      template_values = {'companyprofile':companyprofile,'productvideo':productvideo,'customerstory':customerstory,'shows':shows}
+      template = jinja_environment.get_template('templates/live/live_company_page.html')
+      self.response.out.write(template.render(template_values))
 class PublicLiveShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self,id):
             show_id = int(id)
@@ -1003,6 +1019,9 @@ routes = [
     # Cases Views
     ('/views/cases/list',CaseListHandler),
     ('/views/cases/show',CaseShowHandler),
+    # Needs Views
+    ('/views/needs/show',NeedShowHandler),
+    
     # Campaings Views
     ('/views/campaigns/list',CampaignListHandler),
     ('/views/campaigns/show',CampaignShowHandler),

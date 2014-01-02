@@ -40,8 +40,9 @@ commentservices.factory('Comment', function($http) {
 
 
                  // Call the method $apply to make the update on the scope
-                 $scope.$apply();
+                 
                  $scope.hilightComment();
+                 $scope.$apply();
                  //$scope.hilightComment();
               }else {
                  alert("Error, response is: " + angular.toJson(resp));

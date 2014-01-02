@@ -7,7 +7,7 @@
         <div class="container">
             <div class="span8">
                 <h1><a href="/#/accounts/p/1" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
-            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     <a href="#" >Companies</a> > <a href="#">Buffer</a> > Growing your business tips and techniques</h1>
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     <a href="#" >Companies</a> > <a >{{companyprofile.name}}</a> > Growing your business tips and techniques</h1>
             </div>
             <div class="span4">
                 <div class="btn-group pull-right get-in">
@@ -39,7 +39,8 @@
                             <li class="active"><a href="#tab-1" data-toggle="tab">Shows</a></li>
                             <li><a href="#tab-2" data-toggle="tab">About</a></li>
                             <li><a href="#tab-3" data-toggle="tab">Products & Services</a></li>
-                            <li><a href="#tab-4" data-toggle="tab">Get in touch</a></li>
+                            <li><a href="#tab-4" data-toggle="tab">Customer Stories</a></li>
+                            <li><a href="#tab-5" data-toggle="tab">Get in touch</a></li>
                         </ul>
                        
                         <div class="tab-content">
@@ -48,26 +49,20 @@
                                   <div class="filter-v1 margin-bottom-40">
                               
                                   <ul class="grid-v1 thumbnails">
-                                      <li class="span3 mix category_1"><a href="/live/shows/5821843504103424">
-                                          <img class="video-thumbnail" src="https://i.ytimg.com/vi/7y2VlKJtXsI/mqdefault.jpg">
-                                          Google App Engine, explorando la plataforma
+                                     {%for show in shows%}
+                                      <li class="span3 mix category_1"><a href="/live/shows/{{show.id}}" target="new">
+                                      {% if show.youtube_url %}
+                                           <iframe width="100%" height="250" src="http://www.youtube.com/embed/{{show.youtube_url}}?rel=0" frameborder="0" allowfullscreen></iframe>  
+                                      {% else %}
+                                           <img src="/static/img/gdl-stay-tuned.png" height="450"/>
+                                      {% endif %}    
+                                         {{show.name}} - {{show.description}}
                                         </a>
                                       </li>
-                                      <li class="span3 mix category_2"><a href="/live/shows/5821843504103424">
-                                          <img class="video-thumbnail" src="https://i.ytimg.com/vi/OfYLG6FXtqE/mqdefault.jpg">
-                                          Google App Engine, explorando la plataforma
-                                        </a>
-                                      </li>
-                                      <li class="span3 mix category_3"><a href="/live/shows/5821843504103424">
-                                          <img class="video-thumbnail" src="https://i.ytimg.com/vi/9jUN1cc2iWg/mqdefault.jpg">
-                                          Google App Engine, explorando la plataforma
-                                        </a>
-                                      </li>
-                                      <li class="span3 mix category_4"><a href="/live/shows/5821843504103424">
-                                          <img class="video-thumbnail" src="https://i.ytimg.com/vi/KQEv90hZsCk/mqdefault.jpg">
-                                          Google App Engine, explorando la plataforma
-                                        </a>
-                                      </li>
+                                      {%endfor%}
+
+
+                                     
 
                                   </ul>
                               </div>  
@@ -133,15 +128,19 @@
                           <div class="span6">
                             
                                 <div class="news-blocks blank-card blank-card-yellow">
-                                <h3>Contact Information</h3>
+                                <h3>Company Profile Information</h3>
                                 <div class="news-block-tags">
                                   <strong>Phone</strong>
                                  
                                 </div>
                                   <ul class="unstyled contact-infos">
-                                    <li ng-repeat="phone in account.phones"> <%=phone.number%> - <%=phone.type_number%> <a ><img class="ctodeal" src="static/img/phone-icon.png" /></a></li>
+                                   {%for phone in companyprofile.phones%}
+                                    <li > {{phone.number}} - {{phone.type_number}} <a ><!--img class="ctodeal" src="static/img/phone-icon.png" /--></a>
+                                    </li>
+                                    {%endfor%}
+                                    <br>
           
-                                    <li><a href="#phonemodal"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new Phone</a></li>
+                                    <!--li><a href="#phonemodal"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new Phone</a></li-->
 
                                   </ul>
                                 <div class="news-block-tags">
@@ -149,9 +148,11 @@
                                  
                                 </div>
                                   <ul class="unstyled contact-infos">
-                                    <li ng-repeat="email in account.emails"> <%=email.email %>   </li>
-                                    
-                                    <li><a href="#emailmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new email address </a></li>
+                                    {%for email in companyprofile.emails%}
+                                    <li > {{email.email}}  
+                                    </li>
+                                    {%endfor%}
+                                    <br>
 
                                   </ul>
                                 <div class="news-block-tags">
@@ -159,14 +160,12 @@
                                  
                                 </div>
                                  <ul class="unstyled contact-infos">
-                                    <li ng-repeat="addr in account.addresses"><%=addr.street%>, <%=addr.city%> <%=addr.state%>, <%=addr.street%> <%=addr.postal_code%>  </li>
-                                    
-                                    <li><a href="#addressmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new address </a></li>
-
-                  
+                                   {%for addr in companyprofile.addresses%}
+                                    <li >{{addr.street}}, {{addr.city}} {{addr.state}}, {{addr.street}} {{addr.postal_code}}  </li>
+                                    {%endfor%}
+                 
                                   </ul>
-
-                                                              
+                                  <br>                                                              
                                                           
                               </div>
                               <div class="news-blocks blank-card blank-card-bluep">
@@ -176,8 +175,10 @@
                                   
                                 </div>
                                 <ul class="unstyled contact-infos" >
-                                    <li ng-repeat="web in account.websites"><a href="http://<%=web.website%>" target="_blank"><%=web.website%></a> </li>
-                                    <li><a href="#websitemodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new Website </a></li>
+                                    {%for web in companyprofile.websites%}
+                                    <li ><a href="http://{{web.website}}" target="new">{{web.website}}</a>  </li>
+                                    {%endfor%}
+                                    <br>
                                     
                                 </ul>
                                  
@@ -186,8 +187,10 @@
                                   
                                 </div>
                                 <ul class="unstyled contact-infos" >
-                                    <li ng-repeat="social in account.sociallinks"><a href="<%=social.sociallink%>" target="_blank"> <%=social.sociallink%> </a></li>
-                                  <li><a href="#socialmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new social links </a></li>    
+                                 {%for social in companyprofile.sociallinks%}
+                                    <li > <a href="{{social.sociallink}}" target="new" >{{social.sociallink}}</a>  </li>
+                                    {%endfor%}
+                                      
                                 </ul>
                                                     
                               </div>
@@ -198,17 +201,22 @@
                                 <h3>Story</h3>
                                 <div class="news-block-tags">
                                   <strong>Tagline </strong>
-                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="edittagline()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
+                                  <!--span class="page-meta"><i class="icon-pencil"><a ng-click="edittagline()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span-->
                                 </div>
-                                <p><%=account.tagline%> </p>
+                                
+                                {%if companyprofile.tagline %}
+                                <p>{{companyprofile.tagline}} </p>
+                                {%else%}
+                                No Tagline Available
+                                {%endif%}
                                 
 
                                 <div class="news-block-tags">
                                   <strong>Introduction</strong>
-                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="editintro()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
+                                  <!--span class="page-meta"><i class="icon-pencil"><a ng-click="editintro()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span-->
                                   
                                 </div>
-                                <p><%=account.introduction%></p>                         
+                                <p>{{companyprofile.introduction}}</p>                         
                               </div>
                             
                           </div>
@@ -216,35 +224,24 @@
                         </div>
                       </div>
                       <div class="tab-pane row-fluid fade in active" id="tab-3">
-                                  <h2>Product A <a href="#"><small>(View all)</small></a></h2>
+                                  <h2>Products <a href="#"><small></small></a></h2>
                                   <div class="filter-v1 margin-bottom-40">
                               
                                   <ul class="grid-v1 thumbnails">
-                                      <li class="span3 mix category_1"><a href="/live/shows/5821843504103424">
-                                          <img class="video-thumbnail" src="https://i.ytimg.com/vi/7y2VlKJtXsI/mqdefault.jpg">
-                                          Google App Engine, explorando la plataforma
+                                   {%for prodvid in productvideo%}
+                                      <li class="span3 mix category_1"><a href="/live/shows/{{prodvid.id}}">
+                                     <iframe width="100%"  height="250" src="http://www.youtube.com/embed/{{prodvid.youtube_url}}?rel=0" frameborder="0" allowfullscreen></iframe>
+                                          {{prodvid.name}} {{prodvid.description}}
                                         </a>
                                       </li>
-                                      <li class="span3 mix category_2"><a href="/live/shows/5821843504103424">
-                                          <img class="video-thumbnail" src="https://i.ytimg.com/vi/OfYLG6FXtqE/mqdefault.jpg">
-                                          Google App Engine, explorando la plataforma
-                                        </a>
-                                      </li>
-                                      <li class="span3 mix category_3"><a href="/live/shows/5821843504103424">
-                                          <img class="video-thumbnail" src="https://i.ytimg.com/vi/9jUN1cc2iWg/mqdefault.jpg">
-                                          Google App Engine, explorando la plataforma
-                                        </a>
-                                      </li>
-                                      <li class="span3 mix category_4"><a href="/live/shows/5821843504103424">
-                                          <img class="video-thumbnail" src="https://i.ytimg.com/vi/KQEv90hZsCk/mqdefault.jpg">
-                                          Google App Engine, explorando la plataforma
-                                        </a>
-                                      </li>
+                                      {%endfor%}
+                                      
+                              
 
                                   </ul>
                               </div>  
                                   
-                                      <h2>Product B <a href="#"><small>(View all)</small></a></h2>
+                                      <!---h2>Product B <a href="#"><small>(View all)</small></a></h2>
                                       <div class="filter-v1 margin-bottom-40">
                                       <!--
                                       <ul class="filter-category">
@@ -254,7 +251,7 @@
                                           <li class="filter" data-filter="category_3">Photography</li>
                                           <li class="filter" data-filter="category_3 category_1">Wordpress and Logo</li>
                                       </ul>
-                                      -->
+                                      >
                                       <ul class="grid-v1 thumbnails">
                                           <li class="span3 mix category_1"><a href="/live/shows/5821843504103424">
                                               <img class="video-thumbnail" src="https://i.ytimg.com/vi/7y2VlKJtXsI/mqdefault.jpg">
@@ -278,14 +275,32 @@
                                           </li>
 
                                       </ul>
-                                  </div>
+                                  </div-->
                                   
                             </div>
-                           
                             <div class="tab-pane row-fluid fade in active" id="tab-4">
+                                  <h2>Products <a href="#"><small></small></a></h2>
+                                  <div class="filter-v1 margin-bottom-40">
+                              
+                                    <ul class="grid-v1 thumbnails">
+                                      {%for custstory in customerstory%}
+                                      <li class="span3 mix category_1"><a href="/live/shows/{{custstory.id}}">
+                                     <iframe width="100%"  height="250" src="http://www.youtube.com/embed/{{custstory.youtube_url}}?rel=0" frameborder="0" allowfullscreen></iframe>
+                                          {{custstory.name}} - {{custstory.description}}
+                                        </a>
+                                      </li>
+                                      {%endfor%}
+                                      
+                              
+
+                                    </ul>
+                                  </div> 
+                              </div>
+                           
+                            <div class="tab-pane row-fluid fade in active" id="tab-5">
                                   <form action="#" class="horizontal-form margin-bottom-40">
                                   <div class="control-group">
-                                      <label class="control-label">Sibject</label>
+                                      <label class="control-label">Subject</label>
                                       <div class="controls">
                                           <input type="text" class="m-wrap span12" />
                                       </div>

@@ -1,5 +1,5 @@
 
-var app = angular.module('crmEngine',['ui.bootstrap.datetimepicker','ui.bootstrap','ui.select2', 'crmEngine.authservices', 'crmEngine.showservices', 'crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.eventservices', 'crmEngine.leadservices','crmEngine.opportunityservices','crmEngine.caseservices','crmEngine.userservices','crmEngine.groupservices','crmEngine.noteservices','crmEngine.commentservices','crmEngine.settingservices','crmEngine.feedbackservices']);
+var app = angular.module('crmEngine',['ui.bootstrap.datetimepicker','ui.bootstrap','ui.select2', 'crmEngine.authservices', 'crmEngine.showservices', 'crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.eventservices', 'crmEngine.leadservices','crmEngine.opportunityservices','crmEngine.caseservices','crmEngine.userservices','crmEngine.groupservices','crmEngine.noteservices','crmEngine.commentservices','crmEngine.settingservices','crmEngine.feedbackservices','crmEngine.companyprofileservices']);
 
 app.config(function($interpolateProvider){
   $interpolateProvider.startSymbol('<%=');
@@ -47,6 +47,11 @@ app.config(['$routeProvider', function($routeProvider) {
       }).when('/cases/show/:caseId', {
         controller: 'CaseShowCtrl',        
         templateUrl:'/views/cases/show'
+      }).
+      // Needs
+      when('/needs/show/:needId', {
+        controller: 'NeedShowCtrl',        
+        templateUrl:'/views/needs/show'
       }).
       // Notes
       when('/notes/show/:noteId',{
@@ -96,7 +101,7 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'ShowShowCtrl',
         templateUrl:'/views/shows/show'
         
-      }).when('/live/company_profile',{
+      }).when('/live/company_profile/:organizationId',{
         controller:'CompanyProfileShowCtrl',
         templateUrl:'/views/live/company_profile'
 
