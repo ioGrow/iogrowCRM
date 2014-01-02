@@ -640,7 +640,7 @@ class CrmEngineApi(remote.Service):
       return my_model
 
   # leads.list api
-  @Lead.query_method(user_required=True,query_fields=('limit','owner','status','show','order', 'pageToken'),path='leads',name='leads.list')
+  @Lead.query_method(user_required=True,query_fields=('limit','owner','status','feedback','show','order', 'pageToken'),path='leads',name='leads.list')
   def LeadList(self,query):
       user_from_email = EndpointsHelper.require_iogrow_user()
       return query.filter(ndb.OR(ndb.AND(Lead.access=='public',Lead.organization==user_from_email.organization),Lead.owner==user_from_email.google_user_id, Lead.collaborators_ids==user_from_email.google_user_id)).order(Lead._key)
