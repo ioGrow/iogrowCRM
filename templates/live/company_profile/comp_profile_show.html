@@ -86,6 +86,7 @@
                   
                                   </ul>
 
+
                                                               
                                                           
                               </div>
@@ -109,6 +110,11 @@
                                     <li ng-repeat="social in companyprof.sociallinks"><a href="<%=social.sociallink%>" target="_blank"> <%=social.sociallink%> </a></li>
                                   <li><a href="#socialmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new social links </a></li>    
                                 </ul>
+                                <div class="news-block-tags">
+                                  <strong>Youtube Channel </strong>
+                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="edityoutubechannel()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
+                                </div>
+                                <p><%=companyprof.youtube_channel%> </p>
                                                     
                               </div>
                           </div>
@@ -165,6 +171,35 @@
               </div>
                </form>
             </div>
+            <!--HKA 02.01.2014 Edit Youtube Channel -->
+
+             <div id="EditYoutubeChannelModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("Edit Company Profile")}}</h3>
+              </div>
+
+              <div class="modal-body">
+                 <form id="editTagline" name="editlead" ng-submit="updateYoutubeChannel(companyprof)" class="form-horizontal"> 
+                
+
+                  <div class="control-group">
+                        <label  class=" control-label">{{_("Youtube Channel")}} </label>
+                       
+                        <div class="controls">
+                          <!--textarea rows="2" cols="50"  id="id_tagline" ng-model="account.tagline"/-->
+                           <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="companyprof.youtube_channel"></textarea>
+
+                        </div>
+                    </div>             
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
+                <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+              </div>
+               </form>
+            </div>
       <!--HKA 31.12.2013 Edit Tagline -->
              <div id="EditTagModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
@@ -199,7 +234,7 @@
 
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("Edit Account")}}</h3>
+                <h3 id="myModalLabel">{{_("Edit Company profile")}}</h3>
               </div>
 
               <div class="modal-body">
@@ -304,7 +339,7 @@
                      <div class="control-group">
                         <label  class="control-label">{{_("City")}} </label>
                         <div class="controls">
-                          <input type="text"   id="id_city" ng-model="address.email">
+                          <input type="text"   id="id_city" ng-model="address.city">
                         </div>
                      </div>
                      <div class="control-group">
@@ -316,7 +351,7 @@
                      <div class="control-group">
                         <label  class="control-label">{{_("Postal Code")}} </label>
                         <div class="controls">
-                          <input type="text"   id="id_postal" ng-model="address.postal">
+                          <input type="text"   id="id_postal" ng-model="address.postal_code">
                         </div>
                      </div>
                      <div class="control-group">

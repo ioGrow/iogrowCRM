@@ -402,7 +402,7 @@ class Social(EndpointsModel):
 #HKA 30.12.2013 Manage Company Profile
 
 class Companyprofile(EndpointsModel):
-  _message_fields_schema = ('id','entityKey','name','tagline','introduction','phones','emails','addresses','websites','sociallinks')
+  _message_fields_schema = ('id','entityKey','name','tagline','introduction','phones','emails','addresses','websites','sociallinks','youtube_channel')
 
   owner = ndb.StringProperty()
   collaborators_list = ndb.StructuredProperty(Userinfo,repeated=True)
@@ -410,6 +410,7 @@ class Companyprofile(EndpointsModel):
   organization = ndb.KeyProperty()
   organizationid = ndb.IntegerProperty()
   name = ndb.StringProperty()
+  youtube_channel = ndb.StringProperty()
   tagline = ndb.TextProperty()
   introduction =ndb.TextProperty() 
   created_at = ndb.DateTimeProperty(auto_now_add=True)
