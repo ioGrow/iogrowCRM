@@ -917,6 +917,9 @@ class PublicLiveShowHandler(BaseHandler, SessionEnabledHandler):
                 user = None
             show_id = int(id)
             show = Show.get_by_id(show_id)
+            #20131001T220000Z
+            starts_at = show.starts_at.strftime("%Y%m%dT%H%M%SZ")
+            ends_at = show.ends_at.strftime("%Y%m%dT%H%M%SZ")
             if show.is_published:
                 # Render the template
                 organization_key = show.organization
@@ -924,7 +927,7 @@ class PublicLiveShowHandler(BaseHandler, SessionEnabledHandler):
 
 
                 companyprofile = model.Companyprofile.query(model.Companyprofile.organization==organization_key).get()
-                template_values = {'user': user,'organization_id':organization_id, 'show': show,'companyprofile':companyprofile}
+                template_values = {'user': user,'organization_id':organization_id, 'show': show,'starts_at':starts_at,'ends_at':ends_at, 'companyprofile':companyprofile}
                 template = jinja_environment.get_template('templates/live/live_show_page.html')
                 self.response.out.write(template.render(template_values))
 

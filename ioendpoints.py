@@ -259,6 +259,7 @@ class LiveApi(remote.Service):
       who.display_name = user_from_email.google_display_name
       who.photo = user_from_email.google_public_profile_photo_url
       who.email = user_from_email.email
+
       my_model.who = who
       my_model.source = "i/oGrow Live"
       my_model.status = "pending"
