@@ -252,6 +252,26 @@ class LiveApi(remote.Service):
   ID_RESOURCE = endpoints.ResourceContainer(
             message_types.VoidMessage,
             id=messages.StringField(1))
+  @Feedback.method(user_required=True,request_fields=('show_url', 'name','content'), path='feedbacks',http_method='POST',name='feedbacks.insert')
+  def insert_feedback_live(self, my_model):
+      user_from_email = EndpointsHelper.require_iogrow_user()
+      who = model.Userinfo()
+      who.display_name = user_from_email.google_display_name
+      who.photo = user_from_email.google_public_profile_photo_url
+      who.email = user_from_email.email
+      my_model.who = who
+      my_model.source = "i/oGrow Live"
+      my_model.status = "pending"
+      show_id = int(my_model.show_url.split("/")[5])
+      show = Show.get_by_id(show_id)
+      my_model.related_to = show.key
+      my_model.organization = show.organization
+      my_model.owner = show.owner
+      organization = show.organization.get()
+      my_model.organization_name = organization.name
+      my_model.put()
+      return my_model
+
 
 @endpoints.api(name='crmengine', version='v1', description='I/Ogrow CRM APIs',allowed_client_ids=[CLIENT_ID,
                                    endpoints.API_EXPLORER_CLIENT_ID],scopes=SCOPES)

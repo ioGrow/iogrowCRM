@@ -11,6 +11,9 @@ feedbackservices.factory('Feedback', function($http) {
           gapi.client.crmengine.feedbacks.get(params).execute(function(resp) {
             if(!resp.code){
                $scope.feedback = resp;
+               if ($scope.feedback.who){
+                $scope.email.to = $scope.feedback.who.email;
+               }
                $scope.isContentLoaded = true;
                $scope.listTasks();
                $scope.listTopics();

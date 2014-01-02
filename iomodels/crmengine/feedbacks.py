@@ -7,7 +7,7 @@ from model import Userinfo
 import model
 
 class Feedback(EndpointsModel):
-    _message_fields_schema = ('id','entityKey','created_at','updated_at', 'folder','access','collaborators_list','name','content','type_feedback','status','source','related_to')
+    _message_fields_schema = ('id','entityKey','created_at','updated_at', 'folder','access','collaborators_list','name','content','type_feedback','status','source','related_to', 'who','show_url')
 
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
@@ -21,6 +21,7 @@ class Feedback(EndpointsModel):
     source = ndb.StringProperty()
     status = ndb.StringProperty()
     related_to = ndb.KeyProperty()
+    show_url = ndb.StringProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
     # public or private

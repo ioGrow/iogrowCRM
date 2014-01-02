@@ -909,14 +909,22 @@ class PublicLiveCompanyPageHandler(BaseHandler, SessionEnabledHandler):
       self.response.out.write(template.render(template_values))
 class PublicLiveShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self,id):
+            if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+                user = self.get_user_from_session()
+                # Set the user locale from user's settings
+                self.set_user_locale()
+            else:
+                user = None
             show_id = int(id)
             show = Show.get_by_id(show_id)
             if show.is_published:
                 # Render the template
                 organization_key = show.organization
                 organization_id = organization_key.id()
+
+
                 companyprofile = model.Companyprofile.query(model.Companyprofile.organization==organization_key).get()
-                template_values = {'organization_id':organization_id, 'show': show,'companyprofile':companyprofile}
+                template_values = {'user': user,'organization_id':organization_id, 'show': show,'companyprofile':companyprofile}
                 template = jinja_environment.get_template('templates/live/live_show_page.html')
                 self.response.out.write(template.render(template_values))
 
