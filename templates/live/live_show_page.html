@@ -112,8 +112,10 @@
                 <button class="btn green" ng-click="showFeedbackModal()"> Ask a question or give a feedback</button>
                
                <br><br>
+               {%if companyprofile.youtube_channel %}
                <div class="g-ytsubscribe" data-layout="full" data-channel="{{companyprofile.youtube_channel}}">
                </div>
+               {%endif%}
                
             
                
