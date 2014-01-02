@@ -3,6 +3,7 @@
 
 {% block title %} Home {%endblock%}
 {% block content %}
+
      <div class="row-fluid breadcrumbs margin-bottom-40">
         <div class="container">
             <div class="span8">
@@ -29,10 +30,56 @@
     <!-- END BREADCRUMBS -->
 
     <!-- BEGIN CONTAINER -->   
-    <div class="container min-hight">
+    <div class="container min-hight" ng-controller="LiveShowController">
+          <div id="giveFeedbackModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h3 id="myModalLabel">{{_("Ask a question or give a feedback")}}</h3>
+            </div>
+            <div class="modal-body">
+            {%if user %}  
+                      <div>
+                        <img class="avatar" ng-src="{{user.google_public_profile_photo_url}}"/>
+                        <strong>{{user.google_display_name }} </strong>
+                      </div>
+                     <form  class="horizontal-form margin-bottom-40">
+                                  <div class="control-group">
+                                      <label class="control-label">Subject</label>
+                                      <div class="controls">
+                                          <input type="text" class="input-block-level" ng-model="feedback.name" />
+                                      </div>
+                                  </div>
+                                 
+                                  <div class="control-group">
+                                      <label class="control-label" >Message</label>
+                                      <div class="controls">
+                                          <textarea class="input-block-level" rows="8" ng-model="feedback.content"></textarea>
+                                      </div>
+                                  </div>
+                                
+            </div>
+            <div class="modal-footer">
+              <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              
+               <input ng-hide="isLoading" ng-click="sendFeedback(feedback)" type="submit" class="btn green" value="Send" >
+                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                                        
+            </form>
+            {% else %}
+             <div id="googleConnect" ng-hide="userinfo" class="text-center">
+
+                             <span id="gSignInFeedback" ng-hide="userinfo"></span>
+             </div>
+            
+                
+
+            {%endif%}
+            </div>
+</div>
         <!-- BEGIN PORTFOLIO ITEM -->
         <div class="row-fluid margin-bottom-30">
-            <!-- BEGIN CAROUSEL -->            
+            <!-- BEGIN CAROUSEL -->  
+
             <div class="span8">
             {% if show.youtube_url %}
               <iframe width="100%" height="450" src="http://www.youtube.com/embed/{{show.youtube_url}}?rel=0" frameborder="0" allowfullscreen></iframe>  
@@ -60,7 +107,9 @@
                 <img class="small-cal-icon" src="https://developers.google.com/_static/a39d39a910/images/calendar-42.png" width="25" alt="Add to calendar">
                 Add to calendar
                 </a></p>
-               <button class="btn green">Ask a question or give a feedback</button>
+               
+                <button class="btn green" ng-click="showFeedbackModal()"> Ask a question or give a feedback</button>
+               
                <br><br>
                <div class="g-ytsubscribe" data-layout="full" data-channel="googledevelopers">
                </div>

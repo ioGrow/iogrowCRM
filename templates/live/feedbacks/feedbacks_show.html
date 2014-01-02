@@ -134,12 +134,17 @@
             <a href="/#/live/feedbacks/" data-toggle="tooltip" data-placement="bottom" title="Back to Shows">
             <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Feedbacks")}} > <%= feedback.name %></h2>
             
-
-            <span><a class="tag" href="#"> <%=feedback.content %></a></span>
+                      <span ng-class="in" ng-show="feedback.who">
+                      <span class="page-meta"><strong>Who: </strong></span>
+                        
+                        <strong><%=feedback.who.display_name%> </strong><span class="contact-title">< <%=feedback.who.email%> ></span><br>
+                      </span>
+            <span><strong>What: </strong> <span class="contact-title"><strong> <%=feedback.content %></strong></span><br></span>
+            <span><strong>When: </strong> <span class="contact-title"><strong> <%=feedback.created_at | date:'MMMM dd, yyyy, HH:mm' %></strong></span></span>
              </br>
-               <span class="page-meta"><strong>Type: </strong> <a ></a> <%=feedback.type_feedback %></span>
-              </br>
-            <span class="page-meta"><strong>Source: </strong> <a ><%=feedback.source%></a>   </span></br>
+              
+               <span class="page-meta"><strong>Source: </strong> <a href="<%=feedback.source%>" target="_blank"><%=feedback.source%></a>   </span></br>
+            <span class="page-meta"><strong>Show url: </strong> <a href="<%=feedback.show_url%>" target="_blank"><%=feedback.show_url%></a>   </span></br>
             <span class="page-meta"><strong>Status: </strong> <a ><%=feedback.status%></a>   </span>
               
             
