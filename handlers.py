@@ -25,6 +25,7 @@ import apiclient
 import webapp2
 import datetime
 from webapp2_extras import jinja2
+import datetime
 import re
 from apiclient.discovery import build
 from google.appengine.ext import ndb
@@ -899,8 +900,11 @@ class PublicLiveCompanyPageHandler(BaseHandler, SessionEnabledHandler):
       org_key = companyprofile.organization
       productvideo = Show.query(Show.organization==org_key,Show.type_show =='Product_Video').fetch()
       customerstory = Show.query(Show.organization==org_key,Show.type_show =='Customer_Story').fetch()
+      current_time = datetime.datetime.now()
+      featuredshows = Show.query(Show.organization==org_key,Show.type_show =='Show',Show.ends_at>current_time).fetch()
+      recentlyshows = Show.query(Show.organization==org_key,Show.type_show =='Show',Show.ends_at<current_time).fetch()
       shows = Show.query(Show.organization==org_key,Show.type_show =='Show').fetch()
-      template_values = {'companyprofile':companyprofile,'productvideo':productvideo,'customerstory':customerstory,'shows':shows}
+      template_values = {'companyprofile':companyprofile,'productvideo':productvideo,'customerstory':customerstory,'shows':shows,'featuredshows':featuredshows,'recentlyshows':recentlyshows}
       template = jinja_environment.get_template('templates/live/live_company_page.html')
       self.response.out.write(template.render(template_values))
 class PublicLiveShowHandler(BaseHandler, SessionEnabledHandler):
@@ -911,7 +915,8 @@ class PublicLiveShowHandler(BaseHandler, SessionEnabledHandler):
                 # Render the template
                 organization_key = show.organization
                 organization_id = organization_key.id()
-                template_values = {'organization_id':organization_id, 'show': show}
+                companyprofile = model.Companyprofile.query(model.Companyprofile.organization==organization_key).get()
+                template_values = {'organization_id':organization_id, 'show': show,'companyprofile':companyprofile}
                 template = jinja_environment.get_template('templates/live/live_show_page.html')
                 self.response.out.write(template.render(template_values))
 

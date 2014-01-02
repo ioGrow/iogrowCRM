@@ -37,7 +37,21 @@ $scope.updatCompanyprofilename = function(companyprof){
   Companyprofile.patch($scope,params);
   $('#EditCompnayProfileModal').modal('hide');
     $scope.companyprof={};
-   }
+   };
+
+   //HKA 02.10.2014 Edit Youtube Channel of Company Profile
+    $scope.edityoutubechannel = function() {
+       $('#EditYoutubeChannelModal').modal('show');
+    };
+   
+    //HKA 30.12.2013 Add Tagline
+$scope.updateYoutubeChannel = function(companyprof){
+ 
+  params = {'id':$scope.companyprof.id,
+             'youtube_channel':companyprof.youtube_channel}
+  Companyprofile.patch($scope,params);
+   $('#EditYoutubeChannelModal').modal('hide');
+ };
 
   //HKA 29.12.2013 Edit tagline of Company Profile
     $scope.edittagline = function() {

@@ -856,6 +856,12 @@ indexes:
   - name: probability
     direction: desc
 
+- kind: Show
+  properties:
+  - name: organization
+  - name: type_show
+  - name: ends_at
+
 - kind: Task
   properties:
   - name: about_item
