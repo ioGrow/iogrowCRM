@@ -27,6 +27,7 @@ app.controller('ShowListCtrl', ['$scope','$filter','Auth','Show',
      };
 
 
+
      $scope.listNextPageItems = function(){
         
         
@@ -187,12 +188,25 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Top
           Show.get($scope,params);
           Leadstatus.list($scope,{});
           User.list($scope,{});
+           
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
             Auth.refreshToken();
      };
 
+    $scope.renderHangoutButton = function(){
+          console.log('*******************');
+          console.log($scope.show);
+          gapi.hangout.render('hangout-on-air', {
+              'render': 'createhangout',
+              'hangout_type': 'onair',
+              'topic': $scope.show.name,
+              
+              'widget_size': 175
+           });
+     };
+    
      
      
      $scope.addTask = function(task){
