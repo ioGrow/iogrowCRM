@@ -15,6 +15,8 @@ topicservices.factory('Show', function($http) {
                $scope.listTopics(resp);
                $scope.listTasks();
                $scope.listEvents();
+               $scope.renderHangoutButton();
+               $scope.renderHangoutButton();
                // Call the method $apply to make the update on the scope
                //$scope.apply();
 

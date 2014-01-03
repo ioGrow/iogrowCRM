@@ -176,6 +176,7 @@ app.controller('ProductVideoShowCtrl', ['$scope','$filter', '$route','Auth','Sho
           Show.get($scope,params);
           Leadstatus.list($scope,{});
           User.list($scope,{});
+         
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -183,7 +184,16 @@ app.controller('ProductVideoShowCtrl', ['$scope','$filter', '$route','Auth','Sho
      };
 
      
-     
+     $scope.renderHangoutButton = function(){
+         
+          gapi.hangout.render('hangout-on-air', {
+              'render': 'createhangout',
+              'hangout_type': 'onair',
+              'topic': $scope.show.name,
+              
+              'widget_size': 175
+           });
+     };
      $scope.addTask = function(task){
       
         $('#myModal').modal('hide');
