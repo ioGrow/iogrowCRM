@@ -175,8 +175,18 @@
                                     <li > <a href="{{social.sociallink}}" target="new" >{{social.sociallink}}</a>  </li>
                                     {%endfor%}
                                       
-                                </ul>
-                                                    
+                                </ul><br>
+                                <div class="news-block-tags">
+                                <strong>Youtube Channel</strong><br>
+                                {%if companyprofile.youtube_channel %}
+                                   <div class="g-ytsubscribe" data-layout="full" data-channel="{{companyprofile.youtube_channel}}">
+                                     
+                                   </div>
+                                 {%endif%}
+                               
+                                  
+                                </div>
+                                                  
                               </div>
                           </div>
                           <div class="span6">
@@ -188,11 +198,9 @@
                                   <!--span class="page-meta"><i class="icon-pencil"><a ng-click="edittagline()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span-->
                                 </div>
                                 
-                                {%if companyprofile.tagline %}
+                                
                                 <p>{{companyprofile.tagline}} </p>
-                                {%else%}
-                                No Tagline Available
-                                {%endif%}
+                               
                                 
 
                                 <div class="news-block-tags">

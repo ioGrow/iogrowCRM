@@ -113,6 +113,17 @@ showservices.factory('Show', function($http) {
     }
 
     )};
+  Show.search = function($scope,params){
+      gapi.client.crmengine.shows.search(params).execute(function(resp) {
+          console.log(resp);
+           if (resp.items){
+              $scope.results = resp.items;
+              
+              $scope.$apply();
+            };
+            
+      });
+  };
 
   
 

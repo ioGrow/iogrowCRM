@@ -10,13 +10,15 @@ app.controller('ShowListCtrl', ['$scope','$filter','Auth','Show',
      $scope.currentPage = 01;
      $scope.pages = [];
      
-     $scope.accounts = [];
+     $scope.order = '-updated_at';
+     $scope.timeInMs = Date.now();
      
      
 
      // What to do after authentication
      $scope.runTheProcess = function(){
           var params = {'limit':7,
+                        'order' : $scope.order,
                         'type_show':'Show'};
           Show.list($scope,params);
           
@@ -35,10 +37,11 @@ app.controller('ShowListCtrl', ['$scope','$filter','Auth','Show',
           if ($scope.pages[nextPage]){
             params = {'limit':7,
                       'type_show':'Show',
+                      'order' : $scope.order,
                       'pageToken':$scope.pages[nextPage]
                      }
           }else{
-            params = {'limit':7,'type_show':'Show'}
+            params = {'limit':7,'type_show':'Show','order' : $scope.order}
           }
           console.log('in listNextPageItems');
           $scope.currentPage = $scope.currentPage + 1 ; 
@@ -51,10 +54,11 @@ app.controller('ShowListCtrl', ['$scope','$filter','Auth','Show',
           if ($scope.pages[prevPage]){
             params = {'limit':7,
                       'type_show':'Show',
+                      'order' : $scope.order,
                       'pageToken':$scope.pages[prevPage]
                      }
           }else{
-            params = {'limit':7,'type_show':'Show'}
+            params = {'limit':7,'type_show':'Show','order' : $scope.order}
           }
           $scope.currentPage = $scope.currentPage - 1 ;
           Show.list($scope,params);
@@ -103,8 +107,78 @@ app.controller('ShowListCtrl', ['$scope','$filter','Auth','Show',
 
             
         }
-     }
+     };
+
+     //HKA 03.01.2014 Add Filtering and Sorting
+
+      $scope.filterByOwner = function(filter){
+        if (filter){
+          var params = { 'owner': filter,
+                         'order': $scope.order,
+                         'type_show':'Show',
+                         'limit':7}
+        }
+        else{
+          var params = {
+              'order': $scope.order,
+              'type_show':'Show',              
+              'limit':7}
+        };
+        Show.list($scope,params);
+     };
+  // HKA 03.01.2014 Filter by upcoming
+  $scope.filterUpcomingShow = function(){
+      $scope.timeInMs = Date.now();
+      console.log($scope.timeInMs);
+          var params = { 'order': 'starts_at',
+                         'starts_at': $scope.timeInMs,
+                         'type_show':'Show',
+                         'limit':7}
+       
+        
+        Show.list($scope,params);
+     };
+   // HKA 03.01.2014 Filter by upcoming
+   $scope.filterRecentShow = function(){
+
+   };
+   // hKA 02.01.2014 Quick filter text area
+    var searchParams ={};
+     $scope.result = undefined;
+     $scope.q = undefined;
      
+     $scope.$watch('searchQuery', function() {
+         searchParams['q'] = $scope.searchQuery;
+         searchParams['limit'] = 7;
+         if ($scope.searchQuery){
+         Show.search($scope,searchParams);
+       };
+     });
+
+     $scope.selectResult = function(){
+          window.location.replace('#/live/shows/show/'+$scope.searchQuery.id);
+     };
+
+    $scope.executeSearch = function(searchQuery){
+        if (typeof(searchQuery)=='string'){
+           var goToSearch = 'type:Show ' + searchQuery;
+           window.location.replace('#/search/'+goToSearch);
+        }else{
+          window.location.replace('#/live/shows/show/'+searchQuery.id);
+        }
+        $scope.searchQuery=' ';
+        $scope.$apply();
+     };
+
+   //HKA 03.01.2014 order by name, last modification, starts at
+
+    $scope.orderBy = function(order){
+        var params = { 'order': order,
+                       'type_show':'Show',
+                        'limit':7};
+        $scope.order = order;
+        Show.list($scope,params);
+     };
 
      $scope.showModal = function(){
         console.log('button clicked');

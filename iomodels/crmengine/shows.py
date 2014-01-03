@@ -3,6 +3,7 @@ from google.appengine.api import search
 from endpoints_proto_datastore.ndb import EndpointsModel
 from model import User
 from iomodels.crmengine.tags import Tag
+from search_helper import tokenize_autocomplete
 import pprint
 
 
@@ -64,6 +65,7 @@ class Show(EndpointsModel):
         empty_string = lambda x: x if x else ""
         collaborators = " ".join(self.collaborators_ids)
         organization = str(self.organization.id())
+        title_autocomplete = ','.join(tokenize_autocomplete(self.name + ' ' + empty_string(self.status)))
         my_document = search.Document(
         doc_id = str(self.key.id()),
         fields=[
@@ -77,6 +79,7 @@ class Show(EndpointsModel):
             search.TextField(name='title', value = empty_string(self.name)),
             search.TextField(name='description', value = empty_string(self.description)),
             search.TextField(name='status', value = empty_string(self.status)),
+            search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
            ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)

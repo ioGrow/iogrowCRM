@@ -473,7 +473,7 @@ class ShowListHandler(BaseHandler, SessionEnabledHandler):
             # Set the user locale from user's settings
             self.set_user_locale()
             # Render the template
-            template_values = {'tabs':tabs}
+            template_values = {'ME':'user.google_user_id','tabs':tabs}
             template = jinja_environment.get_template('templates/live/shows/list_show.html')
             self.response.out.write(template.render(template_values))
 class ShowShowHandler(BaseHandler, SessionEnabledHandler):

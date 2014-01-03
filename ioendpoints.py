@@ -186,6 +186,18 @@ class EventResponse(messages.Message):
     comments = messages.IntegerField(7)
     about = messages.MessageField(DiscussionAboutSchema,8)
     author = messages.MessageField(AuthorSchema,9)
+# The message class that defines the shows.search response 
+class ShowSearchResult(messages.Message):
+    id = messages.StringField(1)
+    entityKey  = messages.StringField(2)
+    title = messages.StringField(3)
+    starts_at = messages.StringField(4)
+    ends_at = messages.StringField(5)
+    status = messages.StringField(6)
+# The message class that defines a set of shows.search results
+class ShowSearchResults(messages.Message):
+    items = messages.MessageField(ShowSearchResult, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
 
 class EndpointsHelper(EndpointsModel):
     INVALID_TOKEN = 'Invalid token'
@@ -1020,7 +1032,7 @@ class CrmEngineApi(remote.Service):
       my_model.put()
       return my_model
   # shows.list api
-  @Show.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken','type_show'),path='shows', name='shows.list')
+  @Show.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken','starts_at','ends_at','type_show'),path='shows', name='shows.list')
   def shows_list(self, query):
       user_from_email = EndpointsHelper.require_iogrow_user()      
       return query.filter(ndb.OR(ndb.AND(Show.access=='public',Show.organization==user_from_email.organization),Show.owner==user_from_email.google_user_id, Show.collaborators_ids==user_from_email.google_user_id)).order(Show._key)
@@ -1059,6 +1071,62 @@ class CrmEngineApi(remote.Service):
     user_from_email=EndpointsHelper.require_iogrow_user()
     my_model.key.delete()
     return message_types.VoidMessage()
+  # HKA 03.01.2014 Add shows.searc
+  @endpoints.method(SearchRequest, ShowSearchResults,
+                      path='shows/search', http_method='POST',
+                      name='shows.search')
+  def shows_search(self, request):
+      user_from_email = EndpointsHelper.require_iogrow_user()
+      organization = str(user_from_email.organization.id())
+      
+      index = search.Index(name="GlobalIndex")
+      #Show only objects where you have permissions
+      query_string = request.q + ' type:Show AND (organization:' +organization+ ' AND (access:public OR (owner:'+ user_from_email.google_user_id +' OR collaborators:'+ user_from_email.google_user_id+')))'
+      print query_string
+      search_results = []
+      count = 1
+      if request.limit:
+          limit = int(request.limit)
+      else:
+          limit = 10
+      next_cursor = None
+      if request.pageToken:
+          cursor = search.Cursor(web_safe_string=request.pageToken)
+      else:
+          cursor = search.Cursor(per_result=True)
+      if limit:
+          options = search.QueryOptions(limit=limit,cursor=cursor)
+      else:
+          options = search.QueryOptions(cursor=cursor)    
+      query = search.Query(query_string=query_string,options=options)
+      try:
+          if query:
+              results = index.search(query)
+              total_matches = results.number_found
+              
+              # Iterate over the documents in the results
+              for scored_document in results:
+                  kwargs = {
+                      'id' : scored_document.doc_id
+                  }
+                  for e in scored_document.fields:
+                      if e.name in ["title", "status","starts_at","ends_at"]:
+                          kwargs[e.name]=e.value
+                  
+                  search_results.append(ShowSearchResult(**kwargs))
+                  
+                  next_cursor = scored_document.cursor.web_safe_string
+              if next_cursor:
+                  next_query_options = search.QueryOptions(limit=1,cursor=scored_document.cursor)
+                  next_query = search.Query(query_string=query_string,options=next_query_options)
+                  if next_query:
+                      next_results = index.search(next_query)
+                      if len(next_results.results)==0:
+                          next_cursor = None            
+                                    
+      except search.Error:
+          logging.exception('Search failed')
+      return ShowSearchResults(items = search_results,nextPageToken=next_cursor)
   #feedbacks APIs
   @Feedback.method(user_required=True,path='feedbacks',http_method='POST',name='feedbacks.insert')
   def Feedbackinsert(self, my_model):
