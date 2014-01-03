@@ -59,7 +59,7 @@
                           <li>    
                             <form class="form-inline ng-pristine ng-valid">
                               <div class="input-append row-fluid">
-                                <input type="text" class="input-xlarge" placeholder="Search">
+                                <input type="text" ng-model="searchQuery" typeahead="result as result.title + ' (' + result.organization + ')' for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="input-xlarge" placeholder="Search">
                                <button class="gbqfb gbqfb-hvr"><span class="gbqfi"></span></button>
                               </div>
                             </form>
@@ -231,6 +231,8 @@
     <script src="/static/frontend/app/scripts/app.js" ></script>
    <script src="/static/frontend/app/scripts/controllers/iogrowlivecontrollers.js" ></script>
     <script src="/static/frontend/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="/static/app/scripts/vendor/ui-bootstrap-0.5.0.js" ></script>
+    <script src="/static/app/scripts/vendor/ui-bootstrap-tpls-0.5.0.js"></script>
     <script type="text/javascript" src="/static/frontend/plugins/back-to-top.js"></script>    
       <script type="text/javascript" src="/static/frontend/plugins/bxslider/jquery.bxslider.js"></script>
     <script type="text/javascript" src="/static/frontend/plugins/fancybox/source/jquery.fancybox.pack.js"></script> 

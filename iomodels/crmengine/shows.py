@@ -4,6 +4,7 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 from model import User
 from iomodels.crmengine.tags import Tag
 import pprint
+from search_helper import tokenize_autocomplete
 
 
 import model
@@ -62,6 +63,7 @@ class Show(EndpointsModel):
     def put_index(self):
         """ index the element at each"""
         empty_string = lambda x: x if x else ""
+        empty_date = lambda x: x if x else date(2999, 12, 31)
         collaborators = " ".join(self.collaborators_ids)
         organization = str(self.organization.id())
         my_document = search.Document(
@@ -80,3 +82,20 @@ class Show(EndpointsModel):
            ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)
+
+        
+        title_autocomplete = ','.join(tokenize_autocomplete( self.name + ' ' + self.organization_name))
+        show_document_for_live = search.Document(
+        doc_id = str(self.key.id()),
+        fields=[
+            search.TextField(name=u'type', value=u'Show'),
+            search.TextField(name='organization', value = empty_string(self.organization_name) ),
+            search.TextField(name='title', value = empty_string(self.name)),
+            search.DateField(name='created_at', value = self.created_at),
+            search.DateField(name='starts_at', value = empty_date(self.starts_at)),
+            search.TextField(name='description', value = empty_string(self.description)),
+            search.TextField(name='type_show', value = empty_string(self.type_show)),
+            search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
+           ])
+        live_index = search.Index(name="ioGrowLiveIndex")
+        live_index.put(show_document_for_live)

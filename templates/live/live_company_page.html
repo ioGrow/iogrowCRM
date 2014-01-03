@@ -45,40 +45,21 @@
                        
                         <div class="tab-content">
                             <div class="tab-pane row-fluid fade in active" id="tab-1">
-                                  <h2>Featured shows <a href="#"><small>(View all)</small></a></h2>
-                                  <div class="filter-v1 margin-bottom-40">
-                              
-                                  <ul class="grid-v1 thumbnails">
-                                     {%for featureshow in featuredshows%}
-                                      <li class="span3 mix category_1"><a href="/live/shows/{{featureshow.id}}" target="new">
-                                      {% if featureshow.youtube_url %}
-                                           <iframe width="100%" height="250" src="http://www.youtube.com/embed/{{featureshow.youtube_url}}?rel=0" frameborder="0" allowfullscreen></iframe>  
-                                      {% else %}
-                                           <img src="/static/img/gdl-stay-tuned.png" height="450"/>
-                                      {% endif %}    
-                                         {{featureshow.name}}
-                                        </a>
-                                      </li>
-                                      {%endfor%}
-
-
-                                     
-
-                                  </ul>
-                              </div>  
+                                   
                                   <h2>Check out our upcoming shows <a href="#"><small>(View all)</small></a></h2>
                                   <ul class="grid-v1 thumbnails">
                                           
                                        
                                           
-                                             {%for featureshow in featuredshows%}
-                                      <li class="span3 mix category_1"><a href="/live/shows/{{featureshow.id}}" target="new">
-                                      {% if featureshow.youtube_url %}
-                                           <iframe width="100%" height="250" src="http://www.youtube.com/embed/{{featureshow.youtube_url}}?rel=0" frameborder="0" allowfullscreen></iframe>  
+                                             {%for upcoming_show in upcoming_shows%}
+                                      <li class="span3 mix category_1"><a href="/live/shows/{{upcoming_show.id}}" target="new">
+                                      {% if upcoming_show.youtube_url %}
+                                            <img class="video-thumbnail" src="http://img.youtube.com/vi/{{upcoming_show.youtube_url}}/0.jpg">
+
                                       {% else %}
                                            <img src="/static/img/gdl-stay-tuned.png" height="450"/>
                                       {% endif %}    
-                                         {{featureshow.name}}
+                                         {{upcoming_show.name}}
                                         </a>
                                       </li>
                                       {%endfor%}
@@ -94,7 +75,7 @@
                                        {%for recentshow in recentlyshows%}
                                     <li class="span3 mix category_1"><a href="/live/shows/{{recentshow.id}}" target="new">
                                          {% if recentshow.youtube_url %}
-                                           <iframe width="100%" height="250" src="http://www.youtube.com/embed/{{recentshow.youtube_url}}?rel=0" frameborder="0" allowfullscreen></iframe>  
+                                           <img class="video-thumbnail" src="http://img.youtube.com/vi/{{recentshow.youtube_url}}/0.jpg">
                                          {% else %}
                                           <img src="/static/img/gdl-stay-tuned.png" height="450"/>
                                          {% endif %}    
@@ -217,7 +198,7 @@
                                    {%for prodvid in productvideo%}
                                      <li class="span3 mix category_1"><a href="/live/shows/{{prodvid.id}}">
                                     {%if prodvid.youtube_url %}
-                                      <iframe width="100%"  height="250" src="http://www.youtube.com/embed/{{prodvid.youtube_url}}?rel=0" frameborder="0" allowfullscreen></iframe>
+                                      <img class="video-thumbnail" src="http://img.youtube.com/vi/{{prodvid.youtube_url}}/0.jpg">
                                      {%else%}
                                        <img src="/static/img/gdl-stay-tuned.png" height="450"/>
                                        {% endif %}
@@ -287,7 +268,7 @@
                                     <ul class="grid-v1 thumbnails">
                                       {%for custstory in customerstory%}
                                       <li class="span3 mix category_1"><a href="/live/shows/{{custstory.id}}">
-                                     <iframe width="100%"  height="250" src="http://www.youtube.com/embed/{{custstory.youtube_url}}?rel=0" frameborder="0" allowfullscreen></iframe>
+                                     <img class="video-thumbnail" src="http://img.youtube.com/vi/{{custstory.youtube_url}}/0.jpg">
                                           {{custstory.name}} - {{custstory.description}}
                                         </a>
                                       </li>

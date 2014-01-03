@@ -18,7 +18,8 @@ showservices.factory('Show', function($http) {
                $scope.listLead();
                $scope.listDocuments();
                $scope.listFeedbacks();
-               $scope.renderHangoutButton();
+               $scope.renderHangoutButton();  
+               
                // Call the method $apply to make the update on the scope
                //$scope.apply();
 

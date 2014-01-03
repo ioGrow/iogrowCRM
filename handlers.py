@@ -901,10 +901,10 @@ class PublicLiveCompanyPageHandler(BaseHandler, SessionEnabledHandler):
       productvideo = Show.query(Show.organization==org_key,Show.type_show =='Product_Video').fetch()
       customerstory = Show.query(Show.organization==org_key,Show.type_show =='Customer_Story').fetch()
       current_time = datetime.datetime.now()
-      featuredshows = Show.query(Show.organization==org_key,Show.type_show =='Show',Show.ends_at>current_time).fetch()
+      upcoming_shows = Show.query(Show.organization==org_key,Show.type_show =='Show',Show.ends_at>current_time).fetch()
       recentlyshows = Show.query(Show.organization==org_key,Show.type_show =='Show',Show.ends_at<current_time).fetch()
       shows = Show.query(Show.organization==org_key,Show.type_show =='Show').fetch()
-      template_values = {'companyprofile':companyprofile,'productvideo':productvideo,'customerstory':customerstory,'shows':shows,'featuredshows':featuredshows,'recentlyshows':recentlyshows}
+      template_values = {'companyprofile':companyprofile,'productvideo':productvideo,'customerstory':customerstory,'shows':shows,'upcoming_shows':upcoming_shows,'recentlyshows':recentlyshows}
       template = jinja_environment.get_template('templates/live/live_company_page.html')
       self.response.out.write(template.render(template_values))
 class PublicLiveShowHandler(BaseHandler, SessionEnabledHandler):
@@ -918,8 +918,7 @@ class PublicLiveShowHandler(BaseHandler, SessionEnabledHandler):
             show_id = int(id)
             show = Show.get_by_id(show_id)
             #20131001T220000Z
-            starts_at = show.starts_at.strftime("%Y%m%dT%H%M%SZ")
-            ends_at = show.ends_at.strftime("%Y%m%dT%H%M%SZ")
+
             if show.is_published:
                 # Render the template
                 organization_key = show.organization
@@ -927,7 +926,13 @@ class PublicLiveShowHandler(BaseHandler, SessionEnabledHandler):
 
 
                 companyprofile = model.Companyprofile.query(model.Companyprofile.organization==organization_key).get()
-                template_values = {'user': user,'organization_id':organization_id, 'show': show,'starts_at':starts_at,'ends_at':ends_at, 'companyprofile':companyprofile}
+                template_values = {'user': user,'organization_id':organization_id, 'show': show,'companyprofile':companyprofile}
+                if show.starts_at:
+                    starts_at = show.starts_at.strftime("%Y%m%dT%H%M%SZ")
+                    template_values['starts_at'] = starts_at
+                if show.ends_at:
+                    ends_at = show.ends_at.strftime("%Y%m%dT%H%M%SZ")
+                    template_values['ends_at'] = ends_at
                 template = jinja_environment.get_template('templates/live/live_show_page.html')
                 self.response.out.write(template.render(template_values))
 

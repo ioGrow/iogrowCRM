@@ -144,6 +144,38 @@ app.controller('LiveHeaderController', ['$scope',
           $('#addAccountModal').modal('hide');
           window.location.replace('#/accounts/show/'+resp.id);
      };
+     var params ={'limit':7};
+     $scope.result = undefined;
+     $scope.q = undefined;
+     $scope.$watch('searchQuery', function() {
+          
+         params['q'] = $scope.searchQuery;
+         gapi.client.iogrowlive.search(params).execute(function(resp) {
+            
+            if (resp.items){
+              $scope.results = resp.items;
+              $scope.$apply();
+            };
+            
+          });
+     });
+     $scope.selectResult = function(){
+        console.log('########################');
+        console.log($scope.searchQuery);
+        // To do update this method
+        if ($scope.searchQuery.type=="Show"){
+          window.location.replace('/live/shows/'+$scope.searchQuery.id);
+        }
+        
+     };
+     $scope.executeSearch = function(searchQuery){
+      if (typeof(searchQuery)=='string'){
+         window.location.replace('#/search/'+searchQuery);
+      }else{
+        window.location.replace('#/accounts/show/'+searchQuery.id);
+      }
+      $scope.searchQuery=' ';
+     };
      
      
    

@@ -182,7 +182,17 @@ app.controller('CustomerStoriesShowCtrl', ['$scope','$filter', '$route','Auth','
             Auth.refreshToken();
      };
 
-     
+     $scope.renderHangoutButton = function(){
+         
+          gapi.hangout.render('hangout-on-air', {
+              'render': 'createhangout',
+              'hangout_type': 'onair',
+              'topic': $scope.show.name,
+              
+              'widget_size': 175
+           });
+          
+     };
      
      $scope.addTask = function(task){
       

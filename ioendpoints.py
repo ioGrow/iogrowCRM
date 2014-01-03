@@ -72,6 +72,17 @@ class SearchResult(messages.Message):
 class SearchResults(messages.Message):
     items = messages.MessageField(SearchResult, 1, repeated=True)
     nextPageToken = messages.StringField(2)
+# The message class that defines the Live Search Result attributes
+class LiveSearchResult(messages.Message):
+    id = messages.StringField(1)
+    title = messages.StringField(2)
+    organization = messages.StringField(3)
+    type = messages.StringField(4)
+    rank = messages.IntegerField(5)
+# The message class that defines a set of search results
+class LiveSearchResults(messages.Message):
+    items = messages.MessageField(LiveSearchResult, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
 # The message class that defines the accounts.search response 
 class AccountSearchResult(messages.Message):
     id = messages.StringField(1)
@@ -272,6 +283,59 @@ class LiveApi(remote.Service):
       my_model.organization_name = organization.name
       my_model.put()
       return my_model
+  # Search API
+  @endpoints.method(SearchRequest, LiveSearchResults,
+                      path='search', http_method='POST',
+                      name='search')
+  def live_search_method(self, request):
+      index = search.Index(name="ioGrowLiveIndex")
+      #Show only objects where you have permissions
+      query_string = request.q 
+      search_results = []
+      count = 1
+      limit = request.limit
+      next_cursor = None
+      if request.pageToken:
+          cursor = search.Cursor(web_safe_string=request.pageToken)
+      else:
+          cursor = search.Cursor(per_result=True)
+      if limit:
+          options = search.QueryOptions(limit=limit,cursor=cursor)
+      else:
+          options = search.QueryOptions(cursor=cursor)    
+      query = search.Query(query_string=query_string,options=options)
+      try:
+          if query:
+              results = index.search(query)
+              total_matches = results.number_found
+              
+              # Iterate over the documents in the results
+              for scored_document in results:
+                  kwargs = {
+                      "id" : scored_document.doc_id, 
+                      "rank" : scored_document.rank
+                  }
+                  for e in scored_document.fields:
+                      if e.name in ["title","organization","type"]:
+                          kwargs[e.name]=e.value
+                  search_results.append(LiveSearchResult(**kwargs))
+                  
+                  next_cursor = scored_document.cursor.web_safe_string
+              if next_cursor:
+                  next_query_options = search.QueryOptions(limit=1,cursor=scored_document.cursor)
+                  next_query = search.Query(query_string=query_string,options=next_query_options)
+                  if next_query:
+                      next_results = index.search(next_query)
+                      if len(next_results.results)==0:
+                          next_cursor = None
+
+
+                      
+                      
+               
+      except search.Error:
+          logging.exception('Search failed')
+      return LiveSearchResults(items = search_results,nextPageToken=next_cursor)
 
 
 @endpoints.api(name='crmengine', version='v1', description='I/Ogrow CRM APIs',allowed_client_ids=[CLIENT_ID,
