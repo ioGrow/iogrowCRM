@@ -9,6 +9,7 @@ app.controller('ProductVideoListCtrl', ['$scope','$filter','Auth','Show',
      $scope.pagination = {};
      $scope.currentPage = 01;
      $scope.pages = [];
+     $scope.order = '-updated_at';
    
      
      
@@ -16,6 +17,7 @@ app.controller('ProductVideoListCtrl', ['$scope','$filter','Auth','Show',
       // What to do after authentication
      $scope.runTheProcess = function(){
           var params = {'limit':7,
+                         'order':$scope.order,
                         'type_show':'Product_Video'};
           Show.list($scope,params);
           
@@ -34,10 +36,11 @@ app.controller('ProductVideoListCtrl', ['$scope','$filter','Auth','Show',
           if ($scope.pages[nextPage]){
             params = {'limit':7,
                        'type_show':'Product_Video',
+                      'order':$scope.order,
                       'pageToken':$scope.pages[nextPage]
                      }
           }else{
-            params = {'limit':7,'type_show':'Product_Video'}
+            params = {'limit':7,'type_show':'Product_Video','order':$scope.order,}
           }
           console.log('in listNextPageItems');
           $scope.currentPage = $scope.currentPage + 1 ; 
@@ -50,10 +53,11 @@ app.controller('ProductVideoListCtrl', ['$scope','$filter','Auth','Show',
           if ($scope.pages[prevPage]){
             params = {'limit':7,
                        'type_show':'Product_Video',
+                       'order':$scope.order,
                       'pageToken':$scope.pages[prevPage]
                      }
           }else{
-            params = {'limit':7,'type_show':'Product_Video'}
+            params = {'limit':7,'type_show':'Product_Video','order':$scope.order,}
           }
           $scope.currentPage = $scope.currentPage - 1 ;
           Show.list($scope,params);
@@ -94,6 +98,10 @@ app.controller('ProductVideoListCtrl', ['$scope','$filter','Auth','Show',
         $('#newShowModal').modal('show');
 
       };
+
+  //HKA 03.01.2014 ordering filtering
+
+  
       
     
      
