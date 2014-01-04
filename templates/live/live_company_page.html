@@ -156,8 +156,18 @@
                                     <li > <a href="{{social.sociallink}}" target="new" >{{social.sociallink}}</a>  </li>
                                     {%endfor%}
                                       
-                                </ul>
-                                                    
+                                </ul><br>
+                                <div class="news-block-tags">
+                                <strong>Youtube Channel</strong><br>
+                                {%if companyprofile.youtube_channel %}
+                                   <div class="g-ytsubscribe" data-layout="full" data-channel="{{companyprofile.youtube_channel}}">
+                                     
+                                   </div>
+                                 {%endif%}
+                               
+                                  
+                                </div>
+                                                  
                               </div>
                           </div>
                           <div class="span6">
@@ -169,11 +179,9 @@
                                   <!--span class="page-meta"><i class="icon-pencil"><a ng-click="edittagline()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span-->
                                 </div>
                                 
-                                {%if companyprofile.tagline %}
+                                
                                 <p>{{companyprofile.tagline}} </p>
-                                {%else%}
-                                No Tagline Available
-                                {%endif%}
+                               
                                 
 
                                 <div class="news-block-tags">
@@ -188,7 +196,7 @@
                           
                         </div>
                       </div>
-                      <div class="tab-pane row-fluid fade in active" id="tab-3">
+                      <div class="tab-pane row-fluid fade" id="tab-3">
                                   <h2>Products <a href="#"><small></small></a></h2>
                                   {%if productvideo%}
                                   <div class="filter-v1 margin-bottom-40">
@@ -261,8 +269,8 @@
                                   </div-->
                                   
                             </div>
-                            <div class="tab-pane row-fluid fade in active" id="tab-4">
-                                  <h2>Products <a href="#"><small></small></a></h2>
+                            <div class="tab-pane row-fluid fade" id="tab-4">
+                                  <h2>Customer Stories <a href="#"><small></small></a></h2>
                                   <div class="filter-v1 margin-bottom-40">
                               
                                     <ul class="grid-v1 thumbnails">
@@ -280,7 +288,7 @@
                                   </div> 
                               </div>
                            
-                            <div class="tab-pane row-fluid fade in active" id="tab-5">
+                            <div class="tab-pane row-fluid fade" id="tab-5">
                                   <form action="#" class="horizontal-form margin-bottom-40">
                                   <div class="control-group">
                                       <label class="control-label">Subject</label>

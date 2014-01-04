@@ -474,6 +474,111 @@ indexes:
   - name: status
   - name: starts_at
 
+- kind: Feedback
+  properties:
+  - name: access
+  - name: organization
+  - name: name
+
+- kind: Feedback
+  properties:
+  - name: access
+  - name: organization
+  - name: source
+
+- kind: Feedback
+  properties:
+  - name: access
+  - name: organization
+  - name: status
+
+- kind: Feedback
+  properties:
+  - name: access
+  - name: organization
+  - name: status
+  - name: updated_at
+    direction: desc
+
+- kind: Feedback
+  properties:
+  - name: access
+  - name: organization
+  - name: type_feedback
+
+- kind: Feedback
+  properties:
+  - name: access
+  - name: organization
+  - name: updated_at
+    direction: desc
+
+- kind: Feedback
+  properties:
+  - name: collaborators_ids
+  - name: name
+
+- kind: Feedback
+  properties:
+  - name: collaborators_ids
+  - name: source
+
+- kind: Feedback
+  properties:
+  - name: collaborators_ids
+  - name: status
+
+- kind: Feedback
+  properties:
+  - name: collaborators_ids
+  - name: status
+  - name: updated_at
+    direction: desc
+
+- kind: Feedback
+  properties:
+  - name: collaborators_ids
+  - name: type_feedback
+
+- kind: Feedback
+  properties:
+  - name: collaborators_ids
+  - name: updated_at
+    direction: desc
+
+- kind: Feedback
+  properties:
+  - name: owner
+  - name: name
+
+- kind: Feedback
+  properties:
+  - name: owner
+  - name: source
+
+- kind: Feedback
+  properties:
+  - name: owner
+  - name: status
+
+- kind: Feedback
+  properties:
+  - name: owner
+  - name: status
+  - name: updated_at
+    direction: desc
+
+- kind: Feedback
+  properties:
+  - name: owner
+  - name: type_feedback
+
+- kind: Feedback
+  properties:
+  - name: owner
+  - name: updated_at
+    direction: desc
+
 - kind: Lead
   properties:
   - name: access
@@ -858,9 +963,173 @@ indexes:
 
 - kind: Show
   properties:
+  - name: access
+  - name: organization
+  - name: status
+  - name: starts_at
+
+- kind: Show
+  properties:
+  - name: access
+  - name: organization
+  - name: status
+  - name: starts_at
+    direction: desc
+
+- kind: Show
+  properties:
+  - name: access
+  - name: organization
+  - name: status
+  - name: type_show
+  - name: name
+
+- kind: Show
+  properties:
+  - name: access
+  - name: organization
+  - name: status
+  - name: type_show
+  - name: starts_at
+
+- kind: Show
+  properties:
+  - name: access
+  - name: organization
+  - name: status
+  - name: type_show
+  - name: starts_at
+    direction: desc
+
+- kind: Show
+  properties:
+  - name: access
+  - name: organization
+  - name: status
+  - name: type_show
+  - name: updated_at
+    direction: desc
+
+- kind: Show
+  properties:
+  - name: access
+  - name: organization
+  - name: status
+  - name: updated_at
+    direction: desc
+
+- kind: Show
+  properties:
+  - name: collaborators_ids
+  - name: status
+  - name: starts_at
+
+- kind: Show
+  properties:
+  - name: collaborators_ids
+  - name: status
+  - name: starts_at
+    direction: desc
+
+- kind: Show
+  properties:
+  - name: collaborators_ids
+  - name: status
+  - name: type_show
+  - name: name
+
+- kind: Show
+  properties:
+  - name: collaborators_ids
+  - name: status
+  - name: type_show
+  - name: starts_at
+
+- kind: Show
+  properties:
+  - name: collaborators_ids
+  - name: status
+  - name: type_show
+  - name: starts_at
+    direction: desc
+
+- kind: Show
+  properties:
+  - name: collaborators_ids
+  - name: status
+  - name: type_show
+  - name: updated_at
+    direction: desc
+
+- kind: Show
+  properties:
+  - name: collaborators_ids
+  - name: status
+  - name: updated_at
+    direction: desc
+
+- kind: Show
+  properties:
+  - name: is_published
   - name: organization
   - name: type_show
   - name: ends_at
+
+- kind: Show
+  properties:
+  - name: organization
+  - name: type_show
+  - name: ends_at
+
+- kind: Show
+  properties:
+  - name: owner
+  - name: status
+  - name: starts_at
+
+- kind: Show
+  properties:
+  - name: owner
+  - name: status
+  - name: starts_at
+    direction: desc
+
+- kind: Show
+  properties:
+  - name: owner
+  - name: status
+  - name: type_show
+  - name: name
+
+- kind: Show
+  properties:
+  - name: owner
+  - name: status
+  - name: type_show
+  - name: starts_at
+
+- kind: Show
+  properties:
+  - name: owner
+  - name: status
+  - name: type_show
+  - name: starts_at
+    direction: desc
+
+- kind: Show
+  properties:
+  - name: owner
+  - name: status
+  - name: type_show
+  - name: updated_at
+    direction: desc
+
+- kind: Show
+  properties:
+  - name: owner
+  - name: status
+  - name: updated_at
+    direction: desc
 
 - kind: Task
   properties:

@@ -42,7 +42,7 @@ from endpoints_proto_datastore import MessageFieldsSchema
 
 STANDARD_TABS = [{'name': 'Accounts','label': 'Accounts','url':'/#/accounts/'},{'name': 'Contacts','label': 'Contacts','url':'/#/contacts/'},{'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/'},{'name': 'Leads','label': 'Leads','url':'/#/leads/'},{'name': 'Cases','label': 'Cases','url':'/#/cases/'}]
 STANDARD_PROFILES = ['Super Administrator', 'Standard User', 'Sales User', 'Marketing User', 'Read Only', 'Support User', 'Contract Manager','Read Only']
-STANDARD_APPS = [{'name': 'sales', 'label': 'Sales', 'url':'/#/accounts/'},#{'name': 'marketing', 'label':'Marketing', 'url':'/#/compaigns/'},
+STANDARD_APPS = [{'name': 'sales', 'label': 'Customer Development', 'url':'/#/accounts/'},#{'name': 'marketing', 'label':'Marketing', 'url':'/#/compaigns/'},
 {'name':'call_center','label': 'Customer Support','url':'/#/cases/'}]
 STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
 ADMIN_TABS = [{'name': 'Users','label': 'Users','url':'/#/admin/users'},{'name': 'Groups','label': 'Groups','url':'/#/admin/groups'},{'name': 'Settings','label': 'Settings','url':'/#/admin/settings'}]
@@ -402,7 +402,7 @@ class Social(EndpointsModel):
 #HKA 30.12.2013 Manage Company Profile
 
 class Companyprofile(EndpointsModel):
-  _message_fields_schema = ('id','entityKey','name','tagline','introduction','phones','emails','addresses','websites','sociallinks','youtube_channel')
+  _message_fields_schema = ('id','entityKey','name','tagline','introduction','organizationid','phones','emails','addresses','websites','sociallinks','youtube_channel')
 
   owner = ndb.StringProperty()
   collaborators_list = ndb.StructuredProperty(Userinfo,repeated=True)

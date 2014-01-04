@@ -473,7 +473,7 @@ class ShowListHandler(BaseHandler, SessionEnabledHandler):
             # Set the user locale from user's settings
             self.set_user_locale()
             # Render the template
-            template_values = {'tabs':tabs}
+            template_values = {'ME':'user.google_user_id','tabs':tabs}
             template = jinja_environment.get_template('templates/live/shows/list_show.html')
             self.response.out.write(template.render(template_values))
 class ShowShowHandler(BaseHandler, SessionEnabledHandler):
@@ -914,9 +914,9 @@ class PublicLiveCompanyPageHandler(BaseHandler, SessionEnabledHandler):
       productvideo = Show.query(Show.organization==org_key,Show.type_show =='Product_Video').fetch()
       customerstory = Show.query(Show.organization==org_key,Show.type_show =='Customer_Story').fetch()
       current_time = datetime.datetime.now()
-      upcoming_shows = Show.query(Show.organization==org_key,Show.type_show =='Show',Show.ends_at>current_time).fetch()
-      recentlyshows = Show.query(Show.organization==org_key,Show.type_show =='Show',Show.ends_at<current_time).fetch()
-      shows = Show.query(Show.organization==org_key,Show.type_show =='Show').fetch()
+      upcoming_shows = Show.query(Show.organization==org_key,Show.type_show =='Show',Show.ends_at>current_time,Show.is_published==True).fetch()
+      recentlyshows = Show.query(Show.organization==org_key,Show.type_show =='Show',Show.ends_at<current_time,Show.is_published==True).fetch()
+      shows = Show.query(Show.organization==org_key,Show.type_show =='Show',Show.is_published==True).fetch()
       template_values = {'companyprofile':companyprofile,'productvideo':productvideo,'customerstory':customerstory,'shows':shows,'upcoming_shows':upcoming_shows,'recentlyshows':recentlyshows}
       template = jinja_environment.get_template('templates/live/live_company_page.html')
       self.response.out.write(template.render(template_values))

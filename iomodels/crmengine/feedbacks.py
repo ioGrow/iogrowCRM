@@ -47,6 +47,7 @@ class Feedback(EndpointsModel):
         empty_string = lambda x: x if x else ""
         collaborators = " ".join(self.collaborators_ids)
         organization = str(self.organization.id())
+        title_autocomplete = ','.join(tokenize_autocomplete(self.name + ' ' + empty_string(self.status) +' '+ empty_string(self.source) + ' ' + empty_string(self.type_feedback)))
         my_document = search.Document(
         doc_id = str(self.key.id()),
         fields=[
@@ -62,6 +63,7 @@ class Feedback(EndpointsModel):
             search.TextField(name='status', value = empty_string(self.status) ),
             search.DateField(name='created_at', value = self.created_at),
             search.DateField(name='updated_at', value = self.updated_at),
+            search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
                 ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)

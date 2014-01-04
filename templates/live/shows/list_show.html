@@ -98,7 +98,7 @@
           </div>
         </div>
            <!-- Filtering and sorting -->
-          <div class="row-fluid" ng-show="leads">
+          <div class="row-fluid" ng-show="shows">
             <div class="span2">
               <div class="btn-group">
                                     <a class="btn" href="#" data-toggle="dropdown">
@@ -106,9 +106,11 @@
                                     <i class="icon-angle-down"></i>
                                     </a>
                                     <ul class="dropdown-menu">
-                                      <li><a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All leads') }}</a></li>
-                                      <li><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My leads') }}</a></li>
-                                      <li ng-repeat="status in leadstatuses"><a ng-click="filterByStatus('<%=status.status%>')" href="#" data-toggle="modal"><%= status.status %></a></li>
+                                      <li><a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All shows') }}</a></li>
+                                      <li><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My shows') }}</a></li>
+                                      <!--li><a ng-click="filterUpcomingShow()" href="#" data-toggle="modal">{{ _('Upcoming shows') }}</a></li>
+                                      <li><a ng-click="filterRecentShow()" href="#" data-toggle="modal">{{ _('Recent shows') }}</a></li-->
+                                     
                                     </ul>
                                     {{ _('Views') }}
               </div>
@@ -119,7 +121,7 @@
                     <form class="form-inline ng-pristine ng-valid" ng-submit="executeSearch(searchQuery)">
                       <div class="input-append row-fluid">
 
-                        <input type="text" ng-model="searchQuery" typeahead="result as result.firstname + ' ' + result.lastname + ' - (' + result.position + ' , ' + result.company +' -'+ result.status + ' )'   for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="input-xxlarge" placeholder="{{ _('Quick Filtering') }}">
+                        <input type="text" ng-model="searchQuery" typeahead="result as result.title   for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="input-xxlarge" placeholder="{{ _('Quick Filtering') }}">
 
                        <button class="gbqfb gbqfb-hvr"><i class="icon-filter"></i></button>
                       </div>
@@ -134,12 +136,8 @@
                                     </a>
                                     <ul class="dropdown-menu">
                                       <li><a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a></li>
-                                      <li><a ng-click="orderBy('firstname')" href="#" data-toggle="modal">{{ _('First Name') }}</a></li>
-                                      <li><a ng-click="orderBy('lastname')" href="#" data-toggle="modal">{{ _('Last Name') }}</a></li>
-                                      <li><a ng-click="orderBy('title')" href="#" data-toggle="modal">{{ _('Title') }}</a></li>
-                                      <li><a ng-click="orderBy('company')" href="#" data-toggle="modal">{{ _('Company') }}</a></li>
-                                      <li><a ng-click="orderBy('status')" href="#" data-toggle="modal">{{ _('Status') }}</a></li>
-                                      
+                                      <li><a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a></li>
+                                      <li><a ng-click="orderBy('starts_at')" href="#" data-toggle="modal">{{ _('Start at') }}</a></li>                                   
                                      
                                     </ul>
               </div>
