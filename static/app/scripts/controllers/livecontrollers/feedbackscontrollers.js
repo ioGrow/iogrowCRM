@@ -10,12 +10,13 @@ app.controller('FeedBacksListCtrl', ['$scope','$filter','Auth','Feedback',
      $scope.currentPage = 01;
      $scope.pages = [];
      $scope.feedback = {};
+     $scope.order = '-updated_at';
     
          
 
      // What to do after authentication
      $scope.runTheProcess = function(){
-          var params = {'limit':7};
+          var params = {'limit':7,'order' : $scope.order};
           Feedback.list($scope,params);
      };
      // We need to call this to refresh token when user credentials are invalid
@@ -29,10 +30,11 @@ app.controller('FeedBacksListCtrl', ['$scope','$filter','Auth','Feedback',
         var params = {};
           if ($scope.pages[nextPage]){
             params = {'limit':7,
+                      'order' : $scope.order,
                       'pageToken':$scope.pages[nextPage]
                      }
           }else{
-            params = {'limit':7}
+            params = {'limit':7,'order' : $scope.order}
           }
           console.log('in listNextPageItems');
           $scope.currentPage = $scope.currentPage + 1 ; 
@@ -44,10 +46,11 @@ app.controller('FeedBacksListCtrl', ['$scope','$filter','Auth','Feedback',
        var params = {};
           if ($scope.pages[prevPage]){
             params = {'limit':7,
+                      'order' : $scope.order,
                       'pageToken':$scope.pages[prevPage]
                      }
           }else{
-            params = {'limit':7}
+            params = {'limit':7,'order' : $scope.order}
           }
           $scope.currentPage = $scope.currentPage - 1 ;
           Feedback.list($scope,params);
@@ -80,6 +83,79 @@ app.controller('FeedBacksListCtrl', ['$scope','$filter','Auth','Feedback',
              Feedback.insert($scope,params);
              $('#addFeedModal').modal('hide');
             };
+
+  //HKA 04.01.2014 Add Filtering and Sorting
+
+      $scope.filterByOwner = function(filter){
+        if (filter){
+          var params = { 'owner': filter,
+                         'order': $scope.order,
+                         'limit':7}
+        }
+        else{
+          var params = {
+              'order': $scope.order,           
+              'limit':7}
+        };
+        Feedback.list($scope,params);
+     };
+     $scope.filterByStatus = function(filter){
+      console.log(filter);
+        if (filter){
+          var params = { 'status': filter,
+                         'order': $scope.order, 
+                         'limit':7}
+        }
+        else{
+          var params = {
+              'order': $scope.order, 
+              
+              'limit':7}
+        };
+        
+        Feedback.list($scope,params);
+     };
+    // hKA 02.01.2014 Quick filter text area
+    var searchParams ={};
+     $scope.result = undefined;
+     $scope.q = undefined;
+     
+     $scope.$watch('searchQuery', function() {
+         searchParams['q'] = $scope.searchQuery;
+         searchParams['limit'] = 7;
+         if ($scope.searchQuery){
+         Feedback.search($scope,searchParams);
+       };
+     });
+     $scope.selectResult = function(){
+          window.location.replace('#/live/feedbacks/feedback/'+$scope.searchQuery.id);
+     };
+
+    $scope.executeSearch = function(searchQuery){
+        if (typeof(searchQuery)=='string'){
+           var goToSearch = 'type:Feedback ' + searchQuery;
+           window.location.replace('#/search/'+goToSearch);
+        }else{
+          window.location.replace('#/live/feedbacks/feedback/'+searchQuery.id);
+        }
+        $scope.searchQuery=' ';
+        $scope.$apply();
+     };
+
+   //HKA 03.01.2014 order by name, last modification, starts at
+
+    $scope.orderBy = function(order){
+        var params = { 'order': order,
+                       'limit':7};
+        $scope.order = order;
+        Feedback.list($scope,params);
+     };
+
+     $scope.showModal = function(){
+        console.log('button clicked');
+        $('#newShowModal').modal('show');
+
+      };
     
 
       

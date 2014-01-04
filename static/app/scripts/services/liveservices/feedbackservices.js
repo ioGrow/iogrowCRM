@@ -98,7 +98,17 @@ feedbackservices.factory('Feedback', function($http) {
     }
 
     )};
-
+ Feedback.search = function($scope,params){
+      gapi.client.crmengine.feedbacks.search(params).execute(function(resp) {
+          console.log(resp);
+           if (resp.items){
+              $scope.results = resp.items;
+              
+              $scope.$apply();
+            };
+            
+      });
+  };
   
 
 return Feedback;

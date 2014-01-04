@@ -209,6 +209,18 @@ class ShowSearchResult(messages.Message):
 class ShowSearchResults(messages.Message):
     items = messages.MessageField(ShowSearchResult, 1, repeated=True)
     nextPageToken = messages.StringField(2)
+# The message class that defines the feedbacks.search response 
+class FeedbackSearchResult(messages.Message):
+    id = messages.StringField(1)
+    entityKey  = messages.StringField(2)
+    title = messages.StringField(3)
+    type_feedback = messages.StringField(4)
+    source = messages.StringField(5)
+    status = messages.StringField(6)
+# The message class that defines a set of feedbacks.search results
+class FeedbackSearchResults(messages.Message):
+    items = messages.MessageField(FeedbackSearchResult, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
 
 class EndpointsHelper(EndpointsModel):
     INVALID_TOKEN = 'Invalid token'
@@ -1314,7 +1326,7 @@ class CrmEngineApi(remote.Service):
       my_model.put()
       return my_model
   # feedbacks.list api
-  @Feedback.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken','related_to'),path='feedbacks', name='feedbacks.list')
+  @Feedback.query_method(user_required=True,query_fields=('limit', 'order','status', 'pageToken','related_to'),path='feedbacks', name='feedbacks.list')
   def feedbacks_list(self, query):
       user_from_email = EndpointsHelper.require_iogrow_user()      
       return query.filter(ndb.OR(ndb.AND(Feedback.access=='public',Feedback.organization==user_from_email.organization),Feedback.owner==user_from_email.google_user_id, Feedback.collaborators_ids==user_from_email.google_user_id)).order(Feedback._key)
@@ -1353,6 +1365,63 @@ class CrmEngineApi(remote.Service):
     user_from_email=EndpointsHelper.require_iogrow_user()
     my_model.key.delete()
     return message_types.VoidMessage()
+  # HKA 04.01.2014
+  # leads.search api 
+  @endpoints.method(SearchRequest, FeedbackSearchResults,
+                      path='feedbacks/search', http_method='POST',
+                      name='feedbacks.search')
+  def feedbacks_search(self, request):
+      user_from_email = EndpointsHelper.require_iogrow_user()
+      organization = str(user_from_email.organization.id())
+      
+      index = search.Index(name="GlobalIndex")
+      #Show only objects where you have permissions
+      query_string = request.q + ' type:Feedback AND (organization:' +organization+ ' AND (access:public OR (owner:'+ user_from_email.google_user_id +' OR collaborators:'+ user_from_email.google_user_id+')))'
+      print query_string
+      search_results = []
+      count = 1
+      if request.limit:
+          limit = int(request.limit)
+      else:
+          limit = 10
+      next_cursor = None
+      if request.pageToken:
+          cursor = search.Cursor(web_safe_string=request.pageToken)
+      else:
+          cursor = search.Cursor(per_result=True)
+      if limit:
+          options = search.QueryOptions(limit=limit,cursor=cursor)
+      else:
+          options = search.QueryOptions(cursor=cursor)    
+      query = search.Query(query_string=query_string,options=options)
+      try:
+          if query:
+              results = index.search(query)
+              total_matches = results.number_found
+              
+              # Iterate over the documents in the results
+              for scored_document in results:
+                  kwargs = {
+                      'id' : scored_document.doc_id
+                  }
+                  for e in scored_document.fields:
+                      if e.name in ["title","type_feedback","source", "status"]:
+                          kwargs[e.name]=e.value
+                  
+                  search_results.append(FeedbackSearchResult(**kwargs))
+                  
+                  next_cursor = scored_document.cursor.web_safe_string
+              if next_cursor:
+                  next_query_options = search.QueryOptions(limit=1,cursor=scored_document.cursor)
+                  next_query = search.Query(query_string=query_string,options=next_query_options)
+                  if next_query:
+                      next_results = index.search(next_query)
+                      if len(next_results.results)==0:
+                          next_cursor = None            
+                                    
+      except search.Error:
+          logging.exception('Search failed')
+      return FeedbackSearchResults(items = search_results,nextPageToken=next_cursor)
   # HKA 29.12.2013 Companyprofile APIs
   # companyprofiles.get api
   @Companyprofile.method(request_fields=('id',),path='companyprofiles/{id}', http_method='GET', name='companyprofiles.get')
