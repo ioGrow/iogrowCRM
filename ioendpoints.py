@@ -1135,7 +1135,7 @@ class CrmEngineApi(remote.Service):
     user_from_email=EndpointsHelper.require_iogrow_user()
     my_model.key.delete()
     return message_types.VoidMessage()
-  # HKA 03.01.2014 Add shows.searc
+  # HKA 03.01.2014 Add shows.search
   @endpoints.method(SearchRequest, ShowSearchResults,
                       path='shows/search', http_method='POST',
                       name='shows.search')
@@ -1145,7 +1145,119 @@ class CrmEngineApi(remote.Service):
       
       index = search.Index(name="GlobalIndex")
       #Show only objects where you have permissions
-      query_string = request.q + ' type:Show AND (organization:' +organization+ ' AND (access:public OR (owner:'+ user_from_email.google_user_id +' OR collaborators:'+ user_from_email.google_user_id+')))'
+      query_string = request.q + ' type:Show AND (organization:' +organization+  ' AND type_show:Show'+' AND (access:public OR (owner:'+ user_from_email.google_user_id +' OR collaborators:'+ user_from_email.google_user_id+')))'
+      print query_string
+      search_results = []
+      count = 1
+      if request.limit:
+          limit = int(request.limit)
+      else:
+          limit = 10
+      next_cursor = None
+      if request.pageToken:
+          cursor = search.Cursor(web_safe_string=request.pageToken)
+      else:
+          cursor = search.Cursor(per_result=True)
+      if limit:
+          options = search.QueryOptions(limit=limit,cursor=cursor)
+      else:
+          options = search.QueryOptions(cursor=cursor)    
+      query = search.Query(query_string=query_string,options=options)
+      try:
+          if query:
+              results = index.search(query)
+              total_matches = results.number_found
+              
+              # Iterate over the documents in the results
+              for scored_document in results:
+                  kwargs = {
+                      'id' : scored_document.doc_id
+                  }
+                  for e in scored_document.fields:
+                      if e.name in ["title", "status","starts_at","ends_at"]:
+                          kwargs[e.name]=e.value
+                  
+                  search_results.append(ShowSearchResult(**kwargs))
+                  
+                  next_cursor = scored_document.cursor.web_safe_string
+              if next_cursor:
+                  next_query_options = search.QueryOptions(limit=1,cursor=scored_document.cursor)
+                  next_query = search.Query(query_string=query_string,options=next_query_options)
+                  if next_query:
+                      next_results = index.search(next_query)
+                      if len(next_results.results)==0:
+                          next_cursor = None            
+                                    
+      except search.Error:
+          logging.exception('Search failed')
+      return ShowSearchResults(items = search_results,nextPageToken=next_cursor)
+  # HKA 04.01.2014 Add showproducts.search (Product videos)
+  @endpoints.method(SearchRequest, ShowSearchResults,
+                      path='showproducts/search', http_method='POST',
+                      name='showproducts.search')
+  def showproducts_search(self, request):
+      user_from_email = EndpointsHelper.require_iogrow_user()
+      organization = str(user_from_email.organization.id())
+      
+      index = search.Index(name="GlobalIndex")
+      #Show only objects where you have permissions
+      query_string = request.q + ' type:Show AND (organization:' +organization+  ' AND type_show:Product_Video'+' AND (access:public OR (owner:'+ user_from_email.google_user_id +' OR collaborators:'+ user_from_email.google_user_id+')))'
+      print query_string
+      search_results = []
+      count = 1
+      if request.limit:
+          limit = int(request.limit)
+      else:
+          limit = 10
+      next_cursor = None
+      if request.pageToken:
+          cursor = search.Cursor(web_safe_string=request.pageToken)
+      else:
+          cursor = search.Cursor(per_result=True)
+      if limit:
+          options = search.QueryOptions(limit=limit,cursor=cursor)
+      else:
+          options = search.QueryOptions(cursor=cursor)    
+      query = search.Query(query_string=query_string,options=options)
+      try:
+          if query:
+              results = index.search(query)
+              total_matches = results.number_found
+              
+              # Iterate over the documents in the results
+              for scored_document in results:
+                  kwargs = {
+                      'id' : scored_document.doc_id
+                  }
+                  for e in scored_document.fields:
+                      if e.name in ["title", "status","starts_at","ends_at"]:
+                          kwargs[e.name]=e.value
+                  
+                  search_results.append(ShowSearchResult(**kwargs))
+                  
+                  next_cursor = scored_document.cursor.web_safe_string
+              if next_cursor:
+                  next_query_options = search.QueryOptions(limit=1,cursor=scored_document.cursor)
+                  next_query = search.Query(query_string=query_string,options=next_query_options)
+                  if next_query:
+                      next_results = index.search(next_query)
+                      if len(next_results.results)==0:
+                          next_cursor = None            
+                                    
+      except search.Error:
+          logging.exception('Search failed')
+      return ShowSearchResults(items = search_results,nextPageToken=next_cursor)
+  # HKA 04.01.2014
+  @endpoints.method(SearchRequest, ShowSearchResults,
+                      path='showcustomerstories/search', http_method='POST',
+                      name='showcustomerstories.search')
+  def showcustomerstories_search(self, request):
+      user_from_email = EndpointsHelper.require_iogrow_user()
+      organization = str(user_from_email.organization.id())
+      
+      index = search.Index(name="GlobalIndex")
+      #Show only objects where you have permissions
+      query_string = request.q + ' type:Show AND (organization:' +organization+  ' AND type_show:Customer_Story'+' AND (access:public OR (owner:'+ user_from_email.google_user_id +' OR collaborators:'+ user_from_email.google_user_id+')))'
       print query_string
       search_results = []
       count = 1

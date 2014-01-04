@@ -127,7 +127,27 @@ showservices.factory('Show', function($http) {
       });
   };
 
-  
-
+  Show.searchproducts = function($scope,params){
+      gapi.client.crmengine.showproducts.search(params).execute(function(resp) {
+          console.log(resp);
+           if (resp.items){
+              $scope.results = resp.items;
+              
+              $scope.$apply();
+            };
+            
+      });
+  };
+Show.searchcustomerstories = function($scope,params){
+      gapi.client.crmengine.showcustomerstories.search(params).execute(function(resp) {
+          console.log(resp);
+           if (resp.items){
+              $scope.results = resp.items;
+              
+              $scope.$apply();
+            };
+            
+      });
+  };
 return Show;
 });

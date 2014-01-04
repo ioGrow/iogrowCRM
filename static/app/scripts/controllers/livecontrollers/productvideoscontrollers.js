@@ -99,7 +99,61 @@ app.controller('ProductVideoListCtrl', ['$scope','$filter','Auth','Show',
 
       };
 
-  //HKA 03.01.2014 ordering filtering
+   //HKA 04.01.2014 Add Filtering and Sorting
+
+      $scope.filterByOwner = function(filter){
+        if (filter){
+          var params = { 'owner': filter,
+                         'order': $scope.order,
+                         'type_show':'Product_Video',
+                         'limit':7}
+        }
+        else{
+          var params = {
+              'order': $scope.order,
+              'type_show':'Product_Video',              
+              'limit':7}
+        };
+        Show.list($scope,params);
+     };
+  
+   // hKA 02.01.2014 Quick filter text area
+    var searchParams ={};
+     $scope.result = undefined;
+     $scope.q = undefined;
+     
+     $scope.$watch('searchQuery', function() {
+         searchParams['q'] = $scope.searchQuery;
+         searchParams['limit'] = 7;
+         if ($scope.searchQuery){
+         Show.searchproducts($scope,searchParams);
+       };
+     });
+
+     $scope.selectResult = function(){
+          window.location.replace('#/live/product_videos/product_video/'+$scope.searchQuery.id);
+     };
+
+    $scope.executeSearch = function(searchQuery){
+        if (typeof(searchQuery)=='string'){
+           var goToSearch = 'type:Show ' + searchQuery;
+           window.location.replace('#/search/'+goToSearch);
+        }else{
+          window.location.replace('#/live/product_videos/product_video/'+searchQuery.id);
+        }
+        $scope.searchQuery=' ';
+        $scope.$apply();
+     };
+
+   //HKA 03.01.2014 order by name, last modification, starts at
+
+    $scope.orderBy = function(order){
+        var params = { 'order': order,
+                       'type_show':'Product_Video',
+                        'limit':7};
+        $scope.order = order;
+        Show.list($scope,params);
+     };
 
   
       
