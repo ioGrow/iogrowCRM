@@ -3,6 +3,7 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 from endpoints_proto_datastore import MessageFieldsSchema
 from google.appengine.api import search
 from model import Userinfo
+from search_helper import tokenize_autocomplete
 
 import model
 
