@@ -1096,6 +1096,12 @@ indexes:
 
 - kind: Show
   properties:
+  - name: is_published
+  - name: type_show
+  - name: ends_at
+
+- kind: Show
+  properties:
   - name: organization
   - name: type_show
   - name: ends_at

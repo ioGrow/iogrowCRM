@@ -889,9 +889,41 @@ class PublicLiveHomeHandler(BaseHandler, SessionEnabledHandler):
                     user = self.get_user_from_session()
                 except:
                     user = None
-
-            template_values = {'user': user}
-            template = jinja_environment.get_template('templates/live/live_index.html')
+            current_time = datetime.datetime.now()
+            upcoming_shows = Show.query(Show.type_show =='Show',Show.ends_at>current_time,Show.is_published==True).fetch(8)
+            recently_shows = Show.query(Show.type_show =='Show',Show.ends_at<current_time,Show.is_published==True).fetch(4)
+            template_values = {'user': user,'upcoming_shows':upcoming_shows,'recently_shows':recently_shows}
+            template = jinja_environment.get_template('templates/live/live_show_index.html')
+            self.response.out.write(template.render(template_values))
+#HKA 05.01.2014 View All upcoming show
+class AllUpcomingsShowsHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+            # Render the template
+            user = None
+            if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+                try:
+                    user = self.get_user_from_session()
+                except:
+                    user = None
+            current_time = datetime.datetime.now()
+            upcoming_shows = Show.query(Show.type_show =='Show',Show.ends_at>current_time,Show.is_published==True).fetch()
+            template_values = {'user': user,'upcoming_shows':upcoming_shows}
+            template = jinja_environment.get_template('templates/live/live_all_upcomings_show.html')
+            self.response.out.write(template.render(template_values))
+# HKA 05.01.2014 View All Recents Show
+class AllRecentShowHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+            # Render the template
+            user = None
+            if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+                try:
+                    user = self.get_user_from_session()
+                except:
+                    user = None
+            current_time = datetime.datetime.now()
+            recently_shows = Show.query(Show.type_show =='Show',Show.ends_at<current_time,Show.is_published==True).fetch(4)
+            template_values = {'user': user,'recently_shows':recently_shows}
+            template = jinja_environment.get_template('templates/live/live_all_recents_show.html')
             self.response.out.write(template.render(template_values))
 class WelcomeHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -911,8 +943,8 @@ class PublicLiveCompanyPageHandler(BaseHandler, SessionEnabledHandler):
       org_id = int(id)
       companyprofile = model.Companyprofile.query(model.Companyprofile.organizationid==org_id).get()
       org_key = companyprofile.organization
-      productvideo = Show.query(Show.organization==org_key,Show.type_show =='Product_Video').fetch()
-      customerstory = Show.query(Show.organization==org_key,Show.type_show =='Customer_Story').fetch()
+      productvideo = Show.query(Show.organization==org_key,Show.type_show =='Product_Video',Show.is_published==True).fetch()
+      customerstory = Show.query(Show.organization==org_key,Show.type_show =='Customer_Story',Show.is_published==True).fetch()
       current_time = datetime.datetime.now()
       upcoming_shows = Show.query(Show.organization==org_key,Show.type_show =='Show',Show.ends_at>current_time,Show.is_published==True).fetch()
       recentlyshows = Show.query(Show.organization==org_key,Show.type_show =='Show',Show.ends_at<current_time,Show.is_published==True).fetch()
@@ -1082,10 +1114,12 @@ routes = [
     # Applications settings
     (r'/apps/(\d+)', ChangeActiveAppHandler),
     # ioGrow Live
-    ('/live',PublicLiveHomeHandler),
-    (r'/live/companies/(\d+)',PublicLiveCompanyPageHandler),
-    (r'/live/shows/(\d+)',PublicLiveShowHandler),
-    ('/welcome',WelcomeHandler),
+    ('/live/',PublicLiveHomeHandler),
+    ('/live/Allupcomings/',AllUpcomingsShowsHandler),
+    ('/live/Allrecents/',AllRecentShowHandler),
+    (r'/live/companies/(\d+)/',PublicLiveCompanyPageHandler),
+    (r'/live/shows/(\d+)/',PublicLiveShowHandler),
+    ('/welcome/',WelcomeHandler),
     
     # Authentication Handlers
     ('/sign-in',SignInHandler),

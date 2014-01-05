@@ -99,7 +99,7 @@
                 {% else %}
                 No description available.
                 {% endif %}
-
+                
                 <h2>When?</h2>
                     <p>{{show.starts_at}} - {{show.ends_at}}</p>
                     <p><a class="add-calendar" href="http://www.google.com/calendar/event?action=TEMPLATE&amp;text={{show.name}}&amp;dates={{starts_at}}/{{ends_at}}&amp;sprop=name%3AioGrow&amp;sprop=website%3Aiogrow.com&amp;details=http://gcdc2013-iogrow.appspot.com/live/shows/{{show.id}}" target="_blank" data-event="{{show.name}}">
@@ -108,6 +108,7 @@
                 <img class="small-cal-icon" src="https://developers.google.com/_static/a39d39a910/images/calendar-42.png" width="25" alt="Add to calendar">
                 Add to calendar
                 </a></p>
+                
                
                 <button class="btn green" ng-click="showFeedbackModal()"> Ask a question or give a feedback</button>
                
