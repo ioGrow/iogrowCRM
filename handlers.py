@@ -893,6 +893,19 @@ class PublicLiveHomeHandler(BaseHandler, SessionEnabledHandler):
             template_values = {'user': user}
             template = jinja_environment.get_template('templates/live/live_index.html')
             self.response.out.write(template.render(template_values))
+class WelcomeHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+            # Render the template
+            user = None
+            if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+                try:
+                    user = self.get_user_from_session()
+                except:
+                    user = None
+
+            template_values = {'user': user}
+            template = jinja_environment.get_template('templates/live/welcome.html')
+            self.response.out.write(template.render(template_values))
 class PublicLiveCompanyPageHandler(BaseHandler, SessionEnabledHandler):
     def get(self,id):
       org_id = int(id)
@@ -1072,6 +1085,8 @@ routes = [
     ('/live',PublicLiveHomeHandler),
     (r'/live/companies/(\d+)',PublicLiveCompanyPageHandler),
     (r'/live/shows/(\d+)',PublicLiveShowHandler),
+    ('/welcome',WelcomeHandler),
+    
     # Authentication Handlers
     ('/sign-in',SignInHandler),
     ('/sign-up',SignUpHandler),
