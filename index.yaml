@@ -497,6 +497,13 @@ indexes:
   - name: access
   - name: organization
   - name: status
+  - name: type_feedback
+
+- kind: Feedback
+  properties:
+  - name: access
+  - name: organization
+  - name: status
   - name: updated_at
     direction: desc
 
@@ -532,6 +539,12 @@ indexes:
   properties:
   - name: collaborators_ids
   - name: status
+  - name: type_feedback
+
+- kind: Feedback
+  properties:
+  - name: collaborators_ids
+  - name: status
   - name: updated_at
     direction: desc
 
@@ -560,6 +573,12 @@ indexes:
   properties:
   - name: owner
   - name: status
+
+- kind: Feedback
+  properties:
+  - name: owner
+  - name: status
+  - name: type_feedback
 
 - kind: Feedback
   properties:

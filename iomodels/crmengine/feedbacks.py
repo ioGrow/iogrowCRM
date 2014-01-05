@@ -2,6 +2,7 @@ from google.appengine.ext import ndb
 from endpoints_proto_datastore.ndb import EndpointsModel
 from endpoints_proto_datastore import MessageFieldsSchema
 from google.appengine.api import search
+from search_helper import tokenize_autocomplete
 from model import Userinfo
 
 import model
