@@ -213,9 +213,14 @@
                     <a href="/#/live/feedbacks/feedback/<%= feedback.id %>"><h3 class="relatedcardOppTitle">
                                     <%= feedback.name%>
                                     </h3></a>
-                    <div class="desc">                           
+                                   
+                    <div class="desc">
                       
-                    <a  class="desc" href="/#/accounts/industry/<%=account.industry%>"> </a> 
+                      <span class="contact-title" >(<%= feedback.status%> ,  </span>  
+                      <span class="contact-title" >from <%= feedback.source%>  )</span>
+                     
+                     
+                 
                     </div>
                   </div>
                                   

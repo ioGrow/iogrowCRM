@@ -134,8 +134,8 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
      Auth.init($scope);
 
 }]);
-app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account','Contact','Case','Opportunity', 'Topic','Note','Task','Event','Permission','User','Attachement','Email','Need',
-    function($scope,$filter,$route,Auth,Account,Contact,Case,Opportunity,Topic,Note,Task,Event,Permission,User,Attachement,Email,Need) {
+app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account','Contact','Case','Opportunity', 'Topic','Note','Task','Event','Permission','User','Attachement','Email','Need','Opportunitystage','Casestatus',
+    function($scope,$filter,$route,Auth,Account,Contact,Case,Opportunity,Topic,Note,Task,Event,Permission,User,Attachement,Email,Need,Opportunitystage,Casestatus) {
        $("#id_Accounts").addClass("active");
        $scope.selectedTab = 1;
        $scope.isSignedIn = false;
@@ -170,12 +170,16 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        $scope.user = undefined;
        $scope.slected_memeber = undefined;
        $scope.email = {};
+       $scope.stage_selected={};
+       $scope.status_selected={};
 
        // What to do after authentication
        $scope.runTheProcess = function(){
           var accountid = {'id':$route.current.params.accountId};
           Account.get($scope,accountid);
           User.list($scope,{});
+          Opportunitystage.list($scope,{});
+          Casestatus.list($scope,{});
        };
        // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
@@ -664,7 +668,7 @@ $scope.CaselistNextPageItems = function(){
   //HKA 22.11.2013 List of Opportunities related to account
    $scope.listOpportunities = function(){
     var params = {'account':$scope.account.entityKey,
-                   'limit':2
+                   'limit':5
                       };
          Opportunity.list($scope,params);
    };
@@ -715,9 +719,10 @@ $scope.CaselistNextPageItems = function(){
        var params = {'name':opportunity.name,
                       'description':opportunity.description,
                       'amount': opportunity.amount,
-                      'stage':opportunity.stage,
                       'account':$scope.account.entityKey,
                       'account_name': $scope.account.name,
+                      'stagename' :$scope.stage_selected.name,
+                      'stage_probability':$scope.stage_selected.probability,
                       'access': $scope.account.access
                       };
 
@@ -728,10 +733,10 @@ $scope.CaselistNextPageItems = function(){
 
   // HKA 19.11.2013 Add Case related to account
     $scope.saveCase = function(casee){
-          
+          console.log($scope.status_selected.status);
         var params = {'name':casee.name,
                       'priority':casee.priority,
-                      'status': casee.statuss,
+                      'status': $scope.status_selected.status,
                       'type_case':casee.type_case,
                       'account':$scope.account.entityKey,
                       'account_name': $scope.account.name,
@@ -774,6 +779,7 @@ $scope.CaselistNextPageItems = function(){
             };
   Account.patch($scope,params);
   $('#phonemodal').modal('hide');
+  $scope.phone={};
   };
 
 //HKA 20.11.2013 Add Email
@@ -793,6 +799,7 @@ $scope.addEmail = function(email){
             };
   Account.patch($scope,params);
   $('#emailmodal').modal('hide');
+  $scope.email={};
   };
   
 //HKA 20.11.2013 Add Addresse
@@ -810,6 +817,7 @@ $scope.addAddress = function(address){
              'addresses':addressArray}
   Account.patch($scope,params);
   $('#addressmodal').modal('hide');
+  $scope.address={};
 };
 
 //HKA 22.11.2013 Add Website
@@ -827,6 +835,7 @@ $scope.addWebsite = function(website){
              'websites':websiteArray}
   Account.patch($scope,params);
   $('#websitemodal').modal('hide');
+  $scope.website={};
 };
 
 //HKA 22.11.2013 Add Social
@@ -844,6 +853,7 @@ $scope.addSocial = function(social){
              'sociallinks':socialArray}
   Account.patch($scope,params);
   $('#socialmodal').modal('hide');
+  $scope.social={};
 };
 
 //HKA 22.11.2013 Add Tagline

@@ -52,7 +52,7 @@
                                        
                                           
                                              {%for upcoming_show in upcoming_shows%}
-                                      <li class="span3 mix category_1"><a href="/live/shows/{{upcoming_show.id}}" target="new">
+                                      <li class="span3 mix category_1"><a href="/live/shows/{{upcoming_show.id}}">
                                       {% if upcoming_show.youtube_url %}
                                             <img class="video-thumbnail" src="http://img.youtube.com/vi/{{upcoming_show.youtube_url}}/0.jpg">
 
@@ -230,54 +230,26 @@
                                   
                 </div>
               </div>
-                                      {%endif%}
+              {%endif%}
                                   
-                                      <!---h2>Product B <a href="#"><small>(View all)</small></a></h2>
-                                      <div class="filter-v1 margin-bottom-40">
-                                      <!--
-                                      <ul class="filter-category">
-                                          <li class="filter" data-filter="all">All</li>
-                                          <li class="filter" data-filter="category_1">UI Design</li>
-                                          <li class="filter" data-filter="category_2">Web Development</li>
-                                          <li class="filter" data-filter="category_3">Photography</li>
-                                          <li class="filter" data-filter="category_3 category_1">Wordpress and Logo</li>
-                                      </ul>
-                                      >
-                                      <ul class="grid-v1 thumbnails">
-                                          <li class="span3 mix category_1"><a href="/live/shows/5821843504103424">
-                                              <img class="video-thumbnail" src="https://i.ytimg.com/vi/7y2VlKJtXsI/mqdefault.jpg">
-                                              Google App Engine, explorando la plataforma
-                                            </a>
-                                          </li>
-                                          <li class="span3 mix category_2"><a href="/live/shows/5821843504103424">
-                                              <img class="video-thumbnail" src="https://i.ytimg.com/vi/OfYLG6FXtqE/mqdefault.jpg">
-                                              Google App Engine, explorando la plataforma
-                                            </a>
-                                          </li>
-                                          <li class="span3 mix category_3"><a href="/live/shows/5821843504103424">
-                                              <img class="video-thumbnail" src="https://i.ytimg.com/vi/9jUN1cc2iWg/mqdefault.jpg">
-                                              Google App Engine, explorando la plataforma
-                                            </a>
-                                          </li>
-                                          <li class="span3 mix category_4"><a href="/live/shows/5821843504103424">
-                                              <img class="video-thumbnail" src="https://i.ytimg.com/vi/KQEv90hZsCk/mqdefault.jpg">
-                                              Google App Engine, explorando la plataforma
-                                            </a>
-                                          </li>
-
-                                      </ul>
-                                  </div-->
+              
                                   
                             </div>
-                            <div class="tab-pane row-fluid fade" id="tab-4">
+                        <div class="tab-pane row-fluid fade" id="tab-4">
                                   <h2>Customer Stories <a href="#"><small></small></a></h2>
+                                   {%if customerstory%}
                                   <div class="filter-v1 margin-bottom-40">
                               
                                     <ul class="grid-v1 thumbnails">
                                       {%for custstory in customerstory%}
                                       <li class="span3 mix category_1"><a href="/live/shows/{{custstory.id}}">
+                                      {%if custstory.youtube_url %}
                                      <img class="video-thumbnail" src="http://img.youtube.com/vi/{{custstory.youtube_url}}/0.jpg">
-                                          {{custstory.name}} - {{custstory.description}}
+                                     {%else%}
+                                      <img src="/static/img/gdl-stay-tuned.png" height="450"/>
+                                      {%endif%}
+
+                                          {{custstory.name}} 
                                         </a>
                                       </li>
                                       {%endfor%}
@@ -286,6 +258,17 @@
 
                                     </ul>
                                   </div> 
+                                  {%else%}
+                                     <div class="span6 responsive" data-tablet="span6" data-desktop="span4">
+                                         <div class="dashboard-stat cards">         
+                                         <div class="blank_slate_arrow"></div>
+                                     <div class="blank_slate_body">
+                                        <img src="/static/img/blankshow.png" align="center">
+                                      <p class="lead">{{ _('Customer Story pages  give a customer to present and share their successes.') }}</p>
+                                       </div>              
+                                      </div>
+                                  </div>
+                                 {%endif%}
                               </div>
                            
                             <div class="tab-pane row-fluid fade" id="tab-5">

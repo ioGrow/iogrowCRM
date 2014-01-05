@@ -251,6 +251,9 @@ accountservices.factory('Attachement', function($http) {
       $scope.isLoading = true;
       gapi.client.crmengine.documents.list(params).execute(function(resp) {
               if(!resp.code){
+                if (!resp.items){
+                    $scope.blankStatdocuments = true;
+                  };
                 
                  $scope.documents = resp.items;
                  if ($scope.currentPage>1){
@@ -301,6 +304,7 @@ accountservices.factory('Attachement', function($http) {
              $('#newDocument').modal('hide');
              $scope.listDocuments();
              $scope.isLoading = false;
+             $scope.blankStatdocuments = false;
              $scope.$apply();
             }else{
                console.log(resp.message);
@@ -308,6 +312,7 @@ accountservices.factory('Attachement', function($http) {
                $('#errorModal').modal('show');
                if(resp.message=="Invalid grant"){
                   $scope.refreshToken();
+                   $scope.blankStatdocuments = false;
                   $scope.isLoading = false;
                   $scope.$apply();
                };
@@ -323,6 +328,7 @@ accountservices.factory('Attachement', function($http) {
             
              $scope.listDocuments();
              $scope.isLoading = false;
+              $scope.blankStatdocuments = false;
              $scope.$apply();
             }else{
                console.log(resp.message);
@@ -330,6 +336,7 @@ accountservices.factory('Attachement', function($http) {
                $('#errorModal').modal('show');
                if(resp.message=="Invalid grant"){
                   $scope.refreshToken();
+                   $scope.blankStatdocuments = false;
                   $scope.isLoading = false;
                   $scope.$apply();
                };
