@@ -1115,8 +1115,8 @@ routes = [
     (r'/apps/(\d+)', ChangeActiveAppHandler),
     # ioGrow Live
     ('/live/',PublicLiveHomeHandler),
-    ('/live/Allupcomings/',AllUpcomingsShowsHandler),
-    ('/live/Allrecents/',AllRecentShowHandler),
+    ('/live/allupcomings/',AllUpcomingsShowsHandler),
+    ('/live/allrecents/',AllRecentShowHandler),
     (r'/live/companies/(\d+)/',PublicLiveCompanyPageHandler),
     (r'/live/shows/(\d+)/',PublicLiveShowHandler),
     ('/welcome/',WelcomeHandler),
