@@ -52,7 +52,7 @@
                                        
                                           
                                              {%for upcoming_show in upcoming_shows%}
-                                      <li class="span3 mix category_1"><a href="/live/shows/{{upcoming_show.id}}">
+                                      <li class="span3 mix category_1"><a href="/live/shows/{{upcoming_show.id}}/">
                                       {% if upcoming_show.youtube_url %}
                                             <img class="video-thumbnail" src="http://img.youtube.com/vi/{{upcoming_show.youtube_url}}/0.jpg">
 
@@ -73,7 +73,7 @@
                                                                         
                                       <ul class="grid-v1 thumbnails"> 
                                        {%for recentshow in recentlyshows%}
-                                    <li class="span3 mix category_1"><a href="/live/shows/{{recentshow.id}}" target="new">
+                                    <li class="span3 mix category_1"><a href="/live/shows/{{recentshow.id}}/" target="new">
                                          {% if recentshow.youtube_url %}
                                            <img class="video-thumbnail" src="http://img.youtube.com/vi/{{recentshow.youtube_url}}/0.jpg">
                                          {% else %}
@@ -204,7 +204,7 @@
                                 <ul class="grid-v1 thumbnails">
                                   
                                    {%for prodvid in productvideo%}
-                                     <li class="span3 mix category_1"><a href="/live/shows/{{prodvid.id}}">
+                                     <li class="span3 mix category_1"><a href="/live/shows/{{prodvid.id}}/">
                                     {%if prodvid.youtube_url %}
                                       <img class="video-thumbnail" src="http://img.youtube.com/vi/{{prodvid.youtube_url}}/0.jpg">
                                      {%else%}
@@ -242,7 +242,7 @@
                               
                                     <ul class="grid-v1 thumbnails">
                                       {%for custstory in customerstory%}
-                                      <li class="span3 mix category_1"><a href="/live/shows/{{custstory.id}}">
+                                      <li class="span3 mix category_1"><a href="/live/shows/{{custstory.id}}/">
                                       {%if custstory.youtube_url %}
                                      <img class="video-thumbnail" src="http://img.youtube.com/vi/{{custstory.youtube_url}}/0.jpg">
                                      {%else%}
