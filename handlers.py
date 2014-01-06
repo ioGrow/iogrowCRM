@@ -1001,8 +1001,9 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             try:
                 user = self.get_user_from_session()
-                if user is None:
-                    self.redirect('/sign-in')
+
+                if user is None or user.type=='public_user':
+                    self.redirect('/welcome/')
                     return
                 # Set the user locale from user's settings
                 self.set_user_locale()
@@ -1031,7 +1032,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
             except UserNotAuthorizedException as e:
                 self.redirect('/sign-in')
         else:
-            self.redirect('/sign-in')
+            self.redirect('/welcome/')
 
 # Change the current app for example from sales to customer support           
 class ChangeActiveAppHandler(SessionEnabledHandler):

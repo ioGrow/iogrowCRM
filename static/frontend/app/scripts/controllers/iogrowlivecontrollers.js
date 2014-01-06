@@ -204,6 +204,7 @@ appLive.controller('LiveShowController', ['$scope',
      
     
 }]);
+
 appLive.controller('mapsController', ['$scope',
     function($scope) {
       $scope.getCompanies = function(){
@@ -232,19 +233,25 @@ appLive.controller('mapsController', ['$scope',
                 };
                 $('#map_canvas').gmap(mapOptions).bind('init', function(event, map) { 
                   for (var i=0; i<$scope.companies.length; i++) {
-                    for (var j=0; j<$scope.companies[i].addresses.length; j++) {
-                      if ($scope.companies[i].addresses[j].lat){
-                           $('#map_canvas').gmap('addMarker', {
-                            'position': $scope.companies[i].addresses[j].lat + ','+ $scope.companies[i].addresses[j].lon, 
-                            'draggable': false, 
-                            'bounds': true,
-                            'address':$scope.companies[i].addresses[j]
-                          }, function(map, marker) {
-                            // should be deleted;
-                          });
-                      }
+                    if ($scope.companies[i].addresses){
+                        for (var j=0; j<$scope.companies[i].addresses.length; j++) {
+                          if ($scope.companies[i].addresses[j].lat){
+                               $('#map_canvas').gmap('addMarker', {
+                                'position': $scope.companies[i].addresses[j].lat + ','+ $scope.companies[i].addresses[j].lon, 
+                                'draggable': false, 
+                                'bounds': true,
+                                'address':$scope.companies[i].addresses[j],
+                                'name': $scope.companies[i].name,
+                                'organizationid': $scope.companies[i].organizationid
+                              }, function(map, marker) {
+                                // should be deleted;
+                              }).click(function() {
+                                  var url = '<a href="/live/companies/'+ this.organizationid+'/">'+ this.name + '</a>';
+                                  $('#map_canvas').gmap('openInfoWindow', {'content':url}, this);
+                             });
+                          }
+                        }
                     }
-                  
                   }
                   
       
