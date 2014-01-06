@@ -655,6 +655,7 @@ $scope.deleteshow = function(){
   var params = {'limit':7,
                         'type_show':'Show'};
           Show.list($scope,params); 
+          $scope.$apply();
 };
 
 //HKA 29.12.2013 Add Feedback to Show
