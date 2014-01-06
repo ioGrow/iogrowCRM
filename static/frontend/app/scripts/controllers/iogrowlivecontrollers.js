@@ -206,16 +206,51 @@ appLive.controller('LiveShowController', ['$scope',
 }]);
 appLive.controller('mapsController', ['$scope',
     function($scope) {
+      $scope.getCompanies = function(){
+        gapi.client.iogrowlive.companies.list().execute(function(resp) {
+               
+               console.log(resp);
+               if(!resp.code){
+                //get the companies in the scope
+                $scope.companies = resp.items;
+                $scope.renderMaps();
+
+                $scope.$apply();
+               // $('#addAccountModal').modal('hide');
+               // window.location.replace('#/accounts/show/'+resp.id);
+                
+               }else{
+                console.log(resp.code);
+               }
+          });
+      };
      
       $scope.renderMaps = function(){
-        // Also works with: var yourStartLatLng = '59.3426606750, 18.0736160278';
-                var yourStartLatLng = new google.maps.LatLng(59.3426606750, 18.0736160278);
                 var mapOptions = {
-          center: new google.maps.LatLng(0, 0),
-          zoom: 02
-        };
-                $('#map_canvas').gmap(mapOptions);
+                  center: new google.maps.LatLng(0, 0),
+                  zoom: 02
+                };
+                $('#map_canvas').gmap(mapOptions).bind('init', function(event, map) { 
+                  for (var i=0; i<$scope.companies.length; i++) {
+                    for (var j=0; j<$scope.companies[i].addresses.length; j++) {
+                      if ($scope.companies[i].addresses[j].lat){
+                           $('#map_canvas').gmap('addMarker', {
+                            'position': $scope.companies[i].addresses[j].lat + ','+ $scope.companies[i].addresses[j].lon, 
+                            'draggable': false, 
+                            'bounds': true,
+                            'address':$scope.companies[i].addresses[j]
+                          }, function(map, marker) {
+                            // should be deleted;
+                          });
+                      }
+                    }
+                  
+                  }
+                  
+      
+                });
                 
       };
-      $scope.renderMaps();
+      //$scope.renderMaps();
+      $scope.getCompanies();
 }]);

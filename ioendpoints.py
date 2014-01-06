@@ -307,6 +307,9 @@ class LiveApi(remote.Service):
       my_model.organization_name = organization.name
       my_model.put()
       return my_model
+  @Companyprofile.query_method(query_fields=('limit', 'order', 'pageToken'),path='companies', name='companies.list')
+  def list_companies(self, query):
+      return query
   # Search API
   @endpoints.method(SearchRequest, LiveSearchResults,
                       path='search', http_method='POST',
