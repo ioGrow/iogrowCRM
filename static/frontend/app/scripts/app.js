@@ -1,5 +1,5 @@
-var app = angular.module('ioGrowLive',['ui.bootstrap']);
-app.config(function($interpolateProvider){
+var appLive = angular.module('ioGrowLive',['ui.bootstrap']);
+appLive.config(function($interpolateProvider){
   $interpolateProvider.startSymbol('<%=');
   $interpolateProvider.endSymbol('%>');
 });

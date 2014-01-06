@@ -392,6 +392,8 @@ class Address(EndpointsModel):
   state = ndb.StringProperty()
   postal_code = ndb.StringProperty()
   country = ndb.StringProperty()
+  lat = ndb.StringProperty()
+  lon = ndb.StringProperty()
 # HKA 19.11.2013 Add Website class
 class Website(EndpointsModel):
   website = ndb.StringProperty()

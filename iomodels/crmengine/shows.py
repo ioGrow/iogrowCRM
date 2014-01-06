@@ -5,7 +5,6 @@ from model import User
 from iomodels.crmengine.tags import Tag
 from search_helper import tokenize_autocomplete
 import pprint
-from search_helper import tokenize_autocomplete
 
 
 import model

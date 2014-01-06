@@ -4,6 +4,7 @@ from endpoints_proto_datastore import MessageFieldsSchema
 from google.appengine.api import search
 from search_helper import tokenize_autocomplete
 from model import Userinfo
+from search_helper import tokenize_autocomplete
 
 import model
 
