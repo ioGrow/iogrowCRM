@@ -1451,7 +1451,7 @@ class CrmEngineApi(remote.Service):
       properties = Companyprofile().__class__.__dict__
       for p in properties.keys():
          
-            if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p) and not(p in ['put','set_perm','put_index']) ):
+            if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p)  and not(p in ['put','set_perm','put_index']) ):
                 exec('patched_model.'+p+'= my_model.'+p)
       print '@@@@@@@@@@@@@@@@@@@@@@@@@@@'
       print patched_model          
