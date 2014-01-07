@@ -404,7 +404,7 @@ class Social(EndpointsModel):
 #HKA 30.12.2013 Manage Company Profile
 
 class Companyprofile(EndpointsModel):
-  _message_fields_schema = ('id','entityKey','name','tagline','introduction','organizationid','phones','emails','addresses','websites','sociallinks','youtube_channel')
+  _message_fields_schema = ('id','entityKey','name','tagline','introduction','organization','organizationid','phones','emails','addresses','websites','sociallinks','youtube_channel')
 
   owner = ndb.StringProperty()
   collaborators_list = ndb.StructuredProperty(Userinfo,repeated=True)
