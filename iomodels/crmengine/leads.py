@@ -5,7 +5,7 @@ from search_helper import tokenize_autocomplete
 import model
 
 class Lead(EndpointsModel):
-    _message_fields_schema = ('id','entityKey','folder', 'owner', 'access','collaborators_list','collaborators_ids', 'firstname','lastname','company' ,'title','tagline','introduction','phones','emails','addresses','websites','sociallinks','status','created_at','updated_at','show','show_name','feedback','feedback_name')
+    _message_fields_schema = ('id','entityKey','folder', 'owner', 'access','collaborators_list','collaborators_ids', 'firstname','lastname','company' ,'title','tagline','introduction','phones','emails','addresses','websites','sociallinks','status','created_at','updated_at','show','show_name','feedback','feedback_name','source')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)

@@ -202,8 +202,11 @@
 
               <span ng-show="lead.updated_at" class="contact-title" >Updated at:  <%=lead.updated_at | date:'yyyy-MM-dd - HH:mm:ss ' %> </span><br>
               <span ng-show="lead.title">{{_("Title")}} : <a   href="/#/search/type:Lead <%=lead.title%>" class="tag" ng-show="lead.title"> #<%= lead.title %> </a></span><span ng-show="lead.company">{{_("Company")}} : <a   href="/#/search/type:Lead <%=lead.company%>" class="tag" ng-show="lead.company"> #<%= lead.company %></a></span> <br>
+              <span>{{_("Lead Source")}} : </span>
+              <a   href="/#/search/type:Lead <%=lead.source%>" class="tag" ng-show="lead.source"> #<%= lead.source %></a> <br>
               <span>{{_("Lead Status")}} : </span>
               <a   href="/#/search/type:Lead <%=lead.status%>" class="tag" ng-show="lead.company"> #<%= lead.status %></a> <br>
+
             </ul>  
              <span class="page-meta"><i class="icon-pencil"><a ng-click="editLead()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="editbeforedelete()" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
 
