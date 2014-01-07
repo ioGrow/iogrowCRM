@@ -79,7 +79,8 @@ app.controller('CustomerStoriesListCtrl', ['$scope','$filter','Auth','Show',
 
        params ={'name': ioevent.name,
                'type_show':'Customer_Story',
-                'is_published': true
+                'is_published': true,
+                'access':'public'
                 //'tags': tags
               }
         

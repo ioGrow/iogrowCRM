@@ -296,8 +296,7 @@ class LiveApi(remote.Service):
       who.email = user_from_email.email
 
       my_model.who = who
-      my_model.source = "i/oGrow Live"
-      my_model.status = "pending"
+      my_model.status = "Pending"
       if my_model.type_url == 'show' :
         show_id = int(my_model.show_url.split("/")[5])
         show = Show.get_by_id(show_id)
@@ -306,20 +305,17 @@ class LiveApi(remote.Service):
         my_model.owner = show.owner
         organization = show.organization.get()
         my_model.organization_name = organization.name
+        my_model.source = "i/oGrow Live"
         my_model.put()
       if my_model.type_url == 'company':
         org_id = int(my_model.show_url.split("/")[5])
         org = model.Organization.get_by_id(org_id)
-        print('------------------------------------------')
-        print(org)
-        print('------------------------------------------')
-        print(org.key)
-        print(org.name)
-        my_model.organization = org.key
-        owner_record = model.User.query(model.User.organization==org.key).get()
-        my_model.owner = owner_record.owner
-        #organization = show.organization.get()
-        my_model.organization_name = org.name
+        org_key = org.key
+        companyprof = Companyprofile.query(Companyprofile.organizationid==org_id).get()
+        my_model.organization = org_key
+        my_model.owner = companyprof.owner
+        my_model.organization_name = companyprof.name
+        my_model.source = "i/oGrow Live Company Page"
         my_model.put()
 
       return my_model

@@ -1,5 +1,7 @@
 appLive.controller('CompanyLiveShowController', ['$scope',
     function($scope) {
+
+      $scope.feedback ={};
       
      $scope.renderSignIn = function() {
           
@@ -101,7 +103,9 @@ appLive.controller('CompanyLiveShowController', ['$scope',
                 
 
                 $scope.$apply();
+                $scope.feedback ={};
                 
+              
                 
                }else{
                 console.log(resp.code);

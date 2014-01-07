@@ -91,7 +91,8 @@ app.controller('ShowListCtrl', ['$scope','$filter','Auth','Show',
                       'starts_at': starts_at,
                       'ends_at':ends_at ,
                       'is_published': true,
-                      'type_show':'Show'
+                      'type_show':'Show',
+                      'access':'public'
                       //'tags': tags
               }
 
@@ -99,6 +100,7 @@ app.controller('ShowListCtrl', ['$scope','$filter','Auth','Show',
               params ={'name': ioevent.name,
                       'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
                       'type_show':'Show'
+                      'access':'public'
                       //'tags': tags
               }
             }
