@@ -46,6 +46,7 @@ accountservices.factory('Account', function($http) {
                
                $scope.listDocuments();
                $scope.email.to = '';
+               $scope.renderMaps();
                 angular.forEach($scope.account.emails, function(value, key){
                   $scope.email.to = $scope.email.to + value.email + ',';
                   
@@ -183,6 +184,12 @@ accountservices.factory('Search', function($http) {
           break;
         case 'Show':
           base_url = '/#/shows/show/';
+          break;
+        case 'Product_Video':
+          base_url = '/#/product_videos/product_video/';
+          break;
+        case 'Customer_Story':
+          base_url = '/#/customer_stories/customer_story/';
           break;
         
 

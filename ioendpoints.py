@@ -454,34 +454,59 @@ class CrmEngineApi(remote.Service):
                       name='accounts.search')
   def account_search(self, request):
       user_from_email = EndpointsHelper.require_iogrow_user()
+      organization = str(user_from_email.organization.id())
       
-      #prepare the query
-      query_string = request.q 
-      query_string_next = unicode(request.q) + u"\ufffd"
+      index = search.Index(name="GlobalIndex")
+      #Show only objects where you have permissions
+      query_string = request.q + ' type:Account AND (organization:' +organization+ ' AND (access:public OR (owner:'+ user_from_email.google_user_id +' OR collaborators:'+ user_from_email.google_user_id+')))'
+      print query_string
+      search_results = []
+      count = 1
       if request.limit:
           limit = int(request.limit)
       else:
           limit = 10
-
-      query = Account.query(ndb.AND(Account.name>=query_string,Account.name<query_string_next,ndb.OR(ndb.AND(Account.access=='public',Account.organization==user_from_email.organization),Account.owner==user_from_email.google_user_id, Account.collaborators_ids==user_from_email.google_user_id))).order(Account.name,Account._key)
+      next_cursor = None
       if request.pageToken:
-          curs = Cursor(urlsafe=request.pageToken)
-          results, next_curs, more = query.fetch_page(limit, start_cursor=curs)
+          cursor = search.Cursor(web_safe_string=request.pageToken)
       else:
-          results, next_curs, more = query.fetch_page(limit)
-
-      search_results = []
-      for result in results:
-          kwargs = {'id':str(result.key.id()),
-                  'entityKey': result.key.urlsafe(),
-                  'name': result.name}
-          search_results.append(AccountSearchResult(**kwargs))
-
-      nextPageToken = None
-      if more and next_curs:
-          nextPageToken = next_curs.urlsafe()
-        
-      return AccountSearchResults(items = search_results,nextPageToken=nextPageToken) 
+          cursor = search.Cursor(per_result=True)
+      if limit:
+          options = search.QueryOptions(limit=limit,cursor=cursor)
+      else:
+          options = search.QueryOptions(cursor=cursor)    
+      query = search.Query(query_string=query_string,options=options)
+      try:
+          if query:
+              results = index.search(query)
+              total_matches = results.number_found
+              
+              # Iterate over the documents in the results
+              for scored_document in results:
+                  kwargs = {
+                      'id' : scored_document.doc_id
+                  }
+                  for e in scored_document.fields:
+                      if e.name in ["entityKey", "title"]:
+                          if e.name == "title":
+                              kwargs["name"] = e.value
+                          else:
+                              kwargs[e.name]=e.value
+                  
+                  search_results.append(AccountSearchResult(**kwargs))
+                  
+                  next_cursor = scored_document.cursor.web_safe_string
+              if next_cursor:
+                  next_query_options = search.QueryOptions(limit=1,cursor=scored_document.cursor)
+                  next_query = search.Query(query_string=query_string,options=next_query_options)
+                  if next_query:
+                      next_results = index.search(next_query)
+                      if len(next_results.results)==0:
+                          next_cursor = None            
+                                    
+      except search.Error:
+          logging.exception('Search failed')
+      return AccountSearchResults(items = search_results,nextPageToken=next_cursor) 
   # Contacts APIs
   # contacts.insert api
   @Contact.method(user_required=True,path='contacts', http_method='POST', name='contacts.insert')
@@ -551,39 +576,56 @@ class CrmEngineApi(remote.Service):
                       name='contacts.search')
   def contact_search(self, request):
       user_from_email = EndpointsHelper.require_iogrow_user()
+      organization = str(user_from_email.organization.id())
       
-      #prepare the query
-      query_string = request.q 
-      query_string_next = unicode(request.q) + u"\ufffd"
+      index = search.Index(name="GlobalIndex")
+      #Show only objects where you have permissions
+      query_string = request.q + ' type:Contact AND (organization:' +organization+ ' AND (access:public OR (owner:'+ user_from_email.google_user_id +' OR collaborators:'+ user_from_email.google_user_id+')))'
+      print query_string
+      search_results = []
+      count = 1
       if request.limit:
           limit = int(request.limit)
       else:
           limit = 10
-
-      query = Contact.query(ndb.AND(Contact.display_name>=query_string,Contact.display_name<query_string_next),ndb.OR(ndb.AND(Contact.access=='public',Contact.organization==user_from_email.organization),Contact.owner==user_from_email.google_user_id, Contact.collaborators_ids==user_from_email.google_user_id)).order(Contact.display_name,Contact._key)
+      next_cursor = None
       if request.pageToken:
-          curs = Cursor(urlsafe=request.pageToken)
-          results, next_curs, more = query.fetch_page(limit, start_cursor=curs)
+          cursor = search.Cursor(web_safe_string=request.pageToken)
       else:
-          results, next_curs, more = query.fetch_page(limit)
-
-      search_results = []
-      for result in results:
-          kwargs = {'id':str(result.key.id()),
-                  'entityKey': result.key.urlsafe(),
-                  'firstname': result.firstname,
-                  'lastname':result.lastname,
-                  'account_name':result.account_name,
-                  'account':result.account.urlsafe(),
-                  'position': result.title}
-          search_results.append(ContactSearchResult(**kwargs))
-
-      nextPageToken = None
-      if more and next_curs:
-          nextPageToken = next_curs.urlsafe()
-        
-      return ContactSearchResults(items = search_results,nextPageToken=nextPageToken)
-
+          cursor = search.Cursor(per_result=True)
+      if limit:
+          options = search.QueryOptions(limit=limit,cursor=cursor)
+      else:
+          options = search.QueryOptions(cursor=cursor)    
+      query = search.Query(query_string=query_string,options=options)
+      try:
+          if query:
+              results = index.search(query)
+              total_matches = results.number_found
+              
+              # Iterate over the documents in the results
+              for scored_document in results:
+                  kwargs = {
+                      'id' : scored_document.doc_id
+                  }
+                  for e in scored_document.fields:
+                      if e.name in ["entityKey", "firstname","lastname","account","account_name","position"]:
+                          kwargs[e.name]=e.value
+                  
+                  search_results.append(ContactSearchResult(**kwargs))
+                  
+                  next_cursor = scored_document.cursor.web_safe_string
+              if next_cursor:
+                  next_query_options = search.QueryOptions(limit=1,cursor=scored_document.cursor)
+                  next_query = search.Query(query_string=query_string,options=next_query_options)
+                  if next_query:
+                      next_results = index.search(next_query)
+                      if len(next_results.results)==0:
+                          next_cursor = None            
+                                    
+      except search.Error:
+          logging.exception('Search failed')
+      return ContactSearchResults(items = search_results,nextPageToken=next_cursor)
   # Opportunities APIs
   # opportunities.insert
   @Opportunity.method(user_required=True,path='opportunities',http_method='POST',name='opportunities.insert')
@@ -1463,7 +1505,7 @@ class CrmEngineApi(remote.Service):
       properties = Companyprofile().__class__.__dict__
       for p in properties.keys():
          
-            if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p) and not(p in ['put','set_perm','put_index']) ):
+            if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p)  and not(p in ['put','set_perm','put_index']) ):
                 exec('patched_model.'+p+'= my_model.'+p)
       print '@@@@@@@@@@@@@@@@@@@@@@@@@@@'
       print patched_model          

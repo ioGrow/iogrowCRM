@@ -1,7 +1,8 @@
 from google.appengine.ext import ndb
 from endpoints_proto_datastore.ndb import EndpointsModel
 from endpoints_proto_datastore import MessageFieldsSchema
-from google.appengine.api import search 
+from google.appengine.api import search
+from search_helper import tokenize_autocomplete 
 
 import model
 class Account(EndpointsModel):
@@ -51,12 +52,15 @@ class Account(EndpointsModel):
         emails = " ".join(map(lambda x: x.email,  self.emails))
         phones = " ".join(map(lambda x: x.number,  self.phones))
         websites =  " ".join(map(lambda x: x.website,  self.websites))
+        title_autocomplete = ','.join(tokenize_autocomplete(self.name))
+        
         #addresses = " \n".join(map(lambda x: " ".join([x.street,x.city,x.state, str(x.postal_code), x.country]) if x else "", self.addresses))
         my_document = search.Document(
         doc_id = str(self.key.id()),
         fields=[
             search.TextField(name=u'type', value=u'Account'),
             search.TextField(name='organization', value = empty_string(organization) ),
+            search.TextField(name='entityKey',value=empty_string(self.key.urlsafe())),
             search.TextField(name='access', value = empty_string(self.access) ),
             search.TextField(name='owner', value = empty_string(self.owner) ),
             search.TextField(name='collaborators', value = collaborators ),
@@ -71,6 +75,7 @@ class Account(EndpointsModel):
             search.TextField(name='emails', value = empty_string(emails)),
             search.TextField(name='phones', value = empty_string(phones)),
             search.TextField(name='websites', value = empty_string(websites)),
+            search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
             #search.TextField(name='addresses', value = empty_string(addresses)),
            ])
         my_index = search.Index(name="GlobalIndex")

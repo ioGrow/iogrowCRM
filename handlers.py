@@ -723,7 +723,7 @@ class GooglePlusConnect(SessionEnabledHandler):
         email = GooglePlusConnect.get_user_email(credentials)
 
         user = model.User()
-        user.type = 'business_user'
+        user.type = 'public_user'
         user.status = 'active'
         user.google_user_id = profile.get('id')
         user.google_display_name = profile.get('displayName')
@@ -1004,6 +1004,8 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             try:
                 user = self.get_user_from_session()
+                print '*************************************'
+                print user
                 if user is None or user.type=='public_user':
                   self.redirect('/welcome/')
                   return
@@ -1037,7 +1039,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                 template = jinja_environment.get_template('templates/base.html')
                 self.response.out.write(template.render(template_values))
             except UserNotAuthorizedException as e:
-                self.redirect('/sign-in')
+                self.redirect('/welcome/')
         else:
           self.redirect('/welcome/')
 
