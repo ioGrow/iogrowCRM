@@ -813,9 +813,8 @@ $scope.addAddress = function(address){
   }else{ 
     addressArray = address;
   }
-  params = {'id':$scope.account.id,
-             'addresses':addressArray}
-  Account.patch($scope,params);
+  Map.searchLocation($scope,address);
+
   $('#addressmodal').modal('hide');
   $scope.address={};
 };
@@ -913,15 +912,24 @@ $scope.deleteaccount = function(){
      };
 
       $scope.renderMaps = function(){
+          console.log('map rendred############################################');
           $scope.addresses = $scope.account.addresses;
           Map.render($scope);
                 
       };
       $scope.locationUpdated = function(addressArray){
+
           var params = {'id':$scope.account.id,
                          'addresses':addressArray};
+          console.log('@#@#@#@#@');
+          console.log(params);
           Account.patch($scope,params);
       };
+      $scope.addGeo = function(addressArray){
+          params = {'id':$scope.account.id,
+             'addresses':addressArray}
+          Account.patch($scope,params);
+      }
 
      // Google+ Authentication 
      Auth.init($scope);

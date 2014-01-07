@@ -722,3 +722,23 @@ padding: 10px 50px 50px 50px;
 .warning-txt{
   color: #fbb450;
 }
+#gmap_canvas{
+  width: 300px;
+    height:200px;
+ 
+}
+#off_screen{
+  position: absolute;
+    left: -1000px;
+    top: -1000px;
+}
+.googleMapContainer{
+
+}
+#gmap_canvas img { 
+  max-width: none !important;
+}
+
+#gmap_canvas label { 
+  width: auto !important; display:inline !important; 
+} 

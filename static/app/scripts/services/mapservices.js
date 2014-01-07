@@ -8,9 +8,10 @@ mapservices.factory('Map', function($http) {
       console.log($scope.addresses);
       var mapOptions = {
                   center: new google.maps.LatLng(0, 0),
-                  zoom: 02
+                  zoom: 01
       };
       $('#gmap_canvas').gmap(mapOptions).bind('init', function(event, map) { 
+
         if($scope.addresses){
           for (var i=0; i<$scope.addresses.length; i++) {
             if ($scope.addresses[i].lat){
@@ -28,7 +29,14 @@ mapservices.factory('Map', function($http) {
                   
           }
         }
+        x = map.getZoom();
+        c = map.getCenter();
+        google.maps.event.trigger(map, 'resize');
+        map.setZoom(x);
+        map.setCenter(c);
+        
       });
+
   };
   Map.updateLocation = function($scope,location,marker){
               marker.address.lat = location.nb.toString();
@@ -48,6 +56,38 @@ mapservices.factory('Map', function($http) {
               }
               $scope.locationUpdated(addressArray);
   };
+  Map.searchLocation = function($scope,address){
+              var addressArray = [];
+              var addressToSearch = address.street + ',' + address.city + ',' + address.country;
+              
+              $('#gmap_canvas').gmap('search', {'address': addressToSearch}, function(results, status) {
+              
+              
+              
+              if ($scope.addresses){
+                addressArray = new Array();
+                addressArray = $scope.addresses;
+                address.lat = results[0].geometry.location.nb.toString();
+                address.lon = results[0].geometry.location.ob.toString();
+                addressArray.push(address);
+
+              }else{ 
+                addressArray = address;
+              }
+              
+              $scope.addGeo(addressArray);
+              
+              var position = results[0].geometry.location.nb + ',' + results[0].geometry.location.ob;
+              
+
+              $('#gmap_canvas').gmap('addMarker', {'position': position, 'bounds': true, 'draggable':true,'address':address}).dragend( function(event) {
+                      console.log(event);
+                      Map.updateLocation($scope,event.latLng, this);
+              });
+              
+  });
+  };
+
   
   return Map;
 });

@@ -159,7 +159,7 @@
                   <div class="tabbable tabbable-custom">
                     <ul class="nav nav-tabs">
                       <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;" >{{ _("Notes") }}</a></li>
-                      <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;">{{ _("About") }}</a></li>
+                      <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;renderMaps();">{{ _("About") }}</a></li>
                       <li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">{{ _("Contacts") }}</a></li>
                       <li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">{{ _("Customer Needs") }}</a></li>
                       <li class="ng-tab" ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">{{ _("Opportunities") }}</a></li>
@@ -228,6 +228,7 @@
                       <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
                         
                         <div class="row-fluid">
+                          
                           <div class="span6">
                             
                                 <div class="news-blocks blank-card blank-card-yellow">
@@ -309,9 +310,10 @@
                                 <p><%=account.introduction%></p>                         
                               </div>
                               <div class="news-blocks blank-card blank-card-yellow">
-                                <h3>Google Maps</h3>
-                                <div id="gmap_canvas" style="width:100%;height:300px;"></div>                         
+                                
+                               <div id="gmap_canvas" style="width:100%;height:300px;"></div>
                               </div>
+                              
                             
                           </div>
                           
@@ -907,6 +909,7 @@
                   <!--END TABS-->
                 </div>
               </div>
+              
               <!-- END PORTLET-->
             </div>
             <div class="span3">
@@ -950,6 +953,7 @@
 
 
                                   </ul>
+                                    
 
                                   <!-- Modal -->
           <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -1048,6 +1052,8 @@
               <!-- END PORTLET-->
             </div>
             </div>
+            
+                                  
 
           
             
