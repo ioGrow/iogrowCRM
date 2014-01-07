@@ -181,9 +181,15 @@
           
           <div class="span12">
             <div class="pull-right sharebuttonDiv"> 
+                   <a ng-click="showConvertModal()" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
+                          <i class="icon-refresh"></i> {{_("Convert")}}
+                   </a>
+                  
                    <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
                     <i class="icon-lock"></i> Share
                   </a>
+                 
+                 
                         
                         
                      
@@ -196,10 +202,13 @@
 
               <span ng-show="lead.updated_at" class="contact-title" >Updated at:  <%=lead.updated_at | date:'yyyy-MM-dd - HH:mm:ss ' %> </span><br>
               <span ng-show="lead.title">{{_("Title")}} : <a   href="/#/search/type:Lead <%=lead.title%>" class="tag" ng-show="lead.title"> #<%= lead.title %> </a></span><span ng-show="lead.company">{{_("Company")}} : <a   href="/#/search/type:Lead <%=lead.company%>" class="tag" ng-show="lead.company"> #<%= lead.company %></a></span> <br>
+              <span>{{_("Lead Source")}} : </span>
+              <a   href="/#/search/type:Lead <%=lead.source%>" class="tag" ng-show="lead.source"> #<%= lead.source %></a> <br>
               <span>{{_("Lead Status")}} : </span>
               <a   href="/#/search/type:Lead <%=lead.status%>" class="tag" ng-show="lead.company"> #<%= lead.status %></a> <br>
+
             </ul>  
-             <span class="page-meta"><i class="icon-refresh"><a ng-click="showConvertModal()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Convert")}}</a></i> | <i class="icon-pencil"><a ng-click="editLead()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="editbeforedelete()" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
+             <span class="page-meta"><i class="icon-pencil"><a ng-click="editLead()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="editbeforedelete()" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
 
            
             
@@ -223,7 +232,7 @@
                   <div class="tabbable tabbable-custom">
                     <ul class="nav nav-tabs">
                       <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;" >Notes</a></li>
-                      <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;">About</a></li>
+                      <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;renderMaps();">About</a></li>
                       <li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">Attach Documents</a></li>
                       <li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">Send an Email</a></li>
                       <!--li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">Opportunities</a></li-->
@@ -366,6 +375,10 @@
                                   
                                 </div>
                                 <p><%=lead.introduction%></p>                        
+                              </div>
+                              <div class="news-blocks blank-card blank-card-yellow">
+                                
+                               <div id="gmap_canvas" style="width:100%;height:300px;"></div>
                               </div>
                             
                           </div>
@@ -732,7 +745,7 @@
                      <div class="control-group">
                         <label  class="control-label">{{_("City")}} </label>
                         <div class="controls">
-                          <input type="text"   id="id_city" ng-model="address.email">
+                          <input type="text"   id="id_city" ng-model="address.city">
                         </div>
                      </div>
                      <div class="control-group">

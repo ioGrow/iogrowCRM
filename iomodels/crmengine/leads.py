@@ -5,7 +5,7 @@ from search_helper import tokenize_autocomplete
 import model
 
 class Lead(EndpointsModel):
-    _message_fields_schema = ('id','entityKey','folder', 'owner', 'access','collaborators_list','collaborators_ids', 'firstname','lastname','company' ,'title','tagline','introduction','phones','emails','addresses','websites','sociallinks','status','created_at','updated_at','show','show_name','feedback','feedback_name')
+    _message_fields_schema = ('id','entityKey','folder', 'owner', 'access','collaborators_list','collaborators_ids', 'firstname','lastname','company' ,'title','tagline','introduction','phones','emails','addresses','websites','sociallinks','status','created_at','updated_at','show','show_name','feedback','feedback_name','source')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
@@ -64,7 +64,7 @@ class Lead(EndpointsModel):
         emails = " ".join(map(lambda x: x.email,  self.emails))
         phones = " ".join(map(lambda x: x.number,  self.phones))
         websites = " ".join(map(lambda x: x.website,  self.websites))
-        addresses = " \n".join(map(lambda x: " ".join([x.street,x.city,x.state, x.postal_code, x.country]), self.addresses))
+        #addresses = " \n".join(map(lambda x: " ".join([x.street,x.city,x.state, x.postal_code, x.country]), self.addresses))
         my_document = search.Document(
         doc_id = str(self.key.id()),
         fields=[
@@ -91,7 +91,7 @@ class Lead(EndpointsModel):
             search.TextField(name='emails', value = empty_string(emails)),
             search.TextField(name='phones', value = empty_string(phones)),
             search.TextField(name='websites', value = empty_string(websites)),
-            search.TextField(name='addresses', value = empty_string(addresses)),
+            #search.TextField(name='addresses', value = empty_string(addresses)),
             search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
            ])
         my_index = search.Index(name="GlobalIndex")
