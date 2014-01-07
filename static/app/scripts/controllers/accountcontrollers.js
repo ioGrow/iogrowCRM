@@ -134,8 +134,8 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
      Auth.init($scope);
 
 }]);
-app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account','Contact','Case','Opportunity', 'Topic','Note','Task','Event','Permission','User','Attachement','Email','Need','Opportunitystage','Casestatus',
-    function($scope,$filter,$route,Auth,Account,Contact,Case,Opportunity,Topic,Note,Task,Event,Permission,User,Attachement,Email,Need,Opportunitystage,Casestatus) {
+app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account','Contact','Case','Opportunity', 'Topic','Note','Task','Event','Permission','User','Attachement','Email','Need','Opportunitystage','Casestatus','Map',
+    function($scope,$filter,$route,Auth,Account,Contact,Case,Opportunity,Topic,Note,Task,Event,Permission,User,Attachement,Email,Need,Opportunitystage,Casestatus,Map) {
        $("#id_Accounts").addClass("active");
        $scope.selectedTab = 1;
        $scope.isSignedIn = false;
@@ -911,6 +911,17 @@ $scope.deleteaccount = function(){
      Account.delete($scope,accountid);
      $('#BeforedeleteAccount').modal('hide');
      };
+
+      $scope.renderMaps = function(){
+          $scope.addresses = $scope.account.addresses;
+          Map.render($scope);
+                
+      };
+      $scope.locationUpdated = function(addressArray){
+          var params = {'id':$scope.account.id,
+                         'addresses':addressArray};
+          Account.patch($scope,params);
+      };
 
      // Google+ Authentication 
      Auth.init($scope);

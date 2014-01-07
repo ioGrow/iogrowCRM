@@ -1,5 +1,5 @@
-app.controller('SearchFormController', ['$scope',
-    function($scope) {
+app.controller('SearchFormController', ['$scope','Search',
+    function($scope,Search) {
      var params ={};
      $scope.result = undefined;
      $scope.q = undefined;
@@ -14,16 +14,19 @@ app.controller('SearchFormController', ['$scope',
           });
      });
      $scope.selectResult = function(){
-        // To do update this method
-        window.location.replace('#/accounts/show/'+$scope.searchQuery.id);
+        var url = Search.getUrl($scope.searchQuery.type,$scope.searchQuery.id);
+        $scope.searchQuery=' ';
+        window.location.replace(url);
      };
      $scope.executeSearch = function(searchQuery){
       if (typeof(searchQuery)=='string'){
          window.location.replace('#/search/'+searchQuery);
       }else{
-        window.location.replace('#/accounts/show/'+searchQuery.id);
+        var url = Search.getUrl($scope.searchQuery.type,$scope.searchQuery.id);
+        $scope.searchQuery=' ';
+        window.location.replace(url);
       }
-      $scope.searchQuery=' ';
+      
      };
 }]);
 

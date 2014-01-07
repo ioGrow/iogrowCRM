@@ -66,11 +66,12 @@ class Show(EndpointsModel):
         empty_date = lambda x: x if x else date(2999, 12, 31)
         collaborators = " ".join(self.collaborators_ids)
         organization = str(self.organization.id())
+        
         title_autocomplete = ','.join(tokenize_autocomplete(self.name + ' ' + empty_string(self.status)))
         my_document = search.Document(
         doc_id = str(self.key.id()),
         fields=[
-            search.TextField(name=u'type', value=u'Show'),
+            search.TextField(name=u'type', value = empty_string(self.type_show)),
             search.TextField(name='organization', value = empty_string(organization) ),
             search.TextField(name='access', value = empty_string(self.access) ),
             search.TextField(name='owner', value = empty_string(self.owner) ),

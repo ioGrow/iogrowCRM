@@ -1,6 +1,7 @@
 from google.appengine.ext import ndb
 from endpoints_proto_datastore.ndb import EndpointsModel
 from google.appengine.api import search 
+from search_helper import tokenize_autocomplete
 
 import model
 
@@ -63,6 +64,7 @@ class Contact(EndpointsModel):
         emails = " ".join(map(lambda x: x.email,  self.emails))
         phones = " ".join(map(lambda x: x.number,  self.phones))
         websites = " ".join(map(lambda x: x.website,  self.websites))
+        title_autocomplete = ','.join(tokenize_autocomplete(self.firstname + ' ' + self.lastname +' '+ empty_string(self.title)+ ' ' +empty_string(self.account_name)))
         #addresses = " \n".join(map(lambda x: " ".join([x.street,x.city,x.state, x.postal_code, x.country]) if x else "", self.addresses))
         my_document = search.Document(
         doc_id = str(self.key.id()),
@@ -81,12 +83,15 @@ class Contact(EndpointsModel):
             search.TextField(name='company', value = empty_string(self.company)),
             search.TextField(name='department', value = empty_string(self.department)),
             search.TextField(name='account_name',value=empty_string(self.account_name)),
+            search.TextField(name='entityKey',value=empty_string(self.key.urlsafe())),
+            search.TextField(name='account',value=empty_string(self.account.urlsafe())),
             search.TextField(name='description', value = empty_string(self.description)),
             search.TextField(name='tagline', value = empty_string(self.tagline)),
             search.TextField(name='introduction', value = empty_string(self.introduction)),
             search.TextField(name='emails', value = empty_string(emails)),
             search.TextField(name='phones', value = empty_string(phones)),
             search.TextField(name='websites', value = empty_string(websites)),
+            search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
             #search.TextField(name='addresses', value = empty_string(addresses)),
 
            ])
