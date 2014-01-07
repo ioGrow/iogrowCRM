@@ -166,8 +166,8 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
      // Google+ Authentication 
      Auth.init($scope);
 }]);
-app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User','Attachement',
-    function($scope,$filter,$route,Auth,Email,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User,Attachement) {
+app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User','Attachement','Map',
+    function($scope,$filter,$route,Auth,Email,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User,Attachement,Map) {
  console.log('I am in ContactShowCtrl');
       $("#id_Contacts").addClass("active");
       var tab = $route.current.params.accountTab;
@@ -819,6 +819,36 @@ $scope.updateintro = function(contact){
                     console.log('after uploading files');
                     console.log(params);
                 }
+      }
+      $scope.renderMaps = function(){
+          $scope.addresses = $scope.contact.addresses;
+          Map.render($scope);
+      };
+      $scope.addAddress = function(address){
+        var addressArray = undefined;
+        if ($scope.contact.addresses){
+          addressArray = new Array();
+          addressArray = $scope.contact.addresses;
+          addressArray.push(address);
+
+        }else{ 
+          addressArray = address;
+        }
+        Map.searchLocation($scope,address);
+
+        $('#addressmodal').modal('hide');
+        $scope.address={};
+      };
+      $scope.locationUpdated = function(addressArray){
+
+          var params = {'id':$scope.contact.id,
+                         'addresses':addressArray};
+          Contact.patch($scope,params);
+      };
+      $scope.addGeo = function(addressArray){
+          params = {'id':$scope.contact.id,
+             'addresses':addressArray}
+          Contact.patch($scope,params);
       }
      // Google+ Authentication 
      Auth.init($scope);

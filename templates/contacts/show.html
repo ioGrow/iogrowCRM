@@ -193,7 +193,7 @@
                   <div class="tabbable tabbable-custom">
                     <ul class="nav nav-tabs">
                       <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;" >Notes</a></li>
-                      <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;">About</a></li>
+                      <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;renderMaps();">About</a></li>
                       <!--li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">Contacts</a></li-->
                       <li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">Opportunities</a></li>
                       <li class="ng-tab"  ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">Cases</a></li>
@@ -339,6 +339,10 @@
                                   
                                 </div>
                                 <p> <%=contact.introduction%></p>                         
+                              </div>
+                              <div class="news-blocks blank-card blank-card-yellow">
+                                
+                               <div id="gmap_canvas" style="width:100%;height:300px;"></div>
                               </div>
                             
                           </div>
@@ -1002,7 +1006,7 @@
                      <div class="control-group">
                         <label  class="control-label">{{_("City")}} </label>
                         <div class="controls">
-                          <input type="text"   id="id_city" ng-model="address.email">
+                          <input type="text"   id="id_city" ng-model="address.city">
                         </div>
                      </div>
                      <div class="control-group">

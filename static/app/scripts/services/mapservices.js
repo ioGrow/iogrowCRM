@@ -57,11 +57,13 @@ mapservices.factory('Map', function($http) {
               $scope.locationUpdated(addressArray);
   };
   Map.searchLocation = function($scope,address){
+              console.log(address);
               var addressArray = [];
               var addressToSearch = address.street + ',' + address.city + ',' + address.country;
               
               $('#gmap_canvas').gmap('search', {'address': addressToSearch}, function(results, status) {
-              
+              console.log('gmap.search');
+              console.log(results);
               
               
               if ($scope.addresses){

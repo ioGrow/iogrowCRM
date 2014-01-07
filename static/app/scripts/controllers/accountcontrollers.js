@@ -802,22 +802,7 @@ $scope.addEmail = function(email){
   $scope.email={};
   };
   
-//HKA 20.11.2013 Add Addresse
-$scope.addAddress = function(address){
-  var addressArray = undefined;
-  if ($scope.account.addresses){
-    addressArray = new Array();
-    addressArray = $scope.account.addresses;
-    addressArray.push(address);
 
-  }else{ 
-    addressArray = address;
-  }
-  Map.searchLocation($scope,address);
-
-  $('#addressmodal').modal('hide');
-  $scope.address={};
-};
 
 //HKA 22.11.2013 Add Website
 $scope.addWebsite = function(website){
@@ -912,16 +897,28 @@ $scope.deleteaccount = function(){
      };
 
       $scope.renderMaps = function(){
-          console.log('map rendred############################################');
           $scope.addresses = $scope.account.addresses;
           Map.render($scope);
-                
+      };
+      $scope.addAddress = function(address){
+        var addressArray = undefined;
+        if ($scope.account.addresses){
+          addressArray = new Array();
+          addressArray = $scope.account.addresses;
+          addressArray.push(address);
+
+        }else{ 
+          addressArray = address;
+        }
+        Map.searchLocation($scope,address);
+
+        $('#addressmodal').modal('hide');
+        $scope.address={};
       };
       $scope.locationUpdated = function(addressArray){
 
           var params = {'id':$scope.account.id,
                          'addresses':addressArray};
-          console.log('@#@#@#@#@');
           console.log(params);
           Account.patch($scope,params);
       };
