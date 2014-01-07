@@ -295,22 +295,22 @@
                                  {%endif%}
                               </div>
                            
-                            <div class="tab-pane row-fluid fade" id="tab-5">
+                            <div class="tab-pane row-fluid fade" id="tab-5" ng-controller="CompanyLiveShowController">
                                   <form action="#" class="horizontal-form margin-bottom-40">
                                   <div class="control-group">
                                       <label class="control-label">Subject</label>
                                       <div class="controls">
-                                          <input type="text" class="m-wrap span12" />
+                                          <input type="text" class="m-wrap span12"  ng-model="feedback.name"/>
                                       </div>
                                   </div>
                                  
                                   <div class="control-group">
                                       <label class="control-label" >Message</label>
                                       <div class="controls">
-                                          <textarea class="m-wrap span12" rows="8"></textarea>
+                                          <textarea class="m-wrap span12" rows="8" ng-model="feedback.content"></textarea>
                                       </div>
                                   </div>
-                                  <button type="submit" class="btn theme-btn green">Send</button>
+                                  <button ng-click="sendFeedback(feedback)" type="submit" class="btn theme-btn green">Send</button>
                                   <button type="button" class="btn">Cancel</button>
                               </form>
                                   

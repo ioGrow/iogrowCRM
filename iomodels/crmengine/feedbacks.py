@@ -23,7 +23,8 @@ class Feedback(EndpointsModel):
     source = ndb.StringProperty()
     status = ndb.StringProperty()
     related_to = ndb.KeyProperty()
-    show_url = ndb.StringProperty()
+    show_url = ndb.StringProperty() 
+    type_url = ndb.StringProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
     # public or private

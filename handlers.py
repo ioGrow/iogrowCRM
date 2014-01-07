@@ -202,7 +202,7 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
                                               shows_folder=shows_folder,
                                               products_folder=products_folder)
             organization.put()
-            comp_prof = model.Companyprofile(name=org_name,organization=organization.key,organizationid=organization.key.id())
+            comp_prof = model.Companyprofile(name=org_name,organization=organization.key,organizationid=organization.key.id(),owner=user.google_user_id)
             comp_prof.put()
             profile = model.Profile.query(model.Profile.name=='Super Administrator', model.Profile.organization==organization.key).get()
             user.init_user_config(organization.key,profile.key)
@@ -1029,7 +1029,8 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                   'logout_url' : logout_url,
                   'CLIENT_ID': CLIENT_ID,
                   'active_app':active_app,
-                  'apps': apps
+                  'apps': apps,
+                  'org_id':org_id
                 }
                 if admin_app:
                     template_values['admin_app']=admin_app

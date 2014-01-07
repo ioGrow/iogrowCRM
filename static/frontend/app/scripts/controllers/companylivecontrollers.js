@@ -101,8 +101,7 @@ appLive.controller('CompanyLiveShowController', ['$scope',
                 
 
                 $scope.$apply();
-               // $('#addAccountModal').modal('hide');
-               // window.location.replace('#/accounts/show/'+resp.id);
+                
                 
                }else{
                 console.log(resp.code);
