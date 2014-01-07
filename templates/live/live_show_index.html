@@ -29,7 +29,7 @@
 
     <div class="container min-hight">
         <!-- BEGIN FILTER -->     
-        <h2>Check out our upcoming shows <a href="/live/allupcomings/"><small>(View all)</small></a></h2>
+        <h2>Check out our upcoming shows <a href="/live/allupcomings/"><small>{%if number_of_upcoming_shows > 8 %}(View all){%endif%}</small></a></h2>
           
         <ul class="grid-v1 thumbnails">
          {%if upcoming_shows %}
@@ -38,7 +38,7 @@
                 <li class="span3 mix category_1">
                 
                 <a href="/live/shows/{{upcoming.id}}/" >
-                    <img class="hangout-icon" src="https://developers.google.com/_static/frontend/a39d39a910/images/hangout.png">
+                    <img class="hangout-icon" src="/static/img/google_hangouts .png">
                  <span> {{upcoming.name}} :  ({{upcoming.starts_at}} to {{upcoming.ends_at}})</span> </a>
                  By {{upcoming.organization_name}}  
                                                           
@@ -63,7 +63,7 @@
         </ul>
         
             
-        <h2>Recently aired <a href="/live/allrecents/"><small>(View all)</small></a></h2>
+        <h2>Recently aired <a href="/live/allrecents/"> <small>{%if number_of_recentlyshows > 4 %}(View all) {%endif%}</small></a> </h2>
           
         <div class="filter-v1 margin-bottom-40">
             
