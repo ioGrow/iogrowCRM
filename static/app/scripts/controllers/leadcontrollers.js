@@ -158,8 +158,8 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus',
 
       
 }]);
-app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Topic','Note','Lead','Permission','User','Leadstatus','Attachement',
-    function($scope,$filter,$route,Auth,Email,Task,Event,Topic,Note,Lead,Permission,User,Leadstatus,Attachement) {
+app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Topic','Note','Lead','Permission','User','Leadstatus','Attachement','Map',
+    function($scope,$filter,$route,Auth,Email,Task,Event,Topic,Note,Lead,Permission,User,Leadstatus,Attachement,Map) {
       $("#id_Leads").addClass("active");
       
       var tab = $route.current.params.accountTab;
@@ -666,6 +666,36 @@ $scope.deletelead = function(){
                     console.log('after uploading files');
                     console.log(params);
                 }
+      }
+      $scope.renderMaps = function(){
+          $scope.addresses = $scope.lead.addresses;
+          Map.render($scope);
+      };
+      $scope.addAddress = function(address){
+        var addressArray = undefined;
+        if ($scope.lead.addresses){
+          addressArray = new Array();
+          addressArray = $scope.lead.addresses;
+          addressArray.push(address);
+
+        }else{ 
+          addressArray = address;
+        }
+        Map.searchLocation($scope,address);
+
+        $('#addressmodal').modal('hide');
+        $scope.address={};
+      };
+      $scope.locationUpdated = function(addressArray){
+
+          var params = {'id':$scope.lead.id,
+                         'addresses':addressArray};
+          Lead.patch($scope,params);
+      };
+      $scope.addGeo = function(addressArray){
+          params = {'id':$scope.lead.id,
+             'addresses':addressArray}
+          Lead.patch($scope,params);
       }
       
     // Google+ Authentication 
