@@ -181,9 +181,15 @@
           
           <div class="span12">
             <div class="pull-right sharebuttonDiv"> 
+                   <a ng-click="showConvertModal()" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
+                          <i class="icon-refresh"></i> {{_("Convert")}}
+                   </a>
+                  
                    <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
                     <i class="icon-lock"></i> Share
                   </a>
+                 
+                 
                         
                         
                      
@@ -199,7 +205,7 @@
               <span>{{_("Lead Status")}} : </span>
               <a   href="/#/search/type:Lead <%=lead.status%>" class="tag" ng-show="lead.company"> #<%= lead.status %></a> <br>
             </ul>  
-             <span class="page-meta"><i class="icon-refresh"><a ng-click="showConvertModal()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Convert")}}</a></i> | <i class="icon-pencil"><a ng-click="editLead()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="editbeforedelete()" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
+             <span class="page-meta"><i class="icon-pencil"><a ng-click="editLead()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="editbeforedelete()" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
 
            
             
