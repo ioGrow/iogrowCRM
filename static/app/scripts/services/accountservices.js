@@ -183,13 +183,13 @@ accountservices.factory('Search', function($http) {
           base_url = '/#/cases/show/';
           break;
         case 'Show':
-          base_url = '/#/shows/show/';
+          base_url = '/#/live/shows/show/';
           break;
         case 'Product_Video':
-          base_url = '/#/product_videos/product_video/';
+          base_url = '/#/live/product_videos/product_video/';
           break;
         case 'Customer_Story':
-          base_url = '/#/customer_stories/customer_story/';
+          base_url = '/#/live/customer_stories/customer_story/';
           break;
         
 

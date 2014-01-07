@@ -99,7 +99,7 @@ app.controller('ShowListCtrl', ['$scope','$filter','Auth','Show',
             }else{
               params ={'name': ioevent.name,
                       'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'type_show':'Show'
+                      'type_show':'Show',
                       'access':'public'
                       //'tags': tags
               }
