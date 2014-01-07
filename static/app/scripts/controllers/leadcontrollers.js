@@ -78,6 +78,7 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus',
                       'company':lead.company,
                       'title':lead.title,
                       'source': lead.source,
+                      'access': lead.access,
                       'status':$scope.stage_selected.status};
         Lead.insert($scope,params);
         $('#addLeadModal').modal('hide')
