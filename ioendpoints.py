@@ -287,7 +287,7 @@ class LiveApi(remote.Service):
   ID_RESOURCE = endpoints.ResourceContainer(
             message_types.VoidMessage,
             id=messages.StringField(1))
-  @Feedback.method(user_required=True,request_fields=('show_url', 'name','content'), path='feedbacks',http_method='POST',name='feedbacks.insert')
+  @Feedback.method(user_required=True,request_fields=('show_url','type_url', 'name','content'), path='feedbacks',http_method='POST',name='feedbacks.insert')
   def insert_feedback_live(self, my_model):
       user_from_email = EndpointsHelper.require_iogrow_user()
       who = model.Userinfo()
@@ -296,16 +296,28 @@ class LiveApi(remote.Service):
       who.email = user_from_email.email
 
       my_model.who = who
-      my_model.source = "i/oGrow Live"
-      my_model.status = "pending"
-      show_id = int(my_model.show_url.split("/")[5])
-      show = Show.get_by_id(show_id)
-      my_model.related_to = show.key
-      my_model.organization = show.organization
-      my_model.owner = show.owner
-      organization = show.organization.get()
-      my_model.organization_name = organization.name
-      my_model.put()
+      my_model.status = "Pending"
+      if my_model.type_url == 'show' :
+        show_id = int(my_model.show_url.split("/")[5])
+        show = Show.get_by_id(show_id)
+        my_model.related_to = show.key
+        my_model.organization = show.organization
+        my_model.owner = show.owner
+        organization = show.organization.get()
+        my_model.organization_name = organization.name
+        my_model.source = "i/oGrow Live"
+        my_model.put()
+      if my_model.type_url == 'company':
+        org_id = int(my_model.show_url.split("/")[5])
+        org = model.Organization.get_by_id(org_id)
+        org_key = org.key
+        companyprof = Companyprofile.query(Companyprofile.organizationid==org_id).get()
+        my_model.organization = org_key
+        my_model.owner = companyprof.owner
+        my_model.organization_name = companyprof.name
+        my_model.source = "i/oGrow Live Company Page"
+        my_model.put()
+
       return my_model
   @Companyprofile.query_method(query_fields=('limit', 'order', 'pageToken'),path='companies', name='companies.list')
   def list_companies(self, query):

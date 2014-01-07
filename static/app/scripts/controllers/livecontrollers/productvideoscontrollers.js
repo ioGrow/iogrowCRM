@@ -79,7 +79,8 @@ app.controller('ProductVideoListCtrl', ['$scope','$filter','Auth','Show',
 
        params ={'name': ioevent.name,
                 'type_show': 'Product_Video',
-                'is_published': true
+                'is_published': true,
+                'access':'public'
                 //'tags': tags
               }
         

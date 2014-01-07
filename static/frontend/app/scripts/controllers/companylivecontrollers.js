@@ -1,5 +1,7 @@
 appLive.controller('CompanyLiveShowController', ['$scope',
     function($scope) {
+
+      $scope.feedback ={};
       
      $scope.renderSignIn = function() {
           
@@ -101,8 +103,9 @@ appLive.controller('CompanyLiveShowController', ['$scope',
                 
 
                 $scope.$apply();
-               // $('#addAccountModal').modal('hide');
-               // window.location.replace('#/accounts/show/'+resp.id);
+                $scope.feedback ={};
+                
+              
                 
                }else{
                 console.log(resp.code);
