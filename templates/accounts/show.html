@@ -495,7 +495,7 @@
                 <div id="addNeedModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("Add new Customer Needs to understand them more")}}</h3>
+                <h3 id="myModalLabel">{{_("Add new Customer Needs")}}</h3>
               </div>
               <div class="modal-body">
                  <form id="addCase" name="addCase" ng-submit="saveNeed(need)" class="form-horizontal"> 
@@ -526,16 +526,9 @@
                        
                         <div class="controls">
                           <select class="input-xlarge" ng-model="need.priority">
-                            <option value="1">1 - Low</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10 - Critical</option>
+                            <option >Low</option>
+                            <option >Medium</option>
+                            <option >High</option>
                           </select>
                           
                         </div>

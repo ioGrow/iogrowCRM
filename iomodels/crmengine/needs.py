@@ -19,7 +19,7 @@ class Need(EndpointsModel):
     name = ndb.StringProperty()
     description = ndb.TextProperty()
     status = ndb.StringProperty()
-    priority = ndb.IntegerProperty()
+    priority = ndb.StringProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
     # public or private
@@ -60,7 +60,7 @@ class Need(EndpointsModel):
             search.TextField(name='about_kind', value = empty_string(self.about_kind) ),
             search.TextField(name='about_name', value = empty_string(self.about_name) ),
             search.TextField(name='status', value = empty_string(self.status)),
-            search.NumberField(name='priority', value = int(self.priority)),
+            search.TextField(name='priority', value = empty_string(self.priority)),
             search.DateField(name='created_at', value = self.created_at),
             search.DateField(name='updated_at', value = self.updated_at),
             search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete))
