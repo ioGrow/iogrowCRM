@@ -19,6 +19,8 @@ accountservices.factory('Contact', function($http) {
                $scope.listOpportunities();
                $scope.listCases();
                $scope.listDocuments();
+               $scope.selectedTab = 2;
+               $scope.renderMaps();
 
               $scope.email.to = '';
                 angular.forEach($scope.contact.emails, function(value, key){

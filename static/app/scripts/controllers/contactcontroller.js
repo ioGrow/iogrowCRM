@@ -199,7 +199,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
           var contactid = {'id':$route.current.params.contactId};
           Contact.get($scope,contactid);
           User.list($scope,{});
-          $scope.selectedTab = 2;
+          
       };
         // We need to call this to refresh token when user credentials are invalid
       $scope.refreshToken = function() {

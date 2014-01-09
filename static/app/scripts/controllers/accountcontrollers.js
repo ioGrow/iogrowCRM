@@ -900,7 +900,7 @@ $scope.deleteaccount = function(){
      };
 
       $scope.renderMaps = function(){
-        console.log('You are welcome----------------');
+       
           $scope.addresses = $scope.account.addresses;
           Map.render($scope);
       };
