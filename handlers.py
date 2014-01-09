@@ -178,21 +178,21 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
             self.redirect('/sign-in')
     def post(self):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
-            user = self.get_user_from_session()
-            org_name = self.request.get('org_name')
-            mob_phone = self.request.get('mob_phone')
-            # init organization folders in Google drive
-            credentials = user.google_credentials
-            http = credentials.authorize(httplib2.Http(memcache))
-            org_folder = self.init_drive_folder(http,org_name+' (ioGrow)')
-            accounts_folder = self.init_drive_folder(http,'Accounts', org_folder)
-            contacts_folder = self.init_drive_folder(http,'Contacts', org_folder)
-            leads_folder = self.init_drive_folder(http,'Leads', org_folder)
-            opportunities_folder = self.init_drive_folder(http,'Opportunities', org_folder)
-            cases_folder = self.init_drive_folder(http,'Cases', org_folder)
-            shows_folder = self.init_drive_folder(http,'Shows', org_folder)
-            products_folder = self.init_drive_folder(http,'Products', org_folder)
-            organization = model.Organization(name=org_name,
+          user = self.get_user_from_session()
+          org_name = self.request.get('org_name')
+          mob_phone = self.request.get('mob_phone')
+          # init organization folders in Google drive
+          credentials = user.google_credentials
+          http = credentials.authorize(httplib2.Http(memcache))
+          org_folder = self.init_drive_folder(http,org_name+' (ioGrow)')
+          accounts_folder = self.init_drive_folder(http,'Accounts', org_folder)
+          contacts_folder = self.init_drive_folder(http,'Contacts', org_folder)
+          #leads_folder = self.init_drive_folder(http,'Leads', org_folder)
+          opportunities_folder = self.init_drive_folder(http,'Opportunities', org_folder)
+          cases_folder = self.init_drive_folder(http,'Cases', org_folder)
+          shows_folder = self.init_drive_folder(http,'Shows', org_folder)
+          products_folder = self.init_drive_folder(http,'Products', org_folder)
+          organization = model.Organization(name=org_name,
                                               org_folder=org_folder,
                                               accounts_folder=accounts_folder,
                                               contacts_folder=contacts_folder,
@@ -201,14 +201,14 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
                                               cases_folder=cases_folder,
                                               shows_folder=shows_folder,
                                               products_folder=products_folder)
-            organization.put()
-            comp_prof = model.Companyprofile(name=org_name,organization=organization.key,organizationid=organization.key.id(),owner=user.google_user_id)
-            comp_prof.put()
-            profile = model.Profile.query(model.Profile.name=='Super Administrator', model.Profile.organization==organization.key).get()
-            user.init_user_config(organization.key,profile.key)
-            self.redirect('/')
+          organization.put()
+          comp_prof = model.Companyprofile(name=org_name,organization=organization.key,organizationid=organization.key.id(),owner=user.google_user_id)
+          comp_prof.put()
+          profile = model.Profile.query(model.Profile.name=='Super Administrator', model.Profile.organization==organization.key).get()
+          user.init_user_config(organization.key,profile.key)
+          self.redirect('/')
         else:
-            self.redirect('/sign-in')
+          self.redirect('/sign-in')
 class AccountListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:

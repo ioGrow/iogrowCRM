@@ -183,7 +183,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
          $scope.selectedTab = 5;
           break;
         default:
-        $scope.selectedTab = 1;
+        $scope.selectedTab = 2;
 
         }
       $scope.editLead = function(){

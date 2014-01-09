@@ -170,28 +170,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
     function($scope,$filter,$route,Auth,Email,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User,Attachement,Map) {
  console.log('I am in ContactShowCtrl');
       $("#id_Contacts").addClass("active");
-      var tab = $route.current.params.accountTab;
-      switch (tab)
-        {
-        case 'notes':
-         $scope.selectedTab = 1;
-          break;
-        case 'about':
-         $scope.selectedTab = 2;
-          break;
-        case 'contacts':
-         $scope.selectedTab = 3;
-          break;
-        case 'opportunities':
-         $scope.selectedTab = 4;
-          break;
-        case 'cases':
-         $scope.selectedTab = 5;
-          break;
-        default:
-        $scope.selectedTab = 1;
-
-        }
+    
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.isContentLoaded = false;
@@ -220,6 +199,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
           var contactid = {'id':$route.current.params.contactId};
           Contact.get($scope,contactid);
           User.list($scope,{});
+          $scope.selectedTab = 2;
       };
         // We need to call this to refresh token when user credentials are invalid
       $scope.refreshToken = function() {
