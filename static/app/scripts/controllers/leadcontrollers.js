@@ -164,28 +164,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
     function($scope,$filter,$route,Auth,Email,Task,Event,Topic,Note,Lead,Permission,User,Leadstatus,Attachement,Map) {
       $("#id_Leads").addClass("active");
       
-      var tab = $route.current.params.accountTab;
-      switch (tab)
-        {
-        case 'notes':
-         $scope.selectedTab = 1;
-          break;
-        case 'about':
-         $scope.selectedTab = 2;
-          break;
-        case 'leads':
-         $scope.selectedTab = 3;
-          break;
-        case 'opportunities':
-         $scope.selectedTab = 4;
-          break;
-        case 'cases':
-         $scope.selectedTab = 5;
-          break;
-        default:
-        $scope.selectedTab = 2;
-
-        }
+     
       $scope.editLead = function(){
       $('#EditLeadModal').modal('show');
      }
