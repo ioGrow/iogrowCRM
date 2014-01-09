@@ -187,7 +187,7 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
           org_folder = self.init_drive_folder(http,org_name+' (ioGrow)')
           accounts_folder = self.init_drive_folder(http,'Accounts', org_folder)
           contacts_folder = self.init_drive_folder(http,'Contacts', org_folder)
-          #leads_folder = self.init_drive_folder(http,'Leads', org_folder)
+          leads_folder = self.init_drive_folder(http,'Leads', org_folder)
           opportunities_folder = self.init_drive_folder(http,'Opportunities', org_folder)
           cases_folder = self.init_drive_folder(http,'Cases', org_folder)
           shows_folder = self.init_drive_folder(http,'Shows', org_folder)
