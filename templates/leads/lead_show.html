@@ -637,10 +637,36 @@
                         </div>
                     </div>
                     <div class="control-group">
+                        <label  class="required control-label">{{_("Title")}}</label>
+                       
+                        <div class="controls">
+                          <input type="text"  id="id_lastname" ng-model="lead.title">
+                          
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
                         <label  class="required control-label">{{_("Company")}} *</label>
                        
                         <div class="controls">
                           <input type="text"  required id="id_company" ng-model="lead.company">
+                          
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Source")}}</label>
+                       
+                        <div class="controls">
+                          <select ng-model="lead.source" >
+                          <option value="">--None--</option>
+                          <option value="ioGrow Live">ioGrow Live</option>
+                          <option value="Social Media">Social Media</option>
+                          <option value="Web Source">Web Site</option>
+                          <option value="Phone Inquiry">Phone Inquiry</option>
+                          <option value="Partner Referral">Partner Referral</option>
+                          <option value="Purchased List">Purchased List</option>
+                          <option value="Other">Other</option>
+                          </select>
                           
                         </div>
                     </div>

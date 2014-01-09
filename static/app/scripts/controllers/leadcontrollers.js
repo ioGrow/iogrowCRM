@@ -411,6 +411,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                 'firstname':lead.firstname,
                 'lastname':lead.lastname,
                 'company':lead.company,
+                 'source':lead.source,
                 'status':$scope.status_selected.status};
         Lead.patch($scope,params);
         $('#EditLeadModal').modal('hide')
