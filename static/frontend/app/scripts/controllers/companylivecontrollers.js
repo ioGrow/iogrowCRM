@@ -95,6 +95,7 @@ appLive.controller('CompanyLiveShowController', ['$scope',
       $scope.sendFeedback = function(feedback){
           feedback.show_url = window.location.href;
           feedback.type_url = 'company';
+          feedback.access= 'public';
           gapi.client.iogrowlive.feedbacks.insert(feedback).execute(function(resp) {
                
                console.log(resp);

@@ -202,28 +202,7 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Top
     function($scope,$filter,$route,Auth,Show,Topic,Note,Task,Event,WhoHasAccess,User,Leadstatus,Lead,Permission,Attachement,Feedback) {
       
       $("#id_Shows").addClass("active");
-      var tab = $route.current.params.accountTab;
-      switch (tab)
-        {
-        case 'notes':
-         $scope.selectedTab = 1;
-          break;
-        case 'about':
-         $scope.selectedTab = 2;
-          break;
-        case 'Feedbacks':
-         $scope.selectedTab = 3;
-          break;
-        case 'Leads':
-         $scope.selectedTab = 4;
-          break;
-        case 'Documents':
-         $scope.selectedTab = 5;
-          break;
-        default:
-        $scope.selectedTab = 2;
-
-        }
+    
 
      
      $scope.isSignedIn = false;
@@ -264,6 +243,7 @@ app.controller('ShowShowCtrl', ['$scope','$filter', '$route','Auth','Show', 'Top
           Show.get($scope,params);
           Leadstatus.list($scope,{});
           User.list($scope,{});
+          $scope.selectedTab = 2;
            
      };
      // We need to call this to refresh token when user credentials are invalid

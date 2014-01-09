@@ -13,6 +13,7 @@ accountservices.factory('Group', function($http) {
           console.log('in groups.get');
           gapi.client.crmengine.groups.get(params).execute(function(resp) {
             if(!resp.code){
+              
 
                $scope.group = resp;
                $scope.isContentLoaded = true;
@@ -33,6 +34,10 @@ accountservices.factory('Group', function($http) {
       console.log('in users.list');
       gapi.client.crmengine.groups.list(params).execute(function(resp) {
               if(!resp.code){
+                if(!resp.items){
+                 $scope.blankstategroup = true;
+
+              };
                  $scope.groups = resp.items;
                  if ($scope.currentPage>1){
                       $scope.pagination.prev = true;

@@ -137,6 +137,7 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
 app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account','Contact','Case','Opportunity', 'Topic','Note','Task','Event','Permission','User','Attachement','Email','Need','Opportunitystage','Casestatus','Map',
     function($scope,$filter,$route,Auth,Account,Contact,Case,Opportunity,Topic,Note,Task,Event,Permission,User,Attachement,Email,Need,Opportunitystage,Casestatus,Map) {
        $("#id_Accounts").addClass("active");
+          
        $scope.selectedTab = 1;
        $scope.isSignedIn = false;
        $scope.immediateFailed = false;
@@ -180,6 +181,8 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
           User.list($scope,{});
           Opportunitystage.list($scope,{});
           Casestatus.list($scope,{});
+         
+
        };
        // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
@@ -897,6 +900,7 @@ $scope.deleteaccount = function(){
      };
 
       $scope.renderMaps = function(){
+        console.log('You are welcome----------------');
           $scope.addresses = $scope.account.addresses;
           Map.render($scope);
       };
@@ -926,7 +930,15 @@ $scope.deleteaccount = function(){
           params = {'id':$scope.account.id,
              'addresses':addressArray}
           Account.patch($scope,params);
-      }
+      };
+  //HKA 08.01.2014 
+  $scope.About_render = function(accid){
+   console.log('we are on About Render');
+    var acc = Account.get($scope,accountid);
+
+          $scope.addresses = acc.addresses;
+          Map.render($scope);
+      };
 
      // Google+ Authentication 
      Auth.init($scope);
