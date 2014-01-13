@@ -1,0 +1,1684 @@
+# Translations template for PROJECT.
+# Copyright (C) 2014 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2014-01-13 15:13+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.6\n"
+
+#: babel/messages/tests/mofile.py:39 babel/messages/tests/mofile.py:40
+msgid "foo"
+msgstr ""
+
+#: babel/messages/tests/mofile.py:41 babel/messages/tests/mofile.py:42
+msgid "There is"
+msgid_plural "There are"
+msgstr[0] ""
+msgstr[1] ""
+
+#: babel/messages/tests/mofile.py:43 babel/messages/tests/mofile.py:44
+msgid "Fizz"
+msgstr ""
+
+#: babel/messages/tests/mofile.py:45 babel/messages/tests/mofile.py:46
+msgid "Fuzz"
+msgstr ""
+
+#: babel/messages/tests/mofile.py:47 babel/messages/tests/mofile.py:48
+msgid "Fuzzes"
+msgstr ""
+
+#: babel/messages/tests/data/project/file1.py:8
+msgid "bar"
+msgstr ""
+
+#: babel/messages/tests/data/project/file2.py:9
+msgid "foobar"
+msgid_plural "foobars"
+msgstr[0] ""
+msgstr[1] ""
+
+#: babel/messages/tests/data/project/ignored/this_wont_normally_be_here.py:11
+msgid "FooBar"
+msgid_plural "FooBars"
+msgstr[0] ""
+msgstr[1] ""
+
+#: httplib2/__init__.py:400
+#, python-format
+msgid "Content purported to be compressed with %s but failed to decompress."
+msgstr ""
+
+#: httplib2/__init__.py:510
+#, python-format
+msgid "Unsupported value for qop: %s."
+msgstr ""
+
+#: httplib2/__init__.py:513 httplib2/__init__.py:576
+#, python-format
+msgid "Unsupported value for algorithm: %s.algorithm"
+msgstr ""
+
+#: httplib2/__init__.py:573
+msgid "The challenge doesn't contain a server nonce, or this one is empty."
+msgstr ""
+
+#: httplib2/__init__.py:579
+#, python-format
+msgid "Unsupported value for pw-algorithm: %s.pw-algorithm"
+msgstr ""
+
+#: httplib2/__init__.py:1359
+msgid "Redirected but the response is missing a Location: header."
+msgstr ""
+
+#: templates/base.html:155
+msgid "Error"
+msgstr ""
+
+#: templates/base.html:168 templates/accounts/show.html:1095
+#: templates/accounts/show.html:1124 templates/accounts/show.html:1153
+#: templates/activities/task_show.html:51
+#: templates/campaigns/campaign_show.html:643
+#: templates/cases/case_show.html:548 templates/contacts/show.html:865
+#: templates/contacts/show.html:893 templates/contacts/show.html:922
+#: templates/leads/lead_show.html:689 templates/leads/lead_show.html:881
+#: templates/leads/lead_show.html:910
+#: templates/live/company_profile/comp_profile_show.html:176
+#: templates/live/company_profile/comp_profile_show.html:205
+#: templates/live/company_profile/comp_profile_show.html:233
+#: templates/live/company_profile/comp_profile_show.html:262
+#: templates/live/customer_stories/customer_stories_show.html:294
+#: templates/live/customer_stories/customer_stories_show.html:840
+#: templates/live/customer_stories/customer_stories_show.html:876
+#: templates/live/feedbacks/feedbacks_show.html:317
+#: templates/live/feedbacks/feedbacks_show.html:751
+#: templates/live/feedbacks/feedbacks_show.html:787
+#: templates/live/product_videos/product_videos_show.html:294
+#: templates/live/product_videos/product_videos_show.html:840
+#: templates/live/product_videos/product_videos_show.html:876
+#: templates/live/shows/show.html:294 templates/live/shows/show.html:841
+#: templates/live/shows/show.html:877 templates/needs/show.html:539
+#: templates/opportunities/opportunity_show.html:546
+msgid "Close"
+msgstr ""
+
+#: templates/ng-index.html:42 templates/accounts/list.html:110
+#: templates/accounts/show.html:132
+#: templates/products/validated_learning/list.html:91
+msgid "Accounts"
+msgstr ""
+
+#: templates/ng-index.html:47 templates/ng-index.html:53
+#: templates/accounts/list.html:42 templates/accounts/list.html:115
+#: templates/products/features/list.html:43
+#: templates/products/roadmaps/list.html:42
+#: templates/products/validated_learning/list.html:43
+#: templates/products/validated_learning/list.html:96
+#: templates/search/list.html:42
+msgid "New Account"
+msgstr ""
+
+#: templates/ng-index.html:62 templates/accounts/list.html:51
+#: templates/accounts/list.html:161 templates/accounts/show.html:637
+#: templates/accounts/show.html:756 templates/accounts/show.html:1070
+#: templates/admin/settings/settings.html:110
+#: templates/admin/settings/settings.html:144
+#: templates/campaigns/campaign_list.html:51
+#: templates/campaigns/campaign_show.html:613
+#: templates/cases/case_list.html:205 templates/cases/case_show.html:498
+#: templates/contacts/show.html:513 templates/contacts/show.html:628
+#: templates/live/company_profile/comp_profile_show.html:166
+#: templates/live/customer_stories/customer_stories_list.html:137
+#: templates/live/customer_stories/customer_stories_show.html:803
+#: templates/live/customer_stories/customer_stories_show.html:858
+#: templates/live/feedbacks/feedbacks_show.html:769
+#: templates/live/product_videos/product_videos_list.html:137
+#: templates/live/product_videos/product_videos_show.html:803
+#: templates/live/product_videos/product_videos_show.html:858
+#: templates/live/shows/list_show.html:139 templates/live/shows/show.html:804
+#: templates/live/shows/show.html:859 templates/needs/show.html:489
+#: templates/opportunities/list.html:52 templates/opportunities/list.html:185
+#: templates/opportunities/opportunity_show.html:502
+#: templates/products/list.html:51 templates/products/features/list.html:52
+#: templates/products/roadmaps/list.html:51
+#: templates/products/validated_learning/list.html:52
+#: templates/search/list.html:51
+msgid "Name"
+msgstr ""
+
+#: templates/ng-index.html:70 templates/accounts/list.html:59
+#: templates/accounts/show.html:135 templates/accounts/show.html:1078
+#: templates/accounts/show.html:1171 templates/campaigns/campaign_show.html:621
+#: templates/cases/case_show.html:172 templates/contacts/show.html:940
+#: templates/leads/lead_show.html:707
+#: templates/live/company_profile/comp_profile_show.html:280
+#: templates/live/customer_stories/customer_stories_show.html:401
+#: templates/live/feedbacks/feedbacks_list.html:64
+#: templates/live/feedbacks/feedbacks_list.html:195
+#: templates/live/feedbacks/feedbacks_show.html:710
+#: templates/live/product_videos/product_videos_show.html:401
+#: templates/live/shows/show.html:402 templates/products/features/list.html:60
+#: templates/products/roadmaps/list.html:59
+#: templates/products/validated_learning/list.html:60
+#: templates/search/list.html:59
+msgid "Type"
+msgstr ""
+
+#: templates/ng-index.html:78 templates/accounts/list.html:67
+#: templates/accounts/show.html:136 templates/accounts/show.html:1086
+#: templates/campaigns/campaign_show.html:629
+#: templates/products/features/list.html:68
+#: templates/products/roadmaps/list.html:67
+#: templates/products/validated_learning/list.html:68
+#: templates/search/list.html:67
+msgid "Industry"
+msgstr ""
+
+#: templates/ng-index.html:89 templates/accounts/list.html:96
+#: templates/accounts/note_show.html:178 templates/accounts/show.html:84
+#: templates/accounts/show.html:107 templates/accounts/show.html:425
+#: templates/accounts/show.html:557 templates/accounts/show.html:671
+#: templates/accounts/show.html:809 templates/accounts/show.html:970
+#: templates/accounts/show.html:1028 templates/accounts/show.html:1193
+#: templates/accounts/show.html:1220 templates/accounts/show.html:1270
+#: templates/accounts/show.html:1297 templates/accounts/show.html:1324
+#: templates/activities/event_show.html:186
+#: templates/activities/task_show.html:228 templates/admin/groups/list.html:63
+#: templates/admin/groups/show.html:73
+#: templates/admin/settings/settings.html:129
+#: templates/admin/settings/settings.html:164
+#: templates/admin/settings/settings.html:242
+#: templates/admin/settings/settings.html:271
+#: templates/admin/settings/settings.html:351
+#: templates/admin/settings/settings.html:381
+#: templates/admin/users/list.html:64 templates/campaigns/campaign_list.html:71
+#: templates/cases/case_list.html:140 templates/cases/case_show.html:120
+#: templates/cases/case_show.html:143 templates/contacts/list.html:104
+#: templates/contacts/show.html:120 templates/contacts/show.html:143
+#: templates/contacts/show.html:542 templates/contacts/show.html:667
+#: templates/documents/show.html:190 templates/leads/lead_list.html:129
+#: templates/leads/lead_show.html:83 templates/leads/lead_show.html:146
+#: templates/leads/lead_show.html:169
+#: templates/live/company_profile/comp_profile_show.html:295
+#: templates/live/company_profile/comp_profile_show.html:322
+#: templates/live/company_profile/comp_profile_show.html:372
+#: templates/live/company_profile/comp_profile_show.html:399
+#: templates/live/company_profile/comp_profile_show.html:426
+#: templates/live/customer_stories/customer_stories_show.html:84
+#: templates/live/customer_stories/customer_stories_show.html:107
+#: templates/live/customer_stories/customer_stories_show.html:459
+#: templates/live/customer_stories/customer_stories_show.html:571
+#: templates/live/feedbacks/feedbacks_list.html:122
+#: templates/live/feedbacks/feedbacks_show.html:98
+#: templates/live/feedbacks/feedbacks_show.html:122
+#: templates/live/feedbacks/feedbacks_show.html:503
+#: templates/live/product_videos/product_videos_show.html:84
+#: templates/live/product_videos/product_videos_show.html:107
+#: templates/live/product_videos/product_videos_show.html:459
+#: templates/live/product_videos/product_videos_show.html:571
+#: templates/live/shows/show.html:84 templates/live/shows/show.html:107
+#: templates/live/shows/show.html:460 templates/live/shows/show.html:572
+#: templates/needs/show.html:120 templates/needs/show.html:143
+#: templates/opportunities/list.html:119
+#: templates/opportunities/opportunity_show.html:121
+#: templates/opportunities/opportunity_show.html:144
+#: templates/products/list.html:63 templates/products/features/list.html:79
+#: templates/products/roadmaps/list.html:78
+#: templates/products/validated_learning/list.html:79
+#: templates/search/list.html:78
+msgid "Cancel"
+msgstr ""
+
+#: templates/ng-index.html:90 templates/products/features/list.html:80
+#: templates/products/roadmaps/list.html:79
+#: templates/products/validated_learning/list.html:80
+#: templates/search/list.html:79
+msgid "Add Account"
+msgstr ""
+
+#: templates/ng-index.html:126 templates/accounts/list.html:212
+#: templates/accounts/note_show.html:101 templates/accounts/show.html:217
+#: templates/accounts/show.html:378 templates/accounts/show.html:483
+#: templates/accounts/show.html:614 templates/accounts/show.html:731
+#: templates/activities/event_show.html:109
+#: templates/activities/task_show.html:151 templates/admin/groups/list.html:132
+#: templates/admin/groups/show.html:130
+#: templates/admin/settings/settings.html:89
+#: templates/admin/settings/settings.html:209
+#: templates/admin/settings/settings.html:317
+#: templates/admin/users/list.html:125
+#: templates/campaigns/campaign_list.html:125
+#: templates/campaigns/campaign_show.html:128
+#: templates/cases/case_list.html:273 templates/cases/case_show.html:244
+#: templates/contacts/list.html:221 templates/contacts/show.html:246
+#: templates/contacts/show.html:492 templates/contacts/show.html:604
+#: templates/documents/show.html:111 templates/leads/lead_list.html:248
+#: templates/leads/lead_show.html:288
+#: templates/live/customer_stories/customer_stories_list.html:185
+#: templates/live/customer_stories/customer_stories_show.html:224
+#: templates/live/feedbacks/feedbacks_list.html:249
+#: templates/live/feedbacks/feedbacks_show.html:247
+#: templates/live/product_videos/product_videos_list.html:186
+#: templates/live/product_videos/product_videos_show.html:224
+#: templates/live/shows/list_show.html:189 templates/live/shows/show.html:224
+#: templates/needs/show.html:244 templates/opportunities/list.html:239
+#: templates/opportunities/opportunity_show.html:248
+#: templates/products/list.html:117 templates/products/features/list.html:135
+#: templates/products/roadmaps/list.html:134
+#: templates/products/validated_learning/list.html:133
+#: templates/search/list.html:128
+msgid "Prev"
+msgstr ""
+
+#: templates/ng-index.html:128 templates/accounts/list.html:216
+#: templates/accounts/note_show.html:105 templates/accounts/show.html:221
+#: templates/accounts/show.html:382 templates/accounts/show.html:487
+#: templates/accounts/show.html:618 templates/accounts/show.html:735
+#: templates/activities/event_show.html:113
+#: templates/activities/task_show.html:155 templates/admin/groups/list.html:136
+#: templates/admin/groups/show.html:134
+#: templates/admin/settings/settings.html:93
+#: templates/admin/settings/settings.html:213
+#: templates/admin/settings/settings.html:321
+#: templates/admin/users/list.html:129
+#: templates/campaigns/campaign_list.html:129
+#: templates/campaigns/campaign_show.html:132
+#: templates/cases/case_list.html:277 templates/cases/case_show.html:248
+#: templates/contacts/list.html:225 templates/contacts/show.html:250
+#: templates/contacts/show.html:496 templates/contacts/show.html:608
+#: templates/documents/show.html:115 templates/leads/lead_list.html:252
+#: templates/leads/lead_show.html:292
+#: templates/live/customer_stories/customer_stories_list.html:189
+#: templates/live/customer_stories/customer_stories_show.html:228
+#: templates/live/feedbacks/feedbacks_list.html:253
+#: templates/live/feedbacks/feedbacks_show.html:251
+#: templates/live/product_videos/product_videos_list.html:190
+#: templates/live/product_videos/product_videos_show.html:228
+#: templates/live/shows/list_show.html:193 templates/live/shows/show.html:228
+#: templates/needs/show.html:248 templates/opportunities/list.html:243
+#: templates/opportunities/opportunity_show.html:252
+#: templates/products/list.html:121 templates/products/features/list.html:139
+#: templates/products/roadmaps/list.html:138
+#: templates/products/validated_learning/list.html:137
+#: templates/search/list.html:132
+msgid "Next"
+msgstr ""
+
+#: templates/accounts/list.html:23
+msgid "Portlet Settings"
+msgstr ""
+
+#: templates/accounts/list.html:26
+msgid "Here will be a configuration form"
+msgstr ""
+
+#: templates/accounts/list.html:33 templates/accounts/note_show.html:14
+#: templates/accounts/show.html:22
+msgid "Sign-in Button;"
+msgstr ""
+
+#: templates/accounts/list.html:62
+msgid "eg: customer, partner, investor"
+msgstr ""
+
+#: templates/accounts/list.html:70
+msgid "eg: tech, health, energy"
+msgstr ""
+
+#: templates/accounts/list.html:75
+#: templates/live/customer_stories/customer_stories_show.html:438
+#: templates/live/feedbacks/feedbacks_list.html:101
+#: templates/live/product_videos/product_videos_show.html:438
+#: templates/live/shows/show.html:439
+msgid "Who can access?"
+msgstr ""
+
+#: templates/accounts/list.html:82
+#: templates/live/customer_stories/customer_stories_show.html:445
+#: templates/live/feedbacks/feedbacks_list.html:108
+#: templates/live/product_videos/product_videos_show.html:445
+#: templates/live/shows/show.html:446
+msgid "public: Anyone within your organization"
+msgstr ""
+
+#: templates/accounts/list.html:86 templates/accounts/show.html:48
+#: templates/live/customer_stories/customer_stories_show.html:48
+#: templates/live/customer_stories/customer_stories_show.html:449
+#: templates/live/feedbacks/feedbacks_list.html:112
+#: templates/live/feedbacks/feedbacks_show.html:62
+#: templates/live/product_videos/product_videos_show.html:48
+#: templates/live/product_videos/product_videos_show.html:449
+#: templates/live/shows/show.html:48 templates/live/shows/show.html:450
+msgid "private: only you and your collaborators"
+msgstr ""
+
+#: templates/accounts/list.html:98
+msgid "Add this account"
+msgstr ""
+
+#: templates/accounts/list.html:99 templates/accounts/show.html:191
+#: templates/accounts/show.html:386 templates/accounts/show.html:491
+#: templates/accounts/show.html:739 templates/accounts/show.html:1031
+#: templates/accounts/show.html:1196 templates/accounts/show.html:1273
+#: templates/accounts/show.html:1300 templates/accounts/show.html:1327
+#: templates/live/company_profile/comp_profile_show.html:298
+#: templates/live/company_profile/comp_profile_show.html:375
+#: templates/live/company_profile/comp_profile_show.html:402
+#: templates/live/company_profile/comp_profile_show.html:429
+#: templates/live/customer_stories/customer_stories_show.html:462
+#: templates/live/feedbacks/feedbacks_list.html:125
+#: templates/live/product_videos/product_videos_show.html:462
+#: templates/live/shows/show.html:463
+msgid "Loading..."
+msgstr ""
+
+#: templates/accounts/list.html:129 templates/cases/case_list.html:172
+#: templates/contacts/list.html:137 templates/leads/lead_list.html:162
+#: templates/live/customer_stories/customer_stories_list.html:103
+#: templates/live/feedbacks/feedbacks_list.html:155
+#: templates/live/product_videos/product_videos_list.html:103
+#: templates/live/shows/list_show.html:105
+#: templates/opportunities/list.html:152
+msgid "Filter by"
+msgstr ""
+
+#: templates/accounts/list.html:133
+msgid "All accounts"
+msgstr ""
+
+#: templates/accounts/list.html:134
+msgid "My accounts"
+msgstr ""
+
+#: templates/accounts/list.html:136 templates/cases/case_list.html:180
+#: templates/contacts/list.html:144 templates/leads/lead_list.html:170
+#: templates/live/customer_stories/customer_stories_list.html:113
+#: templates/live/feedbacks/feedbacks_list.html:168
+#: templates/live/product_videos/product_videos_list.html:113
+#: templates/live/shows/list_show.html:115
+#: templates/opportunities/list.html:160
+msgid "Views"
+msgstr ""
+
+#: templates/accounts/list.html:145 templates/cases/case_list.html:189
+#: templates/contacts/list.html:153 templates/leads/lead_list.html:179
+#: templates/live/customer_stories/customer_stories_list.html:122
+#: templates/live/feedbacks/feedbacks_list.html:177
+#: templates/live/product_videos/product_videos_list.html:122
+#: templates/live/shows/list_show.html:124
+#: templates/opportunities/list.html:169
+msgid "Quick Filtering"
+msgstr ""
+
+#: templates/accounts/list.html:160 templates/cases/case_list.html:204
+#: templates/contacts/list.html:168 templates/leads/lead_list.html:193
+#: templates/live/customer_stories/customer_stories_list.html:136
+#: templates/live/feedbacks/feedbacks_list.html:191
+#: templates/live/product_videos/product_videos_list.html:136
+#: templates/live/shows/list_show.html:138
+#: templates/opportunities/list.html:184
+msgid "Last modified"
+msgstr ""
+
+#: templates/accounts/list.html:199
+msgid ""
+"Accounts  pages includes a detailed page for each customer, partner, or "
+"investor in your ecosystem. You and your co-workers can collaborate to "
+"get a deep understanding."
+msgstr ""
+
+#: templates/accounts/list.html:220
+msgid "Loading"
+msgstr ""
+
+#: templates/accounts/note_show.html:26 templates/accounts/show.html:85
+#: templates/accounts/show.html:123 templates/campaigns/campaign_show.html:37
+#: templates/cases/case_show.html:121 templates/contacts/show.html:121
+#: templates/leads/lead_show.html:147
+#: templates/live/company_profile/comp_profile_show.html:35
+#: templates/live/customer_stories/customer_stories_show.html:85
+#: templates/live/feedbacks/feedbacks_show.html:99
+#: templates/live/feedbacks/feedbacks_show.html:140
+#: templates/live/product_videos/product_videos_show.html:85
+#: templates/live/shows/show.html:85 templates/needs/show.html:121
+#: templates/opportunities/opportunity_show.html:122
+msgid "Share"
+msgstr ""
+
+#: templates/accounts/note_show.html:69
+msgid "Just add comments to remember what's important :"
+msgstr ""
+
+#: templates/accounts/note_show.html:122
+msgid "Who's involved"
+msgstr ""
+
+#: templates/accounts/note_show.html:135
+msgid "Add a new Contributor"
+msgstr ""
+
+#: templates/accounts/note_show.html:146
+#: templates/activities/event_show.html:154
+#: templates/activities/task_show.html:196
+msgid "Involve new contributors"
+msgstr ""
+
+#: templates/accounts/note_show.html:152
+msgid ""
+"Invite people from your team and start working together on this task. "
+"Everyone you invite will receive an email."
+msgstr ""
+
+#: templates/accounts/note_show.html:160
+msgid "Enter name or email addresse to involve people in this discussion"
+msgstr ""
+
+#: templates/accounts/note_show.html:163
+msgid "Add as:"
+msgstr ""
+
+#: templates/accounts/note_show.html:166
+msgid "Responsible"
+msgstr ""
+
+#: templates/accounts/note_show.html:167
+msgid "Participant"
+msgstr ""
+
+#: templates/accounts/note_show.html:168
+msgid "Invited"
+msgstr ""
+
+#: templates/accounts/note_show.html:179
+#: templates/activities/event_show.html:187
+#: templates/activities/task_show.html:229
+msgid "Involve"
+msgstr ""
+
+#: templates/accounts/show.html:31 templates/cases/case_show.html:67
+#: templates/contacts/show.html:67 templates/leads/lead_show.html:93
+#: templates/live/customer_stories/customer_stories_show.html:31
+#: templates/live/feedbacks/feedbacks_show.html:45
+#: templates/live/product_videos/product_videos_show.html:31
+#: templates/live/shows/show.html:31 templates/needs/show.html:67
+#: templates/opportunities/opportunity_show.html:68
+msgid "Sharing Settings"
+msgstr ""
+
+#: templates/accounts/show.html:37
+#: templates/live/customer_stories/customer_stories_show.html:37
+#: templates/live/feedbacks/feedbacks_show.html:51
+#: templates/live/product_videos/product_videos_show.html:37
+#: templates/live/shows/show.html:37
+msgid "Who has access:"
+msgstr ""
+
+#: templates/accounts/show.html:44
+#: templates/live/customer_stories/customer_stories_show.html:44
+#: templates/live/feedbacks/feedbacks_show.html:58
+#: templates/live/product_videos/product_videos_show.html:44
+#: templates/live/shows/show.html:44
+msgid "public: Anyone within your organization can access and find"
+msgstr ""
+
+#: templates/accounts/show.html:56
+#: templates/live/customer_stories/customer_stories_show.html:56
+#: templates/live/feedbacks/feedbacks_show.html:70
+#: templates/live/product_videos/product_videos_show.html:56
+#: templates/live/shows/show.html:56
+msgid "Collaborators:"
+msgstr ""
+
+#: templates/accounts/show.html:66
+#: templates/live/customer_stories/customer_stories_show.html:66
+#: templates/live/feedbacks/feedbacks_show.html:80
+#: templates/live/product_videos/product_videos_show.html:66
+#: templates/live/shows/show.html:66
+msgid "Invited user:"
+msgstr ""
+
+#: templates/accounts/show.html:73
+#: templates/live/customer_stories/customer_stories_show.html:73
+#: templates/live/feedbacks/feedbacks_show.html:87
+#: templates/live/product_videos/product_videos_show.html:73
+#: templates/live/shows/show.html:73
+msgid "Invite collaborators:"
+msgstr ""
+
+#: templates/accounts/show.html:75
+#: templates/live/customer_stories/customer_stories_show.html:75
+#: templates/live/feedbacks/feedbacks_show.html:89
+#: templates/live/product_videos/product_videos_show.html:75
+#: templates/live/shows/show.html:75
+msgid "Enter name or email addresse to add people to this group"
+msgstr ""
+
+#: templates/accounts/show.html:99 templates/cases/case_show.html:135
+#: templates/contacts/show.html:135 templates/leads/lead_show.html:161
+#: templates/live/customer_stories/customer_stories_show.html:99
+#: templates/live/feedbacks/feedbacks_show.html:114
+#: templates/live/product_videos/product_videos_show.html:99
+#: templates/live/shows/show.html:99 templates/needs/show.html:135
+#: templates/opportunities/opportunity_show.html:136
+msgid "Are you sure you want to delete"
+msgstr ""
+
+#: templates/accounts/show.html:138 templates/accounts/show.html:300
+#: templates/accounts/show.html:307 templates/activities/task_show.html:108
+#: templates/admin/settings/settings.html:70
+#: templates/admin/settings/settings.html:192
+#: templates/admin/settings/settings.html:300
+#: templates/campaigns/campaign_show.html:52 templates/cases/case_show.html:173
+#: templates/contacts/show.html:173 templates/contacts/show.html:332
+#: templates/contacts/show.html:338 templates/leads/lead_show.html:211
+#: templates/leads/lead_show.html:368 templates/leads/lead_show.html:374
+#: templates/live/live_company_page.html:203
+#: templates/live/live_company_page.html:213
+#: templates/live/company_profile/comp_profile_show.html:46
+#: templates/live/company_profile/comp_profile_show.html:118
+#: templates/live/company_profile/comp_profile_show.html:130
+#: templates/live/company_profile/comp_profile_show.html:137
+#: templates/live/customer_stories/customer_stories_show.html:148
+#: templates/live/customer_stories/customer_stories_show.html:256
+#: templates/live/customer_stories/customer_stories_show.html:262
+#: templates/live/feedbacks/feedbacks_show.html:171
+#: templates/live/feedbacks/feedbacks_show.html:279
+#: templates/live/feedbacks/feedbacks_show.html:285
+#: templates/live/product_videos/product_videos_show.html:148
+#: templates/live/product_videos/product_videos_show.html:256
+#: templates/live/product_videos/product_videos_show.html:262
+#: templates/live/shows/show.html:148 templates/live/shows/show.html:256
+#: templates/live/shows/show.html:262 templates/needs/show.html:173
+#: templates/opportunities/opportunity_show.html:178
+msgid "Edit"
+msgstr ""
+
+#: templates/accounts/show.html:138 templates/activities/task_show.html:108
+#: templates/admin/settings/settings.html:70
+#: templates/admin/settings/settings.html:192
+#: templates/admin/settings/settings.html:300
+#: templates/campaigns/campaign_show.html:52 templates/cases/case_show.html:173
+#: templates/contacts/show.html:173 templates/leads/lead_show.html:211
+#: templates/live/customer_stories/customer_stories_show.html:148
+#: templates/live/feedbacks/feedbacks_show.html:171
+#: templates/live/product_videos/product_videos_show.html:148
+#: templates/live/shows/show.html:148 templates/needs/show.html:173
+#: templates/opportunities/opportunity_show.html:178
+msgid "Delete"
+msgstr ""
+
+#: templates/accounts/show.html:154
+msgid "Account Feeds"
+msgstr ""
+
+#: templates/accounts/show.html:161 templates/cases/case_show.html:196
+#: templates/needs/show.html:196
+#: templates/opportunities/opportunity_show.html:200
+msgid "Notes"
+msgstr ""
+
+#: templates/accounts/show.html:162
+msgid "About"
+msgstr ""
+
+#: templates/accounts/show.html:163 templates/contacts/list.html:118
+#: templates/contacts/show.html:168
+msgid "Contacts"
+msgstr ""
+
+#: templates/accounts/show.html:164 templates/needs/show.html:168
+msgid "Customer Needs"
+msgstr ""
+
+#: templates/accounts/show.html:165 templates/opportunities/list.html:133
+#: templates/opportunities/opportunity_show.html:169
+msgid "Opportunities"
+msgstr ""
+
+#: templates/accounts/show.html:166 templates/cases/case_list.html:154
+#: templates/cases/case_show.html:168
+msgid "Cases"
+msgstr ""
+
+#: templates/accounts/show.html:167 templates/cases/case_show.html:197
+#: templates/contacts/show.html:200 templates/needs/show.html:197
+#: templates/opportunities/opportunity_show.html:201
+msgid "Attach Documents"
+msgstr ""
+
+#: templates/accounts/show.html:168 templates/cases/case_show.html:198
+#: templates/needs/show.html:198
+#: templates/opportunities/opportunity_show.html:202
+msgid "Send an Email"
+msgstr ""
+
+#: templates/accounts/show.html:175
+msgid "Just add notes to remember what's important :"
+msgstr ""
+
+#: templates/accounts/show.html:178
+msgid "Add a new subject"
+msgstr ""
+
+#: templates/accounts/show.html:190
+msgid "Add this note"
+msgstr ""
+
+#: templates/accounts/show.html:235
+msgid "Account Informations"
+msgstr ""
+
+#: templates/accounts/show.html:237
+msgid "Phone"
+msgstr ""
+
+#: templates/accounts/show.html:247 templates/accounts/show.html:1213
+#: templates/accounts/show.html:1215 templates/admin/users/list.html:52
+#: templates/contacts/show.html:975 templates/documents/show.html:163
+#: templates/leads/lead_show.html:740
+#: templates/live/company_profile/comp_profile_show.html:315
+#: templates/live/company_profile/comp_profile_show.html:317
+msgid "Email"
+msgstr ""
+
+#: templates/accounts/show.html:257
+msgid "Address"
+msgstr ""
+
+#: templates/accounts/show.html:272
+msgid "Links"
+msgstr ""
+
+#: templates/accounts/show.html:274 templates/accounts/show.html:1290
+#: templates/contacts/show.html:1052 templates/leads/lead_show.html:817
+#: templates/live/company_profile/comp_profile_show.html:392
+msgid "Website"
+msgstr ""
+
+#: templates/accounts/show.html:284
+msgid "Social Links"
+msgstr ""
+
+#: templates/accounts/show.html:297
+msgid "Story"
+msgstr ""
+
+#: templates/accounts/show.html:299 templates/accounts/show.html:1114
+#: templates/contacts/show.html:883 templates/leads/lead_show.html:871
+#: templates/live/company_profile/comp_profile_show.html:223
+msgid "Tagline"
+msgstr ""
+
+#: templates/accounts/show.html:306 templates/accounts/show.html:1143
+#: templates/contacts/show.html:912 templates/leads/lead_show.html:900
+#: templates/live/company_profile/comp_profile_show.html:252
+msgid "Introduction"
+msgstr ""
+
+#: templates/accounts/show.html:330 templates/campaigns/campaign_show.html:228
+msgid "Add a person to this account"
+msgstr ""
+
+#: templates/accounts/show.html:349 templates/accounts/show.html:591
+#: templates/accounts/show.html:706
+msgid "View more"
+msgstr ""
+
+#: templates/accounts/show.html:393 templates/contacts/list.html:42
+#: templates/contacts/list.html:123
+msgid "New Contact"
+msgstr ""
+
+#: templates/accounts/show.html:399 templates/contacts/list.html:51
+#: templates/contacts/list.html:169 templates/contacts/show.html:827
+#: templates/leads/lead_list.html:52 templates/leads/lead_list.html:194
+#: templates/leads/lead_show.html:624
+#: templates/live/customer_stories/customer_stories_show.html:523
+#: templates/live/feedbacks/feedbacks_show.html:455
+#: templates/live/product_videos/product_videos_show.html:523
+#: templates/live/shows/show.html:524
+msgid "First Name"
+msgstr ""
+
+#: templates/accounts/show.html:407 templates/contacts/list.html:59
+#: templates/contacts/list.html:170 templates/contacts/show.html:835
+#: templates/leads/lead_list.html:60 templates/leads/lead_list.html:195
+#: templates/leads/lead_show.html:632
+#: templates/live/customer_stories/customer_stories_show.html:531
+#: templates/live/feedbacks/feedbacks_show.html:463
+#: templates/live/product_videos/product_videos_show.html:531
+#: templates/live/shows/show.html:532
+msgid "Last Name"
+msgstr ""
+
+#: templates/accounts/show.html:414
+msgid "Position"
+msgstr ""
+
+#: templates/accounts/show.html:426
+msgid "Add Contact"
+msgstr ""
+
+#: templates/accounts/show.html:440
+msgid "Add a new Need"
+msgstr ""
+
+#: templates/accounts/show.html:453 templates/accounts/show.html:699
+msgid "Status:"
+msgstr ""
+
+#: templates/accounts/show.html:454 templates/accounts/show.html:700
+msgid "Priority:"
+msgstr ""
+
+#: templates/accounts/show.html:498
+msgid "Add new Customer Needs"
+msgstr ""
+
+#: templates/accounts/show.html:508
+msgid "Subject of the need"
+msgstr ""
+
+#: templates/accounts/show.html:516
+msgid "More details about this need"
+msgstr ""
+
+#: templates/accounts/show.html:525
+msgid "How is important for your customer?"
+msgstr ""
+
+#: templates/accounts/show.html:538 templates/accounts/show.html:784
+#: templates/activities/task_show.html:22
+#: templates/activities/task_show.html:107
+#: templates/campaigns/campaign_list.html:59
+#: templates/campaigns/campaign_show.html:49 templates/cases/case_list.html:94
+#: templates/cases/case_list.html:207 templates/cases/case_show.html:171
+#: templates/cases/case_show.html:514 templates/cases/case_show.html:530
+#: templates/contacts/show.html:645 templates/leads/lead_list.html:95
+#: templates/leads/lead_list.html:198 templates/leads/lead_show.html:674
+#: templates/live/customer_stories/customer_stories_show.html:426
+#: templates/live/customer_stories/customer_stories_show.html:555
+#: templates/live/feedbacks/feedbacks_list.html:89
+#: templates/live/feedbacks/feedbacks_list.html:193
+#: templates/live/feedbacks/feedbacks_show.html:487
+#: templates/live/feedbacks/feedbacks_show.html:735
+#: templates/live/product_videos/product_videos_show.html:426
+#: templates/live/product_videos/product_videos_show.html:555
+#: templates/live/shows/show.html:427 templates/live/shows/show.html:556
+#: templates/needs/show.html:171 templates/needs/show.html:505
+#: templates/needs/show.html:521
+msgid "Status"
+msgstr ""
+
+#: templates/accounts/show.html:558
+msgid "Add this need"
+msgstr ""
+
+#: templates/accounts/show.html:572 templates/campaigns/campaign_show.html:311
+#: templates/contacts/show.html:444
+msgid "Add a new opportunity"
+msgstr ""
+
+#: templates/accounts/show.html:584
+msgid "amount:"
+msgstr ""
+
+#: templates/accounts/show.html:585
+msgid "stage:"
+msgstr ""
+
+#: templates/accounts/show.html:631 templates/contacts/show.html:507
+#: templates/opportunities/list.html:43 templates/opportunities/list.html:138
+msgid "New Opportunity"
+msgstr ""
+
+#: templates/accounts/show.html:644 templates/accounts/show.html:796
+#: templates/cases/case_list.html:108 templates/cases/case_show.html:522
+#: templates/contacts/show.html:520 templates/contacts/show.html:654
+#: templates/needs/show.html:513 templates/opportunities/list.html:68
+#: templates/opportunities/opportunity_show.html:177
+#: templates/opportunities/opportunity_show.html:510
+msgid "Labels"
+msgstr ""
+
+#: templates/accounts/show.html:651 templates/contacts/show.html:527
+#: templates/opportunities/list.html:76 templates/opportunities/list.html:186
+#: templates/opportunities/opportunity_show.html:518
+msgid "Amount"
+msgstr ""
+
+#: templates/accounts/show.html:657 templates/contacts/show.html:533
+#: templates/opportunities/list.html:84
+#: templates/opportunities/opportunity_show.html:176
+#: templates/opportunities/opportunity_show.html:526
+msgid "Stage"
+msgstr ""
+
+#: templates/accounts/show.html:672 templates/contacts/show.html:543
+msgid "Add Opportunity"
+msgstr ""
+
+#: templates/accounts/show.html:686 templates/campaigns/campaign_show.html:398
+#: templates/contacts/show.html:556
+msgid "Add a new case"
+msgstr ""
+
+#: templates/accounts/show.html:701
+msgid "Labels :"
+msgstr ""
+
+#: templates/accounts/show.html:746 templates/cases/case_list.html:42
+#: templates/cases/case_list.html:159 templates/contacts/show.html:618
+msgid "New Case"
+msgstr ""
+
+#: templates/accounts/show.html:764 templates/cases/case_list.html:74
+#: templates/cases/case_list.html:206 templates/cases/case_show.html:170
+#: templates/cases/case_show.html:506 templates/contacts/show.html:636
+#: templates/needs/show.html:170 templates/needs/show.html:497
+msgid "Priority"
+msgstr ""
+
+#: templates/accounts/show.html:810 templates/contacts/show.html:668
+msgid "Add Case"
+msgstr ""
+
+#: templates/accounts/show.html:945 templates/accounts/show.html:1010
+msgid "Add a new event"
+msgstr ""
+
+#: templates/accounts/show.html:955
+msgid "Add a new Task"
+msgstr ""
+
+#: templates/accounts/show.html:962
+msgid "When's it due?"
+msgstr ""
+
+#: templates/accounts/show.html:981 templates/cases/case_show.html:19
+#: templates/contacts/show.html:19 templates/leads/lead_show.html:19
+#: templates/live/customer_stories/customer_stories_show.html:637
+#: templates/live/feedbacks/feedbacks_show.html:544
+#: templates/live/product_videos/product_videos_show.html:637
+#: templates/live/shows/show.html:638 templates/needs/show.html:19
+#: templates/opportunities/opportunity_show.html:19
+msgid "Create a new"
+msgstr ""
+
+#: templates/accounts/show.html:1005
+msgid "New Event"
+msgstr ""
+
+#: templates/accounts/show.html:1011
+msgid "When?"
+msgstr ""
+
+#: templates/accounts/show.html:1014
+msgid "Starts"
+msgstr ""
+
+#: templates/accounts/show.html:1019
+msgid "Ends"
+msgstr ""
+
+#: templates/accounts/show.html:1024
+msgid "Where?"
+msgstr ""
+
+#: templates/accounts/show.html:1030
+msgid "Add this event"
+msgstr ""
+
+#: templates/accounts/show.html:1062 templates/accounts/show.html:1106
+#: templates/accounts/show.html:1135 templates/campaigns/campaign_show.html:605
+msgid "Edit Account"
+msgstr ""
+
+#: templates/accounts/show.html:1096 templates/accounts/show.html:1125
+#: templates/accounts/show.html:1154 templates/activities/task_show.html:52
+#: templates/admin/settings/settings.html:272
+#: templates/admin/settings/settings.html:382
+#: templates/campaigns/campaign_show.html:644
+#: templates/cases/case_show.html:549 templates/contacts/show.html:866
+#: templates/contacts/show.html:894 templates/contacts/show.html:923
+#: templates/leads/lead_show.html:690 templates/leads/lead_show.html:882
+#: templates/leads/lead_show.html:911
+#: templates/live/company_profile/comp_profile_show.html:177
+#: templates/live/company_profile/comp_profile_show.html:206
+#: templates/live/company_profile/comp_profile_show.html:234
+#: templates/live/company_profile/comp_profile_show.html:263
+#: templates/live/customer_stories/customer_stories_show.html:295
+#: templates/live/customer_stories/customer_stories_show.html:841
+#: templates/live/customer_stories/customer_stories_show.html:877
+#: templates/live/feedbacks/feedbacks_show.html:318
+#: templates/live/feedbacks/feedbacks_show.html:752
+#: templates/live/feedbacks/feedbacks_show.html:788
+#: templates/live/product_videos/product_videos_show.html:295
+#: templates/live/product_videos/product_videos_show.html:841
+#: templates/live/product_videos/product_videos_show.html:877
+#: templates/live/shows/show.html:295 templates/live/shows/show.html:842
+#: templates/live/shows/show.html:878 templates/needs/show.html:540
+#: templates/opportunities/opportunity_show.html:547
+msgid "Save"
+msgstr ""
+
+#: templates/accounts/show.html:1165 templates/contacts/show.html:934
+#: templates/leads/lead_show.html:701
+#: templates/live/company_profile/comp_profile_show.html:274
+msgid "Add Phone"
+msgstr ""
+
+#: templates/accounts/show.html:1173 templates/accounts/show.html:1175
+#: templates/live/company_profile/comp_profile_show.html:282
+msgid "home"
+msgstr ""
+
+#: templates/accounts/show.html:1173 templates/accounts/show.html:1176
+#: templates/live/company_profile/comp_profile_show.html:282
+msgid "work"
+msgstr ""
+
+#: templates/accounts/show.html:1173 templates/accounts/show.html:1177
+#: templates/live/company_profile/comp_profile_show.html:282
+msgid "mobile"
+msgstr ""
+
+#: templates/accounts/show.html:1173 templates/accounts/show.html:1178
+#: templates/live/company_profile/comp_profile_show.html:282
+msgid "other"
+msgstr ""
+
+#: templates/accounts/show.html:1184 templates/contacts/show.html:946
+#: templates/leads/lead_show.html:713
+#: templates/live/company_profile/comp_profile_show.html:286
+msgid "Number"
+msgstr ""
+
+#: templates/accounts/show.html:1195
+#: templates/live/company_profile/comp_profile_show.html:297
+msgid "Add this phone"
+msgstr ""
+
+#: templates/accounts/show.html:1207 templates/contacts/show.html:969
+#: templates/leads/lead_show.html:734
+#: templates/live/company_profile/comp_profile_show.html:309
+msgid "Add Email"
+msgstr ""
+
+#: templates/accounts/show.html:1233 templates/contacts/show.html:995
+#: templates/leads/lead_show.html:760
+#: templates/live/company_profile/comp_profile_show.html:335
+msgid "Add Address"
+msgstr ""
+
+#: templates/accounts/show.html:1239 templates/contacts/show.html:1001
+#: templates/leads/lead_show.html:766
+#: templates/live/company_profile/comp_profile_show.html:341
+msgid "Street"
+msgstr ""
+
+#: templates/accounts/show.html:1245 templates/contacts/show.html:1007
+#: templates/leads/lead_show.html:772
+#: templates/live/company_profile/comp_profile_show.html:347
+msgid "City"
+msgstr ""
+
+#: templates/accounts/show.html:1251 templates/contacts/show.html:1013
+#: templates/leads/lead_show.html:778
+#: templates/live/company_profile/comp_profile_show.html:353
+msgid "State/Province"
+msgstr ""
+
+#: templates/accounts/show.html:1257 templates/contacts/show.html:1019
+#: templates/leads/lead_show.html:784
+#: templates/live/company_profile/comp_profile_show.html:359
+msgid "Postal Code"
+msgstr ""
+
+#: templates/accounts/show.html:1263 templates/contacts/show.html:1025
+#: templates/leads/lead_show.html:790
+#: templates/live/company_profile/comp_profile_show.html:365
+msgid "Country"
+msgstr ""
+
+#: templates/accounts/show.html:1272
+#: templates/live/company_profile/comp_profile_show.html:374
+msgid "Add this address"
+msgstr ""
+
+#: templates/accounts/show.html:1284 templates/contacts/show.html:1046
+#: templates/leads/lead_show.html:811
+#: templates/live/company_profile/comp_profile_show.html:386
+msgid "Add Website"
+msgstr ""
+
+#: templates/accounts/show.html:1299
+#: templates/live/company_profile/comp_profile_show.html:401
+msgid "Add this Website"
+msgstr ""
+
+#: templates/accounts/show.html:1311 templates/contacts/show.html:1073
+#: templates/leads/lead_show.html:837
+#: templates/live/company_profile/comp_profile_show.html:413
+msgid "Add Social link"
+msgstr ""
+
+#: templates/accounts/show.html:1317 templates/accounts/show.html:1319
+#: templates/contacts/show.html:1079 templates/leads/lead_show.html:843
+#: templates/live/company_profile/comp_profile_show.html:419
+#: templates/live/company_profile/comp_profile_show.html:421
+msgid "Social link"
+msgstr ""
+
+#: templates/accounts/show.html:1326
+#: templates/live/company_profile/comp_profile_show.html:428
+msgid "Add this Social link"
+msgstr ""
+
+#: templates/activities/task_show.html:5
+msgid "Edit Task"
+msgstr ""
+
+#: templates/activities/task_show.html:106
+msgid "Due on"
+msgstr ""
+
+#: templates/admin/groups/list.html:42 templates/admin/groups/list.html:80
+msgid "New Group"
+msgstr ""
+
+#: templates/admin/groups/list.html:51
+msgid "Group Name"
+msgstr ""
+
+#: templates/admin/groups/list.html:64
+msgid "Add this group"
+msgstr ""
+
+#: templates/admin/groups/list.html:75 templates/admin/groups/show.html:87
+msgid "Groups"
+msgstr ""
+
+#: templates/admin/groups/list.html:118
+msgid "Manage easily your Group."
+msgstr ""
+
+#: templates/admin/groups/show.html:42
+msgid "Add a new member"
+msgstr ""
+
+#: templates/admin/groups/show.html:74
+msgid "Add this member"
+msgstr ""
+
+#: templates/admin/groups/show.html:92
+msgid "New Member"
+msgstr ""
+
+#: templates/admin/settings/settings.html:31
+msgid "Settings"
+msgstr ""
+
+#: templates/admin/settings/settings.html:56
+msgid "Add a new stage"
+msgstr ""
+
+#: templates/admin/settings/settings.html:104
+msgid "New Opportunity Stage"
+msgstr ""
+
+#: templates/admin/settings/settings.html:118
+#: templates/admin/settings/settings.html:152
+msgid "Probability"
+msgstr ""
+
+#: templates/admin/settings/settings.html:130
+msgid "Add a new Opportunity stage"
+msgstr ""
+
+#: templates/admin/settings/settings.html:138
+msgid "Edit Opportunity Stage"
+msgstr ""
+
+#: templates/admin/settings/settings.html:165
+msgid "save"
+msgstr ""
+
+#: templates/admin/settings/settings.html:178
+msgid "Add a Case status"
+msgstr ""
+
+#: templates/admin/settings/settings.html:224
+msgid "New Case Status"
+msgstr ""
+
+#: templates/admin/settings/settings.html:230
+#: templates/admin/settings/settings.html:259
+msgid "Case Status"
+msgstr ""
+
+#: templates/admin/settings/settings.html:243
+msgid "Add Case Status"
+msgstr ""
+
+#: templates/admin/settings/settings.html:253
+msgid "Edit Case Status"
+msgstr ""
+
+#: templates/admin/settings/settings.html:286
+msgid "Add a Lead status"
+msgstr ""
+
+#: templates/admin/settings/settings.html:332
+msgid "New Lead status"
+msgstr ""
+
+#: templates/admin/settings/settings.html:338
+#: templates/admin/settings/settings.html:368
+#: templates/leads/lead_show.html:207
+msgid "Lead Status"
+msgstr ""
+
+#: templates/admin/settings/settings.html:352
+msgid "Add Lead Status"
+msgstr ""
+
+#: templates/admin/settings/settings.html:362
+msgid "Edit Lead status"
+msgstr ""
+
+#: templates/admin/users/list.html:43 templates/admin/users/list.html:81
+#: templates/documents/show.html:154
+msgid "New User"
+msgstr ""
+
+#: templates/admin/users/list.html:65
+msgid "Add this user"
+msgstr ""
+
+#: templates/admin/users/list.html:76
+msgid "Users"
+msgstr ""
+
+#: templates/campaigns/campaign_list.html:42
+#: templates/campaigns/campaign_list.html:88
+msgid "New Campaign"
+msgstr ""
+
+#: templates/campaigns/campaign_list.html:72
+msgid "Add Campaign"
+msgstr ""
+
+#: templates/campaigns/campaign_list.html:83
+#: templates/campaigns/campaign_show.html:46
+msgid "Campaigns"
+msgstr ""
+
+#: templates/campaigns/campaign_show.html:68
+msgid "Campaign Feeds"
+msgstr ""
+
+#: templates/cases/case_list.html:48 templates/cases/case_list.html:208
+msgid "Contact"
+msgstr ""
+
+#: templates/cases/case_list.html:56 templates/contacts/list.html:75
+#: templates/opportunities/list.html:60
+msgid "Account"
+msgstr ""
+
+#: templates/cases/case_list.html:65
+msgid "Subject"
+msgstr ""
+
+#: templates/cases/case_list.html:176
+msgid "All cases"
+msgstr ""
+
+#: templates/cases/case_list.html:177
+msgid "My cases"
+msgstr ""
+
+#: templates/cases/case_list.html:209 templates/contacts/list.html:172
+#: templates/contacts/show.html:851 templates/leads/lead_list.html:68
+#: templates/leads/lead_list.html:197 templates/leads/lead_show.html:204
+#: templates/leads/lead_show.html:649
+#: templates/live/customer_stories/customer_stories_show.html:539
+#: templates/live/feedbacks/feedbacks_show.html:471
+#: templates/live/product_videos/product_videos_show.html:539
+#: templates/live/shows/show.html:540 templates/opportunities/list.html:187
+msgid "Company"
+msgstr ""
+
+#: templates/cases/case_show.html:189
+msgid "Case Feeds"
+msgstr ""
+
+#: templates/cases/case_show.html:490 templates/needs/show.html:481
+msgid "Edit Case"
+msgstr ""
+
+#: templates/contacts/list.html:67 templates/contacts/list.html:171
+#: templates/leads/lead_list.html:76 templates/leads/lead_list.html:196
+#: templates/leads/lead_show.html:204 templates/leads/lead_show.html:640
+#: templates/live/customer_stories/customer_stories_show.html:385
+#: templates/live/customer_stories/customer_stories_show.html:547
+#: templates/live/feedbacks/feedbacks_list.html:48
+#: templates/live/feedbacks/feedbacks_list.html:192
+#: templates/live/feedbacks/feedbacks_show.html:479
+#: templates/live/feedbacks/feedbacks_show.html:694
+#: templates/live/product_videos/product_videos_show.html:385
+#: templates/live/product_videos/product_videos_show.html:547
+#: templates/live/shows/show.html:386 templates/live/shows/show.html:548
+msgid "Title"
+msgstr ""
+
+#: templates/contacts/list.html:141
+msgid "All contacts"
+msgstr ""
+
+#: templates/contacts/list.html:142
+msgid "My contacts"
+msgstr ""
+
+#: templates/contacts/show.html:172
+msgid "at"
+msgstr ""
+
+#: templates/contacts/show.html:188
+msgid "Contact Feeds"
+msgstr ""
+
+#: templates/contacts/show.html:819 templates/contacts/show.html:875
+#: templates/contacts/show.html:904
+msgid "Edit Contact"
+msgstr ""
+
+#: templates/contacts/show.html:843
+msgid "Tittle"
+msgstr ""
+
+#: templates/documents/show.html:171
+msgid "Profile"
+msgstr ""
+
+#: templates/documents/show.html:179
+msgid "Role"
+msgstr ""
+
+#: templates/documents/show.html:191
+msgid "Add Atendee"
+msgstr ""
+
+#: templates/leads/lead_list.html:43 templates/leads/lead_list.html:148
+#: templates/live/customer_stories/customer_stories_show.html:514
+#: templates/live/feedbacks/feedbacks_show.html:446
+#: templates/live/product_videos/product_videos_show.html:514
+#: templates/live/shows/show.html:515
+msgid "New Lead"
+msgstr ""
+
+#: templates/leads/lead_list.html:84 templates/leads/lead_show.html:205
+msgid "Lead Source"
+msgstr ""
+
+#: templates/leads/lead_list.html:143 templates/leads/lead_show.html:200
+msgid "Leads"
+msgstr ""
+
+#: templates/leads/lead_list.html:166
+msgid "All leads"
+msgstr ""
+
+#: templates/leads/lead_list.html:167
+msgid "My leads"
+msgstr ""
+
+#: templates/leads/lead_show.html:69
+msgid "Are you sure you want to convert"
+msgstr ""
+
+#: templates/leads/lead_show.html:185
+msgid "Convert"
+msgstr ""
+
+#: templates/leads/lead_show.html:616 templates/leads/lead_show.html:863
+#: templates/leads/lead_show.html:892
+msgid "Edit Lead"
+msgstr ""
+
+#: templates/leads/lead_show.html:657
+#: templates/live/customer_stories/customer_stories_show.html:413
+#: templates/live/feedbacks/feedbacks_list.html:76
+#: templates/live/feedbacks/feedbacks_list.html:194
+#: templates/live/feedbacks/feedbacks_show.html:722
+#: templates/live/product_videos/product_videos_show.html:413
+#: templates/live/shows/show.html:414
+msgid "Source"
+msgstr ""
+
+#: templates/live/live_all_recents_show.html:64
+#: templates/live/live_all_upcomings_show.html:55
+msgid ""
+"Big companies can spend lot of money on advertising, but small companies "
+"can’t . So why not following a new way: Instead of trying to out-"
+"advertise your competitors, try to build your own audience. Speak, share "
+"information that’s valuable with people and you will create a whole "
+"different connection. You will gain more trust and more respect. The "
+"audience care often about what you have to say"
+msgstr ""
+
+#: templates/live/live_show_index.html:96
+msgid ""
+"Big companies can spend lot of money on advertising, but small companies "
+"can’t . So why not following a new way: Instead of trying to out-"
+"advertise your competitors, try to build your own audience. Speak, share "
+"information that’s valuable with people and you will create a whole "
+"different connection. You will gain more trust and more respect. The "
+"audience care often about what you have to say."
+msgstr ""
+
+#: templates/live/live_show_page.html:37
+msgid "Ask a question or give a feedback"
+msgstr ""
+
+#: templates/live/company_profile/comp_profile_show.html:158
+#: templates/live/company_profile/comp_profile_show.html:187
+#: templates/live/company_profile/comp_profile_show.html:215
+msgid "Edit Company Profile"
+msgstr ""
+
+#: templates/live/company_profile/comp_profile_show.html:195
+msgid "Youtube Channel"
+msgstr ""
+
+#: templates/live/company_profile/comp_profile_show.html:244
+msgid "Edit Company profile"
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_list.html:85
+#: templates/live/customer_stories/customer_stories_show.html:131
+msgid "Customer Stories"
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_list.html:90
+msgid "Add Customer Story"
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_list.html:107
+msgid "All product videos"
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_list.html:108
+msgid "My product videos"
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_list.html:109
+#: templates/live/feedbacks/feedbacks_list.html:164
+#: templates/live/product_videos/product_videos_list.html:109
+#: templates/live/shows/list_show.html:111
+msgid "Upcoming shows"
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_list.html:110
+#: templates/live/feedbacks/feedbacks_list.html:165
+#: templates/live/product_videos/product_videos_list.html:110
+#: templates/live/shows/list_show.html:112
+msgid "Recent shows"
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_list.html:172
+msgid ""
+"Big companies can spend lot of money on advertising, but small companies "
+"can’t . So why not following a new way: Instead of trying to out-"
+"advertise your competitors, try to build your own audience. Show the "
+"world who are your happy customers, how did your products or services "
+"changed their life. Do live hangouts with your customers. The audience "
+"care often about what you have to say. "
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_show.html:279
+#: templates/live/feedbacks/feedbacks_show.html:302
+#: templates/live/product_videos/product_videos_show.html:279
+#: templates/live/shows/show.html:279
+msgid "Edit Description"
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_show.html:284
+#: templates/live/feedbacks/feedbacks_show.html:307
+#: templates/live/product_videos/product_videos_show.html:284
+#: templates/live/shows/show.html:284
+msgid "Description"
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_show.html:339
+#: templates/live/feedbacks/feedbacks_show.html:362
+#: templates/live/product_videos/product_videos_show.html:339
+#: templates/live/shows/show.html:339
+msgid "Add feedbacks"
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_show.html:366
+#: templates/live/feedbacks/feedbacks_list.html:236
+#: templates/live/feedbacks/feedbacks_show.html:391
+#: templates/live/product_videos/product_videos_show.html:366
+#: templates/live/shows/show.html:367
+msgid "Feedbacks pages  let you receive a feedback from leads or customers "
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_show.html:379
+#: templates/live/feedbacks/feedbacks_list.html:42
+#: templates/live/product_videos/product_videos_show.html:379
+#: templates/live/shows/show.html:380
+msgid "New Feedback"
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_show.html:393
+#: templates/live/feedbacks/feedbacks_list.html:56
+#: templates/live/feedbacks/feedbacks_show.html:702
+#: templates/live/product_videos/product_videos_show.html:393
+#: templates/live/shows/show.html:394
+msgid "Content"
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_show.html:461
+#: templates/live/feedbacks/feedbacks_list.html:124
+#: templates/live/product_videos/product_videos_show.html:461
+#: templates/live/shows/show.html:462
+msgid "Add this Feedback"
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_show.html:473
+#: templates/live/feedbacks/feedbacks_show.html:405
+#: templates/live/product_videos/product_videos_show.html:473
+#: templates/live/shows/show.html:474
+msgid "Add a new lead"
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_show.html:795
+#: templates/live/feedbacks/feedbacks_show.html:686
+#: templates/live/product_videos/product_videos_show.html:795
+#: templates/live/shows/show.html:796
+msgid "Edit Show"
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_show.html:812
+#: templates/live/customer_stories/customer_stories_show.html:866
+#: templates/live/feedbacks/feedbacks_show.html:777
+#: templates/live/product_videos/product_videos_show.html:812
+#: templates/live/product_videos/product_videos_show.html:866
+#: templates/live/shows/show.html:813 templates/live/shows/show.html:867
+msgid "Youtube Url"
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_show.html:820
+#: templates/live/product_videos/product_videos_show.html:820
+#: templates/live/shows/show.html:821
+msgid "Tags"
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_show.html:828
+#: templates/live/product_videos/product_videos_show.html:828
+#: templates/live/shows/show.html:829
+msgid "Publish this show on i/oGrow Live: Url"
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_show.html:850
+#: templates/live/feedbacks/feedbacks_show.html:761
+#: templates/live/product_videos/product_videos_show.html:850
+#: templates/live/shows/show.html:851
+msgid "Edit Youtube url"
+msgstr ""
+
+#: templates/live/feedbacks/feedbacks_list.html:137
+#: templates/live/feedbacks/feedbacks_show.html:149
+msgid "Feedbacks"
+msgstr ""
+
+#: templates/live/feedbacks/feedbacks_list.html:142
+msgid "Add new Feedback"
+msgstr ""
+
+#: templates/live/feedbacks/feedbacks_list.html:159
+msgid "All feedbacks"
+msgstr ""
+
+#: templates/live/feedbacks/feedbacks_list.html:160
+msgid "My feedbacks"
+msgstr ""
+
+#: templates/live/feedbacks/feedbacks_list.html:161
+msgid "Pending"
+msgstr ""
+
+#: templates/live/feedbacks/feedbacks_list.html:162
+msgid "Working"
+msgstr ""
+
+#: templates/live/feedbacks/feedbacks_list.html:163
+msgid "Rejected"
+msgstr ""
+
+#: templates/live/product_videos/product_videos_list.html:85
+#: templates/live/product_videos/product_videos_show.html:131
+msgid "Product Videos"
+msgstr ""
+
+#: templates/live/product_videos/product_videos_list.html:90
+msgid "Add Product Video"
+msgstr ""
+
+#: templates/live/product_videos/product_videos_list.html:107
+msgid "All customer stories"
+msgstr ""
+
+#: templates/live/product_videos/product_videos_list.html:108
+msgid "My customer story"
+msgstr ""
+
+#: templates/live/product_videos/product_videos_list.html:173
+msgid ""
+"Big companies can spend lot of money on advertising, but small companies "
+"can’t . So why not following a new way: Instead of trying to out-"
+"advertise your competitors, try to build your own audience. Show the "
+"world what are the products and best ideas you are working on. You will "
+"gain feedbacks, suggestions, and trafic. The audience care often about "
+"what you have to say. "
+msgstr ""
+
+#: templates/live/shows/list_show.html:87 templates/live/shows/show.html:132
+msgid "Shows"
+msgstr ""
+
+#: templates/live/shows/list_show.html:92
+msgid "Schedule a show"
+msgstr ""
+
+#: templates/live/shows/list_show.html:109
+msgid "All shows"
+msgstr ""
+
+#: templates/live/shows/list_show.html:110
+msgid "My shows"
+msgstr ""
+
+#: templates/live/shows/list_show.html:140
+msgid "Start at"
+msgstr ""
+
+#: templates/live/shows/list_show.html:176
+msgid ""
+"Big companies can spend lot of money on advertising, but small companies "
+"can’t . So why not following a new way: Instead of trying to out-"
+"advertise your competitors, try to build your own audience. Speak, share "
+"information that’s valuable with people and you will create a whole "
+"different connection. You will gain more trust and more respect. The "
+"audience care often about what you have to say. "
+msgstr ""
+
+#: templates/needs/show.html:189
+msgid "Customer Needs   Feeds"
+msgstr ""
+
+#: templates/opportunities/list.html:156
+msgid "All opportunities"
+msgstr ""
+
+#: templates/opportunities/list.html:157
+msgid "My opportunities"
+msgstr ""
+
+#: templates/opportunities/list.html:188
+msgid "Stage probability"
+msgstr ""
+
+#: templates/opportunities/opportunity_show.html:173
+#: templates/opportunities/opportunity_show.html:174
+msgid "associated with"
+msgstr ""
+
+#: templates/opportunities/opportunity_show.html:194
+msgid "Opportunity Feeds"
+msgstr ""
+
+#: templates/opportunities/opportunity_show.html:494
+msgid "Edit Opportunity"
+msgstr ""
+
+#: templates/products/list.html:42 templates/products/list.html:80
+msgid "New Product"
+msgstr ""
+
+#: templates/products/list.html:64
+msgid "Add Product"
+msgstr ""
+
+#: templates/products/list.html:75 templates/products/features/list.html:93
+#: templates/products/roadmaps/list.html:92
+msgid "Products"
+msgstr ""
+
+#: templates/products/features/list.html:98
+msgid "New Feature"
+msgstr ""
+
+#: templates/products/roadmaps/list.html:97
+msgid "New Roadmap"
+msgstr ""
+
+#: templates/search/list.html:90
+msgid "Search results"
+msgstr ""
+
