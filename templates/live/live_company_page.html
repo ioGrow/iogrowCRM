@@ -52,17 +52,13 @@
                                        
                                            {%if upcoming_shows %}
                                              {%for upcoming_show in upcoming_shows%}
-                                      <li class="span3 mix category_1"><a href="/live/shows/{{upcoming_show.id}}/">
-                                      {% if upcoming_show.youtube_url %}
-                                            <img class="video-thumbnail" src="http://img.youtube.com/vi/{{upcoming_show.youtube_url}}/0.jpg">
-
-                                      {% else %}
-                                           <img src="/static/img/gdl-stay-tuned.png" height="450"/>
-                                      {% endif %}    
-                                         {{upcoming_show.name}}
-                                        </a>
+                                      <li class="span3 mix category_1">
+                                    <a href="/live/shows/{{upcoming_show.id}}/" >
+                                               <img class="hangout-icon" src="">
+                                        <span> {{upcoming_show.name}} :  ({{upcoming_show.starts_at}} to {{upcoming_show.ends_at}})</span> </a>
                                       </li>
                                       {%endfor%}
+                                      
                                       {%else%}
                                 <div class="span6 responsive" data-tablet="span6" data-desktop="span4">
                                 <div class="dashboard-stat cards">
@@ -80,7 +76,7 @@
                                         </ul>
 
                                       <h2>Recently aired <a href="#"><small>(View all)</small></a></h2>
-                                      <div class="filter-v1 margin-bottom-40">
+                                      <div >
                                                                         
                                       <ul class="grid-v1 thumbnails"> 
                                        {%if recentlyshows%}
