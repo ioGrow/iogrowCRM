@@ -67,13 +67,13 @@
           
         <div class="filter-v1 margin-bottom-40">
             
-            <ul class="grid-v1 thumbnails">
+            <ul >
             {%if recently_shows %}
                 {%for recent in recently_shows%}
                 <li class="span3 mix category_1">
                 
                 <a href="/live/shows/{{recent.id}}/">
-                    <!--img class="hangout-icon" src="https://developers.google.com/_static/frontend/a39d39a910/images/hangout.png"-->
+                    
                    {% if recent.youtube_url %}
                 <img class="hangout-icon" src="http://img.youtube.com/vi/{{recent.youtube_url}}/0.jpg">
 

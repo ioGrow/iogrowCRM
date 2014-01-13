@@ -889,15 +889,16 @@ class PublicLiveHomeHandler(BaseHandler, SessionEnabledHandler):
                     user = self.get_user_from_session()
                 except:
                     user = None
-            org  = user.organization.get()
-            org_id = org.key.id()
+            #org  = user.organization.get()
+            #org_id = org.key.id()
             current_time = datetime.datetime.now()
             upcoming_shows = Show.query(Show.type_show =='Show',Show.ends_at>current_time,Show.is_published==True).fetch(8)
             recently_shows = Show.query(Show.type_show =='Show',Show.ends_at<current_time,Show.is_published==True).fetch(4)
+            print('------------------------------------')
+            print(recently_shows)
             number_of_upcoming_shows = Show.query(Show.type_show =='Show',Show.ends_at>current_time,Show.is_published==True).count()
             number_of_recentlyshows = Show.query(Show.type_show =='Show',Show.ends_at<current_time,Show.is_published==True).count()
-            template_values = {'user': user,'org_id':org_id,'upcoming_shows':upcoming_shows,
-            'recently_shows':recently_shows,'number_of_recentlyshows':number_of_recentlyshows,'number_of_upcoming_shows':number_of_upcoming_shows,}
+            template_values = {'user': user,'upcoming_shows':upcoming_shows,'recently_shows':recently_shows,'number_of_recentlyshows':number_of_recentlyshows,'number_of_upcoming_shows':number_of_upcoming_shows,}
             template = jinja_environment.get_template('templates/live/live_show_index.html')
             self.response.out.write(template.render(template_values))
 #HKA 05.01.2014 View All upcoming show
