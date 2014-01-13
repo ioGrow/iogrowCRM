@@ -55,7 +55,7 @@
                     <!-- END RESPONSIVE MENU TOGGLER -->
 
                     <!-- BEGIN TOP NAVIGATION MENU -->
-                    <ul class="nav search-form-top"> 
+                    <ul class="nav search-form-top" ng-controller="SearchFormController"> 
                           <li>    
                             <form class="form-inline ng-pristine ng-valid">
                               <div class="input-append row-fluid">
@@ -143,10 +143,10 @@
           <!-- END TODO DROPDOWN -->               
           <!-- BEGIN USER LOGIN DROPDOWN -->
            <li>
-            <a href="/live/companies/">
+            <a href="/welcome/">
             
             
-            <!--span class="username">Features</span-->
+            <span class="username">Home</span>
             </a>
           </li>
           <li>
@@ -229,13 +229,16 @@
     </script>
     <script src="https://apis.google.com/js/client.js?onload=loadGapi">
     </script>
-
+    
     <script src="/static/frontend/plugins/jquery-1.10.1.min.js" type="text/javascript"></script>
     <script src="/static/frontend/plugins/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
     <script src="/static/app/scripts/vendor/angular.js" ></script>
     <script src="/static/frontend/app/scripts/app.js" ></script>
    <script src="/static/frontend/app/scripts/controllers/iogrowlivecontrollers.js" ></script>
     <script src="/static/frontend/app/scripts/controllers/companylivecontrollers.js" ></script>
+    
+    <script src="/static/frontend/app/scripts/controllers/livesearchcontrollers.js" ></script>
+    <script src="/static/frontend/app/scripts/services/livesearchservices.js" ></script>
     <script src="/static/frontend/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="/static/app/scripts/vendor/ui-bootstrap-0.5.0.js" ></script>
     <script src="/static/app/scripts/vendor/ui-bootstrap-tpls-0.5.0.js"></script>

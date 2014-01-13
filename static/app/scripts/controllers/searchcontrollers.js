@@ -14,6 +14,7 @@ app.controller('SearchFormController', ['$scope','Search',
           });
      });
      $scope.selectResult = function(){
+      console.log('You are welcome On the morning day');
         var url = Search.getUrl($scope.searchQuery.type,$scope.searchQuery.id);
         $scope.searchQuery=' ';
         window.location.replace(url);
