@@ -1,4 +1,4 @@
-# Translations template for PROJECT.
+# Arabic translations for PROJECT.
 # Copyright (C) 2014 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
@@ -9,9 +9,11 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2014-01-13 18:46+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2014-01-13 18:47+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language-Team: ar <LL@li.org>\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n>=3 "
+"&& n<=10 ? 3 : n>=11 && n<=99 ? 4 : 5)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -26,6 +28,10 @@ msgid "There is"
 msgid_plural "There are"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
 
 #: babel/messages/tests/mofile.py:43 babel/messages/tests/mofile.py:44
 msgid "Fizz"
@@ -48,12 +54,20 @@ msgid "foobar"
 msgid_plural "foobars"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
 
 #: babel/messages/tests/data/project/ignored/this_wont_normally_be_here.py:11
 msgid "FooBar"
 msgid_plural "FooBars"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
 
 #: httplib2/__init__.py:400
 #, python-format
@@ -118,7 +132,7 @@ msgstr ""
 #: templates/accounts/show.html:132
 #: templates/products/validated_learning/list.html:91
 msgid "Accounts"
-msgstr ""
+msgstr "الحسابات"
 
 #: templates/ng-index.html:47 templates/ng-index.html:53
 #: templates/accounts/list.html:42 templates/accounts/list.html:115
@@ -128,7 +142,7 @@ msgstr ""
 #: templates/products/validated_learning/list.html:96
 #: templates/search/list.html:42
 msgid "New Account"
-msgstr ""
+msgstr "حساب جديد"
 
 #: templates/ng-index.html:62 templates/accounts/list.html:51
 #: templates/accounts/list.html:161 templates/accounts/show.html:637
@@ -156,7 +170,7 @@ msgstr ""
 #: templates/products/validated_learning/list.html:52
 #: templates/search/list.html:51
 msgid "Name"
-msgstr ""
+msgstr "الاسم"
 
 #: templates/ng-index.html:70 templates/accounts/list.html:59
 #: templates/accounts/show.html:135 templates/accounts/show.html:1078
@@ -174,7 +188,7 @@ msgstr ""
 #: templates/products/validated_learning/list.html:60
 #: templates/search/list.html:59
 msgid "Type"
-msgstr ""
+msgstr "طبيعة"
 
 #: templates/ng-index.html:78 templates/accounts/list.html:67
 #: templates/accounts/show.html:136 templates/accounts/show.html:1086
