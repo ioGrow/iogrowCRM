@@ -2,7 +2,7 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus',
     function($scope,Auth,Lead,Leadstatus) {
       $("#id_Leads").addClass("active");
       
-      console.log('i am in lead list controller');
+      document.title = "Leads: Home";
        $("#id_Leads").addClass("active");
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;

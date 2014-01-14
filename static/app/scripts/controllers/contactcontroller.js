@@ -1,6 +1,7 @@
 app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
     function($scope,Auth,Account,Contact) {
         $("#id_Contacts").addClass("active");
+        document.title = "Contacts: Home";
         $scope.isSignedIn = false;
         $scope.immediateFailed = false;
         $scope.nextPageToken = undefined;

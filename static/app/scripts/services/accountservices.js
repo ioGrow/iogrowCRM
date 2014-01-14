@@ -48,6 +48,7 @@ accountservices.factory('Account', function($http) {
                $scope.selectedTab = 2;
                $scope.renderMaps();
                $scope.email.to = '';
+               document.title = "Account: " + $scope.account.name ;
                //$scope.renderMaps();
                 angular.forEach($scope.account.emails, function(value, key){
                   $scope.email.to = $scope.email.to + value.email + ',';

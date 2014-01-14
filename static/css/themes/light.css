@@ -742,3 +742,36 @@ padding: 10px 50px 50px 50px;
 #gmap_canvas label { 
   width: auto !important; display:inline !important; 
 } 
+#id_Contacts.active > a{
+  
+  background: #852b99 !important;
+font-weight: bold;
+border-top-color: transparent !important;
+color: #fff !important;
+border-left: 2px solid #852b99;
+}
+#id_Opportunities.active > a{
+  
+  background: #28b779 !important;
+font-weight: bold;
+border-top-color: transparent !important;
+color: #fff !important;
+border-left: 2px solid #28b779;
+}
+#id_Leads.active > a{
+  
+  background: #ffb848 !important;
+font-weight: bold;
+border-top-color: transparent !important;
+color: #fff !important;
+border-left: 2px solid #ffb848;
+}
+#id_Cases.active > a{
+  
+  background: #5c3c00 !important;
+font-weight: bold;
+border-top-color: transparent !important;
+color: #fff !important;
+border-left: 2px solid #5c3c00;
+}
+

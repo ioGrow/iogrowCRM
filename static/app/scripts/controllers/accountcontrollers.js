@@ -1,6 +1,7 @@
 app.controller('AccountListCtrl', ['$scope','Auth','Account',
     function($scope,Auth,Account) {
      $("#id_Accounts").addClass("active");
+     document.title = "Accounts: Home";
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -13,6 +14,7 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
      $scope.account = {};
      $scope.account.access ='public';
      $scope.order = '-updated_at';
+     $scope.account.account_type = 'Customer'
      
      // What to do after authentication
      $scope.runTheProcess = function(){
