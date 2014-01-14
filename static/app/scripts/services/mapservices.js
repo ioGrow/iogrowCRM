@@ -39,8 +39,8 @@ mapservices.factory('Map', function($http) {
 
   };
   Map.updateLocation = function($scope,location,marker){
-              marker.address.lat = location.nb.toString();
-              marker.address.lon = location.ob.toString();
+              marker.address.lat = location.b.toString();
+              marker.address.lon = location.d.toString();
               if ($scope.addresses){
                   for (var i=0; i<$scope.addresses.length; i++) {
                      if ($scope.addresses[i].city==marker.address.city&$scope.addresses[i].country==marker.address.country){
@@ -69,8 +69,8 @@ mapservices.factory('Map', function($http) {
               if ($scope.addresses){
                 addressArray = new Array();
                 addressArray = $scope.addresses;
-                address.lat = results[0].geometry.location.nb.toString();
-                address.lon = results[0].geometry.location.ob.toString();
+                address.lat = results[0].geometry.location.b.toString();
+                address.lon = results[0].geometry.location.d.toString();
                 addressArray.push(address);
 
               }else{ 
@@ -79,7 +79,7 @@ mapservices.factory('Map', function($http) {
               
               $scope.addGeo(addressArray);
               
-              var position = results[0].geometry.location.nb + ',' + results[0].geometry.location.ob;
+              var position = results[0].geometry.location.b + ',' + results[0].geometry.location.d;
               
 
               $('#gmap_canvas').gmap('addMarker', {'position': position, 'bounds': true, 'draggable':true,'address':address}).dragend( function(event) {
