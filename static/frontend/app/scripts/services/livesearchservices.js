@@ -8,8 +8,8 @@ livesearchservices.factory('Search', function($http) {
     var base_url = undefined;
     switch (type)
         {
-        case 'Account':
-          base_url = '/#/accounts/show/';
+        case 'Company':
+          base_url = '/live/companies/';
           break;
         case 'Contact':
           base_url = '/#/contacts/show/';
