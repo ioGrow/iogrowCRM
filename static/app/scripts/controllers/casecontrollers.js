@@ -1,7 +1,7 @@
 app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Casestatus',
     function($scope,Auth,Case,Account,Contact,Casestatus) {
     
-
+     document.title = "Cases: Home";
      $("#id_Cases").addClass("active");
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;

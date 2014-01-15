@@ -221,7 +221,21 @@ class FeedbackSearchResult(messages.Message):
 class FeedbackSearchResults(messages.Message):
     items = messages.MessageField(FeedbackSearchResult, 1, repeated=True)
     nextPageToken = messages.StringField(2)
-
+# The message class that defines the feedbacks.search response 
+class AddressSchema(messages.Message):
+    lat = messages.StringField(1)
+    lon = messages.StringField(2)
+class CompanyProfileSchema(messages.Message):
+    id = messages.StringField(1)
+    name = messages.StringField(2)
+    addresses = messages.MessageField(AddressSchema, 3, repeated=True)   
+class CompanyProfileResponse(messages.Message):
+    items = messages.MessageField(CompanyProfileSchema, 1, repeated=True)
+    nextPageToken = messages.StringField(2)    
+# The message class that defines a set of feedbacks.search results
+class FeedbackSearchResults(messages.Message):
+    items = messages.MessageField(FeedbackSearchResult, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
 class EndpointsHelper(EndpointsModel):
     INVALID_TOKEN = 'Invalid token'
     INVALID_GRANT = 'Invalid grant'
@@ -319,9 +333,23 @@ class LiveApi(remote.Service):
         my_model.put()
 
       return my_model
-  @Companyprofile.query_method(query_fields=('limit', 'order', 'pageToken'),path='companies', name='companies.list')
-  def list_companies(self, query):
-      return query
+  @endpoints.method(SearchRequest, CompanyProfileResponse,
+                      path='companies', http_method='POST',
+                      name='companies.list')
+  def list_comapnies(self, request):
+      companies = Companyprofile.query().fetch()
+      company_list = list()
+      for company in companies:
+          if company.addresses:
+              addresses = list()
+              for address in company.addresses:
+                  latlon = AddressSchema(lat = address.lat,lon = address.lon)
+                  addresses.append(latlon)
+              company_profile = CompanyProfileSchema(id=str(company.organizationid),
+                                                 name=company.name,
+                                                 addresses=addresses)
+              company_list.append(company_profile)
+      return CompanyProfileResponse(items = company_list,nextPageToken=None)
   # Search API
   @endpoints.method(SearchRequest, LiveSearchResults,
                       path='search', http_method='POST',

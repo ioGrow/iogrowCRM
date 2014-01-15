@@ -18,7 +18,7 @@ class Topic(EndpointsModel):
     updated_at = ndb.DateTimeProperty(auto_now=True)
     title = ndb.StringProperty()
     # about 100 characters from the beginning of this topic
-    excerpt = ndb.StringProperty()
+    excerpt = ndb.TextProperty()
     # number of comments in this topic
     comments = ndb.IntegerProperty(default=0)
     # A Topic is attached to an object for example Account or Opportunity..

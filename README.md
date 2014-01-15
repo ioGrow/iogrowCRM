@@ -1,6 +1,7 @@
 iogrow
-======
+
 
 ioGrow Platform
 
-First Merge with Test
+Welcome to ioGrow Platform
+Take a look at the API at Google Api Explorer

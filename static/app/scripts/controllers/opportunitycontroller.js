@@ -2,6 +2,7 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
     function($scope,Auth,Account,Opportunity,Opportunitystage,Search) {
       
      $("#id_Opportunities").addClass("active");
+     document.title = "Opportunities: Home";
 
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;

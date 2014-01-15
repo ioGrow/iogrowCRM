@@ -20,6 +20,7 @@ opportunityservices.factory('Opportunity', function($http) {
         $scope.listTasks();
         $scope.listEvents();
         $scope.listDocuments();
+        document.title = "Opportunity: " + $scope.opportunity.name ;
        
         $scope.$apply();
 

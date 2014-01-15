@@ -17,6 +17,7 @@ accountservices.factory('Case', function() {
                $scope.listTasks();
                $scope.listEvents();
                $scope.listDocuments();
+               document.title = "Case: " + $scope.case.name ;
                // Call the method $apply to make the update on the scope
                //$scope.apply();
 

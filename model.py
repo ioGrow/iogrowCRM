@@ -38,7 +38,7 @@ from iomodels.crmengine.casestatuses import Casestatus
 from endpoints_proto_datastore import MessageFieldsSchema
 from google.appengine.api import search
 from endpoints_proto_datastore import MessageFieldsSchema
-
+from search_helper import tokenize_autocomplete
 
 STANDARD_TABS = [{'name': 'Accounts','label': 'Accounts','url':'/#/accounts/'},{'name': 'Contacts','label': 'Contacts','url':'/#/contacts/'},{'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/'},{'name': 'Leads','label': 'Leads','url':'/#/leads/'},{'name': 'Cases','label': 'Cases','url':'/#/cases/'}]
 STANDARD_PROFILES = ['Super Administrator', 'Standard User', 'Sales User', 'Marketing User', 'Read Only', 'Support User', 'Contract Manager','Read Only']
@@ -424,4 +424,23 @@ class Companyprofile(EndpointsModel):
   addresses = ndb.StructuredProperty(Address,repeated=True)
   websites = ndb.StructuredProperty(Website,repeated=True)
   sociallinks= ndb.StructuredProperty(Social,repeated=True)
+
+  def put(self, **kwargs):
+        ndb.Model.put(self, **kwargs)
+        self.put_index()
+
+  def put_index(self):
+        empty_string = lambda x: x if x else ""
+        empty_date = lambda x: x if x else date(2999, 12, 31)
+        title_autocomplete = ','.join(tokenize_autocomplete( self.name))
+        show_document_for_live = search.Document(
+        doc_id = str(self.organizationid),
+        fields=[
+            search.TextField(name=u'type', value=u'Company'),
+            search.TextField(name='organization', value = empty_string(self.name) ),
+            search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
+           ])
+        live_index = search.Index(name="ioGrowLiveIndex")
+        live_index.put(show_document_for_live)
+        
     

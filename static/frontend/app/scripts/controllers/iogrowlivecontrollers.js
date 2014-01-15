@@ -242,7 +242,7 @@ appLive.controller('mapsController', ['$scope',
                                 'bounds': true,
                                 'address':$scope.companies[i].addresses[j],
                                 'name': $scope.companies[i].name,
-                                'organizationid': $scope.companies[i].organizationid
+                                'organizationid': $scope.companies[i].id
                               }, function(map, marker) {
                                 // should be deleted;
                               }).click(function() {
