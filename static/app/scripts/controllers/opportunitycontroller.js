@@ -461,7 +461,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
                  'stage_probability':$scope.stage_selected.probability,
                 'amount':opportunity.amount,
                 'description':opportunity.description};
-  $scope.$watch(opportunity.amount, function() {
+  /*$scope.$watch(opportunity.amount, function() {
       var paramsNote = {
                   'about_kind': 'Opportunity',
                   'about_item': $scope.opportunity.id,
@@ -472,7 +472,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
       console.log(paramsNote);
       
       Note.insert($scope,paramsNote);
-   });              
+   }); */             
   Opportunity.patch($scope,params);
   $('#EditOpportunityModal').modal('hide');
  };
