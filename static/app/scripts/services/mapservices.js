@@ -56,13 +56,24 @@ mapservices.factory('Map', function($http) {
               }
               $scope.locationUpdated(addressArray);
   };
+  Map.emptyString = function(entry,isLast){
+    if (entry==undefined){
+      entry = ' ';
+    }
+    if(isLast=false){
+      entry = entry + ',';
+    }
+    return entry
+  }
   Map.searchLocation = function($scope,address){
               console.log(address);
               var addressArray = [];
-              var addressToSearch = address.street + ',' + address.city + ',' + address.country;
+              var addressToSearch = Map.emptyString(address.street,false) + Map.emptyString(address.city,false) + Map.emptyString(address.country,false);
+
               
               $('#gmap_canvas').gmap('search', {'address': addressToSearch}, function(results, status) {
               console.log('gmap.search');
+              console.log(addressToSearch);
               console.log(results);
               
               
