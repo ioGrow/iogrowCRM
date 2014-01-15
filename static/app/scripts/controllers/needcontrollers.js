@@ -166,7 +166,7 @@ app.controller('NeedShowCtrl', ['$scope','$filter', '$route','Auth','Need', 'Top
 
 
     $scope.editcase = function() {
-       $('#EditCaseModal').modal('show');
+       $('#EditNeedModal').modal('show');
     }
 //HKA 09.11.2013 Add a new Task
    $scope.addTask = function(task){
@@ -389,6 +389,13 @@ $scope.deletecase = function(){
                     console.log(params);
                 }
       };
+  //HKA 15.01.2014 update Need
+  $scope.updatNeed = function(need){
+    console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
+    console.log(need);
+    Need.patch($scope,need);
+         $('#EditNeedModal').modal('hide');
+  }
 
       
 

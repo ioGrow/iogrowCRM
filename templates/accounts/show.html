@@ -450,7 +450,7 @@
                                      <%=need.name%>
                                     </h3></a>
                                     <div class="desc">                           
-                                    <span class="contact-title" ng-show="need.status">{{ _("Status:") }}<a  class="desc" href="/#/search/type:Need <%=need.status%>"># <%=need.status%></a></span> <br>
+                                    <span class="contact-title" ng-show="need.status">{{ _("Status:") }}<a  class="desc" href="/#/search/type:Need <%=need.status%>"># <%=need.need_status%></a></span> <br>
                                     <span ng-show="need.priority" class="contact-title" >{{ _("Priority:") }}<a class="desc" href="/#/search/type:Need <%=need.priority%>">#<%=need.priority%> </a></span><br>
                                       
                                     
@@ -499,11 +499,7 @@
               </div>
               <div class="modal-body">
                  <form id="addCase" name="addCase" ng-submit="saveNeed(need)" class="form-horizontal"> 
-                  <fieldset>
-                  
-                    
-
-                    
+                  <fieldset>                    
                     <div class="control-group">
                         <label  class="required control-label">{{_("Subject of the need")}} </label>
                        
@@ -538,7 +534,7 @@
                         <label  class="required control-label">{{_("Status")}}</label>
                        
                         <div class="controls">
-                          <select class="input-xlarge" ng-model="need.status">
+                          <select class="input-xlarge" ng-model="need.need_status">
                             <option value="pending">Hypothese to test</option>
                             <option value="testing">Testing</option>
                             <option value="validated">Validated</option>

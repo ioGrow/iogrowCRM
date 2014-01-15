@@ -6,7 +6,7 @@ from search_helper import tokenize_autocomplete
 import model
 
 class Need(EndpointsModel):
-    _message_fields_schema = ('id','entityKey','owner','folder', 'access','collaborators_list','collaborators_ids',  'name','description', 'status','priority','about_kind','about_item','about_name','created_at','updated_at')
+    _message_fields_schema = ('id','entityKey','owner','folder', 'access','collaborators_list','collaborators_ids',  'name','description', 'need_status','priority','about_kind','about_item','about_name','created_at','updated_at')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
@@ -18,7 +18,7 @@ class Need(EndpointsModel):
     about_name = ndb.StringProperty()
     name = ndb.StringProperty()
     description = ndb.TextProperty()
-    status = ndb.StringProperty()
+    need_status = ndb.StringProperty()
     priority = ndb.StringProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
@@ -59,7 +59,7 @@ class Need(EndpointsModel):
             search.TextField(name='description', value = empty_string(self.description) ),
             search.TextField(name='about_kind', value = empty_string(self.about_kind) ),
             search.TextField(name='about_name', value = empty_string(self.about_name) ),
-            search.TextField(name='status', value = empty_string(self.status)),
+            search.TextField(name='need_status', value = empty_string(self.need_status)),
             search.TextField(name='priority', value = empty_string(self.priority)),
             search.DateField(name='created_at', value = self.created_at),
             search.DateField(name='updated_at', value = self.updated_at),
