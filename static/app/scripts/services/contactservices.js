@@ -22,7 +22,7 @@ accountservices.factory('Contact', function($http) {
                $scope.selectedTab = 2;
                $scope.renderMaps();
 
-              document.title = "Contact: " + $scope.contact.name ;
+              document.title = "Contact: " + $scope.contact.firstname +' ' +$scope.contact.lastname ;
               $scope.email.to = '';
                 angular.forEach($scope.contact.emails, function(value, key){
                   $scope.email.to = $scope.email.to + value.email + ',';

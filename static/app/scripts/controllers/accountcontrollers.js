@@ -751,11 +751,13 @@ $scope.CaselistNextPageItems = function(){
       $('#addCaseModal').modal('hide');
     };
     $scope.saveNeed = function(need){
+      console.log('Hello neeeeeeeeeeeeeeeeeeeed');
+      console.log(need);
           
         var params = {'name':need.name,
                       'description': need.description,
                       'priority':need.priority,
-                      'status': need.status,
+                      'need_status': need.need_status,
                       'folder': $scope.account.folder,
                       'about_kind':'Account',
                       'about_item': $scope.account.id,

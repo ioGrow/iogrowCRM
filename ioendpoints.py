@@ -1018,8 +1018,28 @@ class CrmEngineApi(remote.Service):
     if not my_model.from_datastore:
       raise endpoints.NotFoundException('Need not found')
     return my_model
+  @Need.method(user_required=True,
+                http_method='PATCH', path='needs/{id}', name='needs.patch')
+  def NeedPatch(self, my_model):
+      user_from_email = EndpointsHelper.require_iogrow_user()
+      # Todo: Check permissions
+      if not my_model.from_datastore:
+          raise endpoints.NotFoundException('Need not found.')
+      patched_model_key = my_model.entityKey
+      patched_model = ndb.Key(urlsafe=patched_model_key).get()
+      print patched_model
+      print my_model
+      properties = Need().__class__.__dict__
+      for p in properties.keys():
+         
+            if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p)):
+                exec('patched_model.'+p+'= my_model.'+p)
+      
+
+      patched_model.put()
+      return patched_model
   # cases.list api
-  @Need.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken','about_kind','about_item', 'about_name',  'priority','status'),path='needs',name='needs.list')
+  @Need.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken','about_kind','about_item', 'about_name',  'priority','need_status'),path='needs',name='needs.list')
   def need_list(self,query):
       user_from_email = EndpointsHelper.require_iogrow_user()
       return query.filter(ndb.OR(ndb.AND(Need.access=='public',Need.organization==user_from_email.organization),Need.owner==user_from_email.google_user_id, Need.collaborators_ids==user_from_email.google_user_id)).order(Need._key)
@@ -1066,7 +1086,7 @@ class CrmEngineApi(remote.Service):
       user_from_email = EndpointsHelper.require_iogrow_user()
       # Todo: Check permissions
       if not my_model.from_datastore:
-          raise endpoints.NotFoundException('Account not found.')
+          raise endpoints.NotFoundException('Case not found.')
       patched_model_key = my_model.entityKey
       patched_model = ndb.Key(urlsafe=patched_model_key).get()
       print patched_model

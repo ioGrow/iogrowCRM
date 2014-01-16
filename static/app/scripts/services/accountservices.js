@@ -194,6 +194,9 @@ accountservices.factory('Search', function($http) {
         case 'Customer_Story':
           base_url = '/#/live/customer_stories/customer_story/';
           break;
+          case 'Need':
+          base_url = '/#/needs/show/';
+          break;
         
 
         }
