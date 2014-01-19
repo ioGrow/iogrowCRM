@@ -1,6 +1,7 @@
 app.controller('CompanyProfileShowCtrl', ['$scope','$route','$filter','Auth','Companyprofile','Map',
     function($scope,$route,$filter,Auth,Companyprofile,Map) {
      $("#id_Company_profile").addClass("active");
+     document.title = "Company Profile";
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;

@@ -1,6 +1,7 @@
 app.controller('FeedBacksListCtrl', ['$scope','$filter','Auth','Feedback',
     function($scope,$filter,Auth,Feedback) {
      $("#id_Feedbacks").addClass("active");
+     document.title = "Feedbacks: Home";
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;

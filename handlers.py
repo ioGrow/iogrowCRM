@@ -927,7 +927,7 @@ class AllRecentShowHandler(BaseHandler, SessionEnabledHandler):
                 except:
                     user = None
             current_time = datetime.datetime.now()
-            recently_shows = Show.query(Show.type_show =='Show',Show.ends_at<current_time,Show.is_published==True).fetch(4)
+            recently_shows = Show.query(Show.type_show =='Show',Show.ends_at<current_time,Show.is_published==True).fetch()
             template_values = {'user': user,'recently_shows':recently_shows}
             template = jinja_environment.get_template('templates/live/live_all_recents_show.html')
             self.response.out.write(template.render(template_values))
