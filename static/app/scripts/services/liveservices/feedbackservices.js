@@ -18,6 +18,7 @@ feedbackservices.factory('Feedback', function($http) {
                $scope.listTasks();
                $scope.listTopics();
                $scope.listLead();
+                document.title = "Feedback: " + $scope.feedback.name ; 
                // Call the method $apply to make the update on the scope
                $scope.$apply();
 

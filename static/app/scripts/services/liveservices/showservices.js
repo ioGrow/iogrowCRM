@@ -18,7 +18,20 @@ showservices.factory('Show', function($http) {
                $scope.listLead();
                $scope.listDocuments();
                $scope.listFeedbacks();
-               $scope.renderHangoutButton();  
+               $scope.renderHangoutButton();
+               switch($scope.show.type_show){
+                   case 'Show':
+                        document.title = "Show: " + $scope.show.name ; 
+                    break;
+                    case 'Product_Video':
+                         document.title = "Product Video: " + $scope.show.name ; 
+                    break;
+                    case 'Customer_Story' :
+                       document.title = "Customer Story: " + $scope.show.name ; 
+                    break;
+
+               };
+                
                
                // Call the method $apply to make the update on the scope
                //$scope.apply();
