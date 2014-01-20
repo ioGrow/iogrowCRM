@@ -69,7 +69,7 @@ class BaseHandler(webapp2.RequestHandler):
     def set_user_locale(self):
         # Get user's Localization settings
         locale = self.request.GET.get('locale', 'en_US')
-        i18n.get_i18n().set_locale('ar')
+        i18n.get_i18n().set_locale('en')
       
 
 
