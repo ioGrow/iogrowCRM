@@ -166,3 +166,142 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
     Auth.init($scope);
 
   }]);
+
+app.controller('AllTasksController', ['$scope','Auth','Account',
+    function($scope,Auth,Account) {
+     $("#id_Accounts").addClass("active");
+     document.title = "Accounts: Home";
+     $scope.isSignedIn = false;
+     $scope.immediateFailed = false;
+     $scope.nextPageToken = undefined;
+     $scope.prevPageToken = undefined;
+     $scope.isLoading = false;
+     $scope.pagination = {};
+     $scope.currentPage = 01;
+     $scope.pages = [];
+     $scope.accounts = [];
+     $scope.account = {};
+     $scope.account.access ='public';
+     $scope.order = '-updated_at';
+     $scope.account.account_type = 'Customer'
+     
+     // What to do after authentication
+     $scope.runTheProcess = function(){
+          var params = { 'order': $scope.order,
+                        'limit':7}
+          Account.list($scope,params);
+     };
+     // We need to call this to refresh token when user credentials are invalid
+     $scope.refreshToken = function() {
+          Auth.refreshToken();
+     };
+     // Next and Prev pagination
+     $scope.listNextPageItems = function(){
+        var nextPage = $scope.currentPage + 1;
+        var params = {};
+          if ($scope.pages[nextPage]){
+            params = {'limit':7,
+                      'order' : $scope.order,
+                      'pageToken':$scope.pages[nextPage]
+            }
+          }else{
+            params = {'order' : $scope.order,'limit':7}
+          }
+          $scope.currentPage = $scope.currentPage + 1 ; 
+          Account.list($scope,params);
+     };
+     $scope.listPrevPageItems = function(){
+       var prevPage = $scope.currentPage - 1;
+       var params = {};
+          if ($scope.pages[prevPage]){
+            params = {'limit':7,
+                      'order' : $scope.order,
+                      'pageToken':$scope.pages[prevPage]
+            }
+          }else{
+            params = {'order' : $scope.order,'limit':7}
+          }
+          $scope.currentPage = $scope.currentPage - 1 ;
+          Account.list($scope,params);
+     };
+     // Add a new account methods
+     // Show the modal 
+     $scope.showModal = function(){
+        $('#addAccountModal').modal('show');
+     };
+     // Insert the account if enter button is pressed
+     $scope.addAccountOnKey = function(account){
+        if(event.keyCode == 13 && account){
+            $scope.save(account);
+        };
+     };
+     // inserting the account  
+     $scope.save = function(account){
+          if (account.name) {
+             Account.insert($scope,account);
+           };
+      };
+
+    $scope.addAccountOnKey = function(account){
+      if(event.keyCode == 13 && account){
+          $scope.save(account);
+      }
+      
+      
+    };
+
+
+     $scope.accountInserted = function(resp){
+          $('#addAccountModal').modal('hide');
+          window.location.replace('#/accounts/show/'+resp.id);
+     };
+     // Quick Filtering
+     var searchParams ={};
+     $scope.result = undefined;
+     $scope.q = undefined;
+     
+     $scope.$watch('searchQuery', function() {
+         searchParams['q'] = $scope.searchQuery;
+         Account.search($scope,searchParams);
+     });
+     $scope.selectResult = function(){
+          window.location.replace('#/accounts/show/'+$scope.searchQuery.id);
+     };
+     $scope.executeSearch = function(searchQuery){
+        if (typeof(searchQuery)=='string'){
+           var goToSearch = 'type:Account ' + searchQuery;
+           window.location.replace('#/search/'+goToSearch);
+        }else{
+          window.location.replace('#/accounts/show/'+searchQuery.id);
+        }
+        $scope.searchQuery=' ';
+        $scope.$apply();
+     };
+     // Sorting
+     $scope.orderBy = function(order){
+        var params = { 'order': order,
+                        'limit':7};
+        $scope.order = order;
+        Account.list($scope,params);
+     };
+     $scope.filterByOwner = function(filter){
+        if (filter){
+          var params = { 'owner': filter,
+                         'order': $scope.order, 
+                         'limit':7}
+        }
+        else{
+          var params = {
+              'order': $scope.order, 
+              
+              'limit':7}
+        };
+        console.log('Filtering by');
+        console.log(params);
+        Account.list($scope,params);
+     };
+
+     // Google+ Authentication 
+     Auth.init($scope);
+
+}]);

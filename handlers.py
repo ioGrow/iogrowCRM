@@ -32,6 +32,7 @@ from google.appengine.ext import ndb
 from google.appengine.api import urlfetch
 from google.appengine.api.app_identity import get_default_version_hostname
 import oauth2client
+from apiclient import errors
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 from oauth2client.tools import run
@@ -376,7 +377,20 @@ class DocumentShowHandler(BaseHandler,SessionEnabledHandler):
       template = jinja_environment.get_template('templates/documents/show.html')
       self.response.out.write(template.render(template_values))
 
+class AllTasksHandler(BaseHandler, SessionEnabledHandler):
+  def get(self):
+      if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            tabs = user.get_user_active_tabs()
 
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            # Render the template
+            template_values = {'tabs':tabs}
+            template = jinja_environment.get_template('templates/activities/all_tasks.html')
+            self.response.out.write(template.render(template_values))
 class TaskShowHandler(BaseHandler, SessionEnabledHandler):
   def get(self):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
@@ -1123,6 +1137,7 @@ routes = [
     
     ('/views/search/list',SearchListHandler),
     ('/views/tasks/show',TaskShowHandler),
+    ('/views/tasks/list',AllTasksHandler),
     ('/views/events/show',EventShowHandler),
     # Admin Console Views
     ('/views/admin/users/list',UserListHandler),

@@ -68,6 +68,12 @@ app.config(['$routeProvider', function($routeProvider) {
       controller : 'TaskShowController',
       templateUrl:'/views/tasks/show'
       }).
+      
+      // All Tasks 
+      when('/tasks/',{
+      controller : 'AllTasksController',
+      templateUrl:'/views/tasks/list'
+      }).
       // Documents
       when('/documents/show/:documentId',{
       controller : 'DocumentShowController',
