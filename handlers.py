@@ -1036,6 +1036,10 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                 
                 
                 active_app = user.get_user_active_app()
+                tabs = user.get_user_active_tabs()
+                print '#*******************************************'
+                print tabs
+                print '#####################################'
                 for app in apps:
                     if app.name=='admin':
                         admin_app = app
@@ -1043,7 +1047,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                 logout_url = users.create_logout_url('/sign-in')
 
                 template_values = {
-
+                  'tabs':tabs,
                   'user':user,
                   'logout_url' : logout_url,
                   'CLIENT_ID': CLIENT_ID,
