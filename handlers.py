@@ -982,7 +982,7 @@ class AllupcomingsShowsCompanyHandler(BaseHandler, SessionEnabledHandler):
     current_time = datetime.datetime.now()
     upcoming_shows = Show.query(Show.organization==org_key,Show.type_show =='Show',Show.ends_at>current_time,Show.is_published==True).fetch()
     template_values = {'upcoming_shows':upcoming_shows,'org_name':org_name,'org_id':org_id}
-    template = jinja_environment.get_template('templates/live/live_all_upcomings_show_for_one_company.html')
+    template = jinja_environment.get_template('templates/live/live_all_upcomings_show_company.html')
     self.response.out.write(template.render(template_values))
 class AllrecentShowCompanyHandler(BaseHandler, SessionEnabledHandler):
   def get(self,id):
@@ -993,7 +993,7 @@ class AllrecentShowCompanyHandler(BaseHandler, SessionEnabledHandler):
     current_time = datetime.datetime.now()
     recently_shows = Show.query(Show.organization==org_key,Show.type_show =='Show',Show.ends_at<current_time,Show.is_published==True).fetch()
     template_values = {'recently_shows':recently_shows,'org_name':org_name,'org_id':org_id}
-    template = jinja_environment.get_template('templates/live/live_all_recents_show_for_one_company.html')
+    template = jinja_environment.get_template('templates/live/live_all_recents_show_company.html')
     self.response.out.write(template.render(template_values))
 class PublicLiveShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self,id):
