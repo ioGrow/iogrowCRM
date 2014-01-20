@@ -45,8 +45,8 @@
                        
                         <div class="tab-content">
                             <div class="tab-pane row-fluid fade in active" id="tab-1">
-                                   
-                                  <h2>Check out our upcoming shows <a href="#"><small>(View all)</small></a></h2>
+                              <div class="container min-hight">       
+                                  <h2>Check out our upcoming shows {%if number_upcoming_shows > 4 %}<a href="/live/companies/{{companyprofile.organizationid}}/allupcomings/"><small>(View all)</small></a>{%endif%}</h2>
                                   <ul class="grid-v1 thumbnails">
                                           
                                        
@@ -54,7 +54,7 @@
                                              {%for upcoming_show in upcoming_shows%}
                                       <li class="span3 mix category_1">
                                     <a href="/live/shows/{{upcoming_show.id}}/" >
-                                               <img class="hangout-icon" src="">
+                                               <!--img class="hangout-icon" src=""-->
                                         <span> {{upcoming_show.name}} :  ({{upcoming_show.starts_at}} to {{upcoming_show.ends_at}})</span> </a>
                                       </li>
                                       {%endfor%}
@@ -75,7 +75,7 @@
                                          
                                         </ul>
 
-                                      <h2>Recently aired <a href="#"><small>(View all)</small></a></h2>
+                                      <h2>Recently aired {%if number_recentlyshows > 4 %} <a href="/live/companies/{{companyprofile.organizationid}}/allrecents/"><small>(View all)</small>{%endif%}</a></h2>
                                       <div >
                                                                         
                                       <ul class="grid-v1 thumbnails"> 
@@ -106,7 +106,7 @@
 
                                       </ul>
                                   </div>
-                                  
+                            </div>   
                             </div>
                             <div class="tab-pane fade" id="tab-2">
                                 <div class="row-fluid">
