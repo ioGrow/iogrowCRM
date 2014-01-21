@@ -307,16 +307,16 @@
                         
                       </div>
                       <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3">
-                          
-                         <div class="cards-container">                         
-                            <div class="inner-cards-container">
-                              <div class="btn-group relbutton">
-            
+                         
+                         <div class="row cards-container">     
+                         <div class="btn-group relbutton">
                                 <button  ng-click="addContactModal()" id="sample_editable_1_new" class="btn red">
                                {{_("Add a person to this account")}}<i class="icon-plus"></i>
                                 </button>                                
-                              </div>                            
-                              <div  class="col-md-3 responsive" ng-repeat="contact in contacts" data-tablet="span6" data-desktop="span3">
+                         </div>                     
+                            <div class="inner-cards-container">
+                                                         
+                              <div  class="col-md-3" ng-repeat="contact in contacts">
                                 <div class="dashboard-stat cards">
                                   
                                   <div class="details">
@@ -331,8 +331,10 @@
                                   </div>
                                   <a class="more" href="/#/contacts/show/<%= contact.id %>">
                                   {{ _('View more')}} <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
+                                  </a>  
+                                    <div class="clearfix"></div>               
                                 </div>
+                                     
                               </div>
                               <div ng-show="blankStatecontact" class="col-md-12" data-tablet="span6" data-desktop="span12">
                                 <div class="dashboard-stat cards">
