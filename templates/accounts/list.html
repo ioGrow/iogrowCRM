@@ -101,7 +101,7 @@
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-        <div class="header-row ">
+        <div class="row ">
           
           <div class="col-md-12">
             <h2 class="page-title">{{ _("Accounts") }} </h2>
@@ -163,7 +163,8 @@
             
             <div class="row cards-container">
 
-            <div class="inner-cards-container">
+            <div class="col-md-12">
+              <div class="inner-cards-container">
                 <div ng-repeat="account in accounts" class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                   <div class="dashboard-stat cards-small">
                     <div class="details">
@@ -192,6 +193,8 @@
                                   
                 </div>
               </div>
+              <div class="clearfix"></div>
+              </div><!--/inner-cards-container-->
               </div>
             </div>
           <div class="row">
