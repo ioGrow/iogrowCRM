@@ -1,29 +1,12 @@
-
-<div class="page-sidebar nav-collapse collapse">
-      <!-- BEGIN SIDEBAR MENU -->        
-      <ul class="page-sidebar-menu">
-        
-        {% for tab in tabs %}
-           <li id="id_{{tab.name}}"  ><a href="{{ tab.url }}"><i class="icon-cogs"></i><span class="title">{{tab.label}}</span></a></li>
-          {% endfor %}
-
-
-        
-      </ul>
-     
-     
-      <!-- END SIDEBAR MENU -->
-</div>
-    
 <div  class="page-content">
 
-      <div class="container-fluid" ng-show="immediateFailed">
-         <div class="span12">  
+      <div class="container" ng-show="immediateFailed">
+         <div class="col-md-12">  
           <h1>{{ _("Sign-in Button;") }}</h1>
               <span id="signin">
                   <span id="myGsignin"></span>
               </span>
-        </div>
+         </div>
       </div>
       <div id="sharingSettingsModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-header">
@@ -35,7 +18,7 @@
                   <fieldset>
                   
                     <p>{{ _("Who has access:") }}</p>
-                    <div class='container-fluid'>
+                    <div class='container'>
 
                      
                           
@@ -52,7 +35,7 @@
                       
                     </div>
                     <hr/>
-                    <div class='container-fluid'>
+                    <div class='container'>
                     <p>{{ _("Collaborators:") }}</p>
                         <div ng-repeat="collaborator in account.collaborators_list" class="invitation">
                           <img class="google-avatar" src="<%=collaborator.photo%>"/>
@@ -62,7 +45,7 @@
                     </div>
                     <hr/>
 
-                    <div class='container-fluid'>
+                    <div class='container'>
                     <p>{{ _("Invited user:") }}</p>
                     <div class="invitation" ng-show="slected_memeber">
                       <img class="google-avatar" src="<%= slected_memeber.google_public_profile_photo_url%>"/>
@@ -87,7 +70,10 @@
                </form>
        </div>
          <!--HKA 24.12.2013 Modal before Deleting Account-->
+          <!-- BEFORE DELETE MODEL-->
          <div id="BeforedeleteAccount" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3 id="myModalLabel">Delete Account</h3>
@@ -109,15 +95,18 @@
                 <input ng-hide="isLoading" ng-click="deleteaccount(account)" type="submit" class="btn red" value="Delete this Account">
                 <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
               </div>
-               </form>
+          </form>
+        </div>
+      </div>
        </div>
-      <div class="container-fluid" ng-show="isContentLoaded">
+         <!-- BEFORE DELETE MODEL END-->
+      <div class="container" ng-show="isContentLoaded">
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-        <div class="row-fluid">
+        <div class="row">
           
-          <div class="span12">
+          <div class="col-md-12">
             <div class="pull-right sharebuttonDiv"> 
                   <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
                     <i class="icon-lock"></i> {{ _("Share") }}
@@ -127,7 +116,7 @@
                      
             </div>
                 
-            <h2>
+            <h2 class="page-title">
             <a href="/#/accounts/" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
             <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Accounts")}} > <%= account.name %> </h2>
             
@@ -146,8 +135,8 @@
         
 
             
-            <div class="row-fluid">
-              <div class="span9">
+            <div class="row">
+              <div class="col-md-9">
               <!-- BEGIN PORTLET-->
               <div class="portlet paddingless">
                 <div class="portlet-title line">
@@ -170,31 +159,27 @@
                     <div class="tab-content">
                       <div class="tab-pane active" id="tab_1_1" ng-show="selectedTab == 1">
                         
-                         <div class="row-fluid">
-                           <div class="span12 margin-bottom-10"> 
-                          <p class⁼"lead"=""><strong>{{ _("Just add notes to remember what's important :") }}</strong> </p>
-                          <form id="addNote" ng-submit="addNote(note)" class="ng-pristine ng-valid">
-                                            
-                                            <input class="input-block-level ng-pristine ng-valid" autofocus type="text" placeholder="{{ _('Add a new subject') }}" id="messageSubject" ng-model="note.title">
-
-                                         
-                                            
-                                            <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="note.content"></textarea>
-                                            <!--input ng-init="note.organization=1" required="" id="id_organization" type="hidden" name="organization" value="1"--> 
-                                  
-                                            <!--input type="hidden" id="id_related_object" ng-init="note.related_object=1" value="1"-->
-                                          
-                                         
+                         <div class="row">
+                           <div class="col-md-12 margin-bottom-10"> 
+                              <p class⁼"lead"="">
+                                <strong>
+                                  {{ _("Just add notes to remember what's important :") }}
+                                </strong> 
+                              </p>
+                                    <form id="addNote" ng-submit="addNote(note)" class="ng-pristine ng-valid">
+                                       <div class="form-group">   
+                                          <input class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="{{ _('Add a new subject') }}" id="messageSubject" ng-model="note.title">
+                                        </div>
+                                        <div class="form-group">
+                                          <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="note.content"></textarea>                
+                                        </div>                         
                                          <div class="pull-right">
-                                         <!-- <input type="submit" class="btn btn-primary" value="Attach file">-->
-                                          <input ng-hide="isLoading" type="submit" class="btn green" value="{{ _('Add this note') }}">
-                                          <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
-                                          </div>
-                                        </form>
-                                       </div>
-                                      </div>
-
-                                        
+                                            <input ng-hide="isLoading" type="submit" class="btn green" value="{{ _('Add this note') }}">
+                                            <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
+                                         </div>
+                                    </form>
+                                </div>
+                              </div>
                             <ul class="chats">
                               <li class="in" ng-repeat="topic in topics" id="topic_<%=$index%>">
                                 <img class="avatar" alt="" src="<%= topic.last_updater.photo%>" />
@@ -209,7 +194,7 @@
                               </li>
                               
                             </ul>
-                            <div class="row-fluid">
+                            <div class="row">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
                                       <ul>
@@ -227,9 +212,9 @@
                             </div>
                       <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
                         
-                        <div class="row-fluid">
+                        <div class="row">
                           
-                          <div class="span6">
+                          <div class="col-md-6">
                             
                                 <div class="news-blocks blank-card blank-card-yellow">
                                 <h3>{{ _('Account Informations') }}</h3>
@@ -291,7 +276,7 @@
                                                     
                               </div>
                           </div>
-                          <div class="span6">
+                          <div class="col-md-6">
                           
                             <div class="news-blocks blank-card blank-card-red">
                                 <h3>{{ _('Story') }}</h3>
@@ -323,16 +308,15 @@
                       </div>
                       <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3">
                           
-                         <div class="row-fluid cards-container">
-                         <div class="btn-group relbutton">
+                         <div class="cards-container">                         
+                            <div class="inner-cards-container">
+                              <div class="btn-group relbutton">
             
                                 <button  ng-click="addContactModal()" id="sample_editable_1_new" class="btn red">
                                {{_("Add a person to this account")}}<i class="icon-plus"></i>
-                                </button>
-                                
-                          </div>
-                            <div class="inner-cards-container">
-                              <div  class="span3 responsive" ng-repeat="contact in contacts" data-tablet="span6" data-desktop="span3">
+                                </button>                                
+                              </div>                            
+                              <div  class="col-md-3 responsive" ng-repeat="contact in contacts" data-tablet="span6" data-desktop="span3">
                                 <div class="dashboard-stat cards">
                                   
                                   <div class="details">
@@ -350,27 +334,23 @@
                                   </a>                 
                                 </div>
                               </div>
-                                <div ng-show="blankStatecontact" class="span12 responsive" data-tablet="span6" data-desktop="span12">
-                <div class="dashboard-stat cards">
-                  
-                  
-                  <div class="blank_slate_arrow"></div>
-                  <div class="blank_slate_body">
-                      <img src="/static/img/contacts_blank.png">
-                      <p class="lead">Each contact gets a page in i/oGrow. You and your co-workers can add notes from calls,conversations, meetings, or any other historic information about this person.</p>
-                  </div>
-               
+                              <div ng-show="blankStatecontact" class="col-md-12" data-tablet="span6" data-desktop="span12">
+                                <div class="dashboard-stat cards">
                                   
-                </div>
-              </div>
+                                  
+                                  <div class="blank_slate_arrow"></div>
+                                  <div class="blank_slate_body">
+                                      <img src="/static/img/contacts_blank.png">
+                                      <p class="lead">Each contact gets a page in i/oGrow. You and your co-workers can add notes from calls,conversations, meetings, or any other historic information about this person.</p>
+                                  </div>    
+                                </div>
+                             </div>
                               <br>
                               
-                              
+                              <div class="clearfix"></div>
                               </div>
-
-                              
                             </div>
-                            <div class="row-fluid">
+                            <div class="row">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
                                       <ul>
@@ -387,45 +367,46 @@
                               </div>
                         <!--HKA 18.11.2013 Add Contact modal -->
 
-                    <div id="addContactModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+                    <div id="addContactModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+                    <div class="modal-dialog">
+                      <div class="modal-content">
                         <div class="modal-header">
-                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                          <h3 id="myModalLabel">{{_("New Contact")}}</h3>
+                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                          <h3 id="myModalLabel" class="modal-title">{{_("New Contact")}}</h3>
                         </div>
                         <div class="modal-body">
-                            <form id="addContact" name="addcontact"  ng-submit="savecontact(contact)" class="form-horizontal"> 
-                            <fieldset>
-                            <div class="control-group">
-                              <label  class="required control-label">{{_("First Name")}} *</label>
+                            <form id="addContact" name="addcontact"  ng-submit="savecontact(contact)" class="form-horizontal" role="form"> 
+                            <div class="form-group">
+                              <label  class="required col-md-3 control-label">{{_("First Name")}} *</label>
                        
-                              <div class="controls">
-                              <input type="text" required id="id_firstname" ng-model="contact.firstname">
+                              <div class="col-md-9">
+                              <input class="form-control" type="text" required id="id_firstname" ng-model="contact.firstname">
                           
                                </div>
                             </div>
-                           <div class="control-group">
-                              <label  class="required control-label">{{_("Last Name")}}</label>
-                              <div class="controls">
-                              <input type="text"  id="id_lastname" ng-model="contact.lastname">
+                           <div class="form-group">
+                              <label  class="required col-md-3 control-label">{{_("Last Name")}}</label>
+                              <div class="col-md-9">
+                              <input class="form-control" type="text"  id="id_lastname" ng-model="contact.lastname">
                           
                               </div>
                            </div>
-                           <div class="control-group">
-                             <label  class="required control-label">{{_("Position")}} </label>
+                           <div class="form-group">
+                             <label  class="required col-md-3 control-label">{{_("Position")}} </label>
                        
-                             <div class="controls">
-                              <input type="text"  id="id_account" ng-model="contact.title">
+                             <div class="col-md-9">
+                              <input class="form-control" type="text"  id="id_account" ng-model="contact.title">
                           
                               </div>
-                           </div>
-                    </fieldset>
-                
+                           </div>                
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
                 <button  type="submit" class="btn green addContactNow">{{_("Add Contact")}}</button>
               </div>
                </form>
+             </div>
+           </div>
        </div>
     <!--End Contact Modal -->
 
@@ -433,7 +414,7 @@
                       </div>
                       <div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 4">
                           
-                         <div class="row-fluid cards-container">
+                         <div class="row cards-container">
                          <div class="btn-group relbutton">
             
                                 <button  ng-click="addNeedModal()" id="sample_editable_1_new" class="btn red">
@@ -442,7 +423,7 @@
                           </div>
                             <div class="inner-cards-container">
                                                         
-                             <div  class="span4 responsive" ng-repeat="need in needs" data-tablet="span6" data-desktop="span4">
+                             <div  class="col-md-4 responsive" ng-repeat="need in needs" data-tablet="span6" data-desktop="span4">
                                 <div class="dashboard-stat cards-med">
                                   
                                   <div class="details">
@@ -459,13 +440,13 @@
                                                  
                                 </div>
                               </div>
-                              <div ng-show="blankStateneeds" class="span12 responsive" data-tablet="span6" data-desktop="span12">
+                              <div ng-show="blankStateneeds" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
                           <div class="dashboard-stat cards">
                   
                   
                                 <div class="blank_slate_arrow"></div>
-                              <div class="blank_slate_body">
-                                  <img src="/static/img/cases_blank.png">
+                              <div class="thumbnail blank_slate_body">
+                                  <img class="img-responsive" src="/static/img/cases_blank.png">
                                 <p class="lead">Let your customers explain their needs, and after you can validate or reject those needs (Lean Development).</p>
                                    </div>
                
@@ -475,7 +456,7 @@
 
                               </div>
                             </div>
-                             <div class="row-fluid">
+                             <div class="row">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
                                       <ul>
@@ -560,7 +541,7 @@
                       </div>
                        <div class="tab-pane active" id="tab_1_5" ng-show="selectedTab == 5">
                           
-                         <div class="row-fluid cards-container">
+                         <div class="row cards-container">
                          
                          <div class="btn-group relbutton">
             
@@ -569,7 +550,7 @@
                                 </button>
                           </div>
                             <div class="inner-cards-container" >
-                              <div  class="span4 responsive" ng-repeat="opp in opportunities" data-tablet="span6" data-desktop="span4">
+                              <div  class="col-md-4 responsive" ng-repeat="opp in opportunities" data-tablet="span6" data-desktop="span4">
                                 <div class="dashboard-stat cards-med">
                                   
                                   <div class="details">
@@ -588,7 +569,7 @@
                                   </a>                 
                                 </div>
                               </div>
-                        <div ng-show="blankStateopportunity" class="span12 responsive" data-tablet="span6" data-desktop="span12">
+                        <div ng-show="blankStateopportunity" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
                          <div class="dashboard-stat cards">
                   
                   
@@ -602,7 +583,7 @@
                               </div>
                               
                             </div>
-                            <div class="row-fluid">
+                            <div class="row">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
                                       <ul>
@@ -675,7 +656,7 @@
                       </div>
                       <div class="tab-pane active" id="tab_1_6" ng-show="selectedTab == 6">
                           
-                         <div class="row-fluid cards-container">
+                         <div class="row cards-container">
                          <div class="btn-group relbutton">
             
                                 <button  ng-click="addCaseModal()" id="sample_editable_1_new" class="btn red">
@@ -684,7 +665,7 @@
                           </div>
                             <div class="inner-cards-container">
                                                         
-                             <div  class="span4 responsive" ng-repeat="casee in cases" data-tablet="span6" data-desktop="span4">
+                             <div  class="col-md-4 responsive" ng-repeat="casee in cases" data-tablet="span6" data-desktop="span4">
                                 <div class="dashboard-stat cards-med">
                                   
                                   <div class="details">
@@ -703,7 +684,7 @@
                                   </a>                 
                                 </div>
                               </div>
-                              <div ng-show="blankStatecase" class="span12 responsive" data-tablet="span6" data-desktop="span12">
+                              <div ng-show="blankStatecase" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
                           <div class="dashboard-stat cards">
                   
                   
@@ -719,7 +700,7 @@
 
                               </div>
                             </div>
-                             <div class="row-fluid">
+                             <div class="row">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
                                       <ul>
@@ -812,7 +793,7 @@
                       </div>
                       <div class="tab-pane active" id="tab_1_7" ng-show="selectedTab == 7">
                           
-                         <div class="row-fluid cards-container iodrive">
+                         <div class="row cards-container iodrive">
                          <div class="btn-group relbutton">
             
                                 <div class="btn-group">
@@ -836,7 +817,7 @@
                           </div>
                             <div class="inner-cards-container">
                                                         
-                             <div  class="span4 responsive" ng-repeat="attachment in documents" data-tablet="span6" data-desktop="span4">
+                             <div  class="col-md-4 responsive" ng-repeat="attachment in documents" data-tablet="span6" data-desktop="span4">
                                 <div class="dashboard-stat cards-med">
                                   
                                   <div class="details">
@@ -851,7 +832,7 @@
                                                  
                                 </div>
                               </div>
-                        <div ng-show="blankStatdocuments" class="span12 responsive" data-tablet="span6" data-desktop="span12">
+                        <div ng-show="blankStatdocuments" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
                            <div class="dashboard-stat cards">
                                <div class="blank_slate_arrow"></div>
                                <div class="blank_slate_body">
@@ -866,8 +847,8 @@
                       </div>
                       <div class="tab-pane active" id="tab_1_8" ng-show="selectedTab == 8">
                         
-                         <div class="row-fluid">
-                           <div class="span12 margin-bottom-10"> 
+                         <div class="row">
+                           <div class="col-md-12 margin-bottom-10"> 
                           <p class⁼"lead"=""><strong>Send an Email to :</strong> </p>
                           <form  ng-submit="sendEmail(email)" class="ng-pristine ng-valid">
                                             
@@ -901,7 +882,7 @@
               
               <!-- END PORTLET-->
             </div>
-            <div class="span3">
+            <div class="col-md-3">
               <!-- BEGIN PORTLET-->
               <div class="portlet">
                 <div class="portlet-title line">
@@ -1005,13 +986,13 @@
                             <form id="addTask" ng-submit="addEvent(ioevent)" class="ng-pristine ng-valid">
                                                   <input class="input-block-level" autofocus type="text" placeholder="{{_('Add a new event')}}" id="taskTitle" ng-model="ioevent.title">
                                                   <p><strong>{{_("When?")}}</strong></p>
-                                                <div class="row-fluid">
-                                                  <div class="span6">
+                                                <div class="row">
+                                                  <div class="col-md-6">
                                                     <p> <strong>{{_("Starts")}}</strong>: <%=ioevent.starts_at | date:'MMMM dd, yyyy, HH:mm'%></p>
                                                         <datetimepicker data-ng-model="ioevent.starts_at"
                                                     data-datetimepicker-config="{ startView:'day', minView:'minute' }" />
                                                   </div>
-                                                  <div class="span6">
+                                                  <div class="col-md-6">
                                                   <p><strong>{{_("Ends")}}</strong>: <%=ioevent.ends_at | date:'MMMM dd, yyyy, HH:mm'%></p>
                                                         <datetimepicker data-ng-model="ioevent.ends_at"
                                                     data-datetimepicker-config="{ startView:'day', minView:'minute' }" />
