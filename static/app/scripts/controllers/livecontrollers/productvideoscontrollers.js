@@ -1,6 +1,7 @@
 app.controller('ProductVideoListCtrl', ['$scope','$filter','Auth','Show',
     function($scope,$filter,Auth,Show) {
      $("#id_Product_videos").addClass("active");
+     document.title = "Product Videos: Home";
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
