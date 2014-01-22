@@ -26,7 +26,11 @@ leadservices.factory('Lead', function($http) {
                // Call the method $apply to make the update on the scope
                $scope.$apply();
             }else {
-               alert("Error, response is: " + angular.toJson(resp));
+               if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
             }
             console.log('gapi #end_execute');
           });
@@ -47,7 +51,11 @@ leadservices.factory('Lead', function($http) {
                 $scope.$apply();
 
             }else {
-               alert("Error, response is: " + angular.toJson(resp));
+               if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
             }
             console.log('leads.patch gapi #end_execute');
           });
@@ -81,7 +89,11 @@ leadservices.factory('Lead', function($http) {
                  
 
               }else {
-                 alert("Error, response is: " + angular.toJson(resp));
+                if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
               }
               console.log('gapi #end_execute');
         });

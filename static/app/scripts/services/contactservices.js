@@ -32,7 +32,11 @@ accountservices.factory('Contact', function($http) {
                $scope.$apply();
 
             }else {
-               alert("Error, response is: " + angular.toJson(resp));
+              if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
             }
             console.log('gapi #end_execute');
           });
@@ -53,7 +57,11 @@ accountservices.factory('Contact', function($http) {
                 $scope.$apply();
 
             }else {
-               alert("Error, response is: " + angular.toJson(resp));
+               if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
             }
             console.log('Contact.patch gapi #end_execute');
           });
@@ -87,7 +95,11 @@ accountservices.factory('Contact', function($http) {
                  $scope.$apply();
 
               } else {
-                 alert("Error, response is: " + angular.toJson(resp));
+                 if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
               }
               console.log('gapi #end_execute');
         });
@@ -137,43 +149,3 @@ Contact.delete = function($scope,id){
 return Contact;
 });
 
-// retrieve list account
-contactservices.factory('MultiContactLoader', ['Account','$route', '$q',
-    function(Account, $route, $q) {
-    return function() {
-    var delay = $q.defer();
-    gapi.client.crmengine.contacts.list().execute(function(resp) {
-            console.log('after execution');
-           // console.log(resp);
-            
-            delay.resolve(resp.items);
-
-            console.log('resoleved');
-            console.log(resp.items);
-            console.log('continue');
-      // pagination
-    
-    });
-    console.log('continued');
-    
-    return delay.promise;
-    };
-
-   // function(Account,$route, $q) {
-  //return function() {
-   // return Account.list($route.current.params.page);
- // };
-}]);
-
-// retrieve a contact
-contactservices.factory('ContactLoader', ['Contact', '$route', '$q',
-    function(Contact, $route, $q) {
-  return function() {
-    var delay = $q.defer();
-    
-    var contactId = $route.current.params.contactId;
-    
-    
-    return Contact.get($route.current.params.contactId);
-  };
-}]);
