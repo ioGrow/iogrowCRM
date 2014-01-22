@@ -308,10 +308,12 @@
                                {{_("Add a person to this account")}}<i class="icon-plus"></i>
                                 </button>                                
                          </div>                     
+
                            <div class="col-md-12">
                             <div class="inner-cards-container">
                               <div  class="col-md-3" ng-repeat="contact in contacts">
                                 <div class="dashboard-stat cards-small">
+
                                   
                                   <div class="details">
                                     <a href="/#/contacts/show/<%= contact.id %>"><h3 class="relatedcardTitle">
@@ -1232,7 +1234,7 @@
             <div class="modal-body">
                   <form id="addEmail" name="addemail" ng-submit="addEmail(emaill)" class="form-horizontal"> 
                     <div class="form-group">
-                        <label  class="control-label">{{_("Email")}} </label>
+                        <label  class="col-md-3 control-label">{{_("Email")}} </label>
                         <div class="col-md-9">
                           <input type="text" placeholder="{{_('Email')}}" required id="id_email" ng-model="emaill.email" class="form-control">
                         </div>
