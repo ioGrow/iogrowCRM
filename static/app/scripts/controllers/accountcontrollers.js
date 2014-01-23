@@ -128,8 +128,7 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
               
               'limit':7}
         };
-        console.log('Filtering by');
-        console.log(params);
+        $scope.isFiltering = true;
         Account.list($scope,params);
      };
 

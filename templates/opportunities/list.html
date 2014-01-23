@@ -151,7 +151,7 @@
         </div>
 
             <!-- Filtering and sorting -->
-          <div class="row filter-row" ng-show="opportunities">
+          <div class="row filter-row" ng-show="opportunities+isFiltering">
             <div class="col-md-2">
               <div class="btn-group btn-filter">
                                     <a class="btn btn-default" href="#" data-toggle="dropdown">
@@ -235,6 +235,20 @@
                   </div>
                 </div>
                 </div>
+                <div ng-show="isFiltering * !opportunities" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
+                <div class="dashboard-stat cards">
+                  
+                  
+                  <div class="blank_slate_arrow"></div>
+                  <div class="thumbnail blank_slate_body">
+                      
+                      <p class="lead">No results found, try with another filter</p>
+                  </div>
+               
+                                  
+                </div>
+              </div>
+
                
                                   
                <div class="clearfix"></div>

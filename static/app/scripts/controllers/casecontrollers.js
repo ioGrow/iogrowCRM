@@ -217,8 +217,7 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
               
               'limit':7}
         };
-        console.log('Filtering by');
-        console.log(params);
+        $scope.isFiltering = true;
         Case.list($scope,params);
      };
      $scope.filterByStatus = function(filter){
@@ -233,7 +232,7 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
               
               'limit':7}
         };
-        
+        $scope.isFiltering = true;
         Case.list($scope,params);
      };
 

@@ -47,8 +47,11 @@ accountservices.factory('Case', function() {
       $scope.isLoading = true;
       gapi.client.crmengine.cases.list(params).execute(function(resp) {
               if(!resp.code){
+                 
                   if (!resp.items){
-                    $scope.blankStatecase = true;
+                    if(!$scope.isFiltering){
+                        $scope.blankStatecase = true;
+                    }
                   }
                  $scope.cases = resp.items;
                          

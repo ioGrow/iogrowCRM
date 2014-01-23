@@ -162,7 +162,7 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
               
               'limit':7}
         };
-       
+        $scope.isFiltering = true;
         Contact.list($scope,params);
      };
 
