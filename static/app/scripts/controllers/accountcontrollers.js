@@ -1,5 +1,6 @@
 app.controller('AccountListCtrl', ['$scope','Auth','Account',
     function($scope,Auth,Account) {
+     $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Accounts").addClass("active");
      document.title = "Accounts: Home";
      $scope.isSignedIn = false;
@@ -138,6 +139,7 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
 }]);
 app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account','Contact','Case','Opportunity', 'Topic','Note','Task','Event','Permission','User','Attachement','Email','Need','Opportunitystage','Casestatus','Map',
     function($scope,$filter,$route,Auth,Account,Contact,Case,Opportunity,Topic,Note,Task,Event,Permission,User,Attachement,Email,Need,Opportunitystage,Casestatus,Map) {
+       $("ul.page-sidebar-menu li").removeClass("active");
        $("#id_Accounts").addClass("active");
           
        $scope.selectedTab = 1;
