@@ -391,8 +391,7 @@ $scope.deletecase = function(){
       };
   //HKA 15.01.2014 update Need
   $scope.updatNeed = function(need){
-    console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
-    console.log(need);
+   
     Need.patch($scope,need);
          $('#EditNeedModal').modal('hide');
   }
