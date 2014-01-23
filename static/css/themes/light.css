@@ -774,4 +774,20 @@ border-top-color: transparent !important;
 color: #fff !important;
 border-left: 2px solid #5c3c00;
 }
+#id_Product_videos.active > a{
+  
+  background: #852b99 !important;
+font-weight: bold;
+border-top-color: transparent !important;
+color: #fff !important;
+border-left: 2px solid #852b99;
+}
+#id_Customer_Stories.active > a{
+  
+  background: #28b779 !important;
+font-weight: bold;
+border-top-color: transparent !important;
+color: #fff !important;
+border-left: 2px solid #28b779;
+}
 

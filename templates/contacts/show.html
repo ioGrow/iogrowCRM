@@ -39,25 +39,9 @@
             </div>
           </div>
 </div>
-<div class="page-sidebar nav-collapse collapse">
-      <!-- BEGIN SIDEBAR MENU -->        
-      <ul class="page-sidebar-menu">
-        
-        {% for tab in tabs %}
-           <li id="id_{{tab.name}}"  ><a href="{{ tab.url }}"><i class="icon-cogs"></i><span class="title">{{tab.label}}</span></a></li>
-          {% endfor %}
-
-
-        
-      </ul>
-     
-     
-      <!-- END SIDEBAR MENU -->
-</div>
-    
 <div  class="page-content">
 
-      <div class="container" ng-show="immediateFailed">
+      <div class="" ng-show="immediateFailed">
          <div class="col-md-12">  
           <h1>Sign-in Button;</h1>
               <span id="signin">
@@ -151,7 +135,7 @@
                </div>
                </div>
        </div>
-      <div class="container" ng-show="isContentLoaded">
+      <div class="" ng-show="isContentLoaded">
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
@@ -167,7 +151,7 @@
                      
                 </div>
                 
-            <h2>
+            <h2 class="page-title">
             <a href="/#/contacts/" data-toggle="tooltip" data-placement="bottom" title="Back to Contacts">
             <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>   {{_("Contacts")}} > <%=contact.firstname%> <%=contact.lastname%></h2>
             

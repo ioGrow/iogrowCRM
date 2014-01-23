@@ -5,17 +5,17 @@
 {% block content %}
      <div class="row-fluid breadcrumbs margin-bottom-40">
         <div class="container">
-           <div class="span8">
-                <h1><a href="/live/" data-toggle="tooltip" data-placement="bottom" title="Back to Shows">
-            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"> Shows </a>      > All upcomings shows  </h1>
+            <div class="span8">
+                <h1><a href="/live/companies/{{org_id}}/" data-toggle="tooltip" data-placement="bottom" title="Back to {{org_name}}">
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"> {{org_name}} </a>      > All recently aired shows  </h1>
             </div>
             <div class="span4">
                 <div class="pull-right get-in">
                       <button id="myBtn" class="btn green g-interactivepost"
     data-clientid="987765099891.apps.googleusercontent.com"
-    data-contenturl="http://gcdc2013-iogrow.appspot.com/live/"
+    data-contenturl="http://gcdc2013-iogrow.appspot.com/live/Allrecents/"
     data-calltoactionlabel="DISCOVER"
-    data-calltoactionurl="http://gcdc2013-iogrow.appspot.com/live/allupcomings/"
+    data-calltoactionurl="http://gcdc2013-iogrow.appspot.com/live/allrecents/"
     data-cookiepolicy="single_host_origin"
     data-prefilltext="Come Discover  i/oGrow Live :)">
      <i class="icon-share"></i>
@@ -30,22 +30,31 @@
 
     <div class="container min-hight">
         <!-- BEGIN FILTER -->     
-        <h2>Check out our upcoming shows </h2>
-        
-        <ul class="grid-v1 thumbnails">
-                 {%if upcoming_shows%}
-                {%for upcoming in upcoming_shows%}
+           
+        <h2>Recently aired </h2>
+          
+        <div >
+            
+            <ul class="grid-v1 thumbnails">
+              {% if recently_shows%}
+                {%for recent in recently_shows%}
                 <li class="span3 mix category_1">
                 
-                <a href="/live/shows/{{upcoming.id}}/" target="new">
+                <a href="/live/shows/{{recent.id}}/">
                     <!--img class="hangout-icon" src="https://developers.google.com/_static/frontend/a39d39a910/images/hangout.png"-->
-                 <span> {{upcoming.name}} :  ({{upcoming.starts_at}} to {{upcoming.ends_at}})</span> </a>
-                 By {{upcoming.organization_name}}  
+                   {% if recent.youtube_url %}
+                <img class="hangout-icon" src="http://img.youtube.com/vi/{{recent.youtube_url}}/0.jpg">
+
+                                      {% else %}
+                                           <img class="hangout-icon" src="/static/img/gdl-stay-tuned.png" />
+                                      {% endif %} 
+                <span> {{recent.name}} </span></a>
+                By  {{recent.organization_name}}
                                                           
                 </li>
                 {%endfor%}
-                {%else%}
-                  <div class="span6 responsive" data-tablet="span6" data-desktop="span4">
+            {%else%}
+               <div class="span6 responsive" data-tablet="span6" data-desktop="span4">
                 <div class="dashboard-stat cards">
                   
                   
@@ -58,13 +67,12 @@
                                   
                 </div>
               </div>
-                {%endif%}
+            {%endif%}
+                     
 
-                
-        </ul>     
-        
-    
-        <!-- END FILTER -->           
+            </ul>
+        </div>
+                   
     </div>
     <!-- END CONTAINER -->
 {% endblock %}

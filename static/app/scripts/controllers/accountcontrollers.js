@@ -753,8 +753,7 @@ $scope.CaselistNextPageItems = function(){
       $('#addCaseModal').modal('hide');
     };
     $scope.saveNeed = function(need){
-      console.log('Hello neeeeeeeeeeeeeeeeeeeed');
-      console.log(need);
+      
           
         var params = {'name':need.name,
                       'description': need.description,
