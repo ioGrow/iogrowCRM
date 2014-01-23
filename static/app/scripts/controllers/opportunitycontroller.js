@@ -288,6 +288,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
 
      }
      $scope.editOpp = function(){
+
       $('#EditOpportunityModal').modal('show')
      }
 
@@ -461,21 +462,25 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
                  'stage_probability':$scope.stage_selected.probability,
                 'amount':opportunity.amount,
                 'description':opportunity.description};
-  /*$scope.$watch(opportunity.amount, function() {
+      console.log('-------------------------YYYYYYYYYY');
+      console.log(opportunity.stagename);
+       
+  Opportunity.patch($scope,params);
+  /*$scope.$watch(opportunity.stagename, function() {
       var paramsNote = {
                   'about_kind': 'Opportunity',
                   'about_item': $scope.opportunity.id,
-                  'title': 'stage updated to '+ opportunity.amount
+                  'title': 'stage updated to '+ $scope.stage_selected.name
                   
       };
-      console.log('inserting a new note');
-      console.log(paramsNote);
+      
       
       Note.insert($scope,paramsNote);
-   }); */             
-  Opportunity.patch($scope,params);
+   }); */      
   $('#EditOpportunityModal').modal('hide');
  };
+
+
 
       $('#some-textarea').wysihtml5();
       
