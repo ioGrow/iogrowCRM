@@ -1,6 +1,7 @@
 app.controller('CustomerStoriesListCtrl', ['$scope','$filter','Auth','Show',
     function($scope,$filter,Auth,Show) {
      $("#id_Customer_Stories").addClass("active");
+     document.title = "Customer Stories: Home";
       $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;

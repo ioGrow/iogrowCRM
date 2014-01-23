@@ -71,8 +71,11 @@ accountservices.factory('Contact', function($http) {
 
     
               if(!resp.code){
-                  if (!resp.items){
-                    $scope.blankStatecontact = true;
+                  
+                   if (!resp.items){
+                    if(!$scope.isFiltering){
+                        $scope.blankStatecontact = true;
+                    }
                   }
                  $scope.contacts = resp.items;
                  if ($scope.contactCurrentPage>1){

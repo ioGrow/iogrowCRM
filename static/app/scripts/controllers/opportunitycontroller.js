@@ -184,8 +184,7 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
               
               'limit':7}
         };
-        console.log('Filtering by');
-        console.log(params);
+        $scope.isFiltering = true;
         Opportunity.list($scope,params);
      };
      $scope.filterByStage = function(filter){
@@ -200,7 +199,7 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
               
               'limit':7}
         };
-        
+        $scope.isFiltering = true;
         Opportunity.list($scope,params);
      };
 

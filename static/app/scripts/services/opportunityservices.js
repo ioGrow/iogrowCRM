@@ -40,8 +40,10 @@ opportunityservices.factory('Opportunity', function($http) {
       $scope.isLoading = true;
       gapi.client.crmengine.opportunities.list(params).execute(function(resp) {
               if(!resp.code){
-                if (!resp.items){
-                    $scope.blankStateopportunity = true;
+                  if (!resp.items){
+                    if(!$scope.isFiltering){
+                        $scope.blankStateopportunity = true;
+                    }
                   }
                  $scope.opportunities = resp.items;
                  if ($scope.oppCurrentPage>1){

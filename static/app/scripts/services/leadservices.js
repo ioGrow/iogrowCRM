@@ -66,7 +66,9 @@ leadservices.factory('Lead', function($http) {
 
               if(!resp.code){
                 if (!resp.items){
-                    $scope.blankStatelead = true;
+                    if(!$scope.isFiltering){
+                        $scope.blankStatelead = true;
+                    }
                   }
                  $scope.leads = resp.items;
                   if ($scope.currentPage>1){

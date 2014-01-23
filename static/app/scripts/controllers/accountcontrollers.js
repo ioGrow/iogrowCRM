@@ -128,8 +128,7 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
               
               'limit':7}
         };
-        console.log('Filtering by');
-        console.log(params);
+        $scope.isFiltering = true;
         Account.list($scope,params);
      };
 
@@ -753,8 +752,7 @@ $scope.CaselistNextPageItems = function(){
       $('#addCaseModal').modal('hide');
     };
     $scope.saveNeed = function(need){
-      console.log('Hello neeeeeeeeeeeeeeeeeeeed');
-      console.log(need);
+      
           
         var params = {'name':need.name,
                       'description': need.description,

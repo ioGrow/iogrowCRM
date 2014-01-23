@@ -95,7 +95,9 @@ accountservices.factory('Account', function($http) {
               if(!resp.code){
                   
                   if (!resp.items){
-                    $scope.blankStateaccount = true;
+                    if(!$scope.isFiltering){
+                        $scope.blankStateaccount = true;
+                    }
                   }
                  $scope.accounts = resp.items;
                  if ($scope.currentPage>1){
