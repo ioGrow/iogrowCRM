@@ -1,6 +1,7 @@
 app.controller('ShowListCtrl', ['$scope','$filter','Auth','Show',
     function($scope,$filter,Auth,Show) {
      $("#id_Shows").addClass("active");
+     document.title = "Shows: Home";
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;

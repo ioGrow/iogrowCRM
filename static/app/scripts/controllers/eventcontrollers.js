@@ -1,5 +1,5 @@
-app.controller('EventShowController',['$scope','$filter','$route','Auth','Note','Event','Task','Topic','Comment','User','Contributor',
-   function($scope,$filter,$route,Auth,Note,Event,Task,Topic,Comment,User,Contributor) {
+app.controller('EventShowController',['$scope','$filter','$route','Auth','Note','Event','Task','Topic','Comment','User','Contributor','Show',
+   function($scope,$filter,$route,Auth,Note,Event,Task,Topic,Comment,User,Contributor,Show) {
 //HKA 14.11.2013 Controller to show Events and add comments
    $scope.isSignedIn = false;
      $scope.immediateFailed = false;
@@ -146,6 +146,12 @@ $scope.listContributors = function(){
                      'order':'-created_at'};
       Contributor.list($scope,params);
       };
+//HKA 20.01.2014 Add 
+ $scope.getshow = function(showId){
+     var show = Show.get($scope.showId);
+     return show;
+
+ }
 
   // Google+ Authentication 
   Auth.init($scope);

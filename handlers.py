@@ -907,9 +907,7 @@ class PublicLiveHomeHandler(BaseHandler, SessionEnabledHandler):
             #org_id = org.key.id()
             current_time = datetime.datetime.now()
             upcoming_shows = Show.query(Show.type_show =='Show',Show.ends_at>current_time,Show.is_published==True).fetch(8)
-            recently_shows = Show.query(Show.type_show =='Show',Show.ends_at<current_time,Show.is_published==True).fetch(4)
-            print('------------------------------------')
-            print(recently_shows)
+            recently_shows = Show.query(Show.type_show =='Show',Show.ends_at<current_time,Show.is_published==True).fetch(4)           
             number_of_upcoming_shows = Show.query(Show.type_show =='Show',Show.ends_at>current_time,Show.is_published==True).count()
             number_of_recentlyshows = Show.query(Show.type_show =='Show',Show.ends_at<current_time,Show.is_published==True).count()
             template_values = {'user': user,'upcoming_shows':upcoming_shows,'recently_shows':recently_shows,'number_of_recentlyshows':number_of_recentlyshows,'number_of_upcoming_shows':number_of_upcoming_shows,}
@@ -941,7 +939,7 @@ class AllRecentShowHandler(BaseHandler, SessionEnabledHandler):
                 except:
                     user = None
             current_time = datetime.datetime.now()
-            recently_shows = Show.query(Show.type_show =='Show',Show.ends_at<current_time,Show.is_published==True).fetch(4)
+            recently_shows = Show.query(Show.type_show =='Show',Show.ends_at<current_time,Show.is_published==True).fetch()
             template_values = {'user': user,'recently_shows':recently_shows}
             template = jinja_environment.get_template('templates/live/live_all_recents_show.html')
             self.response.out.write(template.render(template_values))
@@ -979,12 +977,38 @@ class PublicLiveCompanyPageHandler(BaseHandler, SessionEnabledHandler):
       productvideo = Show.query(Show.organization==org_key,Show.type_show =='Product_Video',Show.is_published==True).fetch()
       customerstory = Show.query(Show.organization==org_key,Show.type_show =='Customer_Story',Show.is_published==True).fetch()
       current_time = datetime.datetime.now()
-      upcoming_shows = Show.query(Show.organization==org_key,Show.type_show =='Show',Show.ends_at>current_time,Show.is_published==True).fetch()
-      recentlyshows = Show.query(Show.organization==org_key,Show.type_show =='Show',Show.ends_at<current_time,Show.is_published==True).fetch()
+      upcoming_shows = Show.query(Show.organization==org_key,Show.type_show =='Show',Show.ends_at>current_time,Show.is_published==True).fetch(4)
+      recentlyshows = Show.query(Show.organization==org_key,Show.type_show =='Show',Show.ends_at<current_time,Show.is_published==True).fetch(4)
+      number_upcoming_shows = Show.query(Show.organization==org_key,Show.type_show =='Show',Show.ends_at>current_time,Show.is_published==True).count()
+      number_recentlyshows = Show.query(Show.organization==org_key,Show.type_show =='Show',Show.ends_at<current_time,Show.is_published==True).count()
       shows = Show.query(Show.organization==org_key,Show.type_show =='Show',Show.is_published==True).fetch()
-      template_values = {'companyprofile':companyprofile,'productvideo':productvideo,'customerstory':customerstory,'shows':shows,'upcoming_shows':upcoming_shows,'recentlyshows':recentlyshows}
+      template_values = {'companyprofile':companyprofile,'productvideo':productvideo,
+      'customerstory':customerstory,'shows':shows,'upcoming_shows':upcoming_shows,'recentlyshows':recentlyshows,
+      'number_upcoming_shows':number_upcoming_shows,'number_recentlyshows':number_recentlyshows}
       template = jinja_environment.get_template('templates/live/live_company_page.html')
       self.response.out.write(template.render(template_values))
+class AllupcomingsShowsCompanyHandler(BaseHandler, SessionEnabledHandler):
+  def get(self,id):
+    org_id = int(id)
+    companyprofile = model.Companyprofile.query(model.Companyprofile.organizationid==org_id).get()
+    org_key = companyprofile.organization
+    org_name = companyprofile.name
+    current_time = datetime.datetime.now()
+    upcoming_shows = Show.query(Show.organization==org_key,Show.type_show =='Show',Show.ends_at>current_time,Show.is_published==True).fetch()
+    template_values = {'upcoming_shows':upcoming_shows,'org_name':org_name,'org_id':org_id}
+    template = jinja_environment.get_template('templates/live/live_all_upcomings_show_company.html')
+    self.response.out.write(template.render(template_values))
+class AllrecentShowCompanyHandler(BaseHandler, SessionEnabledHandler):
+  def get(self,id):
+    org_id = int(id)
+    companyprofile = model.Companyprofile.query(model.Companyprofile.organizationid==org_id).get()
+    org_key = companyprofile.organization
+    org_name = companyprofile.name
+    current_time = datetime.datetime.now()
+    recently_shows = Show.query(Show.organization==org_key,Show.type_show =='Show',Show.ends_at<current_time,Show.is_published==True).fetch()
+    template_values = {'recently_shows':recently_shows,'org_name':org_name,'org_id':org_id}
+    template = jinja_environment.get_template('templates/live/live_all_recents_show_company.html')
+    self.response.out.write(template.render(template_values))
 class PublicLiveShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self,id):
             if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
@@ -1166,6 +1190,8 @@ routes = [
     ('/welcome/',WelcomeHandler),
     ('/live/companies/',MapsHandler),
     (r'/live/companies/(\d+)/',PublicLiveCompanyPageHandler),
+    (r'/live/companies/(\d+)/allrecents/',AllrecentShowCompanyHandler),
+    (r'/live/companies/(\d+)/allupcomings/',AllupcomingsShowsCompanyHandler),
     # Authentication Handlers
     ('/sign-in',SignInHandler),
     ('/sign-up',SignUpHandler),

@@ -812,6 +812,14 @@ indexes:
   properties:
   - name: access
   - name: organization
+  - name: owner
+  - name: updated_at
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: access
+  - name: organization
   - name: stage_probability
     direction: desc
 
@@ -879,6 +887,13 @@ indexes:
   - name: collaborators_ids
   - name: owner
   - name: stage_probability
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: collaborators_ids
+  - name: owner
+  - name: updated_at
     direction: desc
 
 - kind: Opportunity
