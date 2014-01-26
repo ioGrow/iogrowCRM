@@ -79,7 +79,7 @@
                     
         <ul class="nav navbar-nav pull-right">      
               <li class="dropdown user">
-                <a href="/live/companies/{{org_id}}/" target="new" class="dropdown-toggle">       
+                <a href="/live/companies/{{org_id}}/" class="dropdown-tog">       
                   <span class="username">
                     My company
                   </span>
@@ -157,8 +157,8 @@
         <ul class="page-sidebar-menu">
           {% for tab in tabs %}
               <li id="id_{{tab.name}}" class="start">
-                <a href="{{ tab.url }}">
-                <i class="fa fa-home"></i>
+                <a href="{{ tab.url }}" data-toggle="collapse" data-target=".navbar-collapse">
+                <i class="fa fa-{{tab.icon}}"></i>
                 <span class="title">
                   {{tab.label}}
                 </span>       
