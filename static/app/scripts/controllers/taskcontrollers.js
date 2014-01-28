@@ -14,6 +14,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      
      $scope.notes = [];  
      $scope.users = [];
+     
      $scope.user = undefined;
      $scope.slected_memeber = undefined;
      $scope.role= 'participant';
@@ -78,6 +79,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
         $('#addAccountModal').modal('show');
 
       };
+
       $scope.selectMember = function(){
         
         $scope.slected_memeber = $scope.user;
@@ -167,8 +169,8 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
 
   }]);
 
-app.controller('AllTasksController', ['$scope','Auth','Account',
-    function($scope,Auth,Account) {
+app.controller('AllTasksController', ['$scope','Auth','Task','User',
+    function($scope,Auth,Task,User) {
      $("#id_Accounts").addClass("active");
      document.title = "Accounts: Home";
      $scope.isSignedIn = false;
@@ -183,18 +185,23 @@ app.controller('AllTasksController', ['$scope','Auth','Account',
      $scope.account = {};
      $scope.account.access ='public';
      $scope.order = '-updated_at';
-     $scope.account.account_type = 'Customer'
+     $scope.account.account_type = 'Customer';
+     $scope.slected_members = [];
      
      // What to do after authentication
      $scope.runTheProcess = function(){
           var params = { 'order': $scope.order,
                         'limit':7}
-          Account.list($scope,params);
+          Task.list($scope,params);
+          User.list($scope,{});
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
           Auth.refreshToken();
      };
+     $scope.assigneeModal = function(){
+        $('#assigneeModal').modal('show');
+      };
      // Next and Prev pagination
      $scope.listNextPageItems = function(){
         var nextPage = $scope.currentPage + 1;
@@ -250,7 +257,43 @@ app.controller('AllTasksController', ['$scope','Auth','Account',
       
     };
 
+    $scope.selectMember = function(){
+        if ($scope.slected_members.indexOf($scope.user) == -1) {
+           $scope.slected_members.push($scope.user);
+           $scope.slected_memeber = $scope.user;
+           $scope.user = $scope.slected_memeber.google_display_name;
+        }
+        $scope.user='';
+     };
+     $scope.unselectMember =function(index){
+         $scope.slected_members.splice(index, 1);
+          console.log($scope.slected_members);
 
+         
+     };
+     $scope.addNewContributor = function(selected_user){
+      console.log('*************** selected user ***********************');
+      console.log(selected_user);
+      angular.forEach($scope.slected_members, function(selected_user){
+     
+      var params = {   
+                      'discussionKey': $scope.task.entityKey,
+                      'type': 'user',
+                      'value': selected_user.email,
+                      'name': selected_user.google_display_name,
+                      'photoLink': selected_user.google_public_profile_photo_url
+        }  
+        console.log('selected member');
+        console.log(params); 
+        Contributor.insert($scope,params);
+      });
+     $('#addContributor').modal('hide');
+     };
+     $scope.listContributors = function(){
+      var params = {'discussionKey':$scope.task.entityKey,
+                     'order':'-created_at'};
+      Contributor.list($scope,params);
+      };
      $scope.accountInserted = function(resp){
           $('#addAccountModal').modal('hide');
           window.location.replace('#/accounts/show/'+resp.id);
