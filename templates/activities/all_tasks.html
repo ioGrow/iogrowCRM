@@ -208,18 +208,16 @@
                          <div class="col-md-12">
                            <form class="form-inline" role="form">
                            <div class="row">
-                          <label class="col-md-1 col-sm-1">
+                           <label class="col-md-1 col-sm-1">
                                <div class="checker"><span class=""><input type="checkbox"></span></div>  
                            </label>
+                           <div class="col-md-5">
                             <button  class="btn btn-default">Close</button>
-                            <button  class="btn btn-default">
-                              <i class="fa fa-tags"></i>
-                            </button>
                             <div class="btn-group">
                               <button type="button" class="btn btn-default">
                                 <i class="fa fa-tags"></i>
                               </button>
-                              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-angle-down"></i></button>
+                              <button id="labels-btn-dropdown" type="button" onclick="fieldfocus()" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-angle-down"></i></button>
                               <div class="dropdown-menu" role="menu">
                                 <div class="row">
                                     <div class="col-md-12">
@@ -278,6 +276,7 @@
                               </div>
                             </div>
                             <button ng-click="assigneeModal()" class="btn btn-default">Assignee</button>
+                            </div>
                           </form>
                             </div>
                         </div>
@@ -285,7 +284,7 @@
                       <script type="text/javascript">
                         $("#select2_sample2").select2({
                               placeholder: "Select a label",
-                              allowClear: true
+                              allowClear: false
                           });
                       </script>
                        <li class="list-group-item ">
