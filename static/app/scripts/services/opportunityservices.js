@@ -25,6 +25,9 @@ opportunityservices.factory('Opportunity', function($http) {
         $scope.$apply();
 
       }else {
+         if(resp.message=="Invalid token"){
+          $scope.refreshToken();;
+         };
         alert("Error, response is :"+angular.toJson(resp))
       }
     });
@@ -59,6 +62,9 @@ opportunityservices.factory('Opportunity', function($http) {
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
               }else {
+                if(resp.message=="Invalid token"){
+                       $scope.refreshToken();;
+                           };
                  alert("Error, response is: " + angular.toJson(resp));
               }
       });
