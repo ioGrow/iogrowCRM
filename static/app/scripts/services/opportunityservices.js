@@ -112,8 +112,9 @@ opportunityservices.factory('Opportunity', function($http) {
          
          if(!resp.code){
           $scope.isLoading = false;
-          $('#addOpportunityModal').modal('hide');
+          
           window.location.replace('#/opportunities/show/'+resp.id);
+          $('#addOpportunityModal').modal('hide');
           
          }else{
           console.log(resp.message);

@@ -89,6 +89,7 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
            
           
           Opportunity.insert($scope,opportunity);
+            //$('#addOpportunityModal').modal('hide');
 
         }else if($scope.searchAccountQuery.length>0){
             // create a new account with this account name
