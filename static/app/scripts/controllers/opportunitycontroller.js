@@ -1,6 +1,6 @@
 app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','Opportunitystage','Search',
     function($scope,Auth,Account,Opportunity,Opportunitystage,Search) {
-      
+     $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Opportunities").addClass("active");
      document.title = "Opportunities: Home";
 
@@ -184,8 +184,7 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
               
               'limit':7}
         };
-        console.log('Filtering by');
-        console.log(params);
+        $scope.isFiltering = true;
         Opportunity.list($scope,params);
      };
      $scope.filterByStage = function(filter){
@@ -200,7 +199,7 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
               
               'limit':7}
         };
-        
+        $scope.isFiltering = true;
         Opportunity.list($scope,params);
      };
 
@@ -211,7 +210,7 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
 
 app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage','Email','Attachement',
     function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email,Attachement) {
- 
+      $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Opportunities").addClass("active");
       $scope.selectedTab = 1;
      $scope.isSignedIn = false;

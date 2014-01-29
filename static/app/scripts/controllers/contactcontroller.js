@@ -1,6 +1,8 @@
 app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
     function($scope,Auth,Account,Contact) {
+        $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Contacts").addClass("active");
+
         document.title = "Contacts: Home";
         $scope.isSignedIn = false;
         $scope.immediateFailed = false;
@@ -160,7 +162,7 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
               
               'limit':7}
         };
-       
+        $scope.isFiltering = true;
         Contact.list($scope,params);
      };
 
@@ -170,6 +172,7 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
 app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User','Attachement','Map',
     function($scope,$filter,$route,Auth,Email,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User,Attachement,Map) {
  console.log('I am in ContactShowCtrl');
+      $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Contacts").addClass("active");
     
      $scope.isSignedIn = false;

@@ -1,16 +1,17 @@
-<div id="EditTaskModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-
+<div id="EditTaskModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("Edit Task")}}</h3>
+                <h3 id="myModalLabel" class="modal-title">{{_("Edit Task")}}</h3>
               </div>
 
               <div class="modal-body">
                  <form id="editCase" name="editlead" ng-submit="updateTask(task)" class="form-horizontal"> 
                 
 
-                  <div class="control-group">
-                        <input class="input-block-level" autofocus type="text" placeholder="Add a new task" id="taskTitle" ng-model="task.title">
+                  <div class="form-group">
+                        <input class="form-control" autofocus type="text" placeholder="Add a new task" id="taskTitle" ng-model="task.title">
                                                   
                         <p><strong>When's it due?</strong></p>
                         <center>
@@ -18,11 +19,11 @@
                                                     data-datetimepicker-config="{ startView:'day', minView:'day' }" />
                         </center>
 
-                         <div class="control-group">
-                            <label  class="required control-label">{{_("Status")}} </label>
+                         <div class="form-group">
+                            <label  class="required col-md-3 control-label">{{_("Status")}} </label>
                             
-                            <div class="controls">
-                              <select class="input-xlarge" ng-model="task.status">
+                            <div class="col-md-9">
+                              <select class="form-control" ng-model="task.status">
                                     
                                     <option value="pending">Pending</option>
                                     <option value="working">Working</option>
@@ -38,8 +39,8 @@
                  
 
                     
-                    <div class="control-group">
-                        <input class="input-block-level" autofocus type="text" placeholder="Add labels to categorize your tasks" id="taskTitle" ng-model="task.tags">
+                    <div class="form-group">
+                        <input class="form-control" autofocus type="text" placeholder="Add labels to categorize your tasks" id="taskTitle" ng-model="task.tags">
                     </div>                       
                   
                      
@@ -52,6 +53,8 @@
                 <button  type="submit" class="btn btn-primary addContactNow green">{{_("Save")}} </button>
               </div>
                </form>
+                </div>
+              </div>
   </div> 
 <div class="page-sidebar nav-collapse collapse">
       <!-- BEGIN SIDEBAR MENU -->        
@@ -65,17 +68,17 @@
       <!-- END SIDEBAR MENU -->
 </div>
 <div  class="page-content">
-<div class="container-fluid" ng-show="immediateFailed">
-         <div class="span12">  
+<div class="" ng-show="immediateFailed">
+         <div class="col-md-12">  
           <h1>Sign-in Button;</h1>
               <span id="signin">
                   <span id="myGsignin"></span>
               </span>
         </div>
  </div>
-    <div class="container-fluid" >
-      <div class="row-fluid">
-         <div class="span12">
+    <div class="" >
+      <div class="row">
+         <div class="col-md-12">
          
             <div class="pull-right sharebuttonDiv"> 
                   <a href="" class="btn blue jfk-button jfk-button-action">
@@ -92,11 +95,11 @@
           <hr>
       </div>
     </div>
-      <!--HKA 19.11.2013 Begin  row-fluid-2 who is involved -->
-    <div class="row-fluid">
+      <!--HKA 19.11.2013 Begin  row-2 who is involved -->
+    <div class="row">
 
     <!--HKA 19.11.2013 BEGIN Span comments-->
-      <div class="span8">
+      <div class="col-md-8">
       <!-- BEGIN PORTLET-->
         <div class="portlet">
           <div class="portlet-title line">
@@ -112,19 +115,20 @@
          
         </div>
       <!-- End Portlet -->
-      <div class="row-fluid">
-                  <div class="span12 margin-bottom-10">
+      <div class="row">
+                  <div class="col-md-12 margin-bottom-10">
                  <p class⁼"lead"=""><strong>Discuss this task :</strong> </p>
                           <form id="addComment" ng-submit="addComment(comment)" class="ng-pristine ng-valid">
-                                            <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="comment.content"></textarea>
+                          <div class="form-group">
+                                            <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="comment.content"></textarea>
                                           
-                                          
+                           </div>                
                                          
-                                         <div class="pull-right">
-                                        
-                                          <input ng-hide="isLoading" type="submit" class="btn green" value="Add comment">
-                                          <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
-                                          </div>
+                           <div class="pull-right">
+                          
+                            <input ng-hide="isLoading" type="submit" class="btn green" value="Add comment">
+                            <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                            </div>
                       </form>
                       </div>
               
@@ -143,7 +147,7 @@
                   </li>
                   
         </ul>
-        <div class="row-fluid">
+        <div class="row">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
                                       <ul>
@@ -166,7 +170,7 @@
 
 
   <!--HKA 19.11.2013 BEGIN Span who is involved -->
-      <div class="span4">
+      <div class="col-md-4">
         <div class="portlet">
                 <div class="portlet-title line">
                   <div class="caption"><i class="icon-tasks"></i>Who's involved</div>
@@ -190,29 +194,31 @@
                 
        </div>
 
-        <div id="addContributor" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div id="addContributor" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("Involve new contributors")}}</h3>
+                <h3 id="myModalLabel" class="modal-title">{{_("Involve new contributors")}}</h3>
               </div>
               <div class="modal-body">
                  <form id="addAccount" name="addaccount" ng-submit="addNewContributor(slected_memeber,role)" class="form-horizontal"> 
-                  <fieldset>
+                
                   
                     <p>Invite people from your team and start working together on this task. Everyone you invite will receive an email.</p>
 
-                    <div class='container-fluid'>
+                    <div class=''>
                     <div class="invitation" ng-show="slected_memeber">
                       <img class="google-avatar" src="<%= slected_memeber.google_public_profile_photo_url%>"/>
                         <strong> <%= slected_memeber.google_display_name %> < <%=slected_memeber.email%> ></strong>
                     </div>
-                    <div class="control-group">
-                      <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="input-block-level" placeholder="Enter name or email addresse to involve people in this discussion">
+                    <div class="form-group">
+                      <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="Enter name or email addresse to involve people in this discussion">
                     </div>
-                    <div class="control-group">
-                          <label class="control-label">Add as:</label>
-                          <div class="controls">
-                            <select class="medium m-wrap" tabindex="1" ng-model="role">
+                    <div class="form-group">
+                          <label class="col-md-3 control-label">Add as:</label>
+                          <div class="col-md-9">
+                            <select class="form-control medium m-wrap" tabindex="1" ng-model="role">
                               <option value="responsible">Responsible</option>
                               <option value="participant">Participant</option>
                               <option value="invited">Invited</option>
@@ -221,7 +227,7 @@
                           </div>
                         </div>
                       </div>
-                    </fieldset>
+                
                 
               </div>
               <div class="modal-footer">
@@ -229,6 +235,8 @@
                 <button  type="submit" class="btn blue addContactNow">{{_("Involve")}}</button>
               </div>
                </form>
+              </div>
+              </div>
        </div>
 
 
@@ -238,7 +246,7 @@
 
 
     </div>
-    <!--HKA 19.11.2013 END row-fluid-2 Span who is involved -->
+    <!--HKA 19.11.2013 END row-2 Span who is involved -->
 
 
 

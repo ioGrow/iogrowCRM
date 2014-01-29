@@ -2,6 +2,7 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
     function($scope,Auth,Case,Account,Contact,Casestatus) {
     
      document.title = "Cases: Home";
+     $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Cases").addClass("active");
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
@@ -216,8 +217,7 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
               
               'limit':7}
         };
-        console.log('Filtering by');
-        console.log(params);
+        $scope.isFiltering = true;
         Case.list($scope,params);
      };
      $scope.filterByStatus = function(filter){
@@ -232,7 +232,7 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
               
               'limit':7}
         };
-        
+        $scope.isFiltering = true;
         Case.list($scope,params);
      };
 
@@ -244,7 +244,7 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
 }]);
 app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Topic','Note','Task','Event','Permission','User','Casestatus','Email','Attachement',
     function($scope,$filter,$route,Auth,Case,Topic,Note,Task,Event,Permission,User,Casestatus,Email,Attachement) {
-      console.log('i am in account list controller');
+      $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Cases").addClass("active");
       
      $scope.selectedTab = 1;

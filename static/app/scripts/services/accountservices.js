@@ -58,7 +58,12 @@ accountservices.factory('Account', function($http) {
                 $scope.$apply();
 
             }else {
-               alert("Error, response is: " + angular.toJson(resp));
+              alert(resp.message);
+               if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+             };
             }
             console.log('gapi #end_execute');
           });
@@ -90,7 +95,9 @@ accountservices.factory('Account', function($http) {
               if(!resp.code){
                   
                   if (!resp.items){
-                    $scope.blankStateaccount = true;
+                    if(!$scope.isFiltering){
+                        $scope.blankStateaccount = true;
+                    }
                   }
                  $scope.accounts = resp.items;
                  if ($scope.currentPage>1){
@@ -112,7 +119,12 @@ accountservices.factory('Account', function($http) {
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
               }else {
-                 alert("Error, response is: " + angular.toJson(resp));
+               
+               if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
               }
       });
   };
@@ -295,7 +307,11 @@ accountservices.factory('Attachement', function($http) {
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
               }else {
-                 alert("Error, response is: " + angular.toJson(resp));
+                 if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
               }
       });
       
@@ -312,7 +328,11 @@ accountservices.factory('Attachement', function($http) {
                 $scope.$apply();
 
             }else {
-               alert("Error, response is: " + angular.toJson(resp));
+               if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
             }
             console.log('gapi #end_execute');
           });

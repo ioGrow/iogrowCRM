@@ -1,0 +1,562 @@
+<div  class="page-content">
+   <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+      <div id="portlet-config" class="modal ">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button data-dismiss="modal" class="close" type="button"></button>
+              <h3>{{ _("Portlet Settings") }}</h3>
+            </div>
+            <div class="modal-body">
+              <p>{{ _("Here will be a configuration form") }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+      <!-- BEGIN PAGE CONTAINER-->
+      <div class="" ng-show="immediateFailed">
+         <div class="col-md-12">  
+          <h1>{{ _("Sign-in Button;") }}</h1>
+              <span id="signin">
+                  <span id="myGsignin"></span>
+              </span>
+        </div>
+      </div>
+            <div id="assigneeModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+           <div class="modal-dialog">
+              <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">
+                <i class="fa fa-tasks"></i>
+                   {{_("Assign someone to this task")}}</h3>
+              </div>
+              <div class="modal-body">
+                 <form id="addMember" name="addaccount" ng-submit="share(slected_memeber)" class="form-horizontal"> 
+                    <div class=''>
+                        <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group') }}">
+                      <div id="assigeeList" class="list-group">
+                        <div class="invitation list-group-item" ng-repeat="selected_us in slected_members">
+                          <button type="button" class="close" ng-click="unselectMember($index)" data-dismiss="alert"></button>
+                          <img class="google-avatar" src="<%= selected_us.google_public_profile_photo_url%>"/>
+                            <strong> <%= selected_us.google_display_name %> < <%=selected_us.email%> ></strong>
+                        </div>
+                      </div>
+                    </div>
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <button  type="submit" class="btn blue addContactNow">{{_("Share")}}</button>
+              </div>
+               </form>
+               </div>
+               </div>
+
+       </div>
+       <script type="text/javascript">
+          $('#assigeeList').slimScroll({
+              height: '200px'
+          });
+       </script>
+      <div id="addAccountModal" class="modal  fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+       <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">{{_("New Account")}}</h3>
+              </div>
+              <div class="modal-body">
+                 <form id="addAccount" name="addaccount"  class="form-horizontal"  ng-keyup="addAccountOnKey(account)"> 
+                  <fieldset>
+                  
+                    
+
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Name")}} *</label>
+                       
+                        <div class="controls">
+                          <input type="text" required  ng-model="account.name">
+                          
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Type")}}</label>
+                       
+                        <div class="controls">
+                         
+                          <select value="Customer" ng-model="account.account_type"> 
+                         <option value="Competitor">Competitor</option><option value="Customer">Customer</option><option value="Distributor">Distributor</option><option value="Integrator">Integrator</option><option value="Investor">Investor</option><option value="Partner">Partner</option><option value="Press">Press</option><option value="Prospect">Prospect</option><option value="Reseller">Reseller</option><option value="Supplier">Supplier</option><option value="Vendor">Vendor</option><option value="Other">Other</option></select>
+                          
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label  class="required control-label">{{_("Industry")}} </label>
+                       
+                        <div class="controls">
+                         
+                          <select ng-model="account.industry">
+                          <option value="">--None--</option><option value="Agriculture">Agriculture</option><option value="Apparel">Apparel</option><option value="Banking">Banking</option><option value="Biotechnology">Biotechnology</option><option value="Chemicals">Chemicals</option><option value="Communications">Communications</option><option value="Construction">Construction</option><option value="Consulting">Consulting</option><option value="Education">Education</option><option value="Electronics">Electronics</option><option value="Energy">Energy</option><option value="Engineering">Engineering</option><option value="Entertainment">Entertainment</option><option value="Environmental">Environmental</option><option value="Finance">Finance</option><option value="Food &amp; Beverage">Food &amp; Beverage</option><option value="Government">Government</option><option value="Healthcare">Healthcare</option><option value="Hospitality">Hospitality</option><option value="Insurance">Insurance</option><option value="Machinery">Machinery</option><option value="Manufacturing">Manufacturing</option><option value="Media">Media</option><option value="Not For Profit">Not For Profit</option><option value="Recreation">Recreation</option><option value="Retail">Retail</option><option value="Shipping">Shipping</option><option value="Technology">Technology</option><option value="Telecommunications">Telecommunications</option><option value="Transportation">Transportation</option><option value="Utilities">Utilities</option><option value="Other">Other</option></select>
+                          
+                        </div>
+                    </div>
+                    <hr/>
+                    <p> {{ _('Who can access?') }}</p>
+                     <div class=''>
+
+                     
+                          
+                            <label class="radio line">
+                            <input type="radio" value="public" ng-model="account.access" />
+                             {{ _('public: Anyone within your organization') }}
+                            </label>
+                            <label class="radio line">
+                            <input type="radio"  value="private" ng-model="account.access" />
+                            {{ _('private: only you and your collaborators') }}
+                            </label>  
+                           
+                       
+                      
+                    </div>
+                    </fieldset>
+                
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                
+                <input ng-hide="isLoading" ng-click="save(account)" type="submit" class="btn green" value="{{ _('Add this account') }}">
+                <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
+              </div>
+               </form>
+            </div>
+        </div>
+       </div>
+      <div class="" ng-show="isSignedIn">
+        
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row">
+          
+          <div class="col-md-12">
+            <h2 class="page-title">{{ _("Tasks") }} </h2>
+            
+            <div class="btn-group">
+            
+                    <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
+                    {{ _("New Task") }} <i class="icon-plus"></i>
+                    </button>
+            </div>
+            
+               
+            <hr/>
+            
+          </div>
+        </div>
+          <!-- Filtering and sorting -->
+          <div class="row">
+          <div class="col-md-9">
+            <div class="row filter-row" ng-show="accounts+isFiltering">
+              <div class="col-md-2">
+                <div class="btn-group btn-filter">
+                        <a class="btn btn-default" href="#" data-toggle="dropdown">
+                          {{ _('Filter by') }}
+                        <i class="icon-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                          <li><a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All accounts') }}</a></li>
+                          <li><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My accounts') }}</a></li>
+                        </ul>
+                </div>
+              </div>
+              <div class="col-md-5">
+                 
+                  <form class=" ng-pristine ng-valid" ng-submit="executeSearch(searchQuery)">
+                    <div class="input-group">
+                      <input type="text" ng-model="searchQuery" typeahead="result as result.name  for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="form-control" placeholder="{{ _('Quick Filtering') }}">
+                      <span class="input-group-btn">
+                        <button class="gbqfb gbqfb-hvr" type="button"><i class="icon-filter"></i></button>
+                      </span>
+                    </div>
+                   
+                  </form>
+                   
+              </div>
+              <div class="col-md-3">
+                <div class="btn-group btn-sort">
+                      <a class="btn btn-default" href="#" data-toggle="dropdown">
+                      {{ _('Sort by') }}
+                      <i class="icon-angle-down"></i>
+                      </a>
+                      <ul class="dropdown-menu">
+                        <li><a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a></li>
+                        <li><a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a></li>
+                        
+                       
+                      </ul>
+                </div>
+
+              </div>
+              <br>
+                <br>
+              
+            </div>
+              <div class="row tasksList">
+                <div class="col-md-12">
+                    <ul class="list-group">
+                        <li class="task-actions list-group-item task-actions">
+                         <div class="row">
+                         <div class="col-md-12">
+                           <form class="form-inline" role="form">
+                           <div class="row">
+                           <label class="col-md-1 col-sm-1">
+                               <div class="checker"><span class=""><input type="checkbox"></span></div>  
+                           </label>
+                           <div class="col-md-5">
+                            <button  class="btn btn-default">Close</button>
+                            <div class="btn-group">
+                              <button type="button" class="btn btn-default">
+                                <i class="fa fa-tags"></i>
+                              </button>
+                              <button id="labels-btn-dropdown" type="button" onclick="fieldfocus()" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-angle-down"></i></button>
+                              <div class="dropdown-menu" role="menu">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                      <select id="select2_sample2" class="form-control select2" multiple>
+                                        <optgroup label="NFC EAST">
+                                        <option>Dallas </option>
+                                        <option>New </option>
+                                        <option> Eagles</option>
+                                        <option>Washington </option>
+                                        </optgroup>
+                                        <optgroup label="NFC NORTH">
+                                        <option>Chicago Bears</option>
+                                        <option>Detroit Lions</option>
+                                        <option>Green Bay Packers</option>
+                                        <option>Minnesota Vikings</option>
+                                        </optgroup>
+                                        <optgroup label="NFC SOUTH">
+                                        <option>Atlanta Falcons</option>
+                                        <option>Carolina Panthers</option>
+                                        <option>New Orleans Saints</option>
+                                        <option>Tampa Bay Buccaneers</option>
+                                        </optgroup>
+                                        <optgroup label="NFC WEST">
+                                        <option>Arizona Cardinals</option>
+                                        <option>St. Louis Rams</option>
+                                        <option>San Francisco 49ers</option>
+                                        <option>Seattle Seahawks</option>
+                                        </optgroup>
+                                        <optgroup label="AFC EAST">
+                                        <option>Buffalo Bills</option>
+                                        <option>Miami Dolphins</option>
+                                        <option>New England Patriots</option>
+                                        <option>New York Jets</option>
+                                        </optgroup>
+                                        <optgroup label="AFC NORTH">
+                                        <option>Baltimore Ravens</option>
+                                        <option>Cincinnati Bengals</option>
+                                        <option>Cleveland Browns</option>
+                                        <option>Pittsburgh Steelers</option>
+                                        </optgroup>
+                                        <optgroup label="AFC SOUTH">
+                                        <option>Houston Texans</option>
+                                        <option>Indianapolis Colts</option>
+                                        <option>Jacksonville Jaguars</option>
+                                        <option>Tennessee Titans</option>
+                                        </optgroup>
+                                        <optgroup label="AFC WEST">
+                                        <option>Denver Broncos</option>
+                                        <option>Kansas City Chiefs</option>
+                                        <option>Oakland Raiders</option>
+                                        <option>San Diego Chargers</option>
+                                        </optgroup>
+                                      </select>
+                                    </div>
+                                  </div>
+                              </div>
+                            </div>
+                            <button ng-click="assigneeModal()" class="btn btn-default">Assignee</button>
+                            </div>
+                          </form>
+                            </div>
+                        </div>
+                      </li>
+                      <script type="text/javascript">
+                        $("#select2_sample2").select2({
+                              placeholder: "Select a label",
+                              allowClear: false
+                          });
+                      </script>
+                       <li class="list-group-item ">
+                         <div class="row">
+                            <label class="col-md-1 col-sm-1">
+                               <div class="checker"><span class=""><input type="checkbox"></span></div>  
+                           </label>
+                           <h4 class="col-md-6 col-sm-7 list-group-item-heading">
+                            List group item heading
+                            </h4>
+                            <div class="col-md-5 col-sm-4">
+                                <span class="pull-right task-label label label-warning">
+                                    warning
+                                  </span>
+                                  <span class="pull-right task-label label label-warning">
+                                    warning
+                                  </span>
+                                  <span class="pull-right task-label label label-warning">
+                                    warning
+                                  </span>
+                                  <span class="pull-right task-label label label-warning">
+                                    warning
+                                  </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                          <p class="col-md-11 col-md-offset-1 list-group-item-text">
+                         <div class="row">
+                          <p class="col-md-11 col-md-offset-1 list-group-item-text">
+                          <span>Related to:<a href="#">Transline</a></span>
+                          <span>Opened by:<a href="#">Transline</a></span>
+                          <span>Closed by:<a href="#">Transline</a></span>
+                        </p>
+                        </div>
+                          
+                        </p>
+                        </div>
+                        
+                      </li>
+                      <li class="list-group-item">
+                         <div class="row">
+                            <label class="col-md-1 col-sm-1">
+                               <div class="checker"><span class=""><input type="checkbox"></span></div>  
+                           </label>
+                           <h4 class="col-md-6 col-sm-7 list-group-item-heading">
+                            List group item heading
+                            </h4>
+                            <div class="col-md-5 col-sm-4">
+                                <span class="pull-right task-label label label-warning">
+                                    warning
+                                  </span>
+                                  <span class="pull-right task-label label label-warning">
+                                    warning
+                                  </span>
+                                  <span class="pull-right task-label label label-warning">
+                                    warning
+                                  </span>
+                                  <span class="pull-right task-label label label-warning">
+                                    warning
+                                  </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                          <p class="col-md-11 col-md-offset-1 list-group-item-text">
+                         <div class="row">
+                          <p class="col-md-11 col-md-offset-1 list-group-item-text">
+                          <span>Related to:<a href="#">Transline</a></span>
+                          <span>Opened by:<a href="#">Transline</a></span>
+                          <span>Closed by:<a href="#">Transline</a></span>
+                        </p>
+                        </div>
+                          
+                        </p>
+                        </div>
+                        
+                      </li>
+                      <li class="list-group-item">
+                         <div class="row">
+                            <label class="col-md-1 col-sm-1">
+                               <div class="checker"><span class=""><input type="checkbox"></span></div>  
+                           </label>
+                           <h4 class="col-md-6 col-sm-7 list-group-item-heading">
+                            List group item heading
+                            </h4>
+                            <div class="col-md-5 col-sm-4">
+                                <span class="pull-right task-label label label-warning">
+                                    warning
+                                  </span>
+                                  <span class="pull-right task-label label label-warning">
+                                    warning
+                                  </span>
+                                  <span class="pull-right task-label label label-warning">
+                                    warning
+                                  </span>
+                                  <span class="pull-right task-label label label-warning">
+                                    warning
+                                  </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                          <p class="col-md-11 col-md-offset-1 list-group-item-text">
+                          <div class="row">
+                          <p class="col-md-11 col-md-offset-1 list-group-item-text">
+                          <span>Related to:<a href="#">Transline</a></span>
+                          <span>Opened by:<a href="#">Transline</a></span>
+                          <span>Closed by:<a href="#">Transline</a></span>
+                        </p>
+                        </div>
+                          
+                        </p>
+                        </div>
+                        
+                      </li>
+                      <li class="list-group-item ">
+                         <div class="row">
+                            <label class="col-md-1 col-sm-1">
+                               <div class="checker"><span class=""><input type="checkbox"></span></div>  
+                           </label>
+                           <h4 class="col-md-6 col-sm-7 list-group-item-heading">
+                            List group item heading
+                            </h4>
+                            <div class="col-md-5 col-sm-4">
+                                <span class="pull-right task-label label label-warning">
+                                    warning
+                                  </span>
+                                  <span class="pull-right task-label label label-warning">
+                                    warning
+                                  </span>
+                                  <span class="pull-right task-label label label-warning">
+                                    warning
+                                  </span>
+                                  <span class="pull-right task-label label label-warning">
+                                    warning
+                                  </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                          <p class="col-md-11 col-md-offset-1 list-group-item-text">
+                          <div class="row">
+                            <p class="col-md-11 col-md-offset-1 list-group-item-text">
+                            <span>Related to:<a href="#">Transline</a></span>
+                            <span>Opened by:<a href="#">Transline</a></span>
+                            <span>Closed by:<a href="#">Transline</a></span>
+                          </p>
+                          </div>
+                          
+                        </p>
+                        </div>
+                        
+                      </li>
+                      <li class="list-group-item ">
+                         <div class="row">
+                            <label class="col-md-1 col-sm-1">
+                               <div class="checker"><span class=""><input type="checkbox"></span></div>  
+                           </label>
+                           <h4 class="col-md-6 col-sm-7 list-group-item-heading">
+                            List group item heading
+                            </h4>
+                            <div class="col-md-5 col-sm-4">
+                                <span class="pull-right task-label label label-warning">
+                                    warning
+                                  </span>
+                                  <span class="pull-right task-label label label-warning">
+                                    warning
+                                  </span>
+                                  <span class="pull-right task-label label label-warning">
+                                    warning
+                                  </span>
+                                  <span class="pull-right task-label label label-warning">
+                                    warning
+                                  </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                          <p class="col-md-11 col-md-offset-1 list-group-item-text">
+                         <div class="row">
+                          <p class="col-md-11 col-md-offset-1 list-group-item-text">
+                          <span>Related to:<a href="#">Transline</a></span>
+                          <span>Opened by:<a href="#">Transline</a></span>
+                          <span>Closed by:<a href="#">Transline</a></span>
+                        </p>
+                        </div>
+                          
+                        </p>
+                        </div>
+                        
+                      </li>
+                      <li class="list-group-item  active bg-blue">
+                         <div class="row">
+                            <label class="col-md-1 col-sm-1">
+                               <div class="checker"><span class=""><input type="checkbox"></span></div>  
+                           </label>
+                           <h4 class="col-md-6 col-sm-7 list-group-item-heading">
+                            List group item heading
+                            </h4>
+                            <div class="col-md-5 col-sm-4">
+                                <span class="pull-right task-label label label-warning">
+                                    warning
+                                  </span>
+                                  <span class="pull-right task-label label label-warning">
+                                    warning
+                                  </span>
+                                  <span class="pull-right task-label label label-warning">
+                                    warning
+                                  </span>
+                                  <span class="pull-right task-label label label-warning">
+                                    warning
+                                  </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                          <p class="col-md-11 col-md-offset-1 list-group-item-text">
+                         <div class="row">
+                          <p class="col-md-11 col-md-offset-1 list-group-item-text">
+                          <span>Related to:<a href="#">Transline</a></span>
+                          <span>Opened by:<a href="#">Transline</a></span>
+                          <span>Closed by:<a href="#">Transline</a></span>
+                        </p>
+                        </div>
+                        </p>
+                        </div>
+                        
+                      </li>
+                    </ul>
+                  </div><!-- / col-md-12-->
+              </div> <!-- / tasksList-->
+          </div>
+          <script type="text/javascript">
+              $('#slimtest1').slimScroll({
+                    height: '200px'
+                });
+          </script>
+          <div class="col-md-3">
+              <div class="portlet">
+                <div class="portlet-title">
+                  <div class="caption">
+                    <i class="fa fa-reorder"></i>Basic Chart
+                  </div>
+                  <div class="tools">
+                      <a href="javascript:;" class="collapse">
+                      </a>
+                      <a href="#portlet-config" data-toggle="modal" class="config">
+                      </a>
+                      <a href="javascript:;" class="reload">
+                      </a>
+                      <a href="javascript:;" class="remove">
+                    </a>
+                  </div>
+                </div>
+                <div class="portlet-body">
+                  
+                </div>
+              </div>
+          </div>
+          </div> 
+          <div class="row">
+            <div class="pagination pull-right" ng-hide="isLoading">
+                  
+                  <ul>
+                    <li ng-show="pagination.prev"><button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
+                    {{_("Prev")}} 
+                    </button></li>
+                    <li ng-repeat="page in pagination.pages" ng-class='{active: page.isCurrent}'><a  href="#/accounts/"><%= page.id %></a></li>
+                    <li  ng-show="pagination.next"><button ng-click="listNextPageItems()"  class="btn">
+                    {{_("Next")}} 
+                    </button></li>
+                  </ul>
+                </div>
+                <h3 class="pagination pull-right" ng-show="isLoading">{{ _('Loading') }}...</h3>
+          </div>
+        <!-- END PAGE CONTENT-->
+      </div>
+      <!-- END PAGE CONTAINER--> 
+</div>
+

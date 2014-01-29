@@ -1,33 +1,49 @@
 
-
-<div class="page-sidebar nav-collapse collapse">
-      <!-- BEGIN SIDEBAR MENU -->        
-        <ul class="page-sidebar-menu">
-        
-        {% for tab in tabs %}
-           <li id="id_{{tab.name}}"  ><a href="{{tab.url}}"><i class="icon-cogs"></i><span class="title">{{tab.label}}</span></a></li>
-          {% endfor %}
-        </ul>
-     
-     
-      <!-- END SIDEBAR MENU -->
-</div>
-    
 <div  class="page-content">
-    
-
-   <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
-      <div id="portlet-config" class="modal hide">
-        <div class="modal-header">
-          <button data-dismiss="modal" class="close" type="button"></button>
-          <h3>portlet Settings</h3>
-        </div>
-        <div class="modal-body">
-          <p>Here will be a configuration form</p>
-        </div>
-      </div>
-      <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
-      <!-- BEGIN PAGE CONTAINER-->
+  <div class="modal fade" id="newShowModal" tabindex="-1" role="basic" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                      <h3 id="myModalLabel">Schedule a show</h3>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addTask" ng-submit="scheduleShow(ioevent)" class="ng-pristine ng-valid">
+                            <div class="form-group">
+                              <div class="input-group">
+                              <input class="form-control input-block-level" autofocus type="text" placeholder="Add a new show" id="taskTitle" ng-model="ioevent.name">
+                              <span class="input-group-addon">
+                                <i class="fa  fa-video-camera"></i>
+                              </span>
+                            </div>
+                            </div>
+                                  <p><strong>When?</strong></p>
+                            <div class="row">
+                              <div class="col-md-6">
+                                <p> <strong>Starts</strong>: <%=ioevent.starts_at | date:'MMMM dd, yyyy, HH:mm'%></p>
+                                    <datetimepicker data-ng-model="ioevent.starts_at"
+                                data-datetimepicker-config="{ startView:'day', minView:'minute'}" />
+                              </div>
+                              <div class="col-md-6">
+                                <p>
+                                  <strong>Ends</strong>: <%=ioevent.ends_at | date:'MMMM dd, yyyy, HH:mm'%>
+                                </p>
+                                <datetimepicker data-ng-model="ioevent.ends_at"
+                                data-datetimepicker-config="{ startView:'day', minView:'minute' }" />
+                              </div>
+                            </div>                                   
+                    </div>
+                    <div class="modal-footer">
+                       <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                       <input ng-hide="isLoading" type="submit" class="btn green" value="Shedule this show">
+                        <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>                          
+                    </form>
+                    </div>
+                  </div>
+                  <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+     </div>
       <div class="container-fluid"ng-show="immediateFailed">
          <div class="span12">  
           <h1>Sign-in Button;</h1>
@@ -36,7 +52,7 @@
               </span>
         </div>
       </div>
-      <div id="newShowModal" class="modal  hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div id="newShowModal2" class="modal  hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
               <h3 id="myModalLabel">Schedule a show</h3>
@@ -44,20 +60,20 @@
             <div class="modal-body">
                      <div class="controls controls-row">
                             <form id="addTask" ng-submit="scheduleShow(ioevent)" class="ng-pristine ng-valid">
-                                                  <input class="input-block-level" autofocus type="text" placeholder="Add a new show" id="taskTitle" ng-model="ioevent.name">
-                                                  <p><strong>When?</strong></p>
-                                                <div class="row-fluid">
-                                                  <div class="span6">
-                                                    <p> <strong>Starts</strong>: <%=ioevent.starts_at | date:'MMMM dd, yyyy, HH:mm'%></p>
-                                                        <datetimepicker data-ng-model="ioevent.starts_at"
-                                                    data-datetimepicker-config="{ startView:'day', minView:'minute'}" />
-                                                  </div>
-                                                  <div class="span6">
-                                                  <p><strong>Ends</strong>: <%=ioevent.ends_at | date:'MMMM dd, yyyy, HH:mm'%></p>
-                                                        <datetimepicker data-ng-model="ioevent.ends_at"
-                                                    data-datetimepicker-config="{ startView:'day', minView:'minute' }" />
-                                                  </div>
-                                                </div>
+                              <input class="input-block-level" autofocus type="text" placeholder="Add a new show" id="taskTitle" ng-model="ioevent.name">
+                              <p><strong>When?</strong></p>
+                            <div class="row-fluid">
+                              <div class="span6">
+                                <p> <strong>Starts</strong>: <%=ioevent.starts_at | date:'MMMM dd, yyyy, HH:mm'%></p>
+                                    <datetimepicker data-ng-model="ioevent.starts_at"
+                                data-datetimepicker-config="{ startView:'day', minView:'minute'}" />
+                              </div>
+                              <div class="span6">
+                              <p><strong>Ends</strong>: <%=ioevent.ends_at | date:'MMMM dd, yyyy, HH:mm'%></p>
+                                    <datetimepicker data-ng-model="ioevent.ends_at"
+                                data-datetimepicker-config="{ startView:'day', minView:'minute' }" />
+                              </div>
+                            </div>
                  <!--input class="input-block-level" autofocus="" type="text" placeholder="Add #hashtags about this show" id="taskTitle" ng-model="ioevent.tags"-->
                                                     
                                                     

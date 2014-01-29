@@ -1,18 +1,3 @@
-
-
-<div class="page-sidebar nav-collapse collapse">
-      <!-- BEGIN SIDEBAR MENU -->        
-        <ul class="page-sidebar-menu">
-        
-        {% for tab in tabs %}
-           <li id="id_{{tab.name}}"  ><a href="{{tab.url}}"><i class="icon-cogs"></i><span class="title">{{tab.label}}</span></a></li>
-          {% endfor %}
-        </ul>
-     
-     
-      <!-- END SIDEBAR MENU -->
-</div>
-    
 <div  class="page-content">
     
 
@@ -28,56 +13,59 @@
       </div>
       <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
       <!-- BEGIN PAGE CONTAINER-->
-      <div class="container-fluid"ng-show="immediateFailed">
-         <div class="span12">  
+      <div ng-show="immediateFailed">
+         <div class="col-md-12">  
           <h1>{{ _("Sign-in Button;") }}</h1>
               <span id="signin">
                   <span id="myGsignin"></span>
               </span>
         </div>
       </div>
-      <div id="addAccountModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("New Account")}}</h3>
-              </div>
-              <div class="modal-body">
-                 <form id="addAccount" name="addaccount"  class="form-horizontal"  ng-keyup="addAccountOnKey(account)"> 
-                  <fieldset>
+      <div id="addAccountModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h3 id="myModalLabel">{{_("New Account")}}</h3>
+                    </div>
+                    <div class="modal-body">
+                       <form id="addAccount" name="addaccount"  class=""  ng-keyup="addAccountOnKey(account)"> 
+                              
                   
                     
 
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Name")}} *</label>
+                    <div class="form-group">
+                        <label  class="required">{{_("Name")}}</label>
                        
-                        <div class="controls">
-                          <input type="text" required  ng-model="account.name">
+                        
+                          <input type="text" class="form-control" required  ng-model="account.name">
                           
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Type")}}</label>
                        
-                        <div class="controls">
+                    </div>
+                    <div class="form-group">
+                        <label  class="required">{{_("Type")}}</label>
+                       
+                       
                          
-                          <select value="Customer" ng-model="account.account_type"> 
+                          <select value="Customer" ng-model="account.account_type" class="form-control"> 
                          <option value="Competitor">Competitor</option><option value="Customer">Customer</option><option value="Distributor">Distributor</option><option value="Integrator">Integrator</option><option value="Investor">Investor</option><option value="Partner">Partner</option><option value="Press">Press</option><option value="Prospect">Prospect</option><option value="Reseller">Reseller</option><option value="Supplier">Supplier</option><option value="Vendor">Vendor</option><option value="Other">Other</option></select>
                           
-                        </div>
+                       
                     </div>
-                    <div class="control-group">
+                    <div class="form-group">
                         <label  class="required control-label">{{_("Industry")}} </label>
                        
-                        <div class="controls">
+                       
                          
-                          <select ng-model="account.industry">
+                          <select ng-model="account.industry" class="form-control">
                           <option value="">--None--</option><option value="Agriculture">Agriculture</option><option value="Apparel">Apparel</option><option value="Banking">Banking</option><option value="Biotechnology">Biotechnology</option><option value="Chemicals">Chemicals</option><option value="Communications">Communications</option><option value="Construction">Construction</option><option value="Consulting">Consulting</option><option value="Education">Education</option><option value="Electronics">Electronics</option><option value="Energy">Energy</option><option value="Engineering">Engineering</option><option value="Entertainment">Entertainment</option><option value="Environmental">Environmental</option><option value="Finance">Finance</option><option value="Food &amp; Beverage">Food &amp; Beverage</option><option value="Government">Government</option><option value="Healthcare">Healthcare</option><option value="Hospitality">Hospitality</option><option value="Insurance">Insurance</option><option value="Machinery">Machinery</option><option value="Manufacturing">Manufacturing</option><option value="Media">Media</option><option value="Not For Profit">Not For Profit</option><option value="Recreation">Recreation</option><option value="Retail">Retail</option><option value="Shipping">Shipping</option><option value="Technology">Technology</option><option value="Telecommunications">Telecommunications</option><option value="Transportation">Transportation</option><option value="Utilities">Utilities</option><option value="Other">Other</option></select>
                           
-                        </div>
+                        
                     </div>
                     <hr/>
                     <p> {{ _('Who can access?') }}</p>
-                     <div class='container-fluid'>
+
+                     <div class='radio-list'>
 
                      
                           
@@ -93,79 +81,78 @@
                        
                       
                     </div>
-                    </fieldset>
+                                                  
+                    </div>
+                    <div class="modal-footer">
+                       <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
                 
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                
-                <input ng-hide="isLoading" ng-click="save(account)" type="submit" class="btn green" value="{{ _('Add this account') }}">
-                <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
-              </div>
-               </form>
-       </div>
-      <div class="container-fluid" ng-show="isSignedIn">
+                      <input ng-hide="isLoading" ng-click="save(account)" type="submit" class="btn green" value="{{ _('Add this account') }}">
+                      <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>                      
+                    
+                    </div>
+                    </form>
+                  </div>
+                  <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+     </div>
+      
+      <div ng-show="isSignedIn">
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-        <div class="row-fluid">
+        <div class="row ">
           
-          <div class="span12">
-            <h2>{{ _("Accounts") }} </h2>
-            
-            <div class="btn-group">
+          <div class="col-md-12">
+            <h2 class="page-title">{{ _("Accounts") }} </h2>
             
                     <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
                     {{ _("New Account") }} <i class="icon-plus"></i>
                     </button>
-            </div>
-            
                
             <hr/>
             
           </div>
         </div>
           <!-- Filtering and sorting -->
-          <div class="row-fluid" ng-show="accounts">
-            <div class="span2">
-              <div class="btn-group">
-                                    <a class="btn" href="#" data-toggle="dropdown">
-                                      {{ _('Filter by') }}
-                                    <i class="icon-angle-down"></i>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                      <li><a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All accounts') }}</a></li>
-                                      <li><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My accounts') }}</a></li>
-                                    </ul>
-                                    {{ _('Views') }}
+          <div class="row filter-row" ng-show="accounts+isFiltering">
+            <div class="col-md-2">
+              <div class="btn-group btn-filter">
+                      <a class="btn btn-default" href="#" data-toggle="dropdown">
+                        {{ _('Filter by') }}
+                      <i class="icon-angle-down"></i>
+                      </a>
+                      <ul class="dropdown-menu">
+                        <li><a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All accounts') }}</a></li>
+                        <li><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My accounts') }}</a></li>
+                      </ul>
               </div>
             </div>
-            <div class="span7">
-              <ul class="nav search-form-top"> 
-                  <li>    
-                    <form class="form-inline ng-pristine ng-valid" ng-submit="executeSearch(searchQuery)">
-                      <div class="input-append row-fluid">
-
-                        <input type="text" ng-model="searchQuery" typeahead="result as result.name  for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="input-xxlarge" placeholder="{{ _('Quick Filtering') }}">
-
-                       <button class="gbqfb gbqfb-hvr"><i class="icon-filter"></i></button>
+            <div class="col-md-7">
+               
+                    <form class=" ng-pristine ng-valid" ng-submit="executeSearch(searchQuery)">
+                      <div class="input-group">
+                        <input type="text" ng-model="searchQuery" typeahead="result as result.name  for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="form-control" placeholder="{{ _('Quick Filtering') }}">
+                        <span class="input-group-btn">
+                          <button class="gbqfb gbqfb-hvr" type="button"><i class="icon-filter"></i></button>
+                        </span>
                       </div>
+                     
                     </form>
-                  </li> 
-              </ul>
+                 
             </div>
-            <div class="span3">
-              <div class="btn-group pull-right">
-                                    <a class="btn" href="#" data-toggle="dropdown">
-                                    {{ _('Sort by') }}
-                                    <i class="icon-angle-down"></i>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                      <li><a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a></li>
-                                      <li><a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a></li>
-                                      
-                                     
-                                    </ul>
+            <div class="col-md-3">
+              <div class="btn-group btn-sort">
+                    <a class="btn btn-default" href="#" data-toggle="dropdown">
+                    {{ _('Sort by') }}
+                    <i class="icon-angle-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a></li>
+                      <li><a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a></li>
+                      
+                     
+                    </ul>
               </div>
 
             </div>
@@ -174,41 +161,56 @@
             
           </div>
             
-            <div class="row-fluid cards-container">
+            <div class="row cards-container">
 
-            <div class="inner-cards-container">
-            
-              <div ng-repeat="account in accounts" class="span3 responsive" data-tablet="span6" data-desktop="span3">
-                <div class="dashboard-stat cards-small">
-                  
-                  <div class="details">
+            <div class="col-md-12">
+              <div class="inner-cards-container">
+                <div ng-repeat="account in accounts" class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                  <div class="dashboard-stat cards-small">
+                    <div class="details">
                     <a href="/#/accounts/show/<%= account.id %>"><h2 class="cardTitle">
                       <%= account.name %>
                     </h2></a>
-                    <div class="desc">                           
-                      
-                    <a ng-show="account.industry" class="desc" href="/#/search/type:Account <%=account.industry%>">#<%=account.industry%></a>
+                      <div class="desc">
+                         <a ng-show="account.industry" class="desc" href="/#/search/type:Account <%=account.industry%>">#<%=account.industry%></a>
+                      </div>
                     </div>
+                    <a class="more" href="#">
+                    View more <i class="m-icon-swapright m-icon-white"></i>
+                    </a>
                   </div>
-                                  
                 </div>
-              </div>
-              <div ng-show="blankStateaccount" class="span12 responsive" data-tablet="span6" data-desktop="span12">
+              <div ng-show="blankStateaccount" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
                 <div class="dashboard-stat cards">
                   
                   
                   <div class="blank_slate_arrow"></div>
-                  <div class="blank_slate_body">
-                      <img src="/static/img/accounts_blank.png">
+                  <div class="thumbnail blank_slate_body">
+                      <img class="img-responsive" src="/static/img/accounts_blank.png">
                       <p class="lead">{{ _('Accounts  pages includes a detailed page for each customer, partner, or investor in your ecosystem. You and your co-workers can collaborate to get a deep understanding.') }}</p>
                   </div>
                
                                   
                 </div>
               </div>
+              <div ng-show="isFiltering * !accounts" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
+                <div class="dashboard-stat cards">
+                  
+                  
+                  <div class="blank_slate_arrow"></div>
+                  <div class="thumbnail blank_slate_body">
+                      
+                      <p class="lead">{{ _('No results found, try with another filter') }}</p>
+                  </div>
+               
+                                  
+                </div>
+              </div>
+              <div class="clearfix"></div>
+              </div><!--/inner-cards-container-->
               </div>
             </div>
-          <div class="row-fluid">
+          <div class="row">
             <div class="pagination pull-right" ng-hide="isLoading">
                   
                   <ul>

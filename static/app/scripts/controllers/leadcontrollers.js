@@ -1,5 +1,6 @@
 app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus',
     function($scope,Auth,Lead,Leadstatus) {
+      $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Leads").addClass("active");
       
       document.title = "Leads: Home";
@@ -134,8 +135,7 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus',
               
               'limit':7}
         };
-        console.log('Filtering by');
-        console.log(params);
+        $scope.isFiltering = true;
         Lead.list($scope,params);
      };
      $scope.filterByStatus = function(filter){
@@ -150,7 +150,7 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus',
               
               'limit':7}
         };
-        
+        $scope.isFiltering = true;
         Lead.list($scope,params);
      };
 
@@ -162,6 +162,7 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus',
 }]);
 app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Topic','Note','Lead','Permission','User','Leadstatus','Attachement','Map',
     function($scope,$filter,$route,Auth,Email,Task,Event,Topic,Note,Lead,Permission,User,Leadstatus,Attachement,Map) {
+      $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Leads").addClass("active");
       
      

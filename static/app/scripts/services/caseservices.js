@@ -22,7 +22,11 @@ accountservices.factory('Case', function() {
                //$scope.apply();
 
             }else {
-               alert("Error, response is: " + angular.toJson(resp));
+               if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
             }
             console.log('gapi #end_execute');
           });
@@ -43,8 +47,11 @@ accountservices.factory('Case', function() {
       $scope.isLoading = true;
       gapi.client.crmengine.cases.list(params).execute(function(resp) {
               if(!resp.code){
+                 
                   if (!resp.items){
-                    $scope.blankStatecase = true;
+                    if(!$scope.isFiltering){
+                        $scope.blankStatecase = true;
+                    }
                   }
                  $scope.cases = resp.items;
                          
@@ -67,7 +74,11 @@ accountservices.factory('Case', function() {
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
               }else {
-                 alert("Error, response is: " + angular.toJson(resp));
+                 if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
               }
       });
   };
@@ -106,7 +117,11 @@ accountservices.factory('Case', function() {
                 $scope.$apply();
 
             }else {
-               alert("Error, response is: " + angular.toJson(resp));
+               if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
             }
             console.log('accounts.patch gapi #end_execute');
           });
