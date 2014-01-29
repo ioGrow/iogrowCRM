@@ -67,8 +67,7 @@ noteservices.factory('Note', function($http) {
 Note.insert = function($scope,note){
       $scope.isLoading = true;
       gapi.client.crmengine.notes.insert(note).execute(function(resp) {
-         console.log('in insert resp');
-         console.log(resp);
+        
          if(!resp.code){
           console.log(resp);
           // TME_02_11_13 when a note is inserted reload topics

@@ -81,12 +81,11 @@ opportunityservices.factory('Opportunity', function($http) {
       });
   };
     Opportunity.patch = function($scope,params) {
-          console.log('in opportunities.patch service');
-          console.log(params);
+          
           gapi.client.crmengine.opportunities.patch(params).execute(function(resp) {
             if(!resp.code){
                $scope.opportunity = resp;
-               
+               $scope.opportunity.stagename= resp.stagename;
                // Call the method $apply to make the update on the scope
                 $scope.$apply();
 

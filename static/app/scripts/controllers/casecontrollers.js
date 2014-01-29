@@ -520,7 +520,7 @@ $scope.updatCasetHeader = function(casee){
            'status':$scope.status_selected.status,
            'type_case':casee.type_case}
   Case.patch($scope,params);
-  $scope.$watch($scope.casee.priority, function() {
+  /*$scope.$watch($scope.casee.priority, function() {
       var paramsNote = {
                   'about_kind': 'Case',
                   'about_item': $scope.casee.id,
@@ -531,7 +531,7 @@ $scope.updatCasetHeader = function(casee){
       console.log(paramsNote);
       
       Note.insert($scope,paramsNote);
-   });
+   });*/
   
  $('#EditCaseModal').modal('hide');
 };

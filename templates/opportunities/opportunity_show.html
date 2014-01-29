@@ -526,20 +526,14 @@
                         <label  class="required control-label">{{_("Stage")}} </label>
                         
                         <div class="controls">
-                          <select ng-model="stage_selected" ng-options="opps.name + ' - ( ' + opps.probability + '% )' for opps in opportunitystages | orderBy: 'opps.probability':false"  >
-                            <option value=""><%=opportunity.stagename%> </option>
-                            <!--option value=""><%=stage_selected.name%></option-->
+                          <select ng-click="" ng-model="stage_selected" ng-options="opps.name + ' - ( ' + opps.probability + '% )' for opps in opportunitystages | orderBy:'name':false "  >
+
+                            <option value=""><%=opportunity.stagename%> - (<%=opportunity.stage_probability%> %) </option>
+                           
                           </select>
                          
-                        </div>
-
-                       
-                          
+                        </div>                          
                     </div>               
-                  
-                     
-                    
-                  
                 
               </div>
               <div class="modal-footer">

@@ -462,12 +462,14 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
                  'stage_probability':$scope.stage_selected.probability,
                 'amount':opportunity.amount,
                 'description':opportunity.description};
-      console.log('-------------------------YYYYYYYYYY');
-      console.log(opportunity.stagename);
-       
+    
+  console.log($scope.opportunity.stagename);
   Opportunity.patch($scope,params);
-  /*$scope.$watch(opportunity.stagename, function() {
-      var paramsNote = {
+  console.log('------------------');
+   console.log($scope.opportunity.stagename);
+ $scope.$watch($scope.opportunity.stagename, $scope.createNote());
+  /*$scope.$watch($scope.opportunity.stagename, function(newVal, oldVal) {
+     var paramsNote = {
                   'about_kind': 'Opportunity',
                   'about_item': $scope.opportunity.id,
                   'title': 'stage updated to '+ $scope.stage_selected.name
@@ -476,11 +478,20 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
       
       
       Note.insert($scope,paramsNote);
-   }); */      
+   });*/     
   $('#EditOpportunityModal').modal('hide');
  };
 
-
+$scope.createNote = function(){
+  
+    var paramsNote = {
+                  'about_kind': 'Opportunity',
+                  'about_item': $scope.opportunity.id,
+                  'title': 'stage updated to '+ $scope.stage_selected.name
+                  
+      };
+       Note.insert($scope,paramsNote);
+};
 
       $('#some-textarea').wysihtml5();
       
