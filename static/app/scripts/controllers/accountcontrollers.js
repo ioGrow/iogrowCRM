@@ -71,6 +71,7 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
      $scope.save = function(account){
           if (account.name) {
       	     Account.insert($scope,account);
+             
            };
       };
 
@@ -84,8 +85,9 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
 
 
      $scope.accountInserted = function(resp){
-          $('#addAccountModal').modal('hide');
+          
           window.location.replace('#/accounts/show/'+resp.id);
+          $('#addAccountModal').modal('hide');
      };
      // Quick Filtering
      var searchParams ={};
