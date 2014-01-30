@@ -212,12 +212,13 @@
               </div>
             </div>
           <div class="row">
-            <div class="pagination pull-right" ng-hide="isLoading">
+          <div class="col-md-12">
+              <div class="pagination pull-right" ng-hide="isLoading">
                   
                  
                    <button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="pagination.prev">
                     {{_("Prev")}} 
-                    </button></li>
+                    </button>
                     <li ng-repeat="page in pagination.pages" ng-class='{active: page.isCurrent}'><a  href="#/accounts/"><%= page.id %></a></li>
                    <button ng-click="listNextPageItems()"  class="btn"  ng-show="pagination.next">
                     {{_("Next")}} 
@@ -226,6 +227,8 @@
               
                 </div>
                 <h3 class="pagination pull-right" ng-show="isLoading">{{ _('Loading') }}...</h3>
+          </div>
+          
           </div>
             
           

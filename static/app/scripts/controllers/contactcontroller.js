@@ -23,7 +23,7 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
         
         // What to do after authentication
        $scope.runTheProcess = function(){
-            var params = {'order' : $scope.order,'limit':7}
+            var params = {'order' : $scope.order,'limit':8}
             Contact.list($scope,params);
        };
         // We need to call this to refresh token when user credentials are invalid
@@ -35,11 +35,11 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
           var nextPage = $scope.contactCurrentPage + 1;
           var params = {};
             if ($scope.contactpages[nextPage]){
-              params = {'order' : $scope.order,'limit':7,
+              params = {'order' : $scope.order,'limit':8,
                         'pageToken':$scope.contactpages[nextPage]
                        }
             }else{
-              params = {'order' : $scope.order,'limit':7}
+              params = {'order' : $scope.order,'limit':8}
             }
             
             $scope.contactCurrentPage = $scope.contactCurrentPage + 1 ; 
@@ -50,11 +50,11 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
          var prevPage = $scope.contactCurrentPage - 1;
          var params = {};
             if ($scope.contactpages[prevPage]){
-              params = {'limit':7,
+              params = {'limit':8,
                         'pageToken':$scope.contactpages[prevPage]
                        }
             }else{
-              params = {'order' : $scope.order,'limit':7}
+              params = {'order' : $scope.order,'limit':8}
             }
             $scope.contactCurrentPage = $scope.contactCurrentPage - 1 ;
             Contact.list($scope,params);
@@ -146,7 +146,7 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
      // Sorting
      $scope.orderBy = function(order){
         var params = { 'order': order,
-                        'limit':7};
+                        'limit':8};
         $scope.order = order;
         Contact.list($scope,params);
      };
@@ -154,13 +154,13 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
         if (filter){
           var params = { 'owner': filter,
                          'order': $scope.order, 
-                         'limit':7}
+                         'limit':8}
         }
         else{
           var params = {
               'order': $scope.order, 
               
-              'limit':7}
+              'limit':8}
         };
         $scope.isFiltering = true;
         Contact.list($scope,params);
