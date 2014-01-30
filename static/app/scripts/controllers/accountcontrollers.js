@@ -20,7 +20,7 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
      // What to do after authentication
      $scope.runTheProcess = function(){
           var params = { 'order': $scope.order,
-                        'limit':7}
+                        'limit':8}
           Account.list($scope,params);
      };
      // We need to call this to refresh token when user credentials are invalid
@@ -32,12 +32,12 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
         var nextPage = $scope.currentPage + 1;
         var params = {};
           if ($scope.pages[nextPage]){
-            params = {'limit':7,
+            params = {'limit':8,
                       'order' : $scope.order,
                       'pageToken':$scope.pages[nextPage]
             }
           }else{
-            params = {'order' : $scope.order,'limit':7}
+            params = {'order' : $scope.order,'limit':8}
           }
           $scope.currentPage = $scope.currentPage + 1 ; 
           Account.list($scope,params);
@@ -46,12 +46,12 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
        var prevPage = $scope.currentPage - 1;
        var params = {};
           if ($scope.pages[prevPage]){
-            params = {'limit':7,
+            params = {'limit':8,
                       'order' : $scope.order,
                       'pageToken':$scope.pages[prevPage]
             }
           }else{
-            params = {'order' : $scope.order,'limit':7}
+            params = {'order' : $scope.order,'limit':8}
           }
           $scope.currentPage = $scope.currentPage - 1 ;
           Account.list($scope,params);
