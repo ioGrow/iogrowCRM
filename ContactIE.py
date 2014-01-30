@@ -62,10 +62,11 @@ class Contact:
 
     def importer(self, file_type, file_path):
         """
-        types: vcf, txt, exls, iogrow_csv, evolution_csv, mozilla_csv, outlook_csv 
+        types: vcf, txt, xls, iogrow_csv, evolution_csv, mozilla_csv, outlook_csv 
         """
-        f = open(file_path, "rb")
+
         if file_type == "iogrow_csv":
+            f = open(file_path, "rb")
             csvreader = csv.reader(f, delimiter=';')
             for row in csvreader:
                 self.given_name = row[0]
@@ -78,12 +79,30 @@ class Contact:
                 self.fax = row[7]
                 self.url = row[8]
                 self.address = row[9]
-        
+        elif file_type == "xls":
+            workbook = xlrd.open_workbook(file_path)
+            worksheets = workbook.sheet_names()
+            for worksheet_name in worksheets:
+	            worksheet = workbook.sheet_by_name(worksheet_name)
+	            num_rows = worksheet.nrows - 1
+	            num_cells = worksheet.ncols - 1
+                curr_row = -1
+                while curr_row < num_rows:
+	                curr_row += 1
+	                row = worksheet.row(curr_row)
+	                curr_cell = -1
+	                while curr_cell < num_cells:
+		                curr_cell += 1
+		                # Cell Types: 0=Empty, 1=Text, 2=Number, 3=Date, 4=Boolean, 5=Error, 6=Blank
+		                cell_type = worksheet.cell_type(curr_row, curr_cell)
+		                cell_value = worksheet.cell_value(curr_row, curr_cell)
+		                print '	', cell_type, ':', cell_value
+
         f.close()
 
     def exporter(self, file_type, file_path):
         """
-        types: vcf, txt, exls,  iogrow_csv, evolution_csv, mozilla_csv, outlook_csv , pdf
+        types: vcf, txt, xls,  iogrow_csv, evolution_csv, mozilla_csv, outlook_csv , pdf
         """
         f = open(file_path, "w")
         if file_type == "iogrow_csv":
@@ -137,5 +156,5 @@ if __name__ ==  "__main__":
     print str(contact)
     contact.exporter("iogrow_csv","contact.csv")
     contact2 = Contact()
-    contact2.importer("iogrow_csv","contact.csv")
+    contact2.importer("xls","contact.xls")
     print str(contact)
