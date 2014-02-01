@@ -286,19 +286,21 @@
               </div>
             </div>
           <div class="row">
+          <div class="col-md-12">
             <div class="pagination pull-right" ng-hide="isLoading">
                   
-                  <ul>
-                    <li ng-show="casepagination.prev"><button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
+                  <!--ul class="list-unstyled list-inline"-->
+                    <button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="casepagination.prev">
                     {{_("Prev")}} 
-                    </button></li>
+                    </button>
                     <li ng-repeat="page in casepagination.pages" ng-class='{active: page.isCurrent}'><a  href="#/cases/"><%= page.id %></a></li>
-                    <li  ng-show="casepagination.next"><button ng-click="listNextPageItems()"  class="btn">
+                    <button ng-click="listNextPageItems()"  class="btn" ng-show="casepagination.next">
                     {{_("Next")}} 
-                    </button></li>
-                  </ul>
+                    </button>
+                  <!--/ul-->
                 </div>
                 <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+            </div>
           </div>
             
           

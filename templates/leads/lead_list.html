@@ -242,21 +242,22 @@
               </div>
             </div>
           <div class="row">
+              <div class="col-md-12">
             <div class="pagination pull-right" ng-hide="isLoading">
                   
-                  <ul>
-                    <li ng-show="leadpagination.prev"><button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
+             
+                    <button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="leadpagination.prev">
                     {{_("Prev")}} 
-                    </button></li>
+                    </button>
                     <li ng-repeat="page in leadpagination.pages" ng-class='{active: page.isCurrent}'><a  href="#/leads/"><%= page.id %></a></li>
-                    <li  ng-show="leadpagination.next"><button ng-click="listNextPageItems()"  class="btn">
+                  <button ng-click="listNextPageItems()"  class="btn"  ng-show="leadpagination.next">
                     {{_("Next")}} 
-                    </button></li>
-                  </ul>
+                    </button>
+                  
                 </div>
                 <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
           </div>
-            
+       </div>     
           
         
         <!-- END PAGE CONTENT-->
