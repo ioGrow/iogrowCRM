@@ -169,6 +169,7 @@
                       </div>
                     </form>
             </div>
+            <div class="col-md-3"> 
             <div class="btn-group">
                                     <a class="btn btn-default" href="#" data-toggle="dropdown">
                                     Sort by
@@ -185,6 +186,7 @@
                                      
                                     </ul>
               </div>
+            </div>
             <br>
               <br>
             
@@ -193,8 +195,8 @@
             <div class="col-md-12">
             <div class="inner-cards-container">
             
-              <div ng-repeat="lead in leads" class="col-md-3 responsive" data-tablet="span6" data-desktop="span3">
-                <div class="dashboard-stat cards-small">
+              <div ng-repeat="lead in leads" class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >
+                <div class="dashboard-stat cards-med">
                   
                   <div class="details">
                     <a href="/#/leads/show/<%= lead.id %>"><h2 class="cardTitle">

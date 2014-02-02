@@ -113,6 +113,7 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
      };
      // Sorting
      $scope.orderBy = function(order){
+      
         var params = { 'order': order,
                         'limit':8};
         $scope.order = order;

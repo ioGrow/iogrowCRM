@@ -189,19 +189,21 @@
                               
                             </ul>
                             <div class="row">
+                             <div class="col-md-12">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
-                                      <ul>
-                                        <li ng-show="topicpagination.prev"><button ng-click="TopiclistPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                     
+                                        <button ng-click="TopiclistPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="topicpagination.prev">
                                         {{_("Prev")}} 
-                                        </button></li>
+                                        </button>
                                         
-                                        <li  ng-show="topicpagination.next"><button ng-click="TopiclistNextPageItems()"  class="btn">
+                                        <button ng-click="TopiclistNextPageItems()"  class="btn" ng-show="topicpagination.next">
                                         {{_("Next")}} 
-                                        </button></li>
-                                      </ul>
+                                        </button>
+                                   
                                     </div>
                                     <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                                </div>
                               </div>
                             </div>
                       <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
@@ -311,7 +313,7 @@
 
                            <div class="col-md-12">
                             <div class="inner-cards-container">
-                              <div  class="col-md-3" ng-repeat="contact in contacts">
+                              <div  class="col-md-4" ng-repeat="contact in contacts">
                                 <div class="dashboard-stat cards-small">
 
                                   
@@ -350,19 +352,20 @@
                               </div>
                             </div>
                             <div class="row">
+                             <div class="col-md-12">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
-                                      <ul>
-                                        <li ng-show="contactpagination.prev"><button ng-click="ContactlistPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                      
+                                        <button ng-click="ContactlistPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="contactpagination.prev">
                                         {{_("Prev")}} 
-                                        </button></li>
-                                        
-                                        <li  ng-show="contactpagination.next"><button ng-click="ContactlistNextPageItems()"  class="btn">
+                                        </button>
+                                        <button ng-click="ContactlistNextPageItems()"  class="btn"  ng-show="contactpagination.next">
                                         {{_("Next")}} 
-                                        </button></li>
-                                      </ul>
+                                        </button>
+                                      
                                     </div>
                                     <h3 class="pagination pull-right" ng-show="isLoading">{{ _("Loading...") }}</h3>
+                              </div>
                               </div>
                         <!--HKA 18.11.2013 Add Contact modal -->
 
@@ -424,7 +427,7 @@
                             <div class="inner-cards-container">
                                                         
                              <div  class="col-md-4 responsive" ng-repeat="need in needs" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
+                                <div class="dashboard-stat cards-small">
                                   
                                   <div class="details">
                                     <a href="/#/needs/show/<%= need.id %>"><h3 class="relatedcardOppTitle">
@@ -458,21 +461,24 @@
                             </div><!--/inner-cards-container-->
                             </div>
                             </div>
-                             <div class="row">
+                          
+                          <div class="row">
+                               <div class="md-col-12">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
-                                      <ul>
-                                        <li ng-show="needspagination.prev"><button ng-click="NeedPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                     
+                                   <button ng-click="NeedPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="needspagination.prev">
                                         {{_("Prev")}} 
-                                        </button></li>
+                                        </button>
                                         
-                                        <li  ng-show="needspagination.next"><button ng-click="NeedlistNextPageItems()"  class="btn">
+                                        <button ng-click="NeedlistNextPageItems()"  class="btn" ng-show="needspagination.next">
                                         {{_("Next")}} 
-                                        </button></li>
-                                      </ul>
+                                        </button>
+                                      
                                     </div>
                                     <h3 class="pagination pull-right" ng-show="isLoading">{{ _("Loading...") }}</h3>
-                              </div>
+                                </div>
+                          </div>
 
                       <!--HKA 19.11.2013 Case Modal -->
                 <div id="addNeedModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -553,7 +559,7 @@
                           <div class="col-md-12">
                             <div class="inner-cards-container" >
                               <div  class="col-md-4 responsive" ng-repeat="opp in opportunities" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
+                                <div class="dashboard-stat cards-small">
                                   
                                   <div class="details">
                                     <a href="/#/opportunities/show/<%= opp.id %>"><h3 class="relatedcardOppTitle">
@@ -587,19 +593,21 @@
                               </div>
                             </div>
                             <div class="row">
+                              <div class="col-md-12">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
-                                      <ul>
-                                        <li ng-show="opppagination.prev"><button ng-click="OppPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                      
+                                        <button ng-click="OppPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="opppagination.prev">
                                         {{_("Prev")}} 
-                                        </button></li>
+                                        </button>
                                         
-                                        <li  ng-show="opppagination.next"><button ng-click="OpplistNextPageItems()"  class="btn">
+                                        <button ng-click="OpplistNextPageItems()"  class="btn" ng-show="opppagination.next">
                                         {{_("Next")}} 
-                                        </button></li>
-                                      </ul>
+                                        </button>
+                                      
                                     </div>
-                                    <!--h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3-->
+                                    <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                              </div>
                               </div>
 
 
@@ -674,7 +682,7 @@
                             <div class="inner-cards-container">
                                                         
                              <div  class="col-md-4 responsive" ng-repeat="casee in cases" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
+                                <div class="dashboard-stat cards-small">
                                   
                                   <div class="details">
                                     <a href="/#/cases/show/<%= casee.id %>"><h3 class="relatedcardOppTitle">
@@ -710,19 +718,21 @@
                               </div>
                             </div>
                              <div class="row">
+                             <div class="col-md-12">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
-                                      <ul>
-                                        <li ng-show="casepagination.prev"><button ng-click="CasePrevPageItems()" id="sample_editable_1_new" class="btn">
+                                      
+                                        <button ng-click="CasePrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="casepagination.prev">
                                         {{_("Prev")}} 
-                                        </button></li>
+                                        </button>
                                         
-                                        <li  ng-show="casepagination.next"><button ng-click="CaselistNextPageItems()"  class="btn">
+                                        <button ng-click="CaselistNextPageItems()"  class="btn" ng-show="casepagination.next">
                                         {{_("Next")}} 
-                                        </button></li>
-                                      </ul>
+                                        </button>
+                                      
                                     </div>
                                     <h3 class="pagination pull-right" ng-show="isLoading">{{ _("Loading...") }}</h3>
+                              </div>
                               </div>
 
                       <!--HKA 19.11.2013 Case Modal -->
@@ -833,7 +843,7 @@
                             <div class="inner-cards-container">
                                                         
                              <div  class="col-md-4 responsive" ng-repeat="attachment in documents" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
+                                <div class="dashboard-stat cards-small">
                                   
                                   <div class="details">
                                     <a href="/#/documents/show/<%= attachment.id %>"><h3 class="relatedcardOppTitle">
