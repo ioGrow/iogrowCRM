@@ -68,6 +68,9 @@ topicservices.factory('Task', function($http) {
                 console.log($scope.currentPage);
 
                  $scope.tasks = resp.items;
+
+                 console.log("taskk********************");
+                 console.log($scope.tasks);
                  /*if ($scope.currentPage>1){
                       console.log('Should show PREV');
                       $scope.pagination.prev = true;
@@ -155,6 +158,65 @@ topicservices.factory('Task', function($http) {
 
 return Task;
 });
+topicservices.factory('Tag', function($http) {
+  
+  var Tag = function(data) {
+    angular.extend(this, data);
+  }
+
+
+  Tag.list = function($scope,params){
+      console.log('in tags.list');
+      console.log(params);
+      $scope.isLoading = true;
+      gapi.client.crmengine.tags.list(params).execute(function(resp) {
+              if(!resp.code){
+                
+                console.log($scope.currentPage);
+
+                 $scope.tags = resp.items;
+                
+                 $scope.isLoading = false;
+
+                 // Call the method $apply to make the update on the scope
+                 $scope.$apply();
+                 
+              }else {
+                 if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+              }
+      });
+  };
+   Tag.insert = function($scope,params){
+     console.log('hereeeeeeeeee');
+      $scope.isLoading = true;
+      gapi.client.crmengine.tags.insert(params).execute(function(resp) {
+         console.log('in insert tags resp');
+         console.log(resp);
+         if(!resp.code){
+          console.log(resp);
+          // TME_02_11_13 when a note is inserted reload topics
+          /*$scope.listContributors();*/
+          $scope.isLoading = false;
+          $scope.listTags();
+          $scope.$apply();
+         // $('#addAccountModal').modal('hide');
+         // window.location.replace('#/accounts/show/'+resp.id);
+          
+         }else{
+          console.log(resp.code);
+         }
+      });
+  };
+
+
+  
+
+return Tag;
+});
 topicservices.factory('Contributor', function($http) {
   
   var Contributor = function(data) {
@@ -196,7 +258,7 @@ topicservices.factory('Contributor', function($http) {
          if(!resp.code){
           console.log(resp);
           // TME_02_11_13 when a note is inserted reload topics
-          $scope.listContributors();
+          /*$scope.listContributors();*/
           $scope.isLoading = false;
 
           $scope.$apply();

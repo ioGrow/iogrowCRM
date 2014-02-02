@@ -23,6 +23,30 @@
               </span>
         </div>
       </div>
+              <!--HKA 24.12.2013 Modal before Deleting Account-->
+                <!-- BEFORE DELETE MODEL-->
+               <div id="beforecloseTask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                      <h3 id="myModalLabel" class="modal-title">Delete Task</h3>
+                    </div>
+                    <div class="modal-body">
+                       <form id="seletesho" name="deletesho" class="form-horizontal"> 
+                        <p>{{_("Are you sure you want to delete selected tasks")}} .</p>
+                    </div>
+                      <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                        
+                        <input ng-hide="isLoading" ng-click="closeTask()" type="submit" class="btn red" value="Delete this Account">
+                        <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                      </div>
+                  </form>
+                </div>
+              </div>
+             </div>
+               <!-- BEFORE DELETE MODEL END-->
             <div id="assigneeModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
            <div class="modal-dialog">
               <div class="modal-content">
@@ -47,7 +71,9 @@
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button  type="submit" class="btn blue addContactNow">{{_("Share")}}</button>
+                
+                <input ng-hide="isLoading" ng-click="addNewContributors()" type="submit" class="btn green" value="{{ _('Add this account') }}">
+                <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
               </div>
                </form>
                </div>
@@ -64,7 +90,7 @@
           <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("New Account")}}</h3>
+                <h3 id="myModalLabel">{{_("New Task")}}</h3>
               </div>
               <div class="modal-body">
                  <form id="addAccount" name="addaccount"  class="form-horizontal"  ng-keyup="addAccountOnKey(account)"> 
@@ -206,18 +232,18 @@
                         <li class="task-actions list-group-item task-actions">
                          <div class="row">
                          <div class="col-md-12">
-                           <form class="form-inline" role="form">
+                           <form id="task_actions" class="form-inline" role="form">
                            <div class="row">
                            <label class="col-md-1 col-sm-1">
-                               <div class="checker"><span class=""><input type="checkbox"></span></div>  
+                               <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">  
                            </label>
                            <div class="col-md-5">
-                            <button  class="btn btn-default">Close</button>
+                            <button  class="btn btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">Close</button>
                             <div class="btn-group">
-                              <button type="button" class="btn btn-default">
+                              <button type="button" ng-class="{disabled: selected_tasks.length==0}" class="btn btn-default task_action">
                                 <i class="fa fa-tags"></i>
                               </button>
-                              <button id="labels-btn-dropdown" type="button" onclick="fieldfocus()" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-angle-down"></i></button>
+                              <button id="labels-btn-dropdown" type="button" class="btn btn-default dropdown-toggle task_action" ng-class="{disabled: selected_tasks.length==0}" data-toggle="dropdown"><i class="fa fa-angle-down"></i></button>
                               <div class="dropdown-menu" role="menu">
                                 <div class="row">
                                     <div class="col-md-12">
@@ -275,25 +301,19 @@
                                   </div>
                               </div>
                             </div>
-                            <button ng-click="assigneeModal()" class="btn btn-default">Assignee</button>
+                            <button ng-click="assigneeModal()" class="btn btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">Assignee</button>
                             </div>
                           </form>
                             </div>
                         </div>
                       </li>
-                      <script type="text/javascript">
-                        $("#select2_sample2").select2({
-                              placeholder: "Select a label",
-                              allowClear: false
-                          });
-                      </script>
-                       <li class="list-group-item ">
+                       <li ng-repeat="task in tasks" class="list-group-item">
                          <div class="row">
                             <label class="col-md-1 col-sm-1">
-                               <div class="checker"><span class=""><input type="checkbox"></span></div>  
+                                <input type="checkbox" ng-click="select_task(task,$index,$event)" ng-checked="isSelected()">  
                            </label>
                            <h4 class="col-md-6 col-sm-7 list-group-item-heading">
-                            List group item heading
+                            <%= task.title %>
                             </h4>
                             <div class="col-md-5 col-sm-4">
                                 <span class="pull-right task-label label label-warning">
@@ -314,196 +334,12 @@
                           <p class="col-md-11 col-md-offset-1 list-group-item-text">
                          <div class="row">
                           <p class="col-md-11 col-md-offset-1 list-group-item-text">
-                          <span>Related to:<a href="#">Transline</a></span>
-                          <span>Opened by:<a href="#">Transline</a></span>
-                          <span>Closed by:<a href="#">Transline</a></span>
+                         
+                          <span>Opened by:<a href="#"> <%= task.author.display_name %></a></span>
+                          <!--<span>Closed by:<a href="#">Transline</a></span>-->
                         </p>
                         </div>
                           
-                        </p>
-                        </div>
-                        
-                      </li>
-                      <li class="list-group-item">
-                         <div class="row">
-                            <label class="col-md-1 col-sm-1">
-                               <div class="checker"><span class=""><input type="checkbox"></span></div>  
-                           </label>
-                           <h4 class="col-md-6 col-sm-7 list-group-item-heading">
-                            List group item heading
-                            </h4>
-                            <div class="col-md-5 col-sm-4">
-                                <span class="pull-right task-label label label-warning">
-                                    warning
-                                  </span>
-                                  <span class="pull-right task-label label label-warning">
-                                    warning
-                                  </span>
-                                  <span class="pull-right task-label label label-warning">
-                                    warning
-                                  </span>
-                                  <span class="pull-right task-label label label-warning">
-                                    warning
-                                  </span>
-                            </div>
-                        </div>
-                        <div class="row">
-                          <p class="col-md-11 col-md-offset-1 list-group-item-text">
-                         <div class="row">
-                          <p class="col-md-11 col-md-offset-1 list-group-item-text">
-                          <span>Related to:<a href="#">Transline</a></span>
-                          <span>Opened by:<a href="#">Transline</a></span>
-                          <span>Closed by:<a href="#">Transline</a></span>
-                        </p>
-                        </div>
-                          
-                        </p>
-                        </div>
-                        
-                      </li>
-                      <li class="list-group-item">
-                         <div class="row">
-                            <label class="col-md-1 col-sm-1">
-                               <div class="checker"><span class=""><input type="checkbox"></span></div>  
-                           </label>
-                           <h4 class="col-md-6 col-sm-7 list-group-item-heading">
-                            List group item heading
-                            </h4>
-                            <div class="col-md-5 col-sm-4">
-                                <span class="pull-right task-label label label-warning">
-                                    warning
-                                  </span>
-                                  <span class="pull-right task-label label label-warning">
-                                    warning
-                                  </span>
-                                  <span class="pull-right task-label label label-warning">
-                                    warning
-                                  </span>
-                                  <span class="pull-right task-label label label-warning">
-                                    warning
-                                  </span>
-                            </div>
-                        </div>
-                        <div class="row">
-                          <p class="col-md-11 col-md-offset-1 list-group-item-text">
-                          <div class="row">
-                          <p class="col-md-11 col-md-offset-1 list-group-item-text">
-                          <span>Related to:<a href="#">Transline</a></span>
-                          <span>Opened by:<a href="#">Transline</a></span>
-                          <span>Closed by:<a href="#">Transline</a></span>
-                        </p>
-                        </div>
-                          
-                        </p>
-                        </div>
-                        
-                      </li>
-                      <li class="list-group-item ">
-                         <div class="row">
-                            <label class="col-md-1 col-sm-1">
-                               <div class="checker"><span class=""><input type="checkbox"></span></div>  
-                           </label>
-                           <h4 class="col-md-6 col-sm-7 list-group-item-heading">
-                            List group item heading
-                            </h4>
-                            <div class="col-md-5 col-sm-4">
-                                <span class="pull-right task-label label label-warning">
-                                    warning
-                                  </span>
-                                  <span class="pull-right task-label label label-warning">
-                                    warning
-                                  </span>
-                                  <span class="pull-right task-label label label-warning">
-                                    warning
-                                  </span>
-                                  <span class="pull-right task-label label label-warning">
-                                    warning
-                                  </span>
-                            </div>
-                        </div>
-                        <div class="row">
-                          <p class="col-md-11 col-md-offset-1 list-group-item-text">
-                          <div class="row">
-                            <p class="col-md-11 col-md-offset-1 list-group-item-text">
-                            <span>Related to:<a href="#">Transline</a></span>
-                            <span>Opened by:<a href="#">Transline</a></span>
-                            <span>Closed by:<a href="#">Transline</a></span>
-                          </p>
-                          </div>
-                          
-                        </p>
-                        </div>
-                        
-                      </li>
-                      <li class="list-group-item ">
-                         <div class="row">
-                            <label class="col-md-1 col-sm-1">
-                               <div class="checker"><span class=""><input type="checkbox"></span></div>  
-                           </label>
-                           <h4 class="col-md-6 col-sm-7 list-group-item-heading">
-                            List group item heading
-                            </h4>
-                            <div class="col-md-5 col-sm-4">
-                                <span class="pull-right task-label label label-warning">
-                                    warning
-                                  </span>
-                                  <span class="pull-right task-label label label-warning">
-                                    warning
-                                  </span>
-                                  <span class="pull-right task-label label label-warning">
-                                    warning
-                                  </span>
-                                  <span class="pull-right task-label label label-warning">
-                                    warning
-                                  </span>
-                            </div>
-                        </div>
-                        <div class="row">
-                          <p class="col-md-11 col-md-offset-1 list-group-item-text">
-                         <div class="row">
-                          <p class="col-md-11 col-md-offset-1 list-group-item-text">
-                          <span>Related to:<a href="#">Transline</a></span>
-                          <span>Opened by:<a href="#">Transline</a></span>
-                          <span>Closed by:<a href="#">Transline</a></span>
-                        </p>
-                        </div>
-                          
-                        </p>
-                        </div>
-                        
-                      </li>
-                      <li class="list-group-item  active bg-blue">
-                         <div class="row">
-                            <label class="col-md-1 col-sm-1">
-                               <div class="checker"><span class=""><input type="checkbox"></span></div>  
-                           </label>
-                           <h4 class="col-md-6 col-sm-7 list-group-item-heading">
-                            List group item heading
-                            </h4>
-                            <div class="col-md-5 col-sm-4">
-                                <span class="pull-right task-label label label-warning">
-                                    warning
-                                  </span>
-                                  <span class="pull-right task-label label label-warning">
-                                    warning
-                                  </span>
-                                  <span class="pull-right task-label label label-warning">
-                                    warning
-                                  </span>
-                                  <span class="pull-right task-label label label-warning">
-                                    warning
-                                  </span>
-                            </div>
-                        </div>
-                        <div class="row">
-                          <p class="col-md-11 col-md-offset-1 list-group-item-text">
-                         <div class="row">
-                          <p class="col-md-11 col-md-offset-1 list-group-item-text">
-                          <span>Related to:<a href="#">Transline</a></span>
-                          <span>Opened by:<a href="#">Transline</a></span>
-                          <span>Closed by:<a href="#">Transline</a></span>
-                        </p>
-                        </div>
                         </p>
                         </div>
                         
@@ -521,7 +357,7 @@
               <div class="portlet">
                 <div class="portlet-title">
                   <div class="caption">
-                    <i class="fa fa-reorder"></i>Basic Chart
+                    <i class="fa fa-reorder"></i>Tags
                   </div>
                   <div class="tools">
                       <a href="javascript:;" class="collapse">
@@ -535,6 +371,29 @@
                   </div>
                 </div>
                 <div class="portlet-body">
+                <ul class="list-group tags-list">
+                  <li ng-repeat="tag_item in tags" class="list-group-item" ng-click="select_tag(tag_item,$index,$event)">
+                    <div class="tag-color" style="border-left: 4px solid <%=tag_item.color%>;">
+                    </div>
+                    <span class="with-color"><%= tag_item.name %></span>
+                  </li>
+                </ul>
+                <form class="well" role="form">
+                <div class="row">
+                  <div class="col-md-12 form-group">
+                    <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New tag name">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                       <input id="tag-col-pick" type="text" class="colorpicker-default form-control" value="#8fff00">
+                  </div>
+                  <div class="col-md-6">
+                    <input type="submit" ng-hide="isLoading" ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
+                    <input type="submit" ng-show="isLoading" class="btn green pull-right" value="{{ _('Loading...') }}">
+                  </div>
+                  </div>
+                </form>
                   
                 </div>
               </div>
@@ -559,4 +418,9 @@
       </div>
       <!-- END PAGE CONTAINER--> 
 </div>
-
+<script type="text/javascript">
+  $("#select2_sample2").select2({
+        placeholder: "Click to Select a label",
+        allowClear: false
+    });
+</script>
