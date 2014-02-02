@@ -10,6 +10,7 @@ from iomodels.crmengine.accounts import Account
 from iomodels.crmengine.contacts import Contact
 from iomodels.crmengine.notes import Note,Topic
 from iomodels.crmengine.tasks import Task
+from iomodels.crmengine.tags import Tag
 from iomodels.crmengine.opportunities import Opportunity
 from iomodels.crmengine.events import Event
 from iomodels.crmengine.documents import Document
@@ -1728,10 +1729,19 @@ class CrmEngineApi(remote.Service):
     return my_model
 
   # tags.list api
-  @Tag.query_method(user_required=True,query_fields=('about_kind', 'limit', 'order', 'pageToken'),path='tags', name='tags.list')
+  @Tag.query_method(user_required=True,query_fields=('about_kind', 'limit', 'order', 'pageToken','color'),path='tags', name='tags.list')
   def tags_list(self, query):
       user_from_email = EndpointsHelper.require_iogrow_user()
       return query.filter(Tag.organization==user_from_email.organization)
+
+  @Tag.method(user_required=True,path='tags', http_method='POST', name='tags.insert')
+  def TagInsert(self, my_model):
+    user_from_email = EndpointsHelper.require_iogrow_user()
+    my_model.organization = user_from_email.organization
+    my_model.owner = user_from_email.google_user_id
+    my_model.put()
+    return my_model
+
   # notes.get api
   @endpoints.method(ID_RESOURCE, DiscussionResponse,
                       path='notes/{id}', http_method='GET',
@@ -1977,55 +1987,25 @@ class CrmEngineApi(remote.Service):
       my_model.put()
       return my_model
   # tasks.patch api
-  @endpoints.method(ID_RESOURCE, TaskResponse,
-                      path='tasks/{id}', http_method='PATCH',
-                      name='tasks.patch')
+  @Task.method(user_required=True,
+                http_method='PATCH', path='tasks/{id}', name='tasks.patch')
   def task_patch(self, my_model):
       user_from_email = EndpointsHelper.require_iogrow_user()
       # Todo: Check permissions
       if not my_model.from_datastore:
           raise endpoints.NotFoundException('Task not found.')
-      my_model.put()
-      task = my_model
-      about_item_id = int(task.about_item)
-      try:
-                about_object = OBJECTS[task.about_kind].get_by_id(about_item_id)
-                if task.about_kind == 'Contact' or task.about_kind == 'Lead':
-                    about_name = about_object.firstname + ' ' + about_object.lastname
-                else:
-                    about_name = about_object.name
-                about_response = DiscussionAboutSchema(kind=task.about_kind,
-                                                       id=task.about_item,
-                                                       name=about_name)
-                author = AuthorSchema(google_user_id = task.author.google_user_id,
-                                      display_name = task.author.display_name,
-                                      google_public_profile_url = task.author.google_public_profile_url,
-                                      photo = task.author.photo)
-                completed_by = None
-                if completed_by:
-                    completed_by = AuthorSchema(google_user_id = task.completed_by.google_user_id,
-                                      display_name = task.completed_by.display_name,
-                                      google_public_profile_url = task.completed_by.google_public_profile_url,
-                                      photo = task.completed_by.photo)
-
-                
-                if task.due:
-                    due_date = task.due.isoformat()
-                else:
-                    due_date = None
-                response = TaskResponse(id=request.id,
-                                              entityKey = task.key.urlsafe(),
-                                              title = task.title,
-                                              due = due_date,
-                                              status = task.status,
-                                              comments = task.comments,
-                                              about = about_response,
-                                              author = author,
-                                              completed_by = completed_by )
-                return response
-      except (IndexError, TypeError):
-                raise endpoints.NotFoundException('About object %s not found.' %
-                                                  (request.id,))
+      patched_model_key = my_model.entityKey
+      patched_model = ndb.Key(urlsafe=patched_model_key).get()
+      print 'current model ***************'
+      pprint.pprint(patched_model) 
+      print 'to be updated ******************' 
+      pprint.pprint(my_model) 
+      properties = Task().__class__.__dict__
+      for p in properties.keys():
+          if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p) and not(p in ['put','set_perm','put_index']) ):
+                exec('patched_model.'+p+'= my_model.'+p)
+      patched_model.put()
+      return patched_model
             
             
 
@@ -2088,6 +2068,7 @@ class CrmEngineApi(remote.Service):
         except (IndexError, TypeError):
             raise endpoints.NotFoundException('Note %s not found.' %
                                               (request.id,))
+  #Tags Api
   # events.insert api
   @Event.method(user_required=True,path='events', http_method='POST', name='events.insert')
   def EventInsert(self, my_model):

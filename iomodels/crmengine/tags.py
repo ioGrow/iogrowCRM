@@ -9,10 +9,11 @@ import model
 
 class Tag(EndpointsModel):
 
-    _message_fields_schema = ('id','name','entityKey', 'about_kind')
+    _message_fields_schema = ('id','name','entityKey', 'about_kind','organization','color')
     owner = ndb.StringProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     name = ndb.StringProperty()
+    color = ndb.StringProperty()
     about_kind = ndb.StringProperty()
     organization = ndb.KeyProperty()
 
