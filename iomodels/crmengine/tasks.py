@@ -8,7 +8,7 @@ from datetime import date
 import model
 
 class Task(EndpointsModel):
-    _message_fields_schema = ('id','entityKey', 'owner','created_at','updated_at','title','due','status','completed_by','comments','about_kind','about_item','organization','involved_ids','involved_list')
+    _message_fields_schema = ('id','entityKey', 'owner','created_at','updated_at','title','due','status','completed_by','comments','about_kind','about_item','organization','involved_ids','involved_list','author')
 
     author = ndb.StructuredProperty(Userinfo)
     # Sharing fields
