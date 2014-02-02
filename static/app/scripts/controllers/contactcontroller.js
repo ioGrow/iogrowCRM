@@ -270,12 +270,12 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
         var nextPage = $scope.oppCurrentPage + 1;
         var params = {};
           if ($scope.opppages[nextPage]){
-            params = {'limit':5,
+            params = {'limit':6,
                       'contact':$scope.contact.entityKey,
                       'pageToken':$scope.opppages[nextPage]
                      }
           }else{
-            params = {'limit':5,
+            params = {'limit':6,
             'account':$scope.contact.entityKey}
           }
           console.log('in listNextPageItems');
@@ -288,12 +288,12 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
        var prevPage = $scope.oppCurrentPage - 1;
        var params = {};
           if ($scope.opppages[prevPage]){
-            params = {'limit':5,
+            params = {'limit':6,
                       'contact':$scope.contact.entityKey,
                       'pageToken':$scope.opppages[prevPage]
                      }
           }else{
-            params = {'limit':5,
+            params = {'limit':6,
                       'contact':$scope.contact.entityKey}
           }
           $scope.oppCurrentPage = $scope.oppCurrentPage - 1 ;
@@ -306,12 +306,12 @@ $scope.CaselistNextPageItems = function(){
         var nextPage = $scope.caseCurrentPage + 1;
         var params = {};
           if ($scope.casepages[nextPage]){
-            params = {'limit':5,
+            params = {'limit':6,
                       'contact':$scope.contact.entityKey,
                       'pageToken':$scope.casepages[nextPage]
                      }
           }else{
-            params = {'limit':5,
+            params = {'limit':6,
             'account':$scope.contact.entityKey}
           }
           console.log('in listNextPageItems');
@@ -323,12 +323,12 @@ $scope.CaselistNextPageItems = function(){
        var prevPage = $scope.caseCurrentPage - 1;
        var params = {};
           if ($scope.casepages[prevPage]){
-            params = {'limit':5,
+            params = {'limit':6,
                       'contact':$scope.contact.entityKey,
                       'pageToken':$scope.casepages[prevPage]
                      }
           }else{
-            params = {'limit':5,
+            params = {'limit':6,
                       'contact':$scope.contact.entityKey}
           }
           $scope.caseCurrentPage = $scope.caseCurrentPage - 1 ;
@@ -508,7 +508,7 @@ $scope.CaselistNextPageItems = function(){
      $scope.listOpportunities = function(){
         var params = {'contact':$scope.contact.entityKey,
                       //'order': '-updated_at',
-                      'limit': 5
+                      'limit': 6
                       };
         Opportunity.list($scope,params);
 
@@ -518,7 +518,7 @@ $scope.CaselistNextPageItems = function(){
   $scope.listCases = function(){
     var params ={'contact':$scope.contact.entityKey,
                   //'order':'-creationTime',
-                  'limit':5};
+                  'limit':6};
 
     Case.list($scope,params)
   };
