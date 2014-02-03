@@ -75,7 +75,7 @@ needservices.factory('Need', function() {
          console.log(resp);
          if(!resp.code){
           $scope.isLoading = false;
-          $('#addNeedModal').modal('hide');
+          
           window.location.replace('#/needs/show/'+resp.id);
           
          }else{

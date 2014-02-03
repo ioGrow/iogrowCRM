@@ -769,6 +769,7 @@ $scope.CaselistNextPageItems = function(){
                       };
      
       Need.insert($scope,params);
+      $('#addNeedModal').modal('hide');
      
     };
 //HKA 19.11.2013 Add Phone
