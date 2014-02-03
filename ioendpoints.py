@@ -39,6 +39,7 @@ from protorpc import messages
 from protorpc import message_types
 from google.appengine.api import memcache
 import pprint
+import json
 
 
 # The ID of javascript client authorized to access to our api
@@ -65,7 +66,9 @@ class InfoNodeResponse(messages.Message):
     kind = messages.StringField(3)
     fields = messages.MessageField(RecordSchema, 4, repeated=True)
     parent = messages.StringField(5)
-
+#TODOS
+# ADD PHONE SCHEMA, LISTOFPHONES SCHEMA, EMAILS, ADDRESSES,...
+# ADD ANOTHER SCHEMA FOR CUSTOM FIELDS
 class InfoNodeConnectionSchema(messages.Message):
     kind = messages.StringField(1,required=True)
     items = messages.MessageField(InfoNodeResponse, 2, repeated=True)
@@ -73,6 +76,7 @@ class InfoNodeListRequest(messages.Message):
     parent = messages.StringField(1,required=True)
     connections = messages.StringField(2,repeated=True)
 class InfoNodeListResponse(messages.Message):
+    some_dict = messages.BytesField(1)
     items = messages.MessageField(InfoNodeConnectionSchema, 2, repeated=True)
 # The message class that defines the SendEmail Request attributes
 class EmailRequest(messages.Message):
@@ -485,8 +489,8 @@ class CrmEngineApi(remote.Service):
           else:
               infonodeconnection = InfoNodeConnectionSchema(kind=key,items=value)
               connections_list.append(infonodeconnection)  
-
-      return InfoNodeListResponse(items=connections_list) 
+      my_dict = {'amount': 31, 'type': 'fish', 'mine': False}
+      return InfoNodeListResponse(some_dict=json.dumps(my_dict, ensure_ascii=True),items=connections_list) 
   
 
   # Accounts APIs

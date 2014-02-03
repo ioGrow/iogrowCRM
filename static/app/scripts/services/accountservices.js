@@ -36,6 +36,7 @@ accountservices.factory('Account', function($http) {
             if(!resp.code){
                $scope.account = resp;
                $scope.isContentLoaded = true;
+               $scope.listInfonodes();
                $scope.listTopics(resp);
                $scope.listTasks();
                $scope.listEvents();
@@ -46,7 +47,7 @@ accountservices.factory('Account', function($http) {
                
                $scope.listDocuments();
                $scope.selectedTab = 2;
-               $scope.renderMaps();
+               
                $scope.email.to = '';
                document.title = "Account: " + $scope.account.name ;
                //$scope.renderMaps();

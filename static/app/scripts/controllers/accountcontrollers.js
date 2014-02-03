@@ -138,8 +138,8 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
      Auth.init($scope);
 
 }]);
-app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account','Contact','Case','Opportunity', 'Topic','Note','Task','Event','Permission','User','Attachement','Email','Need','Opportunitystage','Casestatus','Map',
-    function($scope,$filter,$route,Auth,Account,Contact,Case,Opportunity,Topic,Note,Task,Event,Permission,User,Attachement,Email,Need,Opportunitystage,Casestatus,Map) {
+app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account','Contact','Case','Opportunity', 'Topic','Note','Task','Event','Permission','User','Attachement','Email','Need','Opportunitystage','Casestatus','Map','InfoNode',
+   function($scope,$filter,$route,Auth,Account,Contact,Case,Opportunity,Topic,Note,Task,Event,Permission,User,Attachement,Email,Need,Opportunitystage,Casestatus,Map,InfoNode) {
        $("ul.page-sidebar-menu li").removeClass("active");
        $("#id_Accounts").addClass("active");
           
@@ -178,6 +178,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        $scope.email = {};
        $scope.stage_selected={};
        $scope.status_selected={};
+       $scope.infonodes = {};
 
        // What to do after authentication
        $scope.runTheProcess = function(){
@@ -770,6 +771,12 @@ $scope.CaselistNextPageItems = function(){
       Need.insert($scope,params);
      
     };
+ $scope.listInfonodes = function(kind) {
+     params = {'parent':$scope.account.entityKey,
+               'connections': kind
+              };
+     InfoNode.list($scope,params);
+ }
 //HKA 19.11.2013 Add Phone
  $scope.addPhone = function(phone){
   //HKA 19.11.2013  Concatenate old phones with new phone
@@ -783,13 +790,24 @@ $scope.CaselistNextPageItems = function(){
     phonesArray = phone;
   }
 
-  params = {'id':$scope.account.id,
-            'phones':phonesArray
-            };
-  Account.patch($scope,params);
+  params = {'parent':$scope.account.entityKey,
+            'kind':'phones',
+            'fields':[
+                {
+                  "field": "type",
+                  "value": phone.type_number
+                },
+                {
+                  "field": "number",
+                  "value": phone.number
+                }
+            ]
+  };
+  InfoNode.insert($scope,params);
   $('#phonemodal').modal('hide');
   $scope.phone={};
   };
+
 
 //HKA 20.11.2013 Add Email
 $scope.addEmail = function(email){
@@ -803,10 +821,16 @@ $scope.addEmail = function(email){
     emailsArray = email;
   }
 
-  params = {'id':$scope.account.id,
-            'emails':emailsArray
-            };
-  Account.patch($scope,params);
+  params = {'parent':$scope.account.entityKey,
+            'kind':'emails',
+            'fields':[
+                {
+                  "field": "email",
+                  "value": email.email
+                }
+            ]
+  };
+  InfoNode.insert($scope,params);
   $('#emailmodal').modal('hide');
   $scope.email={};
   };
@@ -815,40 +839,49 @@ $scope.addEmail = function(email){
 
 //HKA 22.11.2013 Add Website
 $scope.addWebsite = function(website){
-  var websiteArray = undefined;
-  if ($scope.account.websites){
-    websiteArray = new Array();
-    websiteArray = $scope.account.websites;
-    websiteArray.push(website);
-
-  }else{ 
-    websiteArray = website;
-  }
-  params = {'id':$scope.account.id,
-             'websites':websiteArray}
-  Account.patch($scope,params);
+  params = {'parent':$scope.account.entityKey,
+            'kind':'websites',
+            'fields':[
+                {
+                  "field": "url",
+                  "value": website.website
+                }
+            ]
+  };
+  InfoNode.insert($scope,params);
   $('#websitemodal').modal('hide');
-  $scope.website={};
 };
 
 //HKA 22.11.2013 Add Social
 $scope.addSocial = function(social){
-  var socialArray = undefined;
-  if ($scope.account.sociallinks){
-    socialArray = new Array();
-    socialArray = $scope.account.sociallinks;
-    socialArray.push(social);
-
-  }else{ 
-    socialArray = social;
-  }
-  params = {'id':$scope.account.id,
-             'sociallinks':socialArray}
-  Account.patch($scope,params);
+  params = {'parent':$scope.account.entityKey,
+            'kind':'sociallinks',
+            'fields':[
+                {
+                  "field": "url",
+                  "value": social.sociallink
+                }
+            ]
+  };
+  InfoNode.insert($scope,params);
   $('#socialmodal').modal('hide');
-  $scope.social={};
+  
 };
+$scope.addCustomField = function(customField){
+  params = {'parent':$scope.account.entityKey,
+            'kind':'customfields',
+            'fields':[
+                {
+                  "field": customField.field,
+                  "value": customField.value
+                }
+            ]
+  };
+  InfoNode.insert($scope,params);
 
+  $('#customfields').modal('hide');
+  
+};
 //HKA 22.11.2013 Add Tagline
 $scope.updateTagline = function(account){
  
@@ -932,10 +965,68 @@ $scope.deleteaccount = function(){
           console.log(params);
           Account.patch($scope,params);
       };
-      $scope.addGeo = function(addressArray){
-          params = {'id':$scope.account.id,
-             'addresses':addressArray}
-          Account.patch($scope,params);
+      $scope.addGeo = function(address){
+          params = {'parent':$scope.account.entityKey,
+            'kind':'addresses',
+            'fields':[
+                {
+                  "field": "street",
+                  "value": address.street
+                },
+                {
+                  "field": "city",
+                  "value": address.city
+                },
+                {
+                  "field": "state",
+                  "value": address.state
+                },
+                {
+                  "field": "postal_code",
+                  "value": address.postal_code
+                },
+                {
+                  "field": "country",
+                  "value": address.country
+                }
+            ]
+          };
+          if (address.lat){
+            params = {'parent':$scope.account.entityKey,
+            'kind':'addresses',
+            'fields':[
+                {
+                  "field": "street",
+                  "value": address.street
+                },
+                {
+                  "field": "city",
+                  "value": address.city
+                },
+                {
+                  "field": "state",
+                  "value": address.state
+                },
+                {
+                  "field": "postal_code",
+                  "value": address.postal_code
+                },
+                {
+                  "field": "country",
+                  "value": address.country
+                },
+                {
+                  "field": "lat",
+                  "value": address.lat.toString()
+                },
+                {
+                  "field": "lon",
+                  "value": address.lon.toString()
+                }
+              ]
+            };
+          } 
+          InfoNode.insert($scope,params);
       };
   //HKA 08.01.2014 
   $scope.About_render = function(accid){
