@@ -9,6 +9,7 @@ accountservices.factory('Contact', function($http) {
 
   
   Contact.get = function($scope,id) {
+          
           gapi.client.crmengine.contacts.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.contact = resp;
@@ -29,6 +30,7 @@ accountservices.factory('Contact', function($http) {
                   
                 });
                // Call the method $apply to make the update on the scope
+                $scope.isLoading = false;
                $scope.$apply();
 
             }else {
@@ -67,6 +69,7 @@ accountservices.factory('Contact', function($http) {
           });
   };
   Contact.list = function($scope,params){
+        $scope.isLoading = true;
       gapi.client.crmengine.contacts.list(params).execute(function(resp) {
 
     

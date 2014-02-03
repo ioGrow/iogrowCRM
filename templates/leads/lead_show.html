@@ -300,19 +300,20 @@
                               
                             </ul>
                             <div class="row">
+                            <div class="col-md-12">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
-                                      <ul>
-                                        <li ng-show="topicpagination.prev"><button ng-click="TopiclistPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                   
+                                       <button ng-click="TopiclistPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="topicpagination.prev">
                                         {{_("Prev")}} 
-                                        </button></li>
-                                        
-                                        <li  ng-show="topicpagination.next"><button ng-click="TopiclistNextPageItems()"  class="btn">
+                                        </button>
+                                    <button ng-click="TopiclistNextPageItems()"  class="btn" ng-show="topicpagination.next">
                                         {{_("Next")}} 
-                                        </button></li>
-                                      </ul>
+                                        </button>
+                                     
                                     </div>
                                     <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                              </div>
                               </div>
                             </div>
                       <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">

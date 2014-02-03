@@ -75,6 +75,7 @@ class Application(EndpointsModel):
     name = ndb.StringProperty(required=True)
     label = ndb.StringProperty(required=True)
     url = ndb.StringProperty()
+    icon = ndb.StringProperty()
     tabs = ndb.KeyProperty(repeated=True)
     organization = ndb.KeyProperty(required=True)
 

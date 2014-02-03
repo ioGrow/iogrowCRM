@@ -23,8 +23,9 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
         
         // What to do after authentication
        $scope.runTheProcess = function(){
-            var params = {'order' : $scope.order,'limit':7}
+            var params = {'order' : $scope.order,'limit':8}
             Contact.list($scope,params);
+
        };
         // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
@@ -35,11 +36,11 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
           var nextPage = $scope.contactCurrentPage + 1;
           var params = {};
             if ($scope.contactpages[nextPage]){
-              params = {'order' : $scope.order,'limit':7,
+              params = {'order' : $scope.order,'limit':8,
                         'pageToken':$scope.contactpages[nextPage]
                        }
             }else{
-              params = {'order' : $scope.order,'limit':7}
+              params = {'order' : $scope.order,'limit':8}
             }
             
             $scope.contactCurrentPage = $scope.contactCurrentPage + 1 ; 
@@ -50,11 +51,11 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
          var prevPage = $scope.contactCurrentPage - 1;
          var params = {};
             if ($scope.contactpages[prevPage]){
-              params = {'limit':7,
+              params = {'limit':8,
                         'pageToken':$scope.contactpages[prevPage]
                        }
             }else{
-              params = {'order' : $scope.order,'limit':7}
+              params = {'order' : $scope.order,'limit':8}
             }
             $scope.contactCurrentPage = $scope.contactCurrentPage - 1 ;
             Contact.list($scope,params);
@@ -146,7 +147,7 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
      // Sorting
      $scope.orderBy = function(order){
         var params = { 'order': order,
-                        'limit':7};
+                        'limit':8};
         $scope.order = order;
         Contact.list($scope,params);
      };
@@ -154,13 +155,13 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
         if (filter){
           var params = { 'owner': filter,
                          'order': $scope.order, 
-                         'limit':7}
+                         'limit':8}
         }
         else{
           var params = {
               'order': $scope.order, 
               
-              'limit':7}
+              'limit':8}
         };
         $scope.isFiltering = true;
         Contact.list($scope,params);
@@ -169,8 +170,8 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
      // Google+ Authentication 
      Auth.init($scope);
 }]);
-app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User','Attachement','Map',
-    function($scope,$filter,$route,Auth,Email,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User,Attachement,Map) {
+app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User','Attachement','Map','Opportunitystage','Casestatus',
+    function($scope,$filter,$route,Auth,Email,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User,Attachement,Map,Opportunitystage,Casestatus) {
  console.log('I am in ContactShowCtrl');
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Contacts").addClass("active");
@@ -198,12 +199,17 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 
       $scope.accounts = [];
       $scope.email = {};
+      $scope.stage_selected={};
+      $scope.status_selected={};
+      
       // What to do after authentication
       $scope.runTheProcess = function(){
           var contactid = {'id':$route.current.params.contactId};
           Contact.get($scope,contactid);
           User.list($scope,{});
-          
+          Opportunitystage.list($scope,{});
+          Casestatus.list($scope,{});
+         
       };
         // We need to call this to refresh token when user credentials are invalid
       $scope.refreshToken = function() {
@@ -270,12 +276,12 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
         var nextPage = $scope.oppCurrentPage + 1;
         var params = {};
           if ($scope.opppages[nextPage]){
-            params = {'limit':5,
+            params = {'limit':6,
                       'contact':$scope.contact.entityKey,
                       'pageToken':$scope.opppages[nextPage]
                      }
           }else{
-            params = {'limit':5,
+            params = {'limit':6,
             'account':$scope.contact.entityKey}
           }
           console.log('in listNextPageItems');
@@ -288,12 +294,12 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
        var prevPage = $scope.oppCurrentPage - 1;
        var params = {};
           if ($scope.opppages[prevPage]){
-            params = {'limit':5,
+            params = {'limit':6,
                       'contact':$scope.contact.entityKey,
                       'pageToken':$scope.opppages[prevPage]
                      }
           }else{
-            params = {'limit':5,
+            params = {'limit':6,
                       'contact':$scope.contact.entityKey}
           }
           $scope.oppCurrentPage = $scope.oppCurrentPage - 1 ;
@@ -306,12 +312,12 @@ $scope.CaselistNextPageItems = function(){
         var nextPage = $scope.caseCurrentPage + 1;
         var params = {};
           if ($scope.casepages[nextPage]){
-            params = {'limit':5,
+            params = {'limit':6,
                       'contact':$scope.contact.entityKey,
                       'pageToken':$scope.casepages[nextPage]
                      }
           }else{
-            params = {'limit':5,
+            params = {'limit':6,
             'account':$scope.contact.entityKey}
           }
           console.log('in listNextPageItems');
@@ -323,12 +329,12 @@ $scope.CaselistNextPageItems = function(){
        var prevPage = $scope.caseCurrentPage - 1;
        var params = {};
           if ($scope.casepages[prevPage]){
-            params = {'limit':5,
+            params = {'limit':6,
                       'contact':$scope.contact.entityKey,
                       'pageToken':$scope.casepages[prevPage]
                      }
           }else{
-            params = {'limit':5,
+            params = {'limit':6,
                       'contact':$scope.contact.entityKey}
           }
           $scope.caseCurrentPage = $scope.caseCurrentPage - 1 ;
@@ -508,7 +514,7 @@ $scope.CaselistNextPageItems = function(){
      $scope.listOpportunities = function(){
         var params = {'contact':$scope.contact.entityKey,
                       //'order': '-updated_at',
-                      'limit': 5
+                      'limit': 6
                       };
         Opportunity.list($scope,params);
 
@@ -518,7 +524,7 @@ $scope.CaselistNextPageItems = function(){
   $scope.listCases = function(){
     var params ={'contact':$scope.contact.entityKey,
                   //'order':'-creationTime',
-                  'limit':5};
+                  'limit':6};
 
     Case.list($scope,params)
   };
@@ -557,13 +563,14 @@ $scope.updatContactHeader = function(contact){
   };
   // HKA 02.12.2013 Add Opportunty related to Contact
     $scope.saveOpp = function(opportunity){
-      console.log('hahahahhahahahaaha');
+      
       console.log($scope.contact.account);
       console.log(opportunity.amount);
        var params = {'name':opportunity.name,
                       'description':opportunity.description,
                       'amount': opportunity.amount,
-                      'stage':opportunity.stage,
+                      'stagename':$scope.stage_selected.name,
+                      'stage_probability':$scope.stage_selected.probability,
                       'account':$scope.contact.account,
                       'account_name':$scope.contact.account_name,
                       'contact':$scope.contact.entityKey,
@@ -582,7 +589,7 @@ $scope.updatContactHeader = function(contact){
           
         var params = {'name':casee.name,
                       'priority':casee.priority,
-                      'status': casee.statuss,
+                      'status': $scope.status_selected.status,
                       'type_case':casee.type_case,
                       'account':$scope.contact.account,
                       'account_name':$scope.contact.account_name,
