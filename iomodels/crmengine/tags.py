@@ -1,11 +1,12 @@
 from google.appengine.ext import ndb
 from google.appengine.api import search 
 from endpoints_proto_datastore.ndb import EndpointsModel
-
 import pprint
-
-
 import model
+
+class TagAbstract(EndpointsModel):
+	name = ndb.StringProperty()
+	color = ndb.StringProperty()
 
 class Tag(EndpointsModel):
 
