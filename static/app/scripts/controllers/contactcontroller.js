@@ -25,6 +25,7 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
        $scope.runTheProcess = function(){
             var params = {'order' : $scope.order,'limit':8}
             Contact.list($scope,params);
+
        };
         // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
@@ -169,8 +170,8 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
      // Google+ Authentication 
      Auth.init($scope);
 }]);
-app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User','Attachement','Map',
-    function($scope,$filter,$route,Auth,Email,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User,Attachement,Map) {
+app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User','Attachement','Map','Opportunitystage','Casestatus',
+    function($scope,$filter,$route,Auth,Email,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User,Attachement,Map,Opportunitystage,Casestatus) {
  console.log('I am in ContactShowCtrl');
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Contacts").addClass("active");
@@ -198,12 +199,17 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 
       $scope.accounts = [];
       $scope.email = {};
+      $scope.stage_selected={};
+      $scope.status_selected={};
+      
       // What to do after authentication
       $scope.runTheProcess = function(){
           var contactid = {'id':$route.current.params.contactId};
           Contact.get($scope,contactid);
           User.list($scope,{});
-          
+          Opportunitystage.list($scope,{});
+          Casestatus.list($scope,{});
+         
       };
         // We need to call this to refresh token when user credentials are invalid
       $scope.refreshToken = function() {
@@ -557,13 +563,14 @@ $scope.updatContactHeader = function(contact){
   };
   // HKA 02.12.2013 Add Opportunty related to Contact
     $scope.saveOpp = function(opportunity){
-      console.log('hahahahhahahahaaha');
+      
       console.log($scope.contact.account);
       console.log(opportunity.amount);
        var params = {'name':opportunity.name,
                       'description':opportunity.description,
                       'amount': opportunity.amount,
-                      'stage':opportunity.stage,
+                      'stagename':$scope.stage_selected.name,
+                      'stage_probability':$scope.stage_selected.probability,
                       'account':$scope.contact.account,
                       'account_name':$scope.contact.account_name,
                       'contact':$scope.contact.entityKey,
@@ -582,7 +589,7 @@ $scope.updatContactHeader = function(contact){
           
         var params = {'name':casee.name,
                       'priority':casee.priority,
-                      'status': casee.statuss,
+                      'status': $scope.status_selected.status,
                       'type_case':casee.type_case,
                       'account':$scope.contact.account,
                       'account_name':$scope.contact.account_name,
