@@ -41,7 +41,11 @@ noteservices.factory('Note', function($http) {
                  $scope.$apply();
                  $scope.hilightTopic();
               }else {
-                 alert("Error, response is: " + angular.toJson(resp));
+                 if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
               }
       });
   };
@@ -58,7 +62,11 @@ noteservices.factory('Note', function($http) {
                 $scope.$apply();
 
             }else {
-               alert("Error, response is: " + angular.toJson(resp));
+               if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
             }
             console.log('gapi #end_execute');
           });
@@ -67,8 +75,7 @@ noteservices.factory('Note', function($http) {
 Note.insert = function($scope,note){
       $scope.isLoading = true;
       gapi.client.crmengine.notes.insert(note).execute(function(resp) {
-         console.log('in insert resp');
-         console.log(resp);
+        
          if(!resp.code){
           console.log(resp);
           // TME_02_11_13 when a note is inserted reload topics

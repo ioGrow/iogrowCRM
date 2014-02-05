@@ -19,7 +19,11 @@ eventservices.factory('Event', function($http) {
                 $scope.$apply();
 
             }else {
-               alert("Error, response is: " + angular.toJson(resp));
+               if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
             }
             console.log('gapi #end_execute');
           });
@@ -60,7 +64,11 @@ eventservices.factory('Event', function($http) {
                  $scope.$apply();
                  $scope.hilightEvent();
               }else {
-                 alert("Error, response is: " + angular.toJson(resp));
+                 if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
               }
       });
   };

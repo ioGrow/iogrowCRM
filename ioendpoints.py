@@ -5,10 +5,12 @@ from protorpc import remote
 from google.appengine.datastore.datastore_query import Cursor
 from endpoints_proto_datastore.ndb import EndpointsAliasProperty
 from endpoints_proto_datastore.ndb import EndpointsModel
+from iograph import InfoNode
 from iomodels.crmengine.accounts import Account
 from iomodels.crmengine.contacts import Contact
 from iomodels.crmengine.notes import Note,Topic
 from iomodels.crmengine.tasks import Task
+from iomodels.crmengine.tags import Tag
 from iomodels.crmengine.opportunities import Opportunity
 from iomodels.crmengine.events import Event
 from iomodels.crmengine.documents import Document
@@ -37,6 +39,7 @@ from protorpc import messages
 from protorpc import message_types
 from google.appengine.api import memcache
 import pprint
+import json
 
 
 # The ID of javascript client authorized to access to our api
@@ -47,6 +50,34 @@ OBJECTS = {'Account': Account,'Contact': Contact,'Case':Case,'Lead':Lead,'Opport
 FOLDERS = {'Account': 'accounts_folder','Contact': 'contacts_folder','Lead':'leads_folder','Opportunity':'opportunities_folder','Case':'cases_folder','Show':'shows_folder','Feedback':'feedbacks_folder'}
 DISCUSSIONS= {'Task':{'title':'task','url':'/#/tasks/show/'},'Event':{'title':'event','url':'/#/events/show/'},'Note':{'title':'discussion','url': '/#/notes/show/'}}
 
+# The message class that defines Record schema for InfoNode attributes
+class RecordSchema(messages.Message):
+    field = messages.StringField(1)
+    value = messages.StringField(2)
+    property_type = messages.StringField(3,default='StringProperty')
+    is_indexed = messages.BooleanField(4)
+class InfoNodeSchema(messages.Message):
+    kind = messages.StringField(1,required=True)
+    fields = messages.MessageField(RecordSchema, 2, repeated=True)
+    parent = messages.StringField(3,required=True)
+class InfoNodeResponse(messages.Message):
+    id = messages.StringField(1)
+    entityKey  = messages.StringField(2)
+    kind = messages.StringField(3)
+    fields = messages.MessageField(RecordSchema, 4, repeated=True)
+    parent = messages.StringField(5)
+#TODOS
+# ADD PHONE SCHEMA, LISTOFPHONES SCHEMA, EMAILS, ADDRESSES,...
+# ADD ANOTHER SCHEMA FOR CUSTOM FIELDS
+class InfoNodeConnectionSchema(messages.Message):
+    kind = messages.StringField(1,required=True)
+    items = messages.MessageField(InfoNodeResponse, 2, repeated=True)
+class InfoNodeListRequest(messages.Message):
+    parent = messages.StringField(1,required=True)
+    connections = messages.StringField(2,repeated=True)
+class InfoNodeListResponse(messages.Message):
+    some_dict = messages.BytesField(1)
+    items = messages.MessageField(InfoNodeConnectionSchema, 2, repeated=True)
 # The message class that defines the SendEmail Request attributes
 class EmailRequest(messages.Message):
     sender = messages.StringField(1)
@@ -412,6 +443,56 @@ class CrmEngineApi(remote.Service):
   ID_RESOURCE = endpoints.ResourceContainer(
             message_types.VoidMessage,
             id=messages.StringField(1))
+  #Info Node APIs
+  # infonode.insert api
+  @endpoints.method(InfoNodeSchema, InfoNodeResponse,
+                      path='infonode/insert', http_method='POST',
+                      name='infonode.insert')
+  def infonode_insert(self, request):
+      parent_key = ndb.Key(urlsafe=request.parent)
+      node = InfoNode(kind = request.kind, parent=parent_key)
+      for record in request.fields:
+          setattr(node,record.field,record.value)
+      entityKey = node.put()
+      return InfoNodeResponse(entityKey=entityKey.urlsafe(),kind=node.kind,fields=request.fields)
+  # infonode.list api
+  @endpoints.method(InfoNodeListRequest, InfoNodeListResponse,
+                      path='infonode/list', http_method='POST',
+                      name='infonode.list')
+  def infonode_list_beta(self, request):
+      parent_key = ndb.Key(urlsafe=request.parent)
+      nodes = InfoNode.query(InfoNode.parent==parent_key).fetch()
+      connections_dict = {}
+      for node in nodes:
+          if node.kind not in connections_dict.keys():
+              connections_dict[node.kind] = list()
+          node_fields = list()
+          for key,value in node.to_dict().iteritems():
+              if key not in['kind','parent','created_at','updated_at']:
+                  record = RecordSchema(field=key,
+                                    value = node.to_dict()[key])
+                  node_fields.append(record)
+          info_node = InfoNodeResponse(id = str( node.key.id() ),
+                                       entityKey = node.key.urlsafe(),
+                                       kind = node.kind,
+                                       fields = node_fields,
+                                       parent = node.parent.urlsafe()) 
+          
+          
+          connections_dict[node.kind].append(info_node)
+      connections_list = list() 
+      for key,value in connections_dict.iteritems():
+          if request.connections:
+              if key in request.connections:
+                  infonodeconnection = InfoNodeConnectionSchema(kind=key,items=value)
+                  connections_list.append(infonodeconnection) 
+          else:
+              infonodeconnection = InfoNodeConnectionSchema(kind=key,items=value)
+              connections_list.append(infonodeconnection)  
+      my_dict = {'amount': 31, 'type': 'fish', 'mine': False}
+      return InfoNodeListResponse(some_dict=json.dumps(my_dict, ensure_ascii=True),items=connections_list) 
+  
+
   # Accounts APIs
   # accounts.insert api
   @Account.method(user_required=True,path='accounts', http_method='POST', name='accounts.insert')
@@ -1652,10 +1733,19 @@ class CrmEngineApi(remote.Service):
     return my_model
 
   # tags.list api
-  @Tag.query_method(user_required=True,query_fields=('about_kind', 'limit', 'order', 'pageToken'),path='tags', name='tags.list')
+  @Tag.query_method(user_required=True,query_fields=('about_kind', 'limit', 'order', 'pageToken','color'),path='tags', name='tags.list')
   def tags_list(self, query):
       user_from_email = EndpointsHelper.require_iogrow_user()
       return query.filter(Tag.organization==user_from_email.organization)
+
+  @Tag.method(user_required=True,path='tags', http_method='POST', name='tags.insert')
+  def TagInsert(self, my_model):
+    user_from_email = EndpointsHelper.require_iogrow_user()
+    my_model.organization = user_from_email.organization
+    my_model.owner = user_from_email.google_user_id
+    my_model.put()
+    return my_model
+
   # notes.get api
   @endpoints.method(ID_RESOURCE, DiscussionResponse,
                       path='notes/{id}', http_method='GET',
@@ -1901,55 +1991,25 @@ class CrmEngineApi(remote.Service):
       my_model.put()
       return my_model
   # tasks.patch api
-  @endpoints.method(ID_RESOURCE, TaskResponse,
-                      path='tasks/{id}', http_method='PATCH',
-                      name='tasks.patch')
+  @Task.method(user_required=True,
+                http_method='PATCH', path='tasks/{id}', name='tasks.patch')
   def task_patch(self, my_model):
       user_from_email = EndpointsHelper.require_iogrow_user()
       # Todo: Check permissions
       if not my_model.from_datastore:
           raise endpoints.NotFoundException('Task not found.')
-      my_model.put()
-      task = my_model
-      about_item_id = int(task.about_item)
-      try:
-                about_object = OBJECTS[task.about_kind].get_by_id(about_item_id)
-                if task.about_kind == 'Contact' or task.about_kind == 'Lead':
-                    about_name = about_object.firstname + ' ' + about_object.lastname
-                else:
-                    about_name = about_object.name
-                about_response = DiscussionAboutSchema(kind=task.about_kind,
-                                                       id=task.about_item,
-                                                       name=about_name)
-                author = AuthorSchema(google_user_id = task.author.google_user_id,
-                                      display_name = task.author.display_name,
-                                      google_public_profile_url = task.author.google_public_profile_url,
-                                      photo = task.author.photo)
-                completed_by = None
-                if completed_by:
-                    completed_by = AuthorSchema(google_user_id = task.completed_by.google_user_id,
-                                      display_name = task.completed_by.display_name,
-                                      google_public_profile_url = task.completed_by.google_public_profile_url,
-                                      photo = task.completed_by.photo)
-
-                
-                if task.due:
-                    due_date = task.due.isoformat()
-                else:
-                    due_date = None
-                response = TaskResponse(id=request.id,
-                                              entityKey = task.key.urlsafe(),
-                                              title = task.title,
-                                              due = due_date,
-                                              status = task.status,
-                                              comments = task.comments,
-                                              about = about_response,
-                                              author = author,
-                                              completed_by = completed_by )
-                return response
-      except (IndexError, TypeError):
-                raise endpoints.NotFoundException('About object %s not found.' %
-                                                  (request.id,))
+      patched_model_key = my_model.entityKey
+      patched_model = ndb.Key(urlsafe=patched_model_key).get()
+      print 'current model ***************'
+      pprint.pprint(patched_model) 
+      print 'to be updated ******************' 
+      pprint.pprint(my_model) 
+      properties = Task().__class__.__dict__
+      for p in properties.keys():
+          if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p) and not(p in ['put','set_perm','put_index']) ):
+                exec('patched_model.'+p+'= my_model.'+p)
+      patched_model.put()
+      return patched_model
             
             
 
@@ -2012,6 +2072,7 @@ class CrmEngineApi(remote.Service):
         except (IndexError, TypeError):
             raise endpoints.NotFoundException('Note %s not found.' %
                                               (request.id,))
+  #Tags Api
   # events.insert api
   @Event.method(user_required=True,path='events', http_method='POST', name='events.insert')
   def EventInsert(self, my_model):

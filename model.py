@@ -40,12 +40,12 @@ from google.appengine.api import search
 from endpoints_proto_datastore import MessageFieldsSchema
 from search_helper import tokenize_autocomplete
 
-STANDARD_TABS = [{'name': 'Accounts','label': 'Accounts','url':'/#/accounts/'},{'name': 'Contacts','label': 'Contacts','url':'/#/contacts/'},{'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/'},{'name': 'Leads','label': 'Leads','url':'/#/leads/'},{'name': 'Cases','label': 'Cases','url':'/#/cases/'}]
+STANDARD_TABS = [{'name': 'Accounts','label': 'Accounts','url':'/#/accounts/','icon':'book'},{'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},{'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/','icon':'money'},{'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},{'name': 'Cases','label': 'Cases','url':'/#/cases/','icon':'suitcase'}]
 STANDARD_PROFILES = ['Super Administrator', 'Standard User', 'Sales User', 'Marketing User', 'Read Only', 'Support User', 'Contract Manager','Read Only']
 STANDARD_APPS = [{'name': 'sales', 'label': 'Customer Development', 'url':'/#/accounts/'},#{'name': 'marketing', 'label':'Marketing', 'url':'/#/compaigns/'},
 {'name':'call_center','label': 'Customer Support','url':'/#/cases/'}]
 STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
-ADMIN_TABS = [{'name': 'Users','label': 'Users','url':'/#/admin/users'},{'name': 'Groups','label': 'Groups','url':'/#/admin/groups'},{'name': 'Settings','label': 'Settings','url':'/#/admin/settings'}]
+ADMIN_TABS = [{'name': 'Users','label': 'Users','url':'/#/admin/users','icon':'user'},{'name': 'Groups','label': 'Groups','url':'/#/admin/groups','icon':'group'},{'name': 'Settings','label': 'Settings','url':'/#/admin/settings','icon':'cogs'}]
 ADMIN_APP = {'name': 'admin', 'label': 'Admin Console', 'url':'/#/admin/users'}
 Iogrowlive_APP = {'name':'iogrowLive','label': 'i/oGrow Live','url':'/#/live/shows'}
 Iogrowlive_TABS = [{'name': 'Shows','label': 'Shows','url':'/#/live/shows'},{'name': 'Company_profile','label': 'Company Profile','url':'/#/live/company_profile/'},
@@ -75,6 +75,7 @@ class Application(EndpointsModel):
     name = ndb.StringProperty(required=True)
     label = ndb.StringProperty(required=True)
     url = ndb.StringProperty()
+    icon = ndb.StringProperty()
     tabs = ndb.KeyProperty(repeated=True)
     organization = ndb.KeyProperty(required=True)
 
@@ -82,6 +83,7 @@ class Tab(EndpointsModel):
     name = ndb.StringProperty(required=True)
     label = ndb.StringProperty(required=True)
     url = ndb.StringProperty()
+    icon = ndb.StringProperty()
     organization = ndb.KeyProperty(required=True)
     tabs = ndb.KeyProperty(repeated=True)
 
@@ -126,12 +128,12 @@ class Organization(EndpointsModel):
           created_tabs = list()
           for tab in STANDARD_TABS:
 
-            created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],organization=org_key)
+            created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
             created_tab.put()
             created_tabs.append(created_tab.key)
           admin_tabs = list()
           for tab in ADMIN_TABS:
-              created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],organization=org_key)
+              created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
               created_tab.put()
               admin_tabs.append(created_tab.key)
           live_tabs = list()

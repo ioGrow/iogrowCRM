@@ -1,5 +1,6 @@
 app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus',
     function($scope,Auth,Lead,Leadstatus) {
+      $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Leads").addClass("active");
       
       document.title = "Leads: Home";
@@ -23,7 +24,7 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus',
 
       // What to do after authentication
        $scope.runTheProcess = function(){
-            var params = {'order' : $scope.order,'limit':7};
+            var params = {'order' : $scope.order,'limit':8};
             Lead.list($scope,params);
             Leadstatus.list($scope,{});
 
@@ -39,11 +40,11 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus',
         var nextPage = $scope.currentPage + 1;
         var params = {};
           if ($scope.pages[nextPage]){
-            params = {'order' : $scope.order,'limit':7,
+            params = {'order' : $scope.order,'limit':8,
                       'pageToken':$scope.pages[nextPage]
                      }
           }else{
-            params = {'order' : $scope.order,'limit':7}
+            params = {'order' : $scope.order,'limit':8}
           }
           console.log('in listNextPageItems');
           $scope.currentPage = $scope.currentPage + 1 ; 
@@ -54,11 +55,11 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus',
        var prevPage = $scope.currentPage - 1;
        var params = {};
           if ($scope.pages[prevPage]){
-            params = {'order' : $scope.order,'limit':7,
+            params = {'order' : $scope.order,'limit':8,
                       'pageToken':$scope.pages[prevPage]
                      }
           }else{
-            params = {'order' : $scope.order,'limit':7}
+            params = {'order' : $scope.order,'limit':8}
           }
           $scope.currentPage = $scope.currentPage - 1 ;
           Lead.list($scope,params);
@@ -118,7 +119,7 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus',
      // Sorting
      $scope.orderBy = function(order){
         var params = { 'order': order,
-                        'limit':7};
+                        'limit':8};
         $scope.order = order;
         Lead.list($scope,params);
      };
@@ -126,31 +127,30 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus',
         if (filter){
           var params = { 'owner': filter,
                          'order': $scope.order, 
-                         'limit':7}
+                         'limit':8}
         }
         else{
           var params = {
               'order': $scope.order, 
               
-              'limit':7}
+              'limit':8}
         };
-        console.log('Filtering by');
-        console.log(params);
+        $scope.isFiltering = true;
         Lead.list($scope,params);
      };
      $scope.filterByStatus = function(filter){
         if (filter){
           var params = { 'status': filter,
                          'order': $scope.order, 
-                         'limit':7}
+                         'limit':8}
         }
         else{
           var params = {
               'order': $scope.order, 
               
-              'limit':7}
+              'limit':8}
         };
-        
+        $scope.isFiltering = true;
         Lead.list($scope,params);
      };
 
@@ -162,6 +162,7 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus',
 }]);
 app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Topic','Note','Lead','Permission','User','Leadstatus','Attachement','Map',
     function($scope,$filter,$route,Auth,Email,Task,Event,Topic,Note,Lead,Permission,User,Leadstatus,Attachement,Map) {
+      $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Leads").addClass("active");
       
      

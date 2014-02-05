@@ -13,10 +13,6 @@ libraries:
   version: latest
 
 handlers:
-- url: /_ah/mail/.+
-  script: handle_incoming_email.app
-  login: admin
-  
 - url: /static
   static_dir: static
 # Endpoints handler

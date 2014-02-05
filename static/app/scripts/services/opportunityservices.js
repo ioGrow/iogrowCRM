@@ -25,7 +25,12 @@ opportunityservices.factory('Opportunity', function($http) {
         $scope.$apply();
 
       }else {
-        alert("Error, response is :"+angular.toJson(resp))
+
+         if(resp.message=="Invalid token"){
+          $scope.refreshToken();;
+         };
+
+
       }
     });
 
@@ -36,8 +41,10 @@ opportunityservices.factory('Opportunity', function($http) {
       $scope.isLoading = true;
       gapi.client.crmengine.opportunities.list(params).execute(function(resp) {
               if(!resp.code){
-                if (!resp.items){
-                    $scope.blankStateopportunity = true;
+                  if (!resp.items){
+                    if(!$scope.isFiltering){
+                        $scope.blankStateopportunity = true;
+                    }
                   }
                  $scope.opportunities = resp.items;
                  if ($scope.oppCurrentPage>1){
@@ -59,7 +66,11 @@ opportunityservices.factory('Opportunity', function($http) {
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
               }else {
-                 alert("Error, response is: " + angular.toJson(resp));
+
+                if(resp.message=="Invalid token"){
+                       $scope.refreshToken();;
+                           };
+                 
               }
       });
   };
@@ -75,17 +86,20 @@ opportunityservices.factory('Opportunity', function($http) {
       });
   };
     Opportunity.patch = function($scope,params) {
-          console.log('in opportunities.patch service');
-          console.log(params);
+          
           gapi.client.crmengine.opportunities.patch(params).execute(function(resp) {
             if(!resp.code){
                $scope.opportunity = resp;
-               
+               $scope.opportunity.stagename= resp.stagename;
                // Call the method $apply to make the update on the scope
                 $scope.$apply();
 
             }else {
-               alert("Error, response is: " + angular.toJson(resp));
+               if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
             }
             console.log('accounts.patch gapi #end_execute');
           });
@@ -98,8 +112,9 @@ opportunityservices.factory('Opportunity', function($http) {
          
          if(!resp.code){
           $scope.isLoading = false;
-          $('#addOpportunityModal').modal('hide');
+          
           window.location.replace('#/opportunities/show/'+resp.id);
+          $('#addOpportunityModal').modal('hide');
           
          }else{
           console.log(resp.message);

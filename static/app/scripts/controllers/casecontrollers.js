@@ -2,6 +2,7 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
     function($scope,Auth,Case,Account,Contact,Casestatus) {
     
      document.title = "Cases: Home";
+     $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Cases").addClass("active");
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
@@ -28,7 +29,7 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
      
       // What to do after authentication
        $scope.runTheProcess = function(){
-            var params = {'order' : $scope.order,'limit':7}
+            var params = {'order' : $scope.order,'limit':8}
             Case.list($scope,params);
             Casestatus.list($scope,{});
        };
@@ -42,11 +43,11 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
         var nextPage = $scope.caseCurrentPage + 1;
         var params = {};
           if ($scope.casepages[nextPage]){
-            params = {'order' : $scope.order,'limit':7,
+            params = {'order' : $scope.order,'limit':8,
                       'pageToken':$scope.casepages[nextPage]
                      }
           }else{
-            params = {'order' : $scope.order,'limit':7}
+            params = {'order' : $scope.order,'limit':8}
           }
           console.log('in listNextPageItems');
           $scope.caseCurrentPage = $scope.caseCurrentPage + 1 ; 
@@ -57,11 +58,11 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
        var prevPage = $scope.caseCurrentPage - 1;
        var params = {};
           if ($scope.casepages[prevPage]){
-            params = {'order' : $scope.order,'limit':7,
+            params = {'order' : $scope.order,'limit':8,
                       'pageToken':$scope.casepages[prevPage]
                      }
           }else{
-            params = {'order' : $scope.order,'limit':7}
+            params = {'order' : $scope.order,'limit':8}
           }
           $scope.caseCurrentPage = $scope.caseCurrentPage - 1 ;
           Case.list($scope,params);
@@ -200,7 +201,7 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
      // Sorting
      $scope.orderBy = function(order){
         var params = { 'order': order,
-                        'limit':7};
+                        'limit':8};
         $scope.order = order;
         Case.list($scope,params);
      };
@@ -208,31 +209,30 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
         if (filter){
           var params = { 'owner': filter,
                          'order': $scope.order, 
-                         'limit':7}
+                         'limit':8}
         }
         else{
           var params = {
               'order': $scope.order, 
               
-              'limit':7}
+              'limit':8}
         };
-        console.log('Filtering by');
-        console.log(params);
+        $scope.isFiltering = true;
         Case.list($scope,params);
      };
      $scope.filterByStatus = function(filter){
         if (filter){
           var params = { 'status': filter,
                          'order': $scope.order, 
-                         'limit':7}
+                         'limit':8}
         }
         else{
           var params = {
               'order': $scope.order, 
               
-              'limit':7}
+              'limit':8}
         };
-        
+        $scope.isFiltering = true;
         Case.list($scope,params);
      };
 
@@ -244,7 +244,7 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
 }]);
 app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Topic','Note','Task','Event','Permission','User','Casestatus','Email','Attachement',
     function($scope,$filter,$route,Auth,Case,Topic,Note,Task,Event,Permission,User,Casestatus,Email,Attachement) {
-      console.log('i am in account list controller');
+      $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Cases").addClass("active");
       
      $scope.selectedTab = 1;
@@ -520,7 +520,7 @@ $scope.updatCasetHeader = function(casee){
            'status':$scope.status_selected.status,
            'type_case':casee.type_case}
   Case.patch($scope,params);
-  $scope.$watch($scope.casee.priority, function() {
+  /*$scope.$watch($scope.casee.priority, function() {
       var paramsNote = {
                   'about_kind': 'Case',
                   'about_item': $scope.casee.id,
@@ -531,7 +531,7 @@ $scope.updatCasetHeader = function(casee){
       console.log(paramsNote);
       
       Note.insert($scope,paramsNote);
-   });
+   });*/
   
  $('#EditCaseModal').modal('hide');
 };
