@@ -1211,7 +1211,7 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("Add Phone")}}</h3>
             </div>
             <div class="modal-body">
-                  <form id="addPhone" name="addphone" ng-submit="addPhone(phone)" class="form-horizontal"> 
+                  <form id="addPhone" name="addphone" class="form-horizontal"> 
                     <div class="form-group">
                         <label  class="col-md-3 control-label">{{_("Type")}} </label>
                         <div class="col-md-9">
@@ -1237,7 +1237,7 @@
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
               
-                  <input ng-hide="isLoading" type="submit" class="btn green" value="{{_('Add this phone')}}">
+                 <input ng-hide="isLoading" ng-click="addPhone(phone)"  type="submit" class="btn green" value="{{_('Add this phone')}}">
                   <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
               </div>
                 </form>
