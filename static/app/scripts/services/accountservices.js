@@ -36,6 +36,7 @@ accountservices.factory('Account', function($http) {
             if(!resp.code){
                $scope.account = resp;
                $scope.isContentLoaded = true;
+               $scope.listInfonodes();
                $scope.listTopics(resp);
                $scope.listTasks();
                $scope.listEvents();
@@ -46,7 +47,7 @@ accountservices.factory('Account', function($http) {
                
                $scope.listDocuments();
                $scope.selectedTab = 2;
-               $scope.renderMaps();
+               
                $scope.email.to = '';
                document.title = "Account: " + $scope.account.name ;
                //$scope.renderMaps();
@@ -58,7 +59,12 @@ accountservices.factory('Account', function($http) {
                 $scope.$apply();
 
             }else {
-               alert("Error, response is: " + angular.toJson(resp));
+              alert(resp.message);
+               if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+             };
             }
             console.log('gapi #end_execute');
           });
@@ -90,7 +96,9 @@ accountservices.factory('Account', function($http) {
               if(!resp.code){
                   
                   if (!resp.items){
-                    $scope.blankStateaccount = true;
+                    if(!$scope.isFiltering){
+                        $scope.blankStateaccount = true;
+                    }
                   }
                  $scope.accounts = resp.items;
                  if ($scope.currentPage>1){
@@ -112,7 +120,12 @@ accountservices.factory('Account', function($http) {
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
               }else {
-                 alert("Error, response is: " + angular.toJson(resp));
+               
+               if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
               }
       });
   };
@@ -205,49 +218,56 @@ accountservices.factory('Search', function($http) {
   };
 
   
-  Search.list = function($scope,params){
+ Search.list = function($scope,params){
       $scope.isLoading = true;
       console.log('in search api go ahead');
       console.log(params);
       gapi.client.crmengine.search(params).execute(function(resp) {
               if(!resp.code){
-                 $scope.searchResults = [];
-                 for (var i=0,len=resp.items.length; i<len; i++)
-                  { 
-                        var id = resp.items[i].id;
-                        var type = resp.items[i].type;
-                        var title = resp.items[i].title;
-                        var url = Search.getUrl(type,id);
-                        var result = {};
-                        result.id = id;
-                        result.type = type;
-                        result.title = title;
-                        result.url = url;
-                        $scope.searchResults.push(result);
+                 
+                  if(resp.items){
+                    $scope.searchResults = [];
+                     for (var i=0,len=resp.items.length; i<len; i++)
+                      { 
+                            var id = resp.items[i].id;
+                            var type = resp.items[i].type;
+                            var title = resp.items[i].title;
+                            var url = Search.getUrl(type,id);
+                            var result = {};
+                            result.id = id;
+                            result.type = type;
+                            result.title = title;
+                            result.url = url;
+                            $scope.searchResults.push(result);
 
+                      }
+                                       
+                     //$scope.searchResults = resp.items;
+                     if ($scope.currentPage>1){
+                          $scope.pagination.prev = true;
+                       }else{
+                           $scope.pagination.prev = false;
+                       }
+                     if (resp.nextPageToken){
+                       var nextPage = $scope.currentPage + 1;
+                       // Store the nextPageToken
+                       $scope.pages[nextPage] = resp.nextPageToken;
+                       $scope.pagination.next = true;
+                       
+                     }else{
+                      $scope.pagination.next = false;
+                     }
                   }
-                                   
-                 //$scope.searchResults = resp.items;
-                 if ($scope.currentPage>1){
-                      $scope.pagination.prev = true;
-                   }else{
-                       $scope.pagination.prev = false;
-                   }
-                 if (resp.nextPageToken){
-                   var nextPage = $scope.currentPage + 1;
-                   // Store the nextPageToken
-                   $scope.pages[nextPage] = resp.nextPageToken;
-                   $scope.pagination.next = true;
-                   
-                 }else{
-                  $scope.pagination.next = false;
-                 }
                  // Loaded succefully
                  $scope.isLoading = false;
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
               }else {
-                 alert("Error, response is: " + angular.toJson(resp));
+                 if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
               }
       });
   };
@@ -288,7 +308,11 @@ accountservices.factory('Attachement', function($http) {
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
               }else {
-                 alert("Error, response is: " + angular.toJson(resp));
+                 if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
               }
       });
       
@@ -305,7 +329,11 @@ accountservices.factory('Attachement', function($http) {
                 $scope.$apply();
 
             }else {
-               alert("Error, response is: " + angular.toJson(resp));
+               if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
             }
             console.log('gapi #end_execute');
           });

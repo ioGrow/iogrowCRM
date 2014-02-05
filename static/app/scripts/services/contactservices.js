@@ -9,6 +9,7 @@ accountservices.factory('Contact', function($http) {
 
   
   Contact.get = function($scope,id) {
+          
           gapi.client.crmengine.contacts.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.contact = resp;
@@ -29,10 +30,15 @@ accountservices.factory('Contact', function($http) {
                   
                 });
                // Call the method $apply to make the update on the scope
+                $scope.isLoading = false;
                $scope.$apply();
 
             }else {
-               alert("Error, response is: " + angular.toJson(resp));
+              if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
             }
             console.log('gapi #end_execute');
           });
@@ -53,18 +59,26 @@ accountservices.factory('Contact', function($http) {
                 $scope.$apply();
 
             }else {
-               alert("Error, response is: " + angular.toJson(resp));
+               if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
             }
             console.log('Contact.patch gapi #end_execute');
           });
   };
   Contact.list = function($scope,params){
+        $scope.isLoading = true;
       gapi.client.crmengine.contacts.list(params).execute(function(resp) {
 
     
               if(!resp.code){
-                  if (!resp.items){
-                    $scope.blankStatecontact = true;
+                  
+                   if (!resp.items){
+                    if(!$scope.isFiltering){
+                        $scope.blankStatecontact = true;
+                    }
                   }
                  $scope.contacts = resp.items;
                  if ($scope.contactCurrentPage>1){
@@ -87,7 +101,11 @@ accountservices.factory('Contact', function($http) {
                  $scope.$apply();
 
               } else {
-                 alert("Error, response is: " + angular.toJson(resp));
+                 if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
               }
               console.log('gapi #end_execute');
         });
@@ -137,43 +155,3 @@ Contact.delete = function($scope,id){
 return Contact;
 });
 
-// retrieve list account
-contactservices.factory('MultiContactLoader', ['Account','$route', '$q',
-    function(Account, $route, $q) {
-    return function() {
-    var delay = $q.defer();
-    gapi.client.crmengine.contacts.list().execute(function(resp) {
-            console.log('after execution');
-           // console.log(resp);
-            
-            delay.resolve(resp.items);
-
-            console.log('resoleved');
-            console.log(resp.items);
-            console.log('continue');
-      // pagination
-    
-    });
-    console.log('continued');
-    
-    return delay.promise;
-    };
-
-   // function(Account,$route, $q) {
-  //return function() {
-   // return Account.list($route.current.params.page);
- // };
-}]);
-
-// retrieve a contact
-contactservices.factory('ContactLoader', ['Contact', '$route', '$q',
-    function(Contact, $route, $q) {
-  return function() {
-    var delay = $q.defer();
-    
-    var contactId = $route.current.params.contactId;
-    
-    
-    return Contact.get($route.current.params.contactId);
-  };
-}]);

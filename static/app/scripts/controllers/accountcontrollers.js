@@ -1,5 +1,6 @@
 app.controller('AccountListCtrl', ['$scope','Auth','Account',
     function($scope,Auth,Account) {
+     $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Accounts").addClass("active");
      document.title = "Accounts: Home";
      $scope.isSignedIn = false;
@@ -19,7 +20,7 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
      // What to do after authentication
      $scope.runTheProcess = function(){
           var params = { 'order': $scope.order,
-                        'limit':7}
+                        'limit':8}
           Account.list($scope,params);
      };
      // We need to call this to refresh token when user credentials are invalid
@@ -31,12 +32,12 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
         var nextPage = $scope.currentPage + 1;
         var params = {};
           if ($scope.pages[nextPage]){
-            params = {'limit':7,
+            params = {'limit':8,
                       'order' : $scope.order,
                       'pageToken':$scope.pages[nextPage]
             }
           }else{
-            params = {'order' : $scope.order,'limit':7}
+            params = {'order' : $scope.order,'limit':8}
           }
           $scope.currentPage = $scope.currentPage + 1 ; 
           Account.list($scope,params);
@@ -45,12 +46,12 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
        var prevPage = $scope.currentPage - 1;
        var params = {};
           if ($scope.pages[prevPage]){
-            params = {'limit':7,
+            params = {'limit':8,
                       'order' : $scope.order,
                       'pageToken':$scope.pages[prevPage]
             }
           }else{
-            params = {'order' : $scope.order,'limit':7}
+            params = {'order' : $scope.order,'limit':8}
           }
           $scope.currentPage = $scope.currentPage - 1 ;
           Account.list($scope,params);
@@ -70,6 +71,7 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
      $scope.save = function(account){
           if (account.name) {
       	     Account.insert($scope,account);
+             
            };
       };
 
@@ -83,8 +85,9 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
 
 
      $scope.accountInserted = function(resp){
-          $('#addAccountModal').modal('hide');
+          
           window.location.replace('#/accounts/show/'+resp.id);
+          $('#addAccountModal').modal('hide');
      };
      // Quick Filtering
      var searchParams ={};
@@ -110,8 +113,9 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
      };
      // Sorting
      $scope.orderBy = function(order){
+      
         var params = { 'order': order,
-                        'limit':7};
+                        'limit':8};
         $scope.order = order;
         Account.list($scope,params);
      };
@@ -119,16 +123,15 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
         if (filter){
           var params = { 'owner': filter,
                          'order': $scope.order, 
-                         'limit':7}
+                         'limit':8}
         }
         else{
           var params = {
               'order': $scope.order, 
               
-              'limit':7}
+              'limit':8}
         };
-        console.log('Filtering by');
-        console.log(params);
+        $scope.isFiltering = true;
         Account.list($scope,params);
      };
 
@@ -136,8 +139,9 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
      Auth.init($scope);
 
 }]);
-app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account','Contact','Case','Opportunity', 'Topic','Note','Task','Event','Permission','User','Attachement','Email','Need','Opportunitystage','Casestatus','Map',
-    function($scope,$filter,$route,Auth,Account,Contact,Case,Opportunity,Topic,Note,Task,Event,Permission,User,Attachement,Email,Need,Opportunitystage,Casestatus,Map) {
+app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account','Contact','Case','Opportunity', 'Topic','Note','Task','Event','Permission','User','Attachement','Email','Need','Opportunitystage','Casestatus','Map','InfoNode',
+   function($scope,$filter,$route,Auth,Account,Contact,Case,Opportunity,Topic,Note,Task,Event,Permission,User,Attachement,Email,Need,Opportunitystage,Casestatus,Map,InfoNode) {
+       $("ul.page-sidebar-menu li").removeClass("active");
        $("#id_Accounts").addClass("active");
           
        $scope.selectedTab = 1;
@@ -175,6 +179,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        $scope.email = {};
        $scope.stage_selected={};
        $scope.status_selected={};
+       $scope.infonodes = {};
 
        // What to do after authentication
        $scope.runTheProcess = function(){
@@ -244,12 +249,12 @@ $scope.ContactlistNextPageItems = function(){
         var nextPage = $scope.contactCurrentPage + 1;
         var params = {};
           if ($scope.contactpages[nextPage]){
-            params = {'limit':5,
+            params = {'limit':6,
                       'account':$scope.account.entityKey,
                       'pageToken':$scope.contactpages[nextPage]
                      }
           }else{
-            params = {'limit':5,
+            params = {'limit':6,
             'account':$scope.account.entityKey}
           }
           console.log('in listNextPageItems');
@@ -261,12 +266,12 @@ $scope.ContactlistNextPageItems = function(){
        var prevPage = $scope.contactCurrentPage - 1;
        var params = {};
           if ($scope.contactpages[prevPage]){
-            params = {'limit':5,
+            params = {'limit':6,
                       'account':$scope.account.entityKey,
                       'pageToken':$scope.contactpages[prevPage]
                      }
           }else{
-            params = {'limit':5,
+            params = {'limit':6,
                       'account':$scope.account.entityKey}
           }
           $scope.contactCurrentPage = $scope.contactCurrentPage - 1 ;
@@ -279,12 +284,12 @@ $scope.OpplistNextPageItems = function(){
         var nextPage = $scope.oppCurrentPage + 1;
         var params = {};
           if ($scope.opppages[nextPage]){
-            params = {'limit':5,
+            params = {'limit':6,
                       'account':$scope.account.entityKey,
                       'pageToken':$scope.opppages[nextPage]
                      }
           }else{
-            params = {'limit':5,
+            params = {'limit':6,
             'account':$scope.account.entityKey}
           }
           console.log('in listNextPageItems');
@@ -296,12 +301,12 @@ $scope.OpplistNextPageItems = function(){
        var prevPage = $scope.oppCurrentPage - 1;
        var params = {};
           if ($scope.opppages[prevPage]){
-            params = {'limit':5,
+            params = {'limit':6,
                       'account':$scope.account.entityKey,
                       'pageToken':$scope.opppages[prevPage]
                      }
           }else{
-            params = {'limit':5,
+            params = {'limit':6,
                       'account':$scope.account.entityKey}
           }
           $scope.oppCurrentPage = $scope.oppCurrentPage - 1 ;
@@ -315,12 +320,12 @@ $scope.CaselistNextPageItems = function(){
         var nextPage = $scope.caseCurrentPage + 1;
         var params = {};
           if ($scope.casepages[nextPage]){
-            params = {'limit':5,
+            params = {'limit':6,
                       'account':$scope.account.entityKey,
                       'pageToken':$scope.casepages[nextPage]
                      }
           }else{
-            params = {'limit':5,
+            params = {'limit':6,
             'account':$scope.account.entityKey}
           }
           console.log('in listNextPageItems');
@@ -332,12 +337,12 @@ $scope.CaselistNextPageItems = function(){
        var prevPage = $scope.caseCurrentPage - 1;
        var params = {};
           if ($scope.casepages[prevPage]){
-            params = {'limit':5,
+            params = {'limit':6,
                       'account':$scope.account.entityKey,
                       'pageToken':$scope.casepages[prevPage]
                      }
           }else{
-            params = {'limit':5,
+            params = {'limit':6,
                       'account':$scope.account.entityKey}
           }
           $scope.caseCurrentPage = $scope.caseCurrentPage - 1 ;
@@ -349,13 +354,13 @@ $scope.CaselistNextPageItems = function(){
         var nextPage = $scope.needsCurrentPage + 1;
         var params = {};
           if ($scope.needspages[nextPage]){
-            params = {'limit':5,
+            params = {'limit':6,
                       'about_kind':'Account',
                       'about_item': $scope.account.id,
                       'pageToken':$scope.needspages[nextPage]
                      }
           }else{
-            params = {'limit':5,
+            params = {'limit':6,
                       'about_kind':'Account',
                       'about_item': $scope.account.id}
           }
@@ -368,13 +373,13 @@ $scope.CaselistNextPageItems = function(){
        var prevPage = $scope.needsCurrentPage - 1;
        var params = {};
           if ($scope.needspages[prevPage]){
-            params = {'limit':5,
+            params = {'limit':6,
                       'about_kind':'Account',
                       'about_item': $scope.account.id,
                       'pageToken':$scope.needspages[prevPage]
                      }
           }else{
-            params = {'limit':5,
+            params = {'limit':6,
                       'about_kind':'Account',
                       'about_item': $scope.account.id}
           }
@@ -665,7 +670,7 @@ $scope.CaselistNextPageItems = function(){
   //HKA 22.11.2013 List of Contacts related to account
    $scope.listContacts = function(){
     var params = {'account':$scope.account.entityKey,
-                   'limit':5
+                   'limit':6
                       };
          Contact.list($scope,params);
    };
@@ -673,7 +678,7 @@ $scope.CaselistNextPageItems = function(){
   //HKA 22.11.2013 List of Opportunities related to account
    $scope.listOpportunities = function(){
     var params = {'account':$scope.account.entityKey,
-                   'limit':5
+                   'limit':6
                       };
          Opportunity.list($scope,params);
    };
@@ -682,7 +687,7 @@ $scope.CaselistNextPageItems = function(){
    $scope.listCases = function(){
 
     var params = {'account':$scope.account.entityKey,
-                   'limit':5
+                   'limit':6
                       };
          Case.list($scope,params);
         
@@ -691,7 +696,7 @@ $scope.CaselistNextPageItems = function(){
 
     var params = {'about_kind':'Account',
                   'about_item': $scope.account.id,
-                   'limit':5
+                   'limit':6
                       };
          Need.list($scope,params);
         
@@ -765,8 +770,15 @@ $scope.CaselistNextPageItems = function(){
                       };
      
       Need.insert($scope,params);
+      $('#addNeedModal').modal('hide');
      
     };
+ $scope.listInfonodes = function(kind) {
+     params = {'parent':$scope.account.entityKey,
+               'connections': kind
+              };
+     InfoNode.list($scope,params);
+ }
 //HKA 19.11.2013 Add Phone
  $scope.addPhone = function(phone){
   //HKA 19.11.2013  Concatenate old phones with new phone
@@ -780,13 +792,24 @@ $scope.CaselistNextPageItems = function(){
     phonesArray = phone;
   }
 
-  params = {'id':$scope.account.id,
-            'phones':phonesArray
-            };
-  Account.patch($scope,params);
+  params = {'parent':$scope.account.entityKey,
+            'kind':'phones',
+            'fields':[
+                {
+                  "field": "type",
+                  "value": phone.type_number
+                },
+                {
+                  "field": "number",
+                  "value": phone.number
+                }
+            ]
+  };
+  InfoNode.insert($scope,params);
   $('#phonemodal').modal('hide');
   $scope.phone={};
   };
+
 
 //HKA 20.11.2013 Add Email
 $scope.addEmail = function(email){
@@ -800,10 +823,16 @@ $scope.addEmail = function(email){
     emailsArray = email;
   }
 
-  params = {'id':$scope.account.id,
-            'emails':emailsArray
-            };
-  Account.patch($scope,params);
+  params = {'parent':$scope.account.entityKey,
+            'kind':'emails',
+            'fields':[
+                {
+                  "field": "email",
+                  "value": email.email
+                }
+            ]
+  };
+  InfoNode.insert($scope,params);
   $('#emailmodal').modal('hide');
   $scope.email={};
   };
@@ -812,40 +841,49 @@ $scope.addEmail = function(email){
 
 //HKA 22.11.2013 Add Website
 $scope.addWebsite = function(website){
-  var websiteArray = undefined;
-  if ($scope.account.websites){
-    websiteArray = new Array();
-    websiteArray = $scope.account.websites;
-    websiteArray.push(website);
-
-  }else{ 
-    websiteArray = website;
-  }
-  params = {'id':$scope.account.id,
-             'websites':websiteArray}
-  Account.patch($scope,params);
+  params = {'parent':$scope.account.entityKey,
+            'kind':'websites',
+            'fields':[
+                {
+                  "field": "url",
+                  "value": website.website
+                }
+            ]
+  };
+  InfoNode.insert($scope,params);
   $('#websitemodal').modal('hide');
-  $scope.website={};
 };
 
 //HKA 22.11.2013 Add Social
 $scope.addSocial = function(social){
-  var socialArray = undefined;
-  if ($scope.account.sociallinks){
-    socialArray = new Array();
-    socialArray = $scope.account.sociallinks;
-    socialArray.push(social);
-
-  }else{ 
-    socialArray = social;
-  }
-  params = {'id':$scope.account.id,
-             'sociallinks':socialArray}
-  Account.patch($scope,params);
+  params = {'parent':$scope.account.entityKey,
+            'kind':'sociallinks',
+            'fields':[
+                {
+                  "field": "url",
+                  "value": social.sociallink
+                }
+            ]
+  };
+  InfoNode.insert($scope,params);
   $('#socialmodal').modal('hide');
-  $scope.social={};
+  
 };
+$scope.addCustomField = function(customField){
+  params = {'parent':$scope.account.entityKey,
+            'kind':'customfields',
+            'fields':[
+                {
+                  "field": customField.field,
+                  "value": customField.value
+                }
+            ]
+  };
+  InfoNode.insert($scope,params);
 
+  $('#customfields').modal('hide');
+  
+};
 //HKA 22.11.2013 Add Tagline
 $scope.updateTagline = function(account){
  
@@ -929,10 +967,68 @@ $scope.deleteaccount = function(){
           console.log(params);
           Account.patch($scope,params);
       };
-      $scope.addGeo = function(addressArray){
-          params = {'id':$scope.account.id,
-             'addresses':addressArray}
-          Account.patch($scope,params);
+      $scope.addGeo = function(address){
+          params = {'parent':$scope.account.entityKey,
+            'kind':'addresses',
+            'fields':[
+                {
+                  "field": "street",
+                  "value": address.street
+                },
+                {
+                  "field": "city",
+                  "value": address.city
+                },
+                {
+                  "field": "state",
+                  "value": address.state
+                },
+                {
+                  "field": "postal_code",
+                  "value": address.postal_code
+                },
+                {
+                  "field": "country",
+                  "value": address.country
+                }
+            ]
+          };
+          if (address.lat){
+            params = {'parent':$scope.account.entityKey,
+            'kind':'addresses',
+            'fields':[
+                {
+                  "field": "street",
+                  "value": address.street
+                },
+                {
+                  "field": "city",
+                  "value": address.city
+                },
+                {
+                  "field": "state",
+                  "value": address.state
+                },
+                {
+                  "field": "postal_code",
+                  "value": address.postal_code
+                },
+                {
+                  "field": "country",
+                  "value": address.country
+                },
+                {
+                  "field": "lat",
+                  "value": address.lat.toString()
+                },
+                {
+                  "field": "lon",
+                  "value": address.lon.toString()
+                }
+              ]
+            };
+          } 
+          InfoNode.insert($scope,params);
       };
   //HKA 08.01.2014 
   $scope.About_render = function(accid){

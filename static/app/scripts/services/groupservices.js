@@ -24,7 +24,11 @@ accountservices.factory('Group', function($http) {
                
 
             }else {
-               alert("Error, response is: " + angular.toJson(resp));
+               if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
             }
             console.log('gapi #end_execute');
           });
@@ -58,7 +62,11 @@ accountservices.factory('Group', function($http) {
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
               }else {
-                 alert("Error, response is: " + angular.toJson(resp));
+                if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
               }
       });
   };
@@ -96,7 +104,11 @@ accountservices.factory('Member', function($http) {
                //$scope.apply();
 
             }else {
-               alert("Error, response is: " + angular.toJson(resp));
+               if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
             }
             console.log('gapi #end_execute');
           });
@@ -126,7 +138,11 @@ accountservices.factory('Member', function($http) {
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
               }else {
-                 alert("Error, response is: " + angular.toJson(resp));
+                 if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
               }
       });
   };

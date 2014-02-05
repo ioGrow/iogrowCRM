@@ -22,7 +22,11 @@ needservices.factory('Need', function() {
                //$scope.apply();
 
             }else {
-               alert("Error, response is: " + angular.toJson(resp));
+               if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
             }
             console.log('gapi #end_execute');
           });
@@ -56,7 +60,11 @@ needservices.factory('Need', function() {
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
               }else {
-                 alert("Error, response is: " + angular.toJson(resp));
+                 if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
               }
       });
   };
@@ -67,7 +75,7 @@ needservices.factory('Need', function() {
          console.log(resp);
          if(!resp.code){
           $scope.isLoading = false;
-          $('#addNeedModal').modal('hide');
+          
           window.location.replace('#/needs/show/'+resp.id);
           
          }else{
@@ -88,7 +96,11 @@ Need.patch  = function($scope,params){
        $scope.need = resp;
        $scope.$apply();
      } else {
-               alert("Error, response is: " + angular.toJson(resp));
+              if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
             }
 
    });

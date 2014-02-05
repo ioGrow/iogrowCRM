@@ -1,6 +1,6 @@
 app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','Opportunitystage','Search',
     function($scope,Auth,Account,Opportunity,Opportunitystage,Search) {
-      
+     $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Opportunities").addClass("active");
      document.title = "Opportunities: Home";
 
@@ -25,7 +25,7 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
 
       // What to do after authentication
        $scope.runTheProcess = function(){
-          var params = {'order' : $scope.order,'limit':7};
+          var params = {'order' : $scope.order,'limit':8};
           Opportunity.list($scope,params);
           Opportunitystage.list($scope,{'order':'probability'});
        };
@@ -39,11 +39,11 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
         var params = {};
           if ($scope.opppages[nextPage]){
             params = {'order' : $scope.order,
-                      'limit':7,
+                      'limit':8,
                       'pageToken':$scope.opppages[nextPage]
                      }
           }else{
-            params = {'order' : $scope.order,'limit':7}
+            params = {'order' : $scope.order,'limit':8}
           }
           console.log('in listNextPageItems');
           $scope.oppCurrentPage = $scope.oppCurrentPage + 1 ; 
@@ -54,11 +54,11 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
        var prevPage = $scope.oppCurrentPage - 1;
        var params = {};
           if ($scope.opppages[prevPage]){
-            params = {'order' : $scope.order,'limit':7,
+            params = {'order' : $scope.order,'limit':8,
                       'pageToken':$scope.opppages[prevPage]
                      }
           }else{
-            params = {'order' : $scope.order,'limit':7}
+            params = {'order' : $scope.order,'limit':8}
           }
           $scope.oppCurrentPage = $scope.oppCurrentPage - 1 ;
           Opportunity.list($scope,params);
@@ -89,6 +89,7 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
            
           
           Opportunity.insert($scope,opportunity);
+            $('#addOpportunityModal').modal('hide');
 
         }else if($scope.searchAccountQuery.length>0){
             // create a new account with this account name
@@ -168,7 +169,7 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
      // Sorting
      $scope.orderBy = function(order){
         var params = { 'order': order,
-                        'limit':7};
+                        'limit':8};
         $scope.order = order;
         Opportunity.list($scope,params);
      };
@@ -176,31 +177,30 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
         if (filter){
           var params = { 'owner': filter,
                          'order': $scope.order, 
-                         'limit':7}
+                         'limit':8}
         }
         else{
           var params = {
               'order': $scope.order, 
               
-              'limit':7}
+              'limit':8}
         };
-        console.log('Filtering by');
-        console.log(params);
+        $scope.isFiltering = true;
         Opportunity.list($scope,params);
      };
      $scope.filterByStage = function(filter){
         if (filter){
           var params = { 'stagename': filter,
                          'order': $scope.order, 
-                         'limit':7}
+                         'limit':8}
         }
         else{
           var params = {
               'order': $scope.order, 
               
-              'limit':7}
+              'limit':8}
         };
-        
+        $scope.isFiltering = true;
         Opportunity.list($scope,params);
      };
 
@@ -211,7 +211,7 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
 
 app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage','Email','Attachement',
     function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email,Attachement) {
- 
+      $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Opportunities").addClass("active");
       $scope.selectedTab = 1;
      $scope.isSignedIn = false;
@@ -288,6 +288,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
 
      }
      $scope.editOpp = function(){
+
       $('#EditOpportunityModal').modal('show')
      }
 
@@ -461,21 +462,36 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
                  'stage_probability':$scope.stage_selected.probability,
                 'amount':opportunity.amount,
                 'description':opportunity.description};
-  /*$scope.$watch(opportunity.amount, function() {
-      var paramsNote = {
+    
+  console.log($scope.opportunity.stagename);
+  Opportunity.patch($scope,params);
+  console.log('------------------');
+   console.log($scope.opportunity.stagename);
+ $scope.$watch($scope.opportunity.stagename, $scope.createNote());
+  /*$scope.$watch($scope.opportunity.stagename, function(newVal, oldVal) {
+     var paramsNote = {
                   'about_kind': 'Opportunity',
                   'about_item': $scope.opportunity.id,
-                  'title': 'stage updated to '+ opportunity.amount
+                  'title': 'stage updated to '+ $scope.stage_selected.name
                   
       };
-      console.log('inserting a new note');
-      console.log(paramsNote);
+      
       
       Note.insert($scope,paramsNote);
-   }); */             
-  Opportunity.patch($scope,params);
+   });*/     
   $('#EditOpportunityModal').modal('hide');
  };
+
+$scope.createNote = function(){
+  
+    var paramsNote = {
+                  'about_kind': 'Opportunity',
+                  'about_item': $scope.opportunity.id,
+                  'title': 'stage updated to '+ $scope.stage_selected.name
+                  
+      };
+       Note.insert($scope,paramsNote);
+};
 
       $('#some-textarea').wysihtml5();
       

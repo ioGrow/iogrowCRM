@@ -1,5 +1,5 @@
 
-var app = angular.module('crmEngine',['ui.bootstrap.datetimepicker','ui.bootstrap','ui.select2', 'crmEngine.authservices', 'crmEngine.showservices', 'crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.eventservices', 'crmEngine.leadservices','crmEngine.opportunityservices','crmEngine.caseservices','crmEngine.userservices','crmEngine.groupservices','crmEngine.noteservices','crmEngine.commentservices','crmEngine.settingservices','crmEngine.feedbackservices','crmEngine.companyprofileservices','mapServices','crmEngine.needservices']);
+var app = angular.module('crmEngine',['ui.bootstrap.datetimepicker','ui.bootstrap','ui.select2', 'crmEngine.authservices', 'crmEngine.showservices', 'crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.eventservices', 'crmEngine.leadservices','crmEngine.opportunityservices','crmEngine.caseservices','crmEngine.userservices','crmEngine.groupservices','crmEngine.noteservices','crmEngine.commentservices','crmEngine.settingservices','crmEngine.feedbackservices','crmEngine.companyprofileservices','mapServices','crmEngine.needservices','crmEngine.infonodeservices']);
 
 app.config(function($interpolateProvider){
   $interpolateProvider.startSymbol('<%=');
@@ -67,6 +67,12 @@ app.config(['$routeProvider', function($routeProvider) {
       when('/tasks/show/:taskId',{
       controller : 'TaskShowController',
       templateUrl:'/views/tasks/show'
+      }).
+      
+      // All Tasks 
+      when('/tasks/',{
+      controller : 'AllTasksController',
+      templateUrl:'/views/tasks/list'
       }).
       // Documents
       when('/documents/show/:documentId',{

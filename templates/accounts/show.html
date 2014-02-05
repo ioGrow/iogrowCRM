@@ -1,41 +1,25 @@
-
-<div class="page-sidebar nav-collapse collapse">
-      <!-- BEGIN SIDEBAR MENU -->        
-      <ul class="page-sidebar-menu">
-        
-        {% for tab in tabs %}
-           <li id="id_{{tab.name}}"  ><a href="{{ tab.url }}"><i class="icon-cogs"></i><span class="title">{{tab.label}}</span></a></li>
-          {% endfor %}
-
-
-        
-      </ul>
-     
-     
-      <!-- END SIDEBAR MENU -->
-</div>
-    
 <div  class="page-content">
 
-      <div class="container-fluid" ng-show="immediateFailed">
-         <div class="span12">  
+      <div class="container" ng-show="immediateFailed">
+         <div class="col-md-12">  
           <h1>{{ _("Sign-in Button;") }}</h1>
               <span id="signin">
                   <span id="myGsignin"></span>
               </span>
-        </div>
+         </div>
       </div>
-      <div id="sharingSettingsModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div id="sharingSettingsModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+           <div class="modal-dialog">
+              <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("Sharing Settings")}}</h3>
+                <h3 id="myModalLabel" class="modal-title">{{_("Sharing Settings")}}</h3>
               </div>
               <div class="modal-body">
                  <form id="addMember" name="addaccount" ng-submit="share(slected_memeber)" class="form-horizontal"> 
-                  <fieldset>
                   
                     <p>{{ _("Who has access:") }}</p>
-                    <div class='container-fluid'>
+                    <div class=''>
 
                      
                           
@@ -52,7 +36,7 @@
                       
                     </div>
                     <hr/>
-                    <div class='container-fluid'>
+                    <div class=''>
                     <p>{{ _("Collaborators:") }}</p>
                         <div ng-repeat="collaborator in account.collaborators_list" class="invitation">
                           <img class="google-avatar" src="<%=collaborator.photo%>"/>
@@ -62,7 +46,7 @@
                     </div>
                     <hr/>
 
-                    <div class='container-fluid'>
+                    <div class=''>
                     <p>{{ _("Invited user:") }}</p>
                     <div class="invitation" ng-show="slected_memeber">
                       <img class="google-avatar" src="<%= slected_memeber.google_public_profile_photo_url%>"/>
@@ -71,53 +55,52 @@
                     </div>
                     
                     <p>{{ _("Invite collaborators:") }}</p>
-                    <div class="control-group">
-                      <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="input-block-level" placeholder="{{ _('Enter name or email addresse to add people to this group') }}">
+                    <div class="form-group">
+                      <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group') }}">
                     </div>
                     
                       </div>
-                    
-                    </fieldset>
-                
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
                 <button  type="submit" class="btn blue addContactNow">{{_("Share")}}</button>
               </div>
                </form>
+               </div>
+               </div>
+
        </div>
          <!--HKA 24.12.2013 Modal before Deleting Account-->
-         <div id="BeforedeleteAccount" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <!-- BEFORE DELETE MODEL-->
+         <div id="BeforedeleteAccount" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">Delete Account</h3>
+                <h3 id="myModalLabel" class="modal-title">Delete Account</h3>
               </div>
               <div class="modal-body">
                  <form id="seletesho" name="deletesho" class="form-horizontal"> 
-                  <fieldset>
-
                   <p>{{_("Are you sure you want to delete")}} :  <%=account.name %> .</p>
-                    
-
-                    
-                    </fieldset>
-                
               </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                
-                <input ng-hide="isLoading" ng-click="deleteaccount(account)" type="submit" class="btn red" value="Delete this Account">
-                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
-              </div>
-               </form>
+                <div class="modal-footer">
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                  
+                  <input ng-hide="isLoading" ng-click="deleteaccount(account)" type="submit" class="btn red" value="Delete this Account">
+                  <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                </div>
+            </form>
+          </div>
+        </div>
        </div>
-      <div class="container-fluid" ng-show="isContentLoaded">
+         <!-- BEFORE DELETE MODEL END-->
+      <div ng-show="isContentLoaded">
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-        <div class="row-fluid">
+        <div class="row">
           
-          <div class="span12">
+          <div class="col-md-12">
             <div class="pull-right sharebuttonDiv"> 
                   <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
                     <i class="icon-lock"></i> {{ _("Share") }}
@@ -127,7 +110,7 @@
                      
             </div>
                 
-            <h2>
+            <h2 class="page-title">
             <a href="/#/accounts/" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
             <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Accounts")}} > <%= account.name %> </h2>
             
@@ -146,10 +129,10 @@
         
 
             
-            <div class="row-fluid">
-              <div class="span9">
+            <div class="row">
+              <div class="col-md-9">
               <!-- BEGIN PORTLET-->
-              <div class="portlet paddingless">
+              <div id="account-tab" class="portlet paddingless">
                 <div class="portlet-title line">
                   <div class="caption">{{ _("Account Feeds") }}</div>
                   
@@ -170,31 +153,27 @@
                     <div class="tab-content">
                       <div class="tab-pane active" id="tab_1_1" ng-show="selectedTab == 1">
                         
-                         <div class="row-fluid">
-                           <div class="span12 margin-bottom-10"> 
-                          <p class⁼"lead"=""><strong>{{ _("Just add notes to remember what's important :") }}</strong> </p>
-                          <form id="addNote" ng-submit="addNote(note)" class="ng-pristine ng-valid">
-                                            
-                                            <input class="input-block-level ng-pristine ng-valid" autofocus type="text" placeholder="{{ _('Add a new subject') }}" id="messageSubject" ng-model="note.title">
-
-                                         
-                                            
-                                            <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="note.content"></textarea>
-                                            <!--input ng-init="note.organization=1" required="" id="id_organization" type="hidden" name="organization" value="1"--> 
-                                  
-                                            <!--input type="hidden" id="id_related_object" ng-init="note.related_object=1" value="1"-->
-                                          
-                                         
+                         <div class="row">
+                           <div class="col-md-12 margin-bottom-10"> 
+                              <p class⁼"lead"="">
+                                <strong>
+                                  {{ _("Just add notes to remember what's important :") }}
+                                </strong> 
+                              </p>
+                                    <form id="addNote" ng-submit="addNote(note)" class="ng-pristine ng-valid">
+                                       <div class="form-group">   
+                                          <input class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="{{ _('Add a new subject') }}" id="messageSubject" ng-model="note.title">
+                                        </div>
+                                        <div class="form-group">
+                                          <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="note.content"></textarea>                
+                                        </div>                         
                                          <div class="pull-right">
-                                         <!-- <input type="submit" class="btn btn-primary" value="Attach file">-->
-                                          <input ng-hide="isLoading" type="submit" class="btn green" value="{{ _('Add this note') }}">
-                                          <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
-                                          </div>
-                                        </form>
-                                       </div>
-                                      </div>
-
-                                        
+                                            <input ng-hide="isLoading" type="submit" class="btn green" value="{{ _('Add this note') }}">
+                                            <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
+                                         </div>
+                                    </form>
+                                </div>
+                              </div>
                             <ul class="chats">
                               <li class="in" ng-repeat="topic in topics" id="topic_<%=$index%>">
                                 <img class="avatar" alt="" src="<%= topic.last_updater.photo%>" />
@@ -209,27 +188,29 @@
                               </li>
                               
                             </ul>
-                            <div class="row-fluid">
+                            <div class="row">
+                             <div class="col-md-12">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
-                                      <ul>
-                                        <li ng-show="topicpagination.prev"><button ng-click="TopiclistPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                     
+                                        <button ng-click="TopiclistPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="topicpagination.prev">
                                         {{_("Prev")}} 
-                                        </button></li>
+                                        </button>
                                         
-                                        <li  ng-show="topicpagination.next"><button ng-click="TopiclistNextPageItems()"  class="btn">
+                                        <button ng-click="TopiclistNextPageItems()"  class="btn" ng-show="topicpagination.next">
                                         {{_("Next")}} 
-                                        </button></li>
-                                      </ul>
+                                        </button>
+                                   
                                     </div>
                                     <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                                </div>
                               </div>
                             </div>
                       <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
                         
-                        <div class="row-fluid">
+                        <div class="row">
                           
-                          <div class="span6">
+                          <div class="col-md-6">
                             
                                 <div class="news-blocks blank-card blank-card-yellow">
                                 <h3>{{ _('Account Informations') }}</h3>
@@ -237,8 +218,8 @@
                                   <strong>{{ _('Phone') }}</strong>
                                  
                                 </div>
-                                  <ul class="unstyled contact-infos">
-                                    <li ng-repeat="phone in account.phones"> <%=phone.number%> - <%=phone.type_number%> <a ><img class="ctodeal" src="static/img/phone-icon.png" /></a></li>
+                                  <ul class="list-unstyled contact-infos">
+                                    <li ng-repeat="phone in infonodes.phones"> <%=phone.number%>, <%= phone.type%></li>
           
                                     <li><a href="#phonemodal"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new Phone</a></li>
 
@@ -247,8 +228,8 @@
                                   <strong>{{ _('Email') }}</strong>
                                  
                                 </div>
-                                  <ul class="unstyled contact-infos">
-                                    <li ng-repeat="email in account.emails"> <%=email.email %>   </li>
+                                  <ul class="list-unstyled contact-infos">
+                                    <li ng-repeat="email in infonodes.emails"> <%=email.email%>   </li>
                                     
                                     <li><a href="#emailmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new email address </a></li>
 
@@ -257,8 +238,8 @@
                                   <strong>{{ _('Address') }}</strong>
                                  
                                 </div>
-                                 <ul class="unstyled contact-infos">
-                                    <li ng-repeat="addr in account.addresses"><%=addr.street%>, <%=addr.city%> <%=addr.state%>, <%=addr.postal_code%> ,<%=addr.country%>   </li>
+                                 <ul class="list-unstyled contact-infos">
+                                    <li ng-repeat="address in infonodes.addresses">- <span ng-show="address.street"><%=address.street%>, </span> <span ng-show="address.city"><%=address.city%>, </span> <span ng-show="address.country"><%=address.country%></span></li>
                                     
                                     <li><a href="#addressmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new address </a></li>
 
@@ -274,8 +255,8 @@
                                   <strong>{{ _('Website') }}</strong>
                                   
                                 </div>
-                                <ul class="unstyled contact-infos" >
-                                    <li ng-repeat="web in account.websites"><a href="http://<%=web.website%>" target="_blank"><%=web.website%></a> </li>
+                                <ul class="list-unstyled contact-infos" >
+                                    <li ng-repeat="website in infonodes.websites"><a href="http://<%=website.url%>" target="_blank"><%=website.url%></a> </li>
                                     <li><a href="#websitemodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new Website </a></li>
                                     
                                 </ul>
@@ -284,14 +265,26 @@
                                   <strong>{{ _('Social Links') }}</strong>
                                   
                                 </div>
-                                <ul class="unstyled contact-infos" >
-                                    <li ng-repeat="social in account.sociallinks"><a href="<%=social.sociallink%>" target="_blank"> <%=social.sociallink%> </a></li>
+                                <ul class="list-unstyled contact-infos" >
+                                    <li ng-repeat="sociallink in infonodes.sociallinks"><a href="<%=sociallink.url%>" target="_blank"> <%=sociallink.url%> </a></li>
                                   <li><a href="#socialmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new social links </a></li>    
                                 </ul>
                                                     
                               </div>
+                              <div class="news-blocks blank-card blank-card-yellow">
+                                <h3>{{ _('Custom Fields') }}</h3>
+                                
+                                <ul class="list-unstyled contact-infos" >
+                                    <li ng-repeat="customfield in infonodes.customfields"><span ng-repeat="record in customfield.fields"><%= record.field%> : <%= record.value%></span></li>
+                                    <li><a href="#customfields" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new custom field </a></li>
+                                    
+                                </ul>
+                                 
+                                
+                                                    
+                              </div>
                           </div>
-                          <div class="span6">
+                          <div class="col-md-6">
                           
                             <div class="news-blocks blank-card blank-card-red">
                                 <h3>{{ _('Story') }}</h3>
@@ -322,18 +315,19 @@
                         
                       </div>
                       <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3">
-                          
-                         <div class="row-fluid cards-container">
+                         
+                         <div class="row cards-container">     
                          <div class="btn-group relbutton">
-            
                                 <button  ng-click="addContactModal()" id="sample_editable_1_new" class="btn red">
                                {{_("Add a person to this account")}}<i class="icon-plus"></i>
-                                </button>
-                                
-                          </div>
+                                </button>                                
+                         </div>                     
+
+                           <div class="col-md-12">
                             <div class="inner-cards-container">
-                              <div  class="span3 responsive" ng-repeat="contact in contacts" data-tablet="span6" data-desktop="span3">
-                                <div class="dashboard-stat cards">
+                              <div  class="col-md-4" ng-repeat="contact in contacts">
+                                <div class="dashboard-stat cards-small">
+
                                   
                                   <div class="details">
                                     <a href="/#/contacts/show/<%= contact.id %>"><h3 class="relatedcardTitle">
@@ -347,103 +341,103 @@
                                   </div>
                                   <a class="more" href="/#/contacts/show/<%= contact.id %>">
                                   {{ _('View more')}} <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>                 
+                                  </a>  
+                                    <div class="clearfix"></div>               
                                 </div>
+                                     
                               </div>
-                                <div ng-show="blankStatecontact" class="span12 responsive" data-tablet="span6" data-desktop="span12">
-                <div class="dashboard-stat cards">
-                  
-                  
-                  <div class="blank_slate_arrow"></div>
-                  <div class="blank_slate_body">
-                      <img src="/static/img/contacts_blank.png">
-                      <p class="lead">Each contact gets a page in i/oGrow. You and your co-workers can add notes from calls,conversations, meetings, or any other historic information about this person.</p>
-                  </div>
-               
+                              <div ng-show="blankStatecontact" class="col-md-12" data-tablet="span6" data-desktop="span12">
+                                <div class="dashboard-stat cards">
                                   
-                </div>
-              </div>
+                                  
+                                  <div class="blank_slate_arrow"></div>
+                                  <div class="thumbnail blank_slate_body">
+                                      <img src="/static/img/contacts_blank.png" class="img-responsive">
+                                      <p class="lead">Each contact gets a page in i/oGrow. You and your co-workers can add notes from calls,conversations, meetings, or any other historic information about this person.</p>
+                                  </div>    
+                                </div>
+                             </div>
                               <br>
                               
-                              
+                              <div class="clearfix"></div>
+                              </div><!--/inner-cards-container-->
                               </div>
-
-                              
                             </div>
-                            <div class="row-fluid">
+                            <div class="row">
+                             <div class="col-md-12">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
-                                      <ul>
-                                        <li ng-show="contactpagination.prev"><button ng-click="ContactlistPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                      
+                                        <button ng-click="ContactlistPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="contactpagination.prev">
                                         {{_("Prev")}} 
-                                        </button></li>
-                                        
-                                        <li  ng-show="contactpagination.next"><button ng-click="ContactlistNextPageItems()"  class="btn">
+                                        </button>
+                                        <button ng-click="ContactlistNextPageItems()"  class="btn"  ng-show="contactpagination.next">
                                         {{_("Next")}} 
-                                        </button></li>
-                                      </ul>
+                                        </button>
+                                      
                                     </div>
                                     <h3 class="pagination pull-right" ng-show="isLoading">{{ _("Loading...") }}</h3>
                               </div>
+                              </div>
                         <!--HKA 18.11.2013 Add Contact modal -->
 
-                    <div id="addContactModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+                    <div id="addContactModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+                    <div class="modal-dialog">
+                      <div class="modal-content">
                         <div class="modal-header">
-                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                          <h3 id="myModalLabel">{{_("New Contact")}}</h3>
+                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                          <h3 id="myModalLabel" class="modal-title">{{_("New Contact")}}</h3>
                         </div>
                         <div class="modal-body">
-                            <form id="addContact" name="addcontact"  ng-submit="savecontact(contact)" class="form-horizontal"> 
-                            <fieldset>
-                            <div class="control-group">
-                              <label  class="required control-label">{{_("First Name")}} *</label>
+                            <form id="addContact" name="addcontact"  ng-submit="savecontact(contact)" class="form-horizontal" role="form"> 
+                            <div class="form-group">
+                              <label  class="required col-md-3 control-label">{{_("First Name")}} *</label>
                        
-                              <div class="controls">
-                              <input type="text" required id="id_firstname" ng-model="contact.firstname">
+                              <div class="col-md-9">
+                              <input class="form-control" type="text" required id="id_firstname" ng-model="contact.firstname">
                           
                                </div>
                             </div>
-                           <div class="control-group">
-                              <label  class="required control-label">{{_("Last Name")}}</label>
-                              <div class="controls">
-                              <input type="text"  id="id_lastname" ng-model="contact.lastname">
+                           <div class="form-group">
+                              <label  class="required col-md-3 control-label">{{_("Last Name")}}</label>
+                              <div class="col-md-9">
+                              <input class="form-control" type="text"  id="id_lastname" ng-model="contact.lastname">
                           
                               </div>
                            </div>
-                           <div class="control-group">
-                             <label  class="required control-label">{{_("Position")}} </label>
+                           <div class="form-group">
+                             <label  class="required col-md-3 control-label">{{_("Position")}} </label>
                        
-                             <div class="controls">
-                              <input type="text"  id="id_account" ng-model="contact.title">
+                             <div class="col-md-9">
+                              <input class="form-control" type="text"  id="id_account" ng-model="contact.title">
                           
                               </div>
-                           </div>
-                    </fieldset>
-                
+                           </div>                
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
                 <button  type="submit" class="btn green addContactNow">{{_("Add Contact")}}</button>
               </div>
                </form>
+             </div>
+           </div>
        </div>
     <!--End Contact Modal -->
-
-
                       </div>
-                      <div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 4">
-                          
-                         <div class="row-fluid cards-container">
+                  <div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 4">
+                         
+                         <div class="row cards-container">     
                          <div class="btn-group relbutton">
-            
                                 <button  ng-click="addNeedModal()" id="sample_editable_1_new" class="btn red">
-                                {{_("Add a new Need")}} <i class="icon-plus"></i>
-                                </button>
-                          </div>
+                               {{_("Add a new Need")}}<i class="icon-plus"></i>
+                                </button>                                
+                         </div>                     
+
+                           <div class="col-md-12">
                             <div class="inner-cards-container">
-                                                        
-                             <div  class="span4 responsive" ng-repeat="need in needs" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
+                              <div  class="col-md-4" ng-repeat="need in needs">
+                                <div class="dashboard-stat cards-small">
+
                                   
                                   <div class="details">
                                     <a href="/#/needs/show/<%= need.id %>"><h3 class="relatedcardOppTitle">
@@ -456,111 +450,119 @@
                                     
                                     </div>
                                   </div>
-                                                 
+                                 
+                                    <div class="clearfix"></div>               
+                                </div>
+                                     
+                              </div>
+                              <div ng-show="blankStateneeds" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
+                                <div class="dashboard-stat cards">
+                        
+                        
+                                      <div class="blank_slate_arrow"></div>
+                                    <div class=" thumbnail blank_slate_body">
+                                        <img class="img-responsive" src="/static/img/cases_blank.png">
+                                      <p class="lead">Let your customers explain their needs, and after you can validate or reject those needs (Lean Development).</p>
+                                         </div>
+                     
+                                        
                                 </div>
                               </div>
-                              <div ng-show="blankStateneeds" class="span12 responsive" data-tablet="span6" data-desktop="span12">
-                          <div class="dashboard-stat cards">
-                  
-                  
-                                <div class="blank_slate_arrow"></div>
-                              <div class="blank_slate_body">
-                                  <img src="/static/img/cases_blank.png">
-                                <p class="lead">Let your customers explain their needs, and after you can validate or reject those needs (Lean Development).</p>
-                                   </div>
-               
-                                  
-                          </div>
-              </div>
-
+                              <br>
+                              
+                              <div class="clearfix"></div>
+                              </div><!--/inner-cards-container-->
                               </div>
                             </div>
-                             <div class="row-fluid">
+                            <div class="row">
+                             <div class="col-md-12">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
-                                      <ul>
-                                        <li ng-show="needspagination.prev"><button ng-click="NeedPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                      
+                                        <button ng-click="NeedPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="needspagination.prev">
                                         {{_("Prev")}} 
-                                        </button></li>
+                                        </button>
                                         
-                                        <li  ng-show="needspagination.next"><button ng-click="NeedlistNextPageItems()"  class="btn">
+                                        <button ng-click="NeedlistNextPageItems()"  class="btn" ng-show="needspagination.next">
                                         {{_("Next")}} 
-                                        </button></li>
-                                      </ul>
+                                        </button>
+                                      
                                     </div>
                                     <h3 class="pagination pull-right" ng-show="isLoading">{{ _("Loading...") }}</h3>
                               </div>
-
-                      <!--HKA 19.11.2013 Case Modal -->
-                <div id="addNeedModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("Add new Customer Needs")}}</h3>
-              </div>
-              <div class="modal-body">
-                 <form id="addCase" name="addCase" ng-submit="saveNeed(need)" class="form-horizontal"> 
-                  <fieldset>                    
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Subject of the need")}} </label>
-                       
-                        <div class="controls">
-                          <input type="text" class="input-xlarge" id="id_name" ng-model="need.name">
-                          
+                              </div>
+                          <!--HKA 19.11.2013 Need Modal -->
+                <div id="addNeedModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                          <h3 id="myModalLabel" class="modal-title">{{_("Add new Customer Needs")}}</h3>
                         </div>
-                    </div>
-                     <div class="control-group">
-                        <label  class="required control-label">{{_("More details about this need")}} </label>
-                       
-                        <div class="controls">
-                           <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="need.description"></textarea>
-                          
-                        </div>
-                    </div>
-                   
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("How is important for your customer?")}} </label>
-                       
-                        <div class="controls">
-                          <select class="input-xlarge" ng-model="need.priority">
-                            <option >Low</option>
-                            <option >Medium</option>
-                            <option >High</option>
-                          </select>
-                          
-                        </div>
-                    </div>
-                    
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Status")}}</label>
-                       
-                        <div class="controls">
-                          <select class="input-xlarge" ng-model="need.need_status">
-                            <option value="pending">Hypothese to test</option>
-                            <option value="testing">Testing</option>
-                            <option value="validated">Validated</option>
-                            <option value="rejected">Rejected</option>
-                          </select>
-                          
-                        </div>
-                      
-                    </div>
-                    
-
-                    </fieldset>
-                
-              </div>
+                          <div class="modal-body">
+                             <form id="addCase" name="addCase" ng-submit="saveNeed(need)" class="form-horizontal">             
+                                <div class="form-group">
+                                    <label  class="required col-md-3 control-label">{{_("Subject of the need")}} </label>
+                                   
+                                    <div class="col-md-9">
+                                      <input type="text" class="form-control" id="id_name" ng-model="need.name">
+                                      
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label  class="required col-md-3 control-label">{{_("More details about this need")}} </label>
+                                   
+                                    <div class="col-md-9">
+                                       <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="need.description"></textarea>
+                                      
+                                    </div>
+                                </div>
+                               
+                                <div class="form-group">
+                                    <label  class="required col-md-3 control-label">{{_("How is important for your customer?")}} </label>
+                                   
+                                    <div class="col-md-9">
+                                      <select class="form-control" ng-model="need.priority">
+                                        <option >Low</option>
+                                        <option >Medium</option>
+                                        <option >High</option>
+                                      </select>
+                                      
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label  class="required col-md-3 control-label">{{_("Status")}}</label>
+                                   
+                                    <div class="col-md-9">
+                                      <select class="form-control" ng-model="need.need_status">
+                                        <option value="pending">Hypothese to test</option>
+                                        <option value="testing">Testing</option>
+                                        <option value="validated">Validated</option>
+                                        <option value="rejected">Rejected</option>
+                                      </select>
+                                      
+                                    </div>
+                                  
+                                </div>
+                          </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
                 <button  type="submit" class="btn green addContactNow">{{_("Add this need")}}</button>
               </div>
                </form>
+               </div>
+               </div>
        </div>
                
-                      <!--HKA 19.11.2013  End Case Modal -->
+                      <!--HKA 19.11.2013  End Need Modal -->
                       </div>
+                    
+ 
+
                        <div class="tab-pane active" id="tab_1_5" ng-show="selectedTab == 5">
                           
-                         <div class="row-fluid cards-container">
+                         <div class="row cards-container">
                          
                          <div class="btn-group relbutton">
             
@@ -568,9 +570,10 @@
                                 {{_("Add a new opportunity")}} <i class="icon-plus"></i>
                                 </button>
                           </div>
+                          <div class="col-md-12">
                             <div class="inner-cards-container" >
-                              <div  class="span4 responsive" ng-repeat="opp in opportunities" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
+                              <div  class="col-md-4 responsive" ng-repeat="opp in opportunities" data-tablet="span6" data-desktop="span4">
+                                <div class="dashboard-stat cards-small">
                                   
                                   <div class="details">
                                     <a href="/#/opportunities/show/<%= opp.id %>"><h3 class="relatedcardOppTitle">
@@ -588,71 +591,76 @@
                                   </a>                 
                                 </div>
                               </div>
-                        <div ng-show="blankStateopportunity" class="span12 responsive" data-tablet="span6" data-desktop="span12">
+                        <div ng-show="blankStateopportunity" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
                          <div class="dashboard-stat cards">
                   
                   
                               <div class="blank_slate_arrow"></div>
-                            <div class="blank_slate_body">
-                                  <img src="/static/img/opportunities_blank.png">
+                            <div class="thumbnail blank_slate_body">
+                                  <img src="/static/img/opportunities_blank.png" class="img-responsive">
                                     <p class="lead">Know which proposals/bids are pending, which you’ve won, and which you’ve lost. Enter notes about the opportunities, attach proposals or contracts to the opportunities, and keep a log of any changes.</p>
                              </div>                               
                            </div>
                          </div>
+                         <div class="clearfix"></div>
                               </div>
-                              
+                              </div>
                             </div>
-                            <div class="row-fluid">
+                            <div class="row">
+                              <div class="col-md-12">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
-                                      <ul>
-                                        <li ng-show="opppagination.prev"><button ng-click="OppPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                      
+                                        <button ng-click="OppPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="opppagination.prev">
                                         {{_("Prev")}} 
-                                        </button></li>
+                                        </button>
                                         
-                                        <li  ng-show="opppagination.next"><button ng-click="OpplistNextPageItems()"  class="btn">
+                                        <button ng-click="OpplistNextPageItems()"  class="btn" ng-show="opppagination.next">
                                         {{_("Next")}} 
-                                        </button></li>
-                                      </ul>
+                                        </button>
+                                      
                                     </div>
-                                    <!--h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3-->
+                                    <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                              </div>
                               </div>
 
 
                         <!--HKA 19.11.2013 Opportunity Modal -->
 
-              <div id="addOpportunityModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div id="addOpportunityModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+              <div class="modal-content">
                  <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                     <h3 id="myModalLabel">{{_("New Opportunity")}}</h3>
+                     <h3 id="myModalLabel" class="modal-title">{{_("New Opportunity")}}</h3>
                   </div>
                  <div class="modal-body">
                      <form id="addOpportunity" name="addOpportunity" ng-submit="saveOpp(opportunity)" class="form-horizontal"> 
                      <fieldset>
-                      <div class="control-group">
-                          <label  class="required control-label">{{_("Name")}} *</label>
+                      <div class="form-group">
+                          <label  class="required col-md-3 control-label">{{_("Name")}} *</label>
                        
-                          <div class="controls">
-                          <input type="text" required id="id_name" ng-model="opportunity.name">
+                          <div class="col-md-9">
+                          <input type="text" class="form-control" required id="id_name" ng-model="opportunity.name">
                           </div>
                       </div>
-                      <div class="control-group">
-                        <label  class="required control-label">{{_("Labels")}} </label>
+                      <div class="form-group">
+                        <label  class="required col-md-3 control-label">{{_("Labels")}} </label>
                        
-                        <div class="controls">
-                          <input type="text"  id="id_label" ng-model="opportunity.description">
+                        <div class="col-md-9">
+                          <input type="text"  class="form-control" id="id_label" ng-model="opportunity.description">
                         </div>
                       </div>
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Amount")}} </label>
-                        <div class="controls">
-                          <input type="text"  id="id_amount" ng-model="opportunity.amount">
+                    <div class="form-group">
+                        <label  class="required col-md-3 control-label">{{_("Amount")}} </label>
+                        <div class="col-md-9">
+                          <input type="text"  class="form-control" id="id_amount" ng-model="opportunity.amount">
                         </div>
                     </div>
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Stage")}} </label>
-                        <div class="controls">
-                          <select ng-model="stage_selected" ng-options="opps.name + ' - ( ' + opps.probability + '% )' for opps in opportunitystages | orderBy: 'name':true"  >
+                    <div class="form-group">
+                        <label  class="required col-md-3 control-label">{{_("Stage")}} </label>
+                        <div class="col-md-9">
+                          <select ng-model="stage_selected" class="form-control" ng-options="opps.name + ' - ( ' + opps.probability + '% )' for opps in opportunitystages | orderBy: 'name':true"  >
                             <option value="">-- choose Stage --</option>
                           
                           </select>
@@ -668,6 +676,8 @@
                       <button  type="submit" class="btn green addContactNow">{{_("Add Opportunity")}}</button>
                      </div>
                    </form>
+                   </div>
+                   </div>
           </div>
 
                 <!--HKA 19.11.2013 End Of Opportunity Modal -->
@@ -675,17 +685,18 @@
                       </div>
                       <div class="tab-pane active" id="tab_1_6" ng-show="selectedTab == 6">
                           
-                         <div class="row-fluid cards-container">
+                         <div class="row cards-container">
                          <div class="btn-group relbutton">
             
                                 <button  ng-click="addCaseModal()" id="sample_editable_1_new" class="btn red">
                                 {{_("Add a new case")}} <i class="icon-plus"></i>
                                 </button>
                           </div>
+                          <div class="col-md-12">
                             <div class="inner-cards-container">
                                                         
-                             <div  class="span4 responsive" ng-repeat="casee in cases" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
+                             <div  class="col-md-4 responsive" ng-repeat="casee in cases" data-tablet="span6" data-desktop="span4">
+                                <div class="dashboard-stat cards-small">
                                   
                                   <div class="details">
                                     <a href="/#/cases/show/<%= casee.id %>"><h3 class="relatedcardOppTitle">
@@ -703,43 +714,48 @@
                                   </a>                 
                                 </div>
                               </div>
-                              <div ng-show="blankStatecase" class="span12 responsive" data-tablet="span6" data-desktop="span12">
+                              <div ng-show="blankStatecase" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
                           <div class="dashboard-stat cards">
                   
                   
                                 <div class="blank_slate_arrow"></div>
-                              <div class="blank_slate_body">
-                                  <img src="/static/img/cases_blank.png">
+                              <div class="thumbnail blank_slate_body">
+                                  <img src="/static/img/cases_blank.png" class="img-responsive">
                                 <p class="lead">The main goal of cases is to assist collaboration and focus of teams on delivering amazing customer experience.</p>
                                    </div>
                
                                   
                           </div>
               </div>
-
+                                <div class="clearfix"></div>
+                              </div>
                               </div>
                             </div>
-                             <div class="row-fluid">
+                             <div class="row">
+                             <div class="col-md-12">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
-                                      <ul>
-                                        <li ng-show="casepagination.prev"><button ng-click="CasePrevPageItems()" id="sample_editable_1_new" class="btn">
+                                      
+                                        <button ng-click="CasePrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="casepagination.prev">
                                         {{_("Prev")}} 
-                                        </button></li>
+                                        </button>
                                         
-                                        <li  ng-show="casepagination.next"><button ng-click="CaselistNextPageItems()"  class="btn">
+                                        <button ng-click="CaselistNextPageItems()"  class="btn" ng-show="casepagination.next">
                                         {{_("Next")}} 
-                                        </button></li>
-                                      </ul>
+                                        </button>
+                                      
                                     </div>
                                     <h3 class="pagination pull-right" ng-show="isLoading">{{ _("Loading...") }}</h3>
                               </div>
+                              </div>
 
                       <!--HKA 19.11.2013 Case Modal -->
-                <div id="addCaseModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div id="addCaseModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+              <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("New Case")}}</h3>
+                <h3 id="myModalLabel" class="modal-title">{{_("New Case")}}</h3>
               </div>
               <div class="modal-body">
                  <form id="addCase" name="addCase" ng-submit="saveCase(casee)" class="form-horizontal"> 
@@ -748,19 +764,19 @@
                     
 
                     
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Name")}} </label>
+                    <div class="form-group">
+                        <label  class="required col-md-3 control-label">{{_("Name")}} </label>
                        
-                        <div class="controls">
-                          <input type="text"  id="id_name" ng-model="casee.name">
+                        <div class="col-md-9">
+                          <input type="text"  class="form-control" id="id_name" ng-model="casee.name">
                           
                         </div>
                     </div>
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Priority")}} </label>
+                    <div class="form-group">
+                        <label  class="required col-md-3 control-label">{{_("Priority")}} </label>
                        
-                        <div class="controls">
-                          <select ng-model="casee.priority">
+                        <div class="col-md-9">
+                          <select class="form-control" ng-model="casee.priority">
                             <option value="1">1 - Low</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -776,11 +792,11 @@
                         </div>
                     </div>
                     
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Status")}}</label>
+                    <div class="form-group">
+                        <label  class="required col-md-3 control-label">{{_("Status")}}</label>
                        
-                        <div class="controls">
-                          <select  ng-model="status_selected" ng-options="stat.status for stat in casesatuses" >
+                        <div class="col-md-9">
+                          <select  class="form-control" ng-model="status_selected" ng-options="stat.status for stat in casesatuses" >
                             <option value="">Choose Status</option>
                             <!--option value=""><%=status_selected.status%></option-->
                           </select>
@@ -788,11 +804,11 @@
                         </div>
                       
                     </div>
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Labels")}} </label>
+                    <div class="form-group">
+                        <label  class="required col-md-3 control-label">{{_("Labels")}} </label>
                        
-                        <div class="controls">
-                          <input type="text"  id="id_description" ng-model="casee.type_case">
+                        <div class="col-md-9">
+                          <input type="text"  class="form-control" id="id_description" ng-model="casee.type_case">
                           
                         </div>
                     </div>
@@ -806,13 +822,16 @@
                 <button  type="submit" class="btn green addContactNow">{{_("Add Case")}}</button>
               </div>
                </form>
+               </div>
+               </div>
        </div>
                
                       <!--HKA 19.11.2013  End Case Modal -->
                       </div>
                       <div class="tab-pane active" id="tab_1_7" ng-show="selectedTab == 7">
                           
-                         <div class="row-fluid cards-container iodrive">
+                         <div class="row cards-container iodrive">
+
                          <div class="btn-group relbutton">
             
                                 <div class="btn-group">
@@ -834,10 +853,11 @@
 
                                 </div>
                           </div>
+                          <div class="col-md-12">
                             <div class="inner-cards-container">
                                                         
-                             <div  class="span4 responsive" ng-repeat="attachment in documents" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
+                             <div  class="col-md-4 responsive" ng-repeat="attachment in documents" data-tablet="span6" data-desktop="span4">
+                                <div class="dashboard-stat cards-small">
                                   
                                   <div class="details">
                                     <a href="/#/documents/show/<%= attachment.id %>"><h3 class="relatedcardOppTitle">
@@ -851,38 +871,42 @@
                                                  
                                 </div>
                               </div>
-                        <div ng-show="blankStatdocuments" class="span12 responsive" data-tablet="span6" data-desktop="span12">
+                        <div ng-show="blankStatdocuments" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
                            <div class="dashboard-stat cards">
                                <div class="blank_slate_arrow"></div>
-                               <div class="blank_slate_body">
-                                  <img src="/static/img/documents_blanks.png">
+                               <div class=" thumbnail blank_slate_body">
+                                  <img src="/static/img/documents_blanks.png" class="img-responsive">
                                     <p class="lead">Manage easily your documments using Google drive</p>
                                </div>                               
                            </div>
                           </div>
-
+                                 <div class="clearfix"></div>
+                              </div>
+                           
                               </div>
                             </div>
                       </div>
                       <div class="tab-pane active" id="tab_1_8" ng-show="selectedTab == 8">
                         
-                         <div class="row-fluid">
-                           <div class="span12 margin-bottom-10"> 
+                         <div class="row">
+                           <div class="col-md-12 margin-bottom-10"> 
                           <p class⁼"lead"=""><strong>Send an Email to :</strong> </p>
                           <form  ng-submit="sendEmail(email)" class="ng-pristine ng-valid">
-                                            
-                                            <input required class="input-block-level ng-pristine ng-valid" autofocus type="text" placeholder="To" id="messageSubject" ng-model="email.to">
-                                            <input class="input-block-level ng-pristine ng-valid" autofocus type="text" placeholder="CC" id="messageSubject" ng-model="email.cc">
-                                            <input class="input-block-level ng-pristine ng-valid" autofocus type="text" placeholder="BCC" id="messageSubject" ng-model="email.bcc">
-                                             <input  required class="input-block-level ng-pristine ng-valid" autofocus type="text" placeholder="Add a subject" id="messageSubject" ng-model="email.subject">
-
-                                        
-                                            <textarea id="some-textarea" placeholder="Enter text ..." id="noteBody" class="input-block-level ng-pristine ng-valid" rows="7" ng-model="email.body"></textarea>
-                                           
-                                  
-                                          
-                                          
-                                         
+                                            <div class="form-group">
+                                            <input required class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="To" id="messageSubject" ng-model="email.to">
+                                            </div>
+                                            <div class="form-group">
+                                            <input class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="CC" id="messageSubject" ng-model="email.cc">
+                                            </div>
+                                            <div class="form-group">
+                                            <input class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="BCC" id="messageSubject" ng-model="email.bcc">
+                                            </div>
+                                            <div class="form-group">
+                                             <input  required class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="Add a subject" id="messageSubject" ng-model="email.subject">
+                                             </div>
+                                            <div class="form-group">
+                                            <textarea id="some-textarea" placeholder="Enter text ..." id="noteBody" class="form-control ng-pristine ng-valid" rows="7" ng-model="email.body"></textarea>
+                                             </div>
                                          <div class="pull-right">
                                          
                                             <input ng-hide="isLoading" type="submit" class="btn green" value="Send">
@@ -901,7 +925,7 @@
               
               <!-- END PORTLET-->
             </div>
-            <div class="span3">
+            <div class="col-md-3">
               <!-- BEGIN PORTLET-->
               <div class="portlet">
                 <div class="portlet-title line">
@@ -914,7 +938,7 @@
                                 <p><strong>Tasks:</strong></p>
 
                                  
-                                  <ul id="tasks" class="unstyled">
+                                  <ul id="tasks" class="list-unstyled">
                                     <li ng-repeat="task in tasks" id="task_<%=$index%>">
                                       <input value="check1" type="checkbox">
                                       <!-- Name -->
@@ -928,7 +952,7 @@
                                   <p><strong>Events:</strong></p>
 
                                  
-                                  <ul id="tasks" class="unstyled">
+                                  <ul id="tasks" class="list-unstyled">
                                     <li ng-repeat="event in events" id="event_<%=$index%>">
                                       <input value="check1" type="checkbox">
                                       <!-- Name -->
@@ -945,22 +969,24 @@
                                     
 
                                   <!-- Modal -->
-          <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 id="myModalLabel">{{_("Add a new Task")}}</h3>
+              <h3 id="myModalLabel" class="modal-title">{{_("Add a new Task")}}</h3>
             </div>
             <div class="modal-body pickerin">
                      <div class="controls controls-row">
                                           <form id="addTask" ng-submit="addTask(task)" class="ng-pristine ng-valid">
-                                                  <input class="input-block-level" autofocus type="text" placeholder="Add a new task" id="taskTitle" ng-model="task.title">
+                                                  <input class="form-control" autofocus type="text" placeholder="Add a new task" id="taskTitle" ng-model="task.title">
                                                   
                                                   <p><strong>{{_("When's it due?")}}</strong></p>
                                                   <center>
                                                     <datetimepicker data-ng-model="task.due"
                                                     data-datetimepicker-config="{ startView:'day', minView:'day' }" />
                                                   </center>
-                     </div>
+                  </div>
             </div>
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
@@ -970,16 +996,20 @@
                                         
             </form>
             </div>
+            </div>
+            </div>
           </div>
-          <div id="newDocument" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div id="newDocument" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 id="myModalLabel">{{_("Create a new")}} <%=mimeType%></h3>
+              <h3 id="myModalLabel" class="modal-title">{{_("Create a new")}} <%=mimeType%></h3>
             </div>
             <div class="modal-body">
                      <div class="controls controls-row">
                                           <form id="addTask" ng-submit="createDocument(newdocument)" class="ng-pristine ng-valid">
-                                                  <input class="input-block-level" autofocus type="text" placeholder="Enter a new <%=mimeType%> name" id="taskTitle" ng-model="newdocument.title" required>
+                                                  <input class="form-control" autofocus type="text" placeholder="Enter a new <%=mimeType%> name" id="taskTitle" ng-model="newdocument.title" required>
                                                   
                                                   
                      </div>
@@ -992,32 +1022,36 @@
                                         
             </form>
             </div>
+            </div>
+            </div>
           </div>
 
           <!--Event Modal -->
-          <div id="newEventModal" class="modal  hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div id="newEventModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 id="myModalLabel">{{_("New Event")}}</h3>
+              <h3 id="myModalLabel" class="modal-title">{{_("New Event")}}</h3>
             </div>
             <div class="modal-body">
                      <div class="controls controls-row">
                             <form id="addTask" ng-submit="addEvent(ioevent)" class="ng-pristine ng-valid">
-                                                  <input class="input-block-level" autofocus type="text" placeholder="{{_('Add a new event')}}" id="taskTitle" ng-model="ioevent.title">
+                                                  <input class="form-control" autofocus type="text" placeholder="{{_('Add a new event')}}" id="taskTitle" ng-model="ioevent.title">
                                                   <p><strong>{{_("When?")}}</strong></p>
-                                                <div class="row-fluid">
-                                                  <div class="span6">
+                                                <div class="row">
+                                                  <div class="col-md-6">
                                                     <p> <strong>{{_("Starts")}}</strong>: <%=ioevent.starts_at | date:'MMMM dd, yyyy, HH:mm'%></p>
                                                         <datetimepicker data-ng-model="ioevent.starts_at"
                                                     data-datetimepicker-config="{ startView:'day', minView:'minute' }" />
                                                   </div>
-                                                  <div class="span6">
+                                                  <div class="col-md-6">
                                                   <p><strong>{{_("Ends")}}</strong>: <%=ioevent.ends_at | date:'MMMM dd, yyyy, HH:mm'%></p>
                                                         <datetimepicker data-ng-model="ioevent.ends_at"
                                                     data-datetimepicker-config="{ startView:'day', minView:'minute' }" />
                                                   </div>
                                                 </div>
-                                                    <input class="input-block-level" autofocus="" type="text" placeholder="{{_('Where?')}}" id="taskTitle" ng-model="ioevent.where">
+                                                    <input class="form-control" autofocus="" type="text" placeholder="{{_('Where?')}}" id="taskTitle" ng-model="ioevent.where">
                                                 </div>
             </div>
             <div class="modal-footer">
@@ -1027,6 +1061,8 @@
                 <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
                                         
             </form>
+            </div>
+            </div>
             </div>
           </div>
                                     
@@ -1051,40 +1087,41 @@
         <!-- END PAGE CONTENT-->
       </div>
       <!--HKA 11.10.2013 Edit Account -->
-             <div id="EditAccountModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-
+             <div id="EditAccountModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+              <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("Edit Account")}}</h3>
+                <h3 id="myModalLabel" class="modal-title">{{_("Edit Account")}}</h3>
               </div>
 
               <div class="modal-body">
                  <form id="editAccount" name="editlead" ng-submit="updatAccountHeader(account)" class="form-horizontal"> 
                 
 
-                  <div class="control-group">
-                        <label  class="required control-label">{{_("Name")}} *</label>
+                  <div class="form-group">
+                        <label  class="required col-md-3 control-label">{{_("Name")}} *</label>
                        
-                        <div class="controls">
-                          <input type="text" required id="id_lastname" ng-model="account.name">
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" required id="id_lastname" ng-model="account.name">
                           
                         </div>
                     </div>
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Type")}}</label>
+                    <div class="form-group">
+                        <label  class="required col-md-3 control-label">{{_("Type")}}</label>
                        
-                        <div class="controls">
-                          <select value="Customer" ng-model="account.account_type"> 
+                        <div class="col-md-9">
+                          <select value="Customer" ng-model="account.account_type" class="form-control"> 
                          <option value="Competitor">Competitor</option><option value="Customer">Customer</option><option value="Distributor">Distributor</option><option value="Integrator">Integrator</option><option value="Investor">Investor</option><option value="Partner">Partner</option><option value="Press">Press</option><option value="Prospect">Prospect</option><option value="Reseller">Reseller</option><option value="Supplier">Supplier</option><option value="Vendor">Vendor</option><option value="Other">Other</option></select>
                           
                         </div>
                     </div>
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Industry")}} *</label>
+                    <div class="form-group">
+                        <label  class="required col-md-3 control-label">{{_("Industry")}} *</label>
                        
-                        <div class="controls">
+                        <div class="col-md-9">
                           
-                          <select ng-model="account.industry">
+                          <select ng-model="account.industry" class="form-control">
                           <option value="">--None--</option><option value="Agriculture">Agriculture</option><option value="Apparel">Apparel</option><option value="Banking">Banking</option><option value="Biotechnology">Biotechnology</option><option value="Chemicals">Chemicals</option><option value="Communications">Communications</option><option value="Construction">Construction</option><option value="Consulting">Consulting</option><option value="Education">Education</option><option value="Electronics">Electronics</option><option value="Energy">Energy</option><option value="Engineering">Engineering</option><option value="Entertainment">Entertainment</option><option value="Environmental">Environmental</option><option value="Finance">Finance</option><option value="Food &amp; Beverage">Food &amp; Beverage</option><option value="Government">Government</option><option value="Healthcare">Healthcare</option><option value="Hospitality">Hospitality</option><option value="Insurance">Insurance</option><option value="Machinery">Machinery</option><option value="Manufacturing">Manufacturing</option><option value="Media">Media</option><option value="Not For Profit">Not For Profit</option><option value="Recreation">Recreation</option><option value="Retail">Retail</option><option value="Shipping">Shipping</option><option value="Technology">Technology</option><option value="Telecommunications">Telecommunications</option><option value="Transportation">Transportation</option><option value="Utilities">Utilities</option><option value="Other">Other</option></select>
                           
                         </div>
@@ -1095,26 +1132,29 @@
                 <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
               </div>
                </form>
+              </div>
+              </div>
             </div>
 
       <!--HKA 11.10.2013 Edit Tagline -->
-             <div id="EditTagModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-
+             <div id="EditTagModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+              <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("Edit Account")}}</h3>
+                <h3 id="myModalLabel" class="modal-title">{{_("Edit Account")}}</h3>
               </div>
 
               <div class="modal-body">
                  <form id="editTagline" name="editlead" ng-submit="updateTagline(account)" class="form-horizontal"> 
                 
 
-                  <div class="control-group">
-                        <label  class=" control-label">{{_("Tagline")}} </label>
+                  <div class="form-group">
+                        <label  class="col-md-3 control-label">{{_("Tagline")}} </label>
                        
-                        <div class="controls">
+                        <div class="col-md-9">
                           <!--textarea rows="2" cols="50"  id="id_tagline" ng-model="account.tagline"/-->
-                           <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="account.tagline"></textarea>
+                           <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="account.tagline"></textarea>
 
                         </div>
                     </div>             
@@ -1124,26 +1164,29 @@
                 <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
               </div>
                </form>
+               </div>
+               </div>
             </div>
 
   <!--HKA 11.10.2013 Edit Introduction  -->
-             <div id="EditIntroModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-
+             <div id="EditIntroModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+              <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("Edit Account")}}</h3>
+                <h3 id="myModalLabel" class="modal-title">{{_("Edit Account")}}</h3>
               </div>
 
               <div class="modal-body">
                  <form id="editTagline" name="edittag" ng-submit="updateintro(account)" class="form-horizontal"> 
                 
 
-                  <div class="control-group">
-                        <label  class=" control-label">{{_("Introduction")}} </label>
+                  <div class="form-group">
+                        <label  class=" col-md-3 control-label">{{_("Introduction")}} </label>
                        
-                        <div class="controls">
+                        <div class="col-md-9">
                          
-                           <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="account.introduction"></textarea>
+                           <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="account.introduction"></textarea>
 
                         </div>
                     </div>             
@@ -1153,24 +1196,27 @@
                 <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
               </div>
                </form>
+               </div>
+               </div>
             </div>
 
       <!--HKA 18.11.2013 Add Phone Modal -->
 
 
-    <div id="phonemodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div id="phonemodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("Add Phone")}}</h3>
+                <h3 id="myModalLabel" class="modal-title">{{_("Add Phone")}}</h3>
             </div>
             <div class="modal-body">
                   <form id="addPhone" name="addphone" ng-submit="addPhone(phone)" class="form-horizontal"> 
-                  <fieldset>
-                    <div class="control-group">
-                        <label  class="control-label">{{_("Type")}} </label>
-                        <div class="controls">
+                    <div class="form-group">
+                        <label  class="col-md-3 control-label">{{_("Type")}} </label>
+                        <div class="col-md-9">
                           <!--input type="text" placeholder="{{_('home')}},{{_('work')}},{{_('mobile')}},{{_('other')}} ..." required id="id_name" ng-model="phone.type_number"-->
-                          <select ng-model="phone.type_number" >
+                          <select ng-model="phone.type_number" class="form-control">
                             <option value="home" selected="selected" >{{_('home')}}</option>
                             <option>{{_('work')}}</option>
                             <option>{{_('mobile')}}</option>
@@ -1179,11 +1225,11 @@
                           </select>
                         </div>
                      </div>
-                     <div class="control-group">
-                        <label  class="required control-label">{{_("Number")}}</label>
+                     <div class="form-group">
+                        <label  class="required col-md-3 control-label">{{_("Number")}}</label>
                        
-                        <div class="controls">
-                          <input type="text"  id="id_name" ng-model="phone.number">
+                        <div class="col-md-9">
+                          <input type="text"  class="form-control" id="id_name" ng-model="phone.number">
                           
                         </div>
                      </div>
@@ -1195,23 +1241,26 @@
                   <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
               </div>
                 </form>
+            </div>
+            </div>
     </div>
 
 
  <!--HKA 18.11.2013 Add Email -->
 
-     <div id="emailmodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+     <div id="emailmodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("Add Email")}}</h3>
+                <h3 id="myModalLabel" class="modal-title">{{_("Add Email")}}</h3>
             </div>
             <div class="modal-body">
                   <form id="addEmail" name="addemail" ng-submit="addEmail(emaill)" class="form-horizontal"> 
-                  <fieldset>
-                    <div class="control-group">
-                        <label  class="control-label">{{_("Email")}} </label>
-                        <div class="controls">
-                          <input type="text" placeholder="{{_('Email')}}" required id="id_email" ng-model="emaill.email">
+                    <div class="form-group">
+                        <label  class="col-md-3 control-label">{{_("Email")}} </label>
+                        <div class="col-md-9">
+                          <input type="text" placeholder="{{_('Email')}}" required id="id_email" ng-model="emaill.email" class="form-control">
                         </div>
                      </div>
               </div>
@@ -1222,46 +1271,49 @@
                   <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
               </div>
                 </form>
+              </div>
+              </div>
         </div>
 
       <!--HKA 18.11.2013  Addresse Modal  -->
 
-    <div id="addressmodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div id="addressmodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("Add Address")}}</h3>
+                <h3 id="myModalLabel" class="modal-title">{{_("Add Address")}}</h3>
             </div>
             <div class="modal-body">
-                  <form id="addAddress" name="addemail" ng-submit="addAddress(address)" class="form-horizontal"> 
-                  <fieldset>
-                    <div class="control-group">
-                        <label  class="control-label">{{_("Street")}} </label>
-                        <div class="controls">
-                          <input type="text"   id="id_street" ng-model="address.street">
+                  <form id="addAddress" name="addemail" ng-submit="addAddress(address)" class="form-horizontal">
+                    <div class="form-group">
+                        <label  class="col-md-3 control-label">{{_("Street")}} </label>
+                        <div class="col-md-9">
+                          <input type="text"   class="form-control" id="id_street" ng-model="address.street">
                         </div>
                      </div>
-                     <div class="control-group">
-                        <label  class="control-label">{{_("City")}} </label>
-                        <div class="controls">
-                          <input type="text"   id="id_city" ng-model="address.city">
+                     <div class="form-group">
+                        <label  class="col-md-3 control-label">{{_("City")}} </label>
+                        <div class="col-md-9">
+                          <input type="text"  class="form-control" id="id_city" ng-model="address.city">
                         </div>
                      </div>
-                     <div class="control-group">
-                        <label  class="control-label">{{_("State/Province")}} </label>
-                        <div class="controls">
-                          <input type="text"  id="id_state" ng-model="address.state">
+                     <div class="form-group">
+                        <label  class="col-md-3 control-label">{{_("State/Province")}} </label>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" id="id_state" ng-model="address.state">
                         </div>
                      </div>
-                     <div class="control-group">
-                        <label  class="control-label">{{_("Postal Code")}} </label>
-                        <div class="controls">
-                          <input type="text"   id="id_postal" ng-model="address.postal_code">
+                     <div class="form-group">
+                        <label  class="col-md-3 control-label">{{_("Postal Code")}} </label>
+                        <div class="col-md-9">
+                          <input type="text"  class="form-control" id="id_postal" ng-model="address.postal_code">
                         </div>
                      </div>
-                     <div class="control-group">
-                        <label  class="control-label">{{_("Country")}} </label>
-                        <div class="controls">
-                          <input type="text"   id="id_country" ng-model="address.country">
+                     <div class="form-group">
+                        <label  class="col-md-3 control-label">{{_("Country")}} </label>
+                        <div class="col-md-9">
+                          <input type="text"  class="form-control" id="id_country" ng-model="address.country">
                         </div>
                      </div>
               </div>
@@ -1272,23 +1324,54 @@
                   <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
               </div>
                 </form>
+            </div>
+            </div>
         </div>
 
+
+     <div id="customfields" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{_("Add Website")}}</h3>
+            </div>
+            <div class="modal-body">
+                  <form id="addWebsite" name="addwebsite" ng-submit="addCustomField(customField)" class="form-horizontal"> 
+                    <div class="form-group">
+                        <label  class="col-md-3 control-label">{{_("Custom Field")}} </label>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" placeholder="Field"  ng-model="customField.field">
+                          <input type="text" class="form-control" placeholder="Value"  ng-model="customField.value">
+                        </div>
+                     </div>
+              </div>
+              <div class="modal-footer">
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+              
+                  <input ng-hide="isLoading" type="submit" class="btn green" value="{{_('Add this Custom Field')}}">
+                  <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
+              </div>
+                </form>
+                </div>
+                </div>
+        </div>
     <!--HKA 18.11.2013 Website Modal -->
 
 
-    <div id="websitemodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div id="websitemodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("Add Website")}}</h3>
+                <h3 id="myModalLabel" class="modal-title">{{_("Add Website")}}</h3>
             </div>
             <div class="modal-body">
                   <form id="addWebsite" name="addwebsite" ng-submit="addWebsite(website)" class="form-horizontal"> 
-                  <fieldset>
-                    <div class="control-group">
-                        <label  class="control-label">{{_("Website")}} </label>
-                        <div class="controls">
-                          <input type="text" placeholder="Website" required id="id_website" ng-model="website.website">
+                    <div class="form-group">
+                        <label  class="col-md-3 control-label">{{_("Website")}} </label>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" placeholder="Website" required id="id_website" ng-model="website.website">
                         </div>
                      </div>
               </div>
@@ -1299,23 +1382,26 @@
                   <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
               </div>
                 </form>
+                </div>
+                </div>
         </div>
 
     <!--HKA 18.11.2013 Social modal -->
 
 
-    <div id="socialmodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div id="socialmodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("Add Social link")}}</h3>
+                <h3 id="myModalLabel" class="modal-title">{{_("Add Social link")}}</h3>
             </div>
              <div class="modal-body">
                   <form id="addSocial" name="addsocial" ng-submit="addSocial(social)" class="form-horizontal"> 
-                  <fieldset>
-                    <div class="control-group">
-                        <label  class="control-label">{{_("Social link")}} </label>
-                        <div class="controls">
-                          <input type="text" placeholder="{{_('Social link')}}"  required id="id_social" ng-model="social.sociallink">
+                    <div class="form-group">
+                        <label  class="col-md-3 control-label">{{_("Social link")}} </label>
+                        <div class="col-md-9">
+                          <input type="text" placeholder="{{_('Social link')}}"  required id="id_social" ng-model="social.sociallink" class="form-control" >
                         </div>
                      </div>
               </div>
@@ -1326,6 +1412,8 @@
                   <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
               </div>
                 </form>
+                </div>
+                </div>
         </div>
 
     </div>
