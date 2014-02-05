@@ -1,10 +1,34 @@
-import endpoints
+"""
+
+This file is the main part of ioGrow API. It contains all request, response
+classes add to calling methods.
+
+"""
+# Standard libs
+import pprint
+import logging
+import httplib2
+
+# Google libs
 from google.appengine.ext import ndb
-from google.appengine.api import search 
-from protorpc import remote
+from google.appengine.api import search
+from google.appengine.api import memcache
 from google.appengine.datastore.datastore_query import Cursor
-from endpoints_proto_datastore.ndb import EndpointsAliasProperty
+from google.appengine.api import mail
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.tools import run
+from apiclient.discovery import build
+from apiclient import errors
+from protorpc import remote
+from protorpc import messages
+from protorpc import message_types
+import endpoints
+
+# Third party libs
 from endpoints_proto_datastore.ndb import EndpointsModel
+
+
+# Our libs
 from iomodels.crmengine.accounts import Account
 from iomodels.crmengine.contacts import Contact
 from iomodels.crmengine.notes import Note,Topic
@@ -24,28 +48,49 @@ from iomodels.crmengine.feedbacks import Feedback
 from iomodels.crmengine.needs import Need
 from iomodels.crmengine.emails import IOEmail
 from iomodels.crmengine.tags import Tag
-from model import User,Userinfo,Group,Member,Permission,Contributor,Companyprofile
-import model
-import logging
-from google.appengine.api import mail
-import httplib2
-from apiclient.discovery import build
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.tools import run
-from apiclient import errors
-from protorpc import messages
-from protorpc import message_types
-from google.appengine.api import memcache
-import pprint
-
+from model import User, Organization, Profile, Userinfo, Group, Member, Permission, Contributor, Companyprofile
 
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
 CLIENT_ID = '987765099891.apps.googleusercontent.com'
-SCOPES = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/drive','https://www.googleapis.com/auth/calendar']
-OBJECTS = {'Account': Account,'Contact': Contact,'Case':Case,'Lead':Lead,'Opportunity':Opportunity,'Show':Show,'Feedback':Feedback}
-FOLDERS = {'Account': 'accounts_folder','Contact': 'contacts_folder','Lead':'leads_folder','Opportunity':'opportunities_folder','Case':'cases_folder','Show':'shows_folder','Feedback':'feedbacks_folder'}
-DISCUSSIONS= {'Task':{'title':'task','url':'/#/tasks/show/'},'Event':{'title':'event','url':'/#/events/show/'},'Note':{'title':'discussion','url': '/#/notes/show/'}}
+SCOPES = [
+            'https://www.googleapis.com/auth/userinfo.email', 
+            'https://www.googleapis.com/auth/drive',
+            'https://www.googleapis.com/auth/calendar'
+            ]
+OBJECTS = {
+            'Account': Account,
+            'Contact': Contact,
+            'Case': Case,
+            'Lead':Lead,
+            'Opportunity':Opportunity,
+            'Show':Show,
+            'Feedback':Feedback
+         }
+FOLDERS = {
+            'Account': 'accounts_folder',
+            'Contact': 'contacts_folder',
+            'Lead': 'leads_folder',
+            'Opportunity':'opportunities_folder',
+            'Case':'cases_folder',
+            'Show':'shows_folder',
+            'Feedback':'feedbacks_folder'
+        }
+
+DISCUSSIONS = {
+                'Task': {
+                            'title':'task',
+                            'url':'/#/tasks/show/'
+                        },
+                'Event':{
+                            'title':'event',
+                            'url':'/#/events/show/'
+                        },
+                 'Note':{
+                            'title':'discussion',
+                            'url': '/#/notes/show/'
+                        }
+              }
 
 # The message class that defines the SendEmail Request attributes
 class EmailRequest(messages.Message):
@@ -57,21 +102,25 @@ class EmailRequest(messages.Message):
     body = messages.StringField(6)
     about_kind = messages.StringField(7)
     about_item = messages.StringField(8)
+
 # The message class that defines the Search Request attributes
 class SearchRequest(messages.Message):
     q = messages.StringField(1)
     limit = messages.IntegerField(2)
     pageToken = messages.StringField(3)
+
 # The message class that defines the Search Result attributes
 class SearchResult(messages.Message):
     id = messages.StringField(1)
     title = messages.StringField(2)
     type = messages.StringField(3)
     rank = messages.IntegerField(4)
+
 # The message class that defines a set of search results
 class SearchResults(messages.Message):
     items = messages.MessageField(SearchResult, 1, repeated=True)
     nextPageToken = messages.StringField(2)
+
 # The message class that defines the Live Search Result attributes
 class LiveSearchResult(messages.Message):
     id = messages.StringField(1)
@@ -79,19 +128,23 @@ class LiveSearchResult(messages.Message):
     organization = messages.StringField(3)
     type = messages.StringField(4)
     rank = messages.IntegerField(5)
+
 # The message class that defines a set of search results
 class LiveSearchResults(messages.Message):
     items = messages.MessageField(LiveSearchResult, 1, repeated=True)
     nextPageToken = messages.StringField(2)
+
 # The message class that defines the accounts.search response 
 class AccountSearchResult(messages.Message):
     id = messages.StringField(1)
     entityKey  = messages.StringField(2)
     name = messages.StringField(3)
+
 # The message class that defines a set of accounts.search results
 class AccountSearchResults(messages.Message):
     items = messages.MessageField(AccountSearchResult, 1, repeated=True)
     nextPageToken = messages.StringField(2)
+
 # The message class that defines the contacts.search response 
 class ContactSearchResult(messages.Message):
     id = messages.StringField(1)
@@ -101,10 +154,12 @@ class ContactSearchResult(messages.Message):
     account_name = messages.StringField(5)
     account = messages.StringField(6)
     position = messages.StringField(7)
+
 # The message class that defines a set of contacts.search results
 class ContactSearchResults(messages.Message):
     items = messages.MessageField(ContactSearchResult, 1, repeated=True)
     nextPageToken = messages.StringField(2)
+
 # The message class that defines the opportunities.search response 
 class OpportunitySearchResult(messages.Message):
     id = messages.StringField(1)
@@ -112,18 +167,21 @@ class OpportunitySearchResult(messages.Message):
     title = messages.StringField(3)
     amount = messages.IntegerField(4)
     account_name = messages.StringField(5)
+
 # The message class that defines a set of contacts.search results
 class OpportunitySearchResults(messages.Message):
     items = messages.MessageField(OpportunitySearchResult, 1, repeated=True)
     nextPageToken = messages.StringField(2)
+
 # The message class that defines the cases.search response 
 class CaseSearchResult(messages.Message):
     id = messages.StringField(1)
-    entityKey  = messages.StringField(2)
+    entityKey = messages.StringField(2)
     title = messages.StringField(3)
     contact_name = messages.StringField(4)
     account_name = messages.StringField(5)
     status = messages.StringField(6)
+
 # The message class that defines a set of cases.search results
 class CaseSearchResults(messages.Message):
     items = messages.MessageField(CaseSearchResult, 1, repeated=True)
@@ -232,10 +290,14 @@ class CompanyProfileSchema(messages.Message):
 class CompanyProfileResponse(messages.Message):
     items = messages.MessageField(CompanyProfileSchema, 1, repeated=True)
     nextPageToken = messages.StringField(2)    
+    
+
 # The message class that defines a set of feedbacks.search results
 class FeedbackSearchResults(messages.Message):
     items = messages.MessageField(FeedbackSearchResult, 1, repeated=True)
     nextPageToken = messages.StringField(2)
+
+
 class EndpointsHelper(EndpointsModel):
     INVALID_TOKEN = 'Invalid token'
     INVALID_GRANT = 'Invalid grant'
@@ -245,7 +307,7 @@ class EndpointsHelper(EndpointsModel):
         user = endpoints.get_current_user()
         if user is None:
             raise endpoints.UnauthorizedException(cls.INVALID_TOKEN)
-        user_from_email = model.User.query(model.User.email == user.email()).get()
+        user_from_email = User.query(User.email == user.email()).get()
         if user_from_email is None:
             raise endpoints.UnauthorizedException(cls.NO_ACCOUNT)
         return user_from_email
@@ -304,7 +366,7 @@ class LiveApi(remote.Service):
   @Feedback.method(user_required=True,request_fields=('show_url','type_url', 'name','content'), path='feedbacks',http_method='POST',name='feedbacks.insert')
   def insert_feedback_live(self, my_model):
       user_from_email = EndpointsHelper.require_iogrow_user()
-      who = model.Userinfo()
+      who = Userinfo()
       who.display_name = user_from_email.google_display_name
       who.photo = user_from_email.google_public_profile_photo_url
       who.email = user_from_email.email
@@ -323,7 +385,7 @@ class LiveApi(remote.Service):
         my_model.put()
       if my_model.type_url == 'company':
         org_id = int(my_model.show_url.split("/")[5])
-        org = model.Organization.get_by_id(org_id)
+        org = Organization.get_by_id(org_id)
         org_key = org.key
         companyprof = Companyprofile.query(Companyprofile.organizationid==org_id).get()
         my_model.organization = org_key
@@ -1570,7 +1632,7 @@ class CrmEngineApi(remote.Service):
       user_from_email = EndpointsHelper.require_iogrow_user()
       #discussion_key = ndb.Key(urlsafe=my_model.discussion)
       #my_model.discussion = discussion_key
-      comment_author = model.Userinfo()
+      comment_author = Userinfo()
       comment_author.display_name = user_from_email.google_display_name
       comment_author.photo = user_from_email.google_public_profile_photo_url
       my_model.author = comment_author
@@ -1642,7 +1704,7 @@ class CrmEngineApi(remote.Service):
   def NoteInsert(self, my_model):
     user_from_email = EndpointsHelper.require_iogrow_user()
     # Todo: Check permissions
-    note_author = model.Userinfo()
+    note_author = Userinfo()
     note_author.display_name = user_from_email.google_display_name
     note_author.photo = user_from_email.google_public_profile_photo_url
     my_model.author = note_author
@@ -1750,7 +1812,7 @@ class CrmEngineApi(remote.Service):
     # insert in the datastore
     
     # Todo: Check permissions
-    author = model.Userinfo()
+    author = Userinfo()
     author.google_user_id = user_from_email.google_user_id
     author.display_name = user_from_email.google_display_name
     author.photo = user_from_email.google_public_profile_photo_url
@@ -1769,7 +1831,7 @@ class CrmEngineApi(remote.Service):
       user_from_email = EndpointsHelper.require_iogrow_user()
       # Todo: Check permissions
       items = request.items
-      author = model.Userinfo()
+      author = Userinfo()
       author.google_user_id = user_from_email.google_user_id
       author.display_name = user_from_email.google_display_name
       author.photo = user_from_email.google_public_profile_photo_url
@@ -1892,7 +1954,7 @@ class CrmEngineApi(remote.Service):
       
       my_model.owner = user_from_email.google_user_id
       my_model.organization =  user_from_email.organization
-      author = model.Userinfo()
+      author = Userinfo()
       author.google_user_id = user_from_email.google_user_id
       author.display_name = user_from_email.google_display_name
       author.photo = user_from_email.google_public_profile_photo_url
@@ -2055,7 +2117,7 @@ class CrmEngineApi(remote.Service):
     except:
         raise endpoints.UnauthorizedException('Invalid grant' )
         return    
-    author = model.Userinfo()
+    author = Userinfo()
     author.google_user_id = user_from_email.google_user_id
     author.display_name = user_from_email.google_display_name
     author.photo = user_from_email.google_public_profile_photo_url
@@ -2142,13 +2204,13 @@ class CrmEngineApi(remote.Service):
         raise endpoints.UnauthorizedException('Invalid grant' )
         return 
 
-    invited_user = model.User.query(model.User.email == my_model.email).get()
+    invited_user = User.query( User.email == my_model.email).get()
     
     if invited_user is not None:
         if invited_user.organization == user_from_email.organization or invited_user.organization is None:
             invited_user.organization = user_from_email.organization
             invited_user.status = 'invited'
-            profile = model.Profile.query(model.Profile.name=='Standard User', model.Profile.organization==user_from_email.organization).get()
+            profile =  Profile.query(Profile.name=='Standard User', Profile.organization==user_from_email.organization).get()
             invited_user.init_user_config(user_from_email.organization,profile.key)
             invited_user_id = invited_user.key.id()
             my_model.id = invited_user_id
@@ -2161,7 +2223,7 @@ class CrmEngineApi(remote.Service):
     else:
         my_model.organization = user_from_email.organization
         my_model.status = 'invited'
-        profile = model.Profile.query(model.Profile.name=='Standard User', model.Profile.organization==user_from_email.organization).get()
+        profile = Profile.query(Profile.name=='Standard User', Profile.organization==user_from_email.organization).get()
         my_model.init_user_config(user_from_email.organization,profile.key)
         
         my_model.put()
@@ -2305,7 +2367,7 @@ class CrmEngineApi(remote.Service):
           raise endpoints.UnauthorizedException('You dont have permission to share this')
       if my_model.type == 'user':
           #try to get informations about this user and check if is in the same organization
-          invited_user = model.User.query(model.User.email == my_model.value,model.User.organization==user_from_email.organization).get()
+          invited_user = User.query( User.email == my_model.value, User.organization==user_from_email.organization).get()
           if invited_user is None:
               raise endpoints.UnauthorizedException('The user does not exist')
          
@@ -2387,7 +2449,7 @@ class CrmEngineApi(remote.Service):
       message.html = request.body
       message.send()
       note = Note()
-      note_author = model.Userinfo()
+      note_author = Userinfo()
       note_author.display_name = user.google_display_name
       note_author.photo = user.google_public_profile_photo_url
       note.author = note_author
