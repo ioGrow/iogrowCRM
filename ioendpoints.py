@@ -29,7 +29,7 @@ import endpoints
 from endpoints_proto_datastore.ndb import EndpointsModel
 
 # Our libs
-from iograph import InfoNode
+from iograph import InfoNode, Edge
 from iomodels.crmengine.accounts import Account
 from iomodels.crmengine.contacts import Contact
 from iomodels.crmengine.notes import Note,Topic
@@ -95,6 +95,21 @@ DISCUSSIONS = {
                         }
               }
 
+
+class EdgeSchema(messages.Message):
+    id = messages.StringField(1)
+    entityKey  = messages.StringField(2)
+    start_node = messages.StringField(3)
+    end_node = messages.StringField(4)
+    kind = messages.StringField(5)
+class EdgeRequest(messages.Message):
+    start_node = messages.StringField(1)
+    end_node = messages.StringField(2)
+    kind = messages.StringField(3)
+class EdgesRequest(messages.Message):
+    items = messages.MessageField(EdgeSchema, 1 , repeated=True)
+class EdgesResponse(messages.Message):
+    items = messages.MessageField(EdgeSchema, 1 , repeated=True)
 # The message class that defines Record schema for InfoNode attributes
 class RecordSchema(messages.Message):
     field = messages.StringField(1)
@@ -121,8 +136,7 @@ class InfoNodeListRequest(messages.Message):
     parent = messages.StringField(1,required=True)
     connections = messages.StringField(2,repeated=True)
 class InfoNodeListResponse(messages.Message):
-    some_dict = messages.BytesField(1)
-    items = messages.MessageField(InfoNodeConnectionSchema, 2, repeated=True)
+    items = messages.MessageField(InfoNodeConnectionSchema, 1, repeated=True)
 # The message class that defines the SendEmail Request attributes
 class EmailRequest(messages.Message):
     sender = messages.StringField(1)
@@ -497,7 +511,15 @@ class LiveApi(remote.Service):
           logging.exception('Search failed')
       return LiveSearchResults(items = search_results,nextPageToken=next_cursor)
 
-
+@endpoints.api(name='androgrow', version='v1', description='AndroGrow APIs',allowed_client_ids=[CLIENT_ID,
+                                   endpoints.API_EXPLORER_CLIENT_ID],scopes=SCOPES)
+class EndGrow(remote.Service):
+    @endpoints.method(SearchRequest, SearchRequest,
+                          path='something/insert', http_method='POST',
+                          name='something.insert')
+    def something(self, request):
+          
+          return SearchRequest(q=request.q)
 @endpoints.api(name='crmengine', version='v1', description='I/Ogrow CRM APIs',allowed_client_ids=[CLIENT_ID,
                                    endpoints.API_EXPLORER_CLIENT_ID],scopes=SCOPES)
 class CrmEngineApi(remote.Service):
@@ -505,6 +527,26 @@ class CrmEngineApi(remote.Service):
   ID_RESOURCE = endpoints.ResourceContainer(
             message_types.VoidMessage,
             id=messages.StringField(1))
+  #Edges APIs
+  # edges.insert api
+  @endpoints.method(EdgesRequest, EdgesResponse,
+                      path='edges/insert', http_method='POST',
+                      name='edges.insert')
+  def edges_insert(self, request):
+      items = list()
+      for item in request.items:
+          start_node = ndb.Key(urlsafe=item.start_node)
+          end_node = ndb.Key(urlsafe=item.end_node)
+          edge =  Edge(kind=item.kind,
+                       start_node = start_node,
+                       end_node = end_node)
+          edge_key = edge.put()
+          items.append(EdgesResponse(id=str( edge_key.id() ), 
+                                     entityKey = edge_key.urlsafe(),
+                                     kind = edge.kind,
+                                     start_node = edge.start_node,
+                                     end_node= edge.end_node))
+      return EdgesResponse(items=items)
   #Info Node APIs
   # infonode.insert api
   @endpoints.method(InfoNodeSchema, InfoNodeResponse,
@@ -551,8 +593,8 @@ class CrmEngineApi(remote.Service):
           else:
               infonodeconnection = InfoNodeConnectionSchema(kind=key,items=value)
               connections_list.append(infonodeconnection)  
-      my_dict = {'amount': 31, 'type': 'fish', 'mine': False}
-      return InfoNodeListResponse(some_dict=json.dumps(my_dict, ensure_ascii=True),items=connections_list) 
+      
+      return InfoNodeListResponse(items=connections_list) 
   
 
   # Accounts APIs
