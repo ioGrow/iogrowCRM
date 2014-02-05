@@ -47,6 +47,36 @@
               </div>
              </div>
                <!-- BEFORE DELETE MODEL END-->
+                             <!--HKA 24.12.2013 Modal before Deleting Account-->
+                <!-- BEFORE DELETE MODEL-->
+               <div id="assigneeTagsToTask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                      <h3 id="myModalLabel" class="modal-title">Add Tags </h3>
+                    </div>
+                    <div class="modal-body">
+                       <form id="seletesho" name="deletesho" class="form-horizontal"> 
+                       <div class="form-group">
+                            <select id="select2_sample2" class="form-control select2" multiple>
+                              <option ng-repeat="tag in tags" 
+                              value='<%={name:tag.name,color:tag.color}%>'>
+                                <%=tag.name%>
+                              </option>
+                            </select>
+                        </div>
+                    </div>
+                      <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                        <input ng-hide="isLoading" ng-click="testTags()" type="submit" class="btn green" value="Add">
+                        <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                      </div>
+                  </form>
+                </div>
+              </div>
+             </div>
+               <!-- BEFORE DELETE MODEL END-->
             <div id="assigneeModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
            <div class="modal-dialog">
               <div class="modal-content">
@@ -181,17 +211,15 @@
           <!-- Filtering and sorting -->
           <div class="row">
           <div class="col-md-9">
-            <div class="row filter-row" ng-show="accounts+isFiltering">
+            <div class="row filter-row"  >
               <div class="col-md-2">
-                <div class="btn-group btn-filter">
-                        <a class="btn btn-default" href="#" data-toggle="dropdown">
-                          {{ _('Filter by') }}
-                        <i class="icon-angle-down"></i>
-                        </a>
-                        <ul class="dropdown-menu">
-                          <li><a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All accounts') }}</a></li>
-                          <li><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My accounts') }}</a></li>
-                        </ul>
+                 <div class="form-group">
+                      <div>
+                        <select ng-model="status" ng-change="filterByStatus()" class="form-control select_status">
+                          <option value="closed" >Closed</option>
+                          <option value="pending">Open</option>
+                        </select>
+                      </div>
                 </div>
               </div>
               <div class="col-md-5">
@@ -207,17 +235,18 @@
                   </form>
                    
               </div>
-              <div class="col-md-3">
+              <div class="col-md-2">
                 <div class="btn-group btn-sort">
                       <a class="btn btn-default" href="#" data-toggle="dropdown">
                       {{ _('Sort by') }}
                       <i class="icon-angle-down"></i>
                       </a>
                       <ul class="dropdown-menu">
-                        <li><a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a></li>
-                        <li><a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a></li>
-                        
-                       
+
+                         <li><a ng-click="orderBy('-created_at')" href="#" data-toggle="modal">{{ _('Newest') }}</a></li>
+                          <li><a ng-click="orderBy('created_at')" href="#" data-toggle="modal">{{ _('Oldest') }}</a></li>
+                        <li><a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Recently updated') }}</a></li>
+
                       </ul>
                 </div>
 
@@ -239,68 +268,9 @@
                            </label>
                            <div class="col-md-5">
                             <button  class="btn btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">Close</button>
-                            <div class="btn-group">
-                              <button type="button" ng-class="{disabled: selected_tasks.length==0}" class="btn btn-default task_action">
-                                <i class="fa fa-tags"></i>
-                              </button>
-                              <button id="labels-btn-dropdown" type="button" class="btn btn-default dropdown-toggle task_action" ng-class="{disabled: selected_tasks.length==0}" data-toggle="dropdown"><i class="fa fa-angle-down"></i></button>
-                              <div class="dropdown-menu" role="menu">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                      <select id="select2_sample2" class="form-control select2" multiple>
-                                        <optgroup label="NFC EAST">
-                                        <option>Dallas </option>
-                                        <option>New </option>
-                                        <option> Eagles</option>
-                                        <option>Washington </option>
-                                        </optgroup>
-                                        <optgroup label="NFC NORTH">
-                                        <option>Chicago Bears</option>
-                                        <option>Detroit Lions</option>
-                                        <option>Green Bay Packers</option>
-                                        <option>Minnesota Vikings</option>
-                                        </optgroup>
-                                        <optgroup label="NFC SOUTH">
-                                        <option>Atlanta Falcons</option>
-                                        <option>Carolina Panthers</option>
-                                        <option>New Orleans Saints</option>
-                                        <option>Tampa Bay Buccaneers</option>
-                                        </optgroup>
-                                        <optgroup label="NFC WEST">
-                                        <option>Arizona Cardinals</option>
-                                        <option>St. Louis Rams</option>
-                                        <option>San Francisco 49ers</option>
-                                        <option>Seattle Seahawks</option>
-                                        </optgroup>
-                                        <optgroup label="AFC EAST">
-                                        <option>Buffalo Bills</option>
-                                        <option>Miami Dolphins</option>
-                                        <option>New England Patriots</option>
-                                        <option>New York Jets</option>
-                                        </optgroup>
-                                        <optgroup label="AFC NORTH">
-                                        <option>Baltimore Ravens</option>
-                                        <option>Cincinnati Bengals</option>
-                                        <option>Cleveland Browns</option>
-                                        <option>Pittsburgh Steelers</option>
-                                        </optgroup>
-                                        <optgroup label="AFC SOUTH">
-                                        <option>Houston Texans</option>
-                                        <option>Indianapolis Colts</option>
-                                        <option>Jacksonville Jaguars</option>
-                                        <option>Tennessee Titans</option>
-                                        </optgroup>
-                                        <optgroup label="AFC WEST">
-                                        <option>Denver Broncos</option>
-                                        <option>Kansas City Chiefs</option>
-                                        <option>Oakland Raiders</option>
-                                        <option>San Diego Chargers</option>
-                                        </optgroup>
-                                      </select>
-                                    </div>
-                                  </div>
-                              </div>
-                            </div>
+                            <button ng-click="showAssigneeTags()" class="btn btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">Tags
+                            <i class="fa fa-tags"></i>
+                            </button>
                             <button ng-click="assigneeModal()" class="btn btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">Assignee</button>
                             </div>
                           </form>
@@ -309,40 +279,28 @@
                       </li>
                        <li ng-repeat="task in tasks" class="list-group-item">
                          <div class="row">
-                            <label class="col-md-1 col-sm-1">
+                            <label class="col-md-2 col-sm-2">
                                 <input type="checkbox" ng-click="select_task(task,$index,$event)" ng-checked="isSelected()">  
+                                <span class="badge badge-important">
+                                  2
+                                </span>
                            </label>
-                           <h4 class="col-md-6 col-sm-7 list-group-item-heading">
+                           <h4 class="col-md-5 col-sm-6 list-group-item-heading"
+                           ng-class= "{task_closed: task.status=='closed'}">
                             <%= task.title %>
-                            </h4>
+                           </h4>
                             <div class="col-md-5 col-sm-4">
-                                <span class="pull-right task-label label label-warning">
-                                    warning
-                                  </span>
-                                  <span class="pull-right task-label label label-warning">
-                                    warning
-                                  </span>
-                                  <span class="pull-right task-label label label-warning">
-                                    warning
-                                  </span>
-                                  <span class="pull-right task-label label label-warning">
-                                    warning
-                                  </span>
+                                <span ng-repeat="task_tag in task.tags" class="pull-right task-label label" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
+                                    <%= task_tag.name %>
+                                </span>
                             </div>
                         </div>
-                        <div class="row">
-                          <p class="col-md-11 col-md-offset-1 list-group-item-text">
                          <div class="row">
                           <p class="col-md-11 col-md-offset-1 list-group-item-text">
-                         
-                          <span>Opened by:<a href="#"> <%= task.author.display_name %></a></span>
-                          <!--<span>Closed by:<a href="#">Transline</a></span>-->
-                        </p>
-                        </div>
-                          
-                        </p>
-                        </div>
-                        
+                             <span>Opened by:<a href="#"> <%= task.author.display_name %></a></span>
+                             <!--<span>Closed by:<a href="#">Transline</a></span>-->
+                          </p>
+                          </div>
                       </li>
                     </ul>
                   </div><!-- / col-md-12-->
@@ -423,4 +381,19 @@
         placeholder: "Click to Select a label",
         allowClear: false
     });
+  var handleUniform = function () {
+        if (!jQuery().uniform) {
+            return;
+        }
+        var test = $("input[type=radio]:not(.toggle, .star)");
+        if (test.size() > 0) {
+            test.each(function () {
+                if ($(this).parents(".checker").size() == 0) {
+                    $(this).show();
+                    $(this).uniform();
+                }
+            });
+        }
+    }
+    handleUniform();
 </script>

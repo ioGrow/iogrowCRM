@@ -186,6 +186,8 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
      $scope.tag = {};
      $scope.account.access ='public';
      $scope.order = '-updated_at';
+     $scope.filter = undefined;
+     $scope.status = 'pending';
      $scope.account.account_type = 'Customer';
      $scope.slected_members = [];
      $scope.tasks_checked = [];
@@ -204,15 +206,13 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
           });
       }
       handleColorPicker();
-      function idealTextColor(bgColor) {
-
-         var nThreshold = 105;
+      $scope.idealTextColor=function(bgColor){
+        var nThreshold = 105;
          var components = getRGBComponents(bgColor);
          var bgDelta = (components.R * 0.299) + (components.G * 0.587) + (components.B * 0.114);
 
-         return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";   
+         return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";  
       }
-
       function getRGBComponents(color) {       
 
           var r = color.substring(1, 3);
@@ -228,6 +228,7 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
      // What to do after authentication
      $scope.runTheProcess = function(){
           var params = { 'order': $scope.order,
+                         'status':'pending',
                         'limit':7}
           Task.list($scope,params);
           User.list($scope,{});
@@ -273,6 +274,22 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
      // Show the modal 
      $scope.showModal = function(){
         $('#addAccountModal').modal('show');
+     };
+     $scope.showAssigneeTags=function(){
+        $('#assigneeTagsToTask').modal('show');
+     };
+     $scope.testTags=function(){
+      var tags=[];
+      tags=$('#select2_sample2').select2("val");
+      tags=tags.map(JSON.parse);
+      angular.forEach($scope.selected_tasks, function(selected_task){
+      params = {'id':selected_task.id,
+            'tags':tags
+      };
+      Task.patch($scope,params);
+      });
+             $('#assigneeTagsToTask').modal('hide');
+
      };
      // Insert the account if enter button is pressed
      $scope.addAccountOnKey = function(account){
@@ -337,7 +354,7 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
          if($scope.selected_tags.indexOf(tag) == -1){
             $scope.selected_tags.push(tag);
             element.css('background-color', tag.color+'!important');
-            text.css('color',idealTextColor(tag.color));
+            text.css('color',$scope.idealTextColor(tag.color));
 
          }else{
             element.css('background-color','#ffffff !important');
@@ -438,10 +455,17 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
      };
      // Sorting
      $scope.orderBy = function(order){
+      if($scope.filter!=undefined){
         var params = { 'order': order,
+                        'status': $scope.filter,
                         'limit':7};
+      }else{
+          var params = { 'order': order,
+                        'limit':7};
+      }
+        
         $scope.order = order;
-        Account.list($scope,params);
+        Task.list($scope,params);
      };
      $scope.filterByOwner = function(filter){
         if (filter){
@@ -457,7 +481,24 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
         };
         console.log('Filtering by');
         console.log(params);
-        Account.list($scope,params);
+        $scope.filter=filter;
+        Task.list($scope,params);
+     };
+     $scope.filterByStatus = function(){
+        if ($scope.status){
+          var params = { 'status': $scope.status,
+                         'order': $scope.order, 
+                         'limit':7}
+        }
+        else{
+          var params = {
+              'order': $scope.order, 
+              
+              'limit':7}
+        };
+        $scope.filter=$scope.status;
+        $scope.isFiltering = true;
+        Task.list($scope,params);
      };
 
      // Google+ Authentication 

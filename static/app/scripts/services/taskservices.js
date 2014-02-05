@@ -36,13 +36,16 @@ topicservices.factory('Task', function($http) {
       $scope.isLoading = true;
       
       gapi.client.crmengine.tasks.patch(params).execute(function(resp) {
+        console.log(params);
+        console.log(resp);
           if(!resp.code){
             $scope.task = resp;
-            $scope.ListComments();
-            $scope.listContributors();
+            /*$scope.ListComments();
+            $scope.listContributors();*/
             $scope.isLoading = false;
-
+            $scope.listTags();
             $scope.$apply();
+
             $('#EditTaskModal').modal('hide');
           
          }else{
@@ -52,6 +55,7 @@ topicservices.factory('Task', function($http) {
              if(resp.message=="Invalid grant"){
                 $scope.refreshToken();
                 $scope.isLoading = false;
+                $scope.listTags();
                 $scope.$apply();
              };
          }
@@ -198,7 +202,7 @@ topicservices.factory('Tag', function($http) {
          console.log(resp);
          if(!resp.code){
           console.log(resp);
-          // TME_02_11_13 when a note is inserted reload topics
+          // TME_02_11_13 when a note gis inserted reload topics
           /*$scope.listContributors();*/
           $scope.isLoading = false;
           $scope.listTags();

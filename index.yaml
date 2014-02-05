@@ -1194,6 +1194,23 @@ indexes:
   - name: updated_at
     direction: desc
 
+- kind: Task
+  properties:
+  - name: status
+  - name: created_at
+
+- kind: Task
+  properties:
+  - name: status
+  - name: created_at
+    direction: desc
+
+- kind: Task
+  properties:
+  - name: status
+  - name: updated_at
+    direction: desc
+
 - kind: Topic
   properties:
   - name: about_item
