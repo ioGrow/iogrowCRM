@@ -150,7 +150,7 @@ class EmailRequest(messages.Message):
 
 # The message class that defines the Search Request attributes
 class SearchRequest(messages.Message):
-    q = messages.StringField(1)
+    q = messages.StringField(1, required= True)
     limit = messages.IntegerField(2)
     pageToken = messages.StringField(3)
 
@@ -2344,18 +2344,21 @@ class CrmEngineApi(remote.Service):
 
     mail.send_mail(sender_address, my_model.email , subject, body)
     return my_model
+
   # users.list api
   @User.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='users', name='users.list')
   def UserList(self, query):
     user_from_email = EndpointsHelper.require_iogrow_user()
     organization = user_from_email.organization
-    return query.filter(model.User.organization == organization)
+    return query.filter(User.organization == organization)
+
   # users.get api
   @User.method(request_fields=('id',),path='users/{id}', http_method='GET', name='users.get')
   def UserGet(self, my_model):
     if not my_model.from_datastore:
       raise endpoints.NotFoundException('Account not found.')
     return my_model
+
   # users.update api
   @User.method(user_required=True,
                 http_method='PUT', path='users/{id}', name='users.update')
@@ -2572,8 +2575,6 @@ class CrmEngineApi(remote.Service):
   def search_method(self, request):
       user_from_email = EndpointsHelper.require_iogrow_user()
       organization = str(user_from_email.organization.id())
-
-
       index = search.Index(name="GlobalIndex")
       #Show only objects where you have permissions
       query_string = request.q + ' AND (organization:' +organization+ ' AND (access:public OR (owner:'+ user_from_email.google_user_id +' OR collaborators:'+ user_from_email.google_user_id+')))'
@@ -2615,11 +2616,6 @@ class CrmEngineApi(remote.Service):
                       next_results = index.search(next_query)
                       if len(next_results.results)==0:
                           next_cursor = None
-
-
-                      
-                      
-               
       except search.Error:
           logging.exception('Search failed')
       return SearchResults(items = search_results,nextPageToken=next_cursor)
