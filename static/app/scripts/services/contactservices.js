@@ -14,6 +14,7 @@ accountservices.factory('Contact', function($http) {
             if(!resp.code){
                $scope.contact = resp;
                $scope.isContentLoaded = true;
+               $scope.listInfonodes();
                $scope.listTopics(resp);
                $scope.listTasks();
                $scope.listEvents();
@@ -21,7 +22,7 @@ accountservices.factory('Contact', function($http) {
                $scope.listCases();
                $scope.listDocuments();
                $scope.selectedTab = 2;
-               $scope.renderMaps();
+               //$scope.renderMaps();
 
               document.title = "Contact: " + $scope.contact.firstname +' ' +$scope.contact.lastname ;
               $scope.email.to = '';

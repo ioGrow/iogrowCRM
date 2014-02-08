@@ -781,17 +781,7 @@ $scope.CaselistNextPageItems = function(){
  }
 //HKA 19.11.2013 Add Phone
  $scope.addPhone = function(phone){
-  //HKA 19.11.2013  Concatenate old phones with new phone
-  var phonesArray = undefined;
   
-  if ($scope.account.phones){
-    phonesArray = new Array();
-    phonesArray = $scope.account.phones;
-    phonesArray.push(phone);
-  }else{
-    phonesArray = phone;
-  }
-
   params = {'parent':$scope.account.entityKey,
             'kind':'phones',
             'fields':[
