@@ -170,8 +170,8 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
      // Google+ Authentication 
      Auth.init($scope);
 }]);
-app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User','Attachement','Map','Opportunitystage','Casestatus',
-    function($scope,$filter,$route,Auth,Email,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User,Attachement,Map,Opportunitystage,Casestatus) {
+app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User','Attachement','Map','Opportunitystage','Casestatus','InfoNode',
+    function($scope,$filter,$route,Auth,Email,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User,Attachement,Map,Opportunitystage,Casestatus,InfoNode) {
  console.log('I am in ContactShowCtrl');
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Contacts").addClass("active");
@@ -201,6 +201,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
       $scope.email = {};
       $scope.stage_selected={};
       $scope.status_selected={};
+      $scope.infonodes = {};
       
       // What to do after authentication
       $scope.runTheProcess = function(){
@@ -603,92 +604,96 @@ $scope.updatContactHeader = function(contact){
 
   //HKA 01.12.2013 Add Phone
  $scope.addPhone = function(phone){
-  //HKA 19.11.2013  Concatenate old phones with new phone
-  var phonesArray = undefined;
-  
-  if ($scope.contact.phones){
-    phonesArray = new Array();
-    phonesArray = $scope.contact.phones;
-    phonesArray.push(phone);
-  }else{
-    phonesArray = phone;
-  }
 
-  params = {'id':$scope.contact.id,
-            'phones':phonesArray
-            };
-  Contact.patch($scope,params);
-  $('#phonemodal').modal('hide');
+  params = {'parent':$scope.contact.entityKey,
+            'kind':'phones',
+            'fields':[
+                {
+                  "field": "type",
+                  "value": phone.type
+                },
+                {
+                  "field": "number",
+                  "value": phone.number
+                }
+            ]
   };
+  InfoNode.insert($scope,params);
+  $('#phonemodal').modal('hide');
+  $scope.phone={};
+  };
+$scope.listInfonodes = function(kind) {
+    console.log($scope.contact.entityKey);
+     params = {'parent':$scope.contact.entityKey,
+               'connections': kind
+              };
+     InfoNode.list($scope,params);
+ }
 
 //HKA 20.11.2013 Add Email
 $scope.addEmail = function(email){
   var emailsArray = undefined;
   
-  if ($scope.contact.emails){
-    emailsArray = new Array();
-    emailsArray = $scope.contact.emails;
-    emailsArray.push(email);
-  }else{
-    emailsArray = email;
-  }
-
-  params = {'id':$scope.contact.id,
-            'emails':emailsArray
-            };
-  Contact.patch($scope,params);
+   params = {'parent':$scope.contact.entityKey,
+            'kind':'emails',
+            'fields':[
+                {
+                  "field": "email",
+                  "value": email.email
+                }
+            ]
+  };
+  InfoNode.insert($scope,params);
   $('#emailmodal').modal('hide');
+  $scope.email={};
   };
   
-//HKA 20.11.2013 Add Addresse
-$scope.addAddress = function(address){
-  var addressArray = undefined;
-  if ($scope.contact.addresses){
-    addressArray = new Array();
-    addressArray = $scope.contact.addresses;
-    addressArray.push(address);
 
-  }else{ 
-    addressArray = address;
-  }
-  params = {'id':$scope.contact.id,
-             'addresses':addressArray}
-  Contact.patch($scope,params);
-  $('#addressmodal').modal('hide');
-};
 
-//HKA 01.12.2013 Add Website
+//HKA 22.11.2013 Add Website
 $scope.addWebsite = function(website){
-  var websiteArray = undefined;
-  if ($scope.contact.websites){
-    websiteArray = new Array();
-    websiteArray = $scope.contact.websites;
-    websiteArray.push(website);
-
-  }else{ 
-    websiteArray = website;
-  }
-  params = {'id':$scope.contact.id,
-             'websites':websiteArray}
-  Contact.patch($scope,params);
+  params = {'parent':$scope.contact.entityKey,
+            'kind':'websites',
+            'fields':[
+                {
+                  "field": "url",
+                  "value": website.website
+                }
+            ]
+  };
+  InfoNode.insert($scope,params);
   $('#websitemodal').modal('hide');
 };
 
-//HKA 01.12.2013 Add Social
+//HKA 22.11.2013 Add Social
 $scope.addSocial = function(social){
-  var socialArray = undefined;
-  if ($scope.contact.sociallinks){
-    socialArray = new Array();
-    socialArray = $scope.contact.sociallinks;
-    socialArray.push(social);
-
-  }else{ 
-    socialArray = social;
-  }
-  params = {'id':$scope.contact.id,
-             'sociallinks':socialArray}
-  Contact.patch($scope,params);
+  params = {'parent':$scope.contact.entityKey,
+            'kind':'sociallinks',
+            'fields':[
+                {
+                  "field": "url",
+                  "value": social.sociallink
+                }
+            ]
+  };
+  InfoNode.insert($scope,params);
   $('#socialmodal').modal('hide');
+  
+};
+$scope.addCustomField = function(customField){
+  params = {'parent':$scope.contact.entityKey,
+            'kind':'customfields',
+            'fields':[
+                {
+                  "field": customField.field,
+                  "value": customField.value
+                }
+            ]
+  };
+  InfoNode.insert($scope,params);
+
+  $('#customfields').modal('hide');
+  
 };
 
 //HKA 01.12.2013 Add Tagline
@@ -811,7 +816,8 @@ $scope.updateintro = function(contact){
                     console.log(params);
                 }
       }
-      $scope.renderMaps = function(){
+     $scope.renderMaps = function(){
+       
           $scope.addresses = $scope.contact.addresses;
           Map.render($scope);
       };
@@ -836,11 +842,69 @@ $scope.updateintro = function(contact){
                          'addresses':addressArray};
           Contact.patch($scope,params);
       };
-      $scope.addGeo = function(addressArray){
-          params = {'id':$scope.contact.id,
-             'addresses':addressArray}
-          Contact.patch($scope,params);
-      }
+       $scope.addGeo = function(address){
+          params = {'parent':$scope.contact.entityKey,
+            'kind':'addresses',
+            'fields':[
+                {
+                  "field": "street",
+                  "value": address.street
+                },
+                {
+                  "field": "city",
+                  "value": address.city
+                },
+                {
+                  "field": "state",
+                  "value": address.state
+                },
+                {
+                  "field": "postal_code",
+                  "value": address.postal_code
+                },
+                {
+                  "field": "country",
+                  "value": address.country
+                }
+            ]
+          };
+          if (address.lat){
+            params = {'parent':$scope.contact.entityKey,
+            'kind':'addresses',
+            'fields':[
+                {
+                  "field": "street",
+                  "value": address.street
+                },
+                {
+                  "field": "city",
+                  "value": address.city
+                },
+                {
+                  "field": "state",
+                  "value": address.state
+                },
+                {
+                  "field": "postal_code",
+                  "value": address.postal_code
+                },
+                {
+                  "field": "country",
+                  "value": address.country
+                },
+                {
+                  "field": "lat",
+                  "value": address.lat.toString()
+                },
+                {
+                  "field": "lon",
+                  "value": address.lon.toString()
+                }
+              ]
+            };
+          } 
+          InfoNode.insert($scope,params);
+      };
      // Google+ Authentication 
      Auth.init($scope);
 }]);
