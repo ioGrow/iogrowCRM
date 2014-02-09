@@ -469,6 +469,13 @@ indexes:
   - name: updated_at
     direction: desc
 
+- kind: Edge
+  properties:
+  - name: kind
+  - name: start_node
+  - name: updated_at
+    direction: desc
+
 - kind: Event
   properties:
   - name: about_item
@@ -1286,6 +1293,33 @@ indexes:
   properties:
   - name: about_item
   - name: about_kind
+  - name: updated_at
+    direction: desc
+
+- kind: Task
+  properties:
+  - name: organization
+  - name: -updated_at
+
+- kind: Task
+  properties:
+  - name: organization
+  - name: title
+
+- kind: Task
+  properties:
+  - name: organization
+  - name: title
+    direction: desc
+
+- kind: Task
+  properties:
+  - name: organization
+  - name: updated_at
+
+- kind: Task
+  properties:
+  - name: organization
   - name: updated_at
     direction: desc
 

@@ -13,6 +13,40 @@ class Edge(ndb.Expando):
     end_node = ndb.KeyProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
+    
+    @classmethod
+    def insert(cls, start_node,end_node,kind,inverse_edge):
+        # create the inverse edge
+        if inverse_edge is not None:
+            inversed_edge = Edge(kind = inverse_edge, 
+                       start_node = end_node,
+                       end_node = start_node)
+            inversed_edge.put()
+        edge = Edge(kind = kind, 
+                       start_node = start_node,
+                       end_node = end_node)
+        edge_key = edge.put()
+        return edge_key
+    
+    @classmethod
+    def list(cls, start_node,kind):
+        return cls.query(cls.start_node==start_node, cls.kind==kind).order(-cls.updated_at).fetch()
+    @classmethod
+    def find(cls, start_node,end_node_set,kind,operation):
+        """ search if there is edges wich start with start_node and ends with one of the end_node_set or has the whole end_node_set
+            operation could be 'AND' to specify that we need all the end_node_set,'OR' to specify that we need at least one of the end_node_set
+            return True or False
+        """
+        edge_list = cls.list(start_node,kind)
+        end_node_found = list()
+        for edge in edge_list:
+            end_node_found.append(edge.end_node)
+        if operation == 'AND':
+            return len( set(end_node_found).intersection(end_node_set) ) == len( set(end_node_set) )
+        elif operation == 'OR':
+            return len( set(end_node_found).intersection(end_node_set) ) > 0
+
+        
 
 class InfoNode(ndb.Expando):
     """InfoNode Class to store all informations about object"""
