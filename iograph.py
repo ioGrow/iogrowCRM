@@ -17,6 +17,9 @@ class Edge(ndb.Expando):
     @classmethod
     def insert(cls, start_node,end_node,kind,inverse_edge):
         # create the inverse edge
+        existing_edge = cls.query(cls.start_node==start_node, cls.end_node == end_node, cls.kind==kind).get()
+        if existing_edge:
+            return existing_edge.key
         if inverse_edge is not None:
             inversed_edge = Edge(kind = inverse_edge, 
                        start_node = end_node,

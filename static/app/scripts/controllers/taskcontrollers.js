@@ -178,8 +178,8 @@ app.directive('ngBlur', ['$parse', function($parse) {
     });
   }
 }]);
-app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor','Tag',
-    function($scope,Auth,Task,User,Contributor,Tag) {
+app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor','Tag','Edge',
+    function($scope,Auth,Task,User,Contributor,Tag,Edge) {
      $("#id_Accounts").addClass("active");
      document.title = "Accounts: Home";
      $scope.isSignedIn = false;
@@ -433,6 +433,9 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
                         'limit':7}
         Task.list($scope,params);
      }
+     $scope.edgeInserted = function () {
+       $scope.listTasks();
+     }
      // Quick Filtering
      var searchParams ={};
      $scope.result = undefined;
@@ -542,8 +545,44 @@ $scope.selectTag= function(tag,index,$event){
             $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
              text.css('color','#000000');
          }
+         console.log('Taaaaaaaaaggggggssss');
+         console.log($scope.selected_tags);
+         $scope.filterByTags($scope.selected_tags);
+
       }
+
     };
+  $scope.filterByTags = function(selected_tags){
+         var tags = [];
+         angular.forEach(selected_tags, function(tag){
+            tags.push(tag.entityKey);
+         });
+         var params = {
+          'tags': tags
+         }
+         Task.list($scope,params);
+
+  }
+  $scope.filterByOwner = function(selected_tags){
+         var tags = [];
+         angular.forEach(selected_tags, function(tag){
+            tags.push(tag.entityKey);
+         });
+         var params = {
+          'tags': tags
+         }
+         Task.list($scope,params);
+
+  }
+  $scope.urgentTasks = function(){
+         
+         var params = {
+          'order': '-due'
+         }
+         Task.list($scope,params);
+
+  }
+
 $scope.unselectAllTags= function(){
         $('.tags-list li').each(function(){
             var element=$(this);
@@ -576,15 +615,28 @@ $scope.doneEditTag=function(tag){
      }
 $scope.addTags=function(){
       var tags=[];
+      var items = [];
       tags=$('#select2_sample2').select2("val");
-      tags=tags.map(JSON.parse);
+      
       angular.forEach($scope.selected_tasks, function(selected_task){
-      params = {'id':selected_task.id,
-            'tags':tags
-      };
-      Task.patch($scope,params);
+          angular.forEach(tags, function(tag){
+            var edge = {
+              'start_node': selected_task.entityKey,
+              'end_node': tag,
+              'kind':'tags',
+              'inverse_edge': 'tagged_on'
+            };
+            items.push(edge);
+          });
       });
-             $('#assigneeTagsToTask').modal('hide');
+
+      params = {
+        'items': items
+      }
+      console.log('************** Edge *********************');
+      console.log(params);
+      Edge.insert($scope,params);
+      $('#assigneeTagsToTask').modal('hide');
 
      };
      // Google+ Authentication 
