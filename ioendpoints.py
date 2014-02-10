@@ -9,6 +9,8 @@ import pprint
 import logging
 import httplib2
 import json
+import datetime
+import time
 
 # Google libs
 from google.appengine.ext import ndb
@@ -709,13 +711,34 @@ class CrmEngineApi(remote.Service):
                                           google_public_profile_url = edge.end_node.get().google_public_profile_url,
                                           photo = edge.end_node.get().google_public_profile_photo_url) )
 
+                      status_color = 'gray'
+                      status_label = 'pending'
+                      if task.due:
+                          now = datetime.datetime.now()
+                          diff = task.due - now
+                          if diff.days>=0 and diff.days<=2:
+                              status_color = 'orange'
+                              status_label = 'soon: due in '+ str(diff.days) + ' days'
+                          if diff.days<0:
+                              status_color = 'red'
+                              status_label = 'overdue'
+                      if task.status == 'open':
+                          status_color = 'green'
+                          status_label = 'work in progress'
+                      if task.status == 'closed':
+                          status_color = 'white'
+                          status_label = 'closed'
+
+                                
+
+
                       task_schema = TaskSchema(
                                   id = str( task.key.id() ),
                                   entityKey = task.key.urlsafe(),
                                   title = task.title,
                                   status = task.status,
-                                  status_color = 'gray',
-                                  status_label = 'pending',
+                                  status_color = status_color,
+                                  status_label = status_label,
                                   comments = 0,
                                   about = DiscussionAboutSchema(),
                                   created_by = AuthorSchema(),
