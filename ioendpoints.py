@@ -95,7 +95,17 @@ DISCUSSIONS = {
                             'title':'discussion',
                             'url': '/#/notes/show/'
                         }
-              }
+        }
+INVERSED_EDGES = {
+            'tags': 'tagged_on',
+            'tagged_on': 'tags'
+            
+         }
+
+
+ # The message class that defines the EntityKey schema
+class EntityKeyRequest(messages.Message):
+    entityKey = messages.StringField(1)       
  # The message class that defines the author schema
 class AuthorSchema(messages.Message):
     google_user_id = messages.StringField(1)
@@ -588,6 +598,15 @@ class CrmEngineApi(remote.Service):
                                      start_node = item.start_node,
                                      end_node= item.end_node ))
       return EdgesResponse(items=items)
+
+  # edges.delete api
+  @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
+                      path='edges', http_method='DELETE',
+                      name='edges.delete')
+  def delete_edge(self, request):
+      edge_key = ndb.Key(urlsafe=request.entityKey)
+      Edge.delete(edge_key)
+      return message_types.VoidMessage() 
   #Info Node APIs
   # infonode.insert api
   @endpoints.method(InfoNodeSchema, InfoNodeResponse,
@@ -2014,14 +2033,16 @@ class CrmEngineApi(remote.Service):
   def tags_list(self, query):
       user_from_email = EndpointsHelper.require_iogrow_user()
       return query.filter(Tag.organization==user_from_email.organization)
-  @Tag.method(request_fields=('id',),response_message=message_types.VoidMessage,
-    http_method ='DELETE',path='tags/{id}',name='tags.delete')
-  def TagDelete(self,my_model):
-    user_from_email=EndpointsHelper.require_iogrow_user()
-    print '*********************************'
-    print my_model
-    my_model.key.delete()
-    return message_types.VoidMessage() 
+  
+  # tags.delete api
+  @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
+                      path='tags', http_method='DELETE',
+                      name='tags.delete')
+  def delete_tag(self, request):
+      tag_key = ndb.Key(urlsafe=request.entityKey)
+      Edge.delete_all(start_node=tag_key)
+      tag_key.delete()
+      return message_types.VoidMessage()
   @Tag.method(user_required=True,path='tags', http_method='POST', name='tags.insert')
   def TagInsert(self, my_model):
     user_from_email = EndpointsHelper.require_iogrow_user()

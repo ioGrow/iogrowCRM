@@ -603,8 +603,11 @@ $scope.tag_save = function(tag){
            };
       };
 $scope.deleteTag=function(tag){
-          Tag.delete($scope,tag.id);
-          console.log("tag deleted ")
+          params = {
+            'entityKey': tag.entityKey
+          }
+          Tag.delete($scope,params);
+          
       };
 $scope.editTag=function(tag){
         $scope.edited_tag=tag;

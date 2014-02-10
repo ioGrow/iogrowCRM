@@ -1,5 +1,9 @@
 from google.appengine.ext import ndb
-
+INVERSED_EDGES = {
+            'tags': 'tagged_on',
+            'tagged_on': 'tags'
+            
+}
 class Node(ndb.Expando):
     """Node Class to store all objects"""
     kind = ndb.StringProperty()
@@ -34,6 +38,23 @@ class Edge(ndb.Expando):
     @classmethod
     def list(cls, start_node,kind):
         return cls.query(cls.start_node==start_node, cls.kind==kind).order(-cls.updated_at).fetch()
+    @classmethod
+    def delete(cls, edge_key):
+         existing_edge = edge_key.get()
+         start_node = existing_edge.start_node 
+         end_node = existing_edge.end_node
+         kind = existing_edge.kind
+
+         existing_edge.key.delete()
+         inversed_edge = cls.query(cls.start_node==end_node, cls.end_node == start_node, cls.kind==INVERSED_EDGES[kind]).get()
+         if inversed_edge:
+             inversed_edge.key.delete()
+    @classmethod
+    def delete_all(cls, start_node):
+         edges = cls.query(ndb.OR(cls.start_node==start_node,cls.end_node==start_node) ).fetch()
+         for edge in edges:
+            edge.key.delete()
+
     @classmethod
     def find(cls, start_node,end_node_set,kind,operation):
         """ search if there is edges wich start with start_node and ends with one of the end_node_set or has the whole end_node_set
