@@ -1,7 +1,9 @@
 from google.appengine.ext import ndb
 INVERSED_EDGES = {
             'tags': 'tagged_on',
-            'tagged_on': 'tags'
+            'tagged_on': 'tags',
+            'assignees' : 'assigned_to'
+
             
 }
 class Node(ndb.Expando):

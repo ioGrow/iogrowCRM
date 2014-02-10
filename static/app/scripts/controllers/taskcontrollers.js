@@ -398,21 +398,27 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
           console.log($scope.slected_members);
      };
      $scope.addNewContributors = function(){
+      items = [];
       angular.forEach($scope.slected_members, function(selected_user){
          angular.forEach($scope.selected_tasks, function(selected_task){
-            var params = {   
-                          'discussionKey': selected_task.entityKey,
-                          'type': 'user',
-                          'value': selected_user.email,
-                          'name': selected_user.google_display_name,
-                          'role': 'member',
-                          'photoLink': selected_user.google_public_profile_photo_url
-            }  
-            console.log('selected member');
-            console.log(params.name); 
-            Contributor.insert($scope,params);
+            
+            var edge = {
+              'start_node': selected_task.entityKey,
+              'end_node': selected_user.entityKey,
+              'kind':'assignees',
+              'inverse_edge': 'assigned_to'
+            };
+            items.push(edge);
+            
+            
          });
       });
+      if (items){
+        params = {
+          'items': items
+        }
+        Edge.insert($scope,params);
+      }
      $('#assigneeModal').modal('hide');
      };
      $scope.listContributors = function(){
