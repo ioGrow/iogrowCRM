@@ -781,17 +781,7 @@ $scope.CaselistNextPageItems = function(){
  }
 //HKA 19.11.2013 Add Phone
  $scope.addPhone = function(phone){
-  //HKA 19.11.2013  Concatenate old phones with new phone
-  var phonesArray = undefined;
   
-  if ($scope.account.phones){
-    phonesArray = new Array();
-    phonesArray = $scope.account.phones;
-    phonesArray.push(phone);
-  }else{
-    phonesArray = phone;
-  }
-
   params = {'parent':$scope.account.entityKey,
             'kind':'phones',
             'fields':[
@@ -813,16 +803,7 @@ $scope.CaselistNextPageItems = function(){
 
 //HKA 20.11.2013 Add Email
 $scope.addEmail = function(email){
-  var emailsArray = undefined;
   
-  if ($scope.account.emails){
-    emailsArray = new Array();
-    emailsArray = $scope.account.emails;
-    emailsArray.push(email);
-  }else{
-    emailsArray = email;
-  }
-
   params = {'parent':$scope.account.entityKey,
             'kind':'emails',
             'fields':[
@@ -946,15 +927,7 @@ $scope.deleteaccount = function(){
           Map.render($scope);
       };
       $scope.addAddress = function(address){
-        var addressArray = undefined;
-        if ($scope.account.addresses){
-          addressArray = new Array();
-          addressArray = $scope.account.addresses;
-          addressArray.push(address);
-
-        }else{ 
-          addressArray = address;
-        }
+       
         Map.searchLocation($scope,address);
 
         $('#addressmodal').modal('hide');

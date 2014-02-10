@@ -275,7 +275,7 @@
                                 <h3>{{ _('Custom Fields') }}</h3>
                                 
                                 <ul class="list-unstyled contact-infos" >
-                                    <li ng-repeat="customfield in infonodes.customfields"><span ng-repeat="record in customfield.fields"><%= record.field%> : <%= record.value%></span></li>
+                                    <li ng-repeat="customfield in infonodes.customfields"><span ng-repeat="record in customfield.fields"><strong> <%= record.field%>:</strong> <%= record.value%></span></li>
                                     <li><a href="#customfields" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new custom field </a></li>
                                     
                                 </ul>
@@ -1229,7 +1229,7 @@
                         <label  class="required col-md-3 control-label">{{_("Number")}}</label>
                        
                         <div class="col-md-9">
-                          <input type="text"  class="form-control" id="id_name" ng-model="phone.number">
+                          <input type="text" class="form-control" id="id_name" ng-model="phone.number">
                           
                         </div>
                      </div>
@@ -1237,7 +1237,8 @@
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
               
-                 <input ng-hide="isLoading" ng-click="addPhone(phone)"  type="submit" class="btn green" value="{{_('Add this phone')}}">
+                 <input ng-hide="isLoading" ng-click="addPhone(phone)" ng-disabled="!(phone.number)" type="submit" class="btn green" value="{{_('Add this phone')}}">
+                
                   <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
               </div>
                 </form>
@@ -1256,18 +1257,18 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("Add Email")}}</h3>
             </div>
             <div class="modal-body">
-                  <form id="addEmail" name="addemail" ng-submit="addEmail(emaill)" class="form-horizontal"> 
+                  <form id="addEmail" name="addemail"  class="form-horizontal"> 
                     <div class="form-group">
                         <label  class="col-md-3 control-label">{{_("Email")}} </label>
                         <div class="col-md-9">
-                          <input type="text" placeholder="{{_('Email')}}" required id="id_email" ng-model="emaill.email" class="form-control">
+                          <input type="text" placeholder="{{_('Email')}}" required id="id_email" ng-model="emaill.email" ng-pattern="/^[\w\.\_]+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}/"  class="form-control">
                         </div>
                      </div>
               </div>
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
               
-                  <input ng-hide="isLoading" type="submit" class="btn green" value="Add this email">
+                  <input ng-hide="isLoading" ng-click="addEmail(emaill)"   ng-disabled="!(emaill.email)"  type="submit" class="btn green" value="Add this email">
                   <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
               </div>
                 </form>
@@ -1285,7 +1286,7 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("Add Address")}}</h3>
             </div>
             <div class="modal-body">
-                  <form id="addAddress" name="addemail" ng-submit="addAddress(address)" class="form-horizontal">
+                  <form id="addAddress" name="addemail"  class="form-horizontal">
                     <div class="form-group">
                         <label  class="col-md-3 control-label">{{_("Street")}} </label>
                         <div class="col-md-9">
@@ -1320,7 +1321,7 @@
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
               
-                  <input ng-hide="isLoading" type="submit" class="btn green" value="{{_('Add this address')}}">
+                  <input ng-hide="isLoading" ng-click="addAddress(address)" ng-disabled="!(address.country || address.postal_code || address.state || address.city || address.street)" type="submit" class="btn green" value="{{_('Add this address')}}">
                   <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
               </div>
                 </form>
@@ -1337,19 +1338,23 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("Add Website")}}</h3>
             </div>
             <div class="modal-body">
-                  <form id="addWebsite" name="addwebsite" ng-submit="addCustomField(customField)" class="form-horizontal"> 
+                  <form id="addWebsite" name="addwebsite"  class="form-horizontal"> 
                     <div class="form-group">
                         <label  class="col-md-3 control-label">{{_("Custom Field")}} </label>
                         <div class="col-md-9">
-                          <input type="text" class="form-control" placeholder="Field"  ng-model="customField.field">
-                          <input type="text" class="form-control" placeholder="Value"  ng-model="customField.value">
+                          <div class="form-group">
+                               <input type="text" class="form-control" placeholder="Field"  ng-model="customField.field">
+                          </div>
+                          <div class="form-group">
+                               <input type="text" class="form-control" placeholder="Value"  ng-model="customField.value">
+                          </div>
                         </div>
                      </div>
               </div>
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
               
-                  <input ng-hide="isLoading" type="submit" class="btn green" value="{{_('Add this Custom Field')}}">
+                  <input ng-hide="isLoading" ng-click="addCustomField(customField)" ng-disabled="!(customField.field && customField.value)" type="submit" class="btn green" value="{{_('Add this custom field')}}">
                   <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
               </div>
                 </form>
@@ -1367,18 +1372,18 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("Add Website")}}</h3>
             </div>
             <div class="modal-body">
-                  <form id="addWebsite" name="addwebsite" ng-submit="addWebsite(website)" class="form-horizontal"> 
+                  <form id="addWebsite" name="addwebsite"  class="form-horizontal"> 
                     <div class="form-group">
                         <label  class="col-md-3 control-label">{{_("Website")}} </label>
                         <div class="col-md-9">
-                          <input type="text" class="form-control" placeholder="Website" required id="id_website" ng-model="website.website">
+                          <input type="text" class="form-control" placeholder="Website" required id="id_website" ng-model="website.website" >
                         </div>
                      </div>
               </div>
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
               
-                  <input ng-hide="isLoading" type="submit" class="btn green" value="{{_('Add this Website')}}">
+                  <input ng-hide="isLoading" ng-click="addWebsite(website)" ng-disabled="!(website.website)" type="submit"  class="btn green" value="{{_('Add this Website')}}">
                   <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
               </div>
                 </form>
@@ -1397,7 +1402,7 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("Add Social link")}}</h3>
             </div>
              <div class="modal-body">
-                  <form id="addSocial" name="addsocial" ng-submit="addSocial(social)" class="form-horizontal"> 
+                  <form id="addSocial" name="addsocial"  class="form-horizontal"> 
                     <div class="form-group">
                         <label  class="col-md-3 control-label">{{_("Social link")}} </label>
                         <div class="col-md-9">
@@ -1408,8 +1413,8 @@
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
               
-                  <input ng-hide="isLoading" type="submit" class="btn green" value="{{_('Add this Social link')}}">
-                  <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
+                  <input ng-hide="isLoading" ng-click="addSocial(social)" ng-disabled="!(social.sociallink)" type="submit" class="btn green" value="{{ _('Add this social link') }}">
+                  <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
               </div>
                 </form>
                 </div>
