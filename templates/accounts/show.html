@@ -1342,8 +1342,12 @@
                     <div class="form-group">
                         <label  class="col-md-3 control-label">{{_("Custom Field")}} </label>
                         <div class="col-md-9">
-                          <input type="text" class="form-control" placeholder="Field"  ng-model="customField.field">
-                          <input type="text" class="form-control" placeholder="Value"  ng-model="customField.value">
+                          <div class="form-group">
+                               <input type="text" class="form-control" placeholder="Field"  ng-model="customField.field">
+                          </div>
+                          <div class="form-group">
+                               <input type="text" class="form-control" placeholder="Value"  ng-model="customField.value">
+                          </div>
                         </div>
                      </div>
               </div>
