@@ -884,7 +884,25 @@
                               </div>
                            
                               </div>
+
                             </div>
+                           <div class="row">
+                             <div class="col-md-12">
+                                <div class="pagination pull-right" ng-hide="isLoading">
+                                      
+                                      
+                                        <button ng-click="DocumentPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="documentpagination.prev">
+                                        {{_("Prev")}} 
+                                        </button>
+                                        
+                                        <button ng-click="DocumentlistNextPageItems()"  class="btn" ng-show="documentpagination.next">
+                                        {{_("Next")}} 
+                                        </button>
+                                      
+                                    </div>
+                                    <h3 class="pagination pull-right" ng-show="isLoading">{{ _("Loading...") }}</h3>
+                              </div>
+                              </div>
                       </div>
                       <div class="tab-pane active" id="tab_1_8" ng-show="selectedTab == 8">
                         

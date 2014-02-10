@@ -50,7 +50,7 @@ accountservices.factory('Account', function($http) {
                
                $scope.email.to = '';
                document.title = "Account: " + $scope.account.name ;
-               //$scope.renderMaps();
+              //$scope.renderMaps();
                 angular.forEach($scope.account.emails, function(value, key){
                   $scope.email.to = $scope.email.to + value.email + ',';
                   
@@ -210,7 +210,9 @@ accountservices.factory('Search', function($http) {
           case 'Need':
           base_url = '/#/needs/show/';
           break;
-        
+        case 'Document' :
+          base_url = '#/documents/show/';
+          break;        
 
         }
 
@@ -280,7 +282,7 @@ accountservices.factory('Attachement', function($http) {
   var Attachement = function(data) {
     angular.extend(this, data);
   };
-  Attachement.list = function($scope,params){
+  /*Attachement.list = function($scope,params){
       $scope.isLoading = true;
       gapi.client.crmengine.documents.list(params).execute(function(resp) {
               if(!resp.code){
@@ -289,19 +291,23 @@ accountservices.factory('Attachement', function($http) {
                   };
                 
                  $scope.documents = resp.items;
-                 if ($scope.currentPage>1){
-                      $scope.pagination.prev = true;
+
+                 console.log('-----------Documents--------');
+                 console.log($scope.documents);
+                
+                 if ($scope.documentCurrentPage > 1){
+                      $scope.documentpagination.prev = true;
                    }else{
-                       $scope.pagination.prev = false;
+                      $scope.documentpagination.prev = false;
                    }
                  if (resp.nextPageToken){
-                   var nextPage = $scope.currentPage + 1;
+                   var nextPage = $scope.documentCurrentPage + 1;
                    // Store the nextPageToken
-                   $scope.pages[nextPage] = resp.nextPageToken;
-                   $scope.pagination.next = true;
+                   $scope.documentpages[nextPage] = resp.nextPageToken;
+                   $scope.documentpagination.next = true;
                    
                  }else{
-                  $scope.pagination.next = false;
+                  $scope.documentpagination.next = false;
                  }
                  // Loaded succefully
                  $scope.isLoading = false;
@@ -316,6 +322,46 @@ accountservices.factory('Attachement', function($http) {
               }
       });
       
+  };*/
+  Attachement.list = function($scope,params){
+      $scope.isLoading = true;
+      gapi.client.crmengine.documents.list(params).execute(function(resp) {
+              if(!resp.code){
+                  
+                  if (!resp.items){
+                    if(!$scope.isFiltering){
+                        $scope.blankStatdocuments = true;
+                    }
+                  }
+                 $scope.documents = resp.items;
+                 if ($scope.documentCurrentPage >1){
+                      $scope.documentpagination.prev = true;
+                   }else{
+                       $scope.documentpagination.prev = false;
+                   }
+                 if (resp.nextPageToken){
+                  console.log('------------------One two three ----');
+                   var nextPage = $scope.documentCurrentPage + 1;
+                   // Store the nextPageToken
+                   $scope.documentpages[nextPage] = resp.nextPageToken;
+                   $scope.documentpagination.next = true;
+                   
+                 }else{
+                  $scope.documentpagination.next = false;
+                 }
+                 // Loaded succefully
+                 $scope.isLoading = false;
+                 // Call the method $apply to make the update on the scope
+                 $scope.$apply();
+              }else {
+               
+               if(resp.message=="Invalid token"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+              }
+      });
   };
   Attachement.get = function($scope,id) {
           gapi.client.crmengine.documents.get(id).execute(function(resp) {
@@ -342,7 +388,7 @@ accountservices.factory('Attachement', function($http) {
       $scope.isLoading = true;
       gapi.client.crmengine.documents.insert(params).execute(function(resp) {
             if(!resp.code){ 
-             $('#newDocument').modal('hide');
+             //$('#newDocument').modal('hide');
              $scope.listDocuments();
              $scope.isLoading = false;
              $scope.blankStatdocuments = false;

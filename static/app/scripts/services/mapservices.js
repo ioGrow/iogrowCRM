@@ -5,7 +5,7 @@ mapservices.factory('Map', function($http) {
   };
 
   Map.render = function($scope){
-      console.log($scope.infonodes.addresses);
+     
       var mapOptions = {
                   center: new google.maps.LatLng(0, 0),
                   zoom: 01
@@ -17,9 +17,7 @@ mapservices.factory('Map', function($http) {
             if ($scope.infonodes.addresses[i].lat){
               var lat = parseFloat($scope.infonodes.addresses[i].lat);
               var lon = parseFloat($scope.infonodes.addresses[i].lon);
-              console.log(lat);
-              console.log('LATLOG');
-              console.log(lon);
+             
               $('#gmap_canvas').gmap('addMarker', {
                       'position': lat+ ','+ lon, 
                       'draggable': true, 
@@ -68,7 +66,7 @@ mapservices.factory('Map', function($http) {
                 
               if ( status == 'OK' ) {
                   
-                  console.log(results[0].geometry.location);
+             
                   address.lat = results[0].geometry.location.lat();
                   address.lon = results[0].geometry.location.lng();
                   var position = results[0].geometry.location.lat() + ',' + results[0].geometry.location.lng();
