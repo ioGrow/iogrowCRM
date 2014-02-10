@@ -168,7 +168,16 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
     Auth.init($scope);
 
   }]);
-
+app.directive('ngBlur', ['$parse', function($parse) {
+  return function(scope, element, attr) {
+    var fn = $parse(attr['ngBlur']);
+    element.bind('blur', function(event) {
+      scope.$apply(function() {
+        fn(scope, {$event:event});
+      });
+    });
+  }
+}]);
 app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor','Tag',
     function($scope,Auth,Task,User,Contributor,Tag) {
      $("#id_Accounts").addClass("active");
@@ -193,6 +202,10 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
      $scope.tasks_checked = [];
      $scope.selected_tasks = [];
      $scope.selected_tags = [];
+     $scope.manage_tags =false;
+     $scope.edited_task =null;
+     $scope.edited_tag =null;
+     $scope.selectedTab=1;
      $scope.task_checked = false;
      $scope.isSelectedAll = false;
      var handleColorPicker = function () {
@@ -278,19 +291,16 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
      $scope.showAssigneeTags=function(){
         $('#assigneeTagsToTask').modal('show');
      };
-     $scope.testTags=function(){
-      var tags=[];
-      tags=$('#select2_sample2').select2("val");
-      tags=tags.map(JSON.parse);
-      angular.forEach($scope.selected_tasks, function(selected_task){
-      params = {'id':selected_task.id,
-            'tags':tags
-      };
-      Task.patch($scope,params);
-      });
-             $('#assigneeTagsToTask').modal('hide');
 
-     };
+     $scope.edit_task=function(task){
+        $scope.edited_task=task;
+     }
+
+     $scope.done_edit_task=function(task){
+        $scope.edited_task=null;
+        $scope.updateTask(task);
+     }
+
      // Insert the account if enter button is pressed
      $scope.addAccountOnKey = function(account){
         if(event.keyCode == 13 && account){
@@ -301,12 +311,6 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
      $scope.save = function(account){
           if (account.name) {
              Account.insert($scope,account);
-           };
-      };
-      $scope.tag_save = function(tag){
-          if (tag.name) {
-             Tag.insert($scope,tag);
-             console.log("tag saved");
            };
       };
 
@@ -330,6 +334,14 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
           console.log($scope.selected_tasks);
          }
     };
+   $scope.updateTask = function(task){
+            params ={ 'id':task.id,
+                      'title': task.title,
+                      'status':task.status
+            };
+      Task.patch($scope,params);
+    };
+
     $scope.select_task= function(task,index,$event){
          var checkbox = $event.target;
          if(checkbox.checked){
@@ -345,23 +357,8 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
              console.log($scope.selected_tasks);
          } 
     };
-     $scope.select_tag= function(tag,index,$event){
-         var element=$($event.target);
-         if(element.prop("tagName")!='LI'){
-              element=element.parent();
-         }
-         var text=element.find(".with-color");
-         if($scope.selected_tags.indexOf(tag) == -1){
-            $scope.selected_tags.push(tag);
-            element.css('background-color', tag.color+'!important');
-            text.css('color',$scope.idealTextColor(tag.color));
 
-         }else{
-            element.css('background-color','#ffffff !important');
-            $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
-             text.css('color','#000000');
-         }
-    };
+     
       $scope.isSelected = function(index) {
         return ($scope.selected_tasks.indexOf(index) >= 0||$scope.isSelectedAll);
       };
@@ -378,6 +375,15 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
             Task.patch($scope,params);
         });
              $('#beforecloseTask').modal('hide');
+      };
+      $scope.reopenTask = function(){
+        angular.forEach($scope.selected_tasks, function(selected_task){
+          console.log(selected_task.id);
+          params = {'id':selected_task.id,
+            'status':'pending'
+            };
+            Task.patch($scope,params);
+        });
       };
     $scope.selectMember = function(){
         if ($scope.slected_members.indexOf($scope.user) == -1) {
@@ -419,17 +425,13 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
           window.location.replace('#/accounts/show/'+resp.id);
      };
      //tags
-     $scope.addNewtag = function(tag){
-       var params = {   
-                          'name': tag.name,
-                          'color':$('#tag-col-pick').val()
-                      }  ;
-       Tag.insert($scope,params);
-        Tag.list($scope,{});
-        
-     }
-     $scope.listTags=function(){
-      Tag.list($scope,{});
+     
+     
+     $scope.listTasks=function(){
+      $scope.selected_tasks=[];/*we have to change it */
+      var params = {'status':$scope.status,
+                        'limit':7}
+        Task.list($scope,params);
      }
      // Quick Filtering
      var searchParams ={};
@@ -500,7 +502,91 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
         $scope.isFiltering = true;
         Task.list($scope,params);
      };
+/***********************************************
+        tags
+***************************************************************************************/
+$scope.listTags=function(){
+      Tag.list($scope,{});
+     }
+$scope.addNewtag = function(tag){
+       var params = {   
+                          'name': tag.name,
+                          'color':$('#tag-col-pick').val()
+                      }  ;
+       Tag.insert($scope,params);
+        Tag.list($scope,{});
+        
+     }
+$scope.updateTag = function(tag){
+            params ={ 'id':tag.id,
+                      'title': tag.name,
+                      'status':tag.color
+            };
+      Tag.patch($scope,params);
+  };
+$scope.selectTag= function(tag,index,$event){
+      if(!$scope.manage_tags){
+         var element=$($event.target);
+         if(element.prop("tagName")!='LI'){
+              element=element.parent();
+              element=element.parent();
+         }
+         var text=element.find(".with-color");
+         if($scope.selected_tags.indexOf(tag) == -1){
+            $scope.selected_tags.push(tag);
+            element.css('background-color', tag.color+'!important');
+            text.css('color',$scope.idealTextColor(tag.color));
 
+         }else{
+            element.css('background-color','#ffffff !important');
+            $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
+             text.css('color','#000000');
+         }
+      }
+    };
+$scope.unselectAllTags= function(){
+        $('.tags-list li').each(function(){
+            var element=$(this);
+            var text=element.find(".with-color");
+             element.css('background-color','#ffffff !important');
+             text.css('color','#000000');
+        });
+     };
+
+
+$scope.manage=function(){
+        $scope.unselectAllTags();
+      };
+$scope.tag_save = function(tag){
+          if (tag.name) {
+             Tag.insert($scope,tag);
+             console.log("tag saved");
+           };
+      };
+$scope.deleteTag=function(tag){
+          Tag.delete($scope,tag.id);
+          console.log("tag deleted ")
+      };
+$scope.editTag=function(tag){
+        $scope.edited_tag=tag;
+     }
+$scope.doneEditTag=function(tag){
+        $scope.edited_tag=null;
+        $scope.updateTag(tag);
+     }
+$scope.addTags=function(){
+      var tags=[];
+      tags=$('#select2_sample2').select2("val");
+      tags=tags.map(JSON.parse);
+      angular.forEach($scope.selected_tasks, function(selected_task){
+      params = {'id':selected_task.id,
+            'tags':tags
+      };
+      Task.patch($scope,params);
+      });
+             $('#assigneeTagsToTask').modal('hide');
+
+     };
      // Google+ Authentication 
      Auth.init($scope);
 

@@ -1733,7 +1733,14 @@ class CrmEngineApi(remote.Service):
   def tags_list(self, query):
       user_from_email = EndpointsHelper.require_iogrow_user()
       return query.filter(Tag.organization==user_from_email.organization)
-
+  @Tag.method(request_fields=('id',),response_message=message_types.VoidMessage,
+    http_method ='DELETE',path='tags/{id}',name='tags.delete')
+  def TagDelete(self,my_model):
+    user_from_email=EndpointsHelper.require_iogrow_user()
+    print '*********************************'
+    print my_model
+    my_model.key.delete()
+    return message_types.VoidMessage() 
   @Tag.method(user_required=True,path='tags', http_method='POST', name='tags.insert')
   def TagInsert(self, my_model):
     user_from_email = EndpointsHelper.require_iogrow_user()

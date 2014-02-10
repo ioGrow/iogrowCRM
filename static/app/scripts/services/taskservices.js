@@ -44,6 +44,7 @@ topicservices.factory('Task', function($http) {
             $scope.listContributors();*/
             $scope.isLoading = false;
             $scope.listTags();
+            $scope.listTasks();
             $scope.$apply();
 
             $('#EditTaskModal').modal('hide');
@@ -56,6 +57,7 @@ topicservices.factory('Task', function($http) {
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.listTags();
+                $scope.listTasks();
                 $scope.$apply();
              };
          }
@@ -215,9 +217,37 @@ topicservices.factory('Tag', function($http) {
          }
       });
   };
+    Tag.patch = function($scope,params){
+      $scope.isLoading = true;
+              console.log('task service');
+      gapi.client.crmengine.tags.patch(params).execute(function(resp) {
+        console.log(params);
+        console.log(resp);
+          if(!resp.code){
+            $scope.tag = resp;
+            $scope.isLoading = false;
+            $scope.listTags();
+            $scope.listTasks();
+            $scope.$apply();
+         }else{
+             console.log(resp.message);
+             if(resp.message=="Invalid grant"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.listTags();
+                $scope.listTasks();
+                $scope.$apply();
+             };
+         }
+      });
+  };
+  Tag.delete = function($scope,id){
 
-
-  
+    console.log('tag iddddddddddddddd');
+    console.log(id);
+    gapi.client.crmengine.tags.delete(id).execute(function(resp){});
+    $scope.listTags();
+  };
 
 return Tag;
 });
