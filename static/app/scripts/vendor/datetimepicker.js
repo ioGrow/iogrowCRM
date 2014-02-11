@@ -16,6 +16,7 @@
 angular.module('ui.bootstrap.datetimepicker', [])
   .constant('dateTimePickerConfig', {
     startView: 'day',
+    autoclose: false,
     minView: 'minute',
     minuteStep: 5,
     dropdownSelector: null
@@ -23,12 +24,12 @@ angular.module('ui.bootstrap.datetimepicker', [])
   .constant('dateTimePickerConfigValidation', function (configuration) {
     "use strict";
 
-    var validOptions = ['startView', 'minView', 'minuteStep', 'dropdownSelector'];
+    var validOptions = ['startView', 'minView', 'minuteStep', 'dropdownSelector','autoclose'];
 
     for (var prop in configuration) {
       if (configuration.hasOwnProperty(prop)) {
         if (validOptions.indexOf(prop) < 0) {
-          throw ("invalid option: " + prop);
+          throw ("invalid ooooption: " + prop);
         }
       }
     }
