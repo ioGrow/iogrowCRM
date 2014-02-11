@@ -367,6 +367,7 @@ accountservices.factory('Attachement', function($http) {
           gapi.client.crmengine.documents.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.attachment = resp;
+               document.title = "Document: " + $scope.attachment.title ;
                $scope.prepareUrls();
                
                $scope.isContentLoaded = true;

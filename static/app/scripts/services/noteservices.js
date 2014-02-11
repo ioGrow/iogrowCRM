@@ -19,7 +19,7 @@ noteservices.factory('Note', function($http) {
                 console.log('CurrentPage   is '+$scope.currentPage);
 
                  $scope.notes = resp.items;
-                  if ($scope.currentPage>1){
+                  if ($scope.currentPage > 1){
                       console.log('Should show PREV');
                     $scope.pagination.prev = true;
                   }else{
