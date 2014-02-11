@@ -9,10 +9,12 @@ accountservices.factory('Contact', function($http) {
 
   
   Contact.get = function($scope,id) {
+          
           gapi.client.crmengine.contacts.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.contact = resp;
                $scope.isContentLoaded = true;
+               $scope.listInfonodes();
                $scope.listTopics(resp);
                $scope.listTasks();
                $scope.listEvents();
@@ -20,7 +22,7 @@ accountservices.factory('Contact', function($http) {
                $scope.listCases();
                $scope.listDocuments();
                $scope.selectedTab = 2;
-               $scope.renderMaps();
+               //$scope.renderMaps();
 
               document.title = "Contact: " + $scope.contact.firstname +' ' +$scope.contact.lastname ;
               $scope.email.to = '';
@@ -29,6 +31,7 @@ accountservices.factory('Contact', function($http) {
                   
                 });
                // Call the method $apply to make the update on the scope
+                $scope.isLoading = false;
                $scope.$apply();
 
             }else {
@@ -67,6 +70,7 @@ accountservices.factory('Contact', function($http) {
           });
   };
   Contact.list = function($scope,params){
+        $scope.isLoading = true;
       gapi.client.crmengine.contacts.list(params).execute(function(resp) {
 
     

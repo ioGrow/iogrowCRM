@@ -201,26 +201,28 @@
                   </div>
                
                                   
-                </div>
+                </div>2013
               </div>
               <div class="clearfix"></div>
               </div>
               </div>
             </div>
           <div class="row">
+          <div class="col-md-12">
             <div class="pagination pull-right" ng-hide="isLoading">
                   
-                  <ul>
-                    <li ng-show="contactpagination.prev"><button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
+                  
+                    <button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="contactpagination.prev">
                     {{_("Prev")}} 
-                    </button></li>
+                    </button>
                     <li ng-repeat="page in contactpagination.pages" ng-class='{active: page.isCurrent}'><a  href="#/accounts/p/<%= page.id %>"><%= page.id %></a></li>
-                    <li  ng-show="contactpagination.next"><button ng-click="listNextPageItems()"  class="btn">
+                   <button ng-click="listNextPageItems()"  class="btn" ng-show="contactpagination.next">
                     {{_("Next")}} 
-                    </button></li>
+                    </button>
                   </ul>
                 </div>
                 <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+            </div>
           </div>
             
           

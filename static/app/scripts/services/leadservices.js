@@ -15,8 +15,9 @@ leadservices.factory('Lead', function($http) {
                 $scope.listTasks();
                 $scope.listEvents();
                 $scope.listDocuments();
+                $scope.listInfonodes();
                 $scope.selectedTab = 2;
-                $scope.renderMaps();
+                //$scope.renderMaps();
                 $scope.email.to = '';
                 document.title = "Lead: " + $scope.lead.firstname +' '+ $scope.lead.lastname ;
                 angular.forEach($scope.lead.emails, function(value, key){

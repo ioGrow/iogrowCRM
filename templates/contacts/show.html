@@ -4,7 +4,7 @@
                 
                   
                     <p ng-show="sending">Sending...</p>
-                    <p ng-show="emailSent">You email has been sent</p>
+                    <p ng-show="emailSent">Your email has been sent</p>
 
 
                   
@@ -81,7 +81,7 @@
                     <p>Collaborators:</p>
                         <div ng-repeat="collaborator in contact.collaborators_list" class="invitation">
                           <img class="google-avatar" src="<%=collaborator.photo%>"/>
-                           <%=collaborator.display_name%> < <%=collaborator.email%> >
+                           <%=collaborator.display_name%>  <%=collaborator.email%> >
                         </div>
                         
                     </div>
@@ -153,7 +153,7 @@
                 
             <h2 class="page-title">
             <a href="/#/contacts/" data-toggle="tooltip" data-placement="bottom" title="Back to Contacts">
-            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>   {{_("Contacts")}} > <%=contact.firstname%> <%=contact.lastname%></h2>
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>   {{_("Contacts")}} > <%=contact.firstname%> <%=contact.lastname%>  </h2>
             
 
             <span ng-show="contact.title"><a class="tag" href="/#/search/type:Contact <%=contact.title%>">#<%=contact.title%> </a></span>
@@ -227,19 +227,20 @@
                               
                             </ul>
                              <div class="row">
+                             <div class="col-md-12">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
-                                      <ul>
-                                        <li ng-show="topicpagination.prev"><button ng-click="TopiclistPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                      
+                                       <button ng-click="TopiclistPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="topicpagination.prev">
                                         {{_("Prev")}} 
-                                        </button></li>
+                                        </button>
                                         
-                                        <li  ng-show="topicpagination.next"><button ng-click="TopiclistNextPageItems()"  class="btn">
+                                        <button ng-click="TopiclistNextPageItems()"  class="btn" ng-show="topicpagination.next">
                                         {{_("Next")}} 
-                                        </button></li>
-                                      </ul>
+                                        </button>
                                     </div>
                                     <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                              </div>
                               </div>
                            
                            
@@ -257,7 +258,7 @@
                                  
                                 </div>
                                   <ul class="list-unstyled contact-infos">
-                                    <li ng-repeat="phone in contact.phones"> <%=phone.number%> - <%=phone.type_number%> <a ><img class="ctodeal" src="static/img/phone-icon.png" /></a></li>
+                                    <li ng-repeat="phone in infonodes.phones"> <%=phone.number%> - <%=phone.type%> <a ><img class="ctodeal"  /></a></li>
           
                                     <li><a href="#phonemodal"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new Phone</a></li>
 
@@ -269,7 +270,7 @@
                                  
                                 </div>
                                   <ul class="list-unstyled contact-infos">
-                                    <li ng-repeat="email in contact.emails"> <%=email.email %>   </li>
+                                    <li ng-repeat="email in infonodes.emails"> <%=email.email %>   </li>
                                     
                                     <li><a href="#emailmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new email address </a></li>
 
@@ -279,7 +280,7 @@
                                  
                                 </div>
                                  <ul class="list-unstyled contact-infos">
-                                    <li ng-repeat="addr in contact.addresses"><%=addr.street%>, <%=addr.city%> <%=addr.state%>, <%=addr.street%> <%=addr.postal_code%>  </li>
+                                    <li ng-repeat="address in infonodes.addresses">- <span ng-show="address.street"><%=address.street%>, </span> <span ng-show="address.city"><%=address.city%>, </span> <span ng-show="address.country"><%=address.country%></span></li>
                                     
                                     <li><a href="#addressmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new address </a></li>
 
@@ -296,7 +297,7 @@
                                   
                                 </div>
                                 <ul class="list-unstyled contact-infos" >
-                                    <li ng-repeat="web in contact.websites"><a href="<%=web.website%>"><%=web.website%></a> </li>
+                                    <li ng-repeat="web in infonodes.websites"><a href="/<%=web.url%>"><%=web.url%></a> </li>
                                     <li><a href="#websitemodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new Website </a></li>
                                     
                                 </ul> 
@@ -305,10 +306,22 @@
                                   
                                 </div>
                                 <ul class="list-unstyled contact-infos" >
-                                    <li ng-repeat="social in contact.sociallinks"><a href="<%=social.sociallink%>"></a> <%=social.sociallink%> </li>
+                                    <li ng-repeat="social in infonodes.sociallinks"><a href="<%=social.url%>"></a> <%=social.url%> </li>
                                   <li><a href="#socialmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new social links </a></li>    
                                 </ul>
                                                              
+                              </div>
+                              <div class="news-blocks blank-card blank-card-yellow">
+                                <h3>{{ _('Custom Fields') }}</h3>
+                                
+                                <ul class="list-unstyled contact-infos" >
+                                    <li ng-repeat="customfield in infonodes.customfields"><span ng-repeat="record in customfield.fields"><%= record.field%> : <%= record.value%></span></li>
+                                    <li><a href="#customfields" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new custom field </a></li>
+                                    
+                                </ul>
+                                 
+                                
+                                                    
                               </div>
                           </div>
                           <div class="col-md-6">
@@ -445,7 +458,7 @@
                             <div class="inner-cards-container">
                                <div class="inner-cards-container" >
                               <div  class="col-md-4 responsive" ng-repeat="opp in opportunities" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
+                                <div class="dashboard-stat cards-small">
                                   
                                   <div class="details">
                                     <a href=""><h3 class="relatedcardOppTitle">
@@ -484,19 +497,21 @@
 
                             </div>
                         <div class="row">
+                        <div class="col-md-12">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
-                                      <ul>
-                                        <li ng-show="opppagination.prev"><button ng-click="OppPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                      
+                                      <button ng-click="OppPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="opppagination.prev">
                                         {{_("Prev")}} 
-                                        </button></li>
+                                        </button>
                                         
-                                        <li  ng-show="opppagination.next"><button ng-click="OpplistNextPageItems()"  class="btn">
+                                        <button ng-click="OpplistNextPageItems()"  class="btn" ng-show="opppagination.next">
                                         {{_("Next")}} 
-                                        </button></li>
-                                      </ul>
+                                        </button>
+                                      
                                     </div>
                                     <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                            </div> 
                             </div> 
                            <!--HKA 19.11.2013 Opportunity Modal -->
 
@@ -533,7 +548,10 @@
                     <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Stage")}} </label>
                         <div class="col-md-9">
-                        <input type="text" class="form-control" id="id_stage" ng-model="opportunity.stage">
+                       <select ng-model="stage_selected" class="form-control" ng-options="opps.name + ' - ( ' + opps.probability + '% )' for opps in opportunitystages | orderBy: 'name':true"  >
+                            <option value="">-- choose Stage --</option>
+                          
+                          </select>
                         </div>
                     </div>                 
                   
@@ -563,7 +581,7 @@
                             <div class="inner-cards-container">
                             
                                <div  class="col-md-4 responsive" ng-repeat="casee in cases" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
+                                <div class="dashboard-stat cards-small">
                                   
                                   <div class="details">
                                     <a href="/#/cases/show/<%= casee.id %>"><h3 class="relatedcardOppTitle">
@@ -602,20 +620,22 @@
                              
                             </div>
                             <div class="row">
+                            <div class="col-md-12">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
-                                      <ul>
-                                        <li ng-show="casepagination.prev"><button ng-click="CasePrevPageItems()" id="sample_editable_1_new" class="btn">
+                                     
+                                        <button ng-click="CasePrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="casepagination.prev">
                                         {{_("Prev")}} 
-                                        </button></li>
+                                        </button>
                                         
-                                        <li  ng-show="casepagination.next"><button ng-click="CaselistNextPageItems()"  class="btn">
+                                       <button ng-click="CaselistNextPageItems()"  class="btn" ng-show="casepagination.next">
                                         {{_("Next")}} 
-                                        </button></li>
-                                      </ul>
+                                        </button>
+                                    
                                     </div>
                                     <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
                               </div>
+                            </div>
                                     <!--HKA 19.11.2013 Case Modal -->
                 <div id="addCaseModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-dialog">
@@ -643,7 +663,18 @@
                         <label  class="required col-md-3 control-label">{{_("Priority")}} </label>
                        
                         <div class="col-md-9">
-                          <input type="text" class="form-control"  id="id_priority" ng-model="casee.priority">
+                           <select class="form-control" ng-model="casee.priority">
+                            <option value="1">1 - Low</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10 - Critical</option>
+                          </select>
                           
                         </div>
                     </div>
@@ -652,7 +683,10 @@
                         <label  class="required col-md-3 control-label">{{_("Status")}}</label>
                        
                         <div class="col-md-9">
-                          <input type="text" class="form-control"  id="id_status" ng-model="casee.statuss">
+                            <select  class="form-control" ng-model="status_selected" ng-options="stat.status for stat in casesatuses" >
+                            <option value="">Choose Status</option>
+                            <!--option value=""><%=status_selected.status%></option-->
+                          </select>
                           
                         </div>
                       
@@ -970,7 +1004,13 @@
                     <div class="form-group">
                         <label  class="col-md-3 control-label">{{_("Type")}} </label>
                         <div class="col-md-9">
-                          <input type="text" class="form-control" placeholder="home, work, mobile, other..." required id="id_name" ng-model="phone.type_number">
+                          <select ng-model="phone.type" class="form-control">
+                            <option value="home" selected="selected" >{{_('home')}}</option>
+                            <option>{{_('work')}}</option>
+                            <option>{{_('mobile')}}</option>
+                            <option>{{_('other')}}</option>
+                            
+                          </select>
                         </div>
                      </div>
                      <div class="form-group">
@@ -1075,6 +1115,37 @@
                 </form>
                 </div>
                </div>
+        </div>
+     <div id="customfields" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{_("Add Website")}}</h3>
+            </div>
+            <div class="modal-body">
+                  <form id="addWebsite" name="addwebsite" ng-submit="addCustomField(customField)" class="form-horizontal"> 
+                    <div class="form-group">
+                        <label  class="col-md-3 control-label">{{_("Custom Field")}} </label>
+                        <div class="col-md-9">
+                        <div class="form-group">
+                             <input type="text" class="form-control" placeholder="Field"  ng-model="customField.field">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Value"  ng-model="customField.value">
+                        </div>
+                        </div>
+                     </div>
+              </div>
+              <div class="modal-footer">
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+              
+                  <input ng-hide="isLoading" type="submit" class="btn green" value="{{_('Add this Custom Field')}}">
+                  <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
+              </div>
+                </form>
+                </div>
+                </div>
         </div>
 
     <!--HKA 18.11.2013 Website Modal -->

@@ -256,22 +256,23 @@
               </div>
             </div>
           <div class="row">
+          <div class="col-md-12">
             <div class="pagination pull-right" ng-hide="isLoading">
                   
-                  <ul>
-                    <li ng-show="opppagination.prev"><button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
+                  <!--ul class="list-unstyled list-inline"-->
+                    <button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="opppagination.prev">
                     {{_("Prev")}} 
-                    </button></li>
+                    </button>
                     <li ng-repeat="page in opppagination.pages" ng-class='{active: page.isCurrent}'><a  href="#/accounts/"><%= page.id %></a></li>
-                    <li  ng-show="opppagination.next"><button ng-click="listNextPageItems()"  class="btn">
+                    <button ng-click="listNextPageItems()"  class="btn" ng-show="opppagination.next">
                     {{_("Next")}} 
-                    </button></li>
-                  </ul>
+                    </button>
+                  <!--/ul-->
                 </div>
                 <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
           </div>
             
-          
+          </div>
         
         <!-- END PAGE CONTENT-->
       </div>

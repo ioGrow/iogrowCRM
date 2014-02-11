@@ -300,19 +300,20 @@
                               
                             </ul>
                             <div class="row">
+                            <div class="col-md-12">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
-                                      <ul>
-                                        <li ng-show="topicpagination.prev"><button ng-click="TopiclistPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                   
+                                       <button ng-click="TopiclistPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="topicpagination.prev">
                                         {{_("Prev")}} 
-                                        </button></li>
-                                        
-                                        <li  ng-show="topicpagination.next"><button ng-click="TopiclistNextPageItems()"  class="btn">
+                                        </button>
+                                    <button ng-click="TopiclistNextPageItems()"  class="btn" ng-show="topicpagination.next">
                                         {{_("Next")}} 
-                                        </button></li>
-                                      </ul>
+                                        </button>
+                                     
                                     </div>
                                     <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                              </div>
                               </div>
                             </div>
                       <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
@@ -327,7 +328,7 @@
                                  
                                 </div>
                                   <ul class="list-unstyled contact-infos">
-                                    <li ng-repeat="phone in lead.phones"> <%=phone.number%> - <%=phone.type_number%> <a ><img class="ctodeal" src="static/img/phone-icon.png" /></a></li>
+                                    <li ng-repeat="phone in infonodes.phones"> <%=phone.number%> - <%=phone.type%> <a ><img class="ctodeal"  /></a></li>
           
                                     <li><a href="#phonemodal"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new Phone</a></li>
 
@@ -337,7 +338,7 @@
                                  
                                 </div>
                                   <ul class="list-unstyled contact-infos">
-                                    <li ng-repeat="email in lead.emails"> <%=email.email %>   </li>
+                                    <li ng-repeat="email in infonodes.emails"> <%=email.email %>   </li>
                                     
                                     <li><a href="#emailmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new email address </a></li>
 
@@ -347,9 +348,7 @@
                                  
                                 </div>
                                  <ul class="list-unstyled contact-infos">
-                                    <li ng-repeat="addr in lead.addresses"><%=addr.street%>, <%=addr.city%> <%=addr.state%>, <%=addr.street%> <%=addr.postal_code%>  </li>
-                                    
-                                    <li><a href="#addressmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new address </a></li>
+                                    <li ng-repeat="address in infonodes.addresses">- <span ng-show="address.street"><%=address.street%>, </span> <span ng-show="address.city"><%=address.city%>, </span> <span ng-show="address.country"><%=address.country%></span></li><a href="#addressmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new address </a></li>
 
                   
                                   </ul>
@@ -364,7 +363,7 @@
                                   
                                 </div>
                                 <ul class="list-unstyled contact-infos" >
-                                    <li ng-repeat="web in lead.websites"><a href="http://<%=web.website%>" target="_blank"><%=web.website%></a> </li>
+                                    <li ng-repeat="web in infonodes.websites"><a href="http://<%=web.url%>" target="_blank"><%=web.url%></a> </li>
                                     <li><a href="#websitemodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new Website </a></li>
                                     
                                 </ul>
@@ -373,10 +372,28 @@
                                   
                                 </div>
                                 <ul class="list-unstyled contact-infos" >
-                                    <li ng-repeat="social in lead.sociallinks"><a href="<%=social.sociallink%>" target="_blank"> <%=social.sociallink%> </a></li>
+                                    <li ng-repeat="social in infonodes.sociallinks"><a href="<%=social.url%>" target="_blank"> <%=social.url%> </a></li>
                                   <li><a href="#socialmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new social links </a></li>    
                                 </ul>                      
                               </div>
+
+                               <div class="news-blocks blank-card blank-card-yellow">
+                                <h3>{{ _('Custom Fields') }}</h3>
+                                
+                                <ul class="list-unstyled contact-infos" >
+                                    <li ng-repeat="customfield in infonodes.customfields">
+                                    <span ng-repeat="record in customfield.fields">
+                                    <%= record.field%>  : <%= record.value%> </span>
+
+                                    </li>
+                                    <li><a href="#customfields" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new custom field </a></li>
+                                    
+                                </ul>
+                                 
+                                
+                                                    
+                              </div>
+
                           </div>
                           <div class="col-md-6">
                           
@@ -768,7 +785,13 @@
                     <div class="form-group">
                         <label  class="col-md-3 control-label">{{_("Type")}} </label>
                         <div class="col-md-9">
-                          <input type="text" class="form-control" placeholder="home, work, mobile, other..." required id="id_name" ng-model="phone.type_number">
+                           <select ng-model="phone.type_number" class="form-control">
+                            <option value="home" selected="selected" >{{_('home')}}</option>
+                            <option>{{_('work')}}</option>
+                            <option>{{_('mobile')}}</option>
+                            <option>{{_('other')}}</option>
+                            
+                          </select>
                         </div>
                      </div>
                      <div class="form-group">
@@ -872,6 +895,39 @@
                 </form>
                 </div>
           </div>
+        </div>
+    <!--HKA 09.02.2014 Custom fiel modal -->
+
+    <div id="customfields" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{_("Add Website")}}</h3>
+            </div>
+            <div class="modal-body">
+                  <form id="addWebsite" name="addwebsite" ng-submit="addCustomField(customField)" class="form-horizontal"> 
+                    <div class="form-group">
+                        <label  class="col-md-3 control-label">{{_("Custom Field")}} </label>
+                        <div class="col-md-9">
+                           <div class="form-group">
+                               <input type="text" class="form-control" placeholder="Field"  ng-model="customField.field">
+                           </div>
+                           <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Value"  ng-model="customField.value">
+                           </div>
+                        </div>
+                     </div>
+              </div>
+              <div class="modal-footer">
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+              
+                  <input ng-hide="isLoading" type="submit" class="btn green" value="{{_('Add this Custom Field')}}">
+                  <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
+              </div>
+                </form>
+                </div>
+                </div>
         </div>
 
     <!--HKA 18.11.2013 Website Modal -->

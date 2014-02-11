@@ -68,7 +68,7 @@ topicservices.factory('Task', function($http) {
       console.log(params);
 
       $scope.isLoading = true;
-      gapi.client.crmengine.tasks.list(params).execute(function(resp) {
+      gapi.client.crmengine.tasks.listv2(params).execute(function(resp) {
               if(!resp.code){
                 console.log('in topics.list looking for pagingation');
                 console.log($scope.currentPage);
@@ -241,12 +241,14 @@ topicservices.factory('Tag', function($http) {
          }
       });
   };
-  Tag.delete = function($scope,id){
+  Tag.delete = function($scope,params){
 
     console.log('tag iddddddddddddddd');
-    console.log(id);
-    gapi.client.crmengine.tags.delete(id).execute(function(resp){});
+    console.log(params);
+    gapi.client.crmengine.tags.delete(params).execute(function(resp){});
     $scope.listTags();
+    $scope.listTasks();
+
   };
 
 return Tag;
@@ -310,3 +312,32 @@ topicservices.factory('Contributor', function($http) {
 
 return Contributor;
 });
+topicservices.factory('Edge', function($http) {
+  
+  var Edge = function(data) {
+    angular.extend(this, data);
+  }
+
+
+ 
+   Edge.insert = function($scope,params){
+      $scope.isLoading = true;
+      gapi.client.crmengine.edges.insert(params).execute(function(resp) {
+         if(!resp.code){
+            $scope.edgeInserted();
+            $scope.isLoading = false;
+
+            $scope.$apply();
+         
+         }else{
+          console.log(resp.code);
+         }
+      });
+  };
+
+
+  
+
+return Edge;
+});
+

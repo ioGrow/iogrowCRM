@@ -8,9 +8,9 @@ import pprint
 from datetime import date
 import model
 from search_helper import tokenize_autocomplete 
-
+  
 class Task(EndpointsModel):
-    _message_fields_schema = ('id','entityKey', 'owner','created_at','updated_at','title','due','status','tags', 'completed_by','comments','about_kind','about_item','organization','involved_ids','involved_list','author')
+    _message_fields_schema = ('id','entityKey', 'owner','access', 'created_at','updated_at','title','due','status','tags',  'completed_by','comments','about_kind','about_item','organization','involved_ids','involved_list','author')
 
     author = ndb.StructuredProperty(Userinfo)
     # Sharing fields

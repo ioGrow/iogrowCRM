@@ -61,7 +61,7 @@
                        <div class="form-group">
                             <select id="select2_sample2" class="form-control select2" multiple>
                               <option ng-repeat="tag in tags" 
-                              value='<%={name:tag.name,color:tag.color}%>'>
+                              value='<%=tag.entityKey%>'>
                                 <%=tag.name%>
                               </option>
                             </select>
@@ -300,7 +300,7 @@
                                         </label>
                                        <h4 ng-dblclick="edit_task(task)" ng-show="edited_task!=task" class="col-md-6 col-sm-7 list-group-item-heading"
                                        ng-class= "{task_closed: task.status=='closed'}">
-                                       <i class="fa fa-dot-circle-o status_color"></i>
+                                       <i class="fa fa-dot-circle-o status_color" style="color:<%= task.status_color%>;" data-toggle="tooltip" data-placement="top" title="<%= task.status_label %>"></i>
                                         <%= task.title %>
                                        </h4>
                                        <div ng-show="edited_task==task" class="col-md-6 col-sm-7">

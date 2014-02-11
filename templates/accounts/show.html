@@ -189,19 +189,21 @@
                               
                             </ul>
                             <div class="row">
+                             <div class="col-md-12">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
-                                      <ul>
-                                        <li ng-show="topicpagination.prev"><button ng-click="TopiclistPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                     
+                                        <button ng-click="TopiclistPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="topicpagination.prev">
                                         {{_("Prev")}} 
-                                        </button></li>
+                                        </button>
                                         
-                                        <li  ng-show="topicpagination.next"><button ng-click="TopiclistNextPageItems()"  class="btn">
+                                        <button ng-click="TopiclistNextPageItems()"  class="btn" ng-show="topicpagination.next">
                                         {{_("Next")}} 
-                                        </button></li>
-                                      </ul>
+                                        </button>
+                                   
                                     </div>
                                     <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                                </div>
                               </div>
                             </div>
                       <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
@@ -217,7 +219,7 @@
                                  
                                 </div>
                                   <ul class="list-unstyled contact-infos">
-                                    <li ng-repeat="phone in account.phones"> <%=phone.number%> - <%=phone.type_number%> <a ><img class="ctodeal" src="static/img/phone-icon.png" /></a></li>
+                                    <li ng-repeat="phone in infonodes.phones"> <%=phone.number%>, <%= phone.type%></li>
           
                                     <li><a href="#phonemodal"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new Phone</a></li>
 
@@ -227,7 +229,7 @@
                                  
                                 </div>
                                   <ul class="list-unstyled contact-infos">
-                                    <li ng-repeat="email in account.emails"> <%=email.email %>   </li>
+                                    <li ng-repeat="email in infonodes.emails"> <%=email.email%>   </li>
                                     
                                     <li><a href="#emailmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new email address </a></li>
 
@@ -237,7 +239,7 @@
                                  
                                 </div>
                                  <ul class="list-unstyled contact-infos">
-                                    <li ng-repeat="addr in account.addresses"><%=addr.street%>, <%=addr.city%> <%=addr.state%>, <%=addr.postal_code%> ,<%=addr.country%>   </li>
+                                    <li ng-repeat="address in infonodes.addresses">- <span ng-show="address.street"><%=address.street%>, </span> <span ng-show="address.city"><%=address.city%>, </span> <span ng-show="address.country"><%=address.country%></span></li>
                                     
                                     <li><a href="#addressmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new address </a></li>
 
@@ -254,7 +256,7 @@
                                   
                                 </div>
                                 <ul class="list-unstyled contact-infos" >
-                                    <li ng-repeat="web in account.websites"><a href="http://<%=web.website%>" target="_blank"><%=web.website%></a> </li>
+                                    <li ng-repeat="website in infonodes.websites"><a href="http://<%=website.url%>" target="_blank"><%=website.url%></a> </li>
                                     <li><a href="#websitemodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new Website </a></li>
                                     
                                 </ul>
@@ -264,9 +266,21 @@
                                   
                                 </div>
                                 <ul class="list-unstyled contact-infos" >
-                                    <li ng-repeat="social in account.sociallinks"><a href="<%=social.sociallink%>" target="_blank"> <%=social.sociallink%> </a></li>
+                                    <li ng-repeat="sociallink in infonodes.sociallinks"><a href="<%=sociallink.url%>" target="_blank"> <%=sociallink.url%> </a></li>
                                   <li><a href="#socialmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new social links </a></li>    
                                 </ul>
+                                                    
+                              </div>
+                              <div class="news-blocks blank-card blank-card-yellow">
+                                <h3>{{ _('Custom Fields') }}</h3>
+                                
+                                <ul class="list-unstyled contact-infos" >
+                                    <li ng-repeat="customfield in infonodes.customfields"><span ng-repeat="record in customfield.fields"><strong> <%= record.field%>:</strong> <%= record.value%></span></li>
+                                    <li><a href="#customfields" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new custom field </a></li>
+                                    
+                                </ul>
+                                 
+                                
                                                     
                               </div>
                           </div>
@@ -311,7 +325,7 @@
 
                            <div class="col-md-12">
                             <div class="inner-cards-container">
-                              <div  class="col-md-3" ng-repeat="contact in contacts">
+                              <div  class="col-md-4" ng-repeat="contact in contacts">
                                 <div class="dashboard-stat cards-small">
 
                                   
@@ -350,19 +364,20 @@
                               </div>
                             </div>
                             <div class="row">
+                             <div class="col-md-12">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
-                                      <ul>
-                                        <li ng-show="contactpagination.prev"><button ng-click="ContactlistPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                      
+                                        <button ng-click="ContactlistPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="contactpagination.prev">
                                         {{_("Prev")}} 
-                                        </button></li>
-                                        
-                                        <li  ng-show="contactpagination.next"><button ng-click="ContactlistNextPageItems()"  class="btn">
+                                        </button>
+                                        <button ng-click="ContactlistNextPageItems()"  class="btn"  ng-show="contactpagination.next">
                                         {{_("Next")}} 
-                                        </button></li>
-                                      </ul>
+                                        </button>
+                                      
                                     </div>
                                     <h3 class="pagination pull-right" ng-show="isLoading">{{ _("Loading...") }}</h3>
+                              </div>
                               </div>
                         <!--HKA 18.11.2013 Add Contact modal -->
 
@@ -408,23 +423,21 @@
            </div>
        </div>
     <!--End Contact Modal -->
-
-
                       </div>
-                      <div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 4">
-                          
-                         <div class="row cards-container">
+                  <div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 4">
+                         
+                         <div class="row cards-container">     
                          <div class="btn-group relbutton">
-            
                                 <button  ng-click="addNeedModal()" id="sample_editable_1_new" class="btn red">
-                                {{_("Add a new Need")}} <i class="icon-plus"></i>
-                                </button>
-                          </div>
-                            <div class="col-md-12">
+                               {{_("Add a new Need")}}<i class="icon-plus"></i>
+                                </button>                                
+                         </div>                     
+
+                           <div class="col-md-12">
                             <div class="inner-cards-container">
-                                                        
-                             <div  class="col-md-4 responsive" ng-repeat="need in needs" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
+                              <div  class="col-md-4" ng-repeat="need in needs">
+                                <div class="dashboard-stat cards-small">
+
                                   
                                   <div class="details">
                                     <a href="/#/needs/show/<%= need.id %>"><h3 class="relatedcardOppTitle">
@@ -437,8 +450,10 @@
                                     
                                     </div>
                                   </div>
-                                                 
+                                 
+                                    <div class="clearfix"></div>               
                                 </div>
+                                     
                               </div>
                               <div ng-show="blankStateneeds" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
                                 <div class="dashboard-stat cards">
@@ -453,28 +468,30 @@
                                         
                                 </div>
                               </div>
-
+                              <br>
+                              
                               <div class="clearfix"></div>
-                            </div><!--/inner-cards-container-->
+                              </div><!--/inner-cards-container-->
+                              </div>
                             </div>
-                            </div>
-                             <div class="row">
+                            <div class="row">
+                             <div class="col-md-12">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
-                                      <ul>
-                                        <li ng-show="needspagination.prev"><button ng-click="NeedPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                      
+                                        <button ng-click="NeedPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="needspagination.prev">
                                         {{_("Prev")}} 
-                                        </button></li>
+                                        </button>
                                         
-                                        <li  ng-show="needspagination.next"><button ng-click="NeedlistNextPageItems()"  class="btn">
+                                        <button ng-click="NeedlistNextPageItems()"  class="btn" ng-show="needspagination.next">
                                         {{_("Next")}} 
-                                        </button></li>
-                                      </ul>
+                                        </button>
+                                      
                                     </div>
                                     <h3 class="pagination pull-right" ng-show="isLoading">{{ _("Loading...") }}</h3>
                               </div>
-
-                      <!--HKA 19.11.2013 Case Modal -->
+                              </div>
+                          <!--HKA 19.11.2013 Need Modal -->
                 <div id="addNeedModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                       <div class="modal-content">
@@ -538,8 +555,11 @@
                </div>
        </div>
                
-                      <!--HKA 19.11.2013  End Case Modal -->
+                      <!--HKA 19.11.2013  End Need Modal -->
                       </div>
+                    
+ 
+
                        <div class="tab-pane active" id="tab_1_5" ng-show="selectedTab == 5">
                           
                          <div class="row cards-container">
@@ -553,7 +573,7 @@
                           <div class="col-md-12">
                             <div class="inner-cards-container" >
                               <div  class="col-md-4 responsive" ng-repeat="opp in opportunities" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
+                                <div class="dashboard-stat cards-small">
                                   
                                   <div class="details">
                                     <a href="/#/opportunities/show/<%= opp.id %>"><h3 class="relatedcardOppTitle">
@@ -587,19 +607,21 @@
                               </div>
                             </div>
                             <div class="row">
+                              <div class="col-md-12">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
-                                      <ul>
-                                        <li ng-show="opppagination.prev"><button ng-click="OppPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                      
+                                        <button ng-click="OppPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="opppagination.prev">
                                         {{_("Prev")}} 
-                                        </button></li>
+                                        </button>
                                         
-                                        <li  ng-show="opppagination.next"><button ng-click="OpplistNextPageItems()"  class="btn">
+                                        <button ng-click="OpplistNextPageItems()"  class="btn" ng-show="opppagination.next">
                                         {{_("Next")}} 
-                                        </button></li>
-                                      </ul>
+                                        </button>
+                                      
                                     </div>
-                                    <!--h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3-->
+                                    <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                              </div>
                               </div>
 
 
@@ -674,7 +696,7 @@
                             <div class="inner-cards-container">
                                                         
                              <div  class="col-md-4 responsive" ng-repeat="casee in cases" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
+                                <div class="dashboard-stat cards-small">
                                   
                                   <div class="details">
                                     <a href="/#/cases/show/<%= casee.id %>"><h3 class="relatedcardOppTitle">
@@ -710,19 +732,21 @@
                               </div>
                             </div>
                              <div class="row">
+                             <div class="col-md-12">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
-                                      <ul>
-                                        <li ng-show="casepagination.prev"><button ng-click="CasePrevPageItems()" id="sample_editable_1_new" class="btn">
+                                      
+                                        <button ng-click="CasePrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="casepagination.prev">
                                         {{_("Prev")}} 
-                                        </button></li>
+                                        </button>
                                         
-                                        <li  ng-show="casepagination.next"><button ng-click="CaselistNextPageItems()"  class="btn">
+                                        <button ng-click="CaselistNextPageItems()"  class="btn" ng-show="casepagination.next">
                                         {{_("Next")}} 
-                                        </button></li>
-                                      </ul>
+                                        </button>
+                                      
                                     </div>
                                     <h3 class="pagination pull-right" ng-show="isLoading">{{ _("Loading...") }}</h3>
+                              </div>
                               </div>
 
                       <!--HKA 19.11.2013 Case Modal -->
@@ -833,7 +857,7 @@
                             <div class="inner-cards-container">
                                                         
                              <div  class="col-md-4 responsive" ng-repeat="attachment in documents" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
+                                <div class="dashboard-stat cards-small">
                                   
                                   <div class="details">
                                     <a href="/#/documents/show/<%= attachment.id %>"><h3 class="relatedcardOppTitle">
@@ -1187,7 +1211,7 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("Add Phone")}}</h3>
             </div>
             <div class="modal-body">
-                  <form id="addPhone" name="addphone" ng-submit="addPhone(phone)" class="form-horizontal"> 
+                  <form id="addPhone" name="addphone" class="form-horizontal"> 
                     <div class="form-group">
                         <label  class="col-md-3 control-label">{{_("Type")}} </label>
                         <div class="col-md-9">
@@ -1205,7 +1229,7 @@
                         <label  class="required col-md-3 control-label">{{_("Number")}}</label>
                        
                         <div class="col-md-9">
-                          <input type="text"  class="form-control" id="id_name" ng-model="phone.number">
+                          <input type="text" class="form-control" id="id_name" ng-model="phone.number">
                           
                         </div>
                      </div>
@@ -1213,7 +1237,8 @@
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
               
-                  <input ng-hide="isLoading" type="submit" class="btn green" value="{{_('Add this phone')}}">
+                 <input ng-hide="isLoading" ng-click="addPhone(phone)" ng-disabled="!(phone.number)" type="submit" class="btn green" value="{{_('Add this phone')}}">
+                
                   <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
               </div>
                 </form>
@@ -1232,18 +1257,18 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("Add Email")}}</h3>
             </div>
             <div class="modal-body">
-                  <form id="addEmail" name="addemail" ng-submit="addEmail(emaill)" class="form-horizontal"> 
+                  <form id="addEmail" name="addemail"  class="form-horizontal"> 
                     <div class="form-group">
                         <label  class="col-md-3 control-label">{{_("Email")}} </label>
                         <div class="col-md-9">
-                          <input type="text" placeholder="{{_('Email')}}" required id="id_email" ng-model="emaill.email" class="form-control">
+                          <input type="text" placeholder="{{_('Email')}}" required id="id_email" ng-model="emaill.email" ng-pattern="/^[\w\.\_]+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}/"  class="form-control">
                         </div>
                      </div>
               </div>
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
               
-                  <input ng-hide="isLoading" type="submit" class="btn green" value="Add this email">
+                  <input ng-hide="isLoading" ng-click="addEmail(emaill)"   ng-disabled="!(emaill.email)"  type="submit" class="btn green" value="Add this email">
                   <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
               </div>
                 </form>
@@ -1261,7 +1286,7 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("Add Address")}}</h3>
             </div>
             <div class="modal-body">
-                  <form id="addAddress" name="addemail" ng-submit="addAddress(address)" class="form-horizontal">
+                  <form id="addAddress" name="addemail"  class="form-horizontal">
                     <div class="form-group">
                         <label  class="col-md-3 control-label">{{_("Street")}} </label>
                         <div class="col-md-9">
@@ -1296,7 +1321,7 @@
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
               
-                  <input ng-hide="isLoading" type="submit" class="btn green" value="{{_('Add this address')}}">
+                  <input ng-hide="isLoading" ng-click="addAddress(address)" ng-disabled="!(address.country || address.postal_code || address.state || address.city || address.street)" type="submit" class="btn green" value="{{_('Add this address')}}">
                   <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
               </div>
                 </form>
@@ -1304,6 +1329,38 @@
             </div>
         </div>
 
+
+     <div id="customfields" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{_("Add Website")}}</h3>
+            </div>
+            <div class="modal-body">
+                  <form id="addWebsite" name="addwebsite"  class="form-horizontal"> 
+                    <div class="form-group">
+                        <label  class="col-md-3 control-label">{{_("Custom Field")}} </label>
+                        <div class="col-md-9">
+                          <div class="form-group">
+                               <input type="text" class="form-control" placeholder="Field"  ng-model="customField.field">
+                          </div>
+                          <div class="form-group">
+                               <input type="text" class="form-control" placeholder="Value"  ng-model="customField.value">
+                          </div>
+                        </div>
+                     </div>
+              </div>
+              <div class="modal-footer">
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+              
+                  <input ng-hide="isLoading" ng-click="addCustomField(customField)" ng-disabled="!(customField.field && customField.value)" type="submit" class="btn green" value="{{_('Add this custom field')}}">
+                  <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
+              </div>
+                </form>
+                </div>
+                </div>
+        </div>
     <!--HKA 18.11.2013 Website Modal -->
 
 
@@ -1315,18 +1372,18 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("Add Website")}}</h3>
             </div>
             <div class="modal-body">
-                  <form id="addWebsite" name="addwebsite" ng-submit="addWebsite(website)" class="form-horizontal"> 
+                  <form id="addWebsite" name="addwebsite"  class="form-horizontal"> 
                     <div class="form-group">
                         <label  class="col-md-3 control-label">{{_("Website")}} </label>
                         <div class="col-md-9">
-                          <input type="text" class="form-control" placeholder="Website" required id="id_website" ng-model="website.website">
+                          <input type="text" class="form-control" placeholder="Website" required id="id_website" ng-model="website.website" >
                         </div>
                      </div>
               </div>
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
               
-                  <input ng-hide="isLoading" type="submit" class="btn green" value="{{_('Add this Website')}}">
+                  <input ng-hide="isLoading" ng-click="addWebsite(website)" ng-disabled="!(website.website)" type="submit"  class="btn green" value="{{_('Add this Website')}}">
                   <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
               </div>
                 </form>
@@ -1345,7 +1402,7 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("Add Social link")}}</h3>
             </div>
              <div class="modal-body">
-                  <form id="addSocial" name="addsocial" ng-submit="addSocial(social)" class="form-horizontal"> 
+                  <form id="addSocial" name="addsocial"  class="form-horizontal"> 
                     <div class="form-group">
                         <label  class="col-md-3 control-label">{{_("Social link")}} </label>
                         <div class="col-md-9">
@@ -1356,8 +1413,8 @@
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
               
-                  <input ng-hide="isLoading" type="submit" class="btn green" value="{{_('Add this Social link')}}">
-                  <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
+                  <input ng-hide="isLoading" ng-click="addSocial(social)" ng-disabled="!(social.sociallink)" type="submit" class="btn green" value="{{ _('Add this social link') }}">
+                  <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
               </div>
                 </form>
                 </div>
