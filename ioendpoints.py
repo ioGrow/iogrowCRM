@@ -124,6 +124,14 @@ class TagSchema(messages.Message):
     color = messages.StringField(2)
     edgeKey = messages.StringField(3)
 
+class TaskInsertRequest(messages.Message):
+    about = messages.StringField(1)
+    title = messages.StringField(3,required=True)
+    due = messages.StringField(4)
+    reminder = messages.StringField(6)
+    status = messages.StringField(5)
+    assignees = messages.MessageField(EntityKeyRequest,13, repeated = True)
+    
 
 class TaskSchema(messages.Message):
     id = messages.StringField(1)
@@ -656,6 +664,60 @@ class CrmEngineApi(remote.Service):
       
       return InfoNodeListResponse(items=connections_list) 
   
+
+  @endpoints.method(TaskInsertRequest, TaskSchema,
+                      path='tasks/insertv2', http_method='POST',
+                      name='tasks.insertv2')
+  def tasks_insert_beta(self, request):
+      user_from_email = EndpointsHelper.require_iogrow_user()
+
+      if request.status:
+          status = request.status
+      else:
+          status = 'pending'
+
+      task = Task(title = request.title,
+                  status = request.status,
+                  owner = user_from_email.google_user_id,
+                  organization = user_from_email.organization
+            )
+      if request.due:
+          task.due = datetime.datetime.strptime(request.due,"%Y-%m-%dT00:00:00.000000")
+
+          try:
+                credentials = user_from_email.google_credentials
+                http = credentials.authorize(httplib2.Http(memcache))
+                service = build('calendar', 'v3', http=http)
+                # prepare params to insert
+                params = {
+                 "start": 
+                  {
+                    "date": task.due.strftime("%Y-%m-%d")
+                  },
+                 "end": 
+                  {
+                    "date": task.due.strftime("%Y-%m-%d")
+                  },
+                  "summary": str(request.title)
+                }
+                created_event = service.events().insert(calendarId='primary',body=params).execute()
+          except:
+                raise endpoints.UnauthorizedException('Invalid grant' )
+                return
+
+      if request.reminder:
+          pass
+          
+      task_key = task.put()
+      if request.about:
+          # insert edges
+          pass
+      if request.assignees:
+          # insert edges
+          pass
+      return TaskSchema()
+
+
   @endpoints.method(TaskRequest, TaskListResponse,
                       path='tasks/listv2', http_method='POST',
                       name='tasks.listv2')
