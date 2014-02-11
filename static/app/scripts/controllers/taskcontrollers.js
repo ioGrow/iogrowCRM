@@ -344,12 +344,18 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
         $scope.draggedTag=tag;
       }
       $scope.dropTag=function(task){
-        var tags=[];
-        tags.push($scope.draggedTag);
-        params = {'id':task.id,
-            'tags':$scope.draggedTag
+        var items = [];
+        var edge = {
+              'start_node': task.entityKey,
+              'end_node': $scope.draggedTag.entityKey,
+              'kind':'tags',
+              'inverse_edge': 'tagged_on'
         };
-        Task.patch($scope,params);
+        items.push(edge);
+        params = {
+          'items': items
+        }
+        Edge.insert($scope,params);
         $scope.draggedTag=null;
       }
      // What to do after authentication
