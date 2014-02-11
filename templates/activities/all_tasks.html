@@ -195,14 +195,7 @@
           
           <div class="col-md-12">
             <h2 class="page-title">{{ _("Tasks") }} </h2>
-            <div class="row">
-              <div class="col-md-12">
-                <form>
-                  <input class="form-control" type="text" placeholder="Add new task"/>
-                </form>
-                <br>
-              </div>
-            </div>
+
 
                
             <hr/>
@@ -212,6 +205,51 @@
           <!-- Filtering and sorting -->
           <div class="row">
           <div class="col-md-9">
+            <div class="row">
+              <div class="col-md-12">
+                <form>
+                    <div class="form-group">
+                      <div class="input-icon right">
+                        <input class="form-control" type="text" placeholder="Add new task ..."/>
+                      </div>
+                    </div>
+                    <div class="btn-group pull-right new-task-assignee">
+                       <i class="fa fa-user dropdown-toggle" data-toggle="dropdown"></i>
+                          <div id="drop-down-id" class="dropdown-menu">
+                          <div class="row">
+                            <div class="col-md-12">
+                              <form>
+                                <input id="search_assignee" type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group') }}">
+                              </form>
+
+                            </div>
+                          </div>
+                                                              
+                          </div> 
+                   </div>
+                    <div class="btn-group pull-right new-task-reminder">
+                       <i class="fa  fa-bell-o dropdown-toggle" data-toggle="dropdown"></i>
+                          <div class="dropdown-menu">
+                               <center>
+                                  <datetimepicker data-ng-model="task.due"
+                                  data-datetimepicker-config="{ startView:'day', minView:'day' }" />
+                                </center>
+                          </div> 
+                   </div>
+                   <div class="btn-group pull-right new-task-date">
+                       <i class="fa fa-calendar dropdown-toggle" data-toggle="dropdown"></i>
+                          <div class="dropdown-menu">
+                               <center>
+                                  <datetimepicker data-ng-model="task.due"
+                                  data-datetimepicker-config="{ startView:'day', minView:'day' }" />
+                                </center>
+                          </div> 
+                   </div>
+
+                </form>
+                <br>
+              </div>
+            </div>
               <!-- BEGIN PORTLET-->
               <div id="account-tab" class="portlet paddingless">
                 <div class="portlet-body">
@@ -255,7 +293,7 @@
                                         </div>
                                     </div>
                                   </li>
-                                   <li ng-repeat="task in tasks" class="list-group-item">
+                                   <li  ng-repeat="task in tasks" class="list-group-item" droppable ng-drop="dropTag(task)">
                                      <div class="row">
                                         <label class="col-md-1 col-sm-1">
                                             <input type="checkbox" ng-click="select_task(task,$index,$event)" ng-checked="isSelected()">  
@@ -327,7 +365,7 @@
                 </div>
                 <div class="portlet-body">
                 <ul class="list-group tags-list">
-                  <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item" ng-click="selectTag(tag_item,$index,$event)">
+                  <li draggable ng-repeat="tag_item in tags" class="list-group-item tags-list-item" ng-click="selectTag(tag_item,$index,$event)" ng-drag="dragTag(tag_item)" >
                   <div class="row">
                     <div class="tag-color" style="border-left: 4px solid <%=tag_item.color%>;">
                     </div>

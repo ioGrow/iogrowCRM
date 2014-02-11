@@ -178,6 +178,103 @@ app.directive('ngBlur', ['$parse', function($parse) {
     });
   }
 }]);
+app.directive('ngDrag', ['$parse', function($parse) {
+  return function(scope, element, attr) {
+    var fn = $parse(attr['ngDrag']);
+    element.bind('drag', function(event) {
+      scope.$apply(function() {
+        fn(scope, {$event:event});
+      });
+    });
+  }
+}]);
+app.directive('ngDrop', ['$parse', function($parse) {
+  return function(scope, element, attr) {
+    var fn = $parse(attr['ngDrop']);
+    element.bind('drop', function(event) {
+      scope.$apply(function() {
+        fn(scope, {$event:event});
+      });
+    });
+  }
+}]);
+app.directive('draggable', function() {
+   return function(scope, element) {
+        // this gives us the native JS object
+        var el = element[0];
+
+        el.draggable = true;
+
+        el.addEventListener(
+            'dragstart',
+            function(e) {
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('Text', this.id);
+                this.classList.add('drag');
+                return false;
+            },
+            false
+        );
+
+        el.addEventListener(
+            'dragend',
+            function(e) {
+                this.classList.remove('drag');
+                //alert('end of draggable');
+                return false;
+            },
+            false
+        );
+        el.addEventListener(
+            'drop',
+            function(e) {
+                // Stops some browsers from redirecting.
+                if (e.stopPropagation) e.stopPropagation();
+
+                this.classList.remove('over');
+
+                //var item = document.getElementById(e.dataTransfer.getData('Text'));
+                //this.appendChild(item);
+
+                return false;
+            },
+            false
+        );
+    }
+});
+app.directive('droppable', function() {
+    return function(scope, element) {
+        var el = element[0];
+        el.addEventListener(
+            'dragover',
+            function(e) {
+                e.dataTransfer.dropEffect = 'move';
+                // allows us to drop
+                if (e.preventDefault) e.preventDefault();
+                this.classList.add('over');
+                return false;
+            },
+            false
+        );
+        el.addEventListener(
+            'dragenter',
+            function(e) {
+                this.classList.add('over');
+                return false;
+            },
+            false
+        );
+
+        el.addEventListener(
+            'dragleave',
+            function(e) {
+                this.classList.remove('over');
+                return false;
+            },
+            false
+        );
+    }
+});
 app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor','Tag',
     function($scope,Auth,Task,User,Contributor,Tag) {
      $("#id_Accounts").addClass("active");
@@ -206,6 +303,7 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
      $scope.edited_task =null;
      $scope.edited_tag =null;
      $scope.selectedTab=1;
+     $scope.draggedTag=null;
      $scope.task_checked = false;
      $scope.isSelectedAll = false;
      var handleColorPicker = function () {
@@ -219,6 +317,10 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
           });
       }
       handleColorPicker();
+      $('#search_assignee').click(function (e)
+          {                
+              e.stopPropagation();
+          });
       $scope.idealTextColor=function(bgColor){
         var nThreshold = 105;
          var components = getRGBComponents(bgColor);
@@ -237,6 +339,18 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
              G: parseInt(g, 16),
              B: parseInt(b, 16)
           };
+      }
+      $scope.dragTag=function(tag){
+        $scope.draggedTag=tag;
+      }
+      $scope.dropTag=function(task){
+        var tags=[];
+        tags.push($scope.draggedTag);
+        params = {'id':task.id,
+            'tags':$scope.draggedTag
+        };
+        Task.patch($scope,params);
+        $scope.draggedTag=null;
       }
      // What to do after authentication
      $scope.runTheProcess = function(){
