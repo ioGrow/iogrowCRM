@@ -47,6 +47,36 @@
               </div>
              </div>
                <!-- BEFORE DELETE MODEL END-->
+                             <!--HKA 24.12.2013 Modal before Deleting Account-->
+                <!-- BEFORE DELETE MODEL-->
+               <div id="assigneeTagsToTask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                      <h3 id="myModalLabel" class="modal-title">Add Tags </h3>
+                    </div>
+                    <div class="modal-body">
+                       <form id="seletesho" name="deletesho" class="form-horizontal"> 
+                       <div class="form-group">
+                            <select id="select2_sample2" class="form-control select2" multiple>
+                              <option ng-repeat="tag in tags" 
+                              value='<%=tag.entityKey%>'>
+                                <%=tag.name%>
+                              </option>
+                            </select>
+                        </div>
+                    </div>
+                      <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                        <input ng-hide="isLoading" ng-click="addTags()" type="submit" class="btn green" value="Add">
+                        <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                      </div>
+                  </form>
+                </div>
+              </div>
+             </div>
+               <!-- BEFORE DELETE MODEL END-->
             <div id="assigneeModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
            <div class="modal-dialog">
               <div class="modal-content">
@@ -165,14 +195,8 @@
           
           <div class="col-md-12">
             <h2 class="page-title">{{ _("Tasks") }} </h2>
-            
-            <div class="btn-group">
-            
-                    <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
-                    {{ _("New Task") }} <i class="icon-plus"></i>
-                    </button>
-            </div>
-            
+
+
                
             <hr/>
             
@@ -181,172 +205,141 @@
           <!-- Filtering and sorting -->
           <div class="row">
           <div class="col-md-9">
-            <div class="row filter-row" ng-show="accounts+isFiltering">
-              <div class="col-md-2">
-                <div class="btn-group btn-filter">
-                        <a class="btn btn-default" href="#" data-toggle="dropdown">
-                          {{ _('Filter by') }}
-                        <i class="icon-angle-down"></i>
-                        </a>
-                        <ul class="dropdown-menu">
-                          <li><a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All accounts') }}</a></li>
-                          <li><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My accounts') }}</a></li>
-                        </ul>
-                </div>
-              </div>
-              <div class="col-md-5">
-                 
-                  <form class=" ng-pristine ng-valid" ng-submit="executeSearch(searchQuery)">
-                    <div class="input-group">
-                      <input type="text" ng-model="searchQuery" typeahead="result as result.name  for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="form-control" placeholder="{{ _('Quick Filtering') }}">
-                      <span class="input-group-btn">
-                        <button class="gbqfb gbqfb-hvr" type="button"><i class="icon-filter"></i></button>
-                      </span>
+            <div class="row">
+              <div class="col-md-12">
+                <form>
+                    <div class="form-group">
+                      <div class="input-icon right">
+                        <input class="form-control" type="text" placeholder="Add new task ..."/>
+                      </div>
                     </div>
-                   
-                  </form>
-                   
-              </div>
-              <div class="col-md-3">
-                <div class="btn-group btn-sort">
-                      <a class="btn btn-default" href="#" data-toggle="dropdown">
-                      {{ _('Sort by') }}
-                      <i class="icon-angle-down"></i>
-                      </a>
-                      <ul class="dropdown-menu">
-                        <li><a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a></li>
-                        <li><a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a></li>
-                        
-                       
-                      </ul>
-                </div>
+                    <div class="btn-group pull-right new-task-assignee">
+                       <i class="fa fa-user dropdown-toggle" data-toggle="dropdown"></i>
+                          <div id="drop-down-id" class="dropdown-menu">
+                          <div class="row">
+                            <div class="col-md-12">
+                              <form>
+                                <input id="search_assignee" type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group') }}">
+                              </form>
 
-              </div>
-              <br>
+                            </div>
+                          </div>
+                                                              
+                          </div> 
+                   </div>
+                    <div class="btn-group pull-right new-task-reminder">
+                       <i class="fa  fa-bell-o dropdown-toggle" data-toggle="dropdown"></i>
+                          <div class="dropdown-menu">
+                               <center>
+                                  <datetimepicker data-ng-model="task.due"
+                                  data-datetimepicker-config="{ startView:'day', minView:'day' }" />
+                                </center>
+                          </div> 
+                   </div>
+                   <div class="btn-group pull-right new-task-date">
+                       <i class="fa fa-calendar dropdown-toggle" data-toggle="dropdown"></i>
+                          <div class="dropdown-menu">
+                               <center>
+                                  <datetimepicker data-ng-model="task.due"
+                                  data-datetimepicker-config="{ startView:'day', minView:'day' }" />
+                                </center>
+                          </div> 
+                   </div>
+
+                </form>
                 <br>
-              
+              </div>
             </div>
-              <div class="row tasksList">
-                <div class="col-md-12">
-                    <ul class="list-group">
-                        <li class="task-actions list-group-item task-actions">
-                         <div class="row">
-                         <div class="col-md-12">
-                           <form id="task_actions" class="form-inline" role="form">
-                           <div class="row">
-                           <label class="col-md-1 col-sm-1">
-                               <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">  
-                           </label>
-                           <div class="col-md-5">
-                            <button  class="btn btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">Close</button>
-                            <div class="btn-group">
-                              <button type="button" ng-class="{disabled: selected_tasks.length==0}" class="btn btn-default task_action">
-                                <i class="fa fa-tags"></i>
-                              </button>
-                              <button id="labels-btn-dropdown" type="button" class="btn btn-default dropdown-toggle task_action" ng-class="{disabled: selected_tasks.length==0}" data-toggle="dropdown"><i class="fa fa-angle-down"></i></button>
-                              <div class="dropdown-menu" role="menu">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                      <select id="select2_sample2" class="form-control select2" multiple>
-                                        <optgroup label="NFC EAST">
-                                        <option>Dallas </option>
-                                        <option>New </option>
-                                        <option> Eagles</option>
-                                        <option>Washington </option>
-                                        </optgroup>
-                                        <optgroup label="NFC NORTH">
-                                        <option>Chicago Bears</option>
-                                        <option>Detroit Lions</option>
-                                        <option>Green Bay Packers</option>
-                                        <option>Minnesota Vikings</option>
-                                        </optgroup>
-                                        <optgroup label="NFC SOUTH">
-                                        <option>Atlanta Falcons</option>
-                                        <option>Carolina Panthers</option>
-                                        <option>New Orleans Saints</option>
-                                        <option>Tampa Bay Buccaneers</option>
-                                        </optgroup>
-                                        <optgroup label="NFC WEST">
-                                        <option>Arizona Cardinals</option>
-                                        <option>St. Louis Rams</option>
-                                        <option>San Francisco 49ers</option>
-                                        <option>Seattle Seahawks</option>
-                                        </optgroup>
-                                        <optgroup label="AFC EAST">
-                                        <option>Buffalo Bills</option>
-                                        <option>Miami Dolphins</option>
-                                        <option>New England Patriots</option>
-                                        <option>New York Jets</option>
-                                        </optgroup>
-                                        <optgroup label="AFC NORTH">
-                                        <option>Baltimore Ravens</option>
-                                        <option>Cincinnati Bengals</option>
-                                        <option>Cleveland Browns</option>
-                                        <option>Pittsburgh Steelers</option>
-                                        </optgroup>
-                                        <optgroup label="AFC SOUTH">
-                                        <option>Houston Texans</option>
-                                        <option>Indianapolis Colts</option>
-                                        <option>Jacksonville Jaguars</option>
-                                        <option>Tennessee Titans</option>
-                                        </optgroup>
-                                        <optgroup label="AFC WEST">
-                                        <option>Denver Broncos</option>
-                                        <option>Kansas City Chiefs</option>
-                                        <option>Oakland Raiders</option>
-                                        <option>San Diego Chargers</option>
-                                        </optgroup>
-                                      </select>
+              <!-- BEGIN PORTLET-->
+              <div id="account-tab" class="portlet paddingless">
+                <div class="portlet-body">
+                  <div class="tabbable tabbable-custom">
+                  <ul class="nav nav-tabs">
+                      <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;renderMaps();">{{ _("All Tasks") }}</a></li>
+                      <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;" >{{ _("Urgent Tasks") }}</a></li>
+                      <li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">{{ _("Created by Me") }}</a></li>
+                      <li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">{{ _("Assigned to Me") }}</a></li>
+                      <li class="ng-tab"  ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">{{ _("Private Tasks") }}</a></li>
+                  </ul>
+                  <div class="tab-content">
+                      <div class="tab-pane active " id="tab_1_1" ng-show="selectedTab == 1">
+                          <div class="row tasksList">
+                            <div class="col-md-12">
+                                <ul class="list-group">
+                                    <li class="task-actions list-group-item task-actions">
+                                     <div class="row">
+                                     <div class="col-md-12">
+                                       <form id="task_actions" class="form-inline" role="form">
+                                       <div class="row">
+                                       <label class="col-md-1 col-sm-1">
+                                           <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">  
+                                       </label>
+                                       <div class="col-md-7">
+                                        <button  ng-show="status=='pending'" class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
+                                        <i class="fa fa-lock"></i>
+                                        Close</button>
+                                         <button  ng-show="status=='closed'" class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
+                                        <i class="fa fa-unlock"></i>
+                                        Reopen</button>
+                                        <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
+                                        <i class="fa fa-tags"></i>
+                                        Tags
+                                        </button>
+                                        <button ng-click="assigneeModal()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
+                                        <i class="fa fa-mail-forward"></i>
+                                        Assignee</button>
+                                        </div>
+                                      </form>
+                                        </div>
                                     </div>
-                                  </div>
-                              </div>
-                            </div>
-                            <button ng-click="assigneeModal()" class="btn btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">Assignee</button>
-                            </div>
-                          </form>
-                            </div>
-                        </div>
-                      </li>
-                       <li ng-repeat="task in tasks" class="list-group-item">
-                         <div class="row">
-                            <label class="col-md-1 col-sm-1">
-                                <input type="checkbox" ng-click="select_task(task,$index,$event)" ng-checked="isSelected()">  
-                           </label>
-                           <h4 class="col-md-6 col-sm-7 list-group-item-heading">
-                            <%= task.title %>
-                            </h4>
-                            <div class="col-md-5 col-sm-4">
-                                <span class="pull-right task-label label label-warning">
-                                    warning
-                                  </span>
-                                  <span class="pull-right task-label label label-warning">
-                                    warning
-                                  </span>
-                                  <span class="pull-right task-label label label-warning">
-                                    warning
-                                  </span>
-                                  <span class="pull-right task-label label label-warning">
-                                    warning
-                                  </span>
-                            </div>
-                        </div>
-                        <div class="row">
-                          <p class="col-md-11 col-md-offset-1 list-group-item-text">
-                         <div class="row">
-                          <p class="col-md-11 col-md-offset-1 list-group-item-text">
-                         
-                          <span>Opened by:<a href="#"> <%= task.author.display_name %></a></span>
-                          <!--<span>Closed by:<a href="#">Transline</a></span>-->
-                        </p>
-                        </div>
-                          
-                        </p>
-                        </div>
-                        
-                      </li>
-                    </ul>
-                  </div><!-- / col-md-12-->
-              </div> <!-- / tasksList-->
+                                  </li>
+                                   <li  ng-repeat="task in tasks" class="list-group-item" droppable ng-drop="dropTag(task)">
+                                     <div class="row">
+                                        <label class="col-md-1 col-sm-1">
+                                            <input type="checkbox" ng-click="select_task(task,$index,$event)" ng-checked="isSelected()">  
+                                        </label>
+                                       <h4 ng-dblclick="edit_task(task)" ng-show="edited_task!=task" class="col-md-6 col-sm-7 list-group-item-heading"
+                                       ng-class= "{task_closed: task.status=='closed'}">
+                                       <i class="fa fa-dot-circle-o status_color" style="color:<%= task.status_color%>;" data-toggle="tooltip" data-placement="top" title="<%= task.status_label %>"></i>
+                                        <%= task.title %>
+                                       </h4>
+                                       <div ng-show="edited_task==task" class="col-md-6 col-sm-7">
+                                       <form ng-submit="done_edit_task(task)">
+                                          <input ng-type="text" class="form-control inlineEditTask" ng-blur="done_edit_task(task)" ng-model="task.title">
+                                       </form>
+                                         
+                                       </div>
+                                        <div class="col-md-5 col-sm-4">
+                                            <span ng-repeat="task_tag in task.tags" class="pull-right task-label badge badge-roundless" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
+                                                <%= task_tag.name %>
+                                            </span>
+                                        </div>
+                                    </div>
+                                     <div class="row">
+                                      <p class="col-md-11 col-md-offset-1 list-group-item-text">
+                                         <span>Opened by:<a href="#"> <%= task.author.display_name %></a></span>
+                                         <!--<span>Closed by:<a href="#">Transline</a></span>-->
+                                      </p>
+                                      </div>
+                                  </li>
+                                </ul>
+                              </div><!-- / col-md-12-->
+                          </div> <!-- / tasksList-->
+                      </div>
+                       <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
+                      </div>
+                       <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3">
+                      </div>
+                       <div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 4">
+                      </div>
+                       <div class="tab-pane active" id="tab_1_5" ng-show="selectedTab == 5">
+                      </div>
+                       <div class="tab-pane active" id="tab_1_6" ng-show="selectedTab == 6">
+                      </div>
+                  </div>
+                </div>
+                </div>
+              </div>
           </div>
           <script type="text/javascript">
               $('#slimtest1').slimScroll({
@@ -372,12 +365,21 @@
                 </div>
                 <div class="portlet-body">
                 <ul class="list-group tags-list">
-                  <li ng-repeat="tag_item in tags" class="list-group-item" ng-click="select_tag(tag_item,$index,$event)">
+                  <li draggable ng-repeat="tag_item in tags" class="list-group-item tags-list-item" ng-click="selectTag(tag_item,$index,$event)" ng-drag="dragTag(tag_item)" >
+                  <div class="row">
                     <div class="tag-color" style="border-left: 4px solid <%=tag_item.color%>;">
                     </div>
-                    <span class="with-color"><%= tag_item.name %></span>
+                    <span class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"><%= tag_item.name %></span>
+                    <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
+                      <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
+                    </form>
+                    <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
                   </li>
+                  </div>
                 </ul>
+                <div class="form-group">
+                  <button class="btn btn-default btn-block" ng-click="manage_tags=!manage_tags;manage()"> Manage Tags</button>
+                </div>
                 <form class="well" role="form">
                 <div class="row">
                   <div class="col-md-12 form-group">
@@ -423,4 +425,19 @@
         placeholder: "Click to Select a label",
         allowClear: false
     });
+  var handleUniform = function () {
+        if (!jQuery().uniform) {
+            return;
+        }
+        var test = $("input[type=radio]:not(.toggle, .star)");
+        if (test.size() > 0) {
+            test.each(function () {
+                if ($(this).parents(".checker").size() == 0) {
+                    $(this).show();
+                    $(this).uniform();
+                }
+            });
+        }
+    }
+    handleUniform();
 </script>

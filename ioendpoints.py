@@ -9,6 +9,8 @@ import pprint
 import logging
 import httplib2
 import json
+import datetime
+import time
 
 # Google libs
 from google.appengine.ext import ndb
@@ -93,8 +95,72 @@ DISCUSSIONS = {
                             'title':'discussion',
                             'url': '/#/notes/show/'
                         }
-              }
+        }
+INVERSED_EDGES = {
+            'tags': 'tagged_on',
+            'tagged_on': 'tags'
+            
+         }
 
+
+ # The message class that defines the EntityKey schema
+class EntityKeyRequest(messages.Message):
+    entityKey = messages.StringField(1)       
+ # The message class that defines the author schema
+class AuthorSchema(messages.Message):
+    google_user_id = messages.StringField(1)
+    display_name = messages.StringField(2)
+    google_public_profile_url = messages.StringField(3)
+    photo = messages.StringField(4)
+    edgeKey = messages.StringField(5)
+# The message class that defines the related to discussion about
+class DiscussionAboutSchema(messages.Message):
+    kind = messages.StringField(1)
+    id = messages.StringField(2)
+    name = messages.StringField(3)
+
+class TagSchema(messages.Message):
+    name  = messages.StringField(1)
+    color = messages.StringField(2)
+    edgeKey = messages.StringField(3)
+
+class TaskInsertRequest(messages.Message):
+    about = messages.StringField(1)
+    title = messages.StringField(3,required=True)
+    due = messages.StringField(4)
+    reminder = messages.StringField(6)
+    status = messages.StringField(5)
+    assignees = messages.MessageField(EntityKeyRequest,13, repeated = True)
+    
+
+class TaskSchema(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    title = messages.StringField(3)
+    due = messages.StringField(4)
+    status = messages.StringField(5)
+    status_color = messages.StringField(6)
+    status_label = messages.StringField(7)
+    comments = messages.IntegerField(8)
+    about = messages.MessageField(DiscussionAboutSchema,9)
+    created_by = messages.MessageField(AuthorSchema,10)
+    completed_by = messages.MessageField(AuthorSchema,11)
+    tags = messages.MessageField(TagSchema,12, repeated = True)
+    assignees = messages.MessageField(AuthorSchema,13, repeated = True)
+    created_at = messages.StringField(14)
+    updated_at = messages.StringField(15)
+
+class TaskRequest(messages.Message):
+    limit = messages.IntegerField(1)
+    pageToken = messages.StringField(2)
+    order = messages.StringField(3)
+    status = messages.StringField(4)
+    tags = messages.StringField(5,repeated = True)
+    owner = messages.StringField(6)
+    assignee = messages.StringField(7)
+class TaskListResponse(messages.Message):
+    items = messages.MessageField(TaskSchema, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
 
 class EdgeSchema(messages.Message):
     id = messages.StringField(1)
@@ -106,8 +172,9 @@ class EdgeRequest(messages.Message):
     start_node = messages.StringField(1)
     end_node = messages.StringField(2)
     kind = messages.StringField(3)
+    inverse_edge = messages.StringField(4)
 class EdgesRequest(messages.Message):
-    items = messages.MessageField(EdgeSchema, 1 , repeated=True)
+    items = messages.MessageField(EdgeRequest, 1 , repeated=True)
 class EdgesResponse(messages.Message):
     items = messages.MessageField(EdgeSchema, 1 , repeated=True)
 # The message class that defines Record schema for InfoNode attributes
@@ -258,17 +325,8 @@ class MultipleAttachmentRequest(messages.Message):
     about_kind = messages.StringField(1)
     about_item = messages.StringField(2)
     items = messages.MessageField(AttachmentSchema, 3, repeated=True)
-# The message class that defines the author schema
-class AuthorSchema(messages.Message):
-    google_user_id = messages.StringField(1)
-    display_name = messages.StringField(2)
-    google_public_profile_url = messages.StringField(3)
-    photo = messages.StringField(4)
-# The message class that defines the related to discussion about
-class DiscussionAboutSchema(messages.Message):
-    kind = messages.StringField(1)
-    id = messages.StringField(2)
-    name = messages.StringField(3)
+
+
 # The message class that defines Discussion Response for notes.get API
 class DiscussionResponse(messages.Message):
     id = messages.StringField(1)
@@ -537,16 +595,26 @@ class CrmEngineApi(remote.Service):
       for item in request.items:
           start_node = ndb.Key(urlsafe=item.start_node)
           end_node = ndb.Key(urlsafe=item.end_node)
-          edge =  Edge(kind=item.kind,
-                       start_node = start_node,
-                       end_node = end_node)
-          edge_key = edge.put()
-          items.append(EdgesResponse(id=str( edge_key.id() ), 
+          
+          edge_key = Edge.insert(start_node=start_node,
+                                 end_node = end_node,
+                                 kind = item.kind,
+                                 inverse_edge = item.inverse_edge)
+          items.append(EdgeSchema(id=str( edge_key.id() ), 
                                      entityKey = edge_key.urlsafe(),
-                                     kind = edge.kind,
-                                     start_node = edge.start_node,
-                                     end_node= edge.end_node))
+                                     kind = item.kind,
+                                     start_node = item.start_node,
+                                     end_node= item.end_node ))
       return EdgesResponse(items=items)
+
+  # edges.delete api
+  @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
+                      path='edges', http_method='DELETE',
+                      name='edges.delete')
+  def delete_edge(self, request):
+      edge_key = ndb.Key(urlsafe=request.entityKey)
+      Edge.delete(edge_key)
+      return message_types.VoidMessage() 
   #Info Node APIs
   # infonode.insert api
   @endpoints.method(InfoNodeSchema, InfoNodeResponse,
@@ -596,6 +664,192 @@ class CrmEngineApi(remote.Service):
       
       return InfoNodeListResponse(items=connections_list) 
   
+
+  @endpoints.method(TaskInsertRequest, TaskSchema,
+                      path='tasks/insertv2', http_method='POST',
+                      name='tasks.insertv2')
+  def tasks_insert_beta(self, request):
+      user_from_email = EndpointsHelper.require_iogrow_user()
+
+      if request.status:
+          status = request.status
+      else:
+          status = 'pending'
+
+      task = Task(title = request.title,
+                  status = request.status,
+                  owner = user_from_email.google_user_id,
+                  organization = user_from_email.organization
+            )
+      if request.due:
+          task.due = datetime.datetime.strptime(request.due,"%Y-%m-%dT00:00:00.000000")
+
+          try:
+                credentials = user_from_email.google_credentials
+                http = credentials.authorize(httplib2.Http(memcache))
+                service = build('calendar', 'v3', http=http)
+                # prepare params to insert
+                params = {
+                 "start": 
+                  {
+                    "date": task.due.strftime("%Y-%m-%d")
+                  },
+                 "end": 
+                  {
+                    "date": task.due.strftime("%Y-%m-%d")
+                  },
+                  "summary": str(request.title)
+                }
+                created_event = service.events().insert(calendarId='primary',body=params).execute()
+          except:
+                raise endpoints.UnauthorizedException('Invalid grant' )
+                return
+
+      if request.reminder:
+          pass
+          
+      task_key = task.put()
+      if request.about:
+          # insert edges
+          pass
+      if request.assignees:
+          # insert edges
+          pass
+      return TaskSchema()
+
+
+  @endpoints.method(TaskRequest, TaskListResponse,
+                      path='tasks/listv2', http_method='POST',
+                      name='tasks.listv2')
+  def tasks_list_beta(self, request):
+      user_from_email = EndpointsHelper.require_iogrow_user()
+      curs = Cursor(urlsafe=request.pageToken)
+      filtered_tasks = list()
+      if request.limit:
+          limit = int(request.limit)
+      else:
+          limit = 10
+      items = list()
+      date_to_string = lambda x: x.strftime("%Y-%m-%d") if x else ""
+      date_time_to_string = lambda x: x.strftime("%Y-%m-%dT%H:%M:00.000") if x else ""
+      filtered_tasks = list()
+      you_can_loop = True
+      count = 0
+      while you_can_loop:
+          if request.order:
+              ascending = True
+              if request.order.startswith('-'):
+                  order_by = request.order[1:]
+                  ascending = False
+              else:
+                  order_by = request.order
+              
+              attr = Task._properties.get(order_by)
+              if attr is None:
+                  raise AttributeError('Order attribute %s not defined.' % (attr_name,))
+              if ascending:
+                  tasks, next_curs, more = Task.query().filter(Task.organization==user_from_email.organization).order(+attr).fetch_page(limit, start_cursor=curs)
+              else:
+                  tasks, next_curs, more = Task.query().filter(Task.organization==user_from_email.organization).order(-attr).fetch_page(limit, start_cursor=curs)
+
+          else:
+              tasks, next_curs, more = Task.query().filter(Task.organization==user_from_email.organization).fetch_page(limit, start_cursor=curs)
+          for task in tasks:
+              if count<= limit:
+                  is_filtered = True
+                  if task.access == 'private' and task.owner!=user_from_email.google_user_id:
+                      end_node_set = [user_from_email.key]
+                      if not Edge.find(start_node=task.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
+                          is_filtered = False
+                  if request.status and task.status!=request.status and is_filtered:
+                      is_filtered = False 
+                  if request.tags and is_filtered:
+                      end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
+                      if not Edge.find(start_node=task.key,kind='tags',end_node_set=end_node_set,operation='AND'):
+                          is_filtered = False
+                  if request.assignee and is_filtered:
+                      end_node_set = [user_from_email.key]
+                      if not Edge.find(start_node=task.key,kind='assignees',end_node_set=end_node_set,operation='AND'):
+                          is_filtered = False
+                  if request.owner and task.owner!=request.owner and is_filtered:
+                      is_filtered = False
+                  if is_filtered:
+                      count = count + 1
+                      #list of tags related to this task
+                      edge_list = Edge.list(start_node=task.key,kind='tags')
+                      tag_list = list()
+                      for edge in edge_list:
+                          tag_list.append( TagSchema(edgeKey = edge.key.urlsafe(),
+                                          name = edge.end_node.get().name,
+                                          color = edge.end_node.get().color))
+                      #list of tags related to this task
+                      edge_list = Edge.list(start_node=task.key,kind='assignees')
+                      assignee_list = list()
+                      for edge in edge_list:
+                          assignee_list.append( AuthorSchema(edgeKey = edge.key.urlsafe(),
+                                          google_user_id = edge.end_node.get().google_user_id,
+                                          display_name = edge.end_node.get().google_display_name,
+                                          google_public_profile_url = edge.end_node.get().google_public_profile_url,
+                                          photo = edge.end_node.get().google_public_profile_photo_url) )
+
+                      status_color = 'green'
+                      status_label = ''
+                      if task.due:
+                          now = datetime.datetime.now()
+                          diff = task.due - now
+                          if diff.days>=0 and diff.days<=2:
+                              status_color = 'orange'
+                              status_label = 'soon: due in '+ str(diff.days) + ' days'
+                          elif diff.days<0:
+                              status_color = 'red'
+                              status_label = 'overdue'
+                          else:
+                              status_label = 'due in '+ str(diff.days) + ' days'
+                      if task.status == 'closed':
+                          status_color = 'white'
+                          status_label = 'closed'
+
+                                
+
+
+                      task_schema = TaskSchema(
+                                  id = str( task.key.id() ),
+                                  entityKey = task.key.urlsafe(),
+                                  title = task.title,
+                                  status = task.status,
+                                  status_color = status_color,
+                                  status_label = status_label,
+                                  comments = 0,
+                                  about = DiscussionAboutSchema(),
+                                  created_by = AuthorSchema(),
+                                  completed_by = AuthorSchema(),
+                                  tags = tag_list,
+                                  assignees = assignee_list,
+                                  created_at = date_time_to_string(task.created_at),
+                                  updated_at = date_time_to_string(task.updated_at)
+                                )
+                      if task.due:
+                          task_schema.due =  date_to_string(task.due)
+                      items.append(task_schema)   
+          if (count == limit):
+              you_can_loop = False
+          print '@@@@@@@@@@@@*********#######'
+          print more
+          print next_curs
+          if more and next_curs:
+              curs = next_curs
+
+          else:
+              you_can_loop = False
+      print 'After the loop'
+      print more
+      print next_curs 
+      
+      if next_curs and more:
+          next_curs_url_safe = next_curs.urlsafe() 
+      else:
+          next_curs_url_safe = None           
+      return  TaskListResponse(items = items, nextPageToken = next_curs_url_safe)
 
   # Accounts APIs
   # accounts.insert api
@@ -1841,7 +2095,16 @@ class CrmEngineApi(remote.Service):
   def tags_list(self, query):
       user_from_email = EndpointsHelper.require_iogrow_user()
       return query.filter(Tag.organization==user_from_email.organization)
-
+  
+  # tags.delete api
+  @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
+                      path='tags', http_method='DELETE',
+                      name='tags.delete')
+  def delete_tag(self, request):
+      tag_key = ndb.Key(urlsafe=request.entityKey)
+      Edge.delete_all(start_node=tag_key)
+      tag_key.delete()
+      return message_types.VoidMessage()
   @Tag.method(user_required=True,path='tags', http_method='POST', name='tags.insert')
   def TagInsert(self, my_model):
     user_from_email = EndpointsHelper.require_iogrow_user()
