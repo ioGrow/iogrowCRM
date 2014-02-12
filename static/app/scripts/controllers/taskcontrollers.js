@@ -361,7 +361,7 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
      // What to do after authentication
      $scope.runTheProcess = function(){
           var params = { 'order': $scope.order,
-                         'status':'pending',
+                         
                         'limit':7}
           Task.list($scope,params);
           User.list($scope,{});
@@ -555,7 +555,7 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
      
      $scope.listTasks=function(){
       $scope.selected_tasks=[];/*we have to change it */
-      var params = {'status':$scope.status,
+      var params = {
                         'limit':7}
         Task.list($scope,params);
      }
