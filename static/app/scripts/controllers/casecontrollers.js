@@ -427,14 +427,12 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
             dueDate = dueDate +'T00:00:00.000000'
             params ={'title': task.title,
                       'due': dueDate,
-                      'about_kind':'Case',
-                     'about_item':$scope.casee.id
+                      'about':$scope.casee.entityKey
             }
             console.log(dueDate);
         }else{
             params ={'title': task.title,
-                     'about_kind':'Case',
-                     'about_item':$scope.casee.id}
+                     'about':$scope.casee.entityKey}
         };
         Task.insert($scope,params);
      }
@@ -446,10 +444,9 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
        
      }
      $scope.listTasks = function(){
-        var params = {'about_kind':'Case',
-                      'about_item':$scope.casee.id,
+        var params = {'about':$scope.casee.entityKey,
                       'order': '-updated_at',
-                      'limit': 5
+                      
                       };
         Task.list($scope,params);
 

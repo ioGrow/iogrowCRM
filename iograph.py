@@ -2,10 +2,11 @@ from google.appengine.ext import ndb
 INVERSED_EDGES = {
             'tags': 'tagged_on',
             'tagged_on': 'tags',
-            'assignees' : 'assigned_to'
-
+            'assignees' : 'assigned_to',
+            'assigned_to' : 'assignees',
+            'tasks' : 'related_to'
+            }
             
-}
 class Node(ndb.Expando):
     """Node Class to store all objects"""
     kind = ndb.StringProperty()

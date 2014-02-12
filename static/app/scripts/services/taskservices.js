@@ -110,8 +110,9 @@ topicservices.factory('Task', function($http) {
   };
    Task.insert = function($scope,params){
       $scope.isLoading = true;
-      gapi.client.crmengine.tasks.insert(params).execute(function(resp) {
+      gapi.client.crmengine.tasks.insertv2(params).execute(function(resp) {
          console.log('in insert TASK resp');
+         console.log(params);
          console.log(resp);
          if(!resp.code){
           console.log(resp);
