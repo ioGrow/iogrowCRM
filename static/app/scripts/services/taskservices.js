@@ -50,7 +50,7 @@ topicservices.factory('Task', function($http) {
             $('#EditTaskModal').modal('hide');
           
          }else{
-             console.log(resp.message);
+            
              $('#EditTaskModal').modal('hide');
              $('#errorModal').modal('show');
              if(resp.message=="Invalid grant"){
@@ -64,19 +64,16 @@ topicservices.factory('Task', function($http) {
       });
   };
   Task.list = function($scope,params){
-      console.log('in tasks.list');
-      console.log(params);
+     
 
       $scope.isLoading = true;
       gapi.client.crmengine.tasks.listv2(params).execute(function(resp) {
               if(!resp.code){
-                console.log('in topics.list looking for pagingation');
-                console.log($scope.currentPage);
+              
 
                  $scope.tasks = resp.items;
 
-                 console.log("taskk********************");
-                 console.log($scope.tasks);
+               
                  /*if ($scope.currentPage>1){
                       console.log('Should show PREV');
                       $scope.pagination.prev = true;
@@ -111,10 +108,9 @@ topicservices.factory('Task', function($http) {
    Task.insert = function($scope,params){
       $scope.isLoading = true;
       gapi.client.crmengine.tasks.insert(params).execute(function(resp) {
-         console.log('in insert TASK resp');
-         console.log(resp);
+        
          if(!resp.code){
-          console.log(resp);
+        
           // TME_02_11_13 when a note is inserted reload topics
           $scope.listTasks();
           $scope.isLoading = false;
@@ -172,8 +168,7 @@ topicservices.factory('Tag', function($http) {
 
 
   Tag.list = function($scope,params){
-      console.log('in tags.list');
-      console.log(params);
+     
       $scope.isLoading = true;
       gapi.client.crmengine.tags.list(params).execute(function(resp) {
               if(!resp.code){
@@ -200,10 +195,9 @@ topicservices.factory('Tag', function($http) {
      console.log('hereeeeeeeeee');
       $scope.isLoading = true;
       gapi.client.crmengine.tags.insert(params).execute(function(resp) {
-         console.log('in insert tags resp');
-         console.log(resp);
+        
          if(!resp.code){
-          console.log(resp);
+
           // TME_02_11_13 when a note gis inserted reload topics
           /*$scope.listContributors();*/
           $scope.isLoading = false;
@@ -261,8 +255,7 @@ topicservices.factory('Contributor', function($http) {
 
 
   Contributor.list = function($scope,params){
-      console.log('in tasks.list');
-      console.log(params);
+     
 
       $scope.isLoading = true;
       gapi.client.crmengine.contributors.list(params).execute(function(resp) {

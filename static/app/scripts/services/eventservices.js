@@ -29,16 +29,15 @@ eventservices.factory('Event', function($http) {
           });
   };
   Event.list = function($scope,params){
-      console.log('in events.list');
-      console.log(params);
+      
 
       $scope.isLoading = true;
 
       gapi.client.crmengine.events.list(params).execute(function(resp) {
-              console.log(resp);
+           
               if(!resp.code){
                
-                  console.log(resp);
+           
 
                  $scope.events = resp.items;
                  /*if ($scope.currentPage>1){
@@ -83,7 +82,7 @@ eventservices.factory('Event', function($http) {
             $scope.$apply();
           
          }else{
-             console.log(resp.message);
+           
              $('#newEventModal').modal('hide');
              $('#errorModal').modal('show');
              if(resp.message=="Invalid grant"){

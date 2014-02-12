@@ -171,6 +171,9 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        $scope.needspagination = {};
        $scope.needsCurrentPage=01;
        $scope.needspages=[];
+       $scope.documentpagination = {};
+       $scope.documentCurrentPage=01;
+       $scope.documentpages=[];
        $scope.pages = [];
        $scope.accounts = [];  
        $scope.users = [];
@@ -386,6 +389,48 @@ $scope.CaselistNextPageItems = function(){
           $scope.needsCurrentPage = $scope.needsCurrentPage - 1 ;
             Need.list($scope,params);
      };
+  // HKA 09.02.2014 Manage Next Prev page on ducument list
+     $scope.DocumentlistNextPageItems = function(){
+        
+ 
+        var nextPage = $scope.documentCurrentPage + 1;
+        var params = {};
+          if ($scope.documentpages[nextPage]){
+            params = {'limit':6,
+                      'about_kind':'Account',
+                      'about_item': $scope.account.id,
+                      'pageToken':$scope.documentpages[nextPage]
+                     }
+          }else{
+            params = {'limit':6,
+                      'about_kind':'Account',
+                      'about_item': $scope.account.id}
+          }
+          $scope.documentCurrentPage = $scope.documentCurrentPage + 1 ;
+          
+          Attachement.list($scope,params);
+            console.log('------------------One two three next ----');
+     }
+     $scope.DocumentPrevPageItems = function(){
+            
+       var prevPage = $scope.documentCurrentPage - 1;
+       var params = {};
+          if ($scope.documentpages[prevPage]){
+            params = {'limit':6,
+                      'about_kind':'Account',
+                      'about_item': $scope.account.id,
+                      'pageToken':$scope.documentpages[prevPage]
+                     }
+          }else{
+            params = {'limit':6,
+                      'about_kind':'Account',
+                      'about_item': $scope.account.id}
+          }
+          $scope.documentCurrentPage = $scope.documentCurrentPage - 1 ;
+            Attachement.list($scope,params);
+
+              console.log('------------------One two three ---- 1SS');
+     };
 
      
      $scope.listTopics = function(account){
@@ -401,14 +446,14 @@ $scope.CaselistNextPageItems = function(){
         var params = {'about_kind':'Account',
                       'about_item':$scope.account.id,
                       'order': '-updated_at',
-                      'limit': 5
+                      'limit': 6
                       };
         Attachement.list($scope,params);
 
      }
      
      $scope.hilightTopic = function(){
-        console.log('Should higll');
+      
        $('#topic_0').effect( "bounce", "slow" );
        $('#topic_0 .message').effect("highlight","slow");
      }
@@ -432,7 +477,8 @@ $scope.CaselistNextPageItems = function(){
                       'title':newdocument.title,
                       'mimeType':mimeType };
         Attachement.insert($scope,params);
-
+        $('#newDocument').modal('hide');
+        $scope.newdocument.title = '';
      };
      $scope.createPickerUploader = function() {
           var projectfolder = $scope.account.folder;
@@ -586,7 +632,7 @@ $scope.CaselistNextPageItems = function(){
      };
 
      $scope.hilightTask = function(){
-        console.log('Should higll');
+       
         $('#task_0').effect("highlight","slow");
         $('#task_0').effect( "bounce", "slow" );
        
@@ -633,7 +679,7 @@ $scope.CaselistNextPageItems = function(){
           };
      };
      $scope.hilightEvent = function(){
-        console.log('Should higll');
+       
         $('#event_0').effect("highlight","slow");
         $('#event_0').effect( "bounce", "slow" );
        
