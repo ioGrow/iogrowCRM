@@ -313,11 +313,14 @@
                                             <span ng-repeat="task_tag in task.tags" class="pull-right task-label badge badge-roundless" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
                                                 <%= task_tag.name %>
                                             </span>
+                                            <span ng-repeat="assignee in task.assignees" class="pull-right">
+                                               <a href="#"> @<%= assignee.display_name %></a>
+                                            </span>
                                         </div>
                                     </div>
                                      <div class="row">
                                       <p class="col-md-11 col-md-offset-1 list-group-item-text">
-                                         <span>Opened by:<a href="#"> <%= task.author.display_name %></a></span>
+                                         <span ng-show="task.created_by">Opened by:<a href="#"> <%= task.created_by.display_name %></a></span> <span ng-show="task.about">{{ _('related to') }}<a href="#"> <%= task.about.name %></a></span>
                                          <!--<span>Closed by:<a href="#">Transline</a></span>-->
                                       </p>
                                       </div>

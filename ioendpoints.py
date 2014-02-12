@@ -677,10 +677,16 @@ class CrmEngineApi(remote.Service):
       else:
           status = 'pending'
 
+      author = Userinfo()
+      author.google_user_id = user_from_email.google_user_id
+      author.display_name = user_from_email.google_display_name
+      author.photo = user_from_email.google_public_profile_photo_url
+
       task = Task(title = request.title,
                   status = request.status,
                   owner = user_from_email.google_user_id,
-                  organization = user_from_email.organization
+                  organization = user_from_email.organization,
+                  author = author
             )
       if request.due:
           task.due = datetime.datetime.strptime(request.due,"%Y-%m-%dT00:00:00.000000")
@@ -796,6 +802,17 @@ class CrmEngineApi(remote.Service):
                           tag_list.append( TagSchema(edgeKey = edge.key.urlsafe(),
                                           name = edge.end_node.get().name,
                                           color = edge.end_node.get().color))
+                      about = None
+                      edge_list = Edge.list(start_node=task.key,kind='related_to')
+                      for edge in edge_list:
+                          about_kind = edge.end_node.kind()
+                          if about_kind == 'Contact' or about_kind == 'Lead':
+                              about_name = edge.end_node.get().firstname + ' ' + edge.end_node.get().lastname
+                          else:
+                              about_name = edge.end_node.get().name
+                          about = DiscussionAboutSchema(kind=about_kind,
+                                                               id=str(edge.end_node.id()),
+                                                               name=about_name)
                       #list of tags related to this task
                       edge_list = Edge.list(start_node=task.key,kind='assignees')
                       assignee_list = list()
@@ -825,7 +842,12 @@ class CrmEngineApi(remote.Service):
 
                                 
 
-
+                      author_schema = None
+                      if task.author:
+                          author_schema = AuthorSchema(google_user_id = task.author.google_user_id,
+                                                          display_name = task.author.display_name,
+                                                          google_public_profile_url = task.author.google_public_profile_url,
+                                                          photo = task.author.photo)
                       task_schema = TaskSchema(
                                   id = str( task.key.id() ),
                                   entityKey = task.key.urlsafe(),
@@ -834,8 +856,8 @@ class CrmEngineApi(remote.Service):
                                   status_color = status_color,
                                   status_label = status_label,
                                   comments = 0,
-                                  about = DiscussionAboutSchema(),
-                                  created_by = AuthorSchema(),
+                                  about = about,
+                                  created_by = author_schema,
                                   completed_by = AuthorSchema(),
                                   tags = tag_list,
                                   assignees = assignee_list,
