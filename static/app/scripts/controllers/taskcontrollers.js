@@ -304,6 +304,7 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
      $scope.edited_tag =null;
      $scope.selectedTab=1;
      $scope.newTask={};
+     $scope.newTask.assignees=[];
      $scope.newTaskValue=null;
      $scope.draggedTag=null;
      $scope.task_checked = false;
@@ -481,6 +482,30 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
           console.log($scope.selected_tasks);
          }
     };
+    $scope.addNewTask=function(){
+        var params ={'about_kind':'Account',
+                      'about_item':$scope.account.id}
+        
+        if ($scope.newTask.due){
+
+            var dueDate= $filter('date')($scope.newTask.due,['yyyy-MM-dd']);
+            dueDate = dueDate +'T00:00:00.000000'
+            params ={'title': $scope.newTask.title,
+                      'due': dueDate,
+                      'about': $scope.account.entityKey
+            }
+            console.log(dueDate);
+            
+        }else{
+            params ={'title': $scope.newTask.title,
+                     'about': $scope.account.entityKey
+                   }
+        };
+       
+        Task.insert($scope,params);
+        $scope.newTask.title='';
+        $scope.newTask.dueDate='0000-00-00T00:00:00-00:00';
+    }
    $scope.updateTask = function(task){
             params ={ 'id':task.id,
                       'title': task.title,
@@ -541,6 +566,7 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
         $scope.user='';
      };
     $scope.tagMember = function(value){
+       $scope.newTask.assignees.push({'entityKey':value.entityKey});
        $scope.newTask.title=$scope.newTaskValue+value.google_display_name;
 
      };

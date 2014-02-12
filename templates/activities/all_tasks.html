@@ -207,47 +207,17 @@
           <div class="col-md-9">
             <div class="row">
               <div class="col-md-12">
-                <form>
+                <form ng-submit="addNewTask()">
                     <div class="form-group">
                       <div class="input-icon right">
-                        <input ng-model="newTask.title" id="new_task_text" class="form-control" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in getAssignedUsers($viewValue) | filter:getValueFrom($viewValue) | limitTo:8" typeahead-on-select="tagMember(newTask.title)" />
+                        <input ng-model="newTask.title" id="new_task_text" class="form-control" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in getAssignedUsers($viewValue) | filter:getValueFrom($viewValue) | limitTo:8" typeahead-on-select="tagMember(newTask.title)" placeholder="Add new task ..." />
                       </div>
                     </div>
-                    <div class="btn-group pull-right new-task-assignee">
-                       <i class="fa fa-user dropdown-toggle" data-toggle="dropdown"></i>
-                        <ul id="addMemberToTask"  class="dropdown-menu extended notification">
-                          <li>
-                            <p>
-                              Assign someone to this task
-                            </p>
-                          </li>
-                          <li>
-                            <form name="addaccount" ng-submit="share(slected_memeber)" class="form-horizontal"> 
-                                <div class=''>
-                                    <input id="search_assignee" type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group') }}">
-                                  <div id="assigeeList" class="list-group">
-                                    <div class="invitation list-group-item" ng-repeat="selected_us in slected_members">
-                                      <button type="button" class="close" ng-click="unselectMember($index)" data-dismiss="alert"></button>
-                                      <img class="google-avatar" src="<%= selected_us.google_public_profile_photo_url%>"/>
-                                        <strong> <%= selected_us.google_display_name %> < <%=selected_us.email%> ></strong>
-                                    </div>
-                                  </div>
-                                </div>
-                          </li>
-                          <li class="external">
-                            <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                                
-                                <input ng-hide="isLoading" ng-click="addNewContributors()" type="submit" class="btn green" value="{{ _('Add this account') }}">
-                                <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
-                            </form>
-                          </li>
-                        </ul>
-                   </div>
                     <div class="btn-group pull-right new-task-reminder">
                        <i class="fa  fa-bell-o dropdown-toggle" data-toggle="dropdown"></i>
                           <div class="dropdown-menu">
                                <center>
-                                  <datetimepicker data-ng-model="task.due"
+                                  <datetimepicker data-ng-model="newTask.due"
                                   data-datetimepicker-config="{ startView:'day', minView:'day' }" />
                                 </center>
                           </div> 
@@ -256,7 +226,7 @@
                        <i class="fa fa-calendar dropdown-toggle" data-toggle="dropdown"></i>
                           <div class="dropdown-menu">
                                <center>
-                                  <datetimepicker data-ng-model="task.due"
+                                  <datetimepicker data-ng-model="newTask.due"
                                   data-datetimepicker-config="{ startView:'day', minView:'day' }" />
                                 </center>
                           </div> 
