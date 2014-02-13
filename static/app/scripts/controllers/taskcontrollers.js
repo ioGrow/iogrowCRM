@@ -391,7 +391,7 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
           var params = { 'order': $scope.order,
                          
                         'limit':7}
-          Task.list($scope,params);
+          Task.list($scope,params,true);
           User.list($scope,{});
           Tag.list($scope,{});
      };
@@ -483,8 +483,6 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
          }
     };
     $scope.addNewTask=function(){
-        var params ={'about_kind':'Account',
-                      'about_item':$scope.account.id}
         
         if ($scope.newTask.due){
 
@@ -497,12 +495,17 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
             console.log(dueDate);
             
         }else{
-            params ={'title': $scope.newTask.title,
-                     'about': $scope.account.entityKey
-                   }
+            params ={'title': $scope.newTask.title}
         };
+        if ($scope.newTask.assignees){
+            params.assignees = $scope.newTask.assignees;
+        }
+        console.log('********************************************************');
+        console.log(params);
        
         Task.insert($scope,params);
+        $scope.newTask.assignees = [];
+
         $scope.newTask.title='';
         $scope.newTask.dueDate='0000-00-00T00:00:00-00:00';
     }
@@ -610,11 +613,22 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
      //tags
      
      
-     $scope.listTasks=function(){
+     $scope.listTasks=function(effects){
       $scope.selected_tasks=[];/*we have to change it */
-      var params = {
+      var params = { 'order': $scope.order,
                         'limit':7}
-        Task.list($scope,params);
+        if (effects){
+          Task.list($scope,params,effects);
+        }
+        else{
+          Task.list($scope,params);
+        }
+        
+     }
+     $scope.hilightTask = function(){
+        
+       $('#task_0').effect( "bounce", "slow" );
+       $('#task_0 .list-group-item-heading').effect("highlight","slow");
      }
      $scope.edgeInserted = function () {
        $scope.listTasks();

@@ -279,7 +279,7 @@
                                         </div>
                                     </div>
                                   </li>
-                                   <li  ng-repeat="task in tasks" class="list-group-item" droppable ng-drop="dropTag(task)">
+                                   <li  ng-repeat="task in tasks" class="list-group-item" droppable ng-drop="dropTag(task)" id="task_<%=$index%>">
                                      <div class="row">
                                         <label class="col-md-1 col-sm-1">
                                             <input type="checkbox" ng-click="select_task(task,$index,$event)" ng-checked="isSelected()">  

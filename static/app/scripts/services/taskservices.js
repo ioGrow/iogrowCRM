@@ -63,42 +63,19 @@ topicservices.factory('Task', function($http) {
          }
       });
   };
-  Task.list = function($scope,params){
-      console.log('in tasks.list');
-      console.log(params);
-
+  Task.list = function($scope,params,effects){
       $scope.isLoading = true;
       gapi.client.crmengine.tasks.listv2(params).execute(function(resp) {
               if(!resp.code){
-                console.log('in topics.list looking for pagingation');
-                console.log($scope.currentPage);
-
-                 $scope.tasks = resp.items;
-
-                 console.log("taskk********************");
-                 console.log($scope.tasks);
-                 /*if ($scope.currentPage>1){
-                      console.log('Should show PREV');
-                      $scope.pagination.prev = true;
-                   }else{
-                       $scope.pagination.prev = false;
-                   }
-                 if (resp.nextPageToken){
-                   var nextPage = $scope.currentPage + 1;
-                   // Store the nextPageToken
-                   $scope.pages[nextPage] = resp.nextPageToken;
-                   $scope.pagination.next = true;
-
-                 }else{
-                  $scope.pagination.next = false;
-                 }
-                 */
-                 // Loaded succefully
+                $scope.tasks = resp.items;
+                // Loaded succefully
                  $scope.isLoading = false;
 
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
-                 $scope.hilightTask();
+                 if (effects){
+                     $scope.hilightTask();
+                 }
               }else {
                  if(resp.message=="Invalid token"){
                 $scope.refreshToken();
@@ -117,7 +94,8 @@ topicservices.factory('Task', function($http) {
          if(!resp.code){
           console.log(resp);
           // TME_02_11_13 when a note is inserted reload topics
-          $scope.listTasks();
+          var effects = true;
+          $scope.listTasks(effects);
           $scope.isLoading = false;
 
           $scope.$apply();

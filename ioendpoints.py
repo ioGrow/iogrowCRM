@@ -728,7 +728,7 @@ class CrmEngineApi(remote.Service):
           # insert edges
           for assignee in request.assignees:
               Edge.insert(start_node = task_key_async,
-                      end_node = ndb.Key(urlsafe=assignee),
+                      end_node = ndb.Key(urlsafe=assignee.entityKey),
                       kind = 'assignees',
                       inverse_edge = 'assigned_to')      
       return TaskSchema()
