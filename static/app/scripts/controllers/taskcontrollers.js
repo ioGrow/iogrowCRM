@@ -490,6 +490,8 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
         if ($scope.newTask.assignees){
             params.assignees = $scope.newTask.assignees;
         }
+        console.log('************************@@@@@@@@@@@@@@@@@@@@@************************');
+        console.log(params);
        
        
         Task.insert($scope,params);
@@ -547,32 +549,7 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
        $scope.newTask.title=$scope.newTaskValue+value.google_display_name;
 
      };
-    $scope.addNewTask=function(){
-        var params ={'about_kind':'Account',
-                      'about_item':$scope.account.id}
-        console.log('assignees*************************');
-        console.log($scope.newTask.assignees);
-        if ($scope.newTask.due){
-
-            var dueDate= $filter('date')($scope.newTask.due,['yyyy-MM-dd']);
-            dueDate = dueDate +'T00:00:00.000000'
-            params ={'title': $scope.newTask.title,
-                      'due': dueDate,
-                      'about': $scope.account.entityKey
-            }
-            console.log(dueDate);
-            
-        }else{
-            params ={'title': $scope.newTask.title,
-                     'about': $scope.account.entityKey
-                   }
-        };
-       
-        Task.insert($scope,params);
-        $scope.newTask.title='';
-        $scope.newTask.assignees=[];
-        $scope.newTask.dueDate='0000-00-00T00:00:00-00:00';
-    }
+   
 /************************************/
       $scope.isSelected = function(index) {
         return ($scope.selected_tasks.indexOf(index) >= 0||$scope.isSelectedAll);
