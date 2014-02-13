@@ -233,7 +233,7 @@
                    </div>
 
                 </form>
-                <br>
+                <img src="/static/img/google_loading.gif" ng-show="isLoading" style="height:25px; width:25px; margin-left:350px;">
               </div>
             </div>
               <!-- BEGIN PORTLET-->
@@ -257,23 +257,34 @@
                                      <div class="col-md-12">
                                        <form id="task_actions" class="form-inline" role="form">
                                        <div class="row">
-                                       <label class="col-md-1 col-sm-1">
+                                       <label class="col-xs-1  col-md-1">
                                            <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">  
                                        </label>
-                                       <div class="col-md-7">
+                                       <div class="col-xs-7  col-md-7">
                                         <button  ng-show="status=='pending'" class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-lock"></i>
-                                        Close</button>
+                                          <span class="btn-text">
+                                            Close  
+                                          </span>
+                                        </button>
                                          <button  ng-show="status=='closed'" class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-unlock"></i>
-                                        Reopen</button>
+                                        <span class="btn-text">
+                                        Reopen
+                                        </span>
+                                        </button>
                                         <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-tags"></i>
-                                        Tags
+                                         <span class="btn-text">
+                                            Tags
+                                         </span>
                                         </button>
                                         <button ng-click="assigneeModal()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-mail-forward"></i>
-                                        Assignee</button>
+                                          <i class="fa fa-mail-forward"></i>
+                                           <span class="btn-text">
+                                            Assignee
+                                           </span>
+                                        </button>
                                         </div>
                                       </form>
                                         </div>
@@ -281,21 +292,21 @@
                                   </li>
                                    <li  ng-repeat="task in tasks" class="list-group-item" droppable ng-drop="dropTag(task)">
                                      <div class="row">
-                                        <label class="col-md-1 col-sm-1">
+                                        <label class="col-md-1 col-xs-1">
                                             <input type="checkbox" ng-click="select_task(task,$index,$event)" ng-checked="isSelected()">  
                                         </label>
-                                       <h4 ng-dblclick="edit_task(task)" ng-show="edited_task!=task" class="col-md-6 col-sm-7 list-group-item-heading"
+                                       <h4 ng-dblclick="edit_task(task)" ng-show="edited_task!=task" class="col-md-6 col-xs-10 list-group-item-heading"
                                        ng-class= "{task_closed: task.status=='closed'}">
                                        <i class="fa fa-dot-circle-o status_color" style="color:<%= task.status_color%>;" data-toggle="tooltip" data-placement="top" title="<%= task.status_label %>"></i>
                                         <%= task.title %>
                                        </h4>
-                                       <div ng-show="edited_task==task" class="col-md-6 col-sm-7">
+                                       <div ng-show="edited_task==task" class="col-md-6 col-xs-7">
                                        <form ng-submit="done_edit_task(task)">
                                           <input ng-type="text" class="form-control inlineEditTask" ng-blur="done_edit_task(task)" ng-model="task.title">
                                        </form>
                                          
                                        </div>
-                                        <div class="col-md-5 col-sm-4">
+                                        <div class="col-md-5 col-xs-12">
                                             <span ng-repeat="task_tag in task.tags" class="pull-right task-label badge badge-roundless" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
                                                 <%= task_tag.name %>
                                             </span>

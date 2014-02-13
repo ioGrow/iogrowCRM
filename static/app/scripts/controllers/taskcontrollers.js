@@ -306,6 +306,7 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
      $scope.newTask={};
      $scope.newTask.assignees=[];
      $scope.newTaskValue=null;
+     $scope.newTaskText=null;
      $scope.draggedTag=null;
      $scope.task_checked = false;
      $scope.isSelectedAll = false;
@@ -355,19 +356,6 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
              return [];
           }
       }
-      $scope.getValueFrom=function(value){
-        var pattern = /(.*)\s@(.*)/;
-          var text= value;
-          console.log('clicking with blanck');
-          $scope.newTaskValue=value;
-          if(pattern.test(text)){  
-              return newstr = text.replace(pattern, "$2");  
-              $scope.newTaskValue=text.replace(pattern, "$1\s @");
-          }else{
-            return null;
-          }
-      }
-    
       $scope.dragTag=function(tag){
         $scope.draggedTag=tag;
       }
@@ -482,30 +470,7 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
           console.log($scope.selected_tasks);
          }
     };
-    $scope.addNewTask=function(){
-        var params ={'about_kind':'Account',
-                      'about_item':$scope.account.id}
-        
-        if ($scope.newTask.due){
 
-            var dueDate= $filter('date')($scope.newTask.due,['yyyy-MM-dd']);
-            dueDate = dueDate +'T00:00:00.000000'
-            params ={'title': $scope.newTask.title,
-                      'due': dueDate,
-                      'about': $scope.account.entityKey
-            }
-            console.log(dueDate);
-            
-        }else{
-            params ={'title': $scope.newTask.title,
-                     'about': $scope.account.entityKey
-                   }
-        };
-       
-        Task.insert($scope,params);
-        $scope.newTask.title='';
-        $scope.newTask.dueDate='0000-00-00T00:00:00-00:00';
-    }
    $scope.updateTask = function(task){
             params ={ 'id':task.id,
                       'title': task.title,
@@ -529,8 +494,58 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
              console.log($scope.selected_tasks);
          } 
     };
+/**********************************************************
+      adding Tag member to new task 
+***********************************************************/
+     $scope.getValueFrom=function(value){
+        var pattern = /(.*)\s@(.*)/;
+          var text= value;
+          console.log('clicking with blanck');
+          console.log(value);
+          $scope.newTaskValue=value;
+          if(pattern.test(text)){  
+            $scope.newTaskText=text.replace(pattern, "$1");
+            $scope.newTaskValue=text.replace(pattern, "$1\s @");
+              return newstr = text.replace(pattern, "$2");  
+              
+          }else{
+            $scope.newTaskText=text;
+            return null;
+          }
+          console.log($scope.newTaskText);
+      }
+    $scope.tagMember = function(value){
+       $scope.newTask.assignees.push({'entityKey':value.entityKey});
+       $scope.newTask.title=$scope.newTaskValue+value.google_display_name;
 
-     
+     };
+    $scope.addNewTask=function(){
+        var params ={'about_kind':'Account',
+                      'about_item':$scope.account.id}
+        console.log('assignees*************************');
+        console.log($scope.newTask.assignees);
+        if ($scope.newTask.due){
+
+            var dueDate= $filter('date')($scope.newTask.due,['yyyy-MM-dd']);
+            dueDate = dueDate +'T00:00:00.000000'
+            params ={'title': $scope.newTask.title,
+                      'due': dueDate,
+                      'about': $scope.account.entityKey
+            }
+            console.log(dueDate);
+            
+        }else{
+            params ={'title': $scope.newTask.title,
+                     'about': $scope.account.entityKey
+                   }
+        };
+       
+        Task.insert($scope,params);
+        $scope.newTask.title='';
+        $scope.newTask.assignees=[];
+        $scope.newTask.dueDate='0000-00-00T00:00:00-00:00';
+    }
+/************************************/
       $scope.isSelected = function(index) {
         return ($scope.selected_tasks.indexOf(index) >= 0||$scope.isSelectedAll);
       };
@@ -565,11 +580,7 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
         }
         $scope.user='';
      };
-    $scope.tagMember = function(value){
-       $scope.newTask.assignees.push({'entityKey':value.entityKey});
-       $scope.newTask.title=$scope.newTaskValue+value.google_display_name;
 
-     };
      $scope.unselectMember =function(index){
          $scope.slected_members.splice(index, 1);
           console.log($scope.slected_members);
