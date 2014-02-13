@@ -4,6 +4,13 @@ app.controller('SearchFormController', ['$scope','Search',
         console.log('Okkkkkkkkkkkkkkkkk');
         // Let's define our first command. First the text we expect, and then the function it should call
         var commands = {
+          'search :account contacts': function(account) {
+            $scope.searchQuery = account + ' and type:Contact';
+
+            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+            $scope.$apply();
+            $scope.executeSearch($scope.searchQuery);
+          },
           'search *term': function(term) {
             $scope.searchQuery = term;
 
@@ -11,6 +18,7 @@ app.controller('SearchFormController', ['$scope','Search',
             $scope.$apply();
             $scope.executeSearch($scope.searchQuery);
           }
+          
         };
 
 

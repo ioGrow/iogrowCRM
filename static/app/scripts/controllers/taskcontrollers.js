@@ -382,6 +382,27 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
           Task.list($scope,params,true);
           User.list($scope,{});
           Tag.list($scope,{});
+
+          if (annyang) {
+                  console.log('gooo ooo oo o oo o  oo o o ');
+                  // Let's define our first command. First the text we expect, and then the function it should call
+                  var commands = {
+                    'ok google *term': function(term) {
+                      
+                      console.log('@@@@@@@@@@@@@@@@@ NEW TASK TO @@@@@@@@@@@@@@@@@@');
+                      console.log(term);
+                      $scope.newTask.title = term;
+                      $scope.$apply();
+                      
+                    }
+                  };
+
+
+                  // Add our commands to annyang
+                  annyang.addCommands(commands);
+
+                  
+                }
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
