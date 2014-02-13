@@ -303,6 +303,9 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
      $scope.edited_task =null;
      $scope.edited_tag =null;
      $scope.selectedTab=1;
+     $scope.newTask={};
+     $scope.newTask.assignees=[];
+     $scope.newTaskValue=null;
      $scope.draggedTag=null;
      $scope.task_checked = false;
      $scope.isSelectedAll = false;
@@ -317,10 +320,11 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
           });
       }
       handleColorPicker();
-      $('#search_assignee').click(function (e)
-          {                
-              e.stopPropagation();
-          });
+      console.log('heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer');
+      console.log($('#addMemberToTask').children());
+      $('#addMemberToTask > *').on('click', null, function(e) {
+            e.stopPropagation();
+        });
       $scope.idealTextColor=function(bgColor){
         var nThreshold = 105;
          var components = getRGBComponents(bgColor);
@@ -340,6 +344,30 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
              B: parseInt(b, 16)
           };
       }
+     $scope.getAssignedUsers=function(value){
+          var pattern = /(.*)\s@(.*)/;
+          var text= value;
+          console.log(value);
+          if(pattern.test(text)){
+              return $scope.users;
+          }else{
+            console.log("rrrrrrrrrrrrrrned");
+             return [];
+          }
+      }
+      $scope.getValueFrom=function(value){
+        var pattern = /(.*)\s@(.*)/;
+          var text= value;
+          console.log('clicking with blanck');
+          $scope.newTaskValue=value;
+          if(pattern.test(text)){  
+              return newstr = text.replace(pattern, "$2");  
+              $scope.newTaskValue=text.replace(pattern, "$1\s @");
+          }else{
+            return null;
+          }
+      }
+    
       $scope.dragTag=function(tag){
         $scope.draggedTag=tag;
       }
@@ -454,6 +482,30 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
           console.log($scope.selected_tasks);
          }
     };
+    $scope.addNewTask=function(){
+        var params ={'about_kind':'Account',
+                      'about_item':$scope.account.id}
+        
+        if ($scope.newTask.due){
+
+            var dueDate= $filter('date')($scope.newTask.due,['yyyy-MM-dd']);
+            dueDate = dueDate +'T00:00:00.000000'
+            params ={'title': $scope.newTask.title,
+                      'due': dueDate,
+                      'about': $scope.account.entityKey
+            }
+            console.log(dueDate);
+            
+        }else{
+            params ={'title': $scope.newTask.title,
+                     'about': $scope.account.entityKey
+                   }
+        };
+       
+        Task.insert($scope,params);
+        $scope.newTask.title='';
+        $scope.newTask.dueDate='0000-00-00T00:00:00-00:00';
+    }
    $scope.updateTask = function(task){
             params ={ 'id':task.id,
                       'title': task.title,
@@ -505,13 +557,18 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
             Task.patch($scope,params);
         });
       };
-    $scope.selectMember = function(){
+     $scope.selectMember = function(){
         if ($scope.slected_members.indexOf($scope.user) == -1) {
            $scope.slected_members.push($scope.user);
            $scope.slected_memeber = $scope.user;
            $scope.user = $scope.slected_memeber.google_display_name;
         }
         $scope.user='';
+     };
+    $scope.tagMember = function(value){
+       $scope.newTask.assignees.push({'entityKey':value.entityKey});
+       $scope.newTask.title=$scope.newTaskValue+value.google_display_name;
+
      };
      $scope.unselectMember =function(index){
          $scope.slected_members.splice(index, 1);
