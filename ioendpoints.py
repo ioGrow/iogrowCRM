@@ -119,6 +119,15 @@ class DiscussionAboutSchema(messages.Message):
     id = messages.StringField(2)
     name = messages.StringField(3)
 
+class NoteInsertRequest(messages.Message):
+    about = messages.StringField(1,required=True)
+    title = messages.StringField(2,required=True)
+    content = messages.StringField(3)
+    
+class NoteInsertRequest(messages.Message):
+    about = messages.StringField(1,required=True)
+    title = messages.StringField(2,required=True)
+    content = messages.StringField(3)
 class TagSchema(messages.Message):
     name  = messages.StringField(1)
     color = messages.StringField(2)
