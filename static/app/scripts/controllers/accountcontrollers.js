@@ -191,6 +191,8 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
           User.list($scope,{});
           Opportunitystage.list($scope,{});
           Casestatus.list($scope,{});
+
+
          
 
        };
@@ -615,15 +617,14 @@ $scope.CaselistNextPageItems = function(){
             dueDate = dueDate +'T00:00:00.000000'
             params ={'title': task.title,
                       'due': dueDate,
-                      'about_kind':'Account',
-                      'about_item':$scope.account.id
+                      'about': $scope.account.entityKey
             }
             console.log(dueDate);
             
         }else{
             params ={'title': task.title,
-                     'about_kind':'Account',
-                     'about_item':$scope.account.id}
+                     'about': $scope.account.entityKey
+                   }
         };
        
         Task.insert($scope,params);
@@ -638,10 +639,9 @@ $scope.CaselistNextPageItems = function(){
        
      };
      $scope.listTasks = function(){
-        var params = {'about_kind':'Account',
-                      'about_item':$scope.account.id,
+        var params = {'about': $scope.account.entityKey,
                       'order': '-updated_at',
-                      'limit': 5
+                      
                       };
         Task.list($scope,params);
 
@@ -824,6 +824,7 @@ $scope.CaselistNextPageItems = function(){
                'connections': kind
               };
      InfoNode.list($scope,params);
+   
  }
 //HKA 19.11.2013 Add Phone
  $scope.addPhone = function(phone){
@@ -861,7 +862,7 @@ $scope.addEmail = function(email){
   };
   InfoNode.insert($scope,params);
   $('#emailmodal').modal('hide');
-  $scope.email={};
+  $scope.emaill={};
   };
   
 

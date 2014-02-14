@@ -432,14 +432,12 @@ $scope.CaselistNextPageItems = function(){
             dueDate = dueDate +'T00:00:00.000000'
             params ={'title': task.title,
                       'due': dueDate,
-                      'about_kind':'Contact',
-                     'about_item':$scope.contact.id
+                      'about':$scope.contact.entityKey
             }
             console.log(dueDate);
         }else{
             params ={'title': task.title,
-                     'about_kind':'Contact',
-                     'about_item':$scope.contact.id}
+                     'about':$scope.contact.entityKey}
         };
         Task.insert($scope,params);
         $scope.task.title='';
@@ -453,10 +451,9 @@ $scope.CaselistNextPageItems = function(){
        
      }
      $scope.listTasks = function(){
-        var params = {'about_kind':'Contact',
-                      'about_item':$scope.contact.id,
-                      'order': '-updated_at',
-                      'limit': 5
+        var params = {'about':$scope.contact.entityKey,
+                      'order': '-updated_at'
+                      
                       };
         Task.list($scope,params);
 

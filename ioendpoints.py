@@ -126,11 +126,11 @@ class TagSchema(messages.Message):
 
 class TaskInsertRequest(messages.Message):
     about = messages.StringField(1)
-    title = messages.StringField(3,required=True)
-    due = messages.StringField(4)
-    reminder = messages.StringField(6)
+    title = messages.StringField(2,required=True)
+    due = messages.StringField(3)
+    reminder = messages.StringField(4)
     status = messages.StringField(5)
-    assignees = messages.MessageField(EntityKeyRequest,13, repeated = True)
+    assignees = messages.MessageField(EntityKeyRequest,6, repeated = True)
     
 
 class TaskSchema(messages.Message):
@@ -158,6 +158,7 @@ class TaskRequest(messages.Message):
     tags = messages.StringField(5,repeated = True)
     owner = messages.StringField(6)
     assignee = messages.StringField(7)
+    about = messages.StringField(8)
 class TaskListResponse(messages.Message):
     items = messages.MessageField(TaskSchema, 1, repeated=True)
     nextPageToken = messages.StringField(2)
@@ -621,6 +622,7 @@ class CrmEngineApi(remote.Service):
                       path='infonode/insert', http_method='POST',
                       name='infonode.insert')
   def infonode_insert(self, request):
+      user_from_email = EndpointsHelper.require_iogrow_user()
       parent_key = ndb.Key(urlsafe=request.parent)
       node = InfoNode(kind = request.kind, parent=parent_key)
       for record in request.fields:
@@ -632,6 +634,7 @@ class CrmEngineApi(remote.Service):
                       path='infonode/list', http_method='POST',
                       name='infonode.list')
   def infonode_list_beta(self, request):
+      user_from_email = EndpointsHelper.require_iogrow_user()
       parent_key = ndb.Key(urlsafe=request.parent)
       nodes = InfoNode.query(InfoNode.parent==parent_key).fetch()
       connections_dict = {}
@@ -676,10 +679,16 @@ class CrmEngineApi(remote.Service):
       else:
           status = 'pending'
 
+      author = Userinfo()
+      author.google_user_id = user_from_email.google_user_id
+      author.display_name = user_from_email.google_display_name
+      author.photo = user_from_email.google_public_profile_photo_url
+
       task = Task(title = request.title,
                   status = request.status,
                   owner = user_from_email.google_user_id,
-                  organization = user_from_email.organization
+                  organization = user_from_email.organization,
+                  author = author
             )
       if request.due:
           task.due = datetime.datetime.strptime(request.due,"%Y-%m-%dT00:00:00.000000")
@@ -708,13 +717,22 @@ class CrmEngineApi(remote.Service):
       if request.reminder:
           pass
           
-      task_key = task.put()
+      task_key = task.put_async()
+      task_key_async = task_key.get_result()
       if request.about:
           # insert edges
-          pass
+
+          Edge.insert(start_node = ndb.Key(urlsafe=request.about),
+                      end_node = task_key_async,
+                      kind = 'tasks',
+                      inverse_edge = 'related_to')
       if request.assignees:
           # insert edges
-          pass
+          for assignee in request.assignees:
+              Edge.insert(start_node = task_key_async,
+                      end_node = ndb.Key(urlsafe=assignee.entityKey),
+                      kind = 'assignees',
+                      inverse_edge = 'assigned_to')      
       return TaskSchema()
 
 
@@ -773,6 +791,10 @@ class CrmEngineApi(remote.Service):
                           is_filtered = False
                   if request.owner and task.owner!=request.owner and is_filtered:
                       is_filtered = False
+                  if request.about and is_filtered:
+                      end_node_set = [ndb.Key(urlsafe=request.about)]
+                      if not Edge.find(start_node=task.key,kind='related_to',end_node_set=end_node_set,operation='AND'):
+                          is_filtered = False
                   if is_filtered:
                       count = count + 1
                       #list of tags related to this task
@@ -782,6 +804,17 @@ class CrmEngineApi(remote.Service):
                           tag_list.append( TagSchema(edgeKey = edge.key.urlsafe(),
                                           name = edge.end_node.get().name,
                                           color = edge.end_node.get().color))
+                      about = None
+                      edge_list = Edge.list(start_node=task.key,kind='related_to')
+                      for edge in edge_list:
+                          about_kind = edge.end_node.kind()
+                          if about_kind == 'Contact' or about_kind == 'Lead':
+                              about_name = edge.end_node.get().firstname + ' ' + edge.end_node.get().lastname
+                          else:
+                              about_name = edge.end_node.get().name
+                          about = DiscussionAboutSchema(kind=about_kind,
+                                                               id=str(edge.end_node.id()),
+                                                               name=about_name)
                       #list of tags related to this task
                       edge_list = Edge.list(start_node=task.key,kind='assignees')
                       assignee_list = list()
@@ -811,7 +844,12 @@ class CrmEngineApi(remote.Service):
 
                                 
 
-
+                      author_schema = None
+                      if task.author:
+                          author_schema = AuthorSchema(google_user_id = task.author.google_user_id,
+                                                          display_name = task.author.display_name,
+                                                          google_public_profile_url = task.author.google_public_profile_url,
+                                                          photo = task.author.photo)
                       task_schema = TaskSchema(
                                   id = str( task.key.id() ),
                                   entityKey = task.key.urlsafe(),
@@ -820,8 +858,8 @@ class CrmEngineApi(remote.Service):
                                   status_color = status_color,
                                   status_label = status_label,
                                   comments = 0,
-                                  about = DiscussionAboutSchema(),
-                                  created_by = AuthorSchema(),
+                                  about = about,
+                                  created_by = author_schema,
                                   completed_by = AuthorSchema(),
                                   tags = tag_list,
                                   assignees = assignee_list,
@@ -2393,48 +2431,38 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         try:
             task = Task.get_by_id(int(request.id))
-            about_item_id = int(task.about_item)
-            try:
-                about_object = OBJECTS[task.about_kind].get_by_id(about_item_id)
-                if task.about_kind == 'Contact' or task.about_kind == 'Lead':
-                    about_name = about_object.firstname + ' ' + about_object.lastname
+            about = None
+            edge_list = Edge.list(start_node=task.key,kind='related_to')
+            for edge in edge_list:
+                about_kind = edge.end_node.kind()
+                if about_kind == 'Contact' or about_kind == 'Lead':
+                    about_name = edge.end_node.get().firstname + ' ' + edge.end_node.get().lastname
                 else:
-                    about_name = about_object.name
-                about_response = DiscussionAboutSchema(kind=task.about_kind,
-                                                       id=task.about_item,
+                    about_name = edge.end_node.get().name
+                about = DiscussionAboutSchema(kind=about_kind,
+                                                       id=str(edge.end_node.id()),
                                                        name=about_name)
-                author = AuthorSchema(google_user_id = task.author.google_user_id,
-                                      display_name = task.author.display_name,
-                                      google_public_profile_url = task.author.google_public_profile_url,
-                                      photo = task.author.photo)
-                completed_by = None
-                if completed_by:
-                    completed_by = AuthorSchema(google_user_id = task.completed_by.google_user_id,
+            author = AuthorSchema()
+            completed_by = None
+            if completed_by:
+                completed_by = AuthorSchema(google_user_id = task.completed_by.google_user_id,
                                       display_name = task.completed_by.display_name,
                                       google_public_profile_url = task.completed_by.google_public_profile_url,
                                       photo = task.completed_by.photo)
-
-                
-                if task.due:
-                    due_date = task.due.isoformat()
-                else:
-                    due_date = None
-                response = TaskResponse(id=request.id,
+            if task.due:
+                due_date = task.due.isoformat()
+            else:
+                due_date = None
+            response = TaskResponse(id=request.id,
                                               entityKey = task.key.urlsafe(),
                                               title = task.title,
                                               due = due_date,
                                               status = task.status,
                                               comments = task.comments,
-                                              about = about_response,
+                                              about = about,
                                               author = author,
                                               completed_by = completed_by )
-                return response
-            except (IndexError, TypeError):
-                raise endpoints.NotFoundException('About object %s not found.' %
-                                                  (request.id,))
-            
-            
-
+            return response
             
         except (IndexError, TypeError):
             raise endpoints.NotFoundException('Note %s not found.' %

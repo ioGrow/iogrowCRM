@@ -51,9 +51,13 @@ accountservices.factory('Account', function($http) {
                $scope.email.to = '';
                document.title = "Account: " + $scope.account.name ;
               //$scope.renderMaps();
-                angular.forEach($scope.account.emails, function(value, key){
+              console.log('-------infonode----------');
+              console.log($scope.infonodes);
+                angular.forEach($scope.infonodes.emails, function(value, key){
                   $scope.email.to = $scope.email.to + value.email + ',';
-                  
+                  console.log('-------$scope.email.to----------');
+                  console.log($scope.email.to);
+                
                 });
                // Call the method $apply to make the update on the scope
                 $scope.$apply();

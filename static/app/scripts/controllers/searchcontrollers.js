@@ -1,5 +1,33 @@
 app.controller('SearchFormController', ['$scope','Search',
     function($scope,Search) {
+     if (annyang) {
+        console.log('Okkkkkkkkkkkkkkkkk');
+        // Let's define our first command. First the text we expect, and then the function it should call
+        var commands = {
+          'search :account contacts': function(account) {
+            $scope.searchQuery = account + ' and type:Contact';
+
+            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+            $scope.$apply();
+            $scope.executeSearch($scope.searchQuery);
+          },
+          'search *term': function(term) {
+            $scope.searchQuery = term;
+
+            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+            $scope.$apply();
+            $scope.executeSearch($scope.searchQuery);
+          }
+          
+        };
+
+
+        // Add our commands to annyang
+        annyang.addCommands(commands);
+
+        // Start listening. You can call this here, or attach this call to an event, button, etc.
+        annyang.start();
+      }
      var params ={};
      $scope.result = undefined;
      $scope.q = undefined;
