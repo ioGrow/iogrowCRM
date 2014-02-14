@@ -326,14 +326,12 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
             dueDate = dueDate +'T00:00:00.000000'
             params ={'title': task.title,
                       'due': dueDate,
-                      'about_kind':'Lead',
-                     'about_item':$scope.lead.id
+                      'about':$scope.lead.entityKey
             }
             console.log(dueDate);
         }else{
             params ={'title': task.title,
-                     'about_kind':'Lead',
-                     'about_item':$scope.lead.id}
+                     'about':$scope.lead.entityKey}
         };
         Task.insert($scope,params);
      }
@@ -345,10 +343,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
        
      }
      $scope.listTasks = function(){
-        var params = {'about_kind':'Lead',
-                      'about_item':$scope.lead.id,
-                      'order': '-updated_at',
-                      'limit': 5
+        var params = {'about':$scope.lead.entityKey,
+                      'order': '-updated_at'
                       };
         Task.list($scope,params);
 

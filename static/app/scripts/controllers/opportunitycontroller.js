@@ -260,14 +260,12 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
             dueDate = dueDate +'T00:00:00.000000'
             params ={'title': task.title,
                       'due': dueDate,
-                      'about_kind':'Opportunity',
-                      'about_item':$scope.opportunity.id
+                      'about':$scope.opportunity.entityKey
             }
             console.log(dueDate);
         }else{
             params ={'title': task.title,
-                     'about_kind':'Opportunity',
-                     'about_item':$scope.opportunity.id}
+                     'about':$scope.opportunity.entityKey}
         };
         Task.insert($scope,params);
      }
@@ -279,10 +277,9 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
        
      }
      $scope.listTasks = function(){
-        var params = {'about_kind':'Opportunity',
-                      'about_item':$scope.opportunity.id,
-                      'order': '-updated_at',
-                      'limit': 5
+        var params = {'about':$scope.opportunity.entityKey,
+                      'order': '-updated_at'
+                      
                       };
         Task.list($scope,params);
 

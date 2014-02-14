@@ -305,6 +305,10 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
      $scope.edited_task =null;
      $scope.edited_tag =null;
      $scope.selectedTab=1;
+     $scope.newTask={};
+     $scope.newTask.assignees=[];
+     $scope.newTaskValue=null;
+     $scope.newTaskText=null;
      $scope.draggedTag=null;
      $scope.task_checked = false;
      $scope.isSelectedAll = false;
@@ -319,10 +323,11 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
           });
       }
       handleColorPicker();
-      $('#search_assignee').click(function (e)
-          {                
-              e.stopPropagation();
-          });
+      console.log('heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer');
+      console.log($('#addMemberToTask').children());
+      $('#addMemberToTask > *').on('click', null, function(e) {
+            e.stopPropagation();
+        });
       $scope.idealTextColor=function(bgColor){
         var nThreshold = 105;
          var components = getRGBComponents(bgColor);
@@ -341,6 +346,17 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
              G: parseInt(g, 16),
              B: parseInt(b, 16)
           };
+      }
+     $scope.getAssignedUsers=function(value){
+          var pattern = /(.*)\s@(.*)/;
+          var text= value;
+          console.log(value);
+          if(pattern.test(text)){
+              return $scope.users;
+          }else{
+            console.log("rrrrrrrrrrrrrrned");
+             return [];
+          }
       }
       $scope.dragTag=function(tag){
         $scope.draggedTag=tag;
@@ -363,11 +379,32 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
      // What to do after authentication
      $scope.runTheProcess = function(){
           var params = { 'order': $scope.order,
-                         'status':'pending',
+                         
                         'limit':7}
-          Task.list($scope,params);
+          Task.list($scope,params,true);
           User.list($scope,{});
           Tag.list($scope,{});
+
+          if (annyang) {
+                  console.log('gooo ooo oo o oo o  oo o o ');
+                  // Let's define our first command. First the text we expect, and then the function it should call
+                  var commands = {
+                    'ok google *term': function(term) {
+                      
+                      console.log('@@@@@@@@@@@@@@@@@ NEW TASK TO @@@@@@@@@@@@@@@@@@');
+                      console.log(term);
+                      $scope.newTask.title = term;
+                      $scope.$apply();
+                      
+                    }
+                  };
+
+
+                  // Add our commands to annyang
+                  annyang.addCommands(commands);
+
+                  
+                }
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -456,6 +493,37 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
           console.log($scope.selected_tasks);
          }
     };
+
+
+    $scope.addNewTask=function(){
+        
+        if ($scope.newTask.due){
+
+            var dueDate= $filter('date')($scope.newTask.due,['yyyy-MM-dd']);
+            dueDate = dueDate +'T00:00:00.000000'
+            params ={'title': $scope.newTask.title,
+                      'due': dueDate,
+                      'about': $scope.account.entityKey
+            }
+            console.log(dueDate);
+            
+        }else{
+            params ={'title': $scope.newTask.title}
+        };
+        if ($scope.newTask.assignees){
+            params.assignees = $scope.newTask.assignees;
+        }
+        console.log('************************@@@@@@@@@@@@@@@@@@@@@************************');
+        console.log(params);
+       
+       
+        Task.insert($scope,params);
+        $scope.newTask.assignees = [];
+
+        $scope.newTask.title='';
+        $scope.newTask.dueDate='0000-00-00T00:00:00-00:00';
+    }
+
    $scope.updateTask = function(task){
             params ={ 'id':task.id,
                       'title': task.title,
@@ -479,8 +547,33 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
              console.log($scope.selected_tasks);
          } 
     };
+/**********************************************************
+      adding Tag member to new task 
+***********************************************************/
+     $scope.getValueFrom=function(value){
+        var pattern = /(.*)\s@(.*)/;
+          var text= value;
+          console.log('clicking with blanck');
+          console.log(value);
+          $scope.newTaskValue=value;
+          if(pattern.test(text)){  
+            $scope.newTaskText=text.replace(pattern, "$1");
+            $scope.newTaskValue=text.replace(pattern, "$1\s @");
+              return newstr = text.replace(pattern, "$2");  
+              
+          }else{
+            $scope.newTaskText=text;
+            return null;
+          }
+          console.log($scope.newTaskText);
+      }
+    $scope.tagMember = function(value){
+       $scope.newTask.assignees.push({'entityKey':value.entityKey});
+       $scope.newTask.title=$scope.newTaskValue+value.google_display_name;
 
-     
+     };
+   
+/************************************/
       $scope.isSelected = function(index) {
         return ($scope.selected_tasks.indexOf(index) >= 0||$scope.isSelectedAll);
       };
@@ -507,7 +600,7 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
             Task.patch($scope,params);
         });
       };
-    $scope.selectMember = function(){
+     $scope.selectMember = function(){
         if ($scope.slected_members.indexOf($scope.user) == -1) {
            $scope.slected_members.push($scope.user);
            $scope.slected_memeber = $scope.user;
@@ -515,6 +608,7 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
         }
         $scope.user='';
      };
+
      $scope.unselectMember =function(index){
          $scope.slected_members.splice(index, 1);
           console.log($scope.slected_members);
@@ -555,11 +649,22 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
      //tags
      
      
-     $scope.listTasks=function(){
+     $scope.listTasks=function(effects){
       $scope.selected_tasks=[];/*we have to change it */
-      var params = {'status':$scope.status,
+      var params = { 'order': $scope.order,
                         'limit':7}
-        Task.list($scope,params);
+        if (effects){
+          Task.list($scope,params,effects);
+        }
+        else{
+          Task.list($scope,params);
+        }
+        
+     }
+     $scope.hilightTask = function(){
+        
+       $('#task_0').effect( "bounce", "slow" );
+       $('#task_0 .list-group-item-heading').effect("highlight","slow");
      }
      $scope.edgeInserted = function () {
        $scope.listTasks();
