@@ -22,7 +22,8 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag',
           var params = { 'order': $scope.order,
                         'limit':6}
           Account.list($scope,params);
-          Tag.list($scope,{});
+          var paramsTag = {'about_kind':'Account'};
+          Tag.list($scope,paramsTag);
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -141,16 +142,19 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag',
       HKA 14.02.2014  tags 
 ***************************************************************************************/
 $scope.listTags=function(){
-      Tag.list($scope,{});
+      var paramsTag = {'about_kind':'Account'}
+      Tag.list($scope,paramsTag);
      }
 $scope.addNewtag = function(tag){
        var params = {   
                           'name': tag.name,
+                          'about_kind':'Account',
                           'color':$('#tag-col-pick').val()
                       }  ;
        Tag.insert($scope,params);
         $scope.tag.name='';
-        Tag.list($scope,{});
+        var paramsTag = {'about_kind':'Account'};
+        Tag.list($scope,paramsTag);
         
      }
 $scope.updateTag = function(tag){
@@ -193,7 +197,7 @@ $scope.selectTag= function(tag,index,$event){
          var params = {
           'tags': tags
          }
-         Task.list($scope,params);
+         Account.list($scope,params);
 
   };
 
