@@ -621,6 +621,7 @@ class CrmEngineApi(remote.Service):
                       path='infonode/insert', http_method='POST',
                       name='infonode.insert')
   def infonode_insert(self, request):
+      user_from_email = EndpointsHelper.require_iogrow_user()
       parent_key = ndb.Key(urlsafe=request.parent)
       node = InfoNode(kind = request.kind, parent=parent_key)
       for record in request.fields:
@@ -632,6 +633,7 @@ class CrmEngineApi(remote.Service):
                       path='infonode/list', http_method='POST',
                       name='infonode.list')
   def infonode_list_beta(self, request):
+      user_from_email = EndpointsHelper.require_iogrow_user()
       parent_key = ndb.Key(urlsafe=request.parent)
       nodes = InfoNode.query(InfoNode.parent==parent_key).fetch()
       connections_dict = {}

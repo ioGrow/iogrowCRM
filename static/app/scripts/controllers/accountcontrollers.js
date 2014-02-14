@@ -191,6 +191,8 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
           User.list($scope,{});
           Opportunitystage.list($scope,{});
           Casestatus.list($scope,{});
+
+
          
 
        };
@@ -824,6 +826,7 @@ $scope.CaselistNextPageItems = function(){
                'connections': kind
               };
      InfoNode.list($scope,params);
+   
  }
 //HKA 19.11.2013 Add Phone
  $scope.addPhone = function(phone){
@@ -861,7 +864,7 @@ $scope.addEmail = function(email){
   };
   InfoNode.insert($scope,params);
   $('#emailmodal').modal('hide');
-  $scope.email={};
+  $scope.emaill={};
   };
   
 
