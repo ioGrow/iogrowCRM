@@ -100,21 +100,72 @@
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-        <div class="row ">
+          <div class="row ">
+            <div class="col-md-12"><h2 class="page-title">{{ _("Accounts") }} </h2></div>
+          </div>
+        <div class="row "  >
+            
+          <div class="col-md-2">
+
           
-          <div class="col-md-12">
-            <h2 class="page-title">{{ _("Accounts") }} </h2>
             
                     <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
                     {{ _("New Account") }} <i class="icon-plus"></i>
                     </button>
                
-            <hr/>
+            
             
           </div>
+          <div class="col-md-2" ng-show="accounts+isFiltering">
+          
+            
+            
+                     <div class="btn-group btn-filter">
+                      <a class="btn btn-default" href="#" data-toggle="dropdown">
+                        {{ _('Filter by') }}
+                      <i class="icon-angle-down"></i>
+                      </a>
+                      <ul class="dropdown-menu">
+                        <li><a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All accounts') }}</a></li>
+                        <li><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My accounts') }}</a></li>
+                      </ul>
+              </div>
+               
+            
+            
+          </div>
+          <div class="col-md-5" ng-show="accounts+isFiltering">
+               
+                    <form class=" ng-pristine ng-valid" ng-submit="executeSearch(searchQuery)">
+                      <div class="input-group">
+                        <input type="text" ng-model="searchQuery" typeahead="result as result.name  for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="form-control" placeholder="{{ _('Quick Filtering') }}">
+                        <span class="input-group-btn">
+                          <button class="gbqfb gbqfb-hvr" type="button"><i class="icon-filter"></i></button>
+                        </span>
+                      </div>
+                     
+                    </form>
+                 
+            </div>
+            <div class="col-md-2" ng-show="accounts+isFiltering">
+              <div class="btn-group btn-sort">
+                    <a class="btn btn-default" href="#" data-toggle="dropdown">
+                    {{ _('Sort by') }}
+                    <i class="icon-angle-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a></li>
+                      <li><a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a></li>
+                      
+                     
+                    </ul>
+              </div>
+
+            </div>
         </div>
+        <hr/>
           <!-- Filtering and sorting -->
-          <div class="row filter-row" ng-show="accounts+isFiltering">
+          <!--div class="row filter-row" ng-show="accounts+isFiltering">
             <div class="col-md-2">
               <div class="btn-group btn-filter">
                       <a class="btn btn-default" href="#" data-toggle="dropdown">
@@ -127,7 +178,7 @@
                       </ul>
               </div>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-7">
                
                     <form class=" ng-pristine ng-valid" ng-submit="executeSearch(searchQuery)">
                       <div class="input-group">
@@ -158,13 +209,13 @@
             <br>
               <br>
             
-          </div>
+          </div-->
             
             <div class="row cards-container">
 
-            <div class="col-md-10">
+            <div class="col-md-9">
               <div class="inner-cards-container">
-                <div ng-repeat="account in accounts" class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div ng-repeat="account in accounts" class="col-lg-4 col-md-3 col-sm-6 col-xs-12">
                   <div class="dashboard-stat cards-small">
                     <div class="details">
                     <a href="/#/accounts/show/<%= account.id %>"><h2 class="cardTitle">
@@ -208,9 +259,7 @@
               <div class="clearfix"></div>
               
               </div><!--/inner-cards-container-->
-              </div>
-            </div>
-          <div class="row">
+               <div class="row">
           <div class="col-md-12">
               <div class="pagination pull-right" ng-hide="isLoading">
                   
@@ -229,6 +278,64 @@
           </div>
           
           </div>
+              </div>
+                <div class="col-md-3">
+              <div class="portlet">
+                <div class="portlet-title">
+                  <div class="caption">
+                    <!-- class="fa fa-reorder"--><i></i>Labels
+                  </div>
+                  <!--div class="tools">
+                      <a href="javascript:;" class="collapse">
+                      </a>
+                      <a href="#portlet-config" data-toggle="modal" class="config">
+                      </a>
+                      <a href="javascript:;" class="reload">
+                      </a>
+                      <a href="javascript:;" class="remove">
+                    </a>
+                  </div-->
+                </div>
+                <div class="portlet-body">
+                <ul class="list-group tags-list">
+                  <li draggable ng-repeat="tag_item in tags" class="list-group-item tags-list-item" ng-click="selectTag(tag_item,$index,$event)" ng-drag="dragTag(tag_item)" >
+                  <div class="row">
+                    <div class="tag-color" style="border-left: 4px solid <%=tag_item.color%>;">
+                    </div>
+                    <span class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"><%= tag_item.name %></span>
+                    <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
+                      <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
+                    </form>
+                    <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
+                  </li>
+                  </div>
+                </ul>
+                
+                <form class="well" role="form">
+                <div class="row">
+                  <div class="col-md-12 form-group">
+                    <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New Label">
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                       <input id="tag-col-pick" type="text" class="colorpicker-default form-control" value="#8fff00">
+                  </div>
+                  <div class="col-md-6">
+                    <input type="submit" ng-hide="isLoadingTask" ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
+                    <input type="submit" ng-show="isLoadingTask" class="btn green pull-right" value="{{ _('Loading...') }}">
+                  </div>
+                  </div>
+                </form>
+                <div class="form-group" ng-show="tags">
+                  <button class="btn btn-default btn-block" ng-click="manage_tags=!manage_tags;manage()"> Manage Tags</button>
+                </div>
+                  
+                </div>
+              </div>
+            </div>
+         
             
           
         

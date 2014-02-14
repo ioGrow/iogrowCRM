@@ -150,6 +150,7 @@ accountservices.factory('Account', function($http) {
          
          if(!resp.code){
             $scope.accountInserted(resp);
+            $('#addAccountModal').modal('hide');
             $scope.isLoading = false;
             $scope.$apply();
           

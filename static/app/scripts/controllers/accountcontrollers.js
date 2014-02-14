@@ -20,7 +20,7 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
      // What to do after authentication
      $scope.runTheProcess = function(){
           var params = { 'order': $scope.order,
-                        'limit':8}
+                        'limit':6}
           Account.list($scope,params);
      };
      // We need to call this to refresh token when user credentials are invalid
@@ -32,12 +32,12 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
         var nextPage = $scope.currentPage + 1;
         var params = {};
           if ($scope.pages[nextPage]){
-            params = {'limit':8,
+            params = {'limit':6,
                       'order' : $scope.order,
                       'pageToken':$scope.pages[nextPage]
             }
           }else{
-            params = {'order' : $scope.order,'limit':8}
+            params = {'order' : $scope.order,'limit':6}
           }
           $scope.currentPage = $scope.currentPage + 1 ; 
           Account.list($scope,params);
@@ -46,12 +46,12 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
        var prevPage = $scope.currentPage - 1;
        var params = {};
           if ($scope.pages[prevPage]){
-            params = {'limit':8,
+            params = {'limit':6,
                       'order' : $scope.order,
                       'pageToken':$scope.pages[prevPage]
             }
           }else{
-            params = {'order' : $scope.order,'limit':8}
+            params = {'order' : $scope.order,'limit':6}
           }
           $scope.currentPage = $scope.currentPage - 1 ;
           Account.list($scope,params);
@@ -71,6 +71,7 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
      $scope.save = function(account){
           if (account.name) {
       	     Account.insert($scope,account);
+              $('#addAccountModal').modal('hide');
              
            };
       };
@@ -115,7 +116,7 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
      $scope.orderBy = function(order){
       
         var params = { 'order': order,
-                        'limit':8};
+                        'limit':6};
         $scope.order = order;
         Account.list($scope,params);
      };
@@ -123,13 +124,13 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account',
         if (filter){
           var params = { 'owner': filter,
                          'order': $scope.order, 
-                         'limit':8}
+                         'limit':6}
         }
         else{
           var params = {
               'order': $scope.order, 
               
-              'limit':8}
+              'limit':6}
         };
         $scope.isFiltering = true;
         Account.list($scope,params);

@@ -25,7 +25,7 @@ topicservices.factory('Task', function($http) {
             }else {
                if(resp.message=="Invalid token"){
                 $scope.refreshToken();
-                $scope.isLoading = false;
+                $scope.isLoadingTask = false;
                 $scope.$apply();
                };
             }
@@ -33,7 +33,7 @@ topicservices.factory('Task', function($http) {
           });
   };
   Task.patch = function($scope,params){
-      $scope.isLoading = true;
+      $scope.isLoadingTask = true;
       
       gapi.client.crmengine.tasks.patch(params).execute(function(resp) {
         console.log(params);
@@ -42,7 +42,7 @@ topicservices.factory('Task', function($http) {
             $scope.task = resp;
             /*$scope.ListComments();
             $scope.listContributors();*/
-            $scope.isLoading = false;
+            $scope.isLoadingTask = false;
             $scope.listTags();
             $scope.listTasks();
             $scope.$apply();
@@ -55,7 +55,7 @@ topicservices.factory('Task', function($http) {
              $('#errorModal').modal('show');
              if(resp.message=="Invalid grant"){
                 $scope.refreshToken();
-                $scope.isLoading = false;
+                $scope.isLoadingTask = false;
                 $scope.listTags();
                 $scope.listTasks();
                 $scope.$apply();
