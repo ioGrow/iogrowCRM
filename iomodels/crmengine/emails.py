@@ -8,7 +8,7 @@ import pprint
 
 import model
 
-class IOEmail(EndpointsModel):
+class Email(EndpointsModel):
 
     _message_fields_schema = ('id','name','entityKey', 'about_kind')
     #_message_fields_schema = ('id','title')
