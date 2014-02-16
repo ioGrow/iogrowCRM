@@ -223,6 +223,8 @@ class AccountListHandler(BaseHandler, SessionEnabledHandler):
             # Render the template
             template_values = {'ME':user.google_user_id,'tabs':tabs}
             template = jinja_environment.get_template('templates/accounts/list.html')
+            self.response.cache_control = 'public'
+            self.response.cache_control.max_age = 300
             self.response.out.write(template.render(template_values))
 
 class AccountShowHandler(BaseHandler, SessionEnabledHandler):
@@ -239,6 +241,8 @@ class AccountShowHandler(BaseHandler, SessionEnabledHandler):
             template_values = {'ME':user.google_user_id,
              'tabs':tabs}
             template = jinja_environment.get_template('templates/accounts/show.html')
+            self.response.cache_control = 'public'
+            self.response.cache_control.max_age = 300
             self.response.out.write(template.render(template_values))
 class ContactListHandler(BaseHandler, SessionEnabledHandler):
   def get(self):
@@ -250,6 +254,8 @@ class ContactListHandler(BaseHandler, SessionEnabledHandler):
       template_values = {'ME':user.google_user_id,
              'tabs':tabs}
       template = jinja_environment.get_template('templates/contacts/list.html')
+      self.response.cache_control = 'public'
+      self.response.cache_control.max_age = 300
       self.response.out.write(template.render(template_values))
 class ContactShowHandler(BaseHandler,SessionEnabledHandler):
   def get(self):
@@ -260,6 +266,9 @@ class ContactShowHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/contacts/show.html')
+      self.response.cache_control = 'public'
+      self.response.cache_control.max_age = 300
+      
       self.response.out.write(template.render(template_values))
 class OpportunityListHandler(BaseHandler,SessionEnabledHandler):
   def get(self):
@@ -271,6 +280,9 @@ class OpportunityListHandler(BaseHandler,SessionEnabledHandler):
       template_values = {'ME':user.google_user_id,
              'tabs':tabs}
       template = jinja_environment.get_template('templates/opportunities/list.html')
+      self.response.cache_control = 'public'
+      self.response.cache_control.max_age = 300
+      
       self.response.out.write(template.render(template_values))
 class OpportunityShowHandler(BaseHandler,SessionEnabledHandler):
   def get (self):
@@ -281,6 +293,9 @@ class OpportunityShowHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/opportunities/opportunity_show.html')
+      self.response.cache_control = 'public'
+      self.response.cache_control.max_age = 300
+      
       self.response.out.write(template.render(template_values))
 
 class LeadListHandler(BaseHandler,SessionEnabledHandler):
@@ -292,6 +307,9 @@ class LeadListHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       template_values = {'ME':user.google_user_id,'tabs':tabs}
       template = jinja_environment.get_template('templates/leads/lead_list.html')
+      self.response.cache_control = 'public'
+      self.response.cache_control.max_age = 300
+      
       self.response.out.write(template.render(template_values))
 class LeadShowHandler(BaseHandler,SessionEnabledHandler):
   def get (self):
@@ -302,6 +320,9 @@ class LeadShowHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/leads/lead_show.html')
+      self.response.cache_control = 'public'
+      self.response.cache_control.max_age = 300
+      
       self.response.out.write(template.render(template_values))
 
 class CaseListHandler(BaseHandler,SessionEnabledHandler):
@@ -313,6 +334,9 @@ class CaseListHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       template_values = {'ME':user.google_user_id,'tabs':tabs}
       template = jinja_environment.get_template('templates/cases/case_list.html')
+      self.response.cache_control = 'public'
+      self.response.cache_control.max_age = 300
+      
       self.response.out.write(template.render(template_values))
 class CaseShowHandler(BaseHandler,SessionEnabledHandler):
   def get (self):
@@ -323,6 +347,9 @@ class CaseShowHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/cases/case_show.html')
+      self.response.cache_control = 'public'
+      self.response.cache_control.max_age = 300
+      
       self.response.out.write(template.render(template_values))
 
 class NeedShowHandler(BaseHandler,SessionEnabledHandler):
@@ -334,6 +361,9 @@ class NeedShowHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/needs/show.html')
+      self.response.cache_control = 'public'
+      self.response.cache_control.max_age = 300
+      
       self.response.out.write(template.render(template_values))
 class CampaignListHandler(BaseHandler,SessionEnabledHandler):
   def get(self):
@@ -344,6 +374,9 @@ class CampaignListHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       template_values = {'tabs':tabs}
       template = jinja_environment.get_template('templates/campaigns/campaign_list.html')
+      self.response.cache_control = 'public'
+      self.response.cache_control.max_age = 300
+      
       self.response.out.write(template.render(template_values))
 class CampaignShowHandler(BaseHandler,SessionEnabledHandler):
   def get (self):
@@ -354,6 +387,9 @@ class CampaignShowHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/campaigns/campaign_show.html')
+      self.response.cache_control = 'public'
+      self.response.cache_control.max_age = 300
+      
       self.response.out.write(template.render(template_values))
 class NoteShowHandler (BaseHandler,SessionEnabledHandler):
   def get(self):
@@ -364,6 +400,9 @@ class NoteShowHandler (BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/accounts/note_show.html')
+      self.response.cache_control = 'public'
+      self.response.cache_control.max_age = 300
+      
       self.response.out.write(template.render(template_values))
 
 class DocumentShowHandler(BaseHandler,SessionEnabledHandler):
@@ -375,6 +414,9 @@ class DocumentShowHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/documents/show.html')
+      self.response.cache_control = 'public'
+      self.response.cache_control.max_age = 300
+      
       self.response.out.write(template.render(template_values))
 
 class AllTasksHandler(BaseHandler, SessionEnabledHandler):
@@ -390,6 +432,9 @@ class AllTasksHandler(BaseHandler, SessionEnabledHandler):
             # Render the template
             template_values = {'tabs':tabs,'ME':user.google_user_id}
             template = jinja_environment.get_template('templates/activities/all_tasks.html')
+            self.response.cache_control = 'public'
+            self.response.cache_control.max_age = 300
+      
             self.response.out.write(template.render(template_values))
 class TaskShowHandler(BaseHandler, SessionEnabledHandler):
   def get(self):
@@ -404,6 +449,9 @@ class TaskShowHandler(BaseHandler, SessionEnabledHandler):
             # Render the template
             template_values = {'tabs':tabs}
             template = jinja_environment.get_template('templates/activities/task_show.html')
+            self.response.cache_control = 'public'
+            self.response.cache_control.max_age = 300
+      
             self.response.out.write(template.render(template_values))
 class EventShowHandler(BaseHandler, SessionEnabledHandler):
   def get(self):
@@ -418,6 +466,9 @@ class EventShowHandler(BaseHandler, SessionEnabledHandler):
             # Render the template
             template_values = {'tabs':tabs}
             template = jinja_environment.get_template('templates/activities/event_show.html')
+            self.response.cache_control = 'public'
+            self.response.cache_control.max_age = 300
+      
             self.response.out.write(template.render(template_values))
 class ProductListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -775,11 +826,6 @@ class GooglePlusConnect(SessionEnabledHandler):
             or issued_to_match.group(1) != local_id_match.group(1)):
           
             return
-
-        
-        
-        
-        
         #Check if is it an invitation to sign-in or just a simple sign-in 
         invited_user_id = None
         invited_user_id_request = self.request.get("id")
@@ -1082,6 +1128,8 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                 if admin_app:
                     template_values['admin_app']=admin_app
                 template = jinja_environment.get_template('templates/base.html')
+                self.response.cache_control = 'public'
+                self.response.cache_control.max_age = 300
                 self.response.out.write(template.render(template_values))
             except UserNotAuthorizedException as e:
                 self.redirect('/welcome/')
