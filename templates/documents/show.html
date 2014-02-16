@@ -12,7 +12,7 @@
 </div>
 <div  class="page-content">
 <div class="container-fluid" ng-show="immediateFailed">
-         <div class="span12">  
+         <div class="col-md-12">  
           <h1>Sign-in Button;</h1>
               <span id="signin">
                   <span id="myGsignin"></span>
@@ -20,8 +20,8 @@
         </div>
  </div>
     <div class="container-fluid" >
-      <div class="row-fluid">
-         <div class="span12">
+      <div class="row">
+         <div class="col-md-12">
          
             <div class="pull-right sharebuttonDiv"> 
                   <a href="" class="btn blue jfk-button jfk-button-action">
@@ -30,7 +30,7 @@
             </div>
             <h2>
             <a href="<%=uri%>" data-toggle="tooltip" data-placement="bottom" title="Back to <%=note.about.kind%>">
-            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>    <%=attachment.about.kind%> > <%=attachment.about.name%>  </h2>
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>    <%=attachment.about.kind%> > <%=attachment.about.name%>  </h2>
             
 
            
@@ -39,10 +39,10 @@
       </div>
     </div>
       <!--HKA 19.11.2013 Begin  row-fluid-2 who is involved -->
-    <div class="row-fluid">
+    <div class="row">
 
     <!--HKA 19.11.2013 BEGIN Span comments-->
-      <div class="span8">
+      <div class="col-md-8">
       <!-- BEGIN PORTLET-->
         <div class="portlet">
           <div class="portlet-title line">
@@ -60,7 +60,7 @@
                       <br>
                         <span class="desc"><a href="<%=attachment.embedLink%>" target="_blank"><img src="/static/img/drive_icon.png" width="25"> open with Google Drive</a></span>
                         <br>
-                       <iframe src="<%=attachment.embedLink%>"  class="span12" height="300"></iframe> 
+                       <iframe src="<%=attachment.embedLink%>"  class="col-md-12" height="300"></iframe> 
                       </span>
                     </div>
                   </li>
@@ -72,12 +72,13 @@
          
         </div>
       <!-- End Portlet -->
-      <div class="row-fluid">
-                  <div class="span12 margin-bottom-10">
+      <div class="row">
+                  <div class="col-md-12 margin-bottom-10">
                  <p class⁼"lead"=""><strong>Just add comments to remember what's important :</strong> </p>
                           <form id="addComment" ng-submit="addComment(comment)" class="ng-pristine ng-valid">
-                                            <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="comment.content"></textarea>
-                                          
+                                      <div class="form-group">     
+                                            <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="comment.content"></textarea>
+                                      </div> 
                                           
                                          
                                          <div class="pull-right">
@@ -103,21 +104,21 @@
                   </li>
                   
         </ul>
-        <div class="row-fluid">
+        <div class="row">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
                                       <ul>
-                                        <li ng-show="pagination.prev"><button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                        <li ng-show="paginationcomment.prev"><button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
                                         {{_("Prev")}} 
                                         </button></li>
                                         
-                                        <li  ng-show="pagination.next"><button ng-click="listNextPageItems()"  class="btn">
+                                        <li  ng-show="paginationcomment.next"><button ng-click="listNextPageItems()"  class="btn">
                                         {{_("Next")}} 
                                         </button></li>
                                       </ul>
                                     </div>
                                     <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
-                              </div>
+      </div>
 
         
       </div>
@@ -126,7 +127,7 @@
 
 
   <!--HKA 19.11.2013 BEGIN Span who is involved -->
-      <div class="span4">
+      <div class="col-md-4">
         <div class="portlet">
                 <div class="portlet-title line">
                   <div class="caption"><i class="icon-tasks"></i>Who's involved</div>
@@ -148,10 +149,12 @@
                 
        </div>
 
-        <div id="addAttendee" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div id="addAttendee" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("New User")}}</h3>
+                <h3 id="myModalLabel">{{_("New Attendee")}}</h3>
               </div>
               <div class="modal-body">
                  <form id="addAccount" name="addaccount" ng-submit="addNewUser(user)" class="form-horizontal"> 
@@ -159,41 +162,26 @@
                   
                     <p>Invite people from your team and start working together in seconds. Everyone you invite will receive a welcome email.</p>
 
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Email")}} *</label>
-                       
-                        <div class="controls">
-                          <input type="text" required id="id_name" ng-model="user.email">
+                    <div class="form-group">
+                        
+                        <label  class="required col-md-3 control-label">{{_("Email")}} *</label>
+                        <div class="col-md-9" >
+                          <input type="text" class="form-control" required id="id_name" ng-model="user.email">
                           
                         </div>
-                    </div>
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Profile")}}</label>
-                       
-                        <div class="controls">
-                          <input type="text"  id="id_name" ng-model="account.account_type">
-                          
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Role")}} </label>
-                       
-                        <div class="controls">
-                          <input type="text"  id="id_name" ng-model="account.industry">
-                          
-                        </div>
-                    </div>
+                    </div>                  
+                    
                     </fieldset>
                 
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button  type="submit" class="btn blue addContactNow">{{_("Add Atendee")}}</button>
+                <button  type="submit" class="btn green addContactNow">{{_("Add Attendee")}}</button>
               </div>
                </form>
        </div>
-
-
+       </div>
+       </div>
       </div>
   <!--HKA 19.11.2013 END Span who is involved -->
     

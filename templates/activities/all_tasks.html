@@ -69,8 +69,8 @@
                     </div>
                       <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                        <input ng-hide="isLoading" ng-click="addTags()" type="submit" class="btn green" value="Add">
-                        <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                        <input ng-hide="isLoadingTask" ng-click="addTags()" type="submit" class="btn green" value="Add">
+                        <input ng-show="isLoadingTask" type="submit" class="btn green" value="Loading..." disabled>
                       </div>
                   </form>
                 </div>
@@ -343,7 +343,7 @@
           </div>
           <script type="text/javascript">
               $('#slimtest1').slimScroll({
-                    height: '200px'
+                    height: '20px'
                 });
           </script>
           <div class="col-md-3">
@@ -377,9 +377,7 @@
                   </li>
                   </div>
                 </ul>
-                <div class="form-group">
-                  <button class="btn btn-default btn-block" ng-click="manage_tags=!manage_tags;manage()"> Manage Tags</button>
-                </div>
+                
                 <form class="well" role="form">
                 <div class="row">
                   <div class="col-md-12 form-group">
@@ -396,7 +394,9 @@
                   </div>
                   </div>
                 </form>
-                  
+                  <div class="form-group" ng-show="tags">
+                  <button class="btn btn-default btn-block" ng-click="manage_tags=!manage_tags;manage()"> Manage Tags</button>
+                </div>
                 </div>
               </div>
           </div>

@@ -1,7 +1,8 @@
 app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','Task','Topic','Comment','User','Contributor',
    function($scope,$filter,$route,Auth,Note,Task,Topic,Comment,User,Contributor) {
 //HKA 14.11.2013 Controller to show Notes and add comments
-   $scope.isSignedIn = false;
+     $("#id_Accounts").addClass("active");
+     $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
@@ -277,8 +278,9 @@ app.directive('droppable', function() {
 });
 app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor','Tag','Edge',
     function($scope,Auth,Task,User,Contributor,Tag,Edge) {
-     $("#id_Accounts").addClass("active");
-     document.title = "Accounts: Home";
+     $("ul.page-sidebar-menu li").removeClass("active");
+     $("#id_Tasks").addClass("active");
+     document.title = "Tasks: Home";
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
