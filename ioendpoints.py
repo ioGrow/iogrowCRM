@@ -495,6 +495,28 @@ class CompanyProfileResponse(messages.Message):
     items = messages.MessageField(CompanyProfileSchema, 1, repeated=True)
     nextPageToken = messages.StringField(2)
 
+class AccountListRequest(messages.Message):
+    limit = messages.IntegerField(1)
+    pageToken = messages.StringField(2)
+    order = messages.StringField(3)
+    tags = messages.StringField(4,repeated = True)
+    owner = messages.StringField(5)
+
+class AccountSchema(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    name = messages.StringField(3)
+    account_type = messages.StringField(4)
+    industry = messages.StringField(5)
+    tagline = messages.StringField(6)
+    introduction = messages.StringField(7)
+    tags = messages.MessageField(TagSchema,8, repeated = True)
+    created_at = messages.StringField(9)
+    updated_at = messages.StringField(10)
+
+class AccountListResponse(messages.Message):
+    items = messages.MessageField(AccountSchema, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
 
 class EndpointsHelper(EndpointsModel):
     INVALID_TOKEN = 'Invalid token'
@@ -831,7 +853,90 @@ class CrmEngineApi(remote.Service):
             raise endpoints.NotFoundException('Account not found.')
         return my_model
 
-    # accounts.list API
+    # accounts.list api v2
+    # tasks.listv2 api
+    @endpoints.method(AccountListRequest, AccountListResponse,
+                      path='accounts/listv2', http_method='POST',
+                      name='accounts.listv2')
+    def accounts_list_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        curs = Cursor(urlsafe=request.pageToken)
+        if request.limit:
+            limit = int(request.limit)
+        else:
+            limit = 10
+        items = list()
+        you_can_loop = True
+        count = 0
+        while you_can_loop:
+            if request.order:
+                ascending = True
+                if request.order.startswith('-'):
+                    order_by = request.order[1:]
+                    ascending = False
+                else:
+                    order_by = request.order
+                attr = Account._properties.get(order_by)
+                if attr is None:
+                    raise AttributeError('Order attribute %s not defined.' % (attr_name,))
+                if ascending:
+                    accounts, next_curs, more =  Account.query().filter(Account.organization==user_from_email.organization).order(+attr).fetch_page(limit, start_cursor=curs)
+                else:
+                    accounts, next_curs, more = Account.query().filter(Account.organization==user_from_email.organization).order(-attr).fetch_page(limit, start_cursor=curs)
+            else:
+                accounts, next_curs, more = Account.query().filter(Account.organization==user_from_email.organization).fetch_page(limit, start_cursor=curs)
+            for account in accounts:
+                if count<= limit:
+                    is_filtered = True
+                    if account.access == 'private' and account.owner!=user_from_email.google_user_id:
+                        end_node_set = [user_from_email.key]
+                        if not Edge.find(start_node=account.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
+                            is_filtered = False
+                    if request.tags and is_filtered:
+                        end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
+                        if not Edge.find(start_node=account.key,kind='tags',end_node_set=end_node_set,operation='AND'):
+                            is_filtered = False
+                    if request.owner and account.owner!=request.owner and is_filtered:
+                        is_filtered = False
+                    if is_filtered:
+                        count = count + 1
+                        #list of tags related to this account
+                        edge_list = Edge.list(start_node=account.key,kind='tags')
+                        tag_list = list()
+                        for edge in edge_list:
+                            tag_list.append(
+                                          TagSchema(
+                                           edgeKey = edge.key.urlsafe(),
+                                           name = edge.end_node.get().name,
+                                           color = edge.end_node.get().color
+                                           )
+                                        )
+                        account_schema = AccountSchema(
+                                  id = str( account.key.id() ),
+                                  entityKey = account.key.urlsafe(),
+                                  name = account.name,
+                                  account_type = account.account_type,
+                                  industry = account.industry,
+                                  tagline = account.tagline,
+                                  introduction = account.introduction,
+                                  tags = tag_list,
+                                  created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                  updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                )
+                        items.append(account_schema)   
+            if (count == limit):
+                you_can_loop = False
+            if more and next_curs:
+                curs = next_curs
+            else:
+                you_can_loop = False
+        if next_curs and more:
+            next_curs_url_safe = next_curs.urlsafe() 
+        else:
+            next_curs_url_safe = None           
+        return  AccountListResponse(items = items, nextPageToken = next_curs_url_safe)
+
+    # accounts.list api
     @Account.query_method(
                           user_required=True,
                           query_fields=(
