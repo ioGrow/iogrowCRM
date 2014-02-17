@@ -4,22 +4,22 @@ app.controller('SearchFormController', ['$scope','Search',
         console.log('Okkkkkkkkkkkkkkkkk');
         // Let's define our first command. First the text we expect, and then the function it should call
         var commands = {
-          'ok google go to contacts': function(account) {
+          'go to contacts': function(account) {
             window.location.replace('/#/contacts');
           },
-          'ok google go to accounts': function(account) {
+          'go to accounts': function(account) {
             window.location.replace('/#/accounts');
           },
-          'ok google go to leads': function(account) {
+          'go to leads': function(account) {
             window.location.replace('/#/leads');
           },
-          'ok google go to opportunities': function(account) {
+          'go to opportunities': function(account) {
             window.location.replace('/#/opportunities');
           },
-          'ok google go to cases': function(account) {
+          'go to cases': function(account) {
             window.location.replace('/#/cases');
           },
-          'ok google go to tasks': function(account) {
+          'go to tasks': function(account) {
             window.location.replace('/#/tasks');
           },
           'search :account contacts': function(account) {
