@@ -1,5 +1,5 @@
-app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag',
-    function($scope,Auth,Account,Tag) {
+app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
+    function($scope,Auth,Account,Tag,Edge) {
      $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Accounts").addClass("active");
      document.title = "Accounts: Home";
@@ -212,8 +212,7 @@ $scope.selectTag= function(tag,index,$event){
           });
       }
       handleColorPicker();
-      console.log('heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer');
-      console.log($('#addMemberToTask').children());
+      
       $('#addMemberToTask > *').on('click', null, function(e) {
             e.stopPropagation();
         });
@@ -240,11 +239,11 @@ $scope.selectTag= function(tag,index,$event){
       $scope.dragTag=function(tag){
         $scope.draggedTag=tag;
       }
-      $scope.dropTag=function(task){
+      $scope.dropTag=function(account){
         var items = [];
         var edge = {
-              'start_node': task.entityKey,
-              'end_node': $scope.draggedTag.entityKey,
+              //'start_node': $scope.account.entityKey,
+              //'end_node': $scope.draggedTag.entityKey,
               'kind':'tags',
               'inverse_edge': 'tagged_on'
         };

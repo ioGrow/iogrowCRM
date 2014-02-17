@@ -215,11 +215,11 @@
 
             <div class="col-md-9">
               <div class="inner-cards-container">
-                <div ng-repeat="account in accounts" class="col-lg-4 col-md-3 col-sm-6 col-xs-12">
-                  <div class="dashboard-stat cards-small">
+                <div  ng-repeat="account in accounts" class="col-lg-4 col-md-3 col-sm-6 col-xs-12">
+                  <div droppable class="dashboard-stat cards-small" ng-drop="dropTag(account)">
                     <div class="details">
                     <a href="/#/accounts/show/<%= account.id %>"><h2 class="cardTitle">
-                      <%= account.name %>
+                      <%= account .name %>
                     </h2></a>
                       <div class="desc">
                          <a ng-show="account.industry" class="desc" href="/#/search/type:Account <%=account.industry%>">#<%=account.industry%></a>
