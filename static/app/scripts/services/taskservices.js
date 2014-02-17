@@ -66,9 +66,14 @@ topicservices.factory('Task', function($http) {
 
   Task.list = function($scope,params,effects){
       $scope.isLoading = true;
+      console.log('Tasks params');
+                console.log(params);
       gapi.client.crmengine.tasks.listv2(params).execute(function(resp) {
+              console.log(params);
               if(!resp.code){
                 $scope.tasks = resp.items;
+                console.log('Tasks');
+                console.log(resp.items);
                 // Loaded succefully
 
                  $scope.isLoading = false;
