@@ -36,7 +36,7 @@ accountservices.factory('Account', function($http) {
             if(!resp.code){
                $scope.account = resp;
                $scope.isContentLoaded = true;
-               /*$scope.listInfonodes();
+               $scope.listInfonodes();
                $scope.listTopics(resp);
                $scope.listTasks();
                $scope.listEvents();
@@ -45,7 +45,7 @@ accountservices.factory('Account', function($http) {
                $scope.listCases();
                $scope.listNeeds();
                
-               $scope.listDocuments();*/
+               $scope.listDocuments();
                $scope.selectedTab = 2;
                
                $scope.email.to = '';
@@ -96,7 +96,7 @@ accountservices.factory('Account', function($http) {
   };
   Account.list = function($scope,params){
       $scope.isLoading = true;
-      gapi.client.crmengine.accounts.list(params).execute(function(resp) {
+      gapi.client.crmengine.accounts.listv2(params).execute(function(resp) {
               if(!resp.code){
                   
                   if (!resp.items){

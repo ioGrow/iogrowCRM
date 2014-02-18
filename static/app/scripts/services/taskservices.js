@@ -36,8 +36,7 @@ topicservices.factory('Task', function($http) {
       $scope.isLoadingTask = true;
       
       gapi.client.crmengine.tasks.patch(params).execute(function(resp) {
-        console.log(params);
-        console.log(resp);
+       
           if(!resp.code){
             $scope.task = resp;
             /*$scope.ListComments();
@@ -66,14 +65,12 @@ topicservices.factory('Task', function($http) {
 
   Task.list = function($scope,params,effects){
       $scope.isLoading = true;
-      console.log('Tasks params');
-                console.log(params);
+     
       gapi.client.crmengine.tasks.listv2(params).execute(function(resp) {
-              console.log(params);
+              
               if(!resp.code){
                 $scope.tasks = resp.items;
-                console.log('Tasks');
-                console.log(resp.items);
+                
                 // Loaded succefully
 
                  $scope.isLoading = false;
@@ -96,9 +93,7 @@ topicservices.factory('Task', function($http) {
       $scope.isLoading = true;
 
       gapi.client.crmengine.tasks.insertv2(params).execute(function(resp) {
-         console.log('in insert TASK resp');
-         console.log(params);
-         console.log(resp);
+   
 
          if(!resp.code){
         
@@ -165,9 +160,13 @@ topicservices.factory('Tag', function($http) {
       gapi.client.crmengine.tags.list(params).execute(function(resp) {
               if(!resp.code){
                 
-                console.log($scope.currentPage);
+                
+
+
 
                  $scope.tags = resp.items;
+                 console.log('tags list');
+                 console.log($scope.tags);
                 
                  $scope.isLoading = false;
 
@@ -184,7 +183,7 @@ topicservices.factory('Tag', function($http) {
       });
   };
    Tag.insert = function($scope,params){
-     console.log('hereeeeeeeeee');
+    
       $scope.isLoading = true;
       gapi.client.crmengine.tags.insert(params).execute(function(resp) {
         
@@ -231,9 +230,13 @@ topicservices.factory('Tag', function($http) {
 
     console.log('tag iddddddddddddddd');
     console.log(params);
-    gapi.client.crmengine.tags.delete(params).execute(function(resp){});
-    $scope.listTags();
-    $scope.listTasks();
+    gapi.client.crmengine.tags.delete(params).execute(function(resp){
+      $scope.listTags();
+      $scope.listaccounts();
+    //$scope.listTasks();
+    $scope.$apply();
+    });
+    
 
   };
 

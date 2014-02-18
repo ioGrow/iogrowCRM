@@ -1,7 +1,7 @@
 app.controller('SearchFormController', ['$scope','Search',
     function($scope,Search) {
      if (annyang) {
-        console.log('Okkkkkkkkkkkkkkkkk');
+        
         // Let's define our first command. First the text we expect, and then the function it should call
         var commands = {
           'go to contacts': function(account) {

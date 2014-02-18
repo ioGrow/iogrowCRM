@@ -223,8 +223,8 @@ class AccountListHandler(BaseHandler, SessionEnabledHandler):
             # Render the template
             template_values = {'ME':user.google_user_id,'tabs':tabs}
             template = jinja_environment.get_template('templates/accounts/list.html')
-            self.response.cache_control = 'public'
-            self.response.cache_control.max_age = 300
+            #self.response.cache_control = 'public'
+            #self.response.cache_control.max_age = 300
             self.response.out.write(template.render(template_values))
 
 class AccountShowHandler(BaseHandler, SessionEnabledHandler):

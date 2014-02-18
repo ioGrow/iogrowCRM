@@ -1,5 +1,5 @@
-app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag',
-    function($scope,Auth,Account,Tag) {
+app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
+    function($scope,Auth,Account,Tag,Edge) {
      $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Accounts").addClass("active");
      document.title = "Accounts: Home";
@@ -13,9 +13,11 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag',
      $scope.pages = [];
      $scope.accounts = [];
      $scope.account = {};
+     $scope.selected_tags = [];
      $scope.account.access ='public';
      $scope.order = '-updated_at';
-     $scope.account.account_type = 'Customer'
+     $scope.account.account_type = 'Customer';
+     $scope.draggedTag=null;
      
      // What to do after authentication
      $scope.runTheProcess = function(){
@@ -144,7 +146,17 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag',
 $scope.listTags=function(){
       var paramsTag = {'about_kind':'Account'}
       Tag.list($scope,paramsTag);
-     }
+     };
+$scope.edgeInserted = function () {
+       $scope.listaccounts();
+     };
+$scope.listaccounts = function(){
+  var params = { 'order': $scope.order,
+                        'limit':6}
+          Account.list($scope,params);
+};
+
+
 $scope.addNewtag = function(tag){
        var params = {   
                           'name': tag.name,
@@ -164,6 +176,23 @@ $scope.updateTag = function(tag){
             };
       Tag.patch($scope,params);
   };
+  $scope.deleteTag=function(tag){
+          params = {
+            'entityKey': tag.entityKey
+          }
+          Tag.delete($scope,params);
+          
+      };
+
+ $scope.listTags=function(){
+  var paramsTag = {'about_kind':'Account'};
+      Tag.list($scope,paramsTag);
+     };
+ $scope.listaccounts = function(){
+   var params = { 'order': $scope.order,
+                        'limit':6}
+          Account.list($scope,params);
+ }
 $scope.selectTag= function(tag,index,$event){
       if(!$scope.manage_tags){
          var element=$($event.target);
@@ -201,7 +230,61 @@ $scope.selectTag= function(tag,index,$event){
 
   };
 
-  var handleColorPicker = function () {
+$scope.unselectAllTags= function(){
+        $('.tags-list li').each(function(){
+            var element=$(this);
+            var text=element.find(".with-color");
+             element.css('background-color','#ffffff !important');
+             text.css('color','#000000');
+        });
+     };
+
+
+$scope.manage=function(){
+        $scope.unselectAllTags();
+      };
+$scope.tag_save = function(tag){
+          if (tag.name) {
+             Tag.insert($scope,tag);
+             console.log("tag saved");
+           };
+      };
+
+$scope.editTag=function(tag){
+        $scope.edited_tag=tag;
+     }
+$scope.doneEditTag=function(tag){
+        $scope.edited_tag=null;
+        $scope.updateTag(tag);
+     }
+$scope.addTags=function(){
+      var tags=[];
+      var items = [];
+      tags=$('#select2_sample2').select2("val");
+      
+      angular.forEach($scope.selected_tasks, function(selected_task){
+          angular.forEach(tags, function(tag){
+            var edge = {
+              'start_node': selected_task.entityKey,
+              'end_node': tag,
+              'kind':'tags',
+              'inverse_edge': 'tagged_on'
+            };
+            items.push(edge);
+          });
+      });
+
+      params = {
+        'items': items
+      }
+      console.log('************** Edge *********************');
+      console.log(params);
+      Edge.insert($scope,params);
+      $('#assigneeTagsToTask').modal('hide');
+
+     };
+
+     var handleColorPicker = function () {
           if (!jQuery().colorpicker) {
               return;
               console.log('errooooooooooooooor');
@@ -235,15 +318,19 @@ $scope.selectTag= function(tag,index,$event){
              G: parseInt(g, 16),
              B: parseInt(b, 16)
           };
-      };
-
+      }
       $scope.dragTag=function(tag){
         $scope.draggedTag=tag;
+        console.log('i am here test------------------------------------');
+        console.log($scope.draggedTag);
+        $scope.$apply();
       }
-      $scope.dropTag=function(task){
+      $scope.dropTag=function(account){
         var items = [];
+        console.log('------------------Account ---------------');
+        console.log(account);
         var edge = {
-              'start_node': task.entityKey,
+             'start_node': account.entityKey,
               'end_node': $scope.draggedTag.entityKey,
               'kind':'tags',
               'inverse_edge': 'tagged_on'
@@ -252,6 +339,8 @@ $scope.selectTag= function(tag,index,$event){
         params = {
           'items': items
         }
+        console.log('params --------------------- params')
+        console.log(params);
         Edge.insert($scope,params);
         $scope.draggedTag=null;
       }

@@ -25,7 +25,38 @@ indexes:
 
 - kind: Account
   properties:
+  - name: organization
+  - name: updated_at
+    direction: desc
+
+- kind: Account
+  properties:
   - name: owner
+  - name: updated_at
+    direction: desc
+
+- kind: Case
+  properties:
+  - name: access
+  - name: organization
+  - name: updated_at
+    direction: desc
+
+- kind: Case
+  properties:
+  - name: collaborators_ids
+  - name: updated_at
+    direction: desc
+
+- kind: Case
+  properties:
+  - name: owner
+  - name: updated_at
+    direction: desc
+
+- kind: Comment
+  properties:
+  - name: discussion
   - name: updated_at
     direction: desc
 
@@ -46,6 +77,12 @@ indexes:
   properties:
   - name: owner
   - name: updated_at
+    direction: desc
+
+- kind: Contributor
+  properties:
+  - name: discussionKey
+  - name: created_at
     direction: desc
 
 - kind: Document

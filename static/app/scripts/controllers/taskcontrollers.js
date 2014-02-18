@@ -7,6 +7,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
+     $scope.isLoadingTag = false;
      $scope.pagination = {};
      $scope.paginationcomment = {};
      $scope.currentPagecomment = 01;
@@ -354,7 +355,7 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
           if(pattern.test(text)){
               return $scope.users;
           }else{
-            console.log("rrrrrrrrrrrrrrned");
+           
              return [];
           }
       }
@@ -383,7 +384,8 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
                         'limit':7}
           Task.list($scope,params,true);
           User.list($scope,{});
-          Tag.list($scope,{});
+          var paramsTag = {'about_kind':'Task'};
+          Tag.list($scope,paramsTag);
 
           if (annyang) {
                   console.log('gooo ooo oo o oo o  oo o o ');
@@ -742,15 +744,18 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
         tags
 ***************************************************************************************/
 $scope.listTags=function(){
-      Tag.list($scope,{});
+  var paramsTag = {'about_kind':'Task'};
+      Tag.list($scope,paramsTag);
      }
 $scope.addNewtag = function(tag){
        var params = {   
                           'name': tag.name,
+                          'about_kind':'Task',
                           'color':$('#tag-col-pick').val()
                       }  ;
        Tag.insert($scope,params);
-        Tag.list($scope,{});
+        var paramsTag = {'about_kind':'Task'};
+        Tag.list($scope,paramsTag);
         
      }
 $scope.updateTag = function(tag){
@@ -840,6 +845,7 @@ $scope.deleteTag=function(tag){
             'entityKey': tag.entityKey
           }
           Tag.delete($scope,params);
+          $scope.listTasks();
           
       };
 $scope.editTag=function(tag){
