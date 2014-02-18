@@ -13,6 +13,7 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
      $scope.pages = [];
      $scope.accounts = [];
      $scope.account = {};
+     $scope.selected_tags = [];
      $scope.account.access ='public';
      $scope.order = '-updated_at';
      $scope.account.account_type = 'Customer';
