@@ -96,7 +96,7 @@ accountservices.factory('Account', function($http) {
   };
   Account.list = function($scope,params){
       $scope.isLoading = true;
-      gapi.client.crmengine.accounts.list(params).execute(function(resp) {
+      gapi.client.crmengine.accounts.listv2(params).execute(function(resp) {
               if(!resp.code){
                   
                   if (!resp.items){
