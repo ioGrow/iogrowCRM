@@ -101,7 +101,6 @@
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
           <div class="row ">
-          
             <div class="col-md-12"><h2 class="page-title">{{ _("Accounts") }} </h2></div>
           </div>
         <div class="row "  >
@@ -223,7 +222,21 @@
                       <%= account .name %>
                     </h2></a>
                       <div class="desc">
-                         <a ng-show="account.industry" class="desc" href="/#/search/type:Account <%=account.industry%>">#<%=account.industry%></a>
+                        <div class="row margin-bottom-5">
+                          <div class="col-md-12"><a ng-show="account.industry" class="desc" href="/#/search/type:Account <%=account.industry%>">#<%=account.industry%></a>
+                          </div>
+                          
+                        </div>
+                        <br/>
+                          <div class="row">
+                          <div class="col-md-12">
+                               <span  ng-repeat="account_tag in account.tags" class="pull-right task-label badge badge-roundless" style="background-color: <%=account_tag.color%>;color:<%=idealTextColor(account_tag.color)%>;">  <%= account_tag.name %></span>
+                          </div>
+                          
+                        </div>
+                        
+                         
+
                       </div>
                     </div>
                     <a class="more" href="#">
@@ -275,11 +288,16 @@
                 
               
                 </div>
-                
+                <h3 class="pagination pull-right" ng-show="isLoading">{{ _('Loading') }}...</h3>
           </div>
           
           </div>
               </div>
+            <script type="text/javascript">
+              $('#slimtest1').slimScroll({
+                    height: '20px'
+                });
+          </script>
                 <div class="col-md-3">
               <div class="portlet">
                 <div class="portlet-title">
