@@ -159,6 +159,7 @@ class TaskRequest(messages.Message):
     owner = messages.StringField(6)
     assignee = messages.StringField(7)
     about = messages.StringField(8)
+    status_color = messages.StringField(9)
 class TaskListResponse(messages.Message):
     items = messages.MessageField(TaskSchema, 1, repeated=True)
     nextPageToken = messages.StringField(2)
