@@ -200,15 +200,28 @@
             <div class="inner-cards-container">
             
               <div ng-repeat="contact in contacts" class="col-md-4 responsive" data-tablet="span6" data-desktop="span3">
-                <div class="dashboard-stat cards-small">
+                <div  droppable ng-drop="dropTag(contact)" class="dashboard-stat cards-small" >
                   
                   <div class="details">
                     <a href="/#/contacts/show/<%= contact.id %>"><h2 class="cardTitle">
                       <%= contact.firstname %> <%=contact.lastname%>
                     </h2></a>
-                    <div class="desc">                           
+                    <div class="desc">
+                    <div class="row margin-bottom-5">
+                      <div class="col-md-12">
+                        <span ng-show="contact.title"><a  class="desc" ng-show="contact.title" href="/#/search/type:Contact <%=contact.title%>">#<%=contact.title%></a></span><span ng-show="contact.account_name"> <span ng-show="contact.account_name + contact.title" class="contact-title">at </span> <a  class="desc" href="/#/search/type:Contact <%=contact.account_name%>">#<%=contact.account_name%></a></span>
+                       </div>
+
+                    </div> 
+                    <br/>
+                    <div class="row">
+                          <div class="col-md-12">
+                               <!--span   class="pull-right task-label badge badge-roundless" style="background-color: <%=account_tag.color%>;color:<%=idealTextColor(account_tag.color)%>;">  <%= contact.name %></span-->
+                          </div>
+                          
+                        </div>                         
                       
-                    <span ng-show="contact.title"><a  class="desc" ng-show="contact.title" href="/#/search/type:Contact <%=contact.title%>">#<%=contact.title%></a></span><span ng-show="contact.account_name"> <span ng-show="contact.account_name + contact.title" class="contact-title">at </span> <a  class="desc" href="/#/search/type:Contact <%=contact.account_name%>">#<%=contact.account_name%></a></span>
+                    
                     </div>
                   </div>
                                   
@@ -261,6 +274,11 @@
           </div>
           
               </div>
+          <script type="text/javascript">
+              $('#slimtest1').slimScroll({
+                    height: '20px'
+                });
+          </script>
           <div class="col-md-3">
               <div class="portlet">
                 <div class="portlet-title">
@@ -327,3 +345,25 @@
       </div>
       <!-- END PAGE CONTAINER--> 
 </div>
+<script type="text/javascript">
+  $("#select2_sample2").select2({
+        placeholder: "Click to Select a label",
+        allowClear: false
+    });
+  var handleUniform = function () {
+        if (!jQuery().uniform) {
+            return;
+        }
+        var test = $("input[type=radio]:not(.toggle, .star)");
+        if (test.size() > 0) {
+            test.each(function () {
+                if ($(this).parents(".checker").size() == 0) {
+                    $(this).show();
+                    $(this).uniform();
+                }
+            });
+        }
+    }
+    handleUniform();
+</script>
+

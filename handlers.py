@@ -223,9 +223,9 @@ class AccountListHandler(BaseHandler, SessionEnabledHandler):
             # Render the template
             template_values = {'ME':user.google_user_id,'tabs':tabs}
             template = jinja_environment.get_template('templates/accounts/list.html')
-            self.response.cache_control = 'public'
+            #self.response.cache_control = 'public'
             #self.response.cache_control.max_age = 300
-            #self.response.out.write(template.render(template_values))
+            self.response.out.write(template.render(template_values))
 
 class AccountShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -254,9 +254,9 @@ class ContactListHandler(BaseHandler, SessionEnabledHandler):
       template_values = {'ME':user.google_user_id,
              'tabs':tabs}
       template = jinja_environment.get_template('templates/contacts/list.html')
-      self.response.cache_control = 'public'
+      #self.response.cache_control = 'public'
       #self.response.cache_control.max_age = 300
-      #self.response.out.write(template.render(template_values))
+      self.response.out.write(template.render(template_values))
 class ContactShowHandler(BaseHandler,SessionEnabledHandler):
   def get(self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:

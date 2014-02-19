@@ -188,11 +188,7 @@ $scope.updateTag = function(tag){
   var paramsTag = {'about_kind':'Account'};
       Tag.list($scope,paramsTag);
      };
- $scope.listaccounts = function(){
-   var params = { 'order': $scope.order,
-                        'limit':6}
-          Account.list($scope,params);
- }
+
 $scope.selectTag= function(tag,index,$event){
       if(!$scope.manage_tags){
          var element=$($event.target);
