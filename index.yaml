@@ -64,14 +64,77 @@ indexes:
   properties:
   - name: access
   - name: organization
+  - name: firstname
+
+- kind: Contact
+  properties:
+  - name: access
+  - name: organization
+  - name: lastname
+
+- kind: Contact
+  properties:
+  - name: access
+  - name: organization
+  - name: owner
+  - name: updated_at
+    direction: desc
+
+- kind: Contact
+  properties:
+  - name: access
+  - name: organization
+  - name: title
+
+- kind: Contact
+  properties:
+  - name: access
+  - name: organization
   - name: updated_at
     direction: desc
 
 - kind: Contact
   properties:
   - name: collaborators_ids
+  - name: firstname
+
+- kind: Contact
+  properties:
+  - name: collaborators_ids
+  - name: lastname
+
+- kind: Contact
+  properties:
+  - name: collaborators_ids
+  - name: owner
   - name: updated_at
     direction: desc
+
+- kind: Contact
+  properties:
+  - name: collaborators_ids
+  - name: title
+
+- kind: Contact
+  properties:
+  - name: collaborators_ids
+  - name: updated_at
+    direction: desc
+
+- kind: Contact
+  properties:
+  - name: owner
+  - name: firstname
+
+- kind: Contact
+  properties:
+  - name: owner
+  - name: lastname
+
+- kind: Contact
+  properties:
+  - name: owner
+  - name: title
 
 - kind: Contact
   properties:

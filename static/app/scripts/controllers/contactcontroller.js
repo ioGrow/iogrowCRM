@@ -20,6 +20,8 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
         $scope.contact = {};
         $scope.contact.access = 'public';
         $scope.order = '-updated_at';
+        $scope.selected_tags = [];
+        $scope.draggedTag=null;
         
         // What to do after authentication
        $scope.runTheProcess = function(){
