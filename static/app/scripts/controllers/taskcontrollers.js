@@ -790,6 +790,11 @@ $scope.selectTag= function(tag,index,$event){
       }
 
     };
+  //HKA 19.02.2014 When delete tag render Task list
+ $scope.tagDeleted = function(){
+     $scope.listTasks();
+
+ };
   $scope.filterByTags = function(selected_tags){
          var tags = [];
          angular.forEach(selected_tags, function(tag){

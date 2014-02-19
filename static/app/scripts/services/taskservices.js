@@ -232,8 +232,7 @@ topicservices.factory('Tag', function($http) {
     console.log(params);
     gapi.client.crmengine.tags.delete(params).execute(function(resp){
       $scope.listTags();
-      $scope.listaccounts();
-    //$scope.listTasks();
+      $scope.tagDeleted();   
     $scope.$apply();
     });
     
