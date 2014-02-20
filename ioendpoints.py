@@ -518,6 +518,28 @@ class AccountListResponse(messages.Message):
     items = messages.MessageField(AccountSchema, 1, repeated=True)
     nextPageToken = messages.StringField(2)
 
+class ContactListRequest(messages.Message):
+    limit = messages.IntegerField(1)
+    pageToken = messages.StringField(2)
+    order = messages.StringField(3)
+    tags = messages.StringField(4,repeated = True)
+    owner = messages.StringField(5)
+
+class ContactSchema(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    firstname = messages.StringField(3)
+    lastname = messages.StringField(4)
+    account_name = messages.StringField(5)
+    title = messages.StringField(6)
+    tags = messages.MessageField(TagSchema,7, repeated = True)
+    created_at = messages.StringField(8)
+    updated_at = messages.StringField(9)
+
+class ContactListResponse(messages.Message):
+    items = messages.MessageField(ContactSchema, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
+
 class EndpointsHelper(EndpointsModel):
     INVALID_TOKEN = 'Invalid token'
     INVALID_GRANT = 'Invalid grant'
@@ -854,7 +876,6 @@ class CrmEngineApi(remote.Service):
         return my_model
 
     # accounts.list api v2
-    # tasks.listv2 api
     @endpoints.method(AccountListRequest, AccountListResponse,
                       path='accounts/listv2', http_method='POST',
                       name='accounts.listv2')
@@ -1440,6 +1461,87 @@ class CrmEngineApi(remote.Service):
         if not my_model.from_datastore:
             raise endpoints.NotFoundException('Contact not found.')
         return my_model
+
+    # contacts.list api v2
+    @endpoints.method(ContactListRequest, ContactListResponse,
+                      path='contacts/listv2', http_method='POST',
+                      name='contacts.listv2')
+    def contact_list_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        curs = Cursor(urlsafe=request.pageToken)
+        if request.limit:
+            limit = int(request.limit)
+        else:
+            limit = 10
+        items = list()
+        you_can_loop = True
+        count = 0
+        while you_can_loop:
+            if request.order:
+                ascending = True
+                if request.order.startswith('-'):
+                    order_by = request.order[1:]
+                    ascending = False
+                else:
+                    order_by = request.order
+                attr = Contact._properties.get(order_by)
+                if attr is None:
+                    raise AttributeError('Order attribute %s not defined.' % (attr_name,))
+                if ascending:
+                    contacts, next_curs, more =  Contact.query().filter(Contact.organization==user_from_email.organization).order(+attr).fetch_page(limit, start_cursor=curs)
+                else:
+                    contacts, next_curs, more = Contact.query().filter(Contact.organization==user_from_email.organization).order(-attr).fetch_page(limit, start_cursor=curs)
+            else:
+                contacts, next_curs, more = Contact.query().filter(Contact.organization==user_from_email.organization).fetch_page(limit, start_cursor=curs)
+            for contact in contacts:
+                if count<= limit:
+                    is_filtered = True
+                    if contact.access == 'private' and contact.owner!=user_from_email.google_user_id:
+                        end_node_set = [user_from_email.key]
+                        if not Edge.find(start_node=contact.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
+                            is_filtered = False
+                    if request.tags and is_filtered:
+                        end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
+                        if not Edge.find(start_node=contact.key,kind='tags',end_node_set=end_node_set,operation='AND'):
+                            is_filtered = False
+                    if request.owner and contact.owner!=request.owner and is_filtered:
+                        is_filtered = False
+                    if is_filtered:
+                        count = count + 1
+                        #list of tags related to this contact
+                        edge_list = Edge.list(start_node=contact.key,kind='tags')
+                        tag_list = list()
+                        for edge in edge_list:
+                            tag_list.append(
+                                          TagSchema(
+                                           edgeKey = edge.key.urlsafe(),
+                                           name = edge.end_node.get().name,
+                                           color = edge.end_node.get().color
+                                           )
+                                        )
+                        contact_schema = ContactSchema(
+                                  id = str( contact.key.id() ),
+                                  entityKey = contact.key.urlsafe(),
+                                  firstname = contact.firstname,
+                                  lastname = contact.lastname,
+								  title = contact.title,
+                                  account_name = contact.account_name,
+                                  tags = tag_list,
+                                  created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                  updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                )
+                        items.append(contact_schema)   
+            if (count == limit):
+                you_can_loop = False
+            if more and next_curs:
+                curs = next_curs
+            else:
+                you_can_loop = False
+        if next_curs and more:
+            next_curs_url_safe = next_curs.urlsafe() 
+        else:
+            next_curs_url_safe = None           
+        return  ContactListResponse(items = items, nextPageToken = next_curs_url_safe)
 
     # contacts.list API
     @Contact.query_method(

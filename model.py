@@ -300,6 +300,15 @@ class User(EndpointsModel):
     display_name = ndb.StringProperty()
     google_public_profile_url = ndb.StringProperty()
     photo = ndb.StringProperty()
+
+    def put(self, **kwargs):
+        existing_user = User.query(User.google_user_id == self.google_user_id).get()
+        if existing_user:
+            ndb.Model.put(existing_user, **kwargs)
+        else:
+            ndb.Model.put(self, **kwargs)
+            
+
     def init_user_config(self,org_key,profile_key):
         profile = profile_key.get()
         # Get Apps for this profile:
