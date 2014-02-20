@@ -188,11 +188,7 @@ $scope.updateTag = function(tag){
   var paramsTag = {'about_kind':'Account'};
       Tag.list($scope,paramsTag);
      };
- $scope.listaccounts = function(){
-   var params = { 'order': $scope.order,
-                        'limit':6}
-          Account.list($scope,params);
- }
+
 $scope.selectTag= function(tag,index,$event){
       if(!$scope.manage_tags){
          var element=$($event.target);
@@ -224,7 +220,9 @@ $scope.selectTag= function(tag,index,$event){
             tags.push(tag.entityKey);
          });
          var params = {
-          'tags': tags
+          'tags': tags,
+          'order': $scope.order,
+                        'limit':6
          }
          Account.list($scope,params);
 
@@ -238,6 +236,11 @@ $scope.unselectAllTags= function(){
              text.css('color','#000000');
         });
      };
+//HKA 19.02.2014 When delete tag render account list
+ $scope.tagDeleted = function(){
+    $scope.listaccounts();
+
+ };
 
 
 $scope.manage=function(){

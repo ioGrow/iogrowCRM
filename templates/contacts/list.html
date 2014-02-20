@@ -94,25 +94,62 @@
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
+        <div class="row ">
+            <div class="col-md-12"> <h2 class="page-title">{{ _("Contacts") }} </h2></div>
+          </div>
         <div class="row">
         
-          <div class="col-md-12">
-            <h2 class="page-title">{{ _("Contacts") }} </h2>
-            
-            <div class="btn-group">
-            
+          <div class="col-md-2"> 
                     <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
                     {{ _("New Contact") }} <i class="icon-plus"></i>
-                    </button>
-            </div>
-               
-            <hr/>
-            
+                    </button> 
           </div>
-        </div>
+          <div class="col-md-2">
+              <div class="btn-group btn-filter">
+                                    <a class="btn btn-default" href="#" data-toggle="dropdown">
+                                      {{ _('Filter by') }}
+                                    <i class="icon-angle-down"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                      <li><a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All contacts') }}</a></li>
+                                      <li><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My contacts') }}</a></li>
+                                    </ul>
+              </div>
+          </div>
+          <div class="col-md-5">  
+                    <form clss="ng-pristine ng-valid" ng-submit="executeSearch(searchQuery)">
+                      <div class="input-group">
 
+                        <input type="text" ng-model="searchQuery" typeahead="result as result.firstname + ' ' + result.lastname + ' - ' + result.position +' at ' + result.account_name + ' '  for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="form-control" placeholder="{{ _('Quick Filtering') }}">
+                        <span class="input-group-btn">  
+                       <button class="gbqfb gbqfb-hvr"><i class="icon-filter"></i></button>
+                       </span>
+                      </div>
+                    </form>
+          </div>
+          <div class="col-md-3">
+              <div class="btn-group  tbtn-sort">
+                                    <a class="btn btn-default" href="#" data-toggle="dropdown">
+                                    Sort by
+                                    <i class="icon-angle-down"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                      <li><a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a></li>
+                                      <li><a ng-click="orderBy('firstname')" href="#" data-toggle="modal">{{ _('First Name') }}</a></li>
+                                      <li><a ng-click="orderBy('lastname')" href="#" data-toggle="modal">{{ _('Last Name') }}</a></li>
+                                      <li><a ng-click="orderBy('title')" href="#" data-toggle="modal">{{ _('Title') }}</a></li>
+                                      <li><a ng-click="orderBy('account_name')" href="#" data-toggle="modal">{{ _('Company') }}</a></li>
+                                      
+                                     
+                                    </ul>
+              </div>
+
+            </div>
+
+        </div>
+           <hr/>
             <!-- Filtering and sorting -->
-          <div class="row filter-row" ng-show="contacts+isFiltering">
+          <!--div class="row filter-row" ng-show="contacts+isFiltering">
             <div class="col-md-2">
               <div class="btn-group btn-filter">
                                     <a class="btn btn-default" href="#" data-toggle="dropdown">
@@ -157,21 +194,34 @@
             <br>
               <br>
             
-          </div>
+          </div-->
             <div class="row cards-container">
-            <div class="col-md-12">
+            <div class="col-md-9">
             <div class="inner-cards-container">
             
-              <div ng-repeat="contact in contacts" class="col-md-3 responsive" data-tablet="span6" data-desktop="span3">
-                <div class="dashboard-stat cards-small">
+              <div ng-repeat="contact in contacts" class="col-md-4 responsive" data-tablet="span6" data-desktop="span3">
+                <div  droppable ng-drop="dropTag(contact)" class="dashboard-stat cards-small" >
                   
                   <div class="details">
                     <a href="/#/contacts/show/<%= contact.id %>"><h2 class="cardTitle">
                       <%= contact.firstname %> <%=contact.lastname%>
                     </h2></a>
-                    <div class="desc">                           
+                    <div class="desc">
+                    <div class="row margin-bottom-5">
+                      <div class="col-md-12">
+                        <span ng-show="contact.title"><a  class="desc" ng-show="contact.title" href="/#/search/type:Contact <%=contact.title%>">#<%=contact.title%></a></span><span ng-show="contact.account_name"> <span ng-show="contact.account_name + contact.title" class="contact-title">at </span> <a  class="desc" href="/#/search/type:Contact <%=contact.account_name%>">#<%=contact.account_name%></a></span>
+                       </div>
+
+                    </div> 
+                    <br/>
+                    <div class="row">
+                          <div class="col-md-12">
+                               <!--span   class="pull-right task-label badge badge-roundless" style="background-color: <%=account_tag.color%>;color:<%=idealTextColor(account_tag.color)%>;">  <%= contact.name %></span-->
+                          </div>
+                          
+                        </div>                         
                       
-                    <span ng-show="contact.title"><a  class="desc" ng-show="contact.title" href="/#/search/type:Contact <%=contact.title%>">#<%=contact.title%></a></span><span ng-show="contact.account_name"> <span ng-show="contact.account_name + contact.title" class="contact-title">at </span> <a  class="desc" href="/#/search/type:Contact <%=contact.account_name%>">#<%=contact.account_name%></a></span>
+                    
                     </div>
                   </div>
                                   
@@ -205,9 +255,7 @@
               </div>
               <div class="clearfix"></div>
               </div>
-              </div>
-            </div>
-          <div class="row">
+              <div class="row">
           <div class="col-md-12">
             <div class="pagination pull-right" ng-hide="isLoading">
                   
@@ -224,10 +272,98 @@
                 <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
             </div>
           </div>
+          
+              </div>
+          <script type="text/javascript">
+              $('#slimtest1').slimScroll({
+                    height: '20px'
+                });
+          </script>
+          <div class="col-md-3">
+              <div class="portlet">
+                <div class="portlet-title">
+                  <div class="caption">
+                    <!-- class="fa fa-reorder"--><i></i>Labels
+                  </div>
+                  <!--div class="tools">
+                      <a href="javascript:;" class="collapse">
+                      </a>
+                      <a href="#portlet-config" data-toggle="modal" class="config">
+                      </a>
+                      <a href="javascript:;" class="reload">
+                      </a>
+                      <a href="javascript:;" class="remove">
+                    </a>
+                  </div-->
+                </div>
+                <div class="portlet-body">
+                <ul class="list-group tags-list">
+                  <li draggable ng-repeat="tag_item in tags" class="list-group-item tags-list-item" ng-click="selectTag(tag_item,$index,$event)" ng-drag="dragTag(tag_item)" >
+                  <div class="row">
+                    <div class="tag-color" style="border-left: 4px solid <%=tag_item.color%>;">
+                    </div>
+                    <span class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"><%= tag_item.name %></span>
+                    <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
+                      <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
+                    </form>
+                    <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
+                  </li>
+                  </div>
+                </ul>
+                
+                <form class="well" role="form">
+                <div class="row">
+                  <div class="col-md-12 form-group">
+                    <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New Label">
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                       <input id="tag-col-pick" type="text" class="colorpicker-default form-control" value="#8fff00">
+                  </div>
+                  <div class="col-md-6">
+                    <input type="submit" ng-hide="isLoadingTask" ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
+                    <input type="submit" ng-show="isLoadingTask" class="btn green pull-right" value="{{ _('Loading...') }}">
+                  </div>
+                  </div>
+                </form>
+                <div class="form-group" ng-show="tags">
+                  <button class="btn btn-default btn-block" ng-click="manage_tags=!manage_tags;manage()"> Manage Tags</button>
+                </div>
+                  
+                </div>
+              </div>
+            </div>
             
+            </div>
+         
+           
           
         
         <!-- END PAGE CONTENT-->
       </div>
       <!-- END PAGE CONTAINER--> 
 </div>
+<script type="text/javascript">
+  $("#select2_sample2").select2({
+        placeholder: "Click to Select a label",
+        allowClear: false
+    });
+  var handleUniform = function () {
+        if (!jQuery().uniform) {
+            return;
+        }
+        var test = $("input[type=radio]:not(.toggle, .star)");
+        if (test.size() > 0) {
+            test.each(function () {
+                if ($(this).parents(".checker").size() == 0) {
+                    $(this).show();
+                    $(this).uniform();
+                }
+            });
+        }
+    }
+    handleUniform();
+</script>
+

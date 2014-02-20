@@ -1,5 +1,5 @@
-app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
-    function($scope,Auth,Account,Contact) {
+app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact','Tag','Edge',
+    function($scope,Auth,Account,Contact,Tag,Edge) {
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Contacts").addClass("active");
 
@@ -20,11 +20,15 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
         $scope.contact = {};
         $scope.contact.access = 'public';
         $scope.order = '-updated_at';
+        $scope.selected_tags = [];
+        $scope.draggedTag=null;
         
         // What to do after authentication
        $scope.runTheProcess = function(){
             var params = {'order' : $scope.order,'limit':8}
             Contact.list($scope,params);
+            var paramsTag = {'about_kind':'Contact'};
+          Tag.list($scope,paramsTag);
 
        };
         // We need to call this to refresh token when user credentials are invalid
@@ -167,9 +171,320 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact',
         Contact.list($scope,params);
      };
 
+/***********************************************
+      HKA 19.02.2014  tags 
+***************************************************************************************/
+$scope.listTags=function(){
+      var paramsTag = {'about_kind':'Contact'}
+      Tag.list($scope,paramsTag);
+     };
+$scope.edgeInserted = function () {
+       $scope.listcontacts();
+     };
+$scope.listcontacts = function(){
+  var params = { 'order': $scope.order,
+                        'limit':6}
+          Contact.list($scope,params);
+};
+
+
+$scope.addNewtag = function(tag){
+       var params = {   
+                          'name': tag.name,
+                          'about_kind':'Contact',
+                          'color':$('#tag-col-pick').val()
+                      }  ;
+       Tag.insert($scope,params);
+        $scope.tag.name='';
+        var paramsTag = {'about_kind':'Contact'};
+        Tag.list($scope,paramsTag);
+        
+     }
+$scope.updateTag = function(tag){
+            params ={ 'id':tag.id,
+                      'title': tag.name,
+                      'status':tag.color
+            };
+      Tag.patch($scope,params);
+  };
+  $scope.deleteTag=function(tag){
+          params = {
+            'entityKey': tag.entityKey
+          }
+          Tag.delete($scope,params);
+          
+      };
+
+ $scope.listTags=function(){
+  var paramsTag = {'about_kind':'Contact'};
+      Tag.list($scope,paramsTag);
+     };
+ 
+$scope.selectTag= function(tag,index,$event){
+      if(!$scope.manage_tags){
+         var element=$($event.target);
+         if(element.prop("tagName")!='LI'){
+              element=element.parent();
+              element=element.parent();
+         }
+         var text=element.find(".with-color");
+         if($scope.selected_tags.indexOf(tag) == -1){
+            $scope.selected_tags.push(tag);
+            element.css('background-color', tag.color+'!important');
+            text.css('color',$scope.idealTextColor(tag.color));
+
+         }else{
+            element.css('background-color','#ffffff !important');
+            $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
+             text.css('color','#000000');
+         }
+         ;
+         $scope.filterByTags($scope.selected_tags);
+
+      }
+
+    };
+  $scope.filterByTags = function(selected_tags){
+         var tags = [];
+         angular.forEach(selected_tags, function(tag){
+            tags.push(tag.entityKey);
+         });
+         var params = {
+          'tags': tags,
+          'order': $scope.order,
+                        'limit':6
+         }
+         Contact.list($scope,params);
+
+  };
+
+$scope.unselectAllTags= function(){
+        $('.tags-list li').each(function(){
+            var element=$(this);
+            var text=element.find(".with-color");
+             element.css('background-color','#ffffff !important');
+             text.css('color','#000000');
+        });
+     };
+//HKA 19.02.2014 When delete tag render account list
+ $scope.tagDeleted = function(){
+    $scope.listcontacts();
+
+ };
+
+
+$scope.manage=function(){
+        $scope.unselectAllTags();
+      };
+$scope.tag_save = function(tag){
+          if (tag.name) {
+             Tag.insert($scope,tag);
+             
+           };
+      };
+
+$scope.editTag=function(tag){
+        $scope.edited_tag=tag;
+     }
+$scope.doneEditTag=function(tag){
+        $scope.edited_tag=null;
+        $scope.updateTag(tag);
+     }
+$scope.addTags=function(){
+      var tags=[];
+      var items = [];
+      tags=$('#select2_sample2').select2("val");
+      
+      angular.forEach($scope.selected_tasks, function(selected_task){
+          angular.forEach(tags, function(tag){
+            var edge = {
+              'start_node': selected_task.entityKey,
+              'end_node': tag,
+              'kind':'tags',
+              'inverse_edge': 'tagged_on'
+            };
+            items.push(edge);
+          });
+      });
+
+      params = {
+        'items': items
+      }
+      
+      Edge.insert($scope,params);
+      $('#assigneeTagsToTask').modal('hide');
+
+     };
+
+     var handleColorPicker = function () {
+          if (!jQuery().colorpicker) {
+              return;
+              
+          }
+          $('.colorpicker-default').colorpicker({
+              format: 'hex'
+          });
+      }
+      handleColorPicker();
+     
+      $('#addMemberToTask > *').on('click', null, function(e) {
+            e.stopPropagation();
+        });
+      $scope.idealTextColor=function(bgColor){
+        var nThreshold = 105;
+         var components = getRGBComponents(bgColor);
+         var bgDelta = (components.R * 0.299) + (components.G * 0.587) + (components.B * 0.114);
+
+         return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";  
+      }
+      function getRGBComponents(color) {       
+
+          var r = color.substring(1, 3);
+          var g = color.substring(3, 5);
+          var b = color.substring(5, 7);
+
+          return {
+             R: parseInt(r, 16),
+             G: parseInt(g, 16),
+             B: parseInt(b, 16)
+          };
+      }
+      $scope.dragTag=function(tag){
+        $scope.draggedTag=tag;
+         //$scope.$apply();
+      };
+      $scope.dropTag=function(account){
+        var items = [];
+        
+        var edge = {
+             'start_node': account.entityKey,
+              'end_node': $scope.draggedTag.entityKey,
+              'kind':'tags',
+              'inverse_edge': 'tagged_on'
+        };
+        items.push(edge);
+        params = {
+          'items': items
+        };
+                Edge.insert($scope,params);
+        $scope.draggedTag=null;
+      };
+
+
      // Google+ Authentication 
      Auth.init($scope);
 }]);
+
+
+app.directive('ngBlur', ['$parse', function($parse) {
+  return function(scope, element, attr) {
+    var fn = $parse(attr['ngBlur']);
+    element.bind('blur', function(event) {
+      scope.$apply(function() {
+        fn(scope, {$event:event});
+      });
+    });
+  }
+}]);
+app.directive('ngDrag', ['$parse', function($parse) {
+  return function(scope, element, attr) {
+    var fn = $parse(attr['ngDrag']);
+    element.bind('drag', function(event) {
+      scope.$apply(function() {
+        fn(scope, {$event:event});
+      });
+    });
+  }
+}]);
+app.directive('ngDrop', ['$parse', function($parse) {
+  return function(scope, element, attr) {
+    var fn = $parse(attr['ngDrop']);
+    element.bind('drop', function(event) {
+      scope.$apply(function() {
+        fn(scope, {$event:event});
+      });
+    });
+  }
+}]);
+app.directive('draggable', function() {
+   return function(scope, element) {
+        // this gives us the native JS object
+        var el = element[0];
+
+        el.draggable = true;
+
+        el.addEventListener(
+            'dragstart',
+            function(e) {
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('Text', this.id);
+                this.classList.add('drag');
+                return false;
+            },
+            false
+        );
+
+        el.addEventListener(
+            'dragend',
+            function(e) {
+                this.classList.remove('drag');
+                //alert('end of draggable');
+                return false;
+            },
+            false
+        );
+        el.addEventListener(
+            'drop',
+            function(e) {
+                // Stops some browsers from redirecting.
+                if (e.stopPropagation) e.stopPropagation();
+
+                this.classList.remove('over');
+
+                //var item = document.getElementById(e.dataTransfer.getData('Text'));
+                //this.appendChild(item);
+
+                return false;
+            },
+            false
+        );
+    }
+});
+app.directive('droppable', function() {
+    return function(scope, element) {
+        var el = element[0];
+        el.addEventListener(
+            'dragover',
+            function(e) {
+                e.dataTransfer.dropEffect = 'move';
+                // allows us to drop
+                if (e.preventDefault) e.preventDefault();
+                this.classList.add('over');
+                return false;
+            },
+            false
+        );
+        el.addEventListener(
+            'dragenter',
+            function(e) {
+                this.classList.add('over');
+                return false;
+            },
+            false
+        );
+
+        el.addEventListener(
+            'dragleave',
+            function(e) {
+                this.classList.remove('over');
+                return false;
+            },
+            false
+        );
+    }
+});
+
+
 app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User','Attachement','Map','Opportunitystage','Casestatus','InfoNode',
     function($scope,$filter,$route,Auth,Email,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User,Attachement,Map,Opportunitystage,Casestatus,InfoNode) {
  console.log('I am in ContactShowCtrl');
