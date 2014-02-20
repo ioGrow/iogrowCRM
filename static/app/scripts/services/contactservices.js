@@ -71,7 +71,7 @@ accountservices.factory('Contact', function($http) {
   };
   Contact.list = function($scope,params){
         $scope.isLoading = true;
-      gapi.client.crmengine.contacts.list(params).execute(function(resp) {
+      gapi.client.crmengine.contacts.listv2(params).execute(function(resp) {
 
     
               if(!resp.code){

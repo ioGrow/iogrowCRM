@@ -104,7 +104,7 @@
                     {{ _("New Contact") }} <i class="icon-plus"></i>
                     </button> 
           </div>
-          <div class="col-md-2">
+          <div class="col-md-2" ng-show="col-md-2">
               <div class="btn-group btn-filter">
                                     <a class="btn btn-default" href="#" data-toggle="dropdown">
                                       {{ _('Filter by') }}
@@ -116,7 +116,7 @@
                                     </ul>
               </div>
           </div>
-          <div class="col-md-5">  
+          <div class="col-md-5" ng-show="col-md-2">  
                     <form clss="ng-pristine ng-valid" ng-submit="executeSearch(searchQuery)">
                       <div class="input-group">
 
@@ -127,7 +127,7 @@
                       </div>
                     </form>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-2" ng-show="col-md-2">
               <div class="btn-group  tbtn-sort">
                                     <a class="btn btn-default" href="#" data-toggle="dropdown">
                                     Sort by
@@ -216,7 +216,7 @@
                     <br/>
                     <div class="row">
                           <div class="col-md-12">
-                               <!--span   class="pull-right task-label badge badge-roundless" style="background-color: <%=account_tag.color%>;color:<%=idealTextColor(account_tag.color)%>;">  <%= contact.name %></span-->
+                               <span ng-repeat="tag in contact.tags"   class="pull-right task-label badge badge-roundless" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
                           </div>
                           
                         </div>                         
