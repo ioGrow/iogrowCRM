@@ -123,6 +123,12 @@ indexes:
 
 - kind: Contact
   properties:
+  - name: organization
+  - name: updated_at
+    direction: desc
+
+- kind: Contact
+  properties:
   - name: owner
   - name: firstname
 
@@ -191,12 +197,107 @@ indexes:
   properties:
   - name: access
   - name: organization
+  - name: amount
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: access
+  - name: organization
+  - name: name
+
+- kind: Opportunity
+  properties:
+  - name: access
+  - name: organization
+  - name: stage_probability
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: access
+  - name: organization
+  - name: stagename
+  - name: name
+
+- kind: Opportunity
+  properties:
+  - name: access
+  - name: organization
+  - name: stagename
+  - name: updated_at
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: access
+  - name: organization
   - name: updated_at
     direction: desc
 
 - kind: Opportunity
   properties:
   - name: collaborators_ids
+  - name: amount
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: collaborators_ids
+  - name: name
+
+- kind: Opportunity
+  properties:
+  - name: collaborators_ids
+  - name: stage_probability
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: collaborators_ids
+  - name: stagename
+  - name: name
+
+- kind: Opportunity
+  properties:
+  - name: collaborators_ids
+  - name: stagename
+  - name: updated_at
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: collaborators_ids
+  - name: updated_at
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: owner
+  - name: amount
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: owner
+  - name: name
+
+- kind: Opportunity
+  properties:
+  - name: owner
+  - name: stage_probability
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: owner
+  - name: stagename
+  - name: name
+
+- kind: Opportunity
+  properties:
+  - name: owner
+  - name: stagename
   - name: updated_at
     direction: desc
 

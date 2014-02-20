@@ -216,7 +216,7 @@
                     <br/>
                     <div class="row">
                           <div class="col-md-12">
-                               <!--span   class="pull-right task-label badge badge-roundless" style="background-color: <%=account_tag.color%>;color:<%=idealTextColor(account_tag.color)%>;">  <%= contact.name %></span-->
+                               <span ng-repeat="tag in contact.tags"   class="pull-right task-label badge badge-roundless" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
                           </div>
                           
                         </div>                         
