@@ -588,6 +588,34 @@ class LeadListResponse(messages.Message):
     items = messages.MessageField(LeadSchema, 1, repeated=True)
     nextPageToken = messages.StringField(2)
 
+class CaseListRequest(messages.Message):
+    limit = messages.IntegerField(1)
+    pageToken = messages.StringField(2)
+    order = messages.StringField(3)
+    tags = messages.StringField(4,repeated = True)
+    owner = messages.StringField(5)
+	status = messages.StringField(6)
+    probability = messages.StringField(7)
+
+class CaseSchema(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    name = messages.StringField(3)
+    status = messages.StringField(4)
+    probability = messages.StringField(5)
+    type_case = messages.StringField(6)
+	contact_name = messages.StringField(7)
+	account_name = messages.StringField(8)
+    tags = messages.MessageField(TagSchema,9, repeated = True)
+    created_at = messages.StringField(10)
+    updated_at = messages.StringField(11)
+
+class CaseListResponse(messages.Message):
+    items = messages.MessageField(CaseSchema, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
+
+
+
 class EndpointsHelper(EndpointsModel):
     INVALID_TOKEN = 'Invalid token'
     INVALID_GRANT = 'Invalid grant'
@@ -1171,7 +1199,94 @@ class CrmEngineApi(remote.Service):
         my_model.put()
         return my_model
 
-    # cases.list API
+    # cases.list api v2
+    @endpoints.method(CaseListRequest, CaseListResponse,
+                      path='cases/listv2', http_method='POST',
+                      name='cases.listv2')
+    def case_list_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        curs = Cursor(urlsafe=request.pageToken)
+        if request.limit:
+            limit = int(request.limit)
+        else:
+            limit = 10
+        items = list()
+        you_can_loop = True
+        count = 0
+        while you_can_loop:
+            if request.order:
+                ascending = True
+                if request.order.startswith('-'):
+                    order_by = request.order[1:]
+                    ascending = False
+                else:
+                    order_by = request.order
+                attr = Case._properties.get(order_by)
+                if attr is None:
+                    raise AttributeError('Order attribute %s not defined.' % (attr_name,))
+                if ascending:
+                    cases, next_curs, more =  Case.query().filter(Case.organization==user_from_email.organization).order(+attr).fetch_page(limit, start_cursor=curs)
+                else:
+                    cases, next_curs, more = Case.query().filter(Case.organization==user_from_email.organization).order(-attr).fetch_page(limit, start_cursor=curs)
+            else:
+                cases, next_curs, more = Case.query().filter(Case.organization==user_from_email.organization).fetch_page(limit, start_cursor=curs)
+            for case in cases:
+                if count<= limit:
+                    is_filtered = True
+                    if case.access == 'private' and case.owner!=user_from_email.google_user_id:
+                        end_node_set = [user_from_email.key]
+                        if not Edge.find(start_node=case.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
+                            is_filtered = False
+                    if request.tags and is_filtered:
+                        end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
+                        if not Edge.find(start_node=case.key,kind='tags',end_node_set=end_node_set,operation='AND'):
+                            is_filtered = False
+                    if request.owner and case.owner!=request.owner and is_filtered:
+                        is_filtered = False
+					if request.status and case.status!=request.status and is_filtered:
+                        is_filtered = False
+					if request.priority and case.priority!=request.priority and is_filtered:
+                        is_filtered = False
+                    if is_filtered:
+                        count = count + 1
+                        #list of tags related to this case
+                        edge_list = Edge.list(start_node=case.key,kind='tags')
+                        tag_list = list()
+                        for edge in edge_list:
+                            tag_list.append(
+                                          TagSchema(
+                                           edgeKey = edge.key.urlsafe(),
+                                           name = edge.end_node.get().name,
+                                           color = edge.end_node.get().color
+                                           )
+                                        )
+                        case_schema = CaseSchema(
+                                  id = str( case.key.id() ),
+                                  entityKey = case.key.urlsafe(),
+                                  name = case.name,
+                                  status = case.status,
+                                  priority = case.priority,
+								  contact_name = case.contact_name,
+	 							  account_name = case.account_name,
+								  type_case = case.type_case,
+								  tags = tag_list,
+                                  created_at = case.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                  updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                )
+                        items.append(case_schema)   
+            if (count == limit):
+                you_can_loop = False
+            if more and next_curs:
+                curs = next_curs
+            else:
+                you_can_loop = False
+        if next_curs and more:
+            next_curs_url_safe = next_curs.urlsafe() 
+        else:
+            next_curs_url_safe = None           
+        return  CaseListResponse(items = items, nextPageToken = next_curs_url_safe)
+
+	# cases.list API
     @Case.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken','account','type_case','priority','status','contact'),path='cases',name='cases.list')
     def CaseList(self,query):
         user_from_email = EndpointsHelper.require_iogrow_user()
