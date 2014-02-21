@@ -194,56 +194,7 @@
 
         </div>
          <hr/>
-            <!-- Filtering and sorting -->
-          <!--div class="row filter-row" ng-show="opportunities+isFiltering">
-            <div class="col-md-2">
-              <div class="btn-group btn-filter">
-                                    <a class="btn btn-default" href="#" data-toggle="dropdown">
-                                      {{ _('Filter by') }}
-                                    <i class="icon-angle-down"></i>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                      <li><a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All opportunities') }}</a></li>
-                                      <li><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My opportunities') }}</a></li>
-                                      <li ng-repeat="stage in opportunitystages"><a ng-click="filterByStage('<%=stage.name%>')" href="#" data-toggle="modal"><%= stage.name %></a></li>
-                                    </ul>
-                                   
-              </div>
-            </div>
-            <div class="col-md-7">
-                  
-                    <form class="ng-pristine ng-valid" ng-submit="executeSearch(searchQuery)">
-                      <div class="input-group">
-
-                        <input type="text" ng-model="searchQuery" typeahead="result as result.title + ' - (' + result.amount + ' with ' + result.account_name + ' )'   for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="form-control" placeholder="{{ _('Quick Filtering') }}">
-
-                       <span class="input-group-btn">
-                          <button class="gbqfb gbqfb-hvr" type="button"><i class="icon-filter"></i></button>
-                        </span>
-                      </div>
-                    </form>
-                 
-            </div>
-            <div class="col-md-3">
-              <div class="btn-group btn-sort">
-                                    <a class="btn btn-default" href="#" data-toggle="dropdown">
-                                    {{ _('Sort by') }}
-                                    <i class="icon-angle-down"></i>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                      <li><a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a></li>
-                                      <li><a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a></li>
-                                      <li><a ng-click="orderBy('-amount')" href="#" data-toggle="modal">{{ _('Amount') }}</a></li>
-                                      <li><a ng-click="orderBy('account_name')" href="#" data-toggle="modal">{{ _('Company') }}</a></li>
-                                      <li><a ng-click="orderBy('-stage_probability')" href="#" data-toggle="modal">{{ _('Stage probability') }}</a></li>
-                                    </ul>
-              </div>
-
-            </div>
-            <br>
-              <br>
-            
-          </div-->
+           
         <div class="row cards-container">
 
          <div class="col-md-9">
@@ -269,7 +220,7 @@
                     <br/>
                           <div class="row">
                           <div class="col-md-12">
-                               <!--span  ng-repeat="opp_tag in opp.tags" class="pull-right task-label badge badge-roundless" style="background-color: <%=opp_tag.color%>;color:<%=idealTextColor(opp_tag.color)%>;">  <%= opp_tag.name %></span-->
+                               <span  ng-repeat="opp_tag in opp.tags" class="pull-right task-label badge badge-roundless" style="background-color: <%=opp_tag.color%>;color:<%=idealTextColor(opp_tag.color)%>;">  <%= opp_tag.name %></span>
                           </div>
                           
                         </div>              

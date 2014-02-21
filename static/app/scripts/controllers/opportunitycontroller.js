@@ -22,6 +22,7 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
      $scope.opportunity = {};
      $scope.opportunity.access ='public';
      $scope.order = '-updated_at';
+     $scope.selected_tags = [];
      $scope.draggedTag=null;
 
       // What to do after authentication
@@ -29,6 +30,8 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
           var params = {'order' : $scope.order,'limit':8};
           Opportunity.list($scope,params);
           Opportunitystage.list($scope,{'order':'probability'});
+          var paramsTag = {'about_kind':'Opportunity'};
+          Tag.list($scope,paramsTag);
        };
         // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
@@ -302,7 +305,7 @@ $scope.unselectAllTags= function(){
      };
 //HKA 19.02.2014 When delete tag render account list
  $scope.tagDeleted = function(){
-    $scope.listaccounts();
+    $scope.listopportunities();
 
  };
 
@@ -361,8 +364,7 @@ $scope.addTags=function(){
           });
       }
       handleColorPicker();
-      console.log('heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer');
-      console.log($('#addMemberToTask').children());
+      
       $('#addMemberToTask > *').on('click', null, function(e) {
             e.stopPropagation();
         });
@@ -384,19 +386,17 @@ $scope.addTags=function(){
              G: parseInt(g, 16),
              B: parseInt(b, 16)
           };
-      }
+      };
       $scope.dragTag=function(tag){
         $scope.draggedTag=tag;
-        console.log('i am here test------------------------------------');
-        console.log($scope.draggedTag);
+       
         $scope.$apply();
       }
-      $scope.dropTag=function(account){
+      $scope.dropTag=function(opportunity){
         var items = [];
-        console.log('------------------Account ---------------');
-        console.log(account);
+        
         var edge = {
-             'start_node': account.entityKey,
+             'start_node': opportunity.entityKey,
               'end_node': $scope.draggedTag.entityKey,
               'kind':'tags',
               'inverse_edge': 'tagged_on'
@@ -405,11 +405,10 @@ $scope.addTags=function(){
         params = {
           'items': items
         }
-        console.log('params --------------------- params')
-        console.log(params);
+        
         Edge.insert($scope,params);
         $scope.draggedTag=null;
-      }
+      };
 
 
 

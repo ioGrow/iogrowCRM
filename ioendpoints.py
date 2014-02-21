@@ -546,7 +546,7 @@ class OpportunityListRequest(messages.Message):
     order = messages.StringField(3)
     tags = messages.StringField(4,repeated = True)
     owner = messages.StringField(5)
-	stagename = messages.StringField(6) 
+    stagename = messages.StringField(6) 
 
 class OpportunitySchema(messages.Message):
     id = messages.StringField(1)
@@ -2799,7 +2799,7 @@ class CrmEngineApi(remote.Service):
                             is_filtered = False
                     if request.owner and opportunity.owner!=request.owner and is_filtered:
                         is_filtered = False
-					if request.stagename and opportunity.stagename!=request.stagename and is_filtered:
+                    if request.stagename and opportunity.stagename!=request.stagename and is_filtered:
                         is_filtered = False
                     if is_filtered:
                         count = count + 1
@@ -2819,7 +2819,7 @@ class CrmEngineApi(remote.Service):
                                   entityKey = opportunity.key.urlsafe(),
                                   name = opportunity.name,
                                   stagename = opportunity.stagename,
-                                  stage_probability = opportunity.stage_probability,
+                                  stage_probability = str(opportunity.stage_probability),
                                   amount = str(opportunity.amount),
 								  tags = tag_list,
                                   created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),

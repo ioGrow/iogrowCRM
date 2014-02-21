@@ -273,6 +273,12 @@ indexes:
 
 - kind: Opportunity
   properties:
+  - name: organization
+  - name: updated_at
+    direction: desc
+
+- kind: Opportunity
+  properties:
   - name: owner
   - name: amount
     direction: desc
@@ -311,6 +317,12 @@ indexes:
   properties:
   - name: organization
   - name: probability
+
+- kind: Show
+  properties:
+  - name: is_published
+  - name: type_show
+  - name: ends_at
 
 - kind: Task
   properties:
