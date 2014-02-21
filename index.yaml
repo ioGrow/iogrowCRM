@@ -50,6 +50,12 @@ indexes:
 
 - kind: Case
   properties:
+  - name: organization
+  - name: updated_at
+    direction: desc
+
+- kind: Case
+  properties:
   - name: owner
   - name: updated_at
     direction: desc

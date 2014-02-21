@@ -597,6 +597,7 @@ class CaseListRequest(messages.Message):
     owner = messages.StringField(5)
     status = messages.StringField(6)
     probability = messages.StringField(7)
+    priority = messages.IntegerField(8)
 
 class CaseSchema(messages.Message):
     id = messages.StringField(1)
@@ -610,6 +611,7 @@ class CaseSchema(messages.Message):
     tags = messages.MessageField(TagSchema,9, repeated = True)
     created_at = messages.StringField(10)
     updated_at = messages.StringField(11)
+    priority = messages.IntegerField(12)
 
 class CaseListResponse(messages.Message):
     items = messages.MessageField(CaseSchema, 1, repeated=True)
