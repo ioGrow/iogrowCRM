@@ -50,6 +50,12 @@ indexes:
 
 - kind: Case
   properties:
+  - name: organization
+  - name: updated_at
+    direction: desc
+
+- kind: Case
+  properties:
   - name: owner
   - name: updated_at
     direction: desc
@@ -189,6 +195,12 @@ indexes:
 
 - kind: Lead
   properties:
+  - name: organization
+  - name: updated_at
+    direction: desc
+
+- kind: Lead
+  properties:
   - name: owner
   - name: updated_at
     direction: desc
@@ -268,6 +280,12 @@ indexes:
 - kind: Opportunity
   properties:
   - name: collaborators_ids
+  - name: updated_at
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: organization
   - name: updated_at
     direction: desc
 
@@ -311,6 +329,12 @@ indexes:
   properties:
   - name: organization
   - name: probability
+
+- kind: Show
+  properties:
+  - name: is_published
+  - name: type_show
+  - name: ends_at
 
 - kind: Task
   properties:

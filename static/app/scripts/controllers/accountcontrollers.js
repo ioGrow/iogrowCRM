@@ -152,7 +152,8 @@ $scope.edgeInserted = function () {
      };
 $scope.listaccounts = function(){
   var params = { 'order': $scope.order,
-                        'limit':6}
+                      'limit':6/*,
+                      'pageToken':$scope.pages[currentPage]*/}
           Account.list($scope,params);
 };
 

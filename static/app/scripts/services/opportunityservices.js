@@ -39,7 +39,7 @@ opportunityservices.factory('Opportunity', function($http) {
   //HKA 05.11.2013 Add list function
   Opportunity.list = function($scope,params){
       $scope.isLoading = true;
-      gapi.client.crmengine.opportunities.list(params).execute(function(resp) {
+      gapi.client.crmengine.opportunities.listv2(params).execute(function(resp) {
               if(!resp.code){
                   if (!resp.items){
                     if(!$scope.isFiltering){

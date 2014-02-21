@@ -199,6 +199,7 @@ class TaskRequest(messages.Message):
     owner = messages.StringField(6)
     assignee = messages.StringField(7)
     about = messages.StringField(8)
+    status_color = messages.StringField(9)
 class TaskListResponse(messages.Message):
     items = messages.MessageField(TaskSchema, 1, repeated=True)
     nextPageToken = messages.StringField(2)
@@ -546,7 +547,7 @@ class OpportunityListRequest(messages.Message):
     order = messages.StringField(3)
     tags = messages.StringField(4,repeated = True)
     owner = messages.StringField(5)
-	stagename = messages.StringField(6) 
+    stagename = messages.StringField(6) 
 
 class OpportunitySchema(messages.Message):
     id = messages.StringField(1)
@@ -569,7 +570,7 @@ class LeadListRequest(messages.Message):
     order = messages.StringField(3)
     tags = messages.StringField(4,repeated = True)
     owner = messages.StringField(5)
-	status = messages.StringField(6) 
+    status = messages.StringField(6) 
 
 class LeadSchema(messages.Message):
     id = messages.StringField(1)
@@ -578,8 +579,8 @@ class LeadSchema(messages.Message):
     lastname = messages.StringField(4)
     company = messages.StringField(5)
     title = messages.StringField(6)
-	source = messages.StringField(7)
-	status = messages.StringField(8)
+    source = messages.StringField(7)
+    status = messages.StringField(8)
     tags = messages.MessageField(TagSchema,9, repeated = True)
     created_at = messages.StringField(10)
     updated_at = messages.StringField(11)
@@ -594,8 +595,9 @@ class CaseListRequest(messages.Message):
     order = messages.StringField(3)
     tags = messages.StringField(4,repeated = True)
     owner = messages.StringField(5)
-	status = messages.StringField(6)
+    status = messages.StringField(6)
     probability = messages.StringField(7)
+    priority = messages.IntegerField(8)
 
 class CaseSchema(messages.Message):
     id = messages.StringField(1)
@@ -604,11 +606,12 @@ class CaseSchema(messages.Message):
     status = messages.StringField(4)
     probability = messages.StringField(5)
     type_case = messages.StringField(6)
-	contact_name = messages.StringField(7)
-	account_name = messages.StringField(8)
+    contact_name = messages.StringField(7)
+    account_name = messages.StringField(8)
     tags = messages.MessageField(TagSchema,9, repeated = True)
     created_at = messages.StringField(10)
     updated_at = messages.StringField(11)
+    priority = messages.IntegerField(12)
 
 class CaseListResponse(messages.Message):
     items = messages.MessageField(CaseSchema, 1, repeated=True)
@@ -1243,9 +1246,9 @@ class CrmEngineApi(remote.Service):
                             is_filtered = False
                     if request.owner and case.owner!=request.owner and is_filtered:
                         is_filtered = False
-					if request.status and case.status!=request.status and is_filtered:
+                    if request.status and case.status!=request.status and is_filtered:
                         is_filtered = False
-					if request.priority and case.priority!=request.priority and is_filtered:
+                    if request.priority and case.priority!=request.priority and is_filtered:
                         is_filtered = False
                     if is_filtered:
                         count = count + 1
@@ -2478,7 +2481,7 @@ class CrmEngineApi(remote.Service):
                             is_filtered = False
                     if request.owner and lead.owner!=request.owner and is_filtered:
                         is_filtered = False
-					if request.status and lead.status!=request.status and is_filtered:
+                    if request.status and lead.status!=request.status and is_filtered:
                         is_filtered = False
                     if is_filtered:
                         count = count + 1
@@ -3022,7 +3025,7 @@ class CrmEngineApi(remote.Service):
                             is_filtered = False
                     if request.owner and opportunity.owner!=request.owner and is_filtered:
                         is_filtered = False
-					if request.stagename and opportunity.stagename!=request.stagename and is_filtered:
+                    if request.stagename and opportunity.stagename!=request.stagename and is_filtered:
                         is_filtered = False
                     if is_filtered:
                         count = count + 1
@@ -3042,7 +3045,7 @@ class CrmEngineApi(remote.Service):
                                   entityKey = opportunity.key.urlsafe(),
                                   name = opportunity.name,
                                   stagename = opportunity.stagename,
-                                  stage_probability = opportunity.stage_probability,
+                                  stage_probability = str(opportunity.stage_probability),
                                   amount = str(opportunity.amount),
 								  tags = tag_list,
                                   created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),

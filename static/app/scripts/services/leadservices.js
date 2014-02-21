@@ -63,7 +63,7 @@ leadservices.factory('Lead', function($http) {
   };
   Lead.list = function($scope,params){
      $scope.isLoading = true;
-      gapi.client.crmengine.leads.list(params).execute(function(resp) {
+      gapi.client.crmengine.leads.listv2(params).execute(function(resp) {
 
               if(!resp.code){
                 if (!resp.items){

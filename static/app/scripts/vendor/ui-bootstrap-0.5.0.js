@@ -2922,7 +2922,6 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position'])
           "Expected typeahead specification in form of '_modelValue_ (as _label_)? for _item_ in _collection_'" +
             " but got '" + input + "'.");
       }
-
       return {
         itemName:match[3],
         source:$parse(match[4]),
@@ -2966,7 +2965,7 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position'])
       var $setModelValue = $parse(attrs.ngModel).assign;
 
       //expressions used by typeahead
-      var parserResult = typeaheadParser.parse(attrs.typeahead);
+      var parserResult = typeaheadParser.parse(attrs.typeahead);/***kdjsfjksdgfjksdgfksdf*/
 
 
       //pop-up element used to display matches
