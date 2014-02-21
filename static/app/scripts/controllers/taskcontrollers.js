@@ -277,9 +277,93 @@ app.directive('droppable', function() {
         );
     }
 });
-app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor','Tag','Edge',
-    function($scope,Auth,Task,User,Contributor,Tag,Edge) {
-     $("ul.page-sidebar-menu li").removeClass("active");
+app.factory('taggableParser', ['$parse', function ($parse) {
+
+  //                      00000111000000000000022200000000000000003333333333333330000000000044000
+  var TYPEAHEAD_REGEXP = /^\s*(.*?)(?:\s+as\s+(.*?))?\s+for\s+(?:([\$\w][\$\w\d]*))\s+in\s+(.*)$/;
+
+  return {
+    parse:function (input) {
+
+      var match = input.match(TYPEAHEAD_REGEXP), modelMapper, viewMapper, source;
+      if (!match) {
+        throw new Error(
+          "Expected typeahead specification in form of '_modelValue_ (as _label_)? for _item_ in _collection_'" +
+            " but got '" + input + "'.");
+      }
+      return {
+        itemName:match[3],
+        source:(match[4]),
+        viewMapper:(match[2] || match[1]), 
+        modelMapper:(match[1])
+      };
+    }
+  };
+}]);
+app.directive('taggable', ['$parse','taggableParser',function($parse,typeaheadParser) {
+    return {
+      restrict: 'A',
+      require:'?ngModel',
+      template: '<input typeahead="tag as tag.<%=tagInfo.data.attribute%>  for tag in getAssignedUsers($viewValue) | filter:getValueFrom($viewValue) | limitTo:8" typeahead-on-select="tagMember(<%=modelName%>)"/>',
+      replace: true,
+
+      link: function ($scope, elem, attrs,ngModel) {
+       /* $scope.$watch('model', function() {
+            $scope.$eval(attrs.ngModel + ' = model');
+        });
+
+        $scope.$watch(attrs.ngModel, function(val) {
+            $scope.model = val;
+        });*/
+        console.log();
+        $scope.modelName=attrs.ngModel;
+        $scope.tagInfo=$scope[attrs.taggabledata];
+        $scope.tag=$scope.tagInfo.tag;
+        $scope.pattern=null;
+        if ($scope.tag=='#'){$scope.pattern = /(.*)\s#(.*)/g;}
+        if ($scope.tag=='@') {$scope.pattern = /(.*)\s@(.*)/g;};
+        if ($scope.tag=='+') {$scope.pattern = /(.*)\s+(.*)/g;};
+        if ($scope.tag=='!') {$scope.pattern = /(.*)\s!(.*)/g;};
+         $scope.newTaskValue=null;
+        $scope.getValueFrom=function(value){
+                var text= value;
+                $scope.newTaskValue=value;
+                if($scope.pattern.test(text)){  
+                  $scope.newTaskValue=text.replace($scope.pattern, "$1\s @");
+                  newstr = text.replace($scope.pattern, "$2");
+                  console.log('return :'+newstr);
+                  return newstr;
+                    
+                }else{
+                  console.log('return nulllllllllll');
+                  return null;
+
+                }          
+            }
+          $scope.getAssignedUsers=function(value){
+              $scope.data=$scope[$scope.tagInfo.data.name];
+              console.log('return dataaaaaaaaaaaaa');
+              console.log($scope.data);
+              var text= value;
+              if($scope.pattern.test(text)){
+                  return $scope.data;
+              }else{
+                 return [];
+              }
+          }
+        $scope.tagMember = function(value){
+           if ($scope.tagInfo.selected.indexOf(value) == -1) {
+               $scope.tagInfo.selected.push(value);
+           }
+           $parse(attrs.ngModel).assign($scope, $scope.newTaskValue+value[$scope.tagInfo.data.attribute]);
+           console.log($scope.tagInfo.selected);
+         };
+
+      }
+  }
+}]);
+app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','Contributor','Tag','Edge',
+    function($scope,$filter,Auth,Task,User,Contributor,Tag,Edge) {
      $("#id_Tasks").addClass("active");
      document.title = "Tasks: Home";
      $scope.isSignedIn = false;
@@ -307,12 +391,18 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
      $scope.edited_tag =null;
      $scope.selectedTab=1;
      $scope.newTask={};
+     $scope.newTask.title='';
      $scope.newTask.assignees=[];
      $scope.newTaskValue=null;
-     $scope.newTaskText=null;
      $scope.draggedTag=null;
      $scope.task_checked = false;
      $scope.isSelectedAll = false;
+     $scope.taggableOptions={'tag':'#'};
+     $scope.taggableOptions.data={
+      name:'users',
+      attribute:'google_display_name'
+      };
+     $scope.taggableOptions.selected=[];
      var handleColorPicker = function () {
           if (!jQuery().colorpicker) {
               return;
@@ -324,10 +414,10 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
           });
       }
       handleColorPicker();
-      console.log('heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer');
       console.log($('#addMemberToTask').children());
-      $('#addMemberToTask > *').on('click', null, function(e) {
+      $('#dat1 > *').on('click', null, function(e) {
             e.stopPropagation();
+            alert('dfsfddsdsf');
         });
       $scope.idealTextColor=function(bgColor){
         var nThreshold = 105;
@@ -348,6 +438,7 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
              B: parseInt(b, 16)
           };
       }
+<<<<<<< HEAD
      $scope.getAssignedUsers=function(value){
           var pattern = /(.*)\s@(.*)/;
           var text= value;
@@ -359,6 +450,9 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
              return [];
           }
       }
+=======
+
+>>>>>>> 67766fe066bedf0be66b0d54a26ffbce732d694d
       $scope.dragTag=function(tag){
         $scope.draggedTag=tag;
       }
@@ -485,9 +579,8 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
     $scope.select_all_tasks = function($event){
         var checkbox = $event.target;
          if(checkbox.checked){
-              var tasks=$scope.tasks;
-              $scope.selected_tasks=tasks;
-           console.log($scope.selected_tasks);
+            $scope.selected_tasks=[];
+             $scope.selected_tasks.push($scope.tasks);
               $scope.isSelectedAll=true;
          }else{
           $scope.selected_tasks=[];
@@ -496,11 +589,10 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
          }
     };
 
-
+    $scope.urgentTasks
     $scope.addNewTask=function(){
-        
         if ($scope.newTask.due){
-
+              console.log("here work!");
             var dueDate= $filter('date')($scope.newTask.due,['yyyy-MM-dd']);
             dueDate = dueDate +'T00:00:00.000000'
             params ={'title': $scope.newTask.title,
@@ -510,18 +602,20 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
             console.log(dueDate);
             
         }else{
+            console.log("here not work!");
             params ={'title': $scope.newTask.title}
         };
         if ($scope.newTask.assignees){
-            params.assignees = $scope.newTask.assignees;
+            params.assignees = $scope.tagInfo.selected;
         }
         console.log('************************@@@@@@@@@@@@@@@@@@@@@************************');
         console.log(params);
        
        
         Task.insert($scope,params);
-        $scope.newTask.assignees = [];
+        $scope.tagInfo.selected = [];
 
+         console.log($scope.newTask.title);
         $scope.newTask.title='';
         $scope.newTask.dueDate='0000-00-00T00:00:00-00:00';
     }
@@ -552,28 +646,7 @@ app.controller('AllTasksController', ['$scope','Auth','Task','User','Contributor
 /**********************************************************
       adding Tag member to new task 
 ***********************************************************/
-     $scope.getValueFrom=function(value){
-        var pattern = /(.*)\s@(.*)/;
-          var text= value;
-          console.log('clicking with blanck');
-          console.log(value);
-          $scope.newTaskValue=value;
-          if(pattern.test(text)){  
-            $scope.newTaskText=text.replace(pattern, "$1");
-            $scope.newTaskValue=text.replace(pattern, "$1\s @");
-              return newstr = text.replace(pattern, "$2");  
-              
-          }else{
-            $scope.newTaskText=text;
-            return null;
-          }
-          console.log($scope.newTaskText);
-      }
-    $scope.tagMember = function(value){
-       $scope.newTask.assignees.push({'entityKey':value.entityKey});
-       $scope.newTask.title=$scope.newTaskValue+value.google_display_name;
-
-     };
+    
    
 /************************************/
       $scope.isSelected = function(index) {
@@ -820,7 +893,7 @@ $scope.selectTag= function(tag,index,$event){
   $scope.urgentTasks = function(){
          
          var params = {
-          'order': '-due'
+          'status_color': 'red'
          }
          Task.list($scope,params);
 

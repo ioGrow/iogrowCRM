@@ -157,16 +157,13 @@ topicservices.factory('Tag', function($http) {
   Tag.list = function($scope,params){
      
       $scope.isLoading = true;
+
       gapi.client.crmengine.tags.list(params).execute(function(resp) {
               if(!resp.code){
-                
-                
-
-
 
                  $scope.tags = resp.items;
-                 console.log('tags list');
-                 console.log($scope.tags);
+                 $scope.tagInfoData=resp.items;
+
                 
                  $scope.isLoading = false;
 
