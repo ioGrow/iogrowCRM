@@ -438,7 +438,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
              B: parseInt(b, 16)
           };
       }
-<<<<<<< HEAD
+
      $scope.getAssignedUsers=function(value){
           var pattern = /(.*)\s@(.*)/;
           var text= value;
@@ -450,9 +450,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
              return [];
           }
       }
-=======
 
->>>>>>> 67766fe066bedf0be66b0d54a26ffbce732d694d
       $scope.dragTag=function(tag){
         $scope.draggedTag=tag;
       }

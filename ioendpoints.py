@@ -570,7 +570,7 @@ class LeadListRequest(messages.Message):
     order = messages.StringField(3)
     tags = messages.StringField(4,repeated = True)
     owner = messages.StringField(5)
-	status = messages.StringField(6) 
+    status = messages.StringField(6) 
 
 class LeadSchema(messages.Message):
     id = messages.StringField(1)
@@ -579,8 +579,8 @@ class LeadSchema(messages.Message):
     lastname = messages.StringField(4)
     company = messages.StringField(5)
     title = messages.StringField(6)
-	source = messages.StringField(7)
-	status = messages.StringField(8)
+    source = messages.StringField(7)
+    status = messages.StringField(8)
     tags = messages.MessageField(TagSchema,9, repeated = True)
     created_at = messages.StringField(10)
     updated_at = messages.StringField(11)
@@ -595,7 +595,7 @@ class CaseListRequest(messages.Message):
     order = messages.StringField(3)
     tags = messages.StringField(4,repeated = True)
     owner = messages.StringField(5)
-	status = messages.StringField(6)
+    status = messages.StringField(6)
     probability = messages.StringField(7)
 
 class CaseSchema(messages.Message):
@@ -605,8 +605,8 @@ class CaseSchema(messages.Message):
     status = messages.StringField(4)
     probability = messages.StringField(5)
     type_case = messages.StringField(6)
-	contact_name = messages.StringField(7)
-	account_name = messages.StringField(8)
+    contact_name = messages.StringField(7)
+    account_name = messages.StringField(8)
     tags = messages.MessageField(TagSchema,9, repeated = True)
     created_at = messages.StringField(10)
     updated_at = messages.StringField(11)
@@ -1244,9 +1244,9 @@ class CrmEngineApi(remote.Service):
                             is_filtered = False
                     if request.owner and case.owner!=request.owner and is_filtered:
                         is_filtered = False
-					if request.status and case.status!=request.status and is_filtered:
+                    if request.status and case.status!=request.status and is_filtered:
                         is_filtered = False
-					if request.priority and case.priority!=request.priority and is_filtered:
+                    if request.priority and case.priority!=request.priority and is_filtered:
                         is_filtered = False
                     if is_filtered:
                         count = count + 1
@@ -2479,7 +2479,7 @@ class CrmEngineApi(remote.Service):
                             is_filtered = False
                     if request.owner and lead.owner!=request.owner and is_filtered:
                         is_filtered = False
-					if request.status and lead.status!=request.status and is_filtered:
+                    if request.status and lead.status!=request.status and is_filtered:
                         is_filtered = False
                     if is_filtered:
                         count = count + 1

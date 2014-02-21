@@ -27,7 +27,7 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
 
       // What to do after authentication
        $scope.runTheProcess = function(){
-          var params = {'order' : $scope.order,'limit':8};
+          var params = {'order' : $scope.order,'limit':6};
           Opportunity.list($scope,params);
           Opportunitystage.list($scope,{'order':'probability'});
           var paramsTag = {'about_kind':'Opportunity'};
@@ -43,11 +43,11 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
         var params = {};
           if ($scope.opppages[nextPage]){
             params = {'order' : $scope.order,
-                      'limit':8,
+                      'limit':6,
                       'pageToken':$scope.opppages[nextPage]
                      }
           }else{
-            params = {'order' : $scope.order,'limit':8}
+            params = {'order' : $scope.order,'limit':6}
           }
           console.log('in listNextPageItems');
           $scope.oppCurrentPage = $scope.oppCurrentPage + 1 ; 
@@ -58,11 +58,11 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
        var prevPage = $scope.oppCurrentPage - 1;
        var params = {};
           if ($scope.opppages[prevPage]){
-            params = {'order' : $scope.order,'limit':8,
+            params = {'order' : $scope.order,'limit':6,
                       'pageToken':$scope.opppages[prevPage]
                      }
           }else{
-            params = {'order' : $scope.order,'limit':8}
+            params = {'order' : $scope.order,'limit':6}
           }
           $scope.oppCurrentPage = $scope.oppCurrentPage - 1 ;
           Opportunity.list($scope,params);
@@ -173,7 +173,7 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
      // Sorting
      $scope.orderBy = function(order){
         var params = { 'order': order,
-                        'limit':8};
+                        'limit':6};
         $scope.order = order;
         Opportunity.list($scope,params);
      };
@@ -181,13 +181,13 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
         if (filter){
           var params = { 'owner': filter,
                          'order': $scope.order, 
-                         'limit':8}
+                         'limit':6}
         }
         else{
           var params = {
               'order': $scope.order, 
               
-              'limit':8}
+              'limit':6}
         };
         $scope.isFiltering = true;
         Opportunity.list($scope,params);
@@ -196,13 +196,13 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
         if (filter){
           var params = { 'stagename': filter,
                          'order': $scope.order, 
-                         'limit':8}
+                         'limit':6}
         }
         else{
           var params = {
               'order': $scope.order, 
               
-              'limit':8}
+              'limit':6}
         };
         $scope.isFiltering = true;
         Opportunity.list($scope,params);
@@ -289,7 +289,7 @@ $scope.selectTag= function(tag,index,$event){
          var params = {
           'tags': tags,
           'order': $scope.order,
-                        'limit':6
+                      'limit':6
          }
          Opportunity.list($scope,params);
 

@@ -148,53 +148,7 @@
 
         </div>
            <hr/>
-            <!-- Filtering and sorting -->
-          <!--div class="row filter-row" ng-show="contacts+isFiltering">
-            <div class="col-md-2">
-              <div class="btn-group btn-filter">
-                                    <a class="btn btn-default" href="#" data-toggle="dropdown">
-                                      {{ _('Filter by') }}
-                                    <i class="icon-angle-down"></i>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                      <li><a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All contacts') }}</a></li>
-                                      <li><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My contacts') }}</a></li>
-                                    </ul>
-              </div>
-            </div>
-            <div class="col-md-7">  
-                    <form class="ng-pristine ng-valid" ng-submit="executeSearch(searchQuery)">
-                      <div class="input-group">
-
-                        <input type="text" ng-model="searchQuery" typeahead="result as result.firstname + ' ' + result.lastname + ' - ' + result.position +' at ' + result.account_name + ' '  for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="form-control" placeholder="{{ _('Quick Filtering') }}">
-                        <span class="input-group-btn">  
-                       <button class="gbqfb gbqfb-hvr"><i class="icon-filter"></i></button>
-                       </span>
-                      </div>
-                    </form>
-            </div>
-            <div class="col-md-3">
-              <div class="btn-group  tbtn-sort">
-                                    <a class="btn btn-default" href="#" data-toggle="dropdown">
-                                    Sort by
-                                    <i class="icon-angle-down"></i>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                      <li><a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a></li>
-                                      <li><a ng-click="orderBy('firstname')" href="#" data-toggle="modal">{{ _('First Name') }}</a></li>
-                                      <li><a ng-click="orderBy('lastname')" href="#" data-toggle="modal">{{ _('Last Name') }}</a></li>
-                                      <li><a ng-click="orderBy('title')" href="#" data-toggle="modal">{{ _('Title') }}</a></li>
-                                      <li><a ng-click="orderBy('account_name')" href="#" data-toggle="modal">{{ _('Company') }}</a></li>
-                                      
-                                     
-                                    </ul>
-              </div>
-
-            </div>
-            <br>
-              <br>
-            
-          </div-->
+           
             <div class="row cards-container">
             <div class="col-md-9">
             <div class="inner-cards-container">
@@ -285,16 +239,7 @@
                   <div class="caption">
                     <!-- class="fa fa-reorder"--><i></i>Labels
                   </div>
-                  <!--div class="tools">
-                      <a href="javascript:;" class="collapse">
-                      </a>
-                      <a href="#portlet-config" data-toggle="modal" class="config">
-                      </a>
-                      <a href="javascript:;" class="reload">
-                      </a>
-                      <a href="javascript:;" class="remove">
-                    </a>
-                  </div-->
+                  
                 </div>
                 <div class="portlet-body">
                 <ul class="list-group tags-list">
