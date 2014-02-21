@@ -215,10 +215,7 @@ $scope.updateTag = function(tag){
           
       };
 
- $scope.listTags=function(){
-  var paramsTag = {'about_kind':'Contact'};
-      Tag.list($scope,paramsTag);
-     };
+
  
 $scope.selectTag= function(tag,index,$event){
       if(!$scope.manage_tags){
