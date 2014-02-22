@@ -543,7 +543,7 @@ class ContactInsertRequest(messages.Message):
     firstname = messages.StringField(3)
     lastname = messages.StringField(4)
     title = messages.StringField(6)
-    access = messages.StringField(6)
+    access = messages.StringField(7)
     
 
 class ContactListResponse(messages.Message):
