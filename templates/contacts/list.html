@@ -99,12 +99,12 @@
           </div>
         <div class="row">
         
-          <div class="col-md-2"> 
+          <div class="col-md-2" > 
                     <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
                     {{ _("New Contact") }} <i class="icon-plus"></i>
                     </button> 
           </div>
-          <div class="col-md-2" ng-show="col-md-2">
+          <div class="col-md-2" ng-show="contacts+isFiltering">
               <div class="btn-group btn-filter">
                                     <a class="btn btn-default" href="#" data-toggle="dropdown">
                                       {{ _('Filter by') }}
@@ -116,7 +116,7 @@
                                     </ul>
               </div>
           </div>
-          <div class="col-md-5" ng-show="col-md-2">  
+          <div class="col-md-5" ng-show="contacts+isFiltering">  
                     <form clss="ng-pristine ng-valid" ng-submit="executeSearch(searchQuery)">
                       <div class="input-group">
 
@@ -127,7 +127,7 @@
                       </div>
                     </form>
           </div>
-          <div class="col-md-2" ng-show="col-md-2">
+          <div class="col-md-2" ng-show="contacts+isFiltering">
               <div class="btn-group  tbtn-sort">
                                     <a class="btn btn-default" href="#" data-toggle="dropdown">
                                     Sort by

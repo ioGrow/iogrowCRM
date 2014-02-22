@@ -154,18 +154,19 @@
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
+        <div class="row ">
+            <div class="col-md-12"> <h2 class="page-title">{{ _("Cases") }} </h2></div>
+          </div>
         <div class="row">
           
-          <div class="col-md-12">
-            <h2 class="page-title">{{ _("Cases") }} </h2>
-          </div>
-          <div>
+          
           <div class="row">
              <div class="col-md-2">
-               <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
+              <div class="col-md-2"> 
+                    <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
                     {{ _("New Case") }} <i class="icon-plus"></i>
-                    </button>
-             </div>
+                    </button> 
+          </div>
              <div class="col-md-2" ng-show="cases+isFiltering">
               <div class="btn-group btn-filter">
                                     <a class="btn btn-default" href="#" data-toggle="dropdown">
@@ -233,7 +234,7 @@
                     <%=casee.name%>
                     </h2></a>
                     <div class="desc">
-                       <div class="row margin-bottom-5">
+                       <div class="row margin-bottom-10">
                           <div class="col-md-12">
 
                                     <span ng-show="casee.status" class="contact-title" >Updated at:  <%=casee.updated_at | date:'yyyy-MM-dd - HH:mm:ss ' %> </span>                           
