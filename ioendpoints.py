@@ -496,28 +496,7 @@ class CompanyProfileResponse(messages.Message):
     items = messages.MessageField(CompanyProfileSchema, 1, repeated=True)
     nextPageToken = messages.StringField(2)
 
-class AccountListRequest(messages.Message):
-    limit = messages.IntegerField(1)
-    pageToken = messages.StringField(2)
-    order = messages.StringField(3)
-    tags = messages.StringField(4,repeated = True)
-    owner = messages.StringField(5)
 
-class AccountSchema(messages.Message):
-    id = messages.StringField(1)
-    entityKey = messages.StringField(2)
-    name = messages.StringField(3)
-    account_type = messages.StringField(4)
-    industry = messages.StringField(5)
-    tagline = messages.StringField(6)
-    introduction = messages.StringField(7)
-    tags = messages.MessageField(TagSchema,8, repeated = True)
-    created_at = messages.StringField(9)
-    updated_at = messages.StringField(10)
-
-class AccountListResponse(messages.Message):
-    items = messages.MessageField(AccountSchema, 1, repeated=True)
-    nextPageToken = messages.StringField(2)
 
 class ContactListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -542,7 +521,7 @@ class ContactInsertRequest(messages.Message):
     account = messages.StringField(2)
     firstname = messages.StringField(3)
     lastname = messages.StringField(4)
-    title = messages.StringField(6)
+    title = messages.StringField(5)
     access = messages.StringField(6)
     
 
@@ -626,6 +605,34 @@ class CaseListResponse(messages.Message):
     items = messages.MessageField(CaseSchema, 1, repeated=True)
     nextPageToken = messages.StringField(2)
 
+class AccountListRequest(messages.Message):
+    limit = messages.IntegerField(1)
+    pageToken = messages.StringField(2)
+    order = messages.StringField(3)
+    tags = messages.StringField(4,repeated = True)
+    owner = messages.StringField(5)
+    contacts = messages.MessageField(CaseListRequest, 6)
+
+class AccountGetRequest(messages.Message):
+    id = messages.IntegerField(1,required = True)
+    contacts = messages.MessageField(ContactListRequest, 2)
+
+class AccountSchema(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    name = messages.StringField(3)
+    account_type = messages.StringField(4)
+    industry = messages.StringField(5)
+    tagline = messages.StringField(6)
+    introduction = messages.StringField(7)
+    tags = messages.MessageField(TagSchema,8, repeated = True)
+    contacts = messages.MessageField(ContactListResponse,9)
+    created_at = messages.StringField(10)
+    updated_at = messages.StringField(11)
+
+class AccountListResponse(messages.Message):
+    items = messages.MessageField(AccountSchema, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
 
 
 class EndpointsHelper(EndpointsModel):
@@ -951,6 +958,67 @@ class CrmEngineApi(remote.Service):
         my_model.put()
         return my_model
 
+    # accounts.get api v2
+    @endpoints.method(AccountGetRequest, AccountSchema,
+                      path='accounts/getv2', http_method='POST',
+                      name='accounts.getv2')
+    def accounts_get_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        account = Account.get_by_id(int(request.id))
+        if account is None:
+            raise endpoints.NotFoundException('Account not found.')
+        #list of tags related to this account
+        edge_list = Edge.list(start_node=account.key,kind='tags')
+        tag_list = list()
+        for edge in edge_list['items']:
+            tag_list.append(
+                            TagSchema(
+                                    edgeKey = edge.key.urlsafe(),
+                                    name = edge.end_node.get().name,
+                                    color = edge.end_node.get().color
+                                    )
+                            )
+        #list of contacts to this account
+        contacts = None
+        if request.contacts:
+            contact_list = list()
+            contact_edge_list = Edge.list(
+                                start_node=account.key,
+                                kind='contacts',
+                                limit=request.contacts.limit,
+                                pageToken=request.contacts.pageToken
+                                )
+            for edge in contact_edge_list['items']:
+                contact_list.append(
+                                    ContactSchema(
+                                               firstname = edge.end_node.get().firstname,
+                                               lastname = edge.end_node.get().lastname,
+                                               title = edge.end_node.get().title
+                                               )
+                                    )
+            if contact_edge_list['next_curs'] and contact_edge_list['more']:
+                contact_next_curs = contact_edge_list['next_curs'].urlsafe()
+            else:
+                contact_next_curs = None
+            contacts = ContactListResponse(
+                                            items = contact_list,
+                                            nextPageToken = contact_next_curs
+                                            )
+        account_schema = AccountSchema(
+                                  id = str( account.key.id() ),
+                                  entityKey = account.key.urlsafe(),
+                                  name = account.name,
+                                  account_type = account.account_type,
+                                  industry = account.industry,
+                                  tagline = account.tagline,
+                                  introduction = account.introduction,
+                                  tags = tag_list,
+                                  contacts = contacts,
+                                  created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                  updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                )
+                  
+        return  account_schema
     # accounts.get API
     @Account.method(
                     request_fields=('id',),
@@ -1012,7 +1080,7 @@ class CrmEngineApi(remote.Service):
                         #list of tags related to this account
                         edge_list = Edge.list(start_node=account.key,kind='tags')
                         tag_list = list()
-                        for edge in edge_list:
+                        for edge in edge_list['items']:
                             tag_list.append(
                                           TagSchema(
                                            edgeKey = edge.key.urlsafe(),
@@ -1020,6 +1088,27 @@ class CrmEngineApi(remote.Service):
                                            color = edge.end_node.get().color
                                            )
                                         )
+                        contact_list = list()
+                        #list of contacts to this account
+                        contacts = None
+                        if request.contacts:
+                            edge_list = Edge.list(start_node=account.key,kind='contacts',limit=request.contacts.limit,pageToken=request.contacts.pageToken)
+                            for edge in edge_list['items']:
+                                contact_list.append(
+                                              ContactSchema(
+                                               firstname = edge.end_node.get().firstname,
+                                               lastname = edge.end_node.get().lastname,
+                                               title = edge.end_node.get().title
+                                               )
+                                            )
+                            if edge_list['next_curs'] and edge_list['more']:
+                                contact_next_curs = edge_list['next_curs'].urlsafe()
+                            else:
+                                contact_next_curs = None
+                            contacts = ContactListResponse(
+                                                        items = contact_list,
+                                                        nextPageToken = contact_next_curs
+                                                        )
                         account_schema = AccountSchema(
                                   id = str( account.key.id() ),
                                   entityKey = account.key.urlsafe(),
@@ -1029,6 +1118,7 @@ class CrmEngineApi(remote.Service):
                                   tagline = account.tagline,
                                   introduction = account.introduction,
                                   tags = tag_list,
+                                  contacts = contacts,
                                   created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )

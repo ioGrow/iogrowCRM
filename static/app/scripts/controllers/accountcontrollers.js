@@ -468,7 +468,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        $("ul.page-sidebar-menu li").removeClass("active");
        $("#id_Accounts").addClass("active");
           
-       $scope.selectedTab = 1;
+       $scope.selectedTab = 2;
        $scope.isSignedIn = false;
        $scope.immediateFailed = false;
        $scope.nextPageToken = undefined;
@@ -510,7 +510,12 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
 
        // What to do after authentication
        $scope.runTheProcess = function(){
-          var accountid = {'id':$route.current.params.accountId};
+          var accountid = {
+                          'id':$route.current.params.accountId,
+                          'contacts':{
+                            'limit': '6'
+                          }
+                          };
           Account.get($scope,accountid);
           User.list($scope,{});
           Opportunitystage.list($scope,{});
@@ -578,33 +583,47 @@ $scope.ContactlistNextPageItems = function(){
         var nextPage = $scope.contactCurrentPage + 1;
         var params = {};
           if ($scope.contactpages[nextPage]){
-            params = {'limit':6,
-                      'account':$scope.account.entityKey,
-                      'pageToken':$scope.contactpages[nextPage]
+            params = {
+                        'id':$scope.account.id,
+                        'contacts':{
+                          'limit': '6',
+                          'pageToken':$scope.contactpages[nextPage]
+                        }
                      }
           }else{
-            params = {'limit':6,
-            'account':$scope.account.entityKey}
+            params = {
+                        'id':$scope.account.id,
+                        'contacts':{
+                          'limit': '6'
+                        }
+                      }
           }
-          console.log('in listNextPageItems');
+          
           $scope.contactCurrentPage = $scope.contactCurrentPage + 1 ; 
-          Contact.list($scope,params);
+          Account.get($scope,params);
      }
      $scope.ContactlistPrevPageItems = function(){
        
        var prevPage = $scope.contactCurrentPage - 1;
        var params = {};
           if ($scope.contactpages[prevPage]){
-            params = {'limit':6,
-                      'account':$scope.account.entityKey,
-                      'pageToken':$scope.contactpages[prevPage]
+            params = {
+                      'id':$scope.account.id,
+                        'contacts':{
+                          'limit': '6',
+                          'pageToken':$scope.contactpages[prevPage]
+                        }
                      }
           }else{
-            params = {'limit':6,
-                      'account':$scope.account.entityKey}
+            params = {
+                      'id':$scope.account.id,
+                        'contacts':{
+                          'limit': '6'
+                        }
+                     }
           }
           $scope.contactCurrentPage = $scope.contactCurrentPage - 1 ;
-            Contact.list($scope,params);
+          Account.get($scope,params);
      }
 //HKA 07.12.2013 Manage Prev & Next Page on Related List Opportunities
 $scope.OpplistNextPageItems = function(){
