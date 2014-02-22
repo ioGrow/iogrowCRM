@@ -537,6 +537,15 @@ class ContactSchema(messages.Message):
     created_at = messages.StringField(8)
     updated_at = messages.StringField(9)
 
+class ContactInsertRequest(messages.Message):
+    id = messages.StringField(1)
+    account = messages.StringField(2)
+    firstname = messages.StringField(3)
+    lastname = messages.StringField(4)
+    title = messages.StringField(6)
+    access = messages.StringField(6)
+    
+
 class ContactListResponse(messages.Message):
     items = messages.MessageField(ContactSchema, 1, repeated=True)
     nextPageToken = messages.StringField(2)
@@ -1592,8 +1601,39 @@ class CrmEngineApi(remote.Service):
         #user_from_email=EndpointsHelper.require_iogrow_user()
         my_model.key.delete()
         return message_types.VoidMessage()
-
-    # contacts.insert API
+	
+	# contacts.insertv2 api
+    @endpoints.method(ContactInsertRequest, ContactSchema,
+                      path='contacts/insertv2', http_method='POST',
+                      name='contacts.insertv2')
+    def contact_insert_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        folder_name = request.firstname + ' ' + request.lastname
+        created_folder = EndpointsHelper.insert_folder(
+                                                       user_from_email,
+                                                       folder_name,
+                                                       'Contact'
+                                                       )
+        contact = Contact(
+					firstname = request.firstname,
+                    lastname = request.lastname,
+                    owner = user_from_email.google_user_id,
+                    organization = user_from_email.organization,
+					folder = created_folder['id']
+					)
+        if request.title:
+            contact.title = request.title
+        contact_key = contact.put_async()
+        contact_key_async = contact_key.get_result()
+        if request.account:
+            # insert edges
+            Edge.insert(start_node = ndb.Key(urlsafe=request.account),
+                      end_node = contact_key_async,
+                      kind = 'contacts',
+                      inverse_edge = 'parents')     
+        return ContactSchema(id=str(contact_key_async.id()))
+    
+	# contacts.insert API
     @Contact.method(
                     user_required=True,
                     path='contacts',
