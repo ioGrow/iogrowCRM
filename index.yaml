@@ -332,9 +332,34 @@ indexes:
 
 - kind: Show
   properties:
+  - name: access
+  - name: organization
+  - name: status
+  - name: type_show
+  - name: updated_at
+    direction: desc
+
+- kind: Show
+  properties:
+  - name: collaborators_ids
+  - name: status
+  - name: type_show
+  - name: updated_at
+    direction: desc
+
+- kind: Show
+  properties:
   - name: is_published
   - name: type_show
   - name: ends_at
+
+- kind: Show
+  properties:
+  - name: owner
+  - name: status
+  - name: type_show
+  - name: updated_at
+    direction: desc
 
 - kind: Task
   properties:
