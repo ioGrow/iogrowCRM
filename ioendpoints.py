@@ -30,7 +30,7 @@ import endpoints
 from endpoints_proto_datastore.ndb import EndpointsModel
 
 # Our libraries
-from iograph import InfoNode, Edge
+from iograph import Node, Edge
 from iomodels.crmengine.accounts import Account
 from iomodels.crmengine.contacts import Contact
 from iomodels.crmengine.notes import Note, Topic
@@ -627,8 +627,9 @@ class AccountSchema(messages.Message):
     introduction = messages.StringField(7)
     tags = messages.MessageField(TagSchema,8, repeated = True)
     contacts = messages.MessageField(ContactListResponse,9)
-    created_at = messages.StringField(10)
-    updated_at = messages.StringField(11)
+    infonodes = messages.MessageField(InfoNodeListResponse,10)
+    created_at = messages.StringField(11)
+    updated_at = messages.StringField(12)
 
 class AccountListResponse(messages.Message):
     items = messages.MessageField(AccountSchema, 1, repeated=True)
@@ -1003,7 +1004,39 @@ class CrmEngineApi(remote.Service):
             contacts = ContactListResponse(
                                             items = contact_list,
                                             nextPageToken = contact_next_curs
-                                            )
+                                        )
+        edge_list = Edge.list(
+                            start_node = account.key,
+                            kind = 'infos'
+                            )
+        connections_dict = {}
+        for edge in edge_list['items']:
+            node = edge.end_node.get()
+            if node.kind not in connections_dict.keys():
+                connections_dict[node.kind] = list()
+            node_fields = list()
+            for key, value in node.to_dict().iteritems():
+                if key not in['kind', 'parent', 'created_at', 'updated_at']:
+                    record = RecordSchema(
+                                          field=key,
+                                          value=node.to_dict()[key]
+                                          )
+                    node_fields.append(record)
+            info_node = InfoNodeResponse(
+                                         id=str(node.key.id()),
+                                         entityKey=node.key.urlsafe(),
+                                         kind=node.kind,
+                                         fields=node_fields
+                                         )
+            connections_dict[node.kind].append(info_node)
+        connections_list = list()
+        for key, value in connections_dict.iteritems():
+            infonodeconnection = InfoNodeConnectionSchema(
+                                                            kind=key,
+                                                            items=value
+                                                        )
+            connections_list.append(infonodeconnection)
+        infonodes = InfoNodeListResponse(items=connections_list)    
         account_schema = AccountSchema(
                                   id = str( account.key.id() ),
                                   entityKey = account.key.urlsafe(),
@@ -1014,6 +1047,7 @@ class CrmEngineApi(remote.Service):
                                   introduction = account.introduction,
                                   tags = tag_list,
                                   contacts = contacts,
+                                  infonodes = infonodes,
                                   created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
@@ -3006,10 +3040,17 @@ class CrmEngineApi(remote.Service):
                         name='infonode.insert')
     def infonode_insert(self, request):
         parent_key = ndb.Key(urlsafe=request.parent)
-        node = InfoNode(kind=request.kind, parent=parent_key)
+
+        node = Node(kind=request.kind)
         for record in request.fields:
             setattr(node, record.field, record.value)
-        entityKey = node.put()
+        entityKey_async = node.put_async()
+        entityKey = entityKey_async.get_result()
+        Edge.insert(
+                    start_node = parent_key,
+                    end_node = entityKey,
+                    kind = 'infos'
+                )
         return InfoNodeResponse(
                                 entityKey=entityKey.urlsafe(),
                                 kind=node.kind,
@@ -3025,9 +3066,15 @@ class CrmEngineApi(remote.Service):
                       name='infonode.list')
     def infonode_list(self, request):
         parent_key = ndb.Key(urlsafe=request.parent)
-        nodes = InfoNode.query(InfoNode.parent == parent_key).fetch()
+        edge_list = Edge.list(
+                            start_node = parent_key,
+                            kind = 'infos'
+                            )
         connections_dict = {}
-        for node in nodes:
+        for edge in edge_list['items']:
+            print '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$44444'
+            node = edge.end_node.get()
+            print node
             if node.kind not in connections_dict.keys():
                 connections_dict[node.kind] = list()
             node_fields = list()
@@ -3042,8 +3089,7 @@ class CrmEngineApi(remote.Service):
                                          id=str(node.key.id()),
                                          entityKey=node.key.urlsafe(),
                                          kind=node.kind,
-                                         fields=node_fields,
-                                         parent=node.parent.urlsafe()
+                                         fields=node_fields
                                          )
             connections_dict[node.kind].append(info_node)
         connections_list = list()

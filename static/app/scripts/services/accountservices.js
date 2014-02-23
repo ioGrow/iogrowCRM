@@ -52,8 +52,28 @@ accountservices.factory('Account', function($http) {
                  }else{
                   $scope.contactpagination.next = false;
                  }
+
+               // list infonodes
+                var renderMap = false;
+                for (var i=0;i<resp.infonodes.items.length;i++)
+                { 
+                  if (resp.infonodes.items[i].kind == 'addresses'){
+                    renderMap = true;
+                  }
+                    $scope.infonodes[resp.infonodes.items[i].kind] = resp.infonodes.items[i].items;
+                    for (var j=0;j<$scope.infonodes[resp.infonodes.items[i].kind].length;j++)
+                      {
+                        for (var v=0;v<$scope.infonodes[resp.infonodes.items[i].kind][j].fields.length;v++)
+                          {
+                            $scope.infonodes[resp.infonodes.items[i].kind][j][$scope.infonodes[resp.infonodes.items[i].kind][j].fields[v].field] = $scope.infonodes[resp.infonodes.items[i].kind][j].fields[v].value;
+                          }
+                      }
+                }
+                if (renderMap){
+                  $scope.renderMaps();
+                }
                $scope.isContentLoaded = true;
-               $scope.listInfonodes();
+               //$scope.listInfonodes();
                $scope.listTopics(resp);
                $scope.listTasks();
                $scope.listEvents();

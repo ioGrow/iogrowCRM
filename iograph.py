@@ -24,7 +24,7 @@ class Edge(ndb.Expando):
     updated_at = ndb.DateTimeProperty(auto_now=True)
     
     @classmethod
-    def insert(cls, start_node,end_node,kind,inverse_edge):
+    def insert(cls, start_node,end_node,kind,inverse_edge=None):
         # create the inverse edge
         existing_edge = cls.query(cls.start_node==start_node, cls.end_node == end_node, cls.kind==kind).get()
         if existing_edge:
