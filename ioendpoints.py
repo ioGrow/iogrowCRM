@@ -1354,7 +1354,7 @@ class CrmEngineApi(remote.Service):
                         #list of tags related to this case
                         edge_list = Edge.list(start_node=case.key,kind='tags')
                         tag_list = list()
-                        for edge in edge_list:
+                        for edge in edge_list['items']:
                             tag_list.append(
                                           TagSchema(
                                            edgeKey = edge.key.urlsafe(),
@@ -1368,10 +1368,10 @@ class CrmEngineApi(remote.Service):
                                   name = case.name,
                                   status = case.status,
                                   priority = case.priority,
-								  contact_name = case.contact_name,
-	 							  account_name = case.account_name,
-								  type_case = case.type_case,
-								  tags = tag_list,
+                                  contact_name = case.contact_name,
+                                  account_name = case.account_name,
+                                  type_case = case.type_case,
+                                  tags = tag_list,
                                   created_at = case.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
@@ -1388,7 +1388,7 @@ class CrmEngineApi(remote.Service):
             next_curs_url_safe = None           
         return  CaseListResponse(items = items, nextPageToken = next_curs_url_safe)
 
-	# cases.list API
+    # cases.list API
     @Case.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken','account','type_case','priority','status','contact'),path='cases',name='cases.list')
     def CaseList(self,query):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -1691,8 +1691,8 @@ class CrmEngineApi(remote.Service):
         #user_from_email=EndpointsHelper.require_iogrow_user()
         my_model.key.delete()
         return message_types.VoidMessage()
-	
-	# contacts.insertv2 api
+    
+    # contacts.insertv2 api
     @endpoints.method(ContactInsertRequest, ContactSchema,
                       path='contacts/insertv2', http_method='POST',
                       name='contacts.insertv2')
@@ -1705,12 +1705,12 @@ class CrmEngineApi(remote.Service):
                                                        'Contact'
                                                        )
         contact = Contact(
-					firstname = request.firstname,
+                    firstname = request.firstname,
                     lastname = request.lastname,
                     owner = user_from_email.google_user_id,
                     organization = user_from_email.organization,
-					folder = created_folder['id']
-					)
+                    folder = created_folder['id']
+                    )
         if request.title:
             contact.title = request.title
         contact_key = contact.put_async()
@@ -1723,7 +1723,7 @@ class CrmEngineApi(remote.Service):
                       inverse_edge = 'parents')     
         return ContactSchema(id=str(contact_key_async.id()))
     
-	# contacts.insert API
+    # contacts.insert API
     @Contact.method(
                     user_required=True,
                     path='contacts',
@@ -1807,7 +1807,7 @@ class CrmEngineApi(remote.Service):
                         #list of tags related to this contact
                         edge_list = Edge.list(start_node=contact.key,kind='tags')
                         tag_list = list()
-                        for edge in edge_list:
+                        for edge in edge_list['items']:
                             tag_list.append(
                                           TagSchema(
                                            edgeKey = edge.key.urlsafe(),
@@ -1820,7 +1820,7 @@ class CrmEngineApi(remote.Service):
                                   entityKey = contact.key.urlsafe(),
                                   firstname = contact.firstname,
                                   lastname = contact.lastname,
-								  title = contact.title,
+                                  title = contact.title,
                                   account_name = contact.account_name,
                                   tags = tag_list,
                                   created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
@@ -2618,7 +2618,7 @@ class CrmEngineApi(remote.Service):
                         #list of tags related to this lead
                         edge_list = Edge.list(start_node=lead.key,kind='tags')
                         tag_list = list()
-                        for edge in edge_list:
+                        for edge in edge_list['items']:
                             tag_list.append(
                                           TagSchema(
                                            edgeKey = edge.key.urlsafe(),
@@ -2631,7 +2631,7 @@ class CrmEngineApi(remote.Service):
                                   entityKey = lead.key.urlsafe(),
                                   firstname = lead.firstname,
                                   lastname = lead.lastname,
-								  title = lead.title,
+                                  title = lead.title,
                                   company = lead.company,
                                   tags = tag_list,
                                   created_at = lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
@@ -2650,7 +2650,7 @@ class CrmEngineApi(remote.Service):
             next_curs_url_safe = None           
         return  LeadListResponse(items = items, nextPageToken = next_curs_url_safe)
 
-	# leads.list api
+    # leads.list api
     @Lead.query_method(
                        user_required=True,
                        query_fields=(
@@ -3162,7 +3162,7 @@ class CrmEngineApi(remote.Service):
                         #list of tags related to this opportunity
                         edge_list = Edge.list(start_node=opportunity.key,kind='tags')
                         tag_list = list()
-                        for edge in edge_list:
+                        for edge in edge_list['items']:
                             tag_list.append(
                                           TagSchema(
                                            edgeKey = edge.key.urlsafe(),
@@ -3177,7 +3177,7 @@ class CrmEngineApi(remote.Service):
                                   stagename = opportunity.stagename,
                                   stage_probability = str(opportunity.stage_probability),
                                   amount = str(opportunity.amount),
-								  tags = tag_list,
+                                  tags = tag_list,
                                   created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
@@ -3194,7 +3194,7 @@ class CrmEngineApi(remote.Service):
             next_curs_url_safe = None           
         return  OpportunityListResponse(items = items, nextPageToken = next_curs_url_safe)
 
-	# opportunities.list API
+    # opportunities.list API
     @Opportunity.query_method(
                               user_required=True,
                               query_fields=(
@@ -3776,7 +3776,7 @@ class CrmEngineApi(remote.Service):
             task = Task.get_by_id(int(request.id))
             about = None
             edge_list = Edge.list(start_node=task.key,kind='related_to')
-            for edge in edge_list:
+            for edge in edge_list['items']:
                 about_kind = edge.end_node.kind()
                 if about_kind == 'Contact' or about_kind == 'Lead':
                     about_name = edge.end_node.get().firstname + ' ' + edge.end_node.get().lastname
@@ -3935,13 +3935,13 @@ class CrmEngineApi(remote.Service):
                         #list of tags related to this task
                         edge_list = Edge.list(start_node=task.key,kind='tags')
                         tag_list = list()
-                        for edge in edge_list:
+                        for edge in edge_list['items']:
                             tag_list.append( TagSchema(edgeKey = edge.key.urlsafe(),
                                           name = edge.end_node.get().name,
                                           color = edge.end_node.get().color))
                         about = None
                         edge_list = Edge.list(start_node=task.key,kind='related_to')
-                        for edge in edge_list:
+                        for edge in edge_list['items']:
                             about_kind = edge.end_node.kind()
                             if about_kind == 'Contact' or about_kind == 'Lead':
                                 about_name = edge.end_node.get().firstname + ' ' + edge.end_node.get().lastname
@@ -3953,7 +3953,7 @@ class CrmEngineApi(remote.Service):
                         #list of tags related to this task
                         edge_list = Edge.list(start_node=task.key,kind='assignees')
                         assignee_list = list()
-                        for edge in edge_list:
+                        for edge in edge_list['items']:
                             assignee_list.append( AuthorSchema(edgeKey = edge.key.urlsafe(),
                                           google_user_id = edge.end_node.get().google_user_id,
                                           display_name = edge.end_node.get().google_display_name,

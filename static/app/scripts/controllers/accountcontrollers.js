@@ -74,7 +74,7 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
      // inserting the account  
      $scope.save = function(account){
           if (account.name) {
-      	     Account.insert($scope,account);
+             Account.insert($scope,account);
               $('#addAccountModal').modal('hide');
              
            };
