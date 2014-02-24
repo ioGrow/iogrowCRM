@@ -39,7 +39,7 @@
                     <div class=''>
                     <p>{{ _("Collaborators:") }}</p>
                         <div ng-repeat="collaborator in account.collaborators_list" class="invitation">
-                          <img class="google-avatar" src="<%=collaborator.photo%>"/>
+                          <img class="google-avatar" ng-src="<%=collaborator.photo%>"/>
                            <%=collaborator.display_name%> < <%=collaborator.email%> >
                         </div>
                         
@@ -112,7 +112,7 @@
                 
             <h2 class="page-title">
             <a href="/#/accounts/" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
-            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Accounts")}} > <%= account.name %> </h2>
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="/static/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Accounts")}} > <%= account.name %> </h2>
             
 
            <span ng-show="account.account_type">{{_("Type")}}: <a class="tag" href="/#/search/type:Account <%=account.account_type%>">#<%=account.account_type%></a></span><br>
@@ -176,7 +176,7 @@
                               </div>
                             <ul class="chats">
                               <li class="in" ng-repeat="topic in topics" id="topic_<%=$index%>">
-                                <img class="avatar" alt="" src="<%= topic.last_updater.photo%>" />
+                                <img class="avatar" alt="" ng-src="<%= topic.last_updater.photo%>" />
                                 <div class="message">
                                   <span class="arrow"></span>
                                   <a href="#" class="name"><%= topic.last_updater.display_name%></a>
@@ -884,7 +884,25 @@
                               </div>
                            
                               </div>
+
                             </div>
+                           <div class="row">
+                             <div class="col-md-12">
+                                <div class="pagination pull-right" ng-hide="isLoading">
+                                      
+                                      
+                                        <button ng-click="DocumentPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="documentpagination.prev">
+                                        {{_("Prev")}} 
+                                        </button>
+                                        
+                                        <button ng-click="DocumentlistNextPageItems()"  class="btn" ng-show="documentpagination.next">
+                                        {{_("Next")}} 
+                                        </button>
+                                      
+                                    </div>
+                                    <h3 class="pagination pull-right" ng-show="isLoading">{{ _("Loading...") }}</h3>
+                              </div>
+                              </div>
                       </div>
                       <div class="tab-pane active" id="tab_1_8" ng-show="selectedTab == 8">
                         

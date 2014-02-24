@@ -9,15 +9,12 @@ topicservices.factory('Topic', function($http) {
   
   
   Topic.list = function($scope,params){
-      console.log('in topics.list');
-      console.log(params);
+    
 
       $scope.isLoading = true;
       gapi.client.crmengine.topics.list(params).execute(function(resp) {
               if(!resp.code){
-                console.log('in topics.list looking for pagingation');
-                console.log('topicCurrentPage   is '+$scope.topicCurrentPage);
-
+               
                  $scope.topics = resp.items;
                  
                   if ($scope.topicCurrentPage >1){
@@ -90,8 +87,7 @@ topicservices.factory('WhoHasAccess', function($http) {
     var who = this;
     return $http.get('/api/whohasaccess/object/'+who.obj+'/item/'+who.itemid).then(function(response) {
       var results = {}
-      console.log('in service');
-      console.log(response.data[0].results);
+     
       results.whohasaccess = response.data[0].results;
       results.is_public = response.data[0].is_public;
 

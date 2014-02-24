@@ -154,25 +154,20 @@
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
+        <div class="row ">
+            <div class="col-md-12"> <h2 class="page-title">{{ _("Cases") }} </h2></div>
+          </div>
         <div class="row">
           
-          <div class="col-md-12">
-            <h2 class="page-title">{{ _("Cases") }} </h2>
-            
-            <div class="btn-group">
-            
+          
+          <div class="row">
+             <div class="col-md-2">
+              <div class="col-md-2"> 
                     <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
                     {{ _("New Case") }} <i class="icon-plus"></i>
-                    </button>
-            </div>
-               
-            <hr/>
-            
+                    </button> 
           </div>
-        </div>
-            <!-- Filtering and sorting -->
-          <div class="row filter-row" ng-show="cases+isFiltering">
-            <div class="col-md-2">
+             <div class="col-md-2" ng-show="cases+isFiltering">
               <div class="btn-group btn-filter">
                                     <a class="btn btn-default" href="#" data-toggle="dropdown">
                                       {{ _('Filter by') }}
@@ -186,7 +181,7 @@
                                     
               </div>
             </div>
-            <div class="col-md-7">
+            <div class="col-md-5" ng-show="cases+isFiltering">
                 
                     <form class="ng-pristine ng-valid" ng-submit="executeSearch(searchQuery)">
                       <div class="input-group">
@@ -200,7 +195,7 @@
                     </form>
                  
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2" ng-show="cases+isFiltering">
               <div class="btn-group btn-sort">
                                     <a class="btn btn-default" href="#" data-toggle="dropdown">
                                     {{ _('Sort by') }}
@@ -218,24 +213,30 @@
                                     </ul>
               </div>
 
-            </div>
-            <br>
-              <br>
-            
-          </div>
+          </div>          
+          
+        </div>  
+        </div>  
+        </div>
+         <hr/>
+        
+          
             
             <div class="row cards-container">
-            <div class="col-md-12">
+            <div class="col-md-9">
             
               <div class="inner-cards-container">
-              <div  ng-repeat="casee in cases" class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div class="dashboard-stat cards-med">
+              <div  ng-repeat="casee in cases" class="col-lg-4 col-md-3 col-sm-6 col-xs-12">
+                <div class="dashboard-stat cards-med"  droppable ng-drop="dropTag(casee)">
                   
                   <div class="details">
                     <a href="/#/cases/show/<%= casee.id %>"><h2 class="cardTitle">
                     <%=casee.name%>
                     </h2></a>
                     <div class="desc">
+                       <div class="row margin-bottom-10">
+                          <div class="col-md-12">
+
                                     <span ng-show="casee.status" class="contact-title" >Updated at:  <%=casee.updated_at | date:'yyyy-MM-dd - HH:mm:ss ' %> </span>                           
                                     <span ng-show="casee.status" class="contact-title" >Status: <a class="desc" href="/#/search/type:Case <%=casee.status%>"> <%=casee.status %></a>  - </span>
                                     <span ng-show="casee.priority" class="contact-title">Priority: <a  class="desc" href="/#/search/type:Case <%=casee.priority%>"><%=casee.priority %></span> 
@@ -247,8 +248,16 @@
                                     </span>
                                     
                                     
-                                    
-                                    </div>
+                          </div>
+                    </div>
+                      <br/>
+                          <div class="row">
+                          <div class="col-md-12">
+                               <span  ng-repeat="case_tag in casee.tags" class="pull-right task-label badge badge-roundless" style="background-color: <%=case_tag.color%>;color:<%=idealTextColor(case_tag.color)%>;">  <%= case_tag.name %></span>
+                          </div>
+                          
+                        </div>               
+                  </div>
                   </div>
                                  
                 </div>
@@ -283,11 +292,9 @@
                                   
                <div class="clearfix"></div>
               </div><!--/inner-cards-container-->
-              </div>
-            </div>
-          <div class="row">
-          <div class="col-md-12">
-            <div class="pagination pull-right" ng-hide="isLoading">
+                <div class="row">
+                <div class="col-md-12">
+                  <div class="pagination pull-right" ng-hide="isLoading">
                   
                   <!--ul class="list-unstyled list-inline"-->
                     <button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="casepagination.prev">
@@ -302,6 +309,64 @@
                 <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
             </div>
           </div>
+              </div>
+        <script type="text/javascript">
+              $('#slimtest1').slimScroll({
+                    height: '20px'
+                });
+          </script>
+
+        <div class="col-md-3">
+           <div class="portlet">
+                <div class="portlet-title">
+                  <div class="caption">
+                    <!-- class="fa fa-reorder"--><i></i>Labels
+                  </div>
+                  
+                </div>
+                <div class="portlet-body">
+                <ul class="list-group tags-list">
+                  <li draggable ng-repeat="tag_item in tags" class="list-group-item tags-list-item" ng-click="selectTag(tag_item,$index,$event)" ng-drag="dragTag(tag_item)" >
+                  <div class="row">
+                    <div class="tag-color" style="border-left: 4px solid <%=tag_item.color%>;">
+                    </div>
+                    <span class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"><%= tag_item.name %></span>
+                    <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
+                      <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
+                    </form>
+                    <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
+                  </li>
+                  </div>
+                </ul>
+                
+                <form class="well" role="form">
+                <div class="row">
+                  <div class="col-md-12 form-group">
+                    <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New Label">
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                       <input id="tag-col-pick" type="text" class="colorpicker-default form-control" value="#8fff00">
+                  </div>
+                  <div class="col-md-6">
+                    <input type="submit" ng-hide="isLoadingTask" ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
+                    <input type="submit" ng-show="isLoadingTask" class="btn green pull-right" value="{{ _('Loading...') }}">
+                  </div>
+                  </div>
+                </form>
+                <div class="form-group" ng-show="tags">
+                  <button class="btn btn-default btn-block" ng-click="manage_tags=!manage_tags;manage()"> Manage Tags</button>
+                </div>
+                  
+                </div>
+              </div>
+            </div>
+          
+        </div>
+            </div>
+        
             
           
         
@@ -309,3 +374,25 @@
       </div>
       <!-- END PAGE CONTAINER--> 
 </div>
+<script type="text/javascript">
+  $("#select2_sample2").select2({
+        placeholder: "Click to Select a label",
+        allowClear: false
+    });
+  var handleUniform = function () {
+        if (!jQuery().uniform) {
+            return;
+        }
+        var test = $("input[type=radio]:not(.toggle, .star)");
+        if (test.size() > 0) {
+            test.each(function () {
+                if ($(this).parents(".checker").size() == 0) {
+                    $(this).show();
+                    $(this).uniform();
+                }
+            });
+        }
+    }
+    handleUniform();
+</script>
+

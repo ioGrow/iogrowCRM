@@ -1,4 +1,6 @@
 from google.appengine.ext import ndb
+from google.appengine.datastore.datastore_query import Cursor
+
 INVERSED_EDGES = {
             'tags': 'tagged_on',
             'tagged_on': 'tags',
@@ -22,7 +24,7 @@ class Edge(ndb.Expando):
     updated_at = ndb.DateTimeProperty(auto_now=True)
     
     @classmethod
-    def insert(cls, start_node,end_node,kind,inverse_edge):
+    def insert(cls, start_node,end_node,kind,inverse_edge=None):
         # create the inverse edge
         existing_edge = cls.query(cls.start_node==start_node, cls.end_node == end_node, cls.kind==kind).get()
         if existing_edge:
@@ -39,8 +41,25 @@ class Edge(ndb.Expando):
         return edge_key
     
     @classmethod
-    def list(cls, start_node,kind):
-        return cls.query(cls.start_node==start_node, cls.kind==kind).order(-cls.updated_at).fetch()
+    def list(cls,start_node,kind,limit=1000,pageToken=None):
+        curs = Cursor(urlsafe=pageToken)
+        if limit:
+            limit = int(limit)
+        else:
+            limit = 1000
+        edges, next_curs, more =  cls.query(
+                                                cls.start_node==start_node, 
+                                                cls.kind==kind
+                                            ).order(
+                                                    -cls.updated_at
+                                                ).fetch_page(
+                                                    limit, start_cursor=curs
+                                                )
+        results = {}
+        results['items'] = edges
+        results['next_curs'] = next_curs
+        results['more'] = more
+        return results
     @classmethod
     def delete(cls, edge_key):
          existing_edge = edge_key.get()

@@ -1,11 +1,13 @@
 app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','Task','Topic','Comment','User','Contributor',
    function($scope,$filter,$route,Auth,Note,Task,Topic,Comment,User,Contributor) {
 //HKA 14.11.2013 Controller to show Notes and add comments
-   $scope.isSignedIn = false;
+     $("#id_Accounts").addClass("active");
+     $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
+     $scope.isLoadingTag = false;
      $scope.pagination = {};
      $scope.paginationcomment = {};
      $scope.currentPagecomment = 01;
@@ -437,8 +439,8 @@ app.directive('taggable', ['$parse','taggableParser',function($parse,typeaheadPa
 }]);
 app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','Contributor','Tag','Edge',
     function($scope,$filter,Auth,Task,User,Contributor,Tag,Edge) {
-     $("#id_Accounts").addClass("active");
-     document.title = "Accounts: Home";
+     $("#id_Tasks").addClass("active");
+     document.title = "Tasks: Home";
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -517,6 +519,18 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           };
       }
 
+     $scope.getAssignedUsers=function(value){
+          var pattern = /(.*)\s@(.*)/;
+          var text= value;
+          console.log(value);
+          if(pattern.test(text)){
+              return $scope.users;
+          }else{
+           
+             return [];
+          }
+      }
+
       $scope.dragTag=function(tag){
         $scope.draggedTag=tag;
       }
@@ -542,7 +556,29 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
                         'limit':7}
           Task.list($scope,params,true);
           User.list($scope,{});
-          Tag.list($scope,{});
+          var paramsTag = {'about_kind':'Task'};
+          Tag.list($scope,paramsTag);
+
+          if (annyang) {
+                  console.log('gooo ooo oo o oo o  oo o o ');
+                  // Let's define our first command. First the text we expect, and then the function it should call
+                  var commands = {
+                    'ok google *term': function(term) {
+                      
+                      console.log('@@@@@@@@@@@@@@@@@ NEW TASK TO @@@@@@@@@@@@@@@@@@');
+                      console.log(term);
+                      $scope.newTask.title = term;
+                      $scope.$apply();
+                      
+                    }
+                  };
+
+
+                  // Add our commands to annyang
+                  annyang.addCommands(commands);
+
+                  
+                }
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -868,15 +904,18 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
         tags
 ***************************************************************************************/
 $scope.listTags=function(){
-      Tag.list($scope,{});
+  var paramsTag = {'about_kind':'Task'};
+      Tag.list($scope,paramsTag);
      }
 $scope.addNewtag = function(tag){
        var params = {   
                           'name': tag.name,
+                          'about_kind':'Task',
                           'color':$('#tag-col-pick').val()
                       }  ;
        Tag.insert($scope,params);
-        Tag.list($scope,{});
+        var paramsTag = {'about_kind':'Task'};
+        Tag.list($scope,paramsTag);
         
      }
 $scope.updateTag = function(tag){
@@ -910,6 +949,11 @@ $scope.selectTag= function(tag,index,$event){
       }
 
     };
+  //HKA 19.02.2014 When delete tag render Task list
+ $scope.tagDeleted = function(){
+     $scope.listTasks();
+
+ };
   $scope.filterByTags = function(selected_tags){
          var tags = [];
          angular.forEach(selected_tags, function(tag){
@@ -965,6 +1009,7 @@ $scope.deleteTag=function(tag){
             'entityKey': tag.entityKey
           }
           Tag.delete($scope,params);
+          $scope.listTasks();
           
       };
 $scope.editTag=function(tag){

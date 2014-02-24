@@ -15,8 +15,11 @@ libraries:
 handlers:
 - url: /static
   static_dir: static
+  expiration: "7d 0h"
 # Endpoints handler
 - url: /_ah/spi/.*
   script: services.application
 - url: /.*
   script: handlers.app
+
+

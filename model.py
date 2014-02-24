@@ -40,7 +40,8 @@ from google.appengine.api import search
 from endpoints_proto_datastore import MessageFieldsSchema
 from search_helper import tokenize_autocomplete
 
-STANDARD_TABS = [{'name': 'Accounts','label': 'Accounts','url':'/#/accounts/','icon':'book'},{'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},{'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/','icon':'money'},{'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},{'name': 'Cases','label': 'Cases','url':'/#/cases/','icon':'suitcase'}]
+STANDARD_TABS = [{'name': 'Accounts','label': 'Accounts','url':'/#/accounts/','icon':'book'},{'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},{'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/','icon':'money'},
+{'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},{'name': 'Cases','label': 'Cases','url':'/#/cases/','icon':'suitcase'},{'name': 'Tasks','label': 'Tasks','url':'/#/tasks/','icon':'check'}]
 STANDARD_PROFILES = ['Super Administrator', 'Standard User', 'Sales User', 'Marketing User', 'Read Only', 'Support User', 'Contract Manager','Read Only']
 STANDARD_APPS = [{'name': 'sales', 'label': 'Customer Development', 'url':'/#/accounts/'},#{'name': 'marketing', 'label':'Marketing', 'url':'/#/compaigns/'},
 {'name':'call_center','label': 'Customer Support','url':'/#/cases/'}]
@@ -299,6 +300,15 @@ class User(EndpointsModel):
     display_name = ndb.StringProperty()
     google_public_profile_url = ndb.StringProperty()
     photo = ndb.StringProperty()
+
+    def put(self, **kwargs):
+        existing_user = User.query(User.google_user_id == self.google_user_id).get()
+        if existing_user:
+            ndb.Model.put(existing_user, **kwargs)
+        else:
+            ndb.Model.put(self, **kwargs)
+            
+
     def init_user_config(self,org_key,profile_key):
         profile = profile_key.get()
         # Get Apps for this profile:

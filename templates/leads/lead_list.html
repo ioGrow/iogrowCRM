@@ -126,26 +126,19 @@
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
+        
+            <div class="row ">
+                <div class="col-md-12"> <h2 class="page-title">{{ _("Leads") }} </h2></div>
+            </div>
+
         <div class="row">
           
-          <div class="col-md-12">
-            <h2 class="page-title">{{ _("Leads") }} </h2>
-            
-            <div class="btn-group">
-            
-                    <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
+          <div class="col-md-2"> 
+                  <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
                     {{ _("New Lead") }} <i class="icon-plus"></i>
-                    </button>
-            </div>
-               
-            <hr/>
-            
+                    </button>          
           </div>
-        </div>
-
-            <!-- Filtering and sorting -->
-          <div class="row filter-row" ng-show="leads+isFiltering">
-            <div class="col-md-2">
+          <div class="col-md-2" ng-show="leads+isFiltering">
               <div class="btn-group btn-filter">
                   <a class="btn btn-default" href="#" data-toggle="dropdown">
                     {{ _('Filter by') }}
@@ -157,8 +150,8 @@
                     <li ng-repeat="status in leadstatuses"><a ng-click="filterByStatus('<%=status.status%>')" href="#" data-toggle="modal"><%= status.status %></a></li>
                   </ul>
               </div>
-            </div>
-            <div class="col-md-7">   
+          </div>
+          <div class="col-md-5" ng-show="leads+isFiltering">   
                     <form class="form-inline ng-pristine ng-valid" ng-submit="executeSearch(searchQuery)">
                       <div class="input-group">
 
@@ -169,8 +162,8 @@
                       </div>
                     </form>
             </div>
-            <div class="col-md-3"> 
-            <div class="btn-group btn-sort" >
+            <div class="col-md-3" ng-show="leads+isFiltering"> 
+              <div class="btn-group btn-sort" >
                                     <a class="btn btn-default" href="#" data-toggle="dropdown">
                                     Sort by
                                     <i class="icon-angle-down"></i>
@@ -186,29 +179,39 @@
                                      
                                     </ul>
               </div>
-            </div>
-            <br>
-              <br>
-            
-          </div>
+        </div>
+        </div>
+          <hr/>
+          
             <div class="row cards-container">
-            <div class="col-md-12">
+            <div class="col-md-9">
             <div class="inner-cards-container">
             
-              <div ng-repeat="lead in leads" class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >
-                <div class="dashboard-stat cards-small">
+              <div ng-repeat="lead in leads" class="col-lg-4 col-md-3 col-sm-6 col-xs-12" >
+                <div class="dashboard-stat cards-small" droppable ng-drop="dropTag(lead)">
                   
                   <div class="details">
                     <a href="/#/leads/show/<%= lead.id %>"><h2 class="cardTitle">
                       <%= lead.firstname %> <%= lead.lastname %>
                     </h2></a>
-                    <div class="desc">
+                  <div class="desc">
+                    <div class="row margin-bottom-5">
+                      <div class="col-md-12">
                       <span ng-show="lead.status" class="contact-title" >Updated at:  <%=lead.updated_at | date:'yyyy-MM-dd - HH:mm:ss ' %> </span>
                       <span ng-show="lead.status" class="contact-title" >Status: <a class="desc" href="/#/search/type:Lead <%=lead.status%>">#<%=lead.status %></a>  </span>
                       <br>
                       <span ng-show="lead.title"><a  class="desc" href="/#/search/type:Lead <%=lead.title%>">#<%=lead.title%></a></span>
                       <span ng-show="lead.company"> <span ng-show="lead.title" class="contact-title">,</span> <a  class="desc" href="/#/search/type:Lead <%=lead.company%>">#<%=lead.company%></a></span>
+                     </div>
+                     </div>
+                   
+                    <div class="row">
+                          <div class="col-md-12">
+                               <span ng-repeat="tag in lead.tags"   class="pull-right task-label badge badge-roundless" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
+                          </div>
+                          
                     </div>
+                  </div>
                   </div>
                                   
                 </div>
@@ -241,9 +244,7 @@
               </div>
               <div class="clearfix"></div>
               </div>
-              </div>
-            </div>
-          <div class="row">
+              <div class="row">
               <div class="col-md-12">
             <div class="pagination pull-right" ng-hide="isLoading">
                   
@@ -259,10 +260,89 @@
                 </div>
                 <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
           </div>
-       </div>     
+       </div> 
+              </div>
+          <script type="text/javascript">
+              $('#slimtest1').slimScroll({
+                    height: '20px'
+                });
+          </script>
+              <div class="col-md-3">
+              <div class="portlet">
+                <div class="portlet-title">
+                  <div class="caption">
+                    <!-- class="fa fa-reorder"--><i></i>Labels
+                  </div>
+                  
+                </div>
+                <div class="portlet-body">
+                <ul class="list-group tags-list">
+                  <li draggable ng-repeat="tag_item in tags" class="list-group-item tags-list-item" ng-click="selectTag(tag_item,$index,$event)" ng-drag="dragTag(tag_item)" >
+                  <div class="row">
+                    <div class="tag-color" style="border-left: 4px solid <%=tag_item.color%>;">
+                    </div>
+                    <span class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"><%= tag_item.name %></span>
+                    <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
+                      <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
+                    </form>
+                    <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
+                  </li>
+                  </div>
+                </ul>
+                
+                <form class="well" role="form">
+                <div class="row">
+                  <div class="col-md-12 form-group">
+                    <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New Label">
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                       <input id="tag-col-pick" type="text" class="colorpicker-default form-control" value="#8fff00">
+                  </div>
+                  <div class="col-md-6">
+                    <input type="submit" ng-hide="isLoadingTask" ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
+                    <input type="submit" ng-show="isLoadingTask" class="btn green pull-right" value="{{ _('Loading...') }}">
+                  </div>
+                  </div>
+                </form>
+                <div class="form-group" ng-show="tags">
+                  <button class="btn btn-default btn-block" ng-click="manage_tags=!manage_tags;manage()"> Manage Tags</button>
+                </div>
+                  
+                </div>
+              </div>
+            </div>
+            
+            </div>
+            </div>
+              
           
         
         <!-- END PAGE CONTENT-->
       </div>
       <!-- END PAGE CONTAINER--> 
 </div>
+<script type="text/javascript">
+  $("#select2_sample2").select2({
+        placeholder: "Click to Select a label",
+        allowClear: false
+    });
+  var handleUniform = function () {
+        if (!jQuery().uniform) {
+            return;
+        }
+        var test = $("input[type=radio]:not(.toggle, .star)");
+        if (test.size() > 0) {
+            test.each(function () {
+                if ($(this).parents(".checker").size() == 0) {
+                    $(this).show();
+                    $(this).uniform();
+                }
+            });
+        }
+    }
+    handleUniform();
+</script>
+

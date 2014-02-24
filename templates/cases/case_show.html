@@ -556,7 +556,18 @@
                         <label  class="required col-md-3 control-label">{{_("Priority")}}</label>
                        
                         <div class="col-md-9">
-                          <input type="text"  class="form-control" id="id_priority" ng-model="casee.priority">
+                          <select class="form-control" ng-model="casee.priority">
+                            <option value="1">1 - Low</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10 - Critical</option>
+                          </select>
                           
                         </div>
                     </div>
@@ -564,7 +575,7 @@
                         <label  class="required col-md-3 control-label">{{_("Labels")}} </label>
                        
                         <div class="col-md-9">
-                          <input type="text"  class="form-control" required id="id_type_case" ng-model="casee.type_case">
+                          <input type="text"  class="form-control"  id="id_type_case" ng-model="casee.type_case">
                           
                         </div>
                     </div>
