@@ -154,11 +154,7 @@ class NoteInsertRequest(messages.Message):
     about = messages.StringField(1,required=True)
     title = messages.StringField(2,required=True)
     content = messages.StringField(3)
-    
-class NoteInsertRequest(messages.Message):
-    about = messages.StringField(1,required=True)
-    title = messages.StringField(2,required=True)
-    content = messages.StringField(3)
+
 class TagSchema(messages.Message):
     name  = messages.StringField(1)
     color = messages.StringField(2)
@@ -2997,6 +2993,34 @@ class CrmEngineApi(remote.Service):
         except (IndexError, TypeError):
             raise endpoints.NotFoundException('Note %s not found.' %
                                                 (request.id,))
+
+    # notes.insert v2 api
+    @endpoints.method(NoteInsertRequest, message_types.VoidMessage,
+                        path='notes/insertv2', http_method='POST',
+                        name='notes.insertv2')
+    def note_insert(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        parent_key = ndb.Key(urlsafe=request.about)
+        note_author = Userinfo()
+        note_author.display_name = user_from_email.google_display_name
+        note_author.photo = user_from_email.google_public_profile_photo_url
+        note = Note(
+                    owner = user_from_email.google_user_id,
+                    organization = user_from_email.organization,
+                    author = note_author,
+                    title = request.title,
+                    content = request.content
+                )
+        entityKey_async = note.put_async()
+        entityKey = entityKey_async.get_result()
+        Edge.insert(
+                    start_node = parent_key,
+                    end_node = entityKey,
+                    kind = 'topics',
+                    inverse_edge = 'related_to'
+                )
+        return message_types.VoidMessage()
+
 
     # notes.insert API
     @Note.method(user_required=True,path='notes', http_method='POST', name='notes.insert')
