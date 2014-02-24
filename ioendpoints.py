@@ -171,6 +171,7 @@ class TaskInsertRequest(messages.Message):
     reminder = messages.StringField(4)
     status = messages.StringField(5)
     assignees = messages.MessageField(EntityKeyRequest,6, repeated = True)
+    tags = messages.MessageField(EntityKeyRequest,7, repeated = True)
     
 
 class TaskSchema(messages.Message):
@@ -3915,7 +3916,14 @@ class CrmEngineApi(remote.Service):
                 Edge.insert(start_node = task_key_async,
                       end_node = ndb.Key(urlsafe=assignee.entityKey),
                       kind = 'assignees',
-                      inverse_edge = 'assigned_to')      
+                      inverse_edge = 'assigned_to') 
+        if request.tags:
+            # insert edges
+            for tag in request.tags:
+                Edge.insert(start_node = task_key_async,
+                      end_node = ndb.Key(urlsafe=tag.entityKey),
+                      kind = 'tags',
+                      inverse_edge = 'tagged_on')      
         return TaskSchema()
 
     # tasks.listv2 api

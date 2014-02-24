@@ -85,7 +85,7 @@ class Edge(ndb.Expando):
         """
         edge_list = cls.list(start_node,kind)
         end_node_found = list()
-        for edge in edge_list:
+        for edge in edge_list['items']:
             end_node_found.append(edge.end_node)
         if operation == 'AND':
             return len( set(end_node_found).intersection(end_node_set) ) == len( set(end_node_set) )
