@@ -136,7 +136,13 @@ def LISTING_QUERY(query, access, organization, owner, collaborators, order):
 
  # The message class that defines the EntityKey schema
 class EntityKeyRequest(messages.Message):
-    entityKey = messages.StringField(1)       
+    entityKey = messages.StringField(1)  
+
+ # The message class that defines the ListRequest schema
+class ListRequest(messages.Message):
+    limit = messages.IntegerField(1)
+    pageToken = messages.StringField(2)     
+
  # The message class that defines the author schema
 class AuthorSchema(messages.Message):
     google_user_id = messages.StringField(1)
@@ -154,6 +160,28 @@ class NoteInsertRequest(messages.Message):
     about = messages.StringField(1,required=True)
     title = messages.StringField(2,required=True)
     content = messages.StringField(3)
+
+class CommentInsertRequest(messages.Message):
+    about = messages.StringField(1,required=True)
+    content = messages.StringField(2,required=True)
+
+class CommentSchema(messages.Message):
+    author = messages.MessageField(AuthorSchema, 1, required = True)
+    content = messages.StringField(2,required=True)
+
+class TopicSchema(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    last_updater = messages.MessageField(AuthorSchema, 3, required = True)
+    title = messages.StringField(4,required = True)
+    excerpt = messages.StringField(5)
+    topic_kind = messages.StringField(6)
+    created_at = messages.StringField(7)
+    updated_at = messages.StringField(8)
+
+class TopicListResponse(messages.Message):
+    items = messages.MessageField(TopicSchema, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
 
 class TagSchema(messages.Message):
     name  = messages.StringField(1)
@@ -197,6 +225,7 @@ class TaskRequest(messages.Message):
     assignee = messages.StringField(7)
     about = messages.StringField(8)
     status_color = messages.StringField(9)
+
 class TaskListResponse(messages.Message):
     items = messages.MessageField(TaskSchema, 1, repeated=True)
     nextPageToken = messages.StringField(2)
@@ -608,12 +637,14 @@ class AccountListRequest(messages.Message):
     order = messages.StringField(3)
     tags = messages.StringField(4,repeated = True)
     owner = messages.StringField(5)
-    contacts = messages.MessageField(CaseListRequest, 6)
+    contacts = messages.MessageField(ContactListRequest, 6)
+    contacts = messages.MessageField(ContactListRequest, 6)
 
 class AccountGetRequest(messages.Message):
     id = messages.IntegerField(1,required = True)
-    contacts = messages.MessageField(ContactListRequest, 2)
-
+    contacts = messages.MessageField(ListRequest, 2)
+    topics = messages.MessageField(ListRequest, 3)
+    
 class AccountSchema(messages.Message):
     id = messages.StringField(1)
     entityKey = messages.StringField(2)
@@ -625,8 +656,9 @@ class AccountSchema(messages.Message):
     tags = messages.MessageField(TagSchema,8, repeated = True)
     contacts = messages.MessageField(ContactListResponse,9)
     infonodes = messages.MessageField(InfoNodeListResponse,10)
-    created_at = messages.StringField(11)
-    updated_at = messages.StringField(12)
+    topics = messages.MessageField(TopicListResponse,11)
+    created_at = messages.StringField(12)
+    updated_at = messages.StringField(13)
 
 class AccountListResponse(messages.Message):
     items = messages.MessageField(AccountSchema, 1, repeated=True)
@@ -1002,6 +1034,78 @@ class CrmEngineApi(remote.Service):
                                             items = contact_list,
                                             nextPageToken = contact_next_curs
                                         )
+        #list of topics related to this account
+        topics = None
+        if request.topics:
+            topic_list = list()
+            topic_edge_list = Edge.list(
+                                start_node=account.key,
+                                kind='topics',
+                                limit=request.topics.limit,
+                                pageToken=request.topics.pageToken
+                                )
+            for edge in topic_edge_list['items']:
+                end_node = edge.end_node.get()
+                print '**************************************************'
+                print end_node.key.kind()
+                if end_node.key.kind() == 'Note':
+                    if end_node.comments == 0:
+                        print 'note n comment 0'
+                        last_updater = end_node.author
+                        excerpt = end_node.content[0:100]
+                        print last_updater
+                        print excerpt
+                    else:
+                        print 'note n comments'
+                        # get the last comment
+                        comments_edge_list = Edge.list(
+                                                start_node = end_node.key,
+                                                kind = 'comments',
+                                                limit = 1 
+                                                )
+                        if len(comments_edge_list['items'])>0:
+                            last_comment = comments_edge_list[0].end_node.get()
+                            last_updater = last_comment.author
+                            excerpt = last_comment.content[0:100]
+                else:
+                    print 'not note'
+                    # get the last comment
+                    comments_edge_list = Edge.list(
+                                                start_node = end_node.key,
+                                                kind = 'comments',
+                                                limit = 1 
+                                                )
+                    if len(comments_edge_list['items'])>0:
+                        print 'with comments'
+                        last_comment = comments_edge_list['items'][0].end_node.get()
+                        last_updater = last_comment.author
+                        excerpt = last_comment.content[0:100]
+
+                author = AuthorSchema(google_user_id = last_updater.google_user_id,
+                                        display_name = last_updater.display_name,
+                                        google_public_profile_url = last_updater.google_public_profile_url,
+                                        photo = last_updater.photo)
+                topic_list.append(
+                                TopicSchema(
+                                        id = str(end_node.key.id()),
+                                        last_updater = author,
+                                        title = edge.end_node.get().title,
+                                        excerpt = excerpt,
+                                        topic_kind = end_node.key.kind(),
+                                        updated_at = end_node.updated_at.strftime(
+                                                            "%Y-%m-%dT%H:%M:00.000"
+                                                    )
+                                        )
+                                    )
+            if topic_edge_list['next_curs'] and topic_edge_list['more']:
+                topic_next_curs = topic_edge_list['next_curs'].urlsafe()
+            else:
+                topic_next_curs = None
+            topics = TopicListResponse(
+                                            items = topic_list,
+                                            nextPageToken = topic_next_curs
+                                        )
+        # list of infonodes
         edge_list = Edge.list(
                             start_node = account.key,
                             kind = 'infos'
@@ -1044,6 +1148,7 @@ class CrmEngineApi(remote.Service):
                                   introduction = account.introduction,
                                   tags = tag_list,
                                   contacts = contacts,
+                                  topics = topics,
                                   infonodes = infonodes,
                                   created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
@@ -1604,6 +1709,49 @@ class CrmEngineApi(remote.Service):
         if not my_model.from_datastore:
             raise endpoints.NotFoundException('Comment not found')
         return my_model
+
+    # comments.insert v2 api
+    @endpoints.method(CommentInsertRequest, message_types.VoidMessage,
+                        path='comments/insertv2', http_method='POST',
+                        name='comments.insertv2')
+    def comment_insert(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        parent_key = ndb.Key(urlsafe=request.about)
+        parent = parent_key.get()
+        # insert topics edge if this is the first comment
+        if parent_key.kind() != 'Note' and parent.comments == 0:
+            edge_list = Edge.list(
+                                start_node=parent_key,
+                                kind='related_to'
+                                )
+            for edge in edge_list['items']:
+                topic_parent = edge.end_node
+                Edge.insert(
+                    start_node = topic_parent,
+                    end_node = parent_key,
+                    kind = 'topics',
+                    inverse_edge = 'related_to'
+                )
+        parent.comments = parent.comments + 1
+        parent.put() 
+        comment_author = Userinfo()
+        comment_author.display_name = user_from_email.google_display_name
+        comment_author.photo = user_from_email.google_public_profile_photo_url
+        comment = Comment(
+                    owner = user_from_email.google_user_id,
+                    organization = user_from_email.organization,
+                    author = comment_author,
+                    content = request.content
+                )
+        entityKey_async = comment.put_async()
+        entityKey = entityKey_async.get_result()
+        Edge.insert(
+                    start_node = parent_key,
+                    end_node = entityKey,
+                    kind = 'comments',
+                    inverse_edge = 'related_to'
+                )
+        return message_types.VoidMessage()
 
     # comments.insert api
     @Comment.method(

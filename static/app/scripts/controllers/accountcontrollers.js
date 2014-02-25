@@ -515,6 +515,9 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
                           'id':$route.current.params.accountId,
                           'contacts':{
                             'limit': '6'
+                          },
+                          'topics':{
+                            'limit': '7'
                           }
                           };
           Account.get($scope,accountid);
@@ -1422,6 +1425,10 @@ $scope.deleteaccount = function(){
              B: parseInt(b, 16)
           };
       }
+
+    $scope.getTopicUrl = function(type,id){
+      return Topic.getUrl(type,id);
+    }
 
      // Google+ Authentication 
      Auth.init($scope);
