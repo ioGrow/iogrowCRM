@@ -207,32 +207,16 @@
           <div class="col-md-9">
             <div class="row">
               <div class="col-md-12">
-                <form ng-submit="addNewTask()">
+                <form ng-submit="addNewTask()" >
                     <div class="form-group">
                       <div class="input-icon right">
                         <input taggable taggabledata="taggableOptions" ng-model="newTask.title" id="new_task_text" class="form-control"  placeholder="Add new task ..." autofocus/>
                       </div>
                     </div>
-                    <div class="btn-group pull-right new-task-reminder">
-                       <i class="fa  fa-bell-o dropdown-toggle" data-toggle="dropdown"></i>
-                          <div class="dropdown-menu">
-                               <center>
-                                  <datetimepicker ng-change="alert('sqfsqfdsfds')" id="dat1" data-ng-model="newTask.due"
-                                  data-datetimepicker-config="{ startView:'day', minView:'day' }" />
-                                </center>
-                          </div> 
-                   </div>
-                   <div class="btn-group pull-right new-task-date">
-                       <i class="fa fa-calendar dropdown-toggle" data-toggle="dropdown"></i>
-                          <div class="dropdown-menu">
-                               <center>
-                                  <datetimepicker data-ng-model="newTask.due"
-                                  data-datetimepicker-config="{ startView:'day', minView:'day' }" />
-                                </center>
-                          </div> 
-                   </div>
-
                 </form>
+                 <datetimepick icon-class='fa fa-bell-o' label-format='MMM d, h:mm a' ng-model='newTask.reminder' class="new-task-reminder pull-right"></datetimepick>
+                <datetimepick ng-model='newTask.due' class="new-task-date pull-right" label-format='MMM d, h:mm a'></datetimepick>
+
               </div>
             </div>
               <!-- BEGIN PORTLET-->
@@ -240,11 +224,11 @@
                 <div class="portlet-body">
                   <div class="tabbable tabbable-custom">
                   <ul class="nav nav-tabs">
-                      <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;">{{ _("All Tasks") }}</a></li>
+                      <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;allTasks();">{{ _("All Tasks") }}</a></li>
                       <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;urgentTasks();" >{{ _("Urgent Tasks") }}</a></li>
-                      <li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">{{ _("Created by Me") }}</a></li>
-                      <li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">{{ _("Assigned to Me") }}</a></li>
-                      <li class="ng-tab"  ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">{{ _("Private Tasks") }}</a></li>
+                      <li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;createdByMe('{{ME}}');">{{ _("Created by Me") }}</a></li>
+                      <li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;assignedToMe('{{ME}}');">{{ _("Assigned to Me") }}</a></li>
+                      <li class="ng-tab"  ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;privateTasks();">{{ _("Private Tasks") }}</a></li>
                   </ul>
                   <div class="tab-content">
                       <div class="tab-pane active " id="tab_1_1" ng-show="selectedTab == 1">
