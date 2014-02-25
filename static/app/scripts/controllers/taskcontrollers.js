@@ -506,6 +506,12 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
               format: 'hex'
           });
       }
+      $('.typeahead').css("width", $('.typeahead').prev().width()+'px !important');
+      $('.typeahead').width(433);
+      console.log('typeahead width');
+      console.log( $('.typeahead').width());
+      console.log('input befor typeahead width');
+      console.log($('.typeahead').prev().width());
       handleColorPicker();
       console.log($('#addMemberToTask').children());
       $scope.$watch('newTask.due', function() {
