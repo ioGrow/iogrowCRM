@@ -4051,7 +4051,7 @@ class CrmEngineApi(remote.Service):
                     organization = user_from_email.organization,
                     author = author)
         if request.due:
-            task.due = datetime.datetime.strptime(request.due,"%Y-%m-%dT00:00:00.000000")
+            task.due = datetime.datetime.strptime(request.due,"%Y-%m-%dT%H:%M:00.000000")
             try:
                 credentials = user_from_email.google_credentials
                 http = credentials.authorize(httplib2.Http(memcache))
@@ -4060,11 +4060,11 @@ class CrmEngineApi(remote.Service):
                 params = {
                  "start": 
                   {
-                    "date": task.due.strftime("%Y-%m-%d")
+                    "dateTime": task.due.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
                   },
                  "end": 
                   {
-                    "date": task.due.strftime("%Y-%m-%d")
+                    "dateTime": task.due.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
                   },
                   "summary": str(request.title)
                 }
