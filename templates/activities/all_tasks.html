@@ -210,7 +210,7 @@
                 <form ng-submit="addNewTask()">
                     <div class="form-group">
                       <div class="input-icon right">
-                        <input taggable taggabledata="taggableOptions" ng-model="newTask.title" id="new_task_text" class="form-control"  placeholder="Add new task ..." />
+                        <input taggable taggabledata="taggableOptions" ng-model="newTask.title" id="new_task_text" class="form-control"  placeholder="Add new task ..." autofocus/>
                       </div>
                     </div>
                     <div class="btn-group pull-right new-task-reminder">
@@ -306,7 +306,7 @@
                                          
                                        </div>
                                         <div class="col-md-5 col-xs-12">
-                                            <span ng-repeat="task_tag in task.tags" class="pull-right task-label badge badge-roundless" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
+                                            <span ng-repeat="task_tag in task.tags" class="pull-right task-label task-tag badge" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
                                                 <%= task_tag.name %>
                                             </span>
                                             <span ng-repeat="assignee in task.assignees" class="pull-right">
@@ -744,11 +744,9 @@
                 </div>
                 <div class="portlet-body">
                 <ul class="list-group tags-list">
-                  <li draggable ng-repeat="tag_item in tags" class="list-group-item tags-list-item" ng-click="selectTag(tag_item,$index,$event)" ng-drag="dragTag(tag_item)" >
+                  <li  ng-repeat="tag_item in tags" class="list-group-item tags-list-item" ng-click="selectTag(tag_item,$index,$event)"  >
                   <div class="row">
-                    <div class="tag-color" style="border-left: 4px solid <%=tag_item.color%>;">
-                    </div>
-                    <span class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"><%= tag_item.name %></span>
+                    <span  draggable ng-drag="dragTag(tag_item)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;" class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"><%= tag_item.name %></span>
                     <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
                       <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
                     </form>
