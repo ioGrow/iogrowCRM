@@ -1,6 +1,8 @@
 app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','Task','Topic','Comment','User','Contributor',
    function($scope,$filter,$route,Auth,Note,Task,Topic,Comment,User,Contributor) {
 //HKA 14.11.2013 Controller to show Notes and add comments
+    $("ul.page-sidebar-menu li").removeClass("active");
+    $("#id_Tasks").addClass("active");
    $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -437,7 +439,8 @@ app.directive('taggable', ['$parse','taggableParser',function($parse,typeaheadPa
 }]);
 app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','Contributor','Tag','Edge',
     function($scope,$filter,Auth,Task,User,Contributor,Tag,Edge) {
-     $("#id_Accounts").addClass("active");
+    $("ul.page-sidebar-menu li").removeClass("active");
+    $("#id_Tasks").addClass("active");
      document.title = "Accounts: Home";
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
