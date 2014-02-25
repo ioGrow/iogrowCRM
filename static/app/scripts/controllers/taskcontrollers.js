@@ -1,13 +1,11 @@
 app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','Task','Topic','Comment','User','Contributor',
    function($scope,$filter,$route,Auth,Note,Task,Topic,Comment,User,Contributor) {
 //HKA 14.11.2013 Controller to show Notes and add comments
-     $("#id_Accounts").addClass("active");
-     $scope.isSignedIn = false;
+   $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
-     $scope.isLoadingTag = false;
      $scope.pagination = {};
      $scope.paginationcomment = {};
      $scope.currentPagecomment = 01;
@@ -304,7 +302,7 @@ app.directive('taggable', ['$parse','taggableParser',function($parse,typeaheadPa
     return {
       restrict: 'A',
       require:'?ngModel',
-      template: '<input typeahead="tag as tag.<%=tagInfo.data.attribute%>  for tag in getAssignedUsers($viewValue) | filter:getValueFrom($viewValue) | limitTo:8" typeahead-on-select="tagMember(<%=modelName%>)"/>',
+      template: '<input typeahead="tag as tag.name  for tag in getAssignedUsers($viewValue) | filter:getValueFrom($viewValue) | limitTo:8" typeahead-on-select="tagMember(<%=modelName%>)"/>',
       replace: true,
 
       link: function ($scope, elem, attrs,ngModel) {
@@ -317,46 +315,121 @@ app.directive('taggable', ['$parse','taggableParser',function($parse,typeaheadPa
         });*/
         console.log();
         $scope.modelName=attrs.ngModel;
+        $scope.attribute='name';
+        $scope.currentAttribute='name';
+        $scope.objectName='user';
         $scope.tagInfo=$scope[attrs.taggabledata];
-        $scope.tag=$scope.tagInfo.tag;
-        $scope.pattern=null;
-        if ($scope.tag=='#'){$scope.pattern = /(.*)\s#(.*)/g;}
-        if ($scope.tag=='@') {$scope.pattern = /(.*)\s@(.*)/g;};
-        if ($scope.tag=='+') {$scope.pattern = /(.*)\s+(.*)/g;};
-        if ($scope.tag=='!') {$scope.pattern = /(.*)\s!(.*)/g;};
+        /*$scope.tag=$scope.tagInfo.tag;*/
+        console.log($scope.tagInfo);
+        
          $scope.newTaskValue=null;
         $scope.getValueFrom=function(value){
+                 $scope.pattern=null;
                 var text= value;
                 $scope.newTaskValue=value;
-                if($scope.pattern.test(text)){  
-                  $scope.newTaskValue=text.replace($scope.pattern, "$1\s @");
-                  newstr = text.replace($scope.pattern, "$2");
-                  console.log('return :'+newstr);
-                  return newstr;
-                    
-                }else{
-                  console.log('return nulllllllllll');
+                $scope.matchPattern=false;
+                angular.forEach($scope.tagInfo, function(item){
+                     if (item.tag=='#'){$scope.pattern = /(.*)\s#(.*)/g;}
+                     if (item.tag=='@') {$scope.pattern = /(.*)\s@(.*)/g;};
+                     if (item.tag=='+') {$scope.pattern = /(.*)\s+(.*)/g;};
+                     if (item.tag=='!') {$scope.pattern = /(.*)\s!(.*)/g;};
+                     var text=$scope.newTaskValue;
+                     if($scope.pattern.test(text)){  
+                          $scope.newTaskValue=text.replace($scope.pattern, "$1\s @");
+                          console.log($scope.newTaskValue);
+                          var newstr = text.replace($scope.pattern, "$2");
+                          console.log()
+                          console.log('return :'+newstr);
+                          $scope.matchPattern=true;
+                          return newstr;
+                            
+                        }
+                    });
+                if (!$scope.matchPattern) {
                   return null;
-
-                }          
+                };
+                        
             }
           $scope.getAssignedUsers=function(value){
-              $scope.data=$scope[$scope.tagInfo.data.name];
-              console.log('return dataaaaaaaaaaaaa');
-              console.log($scope.data);
-              var text= value;
-              if($scope.pattern.test(text)){
-                  return $scope.data;
-              }else{
-                 return [];
-              }
+               $scope.patternAs=null;
+               $scope.matchPattern=false;
+                console.log('$scope.tagInfo');
+                console.log($scope.tagInfo);
+                $scope.datar={};
+                angular.forEach($scope.tagInfo, function(item){
+                     console.log('item');
+                     console.log(item.data.name);
+                     $scope.data=$scope[item.data.name];
+                     console.log('$scope.data');
+                     console.log($scope[item.data.name]);
+                     
+                     if (item.tag=='#'){$scope.patternAs = /(.*)\s#(.*)/g;}
+                     if (item.tag=='@') {$scope.patternAs = /(.*)\s@(.*)/g;};
+                     if (item.tag=='+') {$scope.patternAs = /(.*)\s+(.*)/g;};
+                     if (item.tag=='!') {$scope.patternAs = /(.*)\s!(.*)/g;};
+                     var text= value;
+                     console.log('this is text from getassign:'+text);
+                      if($scope.patternAs.test(text)){
+                        $scope.matchPattern=true;
+                          
+                          $scope.attribute=item.data.attribute;
+                          console.log('item.data.attribute');
+                          console.log(item.data.attribute);
+                          console.log('item.data.attribute');
+                          console.log($scope.attribute);
+
+                          $scope.datar=$scope.data;
+                          angular.forEach($scope.datar, function(item){
+                          if (!item.hasOwnProperty('name')) {
+                                    item.name = item[$scope.attribute];
+                                    console.log('attribute');
+                                    console.log(item.name);
+                                    
+                                }
+                                console.log('log forEach item');
+                                console.log(item);
+                          }); 
+                          console.log('$scope.datar in forEach');
+                          console.log($scope.datar);
+                          $scope.currentAttribute=$scope.attribute;
+                          $scope.objectName=item.data.name;
+                      }
+                    });
+                console.log('$scope.datar');
+                console.log($scope.datar);
+                if (!$scope.matchPattern) {
+                  console.log('here not match')
+                  return [];
+                }else{
+                  console.log('here match')
+
+                      console.log('currentAttribute');
+                          console.log($scope.currentAttribute);
+
+                  return $scope.datar;
+                }
           }
         $scope.tagMember = function(value){
-           if ($scope.tagInfo.selected.indexOf(value) == -1) {
-               $scope.tagInfo.selected.push(value);
-           }
-           $parse(attrs.ngModel).assign($scope, $scope.newTaskValue+value[$scope.tagInfo.data.attribute]);
-           console.log($scope.tagInfo.selected);
+          console.log('element tagggged');
+          console.log($scope.objectName);
+          angular.forEach($scope.tagInfo, function(item){
+              if (item.data.name==$scope.objectName) {
+                
+                   if ($scope.currentAttribute!='name') {
+                    console.log('$scope.currentAttribute');
+                    console.log($scope.currentAttribute);
+                      delete value["name"];
+                   };
+                   console.log(item.selected);
+                  if (item.selected.indexOf(value) == -1) {
+                   item.selected.push(value);
+                   }
+               $parse(attrs.ngModel).assign($scope, $scope.newTaskValue+value[item.data.attribute]);
+               console.log(item.selected);
+
+              }; 
+           });
+           
          };
 
       }
@@ -364,8 +437,8 @@ app.directive('taggable', ['$parse','taggableParser',function($parse,typeaheadPa
 }]);
 app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','Contributor','Tag','Edge',
     function($scope,$filter,Auth,Task,User,Contributor,Tag,Edge) {
-     $("#id_Tasks").addClass("active");
-     document.title = "Tasks: Home";
+     $("#id_Accounts").addClass("active");
+     document.title = "Accounts: Home";
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -394,15 +467,20 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
      $scope.newTask.title='';
      $scope.newTask.assignees=[];
      $scope.newTaskValue=null;
-     $scope.draggedTag=null;
+     $scope.draggedTag={};
      $scope.task_checked = false;
      $scope.isSelectedAll = false;
-     $scope.taggableOptions={'tag':'#'};
-     $scope.taggableOptions.data={
+     $scope.taggableOptions=[];
+     $scope.taggableOptions.push(
+      {'tag':'#','data':{
       name:'users',
       attribute:'google_display_name'
-      };
-     $scope.taggableOptions.selected=[];
+      },'selected':[]},
+      {'tag':'!','data':{
+      name:'tags',
+      attribute:'name'
+      },'selected':[]}
+      );
      var handleColorPicker = function () {
           if (!jQuery().colorpicker) {
               return;
@@ -439,18 +517,6 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           };
       }
 
-     $scope.getAssignedUsers=function(value){
-          var pattern = /(.*)\s@(.*)/;
-          var text= value;
-          console.log(value);
-          if(pattern.test(text)){
-              return $scope.users;
-          }else{
-           
-             return [];
-          }
-      }
-
       $scope.dragTag=function(tag){
         $scope.draggedTag=tag;
       }
@@ -476,29 +542,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
                         'limit':7}
           Task.list($scope,params,true);
           User.list($scope,{});
-          var paramsTag = {'about_kind':'Task'};
-          Tag.list($scope,paramsTag);
-
-          if (annyang) {
-                  console.log('gooo ooo oo o oo o  oo o o ');
-                  // Let's define our first command. First the text we expect, and then the function it should call
-                  var commands = {
-                    'ok google *term': function(term) {
-                      
-                      console.log('@@@@@@@@@@@@@@@@@ NEW TASK TO @@@@@@@@@@@@@@@@@@');
-                      console.log(term);
-                      $scope.newTask.title = term;
-                      $scope.$apply();
-                      
-                    }
-                  };
-
-
-                  // Add our commands to annyang
-                  annyang.addCommands(commands);
-
-                  
-                }
+          Tag.list($scope,{});
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -603,9 +647,20 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
             console.log("here not work!");
             params ={'title': $scope.newTask.title}
         };
-        if ($scope.newTask.assignees){
-            params.assignees = $scope.tagInfo.selected;
-        }
+        angular.forEach($scope.taggableOptions, function(option){
+          if(option.data.name=='users'&&option.selected!=[]){
+            console.log('in users condition');
+            console.log(option.selected);
+            params.assignees=option.selected;
+            option.selected=[];
+            console.log(params.assignees);
+          }
+          if(option.data.name=='tags'&&option.selected!=[]){
+            params.tags=option.selected;
+            option.selected=[];
+          }
+
+        });
         console.log('************************@@@@@@@@@@@@@@@@@@@@@************************');
         console.log(params);
        
@@ -815,18 +870,15 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
         tags
 ***************************************************************************************/
 $scope.listTags=function(){
-  var paramsTag = {'about_kind':'Task'};
-      Tag.list($scope,paramsTag);
+      Tag.list($scope,{});
      }
 $scope.addNewtag = function(tag){
        var params = {   
                           'name': tag.name,
-                          'about_kind':'Task',
                           'color':$('#tag-col-pick').val()
                       }  ;
        Tag.insert($scope,params);
-        var paramsTag = {'about_kind':'Task'};
-        Tag.list($scope,paramsTag);
+        Tag.list($scope,{});
         
      }
 $scope.updateTag = function(tag){
@@ -840,8 +892,7 @@ $scope.selectTag= function(tag,index,$event){
       if(!$scope.manage_tags){
          var element=$($event.target);
          if(element.prop("tagName")!='LI'){
-              element=element.parent();
-              element=element.parent();
+              element=element.parent().closest('LI');
          }
          var text=element.find(".with-color");
          if($scope.selected_tags.indexOf(tag) == -1){
@@ -861,11 +912,6 @@ $scope.selectTag= function(tag,index,$event){
       }
 
     };
-  //HKA 19.02.2014 When delete tag render Task list
- $scope.tagDeleted = function(){
-     $scope.listTasks();
-
- };
   $scope.filterByTags = function(selected_tags){
          var tags = [];
          angular.forEach(selected_tags, function(tag){
@@ -921,7 +967,6 @@ $scope.deleteTag=function(tag){
             'entityKey': tag.entityKey
           }
           Tag.delete($scope,params);
-          $scope.listTasks();
           
       };
 $scope.editTag=function(tag){

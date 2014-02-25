@@ -32,21 +32,60 @@ accountservices.factory('Account', function($http) {
 
   
   Account.get = function($scope,id) {
-          gapi.client.crmengine.accounts.get(id).execute(function(resp) {
+          gapi.client.crmengine.accounts.getv2(id).execute(function(resp) {
             if(!resp.code){
+                console.log('********************************************');
+                console.log(resp);
                $scope.account = resp;
+               $scope.contacts = resp.contacts.items;
+                 if ($scope.contactCurrentPage>1){
+                      $scope.contactpagination.prev = true;
+                   }else{
+                       $scope.contactpagination.prev = false;
+                   }
+                 if (resp.contacts.nextPageToken){
+                   var nextPage = $scope.contactCurrentPage + 1;
+                   // Store the nextPageToken
+                   $scope.contactpages[nextPage] = resp.contacts.nextPageToken;
+                   $scope.contactpagination.next = true;
+                   
+                 }else{
+                  $scope.contactpagination.next = false;
+                 }
+
+               // list infonodes
+                var renderMap = false;
+                if (resp.infonodes.items){
+                      for (var i=0;i<resp.infonodes.items.length;i++)
+                      { 
+                        if (resp.infonodes.items[i].kind == 'addresses'){
+                          renderMap = true;
+                        }
+                          $scope.infonodes[resp.infonodes.items[i].kind] = resp.infonodes.items[i].items;
+                          for (var j=0;j<$scope.infonodes[resp.infonodes.items[i].kind].length;j++)
+                            {
+                              for (var v=0;v<$scope.infonodes[resp.infonodes.items[i].kind][j].fields.length;v++)
+                                {
+                                  $scope.infonodes[resp.infonodes.items[i].kind][j][$scope.infonodes[resp.infonodes.items[i].kind][j].fields[v].field] = $scope.infonodes[resp.infonodes.items[i].kind][j].fields[v].value;
+                                }
+                            }
+                      }
+                      if (renderMap){
+                        $scope.renderMaps();
+                      }
+                }
                $scope.isContentLoaded = true;
-               $scope.listInfonodes();
+               //$scope.listInfonodes();
                $scope.listTopics(resp);
                $scope.listTasks();
                $scope.listEvents();
-               $scope.listContacts();
+               //$scope.listContacts();
                $scope.listOpportunities();
                $scope.listCases();
                $scope.listNeeds();
                
                $scope.listDocuments();
-               $scope.selectedTab = 2;
+               
                
                $scope.email.to = '';
                document.title = "Account: " + $scope.account.name ;

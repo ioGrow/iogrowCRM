@@ -432,8 +432,8 @@ class AllTasksHandler(BaseHandler, SessionEnabledHandler):
             # Render the template
             template_values = {'tabs':tabs,'ME':user.google_user_id}
             template = jinja_environment.get_template('templates/activities/all_tasks.html')
-            self.response.cache_control = 'public'
-            self.response.cache_control.max_age = 300
+            #self.response.cache_control = 'public'
+            #self.response.cache_control.max_age = 300
       
             self.response.out.write(template.render(template_values))
 class TaskShowHandler(BaseHandler, SessionEnabledHandler):
