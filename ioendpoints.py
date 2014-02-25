@@ -222,7 +222,7 @@ class TaskRequest(messages.Message):
     status = messages.StringField(4)
     tags = messages.StringField(5,repeated = True)
     owner = messages.StringField(6)
-    assignee = messages.StringField(7)
+    assignee = messages.BooleanField(7)
     about = messages.StringField(8)
     urgent = messages.BooleanField(9)
 
