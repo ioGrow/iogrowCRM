@@ -2941,7 +2941,7 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position'])
     link:function (originalScope, element, attrs, modelCtrl) {
 
       //SUPPORTED ATTRIBUTES (OPTIONS)
-
+      alert($(element));
       //minimal no of characters that needs to be entered before typeahead kicks-in
       var minSearch = originalScope.$eval(attrs.typeaheadMinLength) || 1;
 

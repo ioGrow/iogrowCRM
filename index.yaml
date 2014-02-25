@@ -371,6 +371,11 @@ indexes:
 - kind: Task
   properties:
   - name: organization
+  - name: due
+
+- kind: Task
+  properties:
+  - name: organization
   - name: updated_at
     direction: desc
 

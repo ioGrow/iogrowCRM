@@ -224,7 +224,8 @@ class TaskRequest(messages.Message):
     owner = messages.StringField(6)
     assignee = messages.StringField(7)
     about = messages.StringField(8)
-    status_color = messages.StringField(9)
+    urgent = messages.BooleanField(9)
+
 
 class TaskListResponse(messages.Message):
     items = messages.MessageField(TaskSchema, 1, repeated=True)
@@ -549,6 +550,7 @@ class ContactInsertRequest(messages.Message):
     lastname = messages.StringField(4)
     title = messages.StringField(5)
     access = messages.StringField(6)
+
     
 
 class ContactListResponse(messages.Message):
@@ -4156,6 +4158,17 @@ class CrmEngineApi(remote.Service):
                         end_node_set = [ndb.Key(urlsafe=request.about)]
                         if not Edge.find(start_node=task.key,kind='related_to',end_node_set=end_node_set,operation='AND'):
                             is_filtered = False
+                    if request.urgent and is_filtered:
+                        if task.due is None:
+                            is_filtered = False
+                        else:
+                            now = datetime.datetime.now()
+                            diff = task.due - now
+                            if diff.days>2:
+                                is_filtered = False
+                        if task.status=='closed':
+                            is_filtered = False
+
                     if is_filtered:
                         count = count + 1
                         #list of tags related to this task

@@ -435,6 +435,21 @@ app.directive('taggable', ['$parse','taggableParser',function($parse,typeaheadPa
       }
   }
 }]);
+app.config(function(ngQuickDateDefaultsProvider) {
+  // Configure with icons from font-awesome
+  return ngQuickDateDefaultsProvider.set({
+    closeButtonHtml: "<i class='fa fa-times'></i>",
+    buttonIconHtml: "<i class='fa fa-calendar'></i>",
+    nextLinkHtml: "<i class='fa fa-chevron-right'></i>",
+    prevLinkHtml: "<i class='fa fa-chevron-left'></i>",
+    placeholder:'',
+    // Take advantage of Sugar.js date parsing
+    parseDateFunction: function(str) {
+      d = Date.create(str);
+      return d.isValid() ? d : null;
+    }
+  });
+});
 app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','Contributor','Tag','Edge',
     function($scope,$filter,Auth,Task,User,Contributor,Tag,Edge) {
      $("#id_Accounts").addClass("active");
@@ -491,12 +506,40 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
               format: 'hex'
           });
       }
+      $('.typeahead').css("width", $('.typeahead').prev().width()+'px !important');
+      $('.typeahead').width(433);
+      console.log('typeahead width');
+      console.log( $('.typeahead').width());
+      console.log('input befor typeahead width');
+      console.log($('.typeahead').prev().width());
       handleColorPicker();
       console.log($('#addMemberToTask').children());
-      $('#dat1 > *').on('click', null, function(e) {
-            e.stopPropagation();
-            alert('dfsfddsdsf');
-        });
+      $scope.$watch('newTask.due', function() {
+
+         if($scope.newTask.due==null&&$scope.newTask.reminder==null){
+                $('#new_task_text').css("paddingRight", "270px !important");
+           }else{
+                if($scope.newTask.due==null||$scope.newTask.reminder==null){
+                      
+                      $('#new_task_text').css("paddingRight", "170px !important");
+                }else{
+                    $('#new_task_text').css("paddingRight", "45px !important");
+                } 
+           }
+      });
+      $scope.$watch('newTask.reminder', function() {
+        
+         if($scope.newTask.due==null&&$scope.newTask.reminder==null){
+                $("#new_task_text").css("padding-right", "270px !important");
+           }else{
+                if($scope.newTask.due==null||$scope.newTask.reminder==null){
+             
+                      $("#new_task_text").css("padding-right", "170px !important");
+                }else{
+                    $("#new_task_text").css("padding-right", "45px !important");
+                } 
+           }
+     });
       $scope.idealTextColor=function(bgColor){
         var nThreshold = 105;
          var components = getRGBComponents(bgColor);
@@ -630,13 +673,12 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           console.log($scope.selected_tasks);
          }
     };
-
-    $scope.urgentTasks
     $scope.addNewTask=function(){
         if ($scope.newTask.due){
               console.log("here work!");
-            var dueDate= $filter('date')($scope.newTask.due,['yyyy-MM-dd']);
-            dueDate = dueDate +'T00:00:00.000000'
+              console.log($scope.newTask.due);
+            var dueDate= $filter('date')($scope.newTask.due,['yyyy-MM-ddTHH:mm:00.000000']);
+           /* dueDate = dueDate +'T00:00:00.000000'*/
             params ={'title': $scope.newTask.title,
                       'due': dueDate,
                       'about': $scope.account.entityKey
@@ -935,14 +977,43 @@ $scope.selectTag= function(tag,index,$event){
 
   }
   $scope.urgentTasks = function(){
-         
-         var params = {
-          'status_color': 'red'
-         }
-         Task.list($scope,params);
+         $scope.tasks = [];
+         $scope.isLoading = true;
+         var params = { 'order': 'due',
+                        'urgent': true,
+                        
+                        'limit':7}
+          Task.list($scope,params,true);
 
   }
+ $scope.allTasks=function(){
+   var params = { 'order': $scope.order,
+                         
+                        'limit':7}
+          Task.list($scope,params,true);
 
+ }
+ $scope.createdByMe=function(){
+   var params = { 'order': $scope.order,
+                         
+                        'limit':7}
+          Task.list($scope,params,true);
+
+ }
+ $scope.assignedToMe=function(){
+   var params = { 'order': $scope.order,
+                         
+                        'limit':7}
+          Task.list($scope,params,true);
+
+ }
+ $scope.privateTasks=function(){
+   var params = { 'order': $scope.order,
+                         
+                        'limit':7}
+          Task.list($scope,params,true);
+
+ }
 $scope.unselectAllTags= function(){
         $('.tags-list li').each(function(){
             var element=$(this);
