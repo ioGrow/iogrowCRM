@@ -522,13 +522,9 @@ class ContactInsertRequest(messages.Message):
     account = messages.StringField(2)
     firstname = messages.StringField(3)
     lastname = messages.StringField(4)
-<<<<<<< HEAD
-    title = messages.StringField(6)
-    access = messages.StringField(7)
-=======
     title = messages.StringField(5)
     access = messages.StringField(6)
->>>>>>> 24b62fb49867b4c78599a4761966b4cf48b7e7ae
+    
     
 
 class ContactListResponse(messages.Message):

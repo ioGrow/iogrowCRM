@@ -542,7 +542,8 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
                         'limit':7}
           Task.list($scope,params,true);
           User.list($scope,{});
-          Tag.list($scope,{});
+          var paramsTag = {'about_kind':'Task'};
+          Tag.list($scope,paramsTag);
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -870,15 +871,18 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
         tags
 ***************************************************************************************/
 $scope.listTags=function(){
-      Tag.list($scope,{});
+      var paramsTag = {'about_kind':'Task'}
+      Tag.list($scope,paramsTag);
      }
 $scope.addNewtag = function(tag){
        var params = {   
                           'name': tag.name,
+                          'about_kind':'Task',
                           'color':$('#tag-col-pick').val()
                       }  ;
        Tag.insert($scope,params);
-        Tag.list($scope,{});
+        var paramsTag = {'about_kind':'Task'};
+        Tag.list($scope,paramsTag);
         
      }
 $scope.updateTag = function(tag){
@@ -941,7 +945,7 @@ $scope.selectTag= function(tag,index,$event){
          }
          Task.list($scope,params);
 
-  }
+  };
 
 $scope.unselectAllTags= function(){
         $('.tags-list li').each(function(){
@@ -1002,6 +1006,12 @@ $scope.addTags=function(){
       $('#assigneeTagsToTask').modal('hide');
 
      };
+
+    $scope.tagDeleted = function(){
+    $scope.listTasks();
+    };
+
+
      // Google+ Authentication 
      Auth.init($scope);
 
