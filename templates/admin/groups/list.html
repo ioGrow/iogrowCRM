@@ -36,10 +36,13 @@
               </span>
         </div>
       </div>
-      <div id="addGroupModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div id="addGroupModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+         <div class="modal-dialog">
+         <div class="modal-content">
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("New Group")}}</h3>
+                
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h3 id="myModalLabel">{{_("New Group")}}</h3>
               </div>
               <div class="modal-body">
                  <form id="addAccount" name="addaccount" ng-submit="addGroup(group)" class="form-horizontal"> 
@@ -47,13 +50,12 @@
                   
                    
 
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Group Name")}} *</label>
+                    <div class="form-group">
+                        <!--label  class="required control-label">{{_("Group Name")}} *</label-->
                        
-                        <div class="controls">
-                          <input type="text" required id="id_name" ng-model="group.name">
+                    <input type="text" class="form-control" placeholder="{{ _('Group Name') }}" required required id="id_name" ng-model="group.name" >
                           
-                        </div>
+                       
                     </div>
                     
                     </fieldset>
@@ -61,36 +63,36 @@
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button  type="submit" class="btn blue addContactNow">{{_("Add this group")}}</button>
+                <button  type="submit" class="btn green addContactNow">{{_("Add this group")}}</button>
               </div>
                </form>
+        </div>
+        </div>
        </div>
       <div class="container-fluid" ng-show="isSignedIn">
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-        <div class="row-fluid">
-          
-          <div class="span12">
+      <div class="row">  
+        <div class="col-md-12">
             <h2>{{ _("Groups") }} </h2>
-            
-            <div class="btn-group">
+        </div>
+      </div>
+        <div class="row">
+            <div class="col-md-12">
             
                     <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
                     {{ _("New Group") }} <i class="icon-plus"></i>
                     </button>
             </div>
-               
-            <hr/>
-            
-          </div>
         </div>
-
+         <hr/>
             
-            <div class="row-fluid cards-container">
+            <div class="row cards-container">
+             <div class="col-md-12">
             <div class="inner-cards-container">
             
-              <div ng-repeat="group in groups" class="span3 responsive" data-tablet="span6" data-desktop="span3">
+              <div ng-repeat="group in groups" class="col-lg-4 col-md-3 col-sm-6 col-xs-12">
                 <div class="dashboard-stat cards-small">
                   
                   <div class="details">
@@ -108,7 +110,8 @@
                                   
                 </div>
               </div>
-              <div ng-show="blankstategroup" class="span12 responsive" data-tablet="span6" data-desktop="span12">
+              <div class="row">
+              <div ng-show="blankstategroup" class="col-md-12 responsive" >
                 <div class="dashboard-stat cards">
                   
                   
@@ -122,9 +125,10 @@
                 </div>
               </div>
               </div>
-              
+              </div>
+             </div> 
             </div>
-          <div class="row-fluid">
+          <div class="row">
             <div class="pagination pull-right" ng-hide="isLoading">
                   
                   <ul>
