@@ -26,6 +26,11 @@ indexes:
 - kind: Account
   properties:
   - name: organization
+  - name: name
+
+- kind: Account
+  properties:
+  - name: organization
   - name: updated_at
     direction: desc
 
@@ -126,6 +131,21 @@ indexes:
   - name: collaborators_ids
   - name: updated_at
     direction: desc
+
+- kind: Contact
+  properties:
+  - name: organization
+  - name: firstname
+
+- kind: Contact
+  properties:
+  - name: organization
+  - name: lastname
+
+- kind: Contact
+  properties:
+  - name: organization
+  - name: title
 
 - kind: Contact
   properties:
