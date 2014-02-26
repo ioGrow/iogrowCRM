@@ -336,6 +336,7 @@ app.directive('taggable', ['$parse','taggableParser',function($parse,typeaheadPa
                      var text=$scope.newTaskValue;
                      if($scope.pattern.test(text)){  
                           $scope.newTaskValue=text.replace($scope.pattern, "$1\s @");
+                          console.log('$scope.newTaskValue');
                           console.log($scope.newTaskValue);
                           var newstr = text.replace($scope.pattern, "$2");
                           console.log()
