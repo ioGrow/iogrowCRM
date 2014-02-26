@@ -4,64 +4,58 @@
   app = angular.module("ngQuickDate", []);
 
   app.provider("ngQuickDateDefaults", function() {
-    return {
-      options: {
-        dateFormat: 'M/d/yyyy',
-        timeFormat: 'h:mm a',
-        labelFormat: null,
-        placeholder: 'Click to Set Date',
-        hoverText: null,
-        buttonIconHtml: null,
-        closeButtonHtml: '&times;',
-        nextLinkHtml: 'Next &rarr;',
-        prevLinkHtml: '&larr; Prev',
-        disableTimepicker: false,
-        disableClearButton: false,
-        defaultTime: null,
-        dayAbbreviations: ["Su", "M", "Tu", "W", "Th", "F", "Sa"],
-        dateFilter: null,
-        parseDateFunction: function(str) {
-          var seconds;
-          seconds = Date.parse(str);
-          if (isNaN(seconds)) {
-            return null;
-          } else {
-            return new Date(seconds);
-          }
-        }
-      },
-      $get: function() {
-        return this.options;
-      },
-      set: function(keyOrHash, value) {
-        var k, v, _results;
-        if (typeof keyOrHash === 'object') {
-          _results = [];
-          for (k in keyOrHash) {
-            v = keyOrHash[k];
-            _results.push(this.options[k] = v);
-          }
-          return _results;
+    this.options = {
+      dateFormat: 'M/d/yyyy',
+      timeFormat: 'h:mm a',
+      labelFormat: null,
+      placeholder: 'Click to Set Date',
+      hoverText: null,
+      buttonIconHtml: null,
+      closeButtonHtml: 'X',
+      nextLinkHtml: 'Next',
+      prevLinkHtml: 'Prev',
+      disableTimepicker: false,
+      disableClearButton: false,
+      dayAbbreviations: ["Su", "M", "Tu", "W", "Th", "F", "Sa"],
+      parseDateFunction: function(str) {
+        var seconds;
+        seconds = Date.parse(str);
+        if (isNaN(seconds)) {
+          return null;
         } else {
-          return this.options[keyOrHash] = value;
+          return new Date(seconds);
         }
+      }
+    };
+    this.$get = function() {
+      return this.options;
+    };
+    return this.set = function(keyOrHash, value) {
+      var k, v, _results;
+      if (typeof keyOrHash === 'object') {
+        _results = [];
+        for (k in keyOrHash) {
+          v = keyOrHash[k];
+          _results.push(this.options[k] = v);
+        }
+        return _results;
+      } else {
+        return this.options[keyOrHash] = value;
       }
     };
   });
 
-  app.directive("datepicker", [
-    'ngQuickDateDefaults', '$filter', '$sce', function(ngQuickDateDefaults, $filter, $sce) {
+  app.directive("datetimepick", [
+    'ngQuickDateDefaults', '$filter', function(ngQuickDateDefaults, $filter) {
       return {
         restrict: "E",
         require: "ngModel",
         scope: {
-          dateFilter: '=?',
-          ngModel: "=",
-          onChange: "&"
+          ngModel: "="
         },
         replace: true,
         link: function(scope, element, attrs, ngModel) {
-          var dateToString, datepickerClicked, datesAreEqual, datesAreEqualToMinute, debug, getDaysInMonth, initialize, parseDateString, setCalendarDateFromModel, setCalendarRows, setConfigOptions, setInputDateFromModel, stringToDate;
+          var dateToString, datepickerClicked, datesAreEqual, debug, getDaysInMonth, initialize, parseDateString, setCalendarDateFromModel, setCalendarRows, setConfigOptions, setInputDateFromModel;
           debug = attrs.debug && attrs.debug.length;
           initialize = function() {
             scope.toggleCalendar(false);
@@ -69,9 +63,6 @@
             scope.inputDate = null;
             if (typeof scope.ngModel === 'string') {
               scope.ngModel = parseDateString(scope.ngModel);
-            }
-            if (typeof attrs.initValue === 'string') {
-              scope.ngModel = parseDateString(attrs.initValue);
             }
             setConfigOptions();
             setInputDateFromModel();
@@ -81,11 +72,9 @@
             var key, value;
             for (key in ngQuickDateDefaults) {
               value = ngQuickDateDefaults[key];
-              if (key.match(/[Hh]tml/)) {
-                scope[key] = $sce.trustAsHtml(ngQuickDateDefaults[key] || "");
-              } else if (!scope[key] && attrs[key]) {
+              if (!key.match(/html/) && attrs[key] && attrs[key].length) {
                 scope[key] = attrs[key];
-              } else if (!scope[key]) {
+              } else {
                 scope[key] = ngQuickDateDefaults[key];
               }
             }
@@ -96,7 +85,7 @@
               }
             }
             if (attrs.iconClass && attrs.iconClass.length) {
-              return scope.buttonIconHtml = $sce.trustAsHtml("<i ng-show='iconClass' class='" + attrs.iconClass + "'></i>");
+              return scope.buttonIconHtml = "<i ng-show='iconClass' class='" + attrs.iconClass + "'></i>";
             }
           };
           datepickerClicked = false;
@@ -129,7 +118,7 @@
             return scope.calendarDate = new Date(d);
           };
           setCalendarRows = function() {
-            var curDate, d, day, daysInMonth, numRows, offset, row, selected, time, today, weeks, _i, _j, _ref;
+            var curDate, d, day, daysInMonth, numRows, offset, row, selected, today, weeks, _i, _j, _ref;
             offset = scope.calendarDate.getDay();
             daysInMonth = getDaysInMonth(scope.calendarDate.getFullYear(), scope.calendarDate.getMonth());
             numRows = Math.ceil((offset + daysInMonth) / 7);
@@ -140,18 +129,11 @@
               weeks.push([]);
               for (day = _j = 0; _j <= 6; day = ++_j) {
                 d = new Date(curDate);
-                if (scope.defaultTime) {
-                  time = scope.defaultTime.split(':');
-                  d.setHours(time[0] || 0);
-                  d.setMinutes(time[1] || 0);
-                  d.setSeconds(time[2] || 0);
-                }
                 selected = scope.ngModel && d && datesAreEqual(d, scope.ngModel);
                 today = datesAreEqual(d, new Date());
                 weeks[row].push({
                   date: d,
                   selected: selected,
-                  disabled: typeof scope.dateFilter === 'function' ? !scope.dateFilter(d) : false,
                   other: d.getMonth() !== scope.calendarDate.getMonth(),
                   today: today
                 });
@@ -163,13 +145,6 @@
           dateToString = function(date, format) {
             return $filter('date')(date, format);
           };
-          stringToDate = function(date) {
-            if (typeof date === 'string') {
-              return parseDateString(date);
-            } else {
-              return date;
-            }
-          };
           parseDateString = ngQuickDateDefaults.parseDateFunction;
           datesAreEqual = function(d1, d2, compareTimes) {
             if (compareTimes == null) {
@@ -178,16 +153,8 @@
             if (compareTimes) {
               return (d1 - d2) === 0;
             } else {
-              d1 = stringToDate(d1);
-              d2 = stringToDate(d2);
               return d1 && d2 && (d1.getYear() === d2.getYear()) && (d1.getMonth() === d2.getMonth()) && (d1.getDate() === d2.getDate());
             }
-          };
-          datesAreEqualToMinute = function(d1, d2) {
-            if (!(d1 && d2)) {
-              return false;
-            }
-            return parseInt(d1.getTime() / 60000) === parseInt(d2.getTime() / 60000);
           };
           getDaysInMonth = function(year, month) {
             return [31, ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0 ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
@@ -195,10 +162,7 @@
           scope.$watch('ngModel', function(newVal, oldVal) {
             if (newVal !== oldVal) {
               setInputDateFromModel();
-              setCalendarDateFromModel();
-              if (scope.onChange && !datesAreEqualToMinute(newVal, oldVal)) {
-                return scope.onChange();
-              }
+              return setCalendarDateFromModel();
             }
           });
           scope.$watch('calendarDate', function(newVal, oldVal) {
@@ -226,19 +190,11 @@
             }
           };
           scope.setDate = function(date, closeCalendar) {
-            var changed;
             if (closeCalendar == null) {
               closeCalendar = true;
             }
-            changed = (!scope.ngModel && date) || (scope.ngModel && !date) || (date.getTime() !== stringToDate(scope.ngModel).getTime());
-            if (typeof scope.dateFilter === 'function' && !scope.dateFilter(date)) {
-              return false;
-            }
             scope.ngModel = date;
-            if (closeCalendar) {
-              scope.toggleCalendar(false);
-            }
-            return true;
+            return scope.toggleCalendar(false);
           };
           scope.setDateFromInput = function(closeCalendar) {
             var err, tmpDate, tmpDateAndTime, tmpTime;
@@ -250,18 +206,15 @@
               if (!tmpDate) {
                 throw 'Invalid Date';
               }
-              if (!scope.disableTimepicker && scope.inputTime && scope.inputTime.length && tmpDate) {
+              if (scope.inputTime && scope.inputTime.length && tmpDate) {
                 tmpTime = scope.disableTimepicker ? '00:00:00' : scope.inputTime;
                 tmpDateAndTime = parseDateString("" + scope.inputDate + " " + tmpTime);
                 if (!tmpDateAndTime) {
                   throw 'Invalid Time';
                 }
-                tmpDate = tmpDateAndTime;
-              }
-              if (!datesAreEqualToMinute(scope.ngModel, tmpDate)) {
-                if (!scope.setDate(tmpDate, false)) {
-                  throw 'Invalid Date';
-                }
+                scope.ngModel = tmpDateAndTime;
+              } else {
+                scope.ngModel = tmpDate;
               }
               if (closeCalendar) {
                 scope.toggleCalendar(false);
@@ -294,7 +247,8 @@
             return scope.calendarDate = new Date(new Date(scope.calendarDate).setMonth(scope.calendarDate.getMonth() - 1));
           };
           scope.clear = function() {
-            return scope.setDate(null, true);
+            scope.ngModel = null;
+            return scope.toggleCalendar(false);
           };
           initialize();
           setCalendarRows();
@@ -302,7 +256,7 @@
             return console.log("quick date scope:", scope);
           }
         },
-        template: "<div class='quickdate'>\n  <a href='' ng-focus='toggleCalendar()' ng-click='toggleCalendar()' class='quickdate-button' title='{{hoverText}}'><div ng-hide='iconClass' ng-bind-html='buttonIconHtml'></div>{{mainButtonStr()}}</a>\n  <div class='quickdate-popup' ng-class='{open: calendarShown}'>\n    <a href='' tabindex='-1' class='quickdate-close' ng-click='toggleCalendar()'><div ng-bind-html='closeButtonHtml'></div></a>\n    <div class='quickdate-text-inputs'>\n      <div class='quickdate-input-wrapper'>\n        <label>Date</label>\n        <input class='quickdate-date-input' name='inputDate' type='text' ng-model='inputDate' placeholder='1/1/2013' ng-blur=\"setDateFromInput()\" ng-enter=\"setDateFromInput(true)\" ng-class=\"{'quickdate-error': inputDateErr}\" ng-tab='onDateInputTab()' />\n      </div>\n      <div class='quickdate-input-wrapper' ng-hide='disableTimepicker'>\n        <label>Time</label>\n        <input class='quickdate-time-input' name='inputTime' type='text' ng-model='inputTime' placeholder='12:00 PM' ng-blur=\"setDateFromInput(false)\" ng-enter=\"setDateFromInput(true)\" ng-class=\"{'quickdate-error': inputTimeErr}\" ng-tab='onTimeInputTab()'>\n      </div>\n    </div>\n    <div class='quickdate-calendar-header'>\n      <a href='' class='quickdate-prev-month quickdate-action-link' tabindex='-1' ng-click='prevMonth()'><div ng-bind-html='prevLinkHtml'></div></a>\n      <span class='quickdate-month'>{{calendarDate | date:'MMMM yyyy'}}</span>\n      <a href='' class='quickdate-next-month quickdate-action-link' ng-click='nextMonth()' tabindex='-1' ><div ng-bind-html='nextLinkHtml'></div></a>\n    </div>\n    <table class='quickdate-calendar'>\n      <thead>\n        <tr>\n          <th ng-repeat='day in dayAbbreviations'>{{day}}</th>\n        </tr>\n      </thead>\n      <tbody>\n        <tr ng-repeat='week in weeks'>\n          <td ng-mousedown='setDate(day.date)' ng-class='{\"other-month\": day.other, \"disabled-date\": day.disabled, \"selected\": day.selected, \"is-today\": day.today}' ng-repeat='day in week'>{{day.date | date:'d'}}</td>\n        </tr>\n      </tbody>\n    </table>\n    <div class='quickdate-popup-footer'>\n      <a href='' class='quickdate-clear' tabindex='-1' ng-hide='disableClearButton' ng-click='clear()'>Clear</a>\n    </div>\n  </div>\n</div>"
+        template: "<div class='quickdate'>\n  <a href='' ng-focus='toggleCalendar(true)' ng-click='toggleCalendar()' class='quickdate-button' title='{{hoverText}}'><div ng-hide='iconClass' ng-bind-html-unsafe='buttonIconHtml'></div>{{mainButtonStr()}}</a>\n  <div class='quickdate-popup' ng-class='{open: calendarShown}'>\n    <a href='' tabindex='-1' class='quickdate-close' ng-click='toggleCalendar()'><div ng-bind-html-unsafe='closeButtonHtml'></div></a>\n    <div class='quickdate-text-inputs'>\n      <div class='quickdate-input-wrapper'>\n        <label>Date</label>\n        <input class='quickdate-date-input form-control' name='inputDate' type='text' ng-model='inputDate' placeholder='1/1/2013' ng-blur='setDateFromInput()' ng-enter='setDateFromInput(true)' ng-class=\"{'ng-quick-date-error': inputDateErr}\"  ng-tab='onDateInputTab()' />\n      </div>\n      <div class='quickdate-input-wrapper' ng-hide='disableTimepicker'>\n        <label>Time</label>\n        <input class='quickdate-time-input form-control' name='inputTime' type='text' ng-model='inputTime' placeholder='12:00 PM' ng-blur='setDateFromInput()' ng-enter='setDateFromInput(true)' ng-class=\"{'quickdate-error': inputTimeErr}\" ng-tab='onTimeInputTab()'>\n      </div>\n    </div>\n    <div class='quickdate-calendar-header'>\n      <a href='' class='quickdate-prev-month quickdate-action-link' tabindex='-1' ng-click='prevMonth()'><div ng-bind-html-unsafe='prevLinkHtml'></div></a>\n      <span class='quickdate-month'>{{calendarDate | date:'MMMM yyyy'}}</span>\n      <a href='' class='quickdate-next-month quickdate-action-link' ng-click='nextMonth()' tabindex='-1' ><div ng-bind-html-unsafe='nextLinkHtml'></div></a>\n    </div>\n    <table class='quickdate-calendar'>\n      <thead>\n        <tr>\n          <th ng-repeat='day in dayAbbreviations'>{{day}}</th>\n        </tr>\n      </thead>\n      <tbody>\n        <tr ng-repeat='week in weeks'>\n          <td ng-mousedown='setDate(day.date)' ng-class='{\"other-month\": day.other, \"selected\": day.selected, \"is-today\": day.today}' ng-repeat='day in week'>{{day.date | date:'d'}}</td>\n        </tr>\n      </tbody>\n    </table>\n    <div class='quickdate-popup-footer'>\n      <a href='' class='quickdate-clear' tabindex='-1' ng-hide='disableClearButton' ng-click='clear()'>Clear</a>\n    </div>\n  </div>\n</div>"
       };
     }
   ]);
@@ -312,6 +266,7 @@
       return element.bind('keydown keypress', function(e) {
         if (e.which === 13) {
           scope.$apply(attr.ngEnter);
+           e.stopPropagation();
           return e.preventDefault();
         }
       });
@@ -321,12 +276,44 @@
   app.directive('ngTab', function() {
     return function(scope, element, attr) {
       return element.bind('keydown keypress', function(e) {
-        if (e.which === 9 && !event.shiftKey) {
-          console.log('regular tab!');
+        if (e.which === 9) {
           return scope.$apply(attr.ngTab);
         }
       });
     };
   });
+
+  if (parseInt(angular.version.full) < 1.2) {
+    app.directive("ngBlur", [
+      "$parse", function($parse) {
+        return function(scope, element, attr) {
+          var fn;
+          fn = $parse(attr["ngBlur"]);
+          return element.bind("blur", function(event) {
+            return scope.$apply(function() {
+              return fn(scope, {
+                $event: event
+              });
+            });
+          });
+        };
+      }
+    ]);
+    app.directive("ngFocus", [
+      "$parse", function($parse) {
+        return function(scope, element, attr) {
+          var fn;
+          fn = $parse(attr["ngFocus"]);
+          return element.bind("focus", function(event) {
+            return scope.$apply(function() {
+              return fn(scope, {
+                $event: event
+              });
+            });
+          });
+        };
+      }
+    ]);
+  }
 
 }).call(this);

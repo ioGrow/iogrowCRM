@@ -17,5 +17,6 @@ class Comment(EndpointsModel):
 	content = ndb.StringProperty(required=True)
 	discussion = ndb.KeyProperty()
 	access = ndb.StringProperty()
+	owner = ndb.StringProperty()
 	organization = ndb.KeyProperty()
 

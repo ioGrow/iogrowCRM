@@ -116,8 +116,11 @@
             
 
            <span ng-show="account.account_type">{{_("Type")}}: <a class="tag" href="/#/search/type:Account <%=account.account_type%>">#<%=account.account_type%></a></span><br>
-          <span ng-show="account.industry">{{_("Industry")}}: <a class="tag" href="/#/search/type:Account <%=account.industry%>">#<%=account.industry%></a></span> 
-             </br>
+          
+            
+            <div class="tags">
+              <span  ng-repeat="account_tag in account.tags" class="task-label badge badge-roundless" style="background-color: <%=account_tag.color%>;color:<%=idealTextColor(account_tag.color)%>;">  <%= account_tag.name %></span>
+            </div>
              <span class="page-meta"><i class="icon-pencil"><a ng-click="editaccount()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |  <i class="icon-trash"><a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  {{_("Delete")}}</a></i></span>
 
            
@@ -182,7 +185,7 @@
                                   <a href="#" class="name"><%= topic.last_updater.display_name%></a>
                                   <span class="datetime">at <%=topic.updated_at | date:'yyyy-MM-dd - HH:mm:ss '  %> </span>
                                   <span class="body">
-                                  <a href="/#/notes/show/<%=topic.discussionId%>" class="discussion-content"><strong class="ng-binding"><%= topic.title%></strong> - <span class="excerpt ng-binding" ng-bind-html-unsafe="topic.excerpt"></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <%= topic.comments%> comments</span></a>
+                                  <a href="<%=getTopicUrl(topic.topic_kind,topic.id)%>" class="discussion-content"><strong class="ng-binding"><%= topic.title%></strong> - <span class="excerpt ng-binding" ng-bind-html-unsafe="topic.excerpt"></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <%= topic.comments%> comments</span></a>
                                   </span>
                                 </div>
                               </li>

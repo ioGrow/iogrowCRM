@@ -7,7 +7,24 @@ topicservices.factory('Topic', function($http) {
   }
 
   
-  
+  Topic.getUrl = function(type,id){
+    var base_url = undefined;
+    switch (type)
+        {
+        case 'Note':
+          base_url = '/#/notes/show/';
+          break;
+        case 'Task':
+          base_url = '/#/tasks/show/';
+          break;
+        case 'Event':
+          base_url = '/#/events/show/';
+          break;
+        }
+
+    return base_url+id;
+  };
+
   Topic.list = function($scope,params){
     
 

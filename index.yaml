@@ -26,6 +26,11 @@ indexes:
 - kind: Account
   properties:
   - name: organization
+  - name: name
+
+- kind: Account
+  properties:
+  - name: organization
   - name: updated_at
     direction: desc
 
@@ -130,6 +135,21 @@ indexes:
 - kind: Contact
   properties:
   - name: organization
+  - name: firstname
+
+- kind: Contact
+  properties:
+  - name: organization
+  - name: lastname
+
+- kind: Contact
+  properties:
+  - name: organization
+  - name: title
+
+- kind: Contact
+  properties:
+  - name: organization
   - name: updated_at
     direction: desc
 
@@ -173,6 +193,13 @@ indexes:
   - name: start_node
   - name: updated_at
     direction: desc
+
+- kind: Event
+  properties:
+  - name: about_item
+  - name: about_kind
+  - name: comments
+  - name: starts_at
 
 - kind: Event
   properties:
@@ -360,6 +387,11 @@ indexes:
   - name: type_show
   - name: updated_at
     direction: desc
+
+- kind: Task
+  properties:
+  - name: organization
+  - name: due
 
 - kind: Task
   properties:
