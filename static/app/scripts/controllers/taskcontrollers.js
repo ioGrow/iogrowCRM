@@ -1,7 +1,9 @@
 app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','Task','Topic','Comment','User','Contributor',
    function($scope,$filter,$route,Auth,Note,Task,Topic,Comment,User,Contributor) {
 //HKA 14.11.2013 Controller to show Notes and add comments
-   $scope.isSignedIn = false;
+    $("ul.page-sidebar-menu li").removeClass("active");
+    $("#id_Tasks").addClass("active");
+    $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
@@ -437,8 +439,9 @@ app.directive('taggable', ['$parse','taggableParser',function($parse,typeaheadPa
 }]);
 app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','Contributor','Tag','Edge',
     function($scope,$filter,Auth,Task,User,Contributor,Tag,Edge) {
-     $("#id_Accounts").addClass("active");
-     document.title = "Accounts: Home";
+    $("ul.page-sidebar-menu li").removeClass("active");
+    $("#id_Tasks").addClass("active");
+     document.title = "Tasks: Home";
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -542,7 +545,8 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
                         'limit':7}
           Task.list($scope,params,true);
           User.list($scope,{});
-          Tag.list($scope,{});
+          var paramsTag = {'about_kind':'Task'};
+          Tag.list($scope,paramsTag);
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -870,15 +874,18 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
         tags
 ***************************************************************************************/
 $scope.listTags=function(){
-      Tag.list($scope,{});
+      var paramsTag = {'about_kind':'Task'}
+      Tag.list($scope,paramsTag);
      }
 $scope.addNewtag = function(tag){
        var params = {   
                           'name': tag.name,
+                          'about_kind':'Task',
                           'color':$('#tag-col-pick').val()
                       }  ;
        Tag.insert($scope,params);
-        Tag.list($scope,{});
+        var paramsTag = {'about_kind':'Task'};
+        Tag.list($scope,paramsTag);
         
      }
 $scope.updateTag = function(tag){
@@ -941,7 +948,7 @@ $scope.selectTag= function(tag,index,$event){
          }
          Task.list($scope,params);
 
-  }
+  };
 
 $scope.unselectAllTags= function(){
         $('.tags-list li').each(function(){
@@ -1002,6 +1009,12 @@ $scope.addTags=function(){
       $('#assigneeTagsToTask').modal('hide');
 
      };
+
+    $scope.tagDeleted = function(){
+    $scope.listTasks();
+    };
+
+
      // Google+ Authentication 
      Auth.init($scope);
 

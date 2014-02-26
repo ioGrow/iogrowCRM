@@ -59,6 +59,7 @@ app.controller('GroupListCtrl', ['$scope','Auth','Group',
     $scope.addGroup = function(group){
       
       Group.insert($scope,group);
+      $('#addGroupModal').modal('hide');
     };
     // Google+ Authentication 
     Auth.init($scope);

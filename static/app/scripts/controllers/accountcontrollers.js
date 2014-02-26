@@ -347,7 +347,8 @@ $scope.addTags=function(){
         console.log(params);
         Edge.insert($scope,params);
         $scope.draggedTag=null;
-      }
+      };
+      
 
 
 

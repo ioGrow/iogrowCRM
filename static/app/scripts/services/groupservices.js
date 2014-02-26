@@ -9,7 +9,7 @@ accountservices.factory('Group', function($http) {
 
   
   Group.get = function($scope,params) {
-          
+           $scope.isLoading = true;
           console.log('in groups.get');
           gapi.client.crmengine.groups.get(params).execute(function(resp) {
             if(!resp.code){
@@ -18,7 +18,7 @@ accountservices.factory('Group', function($http) {
                $scope.group = resp;
                $scope.isContentLoaded = true;
                //$scope.listMembers();
-
+                $scope.isLoading = false;
                // Call the method $apply to make the update on the scope
                $scope.$apply();
                
