@@ -25,7 +25,7 @@ class Event(EndpointsModel):
     ends_at = ndb.DateTimeProperty()
     status = ndb.StringProperty()
     # number of comments in this topic
-    comments = ndb.IntegerProperty()
+    comments = ndb.IntegerProperty(default=0)
     # A Topic is attached to an object for example Account or Opportunity..
     about_kind = ndb.StringProperty()
     about_item = ndb.StringProperty()

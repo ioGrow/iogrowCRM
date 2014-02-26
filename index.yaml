@@ -198,6 +198,13 @@ indexes:
   properties:
   - name: about_item
   - name: about_kind
+  - name: comments
+  - name: starts_at
+
+- kind: Event
+  properties:
+  - name: about_item
+  - name: about_kind
   - name: starts_at
 
 - kind: Lead
@@ -380,6 +387,11 @@ indexes:
   - name: type_show
   - name: updated_at
     direction: desc
+
+- kind: Task
+  properties:
+  - name: organization
+  - name: due
 
 - kind: Task
   properties:

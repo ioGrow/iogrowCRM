@@ -74,9 +74,27 @@ accountservices.factory('Account', function($http) {
                         $scope.renderMaps();
                       }
                 }
+
+                $scope.topics = resp.topics.items;
+                 
+                  if ($scope.topicCurrentPage >1){
+                      console.log('Should show PREV');
+                    $scope.topicpagination.prev = true;
+                  }else{
+                      $scope.topicpagination.prev= false;
+                   }
+                 if (resp.topics.nextPageToken){
+                   var nextPage = $scope.topicCurrentPage + 1;
+                    // Store the nextPageToken
+                   $scope.topicpages[nextPage] = resp.topics.nextPageToken;
+                   $scope.topicpagination.next = true;
+
+                   }else{
+                  $scope.topicpagination.next = false;
+                 }
                $scope.isContentLoaded = true;
                //$scope.listInfonodes();
-               $scope.listTopics(resp);
+               //$scope.listTopics(resp);
                $scope.listTasks();
                $scope.listEvents();
                //$scope.listContacts();
