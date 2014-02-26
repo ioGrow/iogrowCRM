@@ -994,18 +994,22 @@ $scope.selectTag= function(tag,index,$event){
           Task.list($scope,params,true);
 
  }
- $scope.createdByMe=function(){
-   var params = { 'order': $scope.order,
-                         
-                        'limit':7}
-          Task.list($scope,params,true);
+ $scope.createdByMe=function(owner){
+    var params = { 
+                'order': $scope.order,
+                'owner': owner,
+                'limit':7
+              };
+    Task.list($scope,params,true);
 
  }
  $scope.assignedToMe=function(){
    var params = { 'order': $scope.order,
-                         
-                        'limit':7}
-          Task.list($scope,params,true);
+                  'assignee' : true,
+                  
+                  'limit':7
+                }
+    Task.list($scope,params,true);
 
  }
  $scope.privateTasks=function(){
