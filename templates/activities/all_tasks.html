@@ -214,9 +214,10 @@
                       </div>
                     </div>
                 </form>
-                 <datetimepick icon-class='fa fa-bell-o' label-format='MMM d, h:mm a' ng-model='newTask.reminder' class="new-task-reminder pull-right"></datetimepick>
-                <datetimepick ng-model='newTask.due' class="new-task-date pull-right" label-format='MMM d, h:mm a'></datetimepick>
-
+                <div class="newTask-meta">
+                    <datetimepick icon-class='fa fa-bell-o' label-format='MMM d, h:mm a' ng-model='newTask.reminder' class="new-task-reminder pull-right"></datetimepick>
+                     <datetimepick ng-model='newTask.due' class="new-task-date pull-right" label-format='MMM d, h:mm a'></datetimepick>
+                </div>
               </div>
             </div>
               <!-- BEGIN PORTLET-->
