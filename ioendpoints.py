@@ -109,11 +109,11 @@ INVERSED_EDGES = {
             
          }
 SEARCH_QUERY_MODEL = """
-                            %(query)s type:%(type)
+                            %(query)s type:%(type)s
                              AND (organization: %(organization)s
                                   AND (access:public
                                        OR (owner: %(owner)s
-                                           OR collaborators: %(collaborators)
+                                           OR collaborators: %(collaborators)s
                                            )
                                        )
                                   )
@@ -1337,7 +1337,7 @@ class CrmEngineApi(remote.Service):
                                "query": request.q,
                                "organization": organization,
                                "owner": user_from_email.google_user_id,
-                               "collaborator": user_from_email.google_user_id,
+                               "collaborators": user_from_email.google_user_id,
                                 }
         search_results = []
         if request.limit:
@@ -1562,7 +1562,7 @@ class CrmEngineApi(remote.Service):
                                "query": request.q,
                                "organization": organization,
                                "owner": user_from_email.google_user_id,
-                               "collaborator": user_from_email.google_user_id,
+                               "collaborators": user_from_email.google_user_id,
                                 }
         search_results = []
         if request.limit:
@@ -2878,7 +2878,7 @@ class CrmEngineApi(remote.Service):
                                "query": request.q,
                                "organization": organization,
                                "owner": user_from_email.google_user_id,
-                               "collaborator": user_from_email.google_user_id,
+                               "collaborators": user_from_email.google_user_id,
                                 }
         search_results = []
         if request.limit:
