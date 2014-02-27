@@ -1887,6 +1887,7 @@ class CrmEngineApi(remote.Service):
                     lastname = request.lastname,
                     owner = user_from_email.google_user_id,
                     organization = user_from_email.organization,
+                    access = request.access,
                     folder = created_folder['id']
                     )
         if request.title:

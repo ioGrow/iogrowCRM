@@ -72,8 +72,10 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact','Tag','Ed
       $scope.save = function(contact){
           var params = {};
           var contact_name = new Array();
-          contact_name.push(contact.firstname);
-          contact_name.push(contact.lastname);
+
+          console.log('---------------contact.access--------');
+          console.log(contact.access);
+          
           contact.display_name = contact_name;
           if (typeof(contact.account)=='object'){
             contact.account_name = contact.account.name;
