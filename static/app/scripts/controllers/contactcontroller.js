@@ -516,6 +516,8 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
       $scope.stage_selected={};
       $scope.status_selected={};
       $scope.infonodes = {};
+      $scope.phone={};
+      $scope.phone.type= 'work';
       
       // What to do after authentication
       $scope.runTheProcess = function(){
@@ -931,7 +933,8 @@ $scope.updatContactHeader = function(contact){
   };
   InfoNode.insert($scope,params);
   $('#phonemodal').modal('hide');
-  $scope.phone={};
+  $scope.phone.type='work';
+  $scope.phone.number='';
   };
 $scope.listInfonodes = function(kind) {
     console.log($scope.contact.entityKey);

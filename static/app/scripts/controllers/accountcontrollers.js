@@ -18,6 +18,7 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
      $scope.order = '-updated_at';
      $scope.account.account_type = 'Customer';
      $scope.draggedTag=null;
+
      
      // What to do after authentication
      $scope.runTheProcess = function(){
@@ -508,7 +509,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        $scope.status_selected={};
        $scope.infonodes = {};
        $scope.phone={};
-       $scope.phone.type= "mobile";
+       $scope.phone.type_number= 'work';
 
 
        // What to do after authentication
@@ -1195,7 +1196,8 @@ $scope.CaselistNextPageItems = function(){
   };
   InfoNode.insert($scope,params);
   $('#phonemodal').modal('hide');
-  $scope.phone={};
+  $scope.phone.type_number='work';
+  $scope.phone.number='';
   };
 
 
