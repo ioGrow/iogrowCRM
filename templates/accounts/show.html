@@ -389,7 +389,7 @@
                         <div class="modal-body">
                             <form id="addContact" name="addcontact"  ng-submit="savecontact(contact)" class="form-horizontal" role="form"> 
                             <div class="form-group">
-                              <label  class="required col-md-3 control-label">{{_("First Name")}} *</label>
+                              <label  class="required col-md-3 control-label">{{_("First Name")}} </label>
                        
                               <div class="col-md-9">
                               <input class="form-control" type="text" required id="id_firstname" ng-model="contact.firstname">
@@ -404,7 +404,7 @@
                               </div>
                            </div>
                            <div class="form-group">
-                             <label  class="required col-md-3 control-label">{{_("Position")}} </label>
+                             <label  class="required col-md-3 control-label">{{_("Tittle")}} </label>
                        
                              <div class="col-md-9">
                               <input class="form-control" type="text"  id="id_account" ng-model="contact.title">
@@ -642,13 +642,13 @@
                           <input type="text" class="form-control" required id="id_name" ng-model="opportunity.name">
                           </div>
                       </div>
-                      <div class="form-group">
+                      <!--div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Labels")}} </label>
                        
                         <div class="col-md-9">
                           <input type="text"  class="form-control" id="id_label" ng-model="opportunity.description">
                         </div>
-                      </div>
+                      </div-->
                     <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Amount")}} </label>
                         <div class="col-md-9">
@@ -802,14 +802,7 @@
                         </div>
                       
                     </div>
-                    <div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Labels")}} </label>
-                       
-                        <div class="col-md-9">
-                          <input type="text"  class="form-control" id="id_description" ng-model="casee.type_case">
-                          
-                        </div>
-                    </div>
+                   
                    
 
                     </fieldset>

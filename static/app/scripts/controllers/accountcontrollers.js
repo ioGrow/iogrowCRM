@@ -513,7 +513,9 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        $scope.need = {};
        $scope.need.need_status = 'pending';
        $scope.need.priority = 'Medium';
-
+       $scope.casee = {};
+       $scope.casee.priority = 4;
+       $scope.casee.status = 'pending';
 
        // What to do after authentication
        $scope.runTheProcess = function(){
