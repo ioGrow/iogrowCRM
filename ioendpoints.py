@@ -184,9 +184,11 @@ class TopicListResponse(messages.Message):
     nextPageToken = messages.StringField(2)
 
 class TagSchema(messages.Message):
-    name  = messages.StringField(1)
-    color = messages.StringField(2)
-    edgeKey = messages.StringField(3)
+    id = messages.StringField(1)
+    edgeKey = messages.StringField(2)
+    name  = messages.StringField(3)
+    color = messages.StringField(4)
+    
 
 class TaskInsertRequest(messages.Message):
     about = messages.StringField(1)
@@ -668,7 +670,21 @@ class EndpointsHelper(EndpointsModel):
     INVALID_TOKEN = 'Invalid token'
     INVALID_GRANT = 'Invalid grant'
     NO_ACCOUNT = 'You don\'t have a i/oGrow account'
-
+    @classmethod
+    def update_edge_indexes(cls,parent_key,kind,indexed_edge):
+        parent = parent_key.get()
+        empty_string = lambda x: x if x else ""
+        search_index = search.Index(name="GlobalIndex")
+        search_document = search_index.get(str( parent_key.id() ) )
+        data = {}
+        data['id'] = parent_key.id()
+        if search_document:
+            for e in search_document.fields:
+                if e.name == kind:
+                    indexed_edge = empty_string(e.value) + ' ' + str(indexed_edge)
+                data[e.name] = e.value
+            data[kind] = indexed_edge
+        parent.put_index(data)
     @classmethod
     def require_iogrow_user(cls):
         user = endpoints.get_current_user()
@@ -723,6 +739,9 @@ class EndpointsHelper(EndpointsModel):
                                                     "fields": 'id'
                                                     }).execute()
             return moved_folder
+        
+        
+
 
 
 @endpoints.api(
@@ -1045,8 +1064,6 @@ class CrmEngineApi(remote.Service):
                                 )
             for edge in topic_edge_list['items']:
                 end_node = edge.end_node.get()
-                print '**************************************************'
-                print end_node.key.kind()
                 if end_node.key.kind() == 'Note':
                     if end_node.comments == 0:
                         print 'note n comment 0'
@@ -1893,12 +1910,24 @@ class CrmEngineApi(remote.Service):
             contact.title = request.title
         contact_key = contact.put_async()
         contact_key_async = contact_key.get_result()
+        
+        
         if request.account:
+            account_key = ndb.Key(urlsafe=request.account)
             # insert edges
-            Edge.insert(start_node = ndb.Key(urlsafe=request.account),
+            Edge.insert(start_node = account_key,
                       end_node = contact_key_async,
                       kind = 'contacts',
-                      inverse_edge = 'parents')     
+                      inverse_edge = 'parents') 
+            EndpointsHelper.update_edge_indexes(
+                                            parent_key = contact_key_async,
+                                            kind = 'contacts',
+                                            indexed_edge = account_key.id()
+                                            )   
+        else:
+            data = {}
+            data['id'] = contact_key_async.id()
+            contact.put_index(data) 
         return ContactSchema(id=str(contact_key_async.id()))
     
     # contacts.insert API
@@ -1988,6 +2017,7 @@ class CrmEngineApi(remote.Service):
                         for edge in edge_list['items']:
                             tag_list.append(
                                           TagSchema(
+                                           id = str( edge.end_node.id() ),
                                            edgeKey = edge.key.urlsafe(),
                                            name = edge.end_node.get().name,
                                            color = edge.end_node.get().color
@@ -2098,6 +2128,8 @@ class CrmEngineApi(remote.Service):
         try:
             if query:
                 results = index.search(query)
+                print '*************** Search ***************'
+                print results
                 #total_matches = results.number_found
                 # Iterate over the documents in the results
                 for scored_document in results:
@@ -2354,6 +2386,11 @@ class CrmEngineApi(remote.Service):
                                  end_node = end_node,
                                  kind = item.kind,
                                  inverse_edge = item.inverse_edge)
+            EndpointsHelper.update_edge_indexes(
+                                            parent_key = start_node,
+                                            kind = item.kind,
+                                            indexed_edge = end_node.id()
+                                            )
             items.append(EdgeSchema(id=str( edge_key.id() ), 
                                      entityKey = edge_key.urlsafe(),
                                      kind = item.kind,
@@ -3214,8 +3251,10 @@ class CrmEngineApi(remote.Service):
         parent_key = ndb.Key(urlsafe=request.parent)
 
         node = Node(kind=request.kind)
+        node_values = []
         for record in request.fields:
             setattr(node, record.field, record.value)
+            node_values.append(str(record.value))
         entityKey_async = node.put_async()
         entityKey = entityKey_async.get_result()
         Edge.insert(
@@ -3223,6 +3262,12 @@ class CrmEngineApi(remote.Service):
                     end_node = entityKey,
                     kind = 'infos'
                 )
+        indexed_edge = '_' + request.kind + ' ' + " ".join(node_values)
+        EndpointsHelper.update_edge_indexes(
+                                            parent_key = parent_key,
+                                            kind = 'infos',
+                                            indexed_edge = indexed_edge
+                                            )
         return InfoNodeResponse(
                                 entityKey=entityKey.urlsafe(),
                                 kind=node.kind,
