@@ -510,6 +510,9 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        $scope.infonodes = {};
        $scope.phone={};
        $scope.phone.type_number= 'work';
+       $scope.need = {};
+       $scope.need.need_status = 'pending';
+       $scope.need.priority = 'Medium';
 
 
        // What to do after authentication
