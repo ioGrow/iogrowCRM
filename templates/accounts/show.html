@@ -19,21 +19,16 @@
                  <form id="addMember" name="addaccount" ng-submit="share(slected_memeber)" class="form-horizontal"> 
                   
                     <p>{{ _("Who has access:") }}</p>
-                    <div class=''>
-
-                     
-                          
-                            <label class="radio line">
-                            <input type="radio" value="public" ng-model="account.access" />
+                    <div class="radio-list">
+                         
+                            <label >
+                            <input type="radio" name="optionRadio" value="public" ng-model="account.access" />
                             {{ _("public: Anyone within your organization can access and find") }}
                             </label>
-                            <label class="radio line">
-                            <input type="radio"  value="private" ng-model="account.access" />
+                            <label >
+                            <input type="radio" name="optionRadio"  value="private" ng-model="account.access" />
                             {{ _("private: only you and your collaborators") }}
-                            </label>  
-                           
-                       
-                      
+                            </label>                       
                     </div>
                     <hr/>
                     <div class=''>

@@ -507,6 +507,8 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        $scope.stage_selected={};
        $scope.status_selected={};
        $scope.infonodes = {};
+       $scope.phone={};
+       $scope.phone.type= "mobile";
 
 
        // What to do after authentication
@@ -878,6 +880,8 @@ $scope.CaselistNextPageItems = function(){
      $scope.share = function(slected_memeber){
         console.log('permissions.insert share');
         console.log(slected_memeber);
+        console.log("---------------- ooooooooooopppppppppppe");
+        console.log($scope.account.access);
         $scope.$watch($scope.account.access, function() {
          var body = {'access':$scope.account.access};
          var id = $scope.account.id;
