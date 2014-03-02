@@ -681,10 +681,13 @@ class EndpointsHelper(EndpointsModel):
         if search_document:
             for e in search_document.fields:
                 if e.name == kind:
+                    print 'something before'
                     indexed_edge = empty_string(e.value) + ' ' + str(indexed_edge)
+                    print 'something after'
                 data[e.name] = e.value
-            data[kind] = indexed_edge
+        data[kind] = indexed_edge
         parent.put_index(data)
+
     @classmethod
     def require_iogrow_user(cls):
         user = endpoints.get_current_user()
@@ -1235,6 +1238,7 @@ class CrmEngineApi(remote.Service):
                         for edge in edge_list['items']:
                             tag_list.append(
                                           TagSchema(
+                                           id = str(edge.end_node.id()),
                                            edgeKey = edge.key.urlsafe(),
                                            name = edge.end_node.get().name,
                                            color = edge.end_node.get().color
@@ -1509,6 +1513,7 @@ class CrmEngineApi(remote.Service):
                         for edge in edge_list['items']:
                             tag_list.append(
                                           TagSchema(
+                                           id = str(edge.end_node.id()),
                                            edgeKey = edge.key.urlsafe(),
                                            name = edge.end_node.get().name,
                                            color = edge.end_node.get().color
@@ -1922,7 +1927,7 @@ class CrmEngineApi(remote.Service):
             EndpointsHelper.update_edge_indexes(
                                             parent_key = contact_key_async,
                                             kind = 'contacts',
-                                            indexed_edge = account_key.id()
+                                            indexed_edge = str(account_key.id())
                                             )   
         else:
             data = {}
@@ -2389,7 +2394,7 @@ class CrmEngineApi(remote.Service):
             EndpointsHelper.update_edge_indexes(
                                             parent_key = start_node,
                                             kind = item.kind,
-                                            indexed_edge = end_node.id()
+                                            indexed_edge = str(end_node.id())
                                             )
             items.append(EdgeSchema(id=str( edge_key.id() ), 
                                      entityKey = edge_key.urlsafe(),
@@ -2836,6 +2841,7 @@ class CrmEngineApi(remote.Service):
                         for edge in edge_list['items']:
                             tag_list.append(
                                           TagSchema(
+                                           id = str(edge.end_node.id()),
                                            edgeKey = edge.key.urlsafe(),
                                            name = edge.end_node.get().name,
                                            color = edge.end_node.get().color
@@ -3428,6 +3434,7 @@ class CrmEngineApi(remote.Service):
                         for edge in edge_list['items']:
                             tag_list.append(
                                           TagSchema(
+                                           id = str(edge.end_node.id()),
                                            edgeKey = edge.key.urlsafe(),
                                            name = edge.end_node.get().name,
                                            color = edge.end_node.get().color
@@ -4126,6 +4133,22 @@ class CrmEngineApi(remote.Service):
                       end_node = task_key_async,
                       kind = 'tasks',
                       inverse_edge = 'related_to')
+        if request.about:
+            about_key = ndb.Key(urlsafe=request.about)
+            # insert edges
+            Edge.insert(start_node = about_key,
+                      end_node = task_key_async,
+                      kind = 'tasks',
+                      inverse_edge = 'related_to')
+            EndpointsHelper.update_edge_indexes(
+                                            parent_key = task_key_async,
+                                            kind = 'tasks',
+                                            indexed_edge = str(about_key.id())
+                                            )   
+        else:
+            data = {}
+            data['id'] = task_key_async.id()
+            task.put_index(data)
         if request.assignees:
             # insert edges
             for assignee in request.assignees:

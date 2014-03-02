@@ -207,7 +207,8 @@
                    
                     <div class="row">
                           <div class="col-md-12">
-                               <span ng-repeat="tag in lead.tags"   class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
+                               <a ng-repeat="tag in lead.tags" href="/#/search/type:Lead tags:<%=tag.id%>"> <span class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
+                               </a>
                           </div>
                           
                     </div>

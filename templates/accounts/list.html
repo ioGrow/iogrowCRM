@@ -185,7 +185,8 @@
                         <br/>
                           <div class="row">
                           <div class="col-md-12">
-                               <span  ng-repeat="account_tag in account.tags" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=account_tag.color%>;color:<%=idealTextColor(account_tag.color)%>;">  <%= account_tag.name %></span>
+                               <a ng-repeat="tag in account.tags" href="/#/search/type:Account tags:<%=tag.id%>"> <span class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
+                               </a>
                           </div>
                           
                         </div>

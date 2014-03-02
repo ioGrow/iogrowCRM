@@ -52,7 +52,7 @@ class Task(EndpointsModel):
                          value = self.owner)
         perm.put()
 
-    def put_index(self):
+    def put_index(self,data=None):
         """ index the element at each"""
         empty_string = lambda x: x if x else ""
         empty_date = lambda x: x if x else date(2999, 12, 31)
@@ -60,22 +60,47 @@ class Task(EndpointsModel):
         tags = " ".join(map(lambda x: x.name,  self.tags))
         title_autocomplete = ','.join(tokenize_autocomplete(self.title + tags))
         organization = str(self.organization.id())
-        my_document = search.Document(
-        doc_id = str(self.key.id()),
-        fields=[
-            search.TextField(name=u'type', value=u'Task'),
-            search.TextField(name='organization', value = empty_string(organization) ),
-            search.TextField(name='access', value = empty_string(self.access) ),
-            search.TextField(name='owner', value = empty_string(self.owner) ),
-            search.TextField(name='collaborators', value = collaborators ),
-            search.TextField(name='tags', value = tags ),
-            search.TextField(name='title', value = empty_string(self.title) ),
-            search.TextField(name='status', value = empty_string(self.status)),
-            search.DateField(name='due', value = empty_date(self.due)),
-            search.TextField(name='about_kind', value = empty_string(self.about_kind)),
-            search.TextField(name='about_item', value = empty_string(self.about_item)),
-            search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
-           ])
+        if data:
+            search_key = ['infos','tasks','tags']
+            for key in search_key:
+                if key not in data.keys():
+                    data[key] = ""
+            my_document = search.Document(
+            doc_id = str(data['id']),
+            fields=[
+                search.TextField(name=u'type', value=u'Task'),
+                search.TextField(name='organization', value = empty_string(organization) ),
+                search.TextField(name='access', value = empty_string(self.access) ),
+                search.TextField(name='owner', value = empty_string(self.owner) ),
+                search.TextField(name='collaborators', value = collaborators ),
+                search.TextField(name='tags', value = tags ),
+                search.TextField(name='title', value = empty_string(self.title) ),
+                search.TextField(name='status', value = empty_string(self.status)),
+                search.DateField(name='due', value = empty_date(self.due)),
+                search.TextField(name='about_kind', value = empty_string(self.about_kind)),
+                search.TextField(name='about_item', value = empty_string(self.about_item)),
+                search.TextField(name='infos', value= data['infos']),
+                search.TextField(name='tags', value= data['tags']),
+                search.TextField(name='tasks', value= data['tasks']),
+                search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
+               ])
+        else:
+            my_document = search.Document(
+            doc_id = str(self.key.id()),
+            fields=[
+                search.TextField(name=u'type', value=u'Task'),
+                search.TextField(name='organization', value = empty_string(organization) ),
+                search.TextField(name='access', value = empty_string(self.access) ),
+                search.TextField(name='owner', value = empty_string(self.owner) ),
+                search.TextField(name='collaborators', value = collaborators ),
+                search.TextField(name='tags', value = tags ),
+                search.TextField(name='title', value = empty_string(self.title) ),
+                search.TextField(name='status', value = empty_string(self.status)),
+                search.DateField(name='due', value = empty_date(self.due)),
+                search.TextField(name='about_kind', value = empty_string(self.about_kind)),
+                search.TextField(name='about_item', value = empty_string(self.about_item)),
+                search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
+               ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)
   

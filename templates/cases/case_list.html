@@ -253,7 +253,8 @@
                       <br/>
                           <div class="row">
                           <div class="col-md-12">
-                               <span  ng-repeat="case_tag in casee.tags" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=case_tag.color%>;color:<%=idealTextColor(case_tag.color)%>;">  <%= case_tag.name %></span>
+                               <a ng-repeat="tag in casee.tags" href="/#/search/type:Case tags:<%=tag.id%>"> <span class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
+                               </a>
                           </div>
                           
                         </div>               
