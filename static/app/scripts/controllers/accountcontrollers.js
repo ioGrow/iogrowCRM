@@ -519,7 +519,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
 
        // What to do after authentication
        $scope.runTheProcess = function(){
-          var accountid = {
+          var params = {
                           'id':$route.current.params.accountId,
                           'contacts':{
                             'limit': '6'
@@ -528,7 +528,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
                             'limit': '7'
                           }
                           };
-          Account.get($scope,accountid);
+          Account.get($scope,params);
           User.list($scope,{});
           Opportunitystage.list($scope,{});
           Casestatus.list($scope,{});
@@ -791,12 +791,13 @@ $scope.CaselistNextPageItems = function(){
 
      
      $scope.listTopics = function(account){
-        var params = {'about_kind':'Account',
-                      'about_item':$scope.account.id,
-                      'order': '-updated_at',
-                      'limit': 5
-                      };
-        Topic.list($scope,params);
+        var params = {
+                      'id':$scope.account.id,
+                      'topics':{
+                             'limit': '7'
+                       }
+                    };
+          Account.get($scope,params);
 
      }
      $scope.listDocuments = function(){
@@ -931,8 +932,7 @@ $scope.CaselistNextPageItems = function(){
       console.log('debug addNote');
       
       var params ={
-                  'about_kind': 'Account',
-                  'about_item': $scope.account.id,
+                  'about': $scope.account.entityKey,
                   'title': note.title,
                   'content': note.content
       };

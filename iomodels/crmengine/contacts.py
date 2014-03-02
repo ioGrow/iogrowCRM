@@ -57,9 +57,6 @@ class Contact(EndpointsModel):
 
 
     def put_index(self,data=None):
-        """ index the element at each"""
-        print '************ Contact put index **********'
-        print self
         empty_string = lambda x: x if x else ""
         collaborators = " ".join(self.collaborators_ids)
         organization = str(self.organization.id())
@@ -69,8 +66,6 @@ class Contact(EndpointsModel):
         title_autocomplete = ','.join(tokenize_autocomplete(self.firstname + ' ' + self.lastname +' '+ empty_string(self.title)+ ' ' +empty_string(self.account_name)))
         #addresses = " \n".join(map(lambda x: " ".join([x.street,x.city,x.state, x.postal_code, x.country]) if x else "", self.addresses))
         if data:
-            print '******************** Something with data *****************'
-            print data
             search_key = ['infos','contacts','tags']
             for key in search_key:
                 if key not in data.keys():
@@ -88,11 +83,10 @@ class Contact(EndpointsModel):
                 search.TextField(name='position', value = empty_string(self.title)),
                 search.TextField(name='infos', value= data['infos']),
                 search.TextField(name='tags', value= data['tags']),
-                search.TextField(name='tags', value= data['contacts']),
+                search.TextField(name='contacts', value= data['contacts']),
                 search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
                 ])
         else:
-            print '******************** Something without data *****************'
             my_document = search.Document(
             doc_id = str(self.key.id()),
             fields=[

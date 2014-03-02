@@ -61,7 +61,7 @@ class Task(EndpointsModel):
         title_autocomplete = ','.join(tokenize_autocomplete(self.title + tags))
         organization = str(self.organization.id())
         if data:
-            search_key = ['infos','tasks','tags']
+            search_key = ['infos','tasks','tags','topics']
             for key in search_key:
                 if key not in data.keys():
                     data[key] = ""
@@ -82,6 +82,7 @@ class Task(EndpointsModel):
                 search.TextField(name='infos', value= data['infos']),
                 search.TextField(name='tags', value= data['tags']),
                 search.TextField(name='tasks', value= data['tasks']),
+                search.TextField(name='topics', value= data['topics']),
                 search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
                ])
         else:

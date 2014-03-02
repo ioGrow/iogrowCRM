@@ -3212,6 +3212,11 @@ class CrmEngineApi(remote.Service):
                     kind = 'topics',
                     inverse_edge = 'related_to'
                 )
+        EndpointsHelper.update_edge_indexes(
+                                            parent_key = entityKey,
+                                            kind = 'topics',
+                                            indexed_edge = str(parent_key.id())
+                                            )   
         return message_types.VoidMessage()
 
 

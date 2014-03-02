@@ -37,21 +37,23 @@ accountservices.factory('Account', function($http) {
                 console.log('********************************************');
                 console.log(resp);
                $scope.account = resp;
-               $scope.contacts = resp.contacts.items;
-                 if ($scope.contactCurrentPage>1){
-                      $scope.contactpagination.prev = true;
+               if (resp.contacts){
+                 $scope.contacts = resp.contacts.items;
+                   if ($scope.contactCurrentPage>1){
+                        $scope.contactpagination.prev = true;
+                     }else{
+                         $scope.contactpagination.prev = false;
+                     }
+                   if (resp.contacts.nextPageToken){
+                     var nextPage = $scope.contactCurrentPage + 1;
+                     // Store the nextPageToken
+                     $scope.contactpages[nextPage] = resp.contacts.nextPageToken;
+                     $scope.contactpagination.next = true;
+                     
                    }else{
-                       $scope.contactpagination.prev = false;
+                    $scope.contactpagination.next = false;
                    }
-                 if (resp.contacts.nextPageToken){
-                   var nextPage = $scope.contactCurrentPage + 1;
-                   // Store the nextPageToken
-                   $scope.contactpages[nextPage] = resp.contacts.nextPageToken;
-                   $scope.contactpagination.next = true;
-                   
-                 }else{
-                  $scope.contactpagination.next = false;
-                 }
+                }
 
                // list infonodes
                 var renderMap = false;
@@ -74,28 +76,34 @@ accountservices.factory('Account', function($http) {
                         $scope.renderMaps();
                       }
                 }
+                if (resp.topics){
+                  $scope.topics = resp.topics.items;
+                   
+                    if ($scope.topicCurrentPage >1){
+                        console.log('Should show PREV');
+                      $scope.topicpagination.prev = true;
+                    }else{
+                        $scope.topicpagination.prev= false;
+                     }
+                   if (resp.topics.nextPageToken){
+                     var nextPage = $scope.topicCurrentPage + 1;
+                      // Store the nextPageToken
+                     $scope.topicpages[nextPage] = resp.topics.nextPageToken;
+                     $scope.topicpagination.next = true;
 
-                $scope.topics = resp.topics.items;
-                 
-                  if ($scope.topicCurrentPage >1){
-                      console.log('Should show PREV');
-                    $scope.topicpagination.prev = true;
-                  }else{
-                      $scope.topicpagination.prev= false;
+                     }else{
+                    $scope.topicpagination.next = false;
                    }
-                 if (resp.topics.nextPageToken){
-                   var nextPage = $scope.topicCurrentPage + 1;
-                    // Store the nextPageToken
-                   $scope.topicpages[nextPage] = resp.topics.nextPageToken;
-                   $scope.topicpagination.next = true;
+                  }
 
-                   }else{
-                  $scope.topicpagination.next = false;
-                 }
+                  if (resp.tasks){
+                     $scope.tasks = resp.tasks.items;
+                  }
+
                $scope.isContentLoaded = true;
                //$scope.listInfonodes();
                //$scope.listTopics(resp);
-               $scope.listTasks();
+               //$scope.listTasks();
                $scope.listEvents();
                //$scope.listContacts();
                $scope.listOpportunities();
@@ -115,6 +123,12 @@ accountservices.factory('Account', function($http) {
                 });
                // Call the method $apply to make the update on the scope
                 $scope.$apply();
+                if (resp.topics){
+                    $scope.hilightTopic();
+                };
+                if (resp.tasks){
+                    $scope.hilightTask();
+                }
 
             }else {
               alert(resp.message);
