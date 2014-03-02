@@ -135,3 +135,18 @@ app.config(['$routeProvider', function($routeProvider) {
         templateUrl:'/views/live/feedbacks/show'
       });
 }]);
+app.config(function(ngQuickDateDefaultsProvider) {
+  // Configure with icons from font-awesome
+  return ngQuickDateDefaultsProvider.set({
+    closeButtonHtml: "<i class='fa fa-times'></i>",
+    buttonIconHtml: "<i class='fa fa-calendar'></i>",
+    nextLinkHtml: "<i class='fa fa-chevron-right'></i>",
+    prevLinkHtml: "<i class='fa fa-chevron-left'></i>",
+    placeholder:'',
+    // Take advantage of Sugar.js date parsing
+    parseDateFunction: function(str) {
+      d = Date.create(str);
+      return d.isValid() ? d : null;
+    }
+  });
+});
