@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript" src="jquery.caret.js"></script>
+<script type="text/javascript">
+$(function() {
+    var element = $('#text');
+    var text = element.val();
+    element.caret(2);
+    var pos = element.caret();
+    element.val(text.substring(0, pos) + 'b' + text.substring(pos));
+
+    element = $('#editable');
+    text = element.html();
+    element.caret(1);
+    pos = element.caret();
+    element.html(text.substring(0, pos) + 'b' + text.substring(pos));
+});
+</script>
+</head>
+<body>
+<textarea id="text">a
+
+c</textarea>
+<input type="text" id="pos">
+<button onclick="$('#pos').val($('#text').caret())">read</button>
+<button onclick="$('#text').caret($('#pos').val())">write</button>
+<div id="editable" contenteditable="true">ac</div>
+</body>
+</html>
