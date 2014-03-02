@@ -220,7 +220,8 @@
                     <br/>
                           <div class="row">
                           <div class="col-md-12">
-                               <span  ng-repeat="opp_tag in opp.tags" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=opp_tag.color%>;color:<%=idealTextColor(opp_tag.color)%>;">  <%= opp_tag.name %></span>
+                               <a ng-repeat="tag in opp.tags" href="/#/search/type:Opportunity tags:<%=tag.id%>"> <span class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
+                               </a>
                           </div>
                           
                         </div>              

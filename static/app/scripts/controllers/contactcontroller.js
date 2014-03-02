@@ -25,7 +25,7 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact','Tag','Ed
         
         // What to do after authentication
        $scope.runTheProcess = function(){
-            var params = {'order' : $scope.order,'limit':8}
+            var params = {'order' : $scope.order,'limit':6}
             Contact.list($scope,params);
             var paramsTag = {'about_kind':'Contact'};
           Tag.list($scope,paramsTag);
