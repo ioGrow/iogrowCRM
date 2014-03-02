@@ -170,8 +170,8 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
   }]);
 app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','Contributor','Tag','Edge',
     function($scope,$filter,Auth,Task,User,Contributor,Tag,Edge) {
-     $("#id_Accounts").addClass("active");
-     document.title = "Accounts: Home";
+     $("#id_Tasks").addClass("active");
+     document.title = "Tasks: Home";
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
