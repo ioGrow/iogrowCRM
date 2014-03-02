@@ -266,6 +266,7 @@ $scope.addNewtag = function(tag){
                       }  ;
        Tag.insert($scope,params);
         $scope.tag.name='';
+        $('#tag-col-pick').val('#8fff00');
         var paramsTag = {'about_kind':'Case'};
         Tag.list($scope,paramsTag);
         

@@ -165,7 +165,8 @@ $scope.addNewtag = function(tag){
                           'color':$('#tag-col-pick').val()
                       }  ;
        Tag.insert($scope,params);
-        $scope.tag.name='';
+          tag.name='';
+         $('#tag-col-pick').val('#8fff00');
         var paramsTag = {'about_kind':'Account'};
         Tag.list($scope,paramsTag);
         
