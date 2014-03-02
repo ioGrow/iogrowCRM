@@ -1,7 +1,9 @@
 app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','Task','Topic','Comment','User','Contributor',
    function($scope,$filter,$route,Auth,Note,Task,Topic,Comment,User,Contributor) {
 //HKA 14.11.2013 Controller to show Notes and add comments
-   $scope.isSignedIn = false;
+     $("ul.page-sidebar-menu li").removeClass("active");
+     $("#id_Tasks").addClass("active");
+     $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
@@ -170,6 +172,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
   }]);
 app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','Contributor','Tag','Edge',
     function($scope,$filter,Auth,Task,User,Contributor,Tag,Edge) {
+     $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Tasks").addClass("active");
      document.title = "Tasks: Home";
      $scope.isSignedIn = false;
@@ -303,7 +306,8 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
                         'limit':7}
           Task.list($scope,params,true);
           User.list($scope,{});
-          Tag.list($scope,{});
+          var varTagname = {'about_kind':'Task'};
+          Tag.list($scope,varTagname);
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -630,15 +634,18 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
         tags
 ***************************************************************************************/
 $scope.listTags=function(){
-      Tag.list($scope,{});
+     var varTagname = {'about_kind':'Task'};
+      Tag.list($scope,varTagname);
      }
 $scope.addNewtag = function(tag){
        var params = {   
                           'name': tag.name,
+                          'about_kind':'Task',
                           'color':$('#tag-col-pick').val()
                       }  ;
        Tag.insert($scope,params);
-        Tag.list($scope,{});
+       var varTagname = {'about_kind':'Task'};
+        Tag.list($scope,varTagname);
          tag.name='';
          $('#tag-col-pick').val('#8fff00');
      }
