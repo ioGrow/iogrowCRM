@@ -79,14 +79,8 @@
                                 </div>
                                 
                               </div>
-                              
-                              
-                              </div>
-                              </div>
-                              </div>
-                             
-                            </div>
-                            <div class="row">
+                               <div class="row">
+                            <div class="col-md-12">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
                                       <ul>
@@ -101,9 +95,19 @@
                                     </div>
                                     <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
                         </div>
+                        </div>
+                              
+                              </div>
+                              </div>
+                              </div>
+                             
+                            </div>
+                           
                        
 
-          <div id="addOppStagetModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+          <div id="addOppStagetModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+                  <div class="modal-dialog">
+                  <div class="modal-content">
                         <div class="modal-header">
                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                           <h3 id="myModalLabel">{{_("New Opportunity Stage")}}</h3>
@@ -111,20 +115,20 @@
                 <div class="modal-body">
                             <form id="addOppStage" name="addOppStage"  ng-submit="saveOppStage(oppstage)" class="form-horizontal"> 
                             <fieldset>
-                            <div class="control-group">
+                            <div class="form-group">
                               <label  class="required control-label">{{_("Name")}} *</label>
                        
-                              <div class="controls">
-                              <input type="text" required id="id_firstname" ng-model="oppstage.name">
+                              
+                              <input type="text" class="form-control" required id="id_firstname" ng-model="oppstage.name">
                           
-                               </div>
+                              
                             </div>
-                           <div class="control-group">
+                           <div class="form-group">
                               <label  class=" control-label">{{_("Probability")}}</label>
-                              <div class="controls">
-                              <input type="text"  id="id_lastname" ng-model="oppstage.probability">
+                             
+                              <input type="text" class="form-control"  id="id_lastname" ng-model="oppstage.probability">
                           
-                              </div>
+                              
                            </div>
                           
                           </fieldset>
@@ -136,8 +140,12 @@
                    </div>
                    </form>
        </div>
+       </div>
+       </div>
        <!-- HKA 15.12.2013 Edit Opportunity stage -->
-       <div id="EditOppsStage" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+       <div id="EditOppsStage" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+       <div class="modal-dialog">
+       <div class="modal-content">
                         <div class="modal-header">
                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                           <h3 id="myModalLabel">{{_("Edit Opportunity Stage")}}</h3>
@@ -145,20 +153,20 @@
                 <div class="modal-body">
                             <form id="addOppStage" name="addOppStage"  ng-submit="updateOppStage(oppstageedit)" class="form-horizontal"> 
                             <fieldset>
-                            <div class="control-group">
+                            <div class="form-group">
                               <label  class="required control-label">{{_("Name")}} *</label>
                        
-                              <div class="controls">
-                              <input type="text" required id="id_firstname" ng-model="oppstageedit.name">
+                              
+                              <input type="text"  class="form-control" required id="id_firstname" ng-model="oppstageedit.name">
                           
-                               </div>
+                              
                             </div>
-                           <div class="control-group">
+                           <div class="form-group">
                               <label  class=" control-label">{{_("Probability")}}</label>
-                              <div class="controls">
-                              <input type="text"  id="id_lastname" ng-model="oppstageedit.probability">
+                              
+                              <input type="text" class="form-control" id="id_lastname" ng-model="oppstageedit.probability">
                           
-                              </div>
+                              
                            </div>
                            
                           
@@ -172,8 +180,9 @@
                    </div>
                    </form>
        </div>
-    
-                      </div>
+       </div>
+       </div>
+     </div>
                       <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
                         
                            <div class="row cards-container">
@@ -204,14 +213,8 @@
                                                  
                                 </div>
                               </div><br>
-                              
-                              
-                              </div>
-                              </div>
-                              </div>
-                             <!-- -- >
-                            </div>
-                            <div class="row">
+                          <div class="row">
+                            <div class="col-md-12">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
                                       <ul>
@@ -225,10 +228,20 @@
                                       </ul>
                                     </div>
                                     <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                          </div>
                         </div>
+                              
+                              </div>
+                              </div>
+                              </div>
+                             <!-- -- >
+                            </div>
+                           
                         <!--HKA 18.11.2013 Add Case  modal -->
 
-                    <div id="addCasestatustModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+                    <div id="addCasestatustModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+                    <div class="modal-dialog">
+                    <div class="modal-content">
                         <div class="modal-header">
                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                           <h3 id="myModalLabel">{{_("New Case Status")}}</h3>
@@ -236,13 +249,13 @@
                         <div class="modal-body">
                             <form id="addcasestatus" name="addcasestatus"  ng-submit="saveCaseStatus(casestatus)" class="form-horizontal"> 
                             <fieldset>
-                            <div class="control-group">
+                            <div class="form-group">
                               <label  class="required control-label">{{_("Case Status")}} *</label>
                        
-                              <div class="controls">
-                              <input type="text" required id="id_firstname" ng-model="casestatus.status">
+                              
+                              <input type="text" class="form-control" required id="id_firstname" ng-model="casestatus.status">
                           
-                               </div>
+                               
                             </div>
                           
                     </fieldset>
@@ -254,10 +267,13 @@
                          </div>
                           </form>
                     </div>
-                        
+                     </div>
+                     </div>   
                       </div>
                        <!--HKA 19.12.2013 Edit Case status -->
-                       <div id="EditCaseStatus" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+                <div id="EditCaseStatus" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+                <div class="modal-dialog">
+                <div class="modal-content">
                         <div class="modal-header">
                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                           <h3 id="myModalLabel">{{_("Edit Case Status")}}</h3>
@@ -265,13 +281,13 @@
                         <div class="modal-body">
                             <form id="addcasestatus" name="addcasestatus"  ng-submit="updateCasestatus(casestatusedit)" class="form-horizontal"> 
                    <fieldset>
-                            <div class="control-group">
+                            <div class="form-group">
                               <label  class="required control-label">{{_("Case Status")}} *</label>
                        
-                              <div class="controls">
-                              <input type="text" required id="id_firstname" ng-model="casestatusedit.status">
+                              
+                              <input type="text" class="form-control" required id="id_firstname" ng-model="casestatusedit.status">
                           
-                               </div>
+                               
                             </div>
                           
                     </fieldset>
@@ -282,6 +298,8 @@
                            <button  type="submit" class="btn green">{{_("Save")}}</button>
                          </div>
                           </form>
+                    </div>
+                    </div>
                     </div>
                         
                       </div>
@@ -299,7 +317,7 @@
                           </div>
                             <div class="inner-cards-container">
                               <div  class="col-lg-4 col-md-3 col-sm-6 col-xs-12" ng-repeat="leadstat in leadstatuses" >
-                                <div class="dashboard-stat cards">
+                                <div class="dashboard-stat cards-small">
                                   
                                   <div class="details">
                                     <a href="/#/contacts/show/<%= contact.id %>"><h3 class="relatedcardTitle">
@@ -314,12 +332,8 @@
                                   
                                 </div>
                               </div><br>
-                              
-                              
-                              </div>
-                              
-                            </div>
-                            <div class="row">
+                              <div class="row">
+                            <div class="col-md-12">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
                                       <ul>
@@ -334,9 +348,17 @@
                                     </div>
                                     <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
                         </div>
+                        </div>
+                              
+                              </div>
+                              
+                            </div>
+
                         <!--HKA 18.11.2013 Add Lead  modal -->
 
-                    <div id="addLeadstatustModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+                    <div id="addLeadstatustModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                  <div class="modal-content">
                         <div class="modal-header">
                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                           <h3 id="myModalLabel">{{_("New Lead status")}}</h3>
@@ -344,13 +366,13 @@
                         <div class="modal-body">
                             <form id="saveLeadtatus" name="addleadstatus"  ng-submit="saveLeadtatus(lead)" class="form-horizontal"> 
                             <fieldset>
-                            <div class="control-group">
+                            <div class="form-group">
                               <label  class="required control-label">{{_("Lead Status")}} *</label>
                        
-                              <div class="controls">
-                              <input type="text" required id="id_firstname" ng-model="lead.status">
+                              
+                              <input type="text" class="form-control" required id="id_firstname" ng-model="lead.status">
                           
-                               </div>
+                               
                             </div>
                            
                            
@@ -362,11 +384,16 @@
                 <button  type="submit" class="btn green">{{_("Add Lead Status")}}</button>
               </div>
                </form>
+        </div>
+        </div>
        </div>
 
     <!--End Lead Modal -->
     <!-- HKA 19.12.2013 Edit Lead status -->
-         <div id="EditLeadStatus" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+         <div id="EditLeadStatus" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+         <div class="modal-dialog">
+         <div class="modal-content">
+
                         <div class="modal-header">
                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                           <h3 id="myModalLabel">{{_("Edit Lead status")}}</h3>
@@ -374,13 +401,12 @@
                         <div class="modal-body">
                             <form id="saveLeadtatus" name="addleadstatus"  ng-submit="updateLeadstatus(leadstat)" class="form-horizontal"> 
                             <fieldset>
-                            <div class="control-group">
+                            <div class="form-group">
                               <label  class="required control-label">{{_("Lead Status")}} *</label>
                        
-                              <div class="controls">
-                              <input type="text" required id="id_firstname" ng-model="leadstat.status">
+                              <input type="text" class="form-control" required id="id_firstname" ng-model="leadstat.status">
                           
-                               </div>
+                              
                             </div>
                            
                            
@@ -392,8 +418,9 @@
                 <button  type="submit" class="btn green">{{_("Save")}}</button>
               </div>
                </form>
+       </div>        
        </div>
-
+       </div>
 
                       </div>
                       <!--div class="tab-pane active" id="tab_1_6" ng-show="selectedTab == 6">

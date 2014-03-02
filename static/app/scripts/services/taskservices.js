@@ -15,6 +15,7 @@ topicservices.factory('Task', function($http) {
                $scope.uri =url;
                $scope.ListComments();
                $scope.listContributors();
+               document.title = "Task: " + $scope.task.title ;
                // $scope.isContentLoaded = true;
                // $scope.listTopics(resp);
                // $scope.listTasks();

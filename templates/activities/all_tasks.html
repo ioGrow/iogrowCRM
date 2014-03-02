@@ -338,7 +338,7 @@
                                         <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-tags"></i>
                                          <span class="btn-text">
-                                            Tags
+                                            Tags iooo
                                          </span>
                                         </button>
                                         <button ng-click="assigneeModal()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
@@ -716,7 +716,7 @@
                   <div class="caption">
                     <i class="fa fa-reorder"></i>Tags
                   </div>
-                  <div class="tools">
+                  <!--div class="tools">
                       <a href="javascript:;" class="collapse">
                       </a>
                       <a href="#portlet-config" data-toggle="modal" class="config">
@@ -725,13 +725,13 @@
                       </a>
                       <a href="javascript:;" class="remove">
                     </a>
-                  </div>
+                  </div-->
                 </div>
                 <div class="portlet-body">
                 <ul class="list-group tags-list">
                   <li  ng-repeat="tag_item in tags" class="list-group-item tags-list-item" ng-click="selectTag(tag_item,$index,$event)"  >
                   <div class="row">
-                    <span  draggable ng-drag="dragTag(tag_item)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;" class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"><%= tag_item.name %></span>
+                    <span  draggable ng-drag="dragTag(tag_item)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;" class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"><%= tag_item.name %> </span>
                     <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
                       <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
                     </form>

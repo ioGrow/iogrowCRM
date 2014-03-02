@@ -28,42 +28,47 @@
       </div>
       <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
       <!-- BEGIN PAGE CONTAINER-->
-      <div class="container-fluid"ng-show="immediateFailed">
-         <div class="span12">  
-          <h1>Sign-in Button;</h1>
+      <div ng-show="immediateFailed">
+         <div class="col-md-12">  
+          <h1>{{ _("Sign-in Button;") }}</h1>
               <span id="signin">
                   <span id="myGsignin"></span>
               </span>
         </div>
       </div>
-      <div id="addMemberModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div id="addMemberModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+         <div class="modal-content">
+
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("Add a new member")}}</h3>
+              
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h3 id="myModalLabel">{{_("Add a new member")}}</h3>
               </div>
               <div class="modal-body">
                  <form id="addMember" name="addaccount" ng-submit="addNewMember(slected_memeber,role)" class="form-horizontal"> 
                   <fieldset>
                   
-                    <p>Add people to this group:</p>
+                   
+                   
                     <div class='container-fluid'>
                     <div class="invitation" ng-show="slected_memeber">
                       <img class="google-avatar" src="<%= slected_memeber.google_public_profile_photo_url%>"/>
                         <strong> <%= slected_memeber.google_display_name %> < <%=slected_memeber.email%> ></strong>
                     </div>
-                    <div class="control-group">
-                      <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="input-block-level" placeholder="Enter name or email addresse to add people to this group">
+                    <div class="form-group">
+                      <label class="control-label">Add people to this group:</label>
+                      <input type="text" class="form-control"  ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="input-block-level" placeholder="Enter name or email addresse to add people to this group">
                     </div>
-                    <div class="control-group">
+                    <div class="form-group">
                           <label class="control-label">Add member as:</label>
-                          <div class="controls">
-                            <select class="medium m-wrap" tabindex="1" ng-model="role">
+                           <select class="form-control" ng-model="role">
                               <option value="member">Member</option>
                               <option value="owner">Owner</option>
                               
                             </select>
-                          </div>
-                        </div>
+                       
+                    </div>
                       </div>
                     
                     </fieldset>
@@ -74,43 +79,48 @@
                 <button  type="submit" class="btn green addContactNow">{{_("Add this member")}}</button>
               </div>
                </form>
+        
+        </div>
+        </div>        
        </div>
-      <div class="container-fluid" ng-show="isSignedIn">
+      <div  ng-show="isSignedIn">
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-        <div class="row-fluid">
+        <div class="row">
           
-          <div class="span12">
+          <div class="col-md-12">
             <h2>
             <a href="/#/admin/groups" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
-            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Groups")}} > <%= group.name%> > Members</h2>
-            
-            <div class="btn-group">
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Groups")}} > <%= group.name%> > Members</h2>            
+                       
+          </div>
+        </div>
+        <div class="row">
+           <div class="col-md-12">
+                
             
                     <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
                     {{ _("New Member") }} <i class="icon-plus"></i>
                     </button>
-            </div>
-               
-            <hr/>
             
-          </div>
+           </div>
         </div>
-
+        <hr/>
             
-            <div class="row-fluid cards-container">
+          <div class="row cards-container">
+            <div class="col-md-12">
             <div class="inner-cards-container">
             
-              <div ng-repeat="member in group.members" class="span3 responsive" data-tablet="span6" data-desktop="span3">
+            <div ng-repeat="member in group.members" class="col-lg-4 col-md-3 col-sm-6 col-xs-12">
                 <div class="dashboard-stat cards-small">
-                  
+                                  
                   <div class="details">
-                    <div class="inner-small-card">
+                    <div class="desc">
                     <a href="<%= member.google_public_profile_url %>">
                     <center><img class="google-avatar" ng-src="<%=member.photo%>"></center>
                     <p class="card-small-title" >
-                      <%= member.display_name %>
+                      <%= member.display_name %> 
                     </p>
                     
                     </a>
@@ -119,10 +129,10 @@
                   </div>
                                   
                 </div>
+             
               </div>
-              </div>
-            </div>
-          <div class="row-fluid">
+          <div class="row">
+            <div class="col-md-12">
             <div class="pagination pull-right" ng-hide="isLoading">
                   
                   <ul>
@@ -135,12 +145,20 @@
                     </button></li>
                   </ul>
                 </div>
+           
                 <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+            </div>
           </div>
+
+          </div>
+          
+          </div>
+          
             
           
         
         <!-- END PAGE CONTENT-->
+     
       </div>
       <!-- END PAGE CONTAINER--> 
 </div>

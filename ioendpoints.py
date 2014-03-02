@@ -550,9 +550,6 @@ class ContactInsertRequest(messages.Message):
     lastname = messages.StringField(4)
     title = messages.StringField(5)
     access = messages.StringField(6)
-
-    
-
 class ContactListResponse(messages.Message):
     items = messages.MessageField(ContactSchema, 1, repeated=True)
     nextPageToken = messages.StringField(2)

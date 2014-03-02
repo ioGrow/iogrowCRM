@@ -194,8 +194,7 @@ $scope.selectTag= function(tag,index,$event){
       if(!$scope.manage_tags){
          var element=$($event.target);
          if(element.prop("tagName")!='LI'){
-              element=element.parent();
-              element=element.parent();
+              element=element.parent().closest('LI');
          }
          var text=element.find(".with-color");
          if($scope.selected_tags.indexOf(tag) == -1){
@@ -347,7 +346,8 @@ $scope.addTags=function(){
         console.log(params);
         Edge.insert($scope,params);
         $scope.draggedTag=null;
-      }
+      };
+      
 
 
 

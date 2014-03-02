@@ -253,7 +253,7 @@
                       <br/>
                           <div class="row">
                           <div class="col-md-12">
-                               <span  ng-repeat="case_tag in casee.tags" class="pull-right task-label badge badge-roundless" style="background-color: <%=case_tag.color%>;color:<%=idealTextColor(case_tag.color)%>;">  <%= case_tag.name %></span>
+                               <span  ng-repeat="case_tag in casee.tags" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=case_tag.color%>;color:<%=idealTextColor(case_tag.color)%>;">  <%= case_tag.name %></span>
                           </div>
                           
                         </div>               
@@ -326,11 +326,11 @@
                 </div>
                 <div class="portlet-body">
                 <ul class="list-group tags-list">
-                  <li draggable ng-repeat="tag_item in tags" class="list-group-item tags-list-item" ng-click="selectTag(tag_item,$index,$event)" ng-drag="dragTag(tag_item)" >
+                  <li  ng-repeat="tag_item in tags" class="list-group-item tags-list-item" ng-click="selectTag(tag_item,$index,$event)" ng-drag="dragTag(tag_item)" >
                   <div class="row">
-                    <div class="tag-color" style="border-left: 4px solid <%=tag_item.color%>;">
-                    </div>
-                    <span class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"><%= tag_item.name %></span>
+                    <!--div class="tag-color" style="border-left: 4px solid <%=tag_item.color%>;">
+                    </div-->
+                    <span draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;"><%= tag_item.name %></span>
                     <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
                       <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
                     </form>
