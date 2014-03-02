@@ -19,21 +19,16 @@
                  <form id="addMember" name="addaccount" ng-submit="share(slected_memeber)" class="form-horizontal"> 
                   
                     <p>{{ _("Who has access:") }}</p>
-                    <div class=''>
-
-                     
-                          
-                            <label class="radio line">
-                            <input type="radio" value="public" ng-model="account.access" />
+                    <div class="radio-list">
+                         
+                            <label >
+                            <input type="radio" name="optionRadio" value="public" ng-model="account.access" />
                             {{ _("public: Anyone within your organization can access and find") }}
                             </label>
-                            <label class="radio line">
-                            <input type="radio"  value="private" ng-model="account.access" />
+                            <label >
+                            <input type="radio" name="optionRadio"  value="private" ng-model="account.access" />
                             {{ _("private: only you and your collaborators") }}
-                            </label>  
-                           
-                       
-                      
+                            </label>                       
                     </div>
                     <hr/>
                     <div class=''>
@@ -116,11 +111,12 @@
             
 
            <span ng-show="account.account_type">{{_("Type")}}: <a class="tag" href="/#/search/type:Account <%=account.account_type%>">#<%=account.account_type%></a></span><br>
-          
+           
+           <span ng-show="account.industry">{{_("Industry")}}: <a class="tag" href="/#/search/type:Account <%=account.industry%>">#<%=account.industry%></a></span><br>
             
-            <div class="tags">
+            <!--div class="tags">
               <span  ng-repeat="account_tag in account.tags" class="task-label badge badge-roundless" style="background-color: <%=account_tag.color%>;color:<%=idealTextColor(account_tag.color)%>;">  <%= account_tag.name %></span>
-            </div>
+            </div-->
              <span class="page-meta"><i class="icon-pencil"><a ng-click="editaccount()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |  <i class="icon-trash"><a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  {{_("Delete")}}</a></i></span>
 
            
@@ -147,7 +143,7 @@
                       <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;" >{{ _("Notes") }}</a></li>
                       <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;renderMaps();">{{ _("About") }}</a></li>
                       <li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">{{ _("Contacts") }}</a></li>
-                      <li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">{{ _("Customer Needs") }}</a></li>
+                      <li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">{{ _("Needs") }}</a></li>
                       <li class="ng-tab" ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">{{ _("Opportunities") }}</a></li>
                       <li class="ng-tab"  ng-class="{active: selectedTab == 6}"><a ng-click="selectedTab = 6;">{{ _("Cases") }}</a></li>
                       <li class="ng-tab"  ng-class="{active: selectedTab == 7}"><a ng-click="selectedTab = 7;">{{ _("Attach Documents") }}</a></li>
@@ -394,7 +390,7 @@
                         <div class="modal-body">
                             <form id="addContact" name="addcontact"  ng-submit="savecontact(contact)" class="form-horizontal" role="form"> 
                             <div class="form-group">
-                              <label  class="required col-md-3 control-label">{{_("First Name")}} *</label>
+                              <label  class="required col-md-3 control-label">{{_("First Name")}} </label>
                        
                               <div class="col-md-9">
                               <input class="form-control" type="text" required id="id_firstname" ng-model="contact.firstname">
@@ -409,7 +405,7 @@
                               </div>
                            </div>
                            <div class="form-group">
-                             <label  class="required col-md-3 control-label">{{_("Position")}} </label>
+                             <label  class="required col-md-3 control-label">{{_("Tittle")}} </label>
                        
                              <div class="col-md-9">
                               <input class="form-control" type="text"  id="id_account" ng-model="contact.title">
@@ -500,12 +496,12 @@
                       <div class="modal-content">
                         <div class="modal-header">
                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                          <h3 id="myModalLabel" class="modal-title">{{_("Add new Customer Needs")}}</h3>
+                          <h3 id="myModalLabel" class="modal-title">{{_("Add new Need")}}</h3>
                         </div>
                           <div class="modal-body">
                              <form id="addCase" name="addCase" ng-submit="saveNeed(need)" class="form-horizontal">             
                                 <div class="form-group">
-                                    <label  class="required col-md-3 control-label">{{_("Subject of the need")}} </label>
+                                    <label  class="required col-md-3 control-label">{{_("Subject")}} </label>
                                    
                                     <div class="col-md-9">
                                       <input type="text" class="form-control" id="id_name" ng-model="need.name">
@@ -513,7 +509,7 @@
                                     </div>
                                 </div>
                                  <div class="form-group">
-                                    <label  class="required col-md-3 control-label">{{_("More details about this need")}} </label>
+                                    <label  class="required col-md-3 control-label">{{_("More details")}} </label>
                                    
                                     <div class="col-md-9">
                                        <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="need.description"></textarea>
@@ -647,13 +643,13 @@
                           <input type="text" class="form-control" required id="id_name" ng-model="opportunity.name">
                           </div>
                       </div>
-                      <div class="form-group">
+                      <!--div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Labels")}} </label>
                        
                         <div class="col-md-9">
                           <input type="text"  class="form-control" id="id_label" ng-model="opportunity.description">
                         </div>
-                      </div>
+                      </div-->
                     <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Amount")}} </label>
                         <div class="col-md-9">
@@ -807,14 +803,7 @@
                         </div>
                       
                     </div>
-                    <div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Labels")}} </label>
-                       
-                        <div class="col-md-9">
-                          <input type="text"  class="form-control" id="id_description" ng-model="casee.type_case">
-                          
-                        </div>
-                    </div>
+                   
                    
 
                     </fieldset>

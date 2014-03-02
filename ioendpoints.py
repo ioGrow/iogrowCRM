@@ -658,6 +658,7 @@ class AccountSchema(messages.Message):
     topics = messages.MessageField(TopicListResponse,11)
     created_at = messages.StringField(12)
     updated_at = messages.StringField(13)
+    access = messages.StringField(14)
 
 class AccountListResponse(messages.Message):
     items = messages.MessageField(AccountSchema, 1, repeated=True)
@@ -1140,6 +1141,7 @@ class CrmEngineApi(remote.Service):
         account_schema = AccountSchema(
                                   id = str( account.key.id() ),
                                   entityKey = account.key.urlsafe(),
+                                  access = account.access,
                                   name = account.name,
                                   account_type = account.account_type,
                                   industry = account.industry,
@@ -1887,6 +1889,7 @@ class CrmEngineApi(remote.Service):
                     lastname = request.lastname,
                     owner = user_from_email.google_user_id,
                     organization = user_from_email.organization,
+                    access = request.access,
                     folder = created_folder['id']
                     )
         if request.title:
