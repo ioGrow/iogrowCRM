@@ -207,16 +207,17 @@
           <div class="col-md-9">
             <div class="row">
               <div class="col-md-12">
-                <form ng-submit="addNewTask()" >
+                <form ng-submit="addNewTask()" class="newTaskForm">
                     <div class="form-group">
                       <div class="input-icon right">
                         <input taggable taggabledata="taggableOptions" ng-model="newTask.title" id="new_task_text" class="form-control"  placeholder="Add new task ..." autofocus/>
                       </div>
                     </div>
                 </form>
-                 <datetimepick icon-class='fa fa-bell-o' label-format='MMM d, h:mm a' ng-model='newTask.reminder' class="new-task-reminder pull-right"></datetimepick>
-                <datetimepick ng-model='newTask.due' class="new-task-date pull-right" label-format='MMM d, h:mm a'></datetimepick>
-
+                <div class="newTask-meta">
+                    <datetimepick icon-class='fa fa-bell-o' label-format='MMM d, h:mm a' ng-model='newTask.reminder' class="new-task-reminder pull-right"></datetimepick>
+                     <datetimepick ng-model='newTask.due' class="new-task-date pull-right" label-format='MMM d, h:mm a'></datetimepick>
+                </div>
               </div>
             </div>
               <!-- BEGIN PORTLET-->
