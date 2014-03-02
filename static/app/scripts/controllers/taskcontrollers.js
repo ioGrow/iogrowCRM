@@ -277,158 +277,97 @@ app.directive('droppable', function() {
         );
     }
 });
-app.factory('taggableParser', ['$parse', function ($parse) {
-
-  //                      00000111000000000000022200000000000000003333333333333330000000000044000
-  var TYPEAHEAD_REGEXP = /^\s*(.*?)(?:\s+as\s+(.*?))?\s+for\s+(?:([\$\w][\$\w\d]*))\s+in\s+(.*)$/;
-
-  return {
-    parse:function (input) {
-
-      var match = input.match(TYPEAHEAD_REGEXP), modelMapper, viewMapper, source;
-      if (!match) {
-        throw new Error(
-          "Expected typeahead specification in form of '_modelValue_ (as _label_)? for _item_ in _collection_'" +
-            " but got '" + input + "'.");
-      }
-      return {
-        itemName:match[3],
-        source:(match[4]),
-        viewMapper:(match[2] || match[1]), 
-        modelMapper:(match[1])
-      };
-    }
-  };
-}]);
-app.directive('taggable', ['$parse','taggableParser',function($parse,typeaheadParser) {
+app.directive('taggable', ['$parse',function($parse) {
     return {
       restrict: 'A',
       require:'?ngModel',
-      template: '<input typeahead="tag as tag.name  for tag in getAssignedUsers($viewValue) | filter:getValueFrom($viewValue) | limitTo:8" typeahead-on-select="tagMember(<%=modelName%>)"/>',
+      template: '<input typeahead="tag as tag.name  for tag in getSearchResult($viewValue) | filter:getSearchText($viewValue) | limitTo:8" typeahead-on-select="selectItem(<%=modelName%>)"/>',
       replace: true,
 
       link: function ($scope, elem, attrs,ngModel) {
-       /* $scope.$watch('model', function() {
-            $scope.$eval(attrs.ngModel + ' = model');
-        });
-
-        $scope.$watch(attrs.ngModel, function(val) {
-            $scope.model = val;
-        });*/
-        console.log();
         $scope.modelName=attrs.ngModel;
         $scope.attribute='name';
         $scope.currentAttribute='name';
         $scope.objectName='user';
         $scope.tagInfo=$scope[attrs.taggabledata];
-        /*$scope.tag=$scope.tagInfo.tag;*/
-        console.log($scope.tagInfo);
-        
-         $scope.newTaskValue=null;
-        $scope.getValueFrom=function(value){
-                 $scope.pattern=null;
-                var text= value;
-                $scope.newTaskValue=value;
+        $scope.newTaskValue=null;
+        function ReturnWord(text, caretPos) {
+              var preText =text, posText =text, wordsBefore=[], wordsAfter=[], pre='', post='';
+                preText = preText.substring(0, caretPos);
+                wordsBefore= preText.split(" ");
+                pre = wordsBefore[wordsBefore.length - 1]; 
+                posText = posText.substring(caretPos);
+                wordsAfter = posText.split(" ");
+                post = wordsAfter[0];
+                wordsBefore.splice(wordsBefore.length - 1,1);
+                wordsAfter.splice(0,1);
+              return {
+                before:wordsBefore.join(' '),
+                after:wordsAfter.join(' '),
+                word:pre+post
+              }
+          }
+        $scope.getSearchText=function(value){
+                $scope.pattern=null;
+                $scope.newTaskText=$(elem).val();
+                $scope.newTaskValue=ReturnWord($(elem).val(),$(elem).caret()).word;
                 $scope.matchPattern=false;
+                $scope.returnedValue=undefined;
                 angular.forEach($scope.tagInfo, function(item){
-                     if (item.tag=='#'){$scope.pattern = /(.*)\s#(.*)/g;}
-                     if (item.tag=='@') {$scope.pattern = /(.*)\s@(.*)/g;};
-                     if (item.tag=='+') {$scope.pattern = /(.*)\s+(.*)/g;};
-                     if (item.tag=='!') {$scope.pattern = /(.*)\s!(.*)/g;};
+                     if (item.tag=='#'){$scope.pattern = /^#([\w]*)/g;}
+                     if (item.tag=='@') {$scope.pattern = /^@([\w]*)/g;};
+                     if (item.tag=='!') {$scope.pattern = /^!([\w]*)/g;};
                      var text=$scope.newTaskValue;
-                     if($scope.pattern.test(text)){  
-                          $scope.newTaskValue=text.replace($scope.pattern, "$1\s @");
-                          console.log($scope.newTaskValue);
-                          var newstr = text.replace($scope.pattern, "$2");
-                          console.log()
-                          console.log('return :'+newstr);
+                     if($scope.pattern.test($scope.newTaskValue)){
+                          $scope.returnedValue = text.replace($scope.pattern, "$1");
                           $scope.matchPattern=true;
-                          return newstr;
-                            
                         }
                     });
-                if (!$scope.matchPattern) {
-                  return null;
-                };
-                        
-            }
-          $scope.getAssignedUsers=function(value){
-               $scope.patternAs=null;
-               $scope.matchPattern=false;
-                console.log('$scope.tagInfo');
-                console.log($scope.tagInfo);
-                $scope.datar={};
-                angular.forEach($scope.tagInfo, function(item){
-                     console.log('item');
-                     console.log(item.data.name);
-                     $scope.data=$scope[item.data.name];
-                     console.log('$scope.data');
-                     console.log($scope[item.data.name]);
-                     
-                     if (item.tag=='#'){$scope.patternAs = /(.*)\s#(.*)/g;}
-                     if (item.tag=='@') {$scope.patternAs = /(.*)\s@(.*)/g;};
-                     if (item.tag=='+') {$scope.patternAs = /(.*)\s+(.*)/g;};
-                     if (item.tag=='!') {$scope.patternAs = /(.*)\s!(.*)/g;};
-                     var text= value;
-                     console.log('this is text from getassign:'+text);
-                      if($scope.patternAs.test(text)){
-                        $scope.matchPattern=true;
-                          
-                          $scope.attribute=item.data.attribute;
-                          console.log('item.data.attribute');
-                          console.log(item.data.attribute);
-                          console.log('item.data.attribute');
-                          console.log($scope.attribute);
-
-                          $scope.datar=$scope.data;
-                          angular.forEach($scope.datar, function(item){
-                          if (!item.hasOwnProperty('name')) {
-                                    item.name = item[$scope.attribute];
-                                    console.log('attribute');
-                                    console.log(item.name);
-                                    
-                                }
-                                console.log('log forEach item');
-                                console.log(item);
-                          }); 
-                          console.log('$scope.datar in forEach');
-                          console.log($scope.datar);
-                          $scope.currentAttribute=$scope.attribute;
-                          $scope.objectName=item.data.name;
-                      }
-                    });
-                console.log('$scope.datar');
-                console.log($scope.datar);
-                if (!$scope.matchPattern) {
-                  console.log('here not match')
-                  return [];
+                if ($scope.matchPattern) {
+                  return $scope.returnedValue;
                 }else{
-                  console.log('here match')
-
-                      console.log('currentAttribute');
-                          console.log($scope.currentAttribute);
-
+                  return null;
+                };  
+            }
+          $scope.getSearchResult=function(value){
+               
+                if($scope.getSearchText(value)!=null){
+                  var text= ReturnWord($(elem).val(),$(elem).caret()).word;
+                  var tag= text.substring(0,1);
+                  $scope.datar={};
+                  angular.forEach($scope.tagInfo, function(item){
+                    if (item.tag==tag) {
+                      $scope.data=$scope[item.data.name];
+                      $scope.currentAttribute=item.data.attribute;
+                      $scope.datar=$scope.data;
+                          angular.forEach($scope.datar, function(itm){
+                          if (!itm.hasOwnProperty('name')) {
+                                    itm.name = itm[$scope.currentAttribute];
+                                }
+                          }); 
+                          $scope.objectName=item.data.name;
+                      };
+                    });
                   return $scope.datar;
-                }
+                  }else{
+                     return [];
+                  }
           }
-        $scope.tagMember = function(value){
-          console.log('element tagggged');
-          console.log($scope.objectName);
+        $scope.selectItem = function(value){
           angular.forEach($scope.tagInfo, function(item){
               if (item.data.name==$scope.objectName) {
-                
-                   if ($scope.currentAttribute!='name') {
-                    console.log('$scope.currentAttribute');
-                    console.log($scope.currentAttribute);
+                  if ($scope.currentAttribute!='name') {
                       delete value["name"];
-                   };
-                   console.log(item.selected);
+                  };
                   if (item.selected.indexOf(value) == -1) {
                    item.selected.push(value);
                    }
-               $parse(attrs.ngModel).assign($scope, $scope.newTaskValue+value[item.data.attribute]);
-               console.log(item.selected);
 
+                  var text= ReturnWord($(elem).val(),$(elem).caret()).word;
+                  var beforeText= ReturnWord($(elem).val(),$(elem).caret()).before;
+                  var afterText= ReturnWord($(elem).val(),$(elem).caret()).after;
+                  var tag= text.substring(0,1);
+                  $parse(attrs.ngModel).assign($scope, beforeText+' '+tag+value[item.data.attribute]+' '+afterText);
               }; 
            });
            
@@ -490,11 +429,11 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
      $scope.isSelectedAll = false;
      $scope.taggableOptions=[];
      $scope.taggableOptions.push(
-      {'tag':'#','data':{
+      {'tag':'@','data':{
       name:'users',
       attribute:'google_display_name'
       },'selected':[]},
-      {'tag':'!','data':{
+      {'tag':'#','data':{
       name:'tags',
       attribute:'name'
       },'selected':[]}
