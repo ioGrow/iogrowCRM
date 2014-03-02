@@ -117,16 +117,16 @@
                     
                     <hr/>
                     <p>Who can access?</p>
-                     <div class='container-fluid'>
+                     <div class="radio-list">
 
                      
                           
-                            <label class="radio line">
-                            <input type="radio" value="public" ng-model="casee.access" />
+                            <label >
+                            <input type="radio" name="optionsRadios" value="public" ng-model="casee.access" checked />
                             public: Anyone within your organization
                             </label>
-                            <label class="radio line">
-                            <input type="radio"  value="private" ng-model="casee.access" />
+                            <label >
+                            <input type="radio" name="optionsRadios"  value="private" ng-model="casee.access" />
                             private: only you and your collaborators
                             </label>  
                            
@@ -157,8 +157,7 @@
         <div class="row ">
             <div class="col-md-12"> <h2 class="page-title">{{ _("Cases") }} </h2></div>
           </div>
-        <div class="row">
-          
+  
           
           <div class="row">
              
@@ -216,7 +215,7 @@
           </div>          
           
         </div>  
-        </div>  
+       
         </div>
          <hr/>
         

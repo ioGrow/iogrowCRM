@@ -18,6 +18,7 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
      $scope.order = '-updated_at';
      $scope.account.account_type = 'Customer';
      $scope.draggedTag=null;
+
      
      // What to do after authentication
      $scope.runTheProcess = function(){
@@ -507,7 +508,14 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        $scope.stage_selected={};
        $scope.status_selected={};
        $scope.infonodes = {};
-
+       $scope.phone={};
+       $scope.phone.type_number= 'work';
+       $scope.need = {};
+       $scope.need.need_status = 'pending';
+       $scope.need.priority = 'Medium';
+       $scope.casee = {};
+       $scope.casee.priority = 4;
+       $scope.casee.status = 'pending';
 
        // What to do after authentication
        $scope.runTheProcess = function(){
@@ -878,6 +886,8 @@ $scope.CaselistNextPageItems = function(){
      $scope.share = function(slected_memeber){
         console.log('permissions.insert share');
         console.log(slected_memeber);
+        console.log("---------------- ooooooooooopppppppppppe");
+        console.log($scope.account.access);
         $scope.$watch($scope.account.access, function() {
          var body = {'access':$scope.account.access};
          var id = $scope.account.id;
@@ -1191,7 +1201,8 @@ $scope.CaselistNextPageItems = function(){
   };
   InfoNode.insert($scope,params);
   $('#phonemodal').modal('hide');
-  $scope.phone={};
+  $scope.phone.type_number='work';
+  $scope.phone.number='';
   };
 
 
