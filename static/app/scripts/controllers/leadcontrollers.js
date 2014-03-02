@@ -500,7 +500,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.email = {};
      $scope.infonodes = {};
     $scope.phone={};
-    $scope.phone.type_number = 'home';
+    $scope.phone.type_number = 'work';
 
       // What to do after authentication
       $scope.runTheProcess = function(){
@@ -753,7 +753,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
   };
   InfoNode.insert($scope,params);
   $('#phonemodal').modal('hide');
-  $scope.phone={};
+  $scope.phone.type_number='work';
+  $scope.phone.number='';
   };
 
 
