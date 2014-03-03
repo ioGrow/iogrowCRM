@@ -232,19 +232,30 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
       handleColorPicker();
       console.log($('#addMemberToTask').children());
      
-      /*$scope.$watch('newTask.reminder', function() {
-         alert($("#new_task_text").width());
+     $scope.$watch('newTask.reminder', function() {
          if($scope.newTask.due==null&&$scope.newTask.reminder==null){
-                $("#new_task_text").css("background-color", "270px !important");
-           }else{
+                $("#new_task_text").attr('style', 'padding-right: 60px !important');
+            }else{
                 if($scope.newTask.due==null||$scope.newTask.reminder==null){
              
-                      $("#new_task_text").css("background-color", "black !important");
+                     $("#new_task_text").attr('style', 'padding-right: 150px !important');
                 }else{
-                    $("#new_task_text").css("padding-right", "45px !important");
+                    $("#new_task_text").attr('style', 'padding-right: 260px !important');
                 } 
            }
-     });*/
+     });
+      $scope.$watch('newTask.due', function() {
+         if($scope.newTask.due==null&&$scope.newTask.reminder==null){
+                $("#new_task_text").attr('style', 'padding-right: 30px !important');
+            }else{
+                if($scope.newTask.due==null||$scope.newTask.reminder==null){
+             
+                     $("#new_task_text").attr('style', 'padding-right: 150px !important');
+                }else{
+                    $("#new_task_text").attr('style', 'padding-right: 260px !important');
+                } 
+           }
+     });
       $scope.idealTextColor=function(bgColor){
         var nThreshold = 105;
          var components = getRGBComponents(bgColor);

@@ -207,7 +207,7 @@ $scope.selectTag= function(tag,index,$event){
          }else{
             element.css('background-color','#ffffff !important');
             $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
-             text.css('color','#000000');
+            text.css('color',$scope.idealTextColor(tag.color));
          }
     
          $scope.filterByTags($scope.selected_tags);
