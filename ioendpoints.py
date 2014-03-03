@@ -32,7 +32,7 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 # Our libraries
 from iograph import Node,Edge,RecordSchema,InfoNodeResponse,InfoNodeConnectionSchema,InfoNodeListResponse
 from iomodels.crmengine.accounts import Account
-from iomodels.crmengine.contacts import Contact
+from iomodels.crmengine.contacts import Contact,ContactSchema,ContactListResponse
 from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse
 from iomodels.crmengine.tasks import Task
 #from iomodels.crmengine.tags import Tag
@@ -495,16 +495,7 @@ class ContactListRequest(messages.Message):
     tags = messages.StringField(4,repeated = True)
     owner = messages.StringField(5)
 
-class ContactSchema(messages.Message):
-    id = messages.StringField(1)
-    entityKey = messages.StringField(2)
-    firstname = messages.StringField(3)
-    lastname = messages.StringField(4)
-    account_name = messages.StringField(5)
-    title = messages.StringField(6)
-    tags = messages.MessageField(TagSchema,7, repeated = True)
-    created_at = messages.StringField(8)
-    updated_at = messages.StringField(9)
+
 
 class ContactInsertRequest(messages.Message):
     id = messages.StringField(1)
@@ -513,9 +504,7 @@ class ContactInsertRequest(messages.Message):
     lastname = messages.StringField(4)
     title = messages.StringField(5)
     access = messages.StringField(6)
-class ContactListResponse(messages.Message):
-    items = messages.MessageField(ContactSchema, 1, repeated=True)
-    nextPageToken = messages.StringField(2)
+
 
 class OpportunityListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -985,28 +974,9 @@ class CrmEngineApi(remote.Service):
         #list of contacts to this account
         contacts = None
         if request.contacts:
-            contact_list = list()
-            contact_edge_list = Edge.list(
-                                start_node=account.key,
-                                kind='contacts',
-                                limit=request.contacts.limit,
-                                pageToken=request.contacts.pageToken
-                                )
-            for edge in contact_edge_list['items']:
-                contact_list.append(
-                                    ContactSchema(
-                                               firstname = edge.end_node.get().firstname,
-                                               lastname = edge.end_node.get().lastname,
-                                               title = edge.end_node.get().title
-                                               )
-                                    )
-            if contact_edge_list['next_curs'] and contact_edge_list['more']:
-                contact_next_curs = contact_edge_list['next_curs'].urlsafe()
-            else:
-                contact_next_curs = None
-            contacts = ContactListResponse(
-                                            items = contact_list,
-                                            nextPageToken = contact_next_curs
+            contacts = Contact.list_by_parent(
+                                            parent_key = account.key,
+                                            request = request
                                         )
         #list of topics related to this account
         topics = None

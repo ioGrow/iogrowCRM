@@ -1,9 +1,26 @@
 from google.appengine.ext import ndb
 from endpoints_proto_datastore.ndb import EndpointsModel
 from google.appengine.api import search 
+from protorpc import messages
 from search_helper import tokenize_autocomplete
-
+from iomodels.crmengine.tags import TagSchema
+from iograph import Edge
 import model
+
+class ContactSchema(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    firstname = messages.StringField(3)
+    lastname = messages.StringField(4)
+    account_name = messages.StringField(5)
+    title = messages.StringField(6)
+    tags = messages.MessageField(TagSchema,7, repeated = True)
+    created_at = messages.StringField(8)
+    updated_at = messages.StringField(9)
+
+class ContactListResponse(messages.Message):
+    items = messages.MessageField(ContactSchema, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
 
 class Contact(EndpointsModel):
     _message_fields_schema = ('id','entityKey','owner', 'folder','created_at','updated_at',  'access','collaborators_list','collaborators_ids','display_name', 'firstname','lastname','title','company','account','account_name','introduction','tagline','phones','emails','addresses','websites','sociallinks')
@@ -102,5 +119,31 @@ class Contact(EndpointsModel):
                 ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)
+
+    @classmethod
+    def list_by_parent(cls,parent_key,request):
+        contact_list = []
+        contact_edge_list = Edge.list(
+                                start_node = parent_key,
+                                kind='contacts',
+                                limit=request.contacts.limit,
+                                pageToken=request.contacts.pageToken
+                                )
+        for edge in contact_edge_list['items']:
+                contact_list.append(
+                                    ContactSchema(
+                                               firstname = edge.end_node.get().firstname,
+                                               lastname = edge.end_node.get().lastname,
+                                               title = edge.end_node.get().title
+                                               )
+                                    )
+        if contact_edge_list['next_curs'] and contact_edge_list['more']:
+            contact_next_curs = contact_edge_list['next_curs'].urlsafe()
+        else:
+            contact_next_curs = None
+        return ContactListResponse(
+                                    items = contact_list,
+                                    nextPageToken = contact_next_curs
+                                )    
 
 
