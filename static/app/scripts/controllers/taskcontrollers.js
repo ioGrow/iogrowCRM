@@ -425,8 +425,6 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           }
 
         });
-        console.log('************************@@@@@@@@@@@@@@@@@@@@@************************');
-        console.log(params);
        
        
         Task.insert($scope,params);
@@ -434,7 +432,8 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
 
          console.log($scope.newTask.title);
         $scope.newTask.title='';
-        $scope.newTask.dueDate='0000-00-00T00:00:00-00:00';
+        $scope.newTask.due=null;
+        $scope.newTask.reminder=null;
     }
 
    $scope.updateTask = function(task){
