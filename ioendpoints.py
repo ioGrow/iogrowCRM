@@ -40,7 +40,7 @@ from iomodels.crmengine.opportunities import Opportunity
 from iomodels.crmengine.events import Event
 from iomodels.crmengine.documents import Document
 from iomodels.crmengine.shows import Show
-from iomodels.crmengine.leads import Lead
+from iomodels.crmengine.leads import Lead,LeadListRequest,LeadListResponse,LeadSearchResults
 from iomodels.crmengine.cases import Case,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
 #from iomodels.crmengine.products import Product
 from iomodels.crmengine.comments import Comment
@@ -312,21 +312,7 @@ class OpportunitySearchResults(messages.Message):
 
 
 
-# The message class that defines the leads.search response
-class LeadSearchResult(messages.Message):
-    id = messages.StringField(1)
-    entityKey = messages.StringField(2)
-    firstname = messages.StringField(3)
-    lastname = messages.StringField(4)
-    company = messages.StringField(5)
-    position = messages.StringField(6)
-    status = messages.StringField(7)
 
-
-# The message class that defines a set of leads.search results
-class LeadSearchResults(messages.Message):
-    items = messages.MessageField(LeadSearchResult, 1, repeated=True)
-    nextPageToken = messages.StringField(2)
 
 
 # The message class that defines a response for leads.convert API
@@ -465,39 +451,6 @@ class OpportunitySchema(messages.Message):
 class OpportunityListResponse(messages.Message):
     items = messages.MessageField(OpportunitySchema, 1, repeated=True)
     nextPageToken = messages.StringField(2)
-
-class LeadListRequest(messages.Message):
-    limit = messages.IntegerField(1)
-    pageToken = messages.StringField(2)
-    order = messages.StringField(3)
-    tags = messages.StringField(4,repeated = True)
-    owner = messages.StringField(5)
-    status = messages.StringField(6)
-
-class LeadSchema(messages.Message):
-    id = messages.StringField(1)
-    entityKey = messages.StringField(2)
-    firstname = messages.StringField(3)
-    lastname = messages.StringField(4)
-    company = messages.StringField(5)
-    title = messages.StringField(6)
-    source = messages.StringField(7)
-    status = messages.StringField(8)
-    tags = messages.MessageField(TagSchema,9, repeated = True)
-    created_at = messages.StringField(10)
-    updated_at = messages.StringField(11)
-
-class LeadListResponse(messages.Message):
-    items = messages.MessageField(LeadSchema, 1, repeated=True)
-    nextPageToken = messages.StringField(2)
-
-
-
-
-    
-
-
-
 
 class EndpointsHelper(EndpointsModel):
     INVALID_TOKEN = 'Invalid token'
@@ -1428,6 +1381,7 @@ class CrmEngineApi(remote.Service):
                             user_from_email = user_from_email,
                             request = request
                             )
+    
     # contacts.update API
     @Contact.method(
                     user_required=True,
@@ -2048,74 +2002,11 @@ class CrmEngineApi(remote.Service):
                       name='leads.listv2')
     def lead_list_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        curs = Cursor(urlsafe=request.pageToken)
-        if request.limit:
-            limit = int(request.limit)
-        else:
-            limit = 10
-        items = list()
-        you_can_loop = True
-        count = 0
-        while you_can_loop:
-            if request.order:
-                ascending = True
-                if request.order.startswith('-'):
-                    order_by = request.order[1:]
-                    ascending = False
-                else:
-                    order_by = request.order
-                attr = Lead._properties.get(order_by)
-                if attr is None:
-                    raise AttributeError('Order attribute %s not defined.' % (attr_name,))
-                if ascending:
-                    leads, next_curs, more =  Lead.query().filter(Lead.organization==user_from_email.organization).order(+attr).fetch_page(limit, start_cursor=curs)
-                else:
-                    leads, next_curs, more = Lead.query().filter(Lead.organization==user_from_email.organization).order(-attr).fetch_page(limit, start_cursor=curs)
-            else:
-                leads, next_curs, more = Lead.query().filter(Lead.organization==user_from_email.organization).fetch_page(limit, start_cursor=curs)
-            for lead in leads:
-                if count<= limit:
-                    is_filtered = True
-                    if lead.access == 'private' and lead.owner!=user_from_email.google_user_id:
-                        end_node_set = [user_from_email.key]
-                        if not Edge.find(start_node=lead.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
-                            is_filtered = False
-                    if request.tags and is_filtered:
-                        end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
-                        if not Edge.find(start_node=lead.key,kind='tags',end_node_set=end_node_set,operation='AND'):
-                            is_filtered = False
-                    if request.owner and lead.owner!=request.owner and is_filtered:
-                        is_filtered = False
-                    if request.status and lead.status!=request.status and is_filtered:
-                        is_filtered = False
-                    if is_filtered:
-                        count = count + 1
-                        #list of tags related to this lead
-                        edge_list = Edge.list(start_node=lead.key,kind='tags')
-                        tag_list = Tag.list_by_parent(parent_key = lead.key)
-                        lead_schema = LeadSchema(
-                                  id = str( lead.key.id() ),
-                                  entityKey = lead.key.urlsafe(),
-                                  firstname = lead.firstname,
-                                  lastname = lead.lastname,
-                                  title = lead.title,
-                                  company = lead.company,
-                                  tags = tag_list,
-                                  created_at = lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
-                                )
-                        items.append(lead_schema)
-            if (count == limit):
-                you_can_loop = False
-            if more and next_curs:
-                curs = next_curs
-            else:
-                you_can_loop = False
-        if next_curs and more:
-            next_curs_url_safe = next_curs.urlsafe()
-        else:
-            next_curs_url_safe = None
-        return  LeadListResponse(items = items, nextPageToken = next_curs_url_safe)
+        return Lead.list(
+                        user_from_email = user_from_email,
+                        request = request
+                        )
+        
 
     # leads.list api
     @Lead.query_method(
@@ -2159,70 +2050,11 @@ class CrmEngineApi(remote.Service):
                         name='leads.search')
     def leads_search(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        organization = str(user_from_email.organization.id())
-        index = search.Index(name="GlobalIndex")
-        #Show only objects where you have permissions
-        query_string = SEARCH_QUERY_MODEL % {
-                               "type": "Lead",
-                               "query": request.q,
-                               "organization": organization,
-                               "owner": user_from_email.google_user_id,
-                               "collaborators": user_from_email.google_user_id,
-                                }
-        search_results = []
-        if request.limit:
-            limit = int(request.limit)
-        else:
-            limit = 10
-        next_cursor = None
-        if request.pageToken:
-            cursor = search.Cursor(web_safe_string=request.pageToken)
-        else:
-            cursor = search.Cursor(per_result=True)
-        if limit:
-            options = search.QueryOptions(limit=limit, cursor=cursor)
-        else:
-            options = search.QueryOptions(cursor=cursor)
-        query = search.Query(query_string=query_string, options=options)
-        try:
-            if query:
-                results = index.search(query)
-                #total_matches = results.number_found
-                # Iterate over the documents in the results
-                for scored_document in results:
-                    kwargs = {
-                              'id': scored_document.doc_id
-                              }
-                    for e in scored_document.fields:
-                        if e.name in [
-                                      "firstname",
-                                      "lastname",
-                                      "company",
-                                      "position",
-                                      "status"
-                                      ]:
-                            kwargs[e.name] = e.value
-                    search_results.append(LeadSearchResult(**kwargs))
-                    next_cursor = scored_document.cursor.web_safe_string
-                if next_cursor:
-                    next_query_options = search.QueryOptions(
-                                                             limit=1,
-                                                             cursor=scored_document.cursor
-                                                             )
-                    next_query = search.Query(
-                                              query_string=query_string,
-                                              options=next_query_options
-                                              )
-                    if next_query:
-                        next_results = index.search(next_query)
-                        if len(next_results.results)==0:
-                            next_cursor = None
-        except search.Error:
-            logging.exception('Search failed')
-        return LeadSearchResults(
-                                 items=search_results,
-                                 nextPageToken=next_cursor
-                                 )
+        return Lead.search(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+        
 
     # leads.update API
     @Lead.method(user_required=True,
