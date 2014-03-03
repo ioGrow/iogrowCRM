@@ -1,7 +1,7 @@
 app.controller('UserListCtrl', ['$scope','Auth','User',
     function($scope,Auth,User) {
      
-
+     $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Users").addClass("active");
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;

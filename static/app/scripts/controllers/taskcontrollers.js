@@ -686,7 +686,20 @@ $scope.selectTag= function(tag,index,$event){
          }
          Task.list($scope,params);
 
-  }
+  };
+
+  //HKA 03.03.2014 When tag is deleted render task.list
+   $scope.tagDeleted = function(){
+    $scope.listasks();
+ };
+
+ $scope.listasks = function(){
+   var params = { 'order': $scope.order,
+                         
+                        'limit':7}
+          Task.list($scope,params,true);
+ }
+
   $scope.filterByOwner = function(selected_tags){
          var tags = [];
          angular.forEach(selected_tags, function(tag){
