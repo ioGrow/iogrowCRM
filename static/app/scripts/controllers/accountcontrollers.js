@@ -209,14 +209,16 @@ $scope.selectTag= function(tag,index,$event){
             $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
              text.css('color','#000000');
          }
-         console.log('Taaaaaaaaaggggggssss');
-         console.log($scope.selected_tags);
+    
          $scope.filterByTags($scope.selected_tags);
 
       }
 
     };
   $scope.filterByTags = function(selected_tags){
+
+    console.log('-----------selected_tags-------');
+    console.log(selected_tags);
          var tags = [];
          angular.forEach(selected_tags, function(tag){
             tags.push(tag.entityKey);
@@ -224,8 +226,10 @@ $scope.selectTag= function(tag,index,$event){
          var params = {
           'tags': tags,
           'order': $scope.order,
-                        'limit':6
+          'limit':6
          }
+         console.log('-------Params------');
+         console.log(params);
          Account.list($scope,params);
 
   };
@@ -300,8 +304,7 @@ $scope.addTags=function(){
           });
       }
       handleColorPicker();
-      console.log('heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer');
-      console.log($('#addMemberToTask').children());
+     
       $('#addMemberToTask > *').on('click', null, function(e) {
             e.stopPropagation();
         });
@@ -326,14 +329,11 @@ $scope.addTags=function(){
       }
       $scope.dragTag=function(tag){
         $scope.draggedTag=tag;
-        console.log('i am here test------------------------------------');
-        console.log($scope.draggedTag);
-        $scope.$apply();
+        
       }
       $scope.dropTag=function(account){
         var items = [];
-        console.log('------------------Account ---------------');
-        console.log(account);
+        
         var edge = {
              'start_node': account.entityKey,
               'end_node': $scope.draggedTag.entityKey,
