@@ -158,7 +158,7 @@ accountservices.factory('Account', function($http) {
                         $scope.blankStateaccount = true;
                     }
                   }
-                  else{$scope.blankStateaccount = false;}
+                 
                  $scope.accounts = resp.items;
                  if ($scope.currentPage>1){
                       $scope.pagination.prev = true;

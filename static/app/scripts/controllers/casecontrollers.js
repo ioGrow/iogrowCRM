@@ -322,6 +322,7 @@ $scope.selectTag= function(tag,index,$event){
           'order': $scope.order,
                         'limit':6
          }
+        $scope.isFiltering = true;
          Case.list($scope,params);
 
   };

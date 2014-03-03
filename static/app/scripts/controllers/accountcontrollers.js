@@ -228,8 +228,7 @@ $scope.selectTag= function(tag,index,$event){
           'order': $scope.order,
           'limit':6
          }
-         console.log('-------Params------');
-         console.log(params);
+         $scope.isFiltering = true;
          Account.list($scope,params);
 
   };
