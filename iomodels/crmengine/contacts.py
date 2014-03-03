@@ -3,7 +3,7 @@ from google.appengine.datastore.datastore_query import Cursor
 from endpoints_proto_datastore.ndb import EndpointsModel
 from google.appengine.api import search 
 from protorpc import messages
-from search_helper import tokenize_autocomplete
+from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
 from iomodels.crmengine.tags import Tag,TagSchema
 from iograph import Edge
 import model
@@ -25,9 +25,24 @@ class ContactListRequest(messages.Message):
     order = messages.StringField(3)
     tags = messages.StringField(4,repeated = True)
     owner = messages.StringField(5)
-    
+
 class ContactListResponse(messages.Message):
     items = messages.MessageField(ContactSchema, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
+
+# The message class that defines the contacts.search response
+class ContactSearchResult(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    firstname = messages.StringField(3)
+    lastname = messages.StringField(4)
+    account_name = messages.StringField(5)
+    account = messages.StringField(6)
+    position = messages.StringField(7)
+
+# The message class that defines a set of contacts.search results
+class ContactSearchResults(messages.Message):
+    items = messages.MessageField(ContactSearchResult, 1, repeated=True)
     nextPageToken = messages.StringField(2)
 
 class Contact(EndpointsModel):
@@ -220,6 +235,73 @@ class Contact(EndpointsModel):
         else:
             next_curs_url_safe = None
         return  ContactListResponse(items = items, nextPageToken = next_curs_url_safe)
+
+    @classmethod
+    def search(cls,user_from_email,request):
+        organization = str(user_from_email.organization.id())
+        index = search.Index(name="GlobalIndex")
+        #Show only objects where you have permissions
+        query_string = SEARCH_QUERY_MODEL % {
+                              "type": "Contact",
+                              "query": request.q,
+                              "organization": organization,
+                              "owner": user_from_email.google_user_id,
+                              "collaborators": user_from_email.google_user_id,
+                              }
+        search_results = []
+        if request.limit:
+            limit = int(request.limit)
+        else:
+            limit = 10
+        next_cursor = None
+        if request.pageToken:
+            cursor = search.Cursor(web_safe_string=request.pageToken)
+        else:
+            cursor = search.Cursor(per_result=True)
+        if limit:
+            options = search.QueryOptions(limit=limit, cursor=cursor)
+        else:
+            options = search.QueryOptions(cursor=cursor)
+        query = search.Query(query_string=query_string, options=options)
+        try:
+            if query:
+                results = index.search(query)
+                # Iterate over the documents in the results
+                for scored_document in results:
+                    kwargs = {
+                        'id': scored_document.doc_id
+                    }
+                    for e in scored_document.fields:
+                        if e.name in [
+                                      "entityKey",
+                                      "firstname",
+                                      "lastname",
+                                      "account",
+                                      "account_name",
+                                      "position"
+                                      ]:
+                            kwargs[e.name] = e.value
+                    search_results.append(ContactSearchResult(**kwargs))
+                    next_cursor = scored_document.cursor.web_safe_string
+                if next_cursor:
+                    next_query_options = search.QueryOptions(
+                                                             limit=1,
+                                                             cursor=scored_document.cursor
+                                                             )
+                    next_query = search.Query(
+                                              query_string=query_string,
+                                              options=next_query_options
+                                              )
+                    if next_query:
+                        next_results = index.search(next_query)
+                        if len(next_results.results) == 0:
+                            next_cursor = None
+        except search.Error:
+            logging.exception('Search failed')
+        return ContactSearchResults(
+                                    items=search_results,
+                                    nextPageToken=next_cursor
+                                    )
 
 
 
