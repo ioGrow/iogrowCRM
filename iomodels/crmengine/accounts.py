@@ -2,7 +2,6 @@ from google.appengine.ext import ndb
 from endpoints_proto_datastore.ndb import EndpointsModel
 from endpoints_proto_datastore import MessageFieldsSchema
 from google.appengine.api import search
-from iomodels.crmengine.tags import TagAbstract
 from search_helper import tokenize_autocomplete 
 
 import model
@@ -19,7 +18,6 @@ class Account(EndpointsModel):
     industry = ndb.StringProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
-    tags = ndb.StructuredProperty(TagAbstract,repeated=True)
     tagline = ndb.TextProperty()
     introduction =ndb.TextProperty()
     # public or private
@@ -113,5 +111,11 @@ class Account(EndpointsModel):
                ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)
+
+
+
+
+
+
 
 

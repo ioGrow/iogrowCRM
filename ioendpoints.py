@@ -50,7 +50,7 @@ from iomodels.crmengine.casestatuses import Casestatus
 from iomodels.crmengine.feedbacks import Feedback
 from iomodels.crmengine.needs import Need
 #from iomodels.crmengine.emails import Email
-from iomodels.crmengine.tags import Tag
+from iomodels.crmengine.tags import Tag, TagSchema
 
 from model import User
 from model import Organization
@@ -61,6 +61,7 @@ from model import Member
 from model import Permission
 from model import Contributor
 from model import Companyprofile
+
 
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
@@ -106,7 +107,7 @@ DISCUSSIONS = {
 INVERSED_EDGES = {
             'tags': 'tagged_on',
             'tagged_on': 'tags'
-            
+
          }
 SEARCH_QUERY_MODEL = """
                             %(query)s type:%(type)s
@@ -136,12 +137,12 @@ def LISTING_QUERY(query, access, organization, owner, collaborators, order):
 
  # The message class that defines the EntityKey schema
 class EntityKeyRequest(messages.Message):
-    entityKey = messages.StringField(1)  
+    entityKey = messages.StringField(1)
 
  # The message class that defines the ListRequest schema
 class ListRequest(messages.Message):
     limit = messages.IntegerField(1)
-    pageToken = messages.StringField(2)     
+    pageToken = messages.StringField(2)
 
  # The message class that defines the author schema
 class AuthorSchema(messages.Message):
@@ -183,13 +184,6 @@ class TopicListResponse(messages.Message):
     items = messages.MessageField(TopicSchema, 1, repeated=True)
     nextPageToken = messages.StringField(2)
 
-class TagSchema(messages.Message):
-    id = messages.StringField(1)
-    edgeKey = messages.StringField(2)
-    name  = messages.StringField(3)
-    color = messages.StringField(4)
-    
-
 class TaskInsertRequest(messages.Message):
     about = messages.StringField(1)
     title = messages.StringField(2,required=True)
@@ -198,7 +192,7 @@ class TaskInsertRequest(messages.Message):
     status = messages.StringField(5)
     assignees = messages.MessageField(EntityKeyRequest,6, repeated = True)
     tags = messages.MessageField(EntityKeyRequest,7, repeated = True)
-    
+
 
 class TaskSchema(messages.Message):
     id = messages.StringField(1)
@@ -562,7 +556,7 @@ class OpportunityListRequest(messages.Message):
     order = messages.StringField(3)
     tags = messages.StringField(4,repeated = True)
     owner = messages.StringField(5)
-    stagename = messages.StringField(6) 
+    stagename = messages.StringField(6)
 
 class OpportunitySchema(messages.Message):
     id = messages.StringField(1)
@@ -585,7 +579,7 @@ class LeadListRequest(messages.Message):
     order = messages.StringField(3)
     tags = messages.StringField(4,repeated = True)
     owner = messages.StringField(5)
-    status = messages.StringField(6) 
+    status = messages.StringField(6)
 
 class LeadSchema(messages.Message):
     id = messages.StringField(1)
@@ -645,7 +639,7 @@ class AccountGetRequest(messages.Message):
     id = messages.IntegerField(1,required = True)
     contacts = messages.MessageField(ListRequest, 2)
     topics = messages.MessageField(ListRequest, 3)
-    
+
 class AccountSchema(messages.Message):
     id = messages.StringField(1)
     entityKey = messages.StringField(2)
@@ -710,12 +704,12 @@ class EndpointsHelper(EndpointsModel):
             # prepare params to insert
             folder_params = {
                         'title': folder_name,
-                        'mimeType':  'application/vnd.google-apps.folder'         
-            }#get the accounts_folder or contacts_folder or .. 
+                        'mimeType':  'application/vnd.google-apps.folder'
+            }#get the accounts_folder or contacts_folder or ..
             parent_folder = eval('organization.'+FOLDERS[kind])
             if parent_folder:
                 folder_params['parents'] = [{'id': parent_folder}]
-            
+
             # execute files.insert and get resource_id
             created_folder = service.files().insert(body=folder_params,fields='id').execute()
         except:
@@ -743,8 +737,8 @@ class EndpointsHelper(EndpointsModel):
                                                     "fields": 'id'
                                                     }).execute()
             return moved_folder
-        
-        
+
+
 
 
 
@@ -945,24 +939,24 @@ class CrmEngineApi(remote.Service):
         if limit:
             options = search.QueryOptions(limit=limit,cursor=cursor)
         else:
-            options = search.QueryOptions(cursor=cursor)    
+            options = search.QueryOptions(cursor=cursor)
         query = search.Query(query_string=query_string,options=options)
         try:
             if query:
                 results = index.search(query)
                 total_matches = results.number_found
-              
+
                 # Iterate over the documents in the results
                 for scored_document in results:
                     kwargs = {
-                        "id" : scored_document.doc_id, 
+                        "id" : scored_document.doc_id,
                         "rank" : scored_document.rank
                     }
                     for e in scored_document.fields:
                         if e.name in ["title","type"]:
                             kwargs[e.name]=e.value
                     search_results.append(SearchResult(**kwargs))
-                    
+
                     next_cursor = scored_document.cursor.web_safe_string
                 if next_cursor:
                     next_query_options = search.QueryOptions(limit=1,cursor=scored_document.cursor)
@@ -1021,15 +1015,7 @@ class CrmEngineApi(remote.Service):
             raise endpoints.NotFoundException('Account not found.')
         #list of tags related to this account
         edge_list = Edge.list(start_node=account.key,kind='tags')
-        tag_list = list()
-        for edge in edge_list['items']:
-            tag_list.append(
-                            TagSchema(
-                                    edgeKey = edge.key.urlsafe(),
-                                    name = edge.end_node.get().name,
-                                    color = edge.end_node.get().color
-                                    )
-                            )
+        tag_list = Tag.list_by_parent(account.key)
         #list of contacts to this account
         contacts = None
         if request.contacts:
@@ -1081,7 +1067,7 @@ class CrmEngineApi(remote.Service):
                         comments_edge_list = Edge.list(
                                                 start_node = end_node.key,
                                                 kind = 'comments',
-                                                limit = 1 
+                                                limit = 1
                                                 )
                         if len(comments_edge_list['items'])>0:
                             last_comment = comments_edge_list[0].end_node.get()
@@ -1093,7 +1079,7 @@ class CrmEngineApi(remote.Service):
                     comments_edge_list = Edge.list(
                                                 start_node = end_node.key,
                                                 kind = 'comments',
-                                                limit = 1 
+                                                limit = 1
                                                 )
                     if len(comments_edge_list['items'])>0:
                         print 'with comments'
@@ -1157,7 +1143,7 @@ class CrmEngineApi(remote.Service):
                                                             items=value
                                                         )
             connections_list.append(infonodeconnection)
-        infonodes = InfoNodeListResponse(items=connections_list)    
+        infonodes = InfoNodeListResponse(items=connections_list)
         account_schema = AccountSchema(
                                   id = str( account.key.id() ),
                                   entityKey = account.key.urlsafe(),
@@ -1174,7 +1160,7 @@ class CrmEngineApi(remote.Service):
                                   created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
-                  
+
         return  account_schema
     # accounts.get API
     @Account.method(
@@ -1236,16 +1222,7 @@ class CrmEngineApi(remote.Service):
                         count = count + 1
                         #list of tags related to this account
                         edge_list = Edge.list(start_node=account.key,kind='tags')
-                        tag_list = list()
-                        for edge in edge_list['items']:
-                            tag_list.append(
-                                          TagSchema(
-                                           id = str(edge.end_node.id()),
-                                           edgeKey = edge.key.urlsafe(),
-                                           name = edge.end_node.get().name,
-                                           color = edge.end_node.get().color
-                                           )
-                                        )
+                        tag_list = Tag.list_by_parent(parent_key = account.key)
                         contact_list = list()
                         #list of contacts to this account
                         contacts = None
@@ -1280,7 +1257,7 @@ class CrmEngineApi(remote.Service):
                                   created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
-                        items.append(account_schema)   
+                        items.append(account_schema)
             if (count == limit):
                 you_can_loop = False
             if more and next_curs:
@@ -1288,9 +1265,9 @@ class CrmEngineApi(remote.Service):
             else:
                 you_can_loop = False
         if next_curs and more:
-            next_curs_url_safe = next_curs.urlsafe() 
+            next_curs_url_safe = next_curs.urlsafe()
         else:
-            next_curs_url_safe = None           
+            next_curs_url_safe = None
         return  AccountListResponse(items = items, nextPageToken = next_curs_url_safe)
 
     # accounts.list api
@@ -1428,8 +1405,8 @@ class CrmEngineApi(remote.Service):
         #my_model.organization =  user_from_email.organization
         my_model.put()
         return my_model
-    
-    # Cases API 
+
+    # Cases API
     # cases.delete
     @Case.method(request_fields=('id',),
       response_message=message_types.VoidMessage,
@@ -1447,7 +1424,7 @@ class CrmEngineApi(remote.Service):
             raise endpoints.NotFoundException('Case not found')
         return my_model
 
-    # cases.insert API 
+    # cases.insert API
     @Case.method(user_required=True,path='cases',http_method='POST',name='cases.insert')
     def CaseInsert(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -1511,16 +1488,7 @@ class CrmEngineApi(remote.Service):
                         count = count + 1
                         #list of tags related to this case
                         edge_list = Edge.list(start_node=case.key,kind='tags')
-                        tag_list = list()
-                        for edge in edge_list['items']:
-                            tag_list.append(
-                                          TagSchema(
-                                           id = str(edge.end_node.id()),
-                                           edgeKey = edge.key.urlsafe(),
-                                           name = edge.end_node.get().name,
-                                           color = edge.end_node.get().color
-                                           )
-                                        )
+                        tag_list = Tag.list_by_parent(parent_key = case.key)
                         case_schema = CaseSchema(
                                   id = str( case.key.id() ),
                                   entityKey = case.key.urlsafe(),
@@ -1534,7 +1502,7 @@ class CrmEngineApi(remote.Service):
                                   created_at = case.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
-                        items.append(case_schema)   
+                        items.append(case_schema)
             if (count == limit):
                 you_can_loop = False
             if more and next_curs:
@@ -1542,9 +1510,9 @@ class CrmEngineApi(remote.Service):
             else:
                 you_can_loop = False
         if next_curs and more:
-            next_curs_url_safe = next_curs.urlsafe() 
+            next_curs_url_safe = next_curs.urlsafe()
         else:
-            next_curs_url_safe = None           
+            next_curs_url_safe = None
         return  CaseListResponse(items = items, nextPageToken = next_curs_url_safe)
 
     # cases.list API
@@ -1640,7 +1608,7 @@ class CrmEngineApi(remote.Service):
         return CaseSearchResults(
                                  items=search_results,
                                  nextPageToken=next_cursor
-                                 ) 
+                                 )
     # cases.update API
     @Case.method(user_required=True,
                   http_method='PUT', path='cases/{id}', name='cases.update')
@@ -1651,7 +1619,7 @@ class CrmEngineApi(remote.Service):
         #my_model.organization =  user_from_email.organization
         my_model.put()
         return my_model
-    
+
     # Cases status apis
     # casestatuses.delete api
     @Casestatus.method(
@@ -1665,7 +1633,7 @@ class CrmEngineApi(remote.Service):
         #user_from_email=EndpointsHelper.require_iogrow_user()
         my_model.key.delete()
         return message_types.VoidMessage()
-    
+
     # casestatuses.get api
     @Casestatus.method(
                        request_fields=('id',),
@@ -1678,7 +1646,7 @@ class CrmEngineApi(remote.Service):
             raise('Case status not found')
         return my_model
 
-    # casestatuses.insert api    
+    # casestatuses.insert api
     @Casestatus.method(
                        user_required=True,
                        path='casestatuses',
@@ -1707,8 +1675,8 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return query.filter(Casestatus.organization == user_from_email.organization)
 
-    
-    # casestatuses.patch api    
+
+    # casestatuses.patch api
     @Casestatus.method(
                        user_required=True,
                        http_method='PATCH',
@@ -1756,7 +1724,7 @@ class CrmEngineApi(remote.Service):
                     inverse_edge = 'related_to'
                 )
         parent.comments = parent.comments + 1
-        parent.put() 
+        parent.put()
         comment_author = Userinfo()
         comment_author.display_name = user_from_email.google_display_name
         comment_author.photo = user_from_email.google_public_profile_photo_url
@@ -1810,7 +1778,7 @@ class CrmEngineApi(remote.Service):
     def CommentList(self, query):
         return query
 
-    # comments.patch API 
+    # comments.patch API
     @Comment.method(
                     user_required=True,
                     http_method='PATCH',
@@ -1876,10 +1844,10 @@ class CrmEngineApi(remote.Service):
             if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p)  and not(p in ['put','set_perm','put_index']) ):
                 exec('patched_model.'+p+'= my_model.'+p)
         print '@@@@@@@@@@@@@@@@@@@@@@@@@@@'
-        print patched_model          
+        print patched_model
         patched_model.put()
         return patched_model
-    
+
     # Contacts APIs
     # contacts.delete api
     @Contact.method(
@@ -1893,7 +1861,7 @@ class CrmEngineApi(remote.Service):
         #user_from_email=EndpointsHelper.require_iogrow_user()
         my_model.key.delete()
         return message_types.VoidMessage()
-    
+
     # contacts.insertv2 api
     @endpoints.method(ContactInsertRequest, ContactSchema,
                       path='contacts/insertv2', http_method='POST',
@@ -1918,26 +1886,26 @@ class CrmEngineApi(remote.Service):
             contact.title = request.title
         contact_key = contact.put_async()
         contact_key_async = contact_key.get_result()
-        
-        
+
+
         if request.account:
             account_key = ndb.Key(urlsafe=request.account)
             # insert edges
             Edge.insert(start_node = account_key,
                       end_node = contact_key_async,
                       kind = 'contacts',
-                      inverse_edge = 'parents') 
+                      inverse_edge = 'parents')
             EndpointsHelper.update_edge_indexes(
                                             parent_key = contact_key_async,
                                             kind = 'contacts',
                                             indexed_edge = str(account_key.id())
-                                            )   
+                                            )
         else:
             data = {}
             data['id'] = contact_key_async.id()
-            contact.put_index(data) 
+            contact.put_index(data)
         return ContactSchema(id=str(contact_key_async.id()))
-    
+
     # contacts.insert API
     @Contact.method(
                     user_required=True,
@@ -2021,16 +1989,7 @@ class CrmEngineApi(remote.Service):
                         count = count + 1
                         #list of tags related to this contact
                         edge_list = Edge.list(start_node=contact.key,kind='tags')
-                        tag_list = list()
-                        for edge in edge_list['items']:
-                            tag_list.append(
-                                          TagSchema(
-                                           id = str( edge.end_node.id() ),
-                                           edgeKey = edge.key.urlsafe(),
-                                           name = edge.end_node.get().name,
-                                           color = edge.end_node.get().color
-                                           )
-                                        )
+                        tag_list = Tag.list_by_parent(parent_key = contact.key)
                         contact_schema = ContactSchema(
                                   id = str( contact.key.id() ),
                                   entityKey = contact.key.urlsafe(),
@@ -2042,7 +2001,7 @@ class CrmEngineApi(remote.Service):
                                   created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
-                        items.append(contact_schema)   
+                        items.append(contact_schema)
             if (count == limit):
                 you_can_loop = False
             if more and next_curs:
@@ -2050,9 +2009,9 @@ class CrmEngineApi(remote.Service):
             else:
                 you_can_loop = False
         if next_curs and more:
-            next_curs_url_safe = next_curs.urlsafe() 
+            next_curs_url_safe = next_curs.urlsafe()
         else:
-            next_curs_url_safe = None           
+            next_curs_url_safe = None
         return  ContactListResponse(items = items, nextPageToken = next_curs_url_safe)
 
     # contacts.list API
@@ -2190,7 +2149,7 @@ class CrmEngineApi(remote.Service):
         #my_model.organization =  user_from_email.organization
         my_model.put()
         return my_model
-    
+
     # Contributors APIs
     # contributors.insert API
     @Contributor.method(
@@ -2205,7 +2164,7 @@ class CrmEngineApi(remote.Service):
         my_model.created_by = user_from_email.google_user_id
         my_model.organization = user_from_email.organization
         discussion_key = my_model.discussionKey
-        discussion_kind = discussion_key.kind() 
+        discussion_kind = discussion_key.kind()
         discussion = discussion_key.get()
         my_model.put()
         confirmation_url = "http://gcdc2013-iogrow.appspot.com"+DISCUSSIONS[discussion_kind]['url']+str(discussion_key.id())
@@ -2214,18 +2173,18 @@ class CrmEngineApi(remote.Service):
         subject = "You're involved in this "+ DISCUSSIONS[discussion_kind]['title'] +": "+discussion.title
         print subject
         body = """
-        %s involved you in this %s 
+        %s involved you in this %s
 
         %s
         """ % (user_from_email.google_display_name,DISCUSSIONS[discussion_kind]['title'],confirmation_url)
         mail.send_mail(sender_address, my_model.value , subject, body)
         return my_model
-    
+
     # contributors.list API
     @Contributor.query_method(user_required=True,query_fields=('discussionKey', 'limit', 'order', 'pageToken'),path='contributors', name='contributors.list')
     def contributor_list(self, query):
         return query
-    
+
     # Documents APIs
     # documents.attachfiles API
     @endpoints.method(
@@ -2257,7 +2216,7 @@ class CrmEngineApi(remote.Service):
                                 )
             document.put()
         return message_types.VoidMessage()
-    
+
     # documents.get API
     @endpoints.method(ID_RESOURCE, DiscussionResponse,
                         path='documents/{id}', http_method='GET',
@@ -2284,7 +2243,7 @@ class CrmEngineApi(remote.Service):
                                         display_name = document.author.display_name,
                                         google_public_profile_url = document.author.google_public_profile_url,
                                         photo = document.author.photo)
-                
+
 
                 response = DiscussionResponse(id=request.id,
                                                 entityKey= document.key.urlsafe(),
@@ -2297,10 +2256,10 @@ class CrmEngineApi(remote.Service):
             except (IndexError, TypeError):
                 raise endpoints.NotFoundException('About object %s not found.' %
                                                     (request.id,))
-              
-            
 
-            
+
+
+
         except (IndexError, TypeError):
             raise endpoints.NotFoundException('Note %s not found.' %
                                                 (request.id,))
@@ -2347,8 +2306,8 @@ class CrmEngineApi(remote.Service):
     # documents.list API
     @Document.query_method(user_required=True,query_fields=('about_kind','about_item', 'limit', 'order', 'pageToken'),path='documents', name='documents.list')
     def DocumentList(self, query):
-        return query 
-    
+        return query
+
      # documents.patch API
     @Document.method(user_required=True,
                   http_method='PATCH', path='documents/{id}', name='documents.patch')
@@ -2369,7 +2328,7 @@ class CrmEngineApi(remote.Service):
 
         my_model.put()
         return my_model
-   
+
     #Edges APIs
     # edges.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
@@ -2378,7 +2337,7 @@ class CrmEngineApi(remote.Service):
     def delete_edge(self, request):
         edge_key = ndb.Key(urlsafe=request.entityKey)
         Edge.delete(edge_key)
-        return message_types.VoidMessage() 
+        return message_types.VoidMessage()
 
     # edges.insert api
     @endpoints.method(EdgesRequest, EdgesResponse,
@@ -2389,7 +2348,7 @@ class CrmEngineApi(remote.Service):
         for item in request.items:
             start_node = ndb.Key(urlsafe=item.start_node)
             end_node = ndb.Key(urlsafe=item.end_node)
-          
+
             edge_key = Edge.insert(start_node=start_node,
                                  end_node = end_node,
                                  kind = item.kind,
@@ -2399,14 +2358,14 @@ class CrmEngineApi(remote.Service):
                                             kind = item.kind,
                                             indexed_edge = str(end_node.id())
                                             )
-            items.append(EdgeSchema(id=str( edge_key.id() ), 
+            items.append(EdgeSchema(id=str( edge_key.id() ),
                                      entityKey = edge_key.urlsafe(),
                                      kind = item.kind,
                                      start_node = item.start_node,
                                      end_node= item.end_node ))
         return EdgesResponse(items=items)
 
-    # Emails APIs  
+    # Emails APIs
     #emails.send API
     @endpoints.method(EmailRequest, message_types.VoidMessage,
                         path='emails/send', http_method='POST',
@@ -2482,7 +2441,7 @@ class CrmEngineApi(remote.Service):
         except (IndexError, TypeError):
             raise endpoints.NotFoundException('EVent %s not found.' %
                                                 (request.id,))
-    
+
     # events.insert API
     @Event.method(user_required=True,path='events', http_method='POST', name='events.insert')
     def EventInsert(self, my_model):
@@ -2495,21 +2454,21 @@ class CrmEngineApi(remote.Service):
             http = credentials.authorize(httplib2.Http(memcache))
             service = build('calendar', 'v3', http=http)
             # prepare params to insert
-        
+
             params = {
-                     "start": 
+                     "start":
                           {
                           "dateTime": my_model.starts_at.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
                           },
-                     "end": 
+                     "end":
                           {
                            "dateTime": my_model.ends_at.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
                       },
                     "summary": my_model.title,
                     "location": my_model.where,
-                    "reminders": 
+                    "reminders":
                     {
-                      "overrides": 
+                      "overrides":
                       [
                       {
                         "method": 'email',
@@ -2520,12 +2479,12 @@ class CrmEngineApi(remote.Service):
                   }
 
             }
-        
+
             created_event = service.events().insert(calendarId='primary',body=params).execute()
-        
+
         except:
             raise endpoints.UnauthorizedException('Invalid grant' )
-            return    
+            return
         author = Userinfo()
         author.google_user_id = user_from_email.google_user_id
         author.display_name = user_from_email.google_display_name
@@ -2536,7 +2495,7 @@ class CrmEngineApi(remote.Service):
         my_model.organization =  user_from_email.organization
         my_model.put()
         return my_model
-    
+
     # events.list API
     @Event.query_method(user_required=True,query_fields=('about_kind','about_item','id','status', 'starts_at','ends_at', 'limit', 'order', 'pageToken'),path='events', name='events.list')
     def EventList(self, query):
@@ -2551,7 +2510,7 @@ class CrmEngineApi(remote.Service):
     def FeedbackDelete(self,my_model):
         user_from_email=EndpointsHelper.require_iogrow_user()
         my_model.key.delete()
-        return message_types.VoidMessage()  
+        return message_types.VoidMessage()
 
     # feedbacks.get API
     @Feedback.method(request_fields=('id',),path='feedbacks/{id}', http_method='GET', name='feedbacks.get')
@@ -2574,7 +2533,7 @@ class CrmEngineApi(remote.Service):
     # feedbacks.list api
     @Feedback.query_method(user_required=True,query_fields=('limit', 'order','status', 'pageToken','related_to'),path='feedbacks', name='feedbacks.list')
     def feedbacks_list(self, query):
-        user_from_email = EndpointsHelper.require_iogrow_user()      
+        user_from_email = EndpointsHelper.require_iogrow_user()
         return query.filter(ndb.OR(ndb.AND(Feedback.access=='public',Feedback.organization==user_from_email.organization),Feedback.owner==user_from_email.google_user_id, Feedback.collaborators_ids==user_from_email.google_user_id)).order(Feedback._key)
 
     # feedbacks.patch api
@@ -2686,7 +2645,7 @@ class CrmEngineApi(remote.Service):
     @Group.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='groups', name='groups.list')
     def GroupList(self, query):
         return query
-    
+
     # groups.patch API
     @Group.method(user_required=True,
                   http_method='PATCH', path='groups/{id}', name='groups.patch')
@@ -2758,7 +2717,7 @@ class CrmEngineApi(remote.Service):
             event.put()
         lead.key.delete()
         return ConvertedLead(id = contact.key.id())
-    
+
     # leads.delete api
     @Lead.method(request_fields=('id',),
       response_message=message_types.VoidMessage,
@@ -2768,7 +2727,7 @@ class CrmEngineApi(remote.Service):
         user_from_email=EndpointsHelper.require_iogrow_user()
         my_model.key.delete()
         return message_types.VoidMessage()
-    
+
     # leads.get API
     @Lead.method(request_fields=('id',),path='leads/{id}', http_method='GET', name='leads.get')
     def LeadGet(self, my_model):
@@ -2840,16 +2799,7 @@ class CrmEngineApi(remote.Service):
                         count = count + 1
                         #list of tags related to this lead
                         edge_list = Edge.list(start_node=lead.key,kind='tags')
-                        tag_list = list()
-                        for edge in edge_list['items']:
-                            tag_list.append(
-                                          TagSchema(
-                                           id = str(edge.end_node.id()),
-                                           edgeKey = edge.key.urlsafe(),
-                                           name = edge.end_node.get().name,
-                                           color = edge.end_node.get().color
-                                           )
-                                        )
+                        tag_list = Tag.list_by_parent(parent_key = lead.key)
                         lead_schema = LeadSchema(
                                   id = str( lead.key.id() ),
                                   entityKey = lead.key.urlsafe(),
@@ -2861,7 +2811,7 @@ class CrmEngineApi(remote.Service):
                                   created_at = lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
-                        items.append(lead_schema)   
+                        items.append(lead_schema)
             if (count == limit):
                 you_can_loop = False
             if more and next_curs:
@@ -2869,9 +2819,9 @@ class CrmEngineApi(remote.Service):
             else:
                 you_can_loop = False
         if next_curs and more:
-            next_curs_url_safe = next_curs.urlsafe() 
+            next_curs_url_safe = next_curs.urlsafe()
         else:
-            next_curs_url_safe = None           
+            next_curs_url_safe = None
         return  LeadListResponse(items = items, nextPageToken = next_curs_url_safe)
 
     # leads.list api
@@ -2910,7 +2860,7 @@ class CrmEngineApi(remote.Service):
         patched_model.put()
         return patched_model
 
-    # leads.search API 
+    # leads.search API
     @endpoints.method(SearchRequest, LeadSearchResults,
                         path='leads/search', http_method='POST',
                         name='leads.search')
@@ -3073,12 +3023,12 @@ class CrmEngineApi(remote.Service):
         my_model.organization = user_from_email.organization
         my_model.put()
         return my_model
-    
+
     # members.list API
     @Member.query_method(user_required=True,query_fields=('limit', 'order','groupKey', 'pageToken'),path='members', name='members.list')
     def MemberList(self, query):
         return query
-    
+
     # members.patch API
     @Member.method(user_required=True,
                   http_method='PATCH', path='members/{id}', name='members.patch')
@@ -3108,7 +3058,7 @@ class CrmEngineApi(remote.Service):
             raise endpoints.NotFoundException('Need not found')
         return my_model
 
-    # needs.insert API 
+    # needs.insert API
     @Need.method(user_required=True,path='needs',http_method='POST',name='needs.insert')
     def need_insert(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -3168,7 +3118,7 @@ class CrmEngineApi(remote.Service):
                                         display_name = note.author.display_name,
                                         google_public_profile_url = note.author.google_public_profile_url,
                                         photo = note.author.photo)
-                  
+
 
                 response = DiscussionResponse(id=request.id,
                                                 entityKey= note.key.urlsafe(),
@@ -3182,7 +3132,7 @@ class CrmEngineApi(remote.Service):
                 raise endpoints.NotFoundException('About object %s not found.' %
                                                   (request.id,))
 
-            
+
         except (IndexError, TypeError):
             raise endpoints.NotFoundException('Note %s not found.' %
                                                 (request.id,))
@@ -3216,7 +3166,7 @@ class CrmEngineApi(remote.Service):
                                             parent_key = entityKey,
                                             kind = 'topics',
                                             indexed_edge = str(parent_key.id())
-                                            )   
+                                            )
         return message_types.VoidMessage()
 
 
@@ -3255,7 +3205,7 @@ class CrmEngineApi(remote.Service):
 
         my_model.put()
         return my_model
-    
+
     # Info Node APIs
     # infonode.insert API
     @endpoints.method(InfoNodeSchema, InfoNodeResponse,
@@ -3353,7 +3303,7 @@ class CrmEngineApi(remote.Service):
         user_from_email=EndpointsHelper.require_iogrow_user()
         my_model.key.delete()
         return message_types.VoidMessage()
-    
+
     # opportunities.get API
     @Opportunity.method(
                         request_fields=('id',),
@@ -3365,7 +3315,7 @@ class CrmEngineApi(remote.Service):
         if not my_model.from_datastore:
             raise endpoints.NotFoundException('Opportunity not found')
         return my_model
-    
+
     # opportunities.insert
     @Opportunity.method(
                         user_required=True,
@@ -3387,7 +3337,7 @@ class CrmEngineApi(remote.Service):
         my_model.folder = created_folder['id']
         my_model.put()
         return my_model
-    
+
     # opportunities.list api v2
     @endpoints.method(OpportunityListRequest, OpportunityListResponse,
                       path='opportunities/listv2', http_method='POST',
@@ -3438,16 +3388,7 @@ class CrmEngineApi(remote.Service):
                         count = count + 1
                         #list of tags related to this opportunity
                         edge_list = Edge.list(start_node=opportunity.key,kind='tags')
-                        tag_list = list()
-                        for edge in edge_list['items']:
-                            tag_list.append(
-                                          TagSchema(
-                                           id = str(edge.end_node.id()),
-                                           edgeKey = edge.key.urlsafe(),
-                                           name = edge.end_node.get().name,
-                                           color = edge.end_node.get().color
-                                           )
-                                        )
+                        tag_list = Tag.list_by_parent(parent_key = opportunity.key)
                         opportunity_schema = OpportunitySchema(
                                   id = str( opportunity.key.id() ),
                                   entityKey = opportunity.key.urlsafe(),
@@ -3459,7 +3400,7 @@ class CrmEngineApi(remote.Service):
                                   created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
-                        items.append(opportunity_schema)   
+                        items.append(opportunity_schema)
             if (count == limit):
                 you_can_loop = False
             if more and next_curs:
@@ -3467,9 +3408,9 @@ class CrmEngineApi(remote.Service):
             else:
                 you_can_loop = False
         if next_curs and more:
-            next_curs_url_safe = next_curs.urlsafe() 
+            next_curs_url_safe = next_curs.urlsafe()
         else:
-            next_curs_url_safe = None           
+            next_curs_url_safe = None
         return  OpportunityListResponse(items = items, nextPageToken = next_curs_url_safe)
 
     # opportunities.list API
@@ -3501,7 +3442,7 @@ class CrmEngineApi(remote.Service):
                                    )
                             ).order(Opportunity._key)
 
-    # opportunities.patch api 
+    # opportunities.patch api
     @Opportunity.method(
                         user_required=True,
                         http_method='PATCH',
@@ -3512,9 +3453,9 @@ class CrmEngineApi(remote.Service):
         #user_from_email = EndpointsHelper.require_iogrow_user()
         # Todo: Check permissions
         my_model.put()
-        return my_model 
-    
-    # opportunities.search api 
+        return my_model
+
+    # opportunities.search api
     @endpoints.method(
                       SearchRequest, OpportunitySearchResults,
                       path='opportunities/search',
@@ -3585,7 +3526,7 @@ class CrmEngineApi(remote.Service):
                                         items=search_results,
                                         nextPageToken=next_cursor
                                         )
-    
+
     # opportunities.update api
     @Opportunity.method(
                         user_required=True,
@@ -3600,8 +3541,8 @@ class CrmEngineApi(remote.Service):
         #my_model.organization =  user_from_email.organization
         my_model.put()
         return my_model
-  
-    
+
+
 
     # Opportunity stages APIs
     # opportunitystages.delete api
@@ -3625,8 +3566,8 @@ class CrmEngineApi(remote.Service):
         if not my_model.from_datastore:
             raise('Opportunity stage not found')
         return my_model
-    
-    # opportunitystages.insert api    
+
+    # opportunitystages.insert api
     @Opportunitystage.method(
                              user_required=True,
                              path='opportunitystage',
@@ -3674,7 +3615,7 @@ class CrmEngineApi(remote.Service):
         if not my_model.from_datastore:
             raise endpoints.NotFoundException('Permission not found')
         return my_model
-    
+
     # permissions.insert API
     @Permission.method(user_required=True,path='permissions', http_method='POST', name='permissions.insert')
     def PermissionInsert(self, my_model):
@@ -3692,7 +3633,7 @@ class CrmEngineApi(remote.Service):
             invited_user = User.query( User.email == my_model.value, User.organization==user_from_email.organization).get()
             if invited_user is None:
                 raise endpoints.UnauthorizedException('The user does not exist')
-           
+
             my_model.value = invited_user.google_user_id
             my_model.organization = user_from_email.organization
             my_model.put()
@@ -3721,8 +3662,8 @@ class CrmEngineApi(remote.Service):
     # permissions.list api
     @Permission.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='permissions',name='permissions.list')
     def PermissionList(self,query):
-        return query 
-    
+        return query
+
     # permissions.patch api
     @Permission.method(user_required=True,
                   http_method='PATCH', path='permissions/{id}', name='permissions.patch')
@@ -3743,7 +3684,7 @@ class CrmEngineApi(remote.Service):
 
         my_model.put()
         return my_model
-    
+
     # Shows: Customer Stories  Search API
     # showcustomerstories.search api
     @endpoints.method(SearchRequest, ShowSearchResults,
@@ -3752,7 +3693,7 @@ class CrmEngineApi(remote.Service):
     def showcustomerstories_search(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         organization = str(user_from_email.organization.id())
-      
+
         index = search.Index(name="GlobalIndex")
         #Show only objects where you have permissions
         query_string = request.q + ' type:Show AND (organization:' +organization+  ' AND type_show:Customer_Story'+' AND (access:public OR (owner:'+ user_from_email.google_user_id +' OR collaborators:'+ user_from_email.google_user_id+')))'
@@ -3771,13 +3712,13 @@ class CrmEngineApi(remote.Service):
         if limit:
             options = search.QueryOptions(limit=limit,cursor=cursor)
         else:
-            options = search.QueryOptions(cursor=cursor)    
+            options = search.QueryOptions(cursor=cursor)
         query = search.Query(query_string=query_string,options=options)
         try:
             if query:
                 results = index.search(query)
                 total_matches = results.number_found
-              
+
                 # Iterate over the documents in the results
                 for scored_document in results:
                     kwargs = {
@@ -3786,9 +3727,9 @@ class CrmEngineApi(remote.Service):
                     for e in scored_document.fields:
                         if e.name in ["title", "status","starts_at","ends_at"]:
                             kwargs[e.name]=e.value
-                    
+
                     search_results.append(ShowSearchResult(**kwargs))
-                  
+
                     next_cursor = scored_document.cursor.web_safe_string
                 if next_cursor:
                     next_query_options = search.QueryOptions(limit=1,cursor=scored_document.cursor)
@@ -3796,8 +3737,8 @@ class CrmEngineApi(remote.Service):
                     if next_query:
                         next_results = index.search(next_query)
                         if len(next_results.results)==0:
-                            next_cursor = None            
-                                    
+                            next_cursor = None
+
         except search.Error:
             logging.exception('Search failed')
         return ShowSearchResults(items = search_results,nextPageToken=next_cursor)
@@ -3810,7 +3751,7 @@ class CrmEngineApi(remote.Service):
     def showproducts_search(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         organization = str(user_from_email.organization.id())
-        
+
         index = search.Index(name="GlobalIndex")
         #Show only objects where you have permissions
         query_string = request.q + ' type:Show AND (organization:' +organization+  ' AND type_show:Product_Video'+' AND (access:public OR (owner:'+ user_from_email.google_user_id +' OR collaborators:'+ user_from_email.google_user_id+')))'
@@ -3829,13 +3770,13 @@ class CrmEngineApi(remote.Service):
         if limit:
             options = search.QueryOptions(limit=limit,cursor=cursor)
         else:
-            options = search.QueryOptions(cursor=cursor)    
+            options = search.QueryOptions(cursor=cursor)
         query = search.Query(query_string=query_string,options=options)
         try:
             if query:
                 results = index.search(query)
                 total_matches = results.number_found
-                
+
                 # Iterate over the documents in the results
                 for scored_document in results:
                     kwargs = {
@@ -3844,9 +3785,9 @@ class CrmEngineApi(remote.Service):
                     for e in scored_document.fields:
                         if e.name in ["title", "status","starts_at","ends_at"]:
                             kwargs[e.name]=e.value
-                    
+
                     search_results.append(ShowSearchResult(**kwargs))
-                  
+
                     next_cursor = scored_document.cursor.web_safe_string
                 if next_cursor:
                     next_query_options = search.QueryOptions(limit=1,cursor=scored_document.cursor)
@@ -3854,8 +3795,8 @@ class CrmEngineApi(remote.Service):
                     if next_query:
                         next_results = index.search(next_query)
                         if len(next_results.results)==0:
-                            next_cursor = None            
-                                    
+                            next_cursor = None
+
         except search.Error:
             logging.exception('Search failed')
         return ShowSearchResults(items = search_results,nextPageToken=next_cursor)
@@ -3876,7 +3817,7 @@ class CrmEngineApi(remote.Service):
     def shows_get(self, my_model):
         if not my_model.from_datastore:
             raise endpoints.NotFoundException('Show not found.')
-        return my_model   
+        return my_model
 
     # shows.insert API
     @Show.method(
@@ -4015,7 +3956,7 @@ class CrmEngineApi(remote.Service):
         Edge.delete_all(start_node=tag_key)
         tag_key.delete()
         return message_types.VoidMessage()
-    
+
     # tags.insert api
     @Tag.method(user_required=True,path='tags', http_method='POST', name='tags.insert')
     def TagInsert(self, my_model):
@@ -4084,7 +4025,7 @@ class CrmEngineApi(remote.Service):
                                               author = author,
                                               completed_by = completed_by )
             return response
-            
+
         except (IndexError, TypeError):
             raise endpoints.NotFoundException('Note %s not found.' %
                                               (request.id,))
@@ -4115,11 +4056,11 @@ class CrmEngineApi(remote.Service):
                 service = build('calendar', 'v3', http=http)
                 # prepare params to insert
                 params = {
-                 "start": 
+                 "start":
                   {
                     "dateTime": task.due.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
                   },
-                 "end": 
+                 "end":
                   {
                     "dateTime": task.due.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
                   },
@@ -4132,7 +4073,7 @@ class CrmEngineApi(remote.Service):
 
         if request.reminder:
             pass
-          
+
         task_key = task.put_async()
         task_key_async = task_key.get_result()
         if request.about:
@@ -4152,7 +4093,7 @@ class CrmEngineApi(remote.Service):
                                             parent_key = task_key_async,
                                             kind = 'tasks',
                                             indexed_edge = str(about_key.id())
-                                            )   
+                                            )
         else:
             data = {}
             data['id'] = task_key_async.id()
@@ -4163,14 +4104,14 @@ class CrmEngineApi(remote.Service):
                 Edge.insert(start_node = task_key_async,
                       end_node = ndb.Key(urlsafe=assignee.entityKey),
                       kind = 'assignees',
-                      inverse_edge = 'assigned_to') 
+                      inverse_edge = 'assigned_to')
         if request.tags:
             # insert edges
             for tag in request.tags:
                 Edge.insert(start_node = task_key_async,
                       end_node = ndb.Key(urlsafe=tag.entityKey),
                       kind = 'tags',
-                      inverse_edge = 'tagged_on')      
+                      inverse_edge = 'tagged_on')
         return TaskSchema()
 
     # tasks.listv2 api
@@ -4216,7 +4157,7 @@ class CrmEngineApi(remote.Service):
                         if not Edge.find(start_node=task.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
                             is_filtered = False
                     if request.status and task.status!=request.status and is_filtered:
-                        is_filtered = False 
+                        is_filtered = False
                     if request.tags and is_filtered:
                         end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
                         if not Edge.find(start_node=task.key,kind='tags',end_node_set=end_node_set,operation='AND'):
@@ -4246,11 +4187,7 @@ class CrmEngineApi(remote.Service):
                         count = count + 1
                         #list of tags related to this task
                         edge_list = Edge.list(start_node=task.key,kind='tags')
-                        tag_list = list()
-                        for edge in edge_list['items']:
-                            tag_list.append( TagSchema(edgeKey = edge.key.urlsafe(),
-                                          name = edge.end_node.get().name,
-                                          color = edge.end_node.get().color))
+                        tag_list = Tag.list_by_parent(parent_key = task.key)
                         about = None
                         edge_list = Edge.list(start_node=task.key,kind='related_to')
                         for edge in edge_list['items']:
@@ -4312,7 +4249,7 @@ class CrmEngineApi(remote.Service):
                                 )
                         if task.due:
                             task_schema.due =  date_to_string(task.due)
-                        items.append(task_schema)   
+                        items.append(task_schema)
             if (count == limit):
                 you_can_loop = False
             print '@@@@@@@@@@@@*********#######'
@@ -4324,11 +4261,11 @@ class CrmEngineApi(remote.Service):
               you_can_loop = False
         print 'After the loop'
         print more
-        print next_curs 
+        print next_curs
         if next_curs and more:
-            next_curs_url_safe = next_curs.urlsafe() 
+            next_curs_url_safe = next_curs.urlsafe()
         else:
-            next_curs_url_safe = None           
+            next_curs_url_safe = None
         return  TaskListResponse(items = items, nextPageToken = next_curs_url_safe)
 
     # Topics APIs
@@ -4381,10 +4318,10 @@ class CrmEngineApi(remote.Service):
             service.permissions().insert(fileId=folderid, sendNotificationEmails= False, body=new_permission).execute()
         except:
             raise endpoints.UnauthorizedException('Invalid grant' )
-            return 
+            return
 
         invited_user = User.query( User.email == my_model.email).get()
-    
+
         if invited_user is not None:
             if invited_user.organization == user_from_email.organization or invited_user.organization is None:
                 invited_user.organization = user_from_email.organization
@@ -4398,16 +4335,16 @@ class CrmEngineApi(remote.Service):
                 raise endpoints.UnauthorizedException('User exist within another organization' )
                 return
 
-            
+
         else:
             my_model.organization = user_from_email.organization
             my_model.status = 'invited'
             profile = Profile.query(Profile.name=='Standard User', Profile.organization==user_from_email.organization).get()
             my_model.init_user_config(user_from_email.organization,profile.key)
-        
+
             my_model.put()
             invited_user_id = my_model.id
-        
+
         confirmation_url = "http://gcdc2013-iogrow.appspot.com//sign-in?id=" + str(invited_user_id) + '&'
         sender_address = "ioGrow notifications <notifications@gcdc2013-iogrow.appspotmail.com>"
         subject = "Confirm your registration"

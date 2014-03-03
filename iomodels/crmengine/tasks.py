@@ -2,7 +2,6 @@ from google.appengine.ext import ndb
 from google.appengine.api import search 
 from endpoints_proto_datastore.ndb import EndpointsModel
 from iomodels.crmengine.notes import Topic
-from iomodels.crmengine.tags import TagAbstract
 from model import Userinfo
 import pprint
 from datetime import date
@@ -10,7 +9,7 @@ import model
 from search_helper import tokenize_autocomplete 
   
 class Task(EndpointsModel):
-    _message_fields_schema = ('id','entityKey', 'owner','access', 'created_at','updated_at','title','due','status','tags',  'completed_by','comments','about_kind','about_item','organization','involved_ids','involved_list','author')
+    _message_fields_schema = ('id','entityKey', 'owner','access', 'created_at','updated_at','title','due','status',  'completed_by','comments','about_kind','about_item','organization','involved_ids','involved_list','author')
 
     author = ndb.StructuredProperty(Userinfo)
     # Sharing fields
@@ -22,7 +21,6 @@ class Task(EndpointsModel):
     title = ndb.StringProperty()
     due = ndb.DateTimeProperty()
     status = ndb.StringProperty()
-    tags = ndb.StructuredProperty(TagAbstract,repeated=True)
     completed_by = ndb.StructuredProperty(Userinfo)
     involved_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
     involved_ids = ndb.StringProperty(repeated=True)
