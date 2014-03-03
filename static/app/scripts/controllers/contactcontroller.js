@@ -253,7 +253,8 @@ $scope.selectTag= function(tag,index,$event){
           'tags': tags,
           'order': $scope.order,
                         'limit':6
-         }
+         };
+         $scope.isFiltering = true;
          Contact.list($scope,params);
 
   };

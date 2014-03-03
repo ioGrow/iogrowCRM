@@ -31,7 +31,7 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
      
       // What to do after authentication
        $scope.runTheProcess = function(){
-            var params = {'order' : $scope.order,'limit':8}
+            var params = {'order' : $scope.order,'limit':6}
             Case.list($scope,params);
             Casestatus.list($scope,{});
             var paramsTag = {'about_kind':'Case'};
@@ -47,11 +47,11 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
         var nextPage = $scope.caseCurrentPage + 1;
         var params = {};
           if ($scope.casepages[nextPage]){
-            params = {'order' : $scope.order,'limit':8,
+            params = {'order' : $scope.order,'limit':6,
                       'pageToken':$scope.casepages[nextPage]
                      }
           }else{
-            params = {'order' : $scope.order,'limit':8}
+            params = {'order' : $scope.order,'limit':6}
           }
           console.log('in listNextPageItems');
           $scope.caseCurrentPage = $scope.caseCurrentPage + 1 ; 
@@ -62,11 +62,11 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
        var prevPage = $scope.caseCurrentPage - 1;
        var params = {};
           if ($scope.casepages[prevPage]){
-            params = {'order' : $scope.order,'limit':8,
+            params = {'order' : $scope.order,'limit':6,
                       'pageToken':$scope.casepages[prevPage]
                      }
           }else{
-            params = {'order' : $scope.order,'limit':8}
+            params = {'order' : $scope.order,'limit':6}
           }
           $scope.caseCurrentPage = $scope.caseCurrentPage - 1 ;
           Case.list($scope,params);
@@ -205,7 +205,7 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
      // Sorting
      $scope.orderBy = function(order){
         var params = { 'order': order,
-                        'limit':8};
+                        'limit':6};
         $scope.order = order;
         Case.list($scope,params);
      };
@@ -213,13 +213,13 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
         if (filter){
           var params = { 'owner': filter,
                          'order': $scope.order, 
-                         'limit':8}
+                         'limit':6}
         }
         else{
           var params = {
               'order': $scope.order, 
               
-              'limit':8}
+              'limit':6}
         };
         $scope.isFiltering = true;
         Case.list($scope,params);
@@ -228,13 +228,13 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
         if (filter){
           var params = { 'status': filter,
                          'order': $scope.order, 
-                         'limit':8}
+                         'limit':6}
         }
         else{
           var params = {
               'order': $scope.order, 
               
-              'limit':8}
+              'limit':6}
         };
         $scope.isFiltering = true;
         Case.list($scope,params);
@@ -322,6 +322,7 @@ $scope.selectTag= function(tag,index,$event){
           'order': $scope.order,
                         'limit':6
          }
+        $scope.isFiltering = true;
          Case.list($scope,params);
 
   };
