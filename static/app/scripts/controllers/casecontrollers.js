@@ -31,7 +31,7 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
      
       // What to do after authentication
        $scope.runTheProcess = function(){
-            var params = {'order' : $scope.order,'limit':8}
+            var params = {'order' : $scope.order,'limit':6}
             Case.list($scope,params);
             Casestatus.list($scope,{});
             var paramsTag = {'about_kind':'Case'};
@@ -47,11 +47,11 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
         var nextPage = $scope.caseCurrentPage + 1;
         var params = {};
           if ($scope.casepages[nextPage]){
-            params = {'order' : $scope.order,'limit':8,
+            params = {'order' : $scope.order,'limit':6,
                       'pageToken':$scope.casepages[nextPage]
                      }
           }else{
-            params = {'order' : $scope.order,'limit':8}
+            params = {'order' : $scope.order,'limit':6}
           }
           console.log('in listNextPageItems');
           $scope.caseCurrentPage = $scope.caseCurrentPage + 1 ; 
@@ -62,11 +62,11 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
        var prevPage = $scope.caseCurrentPage - 1;
        var params = {};
           if ($scope.casepages[prevPage]){
-            params = {'order' : $scope.order,'limit':8,
+            params = {'order' : $scope.order,'limit':6,
                       'pageToken':$scope.casepages[prevPage]
                      }
           }else{
-            params = {'order' : $scope.order,'limit':8}
+            params = {'order' : $scope.order,'limit':6}
           }
           $scope.caseCurrentPage = $scope.caseCurrentPage - 1 ;
           Case.list($scope,params);
@@ -205,7 +205,7 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
      // Sorting
      $scope.orderBy = function(order){
         var params = { 'order': order,
-                        'limit':8};
+                        'limit':6};
         $scope.order = order;
         Case.list($scope,params);
      };
@@ -213,13 +213,13 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
         if (filter){
           var params = { 'owner': filter,
                          'order': $scope.order, 
-                         'limit':8}
+                         'limit':6}
         }
         else{
           var params = {
               'order': $scope.order, 
               
-              'limit':8}
+              'limit':6}
         };
         $scope.isFiltering = true;
         Case.list($scope,params);
@@ -228,13 +228,13 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
         if (filter){
           var params = { 'status': filter,
                          'order': $scope.order, 
-                         'limit':8}
+                         'limit':6}
         }
         else{
           var params = {
               'order': $scope.order, 
               
-              'limit':8}
+              'limit':6}
         };
         $scope.isFiltering = true;
         Case.list($scope,params);
@@ -266,6 +266,7 @@ $scope.addNewtag = function(tag){
                       }  ;
        Tag.insert($scope,params);
         $scope.tag.name='';
+        $('#tag-col-pick').val('#8fff00');
         var paramsTag = {'about_kind':'Case'};
         Tag.list($scope,paramsTag);
         
@@ -321,6 +322,7 @@ $scope.selectTag= function(tag,index,$event){
           'order': $scope.order,
                         'limit':6
          }
+        $scope.isFiltering = true;
          Case.list($scope,params);
 
   };
@@ -443,116 +445,6 @@ $scope.addTags=function(){
 
     
 }]);
-
-
-app.directive('ngBlur', ['$parse', function($parse) {
-  return function(scope, element, attr) {
-    var fn = $parse(attr['ngBlur']);
-    element.bind('blur', function(event) {
-      scope.$apply(function() {
-        fn(scope, {$event:event});
-      });
-    });
-  }
-}]);
-app.directive('ngDrag', ['$parse', function($parse) {
-  return function(scope, element, attr) {
-    var fn = $parse(attr['ngDrag']);
-    element.bind('drag', function(event) {
-      scope.$apply(function() {
-        fn(scope, {$event:event});
-      });
-    });
-  }
-}]);
-app.directive('ngDrop', ['$parse', function($parse) {
-  return function(scope, element, attr) {
-    var fn = $parse(attr['ngDrop']);
-    element.bind('drop', function(event) {
-      scope.$apply(function() {
-        fn(scope, {$event:event});
-      });
-    });
-  }
-}]);
-app.directive('draggable', function() {
-   return function(scope, element) {
-        // this gives us the native JS object
-        var el = element[0];
-
-        el.draggable = true;
-
-        el.addEventListener(
-            'dragstart',
-            function(e) {
-                e.dataTransfer.effectAllowed = 'move';
-                e.dataTransfer.setData('Text', this.id);
-                this.classList.add('drag');
-                return false;
-            },
-            false
-        );
-
-        el.addEventListener(
-            'dragend',
-            function(e) {
-                this.classList.remove('drag');
-                //alert('end of draggable');
-                return false;
-            },
-            false
-        );
-        el.addEventListener(
-            'drop',
-            function(e) {
-                // Stops some browsers from redirecting.
-                if (e.stopPropagation) e.stopPropagation();
-
-                this.classList.remove('over');
-
-                //var item = document.getElementById(e.dataTransfer.getData('Text'));
-                //this.appendChild(item);
-
-                return false;
-            },
-            false
-        );
-    }
-});
-app.directive('droppable', function() {
-    return function(scope, element) {
-        var el = element[0];
-        el.addEventListener(
-            'dragover',
-            function(e) {
-                e.dataTransfer.dropEffect = 'move';
-                // allows us to drop
-                if (e.preventDefault) e.preventDefault();
-                this.classList.add('over');
-                return false;
-            },
-            false
-        );
-        el.addEventListener(
-            'dragenter',
-            function(e) {
-                this.classList.add('over');
-                return false;
-            },
-            false
-        );
-
-        el.addEventListener(
-            'dragleave',
-            function(e) {
-                this.classList.remove('over');
-                return false;
-            },
-            false
-        );
-    }
-});
-
 
 app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Topic','Note','Task','Event','Permission','User','Casestatus','Email','Attachement',
     function($scope,$filter,$route,Auth,Case,Topic,Note,Task,Event,Permission,User,Casestatus,Email,Attachement) {

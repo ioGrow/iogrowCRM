@@ -229,7 +229,6 @@
                       <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;urgentTasks();" >{{ _("Urgent Tasks") }}</a></li>
                       <li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;createdByMe('{{ME}}');">{{ _("Created by Me") }}</a></li>
                       <li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;assignedToMe('{{ME}}');">{{ _("Assigned to Me") }}</a></li>
-                      <li class="ng-tab"  ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;privateTasks();">{{ _("Private Tasks") }}</a></li>
                   </ul>
                   <div class="tab-content">
                       <div class="tab-pane active " id="tab_1_1" ng-show="selectedTab == 1">
@@ -281,8 +280,8 @@
                                         </label>
                                        <h4 ng-dblclick="edit_task(task)" ng-show="edited_task!=task" class="col-md-6 col-xs-10 list-group-item-heading"
                                        ng-class= "{task_closed: task.status=='closed'}">
-                                       <i class="fa fa-dot-circle-o status_color" style="color:<%= task.status_color%>;" data-toggle="tooltip" data-placement="top" title="<%= task.status_label %>"></i>
-                                        <%= task.title %>
+                                       <i class="fa fa-dot-circle-o status_color" style="color:<%= task.status_color%>;" data-toggle="tooltip" data-placement="top" title="<%= task.status_label %>" ></i>
+                                          <a href="/#/tasks/show/<%= task.id %>"> <%= task.title %></a> 
                                        </h4>
                                        <div ng-show="edited_task==task" class="col-md-6 col-xs-7">
                                        <form ng-submit="done_edit_task(task)">
@@ -546,84 +545,6 @@
                       </div>
                        <div class="tab-pane active" id="tab_1_5" ng-show="selectedTab == 5">
                             <div class="row tasksList">
-                            <div class="col-md-12">
-                                <ul class="list-group">
-                                    <li class="task-actions list-group-item task-actions">
-                                     <div class="row">
-                                     <div class="col-md-12">
-                                       <form id="task_actions" class="form-inline" role="form">
-                                       <div class="row">
-                                       <label class="col-xs-1  col-md-1">
-                                           <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">  
-                                       </label>
-                                       <div class="col-xs-7  col-md-7">
-                                        <button  ng-show="status=='pending'" class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-lock"></i>
-                                          <span class="btn-text">
-                                            Close  
-                                          </span>
-                                        </button>
-                                         <button  ng-show="status=='closed'" class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-unlock"></i>
-                                        <span class="btn-text">
-                                        Reopen
-                                        </span>
-                                        </button>
-                                        <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-tags"></i>
-                                         <span class="btn-text">
-                                            Tags
-                                         </span>
-                                        </button>
-                                        <button ng-click="assigneeModal()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
-                                          <i class="fa fa-mail-forward"></i>
-                                           <span class="btn-text">
-                                            Assignee
-                                           </span>
-                                        </button>
-                                        </div>
-                                      </form>
-                                        </div>
-                                    </div>
-                                  </li>
-                                   <li  ng-repeat="task in tasks" class="list-group-item" droppable ng-drop="dropTag(task)" id="task_<%=$index%>">
-                                     <div class="row">
-                                        <label class="col-md-1 col-xs-1">
-                                            <input type="checkbox" ng-click="select_task(task,$index,$event)" ng-checked="isSelected()">  
-                                        </label>
-                                       <h4 ng-dblclick="edit_task(task)" ng-show="edited_task!=task" class="col-md-6 col-xs-10 list-group-item-heading"
-                                       ng-class= "{task_closed: task.status=='closed'}">
-                                       <i class="fa fa-dot-circle-o status_color" style="color:<%= task.status_color%>;" data-toggle="tooltip" data-placement="top" title="<%= task.status_label %>"></i>
-                                        <%= task.title %>
-                                       </h4>
-                                       <div ng-show="edited_task==task" class="col-md-6 col-xs-7">
-                                       <form ng-submit="done_edit_task(task)">
-                                          <input ng-type="text" class="form-control inlineEditTask" ng-blur="done_edit_task(task)" ng-model="task.title">
-                                       </form>
-                                         
-                                       </div>
-                                        <div class="col-md-5 col-xs-12">
-                                            <span ng-repeat="task_tag in task.tags" class="pull-right task-label badge badge-roundless" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
-                                                <%= task_tag.name %>
-                                            </span>
-                                            <span ng-repeat="assignee in task.assignees" class="pull-right">
-                                               <a href="#"> @<%= assignee.display_name %></a>
-                                            </span>
-                                        </div>
-                                    </div>
-                                     <div class="row">
-                                      <p class="col-md-11 col-md-offset-1 list-group-item-text">
-                                         <span ng-show="task.created_by">Opened by:<a href="#"> <%= task.created_by.display_name %></a></span> <span ng-show="task.about">{{ _('related to') }}<a href="#"> <%= task.about.name %></a></span>
-                                         <!--<span>Closed by:<a href="#">Transline</a></span>-->
-                                      </p>
-                                      </div>
-                                  </li>
-                                </ul>
-                              </div><!-- / col-md-12-->
-                          </div>
-                      </div>
-                       <div class="tab-pane active" id="tab_1_6" ng-show="selectedTab == 6">
-                              <div class="row tasksList">
                             <div class="col-md-12">
                                 <ul class="list-group">
                                     <li class="task-actions list-group-item task-actions">

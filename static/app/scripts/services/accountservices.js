@@ -172,6 +172,7 @@ accountservices.factory('Account', function($http) {
                         $scope.blankStateaccount = true;
                     }
                   }
+                 
                  $scope.accounts = resp.items;
                  if ($scope.currentPage>1){
                       $scope.pagination.prev = true;
