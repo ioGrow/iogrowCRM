@@ -30,16 +30,16 @@
                     <div class="modal-content">
                     <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                      <h3 id="myModalLabel" class="modal-title">Delete Task</h3>
+                      <h3 id="myModalLabel" class="modal-title">Close Task</h3>
                     </div>
                     <div class="modal-body">
                        <form id="seletesho" name="deletesho" class="form-horizontal"> 
-                        <p>{{_("Are you sure you want to delete selected tasks")}} .</p>
+                        <p>{{_("Are you sure you want to close this task")}} .</p>
                     </div>
                       <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
                         
-                        <input ng-hide="isLoading" ng-click="closeTask()" type="submit" class="btn red" value="Delete this User">
+                        <input ng-hide="isLoading" ng-click="closeTask()" type="submit" class="btn red" value="Close this Task">
                         <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
                       </div>
                   </form>
@@ -102,7 +102,7 @@
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
                 
-                <input ng-hide="isLoading" ng-click="addNewContributors()" type="submit" class="btn green" value="{{ _('Add this account') }}">
+                <input ng-hide="isLoading" ng-click="addNewContributors()" type="submit" class="btn green" value="{{ _('Add this user') }}">
                 <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
               </div>
                </form>
