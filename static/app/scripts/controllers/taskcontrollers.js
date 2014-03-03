@@ -229,38 +229,22 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
       }
       $('.typeahead').css("width", $('.typeahead').prev().width()+'px !important');
       $('.typeahead').width(433);
-      console.log('typeahead width');
-      console.log( $('.typeahead').width());
-      console.log('input befor typeahead width');
-      console.log($('.typeahead').prev().width());
       handleColorPicker();
       console.log($('#addMemberToTask').children());
-      $scope.$watch('newTask.due', function() {
-
+     
+      /*$scope.$watch('newTask.reminder', function() {
+         alert($("#new_task_text").width());
          if($scope.newTask.due==null&&$scope.newTask.reminder==null){
-                $('#new_task_text').css("paddingRight", "270px !important");
-           }else{
-                if($scope.newTask.due==null||$scope.newTask.reminder==null){
-                      
-                      $('#new_task_text').css("paddingRight", "170px !important");
-                }else{
-                    $('#new_task_text').css("paddingRight", "45px !important");
-                } 
-           }
-      });
-      $scope.$watch('newTask.reminder', function() {
-        
-         if($scope.newTask.due==null&&$scope.newTask.reminder==null){
-                $("#new_task_text").css("padding-right", "270px !important");
+                $("#new_task_text").css("background-color", "270px !important");
            }else{
                 if($scope.newTask.due==null||$scope.newTask.reminder==null){
              
-                      $("#new_task_text").css("padding-right", "170px !important");
+                      $("#new_task_text").css("background-color", "black !important");
                 }else{
                     $("#new_task_text").css("padding-right", "45px !important");
                 } 
            }
-     });
+     });*/
       $scope.idealTextColor=function(bgColor){
         var nThreshold = 105;
          var components = getRGBComponents(bgColor);
@@ -280,7 +264,21 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
              B: parseInt(b, 16)
           };
       }
-
+      $scope.customWidth=function(width,due,reminder){
+       /* if(due==null&&$reminder==null){
+                return 30;
+           }else{
+                if($scope.newTask.due==null||$scope.newTask.reminder==null){
+             
+                      return 150;
+                }else{
+                   return 260;
+                } 
+           }*/
+           console.log(width);
+           console.log(due);
+           console.log(reminder);
+      }
       $scope.dragTag=function(tag){
         $scope.draggedTag=tag;
       }
