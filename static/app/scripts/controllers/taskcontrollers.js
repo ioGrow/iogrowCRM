@@ -423,12 +423,10 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           }
 
         });
-       
-       
         Task.insert($scope,params);
         $scope.tagInfo.selected = [];
 
-         console.log($scope.newTask.title);
+        console.log($scope.newTask.title);
         $scope.newTask.title='';
         $scope.newTask.due=null;
         $scope.newTask.reminder=null;

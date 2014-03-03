@@ -239,7 +239,8 @@ $scope.selectTag= function(tag,index,$event){
           'tags': tags,
           'order': $scope.order,
                         'limit':6
-         }
+         };
+         $scope.isFiltering = true;
          Lead.list($scope,params);
 
   };

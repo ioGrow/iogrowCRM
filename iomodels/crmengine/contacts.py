@@ -56,8 +56,10 @@ class Contact(EndpointsModel):
         perm.put()
 
 
-    def put_index(self):
+    def put_index(self,data=None):
         """ index the element at each"""
+        print '************ Contact put index **********'
+        print self
         empty_string = lambda x: x if x else ""
         collaborators = " ".join(self.collaborators_ids)
         organization = str(self.organization.id())
@@ -66,35 +68,44 @@ class Contact(EndpointsModel):
         websites = " ".join(map(lambda x: x.website,  self.websites))
         title_autocomplete = ','.join(tokenize_autocomplete(self.firstname + ' ' + self.lastname +' '+ empty_string(self.title)+ ' ' +empty_string(self.account_name)))
         #addresses = " \n".join(map(lambda x: " ".join([x.street,x.city,x.state, x.postal_code, x.country]) if x else "", self.addresses))
-        my_document = search.Document(
-        doc_id = str(self.key.id()),
-        fields=[
-            search.TextField(name=u'type', value=u'Contact'),
-            search.TextField(name='title', value = empty_string(self.firstname) + " " + empty_string(self.lastname)),
-            search.TextField(name='organization', value = empty_string(organization) ),
-            search.TextField(name='access', value = empty_string(self.access) ),
-            search.TextField(name='owner', value = empty_string(self.owner) ),
-            search.TextField(name='collaborators', value = collaborators ),
-            search.TextField(name='firstname', value = empty_string(self.firstname) ),
-            search.TextField(name='lastname', value = empty_string(self.lastname)),
-            search.TextField(name='position', value = empty_string(self.title)),
-            search.DateField(name='created_at', value = self.created_at),
-            search.DateField(name='updated_at', value = self.updated_at),
-            search.TextField(name='company', value = empty_string(self.company)),
-            search.TextField(name='department', value = empty_string(self.department)),
-            search.TextField(name='account_name',value=empty_string(self.account_name)),
-            search.TextField(name='entityKey',value=empty_string(self.key.urlsafe())),
-            search.TextField(name='account',value=empty_string(self.account.urlsafe())),
-            search.TextField(name='description', value = empty_string(self.description)),
-            search.TextField(name='tagline', value = empty_string(self.tagline)),
-            search.TextField(name='introduction', value = empty_string(self.introduction)),
-            search.TextField(name='emails', value = empty_string(emails)),
-            search.TextField(name='phones', value = empty_string(phones)),
-            search.TextField(name='websites', value = empty_string(websites)),
-            search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
-            #search.TextField(name='addresses', value = empty_string(addresses)),
-
-           ])
+        if data:
+            print '******************** Something with data *****************'
+            print data
+            search_key = ['infos','contacts','tags']
+            for key in search_key:
+                if key not in data.keys():
+                    data[key] = ""
+            my_document = search.Document(
+            doc_id = str(data['id']),
+            fields=[
+                search.TextField(name=u'type', value=u'Contact'),
+                search.TextField(name='title', value = empty_string(self.firstname) + " " + empty_string(self.lastname)),
+                search.TextField(name='organization', value = empty_string(organization) ),
+                search.TextField(name='access', value = empty_string(self.access) ),
+                search.TextField(name='owner', value = empty_string(self.owner) ),
+                search.TextField(name='firstname', value = empty_string(self.firstname) ),
+                search.TextField(name='lastname', value = empty_string(self.lastname)),
+                search.TextField(name='position', value = empty_string(self.title)),
+                search.TextField(name='infos', value= data['infos']),
+                search.TextField(name='tags', value= data['tags']),
+                search.TextField(name='tags', value= data['contacts']),
+                search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
+                ])
+        else:
+            print '******************** Something without data *****************'
+            my_document = search.Document(
+            doc_id = str(self.key.id()),
+            fields=[
+                search.TextField(name=u'type', value=u'Contact'),
+                search.TextField(name='title', value = empty_string(self.firstname) + " " + empty_string(self.lastname)),
+                search.TextField(name='organization', value = empty_string(organization) ),
+                search.TextField(name='access', value = empty_string(self.access) ),
+                search.TextField(name='owner', value = empty_string(self.owner) ),
+                search.TextField(name='firstname', value = empty_string(self.firstname) ),
+                search.TextField(name='lastname', value = empty_string(self.lastname)),
+                search.TextField(name='position', value = empty_string(self.title)),
+                search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
+                ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)
 

@@ -171,7 +171,8 @@
                     <br/>
                     <div class="row">
                           <div class="col-md-12">
-                               <span ng-repeat="tag in contact.tags"   class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
+                               <a ng-repeat="tag in contact.tags" href="/#/search/type:Contact tags:<%=tag.id%>"> <span class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
+                               </a>
                           </div>
                           
                     </div>                         
@@ -206,7 +207,7 @@
                   </div>
                
                                   
-                </div>2013
+                </div>
               </div>
               <div class="clearfix"></div>
               </div>
