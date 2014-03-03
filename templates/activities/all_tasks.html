@@ -337,7 +337,7 @@
                                         <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-tags"></i>
                                          <span class="btn-text">
-                                            Tags iooo
+                                            Tags
                                          </span>
                                         </button>
                                         <button ng-click="assigneeModal()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
@@ -372,7 +372,7 @@
                                                 <%= task_tag.name %>
                                             </span>
                                             <span ng-repeat="assignee in task.assignees" class="pull-right">
-                                               <a href="#"> @<%= assignee.display_name %></a>
+                                               <a > @<%= assignee.display_name %></a>
                                             </span>
                                         </div>
                                     </div>

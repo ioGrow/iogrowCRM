@@ -55,8 +55,8 @@ class Task(EndpointsModel):
         empty_string = lambda x: x if x else ""
         empty_date = lambda x: x if x else date(2999, 12, 31)
         collaborators = " ".join(self.collaborators_ids)
-        tags = " ".join(map(lambda x: x.name,  self.tags))
-        title_autocomplete = ','.join(tokenize_autocomplete(self.title + tags))
+        #tags = " ".join(map(lambda x: x.name,  self.tags))
+        #title_autocomplete = ','.join(tokenize_autocomplete(self.title + tags))
         organization = str(self.organization.id())
         if data:
             search_key = ['infos','tasks','tags','topics']
@@ -71,7 +71,7 @@ class Task(EndpointsModel):
                 search.TextField(name='access', value = empty_string(self.access) ),
                 search.TextField(name='owner', value = empty_string(self.owner) ),
                 search.TextField(name='collaborators', value = collaborators ),
-                search.TextField(name='tags', value = tags ),
+                #search.TextField(name='tags', value = tags ),
                 search.TextField(name='title', value = empty_string(self.title) ),
                 search.TextField(name='status', value = empty_string(self.status)),
                 search.DateField(name='due', value = empty_date(self.due)),
@@ -81,7 +81,7 @@ class Task(EndpointsModel):
                 search.TextField(name='tags', value= data['tags']),
                 search.TextField(name='tasks', value= data['tasks']),
                 search.TextField(name='topics', value= data['topics']),
-                search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
+                #search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
                ])
         else:
             my_document = search.Document(
