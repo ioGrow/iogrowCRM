@@ -5,12 +5,10 @@ from endpoints_proto_datastore import MessageFieldsSchema
 from google.appengine.api import search
 from protorpc import messages
 import endpoints
-
-from search_helper import tokenize_autocomplete 
-
+from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
 import model
 from iomodels.crmengine.tags import Tag,TagSchema
-from iomodels.crmengine.contacts import Contact,ContactListResponse
+from iomodels.crmengine.contacts import Contact,ContactListRequest,ContactListResponse
 from iograph import Node,Edge,InfoNodeListResponse
 from iomodels.crmengine.notes import Note,TopicListResponse
 
@@ -45,8 +43,27 @@ class AccountSchema(messages.Message):
     updated_at = messages.StringField(13)
     access = messages.StringField(14)
 
+class AccountListRequest(messages.Message):
+    limit = messages.IntegerField(1)
+    pageToken = messages.StringField(2)
+    order = messages.StringField(3)
+    tags = messages.StringField(4,repeated = True)
+    owner = messages.StringField(5)
+    contacts = messages.MessageField(ContactListRequest, 6)
+
 class AccountListResponse(messages.Message):
     items = messages.MessageField(AccountSchema, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
+
+# The message class that defines the accounts.search response
+class AccountSearchResult(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    name = messages.StringField(3)
+
+# The message class that defines a set of accounts.search results
+class AccountSearchResults(messages.Message):
+    items = messages.MessageField(AccountSearchResult, 1, repeated=True)
     nextPageToken = messages.StringField(2)
 
 class Account(EndpointsModel):
@@ -269,6 +286,70 @@ class Account(EndpointsModel):
         else:
             next_curs_url_safe = None
         return  AccountListResponse(items = items, nextPageToken = next_curs_url_safe)
+    
+    @classmethod
+    def search(cls,user_from_email,request):
+        organization = str(user_from_email.organization.id())
+        index = search.Index(name="GlobalIndex")
+        #Show only objects where you have permissions
+        query_string = SEARCH_QUERY_MODEL % {
+                               "type": "Account",
+                               "query": request.q,
+                               "organization": organization,
+                               "owner": user_from_email.google_user_id,
+                               "collaborators": user_from_email.google_user_id,
+                                }
+        search_results = []
+        if request.limit:
+            limit = int(request.limit)
+        else:
+            limit = 10
+        next_cursor = None
+        if request.pageToken:
+            cursor = search.Cursor(web_safe_string=request.pageToken)
+        else:
+            cursor = search.Cursor(per_result=True)
+        if limit:
+            options = search.QueryOptions(limit=limit, cursor=cursor)
+        else:
+            options = search.QueryOptions(cursor=cursor)
+        query = search.Query(query_string=query_string, options=options)
+        try:
+            if query:
+                results = index.search(query)
+                #total_matches = results.number_found
+                # Iterate over the documents in the results
+                for scored_document in results:
+                    kwargs = {
+                        'id': scored_document.doc_id
+                    }
+                    for e in scored_document.fields:
+                        if e.name in ["entityKey", "title"]:
+                            if e.name == "title":
+                                kwargs["name"] = e.value
+                            else:
+                                kwargs[e.name] = e.value
+                    search_results.append(AccountSearchResult(**kwargs))
+                    next_cursor = scored_document.cursor.web_safe_string
+                if next_cursor:
+                    next_query_options = search.QueryOptions(
+                                                             limit=1,
+                                                             cursor=scored_document.cursor
+                                                             )
+                    next_query = search.Query(
+                                              query_string=query_string,
+                                              options=next_query_options
+                                              )
+                    if next_query:
+                        next_results = index.search(next_query)
+                        if len(next_results.results) == 0:
+                            next_cursor = None
+        except search.Error:
+            logging.exception('Search failed')
+        return AccountSearchResults(
+                                    items=search_results,
+                                    nextPageToken=next_cursor
+                                    )
 
 
 

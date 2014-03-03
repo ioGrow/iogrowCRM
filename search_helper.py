@@ -1,3 +1,13 @@
+SEARCH_QUERY_MODEL = """
+                            %(query)s type:%(type)s
+                             AND (organization: %(organization)s
+                                  AND (access:public
+                                       OR (owner: %(owner)s
+                                           OR collaborators: %(collaborators)s
+                                           )
+                                       )
+                                  )
+                        """
 def tokenize_autocomplete(phrase):
         a = []
         for word in phrase.split():
