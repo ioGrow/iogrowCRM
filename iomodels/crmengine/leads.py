@@ -1,8 +1,50 @@
 from google.appengine.ext import ndb
+from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.api import search 
 from endpoints_proto_datastore.ndb import EndpointsModel
-from search_helper import tokenize_autocomplete
+from protorpc import messages
+from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
+from iomodels.crmengine.tags import Tag,TagSchema
+from iograph import Edge
 import model
+
+class LeadSchema(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    firstname = messages.StringField(3)
+    lastname = messages.StringField(4)
+    company = messages.StringField(5)
+    title = messages.StringField(6)
+    source = messages.StringField(7)
+    status = messages.StringField(8)
+    tags = messages.MessageField(TagSchema,9, repeated = True)
+    created_at = messages.StringField(10)
+    updated_at = messages.StringField(11)
+
+class LeadListRequest(messages.Message):
+    limit = messages.IntegerField(1)
+    pageToken = messages.StringField(2)
+    order = messages.StringField(3)
+    tags = messages.StringField(4,repeated = True)
+    owner = messages.StringField(5)
+    status = messages.StringField(6)
+
+class LeadListResponse(messages.Message):
+    items = messages.MessageField(LeadSchema, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
+
+class LeadSearchResult(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    firstname = messages.StringField(3)
+    lastname = messages.StringField(4)
+    company = messages.StringField(5)
+    position = messages.StringField(6)
+    status = messages.StringField(7)
+
+class LeadSearchResults(messages.Message):
+    items = messages.MessageField(LeadSearchResult, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
 
 class Lead(EndpointsModel):
     _message_fields_schema = ('id','entityKey','folder', 'owner', 'access','collaborators_list','collaborators_ids', 'firstname','lastname','company' ,'title','tagline','introduction','phones','emails','addresses','websites','sociallinks','status','created_at','updated_at','show','show_name','feedback','feedback_name','source')
@@ -131,3 +173,141 @@ class Lead(EndpointsModel):
                ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)
+
+    @classmethod
+    def list(cls,user_from_email,request):
+        curs = Cursor(urlsafe=request.pageToken)
+        if request.limit:
+            limit = int(request.limit)
+        else:
+            limit = 10
+        items = list()
+        you_can_loop = True
+        count = 0
+        while you_can_loop:
+            if request.order:
+                ascending = True
+                if request.order.startswith('-'):
+                    order_by = request.order[1:]
+                    ascending = False
+                else:
+                    order_by = request.order
+                attr = cls._properties.get(order_by)
+                if attr is None:
+                    raise AttributeError('Order attribute %s not defined.' % (attr_name,))
+                if ascending:
+                    leads, next_curs, more =  cls.query().filter(cls.organization==user_from_email.organization).order(+attr).fetch_page(limit, start_cursor=curs)
+                else:
+                    leads, next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).order(-attr).fetch_page(limit, start_cursor=curs)
+            else:
+                leads, next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).fetch_page(limit, start_cursor=curs)
+            for lead in leads:
+                if count<= limit:
+                    is_filtered = True
+                    if lead.access == 'private' and lead.owner!=user_from_email.google_user_id:
+                        end_node_set = [user_from_email.key]
+                        if not Edge.find(start_node=lead.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
+                            is_filtered = False
+                    if request.tags and is_filtered:
+                        end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
+                        if not Edge.find(start_node=lead.key,kind='tags',end_node_set=end_node_set,operation='AND'):
+                            is_filtered = False
+                    if request.owner and lead.owner!=request.owner and is_filtered:
+                        is_filtered = False
+                    if request.status and lead.status!=request.status and is_filtered:
+                        is_filtered = False
+                    if is_filtered:
+                        count = count + 1
+                        #list of tags related to this lead
+                        edge_list = Edge.list(start_node=lead.key,kind='tags')
+                        tag_list = Tag.list_by_parent(parent_key = lead.key)
+                        lead_schema = LeadSchema(
+                                  id = str( lead.key.id() ),
+                                  entityKey = lead.key.urlsafe(),
+                                  firstname = lead.firstname,
+                                  lastname = lead.lastname,
+                                  title = lead.title,
+                                  company = lead.company,
+                                  tags = tag_list,
+                                  created_at = lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                  updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                )
+                        items.append(lead_schema)
+            if (count == limit):
+                you_can_loop = False
+            if more and next_curs:
+                curs = next_curs
+            else:
+                you_can_loop = False
+        if next_curs and more:
+            next_curs_url_safe = next_curs.urlsafe()
+        else:
+            next_curs_url_safe = None
+        return  LeadListResponse(items = items, nextPageToken = next_curs_url_safe)
+
+    @classmethod
+    def search(cls,user_from_email,request):
+        organization = str(user_from_email.organization.id())
+        index = search.Index(name="GlobalIndex")
+        #Show only objects where you have permissions
+        query_string = SEARCH_QUERY_MODEL % {
+                               "type": "Lead",
+                               "query": request.q,
+                               "organization": organization,
+                               "owner": user_from_email.google_user_id,
+                               "collaborators": user_from_email.google_user_id,
+                                }
+        search_results = []
+        if request.limit:
+            limit = int(request.limit)
+        else:
+            limit = 10
+        next_cursor = None
+        if request.pageToken:
+            cursor = search.Cursor(web_safe_string=request.pageToken)
+        else:
+            cursor = search.Cursor(per_result=True)
+        if limit:
+            options = search.QueryOptions(limit=limit, cursor=cursor)
+        else:
+            options = search.QueryOptions(cursor=cursor)
+        query = search.Query(query_string=query_string, options=options)
+        try:
+            if query:
+                results = index.search(query)
+                #total_matches = results.number_found
+                # Iterate over the documents in the results
+                for scored_document in results:
+                    kwargs = {
+                              'id': scored_document.doc_id
+                              }
+                    for e in scored_document.fields:
+                        if e.name in [
+                                      "firstname",
+                                      "lastname",
+                                      "company",
+                                      "position",
+                                      "status"
+                                      ]:
+                            kwargs[e.name] = e.value
+                    search_results.append(LeadSearchResult(**kwargs))
+                    next_cursor = scored_document.cursor.web_safe_string
+                if next_cursor:
+                    next_query_options = search.QueryOptions(
+                                                             limit=1,
+                                                             cursor=scored_document.cursor
+                                                             )
+                    next_query = search.Query(
+                                              query_string=query_string,
+                                              options=next_query_options
+                                              )
+                    if next_query:
+                        next_results = index.search(next_query)
+                        if len(next_results.results)==0:
+                            next_cursor = None
+        except search.Error:
+            logging.exception('Search failed')
+        return LeadSearchResults(
+                                 items=search_results,
+                                 nextPageToken=next_cursor
+                                 )
