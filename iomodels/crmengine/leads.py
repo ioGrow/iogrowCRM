@@ -192,15 +192,15 @@ class Lead(EndpointsModel):
                     ascending = False
                 else:
                     order_by = request.order
-                attr = Lead._properties.get(order_by)
+                attr = cls._properties.get(order_by)
                 if attr is None:
                     raise AttributeError('Order attribute %s not defined.' % (attr_name,))
                 if ascending:
-                    leads, next_curs, more =  Lead.query().filter(Lead.organization==user_from_email.organization).order(+attr).fetch_page(limit, start_cursor=curs)
+                    leads, next_curs, more =  cls.query().filter(cls.organization==user_from_email.organization).order(+attr).fetch_page(limit, start_cursor=curs)
                 else:
-                    leads, next_curs, more = Lead.query().filter(Lead.organization==user_from_email.organization).order(-attr).fetch_page(limit, start_cursor=curs)
+                    leads, next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).order(-attr).fetch_page(limit, start_cursor=curs)
             else:
-                leads, next_curs, more = Lead.query().filter(Lead.organization==user_from_email.organization).fetch_page(limit, start_cursor=curs)
+                leads, next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).fetch_page(limit, start_cursor=curs)
             for lead in leads:
                 if count<= limit:
                     is_filtered = True
