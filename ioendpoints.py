@@ -31,7 +31,7 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 
 # Our libraries
 from iograph import Node,Edge,RecordSchema,InfoNodeResponse,InfoNodeConnectionSchema,InfoNodeListResponse
-from iomodels.crmengine.accounts import Account
+from iomodels.crmengine.accounts import Account,AccountGetRequest,AccountSchema,AccountListResponse
 from iomodels.crmengine.contacts import Contact,ContactSchema,ContactListResponse
 from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse
 from iomodels.crmengine.tasks import Task
@@ -591,30 +591,7 @@ class AccountListRequest(messages.Message):
     contacts = messages.MessageField(ContactListRequest, 6)
     contacts = messages.MessageField(ContactListRequest, 6)
 
-class AccountGetRequest(messages.Message):
-    id = messages.IntegerField(1,required = True)
-    contacts = messages.MessageField(ListRequest, 2)
-    topics = messages.MessageField(ListRequest, 3)
 
-class AccountSchema(messages.Message):
-    id = messages.StringField(1)
-    entityKey = messages.StringField(2)
-    name = messages.StringField(3)
-    account_type = messages.StringField(4)
-    industry = messages.StringField(5)
-    tagline = messages.StringField(6)
-    introduction = messages.StringField(7)
-    tags = messages.MessageField(TagSchema,8, repeated = True)
-    contacts = messages.MessageField(ContactListResponse,9)
-    infonodes = messages.MessageField(InfoNodeListResponse,10)
-    topics = messages.MessageField(TopicListResponse,11)
-    created_at = messages.StringField(12)
-    updated_at = messages.StringField(13)
-    access = messages.StringField(14)
-
-class AccountListResponse(messages.Message):
-    items = messages.MessageField(AccountSchema, 1, repeated=True)
-    nextPageToken = messages.StringField(2)
 
 
 class EndpointsHelper(EndpointsModel):
@@ -966,48 +943,7 @@ class CrmEngineApi(remote.Service):
                       name='accounts.getv2')
     def accounts_get_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        account = Account.get_by_id(int(request.id))
-        if account is None:
-            raise endpoints.NotFoundException('Account not found.')
-        #list of tags related to this account
-        tag_list = Tag.list_by_parent(account.key)
-        #list of contacts to this account
-        contacts = None
-        if request.contacts:
-            contacts = Contact.list_by_parent(
-                                            parent_key = account.key,
-                                            request = request
-                                        )
-        #list of topics related to this account
-        topics = None
-        if request.topics:
-            topics = Note.list_by_parent(
-                                        parent_key = account.key,
-                                        request = request
-                                        )
-        # list of infonodes
-        infonodes = Node.list_info_nodes(
-                                        parent_key = account.key,
-                                        request = request
-                                        )
-        account_schema = AccountSchema(
-                                  id = str( account.key.id() ),
-                                  entityKey = account.key.urlsafe(),
-                                  access = account.access,
-                                  name = account.name,
-                                  account_type = account.account_type,
-                                  industry = account.industry,
-                                  tagline = account.tagline,
-                                  introduction = account.introduction,
-                                  tags = tag_list,
-                                  contacts = contacts,
-                                  topics = topics,
-                                  infonodes = infonodes,
-                                  created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
-                                )
-
-        return  account_schema
+        return Account.get_schema(request = request)
     # accounts.get API
     @Account.method(
                     request_fields=('id',),

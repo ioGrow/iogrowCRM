@@ -2,9 +2,52 @@ from google.appengine.ext import ndb
 from endpoints_proto_datastore.ndb import EndpointsModel
 from endpoints_proto_datastore import MessageFieldsSchema
 from google.appengine.api import search
+from protorpc import messages
+import endpoints
+
 from search_helper import tokenize_autocomplete 
 
 import model
+from iomodels.crmengine.tags import Tag,TagSchema
+from iomodels.crmengine.contacts import Contact,ContactListResponse
+from iograph import Node,Edge,InfoNodeListResponse
+from iomodels.crmengine.notes import Note,TopicListResponse
+
+
+# The message class that defines the EntityKey schema
+class EntityKeyRequest(messages.Message):
+    entityKey = messages.StringField(1)
+
+ # The message class that defines the ListRequest schema
+class ListRequest(messages.Message):
+    limit = messages.IntegerField(1)
+    pageToken = messages.StringField(2)
+
+class AccountGetRequest(messages.Message):
+    id = messages.IntegerField(1,required = True)
+    contacts = messages.MessageField(ListRequest, 2)
+    topics = messages.MessageField(ListRequest, 3)
+
+class AccountSchema(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    name = messages.StringField(3)
+    account_type = messages.StringField(4)
+    industry = messages.StringField(5)
+    tagline = messages.StringField(6)
+    introduction = messages.StringField(7)
+    tags = messages.MessageField(TagSchema,8, repeated = True)
+    contacts = messages.MessageField(ContactListResponse,9)
+    infonodes = messages.MessageField(InfoNodeListResponse,10)
+    topics = messages.MessageField(TopicListResponse,11)
+    created_at = messages.StringField(12)
+    updated_at = messages.StringField(13)
+    access = messages.StringField(14)
+
+class AccountListResponse(messages.Message):
+    items = messages.MessageField(AccountSchema, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
+
 class Account(EndpointsModel):
     _message_fields_schema = ('id','entityKey','created_at','updated_at', 'folder','access','collaborators_list','phones','emails','addresses','websites','sociallinks', 'collaborators_ids','name','owner','account_type','industry','tagline','introduction')
     # Sharing fields
@@ -111,6 +154,51 @@ class Account(EndpointsModel):
                ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)
+
+    @classmethod
+    def get_schema(cls,request):
+        account = Account.get_by_id(int(request.id))
+        if account is None:
+            raise endpoints.NotFoundException('Account not found.')
+        #list of tags related to this account
+        tag_list = Tag.list_by_parent(account.key)
+        #list of contacts to this account
+        contacts = None
+        if request.contacts:
+            contacts = Contact.list_by_parent(
+                                            parent_key = account.key,
+                                            request = request
+                                        )
+        #list of topics related to this account
+        topics = None
+        if request.topics:
+            topics = Note.list_by_parent(
+                                        parent_key = account.key,
+                                        request = request
+                                        )
+        # list of infonodes
+        infonodes = Node.list_info_nodes(
+                                        parent_key = account.key,
+                                        request = request
+                                        )
+        account_schema = AccountSchema(
+                                  id = str( account.key.id() ),
+                                  entityKey = account.key.urlsafe(),
+                                  access = account.access,
+                                  name = account.name,
+                                  account_type = account.account_type,
+                                  industry = account.industry,
+                                  tagline = account.tagline,
+                                  introduction = account.introduction,
+                                  tags = tag_list,
+                                  contacts = contacts,
+                                  topics = topics,
+                                  infonodes = infonodes,
+                                  created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                  updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                )
+
+        return  account_schema
 
 
 
