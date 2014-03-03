@@ -1,9 +1,10 @@
 from google.appengine.ext import ndb
+from google.appengine.datastore.datastore_query import Cursor
 from endpoints_proto_datastore.ndb import EndpointsModel
 from google.appengine.api import search 
 from protorpc import messages
 from search_helper import tokenize_autocomplete
-from iomodels.crmengine.tags import TagSchema
+from iomodels.crmengine.tags import Tag,TagSchema
 from iograph import Edge
 import model
 
@@ -18,6 +19,13 @@ class ContactSchema(messages.Message):
     created_at = messages.StringField(8)
     updated_at = messages.StringField(9)
 
+class ContactListRequest(messages.Message):
+    limit = messages.IntegerField(1)
+    pageToken = messages.StringField(2)
+    order = messages.StringField(3)
+    tags = messages.StringField(4,repeated = True)
+    owner = messages.StringField(5)
+    
 class ContactListResponse(messages.Message):
     items = messages.MessageField(ContactSchema, 1, repeated=True)
     nextPageToken = messages.StringField(2)
@@ -144,6 +152,74 @@ class Contact(EndpointsModel):
         return ContactListResponse(
                                     items = contact_list,
                                     nextPageToken = contact_next_curs
-                                )    
+                                ) 
+    @classmethod
+    def list(cls,user_from_email,request):
+        curs = Cursor(urlsafe=request.pageToken)
+        if request.limit:
+            limit = int(request.limit)
+        else:
+            limit = 10
+        items = list()
+        you_can_loop = True
+        count = 0
+        while you_can_loop:
+            if request.order:
+                ascending = True
+                if request.order.startswith('-'):
+                    order_by = request.order[1:]
+                    ascending = False
+                else:
+                    order_by = request.order
+                attr = cls._properties.get(order_by)
+                if attr is None:
+                    raise AttributeError('Order attribute %s not defined.' % (attr_name,))
+                if ascending:
+                    contacts, next_curs, more =  cls.query().filter(cls.organization==user_from_email.organization).order(+attr).fetch_page(limit, start_cursor=curs)
+                else:
+                    contacts, next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).order(-attr).fetch_page(limit, start_cursor=curs)
+            else:
+                contacts, next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).fetch_page(limit, start_cursor=curs)
+            for contact in contacts:
+                if count<= limit:
+                    is_filtered = True
+                    if contact.access == 'private' and contact.owner!=user_from_email.google_user_id:
+                        end_node_set = [user_from_email.key]
+                        if not Edge.find(start_node=contact.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
+                            is_filtered = False
+                    if request.tags and is_filtered:
+                        end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
+                        if not Edge.find(start_node=contact.key,kind='tags',end_node_set=end_node_set,operation='AND'):
+                            is_filtered = False
+                    if request.owner and contact.owner!=request.owner and is_filtered:
+                        is_filtered = False
+                    if is_filtered:
+                        count = count + 1
+                        #list of tags related to this contact
+                        tag_list = Tag.list_by_parent(parent_key = contact.key)
+                        contact_schema = ContactSchema(
+                                  id = str( contact.key.id() ),
+                                  entityKey = contact.key.urlsafe(),
+                                  firstname = contact.firstname,
+                                  lastname = contact.lastname,
+                                  title = contact.title,
+                                  account_name = contact.account_name,
+                                  tags = tag_list,
+                                  created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                  updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                )
+                        items.append(contact_schema)
+            if (count == limit):
+                you_can_loop = False
+            if more and next_curs:
+                curs = next_curs
+            else:
+                you_can_loop = False
+        if next_curs and more:
+            next_curs_url_safe = next_curs.urlsafe()
+        else:
+            next_curs_url_safe = None
+        return  ContactListResponse(items = items, nextPageToken = next_curs_url_safe)
+
 
 
