@@ -30,7 +30,7 @@ import endpoints
 from endpoints_proto_datastore.ndb import EndpointsModel
 
 # Our libraries
-from iograph import Node, Edge
+from iograph import Node,Edge,RecordSchema,InfoNodeResponse,InfoNodeConnectionSchema,InfoNodeListResponse
 from iomodels.crmengine.accounts import Account
 from iomodels.crmengine.contacts import Contact
 from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse
@@ -229,12 +229,7 @@ class EdgesResponse(messages.Message):
     items = messages.MessageField(EdgeSchema, 1, repeated=True)
 
 
-# The message class that defines Record schema for InfoNode attributes
-class RecordSchema(messages.Message):
-    field = messages.StringField(1)
-    value = messages.StringField(2)
-    property_type = messages.StringField(3, default='StringProperty')
-    is_indexed = messages.BooleanField(4)
+
 
 
 class InfoNodeSchema(messages.Message):
@@ -243,20 +238,13 @@ class InfoNodeSchema(messages.Message):
     parent = messages.StringField(3, required=True)
 
 
-class InfoNodeResponse(messages.Message):
-    id = messages.StringField(1)
-    entityKey = messages.StringField(2)
-    kind = messages.StringField(3)
-    fields = messages.MessageField(RecordSchema, 4, repeated=True)
-    parent = messages.StringField(5)
+
 
 
 #TODOS
 # ADD PHONE SCHEMA, LISTOFPHONES SCHEMA, EMAILS, ADDRESSES,...
 # ADD ANOTHER SCHEMA FOR CUSTOM FIELDS
-class InfoNodeConnectionSchema(messages.Message):
-    kind = messages.StringField(1, required=True)
-    items = messages.MessageField(InfoNodeResponse, 2, repeated=True)
+
 
 
 class InfoNodeListRequest(messages.Message):
@@ -264,8 +252,7 @@ class InfoNodeListRequest(messages.Message):
     connections = messages.StringField(2, repeated=True)
 
 
-class InfoNodeListResponse(messages.Message):
-    items = messages.MessageField(InfoNodeConnectionSchema, 1, repeated=True)
+
 
 
 # The message class that defines the SendEmail Request attributes
@@ -994,7 +981,6 @@ class CrmEngineApi(remote.Service):
         if account is None:
             raise endpoints.NotFoundException('Account not found.')
         #list of tags related to this account
-        edge_list = Edge.list(start_node=account.key,kind='tags')
         tag_list = Tag.list_by_parent(account.key)
         #list of contacts to this account
         contacts = None
@@ -1030,38 +1016,10 @@ class CrmEngineApi(remote.Service):
                                         request = request
                                         )
         # list of infonodes
-        edge_list = Edge.list(
-                            start_node = account.key,
-                            kind = 'infos'
-                            )
-        connections_dict = {}
-        for edge in edge_list['items']:
-            node = edge.end_node.get()
-            if node.kind not in connections_dict.keys():
-                connections_dict[node.kind] = list()
-            node_fields = list()
-            for key, value in node.to_dict().iteritems():
-                if key not in['kind', 'parent', 'created_at', 'updated_at']:
-                    record = RecordSchema(
-                                          field=key,
-                                          value=node.to_dict()[key]
-                                          )
-                    node_fields.append(record)
-            info_node = InfoNodeResponse(
-                                         id=str(node.key.id()),
-                                         entityKey=node.key.urlsafe(),
-                                         kind=node.kind,
-                                         fields=node_fields
-                                         )
-            connections_dict[node.kind].append(info_node)
-        connections_list = list()
-        for key, value in connections_dict.iteritems():
-            infonodeconnection = InfoNodeConnectionSchema(
-                                                            kind=key,
-                                                            items=value
-                                                        )
-            connections_list.append(infonodeconnection)
-        infonodes = InfoNodeListResponse(items=connections_list)
+        infonodes = Node.list_info_nodes(
+                                        parent_key = account.key,
+                                        request = request
+                                        )
         account_schema = AccountSchema(
                                   id = str( account.key.id() ),
                                   entityKey = account.key.urlsafe(),
@@ -3165,48 +3123,10 @@ class CrmEngineApi(remote.Service):
                       name='infonode.list')
     def infonode_list(self, request):
         parent_key = ndb.Key(urlsafe=request.parent)
-        edge_list = Edge.list(
-                            start_node = parent_key,
-                            kind = 'infos'
-                            )
-        connections_dict = {}
-        for edge in edge_list['items']:
-            print '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$44444'
-            node = edge.end_node.get()
-            print node
-            if node.kind not in connections_dict.keys():
-                connections_dict[node.kind] = list()
-            node_fields = list()
-            for key, value in node.to_dict().iteritems():
-                if key not in['kind', 'parent', 'created_at', 'updated_at']:
-                    record = RecordSchema(
-                                          field=key,
-                                          value=node.to_dict()[key]
-                                          )
-                    node_fields.append(record)
-            info_node = InfoNodeResponse(
-                                         id=str(node.key.id()),
-                                         entityKey=node.key.urlsafe(),
-                                         kind=node.kind,
-                                         fields=node_fields
-                                         )
-            connections_dict[node.kind].append(info_node)
-        connections_list = list()
-        for key, value in connections_dict.iteritems():
-            if request.connections:
-                if key in request.connections:
-                    infonodeconnection = InfoNodeConnectionSchema(
-                                                                  kind=key,
-                                                                  items=value
-                                                                  )
-                    connections_list.append(infonodeconnection)
-            else:
-                infonodeconnection = InfoNodeConnectionSchema(
-                                                              kind=key,
-                                                              items=value
-                                                              )
-                connections_list.append(infonodeconnection)
-        return InfoNodeListResponse(items=connections_list)
+        return Node.list_info_nodes(
+                                    parent_key = parent_key,
+                                    request = request
+                                    )
 
     # Opportunities APIs
     # opportunities.delete api
