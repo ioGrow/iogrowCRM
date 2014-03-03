@@ -1,8 +1,9 @@
 from google.appengine.ext import ndb
+from google.appengine.datastore.datastore_query import Cursor
 from endpoints_proto_datastore.ndb import EndpointsModel
 from google.appengine.api import search
 from protorpc import messages
-from search_helper import tokenize_autocomplete
+from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
 from iomodels.crmengine.tags import Tag,TagSchema
 from iograph import Node,Edge,InfoNodeListResponse
 import model
@@ -34,6 +35,21 @@ class CaseSchema(messages.Message):
 
 class CaseListResponse(messages.Message):
     items = messages.MessageField(CaseSchema, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
+
+# The message class that defines the cases.search response
+class CaseSearchResult(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    title = messages.StringField(3)
+    contact_name = messages.StringField(4)
+    account_name = messages.StringField(5)
+    status = messages.StringField(6)
+
+
+# The message class that defines a set of cases.search results
+class CaseSearchResults(messages.Message):
+    items = messages.MessageField(CaseSearchResult, 1, repeated=True)
     nextPageToken = messages.StringField(2)
 
 class Case(EndpointsModel):
@@ -201,6 +217,73 @@ class Case(EndpointsModel):
         else:
             next_curs_url_safe = None
         return  CaseListResponse(items = items, nextPageToken = next_curs_url_safe)
+
+    @classmethod
+    def search(cls,user_from_email,request):
+        organization = str(user_from_email.organization.id())
+        index = search.Index(name="GlobalIndex")
+        #Show only objects where you have permissions
+        query_string = SEARCH_QUERY_MODEL % {
+                               "type": "Case",
+                               "query": request.q,
+                               "organization": organization,
+                               "owner": user_from_email.google_user_id,
+                               "collaborators": user_from_email.google_user_id,
+                                }
+        search_results = []
+        if request.limit:
+            limit = int(request.limit)
+        else:
+            limit = 10
+        next_cursor = None
+        if request.pageToken:
+            cursor = search.Cursor(web_safe_string=request.pageToken)
+        else:
+            cursor = search.Cursor(per_result=True)
+        if limit:
+            options = search.QueryOptions(limit=limit, cursor=cursor)
+        else:
+            options = search.QueryOptions(cursor=cursor)
+        query = search.Query(query_string=query_string, options=options)
+        try:
+            if query:
+                results = index.search(query)
+                #total_matches = results.number_found
+                # Iterate over the documents in the results
+                for scored_document in results:
+                    kwargs = {
+                        'id': scored_document.doc_id
+                    }
+                    for e in scored_document.fields:
+                        if e.name in [
+                                      "title",
+                                      "contact_name",
+                                      "account_name",
+                                      "status"
+                                      ]:
+                            kwargs[e.name] = e.value
+                    search_results.append(CaseSearchResult(**kwargs))
+                    next_cursor = scored_document.cursor.web_safe_string
+                    if next_cursor:
+                        next_query_options = search.QueryOptions(
+                                                                 limit=1,
+                                                                 cursor=scored_document.cursor
+                                                                 )
+                        next_query = search.Query(
+                                                  query_string=query_string,
+                                                  options=next_query_options
+                                                  )
+                        if next_query:
+                            next_results = index.search(next_query)
+                            if len(next_results.results) == 0:
+                                next_cursor = None
+        except search.Error:
+            logging.exception('Search failed')
+        return CaseSearchResults(
+                                 items=search_results,
+                                 nextPageToken=next_cursor
+                                 )
+
     
 
   
