@@ -16,6 +16,11 @@ class AuthorSchema(messages.Message):
     photo = messages.StringField(4)
     edgeKey = messages.StringField(5)
 
+class DiscussionAboutSchema(messages.Message):
+    kind = messages.StringField(1)
+    id = messages.StringField(2)
+    name = messages.StringField(3)
+
 class TopicSchema(messages.Message):
     id = messages.StringField(1)
     entityKey = messages.StringField(2)
