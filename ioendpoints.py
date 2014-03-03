@@ -33,7 +33,7 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 from iograph import Node, Edge
 from iomodels.crmengine.accounts import Account
 from iomodels.crmengine.contacts import Contact
-from iomodels.crmengine.notes import Note, Topic
+from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse
 from iomodels.crmengine.tasks import Task
 #from iomodels.crmengine.tags import Tag
 from iomodels.crmengine.opportunities import Opportunity
@@ -144,13 +144,7 @@ class ListRequest(messages.Message):
     limit = messages.IntegerField(1)
     pageToken = messages.StringField(2)
 
- # The message class that defines the author schema
-class AuthorSchema(messages.Message):
-    google_user_id = messages.StringField(1)
-    display_name = messages.StringField(2)
-    google_public_profile_url = messages.StringField(3)
-    photo = messages.StringField(4)
-    edgeKey = messages.StringField(5)
+
 # The message class that defines the related to discussion about
 class DiscussionAboutSchema(messages.Message):
     kind = messages.StringField(1)
@@ -169,20 +163,6 @@ class CommentInsertRequest(messages.Message):
 class CommentSchema(messages.Message):
     author = messages.MessageField(AuthorSchema, 1, required = True)
     content = messages.StringField(2,required=True)
-
-class TopicSchema(messages.Message):
-    id = messages.StringField(1)
-    entityKey = messages.StringField(2)
-    last_updater = messages.MessageField(AuthorSchema, 3, required = True)
-    title = messages.StringField(4,required = True)
-    excerpt = messages.StringField(5)
-    topic_kind = messages.StringField(6)
-    created_at = messages.StringField(7)
-    updated_at = messages.StringField(8)
-
-class TopicListResponse(messages.Message):
-    items = messages.MessageField(TopicSchema, 1, repeated=True)
-    nextPageToken = messages.StringField(2)
 
 class TaskInsertRequest(messages.Message):
     about = messages.StringField(1)
@@ -1045,71 +1025,9 @@ class CrmEngineApi(remote.Service):
         #list of topics related to this account
         topics = None
         if request.topics:
-            topic_list = list()
-            topic_edge_list = Edge.list(
-                                start_node=account.key,
-                                kind='topics',
-                                limit=request.topics.limit,
-                                pageToken=request.topics.pageToken
-                                )
-            for edge in topic_edge_list['items']:
-                end_node = edge.end_node.get()
-                if end_node.key.kind() == 'Note':
-                    if end_node.comments == 0:
-                        print 'note n comment 0'
-                        last_updater = end_node.author
-                        excerpt = end_node.content[0:100]
-                        print last_updater
-                        print excerpt
-                    else:
-                        print 'note n comments'
-                        # get the last comment
-                        comments_edge_list = Edge.list(
-                                                start_node = end_node.key,
-                                                kind = 'comments',
-                                                limit = 1
-                                                )
-                        if len(comments_edge_list['items'])>0:
-                            last_comment = comments_edge_list[0].end_node.get()
-                            last_updater = last_comment.author
-                            excerpt = last_comment.content[0:100]
-                else:
-                    print 'not note'
-                    # get the last comment
-                    comments_edge_list = Edge.list(
-                                                start_node = end_node.key,
-                                                kind = 'comments',
-                                                limit = 1
-                                                )
-                    if len(comments_edge_list['items'])>0:
-                        print 'with comments'
-                        last_comment = comments_edge_list['items'][0].end_node.get()
-                        last_updater = last_comment.author
-                        excerpt = last_comment.content[0:100]
-
-                author = AuthorSchema(google_user_id = last_updater.google_user_id,
-                                        display_name = last_updater.display_name,
-                                        google_public_profile_url = last_updater.google_public_profile_url,
-                                        photo = last_updater.photo)
-                topic_list.append(
-                                TopicSchema(
-                                        id = str(end_node.key.id()),
-                                        last_updater = author,
-                                        title = edge.end_node.get().title,
-                                        excerpt = excerpt,
-                                        topic_kind = end_node.key.kind(),
-                                        updated_at = end_node.updated_at.strftime(
-                                                            "%Y-%m-%dT%H:%M:00.000"
-                                                    )
-                                        )
-                                    )
-            if topic_edge_list['next_curs'] and topic_edge_list['more']:
-                topic_next_curs = topic_edge_list['next_curs'].urlsafe()
-            else:
-                topic_next_curs = None
-            topics = TopicListResponse(
-                                            items = topic_list,
-                                            nextPageToken = topic_next_curs
+            topics = Note.list_by_parent(
+                                        parent_key = account.key,
+                                        request = request
                                         )
         # list of infonodes
         edge_list = Edge.list(
