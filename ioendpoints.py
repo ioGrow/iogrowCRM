@@ -41,7 +41,7 @@ from iomodels.crmengine.events import Event
 from iomodels.crmengine.documents import Document
 from iomodels.crmengine.shows import Show
 from iomodels.crmengine.leads import Lead
-from iomodels.crmengine.cases import Case
+from iomodels.crmengine.cases import Case,CaseListRequest,CaseSchema,CaseListResponse
 #from iomodels.crmengine.products import Product
 from iomodels.crmengine.comments import Comment
 from iomodels.crmengine.opportunitystage import Opportunitystage
@@ -522,33 +522,7 @@ class LeadListResponse(messages.Message):
     items = messages.MessageField(LeadSchema, 1, repeated=True)
     nextPageToken = messages.StringField(2)
 
-class CaseListRequest(messages.Message):
-    limit = messages.IntegerField(1)
-    pageToken = messages.StringField(2)
-    order = messages.StringField(3)
-    tags = messages.StringField(4,repeated = True)
-    owner = messages.StringField(5)
-    status = messages.StringField(6)
-    probability = messages.StringField(7)
-    priority = messages.IntegerField(8)
 
-class CaseSchema(messages.Message):
-    id = messages.StringField(1)
-    entityKey = messages.StringField(2)
-    name = messages.StringField(3)
-    status = messages.StringField(4)
-    probability = messages.StringField(5)
-    type_case = messages.StringField(6)
-    contact_name = messages.StringField(7)
-    account_name = messages.StringField(8)
-    tags = messages.MessageField(TagSchema,9, repeated = True)
-    created_at = messages.StringField(10)
-    updated_at = messages.StringField(11)
-    priority = messages.IntegerField(12)
-
-class CaseListResponse(messages.Message):
-    items = messages.MessageField(CaseSchema, 1, repeated=True)
-    nextPageToken = messages.StringField(2)
 
 
     
