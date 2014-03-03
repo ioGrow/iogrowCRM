@@ -8,7 +8,9 @@ import endpoints
 from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
 import model
 from iomodels.crmengine.tags import Tag,TagSchema
+from iomodels.crmengine.tasks import Task,TaskRequest,TaskListResponse
 from iomodels.crmengine.contacts import Contact,ContactListRequest,ContactListResponse
+from iomodels.crmengine.opportunities import Opportunity,OpportunityListResponse
 from iograph import Node,Edge,InfoNodeListResponse
 from iomodels.crmengine.notes import Note,TopicListResponse
 
@@ -26,6 +28,8 @@ class AccountGetRequest(messages.Message):
     id = messages.IntegerField(1,required = True)
     contacts = messages.MessageField(ListRequest, 2)
     topics = messages.MessageField(ListRequest, 3)
+    tasks = messages.MessageField(ListRequest, 4)
+    opportunities = messages.MessageField(ListRequest, 5)
 
 class AccountSchema(messages.Message):
     id = messages.StringField(1)
@@ -39,9 +43,11 @@ class AccountSchema(messages.Message):
     contacts = messages.MessageField(ContactListResponse,9)
     infonodes = messages.MessageField(InfoNodeListResponse,10)
     topics = messages.MessageField(TopicListResponse,11)
-    created_at = messages.StringField(12)
-    updated_at = messages.StringField(13)
-    access = messages.StringField(14)
+    tasks = messages.MessageField(TaskListResponse,12)
+    opportunities = messages.MessageField(OpportunityListResponse,13)
+    created_at = messages.StringField(14)
+    updated_at = messages.StringField(15)
+    access = messages.StringField(16)
 
 class AccountListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -50,6 +56,8 @@ class AccountListRequest(messages.Message):
     tags = messages.StringField(4,repeated = True)
     owner = messages.StringField(5)
     contacts = messages.MessageField(ContactListRequest, 6)
+    
+
 
 class AccountListResponse(messages.Message):
     items = messages.MessageField(AccountSchema, 1, repeated=True)
@@ -180,6 +188,11 @@ class Account(EndpointsModel):
             raise endpoints.NotFoundException('Account not found.')
         #list of tags related to this account
         tag_list = Tag.list_by_parent(account.key)
+        # list of infonodes
+        infonodes = Node.list_info_nodes(
+                                        parent_key = account.key,
+                                        request = request
+                                        )
         #list of contacts to this account
         contacts = None
         if request.contacts:
@@ -194,8 +207,15 @@ class Account(EndpointsModel):
                                         parent_key = account.key,
                                         request = request
                                         )
-        # list of infonodes
-        infonodes = Node.list_info_nodes(
+        tasks = None
+        if request.tasks:
+            tasks = Task.list_by_parent(
+                                        parent_key = account.key,
+                                        request = request
+                                        )
+        opportunities = None
+        if request.opportunities:
+            opportunities = Opportunity.list_by_parent(
                                         parent_key = account.key,
                                         request = request
                                         )
@@ -211,6 +231,8 @@ class Account(EndpointsModel):
                                   tags = tag_list,
                                   contacts = contacts,
                                   topics = topics,
+                                  tasks = tasks,
+                                  opportunities = opportunities,
                                   infonodes = infonodes,
                                   created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")

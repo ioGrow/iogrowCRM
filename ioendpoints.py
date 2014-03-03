@@ -732,7 +732,6 @@ class CrmEngineApi(remote.Service):
                             user_from_email = user_from_email,
                             request = request
                             )
-
     # accounts.list api
     @Account.query_method(
                           user_required=True,
