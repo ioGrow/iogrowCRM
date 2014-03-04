@@ -93,6 +93,7 @@ accountservices.factory('Account', function($http) {
                     $scope.topicpagination.next = false;
                    }
                   }
+                  
 
                   if (resp.needs){
                        $scope.needs = resp.needs.items;

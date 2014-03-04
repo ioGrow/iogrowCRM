@@ -422,6 +422,9 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
                           },
                           'needs':{
                             'limit': '7'
+                          },
+                          'tasks':{
+                            
                           }
                           };
           Account.get($scope,params);
@@ -892,13 +895,12 @@ $scope.CaselistNextPageItems = function(){
        
      };
      $scope.listTasks = function(){
-        var params = {'about': $scope.account.entityKey,
-                      'order': '-updated_at',
-                      
+        var params = {
+                        'id':$scope.account.id,
+                        'tasks':{}
                       };
-        Task.list($scope,params);
-
-     };
+        Account.get($scope,params);
+    };
 //HKA 11.11.2013 Add new Event
  $scope.addEvent = function(ioevent){
       

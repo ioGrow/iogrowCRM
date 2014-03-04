@@ -2837,13 +2837,7 @@ class CrmEngineApi(remote.Service):
         task_key_async = task_key.get_result()
         if request.about:
             # insert edges
-            Edge.insert(start_node = ndb.Key(urlsafe=request.about),
-                      end_node = task_key_async,
-                      kind = 'tasks',
-                      inverse_edge = 'related_to')
-        if request.about:
             about_key = ndb.Key(urlsafe=request.about)
-            # insert edges
             Edge.insert(start_node = about_key,
                       end_node = task_key_async,
                       kind = 'tasks',
