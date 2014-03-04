@@ -1,10 +1,32 @@
 from google.appengine.ext import ndb
+from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.api import search 
+from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
+from protorpc import messages
 from endpoints_proto_datastore.ndb import EndpointsModel
 from model import Userinfo
+from iomodels.crmengine.tags import Tag,TagSchema
+from iograph import Edge
 
 import model
 
+class DocumentSchema(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    title = messages.StringField(3)
+    resource_id = messages.StringField(4)
+    alternateLink = messages.StringField(5)
+    thumbnailLink = messages.StringField(6)
+    embedLink = messages.StringField(7)
+    mimeType = messages.StringField(8)
+    tags = messages.MessageField(TagSchema,9, repeated = True)
+    created_at = messages.StringField(10)
+    updated_at = messages.StringField(11)
+    access = messages.IntegerField(12)
+
+class DocumentListResponse(messages.Message):
+    items = messages.MessageField(DocumentSchema, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
 
 class Document(EndpointsModel):
     # Sharing fields
@@ -74,3 +96,40 @@ class Document(EndpointsModel):
            ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)
+
+    @classmethod
+    def list_by_parent(cls,parent_key,request):
+        document_list = []
+        document_edge_list = Edge.list(
+                                start_node = parent_key,
+                                kind='documents',
+                                limit=request.documents.limit,
+                                pageToken=request.documents.pageToken
+                                )
+        for edge in document_edge_list['items']:
+            document = edge.end_node.get()
+            tag_list = Tag.list_by_parent(parent_key = document.key)
+            document_list.append(
+                            DocumentSchema(
+                                    id = str( document.key.id() ),
+                                    entityKey = document.key.urlsafe(),
+                                    title = document.title,
+                                    resource_id = document.resource_id,
+                                    alternateLink = document.alternateLink,
+                                    thumbnailLink = document.thumbnailLink,
+                                    embedLink = document.embedLink,
+                                    mimeType = document.mimeType,
+                                    access = document.access,
+                                    tags = tag_list,
+                                    created_at = document.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                    updated_at = document.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                    )
+                            )
+        if document_edge_list['next_curs'] and document_edge_list['more']:
+            document_next_curs = document_edge_list['next_curs'].urlsafe()
+        else:
+            document_next_curs = None
+        return DocumentListResponse(
+                                    items = document_list,
+                                    nextPageToken = document_next_curs
+                                )

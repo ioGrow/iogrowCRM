@@ -221,7 +221,6 @@ class Task(EndpointsModel):
                     if is_filtered:
                         count = count + 1
                         #list of tags related to this task
-                        edge_list = Edge.list(start_node=task.key,kind='tags')
                         tag_list = Tag.list_by_parent(parent_key = task.key)
                         about = None
                         edge_list = Edge.list(start_node=task.key,kind='related_to')
@@ -296,4 +295,64 @@ class Task(EndpointsModel):
         else:
             next_curs_url_safe = None
         return  TaskListResponse(items = items, nextPageToken = next_curs_url_safe)
+
+    @classmethod
+    def list_by_parent(cls,parent_key,request):
+        date_time_to_string = lambda x: x.strftime("%Y-%m-%dT%H:%M:00.000") if x else ""
+        task_list = []
+        task_edge_list = Edge.list(
+                                start_node = parent_key,
+                                kind = 'tasks',
+                                limit=request.tasks.limit,
+                                pageToken=request.tasks.pageToken
+                                )
+        for edge in task_edge_list['items']:
+            task = edge.end_node.get()
+            status_color = 'green'
+            status_label = ''
+            if task.due:
+                now = datetime.datetime.now()
+                diff = task.due - now
+                if diff.days>=0 and diff.days<=2:
+                    status_color = 'orange'
+                    status_label = 'soon: due in '+ str(diff.days) + ' days'
+                elif diff.days<0:
+                    status_color = 'red'
+                    status_label = 'overdue'
+                else:
+                    status_label = 'due in '+ str(diff.days) + ' days'
+            if task.status == 'closed':
+                status_color = 'white'
+                status_label = 'closed'
+            author_schema = None
+            if task.author:
+                author_schema = AuthorSchema(
+                                            google_user_id = task.author.google_user_id,
+                                            display_name = task.author.display_name,
+                                            google_public_profile_url = task.author.google_public_profile_url,
+                                            photo = task.author.photo
+                                            )
+            task_schema = TaskSchema(
+                                  id = str( task.key.id() ),
+                                  entityKey = task.key.urlsafe(),
+                                  title = task.title,
+                                  status = task.status,
+                                  status_color = status_color,
+                                  status_label = status_label,
+                                  created_by = author_schema,
+                                  completed_by = AuthorSchema(),
+                                  created_at = date_time_to_string(task.created_at),
+                                  updated_at = date_time_to_string(task.updated_at)
+                                )
+            if task.due:
+                task_schema.due =  date_time_to_string(task.due)
+            task_list.append(task_schema)
+        if task_edge_list['next_curs'] and task_edge_list['more']:
+            task_next_curs = task_edge_list['next_curs'].urlsafe()
+        else:
+            task_next_curs = None
+        return TaskListResponse(
+                                items = task_list,
+                                nextPageToken = task_next_curs
+                                )
   
