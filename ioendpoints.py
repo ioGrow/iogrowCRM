@@ -62,6 +62,7 @@ from model import Permission
 from model import Contributor
 from model import Companyprofile
 from search_helper import SEARCH_QUERY_MODEL
+from endpoints_helper import EndpointsHelper
 
 
 # The ID of javascript client authorized to access to our api
@@ -357,88 +358,6 @@ class ContactInsertRequest(messages.Message):
     lastname = messages.StringField(4)
     title = messages.StringField(5)
     access = messages.StringField(6)
-
-
-
-class EndpointsHelper(EndpointsModel):
-    INVALID_TOKEN = 'Invalid token'
-    INVALID_GRANT = 'Invalid grant'
-    NO_ACCOUNT = 'You don\'t have a i/oGrow account'
-    @classmethod
-    def update_edge_indexes(cls,parent_key,kind,indexed_edge):
-        parent = parent_key.get()
-        empty_string = lambda x: x if x else ""
-        search_index = search.Index(name="GlobalIndex")
-        search_document = search_index.get(str( parent_key.id() ) )
-        data = {}
-        data['id'] = parent_key.id()
-        if search_document:
-            for e in search_document.fields:
-                if e.name == kind:
-                    print 'something before'
-                    indexed_edge = empty_string(e.value) + ' ' + str(indexed_edge)
-                    print 'something after'
-                data[e.name] = e.value
-        data[kind] = indexed_edge
-        parent.put_index(data)
-
-    @classmethod
-    def require_iogrow_user(cls):
-        user = endpoints.get_current_user()
-        if user is None:
-            raise endpoints.UnauthorizedException(cls.INVALID_TOKEN)
-        user_from_email = User.query(User.email == user.email()).get()
-        if user_from_email is None:
-            raise endpoints.UnauthorizedException(cls.NO_ACCOUNT)
-        return user_from_email
-
-    @classmethod
-    def insert_folder(cls, user, folder_name, kind):
-        try:
-            credentials = user.google_credentials
-            http = credentials.authorize(httplib2.Http(memcache))
-            service = build('drive', 'v2', http=http)
-            organization = user.organization.get()
-
-            # prepare params to insert
-            folder_params = {
-                        'title': folder_name,
-                        'mimeType':  'application/vnd.google-apps.folder'
-            }#get the accounts_folder or contacts_folder or ..
-            parent_folder = eval('organization.'+FOLDERS[kind])
-            if parent_folder:
-                folder_params['parents'] = [{'id': parent_folder}]
-
-            # execute files.insert and get resource_id
-            created_folder = service.files().insert(body=folder_params,fields='id').execute()
-        except:
-            raise endpoints.UnauthorizedException(cls.INVALID_GRANT)
-        return created_folder
-
-    @classmethod
-    def move_folder(cls, user, folder, new_kind):
-            credentials = user.google_credentials
-            http = credentials.authorize(httplib2.Http(memcache))
-            service = build('drive', 'v2', http=http)
-            #organization = user.organization.get()
-            new_parent = eval('organization.' + FOLDERS[new_kind])
-            params = {
-              "parents":
-              [
-                {
-                  "id": new_parent
-                }
-              ]
-            }
-            moved_folder = service.files().patch(**{
-                                                    "fileId": folder,
-                                                    "body": params,
-                                                    "fields": 'id'
-                                                    }).execute()
-            return moved_folder
-
-
-
 
 
 @endpoints.api(
@@ -1146,43 +1065,10 @@ class CrmEngineApi(remote.Service):
                       name='contacts.insertv2')
     def contact_insert_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        folder_name = request.firstname + ' ' + request.lastname
-        created_folder = EndpointsHelper.insert_folder(
-                                                       user_from_email,
-                                                       folder_name,
-                                                       'Contact'
-                                                       )
-        contact = Contact(
-                    firstname = request.firstname,
-                    lastname = request.lastname,
-                    owner = user_from_email.google_user_id,
-                    organization = user_from_email.organization,
-                    access = request.access,
-                    folder = created_folder['id']
-                    )
-        if request.title:
-            contact.title = request.title
-        contact_key = contact.put_async()
-        contact_key_async = contact_key.get_result()
-
-
-        if request.account:
-            account_key = ndb.Key(urlsafe=request.account)
-            # insert edges
-            Edge.insert(start_node = account_key,
-                      end_node = contact_key_async,
-                      kind = 'contacts',
-                      inverse_edge = 'parents')
-            EndpointsHelper.update_edge_indexes(
-                                            parent_key = contact_key_async,
-                                            kind = 'contacts',
-                                            indexed_edge = str(account_key.id())
-                                            )
-        else:
-            data = {}
-            data['id'] = contact_key_async.id()
-            contact.put_index(data)
-        return ContactSchema(id=str(contact_key_async.id()))
+        return Contact.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
 
     # contacts.insert API
     @Contact.method(

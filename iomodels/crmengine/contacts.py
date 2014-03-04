@@ -4,9 +4,11 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 from google.appengine.api import search 
 from protorpc import messages
 from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
+from endpoints_helper import EndpointsHelper
 from iomodels.crmengine.tags import Tag,TagSchema
 from iograph import Edge
 import model
+
 
 class ContactSchema(messages.Message):
     id = messages.StringField(1)
@@ -302,6 +304,43 @@ class Contact(EndpointsModel):
                                     items=search_results,
                                     nextPageToken=next_cursor
                                     )
+    @classmethod
+    def insert(cls,user_from_email,request):
+        folder_name = request.firstname + ' ' + request.lastname
+        created_folder = EndpointsHelper.insert_folder(
+                                                       user_from_email,
+                                                       folder_name,
+                                                       'Contact'
+                                                       )
+        contact = cls(
+                    firstname = request.firstname,
+                    lastname = request.lastname,
+                    owner = user_from_email.google_user_id,
+                    organization = user_from_email.organization,
+                    access = request.access,
+                    folder = created_folder['id']
+                    )
+        if request.title:
+            contact.title = request.title
+        contact_key = contact.put_async()
+        contact_key_async = contact_key.get_result()
+        if request.account:
+            account_key = ndb.Key(urlsafe=request.account)
+            # insert edges
+            Edge.insert(start_node = account_key,
+                      end_node = contact_key_async,
+                      kind = 'contacts',
+                      inverse_edge = 'parents')
+            EndpointsHelper.update_edge_indexes(
+                                            parent_key = contact_key_async,
+                                            kind = 'contacts',
+                                            indexed_edge = str(account_key.id())
+                                            )
+        else:
+            data = {}
+            data['id'] = contact_key_async.id()
+            contact.put_index(data)
+        return ContactSchema(id=str(contact_key_async.id()))
 
 
 
