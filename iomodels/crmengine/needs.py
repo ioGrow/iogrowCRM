@@ -1,9 +1,28 @@
 from google.appengine.ext import ndb
 from endpoints_proto_datastore.ndb import EndpointsModel
 from google.appengine.api import search
-from search_helper import tokenize_autocomplete
+from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
+from protorpc import messages
+from iomodels.crmengine.tags import Tag,TagSchema
+from iograph import Edge
 
 import model
+
+class NeedSchema(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    name = messages.StringField(3)
+    description = messages.StringField(4)
+    need_status = messages.StringField(5)
+    priority = messages.StringField(6)
+    tags = messages.MessageField(TagSchema,7, repeated = True)
+    created_at = messages.StringField(8)
+    updated_at = messages.StringField(9)
+    access = messages.IntegerField(10)
+
+class NeedListResponse(messages.Message):
+    items = messages.MessageField(NeedSchema, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
 
 class Need(EndpointsModel):
     _message_fields_schema = ('id','entityKey','owner','folder', 'access','collaborators_list','collaborators_ids',  'name','description', 'need_status','priority','about_kind','about_item','about_name','created_at','updated_at')
@@ -67,6 +86,40 @@ class Need(EndpointsModel):
            ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)
+    @classmethod
+    def list_by_parent(cls,parent_key,request):
+        need_list = []
+        need_edge_list = Edge.list(
+                                start_node = parent_key,
+                                kind = 'needs',
+                                limit = request.needs.limit,
+                                pageToken = request.needs.pageToken
+                                )
+        for edge in document_edge_list['items']:
+            need = edge.end_node.get()
+            tag_list = Tag.list_by_parent(parent_key = document.key)
+            need_list.append(
+                            NeedSchema(
+                                    id = str( need.key.id() ),
+                                    entityKey = need.key.urlsafe(),
+                                    name = need.name,
+                                    description = need.description ,
+                                    need_status = need.need_status,
+                                    priority = need.priority,
+                                    access = need.access,
+                                    tags = tag_list,
+                                    created_at = need.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                    updated_at = need.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                    )
+                            )
+        if need_edge_list['next_curs'] and need_edge_list['more']:
+            need_next_curs = need_edge_list['next_curs'].urlsafe()
+        else:
+            need_next_curs = None
+        return NeedListResponse(
+                                    items = need_list,
+                                    nextPageToken = need_next_curs
+                                )
     
 
   

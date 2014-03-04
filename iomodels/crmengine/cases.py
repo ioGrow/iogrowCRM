@@ -283,6 +283,39 @@ class Case(EndpointsModel):
                                  items=search_results,
                                  nextPageToken=next_cursor
                                  )
+    @classmethod
+    def list_by_parent(cls,parent_key,request):
+        case_list = []
+        case_edge_list = Edge.list(
+                                start_node = parent_key,
+                                kind='cases',
+                                limit=request.cases.limit,
+                                pageToken=request.cases.pageToken
+                                )
+        for edge in case_edge_list['items']:
+            case = edge.end_node.get()
+            tag_list = Tag.list_by_parent(parent_key = case.key)
+            case_list.append(
+                            CaseSchema(
+                                    id = str( case.key.id() ),
+                                    entityKey = case.key.urlsafe(),
+                                    name = case.name,
+                                    status = case.status,
+                                    priority = case.priority,
+                                    type_case = case.type_case,
+                                    tags = tag_list,
+                                    created_at = case.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                    updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                    )
+                            )
+        if case_edge_list['next_curs'] and case_edge_list['more']:
+            case_next_curs = case_edge_list['next_curs'].urlsafe()
+        else:
+            case_next_curs = None
+        return CaseListResponse(
+                                    items = case_list,
+                                    nextPageToken = case_next_curs
+                                )
 
     
 

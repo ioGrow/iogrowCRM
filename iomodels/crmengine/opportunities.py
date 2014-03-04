@@ -189,7 +189,6 @@ class Opportunity(EndpointsModel):
                     if is_filtered:
                         count = count + 1
                         #list of tags related to this opportunity
-                        edge_list = Edge.list(start_node=opportunity.key,kind='tags')
                         tag_list = Tag.list_by_parent(parent_key = opportunity.key)
                         opportunity_schema = OpportunitySchema(
                                   id = str( opportunity.key.id() ),
@@ -214,6 +213,39 @@ class Opportunity(EndpointsModel):
         else:
             next_curs_url_safe = None
         return  OpportunityListResponse(items = items, nextPageToken = next_curs_url_safe)
+
+    @classmethod
+    def list_by_parent(cls,parent_key,request):
+        opportunity_list = []
+        opportunity_edge_list = Edge.list(
+                                    start_node = parent_key,
+                                    kind='opportunities',
+                                    limit=request.opportunities.limit,
+                                    pageToken=request.opportunities.pageToken
+                                )
+        for edge in opportunity_edge_list['items']:
+            opportunity = edge.end_node.get()
+            tag_list = Tag.list_by_parent(parent_key = opportunity.key)
+            opportunity_schema = OpportunitySchema(
+                                  id = str( opportunity.key.id() ),
+                                  entityKey = opportunity.key.urlsafe(),
+                                  name = opportunity.name,
+                                  stagename = opportunity.stagename,
+                                  stage_probability = str(opportunity.stage_probability),
+                                  amount = str(opportunity.amount),
+                                  tags = tag_list,
+                                  created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                  updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                )
+            opportunity_list.append(opportunity_schema)
+        if opportunity_edge_list['next_curs'] and opportunity_edge_list['more']:
+            opportunity_next_curs = opportunity_edge_list['next_curs'].urlsafe()
+        else:
+            opportunity_next_curs = None
+        return OpportunityListResponse(
+                                    items = opportunity_list,
+                                    nextPageToken = opportunity_next_curs
+                                )
 
     @classmethod
     def search(cls,user_from_email,request):
