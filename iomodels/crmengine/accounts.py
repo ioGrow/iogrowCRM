@@ -14,6 +14,7 @@ from iomodels.crmengine.contacts import Contact,ContactListRequest,ContactListRe
 from iomodels.crmengine.opportunities import Opportunity,OpportunityListResponse
 from iograph import Node,Edge,InfoNodeListResponse
 from iomodels.crmengine.notes import Note,TopicListResponse
+from iomodels.crmengine.cases import Case,CaseListResponse
 
 
 # The message class that defines the EntityKey schema
@@ -32,6 +33,7 @@ class AccountGetRequest(messages.Message):
     tasks = messages.MessageField(ListRequest, 4)
     events = messages.MessageField(ListRequest, 5)
     opportunities = messages.MessageField(ListRequest, 6)
+    cases = messages.MessageField(ListRequest, 7)
 
 class AccountSchema(messages.Message):
     id = messages.StringField(1)
@@ -48,9 +50,10 @@ class AccountSchema(messages.Message):
     tasks = messages.MessageField(TaskListResponse,12)
     events = messages.MessageField(TaskListResponse,13)
     opportunities = messages.MessageField(OpportunityListResponse,14)
-    created_at = messages.StringField(15)
-    updated_at = messages.StringField(16)
-    access = messages.StringField(17)
+    cases = messages.MessageField(CaseListResponse,15)
+    created_at = messages.StringField(16)
+    updated_at = messages.StringField(17)
+    access = messages.StringField(18)
 
 class AccountListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -228,6 +231,12 @@ class Account(EndpointsModel):
                                         parent_key = account.key,
                                         request = request
                                         )
+        cases = None
+        if request.cases:
+            cases = Case.list_by_parent(
+                                        parent_key = account.key,
+                                        request = request
+                                        )
         account_schema = AccountSchema(
                                   id = str( account.key.id() ),
                                   entityKey = account.key.urlsafe(),
@@ -243,6 +252,7 @@ class Account(EndpointsModel):
                                   tasks = tasks,
                                   events = events,
                                   opportunities = opportunities,
+                                  cases = cases,
                                   infonodes = infonodes,
                                   created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
