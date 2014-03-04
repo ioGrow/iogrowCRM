@@ -32,7 +32,7 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 # Our libraries
 from iograph import Node,Edge,RecordSchema,InfoNodeResponse,InfoNodeConnectionSchema,InfoNodeListResponse
 from iomodels.crmengine.accounts import Account,AccountGetRequest,AccountSchema,AccountListRequest,AccountListResponse,AccountSearchResult,AccountSearchResults
-from iomodels.crmengine.contacts import Contact,ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults
+from iomodels.crmengine.contacts import Contact,ContactInsertRequest,ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults
 from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
@@ -48,7 +48,7 @@ from iomodels.crmengine.opportunitystage import Opportunitystage
 from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.casestatuses import Casestatus
 from iomodels.crmengine.feedbacks import Feedback
-from iomodels.crmengine.needs import Need
+from iomodels.crmengine.needs import Need,NeedInsertRequest,NeedListResponse,NeedSchema
 #from iomodels.crmengine.emails import Email
 from iomodels.crmengine.tags import Tag, TagSchema
 
@@ -351,13 +351,7 @@ class CompanyProfileResponse(messages.Message):
     items = messages.MessageField(CompanyProfileSchema, 1, repeated=True)
     nextPageToken = messages.StringField(2)
 
-class ContactInsertRequest(messages.Message):
-    id = messages.StringField(1)
-    account = messages.StringField(2)
-    firstname = messages.StringField(3)
-    lastname = messages.StringField(4)
-    title = messages.StringField(5)
-    access = messages.StringField(6)
+
 
 
 @endpoints.api(
@@ -1973,8 +1967,17 @@ class CrmEngineApi(remote.Service):
         if not my_model.from_datastore:
             raise endpoints.NotFoundException('Need not found')
         return my_model
-
-    # needs.insert API
+    # needs.insert v2 api
+    @endpoints.method(NeedInsertRequest, NeedSchema,
+                      path='needs/insertv2', http_method='POST',
+                      name='needs.insertv2')
+    def need_insert_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Need.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+    # needs.insert api
     @Need.method(user_required=True,path='needs',http_method='POST',name='needs.insert')
     def need_insert(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()

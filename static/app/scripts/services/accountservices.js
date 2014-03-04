@@ -34,8 +34,6 @@ accountservices.factory('Account', function($http) {
   Account.get = function($scope,id) {
           gapi.client.crmengine.accounts.getv2(id).execute(function(resp) {
             if(!resp.code){
-                console.log('********************************************');
-                console.log(resp);
                $scope.account = resp;
                if (resp.contacts){
                  $scope.contacts = resp.contacts.items;
@@ -96,6 +94,24 @@ accountservices.factory('Account', function($http) {
                    }
                   }
 
+                  if (resp.needs){
+                       $scope.needs = resp.needs.items;
+                       if ($scope.needsCurrentPage>1){
+                        $scope.needspagination.prev = true;
+                       }else{
+                           $scope.needspagination.prev = false;
+                       }
+                       if (resp.needs.nextPageToken){
+                         var nextPage = $scope.needsCurrentPage + 1;
+                         // Store the nextPageToken
+                         $scope.needspages[nextPage] = resp.needs.nextPageToken;
+                         $scope.needspagination.next = true;
+                         
+                       }else{
+                        $scope.needspagination.next = false;
+                       }
+                  }
+
                   if (resp.tasks){
                      $scope.tasks = resp.tasks.items;
                   }
@@ -108,7 +124,7 @@ accountservices.factory('Account', function($http) {
                //$scope.listContacts();
                $scope.listOpportunities();
                $scope.listCases();
-               $scope.listNeeds();
+               //$scope.listNeeds();
                
                $scope.listDocuments();
                

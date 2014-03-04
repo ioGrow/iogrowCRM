@@ -419,6 +419,9 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
                           },
                           'topics':{
                             'limit': '7'
+                          },
+                          'needs':{
+                            'limit': '7'
                           }
                           };
           Account.get($scope,params);
@@ -1059,9 +1062,7 @@ $scope.CaselistNextPageItems = function(){
                       'priority':need.priority,
                       'need_status': need.need_status,
                       'folder': $scope.account.folder,
-                      'about_kind':'Account',
-                      'about_item': $scope.account.id,
-                      'about_name': $scope.account.name,
+                      'parent': $scope.account.entityKey,
                       'access': $scope.account.access
                       };
      

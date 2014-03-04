@@ -9,7 +9,13 @@ from iomodels.crmengine.tags import Tag,TagSchema
 from iograph import Edge
 import model
 
-
+class ContactInsertRequest(messages.Message):
+    account = messages.StringField(1)
+    firstname = messages.StringField(2)
+    lastname = messages.StringField(3)
+    title = messages.StringField(4)
+    access = messages.StringField(5)
+    
 class ContactSchema(messages.Message):
     id = messages.StringField(1)
     entityKey = messages.StringField(2)

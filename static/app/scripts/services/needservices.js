@@ -70,7 +70,7 @@ needservices.factory('Need', function() {
   };
   Need.insert = function($scope,params){
      $scope.isLoading = true;
-      gapi.client.crmengine.needs.insert(params).execute(function(resp) {
+      gapi.client.crmengine.needs.insertv2(params).execute(function(resp) {
          console.log('in insert resp');
          console.log(resp);
          if(!resp.code){
