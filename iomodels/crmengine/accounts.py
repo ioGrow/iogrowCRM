@@ -9,6 +9,7 @@ from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
 import model
 from iomodels.crmengine.tags import Tag,TagSchema
 from iomodels.crmengine.tasks import Task,TaskRequest,TaskListResponse
+from iomodels.crmengine.events import Event,EventListResponse
 from iomodels.crmengine.contacts import Contact,ContactListRequest,ContactListResponse
 from iomodels.crmengine.opportunities import Opportunity,OpportunityListResponse
 from iograph import Node,Edge,InfoNodeListResponse
@@ -29,7 +30,8 @@ class AccountGetRequest(messages.Message):
     contacts = messages.MessageField(ListRequest, 2)
     topics = messages.MessageField(ListRequest, 3)
     tasks = messages.MessageField(ListRequest, 4)
-    opportunities = messages.MessageField(ListRequest, 5)
+    events = messages.MessageField(ListRequest, 5)
+    opportunities = messages.MessageField(ListRequest, 6)
 
 class AccountSchema(messages.Message):
     id = messages.StringField(1)
@@ -44,10 +46,11 @@ class AccountSchema(messages.Message):
     infonodes = messages.MessageField(InfoNodeListResponse,10)
     topics = messages.MessageField(TopicListResponse,11)
     tasks = messages.MessageField(TaskListResponse,12)
-    opportunities = messages.MessageField(OpportunityListResponse,13)
-    created_at = messages.StringField(14)
-    updated_at = messages.StringField(15)
-    access = messages.StringField(16)
+    events = messages.MessageField(TaskListResponse,13)
+    opportunities = messages.MessageField(OpportunityListResponse,14)
+    created_at = messages.StringField(15)
+    updated_at = messages.StringField(16)
+    access = messages.StringField(17)
 
 class AccountListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -213,6 +216,12 @@ class Account(EndpointsModel):
                                         parent_key = account.key,
                                         request = request
                                         )
+        events = None
+        if request.events:
+            events = Event.list_by_parent(
+                                        parent_key = account.key,
+                                        request = request
+                                        )
         opportunities = None
         if request.opportunities:
             opportunities = Opportunity.list_by_parent(
@@ -232,6 +241,7 @@ class Account(EndpointsModel):
                                   contacts = contacts,
                                   topics = topics,
                                   tasks = tasks,
+                                  events = events,
                                   opportunities = opportunities,
                                   infonodes = infonodes,
                                   created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
