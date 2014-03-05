@@ -5,9 +5,17 @@ from google.appengine.api import search
 from protorpc import messages
 from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
 from iomodels.crmengine.tags import Tag,TagSchema
+from iomodels.crmengine.casestatuses import CaseStatusSchema
 from iograph import Node,Edge,InfoNodeListResponse
+from endpoints_helper import EndpointsHelper
 import model
 
+class CaseInsertRequest(messages.Message):
+    name = messages.StringField(1)
+    priority = messages.IntegerField(2)
+    status = messages.StringField(3, required = True)
+    account = messages.StringField(4, required = True)
+    contact = messages.StringField(5)
 
 class CaseListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -26,8 +34,8 @@ class CaseSchema(messages.Message):
     status = messages.StringField(4)
     probability = messages.StringField(5)
     type_case = messages.StringField(6)
-    contact_name = messages.StringField(7)
-    account_name = messages.StringField(8)
+    current_status = messages.MessageField(CaseStatusSchema,7) 
+    all_status = messages.MessageField(CaseStatusSchema,8,repeated = True)
     tags = messages.MessageField(TagSchema,9, repeated = True)
     created_at = messages.StringField(10)
     updated_at = messages.StringField(11)
@@ -98,7 +106,7 @@ class Case(EndpointsModel):
         organization = str(self.organization.id())
         title_autocomplete = ','.join(tokenize_autocomplete(self.name + ' ' + empty_string(self.account_name) + ' ' + empty_string(self.contact_name)))
         if data:
-            search_key = ['infos','contacts','tags']
+            search_key = ['infos','cases','tags']
             for key in search_key:
                 if key not in data.keys():
                     data[key] = ""
@@ -119,6 +127,7 @@ class Case(EndpointsModel):
                 search.DateField(name='updated_at', value = self.updated_at),
                 search.TextField(name='infos', value= data['infos']),
                 search.TextField(name='tags', value= data['tags']),
+                search.TextField(name='cases', value= data['cases']),
                 search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
                 search.TextField(name='type_case', value = empty_string(self.type_case))
                ])
@@ -295,14 +304,25 @@ class Case(EndpointsModel):
         for edge in case_edge_list['items']:
             case = edge.end_node.get()
             tag_list = Tag.list_by_parent(parent_key = case.key)
+            case_status_edges = Edge.list(
+                                                start_node = case.key,
+                                                kind = 'status',
+                                                limit = 1
+                                                )
+            current_status_schema = None
+            if len(case_status_edges['items'])>0:
+                current_status = case_status_edges['items'][0].end_node.get()
+                current_status_schema = CaseStatusSchema(  
+                                                        name = current_status.status,
+                                                        status_changed_at = case_status_edges['items'][0].created_at.isoformat()
+                                                        )
             case_list.append(
                             CaseSchema(
                                     id = str( case.key.id() ),
                                     entityKey = case.key.urlsafe(),
                                     name = case.name,
-                                    status = case.status,
+                                    current_status = current_status_schema,
                                     priority = case.priority,
-                                    type_case = case.type_case,
                                     tags = tag_list,
                                     created_at = case.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                     updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
@@ -316,6 +336,61 @@ class Case(EndpointsModel):
                                     items = case_list,
                                     nextPageToken = case_next_curs
                                 )
+    @classmethod
+    def insert(cls,user_from_email,request):
+        created_folder = EndpointsHelper.insert_folder(
+                                                       user_from_email,
+                                                       request.name,
+                                                       'Case'
+                                                       )
+        case = cls(
+                    owner = user_from_email.google_user_id,
+                    organization = user_from_email.organization,
+                    name = request.name,
+                    priority = request.priority,
+                    folder = created_folder['id']
+                    )
+        case_key = case.put_async()
+        case_key_async = case_key.get_result()
+        indexed = False
+        if request.status:
+            status_key = ndb.Key(urlsafe=request.status)
+            # insert edges
+            Edge.insert(start_node = case_key_async ,
+                      end_node = status_key,
+                      kind = 'status',
+                      inverse_edge = 'related_cases')
+        if request.account:
+            account_key = ndb.Key(urlsafe=request.account)
+            # insert edges
+            Edge.insert(start_node = account_key,
+                      end_node = case_key_async,
+                      kind = 'cases',
+                      inverse_edge = 'parents')
+            EndpointsHelper.update_edge_indexes(
+                                            parent_key = case_key_async,
+                                            kind = 'cases',
+                                            indexed_edge = str(account_key.id())
+                                            )
+            indexed = True
+        if request.contact:
+            contact_key = ndb.Key(urlsafe=request.contact)
+            # insert edges
+            Edge.insert(start_node = contact_key,
+                      end_node = case_key_async,
+                      kind = 'cases',
+                      inverse_edge = 'parents')
+            EndpointsHelper.update_edge_indexes(
+                                            parent_key = case_key_async,
+                                            kind = 'cases',
+                                            indexed_edge = str(contact_key.id())
+                                            )
+            indexed = True
+        if not indexed:
+            data = {}
+            data['id'] = case_key_async.id()
+            case.put_index(data)
+        return CaseSchema(id=str(case_key_async.id()))
 
     
 

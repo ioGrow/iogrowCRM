@@ -41,7 +41,7 @@ from iomodels.crmengine.events import Event
 from iomodels.crmengine.documents import Document
 from iomodels.crmengine.shows import Show
 from iomodels.crmengine.leads import Lead,LeadListRequest,LeadListResponse,LeadSearchResults
-from iomodels.crmengine.cases import Case,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
+from iomodels.crmengine.cases import Case,CaseInsertRequest,CaseSchema,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
 #from iomodels.crmengine.products import Product
 from iomodels.crmengine.comments import Comment
 from iomodels.crmengine.opportunitystage import Opportunitystage
@@ -742,7 +742,17 @@ class CrmEngineApi(remote.Service):
             raise endpoints.NotFoundException('Case not found')
         return my_model
 
-    # cases.insert API
+    # cases.insertv2 api
+    @endpoints.method(CaseInsertRequest, CaseSchema,
+                      path='cases/insertv2', http_method='POST',
+                      name='cases.insertv2')
+    def case_insert_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Case.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+    # cases.insert api
     @Case.method(user_required=True,path='cases',http_method='POST',name='cases.insert')
     def CaseInsert(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()

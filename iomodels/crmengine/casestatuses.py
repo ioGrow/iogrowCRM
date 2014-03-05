@@ -2,8 +2,12 @@ from google.appengine.ext import ndb
 from endpoints_proto_datastore.ndb import EndpointsModel
 from endpoints_proto_datastore import MessageFieldsSchema
 from google.appengine.api import search
+from protorpc import messages
 import model
 
+class CaseStatusSchema(messages.Message):
+    name  = messages.StringField(1)
+    status_changed_at = messages.StringField(2)
 
 class Casestatus (EndpointsModel):
     _message_fields_schema = ('id','entityKey','created_at','updated_at','status','owner','organization')
