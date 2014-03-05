@@ -223,6 +223,16 @@ indexes:
 - kind: Lead
   properties:
   - name: organization
+  - name: firstname
+
+- kind: Lead
+  properties:
+  - name: organization
+  - name: lastname
+
+- kind: Lead
+  properties:
+  - name: organization
   - name: updated_at
     direction: desc
 
