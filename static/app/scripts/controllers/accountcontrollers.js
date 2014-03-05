@@ -419,6 +419,9 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
                           },
                           'topics':{
                             'limit': '7'
+                          },
+                          'tasks':{
+                            'limit': '7'
                           }
                           };
           Account.get($scope,params);
