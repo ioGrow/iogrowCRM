@@ -36,7 +36,7 @@ from iomodels.crmengine.contacts import Contact,ContactInsertRequest,ContactSche
 from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
-from iomodels.crmengine.opportunities import Opportunity,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults
+from iomodels.crmengine.opportunities import Opportunity,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults
 from iomodels.crmengine.events import Event
 from iomodels.crmengine.documents import Document
 from iomodels.crmengine.shows import Show
@@ -2197,6 +2197,16 @@ class CrmEngineApi(remote.Service):
             raise endpoints.NotFoundException('Opportunity not found')
         return my_model
 
+    # opportunities.insertv2 api
+    @endpoints.method(OpportunityInsertRequest, OpportunitySchema,
+                      path='opportunities/insertv2', http_method='POST',
+                      name='opportunities.insertv2')
+    def opportunity_insert_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Opportunity.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
     # opportunities.insert
     @Opportunity.method(
                         user_required=True,
