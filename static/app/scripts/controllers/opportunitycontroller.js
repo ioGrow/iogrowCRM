@@ -24,6 +24,7 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
      $scope.order = '-updated_at';
      $scope.selected_tags = [];
      $scope.draggedTag=null;
+     $scope.selectedTab = 2;
 
       // What to do after authentication
        $scope.runTheProcess = function(){
@@ -672,9 +673,8 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
     
   console.log($scope.opportunity.stagename);
   Opportunity.patch($scope,params);
-  console.log('------------------');
-   console.log($scope.opportunity.stagename);
- $scope.$watch($scope.opportunity.stagename, $scope.createNote());
+
+ //$scope.$watch($scope.opportunity.stagename, $scope.createNote());
   /*$scope.$watch($scope.opportunity.stagename, function(newVal, oldVal) {
      var paramsNote = {
                   'about_kind': 'Opportunity',

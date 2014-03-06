@@ -187,7 +187,7 @@
             <span ng-show="opportunity.account_name" ng-hide="opportunity.account_name">{{_("associated with")}}:  <a class="tag" href="/#/accounts/show/<%=opportunity.account_id %>">#<%=opportunity.account_name %></a></span>
            
             <br><span ng-show="opportunity.stagename">{{_("Stage")}}: <a class="tag" href="/#/search/type:Opportunity <%=opportunity.stage %>">#<%=opportunity.stagename %> </a>| <%=opportunity.stage_probability %> %</span>
-            <br><span>{{_("Labels")}}: <a class="tag" href="/#/search/type:Opportunity <%=opportunity.description %>">#<%=opportunity.description %></a></span> <br>
+            <br><!--span>{{_("Labels")}}: <a class="tag" href="/#/search/type:Opportunity <%=opportunity.description %>">#<%=opportunity.description %></a></span> <br-->
             <span class="page-meta"><i class="icon-pencil"><a ng-click="editOpp()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="editbeforedelete()" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
 
            
@@ -211,8 +211,10 @@
                 <div class="tabbable tabbable-custom">
                   <ul class="nav nav-tabs">
                         <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;" >{{ _("Notes") }}</a></li>
-                        <li class="ng-tab"  ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;">{{ _("Attach Documents") }}</a></li>
-                        <li class="ng-tab"  ng-class="{active: selectedTab ==3}"><a ng-click="selectedTab = 3;">{{ _("Send an Email") }}</a></li>
+                        <li class="ng-tab" ng-class="{active: selectedTab == 2}"> <a ng-click="selectedTab = 2"> About</a>                       
+                        </li>
+                        <li class="ng-tab"  ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">{{ _("Attach Documents") }}</a></li>
+                        <li class="ng-tab"  ng-class="{active: selectedTab ==4}"><a ng-click="selectedTab = 4;">{{ _("Send an Email") }}</a></li>
                   </ul>
                 <div class="tab-content">
                 <div class="tab-pane active" id="tab_1_1" ng-show="selectedTab == 1">
@@ -267,7 +269,117 @@
                   </div>
                   </div>
                 </div>
-                <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
+
+
+                <!--HKA 06.03.2014 -->
+                 <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
+                        
+                        <div class="row">
+                          <div class="col-md-6">
+                            
+                                <div class="news-blocks blank-card blank-card-yellow">
+                                <h3>Contact Informations</h3>
+                                <div class="news-block-tags">
+                                  <strong>Phone</strong>
+                                 
+                                </div>
+                                  <ul class="list-unstyled contact-infos">
+                                    <li ng-repeat="phone in infonodes.phones"> <%=phone.number%> - <%=phone.type%> <a ><img class="ctodeal"  /></a></li>
+          
+                                    <li><a href="#phonemodal"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new Phone</a></li>
+
+                                  </ul>
+
+                                  </ul>
+                                <div class="news-block-tags">
+                                  <strong>Email</strong>
+                                 
+                                </div>
+                                  <ul class="list-unstyled contact-infos">
+                                    <li ng-repeat="email in infonodes.emails"> <%=email.email %>   </li>
+                                    
+                                    <li><a href="#emailmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new email address </a></li>
+
+                                  </ul>
+                                <div class="news-block-tags">
+                                  <strong>Address</strong>
+                                 
+                                </div>
+                                 <ul class="list-unstyled contact-infos">
+                                    <li ng-repeat="address in infonodes.addresses">- <span ng-show="address.street"><%=address.street%>, </span> <span ng-show="address.city"><%=address.city%>, </span> <span ng-show="address.country"><%=address.country%></span></li>
+                                    
+                                    <li><a href="#addressmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new address </a></li>
+
+                  
+                                  </ul>
+
+                                                              
+                                                          
+                              </div>
+                              <!--div class="news-blocks blank-card blank-card-bluep">
+                                <h3>Links</h3>
+                                <div class="news-block-tags">
+                                  <strong>Website</strong>
+                                  
+                                </div>
+                                <ul class="list-unstyled contact-infos" >
+                                    <li ng-repeat="web in infonodes.websites"><a href="/<%=web.url%>"><%=web.url%></a> </li>
+                                    <li><a href="#websitemodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new Website </a></li>
+                                    
+                                </ul> 
+                                <div class="news-block-tags">
+                                  <strong>Social Links</strong>
+                                  
+                                </div>
+                                <ul class="list-unstyled contact-infos" >
+                                    <li ng-repeat="social in infonodes.sociallinks"><a href="<%=social.url%>"></a> <%=social.url%> </li>
+                                  <li><a href="#socialmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new social links </a></li>    
+                                </ul>
+                                                             
+                              </div-->
+                              <div class="news-blocks blank-card blank-card-bluep">
+                                <h3>{{ _('Custom Fields') }}</h3>
+                                
+                                <ul class="list-unstyled contact-infos" >
+                                    <li ng-repeat="customfield in infonodes.customfields"><span ng-repeat="record in customfield.fields"><%= record.field%> : <%= record.value%></span></li>
+                                    <li><a href="#customfields" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new custom field </a></li>
+                                    
+                                </ul>
+                                 
+                                
+                                                    
+                              </div>
+                          </div>
+                          <div class="col-md-6">
+                          
+                            <div class="news-blocks blank-card blank-card-red">
+                                <h3>Story</h3>
+                                <div class="news-block-tags">
+                                  <strong>Tagline</strong>
+                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="edittagline()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
+                                  
+                                </div>
+                                <p><%=contact.tagline%></p>
+                                <div class="news-block-tags">
+                                  <strong>Introduction</strong>
+                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="editintro()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
+                                  
+                                </div>
+                                <p> <%=contact.introduction%></p>                         
+                              </div>
+                              <div class="news-blocks blank-card blank-card-yellow">
+                                
+                               <div id="gmap_canvas" style="width:100%;height:300px;"></div>
+                              </div>
+                            
+                          </div>
+                          
+                        </div>
+                          
+                        
+                      </div>
+
+                    <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3">
                           
                          <div class="row cards-container iodrive">
 
@@ -325,7 +437,7 @@
                               </div>
                             </div>
                       </div>
-                    <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3">
+                    <div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 4">
                         
                          <div class="row">
                            <div class="col-md-12 margin-bottom-10"> 
@@ -555,14 +667,14 @@
                           
                         </div>
                     </div>
-                    <div class="form-group">
+                    <!--div class="form-group">
                         <label  class="required col-md-3 control-label">{{_( "Labels")}} </label>
                        
                         <div class="col-md-9">
                           <input type="text"  id="id_amount" class="form-control" ng-model="opportunity.description">
                           
                         </div>
-                    </div>
+                    </div-->
                     <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_( "Amount")}} </label>
                        
