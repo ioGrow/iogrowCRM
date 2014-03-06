@@ -38,7 +38,7 @@ from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListRespons
 #from iomodels.crmengine.tags import Tag
 from iomodels.crmengine.opportunities import Opportunity,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults
 from iomodels.crmengine.events import Event
-from iomodels.crmengine.documents import Document
+from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema
 from iomodels.crmengine.shows import Show
 from iomodels.crmengine.leads import Lead,LeadListRequest,LeadListResponse,LeadSearchResults
 from iomodels.crmengine.cases import Case,CaseInsertRequest,CaseSchema,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
@@ -1307,6 +1307,16 @@ class CrmEngineApi(remote.Service):
         except (IndexError, TypeError):
             raise endpoints.NotFoundException('Note %s not found.' %
                                                 (request.id,))
+    # contacts.insertv2 api
+    @endpoints.method(DocumentInsertRequest, DocumentSchema,
+                      path='documents/insertv2', http_method='POST',
+                      name='documents.insertv2')
+    def document_insert_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Document.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
     # documents.insert API
     @Document.method(user_required=True,path='documents', http_method='POST', name='documents.insert')
     def DocumentInsert(self, my_model):
