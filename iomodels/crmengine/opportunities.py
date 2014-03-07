@@ -44,7 +44,7 @@ class OpportunitySearchResults(messages.Message):
 
 class Opportunity(EndpointsModel):
 
-    _message_fields_schema = ('id','entityKey','owner', 'created_at', 'updated_at', 'folder', 'access','collaborators_list','collaborators_ids', 'name','description','amount','account','account_name','account_id','contact','contact_name','contact_id','updated_at','stagename','stage_probability')
+    _message_fields_schema = ('id','entityKey','owner', 'created_at', 'updated_at', 'folder', 'access','collaborators_list','collaborators_ids', 'name','description','amount','account','account_name','account_id','contact','contact_name','contact_id','updated_at','stagename','stage_probability','closed_date','reason_lost')
 
     # Sharing fields
     owner = ndb.StringProperty()
@@ -63,7 +63,7 @@ class Opportunity(EndpointsModel):
     industry = ndb.StringProperty()
     amount = ndb.IntegerProperty()
     closed_date = ndb.DateTimeProperty()
-    reason_lost = ndb.DateTimeProperty()
+    reason_lost = ndb.StringProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
     created_by = ndb.KeyProperty()

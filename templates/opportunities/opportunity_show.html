@@ -187,7 +187,7 @@
             <span ng-show="opportunity.account_name" ng-hide="opportunity.account_name">{{_("associated with")}}:  <a class="tag" href="/#/accounts/show/<%=opportunity.account_id %>">#<%=opportunity.account_name %></a></span>
            
             <br><span ng-show="opportunity.stagename">{{_("Stage")}}: <a class="tag" href="/#/search/type:Opportunity <%=opportunity.stage %>">#<%=opportunity.stagename %> </a>| <%=opportunity.stage_probability %> %</span>
-            <br><!--span>{{_("Labels")}}: <a class="tag" href="/#/search/type:Opportunity <%=opportunity.description %>">#<%=opportunity.description %></a></span> <br-->
+            <br><span ng-show="opportunity.account_name">{{_("Related To")}}: <a class="tag" href="/#/search/type:Opportunity <%=opportunity.account_name %>">#<%=opportunity.account_name %></a></span> <br>
             <span class="page-meta"><i class="icon-pencil"><a ng-click="editOpp()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="editbeforedelete()" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
 
            
@@ -278,65 +278,30 @@
                           <div class="col-md-6">
                             
                                 <div class="news-blocks blank-card blank-card-yellow">
-                                <h3>Contact Informations</h3>
+                                <h3>Opportunity Informations</h3>
+
                                 <div class="news-block-tags">
-                                  <strong>Phone</strong>
-                                 
+                                  <strong>Close Date</strong>
+                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="editclosedate(opportunity)" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
+                                  
                                 </div>
-                                  <ul class="list-unstyled contact-infos">
-                                    <li ng-repeat="phone in infonodes.phones"> <%=phone.number%> - <%=phone.type%> <a ><img class="ctodeal"  /></a></li>
-          
-                                    <li><a href="#phonemodal"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new Phone</a></li>
-
-                                  </ul>
-
-                                  </ul>
+                                <p><%=opportunity.closed_date%></p>
                                 <div class="news-block-tags">
-                                  <strong>Email</strong>
-                                 
+                                  <strong>{{_("Main Competitor(s)")}}</strong>
+                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="editcompetitor()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
+                                  
                                 </div>
-                                  <ul class="list-unstyled contact-infos">
-                                    <li ng-repeat="email in infonodes.emails"> <%=email.email %>   </li>
-                                    
-                                    <li><a href="#emailmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new email address </a></li>
-
-                                  </ul>
+                                <p> <%=contact.introduction%></p>
                                 <div class="news-block-tags">
-                                  <strong>Address</strong>
-                                 
+                                  <strong>{{_("Reason Lost")}}</strong>
+                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="editreasonlost()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
+                                  
                                 </div>
-                                 <ul class="list-unstyled contact-infos">
-                                    <li ng-repeat="address in infonodes.addresses">- <span ng-show="address.street"><%=address.street%>, </span> <span ng-show="address.city"><%=address.city%>, </span> <span ng-show="address.country"><%=address.country%></span></li>
-                                    
-                                    <li><a href="#addressmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new address </a></li>
-
-                  
-                                  </ul>
-
-                                                              
+                                     <p> <%=opportunity.reason_lost%></p>
+                                                     
                                                           
                               </div>
-                              <!--div class="news-blocks blank-card blank-card-bluep">
-                                <h3>Links</h3>
-                                <div class="news-block-tags">
-                                  <strong>Website</strong>
-                                  
-                                </div>
-                                <ul class="list-unstyled contact-infos" >
-                                    <li ng-repeat="web in infonodes.websites"><a href="/<%=web.url%>"><%=web.url%></a> </li>
-                                    <li><a href="#websitemodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new Website </a></li>
-                                    
-                                </ul> 
-                                <div class="news-block-tags">
-                                  <strong>Social Links</strong>
-                                  
-                                </div>
-                                <ul class="list-unstyled contact-infos" >
-                                    <li ng-repeat="social in infonodes.sociallinks"><a href="<%=social.url%>"></a> <%=social.url%> </li>
-                                  <li><a href="#socialmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new social links </a></li>    
-                                </ul>
-                                                             
-                              </div-->
+                              
                               <div class="news-blocks blank-card blank-card-bluep">
                                 <h3>{{ _('Custom Fields') }}</h3>
                                 
@@ -353,19 +318,26 @@
                           <div class="col-md-6">
                           
                             <div class="news-blocks blank-card blank-card-red">
-                                <h3>Story</h3>
+                                <h3>Description</h3>
                                 <div class="news-block-tags">
-                                  <strong>Tagline</strong>
-                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="edittagline()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
+                                  <strong>Description</strong>
+                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="editdescription()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
                                   
                                 </div>
-                                <p><%=contact.tagline%></p>
+                                <p> <%=opportunity.description%></p>
                                 <div class="news-block-tags">
-                                  <strong>Introduction</strong>
-                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="editintro()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
+                                  <strong>Type</strong>
+                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="edittype()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
                                   
                                 </div>
-                                <p> <%=contact.introduction%></p>                         
+                                <p><%=opportunity.type%></p>
+                                
+                                <div class="news-block-tags">
+                                  <strong>Source</strong>
+                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="editsource()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
+                                  
+                                </div>
+                                <p> <%=opportunity.source%></p>                        
                               </div>
                               <div class="news-blocks blank-card blank-card-yellow">
                                 
@@ -375,7 +347,243 @@
                           </div>
                           
                         </div>
+                        
+                      <!--HKA 06.03.2014 Edit close date Modal  -->
+
+             <div id="EditCloseDate" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+              <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{_("Edit Opportunity")}}</h3>
+              </div>
+
+              <div class="modal-body">
+                 <form id="editTagline" name="editlead" ng-submit="updateClosedate(opportunity)" class="form-horizontal"> 
+                
+
+                  <div class="form-group">
+                        
+                       
+                        <div class="col-md-12">
                           
+                           <p><strong>{{_("Close Date")}}</strong></p>
+                                                  <center>
+                                                    <datetimepicker data-ng-model="opportunity.closed_date"
+                                                    data-datetimepicker-config="{ startView:'day', minView:'day' }" />
+                                                  </center>
+
+                        </div>
+                    </div>             
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
+                <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+              </div>
+               </form>
+               </div>
+               </div>
+            </div>
+      
+        <!--HKA 06.03.2014 Main Competitor Modal -->
+            <div id="EditCompetitor" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+              <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{_("Edit Opportunity")}}</h3>
+              </div>
+
+              <div class="modal-body">
+                 <form id="editTagline" name="editlead" ng-submit="updateTagline(account)" class="form-horizontal"> 
+                
+
+                  <div class="form-group">
+                        <label  class="col-md-3 control-label">{{_("Competitors")}} </label>
+                       
+                        <div class="col-md-9">
+                          <!--textarea rows="2" cols="50"  id="id_tagline" ng-model="account.tagline"/-->
+                           <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="account.tagline"></textarea>
+
+                        </div>
+                    </div>             
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
+                <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+              </div>
+               </form>
+               </div>
+               </div>
+            </div>
+      
+           <!-- HKA 06.03.2014 Reason lost Modal -->
+
+           <div id="EditReasonLost" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+              <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{_("Edit Opportunity")}}</h3>
+              </div>
+
+              <div class="modal-body">
+                 <form id="editTagline" name="editlead" ng-submit="updateReasonlost(opportunity)" class="form-horizontal"> 
+                
+
+                  <div class="form-group">
+                        <label  class="col-md-3 control-label">{{_("Reason Lost")}} </label>
+                       
+                        <div class="col-md-9">
+                          
+                        <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="opportunity.reason_lost"></textarea>
+
+                        </div>
+                    </div>             
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
+                <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+              </div>
+               </form>
+               </div>
+               </div>
+            </div>
+
+             <!-- HKA 06.03.2014 edit Description Modal -->
+
+           <div id="EditDescription" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+              <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{_("Edit Opportunity")}}</h3>
+              </div>
+
+              <div class="modal-body">
+                 <form id="editTagline" name="editlead" ng-submit="updateDescription(opportunity)" class="form-horizontal"> 
+                
+
+                  <div class="form-group">
+                        <label  class="col-md-3 control-label">{{_("Description")}} </label>
+                       
+                        <div class="col-md-9">
+                        
+                           <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="opportunity.description"></textarea>
+
+                        </div>
+                    </div>             
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
+                <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+              </div>
+               </form>
+               </div>
+               </div>
+            </div>
+
+            <!--HKA 06.03.2014 Type Modal -->
+            <div id="EditType" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+              <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{_("Edit Opportunity")}}</h3>
+              </div>
+
+              <div class="modal-body">
+                 <form id="editTagline" name="editlead" ng-submit="updateType(opportunity)" class="form-horizontal"> 
+                
+
+                  <div class="form-group">
+                        <label  class="col-md-3 control-label">{{_("Type")}} </label>
+                       
+                        <div class="col-md-9">
+                          <select ng-model="opportunity.type" class="form-control"><option value="">Existing Customer - Upgrade</option><option value="Existing Customer - Replacement">Existing Customer - Replacement</option><option value="Existing Customer - Downgrade">Existing Customer - Downgrade</option><option value="New Customer">New Customer</option><option value="Other">Other</option></select>
+                          
+                         
+                        </div>
+                    </div>             
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
+                <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+              </div>
+               </form>
+               </div>
+               </div>
+            </div>
+
+            <!--HKA 06.03.2014 source Modal -->
+            <div id="EditSource" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+              <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{_("Edit Opportunity")}}</h3>
+              </div>
+
+              <div class="modal-body">
+                 <form id="editTagline" name="editlead" ng-submit="updatsource(opportunity)" class="form-horizontal"> 
+                
+
+                  <div class="form-group">
+                        <label  class="col-md-3 control-label">{{_("Source")}} </label>
+                       
+                        <div class="col-md-9">
+                          <select ng-model="opportunity.source" class="form-control"><option value="">Social Media</option><option value="Web Source">Web Site</option><option value="Phone Inquiry">Phone Inquiry</option><option value="Partner Referral">Partner Referral</option><option value="Purchased List">Purchased List</option><option value="Other">Other</option></select>
+                          
+                         
+                        </div>
+                    </div>             
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
+                <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+              </div>
+               </form>
+               </div>
+               </div>
+            </div>
+
+            <!--HKA 06.03.2014 Custom fields Modal -->
+
+            <div id="customfields" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{_("Add Custom Field")}}</h3>
+            </div>
+            <div class="modal-body">
+                  <form id="addWebsite" name="addwebsite"  class="form-horizontal"> 
+                    <div class="form-group">
+                        <label  class="col-md-3 control-label">{{_("Custom Field")}} </label>
+                        <div class="col-md-9">
+                          <div class="form-group">
+                               <input type="text" class="form-control" placeholder="Field"  ng-model="customField.field">
+                          </div>
+                          <div class="form-group">
+                               <input type="text" class="form-control" placeholder="Value"  ng-model="customField.value">
+                          </div>
+                        </div>
+                     </div>
+              </div>
+              <div class="modal-footer">
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+              
+                  <input ng-hide="isLoading" ng-click="addCustomField(customField)" ng-disabled="!(customField.field && customField.value)" type="submit" class="btn green" value="{{_('Add this custom field')}}">
+                  <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
+              </div>
+                </form>
+                </div>
+                </div>
+        </div>
+
+
+
+
                         
                       </div>
 
@@ -667,15 +875,7 @@
                           
                         </div>
                     </div>
-                    <!--div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_( "Labels")}} </label>
-                       
-                        <div class="col-md-9">
-                          <input type="text"  id="id_amount" class="form-control" ng-model="opportunity.description">
-                          
-                        </div>
-                    </div-->
-                    <div class="form-group">
+                  <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_( "Amount")}} </label>
                        
                         <div class="col-md-9">

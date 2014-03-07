@@ -20,6 +20,7 @@ opportunityservices.factory('Opportunity', function($http) {
         $scope.listTasks();
         $scope.listEvents();
         $scope.listDocuments();
+        $scope.listInfonodes();
         $scope.selectedTab = 2;
         document.title = "Opportunity: " + $scope.opportunity.name ;
        
@@ -102,7 +103,7 @@ opportunityservices.factory('Opportunity', function($http) {
                 $scope.$apply();
                };
             }
-            console.log('accounts.patch gapi #end_execute');
+            console.log('opportunities.patch gapi #end_execute');
           });
   };
     //HKA 09.11.2013 Add an opportunity
