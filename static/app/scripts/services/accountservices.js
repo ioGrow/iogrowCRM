@@ -55,7 +55,7 @@ accountservices.factory('Account', function($http) {
 
                // list infonodes
                 var renderMap = false;
-                if (resp.infonodes.items){
+                if (resp.infonodes){
                       for (var i=0;i<resp.infonodes.items.length;i++)
                       { 
                         if (resp.infonodes.items[i].kind == 'addresses'){

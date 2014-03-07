@@ -823,18 +823,20 @@ $scope.deleteopportunity= function(){
 
      $scope.updateClosedate = function(opportunity){
       console.log('***************close date**************');
-      console.log(opportunity.closed_date)
+      console.log(opportunity.closed_date);
+      var close_at = $filter('date')(opportunity.closed_date,['yyyy-MM-ddTHH:mm:00.000000']);
+      console.log(close_at);
       params = {'id':$scope.opportunity.id,
-              'closed_date':opportunity.closed_date};
+              'closed_date':close_at};
       Opportunity.patch($scope,params);
       $('#EditCloseDate').modal('hide');
      };
 
      $scope.updateCompetitor = function(opportunity){
       params = {'id':$scope.opportunity.id,
-             'closed_date':opportunity.closed_date};
+             'competitor':opportunity.competitor};
       Opportunity.patch($scope,params);
-      $('#EditCloseDate').modal('hide');
+      $('#EditCompetitor').modal('hide');
      };
 
      $scope.updateReasonlost = function(opportunity){
@@ -854,7 +856,7 @@ $scope.deleteopportunity= function(){
 
      $scope.updateType = function(opportunity){
       params = {'id':$scope.opportunity.id,
-              'description':opportunity.description};
+              'opportunity_type':opportunity.opportunity_type};
       Opportunity.patch($scope,params);
       $('#EditType').modal('hide');
      };
@@ -862,7 +864,7 @@ $scope.deleteopportunity= function(){
 
      $scope.updatsource = function(opportunity){
       params = {'id':$scope.opportunity.id,
-              'description':opportunity.description};
+              'source':opportunity.source};
       Opportunity.patch($scope,params);
       $('#EditSource').modal('hide');
      };
