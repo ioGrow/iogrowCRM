@@ -7,7 +7,8 @@ INVERSED_EDGES = {
             'tagged_on': 'tags',
             'assignees' : 'assigned_to',
             'assigned_to' : 'assignees',
-            'tasks' : 'related_to'
+            'tasks' : 'related_to',
+            'needs': 'need_related_to'
             }
 
 # The message class that defines Record schema for InfoNode attributes

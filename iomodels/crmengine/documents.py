@@ -1,14 +1,27 @@
 from google.appengine.ext import ndb
 from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.api import search 
+from apiclient.discovery import build
+import httplib2
 from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
+from endpoints_helper import EndpointsHelper
 from protorpc import messages
 from endpoints_proto_datastore.ndb import EndpointsModel
 from model import Userinfo
 from iomodels.crmengine.tags import Tag,TagSchema
 from iograph import Edge
-
+from protorpc import messages
 import model
+
+class DocumentInsertRequest(messages.Message):
+    title = messages.StringField(1,required=True)
+    resource_id = messages.IntegerField(2)
+    alternateLink = messages.StringField(3)
+    thumbnailLink = messages.StringField(4)
+    embedLink = messages.StringField(5)
+    mimeType = messages.StringField(6,required=True)
+    access = messages.StringField(7)
+    parent = messages.StringField(8,required=True)
 
 class DocumentSchema(messages.Message):
     id = messages.StringField(1)
@@ -71,29 +84,54 @@ class Document(EndpointsModel):
         perm.put()
 
 
-    def put_index(self):
+    def put_index(self,data=None):
         """ index the element at each"""
         if self.comments is None:
             self.comments = 0
         empty_string = lambda x: x if x else ""
         collaborators = " ".join(self.collaborators_ids)
         organization = str(self.organization.id())
-        my_document = search.Document(
-        doc_id = str(self.key.id()),
-        fields=[
-            search.TextField(name=u'type', value=u'Document'),
-            search.TextField(name='organization', value = empty_string(organization) ),
-            search.TextField(name='access', value = empty_string(self.access) ),
-            search.TextField(name='owner', value = empty_string(self.owner) ),
-            search.TextField(name='collaborators', value = collaborators ),
-            search.TextField(name='title', value = empty_string(self.title) ),
-            search.TextField(name='resource_id', value = empty_string(self.resource_id)),
-            search.TextField(name='about_kind', value = empty_string(self.about_kind)),
-            search.TextField(name='about_item', value = empty_string(self.about_item)),
-            search.DateField(name='created_at', value = self.created_at),
-            search.DateField(name='updated_at', value = self.updated_at),
-            search.NumberField(name='comments', value = self.comments),
-           ])
+        if data:
+            search_key = ['infos','documents','tags']
+            for key in search_key:
+                if key not in data.keys():
+                    data[key] = ""
+            my_document = search.Document(
+            doc_id = str(data['id']),
+            fields=[
+                search.TextField(name=u'type', value=u'Document'),
+                search.TextField(name='organization', value = empty_string(organization) ),
+                search.TextField(name='access', value = empty_string(self.access) ),
+                search.TextField(name='owner', value = empty_string(self.owner) ),
+                search.TextField(name='collaborators', value = collaborators ),
+                search.TextField(name='title', value = empty_string(self.title) ),
+                search.TextField(name='resource_id', value = empty_string(self.resource_id)),
+                search.TextField(name='about_kind', value = empty_string(self.about_kind)),
+                search.TextField(name='about_item', value = empty_string(self.about_item)),
+                search.TextField(name='infos', value= data['infos']),
+                search.TextField(name='tags', value= data['tags']),
+                search.TextField(name='documents', value= data['documents']),
+                search.DateField(name='created_at', value = self.created_at),
+                search.DateField(name='updated_at', value = self.updated_at),
+                search.NumberField(name='comments', value = self.comments),
+               ])
+        else:
+            my_document = search.Document(
+            doc_id = str(self.key.id()),
+            fields=[
+                search.TextField(name=u'type', value=u'Document'),
+                search.TextField(name='organization', value = empty_string(organization) ),
+                search.TextField(name='access', value = empty_string(self.access) ),
+                search.TextField(name='owner', value = empty_string(self.owner) ),
+                search.TextField(name='collaborators', value = collaborators ),
+                search.TextField(name='title', value = empty_string(self.title) ),
+                search.TextField(name='resource_id', value = empty_string(self.resource_id)),
+                search.TextField(name='about_kind', value = empty_string(self.about_kind)),
+                search.TextField(name='about_item', value = empty_string(self.about_item)),
+                search.DateField(name='created_at', value = self.created_at),
+                search.DateField(name='updated_at', value = self.updated_at),
+                search.NumberField(name='comments', value = self.comments),
+               ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)
 
@@ -133,3 +171,59 @@ class Document(EndpointsModel):
                                     items = document_list,
                                     nextPageToken = document_next_curs
                                 )
+    @classmethod
+    def insert(cls,user_from_email,request):
+        # prepare google drive service
+        credentials = user_from_email.google_credentials
+        http = httplib2.Http()
+        service = build('drive', 'v2', http=http)
+        credentials.authorize(http)
+        organization = user_from_email.organization.get()
+        # prepare params to insert
+        params = {
+                    'title': request.title,
+                    'mimeType': request.mimeType
+        }
+        #get the accounts_folder or contacts_folder or ..
+        parent_key = ndb.Key(urlsafe=request.parent)
+        parent = parent_key.get()
+        if parent:
+            parent_folder = parent.folder
+            if parent:
+                params['parents'] = [{'id': parent_folder}]
+
+        # execute files.insert and get resource_id
+        created_document = service.files().insert(body=params).execute()
+        author = Userinfo()
+        author.google_user_id = user_from_email.google_user_id
+        author.display_name = user_from_email.google_display_name
+        author.photo = user_from_email.google_public_profile_photo_url
+        document = cls(
+                    owner = user_from_email.google_user_id,
+                    organization = user_from_email.organization,
+                    access = request.access,
+                    title = request.title,
+                    mimeType = request.mimeType,
+                    resource_id = created_document['id'],
+                    embedLink = created_document['embedLink'],
+                    author = author
+                    )
+        document_key = document.put_async()
+        document_key_async = document_key.get_result()
+        if request.parent:
+            parent_key = ndb.Key(urlsafe=request.parent)
+            # insert edges
+            Edge.insert(start_node = parent_key,
+                      end_node = document_key_async,
+                      kind = 'documents',
+                      inverse_edge = 'parents')
+            EndpointsHelper.update_edge_indexes(
+                                            parent_key = document_key_async,
+                                            kind = 'documents',
+                                            indexed_edge = str(parent_key.id())
+                                            )
+        else:
+            data = {}
+            data['id'] = document_key_async.id()
+            document.put_index(data)
+        return DocumentSchema(id=str(document_key_async.id()))

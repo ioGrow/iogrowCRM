@@ -2,7 +2,13 @@ from google.appengine.ext import ndb
 from endpoints_proto_datastore.ndb import EndpointsModel
 from endpoints_proto_datastore import MessageFieldsSchema
 from google.appengine.api import search
+from protorpc import messages
 import model
+
+class OpportunitystageSchema(messages.Message):
+    name  = messages.StringField(1)
+    probability = messages.StringField(2)
+    stage_changed_at = messages.StringField(3)
 
 
 class Opportunitystage (EndpointsModel):

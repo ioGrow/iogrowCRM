@@ -5,16 +5,26 @@ from protorpc import messages
 from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
 from endpoints_proto_datastore.ndb import EndpointsModel
 from iomodels.crmengine.tags import Tag,TagSchema
+from iomodels.crmengine.opportunitystage import OpportunitystageSchema
 from iograph import Edge
+from endpoints_helper import EndpointsHelper
 import model
+
+class OpportunityInsertRequest(messages.Message):
+    name = messages.StringField(1)
+    amount = messages.StringField(2)
+    stage = messages.StringField(3, required = True)
+    account = messages.StringField(4, required = True)
+    contact = messages.StringField(5)
 
 class OpportunitySchema(messages.Message):
     id = messages.StringField(1)
     entityKey = messages.StringField(2)
     name = messages.StringField(3)
-    stagename = messages.StringField(4)
-    stage_probability = messages.StringField(5)
-    amount = messages.StringField(6)
+    amount = messages.StringField(4)
+    current_stage = messages.MessageField(OpportunitystageSchema,5) 
+    stages = messages.MessageField(OpportunitystageSchema,6,repeated = True)
+    # TODO: Add related accounts and contacts 
     tags = messages.MessageField(TagSchema,7, repeated = True)
     created_at = messages.StringField(8)
     updated_at = messages.StringField(9)
@@ -98,9 +108,9 @@ class Opportunity(EndpointsModel):
         empty_string = lambda x: x if x else ""
         collaborators = " ".join(self.collaborators_ids)
         organization = str(self.organization.id())
-        title_autocomplete = ','.join(tokenize_autocomplete(self.name + ' ' + self.account_name))
+        title_autocomplete = ','.join(tokenize_autocomplete(self.name))
         if data:
-            search_key = ['infos','contacts','tags']
+            search_key = ['infos','opportunities','tags']
             for key in search_key:
                 if key not in data.keys():
                     data[key] = ""
@@ -120,6 +130,7 @@ class Opportunity(EndpointsModel):
                 search.DateField(name='created_at', value = self.created_at),
                 search.TextField(name='infos', value= data['infos']),
                 search.TextField(name='tags', value= data['tags']),
+                search.TextField(name='opportunities', value= data['opportunities']),
                 search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
             ])
         else:
@@ -226,13 +237,26 @@ class Opportunity(EndpointsModel):
         for edge in opportunity_edge_list['items']:
             opportunity = edge.end_node.get()
             tag_list = Tag.list_by_parent(parent_key = opportunity.key)
+            opportunity_stage_edges = Edge.list(
+                                                start_node = opportunity.key,
+                                                kind = 'stages',
+                                                limit = 1
+                                                )
+            current_stage_schema = None
+            if len(opportunity_stage_edges['items'])>0:
+                current_stage = opportunity_stage_edges['items'][0].end_node.get()
+                current_stage_schema = OpportunitystageSchema(  
+                                                        name=current_stage.name,
+                                                        probability= str(current_stage.probability),
+                                                        stage_changed_at=opportunity_stage_edges['items'][0].created_at.isoformat()
+                                                        )
+                            
             opportunity_schema = OpportunitySchema(
                                   id = str( opportunity.key.id() ),
                                   entityKey = opportunity.key.urlsafe(),
                                   name = opportunity.name,
-                                  stagename = opportunity.stagename,
-                                  stage_probability = str(opportunity.stage_probability),
                                   amount = str(opportunity.amount),
+                                  current_stage = current_stage_schema,
                                   tags = tag_list,
                                   created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
@@ -311,3 +335,59 @@ class Opportunity(EndpointsModel):
                                         items=search_results,
                                         nextPageToken=next_cursor
                                         )
+
+    @classmethod
+    def insert(cls,user_from_email,request):
+        created_folder = EndpointsHelper.insert_folder(
+                                                       user_from_email,
+                                                       request.name,
+                                                       'Opportunity'
+                                                       )
+        opportunity = cls(
+                    owner = user_from_email.google_user_id,
+                    organization = user_from_email.organization,
+                    name = request.name,
+                    amount = int(request.amount),
+                    folder = created_folder['id']
+                    )
+        opportunity_key = opportunity.put_async()
+        opportunity_key_async = opportunity_key.get_result()
+        indexed = False
+        if request.stage:
+            stage_key = ndb.Key(urlsafe=request.stage)
+            # insert edges
+            Edge.insert(start_node = opportunity_key_async ,
+                      end_node = stage_key,
+                      kind = 'stages',
+                      inverse_edge = 'related_opportunities')
+        if request.account:
+            account_key = ndb.Key(urlsafe=request.account)
+            # insert edges
+            Edge.insert(start_node = account_key,
+                      end_node = opportunity_key_async,
+                      kind = 'opportunities',
+                      inverse_edge = 'parents')
+            EndpointsHelper.update_edge_indexes(
+                                            parent_key = opportunity_key_async,
+                                            kind = 'opportunities',
+                                            indexed_edge = str(account_key.id())
+                                            )
+            indexed = True
+        if request.contact:
+            contact_key = ndb.Key(urlsafe=request.contact)
+            # insert edges
+            Edge.insert(start_node = contact_key,
+                      end_node = opportunity_key_async,
+                      kind = 'opportunities',
+                      inverse_edge = 'parents')
+            EndpointsHelper.update_edge_indexes(
+                                            parent_key = opportunity_key_async,
+                                            kind = 'opportunities',
+                                            indexed_edge = str(contact_key.id())
+                                            )
+            indexed = True
+        if not indexed:
+            data = {}
+            data['id'] = opportunity_key_async.id()
+            opportunity.put_index(data)
+        return OpportunitySchema(id=str(opportunity_key_async.id()))

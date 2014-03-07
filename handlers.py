@@ -27,6 +27,7 @@ import datetime
 from webapp2_extras import jinja2
 import datetime
 import re
+from google.appengine.api import users
 from apiclient.discovery import build
 from google.appengine.ext import ndb
 from google.appengine.api import urlfetch
@@ -42,6 +43,7 @@ from webapp2_extras import i18n
 from google.appengine.api import users
 from google.appengine.api import memcache
 from iomodels.crmengine.shows import Show
+
 
 jinja_environment = jinja2.Environment(
   loader=jinja2.FileSystemLoader(os.getcwd()),
@@ -1091,6 +1093,8 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             try:
                 user = self.get_user_from_session()
+                logout_url = 'https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://localhost:8090/sign-in'
+                
                 print '*************************************'
                 print user
                 if user is None or user.type=='public_user':
@@ -1114,7 +1118,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                     if app.name=='admin':
                         admin_app = app
                 
-                logout_url = users.create_logout_url('/sign-in')
+                
 
                 template_values = {
                   'tabs':tabs,
