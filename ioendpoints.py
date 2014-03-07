@@ -37,7 +37,7 @@ from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,Topic
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
 from iomodels.crmengine.opportunities import Opportunity,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults
-from iomodels.crmengine.events import Event
+from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema
 from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema
 from iomodels.crmengine.shows import Show
 from iomodels.crmengine.leads import Lead,LeadListRequest,LeadListResponse,LeadSearchResults
@@ -1307,7 +1307,7 @@ class CrmEngineApi(remote.Service):
         except (IndexError, TypeError):
             raise endpoints.NotFoundException('Note %s not found.' %
                                                 (request.id,))
-    # contacts.insertv2 api
+    # documents.insertv2 api
     @endpoints.method(DocumentInsertRequest, DocumentSchema,
                       path='documents/insertv2', http_method='POST',
                       name='documents.insertv2')
@@ -1496,6 +1496,16 @@ class CrmEngineApi(remote.Service):
             raise endpoints.NotFoundException('EVent %s not found.' %
                                                 (request.id,))
 
+    # events.insertv2 api
+    @endpoints.method(EventInsertRequest, EventSchema,
+                      path='events/insertv2', http_method='POST',
+                      name='events.insertv2')
+    def event_insert_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Event.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
     # events.insert API
     @Event.method(user_required=True,path='events', http_method='POST', name='events.insert')
     def EventInsert(self, my_model):

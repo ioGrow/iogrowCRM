@@ -55,24 +55,26 @@ accountservices.factory('Account', function($http) {
 
                // list infonodes
                 var renderMap = false;
-                if (resp.infonodes.items){
-                      for (var i=0;i<resp.infonodes.items.length;i++)
-                      { 
-                        if (resp.infonodes.items[i].kind == 'addresses'){
-                          renderMap = true;
+                if (resp.infonodes){
+                    if (resp.infonodes.items){
+                        for (var i=0;i<resp.infonodes.items.length;i++)
+                        { 
+                          if (resp.infonodes.items[i].kind == 'addresses'){
+                            renderMap = true;
+                          }
+                            $scope.infonodes[resp.infonodes.items[i].kind] = resp.infonodes.items[i].items;
+                            for (var j=0;j<$scope.infonodes[resp.infonodes.items[i].kind].length;j++)
+                              {
+                                for (var v=0;v<$scope.infonodes[resp.infonodes.items[i].kind][j].fields.length;v++)
+                                  {
+                                    $scope.infonodes[resp.infonodes.items[i].kind][j][$scope.infonodes[resp.infonodes.items[i].kind][j].fields[v].field] = $scope.infonodes[resp.infonodes.items[i].kind][j].fields[v].value;
+                                  }
+                              }
                         }
-                          $scope.infonodes[resp.infonodes.items[i].kind] = resp.infonodes.items[i].items;
-                          for (var j=0;j<$scope.infonodes[resp.infonodes.items[i].kind].length;j++)
-                            {
-                              for (var v=0;v<$scope.infonodes[resp.infonodes.items[i].kind][j].fields.length;v++)
-                                {
-                                  $scope.infonodes[resp.infonodes.items[i].kind][j][$scope.infonodes[resp.infonodes.items[i].kind][j].fields[v].field] = $scope.infonodes[resp.infonodes.items[i].kind][j].fields[v].value;
-                                }
-                            }
-                      }
-                      if (renderMap){
-                        $scope.renderMaps();
-                      }
+                        if (renderMap){
+                          $scope.renderMaps();
+                        }
+                    }
                 }
                 if (resp.topics){
                   $scope.topics = resp.topics.items;
