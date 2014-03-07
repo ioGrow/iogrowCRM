@@ -32,23 +32,23 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 # Our libraries
 from iograph import Node,Edge,RecordSchema,InfoNodeResponse,InfoNodeConnectionSchema,InfoNodeListResponse
 from iomodels.crmengine.accounts import Account,AccountGetRequest,AccountSchema,AccountListRequest,AccountListResponse,AccountSearchResult,AccountSearchResults
-from iomodels.crmengine.contacts import Contact,ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults
+from iomodels.crmengine.contacts import Contact,ContactInsertRequest,ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults
 from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
-from iomodels.crmengine.opportunities import Opportunity,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults
+from iomodels.crmengine.opportunities import Opportunity,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults
 from iomodels.crmengine.events import Event
-from iomodels.crmengine.documents import Document
+from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema
 from iomodels.crmengine.shows import Show
 from iomodels.crmengine.leads import Lead,LeadListRequest,LeadListResponse,LeadSearchResults
-from iomodels.crmengine.cases import Case,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
+from iomodels.crmengine.cases import Case,CaseInsertRequest,CaseSchema,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
 #from iomodels.crmengine.products import Product
 from iomodels.crmengine.comments import Comment
 from iomodels.crmengine.opportunitystage import Opportunitystage
 from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.casestatuses import Casestatus
 from iomodels.crmengine.feedbacks import Feedback
-from iomodels.crmengine.needs import Need
+from iomodels.crmengine.needs import Need,NeedInsertRequest,NeedListResponse,NeedSchema
 #from iomodels.crmengine.emails import Email
 from iomodels.crmengine.tags import Tag, TagSchema
 
@@ -62,6 +62,7 @@ from model import Permission
 from model import Contributor
 from model import Companyprofile
 from search_helper import SEARCH_QUERY_MODEL
+from endpoints_helper import EndpointsHelper
 
 
 # The ID of javascript client authorized to access to our api
@@ -349,94 +350,6 @@ class CompanyProfileSchema(messages.Message):
 class CompanyProfileResponse(messages.Message):
     items = messages.MessageField(CompanyProfileSchema, 1, repeated=True)
     nextPageToken = messages.StringField(2)
-
-class ContactInsertRequest(messages.Message):
-    id = messages.StringField(1)
-    account = messages.StringField(2)
-    firstname = messages.StringField(3)
-    lastname = messages.StringField(4)
-    title = messages.StringField(5)
-    access = messages.StringField(6)
-
-
-
-class EndpointsHelper(EndpointsModel):
-    INVALID_TOKEN = 'Invalid token'
-    INVALID_GRANT = 'Invalid grant'
-    NO_ACCOUNT = 'You don\'t have a i/oGrow account'
-    @classmethod
-    def update_edge_indexes(cls,parent_key,kind,indexed_edge):
-        parent = parent_key.get()
-        empty_string = lambda x: x if x else ""
-        search_index = search.Index(name="GlobalIndex")
-        search_document = search_index.get(str( parent_key.id() ) )
-        data = {}
-        data['id'] = parent_key.id()
-        if search_document:
-            for e in search_document.fields:
-                if e.name == kind:
-                    print 'something before'
-                    indexed_edge = empty_string(e.value) + ' ' + str(indexed_edge)
-                    print 'something after'
-                data[e.name] = e.value
-        data[kind] = indexed_edge
-        parent.put_index(data)
-
-    @classmethod
-    def require_iogrow_user(cls):
-        user = endpoints.get_current_user()
-        if user is None:
-            raise endpoints.UnauthorizedException(cls.INVALID_TOKEN)
-        user_from_email = User.query(User.email == user.email()).get()
-        if user_from_email is None:
-            raise endpoints.UnauthorizedException(cls.NO_ACCOUNT)
-        return user_from_email
-
-    @classmethod
-    def insert_folder(cls, user, folder_name, kind):
-        try:
-            credentials = user.google_credentials
-            http = credentials.authorize(httplib2.Http(memcache))
-            service = build('drive', 'v2', http=http)
-            organization = user.organization.get()
-
-            # prepare params to insert
-            folder_params = {
-                        'title': folder_name,
-                        'mimeType':  'application/vnd.google-apps.folder'
-            }#get the accounts_folder or contacts_folder or ..
-            parent_folder = eval('organization.'+FOLDERS[kind])
-            if parent_folder:
-                folder_params['parents'] = [{'id': parent_folder}]
-
-            # execute files.insert and get resource_id
-            created_folder = service.files().insert(body=folder_params,fields='id').execute()
-        except:
-            raise endpoints.UnauthorizedException(cls.INVALID_GRANT)
-        return created_folder
-
-    @classmethod
-    def move_folder(cls, user, folder, new_kind):
-            credentials = user.google_credentials
-            http = credentials.authorize(httplib2.Http(memcache))
-            service = build('drive', 'v2', http=http)
-            #organization = user.organization.get()
-            new_parent = eval('organization.' + FOLDERS[new_kind])
-            params = {
-              "parents":
-              [
-                {
-                  "id": new_parent
-                }
-              ]
-            }
-            moved_folder = service.files().patch(**{
-                                                    "fileId": folder,
-                                                    "body": params,
-                                                    "fields": 'id'
-                                                    }).execute()
-            return moved_folder
-
 
 
 
@@ -829,7 +742,17 @@ class CrmEngineApi(remote.Service):
             raise endpoints.NotFoundException('Case not found')
         return my_model
 
-    # cases.insert API
+    # cases.insertv2 api
+    @endpoints.method(CaseInsertRequest, CaseSchema,
+                      path='cases/insertv2', http_method='POST',
+                      name='cases.insertv2')
+    def case_insert_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Case.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+    # cases.insert api
     @Case.method(user_required=True,path='cases',http_method='POST',name='cases.insert')
     def CaseInsert(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -1146,43 +1069,10 @@ class CrmEngineApi(remote.Service):
                       name='contacts.insertv2')
     def contact_insert_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        folder_name = request.firstname + ' ' + request.lastname
-        created_folder = EndpointsHelper.insert_folder(
-                                                       user_from_email,
-                                                       folder_name,
-                                                       'Contact'
-                                                       )
-        contact = Contact(
-                    firstname = request.firstname,
-                    lastname = request.lastname,
-                    owner = user_from_email.google_user_id,
-                    organization = user_from_email.organization,
-                    access = request.access,
-                    folder = created_folder['id']
-                    )
-        if request.title:
-            contact.title = request.title
-        contact_key = contact.put_async()
-        contact_key_async = contact_key.get_result()
-
-
-        if request.account:
-            account_key = ndb.Key(urlsafe=request.account)
-            # insert edges
-            Edge.insert(start_node = account_key,
-                      end_node = contact_key_async,
-                      kind = 'contacts',
-                      inverse_edge = 'parents')
-            EndpointsHelper.update_edge_indexes(
-                                            parent_key = contact_key_async,
-                                            kind = 'contacts',
-                                            indexed_edge = str(account_key.id())
-                                            )
-        else:
-            data = {}
-            data['id'] = contact_key_async.id()
-            contact.put_index(data)
-        return ContactSchema(id=str(contact_key_async.id()))
+        return Contact.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
 
     # contacts.insert API
     @Contact.method(
@@ -1417,6 +1307,16 @@ class CrmEngineApi(remote.Service):
         except (IndexError, TypeError):
             raise endpoints.NotFoundException('Note %s not found.' %
                                                 (request.id,))
+    # contacts.insertv2 api
+    @endpoints.method(DocumentInsertRequest, DocumentSchema,
+                      path='documents/insertv2', http_method='POST',
+                      name='documents.insertv2')
+    def document_insert_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Document.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
     # documents.insert API
     @Document.method(user_required=True,path='documents', http_method='POST', name='documents.insert')
     def DocumentInsert(self, my_model):
@@ -2087,8 +1987,17 @@ class CrmEngineApi(remote.Service):
         if not my_model.from_datastore:
             raise endpoints.NotFoundException('Need not found')
         return my_model
-
-    # needs.insert API
+    # needs.insert v2 api
+    @endpoints.method(NeedInsertRequest, NeedSchema,
+                      path='needs/insertv2', http_method='POST',
+                      name='needs.insertv2')
+    def need_insert_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Need.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+    # needs.insert api
     @Need.method(user_required=True,path='needs',http_method='POST',name='needs.insert')
     def need_insert(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -2308,6 +2217,16 @@ class CrmEngineApi(remote.Service):
             raise endpoints.NotFoundException('Opportunity not found')
         return my_model
 
+    # opportunities.insertv2 api
+    @endpoints.method(OpportunityInsertRequest, OpportunitySchema,
+                      path='opportunities/insertv2', http_method='POST',
+                      name='opportunities.insertv2')
+    def opportunity_insert_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Opportunity.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
     # opportunities.insert
     @Opportunity.method(
                         user_required=True,
@@ -2948,13 +2867,7 @@ class CrmEngineApi(remote.Service):
         task_key_async = task_key.get_result()
         if request.about:
             # insert edges
-            Edge.insert(start_node = ndb.Key(urlsafe=request.about),
-                      end_node = task_key_async,
-                      kind = 'tasks',
-                      inverse_edge = 'related_to')
-        if request.about:
             about_key = ndb.Key(urlsafe=request.about)
-            # insert edges
             Edge.insert(start_node = about_key,
                       end_node = task_key_async,
                       kind = 'tasks',

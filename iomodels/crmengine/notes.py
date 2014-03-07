@@ -171,7 +171,7 @@ class Note(EndpointsModel):
                                                 limit = 1
                                                 )
                     if len(comments_edge_list['items'])>0:
-                            last_comment = comments_edge_list[0].end_node.get()
+                            last_comment = comments_edge_list['items'][0].end_node.get()
                             last_updater = last_comment.author
                             excerpt = last_comment.content[0:100]
             else:
