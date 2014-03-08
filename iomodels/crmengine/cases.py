@@ -201,15 +201,24 @@ class Case(EndpointsModel):
                         count = count + 1
                         #list of tags related to this case
                         tag_list = Tag.list_by_parent(parent_key = case.key)
+                        case_status_edges = Edge.list(
+                                                start_node = case.key,
+                                                kind = 'status',
+                                                limit = 1
+                                                )
+                        current_status_schema = None
+                        if len(case_status_edges['items'])>0:
+                            current_status = case_status_edges['items'][0].end_node.get()
+                            current_status_schema = CaseStatusSchema(  
+                                                                    name = current_status.status,
+                                                                    status_changed_at = case_status_edges['items'][0].created_at.isoformat()
+                                                                    )
                         case_schema = CaseSchema(
                                   id = str( case.key.id() ),
                                   entityKey = case.key.urlsafe(),
                                   name = case.name,
-                                  status = case.status,
+                                  current_status = current_status_schema,
                                   priority = case.priority,
-                                  contact_name = case.contact_name,
-                                  account_name = case.account_name,
-                                  type_case = case.type_case,
                                   tags = tag_list,
                                   created_at = case.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")

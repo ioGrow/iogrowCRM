@@ -43,7 +43,8 @@ from webapp2_extras import i18n
 from google.appengine.api import users
 from google.appengine.api import memcache
 from iomodels.crmengine.shows import Show
-
+import time
+from apiclient.http import BatchHttpRequest
 
 jinja_environment = jinja2.Environment(
   loader=jinja2.FileSystemLoader(os.getcwd()),
@@ -66,6 +67,15 @@ VISIBLE_ACTIONS = [
 TOKEN_INFO_ENDPOINT = ('https://www.googleapis.com/oauth2/v1/tokeninfo' +
     '?access_token=%s')
 TOKEN_REVOKE_ENDPOINT = 'https://accounts.google.com/o/oauth2/revoke?token=%s'
+
+FOLDERS = {
+            'Accounts': 'accounts_folder',
+            'Contacts': 'contacts_folder',
+            'Leads': 'leads_folder',
+            'Opportunities': 'opportunities_folder',
+            'Cases': 'cases_folder'
+        }
+folders = {}
 
 class BaseHandler(webapp2.RequestHandler):
     def set_user_locale(self):
@@ -144,11 +154,8 @@ class SignInHandler(BaseHandler, SessionEnabledHandler):
 class SignUpHandler(BaseHandler, SessionEnabledHandler):
     
     @staticmethod
-    def init_drive_folder(http,folder_name,parent=None):
+    def init_drive_folder(http,driveservice,folder_name,parent=None):
       """Return the public Google+ profile data for the given user."""
-      
-      driveservice = build('drive', 'v2', http=http)
-      
       folder = {
                 'title': folder_name,
                 'mimeType': 'application/vnd.google-apps.folder'          
@@ -156,11 +163,28 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
       if parent:
         folder['parents'] = [{'id': parent}]
       try:
-        created_folder = driveservice.files().insert(body=folder).execute()
+        created_folder = driveservice.files().insert(fields='id',body=folder).execute()
         return created_folder['id']
       except errors.HttpError, error:
         print 'An error occured: %s' % error
-        return None   
+        return None
+
+    @staticmethod
+    def folder_created_callback(request_id, response, exception):
+        print '********************'
+        global folders
+        print folders
+        print response
+        print exception
+        print request_id
+        if exception is not None:
+            # Do something with the exception
+            pass
+        else:
+            # Do something with the response
+            folder_name = response['title']
+            folders[folder_name] = response['id']
+
       
       
     def get(self):
@@ -187,23 +211,25 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
           # init organization folders in Google drive
           credentials = user.google_credentials
           http = credentials.authorize(httplib2.Http(memcache))
-          org_folder = self.init_drive_folder(http,org_name+' (ioGrow)')
-          accounts_folder = self.init_drive_folder(http,'Accounts', org_folder)
-          contacts_folder = self.init_drive_folder(http,'Contacts', org_folder)
-          leads_folder = self.init_drive_folder(http,'Leads', org_folder)
-          opportunities_folder = self.init_drive_folder(http,'Opportunities', org_folder)
-          cases_folder = self.init_drive_folder(http,'Cases', org_folder)
-          shows_folder = self.init_drive_folder(http,'Shows', org_folder)
-          products_folder = self.init_drive_folder(http,'Products', org_folder)
-          organization = model.Organization(name=org_name,
-                                              org_folder=org_folder,
-                                              accounts_folder=accounts_folder,
-                                              contacts_folder=contacts_folder,
-                                              leads_folder=leads_folder,
-                                              opportunities_folder=opportunities_folder,
-                                              cases_folder=cases_folder,
-                                              shows_folder=shows_folder,
-                                              products_folder=products_folder)
+          driveservice = build('drive', 'v2', http=http)
+          current_time = time.time()
+          org_folder = self.init_drive_folder(http,driveservice,org_name+' (ioGrow)')
+          batch = BatchHttpRequest()
+          for folder_name in FOLDERS.keys():
+              folder = {
+                    'title': folder_name,
+                    'mimeType': 'application/vnd.google-apps.folder',
+                    'parents' : [{'id': org_folder}]       
+              }
+              batch.add(driveservice.files().insert(fields='id,title',body=folder), callback=self.folder_created_callback)
+          batch.execute(http=http)
+          organization = model.Organization(
+                                            name=org_name,
+                                            org_folder=org_folder
+                                            )
+          for folder_name in FOLDERS.keys():
+              if folder_name in folders.keys():
+                  setattr(organization, FOLDERS[folder_name], folders[folder_name])
           organization.put()
           comp_prof = model.Companyprofile(name=org_name,organization=organization.key,organizationid=organization.key.id(),owner=user.google_user_id)
           comp_prof.put()

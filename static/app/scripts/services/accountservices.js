@@ -36,6 +36,9 @@ accountservices.factory('Account', function($http) {
             if(!resp.code){
                $scope.account = resp;
                if (resp.contacts){
+                 if (!resp.contacts.items){
+                     $scope.blankStatecontact = true;
+                 } 
                  $scope.contacts = resp.contacts.items;
                    if ($scope.contactCurrentPage>1){
                         $scope.contactpagination.prev = true;
@@ -98,6 +101,9 @@ accountservices.factory('Account', function($http) {
                   
 
                   if (resp.needs){
+                      if (!resp.needs.items){
+                        $scope.blankStateneeds = true;
+                      }
                        $scope.needs = resp.needs.items;
                        if ($scope.needsCurrentPage>1){
                         $scope.needspagination.prev = true;
@@ -115,21 +121,91 @@ accountservices.factory('Account', function($http) {
                        }
                   }
 
+                  if (resp.opportunities){
+                      if (!resp.opportunities.items){
+                        $scope.blankStateopportunity = true;
+                      }
+                       $scope.opportunities = resp.opportunities.items;
+                       if ($scope.oppCurrentPage>1){
+                           $scope.opppagination.prev = true;
+                       }else{
+                           $scope.opppagination.prev = false;
+                       }
+                       if (resp.opportunities.nextPageToken){
+                         var nextPage = $scope.oppCurrentPage + 1;
+                         // Store the nextPageToken
+                         $scope.opppages[nextPage] = resp.opportunities.nextPageToken;
+                         $scope.opppagination.next = true;
+                         
+                       }else{
+                        $scope.opppagination.next = false;
+                       }
+
+                  }
+
+                  if (resp.cases){
+                      if (!resp.cases.items){
+                        $scope.blankStatecase = true;
+                      }
+                       $scope.cases = resp.cases.items;
+                       if ($scope.caseCurrentPage>1){
+                          $scope.casepagination.prev = true;
+                       }else{
+                          $scope.casepagination.prev = false;
+                       }
+                     if (resp.cases.nextPageToken){
+                       var nextPage = $scope.caseCurrentPage + 1;
+                       // Store the nextPageToken
+                       $scope.casepages[nextPage] = resp.cases.nextPageToken;
+                       $scope.casepagination.next = true;
+                       
+                     }else{
+                      $scope.casepagination.next = false;
+                     }
+
+                  }
+
+                  if (resp.documents){
+                      if (!resp.documents.items){
+                        $scope.blankStatdocuments = true;
+                      }
+                      $scope.documents = resp.documents.items;
+                      if ($scope.documentCurrentPage >1){
+                          $scope.documentpagination.prev = true;
+                      }else{
+                           $scope.documentpagination.prev = false;
+                      }
+                     if (resp.documents.nextPageToken){
+                      
+                       var nextPage = $scope.documentCurrentPage + 1;
+                       // Store the nextPageToken
+                       $scope.documentpages[nextPage] = resp.documents.nextPageToken;
+                       $scope.documentpagination.next = true;
+                       
+                     }else{
+                      $scope.documentpagination.next = false;
+                     }
+                  }
+
                   if (resp.tasks){
                      $scope.tasks = resp.tasks.items;
+                  }
+
+                  if (resp.events){
+                     $scope.events = resp.events.items;
                   }
 
                $scope.isContentLoaded = true;
                //$scope.listInfonodes();
                //$scope.listTopics(resp);
                //$scope.listTasks();
-               $scope.listEvents();
+               //$scope.listEvents();
                //$scope.listContacts();
-               $scope.listOpportunities();
-               $scope.listCases();
+               //$scope.listOpportunities();
+               //$scope.listCases();
                //$scope.listNeeds();
                
-               $scope.listDocuments();
+               //$scope.listDocuments();
                
                
                $scope.email.to = '';
@@ -148,6 +224,10 @@ accountservices.factory('Account', function($http) {
                 if (resp.tasks){
                     $scope.hilightTask();
                 }
+                if (resp.events){
+                    $scope.hilightEvent();
+                }
+                
 
             }else {
               alert(resp.message);
@@ -480,7 +560,7 @@ accountservices.factory('Attachement', function($http) {
   };
   Attachement.insert = function($scope,params){
       $scope.isLoading = true;
-      gapi.client.crmengine.documents.insert(params).execute(function(resp) {
+      gapi.client.crmengine.documents.insertv2(params).execute(function(resp) {
             if(!resp.code){ 
              //$('#newDocument').modal('hide');
              $scope.listDocuments();
