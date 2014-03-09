@@ -157,7 +157,7 @@
             
 
             <span ng-show="contact.title"><a class="tag" href="/#/search/type:Contact <%=contact.title%>">#<%=contact.title%> </a></span>
-            <span ng-show="contact.account_name">{{_("at")}} <a class="tag" href="/#/search/type:Contact <%=contact.account_name%>">#<%=contact.account_name%></a></span> <br>
+            <span ng-show="contact.account">{{_("at")}} <a class="tag" href="/#/search/type:Contact <%=contact.account.name%>">#<%=contact.account.name%></a></span> <br>
             <span class="page-meta"><i class="icon-pencil"><a ng-click="editacontact()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="editbeforedelete()" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
 
             

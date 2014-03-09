@@ -472,7 +472,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
             params = {
                       'id':$scope.account.id,
                         'topics':{
-                          'limit': '6',
+                          'limit': '7',
                           'pageToken':$scope.topicpages[nextPage]
                         }
                      }
@@ -480,7 +480,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
             params = {
                       'id':$scope.account.id,
                         'topics':{
-                          'limit': '6'
+                          'limit': '7'
                         }
                      }
           }
@@ -497,7 +497,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
             params = {
                       'id':$scope.account.id,
                         'topics':{
-                          'limit': '6',
+                          'limit': '7',
                           'pageToken':$scope.topicpages[prevPage]
                         }
                      }
@@ -505,7 +505,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
             params = {
                       'id':$scope.account.id,
                         'topics':{
-                          'limit': '6'
+                          'limit': '7'
                         }
                      }
           }
@@ -619,17 +619,23 @@ $scope.CaselistNextPageItems = function(){
         var nextPage = $scope.caseCurrentPage + 1;
         var params = {};
           if ($scope.casepages[nextPage]){
-            params = {'limit':6,
-                      'account':$scope.account.entityKey,
-                      'pageToken':$scope.casepages[nextPage]
+            params = {
+                      'id':$scope.account.id,
+                        'cases':{
+                          'limit': '6',
+                          'pageToken':$scope.casepages[nextPage]
+                        }
                      }
           }else{
-            params = {'limit':6,
-            'account':$scope.account.entityKey}
+            params = {
+                      'id':$scope.account.id,
+                        'cases':{
+                          'limit': '6'
+                        }
+                     }
           }
-          console.log('in listNextPageItems');
           $scope.caseCurrentPage = $scope.caseCurrentPage + 1 ; 
-          Case.list($scope,params);
+          Account.get($scope,params);
      }
      $scope.CasePrevPageItems = function(){
             
@@ -638,7 +644,7 @@ $scope.CaselistNextPageItems = function(){
           if ($scope.casepages[prevPage]){
             params = {
                       'id':$scope.account.id,
-                        'opportunities':{
+                        'cases':{
                           'limit': '6',
                           'pageToken':$scope.casepages[prevPage]
                         }
@@ -805,8 +811,7 @@ $scope.CaselistNextPageItems = function(){
                       'mimeType':mimeType 
                      };
         Attachement.insert($scope,params);
-        $('#newDocument').modal('hide');
-        $scope.newdocument.title = '';
+       
      };
      $scope.createPickerUploader = function() {
           var projectfolder = $scope.account.folder;
@@ -894,14 +899,11 @@ $scope.CaselistNextPageItems = function(){
       };
       
     $scope.addNote = function(note){
-      console.log('debug addNote');
-      
       var params ={
                   'about': $scope.account.entityKey,
                   'title': note.title,
                   'content': note.content
       };
-      console.log(params);
       Note.insert($scope,params);
       $scope.note.title = '';
       $scope.note.content = '';
@@ -1098,10 +1100,8 @@ $scope.CaselistNextPageItems = function(){
     $scope.saveOpp = function(opportunity){
          
        var params = {'name':opportunity.name,
-                      'description':opportunity.description,
                       'amount': opportunity.amount,
                       'account':$scope.account.entityKey,
-                      'account_name': $scope.account.name,
                       'stage' :$scope.stage_selected.entityKey,
                       'access': $scope.account.access
                       };

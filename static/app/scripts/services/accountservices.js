@@ -567,6 +567,8 @@ accountservices.factory('Attachement', function($http) {
              $scope.isLoading = false;
              $scope.blankStatdocuments = false;
              $scope.$apply();
+             $('#newDocument').modal('hide');
+             $scope.newdocument.title = '';
             }else{
                console.log(resp.message);
                $('#newDocument').modal('hide');

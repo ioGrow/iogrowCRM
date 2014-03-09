@@ -32,7 +32,7 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 # Our libraries
 from iograph import Node,Edge,RecordSchema,InfoNodeResponse,InfoNodeConnectionSchema,InfoNodeListResponse
 from iomodels.crmengine.accounts import Account,AccountGetRequest,AccountSchema,AccountListRequest,AccountListResponse,AccountSearchResult,AccountSearchResults
-from iomodels.crmengine.contacts import Contact,ContactInsertRequest,ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults
+from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertRequest,ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults
 from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
@@ -1081,6 +1081,16 @@ class CrmEngineApi(remote.Service):
         my_model.put()
         return my_model
 
+    # accounts.list api v2
+    @endpoints.method(ContactGetRequest, ContactSchema,
+                      path='contacts/getv2', http_method='POST',
+                      name='contacts.getv2')
+    def contact_get_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Contact.get_schema(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
     #contacts.get API
     @Contact.method(
                     request_fields=('id',),
