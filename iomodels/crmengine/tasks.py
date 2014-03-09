@@ -1,7 +1,11 @@
 from google.appengine.ext import ndb
 import datetime
+import endpoints
 from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.api import search 
+from apiclient.discovery import build
+from google.appengine.api import memcache
+import httplib2
 from protorpc import messages
 from endpoints_proto_datastore.ndb import EndpointsModel
 from iomodels.crmengine.notes import Topic, AuthorSchema,DiscussionAboutSchema
@@ -11,6 +15,7 @@ from iograph import Edge
 from datetime import date
 import model
 from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
+from endpoints_helper import EndpointsHelper
 
 # The message class that defines the EntityKey schema
 class EntityKeyRequest(messages.Message):
@@ -39,13 +44,14 @@ class TaskSchema(messages.Message):
     updated_at = messages.StringField(15)
 
 class TaskInsertRequest(messages.Message):
-    about = messages.StringField(1)
+    parent = messages.StringField(1)
     title = messages.StringField(2,required=True)
     due = messages.StringField(3)
     reminder = messages.StringField(4)
     status = messages.StringField(5)
-    assignees = messages.MessageField(EntityKeyRequest,6, repeated = True)
-    tags = messages.MessageField(EntityKeyRequest,7, repeated = True)
+    access = messages.StringField(6)
+    assignees = messages.MessageField(EntityKeyRequest,7, repeated = True)
+    tags = messages.MessageField(EntityKeyRequest,8, repeated = True)
 
 class TaskRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -356,4 +362,85 @@ class Task(EndpointsModel):
                                 items = task_list,
                                 nextPageToken = task_next_curs
                                 )
+    @classmethod
+    def insert(cls,user_from_email,request):
+        if request.status:
+            status = request.status
+        else:
+            status = 'pending'
+        if request.access:
+            access = request.access
+        else:
+            access = 'public'
+        author = Userinfo()
+        author.google_user_id = user_from_email.google_user_id
+        author.display_name = user_from_email.google_display_name
+        author.photo = user_from_email.google_public_profile_photo_url
+        task = Task(title = request.title,
+                    status = request.status,
+                    owner = user_from_email.google_user_id,
+                    organization = user_from_email.organization,
+                    author = author)
+        if request.due:
+            task.due = datetime.datetime.strptime(request.due,"%Y-%m-%dT%H:%M:00.000000")
+            print '@@@@ yes i know #@@@@'
+            try:
+                credentials = user_from_email.google_credentials
+                http = credentials.authorize(httplib2.Http(memcache))
+                service = build('calendar', 'v3', http=http)
+                # prepare params to insert
+                params = {
+                 "start":
+                  {
+                    "dateTime": task.due.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
+                  },
+                 "end":
+                  {
+                    "dateTime": task.due.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
+                  },
+                  "summary": str(request.title)
+                }
+                print '***************Something here yes*********************'
+                created_event = service.events().insert(calendarId='primary',body=params).execute()
+                print '***************Something here no*********************'
+            except:
+                raise endpoints.UnauthorizedException('Invalid grant' )
+                return
+
+        if request.reminder:
+            pass
+
+        task_key = task.put_async()
+        task_key_async = task_key.get_result()
+        if request.parent:
+            # insert edges
+            parent_key = ndb.Key(urlsafe=request.parent)
+            Edge.insert(start_node = parent_key,
+                      end_node = task_key_async,
+                      kind = 'tasks',
+                      inverse_edge = 'related_to')
+            EndpointsHelper.update_edge_indexes(
+                                            parent_key = task_key_async,
+                                            kind = 'tasks',
+                                            indexed_edge = str(parent_key.id())
+                                            )
+        else:
+            data = {}
+            data['id'] = task_key_async.id()
+            task.put_index(data)
+        if request.assignees:
+            # insert edges
+            for assignee in request.assignees:
+                Edge.insert(start_node = task_key_async,
+                      end_node = ndb.Key(urlsafe=assignee.entityKey),
+                      kind = 'assignees',
+                      inverse_edge = 'assigned_to')
+        if request.tags:
+            # insert edges
+            for tag in request.tags:
+                Edge.insert(start_node = task_key_async,
+                      end_node = ndb.Key(urlsafe=tag.entityKey),
+                      kind = 'tags',
+                      inverse_edge = 'tagged_on')
+        return TaskSchema()
   

@@ -2834,78 +2834,10 @@ class CrmEngineApi(remote.Service):
                       name='tasks.insertv2')
     def tasks_insert_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        if request.status:
-            status = request.status
-        else:
-            status = 'pending'
-        author = Userinfo()
-        author.google_user_id = user_from_email.google_user_id
-        author.display_name = user_from_email.google_display_name
-        author.photo = user_from_email.google_public_profile_photo_url
-        task = Task(title = request.title,
-                    status = request.status,
-                    owner = user_from_email.google_user_id,
-                    organization = user_from_email.organization,
-                    author = author)
-        if request.due:
-            task.due = datetime.datetime.strptime(request.due,"%Y-%m-%dT%H:%M:00.000000")
-            try:
-                credentials = user_from_email.google_credentials
-                http = credentials.authorize(httplib2.Http(memcache))
-                service = build('calendar', 'v3', http=http)
-                # prepare params to insert
-                params = {
-                 "start":
-                  {
-                    "dateTime": task.due.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
-                  },
-                 "end":
-                  {
-                    "dateTime": task.due.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
-                  },
-                  "summary": str(request.title)
-                }
-                created_event = service.events().insert(calendarId='primary',body=params).execute()
-            except:
-                raise endpoints.UnauthorizedException('Invalid grant' )
-                return
-
-        if request.reminder:
-            pass
-
-        task_key = task.put_async()
-        task_key_async = task_key.get_result()
-        if request.about:
-            # insert edges
-            about_key = ndb.Key(urlsafe=request.about)
-            Edge.insert(start_node = about_key,
-                      end_node = task_key_async,
-                      kind = 'tasks',
-                      inverse_edge = 'related_to')
-            EndpointsHelper.update_edge_indexes(
-                                            parent_key = task_key_async,
-                                            kind = 'tasks',
-                                            indexed_edge = str(about_key.id())
-                                            )
-        else:
-            data = {}
-            data['id'] = task_key_async.id()
-            task.put_index(data)
-        if request.assignees:
-            # insert edges
-            for assignee in request.assignees:
-                Edge.insert(start_node = task_key_async,
-                      end_node = ndb.Key(urlsafe=assignee.entityKey),
-                      kind = 'assignees',
-                      inverse_edge = 'assigned_to')
-        if request.tags:
-            # insert edges
-            for tag in request.tags:
-                Edge.insert(start_node = task_key_async,
-                      end_node = ndb.Key(urlsafe=tag.entityKey),
-                      kind = 'tags',
-                      inverse_edge = 'tagged_on')
-        return TaskSchema()
+        return Task.insert(
+                    user_from_email = user_from_email,
+                    request = request
+                    )
 
     # tasks.listv2 api
     @endpoints.method(TaskRequest, TaskListResponse,
