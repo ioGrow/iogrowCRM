@@ -810,6 +810,7 @@ $scope.CaselistNextPageItems = function(){
      };
      $scope.createPickerUploader = function() {
           var projectfolder = $scope.account.folder;
+          var developerKey = 'AIzaSyD___EKeONhEP1JDWsNQi0zQhlGGzuwRI4';
           var docsView = new google.picker.DocsView()
               .setIncludeFolders(true) 
               .setSelectFolderEnabled(true);
@@ -817,7 +818,9 @@ $scope.CaselistNextPageItems = function(){
               addView(new google.picker.DocsUploadView().setParent(projectfolder)).
               addView(docsView).
               setCallback($scope.uploaderCallback).
-              setAppId(12345).
+              setOAuthToken(window.authResult.access_token).
+              setDeveloperKey(developerKey).
+              setAppId(987765099891).
                 enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
               build();
           picker.setVisible(true);
@@ -827,18 +830,14 @@ $scope.CaselistNextPageItems = function(){
         
 
         if (data.action == google.picker.Action.PICKED) {
-                var params = {'about_kind': 'Account',
-                                      'about_item':$scope.account.id};
+                var params = {
+                              'access': $scope.account.access,
+                              'parent':$scope.account.entityKey
+                            };
                 params.items = new Array();
                
                  $.each(data.docs, function(index) {
-                      console.log(data.docs);
-                      /*
-                      {'about_kind':'Account',
-                      'about_item': $scope.account.id,
-                      'title':newdocument.title,
-                      'mimeType':mimeType };
-                      */
+                     
                       var item = { 'id':data.docs[index].id,
                                   'title':data.docs[index].name,
                                   'mimeType': data.docs[index].mimeType,
@@ -850,8 +849,7 @@ $scope.CaselistNextPageItems = function(){
                   });
                  Attachement.attachfiles($scope,params);
                     
-                    console.log('after uploading files');
-                    console.log(params);
+                  
                 }
       }
      $scope.share = function(slected_memeber){

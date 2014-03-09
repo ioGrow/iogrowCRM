@@ -38,7 +38,7 @@ from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListRespons
 #from iomodels.crmengine.tags import Tag
 from iomodels.crmengine.opportunities import Opportunity,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults
 from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema
-from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema
+from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest
 from iomodels.crmengine.shows import Show
 from iomodels.crmengine.leads import Lead,LeadListRequest,LeadListResponse,LeadSearchResults
 from iomodels.crmengine.cases import Case,CaseInsertRequest,CaseSchema,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
@@ -249,22 +249,6 @@ class LiveSearchResults(messages.Message):
 # The message class that defines a response for leads.convert API
 class ConvertedLead(messages.Message):
     id = messages.IntegerField(1)
-
-
-# The message class that defines the schema of Attachment
-class AttachmentSchema(messages.Message):
-    id = messages.StringField(1)
-    title = messages.StringField(2)
-    mimeType = messages.StringField(3)
-    embedLink = messages.StringField(4)
-
-
-# The message class that defines request attributes to attache multiples files
-class MultipleAttachmentRequest(messages.Message):
-    about_kind = messages.StringField(1)
-    about_item = messages.StringField(2)
-    items = messages.MessageField(AttachmentSchema, 3, repeated=True)
-
 
 # The message class that defines Discussion Response for notes.get API
 class DiscussionResponse(messages.Message):
@@ -1241,25 +1225,10 @@ class CrmEngineApi(remote.Service):
     def attach_files(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         # Todo: Check permissions
-        items = request.items
-        author = Userinfo()
-        author.google_user_id = user_from_email.google_user_id
-        author.display_name = user_from_email.google_display_name
-        author.photo = user_from_email.google_public_profile_photo_url
-        for item in items:
-            document = Document(about_kind = request.about_kind,
-                                about_item = request.about_item,
-                                title = item.title,
-                                resource_id = item.id,
-                                mimeType = item.mimeType,
-                                embedLink = item.embedLink,
-                                owner = user_from_email.google_user_id,
-                                organization = user_from_email.organization,
-                                author=author,
-                                comments = 0
-                                )
-            document.put()
-        return message_types.VoidMessage()
+        return Document.attach_files(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
 
     # documents.get API
     @endpoints.method(ID_RESOURCE, DiscussionResponse,
