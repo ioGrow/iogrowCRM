@@ -184,9 +184,9 @@
 
            <span class="opportunity-amount" >$<%=opportunity.amount %>  </span><span>
            <span ng-show="opportunity.contact_name">{{_("associated with")}}: <a class="tag" href="/#/search/type:Opportunity <%=opportunity.contact_name %>">#<%=opportunity.contact_name %></a> from <a class="tag" ng-show="opportunity.account_name" href="/#/search/type:Opportunity <%=opportunity.contact_name %>">#<%=opportunity.account_name %></a></span>
-            <span ng-show="opportunity.account_name" ng-hide="opportunity.account_name">{{_("associated with")}}:  <a class="tag" href="/#/accounts/show/<%=opportunity.account_id %>">#<%=opportunity.account_name %></a></span>
+            <span ng-show="opportunity.account" >{{_("associated with")}}:  <a class="tag" href="/#/accounts/show/<%=opportunity.account.id %>">#<%=opportunity.account.name %></a></span>
            
-            <br><span ng-show="opportunity.stagename">{{_("Stage")}}: <a class="tag" href="/#/search/type:Opportunity <%=opportunity.stage %>">#<%=opportunity.stagename %> </a>| <%=opportunity.stage_probability %> %</span>
+            <br><span ng-show="opportunity.current_stage">{{_("Stage")}}: <%=opportunity.current_stage.name %> | <%=opportunity.current_stage.probability %> %</span>
             <br><span ng-show="opportunity.account_name">{{_("Related To")}}: <a class="tag" href="/#/search/type:Opportunity <%=opportunity.account_name %>">#<%=opportunity.account_name %></a></span> <br>
             <span class="page-meta"><i class="icon-pencil"><a ng-click="editOpp()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="editbeforedelete()" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
 
@@ -281,7 +281,7 @@
                                 <h3>Opportunity Informations</h3>
 
                                 <div class="news-block-tags">
-                                  <strong>Close Date</strong>
+                                  <strong>Estimated Close Date</strong>
                                   <span class="page-meta"><i class="icon-pencil"><a ng-click="editclosedate(opportunity)" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
                                   
                                 </div>
