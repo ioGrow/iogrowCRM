@@ -382,7 +382,8 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
  console.log('I am in ContactShowCtrl');
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Contacts").addClass("active");
-    
+     
+     $scope.selectedTab = 2;
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.isContentLoaded = false;
@@ -403,6 +404,9 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
      $scope.casepagination = {};
      $scope.caseCurrentPage=01;
      $scope.casepages=[];
+     $scope.documentpagination = {};
+     $scope.documentCurrentPage=01;
+     $scope.documentpages=[];
 
       $scope.accounts = [];
       $scope.email = {};
@@ -411,11 +415,39 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
       $scope.infonodes = {};
       $scope.phone={};
       $scope.phone.type= 'work';
+      $scope.casee = {};
+      $scope.casee.priority = 4;
       
       // What to do after authentication
       $scope.runTheProcess = function(){
-          var contactid = {'id':$route.current.params.contactId};
-          Contact.get($scope,contactid);
+          var params = {
+                          'id':$route.current.params.contactId,
+                          
+                          'topics':{
+                            'limit': '7'
+                          },
+
+                          'opportunities':{
+                            'limit': '6'
+                          },
+
+                          'cases':{
+                            'limit': '6'
+                          },
+
+                          'documents':{
+                            'limit': '6'
+                          },
+
+                          'tasks':{
+                            
+                          },
+
+                          'events':{
+                            
+                          }
+                      };
+          Contact.get($scope,params);
           User.list($scope,{});
           Opportunitystage.list($scope,{});
           Casestatus.list($scope,{});
@@ -432,51 +464,58 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
         var nextPage = $scope.topicCurrentPage + 1;
         var params = {};
           if ($scope.topicpages[nextPage]){
-            params = {'about_kind':'Contact',
-                      'about_item':$scope.contact.id,
-                      'order': '-updated_at',
-                      'limit': 5,
-                      'pageToken':$scope.topicpages[nextPage]
+            params = {
+                      'id':$scope.contact.id,
+                        'topics':{
+                          'limit': '7',
+                          'pageToken':$scope.topicpages[nextPage]
+                        }
                      }
-          }else{
-            params = {'about_kind':'Contact',
-                      'about_item':$scope.Contact.id,
-                      'order': '-updated_at',
-                      'limit':5}
+            }else{
+            params = {
+                      'id':$scope.contact.id,
+                        'topics':{
+                          'limit': '7'
+                        }
+                     }
           }
-          console.log('in listNextPageItems');
+          
           $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ; 
-          Topic.list($scope,params);
+          Contact.get($scope,params);
      }
      $scope.TopiclistPrevPageItems = function(){
 
        var prevPage = $scope.topicCurrentPage - 1;
        var params = {};
+       
           if ($scope.topicpages[prevPage]){
-            params = {'about_kind':'Contact',
-                      'about_item':$scope.contact.id,
-                      'order': '-updated_at',
-                      'limit': 5,
-                      'pageToken':$scope.topicpages[prevPage]
+            params = {
+                      'id':$scope.contact.id,
+                        'topics':{
+                          'limit': '7',
+                          'pageToken':$scope.topicpages[prevPage]
+                        }
                      }
           }else{
-            params = {'about_kind':'Contact',
-                      'about_item':$scope.contact.id,
-                      'order': '-updated_at',
-                      'limit': 5}
+            params = {
+                      'id':$scope.contact.id,
+                        'topics':{
+                          'limit': '7'
+                        }
+                     }
           }
           $scope.topicCurrentPage = $scope.topicCurrentPage - 1 ;
-          Topic.list($scope,params);
-          console.log()
+          Contact.get($scope,params);
      }
      
      $scope.listTopics = function(contact){
-        var params = {'about_kind':'Contact',
-                      'about_item':$scope.contact.id,
-                      'order': '-updated_at',
-                      'limit': 5
-                      };
-        Topic.list($scope,params);
+        var params = {
+                      'id':$scope.contact.id,
+                      'topics':{
+                             'limit': '7'
+                       }
+                    };
+          Contact.get($scope,params);
 
      };
      //HKA 10.12.2013 Page Prev & Next on List Opportunities
@@ -486,17 +525,23 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
         var nextPage = $scope.oppCurrentPage + 1;
         var params = {};
           if ($scope.opppages[nextPage]){
-            params = {'limit':6,
-                      'contact':$scope.contact.entityKey,
-                      'pageToken':$scope.opppages[nextPage]
+            params = {
+                      'id':$scope.contact.id,
+                        'opportunities':{
+                          'limit': '6',
+                          'pageToken':$scope.opppages[nextPage]
+                        }
                      }
-          }else{
-            params = {'limit':6,
-            'account':$scope.contact.entityKey}
+            }else{
+            params = {
+                      'id':$scope.contact.id,
+                        'opportunities':{
+                          'limit': '6'
+                        }
+                     }
           }
-          console.log('in listNextPageItems');
           $scope.oppCurrentPage = $scope.oppCurrentPage + 1 ; 
-          Opportunity.list($scope,params);
+          Contact.get($scope,params);
      };
      $scope.OppPrevPageItems = function(){
 
@@ -504,16 +549,23 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
        var prevPage = $scope.oppCurrentPage - 1;
        var params = {};
           if ($scope.opppages[prevPage]){
-            params = {'limit':6,
-                      'contact':$scope.contact.entityKey,
-                      'pageToken':$scope.opppages[prevPage]
+            params = {
+                      'id':$scope.contact.id,
+                        'opportunities':{
+                          'limit': '6',
+                          'pageToken':$scope.opppages[prevPage]
+                        }
                      }
-          }else{
-            params = {'limit':6,
-                      'contact':$scope.contact.entityKey}
+            }else{
+            params = {
+                      'id':$scope.contact.id,
+                        'opportunities':{
+                          'limit': '6'
+                        }
+                     }
           }
           $scope.oppCurrentPage = $scope.oppCurrentPage - 1 ;
-            Opportunity.list($scope,params);
+          Contact.get($scope,params);
      };
     //HKA 07.12.2013 Manage Prev & Next Page on Related List Cases
 $scope.CaselistNextPageItems = function(){
@@ -522,33 +574,46 @@ $scope.CaselistNextPageItems = function(){
         var nextPage = $scope.caseCurrentPage + 1;
         var params = {};
           if ($scope.casepages[nextPage]){
-            params = {'limit':6,
-                      'contact':$scope.contact.entityKey,
-                      'pageToken':$scope.casepages[nextPage]
+            params = {
+                      'id':$scope.contact.id,
+                        'cases':{
+                          'limit': '6',
+                          'pageToken':$scope.casepages[nextPage]
+                        }
                      }
           }else{
-            params = {'limit':6,
-            'account':$scope.contact.entityKey}
+            params = {
+                      'id':$scope.contact.id,
+                        'cases':{
+                          'limit': '6'
+                        }
+                     }
           }
-          console.log('in listNextPageItems');
           $scope.caseCurrentPage = $scope.caseCurrentPage + 1 ; 
-          Case.list($scope,params);
+          Contact.get($scope,params);
      }
      $scope.CasePrevPageItems = function(){
             
        var prevPage = $scope.caseCurrentPage - 1;
        var params = {};
           if ($scope.casepages[prevPage]){
-            params = {'limit':6,
-                      'contact':$scope.contact.entityKey,
-                      'pageToken':$scope.casepages[prevPage]
+            params = {
+                      'id':$scope.contact.id,
+                        'cases':{
+                          'limit': '6',
+                          'pageToken':$scope.casepages[prevPage]
+                        }
                      }
-          }else{
-            params = {'limit':6,
-                      'contact':$scope.contact.entityKey}
+            }else{
+            params = {
+                      'id':$scope.contact.id,
+                        'cases':{
+                          'limit': '6'
+                        }
+                     }
           }
           $scope.caseCurrentPage = $scope.caseCurrentPage - 1 ;
-            Case.list($scope,params);
+          Contact.get($scope,params);
      };
 
 
@@ -630,27 +695,24 @@ $scope.CaselistNextPageItems = function(){
    $scope.addTask = function(task){
       
         $('#myModal').modal('hide');
-        var params ={}
-
-        console.log('adding a new task');
-        console.log(task);
-        
         if (task.due){
 
-            var dueDate= $filter('date')(task.due,['yyyy-MM-dd']);
-            dueDate = dueDate +'T00:00:00.000000'
+            var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
+            
             params ={'title': task.title,
                       'due': dueDate,
-                      'about':$scope.contact.entityKey
+                      'parent': $scope.contact.entityKey
             }
-            console.log(dueDate);
+            
+            
         }else{
             params ={'title': task.title,
-                     'about':$scope.contact.entityKey}
+                     'parent': $scope.contact.entityKey
+                   }
         };
-        Task.insert($scope,params);
         $scope.task.title='';
-        $scope.task.dueDate='T00:00:00.000000';
+        $scope.task.dueDate='0000-00-00T00:00:00-00:00';
+        Task.insert($scope,params);
      }
 
      $scope.hilightTask = function(){
@@ -660,11 +722,11 @@ $scope.CaselistNextPageItems = function(){
        
      }
      $scope.listTasks = function(){
-        var params = {'about':$scope.contact.entityKey,
-                      'order': '-updated_at'
-                      
+        var params = {
+                        'id':$scope.contact.id,
+                        'tasks':{}
                       };
-        Task.list($scope,params);
+        Contact.get($scope,params);
 
      }
  //HKA 10.11.2013 Add event 
@@ -679,28 +741,23 @@ $scope.CaselistNextPageItems = function(){
                       'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
                       'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
                       'where': ioevent.where,
-                      'about_kind':'Contact',
-                      'about_item':$scope.contact.id
+                      'parent':$scope.contact.entityKey
               }
 
             }else{
-              params ={'title': ioevent.title,
+              params ={
+                'title': ioevent.title,
                       'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
                       'where': ioevent.where,
-                      'about_kind':'Contact',
-                      'about_item':$scope.contact.id
+                      'parent':$scope.contact.entityKey
               }
             }
-            console.log('inserting the event');
-            console.log(params);
+            
             Event.insert($scope,params);
             $scope.ioevent.title='';
-            $scope.ioevent.starts_at='';
-            $scope.ioevent.ends_at='';
             $scope.ioevent.where='';
-
-            
-        };
+            $scope.ioevent.starts_at='T00:00:00.000000';
+          };
      }
      $scope.hilightEvent = function(){
         console.log('Should higll');
@@ -709,12 +766,13 @@ $scope.CaselistNextPageItems = function(){
        
      }
      $scope.listEvents = function(){
-        var params = {'about_kind':'Contact',
-                      'about_item':$scope.contact.id,
-                      'order': 'starts_at',
-                      'limit': 5
+        var params = {
+                        'id':$scope.contact.id,
+                        'events':{
+                          
+                        }
                       };
-        Event.list($scope,params);
+        Contact.get($scope,params);
 
      };
   //HKA 02.12.2013 List Opportunities related to Contact
@@ -737,10 +795,11 @@ $scope.CaselistNextPageItems = function(){
   };
      //HKA 11.11.2013 Add Note
   $scope.addNote = function(note){
-    var params = {'title':$scope.note.title,
-                  'content':$scope.note.content,
-                  'about_item':$scope.contact.id,
-                  'about_kind':'Contact' };
+    var params ={
+                  'about': $scope.contact.entityKey,
+                  'title': note.title,
+                  'content': note.content
+      };
     Note.insert($scope,params);
     $scope.note.title='';
     $scope.note.content='';
@@ -771,21 +830,13 @@ $scope.updatContactHeader = function(contact){
   // HKA 02.12.2013 Add Opportunty related to Contact
     $scope.saveOpp = function(opportunity){
       
-      console.log($scope.contact.account);
-      console.log(opportunity.amount);
-       var params = {'name':opportunity.name,
-                      'description':opportunity.description,
+      var params = {'name':opportunity.name,
                       'amount': opportunity.amount,
-                      'stagename':$scope.stage_selected.name,
-                      'stage_probability':$scope.stage_selected.probability,
-                      'account':$scope.contact.account,
-                      'account_name':$scope.contact.account_name,
+                      'account':$scope.contact.account.entityKey,
                       'contact':$scope.contact.entityKey,
-                      'contact_name': $scope.contact.firstname+' '+$scope.contact.lastname,
+                      'stage' :$scope.stage_selected.entityKey,
                       'access': $scope.contact.access
                       };
-        console.log(params);
-
       Opportunity.insert($scope,params);
       $('#addOpportunityModal').modal('hide');
     };
@@ -794,14 +845,12 @@ $scope.updatContactHeader = function(contact){
   // HKA 01.12.2013 Add Case related to Contact
     $scope.saveCase = function(casee){
           
+        
         var params = {'name':casee.name,
                       'priority':casee.priority,
-                      'status': $scope.status_selected.status,
-                      'type_case':casee.type_case,
-                      'account':$scope.contact.account,
-                      'account_name':$scope.contact.account_name,
+                      'status': $scope.status_selected.entityKey,
+                      'account':$scope.contact.account.entityKey,
                       'contact':$scope.contact.entityKey,
-                      'contact_name': $scope.contact.firstname+' '+$scope.contact.lastname,
                       'access': $scope.contact.access
                       };
       Case.insert($scope,params);
@@ -954,13 +1003,68 @@ $scope.updateintro = function(contact){
      Contact.delete($scope,contactid);
      $('#BeforedeleteContact').modal('hide');
      };
+
+     $scope.DocumentlistNextPageItems = function(){
+        
+ 
+        var nextPage = $scope.documentCurrentPage + 1;
+        var params = {};
+          if ($scope.documentpages[nextPage]){
+            params = {
+                        'id':$scope.contact.id,
+                        'documents':{
+                          'limit': '6',
+                          'pageToken':$scope.documentpages[nextPage]
+                        }
+                      }
+            
+          }else{
+            params = {
+                        'id':$scope.contact.id,
+                        'documents':{
+                          'limit': '6'
+                        }
+                      }
+            }
+          $scope.documentCurrentPage = $scope.documentCurrentPage + 1 ;
+          
+          Contact.get($scope,params);
+          
+     }
+     $scope.DocumentPrevPageItems = function(){
+            
+       var prevPage = $scope.documentCurrentPage - 1;
+       var params = {};
+          if ($scope.documentpages[prevPage]){
+            params = {
+                        'id':$scope.contact.id,
+                        'documents':{
+                          'limit': '6',
+                          'pageToken':$scope.documentpages[prevPage]
+                        }
+                      }
+            
+          }else{
+            params = {
+                        'id':$scope.contact.id,
+                        'documents':{
+                          'limit': '6'
+                        }
+                      }
+          }
+          $scope.documentCurrentPage = $scope.documentCurrentPage - 1 ;
+          Contact.get($scope,params);
+
+              
+     };
      $scope.listDocuments = function(){
-        var params = {'about_kind':'Contact',
-                      'about_item':$scope.contact.id,
-                      'order': '-updated_at',
-                      'limit': 5
-                      };
-        Attachement.list($scope,params);
+        var params = {
+                        'id':$scope.contact.id,
+                        'documents':{
+                          'limit': '6'
+                        }
+                      }
+        Contact.get($scope,params);
 
      };
      $scope.showCreateDocument = function(type){
@@ -970,14 +1074,16 @@ $scope.updateintro = function(contact){
      };
      $scope.createDocument = function(newdocument){
         var mimeType = 'application/vnd.google-apps.' + $scope.mimeType;
-        var params = {'about_kind':'Contact',
-                      'about_item': $scope.contact.id,
+        var params = {
+                      'parent': $scope.contact.entityKey,
                       'title':newdocument.title,
-                      'mimeType':mimeType };
+                      'mimeType':mimeType 
+                     };
         Attachement.insert($scope,params);
 
      };
      $scope.createPickerUploader = function() {
+          var developerKey = 'AIzaSyD___EKeONhEP1JDWsNQi0zQhlGGzuwRI4';
           var projectfolder = $scope.contact.folder;
           var docsView = new google.picker.DocsView()
               .setIncludeFolders(true) 
@@ -986,7 +1092,9 @@ $scope.updateintro = function(contact){
               addView(new google.picker.DocsUploadView().setParent(projectfolder)).
               addView(docsView).
               setCallback($scope.uploaderCallback).
-              setAppId(12345).
+              setOAuthToken(window.authResult.access_token).
+              setDeveloperKey(developerKey).
+              setAppId(987765099891).
                 enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
               build();
           picker.setVisible(true);
@@ -996,8 +1104,10 @@ $scope.updateintro = function(contact){
         
 
         if (data.action == google.picker.Action.PICKED) {
-                var params = {'about_kind': 'Contact',
-                                      'about_item':$scope.contact.id};
+                var params = {
+                              'access': $scope.contact.access,
+                              'parent':$scope.contact.entityKey
+                            };
                 params.items = new Array();
                
                  $.each(data.docs, function(index) {
@@ -1019,8 +1129,6 @@ $scope.updateintro = function(contact){
                   });
                  Attachement.attachfiles($scope,params);
                     
-                    console.log('after uploading files');
-                    console.log(params);
                 }
       }
      $scope.renderMaps = function(){

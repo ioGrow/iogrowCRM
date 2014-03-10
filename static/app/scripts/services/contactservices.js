@@ -10,18 +10,134 @@ accountservices.factory('Contact', function($http) {
   
   Contact.get = function($scope,id) {
           
-          gapi.client.crmengine.contacts.get(id).execute(function(resp) {
+          gapi.client.crmengine.contacts.getv2(id).execute(function(resp) {
             if(!resp.code){
                $scope.contact = resp;
+               // list infonodes
+                var renderMap = false;
+                if (resp.infonodes){
+                    if (resp.infonodes.items){
+                        for (var i=0;i<resp.infonodes.items.length;i++)
+                        { 
+                          if (resp.infonodes.items[i].kind == 'addresses'){
+                            renderMap = true;
+                          }
+                            $scope.infonodes[resp.infonodes.items[i].kind] = resp.infonodes.items[i].items;
+                            for (var j=0;j<$scope.infonodes[resp.infonodes.items[i].kind].length;j++)
+                              {
+                                for (var v=0;v<$scope.infonodes[resp.infonodes.items[i].kind][j].fields.length;v++)
+                                  {
+                                    $scope.infonodes[resp.infonodes.items[i].kind][j][$scope.infonodes[resp.infonodes.items[i].kind][j].fields[v].field] = $scope.infonodes[resp.infonodes.items[i].kind][j].fields[v].value;
+                                  }
+                              }
+                        }
+                        if (renderMap){
+                          $scope.renderMaps();
+                        }
+                    }
+                }
+                if (resp.topics){
+                  $scope.topics = resp.topics.items;
+                   
+                    if ($scope.topicCurrentPage >1){
+                        console.log('Should show PREV');
+                      $scope.topicpagination.prev = true;
+                    }else{
+                        $scope.topicpagination.prev= false;
+                     }
+                   if (resp.topics.nextPageToken){
+                     var nextPage = $scope.topicCurrentPage + 1;
+                      // Store the nextPageToken
+                     $scope.topicpages[nextPage] = resp.topics.nextPageToken;
+                     $scope.topicpagination.next = true;
+
+                     }else{
+                    $scope.topicpagination.next = false;
+                   }
+                  }
+                  
+                  if (resp.opportunities){
+                      if (!resp.opportunities.items){
+                        $scope.blankStateopportunity = true;
+                      }
+                       $scope.opportunities = resp.opportunities.items;
+                       if ($scope.oppCurrentPage>1){
+                           $scope.opppagination.prev = true;
+                       }else{
+                           $scope.opppagination.prev = false;
+                       }
+                       if (resp.opportunities.nextPageToken){
+                         var nextPage = $scope.oppCurrentPage + 1;
+                         // Store the nextPageToken
+                         $scope.opppages[nextPage] = resp.opportunities.nextPageToken;
+                         $scope.opppagination.next = true;
+                         
+                       }else{
+                        $scope.opppagination.next = false;
+                       }
+
+                  }
+
+                  if (resp.cases){
+                      if (!resp.cases.items){
+                        $scope.blankStatecase = true;
+                      }
+                       $scope.cases = resp.cases.items;
+                       if ($scope.caseCurrentPage>1){
+                          $scope.casepagination.prev = true;
+                       }else{
+                          $scope.casepagination.prev = false;
+                       }
+                     if (resp.cases.nextPageToken){
+                       var nextPage = $scope.caseCurrentPage + 1;
+                       // Store the nextPageToken
+                       $scope.casepages[nextPage] = resp.cases.nextPageToken;
+                       $scope.casepagination.next = true;
+                       
+                     }else{
+                      $scope.casepagination.next = false;
+                     }
+
+                  }
+
+                  if (resp.documents){
+                      if (!resp.documents.items){
+                        $scope.blankStatdocuments = true;
+                      }
+                      $scope.documents = resp.documents.items;
+                      if ($scope.documentCurrentPage >1){
+                          $scope.documentpagination.prev = true;
+                      }else{
+                           $scope.documentpagination.prev = false;
+                      }
+                     if (resp.documents.nextPageToken){
+                      
+                       var nextPage = $scope.documentCurrentPage + 1;
+                       // Store the nextPageToken
+                       $scope.documentpages[nextPage] = resp.documents.nextPageToken;
+                       $scope.documentpagination.next = true;
+                       
+                     }else{
+                      $scope.documentpagination.next = false;
+                     }
+                  }
+
+                  if (resp.tasks){
+                     $scope.tasks = resp.tasks.items;
+                  }
+
+                  if (resp.events){
+                     $scope.events = resp.events.items;
+                  }
                $scope.isContentLoaded = true;
-               $scope.listInfonodes();
-               $scope.listTopics(resp);
-               $scope.listTasks();
-               $scope.listEvents();
-               $scope.listOpportunities();
-               $scope.listCases();
-               $scope.listDocuments();
-               $scope.selectedTab = 2;
+               //$scope.listInfonodes();
+               // $scope.listTopics(resp);
+               // $scope.listTasks();
+               // $scope.listEvents();
+               // $scope.listOpportunities();
+               // $scope.listCases();
+               // $scope.listDocuments();
+               
                //$scope.renderMaps();
 
               document.title = "Contact: " + $scope.contact.firstname +' ' +$scope.contact.lastname ;

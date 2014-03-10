@@ -6,8 +6,37 @@ from protorpc import messages
 from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
 from iomodels.crmengine.tags import Tag,TagSchema
-from iograph import Edge
+from iomodels.crmengine.tasks import Task,TaskRequest,TaskListResponse
+from iomodels.crmengine.events import Event,EventListResponse
+from iograph import Node,Edge,InfoNodeListResponse
+from iomodels.crmengine.notes import Note,TopicListResponse
+from iomodels.crmengine.opportunities import Opportunity,OpportunityListResponse
+from iomodels.crmengine.cases import Case,CaseListResponse
+from iomodels.crmengine.documents import Document,DocumentListResponse
 import model
+
+# The message class that defines the EntityKey schema
+class EntityKeyRequest(messages.Message):
+    entityKey = messages.StringField(1)
+
+ # The message class that defines the ListRequest schema
+class ListRequest(messages.Message):
+    limit = messages.IntegerField(1)
+    pageToken = messages.StringField(2)
+
+class AccountSchema(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    name = messages.StringField(3)
+
+class ContactGetRequest(messages.Message):
+    id = messages.IntegerField(1,required = True)
+    topics = messages.MessageField(ListRequest, 2)
+    tasks = messages.MessageField(ListRequest, 3)
+    events = messages.MessageField(ListRequest, 4)
+    opportunities = messages.MessageField(ListRequest, 5)
+    cases = messages.MessageField(ListRequest, 6)
+    documents = messages.MessageField(ListRequest, 7)
 
 class ContactInsertRequest(messages.Message):
     account = messages.StringField(1)
@@ -21,11 +50,21 @@ class ContactSchema(messages.Message):
     entityKey = messages.StringField(2)
     firstname = messages.StringField(3)
     lastname = messages.StringField(4)
-    account_name = messages.StringField(5)
+    account = messages.MessageField(AccountSchema,5)
     title = messages.StringField(6)
-    tags = messages.MessageField(TagSchema,7, repeated = True)
-    created_at = messages.StringField(8)
-    updated_at = messages.StringField(9)
+    tagline = messages.StringField(7)
+    introduction = messages.StringField(8)
+    infonodes = messages.MessageField(InfoNodeListResponse,9)
+    topics = messages.MessageField(TopicListResponse,10)
+    tasks = messages.MessageField(TaskListResponse,11)
+    events = messages.MessageField(EventListResponse,12)
+    documents = messages.MessageField(DocumentListResponse,13)
+    opportunities = messages.MessageField(OpportunityListResponse,14)
+    cases = messages.MessageField(CaseListResponse,15)
+    tags = messages.MessageField(TagSchema,16, repeated = True)
+    created_at = messages.StringField(17)
+    updated_at = messages.StringField(18)
+    access = messages.StringField(19)
 
 class ContactListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -152,6 +191,91 @@ class Contact(EndpointsModel):
         my_index.put(my_document)
 
     @classmethod
+    def get_schema(cls,user_from_email,request):
+        contact = Contact.get_by_id(int(request.id))
+        if contact is None:
+            raise endpoints.NotFoundException('Contact not found.')
+        parents_edge_list = Edge.list(
+                                    start_node = contact.key,
+                                    kind = 'parents',
+                                    limit = 1
+                                    )
+        account_schema = None
+        if len(parents_edge_list['items'])>0:
+            account = parents_edge_list['items'][0].end_node.get()
+            if account:
+                account_schema = AccountSchema(
+                                        id = str( account.key.id() ),
+                                        entityKey = account.key.urlsafe(),
+                                        name = account.name
+                                        )
+        #list of tags related to this account
+        tag_list = Tag.list_by_parent(contact.key)
+        # list of infonodes
+        infonodes = Node.list_info_nodes(
+                                        parent_key = contact.key,
+                                        request = request
+                                        )
+        #list of topics related to this account
+        topics = None
+        if request.topics:
+            topics = Note.list_by_parent(
+                                        parent_key = contact.key,
+                                        request = request
+                                        )
+        tasks = None
+        if request.tasks:
+            tasks = Task.list_by_parent(
+                                        parent_key = contact.key,
+                                        request = request
+                                        )
+        events = None
+        if request.events:
+            events = Event.list_by_parent(
+                                        parent_key = contact.key,
+                                        request = request
+                                        )
+        opportunities = None
+        if request.opportunities:
+            opportunities = Opportunity.list_by_parent(
+                                        parent_key = contact.key,
+                                        request = request
+                                        )
+        cases = None
+        if request.cases:
+            cases = Case.list_by_parent(
+                                        parent_key = contact.key,
+                                        request = request
+                                        )
+        documents = None
+        if request.documents:
+            documents = Document.list_by_parent(
+                                        parent_key = contact.key,
+                                        request = request
+                                        )
+        contact_schema = ContactSchema(
+                                  id = str( contact.key.id() ),
+                                  entityKey = contact.key.urlsafe(),
+                                  access = contact.access,
+                                  firstname = contact.firstname,
+                                  lastname = contact.lastname,
+                                  title = contact.title,
+                                  account = account_schema,
+                                  tagline = contact.tagline,
+                                  introduction = contact.introduction,
+                                  tags = tag_list,
+                                  topics = topics,
+                                  tasks = tasks,
+                                  events = events,
+                                  opportunities = opportunities,
+                                  cases = cases,
+                                  documents = documents,
+                                  infonodes = infonodes,
+                                  created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                  updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                )
+        return  contact_schema
+    @classmethod
     def list_by_parent(cls,parent_key,request):
         contact_list = []
         contact_edge_list = Edge.list(
@@ -218,6 +342,20 @@ class Contact(EndpointsModel):
                         is_filtered = False
                     if is_filtered:
                         count = count + 1
+                        parents_edge_list = Edge.list(
+                                                    start_node = contact.key,
+                                                    kind = 'parents',
+                                                    limit = 1
+                                                    )
+                        account_schema = None
+                        if len(parents_edge_list['items'])>0:
+                            account = parents_edge_list['items'][0].end_node.get()
+                            if account:
+                                account_schema = AccountSchema(
+                                                        id = str( account.key.id() ),
+                                                        entityKey = account.key.urlsafe(),
+                                                        name = account.name
+                                                        )
                         #list of tags related to this contact
                         tag_list = Tag.list_by_parent(parent_key = contact.key)
                         contact_schema = ContactSchema(
@@ -226,7 +364,7 @@ class Contact(EndpointsModel):
                                   firstname = contact.firstname,
                                   lastname = contact.lastname,
                                   title = contact.title,
-                                  account_name = contact.account_name,
+                                  account = account_schema,
                                   tags = tag_list,
                                   created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")

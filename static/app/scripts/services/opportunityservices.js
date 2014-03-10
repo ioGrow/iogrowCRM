@@ -110,7 +110,7 @@ opportunityservices.factory('Opportunity', function($http) {
     Opportunity.insert = function($scope,opportunity){
       $scope.isLoading = true;
       
-      gapi.client.crmengine.opportunities.insert(opportunity).execute(function(resp) {
+      gapi.client.crmengine.opportunities.insertv2(opportunity).execute(function(resp) {
          
          if(!resp.code){
           $scope.isLoading = false;
