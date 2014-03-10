@@ -18,9 +18,6 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
      $scope.order = '-updated_at';
      $scope.account.account_type = 'Customer';
      $scope.draggedTag=null;
-
-     
-     // What to do after authentication
      $scope.runTheProcess = function(){
           var params = { 'order': $scope.order,
                         'limit':6}
@@ -28,6 +25,15 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
           var paramsTag = {'about_kind':'Account'};
           Tag.list($scope,paramsTag);
      };
+     $scope.getPosition= function(index){
+        if(index<3){
+          console.log(index+1);
+          return index+1;
+        }else{
+          console.log((index%3)+1);
+          return (index%3)+1;
+        }
+     }
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
           Auth.refreshToken();
