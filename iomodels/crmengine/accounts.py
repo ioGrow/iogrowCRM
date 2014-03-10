@@ -50,7 +50,7 @@ class AccountSchema(messages.Message):
     infonodes = messages.MessageField(InfoNodeListResponse,10)
     topics = messages.MessageField(TopicListResponse,11)
     tasks = messages.MessageField(TaskListResponse,12)
-    events = messages.MessageField(TaskListResponse,13)
+    events = messages.MessageField(EventListResponse,13)
     opportunities = messages.MessageField(OpportunityListResponse,14)
     cases = messages.MessageField(CaseListResponse,15)
     documents = messages.MessageField(DocumentListResponse,16)

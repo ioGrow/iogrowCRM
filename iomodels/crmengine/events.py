@@ -1,6 +1,12 @@
+import datetime
+import endpoints
 from google.appengine.ext import ndb
 from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.api import search 
+from apiclient.discovery import build
+from google.appengine.api import memcache
+import httplib2
+from endpoints_helper import EndpointsHelper
 from protorpc import messages
 from endpoints_proto_datastore.ndb import EndpointsModel
 from iomodels.crmengine.notes import Topic, AuthorSchema,DiscussionAboutSchema
@@ -31,13 +37,12 @@ class EventSchema(messages.Message):
     updated_at = messages.StringField(9)
 
 class EventInsertRequest(messages.Message):
-    about = messages.StringField(1)
-    title = messages.StringField(2,required=True)
-    due = messages.StringField(3)
-    reminder = messages.StringField(4)
-    status = messages.StringField(5)
-    assignees = messages.MessageField(EntityKeyRequest,6, repeated = True)
-    tags = messages.MessageField(EntityKeyRequest,7, repeated = True)
+    parent = messages.StringField(1)
+    title = messages.StringField(2)
+    starts_at = messages.StringField(3)
+    ends_at = messages.StringField(4)
+    where = messages.StringField(5)
+    access = messages.StringField(6)
 
 class EventListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -96,32 +101,58 @@ class Event(EndpointsModel):
                          value = self.owner)
         perm.put()
 
-
-    def put_index(self):
+    def put_index(self,data=None):
         """ index the element at each"""
         empty_string = lambda x: x if x else ""
         collaborators = " ".join(self.collaborators_ids)
         organization = str(self.organization.id())
-        my_document = search.Document(
-        doc_id = str(self.key.id()),
-        fields=[
-            search.TextField(name=u'type', value=u'Event'),
-            search.TextField(name='organization', value = empty_string(organization) ),
-            search.TextField(name='access', value = empty_string(self.access) ),
-            search.TextField(name='owner', value = empty_string(self.owner) ),
-            search.TextField(name='collaborators', value = collaborators ),
-            search.TextField(name='where', value = empty_string(self.where) ),
-            search.TextField(name='status', value = empty_string(self.status)),
-            search.TextField(name='title', value = empty_string(self.title)),
-            search.DateField(name='created_at', value = self.created_at),
-            search.DateField(name='updated_at', value = self.updated_at),
-            #search.DateField(name='starts_at', value = self.starts_at),
-            #search.DateField(name='ends_at', value = self.ends_at),
-            search.NumberField(name='comments', value = self.comments),
-            search.TextField(name='about_kind', value = empty_string(self.about_kind)),
-            search.TextField(name='about_item', value = empty_string(self.about_item)),
+        if data:
+            search_key = ['infos','events','tags']
+            for key in search_key:
+                if key not in data.keys():
+                    data[key] = ""
+            my_document = search.Document(
+            doc_id = str(data['id']),
+            fields=[
+                search.TextField(name=u'type', value=u'Event'),
+                search.TextField(name='organization', value = empty_string(organization) ),
+                search.TextField(name='access', value = empty_string(self.access) ),
+                search.TextField(name='owner', value = empty_string(self.owner) ),
+                search.TextField(name='collaborators', value = collaborators ),
+                search.TextField(name='where', value = empty_string(self.where) ),
+                search.TextField(name='status', value = empty_string(self.status)),
+                search.TextField(name='title', value = empty_string(self.title)),
+                search.DateField(name='created_at', value = self.created_at),
+                search.DateField(name='updated_at', value = self.updated_at),
+                search.TextField(name='infos', value= data['infos']),
+                search.TextField(name='tags', value= data['tags']),
+                search.TextField(name='events', value= data['events']),
+                search.NumberField(name='comments', value = self.comments),
+                search.TextField(name='about_kind', value = empty_string(self.about_kind)),
+                search.TextField(name='about_item', value = empty_string(self.about_item)),
 
-           ])
+               ])
+        else:
+            my_document = search.Document(
+            doc_id = str(self.key.id()),
+            fields=[
+                search.TextField(name=u'type', value=u'Event'),
+                search.TextField(name='organization', value = empty_string(organization) ),
+                search.TextField(name='access', value = empty_string(self.access) ),
+                search.TextField(name='owner', value = empty_string(self.owner) ),
+                search.TextField(name='collaborators', value = collaborators ),
+                search.TextField(name='where', value = empty_string(self.where) ),
+                search.TextField(name='status', value = empty_string(self.status)),
+                search.TextField(name='title', value = empty_string(self.title)),
+                search.DateField(name='created_at', value = self.created_at),
+                search.DateField(name='updated_at', value = self.updated_at),
+                #search.DateField(name='starts_at', value = self.starts_at),
+                #search.DateField(name='ends_at', value = self.ends_at),
+                search.NumberField(name='comments', value = self.comments),
+                search.TextField(name='about_kind', value = empty_string(self.about_kind)),
+                search.TextField(name='about_item', value = empty_string(self.about_item)),
+
+               ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)
 
@@ -156,4 +187,80 @@ class Event(EndpointsModel):
                                 items = event_list,
                                 nextPageToken = event_next_curs
                                 )
-  
+    @classmethod
+    def insert(cls,user_from_email,request):
+        author = Userinfo()
+        author.google_user_id = user_from_email.google_user_id
+        author.display_name = user_from_email.google_display_name
+        author.photo = user_from_email.google_public_profile_photo_url
+        event = cls(
+                    owner = user_from_email.google_user_id,
+                    organization = user_from_email.organization,
+                    access = request.access,
+                    title = request.title,
+                    starts_at = datetime.datetime.strptime(request.starts_at,"%Y-%m-%dT%H:%M:00.000000"),
+                    ends_at = datetime.datetime.strptime(request.ends_at,"%Y-%m-%dT%H:%M:00.000000"),
+                    where = request.where,
+                    author = author
+                    )
+        try:
+            print '11111111@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
+            credentials = user_from_email.google_credentials
+            print credentials
+            http = credentials.authorize(httplib2.Http(memcache))
+            print 'bad bad'
+            service = build('calendar', 'v3', http=http)
+            print '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
+            print event
+            # prepare params to insert
+            params = {
+                     "start":
+                          {
+                          "dateTime": event.starts_at.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
+                          },
+                     "end":
+                          {
+                           "dateTime": event.ends_at.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
+                      },
+                    "summary": request.title,
+                    "location": request.where,
+                    "reminders":
+                    {
+                      "overrides":
+                      [
+                      {
+                        "method": 'email',
+                        "minutes": 30
+                      }
+                    ],
+                    "useDefault": False
+                  }
+
+            }
+            print '****************************************'
+            print params
+
+            created_event = service.events().insert(calendarId='primary',body=params).execute()
+
+        except:
+            raise endpoints.UnauthorizedException('Invalid grant' )
+            
+        event_key = event.put_async()
+        event_key_async = event_key.get_result()
+        if request.parent:
+            parent_key = ndb.Key(urlsafe=request.parent)
+            # insert edges
+            Edge.insert(start_node = parent_key,
+                      end_node = event_key_async,
+                      kind = 'events',
+                      inverse_edge = 'parents')
+            EndpointsHelper.update_edge_indexes(
+                                            parent_key = event_key_async,
+                                            kind = 'events',
+                                            indexed_edge = str(parent_key.id())
+                                            )
+        else:
+            data = {}
+            data['id'] = event_key_async.id()
+            event.put_index(data)
+        return EventSchema(id=str(event_key_async.id()))

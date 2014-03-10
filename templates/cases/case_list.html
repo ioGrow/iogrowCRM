@@ -236,8 +236,8 @@
                        <div class="row margin-bottom-10">
                           <div class="col-md-12">
 
-                                    <span ng-show="casee.status" class="contact-title" >Updated at:  <%=casee.updated_at | date:'yyyy-MM-dd - HH:mm:ss ' %> </span>                           
-                                    <span ng-show="casee.status" class="contact-title" >Status: <a class="desc" href="/#/search/type:Case <%=casee.status%>"> <%=casee.status %></a>  - </span>
+                                    <span ng-show="casee.updated_at" class="contact-title" >Updated at:  <%=casee.updated_at | date:'yyyy-MM-dd - HH:mm:ss ' %> </span>                           
+                                    <span ng-show="casee.current_status" class="contact-title" >Status: <a class="desc" href="/#/search/type:Case <%=casee.status%>"> <%=casee.current_status.name %></a>  - </span>
                                     <span ng-show="casee.priority" class="contact-title">Priority: <a  class="desc" href="/#/search/type:Case <%=casee.priority%>"><%=casee.priority %></span> 
                                     <span ng-show="casee.contact_name" class="contact-title"> Customer:
                                     <a  class="desc" href="/#/search/type:Case <%=casee.contact_name%>"><%=casee.contact_name %></a>

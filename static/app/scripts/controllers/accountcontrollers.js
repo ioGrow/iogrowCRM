@@ -420,19 +420,40 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        $scope.runTheProcess = function(){
           var params = {
                           'id':$route.current.params.accountId,
-                          'contacts':{
-                            'limit': '6'
-                          },
+                          
                           'topics':{
                             'limit': '7'
                           },
 
-                          'needs':{
-                            'limit': '7'
+                          'contacts':{
+                            'limit': '6'
                           },
+                          
+                          'needs':{
+                            'limit': '6'
+                          },
+
+                          'opportunities':{
+                            'limit': '6'
+                          },
+
+                          'cases':{
+                            'limit': '6'
+                          },
+
+                          'documents':{
+                            'limit': '6'
+                          },
+
                           'tasks':{
                             
+                          },
+
+                          'events':{
+                            
                           }
+
+
                           };
           Account.get($scope,params);
           User.list($scope,{});
@@ -454,43 +475,48 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
         var nextPage = $scope.topicCurrentPage + 1;
         var params = {};
           if ($scope.topicpages[nextPage]){
-
-            params = {'about_kind':'Account',
-                      'about_item':$scope.account.id,
-                      'order': '-updated_at',
-                      'limit': 5,
-                      'pageToken':$scope.topicpages[nextPage]
+            params = {
+                      'id':$scope.account.id,
+                        'topics':{
+                          'limit': '7',
+                          'pageToken':$scope.topicpages[nextPage]
+                        }
                      }
-          }else{
-            params = {'about_kind':'Account',
-                      'about_item':$scope.account.id,
-                      'order': '-updated_at',
-                      'limit':5}
+            }else{
+            params = {
+                      'id':$scope.account.id,
+                        'topics':{
+                          'limit': '7'
+                        }
+                     }
           }
-          console.log('in listNextPageItems');
+          
           $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ; 
-          Topic.list($scope,params);
+          Account.get($scope,params);
      }
      $scope.TopiclistPrevPageItems = function(){
        
        var prevPage = $scope.topicCurrentPage - 1;
        var params = {};
-       console.log('i am here now');
+       
           if ($scope.topicpages[prevPage]){
-            params = {'about_kind':'Account',
-                      'about_item':$scope.account.id,
-                      'order': '-updated_at',
-                      'limit': 5,
-                      'pageToken':$scope.topicpages[prevPage]
+            params = {
+                      'id':$scope.account.id,
+                        'topics':{
+                          'limit': '7',
+                          'pageToken':$scope.topicpages[prevPage]
+                        }
                      }
           }else{
-            params = {'about_kind':'Account',
-                      'about_item':$scope.account.id,
-                      'order': '-updated_at',
-                      'limit': 5}
+            params = {
+                      'id':$scope.account.id,
+                        'topics':{
+                          'limit': '7'
+                        }
+                     }
           }
           $scope.topicCurrentPage = $scope.topicCurrentPage - 1 ;
-          Topic.list($scope,params);
+          Account.get($scope,params);
           
      }
 
@@ -550,33 +576,46 @@ $scope.OpplistNextPageItems = function(){
         var nextPage = $scope.oppCurrentPage + 1;
         var params = {};
           if ($scope.opppages[nextPage]){
-            params = {'limit':6,
-                      'account':$scope.account.entityKey,
-                      'pageToken':$scope.opppages[nextPage]
+            params = {
+                      'id':$scope.account.id,
+                        'opportunities':{
+                          'limit': '6',
+                          'pageToken':$scope.opppages[nextPage]
+                        }
                      }
-          }else{
-            params = {'limit':6,
-            'account':$scope.account.entityKey}
+            }else{
+            params = {
+                      'id':$scope.account.id,
+                        'opportunities':{
+                          'limit': '6'
+                        }
+                     }
           }
-          console.log('in listNextPageItems');
           $scope.oppCurrentPage = $scope.oppCurrentPage + 1 ; 
-          Opportunity.list($scope,params);
+          Account.get($scope,params);
      }
      $scope.OppPrevPageItems = function(){
        
        var prevPage = $scope.oppCurrentPage - 1;
        var params = {};
           if ($scope.opppages[prevPage]){
-            params = {'limit':6,
-                      'account':$scope.account.entityKey,
-                      'pageToken':$scope.opppages[prevPage]
+            params = {
+                      'id':$scope.account.id,
+                        'opportunities':{
+                          'limit': '6',
+                          'pageToken':$scope.opppages[prevPage]
+                        }
                      }
-          }else{
-            params = {'limit':6,
-                      'account':$scope.account.entityKey}
+            }else{
+            params = {
+                      'id':$scope.account.id,
+                        'opportunities':{
+                          'limit': '6'
+                        }
+                     }
           }
           $scope.oppCurrentPage = $scope.oppCurrentPage - 1 ;
-            Opportunity.list($scope,params);
+          Account.get($scope,params);
      };
 
      //HKA 07.12.2013 Manage Prev & Next Page on Related List Cases
@@ -586,33 +625,46 @@ $scope.CaselistNextPageItems = function(){
         var nextPage = $scope.caseCurrentPage + 1;
         var params = {};
           if ($scope.casepages[nextPage]){
-            params = {'limit':6,
-                      'account':$scope.account.entityKey,
-                      'pageToken':$scope.casepages[nextPage]
+            params = {
+                      'id':$scope.account.id,
+                        'cases':{
+                          'limit': '6',
+                          'pageToken':$scope.casepages[nextPage]
+                        }
                      }
           }else{
-            params = {'limit':6,
-            'account':$scope.account.entityKey}
+            params = {
+                      'id':$scope.account.id,
+                        'cases':{
+                          'limit': '6'
+                        }
+                     }
           }
-          console.log('in listNextPageItems');
           $scope.caseCurrentPage = $scope.caseCurrentPage + 1 ; 
-          Case.list($scope,params);
+          Account.get($scope,params);
      }
      $scope.CasePrevPageItems = function(){
             
        var prevPage = $scope.caseCurrentPage - 1;
        var params = {};
           if ($scope.casepages[prevPage]){
-            params = {'limit':6,
-                      'account':$scope.account.entityKey,
-                      'pageToken':$scope.casepages[prevPage]
+            params = {
+                      'id':$scope.account.id,
+                        'cases':{
+                          'limit': '6',
+                          'pageToken':$scope.casepages[prevPage]
+                        }
                      }
-          }else{
-            params = {'limit':6,
-                      'account':$scope.account.entityKey}
+            }else{
+            params = {
+                      'id':$scope.account.id,
+                        'cases':{
+                          'limit': '6'
+                        }
+                     }
           }
           $scope.caseCurrentPage = $scope.caseCurrentPage - 1 ;
-            Case.list($scope,params);
+          Account.get($scope,params);
      };
      $scope.NeedlistNextPageItems = function(){
         
@@ -620,37 +672,47 @@ $scope.CaselistNextPageItems = function(){
         var nextPage = $scope.needsCurrentPage + 1;
         var params = {};
           if ($scope.needspages[nextPage]){
-            params = {'limit':6,
-                      'about_kind':'Account',
-                      'about_item': $scope.account.id,
-                      'pageToken':$scope.needspages[nextPage]
+            params = {
+                      'id':$scope.account.id,
+                        'needs':{
+                          'limit': '6',
+                          'pageToken':$scope.needspages[nextPage]
+                        }
                      }
+            
           }else{
-            params = {'limit':6,
-                      'about_kind':'Account',
-                      'about_item': $scope.account.id}
+            params = {
+                      'id':$scope.account.id,
+                        'needs':{
+                          'limit': '6'
+                        }
+                     }
           }
-          console.log('in listNextPageItems');
           $scope.needsCurrentPage = $scope.needsCurrentPage + 1 ; 
-          Need.list($scope,params);
+          Account.get($scope,params);
      }
      $scope.NeedPrevPageItems = function(){
             
        var prevPage = $scope.needsCurrentPage - 1;
        var params = {};
           if ($scope.needspages[prevPage]){
-            params = {'limit':6,
-                      'about_kind':'Account',
-                      'about_item': $scope.account.id,
-                      'pageToken':$scope.needspages[prevPage]
+            params = {
+                      'id':$scope.account.id,
+                        'needs':{
+                          'limit': '6',
+                          'pageToken':$scope.needspages[prevPage]
+                        }
                      }
           }else{
-            params = {'limit':6,
-                      'about_kind':'Account',
-                      'about_item': $scope.account.id}
+            params = {
+                      'id':$scope.account.id,
+                        'needs':{
+                          'limit': '6'
+                        }
+                     }
           }
           $scope.needsCurrentPage = $scope.needsCurrentPage - 1 ;
-            Need.list($scope,params);
+          Account.get($scope,params);
      };
   // HKA 09.02.2014 Manage Next Prev page on ducument list
      $scope.DocumentlistNextPageItems = function(){
@@ -659,40 +721,52 @@ $scope.CaselistNextPageItems = function(){
         var nextPage = $scope.documentCurrentPage + 1;
         var params = {};
           if ($scope.documentpages[nextPage]){
-            params = {'limit':6,
-                      'about_kind':'Account',
-                      'about_item': $scope.account.id,
-                      'pageToken':$scope.documentpages[nextPage]
-                     }
+            params = {
+                        'id':$scope.account.id,
+                        'documents':{
+                          'limit': '6',
+                          'pageToken':$scope.documentpages[nextPage]
+                        }
+                      }
+            
           }else{
-            params = {'limit':6,
-                      'about_kind':'Account',
-                      'about_item': $scope.account.id}
-          }
+            params = {
+                        'id':$scope.account.id,
+                        'documents':{
+                          'limit': '6'
+                        }
+                      }
+            }
           $scope.documentCurrentPage = $scope.documentCurrentPage + 1 ;
           
-          Attachement.list($scope,params);
-            console.log('------------------One two three next ----');
+          Account.get($scope,params);
+          
      }
      $scope.DocumentPrevPageItems = function(){
             
        var prevPage = $scope.documentCurrentPage - 1;
        var params = {};
           if ($scope.documentpages[prevPage]){
-            params = {'limit':6,
-                      'about_kind':'Account',
-                      'about_item': $scope.account.id,
-                      'pageToken':$scope.documentpages[prevPage]
-                     }
+            params = {
+                        'id':$scope.account.id,
+                        'documents':{
+                          'limit': '6',
+                          'pageToken':$scope.documentpages[prevPage]
+                        }
+                      }
+            
           }else{
-            params = {'limit':6,
-                      'about_kind':'Account',
-                      'about_item': $scope.account.id}
+            params = {
+                        'id':$scope.account.id,
+                        'documents':{
+                          'limit': '6'
+                        }
+                      }
           }
           $scope.documentCurrentPage = $scope.documentCurrentPage - 1 ;
-            Attachement.list($scope,params);
+          Account.get($scope,params);
 
-              console.log('------------------One two three ---- 1SS');
+              
      };
 
      
@@ -707,12 +781,13 @@ $scope.CaselistNextPageItems = function(){
 
      }
      $scope.listDocuments = function(){
-        var params = {'about_kind':'Account',
-                      'about_item':$scope.account.id,
-                      'order': '-updated_at',
-                      'limit': 6
-                      };
-        Attachement.list($scope,params);
+        var params = {
+                        'id':$scope.account.id,
+                        'documents':{
+                          'limit': '6'
+                        }
+                      }
+        Account.get($scope,params);
 
      }
      
@@ -736,16 +811,17 @@ $scope.CaselistNextPageItems = function(){
      };
      $scope.createDocument = function(newdocument){
         var mimeType = 'application/vnd.google-apps.' + $scope.mimeType;
-        var params = {'about_kind':'Account',
-                      'about_item': $scope.account.id,
+        var params = {
+                      'parent': $scope.account.entityKey,
                       'title':newdocument.title,
-                      'mimeType':mimeType };
+                      'mimeType':mimeType 
+                     };
         Attachement.insert($scope,params);
-        $('#newDocument').modal('hide');
-        $scope.newdocument.title = '';
+       
      };
      $scope.createPickerUploader = function() {
           var projectfolder = $scope.account.folder;
+          var developerKey = 'AIzaSyD___EKeONhEP1JDWsNQi0zQhlGGzuwRI4';
           var docsView = new google.picker.DocsView()
               .setIncludeFolders(true) 
               .setSelectFolderEnabled(true);
@@ -753,7 +829,9 @@ $scope.CaselistNextPageItems = function(){
               addView(new google.picker.DocsUploadView().setParent(projectfolder)).
               addView(docsView).
               setCallback($scope.uploaderCallback).
-              setAppId(12345).
+              setOAuthToken(window.authResult.access_token).
+              setDeveloperKey(developerKey).
+              setAppId(987765099891).
                 enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
               build();
           picker.setVisible(true);
@@ -763,18 +841,14 @@ $scope.CaselistNextPageItems = function(){
         
 
         if (data.action == google.picker.Action.PICKED) {
-                var params = {'about_kind': 'Account',
-                                      'about_item':$scope.account.id};
+                var params = {
+                              'access': $scope.account.access,
+                              'parent':$scope.account.entityKey
+                            };
                 params.items = new Array();
                
                  $.each(data.docs, function(index) {
-                      console.log(data.docs);
-                      /*
-                      {'about_kind':'Account',
-                      'about_item': $scope.account.id,
-                      'title':newdocument.title,
-                      'mimeType':mimeType };
-                      */
+                     
                       var item = { 'id':data.docs[index].id,
                                   'title':data.docs[index].name,
                                   'mimeType': data.docs[index].mimeType,
@@ -786,15 +860,11 @@ $scope.CaselistNextPageItems = function(){
                   });
                  Attachement.attachfiles($scope,params);
                     
-                    console.log('after uploading files');
-                    console.log(params);
+                  
                 }
       }
      $scope.share = function(slected_memeber){
-        console.log('permissions.insert share');
-        console.log(slected_memeber);
-        console.log("---------------- ooooooooooopppppppppppe");
-        console.log($scope.account.access);
+        
         $scope.$watch($scope.account.access, function() {
          var body = {'access':$scope.account.access};
          var id = $scope.account.id;
@@ -835,14 +905,11 @@ $scope.CaselistNextPageItems = function(){
       };
       
     $scope.addNote = function(note){
-      console.log('debug addNote');
-      
       var params ={
                   'about': $scope.account.entityKey,
                   'title': note.title,
                   'content': note.content
       };
-      console.log(params);
       Note.insert($scope,params);
       $scope.note.title = '';
       $scope.note.content = '';
@@ -868,31 +935,25 @@ $scope.CaselistNextPageItems = function(){
    $scope.addTask = function(task){
       
         $('#myModal').modal('hide');
-        var params ={'about_kind':'Account',
-                      'about_item':$scope.account.id}
-
-        console.log('adding a new task');
-        console.log(task);
-        
         if (task.due){
 
-            var dueDate= $filter('date')(task.due,['yyyy-MM-dd']);
-            dueDate = dueDate +'T00:00:00.000000'
+            var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
+            
             params ={'title': task.title,
                       'due': dueDate,
-                      'about': $scope.account.entityKey
+                      'parent': $scope.account.entityKey
             }
-            console.log(dueDate);
+            
             
         }else{
             params ={'title': task.title,
-                     'about': $scope.account.entityKey
+                     'parent': $scope.account.entityKey
                    }
         };
-       
-        Task.insert($scope,params);
         $scope.task.title='';
         $scope.task.dueDate='0000-00-00T00:00:00-00:00';
+        Task.insert($scope,params);
+        
      };
 
      $scope.hilightTask = function(){
@@ -920,20 +981,18 @@ $scope.CaselistNextPageItems = function(){
                       'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
                       'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
                       'where': ioevent.where,
-                      'about_kind':'Account',
-                      'about_item':$scope.account.id
+                      'parent':$scope.account.entityKey
               }
 
             }else{
-              params ={'title': ioevent.title,
+              params ={
+                'title': ioevent.title,
                       'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
                       'where': ioevent.where,
-                      'about_kind':'Account',
-                      'about_item':$scope.account.id
+                      'parent':$scope.account.entityKey
               }
             }
-            console.log('inserting the event');
-            console.log(params);
+            
             Event.insert($scope,params);
             $scope.ioevent.title='';
             $scope.ioevent.where='';
@@ -947,12 +1006,13 @@ $scope.CaselistNextPageItems = function(){
        
      };
      $scope.listEvents = function(){
-        var params = {'about_kind':'Account',
-                      'about_item':$scope.account.id,
-                      'order': 'starts_at',
-                      'limit': 5
+        var params = {
+                        'id':$scope.account.id,
+                        'events':{
+                          
+                        }
                       };
-        Event.list($scope,params);
+        Account.get($scope,params);
 
      };
 
@@ -977,36 +1037,47 @@ $scope.CaselistNextPageItems = function(){
   
   //HKA 22.11.2013 List of Contacts related to account
    $scope.listContacts = function(){
-    var params = {'account':$scope.account.entityKey,
-                   'limit':6
-                      };
-         Contact.list($scope,params);
+    var params = {
+                  'id':$scope.account.id,
+                  'contacts':{
+                    'limit': '6'
+                  }
+                 };
+    Account.get($scope,params);
    };
 
   //HKA 22.11.2013 List of Opportunities related to account
    $scope.listOpportunities = function(){
-    var params = {'account':$scope.account.entityKey,
-                   'limit':6
-                      };
-         Opportunity.list($scope,params);
+    var params = {
+                  'id':$scope.account.id,
+                  'opportunities':{
+                    'limit': '6'
+                  }
+                 };
+    Account.get($scope,params);
    };
 
   //HKA 22.11.2013 List of Cases related to account
    $scope.listCases = function(){
 
-    var params = {'account':$scope.account.entityKey,
-                   'limit':6
-                      };
-         Case.list($scope,params);
+    var params = {
+                  'id':$scope.account.id,
+                  'cases':{
+                    'limit': '6'
+                  }
+                 };
+    Account.get($scope,params);
         
    };
    $scope.listNeeds = function(){
 
-    var params = {'about_kind':'Account',
-                  'about_item': $scope.account.id,
-                   'limit':6
-                      };
-         Need.list($scope,params);
+    var params = {
+                  'id':$scope.account.id,
+                  'needs':{
+                    'limit': '6'
+                  }
+                 };
+    Account.get($scope,params);
         
    };
 
@@ -1035,12 +1106,9 @@ $scope.CaselistNextPageItems = function(){
     $scope.saveOpp = function(opportunity){
          
        var params = {'name':opportunity.name,
-                      'description':opportunity.description,
                       'amount': opportunity.amount,
                       'account':$scope.account.entityKey,
-                      'account_name': $scope.account.name,
-                      'stagename' :$scope.stage_selected.name,
-                      'stage_probability':$scope.stage_selected.probability,
+                      'stage' :$scope.stage_selected.entityKey,
                       'access': $scope.account.access
                       };
 
@@ -1054,10 +1122,8 @@ $scope.CaselistNextPageItems = function(){
           console.log($scope.status_selected.status);
         var params = {'name':casee.name,
                       'priority':casee.priority,
-                      'status': $scope.status_selected.status,
-                      'type_case':casee.type_case,
+                      'status': $scope.status_selected.entityKey,
                       'account':$scope.account.entityKey,
-                      'account_name': $scope.account.name,
                       'access': $scope.account.access
                       };
       Case.insert($scope,params);

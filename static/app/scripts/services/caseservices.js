@@ -84,7 +84,7 @@ accountservices.factory('Case', function() {
   };
   Case.insert = function($scope,casee){
      $scope.isLoading = true;
-      gapi.client.crmengine.cases.insert(casee).execute(function(resp) {
+      gapi.client.crmengine.cases.insertv2(casee).execute(function(resp) {
          console.log('in insert resp');
          console.log(resp);
          if(!resp.code){
