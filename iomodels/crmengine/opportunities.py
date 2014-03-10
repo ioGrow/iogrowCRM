@@ -54,7 +54,7 @@ class OpportunitySearchResults(messages.Message):
 
 class Opportunity(EndpointsModel):
 
-    _message_fields_schema = ('id','entityKey','owner', 'created_at', 'updated_at', 'folder', 'access','collaborators_list','collaborators_ids', 'name','description','amount','account','account_name','account_id','contact','contact_name','contact_id','updated_at','stagename','stage_probability')
+    _message_fields_schema = ('id','entityKey','owner', 'created_at', 'updated_at', 'folder', 'access','collaborators_list','collaborators_ids', 'name','description','amount','account','account_name','account_id','contact','contact_name','contact_id','updated_at','stagename','stage_probability','closed_date','reason_lost','opportunity_type','competitor','source')
 
     # Sharing fields
     owner = ndb.StringProperty()
@@ -73,7 +73,7 @@ class Opportunity(EndpointsModel):
     industry = ndb.StringProperty()
     amount = ndb.IntegerProperty()
     closed_date = ndb.DateTimeProperty()
-    reason_lost = ndb.DateTimeProperty()
+    reason_lost = ndb.StringProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
     created_by = ndb.KeyProperty()
@@ -81,6 +81,9 @@ class Opportunity(EndpointsModel):
     address = ndb.StringProperty()
     stagename = ndb.StringProperty()
     stage_probability = ndb.IntegerProperty()
+    competitor = ndb.StringProperty()
+    source = ndb.StringProperty()
+    opportunity_type = ndb.StringProperty()
     
     # public or private
     access = ndb.StringProperty()
@@ -205,8 +208,6 @@ class Opportunity(EndpointsModel):
                                   id = str( opportunity.key.id() ),
                                   entityKey = opportunity.key.urlsafe(),
                                   name = opportunity.name,
-                                  stagename = opportunity.stagename,
-                                  stage_probability = str(opportunity.stage_probability),
                                   amount = str(opportunity.amount),
                                   tags = tag_list,
                                   created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),

@@ -24,6 +24,7 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
      $scope.order = '-updated_at';
      $scope.selected_tags = [];
      $scope.draggedTag=null;
+     $scope.selectedTab = 2;
 
       // What to do after authentication
        $scope.runTheProcess = function(){
@@ -419,8 +420,8 @@ $scope.addTags=function(){
      Auth.init($scope);
      
 }]);
-app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage','Email','Attachement',
-    function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email,Attachement) {
+app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage','Email','Attachement','InfoNode',
+    function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email,Attachement,InfoNode) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Opportunities").addClass("active");
       $scope.selectedTab = 1;
@@ -442,6 +443,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
      $scope.slected_memeber = undefined;
       $scope.stage_selected={};
       $scope.email = {};
+      $scope.infonodes = {};
 
       // What to do after authentication
        $scope.runTheProcess = function(){
@@ -635,7 +637,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
         };
      };
      $scope.hilightEvent = function(){
-        console.log('Should higll');
+        
         $('#event_0').effect("highlight","slow");
         $('#event_0').effect( "bounce", "slow" );
        
@@ -672,9 +674,8 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
     
   console.log($scope.opportunity.stagename);
   Opportunity.patch($scope,params);
-  console.log('------------------');
-   console.log($scope.opportunity.stagename);
- $scope.$watch($scope.opportunity.stagename, $scope.createNote());
+
+ //$scope.$watch($scope.opportunity.stagename, $scope.createNote());
   /*$scope.$watch($scope.opportunity.stagename, function(newVal, oldVal) {
      var paramsNote = {
                   'about_kind': 'Opportunity',
@@ -796,7 +797,104 @@ $scope.deleteopportunity= function(){
                     console.log('after uploading files');
                     console.log(params);
                 }
-      }
+      };
+
+  //06.03.2014 Edit Close date, Reason lost, Main competitor, Type, Description, Source : show Modal
+     $scope.editclosedate = function(){
+     $('#EditCloseDate').modal('show')
+     };
+     $scope.editcompetitor = function(){
+     $('#EditCompetitor').modal('show')
+     };
+     $scope.editreasonlost = function(){
+     $('#EditReasonLost').modal('show')
+     };
+     $scope.editdescription = function(){
+     $('#EditDescription').modal('show')
+     };
+      $scope.edittype = function(){
+     $('#EditType').modal('show')
+     };
+     $scope.editsource = function(){
+     $('#EditSource').modal('show')
+     };
+
+    //07.03.2014 update Close date, Reason lost, Main competitor, Type, Description, Source
+
+     $scope.updateClosedate = function(opportunity){
+      console.log('***************close date**************');
+      console.log(opportunity.closed_date);
+      var close_at = $filter('date')(opportunity.closed_date,['yyyy-MM-ddTHH:mm:00.000000']);
+      console.log(close_at);
+      params = {'id':$scope.opportunity.id,
+              'closed_date':close_at};
+      Opportunity.patch($scope,params);
+      $('#EditCloseDate').modal('hide');
+     };
+
+     $scope.updateCompetitor = function(opportunity){
+      params = {'id':$scope.opportunity.id,
+             'competitor':opportunity.competitor};
+      Opportunity.patch($scope,params);
+      $('#EditCompetitor').modal('hide');
+     };
+
+     $scope.updateReasonlost = function(opportunity){
+      params = {'id':$scope.opportunity.id,
+              'reason_lost':opportunity.reason_lost};
+      Opportunity.patch($scope,params);
+      $('#EditReasonLost').modal('hide');
+     };
+
+     $scope.updateDescription = function(opportunity){
+      params = {'id':$scope.opportunity.id,
+              'description':opportunity.description};
+      Opportunity.patch($scope,params);
+      $('#EditDescription').modal('hide');
+     };
+
+
+     $scope.updateType = function(opportunity){
+      params = {'id':$scope.opportunity.id,
+              'opportunity_type':opportunity.opportunity_type};
+      Opportunity.patch($scope,params);
+      $('#EditType').modal('hide');
+     };
+
+
+     $scope.updatsource = function(opportunity){
+      params = {'id':$scope.opportunity.id,
+              'source':opportunity.source};
+      Opportunity.patch($scope,params);
+      $('#EditSource').modal('hide');
+     };
+     
+    //HKA 07.03.2014 Add Custom field
+
+    $scope.addCustomField = function(customField){
+      params = {'parent':$scope.opportunity.entityKey,
+            'kind':'customfields',
+            'fields':[
+                {
+                  "field": customField.field,
+                  "value": customField.value
+                }
+            ]
+  };
+  InfoNode.insert($scope,params);
+
+  $('#customfields').modal('hide');
+  
+};
+
+$scope.listInfonodes = function(kind) {
+     params = {'parent':$scope.opportunity.entityKey,
+               'connections': kind
+              };
+     InfoNode.list($scope,params);
+   
+ };
+
 
     
      // Google+ Authentication 
