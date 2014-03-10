@@ -149,6 +149,15 @@ accountservices.factory('Contact', function($http) {
                // Call the method $apply to make the update on the scope
                 $scope.isLoading = false;
                $scope.$apply();
+               if (resp.topics){
+                    $scope.hilightTopic();
+                };
+                if (resp.tasks){
+                    $scope.hilightTask();
+                }
+                if (resp.events){
+                    $scope.hilightEvent();
+                }
 
             }else {
               if(resp.message=="Invalid token"){
