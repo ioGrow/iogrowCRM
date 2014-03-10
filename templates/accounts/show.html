@@ -795,7 +795,7 @@
                         <label  class="required col-md-3 control-label">{{_("Status")}}</label>
                        
                         <div class="col-md-9">
-                          <select  class="form-control" ng-model="status_selected" ng-options="stat.status for stat in casesatuses" >
+                          <select  class="form-control" ng-model="status_selected" ng-options="stat.status for stat in casesatuses" required>
                             <option value="">Choose Status</option>
                             <!--option value=""><%=status_selected.status%></option-->
                           </select>

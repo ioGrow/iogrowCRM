@@ -11,7 +11,19 @@ from model import Userinfo
 from iomodels.crmengine.tags import Tag,TagSchema
 from iograph import Edge
 from protorpc import messages
+from protorpc import message_types
 import model
+
+class AttachmentSchema(messages.Message):
+    id = messages.StringField(1)
+    title = messages.StringField(2)
+    mimeType = messages.StringField(3)
+    embedLink = messages.StringField(4)
+
+class MultipleAttachmentRequest(messages.Message):
+    parent = messages.StringField(1)
+    items = messages.MessageField(AttachmentSchema, 2, repeated=True)
+    access = messages.StringField(3)
 
 class DocumentInsertRequest(messages.Message):
     title = messages.StringField(1,required=True)
@@ -35,7 +47,7 @@ class DocumentSchema(messages.Message):
     tags = messages.MessageField(TagSchema,9, repeated = True)
     created_at = messages.StringField(10)
     updated_at = messages.StringField(11)
-    access = messages.IntegerField(12)
+    access = messages.StringField(12)
 
 class DocumentListResponse(messages.Message):
     items = messages.MessageField(DocumentSchema, 1, repeated=True)
@@ -227,3 +239,46 @@ class Document(EndpointsModel):
             data['id'] = document_key_async.id()
             document.put_index(data)
         return DocumentSchema(id=str(document_key_async.id()))
+    
+    @classmethod 
+    def attach_files(cls,user_from_email,request):
+        items = request.items
+        author = Userinfo()
+        author.google_user_id = user_from_email.google_user_id
+        author.display_name = user_from_email.google_display_name
+        author.photo = user_from_email.google_public_profile_photo_url
+        if request.access:
+            access = request.access
+        else:
+            access = 'public'
+        for item in items:
+            document = cls(
+                            title = item.title,
+                            resource_id = item.id,
+                            mimeType = item.mimeType,
+                            embedLink = item.embedLink,
+                            owner = user_from_email.google_user_id,
+                            organization = user_from_email.organization,
+                            author=author,
+                            access = access,
+                            comments = 0
+                            )
+            document_key = document.put_async()
+            document_key_async = document_key.get_result()
+            if request.parent:
+                parent_key = ndb.Key(urlsafe=request.parent)
+                # insert edges
+                Edge.insert(start_node = parent_key,
+                          end_node = document_key_async,
+                          kind = 'documents',
+                          inverse_edge = 'parents')
+                EndpointsHelper.update_edge_indexes(
+                                                parent_key = document_key_async,
+                                                kind = 'documents',
+                                                indexed_edge = str(parent_key.id())
+                                                )
+            else:
+                data = {}
+                data['id'] = document_key_async.id()
+                document.put_index(data)
+        return message_types.VoidMessage()
