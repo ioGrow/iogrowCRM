@@ -1,7 +1,8 @@
 app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','Casestatus','Leadstatus',
 	function($scope,$route,Auth,Opportunitystage,Casestatus,Leadstatus){
 //HKA 11.12.2013 Controller to manage Opportunity stage, Case Status, Company profile, personnel Settings, Lead Status
-		$("#id_Settings").addClass("active");
+		$("ul.page-sidebar-menu li").removeClass("active");
+    $("#id_Settings").addClass("active");
 
 		var tab = $route.current.params.accountTab;
      $scope.oppstage = {};

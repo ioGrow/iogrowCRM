@@ -1,5 +1,6 @@
 app.controller('GroupListCtrl', ['$scope','Auth','Group',
     function($scope,Auth,Group) {
+     $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Groups").addClass("active");
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;

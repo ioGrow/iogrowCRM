@@ -691,14 +691,14 @@
                         </div>
                       
                     </div>
-                    <div class="form-group">
+                    <!--div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Labels")}} </label>
                        
                         <div class="col-md-9">
                           <input type="text" class="form-control"  id="id_description" ng-model="casee.type_case">
                           
                         </div>
-                    </div>
+                    </div-->
                    
 
                   
@@ -926,8 +926,8 @@
              <div id="EditTagModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
               <div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
+              <div class="modal-content">
+              <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3 id="myModalLabel" class="modal-title">{{_("Edit Contact")}}</h3>
               </div>
@@ -937,11 +937,11 @@
                 
 
                   <div class="form-group">
-                        <label  class=" control-label">{{_("Tagline")}} </label>
+                        <label  class="col-md-3 control-label">{{_("Tagline")}} </label>
                        
                         <div class="col-md-9">
                           <!--textarea rows="2" cols="50"  id="id_tagline" ng-model="account.tagline"/-->
-                           <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="contact.tagline"></textarea>
+                           <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="contact.tagline"></textarea>
 
                         </div>
                     </div>             
@@ -970,11 +970,11 @@
                 
 
                   <div class="form-group">
-                        <label  class=" control-label">{{_("Introduction")}} </label>
+                        <label  class="col-md-3 control-label">{{_("Introduction")}} </label>
                        
                         <div class="col-md-9">
                          
-                           <textarea id="noteBody" class="input-block-level ng-pristine ng-valid" rows="3" ng-model="contact.introduction"></textarea>
+                           <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="contact.introduction"></textarea>
 
                         </div>
                     </div>             

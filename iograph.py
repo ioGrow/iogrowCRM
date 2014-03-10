@@ -1,19 +1,36 @@
 from google.appengine.ext import ndb
 from google.appengine.datastore.datastore_query import Cursor
+from protorpc import messages
 
 INVERSED_EDGES = {
             'tags': 'tagged_on',
             'tagged_on': 'tags',
             'assignees' : 'assigned_to',
             'assigned_to' : 'assignees',
-            'tasks' : 'related_to'
+            'tasks' : 'related_to',
+            'needs': 'need_related_to'
             }
-            
-class Node(ndb.Expando):
-    """Node Class to store all objects"""
-    kind = ndb.StringProperty()
-    created_at = ndb.DateTimeProperty(auto_now_add=True)
-    updated_at = ndb.DateTimeProperty(auto_now=True)
+
+# The message class that defines Record schema for InfoNode attributes
+class RecordSchema(messages.Message):
+    field = messages.StringField(1)
+    value = messages.StringField(2)
+    property_type = messages.StringField(3, default='StringProperty')
+    is_indexed = messages.BooleanField(4)
+
+class InfoNodeResponse(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    kind = messages.StringField(3)
+    fields = messages.MessageField(RecordSchema, 4, repeated=True)
+    parent = messages.StringField(5)
+
+class InfoNodeConnectionSchema(messages.Message):
+    kind = messages.StringField(1, required=True)
+    items = messages.MessageField(InfoNodeResponse, 2, repeated=True)
+
+class InfoNodeListResponse(messages.Message):
+    items = messages.MessageField(InfoNodeConnectionSchema, 1, repeated=True)
 
 class Edge(ndb.Expando):
     """Edge Class to store the relationships between objects"""
@@ -93,6 +110,49 @@ class Edge(ndb.Expando):
             return len( set(end_node_found).intersection(end_node_set) ) > 0
 
         
+class Node(ndb.Expando):
+    """Node Class to store all objects"""
+    kind = ndb.StringProperty()
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
+    updated_at = ndb.DateTimeProperty(auto_now=True)
+
+    @classmethod
+    def list_info_nodes(cls,parent_key,request):
+        edge_list = Edge.list(
+                            start_node = parent_key,
+                            kind = 'infos'
+                            )
+        connections_dict = {}
+        for edge in edge_list['items']:
+            node = edge.end_node.get()
+            if node.kind not in connections_dict.keys():
+                connections_dict[node.kind] = []
+            node_fields = []
+            for key, value in node.to_dict().iteritems():
+                if key not in['kind', 'created_at', 'updated_at']:
+                    record = RecordSchema(
+                                          field = key,
+                                          value = node.to_dict()[key]
+                                          )
+                    node_fields.append(record)
+            info_node = InfoNodeResponse(
+                                         id = str(node.key.id()),
+                                         entityKey = node.key.urlsafe(),
+                                         kind = node.kind,
+                                         fields = node_fields
+                                         )
+            connections_dict[node.kind].append(info_node)
+        connections_list = []
+        for key, value in connections_dict.iteritems():
+            infonodeconnection = InfoNodeConnectionSchema(
+                                                            kind=key,
+                                                            items=value
+                                                        )
+            connections_list.append(infonodeconnection)
+        return InfoNodeListResponse(
+                                    items = connections_list
+                                    )
+
 
 class InfoNode(ndb.Expando):
     """InfoNode Class to store all informations about object"""

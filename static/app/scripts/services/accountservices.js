@@ -34,28 +34,28 @@ accountservices.factory('Account', function($http) {
   Account.get = function($scope,id) {
           gapi.client.crmengine.accounts.getv2(id).execute(function(resp) {
             if(!resp.code){
-                console.log('********************************************');
-                console.log(resp);
                $scope.account = resp;
-               $scope.contacts = resp.contacts.items;
-                 if ($scope.contactCurrentPage>1){
-                      $scope.contactpagination.prev = true;
+               if (resp.contacts){
+                 $scope.contacts = resp.contacts.items;
+                   if ($scope.contactCurrentPage>1){
+                        $scope.contactpagination.prev = true;
+                     }else{
+                         $scope.contactpagination.prev = false;
+                     }
+                   if (resp.contacts.nextPageToken){
+                     var nextPage = $scope.contactCurrentPage + 1;
+                     // Store the nextPageToken
+                     $scope.contactpages[nextPage] = resp.contacts.nextPageToken;
+                     $scope.contactpagination.next = true;
+                     
                    }else{
-                       $scope.contactpagination.prev = false;
+                    $scope.contactpagination.next = false;
                    }
-                 if (resp.contacts.nextPageToken){
-                   var nextPage = $scope.contactCurrentPage + 1;
-                   // Store the nextPageToken
-                   $scope.contactpages[nextPage] = resp.contacts.nextPageToken;
-                   $scope.contactpagination.next = true;
-                   
-                 }else{
-                  $scope.contactpagination.next = false;
-                 }
+                }
 
                // list infonodes
                 var renderMap = false;
-                if (resp.infonodes.items){
+                if (resp.infonodes){
                       for (var i=0;i<resp.infonodes.items.length;i++)
                       { 
                         if (resp.infonodes.items[i].kind == 'addresses'){
@@ -74,33 +74,58 @@ accountservices.factory('Account', function($http) {
                         $scope.renderMaps();
                       }
                 }
+                if (resp.topics){
+                  $scope.topics = resp.topics.items;
+                   
+                    if ($scope.topicCurrentPage >1){
+                        console.log('Should show PREV');
+                      $scope.topicpagination.prev = true;
+                    }else{
+                        $scope.topicpagination.prev= false;
+                     }
+                   if (resp.topics.nextPageToken){
+                     var nextPage = $scope.topicCurrentPage + 1;
+                      // Store the nextPageToken
+                     $scope.topicpages[nextPage] = resp.topics.nextPageToken;
+                     $scope.topicpagination.next = true;
 
-                $scope.topics = resp.topics.items;
-                 
-                  if ($scope.topicCurrentPage >1){
-                      console.log('Should show PREV');
-                    $scope.topicpagination.prev = true;
-                  }else{
-                      $scope.topicpagination.prev= false;
+                     }else{
+                    $scope.topicpagination.next = false;
                    }
-                 if (resp.topics.nextPageToken){
-                   var nextPage = $scope.topicCurrentPage + 1;
-                    // Store the nextPageToken
-                   $scope.topicpages[nextPage] = resp.topics.nextPageToken;
-                   $scope.topicpagination.next = true;
+                  }
+                  
 
-                   }else{
-                  $scope.topicpagination.next = false;
-                 }
+                  if (resp.needs){
+                       $scope.needs = resp.needs.items;
+                       if ($scope.needsCurrentPage>1){
+                        $scope.needspagination.prev = true;
+                       }else{
+                           $scope.needspagination.prev = false;
+                       }
+                       if (resp.needs.nextPageToken){
+                         var nextPage = $scope.needsCurrentPage + 1;
+                         // Store the nextPageToken
+                         $scope.needspages[nextPage] = resp.needs.nextPageToken;
+                         $scope.needspagination.next = true;
+                         
+                       }else{
+                        $scope.needspagination.next = false;
+                       }
+                  }
+
+                  if (resp.tasks){
+                     $scope.tasks = resp.tasks.items;
+                  }
+
                $scope.isContentLoaded = true;
                //$scope.listInfonodes();
                //$scope.listTopics(resp);
-               $scope.listTasks();
+               //$scope.listTasks();
                $scope.listEvents();
                //$scope.listContacts();
                $scope.listOpportunities();
                $scope.listCases();
-               $scope.listNeeds();
+               //$scope.listNeeds();
                
                $scope.listDocuments();
                
@@ -115,6 +140,12 @@ accountservices.factory('Account', function($http) {
                 });
                // Call the method $apply to make the update on the scope
                 $scope.$apply();
+                if (resp.topics){
+                    $scope.hilightTopic();
+                };
+                if (resp.tasks){
+                    $scope.hilightTask();
+                }
 
             }else {
               alert(resp.message);

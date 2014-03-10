@@ -72,9 +72,9 @@ noteservices.factory('Note', function($http) {
           });
   };
 
-Note.insert = function($scope,note){
+Note.insert = function($scope,params){
       $scope.isLoading = true;
-      gapi.client.crmengine.notes.insert(note).execute(function(resp) {
+      gapi.client.crmengine.notes.insertv2(params).execute(function(resp) {
         
          if(!resp.code){
           console.log(resp);

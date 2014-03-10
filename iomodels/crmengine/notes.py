@@ -1,11 +1,39 @@
 from google.appengine.ext import ndb
 from google.appengine.api import search 
+from protorpc import messages
 from endpoints_proto_datastore.ndb import EndpointsModel
 from model import Userinfo
-import pprint
+from iograph import Edge
+
 
 
 import model
+ # The message class that defines the author schema
+class AuthorSchema(messages.Message):
+    google_user_id = messages.StringField(1)
+    display_name = messages.StringField(2)
+    google_public_profile_url = messages.StringField(3)
+    photo = messages.StringField(4)
+    edgeKey = messages.StringField(5)
+
+class DiscussionAboutSchema(messages.Message):
+    kind = messages.StringField(1)
+    id = messages.StringField(2)
+    name = messages.StringField(3)
+
+class TopicSchema(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    last_updater = messages.MessageField(AuthorSchema, 3, required = True)
+    title = messages.StringField(4,required = True)
+    excerpt = messages.StringField(5)
+    topic_kind = messages.StringField(6)
+    created_at = messages.StringField(7)
+    updated_at = messages.StringField(8)
+
+class TopicListResponse(messages.Message):
+    items = messages.MessageField(TopicSchema, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
 
 class Topic(EndpointsModel):
 
@@ -72,29 +100,119 @@ class Note(EndpointsModel):
         perm.put()
 
 
-    def put_index(self):
+    def put_index(self,data=None):
         """ index the element at each"""
         empty_string = lambda x: x if x else ""
         collaborators = " ".join(self.collaborators_ids)
         organization = str(self.organization.id())
-        my_document = search.Document(
-        doc_id = str(self.key.id()),
-        fields=[
-            search.TextField(name=u'type', value=u'Note'),
-            search.TextField(name='organization', value = empty_string(organization) ),
-            search.TextField(name='access', value = empty_string(self.access) ),
-            search.TextField(name='owner', value = empty_string(self.owner) ),
-            search.TextField(name='collaborators', value = collaborators ),
-            search.TextField(name='title', value = empty_string(self.title) ),
-            search.TextField(name='content', value = empty_string(self.content)),
-            search.TextField(name='about_kind', value = empty_string(self.about_kind)),
-            search.TextField(name='about_item', value = empty_string(self.about_item)),
-            search.DateField(name='created_at', value = self.created_at),
-            search.DateField(name='updated_at', value = self.updated_at),
-            search.NumberField(name='comments', value = self.comments),
-           ])
+        if data:
+            search_key = ['topics','tags']
+            for key in search_key:
+                if key not in data.keys():
+                    data[key] = ""
+            my_document = search.Document(
+            doc_id = str(data['id']),
+            fields=[
+                search.TextField(name=u'type', value=u'Note'),
+                search.TextField(name='organization', value = empty_string(organization) ),
+                search.TextField(name='access', value = empty_string(self.access) ),
+                search.TextField(name='owner', value = empty_string(self.owner) ),
+                search.TextField(name='collaborators', value = collaborators ),
+                search.TextField(name='title', value = empty_string(self.title) ),
+                search.TextField(name='content', value = empty_string(self.content)),
+                search.TextField(name='about_kind', value = empty_string(self.about_kind)),
+                search.TextField(name='about_item', value = empty_string(self.about_item)),
+                search.DateField(name='created_at', value = self.created_at),
+                search.DateField(name='updated_at', value = self.updated_at),
+                search.NumberField(name='comments', value = self.comments),
+                search.TextField(name='tags', value= data['tags']),
+                search.TextField(name='topics', value= data['topics']),
+               ])
+        else:
+            my_document = search.Document(
+            doc_id = str(self.key.id()),
+            fields=[
+                search.TextField(name=u'type', value=u'Note'),
+                search.TextField(name='organization', value = empty_string(organization) ),
+                search.TextField(name='access', value = empty_string(self.access) ),
+                search.TextField(name='owner', value = empty_string(self.owner) ),
+                search.TextField(name='collaborators', value = collaborators ),
+                search.TextField(name='title', value = empty_string(self.title) ),
+                search.TextField(name='content', value = empty_string(self.content)),
+                search.TextField(name='about_kind', value = empty_string(self.about_kind)),
+                search.TextField(name='about_item', value = empty_string(self.about_item)),
+                search.DateField(name='created_at', value = self.created_at),
+                search.DateField(name='updated_at', value = self.updated_at),
+                search.NumberField(name='comments', value = self.comments),
+               ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)
+
+    @classmethod
+    def list_by_parent(cls,parent_key,request):
+        topic_list = []
+        topic_edge_list = Edge.list(
+                                start_node = parent_key,
+                                kind='topics',
+                                limit=request.topics.limit,
+                                pageToken=request.topics.pageToken
+                                )
+        for edge in topic_edge_list['items']:
+            end_node = edge.end_node.get()
+            if end_node.key.kind() == 'Note':
+                if end_node.comments == 0:
+                    last_updater = end_node.author
+                    excerpt = end_node.content[0:100]
+                else:
+                    # get the last comment
+                    comments_edge_list = Edge.list(
+                                                start_node = end_node.key,
+                                                kind = 'comments',
+                                                limit = 1
+                                                )
+                    if len(comments_edge_list['items'])>0:
+                            last_comment = comments_edge_list['items'][0].end_node.get()
+                            last_updater = last_comment.author
+                            excerpt = last_comment.content[0:100]
+            else:
+                # get the last comment
+                comments_edge_list = Edge.list(
+                                                start_node = end_node.key,
+                                                kind = 'comments',
+                                                limit = 1
+                                                )
+                if len(comments_edge_list['items'])>0:
+                        last_comment = comments_edge_list['items'][0].end_node.get()
+                        last_updater = last_comment.author
+                        excerpt = last_comment.content[0:100]
+
+            author = AuthorSchema(
+                                google_user_id = last_updater.google_user_id,
+                                display_name = last_updater.display_name,
+                                google_public_profile_url = last_updater.google_public_profile_url,
+                                photo = last_updater.photo
+                                )
+            topic_list.append(
+                            TopicSchema(
+                                    id = str(end_node.key.id()),
+                                    last_updater = author,
+                                    title = edge.end_node.get().title,
+                                    excerpt = excerpt,
+                                    topic_kind = end_node.key.kind(),
+                                    updated_at = end_node.updated_at.strftime(
+                                                            "%Y-%m-%dT%H:%M:00.000"
+                                                )
+                                    )
+                            )
+        if topic_edge_list['next_curs'] and topic_edge_list['more']:
+            topic_next_curs = topic_edge_list['next_curs'].urlsafe()
+        else:
+            topic_next_curs = None
+        return TopicListResponse(
+                                    items = topic_list,
+                                    nextPageToken = topic_next_curs
+                                )
+
 
     # Attach a topic to this note  
     def _setup(self):

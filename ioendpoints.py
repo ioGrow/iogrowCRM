@@ -30,27 +30,27 @@ import endpoints
 from endpoints_proto_datastore.ndb import EndpointsModel
 
 # Our libraries
-from iograph import Node, Edge
-from iomodels.crmengine.accounts import Account
-from iomodels.crmengine.contacts import Contact
-from iomodels.crmengine.notes import Note, Topic
-from iomodels.crmengine.tasks import Task
+from iograph import Node,Edge,RecordSchema,InfoNodeResponse,InfoNodeConnectionSchema,InfoNodeListResponse
+from iomodels.crmengine.accounts import Account,AccountGetRequest,AccountSchema,AccountListRequest,AccountListResponse,AccountSearchResult,AccountSearchResults
+from iomodels.crmengine.contacts import Contact,ContactInsertRequest,ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults
+from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema
+from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
-from iomodels.crmengine.opportunities import Opportunity
+from iomodels.crmengine.opportunities import Opportunity,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults
 from iomodels.crmengine.events import Event
-from iomodels.crmengine.documents import Document
+from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema
 from iomodels.crmengine.shows import Show
-from iomodels.crmengine.leads import Lead
-from iomodels.crmengine.cases import Case
+from iomodels.crmengine.leads import Lead,LeadListRequest,LeadListResponse,LeadSearchResults
+from iomodels.crmengine.cases import Case,CaseInsertRequest,CaseSchema,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
 #from iomodels.crmengine.products import Product
 from iomodels.crmengine.comments import Comment
 from iomodels.crmengine.opportunitystage import Opportunitystage
 from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.casestatuses import Casestatus
 from iomodels.crmengine.feedbacks import Feedback
-from iomodels.crmengine.needs import Need
+from iomodels.crmengine.needs import Need,NeedInsertRequest,NeedListResponse,NeedSchema
 #from iomodels.crmengine.emails import Email
-from iomodels.crmengine.tags import Tag
+from iomodels.crmengine.tags import Tag, TagSchema
 
 from model import User
 from model import Organization
@@ -61,6 +61,9 @@ from model import Member
 from model import Permission
 from model import Contributor
 from model import Companyprofile
+from search_helper import SEARCH_QUERY_MODEL
+from endpoints_helper import EndpointsHelper
+
 
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
@@ -106,18 +109,9 @@ DISCUSSIONS = {
 INVERSED_EDGES = {
             'tags': 'tagged_on',
             'tagged_on': 'tags'
-            
+
          }
-SEARCH_QUERY_MODEL = """
-                            %(query)s type:%(type)s
-                             AND (organization: %(organization)s
-                                  AND (access:public
-                                       OR (owner: %(owner)s
-                                           OR collaborators: %(collaborators)s
-                                           )
-                                       )
-                                  )
-                        """
+
 
 
 def LISTING_QUERY(query, access, organization, owner, collaborators, order):
@@ -136,25 +130,12 @@ def LISTING_QUERY(query, access, organization, owner, collaborators, order):
 
  # The message class that defines the EntityKey schema
 class EntityKeyRequest(messages.Message):
-    entityKey = messages.StringField(1)  
+    entityKey = messages.StringField(1)
 
  # The message class that defines the ListRequest schema
 class ListRequest(messages.Message):
     limit = messages.IntegerField(1)
-    pageToken = messages.StringField(2)     
-
- # The message class that defines the author schema
-class AuthorSchema(messages.Message):
-    google_user_id = messages.StringField(1)
-    display_name = messages.StringField(2)
-    google_public_profile_url = messages.StringField(3)
-    photo = messages.StringField(4)
-    edgeKey = messages.StringField(5)
-# The message class that defines the related to discussion about
-class DiscussionAboutSchema(messages.Message):
-    kind = messages.StringField(1)
-    id = messages.StringField(2)
-    name = messages.StringField(3)
+    pageToken = messages.StringField(2)
 
 class NoteInsertRequest(messages.Message):
     about = messages.StringField(1,required=True)
@@ -169,69 +150,7 @@ class CommentSchema(messages.Message):
     author = messages.MessageField(AuthorSchema, 1, required = True)
     content = messages.StringField(2,required=True)
 
-class TopicSchema(messages.Message):
-    id = messages.StringField(1)
-    entityKey = messages.StringField(2)
-    last_updater = messages.MessageField(AuthorSchema, 3, required = True)
-    title = messages.StringField(4,required = True)
-    excerpt = messages.StringField(5)
-    topic_kind = messages.StringField(6)
-    created_at = messages.StringField(7)
-    updated_at = messages.StringField(8)
 
-class TopicListResponse(messages.Message):
-    items = messages.MessageField(TopicSchema, 1, repeated=True)
-    nextPageToken = messages.StringField(2)
-
-class TagSchema(messages.Message):
-    id = messages.StringField(1)
-    edgeKey = messages.StringField(2)
-    name  = messages.StringField(3)
-    color = messages.StringField(4)
-    
-
-class TaskInsertRequest(messages.Message):
-    about = messages.StringField(1)
-    title = messages.StringField(2,required=True)
-    due = messages.StringField(3)
-    reminder = messages.StringField(4)
-    status = messages.StringField(5)
-    assignees = messages.MessageField(EntityKeyRequest,6, repeated = True)
-    tags = messages.MessageField(EntityKeyRequest,7, repeated = True)
-    
-
-class TaskSchema(messages.Message):
-    id = messages.StringField(1)
-    entityKey = messages.StringField(2)
-    title = messages.StringField(3)
-    due = messages.StringField(4)
-    status = messages.StringField(5)
-    status_color = messages.StringField(6)
-    status_label = messages.StringField(7)
-    comments = messages.IntegerField(8)
-    about = messages.MessageField(DiscussionAboutSchema,9)
-    created_by = messages.MessageField(AuthorSchema,10)
-    completed_by = messages.MessageField(AuthorSchema,11)
-    tags = messages.MessageField(TagSchema,12, repeated = True)
-    assignees = messages.MessageField(AuthorSchema,13, repeated = True)
-    created_at = messages.StringField(14)
-    updated_at = messages.StringField(15)
-
-class TaskRequest(messages.Message):
-    limit = messages.IntegerField(1)
-    pageToken = messages.StringField(2)
-    order = messages.StringField(3)
-    status = messages.StringField(4)
-    tags = messages.StringField(5,repeated = True)
-    owner = messages.StringField(6)
-    assignee = messages.BooleanField(7)
-    about = messages.StringField(8)
-    urgent = messages.BooleanField(9)
-
-
-class TaskListResponse(messages.Message):
-    items = messages.MessageField(TaskSchema, 1, repeated=True)
-    nextPageToken = messages.StringField(2)
 
 
 class EdgeSchema(messages.Message):
@@ -255,12 +174,7 @@ class EdgesResponse(messages.Message):
     items = messages.MessageField(EdgeSchema, 1, repeated=True)
 
 
-# The message class that defines Record schema for InfoNode attributes
-class RecordSchema(messages.Message):
-    field = messages.StringField(1)
-    value = messages.StringField(2)
-    property_type = messages.StringField(3, default='StringProperty')
-    is_indexed = messages.BooleanField(4)
+
 
 
 class InfoNodeSchema(messages.Message):
@@ -269,20 +183,13 @@ class InfoNodeSchema(messages.Message):
     parent = messages.StringField(3, required=True)
 
 
-class InfoNodeResponse(messages.Message):
-    id = messages.StringField(1)
-    entityKey = messages.StringField(2)
-    kind = messages.StringField(3)
-    fields = messages.MessageField(RecordSchema, 4, repeated=True)
-    parent = messages.StringField(5)
+
 
 
 #TODOS
 # ADD PHONE SCHEMA, LISTOFPHONES SCHEMA, EMAILS, ADDRESSES,...
 # ADD ANOTHER SCHEMA FOR CUSTOM FIELDS
-class InfoNodeConnectionSchema(messages.Message):
-    kind = messages.StringField(1, required=True)
-    items = messages.MessageField(InfoNodeResponse, 2, repeated=True)
+
 
 
 class InfoNodeListRequest(messages.Message):
@@ -290,8 +197,7 @@ class InfoNodeListRequest(messages.Message):
     connections = messages.StringField(2, repeated=True)
 
 
-class InfoNodeListResponse(messages.Message):
-    items = messages.MessageField(InfoNodeConnectionSchema, 1, repeated=True)
+
 
 
 # The message class that defines the SendEmail Request attributes
@@ -340,86 +246,6 @@ class LiveSearchResult(messages.Message):
 class LiveSearchResults(messages.Message):
     items = messages.MessageField(LiveSearchResult, 1, repeated=True)
     nextPageToken = messages.StringField(2)
-
-
-# The message class that defines the accounts.search response
-class AccountSearchResult(messages.Message):
-    id = messages.StringField(1)
-    entityKey = messages.StringField(2)
-    name = messages.StringField(3)
-
-
-# The message class that defines a set of accounts.search results
-class AccountSearchResults(messages.Message):
-    items = messages.MessageField(AccountSearchResult, 1, repeated=True)
-    nextPageToken = messages.StringField(2)
-
-
-# The message class that defines the contacts.search response
-class ContactSearchResult(messages.Message):
-    id = messages.StringField(1)
-    entityKey = messages.StringField(2)
-    firstname = messages.StringField(3)
-    lastname = messages.StringField(4)
-    account_name = messages.StringField(5)
-    account = messages.StringField(6)
-    position = messages.StringField(7)
-
-
-# The message class that defines a set of contacts.search results
-class ContactSearchResults(messages.Message):
-    items = messages.MessageField(ContactSearchResult, 1, repeated=True)
-    nextPageToken = messages.StringField(2)
-
-
-# The message class that defines the opportunities.search response
-class OpportunitySearchResult(messages.Message):
-    id = messages.StringField(1)
-    entityKey = messages.StringField(2)
-    title = messages.StringField(3)
-    amount = messages.IntegerField(4)
-    account_name = messages.StringField(5)
-
-
-# The message class that defines a set of contacts.search results
-class OpportunitySearchResults(messages.Message):
-    items = messages.MessageField(OpportunitySearchResult, 1, repeated=True)
-    nextPageToken = messages.StringField(2)
-
-
-# The message class that defines the cases.search response
-class CaseSearchResult(messages.Message):
-    id = messages.StringField(1)
-    entityKey = messages.StringField(2)
-    title = messages.StringField(3)
-    contact_name = messages.StringField(4)
-    account_name = messages.StringField(5)
-    status = messages.StringField(6)
-
-
-# The message class that defines a set of cases.search results
-class CaseSearchResults(messages.Message):
-    items = messages.MessageField(CaseSearchResult, 1, repeated=True)
-    nextPageToken = messages.StringField(2)
-
-
-# The message class that defines the leads.search response
-class LeadSearchResult(messages.Message):
-    id = messages.StringField(1)
-    entityKey = messages.StringField(2)
-    firstname = messages.StringField(3)
-    lastname = messages.StringField(4)
-    company = messages.StringField(5)
-    position = messages.StringField(6)
-    status = messages.StringField(7)
-
-
-# The message class that defines a set of leads.search results
-class LeadSearchResults(messages.Message):
-    items = messages.MessageField(LeadSearchResult, 1, repeated=True)
-    nextPageToken = messages.StringField(2)
-
-
 # The message class that defines a response for leads.convert API
 class ConvertedLead(messages.Message):
     id = messages.IntegerField(1)
@@ -525,226 +351,6 @@ class CompanyProfileResponse(messages.Message):
     items = messages.MessageField(CompanyProfileSchema, 1, repeated=True)
     nextPageToken = messages.StringField(2)
 
-
-
-class ContactListRequest(messages.Message):
-    limit = messages.IntegerField(1)
-    pageToken = messages.StringField(2)
-    order = messages.StringField(3)
-    tags = messages.StringField(4,repeated = True)
-    owner = messages.StringField(5)
-
-class ContactSchema(messages.Message):
-    id = messages.StringField(1)
-    entityKey = messages.StringField(2)
-    firstname = messages.StringField(3)
-    lastname = messages.StringField(4)
-    account_name = messages.StringField(5)
-    title = messages.StringField(6)
-    tags = messages.MessageField(TagSchema,7, repeated = True)
-    created_at = messages.StringField(8)
-    updated_at = messages.StringField(9)
-
-class ContactInsertRequest(messages.Message):
-    id = messages.StringField(1)
-    account = messages.StringField(2)
-    firstname = messages.StringField(3)
-    lastname = messages.StringField(4)
-    title = messages.StringField(5)
-    access = messages.StringField(6)
-class ContactListResponse(messages.Message):
-    items = messages.MessageField(ContactSchema, 1, repeated=True)
-    nextPageToken = messages.StringField(2)
-
-class OpportunityListRequest(messages.Message):
-    limit = messages.IntegerField(1)
-    pageToken = messages.StringField(2)
-    order = messages.StringField(3)
-    tags = messages.StringField(4,repeated = True)
-    owner = messages.StringField(5)
-    stagename = messages.StringField(6) 
-
-class OpportunitySchema(messages.Message):
-    id = messages.StringField(1)
-    entityKey = messages.StringField(2)
-    name = messages.StringField(3)
-    stagename = messages.StringField(4)
-    stage_probability = messages.StringField(5)
-    amount = messages.StringField(6)
-    tags = messages.MessageField(TagSchema,7, repeated = True)
-    created_at = messages.StringField(8)
-    updated_at = messages.StringField(9)
-
-class OpportunityListResponse(messages.Message):
-    items = messages.MessageField(OpportunitySchema, 1, repeated=True)
-    nextPageToken = messages.StringField(2)
-
-class LeadListRequest(messages.Message):
-    limit = messages.IntegerField(1)
-    pageToken = messages.StringField(2)
-    order = messages.StringField(3)
-    tags = messages.StringField(4,repeated = True)
-    owner = messages.StringField(5)
-    status = messages.StringField(6) 
-
-class LeadSchema(messages.Message):
-    id = messages.StringField(1)
-    entityKey = messages.StringField(2)
-    firstname = messages.StringField(3)
-    lastname = messages.StringField(4)
-    company = messages.StringField(5)
-    title = messages.StringField(6)
-    source = messages.StringField(7)
-    status = messages.StringField(8)
-    tags = messages.MessageField(TagSchema,9, repeated = True)
-    created_at = messages.StringField(10)
-    updated_at = messages.StringField(11)
-
-class LeadListResponse(messages.Message):
-    items = messages.MessageField(LeadSchema, 1, repeated=True)
-    nextPageToken = messages.StringField(2)
-
-class CaseListRequest(messages.Message):
-    limit = messages.IntegerField(1)
-    pageToken = messages.StringField(2)
-    order = messages.StringField(3)
-    tags = messages.StringField(4,repeated = True)
-    owner = messages.StringField(5)
-    status = messages.StringField(6)
-    probability = messages.StringField(7)
-    priority = messages.IntegerField(8)
-
-class CaseSchema(messages.Message):
-    id = messages.StringField(1)
-    entityKey = messages.StringField(2)
-    name = messages.StringField(3)
-    status = messages.StringField(4)
-    probability = messages.StringField(5)
-    type_case = messages.StringField(6)
-    contact_name = messages.StringField(7)
-    account_name = messages.StringField(8)
-    tags = messages.MessageField(TagSchema,9, repeated = True)
-    created_at = messages.StringField(10)
-    updated_at = messages.StringField(11)
-    priority = messages.IntegerField(12)
-
-class CaseListResponse(messages.Message):
-    items = messages.MessageField(CaseSchema, 1, repeated=True)
-    nextPageToken = messages.StringField(2)
-
-class AccountListRequest(messages.Message):
-    limit = messages.IntegerField(1)
-    pageToken = messages.StringField(2)
-    order = messages.StringField(3)
-    tags = messages.StringField(4,repeated = True)
-    owner = messages.StringField(5)
-    contacts = messages.MessageField(ContactListRequest, 6)
-    contacts = messages.MessageField(ContactListRequest, 6)
-
-class AccountGetRequest(messages.Message):
-    id = messages.IntegerField(1,required = True)
-    contacts = messages.MessageField(ListRequest, 2)
-    topics = messages.MessageField(ListRequest, 3)
-    
-class AccountSchema(messages.Message):
-    id = messages.StringField(1)
-    entityKey = messages.StringField(2)
-    name = messages.StringField(3)
-    account_type = messages.StringField(4)
-    industry = messages.StringField(5)
-    tagline = messages.StringField(6)
-    introduction = messages.StringField(7)
-    tags = messages.MessageField(TagSchema,8, repeated = True)
-    contacts = messages.MessageField(ContactListResponse,9)
-    infonodes = messages.MessageField(InfoNodeListResponse,10)
-    topics = messages.MessageField(TopicListResponse,11)
-    created_at = messages.StringField(12)
-    updated_at = messages.StringField(13)
-    access = messages.StringField(14)
-
-class AccountListResponse(messages.Message):
-    items = messages.MessageField(AccountSchema, 1, repeated=True)
-    nextPageToken = messages.StringField(2)
-
-
-class EndpointsHelper(EndpointsModel):
-    INVALID_TOKEN = 'Invalid token'
-    INVALID_GRANT = 'Invalid grant'
-    NO_ACCOUNT = 'You don\'t have a i/oGrow account'
-    @classmethod
-    def update_edge_indexes(cls,parent_key,kind,indexed_edge):
-        parent = parent_key.get()
-        empty_string = lambda x: x if x else ""
-        search_index = search.Index(name="GlobalIndex")
-        search_document = search_index.get(str( parent_key.id() ) )
-        data = {}
-        data['id'] = parent_key.id()
-        if search_document:
-            for e in search_document.fields:
-                if e.name == kind:
-                    print 'something before'
-                    indexed_edge = empty_string(e.value) + ' ' + str(indexed_edge)
-                    print 'something after'
-                data[e.name] = e.value
-        data[kind] = indexed_edge
-        parent.put_index(data)
-
-    @classmethod
-    def require_iogrow_user(cls):
-        user = endpoints.get_current_user()
-        if user is None:
-            raise endpoints.UnauthorizedException(cls.INVALID_TOKEN)
-        user_from_email = User.query(User.email == user.email()).get()
-        if user_from_email is None:
-            raise endpoints.UnauthorizedException(cls.NO_ACCOUNT)
-        return user_from_email
-
-    @classmethod
-    def insert_folder(cls, user, folder_name, kind):
-        try:
-            credentials = user.google_credentials
-            http = credentials.authorize(httplib2.Http(memcache))
-            service = build('drive', 'v2', http=http)
-            organization = user.organization.get()
-
-            # prepare params to insert
-            folder_params = {
-                        'title': folder_name,
-                        'mimeType':  'application/vnd.google-apps.folder'         
-            }#get the accounts_folder or contacts_folder or .. 
-            parent_folder = eval('organization.'+FOLDERS[kind])
-            if parent_folder:
-                folder_params['parents'] = [{'id': parent_folder}]
-            
-            # execute files.insert and get resource_id
-            created_folder = service.files().insert(body=folder_params,fields='id').execute()
-        except:
-            raise endpoints.UnauthorizedException(cls.INVALID_GRANT)
-        return created_folder
-
-    @classmethod
-    def move_folder(cls, user, folder, new_kind):
-            credentials = user.google_credentials
-            http = credentials.authorize(httplib2.Http(memcache))
-            service = build('drive', 'v2', http=http)
-            #organization = user.organization.get()
-            new_parent = eval('organization.' + FOLDERS[new_kind])
-            params = {
-              "parents":
-              [
-                {
-                  "id": new_parent
-                }
-              ]
-            }
-            moved_folder = service.files().patch(**{
-                                                    "fileId": folder,
-                                                    "body": params,
-                                                    "fields": 'id'
-                                                    }).execute()
-            return moved_folder
-        
-        
 
 
 
@@ -945,24 +551,24 @@ class CrmEngineApi(remote.Service):
         if limit:
             options = search.QueryOptions(limit=limit,cursor=cursor)
         else:
-            options = search.QueryOptions(cursor=cursor)    
+            options = search.QueryOptions(cursor=cursor)
         query = search.Query(query_string=query_string,options=options)
         try:
             if query:
                 results = index.search(query)
                 total_matches = results.number_found
-              
+
                 # Iterate over the documents in the results
                 for scored_document in results:
                     kwargs = {
-                        "id" : scored_document.doc_id, 
+                        "id" : scored_document.doc_id,
                         "rank" : scored_document.rank
                     }
                     for e in scored_document.fields:
                         if e.name in ["title","type"]:
                             kwargs[e.name]=e.value
                     search_results.append(SearchResult(**kwargs))
-                    
+
                     next_cursor = scored_document.cursor.web_safe_string
                 if next_cursor:
                     next_query_options = search.QueryOptions(limit=1,cursor=scored_document.cursor)
@@ -1016,166 +622,7 @@ class CrmEngineApi(remote.Service):
                       name='accounts.getv2')
     def accounts_get_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        account = Account.get_by_id(int(request.id))
-        if account is None:
-            raise endpoints.NotFoundException('Account not found.')
-        #list of tags related to this account
-        edge_list = Edge.list(start_node=account.key,kind='tags')
-        tag_list = list()
-        for edge in edge_list['items']:
-            tag_list.append(
-                            TagSchema(
-                                    edgeKey = edge.key.urlsafe(),
-                                    name = edge.end_node.get().name,
-                                    color = edge.end_node.get().color
-                                    )
-                            )
-        #list of contacts to this account
-        contacts = None
-        if request.contacts:
-            contact_list = list()
-            contact_edge_list = Edge.list(
-                                start_node=account.key,
-                                kind='contacts',
-                                limit=request.contacts.limit,
-                                pageToken=request.contacts.pageToken
-                                )
-            for edge in contact_edge_list['items']:
-                contact_list.append(
-                                    ContactSchema(
-                                               firstname = edge.end_node.get().firstname,
-                                               lastname = edge.end_node.get().lastname,
-                                               title = edge.end_node.get().title
-                                               )
-                                    )
-            if contact_edge_list['next_curs'] and contact_edge_list['more']:
-                contact_next_curs = contact_edge_list['next_curs'].urlsafe()
-            else:
-                contact_next_curs = None
-            contacts = ContactListResponse(
-                                            items = contact_list,
-                                            nextPageToken = contact_next_curs
-                                        )
-        #list of topics related to this account
-        topics = None
-        if request.topics:
-            topic_list = list()
-            topic_edge_list = Edge.list(
-                                start_node=account.key,
-                                kind='topics',
-                                limit=request.topics.limit,
-                                pageToken=request.topics.pageToken
-                                )
-            for edge in topic_edge_list['items']:
-                end_node = edge.end_node.get()
-                if end_node.key.kind() == 'Note':
-                    if end_node.comments == 0:
-                        print 'note n comment 0'
-                        last_updater = end_node.author
-                        excerpt = end_node.content[0:100]
-                        print last_updater
-                        print excerpt
-                    else:
-                        print 'note n comments'
-                        # get the last comment
-                        comments_edge_list = Edge.list(
-                                                start_node = end_node.key,
-                                                kind = 'comments',
-                                                limit = 1 
-                                                )
-                        if len(comments_edge_list['items'])>0:
-                            last_comment = comments_edge_list[0].end_node.get()
-                            last_updater = last_comment.author
-                            excerpt = last_comment.content[0:100]
-                else:
-                    print 'not note'
-                    # get the last comment
-                    comments_edge_list = Edge.list(
-                                                start_node = end_node.key,
-                                                kind = 'comments',
-                                                limit = 1 
-                                                )
-                    if len(comments_edge_list['items'])>0:
-                        print 'with comments'
-                        last_comment = comments_edge_list['items'][0].end_node.get()
-                        last_updater = last_comment.author
-                        excerpt = last_comment.content[0:100]
-
-                author = AuthorSchema(google_user_id = last_updater.google_user_id,
-                                        display_name = last_updater.display_name,
-                                        google_public_profile_url = last_updater.google_public_profile_url,
-                                        photo = last_updater.photo)
-                topic_list.append(
-                                TopicSchema(
-                                        id = str(end_node.key.id()),
-                                        last_updater = author,
-                                        title = edge.end_node.get().title,
-                                        excerpt = excerpt,
-                                        topic_kind = end_node.key.kind(),
-                                        updated_at = end_node.updated_at.strftime(
-                                                            "%Y-%m-%dT%H:%M:00.000"
-                                                    )
-                                        )
-                                    )
-            if topic_edge_list['next_curs'] and topic_edge_list['more']:
-                topic_next_curs = topic_edge_list['next_curs'].urlsafe()
-            else:
-                topic_next_curs = None
-            topics = TopicListResponse(
-                                            items = topic_list,
-                                            nextPageToken = topic_next_curs
-                                        )
-        # list of infonodes
-        edge_list = Edge.list(
-                            start_node = account.key,
-                            kind = 'infos'
-                            )
-        connections_dict = {}
-        for edge in edge_list['items']:
-            node = edge.end_node.get()
-            if node.kind not in connections_dict.keys():
-                connections_dict[node.kind] = list()
-            node_fields = list()
-            for key, value in node.to_dict().iteritems():
-                if key not in['kind', 'parent', 'created_at', 'updated_at']:
-                    record = RecordSchema(
-                                          field=key,
-                                          value=node.to_dict()[key]
-                                          )
-                    node_fields.append(record)
-            info_node = InfoNodeResponse(
-                                         id=str(node.key.id()),
-                                         entityKey=node.key.urlsafe(),
-                                         kind=node.kind,
-                                         fields=node_fields
-                                         )
-            connections_dict[node.kind].append(info_node)
-        connections_list = list()
-        for key, value in connections_dict.iteritems():
-            infonodeconnection = InfoNodeConnectionSchema(
-                                                            kind=key,
-                                                            items=value
-                                                        )
-            connections_list.append(infonodeconnection)
-        infonodes = InfoNodeListResponse(items=connections_list)    
-        account_schema = AccountSchema(
-                                  id = str( account.key.id() ),
-                                  entityKey = account.key.urlsafe(),
-                                  access = account.access,
-                                  name = account.name,
-                                  account_type = account.account_type,
-                                  industry = account.industry,
-                                  tagline = account.tagline,
-                                  introduction = account.introduction,
-                                  tags = tag_list,
-                                  contacts = contacts,
-                                  topics = topics,
-                                  infonodes = infonodes,
-                                  created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
-                                )
-                  
-        return  account_schema
+        return Account.get_schema(request = request)
     # accounts.get API
     @Account.method(
                     request_fields=('id',),
@@ -1194,105 +641,10 @@ class CrmEngineApi(remote.Service):
                       name='accounts.listv2')
     def accounts_list_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        curs = Cursor(urlsafe=request.pageToken)
-        if request.limit:
-            limit = int(request.limit)
-        else:
-            limit = 10
-        items = list()
-        you_can_loop = True
-        count = 0
-        while you_can_loop:
-            if request.order:
-                ascending = True
-                if request.order.startswith('-'):
-                    order_by = request.order[1:]
-                    ascending = False
-                else:
-                    order_by = request.order
-                attr = Account._properties.get(order_by)
-                if attr is None:
-                    raise AttributeError('Order attribute %s not defined.' % (attr_name,))
-                if ascending:
-                    accounts, next_curs, more =  Account.query().filter(Account.organization==user_from_email.organization).order(+attr).fetch_page(limit, start_cursor=curs)
-                else:
-                    accounts, next_curs, more = Account.query().filter(Account.organization==user_from_email.organization).order(-attr).fetch_page(limit, start_cursor=curs)
-            else:
-                accounts, next_curs, more = Account.query().filter(Account.organization==user_from_email.organization).fetch_page(limit, start_cursor=curs)
-            for account in accounts:
-                if count<= limit:
-                    is_filtered = True
-                    if account.access == 'private' and account.owner!=user_from_email.google_user_id:
-                        end_node_set = [user_from_email.key]
-                        if not Edge.find(start_node=account.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
-                            is_filtered = False
-                    if request.tags and is_filtered:
-                        end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
-                        if not Edge.find(start_node=account.key,kind='tags',end_node_set=end_node_set,operation='AND'):
-                            is_filtered = False
-                    if request.owner and account.owner!=request.owner and is_filtered:
-                        is_filtered = False
-                    if is_filtered:
-                        count = count + 1
-                        #list of tags related to this account
-                        edge_list = Edge.list(start_node=account.key,kind='tags')
-                        tag_list = list()
-                        for edge in edge_list['items']:
-                            tag_list.append(
-                                          TagSchema(
-                                           id = str(edge.end_node.id()),
-                                           edgeKey = edge.key.urlsafe(),
-                                           name = edge.end_node.get().name,
-                                           color = edge.end_node.get().color
-                                           )
-                                        )
-                        contact_list = list()
-                        #list of contacts to this account
-                        contacts = None
-                        if request.contacts:
-                            edge_list = Edge.list(start_node=account.key,kind='contacts',limit=request.contacts.limit,pageToken=request.contacts.pageToken)
-                            for edge in edge_list['items']:
-                                contact_list.append(
-                                              ContactSchema(
-                                               firstname = edge.end_node.get().firstname,
-                                               lastname = edge.end_node.get().lastname,
-                                               title = edge.end_node.get().title
-                                               )
-                                            )
-                            if edge_list['next_curs'] and edge_list['more']:
-                                contact_next_curs = edge_list['next_curs'].urlsafe()
-                            else:
-                                contact_next_curs = None
-                            contacts = ContactListResponse(
-                                                        items = contact_list,
-                                                        nextPageToken = contact_next_curs
-                                                        )
-                        account_schema = AccountSchema(
-                                  id = str( account.key.id() ),
-                                  entityKey = account.key.urlsafe(),
-                                  name = account.name,
-                                  account_type = account.account_type,
-                                  industry = account.industry,
-                                  tagline = account.tagline,
-                                  introduction = account.introduction,
-                                  tags = tag_list,
-                                  contacts = contacts,
-                                  created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
-                                )
-                        items.append(account_schema)   
-            if (count == limit):
-                you_can_loop = False
-            if more and next_curs:
-                curs = next_curs
-            else:
-                you_can_loop = False
-        if next_curs and more:
-            next_curs_url_safe = next_curs.urlsafe() 
-        else:
-            next_curs_url_safe = None           
-        return  AccountListResponse(items = items, nextPageToken = next_curs_url_safe)
-
+        return Account.list(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
     # accounts.list api
     @Account.query_method(
                           user_required=True,
@@ -1351,68 +703,11 @@ class CrmEngineApi(remote.Service):
                         name='accounts.search')
     def account_search(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        organization = str(user_from_email.organization.id())
-
-        index = search.Index(name="GlobalIndex")
-        #Show only objects where you have permissions
-        query_string = SEARCH_QUERY_MODEL % {
-                               "type": "Account",
-                               "query": request.q,
-                               "organization": organization,
-                               "owner": user_from_email.google_user_id,
-                               "collaborators": user_from_email.google_user_id,
-                                }
-        search_results = []
-        if request.limit:
-            limit = int(request.limit)
-        else:
-            limit = 10
-        next_cursor = None
-        if request.pageToken:
-            cursor = search.Cursor(web_safe_string=request.pageToken)
-        else:
-            cursor = search.Cursor(per_result=True)
-        if limit:
-            options = search.QueryOptions(limit=limit, cursor=cursor)
-        else:
-            options = search.QueryOptions(cursor=cursor)
-        query = search.Query(query_string=query_string, options=options)
-        try:
-            if query:
-                results = index.search(query)
-                #total_matches = results.number_found
-                # Iterate over the documents in the results
-                for scored_document in results:
-                    kwargs = {
-                        'id': scored_document.doc_id
-                    }
-                    for e in scored_document.fields:
-                        if e.name in ["entityKey", "title"]:
-                            if e.name == "title":
-                                kwargs["name"] = e.value
-                            else:
-                                kwargs[e.name] = e.value
-                    search_results.append(AccountSearchResult(**kwargs))
-                    next_cursor = scored_document.cursor.web_safe_string
-                if next_cursor:
-                    next_query_options = search.QueryOptions(
-                                                             limit=1,
-                                                             cursor=scored_document.cursor
-                                                             )
-                    next_query = search.Query(
-                                              query_string=query_string,
-                                              options=next_query_options
-                                              )
-                    if next_query:
-                        next_results = index.search(next_query)
-                        if len(next_results.results) == 0:
-                            next_cursor = None
-        except search.Error:
-            logging.exception('Search failed')
-        return AccountSearchResults(
-                                    items=search_results,
-                                    nextPageToken=next_cursor
-                                    )
+        return Account.search(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+        
 
     # accounts.update
     @Account.method(
@@ -1428,8 +723,8 @@ class CrmEngineApi(remote.Service):
         #my_model.organization =  user_from_email.organization
         my_model.put()
         return my_model
-    
-    # Cases API 
+
+    # Cases API
     # cases.delete
     @Case.method(request_fields=('id',),
       response_message=message_types.VoidMessage,
@@ -1447,7 +742,17 @@ class CrmEngineApi(remote.Service):
             raise endpoints.NotFoundException('Case not found')
         return my_model
 
-    # cases.insert API 
+    # cases.insertv2 api
+    @endpoints.method(CaseInsertRequest, CaseSchema,
+                      path='cases/insertv2', http_method='POST',
+                      name='cases.insertv2')
+    def case_insert_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Case.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+    # cases.insert api
     @Case.method(user_required=True,path='cases',http_method='POST',name='cases.insert')
     def CaseInsert(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -1465,88 +770,10 @@ class CrmEngineApi(remote.Service):
                       name='cases.listv2')
     def case_list_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        curs = Cursor(urlsafe=request.pageToken)
-        if request.limit:
-            limit = int(request.limit)
-        else:
-            limit = 10
-        items = list()
-        you_can_loop = True
-        count = 0
-        while you_can_loop:
-            if request.order:
-                ascending = True
-                if request.order.startswith('-'):
-                    order_by = request.order[1:]
-                    ascending = False
-                else:
-                    order_by = request.order
-                attr = Case._properties.get(order_by)
-                if attr is None:
-                    raise AttributeError('Order attribute %s not defined.' % (attr_name,))
-                if ascending:
-                    cases, next_curs, more =  Case.query().filter(Case.organization==user_from_email.organization).order(+attr).fetch_page(limit, start_cursor=curs)
-                else:
-                    cases, next_curs, more = Case.query().filter(Case.organization==user_from_email.organization).order(-attr).fetch_page(limit, start_cursor=curs)
-            else:
-                cases, next_curs, more = Case.query().filter(Case.organization==user_from_email.organization).fetch_page(limit, start_cursor=curs)
-            for case in cases:
-                if count<= limit:
-                    is_filtered = True
-                    if case.access == 'private' and case.owner!=user_from_email.google_user_id:
-                        end_node_set = [user_from_email.key]
-                        if not Edge.find(start_node=case.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
-                            is_filtered = False
-                    if request.tags and is_filtered:
-                        end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
-                        if not Edge.find(start_node=case.key,kind='tags',end_node_set=end_node_set,operation='AND'):
-                            is_filtered = False
-                    if request.owner and case.owner!=request.owner and is_filtered:
-                        is_filtered = False
-                    if request.status and case.status!=request.status and is_filtered:
-                        is_filtered = False
-                    if request.priority and case.priority!=request.priority and is_filtered:
-                        is_filtered = False
-                    if is_filtered:
-                        count = count + 1
-                        #list of tags related to this case
-                        edge_list = Edge.list(start_node=case.key,kind='tags')
-                        tag_list = list()
-                        for edge in edge_list['items']:
-                            tag_list.append(
-                                          TagSchema(
-                                           id = str(edge.end_node.id()),
-                                           edgeKey = edge.key.urlsafe(),
-                                           name = edge.end_node.get().name,
-                                           color = edge.end_node.get().color
-                                           )
-                                        )
-                        case_schema = CaseSchema(
-                                  id = str( case.key.id() ),
-                                  entityKey = case.key.urlsafe(),
-                                  name = case.name,
-                                  status = case.status,
-                                  priority = case.priority,
-                                  contact_name = case.contact_name,
-                                  account_name = case.account_name,
-                                  type_case = case.type_case,
-                                  tags = tag_list,
-                                  created_at = case.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
-                                )
-                        items.append(case_schema)   
-            if (count == limit):
-                you_can_loop = False
-            if more and next_curs:
-                curs = next_curs
-            else:
-                you_can_loop = False
-        if next_curs and more:
-            next_curs_url_safe = next_curs.urlsafe() 
-        else:
-            next_curs_url_safe = None           
-        return  CaseListResponse(items = items, nextPageToken = next_curs_url_safe)
-
+        return Case.list(
+                        user_from_email = user_from_email,
+                        request = request
+                        )
     # cases.list API
     @Case.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken','account','type_case','priority','status','contact'),path='cases',name='cases.list')
     def CaseList(self,query):
@@ -1578,69 +805,11 @@ class CrmEngineApi(remote.Service):
                         name='cases.search')
     def cases_search(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        organization = str(user_from_email.organization.id())
-        index = search.Index(name="GlobalIndex")
-        #Show only objects where you have permissions
-        query_string = SEARCH_QUERY_MODEL % {
-                               "type": "Case",
-                               "query": request.q,
-                               "organization": organization,
-                               "owner": user_from_email.google_user_id,
-                               "collaborators": user_from_email.google_user_id,
-                                }
-        search_results = []
-        if request.limit:
-            limit = int(request.limit)
-        else:
-            limit = 10
-        next_cursor = None
-        if request.pageToken:
-            cursor = search.Cursor(web_safe_string=request.pageToken)
-        else:
-            cursor = search.Cursor(per_result=True)
-        if limit:
-            options = search.QueryOptions(limit=limit, cursor=cursor)
-        else:
-            options = search.QueryOptions(cursor=cursor)
-        query = search.Query(query_string=query_string, options=options)
-        try:
-            if query:
-                results = index.search(query)
-                #total_matches = results.number_found
-                # Iterate over the documents in the results
-                for scored_document in results:
-                    kwargs = {
-                        'id': scored_document.doc_id
-                    }
-                    for e in scored_document.fields:
-                        if e.name in [
-                                      "title",
-                                      "contact_name",
-                                      "account_name",
-                                      "status"
-                                      ]:
-                            kwargs[e.name] = e.value
-                    search_results.append(CaseSearchResult(**kwargs))
-                    next_cursor = scored_document.cursor.web_safe_string
-                    if next_cursor:
-                        next_query_options = search.QueryOptions(
-                                                                 limit=1,
-                                                                 cursor=scored_document.cursor
-                                                                 )
-                        next_query = search.Query(
-                                                  query_string=query_string,
-                                                  options=next_query_options
-                                                  )
-                        if next_query:
-                            next_results = index.search(next_query)
-                            if len(next_results.results) == 0:
-                                next_cursor = None
-        except search.Error:
-            logging.exception('Search failed')
-        return CaseSearchResults(
-                                 items=search_results,
-                                 nextPageToken=next_cursor
-                                 ) 
+        return Case.search(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+    
     # cases.update API
     @Case.method(user_required=True,
                   http_method='PUT', path='cases/{id}', name='cases.update')
@@ -1651,7 +820,7 @@ class CrmEngineApi(remote.Service):
         #my_model.organization =  user_from_email.organization
         my_model.put()
         return my_model
-    
+
     # Cases status apis
     # casestatuses.delete api
     @Casestatus.method(
@@ -1665,7 +834,7 @@ class CrmEngineApi(remote.Service):
         #user_from_email=EndpointsHelper.require_iogrow_user()
         my_model.key.delete()
         return message_types.VoidMessage()
-    
+
     # casestatuses.get api
     @Casestatus.method(
                        request_fields=('id',),
@@ -1678,7 +847,7 @@ class CrmEngineApi(remote.Service):
             raise('Case status not found')
         return my_model
 
-    # casestatuses.insert api    
+    # casestatuses.insert api
     @Casestatus.method(
                        user_required=True,
                        path='casestatuses',
@@ -1707,8 +876,8 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return query.filter(Casestatus.organization == user_from_email.organization)
 
-    
-    # casestatuses.patch api    
+
+    # casestatuses.patch api
     @Casestatus.method(
                        user_required=True,
                        http_method='PATCH',
@@ -1756,7 +925,7 @@ class CrmEngineApi(remote.Service):
                     inverse_edge = 'related_to'
                 )
         parent.comments = parent.comments + 1
-        parent.put() 
+        parent.put()
         comment_author = Userinfo()
         comment_author.display_name = user_from_email.google_display_name
         comment_author.photo = user_from_email.google_public_profile_photo_url
@@ -1810,7 +979,7 @@ class CrmEngineApi(remote.Service):
     def CommentList(self, query):
         return query
 
-    # comments.patch API 
+    # comments.patch API
     @Comment.method(
                     user_required=True,
                     http_method='PATCH',
@@ -1876,10 +1045,10 @@ class CrmEngineApi(remote.Service):
             if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p)  and not(p in ['put','set_perm','put_index']) ):
                 exec('patched_model.'+p+'= my_model.'+p)
         print '@@@@@@@@@@@@@@@@@@@@@@@@@@@'
-        print patched_model          
+        print patched_model
         patched_model.put()
         return patched_model
-    
+
     # Contacts APIs
     # contacts.delete api
     @Contact.method(
@@ -1893,51 +1062,18 @@ class CrmEngineApi(remote.Service):
         #user_from_email=EndpointsHelper.require_iogrow_user()
         my_model.key.delete()
         return message_types.VoidMessage()
-    
+
     # contacts.insertv2 api
     @endpoints.method(ContactInsertRequest, ContactSchema,
                       path='contacts/insertv2', http_method='POST',
                       name='contacts.insertv2')
     def contact_insert_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        folder_name = request.firstname + ' ' + request.lastname
-        created_folder = EndpointsHelper.insert_folder(
-                                                       user_from_email,
-                                                       folder_name,
-                                                       'Contact'
-                                                       )
-        contact = Contact(
-                    firstname = request.firstname,
-                    lastname = request.lastname,
-                    owner = user_from_email.google_user_id,
-                    organization = user_from_email.organization,
-                    access = request.access,
-                    folder = created_folder['id']
-                    )
-        if request.title:
-            contact.title = request.title
-        contact_key = contact.put_async()
-        contact_key_async = contact_key.get_result()
-        
-        
-        if request.account:
-            account_key = ndb.Key(urlsafe=request.account)
-            # insert edges
-            Edge.insert(start_node = account_key,
-                      end_node = contact_key_async,
-                      kind = 'contacts',
-                      inverse_edge = 'parents') 
-            EndpointsHelper.update_edge_indexes(
-                                            parent_key = contact_key_async,
-                                            kind = 'contacts',
-                                            indexed_edge = str(account_key.id())
-                                            )   
-        else:
-            data = {}
-            data['id'] = contact_key_async.id()
-            contact.put_index(data) 
-        return ContactSchema(id=str(contact_key_async.id()))
-    
+        return Contact.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+
     # contacts.insert API
     @Contact.method(
                     user_required=True,
@@ -1979,81 +1115,11 @@ class CrmEngineApi(remote.Service):
                       name='contacts.listv2')
     def contact_list_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        curs = Cursor(urlsafe=request.pageToken)
-        if request.limit:
-            limit = int(request.limit)
-        else:
-            limit = 10
-        items = list()
-        you_can_loop = True
-        count = 0
-        while you_can_loop:
-            if request.order:
-                ascending = True
-                if request.order.startswith('-'):
-                    order_by = request.order[1:]
-                    ascending = False
-                else:
-                    order_by = request.order
-                attr = Contact._properties.get(order_by)
-                if attr is None:
-                    raise AttributeError('Order attribute %s not defined.' % (attr_name,))
-                if ascending:
-                    contacts, next_curs, more =  Contact.query().filter(Contact.organization==user_from_email.organization).order(+attr).fetch_page(limit, start_cursor=curs)
-                else:
-                    contacts, next_curs, more = Contact.query().filter(Contact.organization==user_from_email.organization).order(-attr).fetch_page(limit, start_cursor=curs)
-            else:
-                contacts, next_curs, more = Contact.query().filter(Contact.organization==user_from_email.organization).fetch_page(limit, start_cursor=curs)
-            for contact in contacts:
-                if count<= limit:
-                    is_filtered = True
-                    if contact.access == 'private' and contact.owner!=user_from_email.google_user_id:
-                        end_node_set = [user_from_email.key]
-                        if not Edge.find(start_node=contact.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
-                            is_filtered = False
-                    if request.tags and is_filtered:
-                        end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
-                        if not Edge.find(start_node=contact.key,kind='tags',end_node_set=end_node_set,operation='AND'):
-                            is_filtered = False
-                    if request.owner and contact.owner!=request.owner and is_filtered:
-                        is_filtered = False
-                    if is_filtered:
-                        count = count + 1
-                        #list of tags related to this contact
-                        edge_list = Edge.list(start_node=contact.key,kind='tags')
-                        tag_list = list()
-                        for edge in edge_list['items']:
-                            tag_list.append(
-                                          TagSchema(
-                                           id = str( edge.end_node.id() ),
-                                           edgeKey = edge.key.urlsafe(),
-                                           name = edge.end_node.get().name,
-                                           color = edge.end_node.get().color
-                                           )
-                                        )
-                        contact_schema = ContactSchema(
-                                  id = str( contact.key.id() ),
-                                  entityKey = contact.key.urlsafe(),
-                                  firstname = contact.firstname,
-                                  lastname = contact.lastname,
-                                  title = contact.title,
-                                  account_name = contact.account_name,
-                                  tags = tag_list,
-                                  created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
-                                )
-                        items.append(contact_schema)   
-            if (count == limit):
-                you_can_loop = False
-            if more and next_curs:
-                curs = next_curs
-            else:
-                you_can_loop = False
-        if next_curs and more:
-            next_curs_url_safe = next_curs.urlsafe() 
-        else:
-            next_curs_url_safe = None           
-        return  ContactListResponse(items = items, nextPageToken = next_curs_url_safe)
+        return Contact.list(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+        
 
     # contacts.list API
     @Contact.query_method(
@@ -2108,74 +1174,11 @@ class CrmEngineApi(remote.Service):
                         name='contacts.search')
     def contact_search(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        organization = str(user_from_email.organization.id())
-        index = search.Index(name="GlobalIndex")
-        #Show only objects where you have permissions
-        query_string = SEARCH_QUERY_MODEL % {
-                              "type": "Contact",
-                              "query": request.q,
-                              "organization": organization,
-                              "owner": user_from_email.google_user_id,
-                              "collaborators": user_from_email.google_user_id,
-                              }
-        search_results = []
-        if request.limit:
-            limit = int(request.limit)
-        else:
-            limit = 10
-        next_cursor = None
-        if request.pageToken:
-            cursor = search.Cursor(web_safe_string=request.pageToken)
-        else:
-            cursor = search.Cursor(per_result=True)
-        if limit:
-            options = search.QueryOptions(limit=limit, cursor=cursor)
-        else:
-            options = search.QueryOptions(cursor=cursor)
-        query = search.Query(query_string=query_string, options=options)
-        try:
-            if query:
-                results = index.search(query)
-                print '*************** Search ***************'
-                print results
-                #total_matches = results.number_found
-                # Iterate over the documents in the results
-                for scored_document in results:
-                    kwargs = {
-                        'id': scored_document.doc_id
-                    }
-                    for e in scored_document.fields:
-                        if e.name in [
-                                      "entityKey",
-                                      "firstname",
-                                      "lastname",
-                                      "account",
-                                      "account_name",
-                                      "position"
-                                      ]:
-                            kwargs[e.name] = e.value
-                    search_results.append(ContactSearchResult(**kwargs))
-                    next_cursor = scored_document.cursor.web_safe_string
-                if next_cursor:
-                    next_query_options = search.QueryOptions(
-                                                             limit=1,
-                                                             cursor=scored_document.cursor
-                                                             )
-                    next_query = search.Query(
-                                              query_string=query_string,
-                                              options=next_query_options
-                                              )
-                    if next_query:
-                        next_results = index.search(next_query)
-                        if len(next_results.results) == 0:
-                            next_cursor = None
-        except search.Error:
-            logging.exception('Search failed')
-        return ContactSearchResults(
-                                    items=search_results,
-                                    nextPageToken=next_cursor
-                                    )
-
+        return Contact.search(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+    
     # contacts.update API
     @Contact.method(
                     user_required=True,
@@ -2190,7 +1193,7 @@ class CrmEngineApi(remote.Service):
         #my_model.organization =  user_from_email.organization
         my_model.put()
         return my_model
-    
+
     # Contributors APIs
     # contributors.insert API
     @Contributor.method(
@@ -2205,7 +1208,7 @@ class CrmEngineApi(remote.Service):
         my_model.created_by = user_from_email.google_user_id
         my_model.organization = user_from_email.organization
         discussion_key = my_model.discussionKey
-        discussion_kind = discussion_key.kind() 
+        discussion_kind = discussion_key.kind()
         discussion = discussion_key.get()
         my_model.put()
         confirmation_url = "http://gcdc2013-iogrow.appspot.com"+DISCUSSIONS[discussion_kind]['url']+str(discussion_key.id())
@@ -2214,18 +1217,18 @@ class CrmEngineApi(remote.Service):
         subject = "You're involved in this "+ DISCUSSIONS[discussion_kind]['title'] +": "+discussion.title
         print subject
         body = """
-        %s involved you in this %s 
+        %s involved you in this %s
 
         %s
         """ % (user_from_email.google_display_name,DISCUSSIONS[discussion_kind]['title'],confirmation_url)
         mail.send_mail(sender_address, my_model.value , subject, body)
         return my_model
-    
+
     # contributors.list API
     @Contributor.query_method(user_required=True,query_fields=('discussionKey', 'limit', 'order', 'pageToken'),path='contributors', name='contributors.list')
     def contributor_list(self, query):
         return query
-    
+
     # Documents APIs
     # documents.attachfiles API
     @endpoints.method(
@@ -2257,7 +1260,7 @@ class CrmEngineApi(remote.Service):
                                 )
             document.put()
         return message_types.VoidMessage()
-    
+
     # documents.get API
     @endpoints.method(ID_RESOURCE, DiscussionResponse,
                         path='documents/{id}', http_method='GET',
@@ -2284,7 +1287,7 @@ class CrmEngineApi(remote.Service):
                                         display_name = document.author.display_name,
                                         google_public_profile_url = document.author.google_public_profile_url,
                                         photo = document.author.photo)
-                
+
 
                 response = DiscussionResponse(id=request.id,
                                                 entityKey= document.key.urlsafe(),
@@ -2297,13 +1300,23 @@ class CrmEngineApi(remote.Service):
             except (IndexError, TypeError):
                 raise endpoints.NotFoundException('About object %s not found.' %
                                                     (request.id,))
-              
-            
 
-            
+
+
+
         except (IndexError, TypeError):
             raise endpoints.NotFoundException('Note %s not found.' %
                                                 (request.id,))
+    # contacts.insertv2 api
+    @endpoints.method(DocumentInsertRequest, DocumentSchema,
+                      path='documents/insertv2', http_method='POST',
+                      name='documents.insertv2')
+    def document_insert_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Document.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
     # documents.insert API
     @Document.method(user_required=True,path='documents', http_method='POST', name='documents.insert')
     def DocumentInsert(self, my_model):
@@ -2347,8 +1360,8 @@ class CrmEngineApi(remote.Service):
     # documents.list API
     @Document.query_method(user_required=True,query_fields=('about_kind','about_item', 'limit', 'order', 'pageToken'),path='documents', name='documents.list')
     def DocumentList(self, query):
-        return query 
-    
+        return query
+
      # documents.patch API
     @Document.method(user_required=True,
                   http_method='PATCH', path='documents/{id}', name='documents.patch')
@@ -2369,7 +1382,7 @@ class CrmEngineApi(remote.Service):
 
         my_model.put()
         return my_model
-   
+
     #Edges APIs
     # edges.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
@@ -2378,7 +1391,7 @@ class CrmEngineApi(remote.Service):
     def delete_edge(self, request):
         edge_key = ndb.Key(urlsafe=request.entityKey)
         Edge.delete(edge_key)
-        return message_types.VoidMessage() 
+        return message_types.VoidMessage()
 
     # edges.insert api
     @endpoints.method(EdgesRequest, EdgesResponse,
@@ -2389,7 +1402,7 @@ class CrmEngineApi(remote.Service):
         for item in request.items:
             start_node = ndb.Key(urlsafe=item.start_node)
             end_node = ndb.Key(urlsafe=item.end_node)
-          
+
             edge_key = Edge.insert(start_node=start_node,
                                  end_node = end_node,
                                  kind = item.kind,
@@ -2399,14 +1412,14 @@ class CrmEngineApi(remote.Service):
                                             kind = item.kind,
                                             indexed_edge = str(end_node.id())
                                             )
-            items.append(EdgeSchema(id=str( edge_key.id() ), 
+            items.append(EdgeSchema(id=str( edge_key.id() ),
                                      entityKey = edge_key.urlsafe(),
                                      kind = item.kind,
                                      start_node = item.start_node,
                                      end_node= item.end_node ))
         return EdgesResponse(items=items)
 
-    # Emails APIs  
+    # Emails APIs
     #emails.send API
     @endpoints.method(EmailRequest, message_types.VoidMessage,
                         path='emails/send', http_method='POST',
@@ -2482,7 +1495,7 @@ class CrmEngineApi(remote.Service):
         except (IndexError, TypeError):
             raise endpoints.NotFoundException('EVent %s not found.' %
                                                 (request.id,))
-    
+
     # events.insert API
     @Event.method(user_required=True,path='events', http_method='POST', name='events.insert')
     def EventInsert(self, my_model):
@@ -2495,21 +1508,21 @@ class CrmEngineApi(remote.Service):
             http = credentials.authorize(httplib2.Http(memcache))
             service = build('calendar', 'v3', http=http)
             # prepare params to insert
-        
+
             params = {
-                     "start": 
+                     "start":
                           {
                           "dateTime": my_model.starts_at.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
                           },
-                     "end": 
+                     "end":
                           {
                            "dateTime": my_model.ends_at.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
                       },
                     "summary": my_model.title,
                     "location": my_model.where,
-                    "reminders": 
+                    "reminders":
                     {
-                      "overrides": 
+                      "overrides":
                       [
                       {
                         "method": 'email',
@@ -2520,12 +1533,12 @@ class CrmEngineApi(remote.Service):
                   }
 
             }
-        
+
             created_event = service.events().insert(calendarId='primary',body=params).execute()
-        
+
         except:
             raise endpoints.UnauthorizedException('Invalid grant' )
-            return    
+            return
         author = Userinfo()
         author.google_user_id = user_from_email.google_user_id
         author.display_name = user_from_email.google_display_name
@@ -2536,7 +1549,7 @@ class CrmEngineApi(remote.Service):
         my_model.organization =  user_from_email.organization
         my_model.put()
         return my_model
-    
+
     # events.list API
     @Event.query_method(user_required=True,query_fields=('about_kind','about_item','id','status', 'starts_at','ends_at', 'limit', 'order', 'pageToken'),path='events', name='events.list')
     def EventList(self, query):
@@ -2551,7 +1564,7 @@ class CrmEngineApi(remote.Service):
     def FeedbackDelete(self,my_model):
         user_from_email=EndpointsHelper.require_iogrow_user()
         my_model.key.delete()
-        return message_types.VoidMessage()  
+        return message_types.VoidMessage()
 
     # feedbacks.get API
     @Feedback.method(request_fields=('id',),path='feedbacks/{id}', http_method='GET', name='feedbacks.get')
@@ -2574,7 +1587,7 @@ class CrmEngineApi(remote.Service):
     # feedbacks.list api
     @Feedback.query_method(user_required=True,query_fields=('limit', 'order','status', 'pageToken','related_to'),path='feedbacks', name='feedbacks.list')
     def feedbacks_list(self, query):
-        user_from_email = EndpointsHelper.require_iogrow_user()      
+        user_from_email = EndpointsHelper.require_iogrow_user()
         return query.filter(ndb.OR(ndb.AND(Feedback.access=='public',Feedback.organization==user_from_email.organization),Feedback.owner==user_from_email.google_user_id, Feedback.collaborators_ids==user_from_email.google_user_id)).order(Feedback._key)
 
     # feedbacks.patch api
@@ -2686,7 +1699,7 @@ class CrmEngineApi(remote.Service):
     @Group.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='groups', name='groups.list')
     def GroupList(self, query):
         return query
-    
+
     # groups.patch API
     @Group.method(user_required=True,
                   http_method='PATCH', path='groups/{id}', name='groups.patch')
@@ -2758,7 +1771,7 @@ class CrmEngineApi(remote.Service):
             event.put()
         lead.key.delete()
         return ConvertedLead(id = contact.key.id())
-    
+
     # leads.delete api
     @Lead.method(request_fields=('id',),
       response_message=message_types.VoidMessage,
@@ -2768,7 +1781,7 @@ class CrmEngineApi(remote.Service):
         user_from_email=EndpointsHelper.require_iogrow_user()
         my_model.key.delete()
         return message_types.VoidMessage()
-    
+
     # leads.get API
     @Lead.method(request_fields=('id',),path='leads/{id}', http_method='GET', name='leads.get')
     def LeadGet(self, my_model):
@@ -2796,83 +1809,11 @@ class CrmEngineApi(remote.Service):
                       name='leads.listv2')
     def lead_list_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        curs = Cursor(urlsafe=request.pageToken)
-        if request.limit:
-            limit = int(request.limit)
-        else:
-            limit = 10
-        items = list()
-        you_can_loop = True
-        count = 0
-        while you_can_loop:
-            if request.order:
-                ascending = True
-                if request.order.startswith('-'):
-                    order_by = request.order[1:]
-                    ascending = False
-                else:
-                    order_by = request.order
-                attr = Lead._properties.get(order_by)
-                if attr is None:
-                    raise AttributeError('Order attribute %s not defined.' % (attr_name,))
-                if ascending:
-                    leads, next_curs, more =  Lead.query().filter(Lead.organization==user_from_email.organization).order(+attr).fetch_page(limit, start_cursor=curs)
-                else:
-                    leads, next_curs, more = Lead.query().filter(Lead.organization==user_from_email.organization).order(-attr).fetch_page(limit, start_cursor=curs)
-            else:
-                leads, next_curs, more = Lead.query().filter(Lead.organization==user_from_email.organization).fetch_page(limit, start_cursor=curs)
-            for lead in leads:
-                if count<= limit:
-                    is_filtered = True
-                    if lead.access == 'private' and lead.owner!=user_from_email.google_user_id:
-                        end_node_set = [user_from_email.key]
-                        if not Edge.find(start_node=lead.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
-                            is_filtered = False
-                    if request.tags and is_filtered:
-                        end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
-                        if not Edge.find(start_node=lead.key,kind='tags',end_node_set=end_node_set,operation='AND'):
-                            is_filtered = False
-                    if request.owner and lead.owner!=request.owner and is_filtered:
-                        is_filtered = False
-                    if request.status and lead.status!=request.status and is_filtered:
-                        is_filtered = False
-                    if is_filtered:
-                        count = count + 1
-                        #list of tags related to this lead
-                        edge_list = Edge.list(start_node=lead.key,kind='tags')
-                        tag_list = list()
-                        for edge in edge_list['items']:
-                            tag_list.append(
-                                          TagSchema(
-                                           id = str(edge.end_node.id()),
-                                           edgeKey = edge.key.urlsafe(),
-                                           name = edge.end_node.get().name,
-                                           color = edge.end_node.get().color
-                                           )
-                                        )
-                        lead_schema = LeadSchema(
-                                  id = str( lead.key.id() ),
-                                  entityKey = lead.key.urlsafe(),
-                                  firstname = lead.firstname,
-                                  lastname = lead.lastname,
-                                  title = lead.title,
-                                  company = lead.company,
-                                  tags = tag_list,
-                                  created_at = lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
-                                )
-                        items.append(lead_schema)   
-            if (count == limit):
-                you_can_loop = False
-            if more and next_curs:
-                curs = next_curs
-            else:
-                you_can_loop = False
-        if next_curs and more:
-            next_curs_url_safe = next_curs.urlsafe() 
-        else:
-            next_curs_url_safe = None           
-        return  LeadListResponse(items = items, nextPageToken = next_curs_url_safe)
+        return Lead.list(
+                        user_from_email = user_from_email,
+                        request = request
+                        )
+        
 
     # leads.list api
     @Lead.query_method(
@@ -2910,77 +1851,16 @@ class CrmEngineApi(remote.Service):
         patched_model.put()
         return patched_model
 
-    # leads.search API 
+    # leads.search API
     @endpoints.method(SearchRequest, LeadSearchResults,
                         path='leads/search', http_method='POST',
                         name='leads.search')
     def leads_search(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        organization = str(user_from_email.organization.id())
-        index = search.Index(name="GlobalIndex")
-        #Show only objects where you have permissions
-        query_string = SEARCH_QUERY_MODEL % {
-                               "type": "Lead",
-                               "query": request.q,
-                               "organization": organization,
-                               "owner": user_from_email.google_user_id,
-                               "collaborators": user_from_email.google_user_id,
-                                }
-        search_results = []
-        if request.limit:
-            limit = int(request.limit)
-        else:
-            limit = 10
-        next_cursor = None
-        if request.pageToken:
-            cursor = search.Cursor(web_safe_string=request.pageToken)
-        else:
-            cursor = search.Cursor(per_result=True)
-        if limit:
-            options = search.QueryOptions(limit=limit, cursor=cursor)
-        else:
-            options = search.QueryOptions(cursor=cursor)
-        query = search.Query(query_string=query_string, options=options)
-        try:
-            if query:
-                results = index.search(query)
-                #total_matches = results.number_found
-                # Iterate over the documents in the results
-                for scored_document in results:
-                    kwargs = {
-                              'id': scored_document.doc_id
-                              }
-                    for e in scored_document.fields:
-                        if e.name in [
-                                      "firstname",
-                                      "lastname",
-                                      "company",
-                                      "position",
-                                      "status"
-                                      ]:
-                            kwargs[e.name] = e.value
-                    search_results.append(LeadSearchResult(**kwargs))
-                    next_cursor = scored_document.cursor.web_safe_string
-                if next_cursor:
-                    next_query_options = search.QueryOptions(
-                                                             limit=1,
-                                                             cursor=scored_document.cursor
-                                                             )
-                    next_query = search.Query(
-                                              query_string=query_string,
-                                              options=next_query_options
-                                              )
-                    if next_query:
-                        next_results = index.search(next_query)
-                        if len(next_results.results)==0:
-                            next_cursor = None
-        except search.Error:
-            logging.exception('Search failed')
-        return LeadSearchResults(
-                                 items=search_results,
-                                 nextPageToken=next_cursor
-                                 )
-
+        return Lead.search(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
     # leads.update API
     @Lead.method(user_required=True,
                   http_method='PUT', path='leads/{id}', name='leads.update')
@@ -3073,12 +1953,12 @@ class CrmEngineApi(remote.Service):
         my_model.organization = user_from_email.organization
         my_model.put()
         return my_model
-    
+
     # members.list API
     @Member.query_method(user_required=True,query_fields=('limit', 'order','groupKey', 'pageToken'),path='members', name='members.list')
     def MemberList(self, query):
         return query
-    
+
     # members.patch API
     @Member.method(user_required=True,
                   http_method='PATCH', path='members/{id}', name='members.patch')
@@ -3107,8 +1987,17 @@ class CrmEngineApi(remote.Service):
         if not my_model.from_datastore:
             raise endpoints.NotFoundException('Need not found')
         return my_model
-
-    # needs.insert API 
+    # needs.insert v2 api
+    @endpoints.method(NeedInsertRequest, NeedSchema,
+                      path='needs/insertv2', http_method='POST',
+                      name='needs.insertv2')
+    def need_insert_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Need.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+    # needs.insert api
     @Need.method(user_required=True,path='needs',http_method='POST',name='needs.insert')
     def need_insert(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -3168,7 +2057,7 @@ class CrmEngineApi(remote.Service):
                                         display_name = note.author.display_name,
                                         google_public_profile_url = note.author.google_public_profile_url,
                                         photo = note.author.photo)
-                  
+
 
                 response = DiscussionResponse(id=request.id,
                                                 entityKey= note.key.urlsafe(),
@@ -3182,7 +2071,7 @@ class CrmEngineApi(remote.Service):
                 raise endpoints.NotFoundException('About object %s not found.' %
                                                   (request.id,))
 
-            
+
         except (IndexError, TypeError):
             raise endpoints.NotFoundException('Note %s not found.' %
                                                 (request.id,))
@@ -3212,6 +2101,11 @@ class CrmEngineApi(remote.Service):
                     kind = 'topics',
                     inverse_edge = 'related_to'
                 )
+        EndpointsHelper.update_edge_indexes(
+                                            parent_key = entityKey,
+                                            kind = 'topics',
+                                            indexed_edge = str(parent_key.id())
+                                            )
         return message_types.VoidMessage()
 
 
@@ -3250,7 +2144,7 @@ class CrmEngineApi(remote.Service):
 
         my_model.put()
         return my_model
-    
+
     # Info Node APIs
     # infonode.insert API
     @endpoints.method(InfoNodeSchema, InfoNodeResponse,
@@ -3292,48 +2186,10 @@ class CrmEngineApi(remote.Service):
                       name='infonode.list')
     def infonode_list(self, request):
         parent_key = ndb.Key(urlsafe=request.parent)
-        edge_list = Edge.list(
-                            start_node = parent_key,
-                            kind = 'infos'
-                            )
-        connections_dict = {}
-        for edge in edge_list['items']:
-            print '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$44444'
-            node = edge.end_node.get()
-            print node
-            if node.kind not in connections_dict.keys():
-                connections_dict[node.kind] = list()
-            node_fields = list()
-            for key, value in node.to_dict().iteritems():
-                if key not in['kind', 'parent', 'created_at', 'updated_at']:
-                    record = RecordSchema(
-                                          field=key,
-                                          value=node.to_dict()[key]
-                                          )
-                    node_fields.append(record)
-            info_node = InfoNodeResponse(
-                                         id=str(node.key.id()),
-                                         entityKey=node.key.urlsafe(),
-                                         kind=node.kind,
-                                         fields=node_fields
-                                         )
-            connections_dict[node.kind].append(info_node)
-        connections_list = list()
-        for key, value in connections_dict.iteritems():
-            if request.connections:
-                if key in request.connections:
-                    infonodeconnection = InfoNodeConnectionSchema(
-                                                                  kind=key,
-                                                                  items=value
-                                                                  )
-                    connections_list.append(infonodeconnection)
-            else:
-                infonodeconnection = InfoNodeConnectionSchema(
-                                                              kind=key,
-                                                              items=value
-                                                              )
-                connections_list.append(infonodeconnection)
-        return InfoNodeListResponse(items=connections_list)
+        return Node.list_info_nodes(
+                                    parent_key = parent_key,
+                                    request = request
+                                    )
 
     # Opportunities APIs
     # opportunities.delete api
@@ -3348,7 +2204,7 @@ class CrmEngineApi(remote.Service):
         user_from_email=EndpointsHelper.require_iogrow_user()
         my_model.key.delete()
         return message_types.VoidMessage()
-    
+
     # opportunities.get API
     @Opportunity.method(
                         request_fields=('id',),
@@ -3360,7 +2216,17 @@ class CrmEngineApi(remote.Service):
         if not my_model.from_datastore:
             raise endpoints.NotFoundException('Opportunity not found')
         return my_model
-    
+
+    # opportunities.insertv2 api
+    @endpoints.method(OpportunityInsertRequest, OpportunitySchema,
+                      path='opportunities/insertv2', http_method='POST',
+                      name='opportunities.insertv2')
+    def opportunity_insert_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Opportunity.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
     # opportunities.insert
     @Opportunity.method(
                         user_required=True,
@@ -3382,90 +2248,17 @@ class CrmEngineApi(remote.Service):
         my_model.folder = created_folder['id']
         my_model.put()
         return my_model
-    
+
     # opportunities.list api v2
     @endpoints.method(OpportunityListRequest, OpportunityListResponse,
                       path='opportunities/listv2', http_method='POST',
                       name='opportunities.listv2')
     def opportunity_list_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        curs = Cursor(urlsafe=request.pageToken)
-        if request.limit:
-            limit = int(request.limit)
-        else:
-            limit = 10
-        items = list()
-        you_can_loop = True
-        count = 0
-        while you_can_loop:
-            if request.order:
-                ascending = True
-                if request.order.startswith('-'):
-                    order_by = request.order[1:]
-                    ascending = False
-                else:
-                    order_by = request.order
-                attr = Opportunity._properties.get(order_by)
-                if attr is None:
-                    raise AttributeError('Order attribute %s not defined.' % (attr_name,))
-                if ascending:
-                    opportunities, next_curs, more =  Opportunity.query().filter(Opportunity.organization==user_from_email.organization).order(+attr).fetch_page(limit, start_cursor=curs)
-                else:
-                    opportunities, next_curs, more = Opportunity.query().filter(Opportunity.organization==user_from_email.organization).order(-attr).fetch_page(limit, start_cursor=curs)
-            else:
-                opportunities, next_curs, more = Opportunity.query().filter(Opportunity.organization==user_from_email.organization).fetch_page(limit, start_cursor=curs)
-            for opportunity in opportunities:
-                if count<= limit:
-                    is_filtered = True
-                    if opportunity.access == 'private' and opportunity.owner!=user_from_email.google_user_id:
-                        end_node_set = [user_from_email.key]
-                        if not Edge.find(start_node=opportunity.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
-                            is_filtered = False
-                    if request.tags and is_filtered:
-                        end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
-                        if not Edge.find(start_node=opportunity.key,kind='tags',end_node_set=end_node_set,operation='AND'):
-                            is_filtered = False
-                    if request.owner and opportunity.owner!=request.owner and is_filtered:
-                        is_filtered = False
-                    if request.stagename and opportunity.stagename!=request.stagename and is_filtered:
-                        is_filtered = False
-                    if is_filtered:
-                        count = count + 1
-                        #list of tags related to this opportunity
-                        edge_list = Edge.list(start_node=opportunity.key,kind='tags')
-                        tag_list = list()
-                        for edge in edge_list['items']:
-                            tag_list.append(
-                                          TagSchema(
-                                           id = str(edge.end_node.id()),
-                                           edgeKey = edge.key.urlsafe(),
-                                           name = edge.end_node.get().name,
-                                           color = edge.end_node.get().color
-                                           )
-                                        )
-                        opportunity_schema = OpportunitySchema(
-                                  id = str( opportunity.key.id() ),
-                                  entityKey = opportunity.key.urlsafe(),
-                                  name = opportunity.name,
-                                  stagename = opportunity.stagename,
-                                  stage_probability = str(opportunity.stage_probability),
-                                  amount = str(opportunity.amount),
-                                  tags = tag_list,
-                                  created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
-                                )
-                        items.append(opportunity_schema)   
-            if (count == limit):
-                you_can_loop = False
-            if more and next_curs:
-                curs = next_curs
-            else:
-                you_can_loop = False
-        if next_curs and more:
-            next_curs_url_safe = next_curs.urlsafe() 
-        else:
-            next_curs_url_safe = None           
-        return  OpportunityListResponse(items = items, nextPageToken = next_curs_url_safe)
+        return Opportunity.list(
+                                user_from_email = user_from_email,
+                                request = request
+                            )
 
     # opportunities.list API
     @Opportunity.query_method(
@@ -3496,7 +2289,7 @@ class CrmEngineApi(remote.Service):
                                    )
                             ).order(Opportunity._key)
 
-    # opportunities.patch api 
+    # opportunities.patch api
     @Opportunity.method(
                         user_required=True,
                         http_method='PATCH',
@@ -3507,9 +2300,9 @@ class CrmEngineApi(remote.Service):
         #user_from_email = EndpointsHelper.require_iogrow_user()
         # Todo: Check permissions
         my_model.put()
-        return my_model 
-    
-    # opportunities.search api 
+        return my_model
+
+    # opportunities.search api
     @endpoints.method(
                       SearchRequest, OpportunitySearchResults,
                       path='opportunities/search',
@@ -3518,69 +2311,11 @@ class CrmEngineApi(remote.Service):
                       )
     def opportunities_search(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        organization = str(user_from_email.organization.id())
-        index = search.Index(name="GlobalIndex")
-        #Show only objects where you have permissions
-        query_string = SEARCH_QUERY_MODEL % {
-                               "type": "Opportunity",
-                               "query": request.q,
-                               "organization": organization,
-                               "owner": user_from_email.google_user_id,
-                               "collaborators": user_from_email.google_user_id
-                               }
-        #print query_string
-        search_results = []
-        if request.limit:
-            limit = int(request.limit)
-        else:
-            limit = 10
-        next_cursor = None
-        if request.pageToken:
-            cursor = search.Cursor(web_safe_string=request.pageToken)
-        else:
-            cursor = search.Cursor(per_result=True)
-        if limit:
-            options = search.QueryOptions(limit=limit, cursor=cursor)
-        else:
-            options = search.QueryOptions(cursor=cursor)
-        query = search.Query(query_string=query_string, options=options)
-        try:
-            if query:
-                results = index.search(query)
-                #total_matches = results.number_found
-                # Iterate over the documents in the results
-                for scored_document in results:
-                    kwargs = {
-                        'id': scored_document.doc_id
-                    }
-                    for e in scored_document.fields:
-                        if e.name in ["title", "amount", "account_name"]:
-                            if e.name == "amount":
-                                kwargs[e.name] = int(e.value)
-                            else:
-                                kwargs[e.name] = e.value
-                    search_results.append(OpportunitySearchResult(**kwargs))
-                    next_cursor = scored_document.cursor.web_safe_string
-                if next_cursor:
-                    next_query_options = search.QueryOptions(
-                                                             limit=1,
-                                                             cursor=scored_document.cursor
-                                                             )
-                    next_query = search.Query(
-                                              query_string=query_string,
-                                              options=next_query_options
-                                              )
-                    if next_query:
-                        next_results = index.search(next_query)
-                        if len(next_results.results) == 0:
-                            next_cursor = None
-        except search.Error:
-            logging.exception('Search failed')
-        return OpportunitySearchResults(
-                                        items=search_results,
-                                        nextPageToken=next_cursor
-                                        )
-    
+        return Opportunity.search(
+                                user_from_email = user_from_email,
+                                request = request
+                                )
+
     # opportunities.update api
     @Opportunity.method(
                         user_required=True,
@@ -3595,8 +2330,8 @@ class CrmEngineApi(remote.Service):
         #my_model.organization =  user_from_email.organization
         my_model.put()
         return my_model
-  
-    
+
+
 
     # Opportunity stages APIs
     # opportunitystages.delete api
@@ -3620,8 +2355,8 @@ class CrmEngineApi(remote.Service):
         if not my_model.from_datastore:
             raise('Opportunity stage not found')
         return my_model
-    
-    # opportunitystages.insert api    
+
+    # opportunitystages.insert api
     @Opportunitystage.method(
                              user_required=True,
                              path='opportunitystage',
@@ -3669,7 +2404,7 @@ class CrmEngineApi(remote.Service):
         if not my_model.from_datastore:
             raise endpoints.NotFoundException('Permission not found')
         return my_model
-    
+
     # permissions.insert API
     @Permission.method(user_required=True,path='permissions', http_method='POST', name='permissions.insert')
     def PermissionInsert(self, my_model):
@@ -3687,7 +2422,7 @@ class CrmEngineApi(remote.Service):
             invited_user = User.query( User.email == my_model.value, User.organization==user_from_email.organization).get()
             if invited_user is None:
                 raise endpoints.UnauthorizedException('The user does not exist')
-           
+
             my_model.value = invited_user.google_user_id
             my_model.organization = user_from_email.organization
             my_model.put()
@@ -3716,8 +2451,8 @@ class CrmEngineApi(remote.Service):
     # permissions.list api
     @Permission.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='permissions',name='permissions.list')
     def PermissionList(self,query):
-        return query 
-    
+        return query
+
     # permissions.patch api
     @Permission.method(user_required=True,
                   http_method='PATCH', path='permissions/{id}', name='permissions.patch')
@@ -3738,7 +2473,7 @@ class CrmEngineApi(remote.Service):
 
         my_model.put()
         return my_model
-    
+
     # Shows: Customer Stories  Search API
     # showcustomerstories.search api
     @endpoints.method(SearchRequest, ShowSearchResults,
@@ -3747,7 +2482,7 @@ class CrmEngineApi(remote.Service):
     def showcustomerstories_search(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         organization = str(user_from_email.organization.id())
-      
+
         index = search.Index(name="GlobalIndex")
         #Show only objects where you have permissions
         query_string = request.q + ' type:Show AND (organization:' +organization+  ' AND type_show:Customer_Story'+' AND (access:public OR (owner:'+ user_from_email.google_user_id +' OR collaborators:'+ user_from_email.google_user_id+')))'
@@ -3766,13 +2501,13 @@ class CrmEngineApi(remote.Service):
         if limit:
             options = search.QueryOptions(limit=limit,cursor=cursor)
         else:
-            options = search.QueryOptions(cursor=cursor)    
+            options = search.QueryOptions(cursor=cursor)
         query = search.Query(query_string=query_string,options=options)
         try:
             if query:
                 results = index.search(query)
                 total_matches = results.number_found
-              
+
                 # Iterate over the documents in the results
                 for scored_document in results:
                     kwargs = {
@@ -3781,9 +2516,9 @@ class CrmEngineApi(remote.Service):
                     for e in scored_document.fields:
                         if e.name in ["title", "status","starts_at","ends_at"]:
                             kwargs[e.name]=e.value
-                    
+
                     search_results.append(ShowSearchResult(**kwargs))
-                  
+
                     next_cursor = scored_document.cursor.web_safe_string
                 if next_cursor:
                     next_query_options = search.QueryOptions(limit=1,cursor=scored_document.cursor)
@@ -3791,8 +2526,8 @@ class CrmEngineApi(remote.Service):
                     if next_query:
                         next_results = index.search(next_query)
                         if len(next_results.results)==0:
-                            next_cursor = None            
-                                    
+                            next_cursor = None
+
         except search.Error:
             logging.exception('Search failed')
         return ShowSearchResults(items = search_results,nextPageToken=next_cursor)
@@ -3805,7 +2540,7 @@ class CrmEngineApi(remote.Service):
     def showproducts_search(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         organization = str(user_from_email.organization.id())
-        
+
         index = search.Index(name="GlobalIndex")
         #Show only objects where you have permissions
         query_string = request.q + ' type:Show AND (organization:' +organization+  ' AND type_show:Product_Video'+' AND (access:public OR (owner:'+ user_from_email.google_user_id +' OR collaborators:'+ user_from_email.google_user_id+')))'
@@ -3824,13 +2559,13 @@ class CrmEngineApi(remote.Service):
         if limit:
             options = search.QueryOptions(limit=limit,cursor=cursor)
         else:
-            options = search.QueryOptions(cursor=cursor)    
+            options = search.QueryOptions(cursor=cursor)
         query = search.Query(query_string=query_string,options=options)
         try:
             if query:
                 results = index.search(query)
                 total_matches = results.number_found
-                
+
                 # Iterate over the documents in the results
                 for scored_document in results:
                     kwargs = {
@@ -3839,9 +2574,9 @@ class CrmEngineApi(remote.Service):
                     for e in scored_document.fields:
                         if e.name in ["title", "status","starts_at","ends_at"]:
                             kwargs[e.name]=e.value
-                    
+
                     search_results.append(ShowSearchResult(**kwargs))
-                  
+
                     next_cursor = scored_document.cursor.web_safe_string
                 if next_cursor:
                     next_query_options = search.QueryOptions(limit=1,cursor=scored_document.cursor)
@@ -3849,8 +2584,8 @@ class CrmEngineApi(remote.Service):
                     if next_query:
                         next_results = index.search(next_query)
                         if len(next_results.results)==0:
-                            next_cursor = None            
-                                    
+                            next_cursor = None
+
         except search.Error:
             logging.exception('Search failed')
         return ShowSearchResults(items = search_results,nextPageToken=next_cursor)
@@ -3871,7 +2606,7 @@ class CrmEngineApi(remote.Service):
     def shows_get(self, my_model):
         if not my_model.from_datastore:
             raise endpoints.NotFoundException('Show not found.')
-        return my_model   
+        return my_model
 
     # shows.insert API
     @Show.method(
@@ -4010,7 +2745,7 @@ class CrmEngineApi(remote.Service):
         Edge.delete_all(start_node=tag_key)
         tag_key.delete()
         return message_types.VoidMessage()
-    
+
     # tags.insert api
     @Tag.method(user_required=True,path='tags', http_method='POST', name='tags.insert')
     def TagInsert(self, my_model):
@@ -4079,7 +2814,7 @@ class CrmEngineApi(remote.Service):
                                               author = author,
                                               completed_by = completed_by )
             return response
-            
+
         except (IndexError, TypeError):
             raise endpoints.NotFoundException('Note %s not found.' %
                                               (request.id,))
@@ -4110,11 +2845,11 @@ class CrmEngineApi(remote.Service):
                 service = build('calendar', 'v3', http=http)
                 # prepare params to insert
                 params = {
-                 "start": 
+                 "start":
                   {
                     "dateTime": task.due.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
                   },
-                 "end": 
+                 "end":
                   {
                     "dateTime": task.due.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
                   },
@@ -4127,18 +2862,12 @@ class CrmEngineApi(remote.Service):
 
         if request.reminder:
             pass
-          
+
         task_key = task.put_async()
         task_key_async = task_key.get_result()
         if request.about:
             # insert edges
-            Edge.insert(start_node = ndb.Key(urlsafe=request.about),
-                      end_node = task_key_async,
-                      kind = 'tasks',
-                      inverse_edge = 'related_to')
-        if request.about:
             about_key = ndb.Key(urlsafe=request.about)
-            # insert edges
             Edge.insert(start_node = about_key,
                       end_node = task_key_async,
                       kind = 'tasks',
@@ -4147,7 +2876,7 @@ class CrmEngineApi(remote.Service):
                                             parent_key = task_key_async,
                                             kind = 'tasks',
                                             indexed_edge = str(about_key.id())
-                                            )   
+                                            )
         else:
             data = {}
             data['id'] = task_key_async.id()
@@ -4158,14 +2887,14 @@ class CrmEngineApi(remote.Service):
                 Edge.insert(start_node = task_key_async,
                       end_node = ndb.Key(urlsafe=assignee.entityKey),
                       kind = 'assignees',
-                      inverse_edge = 'assigned_to') 
+                      inverse_edge = 'assigned_to')
         if request.tags:
             # insert edges
             for tag in request.tags:
                 Edge.insert(start_node = task_key_async,
                       end_node = ndb.Key(urlsafe=tag.entityKey),
                       kind = 'tags',
-                      inverse_edge = 'tagged_on')      
+                      inverse_edge = 'tagged_on')
         return TaskSchema()
 
     # tasks.listv2 api
@@ -4174,157 +2903,11 @@ class CrmEngineApi(remote.Service):
                       name='tasks.listv2')
     def tasks_list_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        curs = Cursor(urlsafe=request.pageToken)
-        filtered_tasks = list()
-        if request.limit:
-            limit = int(request.limit)
-        else:
-            limit = 10
-        items = list()
-        date_to_string = lambda x: x.strftime("%Y-%m-%d") if x else ""
-        date_time_to_string = lambda x: x.strftime("%Y-%m-%dT%H:%M:00.000") if x else ""
-        filtered_tasks = list()
-        you_can_loop = True
-        count = 0
-        while you_can_loop:
-            if request.order:
-                ascending = True
-                if request.order.startswith('-'):
-                    order_by = request.order[1:]
-                    ascending = False
-                else:
-                    order_by = request.order
-                attr = Task._properties.get(order_by)
-                if attr is None:
-                    raise AttributeError('Order attribute %s not defined.' % (attr_name,))
-                if ascending:
-                    tasks, next_curs, more = Task.query().filter(Task.organization==user_from_email.organization).order(+attr).fetch_page(limit, start_cursor=curs)
-                else:
-                    tasks, next_curs, more = Task.query().filter(Task.organization==user_from_email.organization).order(-attr).fetch_page(limit, start_cursor=curs)
-            else:
-                tasks, next_curs, more = Task.query().filter(Task.organization==user_from_email.organization).fetch_page(limit, start_cursor=curs)
-            for task in tasks:
-                if count<= limit:
-                    is_filtered = True
-                    if task.access == 'private' and task.owner!=user_from_email.google_user_id:
-                        end_node_set = [user_from_email.key]
-                        if not Edge.find(start_node=task.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
-                            is_filtered = False
-                    if request.status and task.status!=request.status and is_filtered:
-                        is_filtered = False 
-                    if request.tags and is_filtered:
-                        end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
-                        if not Edge.find(start_node=task.key,kind='tags',end_node_set=end_node_set,operation='AND'):
-                            is_filtered = False
-                    if request.assignee and is_filtered:
-                        end_node_set = [user_from_email.key]
-                        if not Edge.find(start_node=task.key,kind='assignees',end_node_set=end_node_set,operation='AND'):
-                            is_filtered = False
-                    if request.owner and task.owner!=request.owner and is_filtered:
-                        is_filtered = False
-                    if request.about and is_filtered:
-                        end_node_set = [ndb.Key(urlsafe=request.about)]
-                        if not Edge.find(start_node=task.key,kind='related_to',end_node_set=end_node_set,operation='AND'):
-                            is_filtered = False
-                    if request.urgent and is_filtered:
-                        if task.due is None:
-                            is_filtered = False
-                        else:
-                            now = datetime.datetime.now()
-                            diff = task.due - now
-                            if diff.days>2:
-                                is_filtered = False
-                        if task.status=='closed':
-                            is_filtered = False
-
-                    if is_filtered:
-                        count = count + 1
-                        #list of tags related to this task
-                        edge_list = Edge.list(start_node=task.key,kind='tags')
-                        tag_list = list()
-                        for edge in edge_list['items']:
-                            tag_list.append( TagSchema(edgeKey = edge.key.urlsafe(),
-                                          name = edge.end_node.get().name,
-                                          color = edge.end_node.get().color))
-                        about = None
-                        edge_list = Edge.list(start_node=task.key,kind='related_to')
-                        for edge in edge_list['items']:
-                            about_kind = edge.end_node.kind()
-                            if about_kind == 'Contact' or about_kind == 'Lead':
-                                about_name = edge.end_node.get().firstname + ' ' + edge.end_node.get().lastname
-                            else:
-                                about_name = edge.end_node.get().name
-                            about = DiscussionAboutSchema(kind=about_kind,
-                                                               id=str(edge.end_node.id()),
-                                                               name=about_name)
-                        #list of tags related to this task
-                        edge_list = Edge.list(start_node=task.key,kind='assignees')
-                        assignee_list = list()
-                        for edge in edge_list['items']:
-                            assignee_list.append( AuthorSchema(edgeKey = edge.key.urlsafe(),
-                                          google_user_id = edge.end_node.get().google_user_id,
-                                          display_name = edge.end_node.get().google_display_name,
-                                          google_public_profile_url = edge.end_node.get().google_public_profile_url,
-                                          photo = edge.end_node.get().google_public_profile_photo_url) )
-
-                        status_color = 'green'
-                        status_label = ''
-                        if task.due:
-                            now = datetime.datetime.now()
-                            diff = task.due - now
-                            if diff.days>=0 and diff.days<=2:
-                                status_color = 'orange'
-                                status_label = 'soon: due in '+ str(diff.days) + ' days'
-                            elif diff.days<0:
-                                status_color = 'red'
-                                status_label = 'overdue'
-                            else:
-                                status_label = 'due in '+ str(diff.days) + ' days'
-                        if task.status == 'closed':
-                            status_color = 'white'
-                            status_label = 'closed'
-                        author_schema = None
-                        if task.author:
-                            author_schema = AuthorSchema(google_user_id = task.author.google_user_id,
-                                                          display_name = task.author.display_name,
-                                                          google_public_profile_url = task.author.google_public_profile_url,
-                                                          photo = task.author.photo)
-                        task_schema = TaskSchema(
-                                  id = str( task.key.id() ),
-                                  entityKey = task.key.urlsafe(),
-                                  title = task.title,
-                                  status = task.status,
-                                  status_color = status_color,
-                                  status_label = status_label,
-                                  comments = 0,
-                                  about = about,
-                                  created_by = author_schema,
-                                  completed_by = AuthorSchema(),
-                                  tags = tag_list,
-                                  assignees = assignee_list,
-                                  created_at = date_time_to_string(task.created_at),
-                                  updated_at = date_time_to_string(task.updated_at)
-                                )
-                        if task.due:
-                            task_schema.due =  date_to_string(task.due)
-                        items.append(task_schema)   
-            if (count == limit):
-                you_can_loop = False
-            print '@@@@@@@@@@@@*********#######'
-            print more
-            print next_curs
-            if more and next_curs:
-                curs = next_curs
-            else:
-              you_can_loop = False
-        print 'After the loop'
-        print more
-        print next_curs 
-        if next_curs and more:
-            next_curs_url_safe = next_curs.urlsafe() 
-        else:
-            next_curs_url_safe = None           
-        return  TaskListResponse(items = items, nextPageToken = next_curs_url_safe)
+        return Task.list(
+                        user_from_email = user_from_email,
+                        request = request
+                        )
+        
 
     # Topics APIs
     # topics.list api
@@ -4376,10 +2959,10 @@ class CrmEngineApi(remote.Service):
             service.permissions().insert(fileId=folderid, sendNotificationEmails= False, body=new_permission).execute()
         except:
             raise endpoints.UnauthorizedException('Invalid grant' )
-            return 
+            return
 
         invited_user = User.query( User.email == my_model.email).get()
-    
+
         if invited_user is not None:
             if invited_user.organization == user_from_email.organization or invited_user.organization is None:
                 invited_user.organization = user_from_email.organization
@@ -4393,16 +2976,16 @@ class CrmEngineApi(remote.Service):
                 raise endpoints.UnauthorizedException('User exist within another organization' )
                 return
 
-            
+
         else:
             my_model.organization = user_from_email.organization
             my_model.status = 'invited'
             profile = Profile.query(Profile.name=='Standard User', Profile.organization==user_from_email.organization).get()
             my_model.init_user_config(user_from_email.organization,profile.key)
-        
+
             my_model.put()
             invited_user_id = my_model.id
-        
+
         confirmation_url = "http://gcdc2013-iogrow.appspot.com//sign-in?id=" + str(invited_user_id) + '&'
         sender_address = "ioGrow notifications <notifications@gcdc2013-iogrow.appspotmail.com>"
         subject = "Confirm your registration"
