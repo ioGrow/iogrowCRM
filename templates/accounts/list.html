@@ -167,36 +167,31 @@
 
             <div class="col-md-9">
              <div class="inner-cards-container">
-                <div  ng-repeat="account in accounts" data-column="<%=getPosition($index)%>" class="cardElement">
-                    <div droppable class="details" ng-drop="dropTag(account)">
-                      <div class="cardHeader">
+                <div droppable  ng-repeat="account in accounts" data-column="<%=getPosition($index)%>" class="cardElement" ng-drop="dropTag(account)">
+                    <div class="cardHeader">
                           <a href="/#/accounts/show/<%= account.id %>">
                               <h2 class="cardTitle">
                                 <%= account .name %>
                               </h2>
                           </a>  
-                      </div>
-                      <hr>
+                    </div>
+                    <hr>
+                    <div class="cardDetails">
                       <div class="desc">
                         <div class="row margin-bottom-5">
                           <div class="col-md-12"><a ng-show="account.industry" class="desc" href="/#/search/type:Account <%=account.industry%>">#<%=account.industry%></a>
                           </div>
                           
                         </div>
-                        <br/>
-                          <div class="row">
-                          <div class="col-md-12">
-                               <a ng-repeat="tag in account.tags" href="/#/search/type:Account tags:<%=tag.id%>"> <span class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
-                               </a>
-                          </div>
-                          
+                      </div>
+                      <br>
+                      <div class="row cardTags">
+                        <div class="col-md-12">
+                             <a ng-repeat="tag in account.tags" href="/#/search/type:Account tags:<%=tag.id%>"> <span class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
+                             </a>
                         </div>
-                        
-                         
-
                       </div>
                     </div>
-                   
                 </div>
                 <script type="text/javascript">
                     $('.inner-cards-container').waterfall({ 
