@@ -59,6 +59,7 @@ accountservices.factory('Account', function($http) {
                // list infonodes
                 var renderMap = false;
                 if (resp.infonodes){
+
                     if (resp.infonodes.items){
                         for (var i=0;i<resp.infonodes.items.length;i++)
                         { 
@@ -73,6 +74,7 @@ accountservices.factory('Account', function($http) {
                                     $scope.infonodes[resp.infonodes.items[i].kind][j][$scope.infonodes[resp.infonodes.items[i].kind][j].fields[v].field] = $scope.infonodes[resp.infonodes.items[i].kind][j].fields[v].value;
                                   }
                               }
+
                         }
                         if (renderMap){
                           $scope.renderMaps();
