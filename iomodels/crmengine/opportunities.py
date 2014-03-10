@@ -6,9 +6,30 @@ from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
 from endpoints_proto_datastore.ndb import EndpointsModel
 from iomodels.crmengine.tags import Tag,TagSchema
 from iomodels.crmengine.opportunitystage import OpportunitystageSchema
-from iograph import Edge
+from iograph import Node,Edge,InfoNodeListResponse
+from iomodels.crmengine.documents import Document,DocumentListResponse
+from iomodels.crmengine.notes import Note,TopicListResponse
+from iomodels.crmengine.tasks import Task,TaskRequest,TaskListResponse
+from iomodels.crmengine.events import Event,EventListResponse
 from endpoints_helper import EndpointsHelper
 import model
+
+
+class AccountSchema(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    name = messages.StringField(3)
+
+class ListRequest(messages.Message):
+    limit = messages.IntegerField(1)
+    pageToken = messages.StringField(2)
+
+class OpportunityGetRequest(messages.Message):
+    id = messages.IntegerField(1,required = True)
+    topics = messages.MessageField(ListRequest, 2)
+    tasks = messages.MessageField(ListRequest, 3)
+    events = messages.MessageField(ListRequest, 4)
+    documents = messages.MessageField(ListRequest, 5)
 
 class OpportunityInsertRequest(messages.Message):
     name = messages.StringField(1)
@@ -24,10 +45,22 @@ class OpportunitySchema(messages.Message):
     amount = messages.StringField(4)
     current_stage = messages.MessageField(OpportunitystageSchema,5) 
     stages = messages.MessageField(OpportunitystageSchema,6,repeated = True)
-    # TODO: Add related accounts and contacts 
-    tags = messages.MessageField(TagSchema,7, repeated = True)
-    created_at = messages.StringField(8)
-    updated_at = messages.StringField(9)
+    infonodes = messages.MessageField(InfoNodeListResponse,7)
+    topics = messages.MessageField(TopicListResponse,8)
+    tasks = messages.MessageField(TaskListResponse,9)
+    events = messages.MessageField(EventListResponse,10)
+    documents = messages.MessageField(DocumentListResponse,11)
+    tags = messages.MessageField(TagSchema,12, repeated = True)
+    created_at = messages.StringField(13)
+    updated_at = messages.StringField(14)
+    access = messages.StringField(15)
+    closed_date = messages.StringField(16)
+    competitor = messages.StringField(17)
+    reason_lost = messages.StringField(18)
+    description = messages.StringField(19)
+    opportunity_type = messages.StringField(20)
+    source = messages.StringField(21)
+    account = messages.MessageField(AccountSchema,22)
 
 class OpportunityListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -158,6 +191,96 @@ class Opportunity(EndpointsModel):
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)
 
+    @classmethod
+    def get_schema(cls,user_from_email,request):
+        opportunity = Opportunity.get_by_id(int(request.id))
+        if opportunity is None:
+            raise endpoints.NotFoundException('Opportunity not found.')
+        parents_edge_list = Edge.list(
+                                    start_node = opportunity.key,
+                                    kind = 'parents'
+                                    )
+        account_schema = None
+        for parent in parents_edge_list['items']:
+            if parent.end_node.kind() == 'Account':
+                account = parent.end_node.get()
+                account_schema = AccountSchema(
+                                        id = str( account.key.id() ),
+                                        entityKey = account.key.urlsafe(),
+                                        name = account.name
+                                        )
+        #list of tags related to this account
+        tag_list = Tag.list_by_parent(opportunity.key)
+        # list of infonodes
+        infonodes = Node.list_info_nodes(
+                                        parent_key = opportunity.key,
+                                        request = request
+                                        )
+        #list of topics related to this account
+        topics = None
+        if request.topics:
+            topics = Note.list_by_parent(
+                                        parent_key = opportunity.key,
+                                        request = request
+                                        )
+        tasks = None
+        if request.tasks:
+            tasks = Task.list_by_parent(
+                                        parent_key = opportunity.key,
+                                        request = request
+                                        )
+        events = None
+        if request.events:
+            events = Event.list_by_parent(
+                                        parent_key = opportunity.key,
+                                        request = request
+                                        )
+        documents = None
+        if request.documents:
+            documents = Document.list_by_parent(
+                                        parent_key = opportunity.key,
+                                        request = request
+                                        )
+        opportunity_stage_edges = Edge.list(
+                                                start_node = opportunity.key,
+                                                kind = 'stages',
+                                                limit = 1
+                                                )
+        current_stage_schema = None
+        if len(opportunity_stage_edges['items'])>0:
+            current_stage = opportunity_stage_edges['items'][0].end_node.get()
+            current_stage_schema = OpportunitystageSchema(  
+                                                        name=current_stage.name,
+                                                        probability= str(current_stage.probability),
+                                                        stage_changed_at=opportunity_stage_edges['items'][0].created_at.isoformat()
+                                                        )
+        closed_date = None
+        if opportunity.closed_date:
+            closed_date = opportunity.closed_date.strftime("%Y-%m-%dT%H:%M:00.000")
+        opportunity_schema = OpportunitySchema(
+                                  id = str( opportunity.key.id() ),
+                                  entityKey = opportunity.key.urlsafe(),
+                                  access = opportunity.access,
+                                  account = account_schema,
+                                  name = opportunity.name,
+                                  amount = str(opportunity.amount),
+                                  closed_date = closed_date,
+                                  competitor = opportunity.competitor,
+                                  reason_lost = opportunity.reason_lost,
+                                  description = opportunity.description,
+                                  opportunity_type = opportunity.opportunity_type,
+                                  source = opportunity.source, 
+                                  current_stage = current_stage_schema,
+                                  tags = tag_list,
+                                  topics = topics,
+                                  tasks = tasks,
+                                  events = events,
+                                  documents = documents,
+                                  infonodes = infonodes,
+                                  created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                  updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                )
+        return  opportunity_schema
     @classmethod
     def list(cls,user_from_email,request):
         curs = Cursor(urlsafe=request.pageToken)
