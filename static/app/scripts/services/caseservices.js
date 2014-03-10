@@ -17,6 +17,7 @@ accountservices.factory('Case', function() {
                $scope.listTasks();
                $scope.listEvents();
                $scope.listDocuments();
+               $scope.selectedTab = 2;
                document.title = "Case: " + $scope.casee.name ;
                // Call the method $apply to make the update on the scope
                //$scope.apply();
@@ -45,7 +46,7 @@ accountservices.factory('Case', function() {
 
   Case.list = function($scope,params){
       $scope.isLoading = true;
-      gapi.client.crmengine.cases.listv2(params).execute(function(resp) {
+      gapi.client.crmengine.cases.list(params).execute(function(resp) {
               if(!resp.code){
                  
                   if (!resp.items){
