@@ -1129,7 +1129,7 @@ $scope.updateintro = function(contact){
                   });
                  Attachement.attachfiles($scope,params);
                     
-                }
+          }
       }
      $scope.renderMaps = function(){
        

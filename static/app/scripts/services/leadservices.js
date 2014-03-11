@@ -7,7 +7,7 @@ leadservices.factory('Lead', function($http) {
   }
 
   Lead.get = function($scope,id) {
-          gapi.client.crmengine.leads.get(id).execute(function(resp) {
+          gapi.client.crmengine.leads.getv2(id).execute(function(resp) {
             if(!resp.code){
                $scope.lead = resp;
                $scope.isContentLoaded = true;
@@ -106,9 +106,8 @@ leadservices.factory('Lead', function($http) {
   };
   Lead.insert = function($scope,lead){
       $scope.isLoading = true;
-      gapi.client.crmengine.leads.insert(lead).execute(function(resp) {
-         console.log('in insert resp');
-         console.log(resp);
+      gapi.client.crmengine.leads.insertv2(lead).execute(function(resp) {
+         
          if(!resp.code){
           $scope.isLoading = false;
           $('#addLeadModal').modal('hide');

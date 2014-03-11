@@ -4,10 +4,37 @@ from google.appengine.api import search
 from endpoints_proto_datastore.ndb import EndpointsModel
 from protorpc import messages
 from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
+from endpoints_helper import EndpointsHelper
 from iomodels.crmengine.tags import Tag,TagSchema
-from iograph import Edge
+from iomodels.crmengine.tasks import Task,TaskRequest,TaskListResponse
+from iomodels.crmengine.events import Event,EventListResponse
+from iograph import Node,Edge,InfoNodeListResponse
+from iomodels.crmengine.notes import Note,TopicListResponse
+from iomodels.crmengine.documents import Document,DocumentListResponse
 import model
 
+
+class LeadInsertRequest(messages.Message):
+    company = messages.StringField(1)
+    firstname = messages.StringField(2)
+    lastname = messages.StringField(3)
+    title = messages.StringField(4)
+    access = messages.StringField(5)
+    source = messages.StringField(6)
+    status = messages.StringField(7)
+
+ # The message class that defines the ListRequest schema
+class ListRequest(messages.Message):
+    limit = messages.IntegerField(1)
+    pageToken = messages.StringField(2)
+
+class LeadGetRequest(messages.Message):
+    id = messages.IntegerField(1,required = True)
+    topics = messages.MessageField(ListRequest, 2)
+    tasks = messages.MessageField(ListRequest, 3)
+    events = messages.MessageField(ListRequest, 4)
+    documents = messages.MessageField(ListRequest, 5)
+    
 class LeadSchema(messages.Message):
     id = messages.StringField(1)
     entityKey = messages.StringField(2)
@@ -15,11 +42,20 @@ class LeadSchema(messages.Message):
     lastname = messages.StringField(4)
     company = messages.StringField(5)
     title = messages.StringField(6)
-    source = messages.StringField(7)
-    status = messages.StringField(8)
-    tags = messages.MessageField(TagSchema,9, repeated = True)
-    created_at = messages.StringField(10)
-    updated_at = messages.StringField(11)
+    tagline = messages.StringField(7)
+    introduction = messages.StringField(8)
+    infonodes = messages.MessageField(InfoNodeListResponse,9)
+    topics = messages.MessageField(TopicListResponse,10)
+    tasks = messages.MessageField(TaskListResponse,11)
+    events = messages.MessageField(EventListResponse,12)
+    documents = messages.MessageField(DocumentListResponse,13)
+    source = messages.StringField(14)
+    status = messages.StringField(15)
+    tags = messages.MessageField(TagSchema,16, repeated = True)
+    created_at = messages.StringField(17)
+    updated_at = messages.StringField(18)
+    access = messages.StringField(19)
+
 
 class LeadListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -175,6 +211,65 @@ class Lead(EndpointsModel):
         my_index.put(my_document)
 
     @classmethod
+    def get_schema(cls,user_from_email,request):
+        lead = Lead.get_by_id(int(request.id))
+        if lead is None:
+            raise endpoints.NotFoundException('Lead not found.')
+        #list of tags related to this account
+        tag_list = Tag.list_by_parent(lead.key)
+        # list of infonodes
+        infonodes = Node.list_info_nodes(
+                                        parent_key = lead.key,
+                                        request = request
+                                        )
+        #list of topics related to this account
+        topics = None
+        if request.topics:
+            topics = Note.list_by_parent(
+                                        parent_key = lead.key,
+                                        request = request
+                                        )
+        tasks = None
+        if request.tasks:
+            tasks = Task.list_by_parent(
+                                        parent_key = lead.key,
+                                        request = request
+                                        )
+        events = None
+        if request.events:
+            events = Event.list_by_parent(
+                                        parent_key = lead.key,
+                                        request = request
+                                        )
+        documents = None
+        if request.documents:
+            documents = Document.list_by_parent(
+                                        parent_key = lead.key,
+                                        request = request
+                                        )
+        lead_schema = LeadSchema(
+                                  id = str( lead.key.id() ),
+                                  entityKey = lead.key.urlsafe(),
+                                  access = lead.access,
+                                  firstname = lead.firstname,
+                                  lastname = lead.lastname,
+                                  title = lead.title,
+                                  company = lead.company,
+                                  source = lead.source,
+                                  status = lead.status,
+                                  tagline = lead.tagline,
+                                  introduction = lead.introduction,
+                                  tags = tag_list,
+                                  topics = topics,
+                                  tasks = tasks,
+                                  events = events,
+                                  documents = documents,
+                                  infonodes = infonodes,
+                                  created_at = lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                  updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                )
+        return  lead_schema
+    @classmethod
     def list(cls,user_from_email,request):
         curs = Cursor(urlsafe=request.pageToken)
         if request.limit:
@@ -311,3 +406,32 @@ class Lead(EndpointsModel):
                                  items=search_results,
                                  nextPageToken=next_cursor
                                  )
+
+    @classmethod
+    def insert(cls,user_from_email,request):
+        print '*************************************************'
+        print request
+        folder_name = request.firstname + ' ' + request.lastname
+        created_folder = EndpointsHelper.insert_folder(
+                                                       user_from_email,
+                                                       folder_name,
+                                                       'Lead'
+                                                       )
+        lead = cls(
+                    firstname = request.firstname,
+                    lastname = request.lastname,
+                    title = request.title,
+                    company = request.company,
+                    status = request.status,
+                    source = request.source,
+                    owner = user_from_email.google_user_id,
+                    organization = user_from_email.organization,
+                    access = request.access,
+                    folder = created_folder['id']
+                    )
+        lead_key = lead.put_async()
+        lead_key_async = lead_key.get_result()
+        data = {}
+        data['id'] = lead_key_async.id()
+        lead.put_index(data)
+        return LeadSchema(id=str(lead_key_async.id()))

@@ -40,7 +40,7 @@ from iomodels.crmengine.opportunities import Opportunity,OpportunitySchema,Oppor
 from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema
 from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest
 from iomodels.crmengine.shows import Show
-from iomodels.crmengine.leads import Lead,LeadListRequest,LeadListResponse,LeadSearchResults
+from iomodels.crmengine.leads import Lead,LeadInsertRequest,LeadListRequest,LeadListResponse,LeadSearchResults,LeadGetRequest,LeadSchema
 from iomodels.crmengine.cases import Case,CaseInsertRequest,CaseSchema,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
 #from iomodels.crmengine.products import Product
 from iomodels.crmengine.comments import Comment
@@ -1771,12 +1771,33 @@ class CrmEngineApi(remote.Service):
         my_model.key.delete()
         return message_types.VoidMessage()
 
+    # leads.get api v2
+    @endpoints.method(LeadGetRequest, LeadSchema,
+                      path='leads/getv2', http_method='POST',
+                      name='leads.getv2')
+    def lead_get_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Lead.get_schema(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
     # leads.get API
     @Lead.method(request_fields=('id',),path='leads/{id}', http_method='GET', name='leads.get')
     def LeadGet(self, my_model):
         if not my_model.from_datastore:
             raise endpoints.NotFoundException('Lead not found')
         return my_model
+
+    # leads.insertv2 api
+    @endpoints.method(LeadInsertRequest, LeadSchema,
+                      path='leads/insertv2', http_method='POST',
+                      name='leads.insertv2')
+    def lead_insert_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Lead.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
 
     # leads.insert API
     @Lead.method(user_required=True,path='leads',http_method='POST',name='leads.insert')

@@ -20,7 +20,7 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge'
       
       $scope.lead.access ='public';
       $scope.order = '-updated_at';
-      $scope.status = 'new';
+      $scope.status = 'New';
       $scope.selected_tags = [];
       $scope.draggedTag=null;
 
@@ -78,13 +78,16 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge'
       
     
       $scope.save = function(lead){
-        var params ={'firstname':lead.firstname,
+        var params ={
+                      'firstname':lead.firstname,
                       'lastname':lead.lastname,
                       'company':lead.company,
                       'title':lead.title,
                       'source': lead.source,
                       'access': lead.access,
-                      'status':$scope.stage_selected.status};
+                      'status':$scope.stage_selected.status
+                    };
+        console.log(params);
         Lead.insert($scope,params);
         $('#addLeadModal').modal('hide')
       };
