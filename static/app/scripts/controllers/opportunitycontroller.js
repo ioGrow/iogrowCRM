@@ -24,7 +24,7 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
      $scope.order = '-updated_at';
      $scope.selected_tags = [];
      $scope.draggedTag=null;
-     $scope.selectedTab = 2;
+     
 
       // What to do after authentication
        $scope.runTheProcess = function(){
@@ -424,7 +424,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
     function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email,Attachement,InfoNode) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Opportunities").addClass("active");
-      $scope.selectedTab = 1;
+     $scope.selectedTab = 2;
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.isContentLoaded = false;
