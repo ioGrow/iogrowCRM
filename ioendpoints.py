@@ -36,7 +36,7 @@ from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertR
 from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
-from iomodels.crmengine.opportunities import Opportunity,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults
+from iomodels.crmengine.opportunities import Opportunity,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest
 from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema
 from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest
 from iomodels.crmengine.shows import Show
@@ -1081,7 +1081,7 @@ class CrmEngineApi(remote.Service):
         my_model.put()
         return my_model
 
-    # accounts.list api v2
+    # contacts.get api v2
     @endpoints.method(ContactGetRequest, ContactSchema,
                       path='contacts/getv2', http_method='POST',
                       name='contacts.getv2')
@@ -2194,6 +2194,16 @@ class CrmEngineApi(remote.Service):
         my_model.key.delete()
         return message_types.VoidMessage()
 
+    # opportunities.get api v2
+    @endpoints.method(OpportunityGetRequest, OpportunitySchema,
+                      path='opportunities/getv2', http_method='POST',
+                      name='opportunities.getv2')
+    def opportunity_get_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Opportunity.get_schema(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
     # opportunities.get API
     @Opportunity.method(
                         request_fields=('id',),

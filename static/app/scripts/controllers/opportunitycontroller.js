@@ -444,11 +444,32 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
       $scope.stage_selected={};
       $scope.email = {};
       $scope.infonodes = {};
+      $scope.documentpagination = {};
+     $scope.documentCurrentPage=01;
+     $scope.documentpages=[];
 
       // What to do after authentication
        $scope.runTheProcess = function(){
-          var opportunityid = {'id':$route.current.params.opportunityId};
-          Opportunity.get($scope,opportunityid);
+          var params = {
+                          'id':$route.current.params.opportunityId,
+                          
+                          'topics':{
+                            'limit': '7'
+                          },
+
+                          'documents':{
+                            'limit': '6'
+                          },
+
+                          'tasks':{
+                            
+                          },
+
+                          'events':{
+                            
+                          }
+                      };
+          Opportunity.get($scope,params);
           User.list($scope,{});
           //HKA 13.12.2013 to retrieve the opportunities's stages
           Opportunitystage.list($scope,{});
@@ -460,25 +481,24 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
      //HKA 09.11.2013 Add a new Task
      $scope.addTask = function(task){
       
-        $('#myModal').modal('hide');
-        var params ={}
-
-        console.log('adding a new task');
-        console.log(task);
-        
+          $('#myModal').modal('hide');
         if (task.due){
 
-            var dueDate= $filter('date')(task.due,['yyyy-MM-dd']);
-            dueDate = dueDate +'T00:00:00.000000'
+            var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
+            
             params ={'title': task.title,
                       'due': dueDate,
-                      'about':$scope.opportunity.entityKey
+                      'parent': $scope.opportunity.entityKey
             }
-            console.log(dueDate);
+            
+            
         }else{
             params ={'title': task.title,
-                     'about':$scope.opportunity.entityKey}
+                     'parent': $scope.opportunity.entityKey
+                   }
         };
+        $scope.task.title='';
+        $scope.task.dueDate='0000-00-00T00:00:00-00:00';
         Task.insert($scope,params);
      }
 
@@ -489,11 +509,11 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
        
      }
      $scope.listTasks = function(){
-        var params = {'about':$scope.opportunity.entityKey,
-                      'order': '-updated_at'
-                      
+        var params = {
+                        'id':$scope.opportunity.id,
+                        'tasks':{}
                       };
-        Task.list($scope,params);
+        Opportunity.get($scope,params);
 
      }
      $scope.editOpp = function(){
@@ -507,55 +527,63 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
         var nextPage = $scope.topicCurrentPage + 1;
         var params = {};
           if ($scope.topicpages[nextPage]){
-            params = {'about_kind':'Opportunity',
-                      'about_item':$scope.opportunity.id,
-                      'order': '-updated_at',
-                      'limit': 5,
-                      'pageToken':$scope.topicpages[nextPage]
+            params = {
+                      'id':$scope.opportunity.id,
+                        'topics':{
+                          'limit': '7',
+                          'pageToken':$scope.topicpages[nextPage]
+                        }
                      }
-          }else{
-            params = {'about_kind':'Opportunity',
-                      'about_item':$scope.opportunity.id,
-                      'order': '-updated_at',
-                      'limit': 5}
+            }else{
+            params = {
+                      'id':$scope.opportunity.id,
+                        'topics':{
+                          'limit': '7'
+                        }
+                     }
           }
-          console.log('in listNextPageItems');
+          
           $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ; 
-          Topic.list($scope,params);
+          Opportunity.get($scope,params);
      }
      $scope.TopiclistPrevPageItems = function(){
        
        var prevPage = $scope.topicCurrentPage - 1;
        var params = {};
+       
           if ($scope.topicpages[prevPage]){
-            params = {'about_kind':'Opportunity',
-                      'about_item':$scope.opportunity.id,
-                      'order': '-updated_at',
-                      'limit': 5,
-                      'pageToken':$scope.topicpages[prevPage]
+            params = {
+                      'id':$scope.opportunity.id,
+                        'topics':{
+                          'limit': '7',
+                          'pageToken':$scope.topicpages[prevPage]
+                        }
                      }
           }else{
-            params = {'about_kind':'Opportunity',
-                      'about_item':$scope.opportunity.id,
-                      'order': '-updated_at',
-                      'limit': 5}
+            params = {
+                      'id':$scope.opportunity.id,
+                        'topics':{
+                          'limit': '7'
+                        }
+                     }
           }
           $scope.topicCurrentPage = $scope.topicCurrentPage - 1 ;
-          Topic.list($scope,params);
+          Opportunity.get($scope,params);
           
      }
     
      $scope.listTopics = function(opportunity){
-        var params = {'about_kind':'Opportunity',
-                      'about_item':$scope.opportunity.id,
-                      'order': '-updated_at',
-                      'limit': 5
-                      };
-        Topic.list($scope,params);
+        var params = {
+                      'id':$scope.opportunity.id,
+                      'topics':{
+                             'limit': '7'
+                       }
+                    };
+          Opportunity.get($scope,params);
 
      }
      $scope.hilightTopic = function(){
-        console.log('Should higll');
+        
        $('#topic_0').effect( "bounce", "slow" );
        $('#topic_0 .message').effect("highlight","slow");
      }
@@ -608,7 +636,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
 //HKA 11.11.2013 Add new Event
  $scope.addEvent = function(ioevent){
       
-        $('#newEventModal').modal('hide');
+         $('#newEventModal').modal('hide');
         var params ={}       
         
         if (ioevent.starts_at){
@@ -617,24 +645,23 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
                       'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
                       'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
                       'where': ioevent.where,
-                      'about_kind':'Opportunity',
-                      'about_item':$scope.opportunity.id
+                      'parent':$scope.opportunity.entityKey
               }
 
             }else{
-              params ={'title': ioevent.title,
+              params ={
+                'title': ioevent.title,
                       'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
                       'where': ioevent.where,
-                      'about_kind':'Opportunity',
-                      'about_item':$scope.opportunity.id
+                      'parent':$scope.opportunity.entityKey
               }
             }
-            console.log('inserting the event');
-            console.log(params);
-            Event.insert($scope,params);
-
             
-        };
+            Event.insert($scope,params);
+            $scope.ioevent.title='';
+            $scope.ioevent.where='';
+            $scope.ioevent.starts_at='T00:00:00.000000';
+          };
      };
      $scope.hilightEvent = function(){
         
@@ -643,22 +670,24 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
        
      };
      $scope.listEvents = function(){
-        var params = {'about_kind':'Opportunity',
-                      'about_item':$scope.opportunity.id,
-                      'order': 'starts_at',
-                      'limit': 5
+        var params = {
+                        'id':$scope.opportunity.id,
+                        'events':{
+                          
+                        }
                       };
-        Event.list($scope,params);
+        Opportunity.get($scope,params);
 
      };
 
 
  //HKA 11.11.2013 Add Note
   $scope.addNote = function(note){
-    var params = {'title':$scope.note.title,
-                  'content':$scope.note.content,
-                  'about_item':$scope.opportunity.id,
-                  'about_kind':'Opportunity' };
+    var params ={
+                  'about': $scope.opportunity.entityKey,
+                  'title': note.title,
+                  'content': note.content
+      };
     Note.insert($scope,params);
     $scope.note.title='';
     $scope.note.content='';
@@ -729,13 +758,67 @@ $scope.deleteopportunity= function(){
      $('#BeforedeleteOpportunity').modal('hide');
      };
 
+     $scope.DocumentlistNextPageItems = function(){
+        
+ 
+        var nextPage = $scope.documentCurrentPage + 1;
+        var params = {};
+          if ($scope.documentpages[nextPage]){
+            params = {
+                        'id':$scope.opportunity.id,
+                        'opportunities':{
+                          'limit': '6',
+                          'pageToken':$scope.documentpages[nextPage]
+                        }
+                      }
+            
+          }else{
+            params = {
+                        'id':$scope.opportunity.id,
+                        'documents':{
+                          'limit': '6'
+                        }
+                      }
+            }
+          $scope.documentCurrentPage = $scope.documentCurrentPage + 1 ;
+          
+          Opportunity.get($scope,params);
+          
+     }
+     $scope.DocumentPrevPageItems = function(){
+            
+       var prevPage = $scope.documentCurrentPage - 1;
+       var params = {};
+          if ($scope.documentpages[prevPage]){
+            params = {
+                        'id':$scope.opportunity.id,
+                        'opportunities':{
+                          'limit': '6',
+                          'pageToken':$scope.documentpages[prevPage]
+                        }
+                      }
+            
+          }else{
+            params = {
+                        'id':$scope.opportunity.id,
+                        'opportunities':{
+                          'limit': '6'
+                        }
+                      }
+          }
+          $scope.documentCurrentPage = $scope.documentCurrentPage - 1 ;
+          Opportunity.get($scope,params);
+
+              
+     };
      $scope.listDocuments = function(){
-        var params = {'about_kind':'Opportunity',
-                      'about_item':$scope.opportunity.id,
-                      'order': '-updated_at',
-                      'limit': 5
-                      };
-        Attachement.list($scope,params);
+        var params = {
+                        'id':$scope.opportunity.id,
+                        'documents':{
+                          'limit': '6'
+                        }
+                      }
+        Opportunity.get($scope,params);
 
      };
      $scope.showCreateDocument = function(type){
@@ -745,14 +828,16 @@ $scope.deleteopportunity= function(){
      };
      $scope.createDocument = function(newdocument){
         var mimeType = 'application/vnd.google-apps.' + $scope.mimeType;
-        var params = {'about_kind':'Opportunity',
-                      'about_item': $scope.opportunity.id,
+        var params = {
+                      'parent': $scope.opportunity.entityKey,
                       'title':newdocument.title,
-                      'mimeType':mimeType };
+                      'mimeType':mimeType 
+                     };
         Attachement.insert($scope,params);
 
      };
      $scope.createPickerUploader = function() {
+          var developerKey = 'AIzaSyD___EKeONhEP1JDWsNQi0zQhlGGzuwRI4';
           var projectfolder = $scope.opportunity.folder;
           var docsView = new google.picker.DocsView()
               .setIncludeFolders(true) 
@@ -761,7 +846,9 @@ $scope.deleteopportunity= function(){
               addView(new google.picker.DocsUploadView().setParent(projectfolder)).
               addView(docsView).
               setCallback($scope.uploaderCallback).
-              setAppId(12345).
+              setOAuthToken(window.authResult.access_token).
+              setDeveloperKey(developerKey).
+              setAppId(987765099891).
                 enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
               build();
           picker.setVisible(true);
@@ -771,8 +858,10 @@ $scope.deleteopportunity= function(){
         
 
         if (data.action == google.picker.Action.PICKED) {
-                var params = {'about_kind': 'Opportunity',
-                                      'about_item':$scope.opportunity.id};
+                var params = {
+                              'access': $scope.opportunity.access,
+                              'parent':$scope.opportunity.entityKey
+                            };
                 params.items = new Array();
                
                  $.each(data.docs, function(index) {
@@ -794,9 +883,7 @@ $scope.deleteopportunity= function(){
                   });
                  Attachement.attachfiles($scope,params);
                     
-                    console.log('after uploading files');
-                    console.log(params);
-                }
+          }
       };
 
   //06.03.2014 Edit Close date, Reason lost, Main competitor, Type, Description, Source : show Modal
