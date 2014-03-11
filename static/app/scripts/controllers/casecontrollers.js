@@ -871,8 +871,9 @@ $scope.deletecase = function(){
       $('#EditOrigin').modal('hide');
      };
       $scope.updateClosedate= function(casem){
+      var close_at = $filter('date')(casem.closed_date,['yyyy-MM-ddTHH:mm:00.000000']);
       params = {'id':$scope.casee.id,
-              'closed_date':casem.closed_date};
+              'closed_date':close_at};
       Case.patch($scope,params);
       $('#EditCloseDate').modal('hide');
      };
