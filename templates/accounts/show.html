@@ -955,10 +955,25 @@
                                     <span><a href="/#/tasks/show/<%=task.id%>" class="discussion-content"><%= task.title%> </a> <span ng-show="task.due"> [before: <%= task.due | date:'yyyy-MM-dd '%>]</span></span>
                                     </li>
                                     
-                                    <li><a href="#myModal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new task</a></li>
+                                    <li ng-hide="addingTask" ><a ng-click="addingTask=true" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new task</a></li>
 
                                   </ul>
-                                 
+                                  <div class="newTask" ng-show="addingTask">
+                                    <form ng-submit="addNewTask()" class="newTaskForm">
+                                          <div class="form-group">
+                                            <div class="input-icon right">
+                                              <input taggable taggabledata="taggableOptions" ng-model="newTask.title" id="new_task_text" class="form-control"  placeholder="Add new task ..." autofocus/>
+                                            </div>
+                                          </div>
+                                      </form>
+                                      <div>
+                                        <div class="newTask-meta pull-right">
+                                          <datetimepick icon-class='fa fa-bell-o' label-format='MMM d, h:mm a' ng-model='newTask.reminder' class="new-task-reminder pull-right"></datetimepick>
+                                           <datetimepick ng-model='newTask.due' class="new-task-date pull-right" label-format='MMM d, h:mm a'></datetimepick>
+                                        </div>  
+                                      </div>
+                                  </div>
+                                   
                                   <p><strong>Events:</strong></p>
 
                                  

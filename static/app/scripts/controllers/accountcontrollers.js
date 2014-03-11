@@ -415,6 +415,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        $scope.casee = {};
        $scope.casee.priority = 4;
        $scope.casee.status = 'pending';
+       $scope.addingTask = false;
 
        // What to do after authentication
        $scope.runTheProcess = function(){
