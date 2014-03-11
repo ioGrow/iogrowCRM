@@ -14,7 +14,31 @@ indexes:
   properties:
   - name: access
   - name: organization
+  - name: account_type
+
+- kind: Account
+  properties:
+  - name: access
+  - name: organization
+  - name: name
+    direction: desc
+
+- kind: Account
+  properties:
+  - name: access
+  - name: organization
   - name: updated_at
+    direction: desc
+
+- kind: Account
+  properties:
+  - name: collaborators_ids
+  - name: account_type
+
+- kind: Account
+  properties:
+  - name: collaborators_ids
+  - name: name
     direction: desc
 
 - kind: Account
@@ -32,6 +56,17 @@ indexes:
   properties:
   - name: organization
   - name: updated_at
+    direction: desc
+
+- kind: Account
+  properties:
+  - name: owner
+  - name: account_type
+
+- kind: Account
+  properties:
+  - name: owner
+  - name: name
     direction: desc
 
 - kind: Account

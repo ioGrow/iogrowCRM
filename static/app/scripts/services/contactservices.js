@@ -160,7 +160,7 @@ accountservices.factory('Contact', function($http) {
                 }
 
             }else {
-              if(resp.message=="Invalid token"){
+              if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
@@ -185,7 +185,7 @@ accountservices.factory('Contact', function($http) {
                 $scope.$apply();
 
             }else {
-               if(resp.message=="Invalid token"){
+               if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
@@ -227,7 +227,7 @@ accountservices.factory('Contact', function($http) {
                  $scope.$apply();
 
               } else {
-                 if(resp.message=="Invalid token"){
+                 if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();

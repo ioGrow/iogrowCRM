@@ -23,7 +23,7 @@ accountservices.factory('Case', function() {
                //$scope.apply();
 
             }else {
-               if(resp.message=="Invalid token"){
+               if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
@@ -75,7 +75,7 @@ accountservices.factory('Case', function() {
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
               }else {
-                 if(resp.message=="Invalid token"){
+                 if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
@@ -97,7 +97,7 @@ accountservices.factory('Case', function() {
           console.log(resp.message);
              $('#addCaseModal').modal('hide');
              $('#errorModal').modal('show');
-             if(resp.message=="Invalid grant"){
+             if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
@@ -118,7 +118,7 @@ accountservices.factory('Case', function() {
                 $scope.$apply();
 
             }else {
-               if(resp.message=="Invalid token"){
+               if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();

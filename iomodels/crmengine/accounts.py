@@ -65,7 +65,7 @@ class AccountListRequest(messages.Message):
     order = messages.StringField(3)
     tags = messages.StringField(4,repeated = True)
     owner = messages.StringField(5)
-    contacts = messages.MessageField(ContactListRequest, 6)
+    
     
 
 
