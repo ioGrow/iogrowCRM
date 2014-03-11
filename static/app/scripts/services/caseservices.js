@@ -124,7 +124,7 @@ accountservices.factory('Case', function() {
                 $scope.$apply();
                };
             }
-            console.log('accounts.patch gapi #end_execute');
+            console.log('cases.patch gapi #end_execute');
           });
   };
 

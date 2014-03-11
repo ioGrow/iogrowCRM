@@ -4,7 +4,7 @@
                 
                   
                     <p ng-show="sending">Sending...</p>
-                    <p ng-show="emailSent">You email has been sent</p>
+                    <p ng-show="emailSent">Your email has been sent</p>
 
 
                   
@@ -274,7 +274,7 @@
                           <div class="col-md-6">
                             
                                 <div class="news-blocks blank-card blank-card-yellow">
-                                <h3>Opportunity Informations</h3>
+                                <h3>Case Informations</h3>
 
                                 <div class="news-block-tags">
                                   <strong>Close Date</strong>
@@ -320,16 +320,16 @@
                                   <span class="page-meta"><i class="icon-pencil"><a ng-click="editdescription()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
                                   
                                 </div>
-                                <p> <%=opportunity.description%></p>
+                                <p> <%=casee.description%></p>
                                 <div class="news-block-tags">
                                   <strong>Type</strong>
                                   <span class="page-meta"><i class="icon-pencil"><a ng-click="edittype()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
                                   
                                 </div>
-                                <p><%=casee.opportunity_type%></p>
+                                <p><%=casee.type_case%></p>
                                 
                                 <div class="news-block-tags">
-                                  <strong>Source</strong>
+                                  <strong>Case Origin</strong>
                                   <span class="page-meta"><i class="icon-pencil"><a ng-click="editsource()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
                                   
                                 </div>
@@ -453,11 +453,11 @@
               <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Edit Opportunity")}}</h3>
+                <h3 id="myModalLabel" class="modal-title">{{_("Edit Case")}}</h3>
               </div>
 
               <div class="modal-body">
-                 <form id="editTagline" name="editlead" ng-submit="updateDescription(opportunity)" class="form-horizontal"> 
+                 <form id="editTagline" name="editlead" ng-submit="updateDescription(casee)" class="form-horizontal"> 
                 
 
                   <div class="form-group">
@@ -465,7 +465,7 @@
                        
                         <div class="col-md-9">
                         
-                           <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="opportunity.description"></textarea>
+                           <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="casee.description"></textarea>
 
                         </div>
                     </div>             
@@ -485,18 +485,18 @@
               <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Edit Opportunity")}}</h3>
+                <h3 id="myModalLabel" class="modal-title">{{_("Edit Case")}}</h3>
               </div>
 
               <div class="modal-body">
-                 <form id="editTagline" name="editlead" ng-submit="updateType(opportunity)" class="form-horizontal"> 
+                 <form id="editTagline" name="editlead" ng-submit="updateType(casee)" class="form-horizontal"> 
                 
 
                   <div class="form-group">
                         <label  class="col-md-3 control-label">{{_("Type")}} </label>
                        
                         <div class="col-md-9">
-                          <select ng-model="opportunity.opportunity_type" class="form-control"><option value="">--None--</option><option value="Mechanical">Mechanical</option><option value="Electrical">Electrical</option><option value="Electronic">Electronic</option><option value="New Customer">New Customer</option><option value="Other">Other</option></select>
+                          <select ng-model="casee.type_case" class="form-control"><option value="">--None--</option><option value="Mechanical">Mechanical</option><option value="Electrical">Electrical</option><option value="Electronic">Electronic</option><option value="New Customer">New Customer</option><option value="Other">Other</option></select>
                           
                          
                         </div>

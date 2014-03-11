@@ -61,7 +61,7 @@ class CaseSearchResults(messages.Message):
     nextPageToken = messages.StringField(2)
 
 class Case(EndpointsModel):
-    _message_fields_schema = ('id','entityKey','owner','folder', 'access','collaborators_list','collaborators_ids',  'name','status','type_case','priority','account','account_name','contact','contact_name','created_at','updated_at')
+    _message_fields_schema = ('id','entityKey','owner','folder', 'access','collaborators_list','collaborators_ids',  'name','status','type_case','priority','account','account_name','contact','contact_name','created_at','updated_at','type_case','description','case_origin')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
@@ -80,6 +80,8 @@ class Case(EndpointsModel):
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
     created_by = ndb.KeyProperty()
+    description = ndb.StringProperty()
+    case_origin = ndb.StringProperty()
     # public or private
     access = ndb.StringProperty()
     
