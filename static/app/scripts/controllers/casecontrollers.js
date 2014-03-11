@@ -851,23 +851,30 @@ $scope.deletecase = function(){
       $scope.edittype = function(){
      $('#EditType').modal('show')
      };
-     /*$scope.editsource = function(){
-     $('#EditSource').modal('show')
-     };*/
+    $scope.editcaseorigin = function(){
+     $('#EditOrigin').modal('show')
+     };
       
-
+    
+    $scope.updateDescription = function(casem){
+      params = {'id':$scope.casee.id,
+              'description':casem.description};
+      Case.patch($scope,params);
+      $('#EditDescription').modal('hide');
+     };
     $scope.updateType = function(casem){
       params = {'id':$scope.casee.id,
               'type_case':casem.type_case};
       Case.patch($scope,params);
       $('#EditType').modal('hide');
      };
-     $scope.updateDescription = function(casem){
+     $scope.updatcaseorigin= function(casem){
       params = {'id':$scope.casee.id,
-              'description':casem.description};
+              'case_origin':casem.case_origin};
       Case.patch($scope,params);
-      $('#EditDescription').modal('hide');
+      $('#EditOrigin').modal('hide');
      };
+     
       
 
 //HKA 11.03.2014 Add Custom field
