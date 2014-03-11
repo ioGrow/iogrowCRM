@@ -459,13 +459,12 @@ class Contact(EndpointsModel):
         contact = cls(
                     firstname = request.firstname,
                     lastname = request.lastname,
+                    title = request.title,
                     owner = user_from_email.google_user_id,
                     organization = user_from_email.organization,
                     access = request.access,
                     folder = created_folder['id']
                     )
-        if request.title:
-            contact.title = request.title
         contact_key = contact.put_async()
         contact_key_async = contact_key.get_result()
         if request.account:

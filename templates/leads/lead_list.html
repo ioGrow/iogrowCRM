@@ -35,7 +35,9 @@
               <div class="modal-body">
                  <form id="addLead" name="addaccount" ng-keyup="addLeadOnKey(lead)" class="form-horizontal"> 
                     <div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("First Name")}} </label>
+
+                        <label  class="required col-md-3 control-label">{{_("First Name")}}</label>
+
                        
                        <div class="col-md-9">
                           <input type="text" class="form-control" required id="id_name" ng-model="lead.firstname">
@@ -46,7 +48,7 @@
                         <label  class="required col-md-3 control-label">{{_("Last Name")}}</label>
                        
                        <div class="col-md-9">
-                          <input type="text" class="form-control"  id="id_lastname" ng-model="lead.lastname">
+                          <input type="text" class="form-control" required id="id_lastname" ng-model="lead.lastname">
                           
                         </div>
                     </div>
@@ -70,7 +72,7 @@
                         <label  class="col-md-3 control-label">{{_("Lead Source")}} </label>
                        
                        <div class="col-md-9">
-                          <select ng-model="lead.source" class="form-control"><option value="">--None--</option><option value="ioGrow Live">ioGrow Live</option><option value="Social Media">Social Media</option><option value="Web Source">Web Site</option><option value="Phone Inquiry">Phone Inquiry</option><option value="Partner Referral">Partner Referral</option><option value="Purchased List">Purchased List</option><option value="Other">Other</option></select>
+                          <select ng-model="lead.source" required class="form-control"><option value="">--None--</option><option value="Social Media">Social Media</option><option value="Web Source">Web Site</option><option value="Phone Inquiry">Phone Inquiry</option><option value="Partner Referral">Partner Referral</option><option value="Purchased List">Purchased List</option><option value="Other">Other</option></select>
                           
                          
                         </div>
@@ -81,8 +83,8 @@
                         <label  class="col-md-3 control-label">{{_("Status")}} </label>
                        
                        <div class="col-md-9">
-                          <select class="form-control" ng-model="stage_selected" ng-options="leadstat.status for leadstat in leadstatuses | orderBy: 'status':false"  >
-                            <option value=""><%=status%></option>
+                          <select class="form-control" required ng-model="stage_selected" ng-options="leadstat.status for leadstat in leadstatuses | orderBy: 'status':false"  >
+                            <option value="">-- choose a status --</option>
                           
                           </select>
                           

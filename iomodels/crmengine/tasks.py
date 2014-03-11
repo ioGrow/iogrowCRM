@@ -233,13 +233,15 @@ class Task(EndpointsModel):
                         edge_list = Edge.list(start_node=task.key,kind='related_to')
                         for edge in edge_list['items']:
                             about_kind = edge.end_node.kind()
-                            if about_kind == 'Contact' or about_kind == 'Lead':
-                                about_name = edge.end_node.get().firstname + ' ' + edge.end_node.get().lastname
-                            else:
-                                about_name = edge.end_node.get().name
-                            about = DiscussionAboutSchema(kind=about_kind,
-                                                               id=str(edge.end_node.id()),
-                                                               name=about_name)
+                            parent = edge.end_node.get()
+                            if parent:
+                                if about_kind == 'Contact' or about_kind == 'Lead':
+                                    about_name = parent.firstname + ' ' + parent.lastname
+                                else:
+                                    about_name = parent.name
+                                about = DiscussionAboutSchema(kind=about_kind,
+                                                                   id=str(parent.key.id()),
+                                                                   name=about_name)
                         #list of tags related to this task
                         edge_list = Edge.list(start_node=task.key,kind='assignees')
                         assignee_list = list()

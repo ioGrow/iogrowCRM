@@ -75,7 +75,7 @@ class EndpointsHelper():
             credentials = user.google_credentials
             http = credentials.authorize(httplib2.Http(memcache))
             service = build('drive', 'v2', http=http)
-            #organization = user.organization.get()
+            organization = user.organization.get()
             new_parent = eval('organization.' + FOLDERS[new_kind])
             params = {
               "parents":
