@@ -182,8 +182,7 @@
             
            <span ng-show="casee.priority">{{_("Priority")}}: <a class="tag" href="/#/search/type:Case <%=casee.priority%>"><%=casee.priority %></a></span><br>
            <span ng-show="casee.status">{{_("Status")}}: <a class="tag" href="/#/search/type:Case <%=casee.status%>"><%=casee.status %></a></span><br>
-            <span ng-show="casee.type_case">{{_("Type")}}: <a class="tag" href="/#/search/type:Case <%=casee.type_case%>"><%=casee.type_case %></a></span> <br>
-            <span class="page-meta"><i class="icon-pencil"><a ng-click="editcase()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="editbeforedelete()" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
+           <span class="page-meta"><i class="icon-pencil"><a ng-click="editcase()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="editbeforedelete()" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
 
            
             
@@ -281,19 +280,15 @@
                                   <span class="page-meta"><i class="icon-pencil"><a ng-click="editclosedate(opportunity)" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
                                   
                                 </div>
-                                <p><%=opportunity.closed_date | date:'MMMM dd, yyyy, HH:mm'%></p>
+                                <p><%=casee.closed_date | date:'MMMM dd, yyyy, HH:mm'%></p>
+                                
                                 <div class="news-block-tags">
-                                  <strong>{{_("Main Competitor(s)")}}</strong>
-                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="editcompetitor()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
+                                  <strong>Case Origin</strong>
+                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="editcaseorigin()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
                                   
                                 </div>
-                                <p> <%=opportunity.competitor%></p>
-                                <div class="news-block-tags">
-                                  <strong>{{_("Reason Lost")}}</strong>
-                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="editreasonlost()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
-                                  
-                                </div>
-                                     <p> <%=opportunity.reason_lost%></p>
+                                <p> <%=casee.case_origin%></p> 
+                              
                                                      
                                                           
                               </div>
@@ -328,12 +323,7 @@
                                 </div>
                                 <p><%=casee.type_case%></p>
                                 
-                                <div class="news-block-tags">
-                                  <strong>Case Origin</strong>
-                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="editcaseorigin()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
-                                  
-                                </div>
-                                <p> <%=casee.case_origin%></p>                        
+                                                       
                               </div>
                               <div class="news-blocks blank-card blank-card-yellow">
                                 
@@ -351,11 +341,11 @@
               <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Edit Opportunity")}}</h3>
+                <h3 id="myModalLabel" class="modal-title">{{_("Edit Case")}}</h3>
               </div>
 
               <div class="modal-body">
-                 <form id="editTagline" name="editlead" ng-submit="updateClosedate(opportunity)" class="form-horizontal"> 
+                 <form id="editTagline" name="editlead" ng-submit="updateClosedate(casee)" class="form-horizontal"> 
                 
 
                   <div class="form-group">
@@ -365,7 +355,7 @@
                           
                            <p><strong>{{_("Close Date")}}</strong></p>
                                                   <center>
-                                                    <datetimepicker data-ng-model="opportunity.closed_date"
+                                                    <datetimepicker data-ng-model="casee.closed_date"
                                                     data-datetimepicker-config="{ startView:'day', minView:'day' }" />
                                                   </center>
 

@@ -835,16 +835,11 @@ $scope.deletecase = function(){
                 }
       };
 
-   //01.03.2014 Edit Close date, Reason lost, Main competitor, Type, Description, Source : show Modal
-    /* $scope.editclosedate = function(){
+   //01.03.2014 Edit Close date, Type, Description, Source : show Modal
+    
+     $scope.editclosedate = function(){
      $('#EditCloseDate').modal('show')
      };
-     $scope.editcompetitor = function(){
-     $('#EditCompetitor').modal('show')
-     };
-     $scope.editreasonlost = function(){
-     $('#EditReasonLost').modal('show')
-     };*/
      $scope.editdescription = function(){
      $('#EditDescription').modal('show')
      };
@@ -855,6 +850,7 @@ $scope.deletecase = function(){
      $('#EditOrigin').modal('show')
      };
       
+
     
     $scope.updateDescription = function(casem){
       params = {'id':$scope.casee.id,
@@ -874,7 +870,12 @@ $scope.deletecase = function(){
       Case.patch($scope,params);
       $('#EditOrigin').modal('hide');
      };
-     
+      $scope.updateClosedate= function(casem){
+      params = {'id':$scope.casee.id,
+              'closed_date':casem.closed_date};
+      Case.patch($scope,params);
+      $('#EditCloseDate').modal('hide');
+     };
       
 
 //HKA 11.03.2014 Add Custom field
