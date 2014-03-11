@@ -202,6 +202,17 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
      $scope.newTask={};
      $scope.newTask.title='';
      $scope.newTask.assignees=[];
+     $scope.color_pallet=[
+         {'name':'red','color':'#F7846A'},
+         {'name':'orange','color':'#FFBB22'},
+         {'name':'yellow','color':'#EEEE22'},
+         {'name':'green','color':'#BBE535'},
+         {'name':'blue','color':'#66CCDD'},
+         {'name':'gray','color':'#B5C5C5'},
+         {'name':'teal','color':'77DDBB'},
+         {'name':'purple','color':'#E874D6'},
+     ];
+     $scope.tag.color= {'name':'green','color':'#BBE535'};
      $scope.newTaskValue=null;
      $scope.draggedTag={};
      $scope.task_checked = false;
@@ -274,6 +285,9 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
              G: parseInt(g, 16),
              B: parseInt(b, 16)
           };
+      }
+      $scope.checkColor=function(color){
+        $scope.tag.color=color;
       }
       $scope.customWidth=function(width,due,reminder){
        /* if(due==null&&$reminder==null){
@@ -647,13 +661,12 @@ $scope.addNewtag = function(tag){
        var params = {   
                           'name': tag.name,
                           'about_kind':'Task',
-                          'color':$('#tag-col-pick').val()
+                          'color':tag.color.color
                       }  ;
        Tag.insert($scope,params);
        var varTagname = {'about_kind':'Task'};
         Tag.list($scope,varTagname);
          tag.name='';
-         $('#tag-col-pick').val('#8fff00');
      }
 
 $scope.updateTag = function(tag){

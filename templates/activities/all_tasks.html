@@ -672,9 +672,10 @@
                 <div class="row">
                   <div class="col-md-6">
                       <!-- <input id="tag-col-pick" type="text" class="colorpicker-default form-control" value="#8fff00">-->
-                      <button class="btn btn-default form-control btn-color">
-                         <img src="static/img/color_pallet.png">
-                      </button>
+                      <ul class="color_pallet_menu">
+                        <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
+                        </li>
+                      </ul>
 
                   </div>
                   <div class="col-md-6">
