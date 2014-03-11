@@ -483,7 +483,6 @@ class Lead(EndpointsModel):
                                             )
         edge_list = Edge.query(Edge.start_node == lead.key).fetch()
         for edge in edge_list:
-            print '******************************#@@@@@@'
             edge.start_node = contact_key_async
             edge.put()
 

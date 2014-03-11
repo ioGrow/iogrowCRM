@@ -166,36 +166,40 @@
             <div class="row cards-container">
 
             <div class="col-md-9">
-              <div class="inner-cards-container">
-                <div  ng-repeat="account in accounts" class="col-lg-4 col-md-3 col-sm-6 col-xs-12">
-                  <div droppable class="dashboard-stat cards-small" ng-drop="dropTag(account)">
-                    <div class="details">
-                    <a href="/#/accounts/show/<%= account.id %>"><h2 class="cardTitle">
-                      <%= account .name %>
-                      
-                    </h2></a>
+             <div class="inner-cards-container">
+                <div droppable  ng-repeat="account in accounts" data-column="<%=getPosition($index)%>" class="cardElement" ng-drop="dropTag(account)">
+                    <div class="cardHeader">
+                          <a href="/#/accounts/show/<%= account.id %>">
+                              <h2 class="cardTitle">
+                                <%= account .name %>
+                              </h2>
+                          </a>  
+                    </div>
+                    <hr>
+                    <div class="cardDetails">
                       <div class="desc">
                         <div class="row margin-bottom-5">
                           <div class="col-md-12"><a ng-show="account.industry" class="desc" href="/#/search/type:Account <%=account.industry%>">#<%=account.industry%></a>
                           </div>
                           
                         </div>
-                        <br/>
-                          <div class="row">
-                          <div class="col-md-12">
-                               <a ng-repeat="tag in account.tags" href="/#/search/type:Account tags:<%=tag.id%>"> <span class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
-                               </a>
-                          </div>
-                          
+                      </div>
+                      <br>
+                      <div class="row cardTags">
+                        <div class="col-md-12">
+                             <a ng-repeat="tag in account.tags" href="/#/search/type:Account tags:<%=tag.id%>"> <span class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
+                             </a>
                         </div>
-                        
-                         
-
                       </div>
                     </div>
-                   
-                  </div>
                 </div>
+                <script type="text/javascript">
+                    $('.inner-cards-container').waterfall({ 
+                      colMinWidth: 200, 
+                      defaultContainerWidth: 800,
+                      autoresize: true
+                    })
+                </script>
               <div ng-show="blankStateaccount" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
                 <div class="dashboard-stat cards">
                   
@@ -209,8 +213,8 @@
                                   
                 </div>
               </div>
-              <div ng-show="isFiltering * !accounts" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
-                <div class="dashboard-stat cards">
+              <div ng-show="isFiltering * !accounts" data-span="3" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
+                <div class="dashboard-stat cards" >
                   
                   
                   <div class="blank_slate_arrow"></div>

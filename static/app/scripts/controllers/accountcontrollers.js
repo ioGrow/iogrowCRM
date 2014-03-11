@@ -18,9 +18,6 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
      $scope.order = '-updated_at';
      $scope.account.account_type = 'Customer';
      $scope.draggedTag=null;
-
-     
-     // What to do after authentication
      $scope.runTheProcess = function(){
           var params = { 'order': $scope.order,
                         'limit':6}
@@ -28,6 +25,15 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
           var paramsTag = {'about_kind':'Account'};
           Tag.list($scope,paramsTag);
      };
+     $scope.getPosition= function(index){
+        if(index<3){
+          console.log(index+1);
+          return index+1;
+        }else{
+          console.log((index%3)+1);
+          return (index%3)+1;
+        }
+     }
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
           Auth.refreshToken();
@@ -207,7 +213,7 @@ $scope.selectTag= function(tag,index,$event){
          }else{
             element.css('background-color','#ffffff !important');
             $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
-             text.css('color','#000000');
+            text.css('color',$scope.idealTextColor(tag.color));
          }
     
          $scope.filterByTags($scope.selected_tags);
@@ -409,6 +415,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        $scope.casee = {};
        $scope.casee.priority = 4;
        $scope.casee.status = 'pending';
+       $scope.addingTask = false;
 
        // What to do after authentication
        $scope.runTheProcess = function(){
