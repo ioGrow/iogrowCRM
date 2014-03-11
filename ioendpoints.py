@@ -1710,6 +1710,17 @@ class CrmEngineApi(remote.Service):
         return my_model
 
     # Leads APIs
+
+    # leads.convert api
+    @endpoints.method(ID_RESOURCE, LeadSchema,
+                      path='leads/convertv2', http_method='POST',
+                      name='leads.convertv2')
+    def lead_convert_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Lead.convert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
     # leads.convert api
     @endpoints.method(ID_RESOURCE, ConvertedLead,
                         path='leads/convert/{id}', http_method='POST',

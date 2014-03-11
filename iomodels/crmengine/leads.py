@@ -11,6 +11,8 @@ from iomodels.crmengine.events import Event,EventListResponse
 from iograph import Node,Edge,InfoNodeListResponse
 from iomodels.crmengine.notes import Note,TopicListResponse
 from iomodels.crmengine.documents import Document,DocumentListResponse
+from iomodels.crmengine.contacts import Contact
+from iomodels.crmengine.accounts import Account
 import model
 
 
@@ -409,8 +411,6 @@ class Lead(EndpointsModel):
 
     @classmethod
     def insert(cls,user_from_email,request):
-        print '*************************************************'
-        print request
         folder_name = request.firstname + ' ' + request.lastname
         created_folder = EndpointsHelper.insert_folder(
                                                        user_from_email,
@@ -435,3 +435,59 @@ class Lead(EndpointsModel):
         data['id'] = lead_key_async.id()
         lead.put_index(data)
         return LeadSchema(id=str(lead_key_async.id()))
+    
+    @classmethod
+    def convert(cls,user_from_email,request):
+        try:
+            lead = Lead.get_by_id(int(request.id))
+        except (IndexError, TypeError):
+            raise endpoints.NotFoundException('Lead %s not found.' %
+                                                  (request.id,))
+        moved_folder = EndpointsHelper.move_folder(user_from_email,lead.folder,'Contact')
+        contact = Contact(
+                            owner = lead.owner,
+                            organization = lead.organization,
+                            access = lead.access,
+                            folder = moved_folder['id'],
+                            firstname = lead.firstname,
+                            lastname = lead.lastname,
+                            title = lead.title,
+                            tagline = lead.tagline,
+                            introduction = lead.introduction
+                        )
+
+        contact_key = contact.put_async()
+        contact_key_async = contact_key.get_result()
+        if lead.company:
+            created_folder = EndpointsHelper.insert_folder(user_from_email,lead.company,'Account')
+            account = Account(
+                                owner = lead.owner,
+                                organization = lead.organization,
+                                access = lead.access,
+                                account_type = 'prospect',
+                                name=lead.company,
+                                folder = created_folder['id']
+                            )
+            account_key = account.put_async()
+            account_key_async = account_key.get_result()
+            Edge.insert(
+                        start_node = account_key_async,
+                        end_node = contact_key_async,
+                        kind = 'contacts',
+                        inverse_edge = 'parents'
+                        )
+            EndpointsHelper.update_edge_indexes(
+                                            parent_key = contact_key_async,
+                                            kind = 'contacts',
+                                            indexed_edge = str(account_key_async.id())
+                                            )
+        edge_list = Edge.query(Edge.start_node == lead.key).fetch()
+        for edge in edge_list:
+            print '******************************#@@@@@@'
+            edge.start_node = contact_key_async
+            edge.put()
+
+        lead.key.delete()
+        return LeadSchema(id = str(contact_key_async.id()) )
+
+
