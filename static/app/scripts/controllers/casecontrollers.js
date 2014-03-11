@@ -446,12 +446,12 @@ $scope.addTags=function(){
     
 }]);
 
-app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Topic','Note','Task','Event','Permission','User','Casestatus','Email','Attachement',
-    function($scope,$filter,$route,Auth,Case,Topic,Note,Task,Event,Permission,User,Casestatus,Email,Attachement) {
+app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Topic','Note','Task','Event','Permission','User','Casestatus','Email','Attachement','InfoNode',
+    function($scope,$filter,$route,Auth,Case,Topic,Note,Task,Event,Permission,User,Casestatus,Email,Attachement,InfoNode) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Cases").addClass("active");
       
-     $scope.selectedTab = 1;
+     $scope.selectedTab = 2;
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -539,7 +539,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
 
      }
      $scope.hilightTopic = function(){
-        console.log('Should higll');
+        
        $('#topic_0').effect( "bounce", "slow" );
        $('#topic_0 .message').effect("highlight","slow");
      }
@@ -642,7 +642,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
      }
 
      $scope.hilightTask = function(){
-        console.log('Should higll');
+        
         $('#task_0').effect("highlight","slow");
         $('#task_0').effect( "bounce", "slow" );
        
@@ -835,7 +835,75 @@ $scope.deletecase = function(){
                 }
       };
 
+   //01.03.2014 Edit Close date, Type, Description, Source : show Modal
+    
+     $scope.editclosedate = function(){
+     $('#EditCloseDate').modal('show')
+     };
+     $scope.editdescription = function(){
+     $('#EditDescription').modal('show')
+     };
+      $scope.edittype = function(){
+     $('#EditType').modal('show')
+     };
+    $scope.editcaseorigin = function(){
+     $('#EditOrigin').modal('show')
+     };
       
+
+    
+    $scope.updateDescription = function(casem){
+      params = {'id':$scope.casee.id,
+              'description':casem.description};
+      Case.patch($scope,params);
+      $('#EditDescription').modal('hide');
+     };
+    $scope.updateType = function(casem){
+      params = {'id':$scope.casee.id,
+              'type_case':casem.type_case};
+      Case.patch($scope,params);
+      $('#EditType').modal('hide');
+     };
+     $scope.updatcaseorigin= function(casem){
+      params = {'id':$scope.casee.id,
+              'case_origin':casem.case_origin};
+      Case.patch($scope,params);
+      $('#EditOrigin').modal('hide');
+     };
+      $scope.updateClosedate= function(casem){
+      var close_at = $filter('date')(casem.closed_date,['yyyy-MM-ddTHH:mm:00.000000']);
+      params = {'id':$scope.casee.id,
+              'closed_date':close_at};
+      Case.patch($scope,params);
+      $('#EditCloseDate').modal('hide');
+     };
+      
+
+//HKA 11.03.2014 Add Custom field
+
+    $scope.addCustomField = function(customField){
+      params = {'parent':$scope.casee.entityKey,
+            'kind':'customfields',
+            'fields':[
+                {
+                  "field": customField.field,
+                  "value": customField.value
+                }
+            ]
+  };
+  InfoNode.insert($scope,params);
+
+  $('#customfields').modal('hide');
+  
+};
+
+$scope.listInfonodes = function(kind) {
+     params = {'parent':$scope.casee.entityKey,
+               'connections': kind
+              };
+     InfoNode.list($scope,params);
+   
+ };
 
      // Google+ Authentication 
      Auth.init($scope);

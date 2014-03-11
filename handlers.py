@@ -375,8 +375,8 @@ class CaseShowHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/cases/case_show.html')
-      self.response.cache_control = 'public'
-      self.response.cache_control.max_age = 300
+      #self.response.cache_control = 'public'
+      #self.response.cache_control.max_age = 300
       
       self.response.out.write(template.render(template_values))
 
@@ -389,8 +389,8 @@ class NeedShowHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/needs/show.html')
-      self.response.cache_control = 'public'
-      self.response.cache_control.max_age = 300
+      #self.response.cache_control = 'public'
+      #self.response.cache_control.max_age = 300
       
       self.response.out.write(template.render(template_values))
 class CampaignListHandler(BaseHandler,SessionEnabledHandler):
