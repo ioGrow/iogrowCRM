@@ -402,8 +402,8 @@ class CampaignListHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       template_values = {'tabs':tabs}
       template = jinja_environment.get_template('templates/campaigns/campaign_list.html')
-      self.response.cache_control = 'public'
-      self.response.cache_control.max_age = 300
+      #self.response.cache_control = 'public'
+      #self.response.cache_control.max_age = 300
       
       self.response.out.write(template.render(template_values))
 class CampaignShowHandler(BaseHandler,SessionEnabledHandler):
@@ -415,8 +415,8 @@ class CampaignShowHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/campaigns/campaign_show.html')
-      self.response.cache_control = 'public'
-      self.response.cache_control.max_age = 300
+      #self.response.cache_control = 'public'
+      #self.response.cache_control.max_age = 300
       
       self.response.out.write(template.render(template_values))
 class NoteShowHandler (BaseHandler,SessionEnabledHandler):
@@ -428,8 +428,8 @@ class NoteShowHandler (BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/accounts/note_show.html')
-      self.response.cache_control = 'public'
-      self.response.cache_control.max_age = 300
+      #self.response.cache_control = 'public'
+      #self.response.cache_control.max_age = 300
       
       self.response.out.write(template.render(template_values))
 
@@ -442,8 +442,8 @@ class DocumentShowHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/documents/show.html')
-      self.response.cache_control = 'public'
-      self.response.cache_control.max_age = 300
+      #self.response.cache_control = 'public'
+      #self.response.cache_control.max_age = 300
       
       self.response.out.write(template.render(template_values))
 
@@ -477,8 +477,8 @@ class TaskShowHandler(BaseHandler, SessionEnabledHandler):
             # Render the template
             template_values = {'tabs':tabs}
             template = jinja_environment.get_template('templates/activities/task_show.html')
-            self.response.cache_control = 'public'
-            self.response.cache_control.max_age = 300
+            #self.response.cache_control = 'public'
+            #self.response.cache_control.max_age = 300
       
             self.response.out.write(template.render(template_values))
 class EventShowHandler(BaseHandler, SessionEnabledHandler):
@@ -494,8 +494,8 @@ class EventShowHandler(BaseHandler, SessionEnabledHandler):
             # Render the template
             template_values = {'tabs':tabs}
             template = jinja_environment.get_template('templates/activities/event_show.html')
-            self.response.cache_control = 'public'
-            self.response.cache_control.max_age = 300
+            #self.response.cache_control = 'public'
+            #self.response.cache_control.max_age = 300
       
             self.response.out.write(template.render(template_values))
 class ProductListHandler(BaseHandler, SessionEnabledHandler):
@@ -1158,8 +1158,8 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                 if admin_app:
                     template_values['admin_app']=admin_app
                 template = jinja_environment.get_template('templates/base.html')
-                self.response.cache_control = 'public'
-                self.response.cache_control.max_age = 300
+                #self.response.cache_control = 'public'
+                #self.response.cache_control.max_age = 300
                 self.response.out.write(template.render(template_values))
             except UserNotAuthorizedException as e:
                 self.redirect('/welcome/')
