@@ -480,6 +480,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
      $scope.documentCurrentPage=01;
      $scope.documentpages=[];
      $scope.infonodes = {};
+     $scope.sharing_with = [];
      
    
      // What to do after authentication
@@ -580,9 +581,9 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
 
     
      $scope.selectMember = function(){
-        console.log('slecting user yeaaah');
         $scope.slected_memeber = $scope.user;
-        $scope.user = $scope.slected_memeber.google_display_name;
+        $scope.user = '';
+        $scope.sharing_with.push($scope.slected_memeber);
 
      };
      $scope.share = function(slected_memeber){
@@ -599,22 +600,33 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
         });
         $('#sharingSettingsModal').modal('hide');
 
-        if (slected_memeber.email){
-        var params = {  'type': 'user',
-                        'role': 'writer',
-                        'value': slected_memeber.email,
-                        'about_kind': 'Case',
-                        'about_item': $scope.account.id
-
-                        
-          };
-          Permission.insert($scope,params); 
+        if ($scope.sharing_with.length>0){
+        
+          var items = [];
+          
+          angular.forEach($scope.sharing_with, function(user){
+                      var item = { 
+                                  'type':"user",
+                                  'value':user.entityKey
+                                };
+                      items.push(item);
+          });
+          
+          if(items.length>0){
+              var params = {
+                            'about': $scope.casee.entityKey,
+                            'items': items
+              }
+              Permission.insert($scope,params); 
+          }
+          
+          
+          $scope.sharing_with = [];
           
           
         }else{ 
           alert('select a user to be invited');
         };
-
 
      };
      

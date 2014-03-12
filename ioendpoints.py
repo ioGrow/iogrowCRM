@@ -2470,30 +2470,33 @@ class CrmEngineApi(remote.Service):
         for item in request.items:
             if item.type == 'user':
                 # get the user
-                shared_with_user = User.query(User.email == item.value).get()
+                shared_with_user_key = ndb.Key(urlsafe = item.value)
+                shared_with_user = shared_with_user_key.get()
                 if shared_with_user:
                     # check if user is in the same organization
                     if shared_with_user.organization == about.organization:
                         # insert the edge
                         Edge.insert(
                                     start_node = about_key,
-                                    end_node = shared_with_user.key,
+                                    end_node = shared_with_user_key,
                                     kind = 'permissions',
                                     inverse_edge = 'has_access_on'
                                 )
                         # update indexes on search for collobaorators_id
+                        indexed_edge = shared_with_user.google_user_id + ' '
                         EndpointsHelper.update_edge_indexes(
                                             parent_key = about_key,
                                             kind = 'collaborators',
-                                            indexed_edge = shared_with_user.google_user_id
-                                            )          
+                                            indexed_edge = indexed_edge
+                                            )  
+                        shared_with_user = None       
             elif item.type == 'group':
                 pass
                 # get the group
                 # get the members of this group
                 # for each member insert the edge
-                # update indexes on search for collaborators_id
-            return message_types.VoidMessage()
+                # update indexes on search for  collaborators_id
+        return message_types.VoidMessage()
     # permissions.insert API
     @Permission.method(user_required=True,path='permissions', http_method='POST', name='permissions.insert')
     def PermissionInsert(self, my_model):

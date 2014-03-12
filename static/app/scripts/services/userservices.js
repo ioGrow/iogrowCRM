@@ -102,7 +102,7 @@ accountservices.factory('Permission', function($http) {
   
   Permission.insert = function($scope,params){
       console.log(params);
-      gapi.client.crmengine.permissions.insert(params).execute(function(resp) {
+      gapi.client.crmengine.permissions.insertv2(params).execute(function(resp) {
          console.log('in insert resp');
          console.log(resp);
          if(!resp.code){

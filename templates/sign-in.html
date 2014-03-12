@@ -45,7 +45,8 @@ var helper = (function() {
      */
     onSignInCallback: function(authResult) {
       $('#authResult').html('Auth Result:<br/>');
-     
+      console.log('*******************');
+      console.log(authResult);
       if (authResult['access_token']) {
         // The user is signed in
         this.authResult = authResult;
