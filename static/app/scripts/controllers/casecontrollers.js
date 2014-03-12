@@ -134,21 +134,23 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
      $scope.q = undefined;
      
       $scope.$watch('searchAccountQuery', function() {
-        if ($scope.searchAccountQuery.length>1){
-         params_search_account['q'] = $scope.searchAccountQuery;
-         gapi.client.crmengine.accounts.search(params_search_account).execute(function(resp) {
-            console.log("in accouts.search api");
-            console.log(params_search_account);
+        if($scope.searchAccountQuery){
+          if ($scope.searchAccountQuery.length>1){
+           params_search_account['q'] = $scope.searchAccountQuery;
+           gapi.client.crmengine.accounts.search(params_search_account).execute(function(resp) {
+              console.log("in accouts.search api");
+              console.log(params_search_account);
 
-            console.log(resp);
-            if (resp.items){
-              $scope.accountsResults = resp.items;
+              console.log(resp);
+              if (resp.items){
+                $scope.accountsResults = resp.items;
+                
+                $scope.$apply();
+              };
               
-              $scope.$apply();
-            };
-            
-          });
-         }
+            });
+           }
+        }
       });
       $scope.selectAccount = function(){
         $scope.casee.account = $scope.searchAccountQuery;
@@ -156,6 +158,7 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
      };
      var params_search_contact ={};
      $scope.$watch('searchContactQuery', function() {
+      if($scope.searchContactQuery){
         if($scope.searchContactQuery.length>1){
          params_search_contact['q'] = $scope.searchContactQuery;
          gapi.client.crmengine.contacts.search(params_search_contact).execute(function(resp) {
@@ -168,6 +171,7 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
             
           });
          }
+      }
         
       });
      $scope.selectContact = function(){
@@ -472,12 +476,34 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
      $scope.user = undefined;
      $scope.slected_memeber = undefined;
      $scope.email = {};
+     $scope.documentpagination = {};
+     $scope.documentCurrentPage=01;
+     $scope.documentpages=[];
+     $scope.infonodes = {};
      
    
      // What to do after authentication
        $scope.runTheProcess = function(){
-          var caseid = {'id':$route.current.params.caseId};
-          Case.get($scope,caseid);
+          var params = {
+                          'id':$route.current.params.caseId,
+                          
+                          'topics':{
+                            'limit': '7'
+                          },
+
+                          'documents':{
+                            'limit': '6'
+                          },
+
+                          'tasks':{
+                            
+                          },
+
+                          'events':{
+                            
+                          }
+                      };
+          Case.get($scope,params);
           User.list($scope,{});
           Casestatus.list($scope,{});
        };
@@ -486,56 +512,64 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
             Auth.refreshToken();
        };
      $scope.TopiclistNextPageItems = function(){
-         
+        
         
         var nextPage = $scope.topicCurrentPage + 1;
         var params = {};
           if ($scope.topicpages[nextPage]){
-            params = {'about_kind':'Case',
-                      'about_item':$scope.casee.id,
-                      'order': '-updated_at',
-                      'limit': 5,
-                      'pageToken':$scope.topicpages[nextPage]
+            params = {
+                      'id':$scope.casee.id,
+                        'topics':{
+                          'limit': '7',
+                          'pageToken':$scope.topicpages[nextPage]
+                        }
                      }
-          }else{
-            params = {'about_kind':'Case',
-                      'about_item':$scope.casee.id,
-                      'order': '-updated_at',
-                      'limit': 5}
+            }else{
+            params = {
+                      'id':$scope.casee.id,
+                        'topics':{
+                          'limit': '7'
+                        }
+                     }
           }
-          console.log('in listNextPageItems');
+          
           $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ; 
-          Topic.list($scope,params);
+          Case.get($scope,params);
      }
      $scope.TopiclistPrevPageItems = function(){
        
        var prevPage = $scope.topicCurrentPage - 1;
        var params = {};
+       
           if ($scope.topicpages[prevPage]){
-            params = {'about_kind':'Case',
-                      'about_item':$scope.casee.id,
-                      'order': '-updated_at',
-                      'limit': 5,
-                      'pageToken':$scope.topicpages[prevPage]
+            params = {
+                      'id':$scope.casee.id,
+                        'topics':{
+                          'limit': '7',
+                          'pageToken':$scope.topicpages[prevPage]
+                        }
                      }
           }else{
-            params = {'about_kind':'Case',
-                      'about_item':$scope.casee.id,
-                      'order': '-updated_at',
-                      'limit': 5}
+            params = {
+                      'id':$scope.casee.id,
+                        'topics':{
+                          'limit': '7'
+                        }
+                     }
           }
           $scope.topicCurrentPage = $scope.topicCurrentPage - 1 ;
-          Topic.list($scope,params);
+          Case.get($scope,params);
           
      }
     
-     $scope.listTopics = function(casee){
-        var params = {'about_kind':'Case',
-                      'about_item':$scope.casee.id,
-                      'order': '-updated_at',
-                      'limit': 5
-                      };
-        Topic.list($scope,params);
+     $scope.listTopics = function(opportunity){
+        var params = {
+                      'id':$scope.casee.id,
+                      'topics':{
+                             'limit': '7'
+                       }
+                    };
+          Case.get($scope,params);
 
      }
      $scope.hilightTopic = function(){
@@ -586,7 +620,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
      
      $scope.updateCollaborators = function(){
          
-          Case.get($scope,$scope.case.id);
+          Case.get($scope,$scope.casee.id);
 
      };
      $scope.showModal = function(){
@@ -596,18 +630,14 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
       };
       
     $scope.addNote = function(note){
-      console.log('debug addNote');
-      
-      var params ={
-                  'about_kind': 'Case',
-                  'about_item': $scope.casee.id,
-                  'title': note.title,
-                  'content': note.content
-      };
-      console.log(params);
+        var params ={
+                    'about': $scope.casee.entityKey,
+                    'title': note.title,
+                    'content': note.content
+        };
       Note.insert($scope,params);
-      $scope.note.title = '';
-      $scope.note.content = '';
+      $scope.note.title='';
+      $scope.note.content='';
     };
       
 
@@ -619,25 +649,24 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
 //HKA 09.11.2013 Add a new Task
    $scope.addTask = function(task){
       
-        $('#myModal').modal('hide');
-        var params ={}
-
-        console.log('adding a new task');
-        console.log(task);
-        
+          $('#myModal').modal('hide');
         if (task.due){
 
-            var dueDate= $filter('date')(task.due,['yyyy-MM-dd']);
-            dueDate = dueDate +'T00:00:00.000000'
+            var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
+            
             params ={'title': task.title,
                       'due': dueDate,
-                      'about':$scope.casee.entityKey
+                      'parent': $scope.casee.entityKey
             }
-            console.log(dueDate);
+            
+            
         }else{
             params ={'title': task.title,
-                     'about':$scope.casee.entityKey}
+                     'parent': $scope.casee.entityKey
+                   }
         };
+        $scope.task.title='';
+        $scope.task.dueDate='0000-00-00T00:00:00-00:00';
         Task.insert($scope,params);
      }
 
@@ -648,17 +677,17 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
        
      }
      $scope.listTasks = function(){
-        var params = {'about':$scope.casee.entityKey,
-                      'order': '-updated_at',
-                      
+        var params = {
+                        'id':$scope.casee.id,
+                        'tasks':{}
                       };
-        Task.list($scope,params);
+        Case.get($scope,params);
 
      }
  //HKA 10.11.2013 Add event 
  $scope.addEvent = function(ioevent){
       
-        $('#newEventModal').modal('hide');
+         $('#newEventModal').modal('hide');
         var params ={}       
         
         if (ioevent.starts_at){
@@ -667,25 +696,24 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
                       'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
                       'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
                       'where': ioevent.where,
-                      'about_kind':'Case',
-                      'about_item':$scope.casee.id
+                      'parent':$scope.casee.entityKey
               }
 
             }else{
-              params ={'title': ioevent.title,
+              params ={
+                'title': ioevent.title,
                       'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
                       'where': ioevent.where,
-                      'about_kind':'Case',
-                      'about_item':$scope.casee.id
+                      'parent':$scope.casee.entityKey
               }
             }
-            console.log('inserting the event');
-            console.log(params);
-            Event.insert($scope,params);
-
             
-        };
-     }
+            Event.insert($scope,params);
+            $scope.ioevent.title='';
+            $scope.ioevent.where='';
+            $scope.ioevent.starts_at='T00:00:00.000000';
+          };
+     };
      $scope.hilightEvent = function(){
         console.log('Should higll');
         $('#event_0').effect("highlight","slow");
@@ -693,25 +721,16 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
        
      }
      $scope.listEvents = function(){
-        var params = {'about_kind':'Case',
-                      'about_item':$scope.casee.id,
-                      'order': 'starts_at',
-                      'limit': 5
+        var params = {
+                        'id':$scope.casee.id,
+                        'events':{
+                          
+                        }
                       };
-        Event.list($scope,params);
+        Case.get($scope,params);
 
-     }
-  //HKA 11.11.2013 Add Note
-  $scope.addNote = function(note){
-    var params = {'title':$scope.note.title,
-                  'content':$scope.note.content,
-                  'about_item':$scope.casee.id,
-                  'about_kind':'Case' };
-    Note.insert($scope,params);
-    $scope.note.title='';
-    $scope.note.content='';
-  }
-
+     };
+ 
 //HKA 22.11.2013 Update Case
 $scope.updatCasetHeader = function(casee){
  
@@ -765,13 +784,67 @@ $scope.deletecase = function(){
      $('#BeforedeleteCase').modal('hide');
      };
 
+     $scope.DocumentlistNextPageItems = function(){
+        
+ 
+        var nextPage = $scope.documentCurrentPage + 1;
+        var params = {};
+          if ($scope.documentpages[nextPage]){
+            params = {
+                        'id':$scope.casee.id,
+                        'documents':{
+                          'limit': '6',
+                          'pageToken':$scope.documentpages[nextPage]
+                        }
+                      }
+            
+          }else{
+            params = {
+                        'id':$scope.casee.id,
+                        'documents':{
+                          'limit': '6'
+                        }
+                      }
+            }
+          $scope.documentCurrentPage = $scope.documentCurrentPage + 1 ;
+          
+          Case.get($scope,params);
+          
+     }
+     $scope.DocumentPrevPageItems = function(){
+            
+       var prevPage = $scope.documentCurrentPage - 1;
+       var params = {};
+          if ($scope.documentpages[prevPage]){
+            params = {
+                        'id':$scope.casee.id,
+                        'documents':{
+                          'limit': '6',
+                          'pageToken':$scope.documentpages[prevPage]
+                        }
+                      }
+            
+          }else{
+            params = {
+                        'id':$scope.casee.id,
+                        'documents':{
+                          'limit': '6'
+                        }
+                      }
+          }
+          $scope.documentCurrentPage = $scope.documentCurrentPage - 1 ;
+          Case.get($scope,params);
+
+              
+     };
      $scope.listDocuments = function(){
-        var params = {'about_kind':'Case',
-                      'about_item':$scope.casee.id,
-                      'order': '-updated_at',
-                      'limit': 5
-                      };
-        Attachement.list($scope,params);
+        var params = {
+                        'id':$scope.casee.id,
+                        'documents':{
+                          'limit': '6'
+                        }
+                      }
+        Case.get($scope,params);
 
      };
      $scope.showCreateDocument = function(type){
@@ -781,14 +854,16 @@ $scope.deletecase = function(){
      };
      $scope.createDocument = function(newdocument){
         var mimeType = 'application/vnd.google-apps.' + $scope.mimeType;
-        var params = {'about_kind':'Case',
-                      'about_item': $scope.casee.id,
+        var params = {
+                      'parent': $scope.casee.entityKey,
                       'title':newdocument.title,
-                      'mimeType':mimeType };
+                      'mimeType':mimeType 
+                     };
         Attachement.insert($scope,params);
 
      };
      $scope.createPickerUploader = function() {
+          var developerKey = 'AIzaSyD___EKeONhEP1JDWsNQi0zQhlGGzuwRI4';
           var projectfolder = $scope.casee.folder;
           var docsView = new google.picker.DocsView()
               .setIncludeFolders(true) 
@@ -797,7 +872,9 @@ $scope.deletecase = function(){
               addView(new google.picker.DocsUploadView().setParent(projectfolder)).
               addView(docsView).
               setCallback($scope.uploaderCallback).
-              setAppId(12345).
+              setOAuthToken(window.authResult.access_token).
+              setDeveloperKey(developerKey).
+              setAppId(987765099891).
                 enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
               build();
           picker.setVisible(true);
@@ -807,8 +884,10 @@ $scope.deletecase = function(){
         
 
         if (data.action == google.picker.Action.PICKED) {
-                var params = {'about_kind': 'Case',
-                                      'about_item':$scope.casee.id};
+                var params = {
+                              'access': $scope.casee.access,
+                              'parent':$scope.casee.entityKey
+                            };
                 params.items = new Array();
                
                  $.each(data.docs, function(index) {
@@ -830,9 +909,7 @@ $scope.deletecase = function(){
                   });
                  Attachement.attachfiles($scope,params);
                     
-                    console.log('after uploading files');
-                    console.log(params);
-                }
+          }
       };
 
    //01.03.2014 Edit Close date, Type, Description, Source : show Modal

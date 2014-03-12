@@ -1158,8 +1158,8 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                 if admin_app:
                     template_values['admin_app']=admin_app
                 template = jinja_environment.get_template('templates/base.html')
-                self.response.cache_control = 'public'
-                self.response.cache_control.max_age = 300
+                # self.response.cache_control = 'public'
+                # self.response.cache_control.max_age = 300
                 self.response.out.write(template.render(template_values))
             except UserNotAuthorizedException as e:
                 self.redirect('/welcome/')

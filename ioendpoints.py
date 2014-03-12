@@ -41,7 +41,7 @@ from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema
 from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest
 from iomodels.crmengine.shows import Show
 from iomodels.crmengine.leads import Lead,LeadInsertRequest,LeadListRequest,LeadListResponse,LeadSearchResults,LeadGetRequest,LeadSchema
-from iomodels.crmengine.cases import Case,CaseInsertRequest,CaseSchema,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
+from iomodels.crmengine.cases import Case,CaseGetRequest,CaseInsertRequest,CaseSchema,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
 #from iomodels.crmengine.products import Product
 from iomodels.crmengine.comments import Comment
 from iomodels.crmengine.opportunitystage import Opportunitystage
@@ -719,6 +719,16 @@ class CrmEngineApi(remote.Service):
         my_model.key.delete()
         return message_types.VoidMessage()
 
+    # cases.getv2 api
+    @endpoints.method(CaseGetRequest, CaseSchema,
+                      path='cases/getv2', http_method='POST',
+                      name='cases.getv2')
+    def case_get_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Case.get_schema(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
     # cases.get API
     @Case.method(request_fields=('id',),path='cases/{id}', http_method='GET', name='cases.get')
     def CaseGet(self, my_model):

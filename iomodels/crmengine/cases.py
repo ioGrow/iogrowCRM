@@ -7,8 +7,28 @@ from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
 from iomodels.crmengine.tags import Tag,TagSchema
 from iomodels.crmengine.casestatuses import CaseStatusSchema
 from iograph import Node,Edge,InfoNodeListResponse
+from iomodels.crmengine.documents import Document,DocumentListResponse
+from iomodels.crmengine.notes import Note,TopicListResponse
+from iomodels.crmengine.tasks import Task,TaskRequest,TaskListResponse
+from iomodels.crmengine.events import Event,EventListResponse
 from endpoints_helper import EndpointsHelper
 import model
+
+class AccountSchema(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    name = messages.StringField(3)
+
+class ListRequest(messages.Message):
+    limit = messages.IntegerField(1)
+    pageToken = messages.StringField(2)
+
+class CaseGetRequest(messages.Message):
+    id = messages.IntegerField(1,required = True)
+    topics = messages.MessageField(ListRequest, 2)
+    tasks = messages.MessageField(ListRequest, 3)
+    events = messages.MessageField(ListRequest, 4)
+    documents = messages.MessageField(ListRequest, 5)
 
 class CaseInsertRequest(messages.Message):
     name = messages.StringField(1)
@@ -32,14 +52,23 @@ class CaseSchema(messages.Message):
     entityKey = messages.StringField(2)
     name = messages.StringField(3)
     status = messages.StringField(4)
-    probability = messages.StringField(5)
+    folder = messages.StringField(5)
     type_case = messages.StringField(6)
     current_status = messages.MessageField(CaseStatusSchema,7) 
     all_status = messages.MessageField(CaseStatusSchema,8,repeated = True)
     tags = messages.MessageField(TagSchema,9, repeated = True)
-    created_at = messages.StringField(10)
-    updated_at = messages.StringField(11)
-    priority = messages.IntegerField(12)
+    infonodes = messages.MessageField(InfoNodeListResponse,10)
+    topics = messages.MessageField(TopicListResponse,11)
+    tasks = messages.MessageField(TaskListResponse,12)
+    events = messages.MessageField(EventListResponse,13)
+    documents = messages.MessageField(DocumentListResponse,14)
+    created_at = messages.StringField(15)
+    updated_at = messages.StringField(16)
+    priority = messages.IntegerField(17)
+    access = messages.StringField(18)
+    description = messages.StringField(19)
+    case_origin = messages.StringField(20)
+    closed_date = messages.StringField(21)
 
 class CaseListResponse(messages.Message):
     items = messages.MessageField(CaseSchema, 1, repeated=True)
@@ -156,6 +185,93 @@ class Case(EndpointsModel):
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)
     
+    @classmethod
+    def get_schema(cls,user_from_email,request):
+        case = cls.get_by_id(int(request.id))
+        if case is None:
+            raise endpoints.NotFoundException('Opportunity not found.')
+        parents_edge_list = Edge.list(
+                                    start_node = case.key,
+                                    kind = 'parents'
+                                    )
+        account_schema = None
+        for parent in parents_edge_list['items']:
+            if parent.end_node.kind() == 'Account':
+                account = parent.end_node.get()
+                account_schema = AccountSchema(
+                                        id = str( account.key.id() ),
+                                        entityKey = account.key.urlsafe(),
+                                        name = account.name
+                                        )
+        tag_list = Tag.list_by_parent(parent_key = case.key)
+        # list of infonodes
+        infonodes = Node.list_info_nodes(
+                                        parent_key = case.key,
+                                        request = request
+                                        )
+        #list of topics related to this account
+        topics = None
+        if request.topics:
+            topics = Note.list_by_parent(
+                                        parent_key = case.key,
+                                        request = request
+                                        )
+        tasks = None
+        if request.tasks:
+            tasks = Task.list_by_parent(
+                                        parent_key = case.key,
+                                        request = request
+                                        )
+        events = None
+        if request.events:
+            events = Event.list_by_parent(
+                                        parent_key = case.key,
+                                        request = request
+                                        )
+        documents = None
+        if request.documents:
+            documents = Document.list_by_parent(
+                                        parent_key = case.key,
+                                        request = request
+                                        )
+        case_status_edges = Edge.list(
+                                    start_node = case.key,
+                                    kind = 'status',
+                                    limit = 1
+                                    )
+        current_status_schema = None
+        if len(case_status_edges['items'])>0:
+                            current_status = case_status_edges['items'][0].end_node.get()
+                            current_status_schema = CaseStatusSchema(  
+                                                                    name = current_status.status,
+                                                                    status_changed_at = case_status_edges['items'][0].created_at.isoformat()
+                                                                    )
+        
+        closed_date = None
+        if case.closed_date:
+            closed_date = case.closed_date.strftime("%Y-%m-%dT%H:%M:00.000")
+        case_schema = CaseSchema(
+                                  id = str( case.key.id() ),
+                                  entityKey = case.key.urlsafe(),
+                                  name = case.name,
+                                  folder = case.folder,
+                                  current_status = current_status_schema,
+                                  priority = case.priority,
+                                  tags = tag_list,
+                                  topics = topics,
+                                  tasks = tasks,
+                                  events = events,
+                                  documents = documents,
+                                  infonodes = infonodes,
+                                  access = case.access,
+                                  description = case.description,
+                                  case_origin = case.case_origin,
+                                  closed_date = closed_date,
+                                  type_case = case.type_case,
+                                  created_at = case.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                  updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                )
+        return case_schema
     @classmethod
     def list(cls,user_from_email,request):
         curs = Cursor(urlsafe=request.pageToken)
