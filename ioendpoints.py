@@ -41,7 +41,7 @@ from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema
 from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest
 from iomodels.crmengine.shows import Show
 from iomodels.crmengine.leads import Lead,LeadInsertRequest,LeadListRequest,LeadListResponse,LeadSearchResults,LeadGetRequest,LeadSchema
-from iomodels.crmengine.cases import Case,CaseInsertRequest,CaseSchema,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
+from iomodels.crmengine.cases import Case,CaseGetRequest,CaseInsertRequest,CaseSchema,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
 #from iomodels.crmengine.products import Product
 from iomodels.crmengine.comments import Comment
 from iomodels.crmengine.opportunitystage import Opportunitystage
@@ -335,6 +335,14 @@ class CompanyProfileResponse(messages.Message):
     items = messages.MessageField(CompanyProfileSchema, 1, repeated=True)
     nextPageToken = messages.StringField(2)
 
+class PermissionRequest(messages.Message):
+    type = messages.StringField(1,required=True)
+    value = messages.StringField(2,required=True)
+
+
+class PermissionInsertRequest(messages.Message):
+    about = messages.StringField(1,required=True)
+    items = messages.MessageField(PermissionRequest, 2, repeated=True)
 
 
 
@@ -719,6 +727,16 @@ class CrmEngineApi(remote.Service):
         my_model.key.delete()
         return message_types.VoidMessage()
 
+    # cases.getv2 api
+    @endpoints.method(CaseGetRequest, CaseSchema,
+                      path='cases/getv2', http_method='POST',
+                      name='cases.getv2')
+    def case_get_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Case.get_schema(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
     # cases.get API
     @Case.method(request_fields=('id',),path='cases/{id}', http_method='GET', name='cases.get')
     def CaseGet(self, my_model):
@@ -2436,6 +2454,46 @@ class CrmEngineApi(remote.Service):
             raise endpoints.NotFoundException('Permission not found')
         return my_model
 
+    # permissions.insertv2 api
+    @endpoints.method(PermissionInsertRequest, message_types.VoidMessage,
+                      path='permissions/insertv2', http_method='POST',
+                      name='permissions.insertv2')
+    def permission_insert_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        about_key = ndb.Key(urlsafe=request.about)
+        about = about_key.get()
+        # check if the user can give permissions for this object
+        if about.access == 'private' and about.owner!=user_from_email.google_user_id:
+            end_node_set = [user_from_email.key]
+            if not Edge.find(start_node=about_key,kind='permissions',end_node_set=end_node_set,operation='AND'):
+                raise endpoints.NotFoundException('Permission denied')
+        for item in request.items:
+            if item.type == 'user':
+                # get the user
+                shared_with_user = User.query(User.email == item.value).get()
+                if shared_with_user:
+                    # check if user is in the same organization
+                    if shared_with_user.organization == about.organization:
+                        # insert the edge
+                        Edge.insert(
+                                    start_node = about_key,
+                                    end_node = shared_with_user.key,
+                                    kind = 'permissions',
+                                    inverse_edge = 'has_access_on'
+                                )
+                        # update indexes on search for collobaorators_id
+                        EndpointsHelper.update_edge_indexes(
+                                            parent_key = about_key,
+                                            kind = 'collaborators',
+                                            indexed_edge = shared_with_user.google_user_id
+                                            )          
+            elif item.type == 'group':
+                pass
+                # get the group
+                # get the members of this group
+                # for each member insert the edge
+                # update indexes on search for collaborators_id
+            return message_types.VoidMessage()
     # permissions.insert API
     @Permission.method(user_required=True,path='permissions', http_method='POST', name='permissions.insert')
     def PermissionInsert(self, my_model):

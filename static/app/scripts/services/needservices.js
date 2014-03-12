@@ -22,7 +22,7 @@ needservices.factory('Need', function() {
                //$scope.apply();
 
             }else {
-               if(resp.message=="Invalid token"){
+               if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
@@ -60,7 +60,7 @@ needservices.factory('Need', function() {
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
               }else {
-                 if(resp.message=="Invalid token"){
+                 if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
@@ -96,7 +96,7 @@ Need.patch  = function($scope,params){
        $scope.need = resp;
        $scope.$apply();
      } else {
-              if(resp.message=="Invalid token"){
+              if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();

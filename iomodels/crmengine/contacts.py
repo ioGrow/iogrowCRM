@@ -153,7 +153,7 @@ class Contact(EndpointsModel):
         title_autocomplete = ','.join(tokenize_autocomplete(self.firstname + ' ' + self.lastname +' '+ empty_string(self.title)+ ' ' +empty_string(self.account_name)))
         #addresses = " \n".join(map(lambda x: " ".join([x.street,x.city,x.state, x.postal_code, x.country]) if x else "", self.addresses))
         if data:
-            search_key = ['infos','contacts','tags']
+            search_key = ['infos','contacts','tags','collaborators']
             for key in search_key:
                 if key not in data.keys():
                     data[key] = ""
@@ -165,6 +165,7 @@ class Contact(EndpointsModel):
                 search.TextField(name='organization', value = empty_string(organization) ),
                 search.TextField(name='access', value = empty_string(self.access) ),
                 search.TextField(name='owner', value = empty_string(self.owner) ),
+                search.TextField(name='collaborators', value = data['collaborators']  ),
                 search.TextField(name='firstname', value = empty_string(self.firstname) ),
                 search.TextField(name='lastname', value = empty_string(self.lastname)),
                 search.TextField(name='position', value = empty_string(self.title)),

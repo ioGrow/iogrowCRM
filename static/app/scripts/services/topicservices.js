@@ -56,7 +56,7 @@ topicservices.factory('Topic', function($http) {
                  $scope.$apply();
                  $scope.hilightTopic();
               }else {
-                 if(resp.message=="Invalid token"){
+                 if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
@@ -77,7 +77,7 @@ topicservices.factory('Topic', function($http) {
                 $scope.$apply();
 
             }else {
-               if(resp.message=="Invalid token"){
+               if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();

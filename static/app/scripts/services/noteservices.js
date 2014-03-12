@@ -41,7 +41,7 @@ noteservices.factory('Note', function($http) {
                  $scope.$apply();
                  $scope.hilightTopic();
               }else {
-                 if(resp.message=="Invalid token"){
+                 if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
@@ -62,7 +62,7 @@ noteservices.factory('Note', function($http) {
                 $scope.$apply();
 
             }else {
-               if(resp.message=="Invalid token"){
+               if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
