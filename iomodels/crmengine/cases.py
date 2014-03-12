@@ -138,7 +138,7 @@ class Case(EndpointsModel):
         organization = str(self.organization.id())
         title_autocomplete = ','.join(tokenize_autocomplete(self.name + ' ' + empty_string(self.account_name) + ' ' + empty_string(self.contact_name)))
         if data:
-            search_key = ['infos','cases','tags']
+            search_key = ['infos','cases','tags','collaborators']
             for key in search_key:
                 if key not in data.keys():
                     data[key] = ""
@@ -149,7 +149,7 @@ class Case(EndpointsModel):
                 search.TextField(name='organization', value = empty_string(organization) ),
                 search.TextField(name='access', value = empty_string(self.access) ),
                 search.TextField(name='owner', value = empty_string(self.owner) ),
-                search.TextField(name='collaborators', value = collaborators ),
+                search.TextField(name='collaborators', value = data['collaborators'] ),
                 search.TextField(name='title', value = empty_string(self.name) ),
                 search.TextField(name='account_name', value = empty_string(self.account_name) ),
                 search.TextField(name='contact_name', value = empty_string(self.contact_name) ),
