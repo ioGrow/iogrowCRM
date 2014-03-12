@@ -8,6 +8,35 @@ app.directive('ngBlur', ['$parse', function($parse) {
     });
   }
 }]);
+app.directive('currency', function() {
+    return {
+      restrict: 'A',
+      require:'?ngModel',
+      link: function ($scope, elem, attrs,ngModel) {
+        var field=$(elem);
+        field.blur(function() {
+          var value=$(this).val();
+         $(this).val(value.replace(/\./g, ''));     
+        });
+        field.focus(function() {
+          var value=$(this).val();
+          $(this).val(numberWithCommas(value));
+        });
+        field.keyup(function() {
+          var value=$(this).val();
+          $(this).val(numberWithCommas(value));
+        });
+        function numberWithCommas(n) {
+          var par=n.toString().split(",");
+          n=par[0];
+          n= n.replace(/\./g, '');
+          n=n.replace(/,/g, '');
+          var parts=n.toString().split(".");
+            return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".") + (parts[1] ? "," + parts[1] : "");
+        }
+      }
+ }
+});
 app.directive('ngDrag', ['$parse', function($parse) {
   return function(scope, element, attr) {
     var fn = $parse(attr['ngDrag']);
