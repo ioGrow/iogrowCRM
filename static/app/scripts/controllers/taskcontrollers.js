@@ -217,6 +217,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
      $scope.draggedTag={};
      $scope.task_checked = false;
      $scope.isSelectedAll = false;
+     $scope.showNewTag=false;
      $scope.taggableOptions=[];
      $scope.taggableOptions.push(
       {'tag':'@','data':{

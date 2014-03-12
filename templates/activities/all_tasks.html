@@ -1,4 +1,12 @@
 <div  class="page-content">
+    <div class="loader-container row" ng-show="isLoading">
+      <div class="loader-dialog col-md-4 col-md-offset-4 ">
+        <div class="loader-content">
+          Loading...
+        </div>
+      </div>
+      
+    </div>
    <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
       <div id="portlet-config" class="modal ">
         <div class="modal-dialog">
@@ -191,8 +199,7 @@
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-        <div class="row">
-          
+        <div class="row"> 
           <div class="col-md-12">
             <h2 class="page-title">{{ _("Tasks") }} 
                 <img src="/static/img/test_loader.gif" ng-show="isLoading" style="margin-top: -5px !important;" class="pull-right" style="height: 40px;">
@@ -660,10 +667,15 @@
                     </form>
                     <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
                   </li>
+                  <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
+                       <a ng-click="" class="btn-link addAnotherPhone">
+                        <i class="fa fa-tags"></i>  Add a new tag</a>
+                  </li>
                   </div>
                 </ul>
-                
-                <form class="well" role="form">
+               
+                <form class="well newTagForm" role="form" ng-show="showNewTag">
+                 <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
                 <div class="row">
                   <div class="col-md-12 form-group">
                     <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New tag name">
