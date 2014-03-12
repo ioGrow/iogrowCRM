@@ -28,6 +28,19 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
      $scope.order = '-updated_at';
      $scope.selected_tags = [];
      $scope.draggedTag=null;
+     $scope.tag = {};
+        $scope.showNewTag=false;
+        $scope.color_pallet=[
+         {'name':'red','color':'#F7846A'},
+         {'name':'orange','color':'#FFBB22'},
+         {'name':'yellow','color':'#EEEE22'},
+         {'name':'green','color':'#BBE535'},
+         {'name':'blue','color':'#66CCDD'},
+         {'name':'gray','color':'#B5C5C5'},
+         {'name':'teal','color':'77DDBB'},
+         {'name':'purple','color':'#E874D6'},
+         ];
+      $scope.tag.color= {'name':'green','color':'#BBE535'};
      
       // What to do after authentication
        $scope.runTheProcess = function(){
@@ -266,11 +279,11 @@ $scope.addNewtag = function(tag){
        var params = {   
                           'name': tag.name,
                           'about_kind':'Case',
-                          'color':$('#tag-col-pick').val()
+                          'color':tag.color.color
                       }  ;
        Tag.insert($scope,params);
         $scope.tag.name='';
-        $('#tag-col-pick').val('#8fff00');
+        $scope.tag.color= {'name':'green','color':'#BBE535'};
         var paramsTag = {'about_kind':'Case'};
         Tag.list($scope,paramsTag);
         
@@ -443,7 +456,10 @@ $scope.addTags=function(){
         $scope.draggedTag=null;
       }; 
     
-
+  // HKA 12.03.2014 Pallet color on Tags
+      $scope.checkColor=function(color){
+        $scope.tag.color=color;
+      }
    // Google+ Authentication 
      Auth.init($scope);
 
