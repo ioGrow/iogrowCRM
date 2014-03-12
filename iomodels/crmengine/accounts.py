@@ -65,7 +65,7 @@ class AccountListRequest(messages.Message):
     order = messages.StringField(3)
     tags = messages.StringField(4,repeated = True)
     owner = messages.StringField(5)
-    contacts = messages.MessageField(ContactListRequest, 6)
+    
     
 
 
@@ -135,7 +135,7 @@ class Account(EndpointsModel):
         
         #addresses = " \n".join(map(lambda x: " ".join([x.street,x.city,x.state, str(x.postal_code), x.country]) if x else "", self.addresses))
         if data:
-            search_key = ['infos','tags']
+            search_key = ['infos','tags','collaborators']
             for key in search_key:
                 if key not in data.keys():
                     data[key] = ""
@@ -147,7 +147,7 @@ class Account(EndpointsModel):
                 search.TextField(name='entityKey',value=empty_string(self.key.urlsafe())),
                 search.TextField(name='access', value = empty_string(self.access) ),
                 search.TextField(name='owner', value = empty_string(self.owner) ),
-                search.TextField(name='collaborators', value = collaborators ),
+                search.TextField(name='collaborators', value = data['collaborators'] ),
                 search.TextField(name='title', value = empty_string(self.name) ),
                 search.TextField(name='account_type', value = empty_string(self.account_type)),
                 search.TextField(name='industry', value = empty_string(self.industry)),

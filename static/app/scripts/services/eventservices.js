@@ -19,7 +19,7 @@ eventservices.factory('Event', function($http) {
                 $scope.$apply();
 
             }else {
-               if(resp.message=="Invalid token"){
+               if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
@@ -63,7 +63,7 @@ eventservices.factory('Event', function($http) {
                  $scope.$apply();
                  $scope.hilightEvent();
               }else {
-                 if(resp.message=="Invalid token"){
+                 if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();

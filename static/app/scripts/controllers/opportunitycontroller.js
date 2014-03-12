@@ -766,7 +766,7 @@ $scope.deleteopportunity= function(){
           if ($scope.documentpages[nextPage]){
             params = {
                         'id':$scope.opportunity.id,
-                        'opportunities':{
+                        'documents':{
                           'limit': '6',
                           'pageToken':$scope.documentpages[nextPage]
                         }
@@ -792,7 +792,7 @@ $scope.deleteopportunity= function(){
           if ($scope.documentpages[prevPage]){
             params = {
                         'id':$scope.opportunity.id,
-                        'opportunities':{
+                        'documents':{
                           'limit': '6',
                           'pageToken':$scope.documentpages[prevPage]
                         }
@@ -801,7 +801,7 @@ $scope.deleteopportunity= function(){
           }else{
             params = {
                         'id':$scope.opportunity.id,
-                        'opportunities':{
+                        'documents':{
                           'limit': '6'
                         }
                       }

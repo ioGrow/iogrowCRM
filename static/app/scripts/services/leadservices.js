@@ -106,7 +106,7 @@ leadservices.factory('Lead', function($http) {
                     $scope.hilightEvent();
                 }
             }else {
-               if(resp.message=="Invalid token"){
+               if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
@@ -131,7 +131,7 @@ leadservices.factory('Lead', function($http) {
                 $scope.$apply();
 
             }else {
-               if(resp.message=="Invalid token"){
+               if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
@@ -171,7 +171,7 @@ leadservices.factory('Lead', function($http) {
                  
 
               }else {
-                if(resp.message=="Invalid token"){
+                if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
