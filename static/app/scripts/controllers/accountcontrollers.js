@@ -416,6 +416,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        $scope.casee.priority = 4;
        $scope.casee.status = 'pending';
        $scope.addingTask = false;
+       $scope.edited_email = null;
 
        // What to do after authentication
        $scope.runTheProcess = function(){
@@ -1409,7 +1410,14 @@ $scope.deleteaccount = function(){
 
     $scope.getTopicUrl = function(type,id){
       return Topic.getUrl(type,id);
-    }
+    };
+//HKA 12.03.2014 Edit infonode
+$scope.edit_email=function(email){
+        $scope.edited_email=email;
+     };
+
+
+
 
      // Google+ Authentication 
      Auth.init($scope);
