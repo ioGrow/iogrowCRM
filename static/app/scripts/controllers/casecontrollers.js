@@ -459,7 +459,7 @@ $scope.addTags=function(){
   // HKA 12.03.2014 Pallet color on Tags
       $scope.checkColor=function(color){
         $scope.tag.color=color;
-      }
+      };
    // Google+ Authentication 
      Auth.init($scope);
 
