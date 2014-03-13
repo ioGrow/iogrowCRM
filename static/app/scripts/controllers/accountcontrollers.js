@@ -18,6 +18,19 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
      $scope.order = '-updated_at';
      $scope.account.account_type = 'Customer';
      $scope.draggedTag=null;
+     $scope.tag = {};
+     $scope.showNewTag=false;
+     $scope.color_pallet=[
+         {'name':'red','color':'#F7846A'},
+         {'name':'orange','color':'#FFBB22'},
+         {'name':'yellow','color':'#EEEE22'},
+         {'name':'green','color':'#BBE535'},
+         {'name':'blue','color':'#66CCDD'},
+         {'name':'gray','color':'#B5C5C5'},
+         {'name':'teal','color':'77DDBB'},
+         {'name':'purple','color':'#E874D6'},
+     ];
+     $scope.tag.color= {'name':'green','color':'#BBE535'};
      $scope.runTheProcess = function(){
           var params = { 'order': $scope.order,
                         'limit':6}
@@ -169,13 +182,15 @@ $scope.addNewtag = function(tag){
        var params = {   
                           'name': tag.name,
                           'about_kind':'Account',
-                          'color':$('#tag-col-pick').val()
+                          'color':tag.color.color
                       }  ;
        Tag.insert($scope,params);
-          tag.name='';
-         $('#tag-col-pick').val('#8fff00');
+      
         var paramsTag = {'about_kind':'Account'};
         Tag.list($scope,paramsTag);
+        tag.name='';
+        $scope.tag.color= {'name':'green','color':'#BBE535'};
+
         
      }
 $scope.updateTag = function(tag){
@@ -349,13 +364,15 @@ $scope.addTags=function(){
         params = {
           'items': items
         }
-        console.log('params --------------------- params')
-        console.log(params);
+        
         Edge.insert($scope,params);
         $scope.draggedTag=null;
       };
       
-
+ // HKA 12.03.2014 Pallet color on Tags
+      $scope.checkColor=function(color){
+        $scope.tag.color=color;
+      }
 
 
 
@@ -416,6 +433,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        $scope.casee.priority = 4;
        $scope.casee.status = 'pending';
        $scope.addingTask = false;
+       $scope.edited_email = null;
 
        // What to do after authentication
        $scope.runTheProcess = function(){
@@ -1409,7 +1427,14 @@ $scope.deleteaccount = function(){
 
     $scope.getTopicUrl = function(type,id){
       return Topic.getUrl(type,id);
-    }
+    };
+//HKA 12.03.2014 Edit infonode
+$scope.edit_email=function(email){
+        $scope.edited_email=email;
+     };
+
+
+
 
      // Google+ Authentication 
      Auth.init($scope);
