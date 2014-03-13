@@ -653,7 +653,7 @@
                     <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Amount")}} </label>
                         <div class="col-md-9">
-                          <input type="text"  class="form-control" id="id_amount" ng-model="opportunity.amount">
+                          <input currency type="text" pattern="\d*"  class="form-control" id="id_amount" ng-model="opportunity.amount">
                         </div>
                     </div>
                     <div class="form-group">

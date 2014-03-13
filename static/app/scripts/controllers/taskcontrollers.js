@@ -720,8 +720,7 @@ $scope.selectTag= function(tag,index,$event){
             $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
              text.css('color','#000000');
          }
-         console.log('Taaaaaaaaaggggggssss');
-         console.log($scope.selected_tags);
+        
          $scope.filterByTags($scope.selected_tags);
 
       }
