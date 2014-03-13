@@ -245,6 +245,7 @@ class Contact(EndpointsModel):
         cases = None
         if request.cases:
             cases = Case.list_by_parent(
+                                        user_from_email = user_from_email,
                                         parent_key = contact.key,
                                         request = request
                                         )

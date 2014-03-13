@@ -614,7 +614,10 @@ class CrmEngineApi(remote.Service):
                       name='accounts.getv2')
     def accounts_get_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        return Account.get_schema(request = request)
+        return Account.get_schema(
+                                    user_from_email = user_from_email,
+                                    request = request
+                                )
     # accounts.get API
     @Account.method(
                     request_fields=('id',),

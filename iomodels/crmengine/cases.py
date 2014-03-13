@@ -36,6 +36,7 @@ class CaseInsertRequest(messages.Message):
     status = messages.StringField(3, required = True)
     account = messages.StringField(4, required = True)
     contact = messages.StringField(5)
+    access = messages.StringField(6)
 
 class CaseListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -302,7 +303,7 @@ class Case(EndpointsModel):
             for case in cases:
                 if count<= limit:
                     is_filtered = True
-                    if case.access == 'private' and case.owner!=user_from_email.google_user_id:
+                    if case.access != 'public' and case.owner!=user_from_email.google_user_id:
                         end_node_set = [user_from_email.key]
                         if not Edge.find(start_node=case.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
                             is_filtered = False
@@ -421,45 +422,66 @@ class Case(EndpointsModel):
                                  nextPageToken=next_cursor
                                  )
     @classmethod
-    def list_by_parent(cls,parent_key,request):
+    def list_by_parent(cls,user_from_email,parent_key,request):
         case_list = []
-        case_edge_list = Edge.list(
-                                start_node = parent_key,
-                                kind='cases',
-                                limit=request.cases.limit,
-                                pageToken=request.cases.pageToken
-                                )
-        for edge in case_edge_list['items']:
-            case = edge.end_node.get()
-            tag_list = Tag.list_by_parent(parent_key = case.key)
-            case_status_edges = Edge.list(
-                                                start_node = case.key,
-                                                kind = 'status',
-                                                limit = 1
-                                                )
-            current_status_schema = None
-            if len(case_status_edges['items'])>0:
-                current_status = case_status_edges['items'][0].end_node.get()
-                current_status_schema = CaseStatusSchema(  
-                                                        name = current_status.status,
-                                                        status_changed_at = case_status_edges['items'][0].created_at.isoformat()
-                                                        )
-            case_list.append(
-                            CaseSchema(
-                                    id = str( case.key.id() ),
-                                    entityKey = case.key.urlsafe(),
-                                    name = case.name,
-                                    current_status = current_status_schema,
-                                    priority = case.priority,
-                                    tags = tag_list,
-                                    created_at = case.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                    updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+        you_can_loop = True
+        count = 0
+        limit = int(request.cases.limit)
+        case_next_curs = request.cases.pageToken
+        while you_can_loop:
+            print '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$'
+            print count
+            edge_limit = int(request.cases.limit) - count
+            if edge_limit>0:
+                case_edge_list = Edge.list(
+                                    start_node = parent_key,
+                                    kind='cases',
+                                    limit=edge_limit,
+                                    pageToken=case_next_curs
                                     )
-                            )
-        if case_edge_list['next_curs'] and case_edge_list['more']:
-            case_next_curs = case_edge_list['next_curs'].urlsafe()
-        else:
-            case_next_curs = None
+                for edge in case_edge_list['items']:
+                    case = edge.end_node.get()
+                    is_filtered = True
+                    if case.access != 'public' and case.owner!=user_from_email.google_user_id:
+                        end_node_set = [user_from_email.key]
+                        if not Edge.find(start_node=case.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
+                            is_filtered = False
+                    if is_filtered:
+                        count = count + 1
+                        tag_list = Tag.list_by_parent(parent_key = case.key)
+                        case_status_edges = Edge.list(
+                                                        start_node = case.key,
+                                                        kind = 'status',
+                                                        limit = 1
+                                                    )
+                        current_status_schema = None
+                        if len(case_status_edges['items'])>0:
+                            current_status = case_status_edges['items'][0].end_node.get()
+                            current_status_schema = CaseStatusSchema(  
+                                                                    name = current_status.status,
+                                                                    status_changed_at = case_status_edges['items'][0].created_at.isoformat()
+                                                                    )
+                        case_list.append(
+                                        CaseSchema(
+                                                id = str( case.key.id() ),
+                                                entityKey = case.key.urlsafe(),
+                                                name = case.name,
+                                                current_status = current_status_schema,
+                                                priority = case.priority,
+                                                tags = tag_list,
+                                                created_at = case.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                                updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                                )
+                                        )
+                if case_edge_list['next_curs'] and case_edge_list['more']:
+                    case_next_curs = case_edge_list['next_curs'].urlsafe()
+                else:
+                    you_can_loop = False
+                    case_next_curs = None
+            
+            if (count == limit):
+                you_can_loop = False
+
         return CaseListResponse(
                                     items = case_list,
                                     nextPageToken = case_next_curs
@@ -474,6 +496,7 @@ class Case(EndpointsModel):
         case = cls(
                     owner = user_from_email.google_user_id,
                     organization = user_from_email.organization,
+                    access = request.access,
                     name = request.name,
                     priority = request.priority,
                     folder = created_folder['id']
