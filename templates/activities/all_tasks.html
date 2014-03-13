@@ -1,5 +1,5 @@
 <div  class="page-content">
-    <div class="loader-container row" ng-show="isLoading">
+    <div class="loader-container row" ng-show="true">
       <div class="loader-dialog col-md-4 col-md-offset-4 ">
         <div class="loader-content">
           Loading...
@@ -662,6 +662,10 @@
                   <li  ng-repeat="tag_item in tags" class="list-group-item tags-list-item" ng-click="selectTag(tag_item,$index,$event)"  >
                   <div class="row">
                     <span  draggable ng-drag="dragTag(tag_item)" style="background-color:<%=tag_item.color%>;color:idealTextColor(<%=tag_item.color%>);" class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"><%= tag_item.name %> </span>
+                    <span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
+                      <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>  
+                    </span>
+                    
                     <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
                       <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
                     </form>
