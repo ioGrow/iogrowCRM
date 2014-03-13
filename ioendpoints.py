@@ -182,9 +182,14 @@ class InfoNodeSchema(messages.Message):
     fields = messages.MessageField(RecordSchema, 2, repeated=True)
     parent = messages.StringField(3, required=True)
 
+class InfoNodePatchRequest(messages.Message):
+    entityKey = messages.StringField(1, required=True)
+    fields = messages.MessageField(RecordSchema, 2, repeated=True)
+    parent = messages.StringField(3, required=True)
 
-
-
+class InfoNodePatchResponse(messages.Message):
+    entityKey = messages.StringField(1, required=True)
+    fields = messages.MessageField(RecordSchema, 2, repeated=True)
 
 #TODOS
 # ADD PHONE SCHEMA, LISTOFPHONES SCHEMA, EMAILS, ADDRESSES,...
@@ -2232,6 +2237,28 @@ class CrmEngineApi(remote.Service):
                                     parent_key = parent_key,
                                     request = request
                                     )
+    # infonode.patch api
+    @endpoints.method(InfoNodePatchRequest, message_types.VoidMessage,
+                        path='infonode/patch', http_method='POST',
+                        name='infonode.patch')
+    def infonode_patch(self, request):
+        node_key = ndb.Key(urlsafe = request.entityKey)
+        parent_key = ndb.Key(urlsafe = request.parent)
+        node = node_key.get()
+        node_values = []
+        if node is None:
+            raise endpoints.NotFoundException('Node not found')
+        for record in request.fields:
+            setattr(node, record.field, record.value)
+            node_values.append(str(record.value))
+        node.put()
+        indexed_edge = '_' + node.kind + ' ' + " ".join(node_values)
+        EndpointsHelper.update_edge_indexes(
+                                            parent_key = parent_key,
+                                            kind = 'infos',
+                                            indexed_edge = indexed_edge
+                                            )
+        return message_types.VoidMessage()
 
     # Opportunities APIs
     # opportunities.delete api
