@@ -40,7 +40,7 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
      };
      $scope.getPosition= function(index){
         if(index<3){
-          console.log(index+1);
+         
           return index+1;
         }else{
           console.log((index%3)+1);
@@ -238,8 +238,7 @@ $scope.selectTag= function(tag,index,$event){
     };
   $scope.filterByTags = function(selected_tags){
 
-    console.log('-----------selected_tags-------');
-    console.log(selected_tags);
+  
          var tags = [];
          angular.forEach(selected_tags, function(tag){
             tags.push(tag.entityKey);
@@ -435,6 +434,12 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        $scope.addingTask = false;
        $scope.sharing_with = [];
        $scope.edited_email = null;
+        $scope.statuses = [
+    {value: 1, text: 'Home'},
+    {value: 2, text: 'Work'},
+    {value: 3, text: 'Mob'},
+    {value: 4, text: 'Other'}
+  ];
 
 
        // What to do after authentication
@@ -1444,10 +1449,17 @@ $scope.deleteaccount = function(){
     };
 //HKA 12.03.2014 Edit infonode
 $scope.edit_email=function(email){
+  console.log('----------thanks----------');
         $scope.edited_email=email;
      };
 
-
+$scope.editTag=function(tag){
+        $scope.edited_tag=tag;
+     }
+$scope.doneEditTag=function(tag){
+        $scope.edited_tag=null;
+        $scope.updateTag(tag);
+     }
 
 
      // Google+ Authentication 
