@@ -1193,23 +1193,41 @@ $scope.CaselistNextPageItems = function(){
 //HKA 19.11.2013 Add Phone
  $scope.addPhone = function(phone){
   
-  params = {'parent':$scope.account.entityKey,
-            'kind':'phones',
-            'fields':[
-                {
-                  "field": "type",
-                  "value": phone.type_number
-                },
-                {
-                  "field": "number",
-                  "value": phone.number
-                }
-            ]
+    params = {'parent':$scope.account.entityKey,
+              'kind':'phones',
+              'fields':[
+                  {
+                    "field": "type",
+                    "value": phone.type_number
+                  },
+                  {
+                    "field": "number",
+                    "value": phone.number
+                  }
+              ]
+    };
+    InfoNode.insert($scope,params);
+    $('#phonemodal').modal('hide');
+    $scope.phone.type_number='work';
+    $scope.phone.number='';
   };
-  InfoNode.insert($scope,params);
-  $('#phonemodal').modal('hide');
-  $scope.phone.type_number='work';
-  $scope.phone.number='';
+
+   $scope.patchPhoneNumber = function(entityKey, data){
+    
+  
+    params = {
+              'entityKey': entityKey,
+              'parent':$scope.account.entityKey,
+              'kind':'phones',
+              'fields':[
+                 
+                  {
+                    "field": "number",
+                    "value": data
+                  }
+              ]
+    };
+     InfoNode.patch($scope,params);
   };
 
 

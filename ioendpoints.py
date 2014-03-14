@@ -186,6 +186,7 @@ class InfoNodePatchRequest(messages.Message):
     entityKey = messages.StringField(1, required=True)
     fields = messages.MessageField(RecordSchema, 2, repeated=True)
     parent = messages.StringField(3, required=True)
+    kind = messages.StringField(4)
 
 class InfoNodePatchResponse(messages.Message):
     entityKey = messages.StringField(1, required=True)
