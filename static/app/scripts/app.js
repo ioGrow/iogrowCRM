@@ -1,10 +1,14 @@
 
-var app = angular.module('crmEngine',['ui.bootstrap.datetimepicker','ngQuickDate','ui.bootstrap','ui.select2', 'crmEngine.authservices', 'crmEngine.showservices', 'crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.eventservices', 'crmEngine.leadservices','crmEngine.opportunityservices','crmEngine.caseservices','crmEngine.userservices','crmEngine.groupservices','crmEngine.noteservices','crmEngine.commentservices','crmEngine.settingservices','crmEngine.feedbackservices','crmEngine.companyprofileservices','mapServices','crmEngine.needservices','crmEngine.infonodeservices']);
+var app = angular.module('crmEngine',['ui.bootstrap.datetimepicker','xeditable','ngQuickDate','ui.bootstrap','ui.select2', 'crmEngine.authservices', 'crmEngine.showservices', 'crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.eventservices', 'crmEngine.leadservices','crmEngine.opportunityservices','crmEngine.caseservices','crmEngine.userservices','crmEngine.groupservices','crmEngine.noteservices','crmEngine.commentservices','crmEngine.settingservices','crmEngine.feedbackservices','crmEngine.companyprofileservices','mapServices','crmEngine.needservices','crmEngine.infonodeservices']);
 
 app.config(function($interpolateProvider){
   $interpolateProvider.startSymbol('<%=');
   $interpolateProvider.endSymbol('%>');
 });
+app.run(function(editableOptions) {
+  editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
+});
+
 app.config(['$routeProvider', function($routeProvider) {
      $routeProvider.
      // Accounts
