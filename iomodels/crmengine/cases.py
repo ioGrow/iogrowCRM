@@ -37,6 +37,7 @@ class CaseInsertRequest(messages.Message):
     account = messages.StringField(4, required = True)
     contact = messages.StringField(5)
     access = messages.StringField(6)
+    status_name = messages.StringField(7)
 
 class CaseListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -541,7 +542,19 @@ class Case(EndpointsModel):
             data = {}
             data['id'] = case_key_async.id()
             case.put_index(data)
-        return CaseSchema(id=str(case_key_async.id()))
+        current_status_schema = CaseStatusSchema(
+                                        name = request.status_name
+                                        )
+        case_schema = CaseSchema(
+                                  id = str( case_key_async.id() ),
+                                  entityKey = case_key_async.urlsafe(),
+                                  name = case.name,
+                                  current_status = current_status_schema,
+                                  priority = case.priority,
+                                  created_at = case.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                  updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                )
+        return case_schema
 
     
 

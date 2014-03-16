@@ -514,4 +514,13 @@ class Opportunity(EndpointsModel):
             data = {}
             data['id'] = opportunity_key_async.id()
             opportunity.put_index(data)
-        return OpportunitySchema(id=str(opportunity_key_async.id()))
+            
+        opportunity_schema = OpportunitySchema(
+                                  id = str( opportunity_key_async.id() ),
+                                  entityKey = opportunity_key_async.urlsafe(),
+                                  name = opportunity.name,
+                                  amount = str(opportunity.amount),
+                                  created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                  updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                )
+        return opportunity_schema

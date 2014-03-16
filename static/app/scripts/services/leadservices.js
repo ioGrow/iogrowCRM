@@ -189,8 +189,14 @@ leadservices.factory('Lead', function($http) {
          
          if(!resp.code){
           $scope.isLoading = false;
-          $('#addLeadModal').modal('hide');
-          window.location.replace('#/leads/show/'+resp.id);
+          
+          if ($scope.leads == undefined){
+            $scope.leads = [];
+            $scope.blankStatelead = false;
+          }
+          $scope.leads.push(resp);
+          $scope.lead = {};
+          $scope.$apply();
           
          }else{
             console.log(resp.message);

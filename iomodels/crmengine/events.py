@@ -12,6 +12,7 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 from iomodels.crmengine.notes import Topic, AuthorSchema,DiscussionAboutSchema
 from model import Userinfo
 from iograph import Edge
+from iomodels.crmengine.tags import Tag,TagSchema
 import pprint
 
 import model
@@ -33,8 +34,10 @@ class EventSchema(messages.Message):
     ends_at = messages.StringField(5)
     where = messages.StringField(6)
     about = messages.MessageField(DiscussionAboutSchema,7)
-    created_at = messages.StringField(8)
-    updated_at = messages.StringField(9)
+    created_by = messages.MessageField(AuthorSchema,8)
+    tags = messages.MessageField(TagSchema,9, repeated = True)
+    created_at = messages.StringField(10)
+    updated_at = messages.StringField(11)
 
 class EventInsertRequest(messages.Message):
     parent = messages.StringField(1)
@@ -157,6 +160,48 @@ class Event(EndpointsModel):
         my_index.put(my_document)
 
     @classmethod
+    def get_schema(cls,user_from_email,request):
+        event = cls.get_by_id( int(request.id) )
+        if event is None:
+            raise endpoints.NotFoundException('Event not found.')
+        tag_list = Tag.list_by_parent(parent_key = event.key)
+        about = None
+        edge_list = Edge.list(start_node=event.key,kind='related_to')
+        for edge in edge_list['items']:
+            about_kind = edge.end_node.kind()
+            parent = edge.end_node.get()
+            if parent:
+                if about_kind == 'Contact' or about_kind == 'Lead':
+                    about_name = parent.firstname + ' ' + parent.lastname
+                else:
+                    about_name = parent.name
+                about = DiscussionAboutSchema(  
+                                                kind=about_kind,
+                                                id=str(parent.key.id()),
+                                                name=about_name
+                                            )
+        author_schema = None
+        if event.author:
+            author_schema = AuthorSchema(
+                                    google_user_id = event.author.google_user_id,
+                                    display_name = event.author.display_name,
+                                    google_public_profile_url = event.author.google_public_profile_url,
+                                    photo = event.author.photo)
+        event_schema = EventSchema(
+                                    id = str( event.key.id() ),
+                                    entityKey = event.key.urlsafe(),
+                                    title = event.title,
+                                    starts_at = event.starts_at.isoformat(),
+                                    ends_at = event.ends_at.isoformat(),
+                                    where = event.where,
+                                    about = about,
+                                    created_by = author_schema,
+                                    tags = tag_list,
+                                    created_at = event.created_at.isoformat(),
+                                    updated_at = event.updated_at.isoformat()
+                                )
+        return event_schema
+    @classmethod
     def list_by_parent(cls,parent_key,request):
         date_time_to_string = lambda x: x.strftime("%Y-%m-%dT%H:%M:00.000") if x else ""
         event_list = []
@@ -204,14 +249,11 @@ class Event(EndpointsModel):
                     author = author
                     )
         try:
-            print '11111111@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
             credentials = user_from_email.google_credentials
             print credentials
             http = credentials.authorize(httplib2.Http(memcache))
             print 'bad bad'
             service = build('calendar', 'v3', http=http)
-            print '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
-            print event
             # prepare params to insert
             params = {
                      "start":
@@ -237,9 +279,6 @@ class Event(EndpointsModel):
                   }
 
             }
-            print '****************************************'
-            print params
-
             created_event = service.events().insert(calendarId='primary',body=params).execute()
 
         except:

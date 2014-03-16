@@ -1161,12 +1161,13 @@ $scope.CaselistNextPageItems = function(){
 
   // HKA 19.11.2013 Add Case related to account
     $scope.saveCase = function(casee){
-          console.log($scope.status_selected.status);
+          
         var params = {'name':casee.name,
                       'priority':casee.priority,
                       'status': $scope.status_selected.entityKey,
                       'account':$scope.account.entityKey,
-                      'access': $scope.account.access
+                      'access': $scope.account.access,
+                      'status_name': $scope.status_selected.name
                       };
       Case.insert($scope,params);
       $('#addCaseModal').modal('hide');

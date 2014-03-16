@@ -78,7 +78,99 @@
                         <label  class="required col-md-3 control-label">{{_("Amount")}} </label>
                        
                         <div class="col-md-9">
-                          <input currency type="text" pattern="\d*"  required id="id_amount" class="form-control" ng-model="opportunity.amount">
+                        <div class="row">
+                          <div class="col-md-3 inline-div">
+                              <select  class="form-control" ng-model="opportunity.currency">
+                                <option value="USD">$ - USD</option>
+                                <option value="EUR">€ - EUR</option>
+                                <option value="CAD">$ - CAD</option>
+                                <option value="GBP">£ - GBP</option>
+                                <option value="AUD">$ - AUD</option>
+                                <option value="">---</option>
+                                <option value="AED">د.إ - AED</option>
+                                <option value="ANG">ƒ - ANG</option>
+                                <option value="AOA">AOA - AOA</option>
+                                <option value="ARS">$ - ARS</option>
+                                <option value="BAM">KM - BAM</option>
+                                <option value="BBD">$ - BBD</option>
+                                <option value="BGL">лв - BGL</option>
+                                <option value="BHD">BD - BHD</option>
+                                <option value="BND">$ - BND</option>
+                                <option value="BRL">R$ - BRL</option>
+                                <option value="BTC">฿ - BTC</option>
+                                <option value="CHF">Fr - CHF</option>
+                                <option value="CLF">UF - CLF</option>
+                                <option value="CLP">$ - CLP</option>
+                                <option value="CNY">¥ - CNY</option>
+                                <option value="COP">$ - COP</option>
+                                <option value="CRC">₡ - CRC</option>
+                                <option value="CZK">Kč - CZK</option>
+                                <option value="DKK">kr - DKK</option>
+                                <option value="EEK">KR - EEK</option>
+                                <option value="EGP">E£ - EGP</option>
+                                <option value="FJD">FJ$ - FJD</option>
+                                <option value="GTQ">Q - GTQ</option>
+                                <option value="HKD">$ - HKD</option>
+                                <option value="HRK">kn  - HRK</option>
+                                <option value="HUF">Ft - HUF</option>
+                                <option value="IDR">Rp - IDR</option>
+                                <option value="ILS">₪ - ILS</option>
+                                <option value="INR">₨ - INR</option>
+                                <option value="IRR">ریال - IRR</option>
+                                <option value="ISK">kr - ISK</option>
+                                <option value="JOD">د.ا - JOD</option>
+                                <option value="JPY">¥ - JPY</option>
+                                <option value="KES">KSh - KES</option>
+                                <option value="KRW">₩ - KRW</option>
+                                <option value="KWD">KD - KWD</option>
+                                <option value="KYD">$ - KYD</option>
+                                <option value="LTL">Lt - LTL</option>
+                                <option value="LVL">Ls - LVL</option>
+                                <option value="MAD">د.م. - MAD</option>
+                                <option value="MVR">Rf - MVR</option>
+                                <option value="MXN">$ - MXN</option>
+                                <option value="MYR">RM - MYR</option>
+                                <option value="NGN">₦ - NGN</option>
+                                <option value="NOK">kr - NOK</option>
+                                <option value="NZD">$ - NZD</option>
+                                <option value="OMR">ر.ع - OMR</option>
+                                <option value="PEN">S/. - PEN</option>
+                                <option value="PHP">₱ - PHP</option>
+                                <option value="PLN">zł - PLN</option>
+                                <option value="QAR">ر.ق - QAR</option>
+                                <option value="RON">L - RON</option>
+                                <option value="RUB">руб. - RUB</option>
+                                <option value="SAR">ر.س - SAR</option>
+                                <option value="SEK">kr - SEK</option>
+                                <option value="SGD">$ - SGD</option>
+                                <option value="THB">฿ - THB</option>
+                                <option value="TRY">TL - TRY</option>
+                                <option value="TTD">$ - TTD</option>
+                                <option value="TWD">$ - TWD</option>
+                                <option value="UAH">₴ - UAH</option>
+                                <option value="VEF">Bs F - VEF</option>
+                                <option value="VND">₫ - VND</option>
+                                <option value="XCD">$ - XCD</option>
+                                <option value="ZAR">R - ZAR</option>
+                              </select>
+                          </div>
+                          <div class="col-md-4 inline-div">
+                               <input amount type="text" pattern="\d*"  required id="id_amount" class="form-control" ng-model="opportunity.amount">
+                          </div>
+                          <div class="col-md-3 inline-div">
+                            <select   class="form-control" ng-model="opportunity.price_type">
+                                <option value="fixed">Fixed bid</option>
+                                <option value="hour">Per hour</option>
+                                <option value="month">Per month</option>
+                                <option value="year">Per year</option>
+                            </select>
+                          </div>
+                          <div class="col-md-2 inline-div">
+                             <input ng-hide="opportunity.price_type=='fixed'" type="text" pattern="\d*"  required id="" class="form-control" ng-model="opportunity.quantity">
+                          </div>
+                        </div>
+                         
+                          
                         </div> 
                         
                     </div>
