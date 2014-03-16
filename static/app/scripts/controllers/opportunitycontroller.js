@@ -19,7 +19,10 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
 
      $scope.opportunities = [];
      $scope.stage_selected={};
-     $scope.opportunity = {};
+     $scope.opportunity = {
+      'currency':'USD',
+      'price_type':'fixed'
+     };
      $scope.opportunity.access ='public';
      $scope.order = '-updated_at';
      $scope.selected_tags = [];
