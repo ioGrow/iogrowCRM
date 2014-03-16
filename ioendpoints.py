@@ -1463,44 +1463,16 @@ class CrmEngineApi(remote.Service):
 
     # Events APIs
     # events.get API
-    @endpoints.method(ID_RESOURCE, EventResponse,
+    @endpoints.method(ID_RESOURCE, EventSchema,
                         path='events/{id}', http_method='GET',
                         name='events.get')
     def event_get(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        try:
-            event = Event.get_by_id(int(request.id))
-            about_item_id = int(event.about_item)
-            try:
-                about_object = OBJECTS[event.about_kind].get_by_id(about_item_id)
-                if event.about_kind == 'Contact' or event.about_kind == 'Lead':
-                    about_name = about_object.firstname + ' ' + about_object.lastname
-                else:
-                    about_name = about_object.name
-                about_response = DiscussionAboutSchema(kind=event.about_kind,
-                                                         id=event.about_item,
-                                                         name=about_name)
-                author = AuthorSchema(google_user_id = event.author.google_user_id,
-                                        display_name = event.author.display_name,
-                                        google_public_profile_url = event.author.google_public_profile_url,
-                                        photo = event.author.photo)
-                response = EventResponse(id=request.id,
-                                                entityKey = event.key.urlsafe(),
-                                                title = event.title,
-                                                starts_at = event.starts_at.isoformat(),
-                                                ends_at = event.ends_at.isoformat(),
-                                                where = event.where,
-                                                comments = event.comments,
-                                                about = about_response,
-                                                author = author)
-                return response
-            except (IndexError, TypeError):
-                raise endpoints.NotFoundException('About object %s not found.' %
-                                                    (request.id,))
+        return Event.get_schema(
+                                user_from_email = user_from_email,
+                                request = request
+                            )
 
-        except (IndexError, TypeError):
-            raise endpoints.NotFoundException('EVent %s not found.' %
-                                                (request.id,))
 
     # events.insertv2 api
     @endpoints.method(EventInsertRequest, EventSchema,
