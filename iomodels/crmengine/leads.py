@@ -434,7 +434,19 @@ class Lead(EndpointsModel):
         data = {}
         data['id'] = lead_key_async.id()
         lead.put_index(data)
-        return LeadSchema(id=str(lead_key_async.id()))
+        lead_schema = LeadSchema(
+                                  id = str( lead_key_async.id() ),
+                                  entityKey = lead_key_async.urlsafe(),
+                                  firstname = lead.firstname,
+                                  lastname = lead.lastname,
+                                  title = lead.title,
+                                  company = lead.company,
+                                  source = lead.source,
+                                  status = lead.status,
+                                  created_at = lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                  updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                )
+        return lead_schema
     
     @classmethod
     def convert(cls,user_from_email,request):

@@ -197,8 +197,14 @@ opportunityservices.factory('Opportunity', function($http) {
          if(!resp.code){
           $scope.isLoading = false;
           
-          window.location.replace('#/opportunities/show/'+resp.id);
-          $('#addOpportunityModal').modal('hide');
+          if ($scope.opportunities == undefined){
+            $scope.opportunities = [];
+            $scope.blankStateopportunity = false;
+          }
+          $scope.opportunities.push(resp);
+          $scope.opportunity = {};
+          $scope.searchAccountQuery = '';
+          $scope.$apply();
           
          }else{
           console.log(resp.message);
