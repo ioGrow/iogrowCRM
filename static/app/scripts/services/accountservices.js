@@ -328,7 +328,7 @@ accountservices.factory('Account', function($http) {
             $scope.$apply();
           
          }else{
-             console.log(resp.message);
+
              $('#addAccountModal').modal('hide');
              $('#errorModal').modal('show');
              if(resp.code==401){

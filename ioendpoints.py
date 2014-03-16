@@ -2898,49 +2898,15 @@ class CrmEngineApi(remote.Service):
 
     # Tasks APIs
     # tasks.get api
-    @endpoints.method(ID_RESOURCE, TaskResponse,
+    @endpoints.method(ID_RESOURCE, TaskSchema,
                       path='tasks/{id}', http_method='GET',
                       name='tasks.get')
     def task_get(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        try:
-            task = Task.get_by_id(int(request.id))
-            about = None
-            edge_list = Edge.list(start_node=task.key,kind='related_to')
-            for edge in edge_list['items']:
-                about_kind = edge.end_node.kind()
-                if about_kind == 'Contact' or about_kind == 'Lead':
-                    about_name = edge.end_node.get().firstname + ' ' + edge.end_node.get().lastname
-                else:
-                    about_name = edge.end_node.get().name
-                about = DiscussionAboutSchema(kind=about_kind,
-                                                       id=str(edge.end_node.id()),
-                                                       name=about_name)
-            author = AuthorSchema()
-            completed_by = None
-            if completed_by:
-                completed_by = AuthorSchema(google_user_id = task.completed_by.google_user_id,
-                                      display_name = task.completed_by.display_name,
-                                      google_public_profile_url = task.completed_by.google_public_profile_url,
-                                      photo = task.completed_by.photo)
-            if task.due:
-                due_date = task.due.isoformat()
-            else:
-                due_date = None
-            response = TaskResponse(id=request.id,
-                                              entityKey = task.key.urlsafe(),
-                                              title = task.title,
-                                              due = due_date,
-                                              status = task.status,
-                                              comments = task.comments,
-                                              about = about,
-                                              author = author,
-                                              completed_by = completed_by )
-            return response
-
-        except (IndexError, TypeError):
-            raise endpoints.NotFoundException('Note %s not found.' %
-                                              (request.id,))
+        return Task.get_schema(
+                                user_from_email = user_from_email,
+                                request = request
+                            )
     # tasks.insertv2 api
     @endpoints.method(TaskInsertRequest, TaskSchema,
                       path='tasks/insertv2', http_method='POST',

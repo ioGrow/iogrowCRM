@@ -162,6 +162,83 @@ class Task(EndpointsModel):
     
     
     @classmethod
+    def get_schema(cls,user_from_email,request):
+        task = cls.get_by_id( int(request.id) )
+        if task is None:
+            raise endpoints.NotFoundException('Task not found.')
+        tag_list = Tag.list_by_parent(parent_key = task.key)
+        about = None
+        edge_list = Edge.list(start_node=task.key,kind='related_to')
+        for edge in edge_list['items']:
+            about_kind = edge.end_node.kind()
+            parent = edge.end_node.get()
+            if parent:
+                if about_kind == 'Contact' or about_kind == 'Lead':
+                    about_name = parent.firstname + ' ' + parent.lastname
+                else:
+                    about_name = parent.name
+                about = DiscussionAboutSchema(  
+                                                kind=about_kind,
+                                                id=str(parent.key.id()),
+                                                name=about_name
+                                            )
+        #list of tags related to this task
+        edge_list = Edge.list(start_node=task.key,kind='assignees')
+        assignee_list = list()
+        for edge in edge_list['items']:
+                            assignee_list.append( AuthorSchema(edgeKey = edge.key.urlsafe(),
+                                          google_user_id = edge.end_node.get().google_user_id,
+                                          display_name = edge.end_node.get().google_display_name,
+                                          google_public_profile_url = edge.end_node.get().google_public_profile_url,
+                                          photo = edge.end_node.get().google_public_profile_photo_url) )
+
+        status_color = 'green'
+        status_label = ''
+        if task.due:
+            now = datetime.datetime.now()
+            diff = task.due - now
+            if diff.days>=0 and diff.days<=2:
+                status_color = 'orange'
+                status_label = 'soon: due in '+ str(diff.days) + ' days'
+            elif diff.days<0:
+                status_color = 'red'
+                status_label = 'overdue'
+            else:
+                status_label = 'due in '+ str(diff.days) + ' days'
+        if task.status == 'closed':
+            status_color = 'white'
+            status_label = 'closed'
+        author_schema = None
+        if task.author:
+            author_schema = AuthorSchema(
+                                    google_user_id = task.author.google_user_id,
+                                    display_name = task.author.display_name,
+                                    google_public_profile_url = task.author.google_public_profile_url,
+                                    photo = task.author.photo)
+        due_date = None
+        if task.due:
+            due_date =  task.due.isisoformat()
+        task_schema = TaskSchema(
+                                  id = str( task.key.id() ),
+                                  entityKey = task.key.urlsafe(),
+                                  title = task.title,
+                                  status = task.status,
+                                  status_color = status_color,
+                                  status_label = status_label,
+                                  due = due_date,
+                                  comments = 0,
+                                  about = about,
+                                  created_by = author_schema,
+                                  completed_by = AuthorSchema(),
+                                  tags = tag_list,
+                                  assignees = assignee_list,
+                                  created_at = task.created_at.isoformat(),
+                                  updated_at = task.updated_at.isoformat()
+                                )
+        
+        return task_schema
+
+    @classmethod
     def list(cls,user_from_email,request):
         curs = Cursor(urlsafe=request.pageToken)
         filtered_tasks = list()
