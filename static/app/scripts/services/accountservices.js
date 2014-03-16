@@ -72,6 +72,8 @@ accountservices.factory('Account', function($http) {
                                 for (var v=0;v<$scope.infonodes[resp.infonodes.items[i].kind][j].fields.length;v++)
                                   {
                                     $scope.infonodes[resp.infonodes.items[i].kind][j][$scope.infonodes[resp.infonodes.items[i].kind][j].fields[v].field] = $scope.infonodes[resp.infonodes.items[i].kind][j].fields[v].value;
+                                    $scope.infonodes[resp.infonodes.items[i].kind][j]['entityKey'] = $scope.infonodes[resp.infonodes.items[i].kind][j].entityKey;
+                                    
                                   }
                               }
 
@@ -233,13 +235,13 @@ accountservices.factory('Account', function($http) {
 
             }else {
               alert(resp.message);
-               if(resp.message=="Invalid token"){
+               if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
              };
             }
-            console.log('gapi #end_execute');
+            
           });
   };
   Account.patch = function($scope,params) {
@@ -273,6 +275,7 @@ accountservices.factory('Account', function($http) {
                         $scope.blankStateaccount = true;
                     }
                   }
+                  
                  
                  $scope.accounts = resp.items;
                  if ($scope.currentPage>1){
@@ -295,7 +298,7 @@ accountservices.factory('Account', function($http) {
                  $scope.$apply();
               }else {
                
-               if(resp.message=="Invalid token"){
+               if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
@@ -328,7 +331,7 @@ accountservices.factory('Account', function($http) {
              console.log(resp.message);
              $('#addAccountModal').modal('hide');
              $('#errorModal').modal('show');
-             if(resp.message=="Invalid grant"){
+             if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
@@ -440,7 +443,7 @@ accountservices.factory('Search', function($http) {
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
               }else {
-                 if(resp.message=="Invalid token"){
+                 if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
@@ -530,7 +533,7 @@ accountservices.factory('Attachement', function($http) {
                  $scope.$apply();
               }else {
                
-               if(resp.message=="Invalid token"){
+               if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
@@ -551,7 +554,7 @@ accountservices.factory('Attachement', function($http) {
                 $scope.$apply();
 
             }else {
-               if(resp.message=="Invalid token"){
+               if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
@@ -575,7 +578,7 @@ accountservices.factory('Attachement', function($http) {
                console.log(resp.message);
                $('#newDocument').modal('hide');
                $('#errorModal').modal('show');
-               if(resp.message=="Invalid grant"){
+               if(resp.code==401){
                   $scope.refreshToken();
                    $scope.blankStatdocuments = false;
                   $scope.isLoading = false;
@@ -599,7 +602,7 @@ accountservices.factory('Attachement', function($http) {
                console.log(resp.message);
                
                $('#errorModal').modal('show');
-               if(resp.message=="Invalid grant"){
+               if(resp.code==401){
                   $scope.refreshToken();
                    $scope.blankStatdocuments = false;
                   $scope.isLoading = false;
@@ -643,7 +646,7 @@ accountservices.factory('Email', function() {
 
                
                $('#errorModal').modal('show');
-               if(resp.message=="Invalid grant"){
+               if(resp.code==401){
                   $scope.refreshToken();
                   $scope.isLoading = false;
                   $scope.$apply();

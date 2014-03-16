@@ -40,8 +40,8 @@ from iomodels.crmengine.opportunities import Opportunity,OpportunitySchema,Oppor
 from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema
 from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest
 from iomodels.crmengine.shows import Show
-from iomodels.crmengine.leads import Lead,LeadListRequest,LeadListResponse,LeadSearchResults
-from iomodels.crmengine.cases import Case,CaseInsertRequest,CaseSchema,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
+from iomodels.crmengine.leads import Lead,LeadInsertRequest,LeadListRequest,LeadListResponse,LeadSearchResults,LeadGetRequest,LeadSchema
+from iomodels.crmengine.cases import Case,CaseGetRequest,CaseInsertRequest,CaseSchema,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
 #from iomodels.crmengine.products import Product
 from iomodels.crmengine.comments import Comment
 from iomodels.crmengine.opportunitystage import Opportunitystage
@@ -182,9 +182,15 @@ class InfoNodeSchema(messages.Message):
     fields = messages.MessageField(RecordSchema, 2, repeated=True)
     parent = messages.StringField(3, required=True)
 
+class InfoNodePatchRequest(messages.Message):
+    entityKey = messages.StringField(1, required=True)
+    fields = messages.MessageField(RecordSchema, 2, repeated=True)
+    parent = messages.StringField(3, required=True)
+    kind = messages.StringField(4)
 
-
-
+class InfoNodePatchResponse(messages.Message):
+    entityKey = messages.StringField(1, required=True)
+    fields = messages.MessageField(RecordSchema, 2, repeated=True)
 
 #TODOS
 # ADD PHONE SCHEMA, LISTOFPHONES SCHEMA, EMAILS, ADDRESSES,...
@@ -335,6 +341,14 @@ class CompanyProfileResponse(messages.Message):
     items = messages.MessageField(CompanyProfileSchema, 1, repeated=True)
     nextPageToken = messages.StringField(2)
 
+class PermissionRequest(messages.Message):
+    type = messages.StringField(1,required=True)
+    value = messages.StringField(2,required=True)
+
+
+class PermissionInsertRequest(messages.Message):
+    about = messages.StringField(1,required=True)
+    items = messages.MessageField(PermissionRequest, 2, repeated=True)
 
 
 
@@ -606,7 +620,10 @@ class CrmEngineApi(remote.Service):
                       name='accounts.getv2')
     def accounts_get_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        return Account.get_schema(request = request)
+        return Account.get_schema(
+                                    user_from_email = user_from_email,
+                                    request = request
+                                )
     # accounts.get API
     @Account.method(
                     request_fields=('id',),
@@ -719,6 +736,16 @@ class CrmEngineApi(remote.Service):
         my_model.key.delete()
         return message_types.VoidMessage()
 
+    # cases.getv2 api
+    @endpoints.method(CaseGetRequest, CaseSchema,
+                      path='cases/getv2', http_method='POST',
+                      name='cases.getv2')
+    def case_get_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Case.get_schema(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
     # cases.get API
     @Case.method(request_fields=('id',),path='cases/{id}', http_method='GET', name='cases.get')
     def CaseGet(self, my_model):
@@ -1710,6 +1737,17 @@ class CrmEngineApi(remote.Service):
         return my_model
 
     # Leads APIs
+
+    # leads.convert api
+    @endpoints.method(ID_RESOURCE, LeadSchema,
+                      path='leads/convertv2', http_method='POST',
+                      name='leads.convertv2')
+    def lead_convert_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Lead.convert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
     # leads.convert api
     @endpoints.method(ID_RESOURCE, ConvertedLead,
                         path='leads/convert/{id}', http_method='POST',
@@ -1771,12 +1809,33 @@ class CrmEngineApi(remote.Service):
         my_model.key.delete()
         return message_types.VoidMessage()
 
+    # leads.get api v2
+    @endpoints.method(LeadGetRequest, LeadSchema,
+                      path='leads/getv2', http_method='POST',
+                      name='leads.getv2')
+    def lead_get_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Lead.get_schema(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
     # leads.get API
     @Lead.method(request_fields=('id',),path='leads/{id}', http_method='GET', name='leads.get')
     def LeadGet(self, my_model):
         if not my_model.from_datastore:
             raise endpoints.NotFoundException('Lead not found')
         return my_model
+
+    # leads.insertv2 api
+    @endpoints.method(LeadInsertRequest, LeadSchema,
+                      path='leads/insertv2', http_method='POST',
+                      name='leads.insertv2')
+    def lead_insert_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Lead.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
 
     # leads.insert API
     @Lead.method(user_required=True,path='leads',http_method='POST',name='leads.insert')
@@ -2179,6 +2238,28 @@ class CrmEngineApi(remote.Service):
                                     parent_key = parent_key,
                                     request = request
                                     )
+    # infonode.patch api
+    @endpoints.method(InfoNodePatchRequest, message_types.VoidMessage,
+                        path='infonode/patch', http_method='POST',
+                        name='infonode.patch')
+    def infonode_patch(self, request):
+        node_key = ndb.Key(urlsafe = request.entityKey)
+        parent_key = ndb.Key(urlsafe = request.parent)
+        node = node_key.get()
+        node_values = []
+        if node is None:
+            raise endpoints.NotFoundException('Node not found')
+        for record in request.fields:
+            setattr(node, record.field, record.value)
+            node_values.append(str(record.value))
+        node.put()
+        indexed_edge = '_' + node.kind + ' ' + " ".join(node_values)
+        EndpointsHelper.update_edge_indexes(
+                                            parent_key = parent_key,
+                                            kind = 'infos',
+                                            indexed_edge = indexed_edge
+                                            )
+        return message_types.VoidMessage()
 
     # Opportunities APIs
     # opportunities.delete api
@@ -2404,6 +2485,49 @@ class CrmEngineApi(remote.Service):
             raise endpoints.NotFoundException('Permission not found')
         return my_model
 
+    # permissions.insertv2 api
+    @endpoints.method(PermissionInsertRequest, message_types.VoidMessage,
+                      path='permissions/insertv2', http_method='POST',
+                      name='permissions.insertv2')
+    def permission_insert_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        about_key = ndb.Key(urlsafe=request.about)
+        about = about_key.get()
+        # check if the user can give permissions for this object
+        if about.access == 'private' and about.owner!=user_from_email.google_user_id:
+            end_node_set = [user_from_email.key]
+            if not Edge.find(start_node=about_key,kind='permissions',end_node_set=end_node_set,operation='AND'):
+                raise endpoints.NotFoundException('Permission denied')
+        for item in request.items:
+            if item.type == 'user':
+                # get the user
+                shared_with_user_key = ndb.Key(urlsafe = item.value)
+                shared_with_user = shared_with_user_key.get()
+                if shared_with_user:
+                    # check if user is in the same organization
+                    if shared_with_user.organization == about.organization:
+                        # insert the edge
+                        Edge.insert(
+                                    start_node = about_key,
+                                    end_node = shared_with_user_key,
+                                    kind = 'permissions',
+                                    inverse_edge = 'has_access_on'
+                                )
+                        # update indexes on search for collobaorators_id
+                        indexed_edge = shared_with_user.google_user_id + ' '
+                        EndpointsHelper.update_edge_indexes(
+                                            parent_key = about_key,
+                                            kind = 'collaborators',
+                                            indexed_edge = indexed_edge
+                                            )  
+                        shared_with_user = None       
+            elif item.type == 'group':
+                pass
+                # get the group
+                # get the members of this group
+                # for each member insert the edge
+                # update indexes on search for  collaborators_id
+        return message_types.VoidMessage()
     # permissions.insert API
     @Permission.method(user_required=True,path='permissions', http_method='POST', name='permissions.insert')
     def PermissionInsert(self, my_model):

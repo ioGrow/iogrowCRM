@@ -337,6 +337,32 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
      $scope.refreshToken = function() {
           Auth.refreshToken();
      };
+
+     $scope.getUrl = function(type,id){
+        var base_url = undefined;
+        console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+    console.log(type);
+    console.log(id);
+          switch (type)
+              {
+              case 'Account':
+                base_url = '/#/accounts/show/';
+                break;
+              case 'Contact':
+                base_url = '/#/contacts/show/';
+                break;
+              case 'Lead':
+                base_url = '/#/leads/show/';
+                break;
+              case 'Opportunity':
+                base_url = '/#/opportunities/show/';
+                break;
+              case 'Case':
+                base_url = '/#/cases/show/';
+                break;
+              }
+            return base_url+id;
+        }
      $scope.assigneeModal = function(){
         $('#assigneeModal').modal('show');
       };
@@ -694,8 +720,7 @@ $scope.selectTag= function(tag,index,$event){
             $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
              text.css('color','#000000');
          }
-         console.log('Taaaaaaaaaggggggssss');
-         console.log($scope.selected_tags);
+        
          $scope.filterByTags($scope.selected_tags);
 
       }

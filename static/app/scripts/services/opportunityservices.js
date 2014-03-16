@@ -57,50 +57,7 @@ opportunityservices.factory('Opportunity', function($http) {
                    }
                   }
                   
-                  if (resp.opportunities){
-                      if (!resp.opportunities.items){
-                        $scope.blankStateopportunity = true;
-                      }
-                       $scope.opportunities = resp.opportunities.items;
-                       if ($scope.oppCurrentPage>1){
-                           $scope.opppagination.prev = true;
-                       }else{
-                           $scope.opppagination.prev = false;
-                       }
-                       if (resp.opportunities.nextPageToken){
-                         var nextPage = $scope.oppCurrentPage + 1;
-                         // Store the nextPageToken
-                         $scope.opppages[nextPage] = resp.opportunities.nextPageToken;
-                         $scope.opppagination.next = true;
-                         
-                       }else{
-                        $scope.opppagination.next = false;
-                       }
-
-                  }
-
-                  if (resp.cases){
-                      if (!resp.cases.items){
-                        $scope.blankStatecase = true;
-                      }
-                       $scope.cases = resp.cases.items;
-                       if ($scope.caseCurrentPage>1){
-                          $scope.casepagination.prev = true;
-                       }else{
-                          $scope.casepagination.prev = false;
-                       }
-                     if (resp.cases.nextPageToken){
-                       var nextPage = $scope.caseCurrentPage + 1;
-                       // Store the nextPageToken
-                       $scope.casepages[nextPage] = resp.cases.nextPageToken;
-                       $scope.casepagination.next = true;
-                       
-                     }else{
-                      $scope.casepagination.next = false;
-                     }
-
-                  }
-
+                  
                   if (resp.documents){
                       if (!resp.documents.items){
                         $scope.blankStatdocuments = true;
@@ -153,7 +110,7 @@ opportunityservices.factory('Opportunity', function($http) {
 
       }else {
 
-         if(resp.message=="Invalid token"){
+         if(resp.code==401){
           $scope.refreshToken();;
          };
 
@@ -194,7 +151,7 @@ opportunityservices.factory('Opportunity', function($http) {
                  $scope.$apply();
               }else {
 
-                if(resp.message=="Invalid token"){
+                if(resp.code==401){
                        $scope.refreshToken();;
                            };
                  
@@ -222,7 +179,7 @@ opportunityservices.factory('Opportunity', function($http) {
                 $scope.$apply();
 
             }else {
-               if(resp.message=="Invalid token"){
+               if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();

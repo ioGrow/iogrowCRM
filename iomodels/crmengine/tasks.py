@@ -159,7 +159,8 @@ class Task(EndpointsModel):
                ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)
-
+    
+    
     @classmethod
     def list(cls,user_from_email,request):
         curs = Cursor(urlsafe=request.pageToken)
@@ -184,7 +185,7 @@ class Task(EndpointsModel):
                     order_by = request.order
                 attr = cls._properties.get(order_by)
                 if attr is None:
-                    raise AttributeError('Order attribute %s not defined.' % (attr_name,))
+                    raise AttributeError('Order attribute %s not defined.' % (order_by,))
                 if ascending:
                     tasks, next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).order(+attr).fetch_page(limit, start_cursor=curs)
                 else:
@@ -233,13 +234,15 @@ class Task(EndpointsModel):
                         edge_list = Edge.list(start_node=task.key,kind='related_to')
                         for edge in edge_list['items']:
                             about_kind = edge.end_node.kind()
-                            if about_kind == 'Contact' or about_kind == 'Lead':
-                                about_name = edge.end_node.get().firstname + ' ' + edge.end_node.get().lastname
-                            else:
-                                about_name = edge.end_node.get().name
-                            about = DiscussionAboutSchema(kind=about_kind,
-                                                               id=str(edge.end_node.id()),
-                                                               name=about_name)
+                            parent = edge.end_node.get()
+                            if parent:
+                                if about_kind == 'Contact' or about_kind == 'Lead':
+                                    about_name = parent.firstname + ' ' + parent.lastname
+                                else:
+                                    about_name = parent.name
+                                about = DiscussionAboutSchema(kind=about_kind,
+                                                                   id=str(parent.key.id()),
+                                                                   name=about_name)
                         #list of tags related to this task
                         edge_list = Edge.list(start_node=task.key,kind='assignees')
                         assignee_list = list()

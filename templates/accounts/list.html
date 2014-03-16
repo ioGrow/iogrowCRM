@@ -193,13 +193,13 @@
                       </div>
                     </div>
                 </div>
-                <script type="text/javascript">
-                    $('.inner-cards-container').waterfall({ 
+               <script type="text/javascript">
+                  $('.inner-cards-container').waterfall({ 
                       colMinWidth: 200, 
                       defaultContainerWidth: 800,
                       autoresize: true
-                    })
-                </script>
+                    });
+               </script>
               <div ng-show="blankStateaccount" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
                 <div class="dashboard-stat cards">
                   
@@ -273,23 +273,32 @@
                     </form>
                     <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
                   </li>
+                  <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
+                       <a ng-click="" class="btn-link addAnotherPhone">
+                        <i class="fa fa-tags"></i>  Add a new label</a>
+                  </li>
                   </div>
                 </ul>
                 
-                <form class="well" role="form">
+                <form class="well newTagForm" role="form" ng-show="showNewTag">
+                 <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
                 <div class="row">
                   <div class="col-md-12 form-group">
-                    <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New Label">
+                    <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New tag name">
                   </div>
                 </div>
-
                 <div class="row">
                   <div class="col-md-6">
-                       <input id="tag-col-pick" type="text" class="colorpicker-default form-control" value="#8fff00">
+                      <!-- <input id="tag-col-pick" type="text" class="colorpicker-default form-control" value="#8fff00">-->
+                      <ul class="color_pallet_menu">
+                        <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
+                        </li>
+                      </ul>
+
                   </div>
                   <div class="col-md-6">
-                    <input type="submit" ng-hide="isLoadingTask" ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
-                    <input type="submit" ng-show="isLoadingTask" class="btn green pull-right" value="{{ _('Loading...') }}">
+                    <input type="submit" ng-hide="isLoading" ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
+                    <input type="submit" ng-show="isLoading" class="btn green pull-right" value="{{ _('Loading...') }}">
                   </div>
                   </div>
                 </form>

@@ -27,7 +27,20 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
      $scope.order = '-updated_at';
      $scope.selected_tags = [];
      $scope.draggedTag=null;
-     $scope.selectedTab = 2;
+     $scope.showNewTag=false;
+     $scope.tag = {};
+     $scope.color_pallet=[
+         {'name':'red','color':'#F7846A'},
+         {'name':'orange','color':'#FFBB22'},
+         {'name':'yellow','color':'#EEEE22'},
+         {'name':'green','color':'#BBE535'},
+         {'name':'blue','color':'#66CCDD'},
+         {'name':'gray','color':'#B5C5C5'},
+         {'name':'teal','color':'77DDBB'},
+         {'name':'purple','color':'#E874D6'},
+     ];
+     $scope.tag.color= {'name':'green','color':'#BBE535'};
+     
 
       // What to do after authentication
        $scope.runTheProcess = function(){
@@ -233,11 +246,11 @@ $scope.addNewtag = function(tag){
        var params = {   
                           'name': tag.name,
                           'about_kind':'Opportunity',
-                          'color':$('#tag-col-pick').val()
+                          'color':tag.color.color
                       }  ;
        Tag.insert($scope,params);
         $scope.tag.name='';
-        $('#tag-col-pick').val('#8fff00');
+        $scope.tag.color= {'name':'green','color':'#BBE535'};
         var paramsTag = {'about_kind':'Opportunity'};
         Tag.list($scope,paramsTag);
         
@@ -416,7 +429,10 @@ $scope.addTags=function(){
         $scope.draggedTag=null;
       };
 
-
+     // HKA 12.03.2014 Pallet color on Tags
+      $scope.checkColor=function(color){
+        $scope.tag.color=color;
+      }
 
 
      // Google+ Authentication 
@@ -427,7 +443,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
     function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email,Attachement,InfoNode) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Opportunities").addClass("active");
-      $scope.selectedTab = 1;
+     $scope.selectedTab = 2;
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.isContentLoaded = false;
@@ -450,6 +466,8 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
       $scope.documentpagination = {};
      $scope.documentCurrentPage=01;
      $scope.documentpages=[];
+     $scope.sharing_with = [];
+
 
       // What to do after authentication
        $scope.runTheProcess = function(){
@@ -594,9 +612,9 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
 
      
      $scope.selectMember = function(){
-        console.log('slecting user yeaaah');
         $scope.slected_memeber = $scope.user;
-        $scope.user = $scope.slected_memeber.google_display_name;
+        $scope.user = '';
+        $scope.sharing_with.push($scope.slected_memeber);
 
      };
      $scope.share = function(slected_memeber){
@@ -611,16 +629,28 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
         });
         $('#sharingSettingsModal').modal('hide');
 
-        if (slected_memeber.email){
-        var params = {  'type': 'user',
-                        'role': 'writer',
-                        'value': slected_memeber.email,
-                        'about_kind': 'Opportunity',
-                        'about_item': $scope.opportunity.id
-
-                        
-          };
-          Permission.insert($scope,params); 
+        if ($scope.sharing_with.length>0){
+        
+          var items = [];
+          
+          angular.forEach($scope.sharing_with, function(user){
+                      var item = { 
+                                  'type':"user",
+                                  'value':user.entityKey
+                                };
+                      items.push(item);
+          });
+          
+          if(items.length>0){
+              var params = {
+                            'about': $scope.opportunity.entityKey,
+                            'items': items
+              }
+              Permission.insert($scope,params); 
+          }
+          
+          
+          $scope.sharing_with = [];
           
           
         }else{ 
@@ -769,7 +799,7 @@ $scope.deleteopportunity= function(){
           if ($scope.documentpages[nextPage]){
             params = {
                         'id':$scope.opportunity.id,
-                        'opportunities':{
+                        'documents':{
                           'limit': '6',
                           'pageToken':$scope.documentpages[nextPage]
                         }
@@ -795,7 +825,7 @@ $scope.deleteopportunity= function(){
           if ($scope.documentpages[prevPage]){
             params = {
                         'id':$scope.opportunity.id,
-                        'opportunities':{
+                        'documents':{
                           'limit': '6',
                           'pageToken':$scope.documentpages[prevPage]
                         }
@@ -804,7 +834,7 @@ $scope.deleteopportunity= function(){
           }else{
             params = {
                         'id':$scope.opportunity.id,
-                        'opportunities':{
+                        'documents':{
                           'limit': '6'
                         }
                       }

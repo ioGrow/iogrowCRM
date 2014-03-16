@@ -22,6 +22,19 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact','Tag','Ed
         $scope.order = '-updated_at';
         $scope.selected_tags = [];
         $scope.draggedTag=null;
+        $scope.tag = {};
+        $scope.showNewTag=false;
+        $scope.color_pallet=[
+         {'name':'red','color':'#F7846A'},
+         {'name':'orange','color':'#FFBB22'},
+         {'name':'yellow','color':'#EEEE22'},
+         {'name':'green','color':'#BBE535'},
+         {'name':'blue','color':'#66CCDD'},
+         {'name':'gray','color':'#B5C5C5'},
+         {'name':'teal','color':'77DDBB'},
+         {'name':'purple','color':'#E874D6'},
+         ];
+         $scope.tag.color= {'name':'green','color':'#BBE535'};
         
         // What to do after authentication
        $scope.runTheProcess = function(){
@@ -73,8 +86,6 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact','Tag','Ed
           var params = {};
           var contact_name = new Array();
 
-          console.log('---------------contact.access--------');
-          console.log(contact.access);
           
           contact.display_name = contact_name;
           if (typeof(contact.account)=='object'){
@@ -194,11 +205,11 @@ $scope.addNewtag = function(tag){
        var params = {   
                           'name': tag.name,
                           'about_kind':'Contact',
-                          'color':$('#tag-col-pick').val()
+                          'color':tag.color.color
                       }  ;
        Tag.insert($scope,params);
         $scope.tag.name='';
-        $('#tag-col-pick').val('#8fff00');
+        $scope.tag.color= {'name':'green','color':'#BBE535'};
         var paramsTag = {'about_kind':'Contact'};
         Tag.list($scope,paramsTag);
         
@@ -371,6 +382,10 @@ $scope.addTags=function(){
         $scope.draggedTag=null;
       };
 
+  // HKA 12.03.2014 Pallet color on Tags
+      $scope.checkColor=function(color){
+        $scope.tag.color=color;
+      }
 
      // Google+ Authentication 
      Auth.init($scope);
@@ -417,6 +432,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
       $scope.phone.type= 'work';
       $scope.casee = {};
       $scope.casee.priority = 4;
+      $scope.sharing_with = [];
       
       // What to do after authentication
       $scope.runTheProcess = function(){
@@ -628,9 +644,9 @@ $scope.CaselistNextPageItems = function(){
 
     
      $scope.selectMember = function(){
-        console.log('slecting user yeaaah');
         $scope.slected_memeber = $scope.user;
-        $scope.user = $scope.slected_memeber.google_display_name;
+        $scope.user = '';
+        $scope.sharing_with.push($scope.slected_memeber);
 
      };
      $scope.updateCollaborators = function(){
@@ -650,16 +666,28 @@ $scope.CaselistNextPageItems = function(){
         });
         $('#sharingSettingsModal').modal('hide');
 
-        if (slected_memeber.email){
-        var params = {  'type': 'user',
-                        'role': 'writer',
-                        'value': slected_memeber.email,
-                        'about_kind': 'Contact',
-                        'about_item': $scope.contact.id
-
-                        
-          };
-          Permission.insert($scope,params); 
+        if ($scope.sharing_with.length>0){
+        
+          var items = [];
+          
+          angular.forEach($scope.sharing_with, function(user){
+                      var item = { 
+                                  'type':"user",
+                                  'value':user.entityKey
+                                };
+                      items.push(item);
+          });
+          
+          if(items.length>0){
+              var params = {
+                            'about': $scope.contact.entityKey,
+                            'items': items
+              }
+              Permission.insert($scope,params); 
+          }
+          
+          
+          $scope.sharing_with = [];
           
           
         }else{ 
@@ -1129,7 +1157,7 @@ $scope.updateintro = function(contact){
                   });
                  Attachement.attachfiles($scope,params);
                     
-                }
+          }
       }
      $scope.renderMaps = function(){
        

@@ -1,5 +1,5 @@
 <div  class="page-content">
-    <div class="loader-container row" ng-show="true">
+    <div class="loader-container row" ng-show="isLoading">
       <div class="loader-dialog col-md-4 col-md-offset-4 ">
         <div class="loader-content">
           Loading...
@@ -202,7 +202,7 @@
         <div class="row"> 
           <div class="col-md-12">
             <h2 class="page-title">{{ _("Tasks") }} 
-                <img src="/static/img/test_loader.gif" ng-show="isLoading" style="margin-top: -5px !important;" class="pull-right" style="height: 40px;">
+                <!--img src="/static/img/test_loader.gif" ng-show="isLoading" style="margin-top: -5px !important;" class="pull-right" style="height: 40px;"-->
 
             </h2>  
             <hr/>
@@ -309,8 +309,8 @@
                                     </div>
                                      <div class="row">
                                       <p class="col-md-11 col-md-offset-1 list-group-item-text">
-                                         <span ng-show="task.created_by">Opened by:<a href="#"> <%= task.created_by.display_name %></a></span> <span ng-show="task.about">{{ _('related to') }}<a href="#"> <%= task.about.name %></a></span>
-                                         <!--<span>Closed by:<a href="#">Transline</a></span>-->
+                                         <span ng-show="task.created_by">Opened by:<a href="#"> <%= task.created_by.display_name %></a></span> <span ng-show="task.about">{{ _('related to') }}<a href="<%= getUrl(task.about.kind,task.about.id); %>"> <%= task.about.name %></a></span>
+                                         
                                       </p>
                                       </div>
                                   </li>
@@ -346,7 +346,7 @@
                                         <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-tags"></i>
                                          <span class="btn-text">
-                                            Tags iooo
+                                            Tags
                                          </span>
                                         </button>
                                         <button ng-click="assigneeModal()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">

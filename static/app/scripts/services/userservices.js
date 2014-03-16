@@ -20,7 +20,7 @@ accountservices.factory('User', function($http) {
                //$scope.apply();
 
             }else {
-               if(resp.message=="Invalid token"){
+               if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
@@ -54,7 +54,7 @@ accountservices.factory('User', function($http) {
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
               }else {
-                 if(resp.message=="Invalid token"){
+                 if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
@@ -102,7 +102,7 @@ accountservices.factory('Permission', function($http) {
   
   Permission.insert = function($scope,params){
       console.log(params);
-      gapi.client.crmengine.permissions.insert(params).execute(function(resp) {
+      gapi.client.crmengine.permissions.insertv2(params).execute(function(resp) {
          console.log('in insert resp');
          console.log(resp);
          if(!resp.code){

@@ -20,9 +20,22 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge'
       
       $scope.lead.access ='public';
       $scope.order = '-updated_at';
-      $scope.status = 'new';
+      $scope.status = 'New';
       $scope.selected_tags = [];
       $scope.draggedTag=null;
+      $scope.tag = {};
+        $scope.showNewTag=false;
+        $scope.color_pallet=[
+         {'name':'red','color':'#F7846A'},
+         {'name':'orange','color':'#FFBB22'},
+         {'name':'yellow','color':'#EEEE22'},
+         {'name':'green','color':'#BBE535'},
+         {'name':'blue','color':'#66CCDD'},
+         {'name':'gray','color':'#B5C5C5'},
+         {'name':'teal','color':'77DDBB'},
+         {'name':'purple','color':'#E874D6'},
+         ];
+         $scope.tag.color= {'name':'green','color':'#BBE535'};
 
       // What to do after authentication
        $scope.runTheProcess = function(){
@@ -78,13 +91,16 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge'
       
     
       $scope.save = function(lead){
-        var params ={'firstname':lead.firstname,
+        var params ={
+                      'firstname':lead.firstname,
                       'lastname':lead.lastname,
                       'company':lead.company,
                       'title':lead.title,
                       'source': lead.source,
                       'access': lead.access,
-                      'status':$scope.stage_selected.status};
+                      'status':$scope.stage_selected.status
+                    };
+        console.log(params);
         Lead.insert($scope,params);
         $('#addLeadModal').modal('hide')
       };
@@ -181,11 +197,11 @@ $scope.addNewtag = function(tag){
        var params = {   
                           'name': tag.name,
                           'about_kind':'Lead',
-                          'color':$('#tag-col-pick').val()
+                          'color':tag.color.color
                       }  ;
        Tag.insert($scope,params);
         $scope.tag.name='';
-        $('#tag-col-pick').val('#8fff00');
+        $scope.tag.color= {'name':'green','color':'#BBE535'};
         var paramsTag = {'about_kind':'Lead'};
         Tag.list($scope,paramsTag);
         
@@ -357,7 +373,10 @@ $scope.addTags=function(){
         $scope.draggedTag=null;
       };
 
-
+  // HKA 12.03.2014 Pallet color on Tags
+      $scope.checkColor=function(color){
+        $scope.tag.color=color;
+      } 
 
    // Google+ Authentication 
      Auth.init($scope);
@@ -397,13 +416,36 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.infonodes = {};
     $scope.phone={};
     $scope.phone.type_number = 'work';
+    $scope.documentpagination = {};
+     $scope.documentCurrentPage=01;
+     $scope.documentpages=[];
+    $scope.selectedTab = 2;
+    $scope.sharing_with = [];
 
       // What to do after authentication
       $scope.runTheProcess = function(){
-            var leadid = {'id':$route.current.params.leadId};
-            Lead.get($scope,leadid);
-            User.list($scope,{});
-            Leadstatus.list($scope,{}); 
+            var params = {
+                          'id':$route.current.params.leadId,
+                          
+                          'topics':{
+                            'limit': '7'
+                          },
+
+                          'documents':{
+                            'limit': '6'
+                          },
+
+                          'tasks':{
+                            
+                          },
+
+                          'events':{
+                            
+                          }
+                      };
+          Lead.get($scope,params);
+          User.list($scope,{});
+          Leadstatus.list($scope,{}); 
             
       };
       // We need to call this to refresh token when user credentials are invalid
@@ -413,58 +455,64 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
       
      $scope.TopiclistNextPageItems = function(){
         
-        
+         
         var nextPage = $scope.topicCurrentPage + 1;
         var params = {};
           if ($scope.topicpages[nextPage]){
-            params = {'about_kind':'Lead',
-                      'about_item':$scope.lead.id,
-                      'order': '-updated_at',
-                      'limit': 5,
-                      'pageToken':$scope.topicpages[nextPage]
+            params = {
+                      'id':$scope.lead.id,
+                        'topics':{
+                          'limit': '7',
+                          'pageToken':$scope.topicpages[nextPage]
+                        }
                      }
-          }else{
-            params = {'about_kind':'Lead',
-                      'about_item':$scope.lead.id,
-                      'order': '-updated_at',
-                      'limit': 5}
+            }else{
+            params = {
+                      'id':$scope.lead.id,
+                        'topics':{
+                          'limit': '7'
+                        }
+                     }
           }
-          console.log('in listNextPageItems');
+          
           $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ; 
-          Topic.list($scope,params);
+          Lead.get($scope,params);
      }
      $scope.TopiclistPrevPageItems = function(){
-       
+
        var prevPage = $scope.topicCurrentPage - 1;
        var params = {};
+       
           if ($scope.topicpages[prevPage]){
-            params = {'about_kind':'Lead',
-                      'about_item':$scope.lead.id,
-                      'order': '-updated_at',
-                      'limit': 5,
-                      'pageToken':$scope.topicpages[prevPage]
+            params = {
+                      'id':$scope.lead.id,
+                        'topics':{
+                          'limit': '7',
+                          'pageToken':$scope.topicpages[prevPage]
+                        }
                      }
           }else{
-            params = {'about_kind':'Lead',
-                      'about_item':$scope.lead.id,
-                      'order': '-updated_at',
-                      'limit': 5}
+            params = {
+                      'id':$scope.lead.id,
+                        'topics':{
+                          'limit': '7'
+                        }
+                     }
           }
           $scope.topicCurrentPage = $scope.topicCurrentPage - 1 ;
-          Topic.list($scope,params);
-          
+          Lead.get($scope,params);
      }
-    
-     $scope.listTopics = function(lead){
-        var params = {'about_kind':'Lead',
-                      'about_item':$scope.lead.id,
-                      'order': '-updated_at',
-                      'limit': 5
-                      };
-        Topic.list($scope,params);
+     
+     $scope.listTopics = function(contact){
+        var params = {
+                      'id':$scope.lead.id,
+                      'topics':{
+                             'limit': '7'
+                       }
+                    };
+          Lead.get($scope,params);
 
-
-     }
+     };
      $scope.hilightTopic = function(){
         console.log('Should higll');
        $('#topic_0').effect( "bounce", "slow" );
@@ -473,9 +521,9 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
 
     
      $scope.selectMember = function(){
-        console.log('slecting user yeaaah');
         $scope.slected_memeber = $scope.user;
-        $scope.user = $scope.slected_memeber.google_display_name;
+        $scope.user = '';
+        $scope.sharing_with.push($scope.slected_memeber);
 
      };
      $scope.share = function(slected_memeber){
@@ -490,16 +538,28 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
         });
         $('#sharingSettingsModal').modal('hide');
 
-        if (slected_memeber.email){
-        var params = {  'type': 'user',
-                        'role': 'writer',
-                        'value': slected_memeber.email,
-                        'about_kind': 'Lead',
-                        'about_item': $scope.lead.id
-
-                        
-          };
-          Permission.insert($scope,params); 
+        if ($scope.sharing_with.length>0){
+        
+          var items = [];
+          
+          angular.forEach($scope.sharing_with, function(user){
+                      var item = { 
+                                  'type':"user",
+                                  'value':user.entityKey
+                                };
+                      items.push(item);
+          });
+          
+          if(items.length>0){
+              var params = {
+                            'about': $scope.lead.entityKey,
+                            'items': items
+              }
+              Permission.insert($scope,params); 
+          }
+          
+          
+          $scope.sharing_with = [];
           
           
         }else{ 
@@ -520,24 +580,23 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
    $scope.addTask = function(task){
       
         $('#myModal').modal('hide');
-        var params ={}
-
-        console.log('adding a new task');
-        console.log(task);
-        
         if (task.due){
 
-            var dueDate= $filter('date')(task.due,['yyyy-MM-dd']);
-            dueDate = dueDate +'T00:00:00.000000'
+            var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
+            
             params ={'title': task.title,
                       'due': dueDate,
-                      'about':$scope.lead.entityKey
+                      'parent': $scope.lead.entityKey
             }
-            console.log(dueDate);
+            
+            
         }else{
             params ={'title': task.title,
-                     'about':$scope.lead.entityKey}
+                     'parent': $scope.lead.entityKey
+                   }
         };
+        $scope.task.title='';
+        $scope.task.dueDate='0000-00-00T00:00:00-00:00';
         Task.insert($scope,params);
      }
 
@@ -548,10 +607,11 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
        
      }
      $scope.listTasks = function(){
-        var params = {'about':$scope.lead.entityKey,
-                      'order': '-updated_at'
+        var params = {
+                        'id':$scope.lead.id,
+                        'tasks':{}
                       };
-        Task.list($scope,params);
+        Lead.get($scope,params);
 
      }
  //HKA 10.11.2013 Add event 
@@ -566,24 +626,23 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                       'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
                       'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
                       'where': ioevent.where,
-                      'about_kind':'Lead',
-                      'about_item':$scope.lead.id
+                      'parent':$scope.lead.entityKey
               }
 
             }else{
-              params ={'title': ioevent.title,
+              params ={
+                'title': ioevent.title,
                       'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
                       'where': ioevent.where,
-                      'about_kind':'Lead',
-                      'about_item':$scope.lead.id
+                      'parent':$scope.lead.entityKey
               }
             }
-            console.log('inserting the event');
-            console.log(params);
-            Event.insert($scope,params);
-
             
-        };
+            Event.insert($scope,params);
+            $scope.ioevent.title='';
+            $scope.ioevent.where='';
+            $scope.ioevent.starts_at='T00:00:00.000000';
+          };
      }
      $scope.hilightEvent = function(){
         console.log('Should higll');
@@ -592,20 +651,22 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
        
      }
      $scope.listEvents = function(){
-        var params = {'about_kind':'Lead',
-                      'about_item':$scope.lead.id,
-                      'order': 'starts_at',
-                      'limit': 5
+        var params = {
+                        'id':$scope.lead.id,
+                        'events':{
+                          
+                        }
                       };
-        Event.list($scope,params);
+        Lead.get($scope,params);
 
      }
   //HKA 11.11.2013 Add Note
   $scope.addNote = function(note){
-    var params = {'title':$scope.note.title,
-                  'content':$scope.note.content,
-                  'about_item':$scope.lead.id,
-                  'about_kind':'Lead' };
+    var params ={
+                  'about': $scope.lead.entityKey,
+                  'title': note.title,
+                  'content': note.content
+    };
     Note.insert($scope,params);
     $scope.note.title='';
     $scope.note.content='';
@@ -789,12 +850,13 @@ $scope.deletelead = function(){
      };
 
      $scope.listDocuments = function(){
-        var params = {'about_kind':'Lead',
-                      'about_item':$scope.lead.id,
-                      'order': '-updated_at',
-                      'limit': 5
-                      };
-        Attachement.list($scope,params);
+        var params = {
+                        'id':$scope.lead.id,
+                        'documents':{
+                          'limit': '6'
+                        }
+                      }
+        Lead.get($scope,params);
 
      };
      $scope.showCreateDocument = function(type){
@@ -804,14 +866,16 @@ $scope.deletelead = function(){
      };
      $scope.createDocument = function(newdocument){
         var mimeType = 'application/vnd.google-apps.' + $scope.mimeType;
-        var params = {'about_kind':'Lead',
-                      'about_item': $scope.lead.id,
+        var params = {
+                      'parent': $scope.lead.entityKey,
                       'title':newdocument.title,
-                      'mimeType':mimeType };
+                      'mimeType':mimeType 
+                     };
         Attachement.insert($scope,params);
 
      };
      $scope.createPickerUploader = function() {
+          var developerKey = 'AIzaSyD___EKeONhEP1JDWsNQi0zQhlGGzuwRI4';
           var projectfolder = $scope.lead.folder;
           var docsView = new google.picker.DocsView()
               .setIncludeFolders(true) 
@@ -820,7 +884,9 @@ $scope.deletelead = function(){
               addView(new google.picker.DocsUploadView().setParent(projectfolder)).
               addView(docsView).
               setCallback($scope.uploaderCallback).
-              setAppId(12345).
+              setOAuthToken(window.authResult.access_token).
+              setDeveloperKey(developerKey).
+              setAppId(987765099891).
                 enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
               build();
           picker.setVisible(true);
@@ -830,8 +896,10 @@ $scope.deletelead = function(){
         
 
         if (data.action == google.picker.Action.PICKED) {
-                var params = {'about_kind': 'Lead',
-                                      'about_item':$scope.lead.id};
+                var params = {
+                              'access': $scope.lead.access,
+                              'parent':$scope.lead.entityKey
+                            };
                 params.items = new Array();
                
                  $.each(data.docs, function(index) {
@@ -853,9 +921,7 @@ $scope.deletelead = function(){
                   });
                  Attachement.attachfiles($scope,params);
                     
-                    console.log('after uploading files');
-                    console.log(params);
-                }
+          }
       }
       $scope.renderMaps = function(){
           $scope.addresses = $scope.lead.addresses;

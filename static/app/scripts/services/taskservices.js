@@ -24,7 +24,7 @@ topicservices.factory('Task', function($http) {
                 $scope.$apply();
 
             }else {
-               if(resp.message=="Invalid token"){
+               if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoadingTask = false;
                 $scope.$apply();
@@ -82,7 +82,7 @@ topicservices.factory('Task', function($http) {
                      $scope.hilightTask();
                  }
               }else {
-                 if(resp.message=="Invalid token"){
+                 if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
@@ -115,6 +115,7 @@ topicservices.factory('Task', function($http) {
 
  Task.getUrl = function(type,id){
   var base_url = undefined;
+    
     switch (type)
         {
         case 'Account':
@@ -172,7 +173,7 @@ topicservices.factory('Tag', function($http) {
                  $scope.$apply();
                  
               }else {
-                 if(resp.message=="Invalid token"){
+                 if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
@@ -263,7 +264,7 @@ topicservices.factory('Contributor', function($http) {
                  $scope.$apply();
                  
               }else {
-                 if(resp.message=="Invalid token"){
+                 if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();

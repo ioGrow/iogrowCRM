@@ -7,16 +7,86 @@ leadservices.factory('Lead', function($http) {
   }
 
   Lead.get = function($scope,id) {
-          gapi.client.crmengine.leads.get(id).execute(function(resp) {
+          gapi.client.crmengine.leads.getv2(id).execute(function(resp) {
             if(!resp.code){
                $scope.lead = resp;
                $scope.isContentLoaded = true;
-                $scope.listTopics(resp);
-                $scope.listTasks();
-                $scope.listEvents();
-                $scope.listDocuments();
-                $scope.listInfonodes();
-                $scope.selectedTab = 2;
+               var renderMap = false;
+                if (resp.infonodes){
+                    if (resp.infonodes.items){
+                        for (var i=0;i<resp.infonodes.items.length;i++)
+                        { 
+                          if (resp.infonodes.items[i].kind == 'addresses'){
+                            renderMap = true;
+                          }
+                            $scope.infonodes[resp.infonodes.items[i].kind] = resp.infonodes.items[i].items;
+                            for (var j=0;j<$scope.infonodes[resp.infonodes.items[i].kind].length;j++)
+                              {
+                                for (var v=0;v<$scope.infonodes[resp.infonodes.items[i].kind][j].fields.length;v++)
+                                  {
+                                    $scope.infonodes[resp.infonodes.items[i].kind][j][$scope.infonodes[resp.infonodes.items[i].kind][j].fields[v].field] = $scope.infonodes[resp.infonodes.items[i].kind][j].fields[v].value;
+                                  }
+                              }
+                        }
+                        if (renderMap){
+                          $scope.renderMaps();
+                        }
+                    }
+                }
+                if (resp.topics){
+                  $scope.topics = resp.topics.items;
+                   
+                    if ($scope.topicCurrentPage >1){
+                        console.log('Should show PREV');
+                      $scope.topicpagination.prev = true;
+                    }else{
+                        $scope.topicpagination.prev= false;
+                     }
+                   if (resp.topics.nextPageToken){
+                     var nextPage = $scope.topicCurrentPage + 1;
+                      // Store the nextPageToken
+                     $scope.topicpages[nextPage] = resp.topics.nextPageToken;
+                     $scope.topicpagination.next = true;
+
+                     }else{
+                    $scope.topicpagination.next = false;
+                   }
+                  }
+                  if (resp.documents){
+                      if (!resp.documents.items){
+                        $scope.blankStatdocuments = true;
+                      }
+                      $scope.documents = resp.documents.items;
+                      if ($scope.documentCurrentPage >1){
+                          $scope.documentpagination.prev = true;
+                      }else{
+                           $scope.documentpagination.prev = false;
+                      }
+                     if (resp.documents.nextPageToken){
+                      
+                       var nextPage = $scope.documentCurrentPage + 1;
+                       // Store the nextPageToken
+                       $scope.documentpages[nextPage] = resp.documents.nextPageToken;
+                       $scope.documentpagination.next = true;
+                       
+                     }else{
+                      $scope.documentpagination.next = false;
+                     }
+                  }
+
+                  if (resp.tasks){
+                     $scope.tasks = resp.tasks.items;
+                  }
+
+                  if (resp.events){
+                     $scope.events = resp.events.items;
+                  }
+                // $scope.listTopics(resp);
+                // $scope.listTasks();
+                // $scope.listEvents();
+                // $scope.listDocuments();
+                // $scope.listInfonodes();
+                
                 //$scope.renderMaps();
                 $scope.email.to = '';
                 document.title = "Lead: " + $scope.lead.firstname +' '+ $scope.lead.lastname ;
@@ -26,8 +96,17 @@ leadservices.factory('Lead', function($http) {
                 });
                // Call the method $apply to make the update on the scope
                $scope.$apply();
+               if (resp.topics){
+                    $scope.hilightTopic();
+                };
+                if (resp.tasks){
+                    $scope.hilightTask();
+                }
+                if (resp.events){
+                    $scope.hilightEvent();
+                }
             }else {
-               if(resp.message=="Invalid token"){
+               if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
@@ -52,7 +131,7 @@ leadservices.factory('Lead', function($http) {
                 $scope.$apply();
 
             }else {
-               if(resp.message=="Invalid token"){
+               if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
@@ -92,7 +171,7 @@ leadservices.factory('Lead', function($http) {
                  
 
               }else {
-                if(resp.message=="Invalid token"){
+                if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
@@ -106,9 +185,8 @@ leadservices.factory('Lead', function($http) {
   };
   Lead.insert = function($scope,lead){
       $scope.isLoading = true;
-      gapi.client.crmengine.leads.insert(lead).execute(function(resp) {
-         console.log('in insert resp');
-         console.log(resp);
+      gapi.client.crmengine.leads.insertv2(lead).execute(function(resp) {
+         
          if(!resp.code){
           $scope.isLoading = false;
           $('#addLeadModal').modal('hide');
