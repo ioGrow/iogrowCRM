@@ -358,6 +358,22 @@ indexes:
 - kind: Opportunity
   properties:
   - name: organization
+  - name: account_name
+
+- kind: Opportunity
+  properties:
+  - name: organization
+  - name: amount
+    direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: organization
+  - name: name
+
+- kind: Opportunity
+  properties:
+  - name: organization
   - name: updated_at
     direction: desc
 
