@@ -8,7 +8,90 @@ app.directive('ngBlur', ['$parse', function($parse) {
     });
   }
 }]);
-app.directive('currency', function() {
+app.directive('currency',  function() {
+  return {
+    restrict: 'A',
+    require:'?ngModel',
+    link: function ($scope, elem, attrs,ngModel) {
+
+        var all_currency=[
+                  {"value":"USD" , "symbol":"$"},
+                  {"value":"EUR", "symbol":"€"},
+                  {"value":"CAD", "symbol":"$"},
+                  {"value":"GBP", "symbol":"£"},
+                  {"value":"AUD", "symbol":"$"},
+                  {"value":"", "symbol":""},
+                  {"value":"AED", "symbol":"د.إ"},
+                  {"value":"ANG", "symbol":"ƒ"},
+                  {"value":"AOA", "symbol":"AOA"},
+                  {"value":"ARS", "symbol":"$"},
+                  {"value":"BAM", "symbol":"KM"},
+                  {"value":"BBD", "symbol":"$"},
+                  {"value":"BGL", "symbol":"лв"},
+                  {"value":"BHD", "symbol":"BD"},
+                  {"value":"BND", "symbol":"$"},
+                  {"value":"BRL", "symbol":"R$"},
+                  {"value":"BTC", "symbol":"฿"},
+                  {"value":"CHF", "symbol":"Fr"},
+                  {"value":"CLF", "symbol":"UF"},
+                  {"value":"CLP", "symbol":"$"},
+                  {"value":"CNY", "symbol":"¥"},
+                  {"value":"COP", "symbol":"$"},
+                  {"value":"CRC", "symbol":"₡"},
+                  {"value":"CZK", "symbol":"Kč"},
+                  {"value":"DKK", "symbol":"kr"},
+                  {"value":"EEK", "symbol":"KR"},
+                  {"value":"EGP", "symbol":"E£"},
+                  {"value":"FJD", "symbol":"FJ$"},
+                  {"value":"GTQ", "symbol":"Q"},
+                  {"value":"HKD", "symbol":"$"},
+                  {"value":"HRK", "symbol":"kn"},
+                  {"value":"HUF", "symbol":"Ft"},
+                  {"value":"IDR", "symbol":"Rp"},
+                  {"value":"ILS", "symbol":"₪"},
+                  {"value":"INR", "symbol":"₨"},
+                  {"value":"IRR", "symbol":"ریال"},
+                  {"value":"ISK", "symbol":"kr"},
+                  {"value":"JOD", "symbol":"د.ا"},
+                  {"value":"JPY", "symbol":"¥"},
+                  {"value":"KES", "symbol":"KSh"},
+                  {"value":"KRW", "symbol":"₩"},
+                  {"value":"KWD", "symbol":"KD"},
+                  {"value":"KYD", "symbol":"$"},
+                  {"value":"LTL", "symbol":"Lt"},
+                  {"value":"LVL", "symbol":"Ls"},
+                  {"value":"MAD", "symbol":"د.م."},
+                  {"value":"MVR", "symbol":"Rf"},
+                  {"value":"MXN", "symbol":"$"},
+                  {"value":"MYR", "symbol":"RM"},
+                  {"value":"NGN", "symbol":"₦"},
+                  {"value":"NOK", "symbol":"kr"},
+                  {"value":"NZD", "symbol":"$"},
+                  {"value":"OMR", "symbol":"ر.ع"},
+                  {"value":"PEN", "symbol":"S/."},
+                  {"value":"PHP", "symbol":"₱"},
+                  {"value":"PLN", "symbol":"zł"},
+                  {"value":"QAR", "symbol":"ر.ق"},
+                  {"value":"RON", "symbol":"L"},
+                  {"value":"RUB", "symbol":"руб."},
+                  {"value":"SAR", "symbol":"ر.س"},
+                  {"value":"SEK", "symbol":"kr"},
+                  {"value":"SGD", "symbol":"$"},
+                  {"value":"THB", "symbol":"฿"},
+                  {"value":"TRY", "symbol":"TL"},
+                  {"value":"TTD", "symbol":"$"},
+                  {"value":"TWD", "symbol":"$"},
+                  {"value":"UAH", "symbol":"₴"},
+                  {"value":"VEF", "symbol":"Bs F"},
+                  {"value":"VND", "symbol":"₫"},
+                  {"value":"XCD", "symbol":"$"},
+                  {"value":"ZAR", "symbol":"R"}];
+          $.each(all_currency, function (i, item) {
+            $(elem).append('<option value='+item.value+'>'+item.symbol+ " - "+item.value+'</option>');
+          });
+     }
+}});
+app.directive('amount', function() {
     return {
       restrict: 'A',
       require:'?ngModel',
@@ -214,7 +297,7 @@ app.directive('taggable', ['$parse',function($parse) {
           angular.forEach($scope.tagInfo, function(item){
               if (item.data.name==$scope.objectName) {
                   if ($scope.currentAttribute!='name') {
-                      delete value["name"];
+                      delete value["value"];
                   };
                   if (item.selected.indexOf(value) == -1) {
                    item.selected.push(value);
