@@ -43,16 +43,16 @@ from search_helper import tokenize_autocomplete
 STANDARD_TABS = [{'name': 'Accounts','label': 'Accounts','url':'/#/accounts/','icon':'book'},{'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},{'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/','icon':'money'},
 {'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},{'name': 'Cases','label': 'Cases','url':'/#/cases/','icon':'suitcase'},{'name': 'Tasks','label': 'Tasks','url':'/#/tasks/','icon':'check'}]
 STANDARD_PROFILES = ['Super Administrator', 'Standard User', 'Sales User', 'Marketing User', 'Read Only', 'Support User', 'Contract Manager','Read Only']
-STANDARD_APPS = [{'name': 'sales', 'label': 'Customer Development', 'url':'/#/accounts/'},#{'name': 'marketing', 'label':'Marketing', 'url':'/#/compaigns/'},
-{'name':'call_center','label': 'Customer Support','url':'/#/cases/'}]
+STANDARD_APPS = [{'name': 'sales', 'label': 'Customer Development', 'url':'/#/accounts/'},#{'name': 'marketing', 'label':'Marketing', 'url':'/#/compaigns/'},{'name':'call_center','label': 'Customer Support','url':'/#/cases/'}
+]
 STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
 ADMIN_TABS = [{'name': 'Users','label': 'Users','url':'/#/admin/users','icon':'user'},{'name': 'Groups','label': 'Groups','url':'/#/admin/groups','icon':'group'},{'name': 'Settings','label': 'Settings','url':'/#/admin/settings','icon':'cogs'}]
 ADMIN_APP = {'name': 'admin', 'label': 'Admin Console', 'url':'/#/admin/users'}
-Iogrowlive_APP = {'name':'iogrowLive','label': 'i/oGrow Live','url':'/#/live/shows'}
+"""Iogrowlive_APP = {'name':'iogrowLive','label': 'i/oGrow Live','url':'/#/live/shows'}
 
 Iogrowlive_TABS = [{'name': 'Shows','label': 'Shows','url':'/#/live/shows'},{'name': 'Company_profile','label': 'Company Profile','url':'/#/live/company_profile/'},
 {'name': 'Product_videos','label': 'Product Videos','url':'/#/live/product_videos'},{'name': 'Customer_Stories','label': 'Customer stories','url':'/#/live/customer_stories'},
-{'name': 'Feedbacks','label': 'Feedbacks','url':'/#/live/feedbacks'},{'name': 'Leads','label': 'Leads','url':'/#/leads/'}]
+{'name': 'Feedbacks','label': 'Feedbacks','url':'/#/live/feedbacks'},{'name': 'Leads','label': 'Leads','url':'/#/leads/'}]"""
 Default_Opp_Stages = [{'name':'Incoming','probability':5},{'name':'Qualified','probability':10},{'name':'Need Analysis','probability':40},{'name':'Negociating','probability':80},{'name':'Close won','probability':100},{'name':'Close lost','probability':0}]
 Default_Case_Status =[{'status':'pending'},{'status':'open'},{'status':'closed'}]
 Default_Lead_Status =[{'status':'New'},{'status':'Working'},{'status':'Unqualified'},{'status':'Closed converted'}]
@@ -138,13 +138,13 @@ class Organization(EndpointsModel):
               created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
               created_tab.put()
               admin_tabs.append(created_tab.key)
-          live_tabs = list()
+          """live_tabs = list()
           for tab in Iogrowlive_TABS:
             if tab['name']=='Company_profile':
               tab['url'] = "/#/live/company_profile/%s" % org_id
             created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],organization=org_key)
             created_tab.put()
-            live_tabs.append(created_tab.key) 
+            live_tabs.append(created_tab.key)"""
 
           # Add apps:
           created_apps = list()
@@ -160,7 +160,7 @@ class Organization(EndpointsModel):
               sales_app = created_app.key
             #if app['name']=='marketing':
               #marketing_app = created_app.key
-            if app['name']=='call_center':
+            """if app['name']=='call_center':
               support_app = created_app.key
 
             created_apps.append(created_app.key)
@@ -168,7 +168,7 @@ class Organization(EndpointsModel):
           live_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=live_tabs,organization=org_key)
           live_app.put()
           created_apps.append(live_app.key)
-          created_tabs.extend(live_tabs)
+          created_tabs.extend(live_tabs)"""
           
           
           app = ADMIN_APP
