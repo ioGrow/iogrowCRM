@@ -33,7 +33,7 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 from iograph import Node,Edge,RecordSchema,InfoNodeResponse,InfoNodeConnectionSchema,InfoNodeListResponse
 from iomodels.crmengine.accounts import Account,AccountGetRequest,AccountSchema,AccountListRequest,AccountListResponse,AccountSearchResult,AccountSearchResults
 from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertRequest,ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults
-from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema
+from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema,NoteSchema
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
 from iomodels.crmengine.opportunities import Opportunity,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest
@@ -2020,45 +2020,15 @@ class CrmEngineApi(remote.Service):
 
     # Notes APIs
     # notes.get api
-    @endpoints.method(ID_RESOURCE, DiscussionResponse,
+    @endpoints.method(ID_RESOURCE, NoteSchema,
                         path='notes/{id}', http_method='GET',
                         name='notes.get')
     def NoteGet(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        try:
-            note = Note.get_by_id(int(request.id))
-            about_item_id = int(note.about_item)
-            try:
-                about_object = OBJECTS[note.about_kind].get_by_id(about_item_id)
-                if note.about_kind == 'Contact' or note.about_kind == 'Lead':
-                    about_name = about_object.firstname + ' ' + about_object.lastname
-                else:
-                    about_name = about_object.name
-                about_response = DiscussionAboutSchema(kind=note.about_kind,
-                                                         id=note.about_item,
-                                                         name=about_name)
-                author = AuthorSchema(google_user_id = note.author.google_user_id,
-                                        display_name = note.author.display_name,
-                                        google_public_profile_url = note.author.google_public_profile_url,
-                                        photo = note.author.photo)
-
-
-                response = DiscussionResponse(id=request.id,
-                                                entityKey= note.key.urlsafe(),
-                                                title= note.title,
-                                                content= note.content,
-                                                comments=note.comments,
-                                                about=about_response,
-                                                author= author)
-                return response
-            except (IndexError, TypeError):
-                raise endpoints.NotFoundException('About object %s not found.' %
-                                                  (request.id,))
-
-
-        except (IndexError, TypeError):
-            raise endpoints.NotFoundException('Note %s not found.' %
-                                                (request.id,))
+        return Note.get_schema(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
 
     # notes.insert v2 api
     @endpoints.method(NoteInsertRequest, message_types.VoidMessage,
