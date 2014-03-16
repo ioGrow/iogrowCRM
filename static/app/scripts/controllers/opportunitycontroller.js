@@ -92,19 +92,18 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
       
     $scope.save = function(opportunity){
       var params = {};
-      console.log('I am here on this method');
-          console.log($scope.stage_selected.name);
-          console.log($scope.stage_selected.probability);
+     
 
        opportunity.stagename= $scope.stage_selected.name;
        opportunity.stage_probability= $scope.stage_selected.probability;
+       opportunity.stage = $scope.stage_selected.entityKey;
         
         if (typeof(opportunity.account)=='object'){
           opportunity.account_name = opportunity.account.name;
           opportunity.account_id = opportunity.account.id;
           opportunity.account = opportunity.account.entityKey;
           
-           
+          
           
           Opportunity.insert($scope,opportunity);
             $('#addOpportunityModal').modal('hide');

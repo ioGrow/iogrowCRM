@@ -13,6 +13,7 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
      $scope.casepagination={};
      $scope.currentPage = 01;
      $scope.pages = [];
+     $scope.status_selected={};
      //HKA 11.12.2013 Manage Next & Prev
      $scope.casepagination = {};
      $scope.caseCurrentPage=01;
@@ -96,24 +97,17 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
     
     $scope.save = function(casee){
         
-        
-        
+        casee.status = $scope.status_selected.entityKey;
+        casee.status_name = $scope.status_selected.status;
         if (typeof(casee.account)=='object'){
           
           casee.account_name = casee.account.name;
           casee.account = casee.account.entityKey;
-          console.log('in cases.save - account') ;
-          console.log(casee.account);
-          console.log(casee);
           
           if (typeof(casee.contact)=='object'){
               
               casee.contact_name = casee.contact.firstname + ' '+ casee.contact.lastname ;
               casee.contact = casee.contact.entityKey;
-              console.log('in cases.save - contact');
-              console.log(casee.contact);
-              console.log(casee);
-
           }
           Case.insert($scope,casee);
 
