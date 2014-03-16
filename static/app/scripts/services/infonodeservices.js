@@ -67,6 +67,24 @@ accountservices.factory('InfoNode', function($http) {
          }
       });
   };
+  InfoNode.patch = function($scope,params){
+      $scope.isLoading = true;
+      gapi.client.crmengine.infonode.patch(params).execute(function(resp) {
+          if(!resp.code){
+          $scope.isLoading = false;
+          $scope.listInfonodes(params.kind);
+        }else{
+            console.log(resp.message);
+             
+             $('#errorModal').modal('show');
+             if(resp.message=="Invalid grant"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+             };
+         }
+      });
+  };
 
   
 

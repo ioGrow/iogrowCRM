@@ -185,7 +185,7 @@ class Task(EndpointsModel):
                     order_by = request.order
                 attr = cls._properties.get(order_by)
                 if attr is None:
-                    raise AttributeError('Order attribute %s not defined.' % (attr_name,))
+                    raise AttributeError('Order attribute %s not defined.' % (order_by,))
                 if ascending:
                     tasks, next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).order(+attr).fetch_page(limit, start_cursor=curs)
                 else:

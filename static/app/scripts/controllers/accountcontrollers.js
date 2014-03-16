@@ -110,9 +110,13 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
 
 
      $scope.accountInserted = function(resp){
-          
-          window.location.replace('#/accounts/show/'+resp.id);
-          $('#addAccountModal').modal('hide');
+          if ($scope.accounts == undefined){
+            $scope.accounts = [];
+            $scope.blankStateaccount = false;
+          }
+          $scope.account.name ='';
+          $scope.accounts.push(resp);
+          $scope.$apply();
      };
      // Quick Filtering
      var searchParams ={};
@@ -432,6 +436,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        $scope.casee.priority = 4;
        $scope.casee.status = 'pending';
        $scope.addingTask = false;
+       $scope.sharing_with = [];
        $scope.edited_email = null;
         $scope.statuses = [
     {value: 1, text: 'Home'},
@@ -439,6 +444,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
     {value: 3, text: 'Mob'},
     {value: 4, text: 'Other'}
   ];
+
 
        // What to do after authentication
        $scope.runTheProcess = function(){
@@ -823,9 +829,9 @@ $scope.CaselistNextPageItems = function(){
 
      
      $scope.selectMember = function(){
-        console.log('slecting user yeaaah');
         $scope.slected_memeber = $scope.user;
-        $scope.user = $scope.slected_memeber.google_display_name;
+        $scope.user = '';
+        $scope.sharing_with.push($scope.slected_memeber);
 
      };
      $scope.showCreateDocument = function(type){
@@ -898,16 +904,28 @@ $scope.CaselistNextPageItems = function(){
         });
         $('#sharingSettingsModal').modal('hide');
 
-        if (slected_memeber.email){
-        var params = {  'type': 'user',
-                        'role': 'writer',
-                        'value': slected_memeber.email,
-                        'about_kind': 'Account',
-                        'about_item': $scope.account.id
-
-                        
-          };
-          Permission.insert($scope,params); 
+        if ($scope.sharing_with.length>0){
+        
+          var items = [];
+          
+          angular.forEach($scope.sharing_with, function(user){
+                      var item = { 
+                                  'type':"user",
+                                  'value':user.entityKey
+                                };
+                      items.push(item);
+          });
+          
+          if(items.length>0){
+              var params = {
+                            'about': $scope.account.entityKey,
+                            'items': items
+              }
+              Permission.insert($scope,params); 
+          }
+          
+          
+          $scope.sharing_with = [];
           
           
         }else{ 
@@ -1179,23 +1197,41 @@ $scope.CaselistNextPageItems = function(){
 //HKA 19.11.2013 Add Phone
  $scope.addPhone = function(phone){
   
-  params = {'parent':$scope.account.entityKey,
-            'kind':'phones',
-            'fields':[
-                {
-                  "field": "type",
-                  "value": phone.type_number
-                },
-                {
-                  "field": "number",
-                  "value": phone.number
-                }
-            ]
+    params = {'parent':$scope.account.entityKey,
+              'kind':'phones',
+              'fields':[
+                  {
+                    "field": "type",
+                    "value": phone.type_number
+                  },
+                  {
+                    "field": "number",
+                    "value": phone.number
+                  }
+              ]
+    };
+    InfoNode.insert($scope,params);
+    $('#phonemodal').modal('hide');
+    $scope.phone.type_number='work';
+    $scope.phone.number='';
   };
-  InfoNode.insert($scope,params);
-  $('#phonemodal').modal('hide');
-  $scope.phone.type_number='work';
-  $scope.phone.number='';
+
+   $scope.patchPhoneNumber = function(entityKey, data){
+    
+  
+    params = {
+              'entityKey': entityKey,
+              'parent':$scope.account.entityKey,
+              'kind':'phones',
+              'fields':[
+                 
+                  {
+                    "field": "number",
+                    "value": data
+                  }
+              ]
+    };
+     InfoNode.patch($scope,params);
   };
 
 

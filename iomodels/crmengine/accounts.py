@@ -192,7 +192,7 @@ class Account(EndpointsModel):
         my_index.put(my_document)
 
     @classmethod
-    def get_schema(cls,request):
+    def get_schema(cls,user_from_email, request):
         account = Account.get_by_id(int(request.id))
         if account is None:
             raise endpoints.NotFoundException('Account not found.')
@@ -244,6 +244,7 @@ class Account(EndpointsModel):
         cases = None
         if request.cases:
             cases = Case.list_by_parent(
+                                        user_from_email = user_from_email,
                                         parent_key = account.key,
                                         request = request
                                         )
@@ -328,8 +329,6 @@ class Account(EndpointsModel):
                                   name = account.name,
                                   account_type = account.account_type,
                                   industry = account.industry,
-                                  tagline = account.tagline,
-                                  introduction = account.introduction,
                                   tags = tag_list,
                                   created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
