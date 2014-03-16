@@ -96,7 +96,7 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
       
     
     $scope.save = function(casee){
-        
+
         casee.status = $scope.status_selected.entityKey;
         casee.status_name = $scope.status_selected.status;
         if (typeof(casee.account)=='object'){
@@ -142,13 +142,10 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
      
       $scope.$watch('searchAccountQuery', function() {
         if($scope.searchAccountQuery){
-          if ($scope.searchAccountQuery.length>1){
+         
            params_search_account['q'] = $scope.searchAccountQuery;
            gapi.client.crmengine.accounts.search(params_search_account).execute(function(resp) {
-              console.log("in accouts.search api");
-              console.log(params_search_account);
-
-              console.log(resp);
+              
               if (resp.items){
                 $scope.accountsResults = resp.items;
                 
@@ -156,7 +153,7 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
               };
               
             });
-           }
+          
         }
       });
       $scope.selectAccount = function(){
