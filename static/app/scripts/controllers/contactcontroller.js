@@ -424,6 +424,8 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
      $scope.documentpages=[];
 
       $scope.accounts = [];
+      $scope.opportunities = [];
+      $scope.Opportunities = {};
       $scope.email = {};
       $scope.stage_selected={};
       $scope.status_selected={};

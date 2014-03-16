@@ -89,8 +89,8 @@
                 <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
                   
-                  <input ng-hide="isLoading" ng-click="deleteaccount(account)" type="submit" class="btn red" value="Delete this Account">
-                  <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                  <input  ng-click="deleteaccount(account)" type="submit" class="btn red" value="Delete this Account">
+                  <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                 </div>
             </form>
           </div>
@@ -175,8 +175,8 @@
                                           <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="note.content"></textarea>                
                                         </div>                         
                                          <div class="pull-right">
-                                            <input ng-hide="isLoading" type="submit" class="btn green" value="{{ _('Add this note') }}">
-                                            <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
+                                            <input  type="submit" class="btn green" value="{{ _('Add this note') }}">
+                                            <!--input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled-->
                                          </div>
                                     </form>
                                 </div>
@@ -197,7 +197,7 @@
                             </ul>
                             <div class="row">
                              <div class="col-md-12">
-                                <div class="pagination pull-right" ng-hide="isLoading">
+                                <div class="pagination pull-right" >
                                       
                                      
                                         <button ng-click="TopiclistPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="topicpagination.prev">
@@ -209,7 +209,7 @@
                                         </button>
                                    
                                     </div>
-                                    <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                                    <!--h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3-->
                                 </div>
                               </div>
                             </div>
@@ -383,7 +383,7 @@
                                         </button>
                                       
                                     </div>
-                                    <h3 class="pagination pull-right" ng-show="isLoading">{{ _("Loading...") }}</h3>
+                                    <h3 class="pagination pull-right" ng-show="isLoading">{{ _("Loading...") }}</h3-->
                               </div>
                               </div>
                         <!--HKA 18.11.2013 Add Contact modal -->
