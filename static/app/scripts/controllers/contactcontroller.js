@@ -86,8 +86,6 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact','Tag','Ed
           var params = {};
           var contact_name = new Array();
 
-          console.log('---------------contact.access--------');
-          console.log(contact.access);
           
           contact.display_name = contact_name;
           if (typeof(contact.account)=='object'){
@@ -434,6 +432,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
       $scope.phone.type= 'work';
       $scope.casee = {};
       $scope.casee.priority = 4;
+      $scope.sharing_with = [];
       
       // What to do after authentication
       $scope.runTheProcess = function(){
@@ -645,9 +644,9 @@ $scope.CaselistNextPageItems = function(){
 
     
      $scope.selectMember = function(){
-        console.log('slecting user yeaaah');
         $scope.slected_memeber = $scope.user;
-        $scope.user = $scope.slected_memeber.google_display_name;
+        $scope.user = '';
+        $scope.sharing_with.push($scope.slected_memeber);
 
      };
      $scope.updateCollaborators = function(){
@@ -667,16 +666,28 @@ $scope.CaselistNextPageItems = function(){
         });
         $('#sharingSettingsModal').modal('hide');
 
-        if (slected_memeber.email){
-        var params = {  'type': 'user',
-                        'role': 'writer',
-                        'value': slected_memeber.email,
-                        'about_kind': 'Contact',
-                        'about_item': $scope.contact.id
-
-                        
-          };
-          Permission.insert($scope,params); 
+        if ($scope.sharing_with.length>0){
+        
+          var items = [];
+          
+          angular.forEach($scope.sharing_with, function(user){
+                      var item = { 
+                                  'type':"user",
+                                  'value':user.entityKey
+                                };
+                      items.push(item);
+          });
+          
+          if(items.length>0){
+              var params = {
+                            'about': $scope.contact.entityKey,
+                            'items': items
+              }
+              Permission.insert($scope,params); 
+          }
+          
+          
+          $scope.sharing_with = [];
           
           
         }else{ 

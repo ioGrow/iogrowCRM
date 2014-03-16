@@ -182,9 +182,15 @@ class InfoNodeSchema(messages.Message):
     fields = messages.MessageField(RecordSchema, 2, repeated=True)
     parent = messages.StringField(3, required=True)
 
+class InfoNodePatchRequest(messages.Message):
+    entityKey = messages.StringField(1, required=True)
+    fields = messages.MessageField(RecordSchema, 2, repeated=True)
+    parent = messages.StringField(3, required=True)
+    kind = messages.StringField(4)
 
-
-
+class InfoNodePatchResponse(messages.Message):
+    entityKey = messages.StringField(1, required=True)
+    fields = messages.MessageField(RecordSchema, 2, repeated=True)
 
 #TODOS
 # ADD PHONE SCHEMA, LISTOFPHONES SCHEMA, EMAILS, ADDRESSES,...
@@ -614,7 +620,10 @@ class CrmEngineApi(remote.Service):
                       name='accounts.getv2')
     def accounts_get_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        return Account.get_schema(request = request)
+        return Account.get_schema(
+                                    user_from_email = user_from_email,
+                                    request = request
+                                )
     # accounts.get API
     @Account.method(
                     request_fields=('id',),
@@ -2229,6 +2238,28 @@ class CrmEngineApi(remote.Service):
                                     parent_key = parent_key,
                                     request = request
                                     )
+    # infonode.patch api
+    @endpoints.method(InfoNodePatchRequest, message_types.VoidMessage,
+                        path='infonode/patch', http_method='POST',
+                        name='infonode.patch')
+    def infonode_patch(self, request):
+        node_key = ndb.Key(urlsafe = request.entityKey)
+        parent_key = ndb.Key(urlsafe = request.parent)
+        node = node_key.get()
+        node_values = []
+        if node is None:
+            raise endpoints.NotFoundException('Node not found')
+        for record in request.fields:
+            setattr(node, record.field, record.value)
+            node_values.append(str(record.value))
+        node.put()
+        indexed_edge = '_' + node.kind + ' ' + " ".join(node_values)
+        EndpointsHelper.update_edge_indexes(
+                                            parent_key = parent_key,
+                                            kind = 'infos',
+                                            indexed_edge = indexed_edge
+                                            )
+        return message_types.VoidMessage()
 
     # Opportunities APIs
     # opportunities.delete api
@@ -2470,30 +2501,33 @@ class CrmEngineApi(remote.Service):
         for item in request.items:
             if item.type == 'user':
                 # get the user
-                shared_with_user = User.query(User.email == item.value).get()
+                shared_with_user_key = ndb.Key(urlsafe = item.value)
+                shared_with_user = shared_with_user_key.get()
                 if shared_with_user:
                     # check if user is in the same organization
                     if shared_with_user.organization == about.organization:
                         # insert the edge
                         Edge.insert(
                                     start_node = about_key,
-                                    end_node = shared_with_user.key,
+                                    end_node = shared_with_user_key,
                                     kind = 'permissions',
                                     inverse_edge = 'has_access_on'
                                 )
                         # update indexes on search for collobaorators_id
+                        indexed_edge = shared_with_user.google_user_id + ' '
                         EndpointsHelper.update_edge_indexes(
                                             parent_key = about_key,
                                             kind = 'collaborators',
-                                            indexed_edge = shared_with_user.google_user_id
-                                            )          
+                                            indexed_edge = indexed_edge
+                                            )  
+                        shared_with_user = None       
             elif item.type == 'group':
                 pass
                 # get the group
                 # get the members of this group
                 # for each member insert the edge
-                # update indexes on search for collaborators_id
-            return message_types.VoidMessage()
+                # update indexes on search for  collaborators_id
+        return message_types.VoidMessage()
     # permissions.insert API
     @Permission.method(user_required=True,path='permissions', http_method='POST', name='permissions.insert')
     def PermissionInsert(self, my_model):
