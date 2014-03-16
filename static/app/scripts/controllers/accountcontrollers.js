@@ -110,9 +110,13 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
 
 
      $scope.accountInserted = function(resp){
-          
-          window.location.replace('#/accounts/show/'+resp.id);
-          $('#addAccountModal').modal('hide');
+          if ($scope.accounts == undefined){
+            $scope.accounts = [];
+            $scope.blankStateaccount = false;
+          }
+          $scope.account.name ='';
+          $scope.accounts.push(resp);
+          $scope.$apply();
      };
      // Quick Filtering
      var searchParams ={};

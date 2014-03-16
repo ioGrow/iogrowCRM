@@ -329,8 +329,6 @@ class Account(EndpointsModel):
                                   name = account.name,
                                   account_type = account.account_type,
                                   industry = account.industry,
-                                  tagline = account.tagline,
-                                  introduction = account.introduction,
                                   tags = tag_list,
                                   created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")

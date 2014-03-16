@@ -255,8 +255,14 @@ accountservices.factory('Contact', function($http) {
          
          if(!resp.code){
           $scope.isLoading = false;
-          $('#addAContactModal').modal('hide');
-          window.location.replace('#/contacts/show/'+resp.id);
+          if ($scope.contacts == undefined){
+            $scope.contacts = [];
+            $scope.blankStatecontact = false;
+          }
+          $scope.contacts.push(resp);
+          $scope.contact = {};
+          $scope.searchAccountQuery = '';
+          $scope.$apply();
           
          }else{
             console.log(resp.message);

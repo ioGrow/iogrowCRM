@@ -469,8 +469,15 @@ class Contact(EndpointsModel):
                     )
         contact_key = contact.put_async()
         contact_key_async = contact_key.get_result()
+        account_schema = None
         if request.account:
             account_key = ndb.Key(urlsafe=request.account)
+            account = account_key.get()
+            account_schema = AccountSchema(
+                                        id = str( account_key.id() ),
+                                        entityKey = request.account,
+                                        name = account.name
+                                        )
             # insert edges
             Edge.insert(start_node = account_key,
                       end_node = contact_key_async,
@@ -481,11 +488,22 @@ class Contact(EndpointsModel):
                                             kind = 'contacts',
                                             indexed_edge = str(account_key.id())
                                             )
+
         else:
             data = {}
             data['id'] = contact_key_async.id()
             contact.put_index(data)
-        return ContactSchema(id=str(contact_key_async.id()))
+        contact_schema = ContactSchema(
+                                  id = str( contact_key_async.id() ),
+                                  entityKey = contact_key_async.urlsafe(),
+                                  firstname = contact.firstname,
+                                  lastname = contact.lastname,
+                                  title = contact.title,
+                                  account = account_schema,
+                                  created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                  updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                )
+        return contact_schema
 
 
 
