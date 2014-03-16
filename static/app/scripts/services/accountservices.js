@@ -275,6 +275,13 @@ accountservices.factory('Account', function($http) {
                         $scope.blankStateaccount = true;
                     }
                   }
+                  else{
+                    $('.inner-cards-container').waterfall({ 
+                      colMinWidth: 200, 
+                      defaultContainerWidth: 800,
+                      autoresize: true
+                    });
+                  }
                  
                  $scope.accounts = resp.items;
                  if ($scope.currentPage>1){
