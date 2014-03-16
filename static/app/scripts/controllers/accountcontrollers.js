@@ -438,6 +438,10 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        $scope.addingTask = false;
        $scope.sharing_with = [];
        $scope.edited_email = null;
+       //$scope.cases = {};
+       //$scope.cases = [];
+       $scope.opportunities = [];
+       $scope.opportunities = {};
         $scope.statuses = [
     {value: 1, text: 'Home'},
     {value: 2, text: 'Work'},

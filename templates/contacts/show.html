@@ -236,7 +236,7 @@
                             </ul>
                              <div class="row">
                              <div class="col-md-12">
-                                <div class="pagination pull-right" ng-hide="isLoading">
+                                <div class="pagination pull-right" >
                                       
                                       
                                        <button ng-click="TopiclistPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="topicpagination.prev">
@@ -444,7 +444,7 @@
                            
                            <div class="pull-right">
                            
-                              <input ng-hide="isLoading" type="submit" class="btn green" value="Send">
+                              <input  type="submit" class="btn green" value="Send">
 
                             
                             </div>
@@ -506,7 +506,7 @@
                             </div>
                         <div class="row">
                         <div class="col-md-12">
-                                <div class="pagination pull-right" ng-hide="isLoading">
+                                <div class="pagination pull-right" >
                                       
                                       
                                       <button ng-click="OppPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="opppagination.prev">
@@ -518,7 +518,7 @@
                                         </button>
                                       
                                     </div>
-                                    <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                                    <!--h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3-->
                             </div> 
                             </div> 
                            <!--HKA 19.11.2013 Opportunity Modal -->
@@ -623,7 +623,7 @@
                             </div>
                             <div class="row">
                             <div class="col-md-12">
-                                <div class="pagination pull-right" ng-hide="isLoading">
+                                <div class="pagination pull-right" >
                                       
                                      
                                         <button ng-click="CasePrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="casepagination.prev">
@@ -635,7 +635,7 @@
                                         </button>
                                     
                                     </div>
-                                    <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                                    <!--h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3-->
                               </div>
                             </div>
                                     <!--HKA 19.11.2013 Case Modal -->
@@ -791,8 +791,8 @@
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
               
-               <input ng-hide="isLoading" type="submit" class="btn green" value="Add this task">
-                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+               <input type="submit" class="btn green" value="Add this task">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                                         
             </form>
             </div>
@@ -837,8 +837,8 @@
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
               
-               <input ng-hide="isLoading" type="submit" class="btn green" value="Add this event">
-                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+               <input  type="submit" class="btn green" value="Add this event">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                                         
             </form>
             </div>
