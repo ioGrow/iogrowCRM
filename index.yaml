@@ -104,6 +104,11 @@ indexes:
   properties:
   - name: discussion
   - name: updated_at
+
+- kind: Comment
+  properties:
+  - name: discussion
+  - name: updated_at
     direction: desc
 
 - kind: Contact
@@ -221,6 +226,12 @@ indexes:
   - name: about_kind
   - name: updated_at
     direction: desc
+
+- kind: Edge
+  properties:
+  - name: kind
+  - name: start_node
+  - name: updated_at
 
 - kind: Edge
   properties:

@@ -407,11 +407,10 @@ accountservices.factory('Search', function($http) {
                  
                   if(resp.items){
                     $scope.searchResults = [];
-                     for (var i=0,len=resp.items.length; i<len; i++)
-                      { 
-                            var id = resp.items[i].id;
-                            var type = resp.items[i].type;
-                            var title = resp.items[i].title;
+                      angular.forEach(resp.items, function(item){
+                            var id = item.id;
+                            var type = item.type;
+                            var title = item.title;
                             var url = Search.getUrl(type,id);
                             var result = {};
                             result.id = id;
@@ -419,8 +418,8 @@ accountservices.factory('Search', function($http) {
                             result.title = title;
                             result.url = url;
                             $scope.searchResults.push(result);
-
-                      }
+                      });
+                     
                                        
                      //$scope.searchResults = resp.items;
                      if ($scope.currentPage>1){

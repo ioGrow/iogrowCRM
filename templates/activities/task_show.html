@@ -76,48 +76,52 @@
               </span>
         </div>
  </div>
-    <div class="" >
-      <div class="row">
-         <div class="col-md-12">
-         
-            <div class="pull-right sharebuttonDiv"> 
-                  <a href="" class="btn blue jfk-button jfk-button-action">
-                    <i class="icon-lock"></i> Share
-                  </a>     
-            </div>
-            <h2>
-            <a href="<%=uri%>" data-toggle="tooltip" data-placement="bottom" title="Back to <%=task.about.name%>">
-            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a> <%=task.about.kind%> >  <%=task.about.name%> </h2>
-            
-
-           
-              
-          <hr>
-      </div>
-    </div>
+    <div ng-show="isContentLoaded" >
       <!--HKA 19.11.2013 Begin  row-2 who is involved -->
     <div class="row">
 
     <!--HKA 19.11.2013 BEGIN Span comments-->
       <div class="col-md-8">
+            <h2 class="page-title showTaskTitle">
+              <input id="checkTaskInShow" type="checkbox" ng-checked="isSelectedAll" ng-click="checkOptions()">  
+              <%=task.title%>
+            </h2>
       <!-- BEGIN PORTLET-->
-        <div class="portlet">
-          <div class="portlet-title line">
-              <div class="caption"><i class="fa fa-comments"></i>[task]: <%=task.title%></div>
-          </div>
-          <div class="portlet-body">
-              <span ng-show="task.due" class="contact-title"><strong>{{_("Due on")}}: <%= task.due | date:'yyyy-MM-dd' %></strong><br> </span>
-              <span class="contact-title" ><strong>{{_("Status")}}: <%= task.status %></strong> <br><br></span>
-              <span class="page-meta"><i class="icon-pencil"><a ng-click="showEditTaskModal()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |  <i class="icon-trash"><a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  {{_("Delete")}}</a></i></span>
-          </div>
-
-       
-         
-        </div>
       <!-- End Portlet -->
       <div class="row">
-                  <div class="col-md-12 margin-bottom-10">
-                 <p class⁼"lead"=""><strong>Discuss this task :</strong> </p>
+                 <div class="col-md-12 margin-bottom-10">
+                     <ul class="list-unstyled pull-right">
+                       <li class="inline-tags">Tags:</li>
+                       <li ng-repeat="tag in task.tags" class="inline-tags">
+                         <a href="#">#<%=tag.name%>  </a>
+                       </li>
+                     </ul>
+                     <form ng-show="taskSelected">
+                         <button   ng-show="task.status=='pending'"class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
+                          <i class="fa fa-lock"></i>
+                            <span class="btn-text">
+                              Close  
+                            </span>
+                          </button>
+                           <button   ng-show="task.status=='closed'" class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
+                          <i class="fa fa-unlock"></i>
+                          <span class="btn-text">
+                          Reopen
+                          </span>
+                          </button>
+                          <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
+                          <i class="fa fa-tags"></i>
+                           <span class="btn-text">
+                              Tags
+                           </span>
+                          </button>
+                     </form>
+                  </div>
+              
+        </div>
+        <div class="row">
+        <div class="col-md-12">
+             <p class⁼"lead"=""><strong>Discuss this task :</strong> </p>
                           <form id="addComment" ng-submit="addComment(comment)" class="ng-pristine ng-valid">
                           <div class="form-group">
                                             <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="comment.content"></textarea>
@@ -130,8 +134,8 @@
                             <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
                             </div>
                       </form>
-                      </div>
-              
+        </div>
+          
         </div>
       <ul class="chats">
                   <li class="in" ng-repeat="comment in comments" id="comment_<%=$index%>">
@@ -172,27 +176,34 @@
   <!--HKA 19.11.2013 BEGIN Span who is involved -->
       <div class="col-md-4">
         <div class="portlet">
-                <div class="portlet-title line">
-                  <div class="caption"><i class="icon-tasks"></i>Who's involved</div>
-                  
-                </div>
-                <div class="portlet-body">
-                <ul class="chats">
-                 
-                 <li  ng-repeat="contributor in contributors">
-                    <img class="avatar" alt="" src="<%=contributor.photoLink%>" />
+                  <div class="portlet-title line">
+                    <div class="caption"><i class="icon-group"></i>Who's involved</div>
                     
-                      <span class="arrow"><%=contributor.name%> : [<%=contributor.role%>]</span>
+                  </div>
+                  <div class="portlet-body">
+                  <ul class="chats">
+                   
+                   <li>                      
+                        <span class="arrow">Created By: <%=task.created_by.display_name%></span>
+                   </li>
+                  </ul>
+                   <div class="caption"><i class="fa fa-group"></i>Assignees</div>
+                    <ul class="chats">
+                 
+                 <li  ng-repeat="assigned in task.assignees">
+                    
+                    
+                      <span class="arrow"><%=assigned.display_name%></span>
                      
                    
-                  </li>
+                 </li>
                   <li><a href="#addContributor"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new assignee</a></li>
 
                  
                 </ul>
-                </div>
-                
-       </div>
+                  </div>
+                  
+         </div>
 
         <div id="addContributor" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -248,7 +259,9 @@
     </div>
     <!--HKA 19.11.2013 END row-2 Span who is involved -->
 
-
+    <script type="text/javascript">
+    $('#checkTaskInShow').uniform();
+    </script>
 
 
     </div>

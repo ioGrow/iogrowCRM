@@ -371,9 +371,12 @@ class Lead(EndpointsModel):
         query = search.Query(query_string=query_string, options=options)
         try:
             if query:
-                results = index.search(query)
-                #total_matches = results.number_found
-                # Iterate over the documents in the results
+                result = index.search(query)
+                if len(result.results) == limit + 1:
+                    next_cursor = result.results[-1].cursor.web_safe_string
+                else:
+                    next_cursor = None
+                results = result.results[:limit]
                 for scored_document in results:
                     kwargs = {
                               'id': scored_document.doc_id
@@ -388,20 +391,7 @@ class Lead(EndpointsModel):
                                       ]:
                             kwargs[e.name] = e.value
                     search_results.append(LeadSearchResult(**kwargs))
-                    next_cursor = scored_document.cursor.web_safe_string
-                if next_cursor:
-                    next_query_options = search.QueryOptions(
-                                                             limit=1,
-                                                             cursor=scored_document.cursor
-                                                             )
-                    next_query = search.Query(
-                                              query_string=query_string,
-                                              options=next_query_options
-                                              )
-                    if next_query:
-                        next_results = index.search(next_query)
-                        if len(next_results.results)==0:
-                            next_cursor = None
+                    
         except search.Error:
             logging.exception('Search failed')
         return LeadSearchResults(

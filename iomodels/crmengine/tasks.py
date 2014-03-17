@@ -97,8 +97,8 @@ class Task(EndpointsModel):
 
     def put(self, **kwargs):
         ndb.Model.put(self, **kwargs)
-        self.put_index()
-        self.set_perm()
+        # self.put_index()
+        # self.set_perm()
 
     def set_perm(self):
         about_item = str(self.key.id())
@@ -447,7 +447,7 @@ class Task(EndpointsModel):
         if request.status:
             status = request.status
         else:
-            status = 'pending'
+            status = 'open'
         if request.access:
             access = request.access
         else:
@@ -457,13 +457,12 @@ class Task(EndpointsModel):
         author.display_name = user_from_email.google_display_name
         author.photo = user_from_email.google_public_profile_photo_url
         task = Task(title = request.title,
-                    status = request.status,
+                    status = status,
                     owner = user_from_email.google_user_id,
                     organization = user_from_email.organization,
                     author = author)
         if request.due:
             task.due = datetime.datetime.strptime(request.due,"%Y-%m-%dT%H:%M:00.000000")
-            print '@@@@ yes i know #@@@@'
             try:
                 credentials = user_from_email.google_credentials
                 http = credentials.authorize(httplib2.Http(memcache))
@@ -480,9 +479,8 @@ class Task(EndpointsModel):
                   },
                   "summary": str(request.title)
                 }
-                print '***************Something here yes*********************'
                 created_event = service.events().insert(calendarId='primary',body=params).execute()
-                print '***************Something here no*********************'
+                
             except:
                 raise endpoints.UnauthorizedException('Invalid grant' )
                 return
@@ -523,4 +521,54 @@ class Task(EndpointsModel):
                       kind = 'tags',
                       inverse_edge = 'tagged_on')
         return TaskSchema()
+
+    @classmethod
+    def patch(cls,user_from_email,request):
+        task = cls.get_by_id( int(request.id) )
+        if task is None:
+            raise endpoints.NotFoundException('Task not found.')
+        if request.title:
+            task.title = request.title
+        if request.status:
+            task.status = request.status
+        if request.due:
+            task.due = datetime.datetime.strptime(request.due,"%Y-%m-%dT%H:%M:00.000000")
+            try:
+                credentials = user_from_email.google_credentials
+                http = credentials.authorize(httplib2.Http(memcache))
+                service = build('calendar', 'v3', http=http)
+                # prepare params to insert
+                params = {
+                 "start":
+                  {
+                    "dateTime": task.due.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
+                  },
+                 "end":
+                  {
+                    "dateTime": task.due.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
+                  },
+                  "summary": str(request.title)
+                }
+                created_event = service.events().insert(calendarId='primary',body=params).execute()
+                
+            except:
+                raise endpoints.UnauthorizedException('Invalid grant' )
+                return
+        task_key = task.put_async()
+        task_key_async = task_key.get_result()
+        EndpointsHelper.update_edge_indexes(
+                                            parent_key = task_key_async,
+                                            kind = None,
+                                            indexed_edge = None
+                                            )
+
+        return cls.get_schema(
+                                user_from_email = user_from_email,
+                                request = request
+                            )
+
+
+
+
+
   

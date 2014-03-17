@@ -13,12 +13,12 @@ commentservices.factory('Comment', function($http) {
       console.log(params);
 
       $scope.isLoading = true;
-      gapi.client.crmengine.comments.list(params).execute(function(resp) {
+      gapi.client.crmengine.comments.listv2(params).execute(function(resp) {
               if(!resp.code){
-              
+                console.log(resp);
                  $scope.comments = resp.items;
              
-                 console.log($scope.comments);
+                 
 
                   if ($scope.currentPagecomment>1){
                       console.log('Should show PREV');
@@ -71,17 +71,23 @@ commentservices.factory('Comment', function($http) {
 
 Comment.insert = function($scope,comment){
       $scope.isLoading = true;
-      gapi.client.crmengine.comments.insert(comment).execute(function(resp) {
-         console.log('in insert resp');
-         console.log(resp);
+      gapi.client.crmengine.comments.insertv2(comment).execute(function(resp) {
+         
          if(!resp.code){
-          console.log(resp);
+
+          if ($scope.comments == undefined){
+            $scope.comments = [];
+          }
+          $scope.comments.push(resp);
+         
+          
           // TME_02_11_13 when a note is inserted reload topics
           //$scope.listTopics();
           $scope.isLoading = false;
+          $scope.$apply();
            $scope.ListComments();
 
-          $scope.$apply();
+          
          
           
          
