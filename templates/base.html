@@ -89,22 +89,22 @@
         <!-- BEGIN TOP NAVIGATION MENU --> 
                     
         <ul class="nav navbar-nav pull-right">      
-              <li class="dropdown user">
+              <!--li class="dropdown user">
                 <a href="/live/companies/{{org_id}}/" class="dropdown-tog" target="new">       
                   <span class="username">
                     My company
                   </span>
                 </a>        
-              </li>
+              </li-->
               <li class="dropdown user" id="header_task_bar">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" >
                 <img alt="" src="static/bootstrap3/img/glyphicons_156_show_thumbnails.png" width="18">
                   <span class="username">
-                    {{active_app.label}}
+                   
                   </span>
-                  <i class="fa fa-angle-down"></i>      
+                  <i class="fa "></i>      
                 </a>
-                <ul id="dropdown-menu-list"class="dropdown-menu extended">
+                <ul id="dropdown-menu-list" class="dropdown-menu extended">
                   <li>
                     <ul class="dropdown-menu-list scroller">
                        {%for application in apps %}
@@ -118,7 +118,37 @@
                           </span>               
                           </a>
                         </li> 
-                       {%endfor%}                             
+                       {%endfor%} 
+                         <li class="gb_a">
+                          <a href="https://drive.google.com/?tab=mo&authuser=0" target="new">
+                         
+                          <span class="task">
+                            <span class="desc">
+                             Drive
+                            </span>
+                          </span>               
+                          </a>
+                        </li>
+                        <li class="gb_a">
+                          <a href="https://www.google.com/calendar?tab=oc" target="new">
+                
+                          <span class="task">
+                            <span class="desc">
+                           Calendar
+                            </span>
+                          </span>               
+                          </a>
+                        </li>
+                        <li class="gb_a">
+                          <a href="https://mail.google.com/mail/?tab=om" target="new">
+                          <i class="fa"></i>
+                          <span class="task">
+                            <span class="desc">
+                           Gmail
+                            </span>
+                          </span>               
+                          </a>
+                        </li>                              
                     </ul>
                   </li>       
                 </ul>

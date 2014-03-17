@@ -1539,7 +1539,7 @@ angular.module('xeditable').factory('editableThemes', function() {
       inputTpl:    '',
       errorTpl:    '<div class="editable-error help-block" ng-show="$error" ng-bind="$error"></div>',
       buttonsTpl:  '<span class="editable-buttons"></span>',
-      submitTpl:   '<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok" ng-click="updateTagline()"></span></button>',
+      submitTpl:   '<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok" ng-click="updatAccountHeader()"></span></button>',
       cancelTpl:   '<button type="button" class="btn btn-default" ng-click="$form.$cancel()">'+
                      '<span class="glyphicon glyphicon-remove"></span>'+
                    '</button>',

@@ -77,8 +77,8 @@
                     </div>
                       <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                        <input ng-hide="isLoadingTask" ng-click="addTags()" type="submit" class="btn green" value="Add">
-                        <input ng-show="isLoadingTask" type="submit" class="btn green" value="Loading..." disabled>
+                        <input  ng-click="addTags()" type="submit" class="btn green" value="Add">
+                        <!--input ng-show="isLoadingTask" type="submit" class="btn green" value="Loading..." disabled-->
                       </div>
                   </form>
                 </div>
@@ -110,8 +110,8 @@
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
                 
-                <input ng-hide="isLoading" ng-click="addNewContributors()" type="submit" class="btn green" value="{{ _('Add this account') }}">
-                <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
+                <input  ng-click="addNewContributors()" type="submit" class="btn green" value="{{ _('Add this user') }}">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled-->
               </div>
                </form>
                </div>
@@ -695,8 +695,8 @@
 
                   </div>
                   <div class="col-md-6">
-                    <input type="submit" ng-hide="isLoading" ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
-                    <input type="submit" ng-show="isLoading" class="btn green pull-right" value="{{ _('Loading...') }}">
+                    <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
+                    <!--input type="submit" ng-show="isLoading" class="btn green pull-right" value="{{ _('Loading...') }}"-->
                   </div>
                   </div>
                 </form>
@@ -721,7 +721,7 @@
                     </button></li>
                   </ul>
                 </div>
-                <h3 class="pagination pull-right" ng-show="isLoading">{{ _('Loading') }}...</h3>
+                <!--h3 class="pagination pull-right" ng-show="isLoading">{{ _('Loading') }}...</h3-->
           </div>
         <!-- END PAGE CONTENT-->
       </div>
