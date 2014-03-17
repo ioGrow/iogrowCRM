@@ -9,6 +9,7 @@ from protorpc import messages
 from endpoints_proto_datastore.ndb import EndpointsModel
 from model import Userinfo
 from iomodels.crmengine.tags import Tag,TagSchema
+from iomodels.crmengine.notes import Topic, AuthorSchema,DiscussionAboutSchema
 from iograph import Edge
 from protorpc import messages
 from protorpc import message_types
@@ -48,6 +49,9 @@ class DocumentSchema(messages.Message):
     created_at = messages.StringField(10)
     updated_at = messages.StringField(11)
     access = messages.StringField(12)
+    about = messages.MessageField(DiscussionAboutSchema,13)
+    created_by = messages.MessageField(AuthorSchema,14)
+
 
 class DocumentListResponse(messages.Message):
     items = messages.MessageField(DocumentSchema, 1, repeated=True)
@@ -147,6 +151,51 @@ class Document(EndpointsModel):
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)
 
+    @classmethod
+    def get_schema(cls,user_from_email,request):
+        document = cls.get_by_id( int(request.id) )
+        if document is None:
+            raise endpoints.NotFoundException('Document not found.')
+        tag_list = Tag.list_by_parent(parent_key = document.key)
+        about = None
+        edge_list = Edge.list(start_node=document.key,kind='related_to')
+        for edge in edge_list['items']:
+            about_kind = edge.end_node.kind()
+            parent = edge.end_node.get()
+            if parent:
+                if about_kind == 'Contact' or about_kind == 'Lead':
+                    about_name = parent.firstname + ' ' + parent.lastname
+                else:
+                    about_name = parent.name
+                about = DiscussionAboutSchema(  
+                                                kind=about_kind,
+                                                id=str(parent.key.id()),
+                                                name=about_name
+                                            )
+        author_schema = None
+        if document.author:
+            author_schema = AuthorSchema(
+                                    google_user_id = document.author.google_user_id,
+                                    display_name = document.author.display_name,
+                                    google_public_profile_url = document.author.google_public_profile_url,
+                                    photo = document.author.photo)
+        document_schema = DocumentSchema(
+                                    id = str( document.key.id() ),
+                                    entityKey = document.key.urlsafe(),
+                                    title = document.title,
+                                    resource_id = document.resource_id,
+                                    alternateLink = document.alternateLink,
+                                    thumbnailLink = document.thumbnailLink,
+                                    embedLink = document.embedLink,
+                                    mimeType = document.mimeType,
+                                    access = document.access,
+                                    tags = tag_list,
+                                    about = about,
+                                    created_by = author_schema,
+                                    created_at = document.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                    updated_at = document.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                    )
+        return document_schema
     @classmethod
     def list_by_parent(cls,parent_key,request):
         document_list = []

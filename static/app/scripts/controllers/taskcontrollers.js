@@ -13,7 +13,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      $scope.currentPagecomment = 01;
      $scope.currentPage = 01;
      $scope.pagescomment = [];
-     
+     $scope.taskSelected=false;
      $scope.notes = [];  
      $scope.users = [];
      
@@ -33,6 +33,9 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      $scope.refreshToken = function() {
             Auth.refreshToken();
      };
+     $scope.checkOptions=function(){
+        $scope.taskSelected=!$scope.taskSelected;
+     }
    $scope.listNextPageItemscomment= function(){
         
         
@@ -121,18 +124,20 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
 
     $scope.addComment = function(comment){
 
-      var params ={'discussion':$scope.task.entityKey,
-        'content':$scope.comment.content
-      };
+      var params ={
+                  'about':$scope.task.entityKey,
+                  'content':$scope.comment.content
+                };
       Comment.insert($scope,params);
       $scope.comment.content='';
      
       
     };
     $scope.ListComments = function(){
-      var params = {'discussion':$scope.task.entityKey,
-                     'limit':5,
-                      'order':'-updated_at'};
+      var params = {
+                    'about':$scope.task.entityKey,
+                    'limit':7
+                   };
       Comment.list($scope,params);
       
       
