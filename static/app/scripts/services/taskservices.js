@@ -15,6 +15,7 @@ topicservices.factory('Task', function($http) {
                 var url = Task.getUrl($scope.task.about.kind,$scope.task.about.id);
                $scope.uri =url;
                }
+               $scope.isContentLoaded = true;
                
                $scope.ListComments();
                $scope.listContributors();
