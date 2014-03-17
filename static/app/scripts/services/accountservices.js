@@ -390,7 +390,10 @@ accountservices.factory('Search', function($http) {
           break;
         case 'Document' :
           base_url = '#/documents/show/';
-          break;        
+          break;
+          case 'Task' :
+          base_url = '#/tasks/show/';
+          break;       
 
         }
 
