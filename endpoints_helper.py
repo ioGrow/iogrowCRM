@@ -38,6 +38,11 @@ class EndpointsHelper():
         parent.put_index(data)
 
     @classmethod
+    def delete_document_from_index(cls,id):
+        search_index = search.Index(name="GlobalIndex")
+        search_index.delete(str(id))
+
+    @classmethod
     def require_iogrow_user(cls):
         user = endpoints.get_current_user()
         if user is None:

@@ -171,7 +171,7 @@ class Note(EndpointsModel):
                                 photo = note.author.photo
                             )
         about = None
-        edge_list = Edge.list(start_node=note.key,kind='related_to')
+        edge_list = Edge.list(start_node=note.key,kind='parents')
         for edge in edge_list['items']:
             about_kind = edge.end_node.kind()
             parent = edge.end_node.get()

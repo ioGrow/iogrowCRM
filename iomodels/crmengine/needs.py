@@ -175,7 +175,7 @@ class Need(EndpointsModel):
             Edge.insert(start_node = parent_key,
                       end_node = need_key_async,
                       kind = 'needs',
-                      inverse_edge = 'need_related_to')
+                      inverse_edge = 'parents')
             EndpointsHelper.update_edge_indexes(
                                             parent_key = need_key_async,
                                             kind = 'needs',

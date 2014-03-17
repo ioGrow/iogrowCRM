@@ -1,14 +1,32 @@
 from google.appengine.ext import ndb
 from google.appengine.datastore.datastore_query import Cursor
 from protorpc import messages
-
+from endpoints_helper import EndpointsHelper
 INVERSED_EDGES = {
-            'tags': 'tagged_on',
-            'tagged_on': 'tags',
             'assignees' : 'assigned_to',
-            'assigned_to' : 'assignees',
-            'tasks' : 'related_to',
-            'needs': 'need_related_to'
+            'cases' : 'parents',
+            'comments': 'parents',
+            'contacts': 'parents',
+            'documents':'parents',
+            'events':'parents',
+            'needs': 'parents',
+            'parents': ['cases','comments', 'contacts','documents','events','needs','tasks','topics'],
+            'tagged_on': 'tags',
+            'tags': 'tagged_on',
+            'tasks' : 'parents',
+            'topics':'parents'
+            }
+
+DELETED_ON_CASCADE = {
+            'Task' : ['comments'],
+            'Event' : ['comments'],
+            'Note' : ['comments'],
+            'Document' : ['comments'],
+            'Account' : ['tasks','topics','documents','events','needs'],
+            'Contact' : ['tasks','topics','documents','events'],
+            'Opportunity' : ['tasks','topics','documents','events'],
+            'Case': ['tasks','topics','documents','events'],
+            'Lead': ['tasks','topics','documents','events']
             }
 
 # The message class that defines Record schema for InfoNode attributes
@@ -90,20 +108,50 @@ class Edge(ndb.Expando):
         return results
     @classmethod
     def delete(cls, edge_key):
-         existing_edge = edge_key.get()
-         start_node = existing_edge.start_node 
-         end_node = existing_edge.end_node
-         kind = existing_edge.kind
-
-         existing_edge.key.delete()
-         inversed_edge = cls.query(cls.start_node==end_node, cls.end_node == start_node, cls.kind==INVERSED_EDGES[kind]).get()
-         if inversed_edge:
-             inversed_edge.key.delete()
+        existing_edge = edge_key.get()
+        start_node = existing_edge.start_node 
+        end_node = existing_edge.end_node
+        kind = existing_edge.kind
+        existing_edge.key.delete()
+        if kind in INVERSED_EDGES.keys():
+            inversed_edge = cls.query(
+                                    cls.start_node==end_node,
+                                    cls.end_node == start_node,
+                                    cls.kind.IN(INVERSED_EDGES[kind])).get()
+            if inversed_edge:
+                inversed_edge.key.delete()
     @classmethod
     def delete_all(cls, start_node):
          edges = cls.query(ndb.OR(cls.start_node==start_node,cls.end_node==start_node) ).fetch()
          for edge in edges:
             edge.key.delete()
+    
+    @classmethod
+    def delete_all_cascade(cls, start_node):
+        EndpointsHelper.delete_document_from_index(start_node.id())
+        start_node_kind = start_node.kind()
+        edges = cls.query( cls.start_node==start_node ).fetch()
+        for edge in edges:
+            # check if we should delete subGraph or not
+            print '$$$$$$$$$$$$$$$$$$$$$$$@@@@@@===1======$$$$$$$$$$$$$$$$$$$$$$$$$'
+            print start_node_kind
+            if start_node_kind in DELETED_ON_CASCADE.keys():
+                print '$$$$$$$$$$$$$$$$$$$$$$$@@@@@@===yes in mapping======$$$$$$$$$$$$$$$$$$$$$$$$$'
+                print edge.kind
+                if edge.kind in DELETED_ON_CASCADE[start_node_kind]:
+                    print '$$$$$$$$$$$$$$$$$$$$$$$@@@@@@===recursive======$$$$$$$$$$$$$$$$$$$$$$$$$'
+                    cls.delete_all_cascade(start_node = edge.end_node)
+            print '$$$$$$$$$$$$$$$$$$$$$$$@@@@@@===delete the edge ======$$$$$$$$$$$$$$$$$$$$$$$$$'
+            cls.delete(edge.key)
+        print '$$$$$$$$$$$$$$$$$$$$$$$@@@@@@===delete the node ======$$$$$$$$$$$$$$$$$$$$$$$$$'
+        start_node.delete()
+
+            
+
+    @classmethod
+    def list_all_inbound(cls, end_node):
+        edges = cls.query( cls.end_node==end_node ).fetch()
+        return edges
 
     @classmethod
     def find(cls, start_node,end_node_set,kind,operation):
