@@ -212,9 +212,8 @@ leadservices.factory('Lead', function($http) {
   };
   Lead.convert = function($scope,id){
       $scope.isLoading = true;
-      gapi.client.crmengine.leads.convert(id).execute(function(resp) {
-         console.log('in insert resp');
-         console.log(resp);
+      gapi.client.crmengine.leads.convertv2(id).execute(function(resp) {
+         
          if(!resp.code){
           $scope.isLoading = false;
           $('#convertLeadModal').modal('hide');
