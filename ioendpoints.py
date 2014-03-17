@@ -2915,6 +2915,16 @@ class CrmEngineApi(remote.Service):
     def TopicList(self, query):
         return query
 
+    # tasks.patch api
+    @endpoints.method(TaskSchema, TaskSchema,
+                      path='tasks/patch', http_method='PATCH',
+                      name='tasks.patch')
+    def tasks_patch_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Task.patch(
+                    user_from_email = user_from_email,
+                    request = request
+                    )
     # Users APIs
     # users.get api
     @User.method(request_fields=('id',),path='users/{id}', http_method='GET', name='users.get')
