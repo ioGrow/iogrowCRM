@@ -14,6 +14,15 @@
 </div>
     
 <div  class="page-content">
+<div class="loader-container row" ng-show="isLoading">
+      <div class="loader-dialog col-md-4 col-md-offset-4 ">
+        <div class="loader-content">
+          Loading...
+        </div>
+      </div>
+      
+    </div>
+
     
 
    <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
@@ -140,8 +149,8 @@
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
                 
-                <input ng-hide="isLoading" ng-click="save(casee)" type="submit" class="btn green" value="Add this case">
-                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                <input  ng-click="save(casee)" type="submit" class="btn green" value="Add this case">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
               </div>
                </form>
                 </div>
@@ -293,7 +302,7 @@
               </div><!--/inner-cards-container-->
                 <div class="row">
                 <div class="col-md-12">
-                  <div class="pagination pull-right" ng-hide="isLoading">
+                  <div class="pagination pull-right" >
                   
                   <!--ul class="list-unstyled list-inline"-->
                     <button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="casepagination.prev">
@@ -305,7 +314,7 @@
                     </button>
                   <!--/ul-->
                 </div>
-                <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                <!--h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3-->
             </div>
           </div>
               </div>
@@ -359,8 +368,8 @@
 
                   </div>
                   <div class="col-md-6">
-                    <input type="submit" ng-hide="isLoading" ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
-                    <input type="submit" ng-show="isLoading" class="btn green pull-right" value="{{ _('Loading...') }}">
+                    <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
+                    <!--input type="submit" ng-show="isLoading" class="btn green pull-right" value="{{ _('Loading...') }}"-->
                   </div>
                   </div>
                 </form>

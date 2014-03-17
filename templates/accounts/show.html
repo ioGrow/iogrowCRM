@@ -175,7 +175,7 @@
                                           <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="note.content"></textarea>                
                                         </div>                         
                                          <div class="pull-right">
-                                            <input  type="submit" class="btn green" value="{{ _('Add this note') }}">
+                                            <input ng-disabled="isLoading"  type="submit" class="btn green" value="{{ _('Add this note') }}">
                                             <!--input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled-->
                                          </div>
                                     </form>
@@ -927,7 +927,7 @@
                                              </div>
                                          <div class="pull-right">
                                          
-                                            <!--input ng-hide="isLoading" type="submit" class="btn green" value="Send"-->
+                                            <input ng-disabled="isLoading" type="submit" class="btn green" value="Send">
 
                                           
                                           </div>
