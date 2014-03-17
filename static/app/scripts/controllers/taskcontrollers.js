@@ -13,7 +13,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      $scope.currentPagecomment = 01;
      $scope.currentPage = 01;
      $scope.pagescomment = [];
-     
+     $scope.taskSelected=false;
      $scope.notes = [];  
      $scope.users = [];
      
@@ -33,6 +33,9 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      $scope.refreshToken = function() {
             Auth.refreshToken();
      };
+     $scope.checkOptions=function(){
+        $scope.taskSelected=!$scope.taskSelected;
+     }
    $scope.listNextPageItemscomment= function(){
         
         

@@ -11,8 +11,11 @@ topicservices.factory('Task', function($http) {
           gapi.client.crmengine.tasks.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.task = resp;
-               var url = Task.getUrl($scope.task.about.kind,$scope.task.about.id);
+               if($scope.task.about){
+                var url = Task.getUrl($scope.task.about.kind,$scope.task.about.id);
                $scope.uri =url;
+               }
+               
                $scope.ListComments();
                $scope.listContributors();
                document.title = "Task: " + $scope.task.title ;
