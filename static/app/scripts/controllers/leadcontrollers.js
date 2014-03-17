@@ -56,7 +56,7 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge'
           console.log((index%3)+1);
           return (index%3)+1;
         }
-     }
+     };
         // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
             Auth.refreshToken();

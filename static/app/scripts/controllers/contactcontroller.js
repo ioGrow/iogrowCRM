@@ -52,7 +52,7 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact','Tag','Ed
           console.log((index%3)+1);
           return (index%3)+1;
         }
-     }
+     };
         // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
             Auth.refreshToken();
