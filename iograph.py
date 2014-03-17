@@ -58,20 +58,31 @@ class Edge(ndb.Expando):
         return edge_key
     
     @classmethod
-    def list(cls,start_node,kind,limit=1000,pageToken=None):
+    def list(cls,start_node,kind,limit=1000,pageToken=None,order='DESC'):
         curs = Cursor(urlsafe=pageToken)
         if limit:
             limit = int(limit)
         else:
             limit = 1000
-        edges, next_curs, more =  cls.query(
-                                                cls.start_node==start_node, 
-                                                cls.kind==kind
-                                            ).order(
-                                                    -cls.updated_at
-                                                ).fetch_page(
-                                                    limit, start_cursor=curs
-                                                )
+        if order == 'DESC':
+            edges, next_curs, more =  cls.query(
+                                                    cls.start_node==start_node, 
+                                                    cls.kind==kind
+                                                ).order(
+                                                        -cls.updated_at
+                                                    ).fetch_page(
+                                                        limit, start_cursor=curs
+                                                    )
+        elif order == 'ASC':
+            edges, next_curs, more =  cls.query(
+                                                    cls.start_node==start_node, 
+                                                    cls.kind==kind
+                                                ).order(
+                                                        cls.updated_at
+                                                    ).fetch_page(
+                                                        limit, start_cursor=curs
+                                                    )
+
         results = {}
         results['items'] = edges
         results['next_curs'] = next_curs

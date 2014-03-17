@@ -147,11 +147,21 @@ class CommentInsertRequest(messages.Message):
     content = messages.StringField(2,required=True)
 
 class CommentSchema(messages.Message):
-    author = messages.MessageField(AuthorSchema, 1, required = True)
-    content = messages.StringField(2,required=True)
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    author = messages.MessageField(AuthorSchema, 3, required = True)
+    content = messages.StringField(4,required=True)
+    created_at = messages.StringField(5)
+    updated_at = messages.StringField(6)
 
+class CommentListRequest(messages.Message):
+    about = messages.StringField(1)
+    limit = messages.IntegerField(2)
+    pageToken = messages.StringField(3)
 
-
+class CommentListResponse(messages.Message):
+    items = messages.MessageField(CommentSchema, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
 
 class EdgeSchema(messages.Message):
     id = messages.StringField(1)
@@ -912,7 +922,7 @@ class CrmEngineApi(remote.Service):
         return my_model
 
     # comments.insert v2 api
-    @endpoints.method(CommentInsertRequest, message_types.VoidMessage,
+    @endpoints.method(CommentInsertRequest, CommentSchema,
                         path='comments/insertv2', http_method='POST',
                         name='comments.insertv2')
     def comment_insert(self, request):
@@ -952,7 +962,21 @@ class CrmEngineApi(remote.Service):
                     kind = 'comments',
                     inverse_edge = 'related_to'
                 )
-        return message_types.VoidMessage()
+        author_schema = AuthorSchema(
+                                google_user_id = comment.author.google_user_id,
+                                display_name = comment.author.display_name,
+                                google_public_profile_url = comment.author.google_public_profile_url,
+                                photo = comment.author.photo
+                            )
+        comment_schema = CommentSchema(
+                                        id = str(entityKey.id()),
+                                        entityKey = entityKey.urlsafe(),
+                                        author =  author_schema,
+                                        content = comment.content,
+                                        created_at = comment.created_at.isoformat(),
+                                        updated_at = comment.updated_at.isoformat()
+                                    )
+        return comment_schema
 
     # comments.insert api
     @Comment.method(
@@ -973,6 +997,46 @@ class CrmEngineApi(remote.Service):
         my_model.put()
         return my_model
 
+    # comments.listv2 v2 api
+    @endpoints.method(CommentListRequest, CommentListResponse,
+                        path='comments/listv2', http_method='POST',
+                        name='comments.listv2')
+    def comment_list(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        comment_list = []
+        parent_key = ndb.Key(urlsafe = request.about)
+        comment_edge_list = Edge.list(
+                                start_node = parent_key,
+                                kind='comments',
+                                limit=request.limit,
+                                pageToken=request.pageToken,
+                                order = 'ASC'
+                                )
+        for edge in comment_edge_list['items']:
+            comment = edge.end_node.get()
+            author_schema = AuthorSchema(
+                                google_user_id = comment.author.google_user_id,
+                                display_name = comment.author.display_name,
+                                google_public_profile_url = comment.author.google_public_profile_url,
+                                photo = comment.author.photo
+                            )
+            comment_schema = CommentSchema(
+                                        id = str(edge.end_node.id()),
+                                        entityKey = edge.end_node.urlsafe(),
+                                        author =  author_schema,
+                                        content = comment.content,
+                                        created_at = comment.created_at.isoformat(),
+                                        updated_at = comment.updated_at.isoformat()
+                                    )
+            comment_list.append(comment_schema)
+        if comment_edge_list['next_curs'] and comment_edge_list['more']:
+            comment_next_curs = comment_edge_list['next_curs'].urlsafe()
+        else:
+            comment_next_curs = None
+        return CommentListResponse(
+                                    items = comment_list,
+                                    nextPageToken = comment_next_curs
+                                )
     # comments.list API
     @Comment.query_method(
                           user_required=True,
