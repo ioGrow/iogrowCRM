@@ -47,6 +47,7 @@ app.controller('SearchFormController', ['$scope','Search',
         annyang.start();
       }
      var params ={};
+     $scope.results =[];
      $scope.result = undefined;
      $scope.q = undefined;
      $scope.$watch('searchQuery', function() {

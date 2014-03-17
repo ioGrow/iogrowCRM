@@ -21,6 +21,17 @@ class DiscussionAboutSchema(messages.Message):
     id = messages.StringField(2)
     name = messages.StringField(3)
 
+class NoteSchema(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    title = messages.StringField(3)
+    content = messages.StringField(4)
+    comments = messages.IntegerField(5)
+    about = messages.MessageField(DiscussionAboutSchema,6)
+    created_by = messages.MessageField(AuthorSchema,7)
+    created_at = messages.StringField(8)
+    updated_at = messages.StringField(9)
+
 class TopicSchema(messages.Message):
     id = messages.StringField(1)
     entityKey = messages.StringField(2)
@@ -147,6 +158,45 @@ class Note(EndpointsModel):
                ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)
+
+    @classmethod
+    def get_schema(cls,user_from_email,request):
+        note = cls.get_by_id( int(request.id) )
+        if note is None:
+            raise endpoints.NotFoundException('Note not found.')
+        author = AuthorSchema(
+                                google_user_id = note.author.google_user_id,
+                                display_name = note.author.display_name,
+                                google_public_profile_url = note.author.google_public_profile_url,
+                                photo = note.author.photo
+                            )
+        about = None
+        edge_list = Edge.list(start_node=note.key,kind='related_to')
+        for edge in edge_list['items']:
+            about_kind = edge.end_node.kind()
+            parent = edge.end_node.get()
+            if parent:
+                if about_kind == 'Contact' or about_kind == 'Lead':
+                    about_name = parent.firstname + ' ' + parent.lastname
+                else:
+                    about_name = parent.name
+                about = DiscussionAboutSchema(  
+                                                kind=about_kind,
+                                                id=str(parent.key.id()),
+                                                name=about_name
+                                            )
+        note_schema = NoteSchema(
+                                    id = str(note.key.id()),
+                                    entityKey = note.key.urlsafe(),
+                                    title = note.title,
+                                    content = note.content,
+                                    about = about,
+                                    created_by = author,
+                                    created_at = note.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                    updated_at = note.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                )
+        return note_schema
+                           
 
     @classmethod
     def list_by_parent(cls,parent_key,request):

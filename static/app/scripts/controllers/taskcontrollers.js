@@ -124,18 +124,20 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
 
     $scope.addComment = function(comment){
 
-      var params ={'discussion':$scope.task.entityKey,
-        'content':$scope.comment.content
-      };
+      var params ={
+                  'about':$scope.task.entityKey,
+                  'content':$scope.comment.content
+                };
       Comment.insert($scope,params);
       $scope.comment.content='';
      
       
     };
     $scope.ListComments = function(){
-      var params = {'discussion':$scope.task.entityKey,
-                     'limit':5,
-                      'order':'-updated_at'};
+      var params = {
+                    'about':$scope.task.entityKey,
+                    'limit':7
+                   };
       Comment.list($scope,params);
       
       

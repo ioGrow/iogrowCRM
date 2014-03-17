@@ -33,7 +33,7 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 from iograph import Node,Edge,RecordSchema,InfoNodeResponse,InfoNodeConnectionSchema,InfoNodeListResponse
 from iomodels.crmengine.accounts import Account,AccountGetRequest,AccountSchema,AccountListRequest,AccountListResponse,AccountSearchResult,AccountSearchResults
 from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertRequest,ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults
-from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema
+from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema,NoteSchema
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
 from iomodels.crmengine.opportunities import Opportunity,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest
@@ -147,11 +147,21 @@ class CommentInsertRequest(messages.Message):
     content = messages.StringField(2,required=True)
 
 class CommentSchema(messages.Message):
-    author = messages.MessageField(AuthorSchema, 1, required = True)
-    content = messages.StringField(2,required=True)
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    author = messages.MessageField(AuthorSchema, 3, required = True)
+    content = messages.StringField(4,required=True)
+    created_at = messages.StringField(5)
+    updated_at = messages.StringField(6)
 
+class CommentListRequest(messages.Message):
+    about = messages.StringField(1)
+    limit = messages.IntegerField(2)
+    pageToken = messages.StringField(3)
 
-
+class CommentListResponse(messages.Message):
+    items = messages.MessageField(CommentSchema, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
 
 class EdgeSchema(messages.Message):
     id = messages.StringField(1)
@@ -540,7 +550,10 @@ class CrmEngineApi(remote.Service):
         print query_string
         search_results = []
         count = 1
-        limit = request.limit
+        if request.limit:
+            limit = int(request.limit)
+        else:
+            limit = 10
         next_cursor = None
         if request.pageToken:
             cursor = search.Cursor(web_safe_string=request.pageToken)
@@ -553,10 +566,14 @@ class CrmEngineApi(remote.Service):
         query = search.Query(query_string=query_string,options=options)
         try:
             if query:
-                results = index.search(query)
-                total_matches = results.number_found
-
+                result = index.search(query)
+                #total_matches = results.number_found
                 # Iterate over the documents in the results
+                if len(result.results) == limit + 1:
+                    next_cursor = result.results[-1].cursor.web_safe_string
+                else:
+                    next_cursor = None
+                results = result.results[:limit]
                 for scored_document in results:
                     kwargs = {
                         "id" : scored_document.doc_id,
@@ -566,15 +583,6 @@ class CrmEngineApi(remote.Service):
                         if e.name in ["title","type"]:
                             kwargs[e.name]=e.value
                     search_results.append(SearchResult(**kwargs))
-
-                    next_cursor = scored_document.cursor.web_safe_string
-                if next_cursor:
-                    next_query_options = search.QueryOptions(limit=1,cursor=scored_document.cursor)
-                    next_query = search.Query(query_string=query_string,options=next_query_options)
-                    if next_query:
-                        next_results = index.search(next_query)
-                        if len(next_results.results)==0:
-                            next_cursor = None
         except search.Error:
             logging.exception('Search failed')
         return SearchResults(items = search_results,nextPageToken=next_cursor)
@@ -914,7 +922,7 @@ class CrmEngineApi(remote.Service):
         return my_model
 
     # comments.insert v2 api
-    @endpoints.method(CommentInsertRequest, message_types.VoidMessage,
+    @endpoints.method(CommentInsertRequest, CommentSchema,
                         path='comments/insertv2', http_method='POST',
                         name='comments.insertv2')
     def comment_insert(self, request):
@@ -954,7 +962,21 @@ class CrmEngineApi(remote.Service):
                     kind = 'comments',
                     inverse_edge = 'related_to'
                 )
-        return message_types.VoidMessage()
+        author_schema = AuthorSchema(
+                                google_user_id = comment.author.google_user_id,
+                                display_name = comment.author.display_name,
+                                google_public_profile_url = comment.author.google_public_profile_url,
+                                photo = comment.author.photo
+                            )
+        comment_schema = CommentSchema(
+                                        id = str(entityKey.id()),
+                                        entityKey = entityKey.urlsafe(),
+                                        author =  author_schema,
+                                        content = comment.content,
+                                        created_at = comment.created_at.isoformat(),
+                                        updated_at = comment.updated_at.isoformat()
+                                    )
+        return comment_schema
 
     # comments.insert api
     @Comment.method(
@@ -975,6 +997,46 @@ class CrmEngineApi(remote.Service):
         my_model.put()
         return my_model
 
+    # comments.listv2 v2 api
+    @endpoints.method(CommentListRequest, CommentListResponse,
+                        path='comments/listv2', http_method='POST',
+                        name='comments.listv2')
+    def comment_list(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        comment_list = []
+        parent_key = ndb.Key(urlsafe = request.about)
+        comment_edge_list = Edge.list(
+                                start_node = parent_key,
+                                kind='comments',
+                                limit=request.limit,
+                                pageToken=request.pageToken,
+                                order = 'ASC'
+                                )
+        for edge in comment_edge_list['items']:
+            comment = edge.end_node.get()
+            author_schema = AuthorSchema(
+                                google_user_id = comment.author.google_user_id,
+                                display_name = comment.author.display_name,
+                                google_public_profile_url = comment.author.google_public_profile_url,
+                                photo = comment.author.photo
+                            )
+            comment_schema = CommentSchema(
+                                        id = str(edge.end_node.id()),
+                                        entityKey = edge.end_node.urlsafe(),
+                                        author =  author_schema,
+                                        content = comment.content,
+                                        created_at = comment.created_at.isoformat(),
+                                        updated_at = comment.updated_at.isoformat()
+                                    )
+            comment_list.append(comment_schema)
+        if comment_edge_list['next_curs'] and comment_edge_list['more']:
+            comment_next_curs = comment_edge_list['next_curs'].urlsafe()
+        else:
+            comment_next_curs = None
+        return CommentListResponse(
+                                    items = comment_list,
+                                    nextPageToken = comment_next_curs
+                                )
     # comments.list API
     @Comment.query_method(
                           user_required=True,
@@ -1268,51 +1330,15 @@ class CrmEngineApi(remote.Service):
                             )
 
     # documents.get API
-    @endpoints.method(ID_RESOURCE, DiscussionResponse,
+    @endpoints.method(ID_RESOURCE, DocumentSchema,
                         path='documents/{id}', http_method='GET',
                         name='documents.get')
     def document_get(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        try:
-            document = Document.get_by_id(int(request.id))
-            if document is None:
-                raise endpoints.NotFoundException('Document not found.' %
-                                                (request.id,))
-
-            about_item_id = int(document.about_item)
-            try:
-                about_object = OBJECTS[document.about_kind].get_by_id(about_item_id)
-                if document.about_kind == 'Contact' or document.about_kind == 'Lead':
-                    about_name = about_object.firstname + ' ' + about_object.lastname
-                else:
-                    about_name = about_object.name
-                about_response = DiscussionAboutSchema(kind=document.about_kind,
-                                                         id=document.about_item,
-                                                         name=about_name)
-                author = AuthorSchema(google_user_id = document.author.google_user_id,
-                                        display_name = document.author.display_name,
-                                        google_public_profile_url = document.author.google_public_profile_url,
-                                        photo = document.author.photo)
-
-
-                response = DiscussionResponse(id=request.id,
-                                                entityKey= document.key.urlsafe(),
-                                                title= document.title,
-                                                content= document.embedLink,
-                                                comments=document.comments,
-                                                about=about_response,
-                                                author= author)
-                return response
-            except (IndexError, TypeError):
-                raise endpoints.NotFoundException('About object %s not found.' %
-                                                    (request.id,))
-
-
-
-
-        except (IndexError, TypeError):
-            raise endpoints.NotFoundException('Note %s not found.' %
-                                                (request.id,))
+        return Document.get_schema(
+                                user_from_email = user_from_email,
+                                request = request
+                            )
     # documents.insertv2 api
     @endpoints.method(DocumentInsertRequest, DocumentSchema,
                       path='documents/insertv2', http_method='POST',
@@ -2056,45 +2082,15 @@ class CrmEngineApi(remote.Service):
 
     # Notes APIs
     # notes.get api
-    @endpoints.method(ID_RESOURCE, DiscussionResponse,
+    @endpoints.method(ID_RESOURCE, NoteSchema,
                         path='notes/{id}', http_method='GET',
                         name='notes.get')
     def NoteGet(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        try:
-            note = Note.get_by_id(int(request.id))
-            about_item_id = int(note.about_item)
-            try:
-                about_object = OBJECTS[note.about_kind].get_by_id(about_item_id)
-                if note.about_kind == 'Contact' or note.about_kind == 'Lead':
-                    about_name = about_object.firstname + ' ' + about_object.lastname
-                else:
-                    about_name = about_object.name
-                about_response = DiscussionAboutSchema(kind=note.about_kind,
-                                                         id=note.about_item,
-                                                         name=about_name)
-                author = AuthorSchema(google_user_id = note.author.google_user_id,
-                                        display_name = note.author.display_name,
-                                        google_public_profile_url = note.author.google_public_profile_url,
-                                        photo = note.author.photo)
-
-
-                response = DiscussionResponse(id=request.id,
-                                                entityKey= note.key.urlsafe(),
-                                                title= note.title,
-                                                content= note.content,
-                                                comments=note.comments,
-                                                about=about_response,
-                                                author= author)
-                return response
-            except (IndexError, TypeError):
-                raise endpoints.NotFoundException('About object %s not found.' %
-                                                  (request.id,))
-
-
-        except (IndexError, TypeError):
-            raise endpoints.NotFoundException('Note %s not found.' %
-                                                (request.id,))
+        return Note.get_schema(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
 
     # notes.insert v2 api
     @endpoints.method(NoteInsertRequest, message_types.VoidMessage,

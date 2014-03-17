@@ -119,19 +119,8 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact','Tag','Ed
      $scope.q = undefined;
      $scope.$watch('searchAccountQuery', function() {
          params_search_account['q'] = $scope.searchAccountQuery;
-         gapi.client.crmengine.accounts.search(params_search_account).execute(function(resp) {
-            console.log("in accouts.search api");
-            console.log(params_search_account);
-
-            console.log(resp);
-            if (resp.items){
-              $scope.results = resp.items;
-              console.log($scope.results);
-              $scope.$apply();
-            };
-            
-          });
-         console.log($scope.results);
+         Account.search($scope,params_search_account);
+        
       });
       $scope.selectAccount = function(){
         $scope.contact.account = $scope.searchAccountQuery;
