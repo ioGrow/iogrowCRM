@@ -447,7 +447,7 @@ class Task(EndpointsModel):
         if request.status:
             status = request.status
         else:
-            status = 'pending'
+            status = 'open'
         if request.access:
             access = request.access
         else:
@@ -457,13 +457,12 @@ class Task(EndpointsModel):
         author.display_name = user_from_email.google_display_name
         author.photo = user_from_email.google_public_profile_photo_url
         task = Task(title = request.title,
-                    status = request.status,
+                    status = status,
                     owner = user_from_email.google_user_id,
                     organization = user_from_email.organization,
                     author = author)
         if request.due:
             task.due = datetime.datetime.strptime(request.due,"%Y-%m-%dT%H:%M:00.000000")
-            print '@@@@ yes i know #@@@@'
             try:
                 credentials = user_from_email.google_credentials
                 http = credentials.authorize(httplib2.Http(memcache))
@@ -480,9 +479,8 @@ class Task(EndpointsModel):
                   },
                   "summary": str(request.title)
                 }
-                print '***************Something here yes*********************'
                 created_event = service.events().insert(calendarId='primary',body=params).execute()
-                print '***************Something here no*********************'
+                
             except:
                 raise endpoints.UnauthorizedException('Invalid grant' )
                 return
