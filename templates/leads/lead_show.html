@@ -31,8 +31,8 @@
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
               
-               <input ng-hide="isLoading" type="submit" class="btn green" value="Create this document">
-                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+               <input  type="submit" class="btn green" value="Create this document">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                                         
             </form>
             </div>
@@ -58,6 +58,14 @@
 </div>
     
 <div  class="page-content">
+<div class="loader-container row" ng-show="isLoading">
+      <div class="loader-dialog col-md-4 col-md-offset-4 ">
+        <div class="loader-content">
+          Loading...
+        </div>
+      </div>
+      
+    </div>
 
       <div class="" ng-show="immediateFailed">
          <div class="col-md-12">  
@@ -88,8 +96,8 @@
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
                 
-                <input ng-hide="isLoading" ng-click="convert(lead)" type="submit" class="btn green" value="Convert this lead">
-                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                <input  ng-click="convert(lead)" type="submit" class="btn green" value="Convert this lead">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
               </div>
                </form>
                </div>
@@ -182,8 +190,8 @@
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
                 
-                <input ng-hide="isLoading" ng-click="deletelead()" type="submit" class="btn red" value="Delete this Lead">
-                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                <input ng-click="deletelead()" type="submit" class="btn red" value="Delete this Lead">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
               </div>
                </form>
                </div>
@@ -277,8 +285,8 @@
                                          
                                          <div class="pull-right">
                                          <!-- <input type="submit" class="btn btn-primary" value="Attach file">-->
-                                          <input ng-hide="isLoading" type="submit" class="btn green" value="Add this note">
-                                          <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                                          <input ng-disabled="isLoading"  type="submit" class="btn green" value="Add this note">
+                                          <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                                           </div>
                                         </form>
                                        </div>
@@ -301,7 +309,7 @@
                             </ul>
                             <div class="row">
                             <div class="col-md-12">
-                                <div class="pagination pull-right" ng-hide="isLoading">
+                                <div class="pagination pull-right" >
                                       
                                    
                                        <button ng-click="TopiclistPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="topicpagination.prev">
@@ -312,7 +320,7 @@
                                         </button>
                                      
                                     </div>
-                                    <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                                    <!--h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3-->
                               </div>
                               </div>
                             </div>
@@ -506,7 +514,7 @@
                            
                            <div class="pull-right">
                            
-                              <input ng-hide="isLoading" type="submit" class="btn green" value="Send">
+                              <input ng-disabled="isLoading"  type="submit" class="btn green" value="Send">
 
                             
                             </div>
@@ -588,8 +596,8 @@
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
               
-               <input ng-hide="isLoading" type="submit" class="btn green" value="Add this task">
-                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+               <input  type="submit" class="btn green" value="Add this task">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                                         
             </form>
             </div>
@@ -614,8 +622,8 @@
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
               
-               <input ng-hide="isLoading" type="submit" class="btn green" value="Create this document">
-                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+               <input  type="submit" class="btn green" value="Create this document">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                                         
             </form>
             </div>
@@ -654,8 +662,8 @@
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
               
-               <input ng-hide="isLoading" type="submit" class="btn green" value="{{_('Add this event')}}">
-                <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
+               <input  type="submit" class="btn green" value="{{_('Add this event')}}">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled-->
                                         
             </form>
             </div>
@@ -806,8 +814,8 @@
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
               
-                  <input ng-hide="isLoading" type="submit" class="btn green" value="Add this phone">
-                  <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                  <input  type="submit" class="btn green" value="Add this phone">
+                  <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
               </div>
                 </form>
                 </div>
@@ -835,8 +843,8 @@
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
               
-                  <input ng-hide="isLoading" type="submit" class="btn green" value="Add this email">
-                  <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                  <input  type="submit" class="btn green" value="Add this email">
+                  <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
               </div>
                 </form>
                 </div>
@@ -889,8 +897,8 @@
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
               
-                  <input ng-hide="isLoading" type="submit" class="btn green" value="Add this address">
-                  <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                  <input  type="submit" class="btn green" value="Add this address">
+                  <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
               </div>
                 </form>
                 </div>
@@ -922,8 +930,8 @@
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
               
-                  <input ng-hide="isLoading" type="submit" class="btn green" value="{{_('Add this Custom Field')}}">
-                  <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
+                  <input  type="submit" class="btn green" value="{{_('Add this Custom Field')}}">
+                  <!--input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled-->
               </div>
                 </form>
                 </div>
@@ -953,8 +961,8 @@
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
               
-                  <input ng-hide="isLoading" type="submit" class="btn green" value="Add this Website">
-                  <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                  <input  type="submit" class="btn green" value="Add this Website">
+                  <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
               </div>
                 </form>
                 </div>
@@ -983,8 +991,8 @@
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
               
-                  <input ng-hide="isLoading" type="submit" class="btn green" value="Add this Social link">
-                  <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                  <input  type="submit" class="btn green" value="Add this Social link">
+                  <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
               </div>
                 </form>
                 </div>
