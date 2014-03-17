@@ -339,6 +339,9 @@
                     <!--div class="tag-color" style="border-left: 4px solid <%=tag_item.color%>;">
                     </div-->
                     <span draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;"><%= tag_item.name %></span>
+                    <span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
+                      <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>  
+                    </span>
                     <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
                       <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
                     </form>
