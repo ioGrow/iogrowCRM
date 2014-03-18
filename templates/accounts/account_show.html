@@ -236,7 +236,7 @@
                                  
                                 </div>
                                   <ul class="list-unstyled contact-infos">
-                                    <li ng-repeat="email in infonodes.emails"> <a editable-text="email.email"> <%=email.email%> </a>  </li>
+                                    <li ng-repeat="email in infonodes.emails"> <a ng-click="assignParams('Infonode','email',email.entityKey,email.email)" editable-text="email.email" > <%=email.email%> </a>  </li>
                                     
                                     <li><a href="#emailmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new email address </a></li>
 
