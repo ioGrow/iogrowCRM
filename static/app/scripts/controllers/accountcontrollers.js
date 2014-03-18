@@ -438,6 +438,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        $scope.addingTask = false;
        $scope.sharing_with = [];
        $scope.edited_email = null;
+       $scope.currentParam={};
        //$scope.cases = {};
        //$scope.cases = [];
        $scope.opportunities = [];
@@ -603,6 +604,38 @@ $scope.ContactlistNextPageItems = function(){
           $scope.contactCurrentPage = $scope.contactCurrentPage - 1 ;
           Account.get($scope,params);
      }
+/// update account with inlineEdit
+  $scope.inlinePatch=function(kind,edge,name,entityKey,value){
+   
+   if ($scope.currentParam.kind=='Account') {
+         params = {};
+         Account.patch($scope,params);
+   }else{
+
+     
+     
+      /****the problem si in params object !!!!!!!!!!!!*/
+        params = {
+                  'entityKey': entityKey,
+                  'parent':$scope.account.entityKey,
+                  'kind':edge,
+                  'fields':[
+                     
+                      {
+                        "field": name,
+                        "value": value
+                      }
+                  ]
+        };
+         console.log('-----I am Here-----');
+           console.log(params);
+         InfoNode.patch($scope,params);
+   }
+
+  }
+  $scope.assignParams=function(kind,name,entityKey,value){
+    $scope.currentParam={'kind':kind,'data':{'name':name,'value':value,'entityKey':entityKey}};
+  }
 //HKA 07.12.2013 Manage Prev & Next Page on Related List Opportunities
 $scope.OpplistNextPageItems = function(){
         
