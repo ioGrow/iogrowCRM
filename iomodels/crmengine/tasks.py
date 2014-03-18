@@ -566,6 +566,9 @@ class Task(EndpointsModel):
                                 user_from_email = user_from_email,
                                 request = request
                             )
+    @classmethod
+    def cascade_delete(cls,entityKey):
+        Edge.delete_all_cascade(start_node = entityKey)
 
 
 
