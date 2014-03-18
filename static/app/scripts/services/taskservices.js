@@ -47,8 +47,8 @@ topicservices.factory('Task', function($http) {
             /*$scope.ListComments();
             $scope.listContributors();*/
             $scope.isLoadingTask = false;
-            $scope.listTags();
-            $scope.listTasks();
+           /* $scope.listTags();
+            $scope.listTasks();*/
             $scope.$apply();
 
             $('#EditTaskModal').modal('hide');

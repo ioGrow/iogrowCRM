@@ -74,13 +74,6 @@ Comment.insert = function($scope,comment){
       gapi.client.crmengine.comments.insertv2(comment).execute(function(resp) {
          
          if(!resp.code){
-
-          if ($scope.comments == undefined){
-            $scope.comments = [];
-          }
-          $scope.comments.push(resp);
-         
-          
           // TME_02_11_13 when a note is inserted reload topics
           //$scope.listTopics();
           $scope.isLoading = false;
