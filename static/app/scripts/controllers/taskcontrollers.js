@@ -1,5 +1,5 @@
-app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','Task','Topic','Comment','User','Contributor',
-   function($scope,$filter,$route,Auth,Note,Task,Topic,Comment,User,Contributor) {
+app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','Task','Tag','Topic','Comment','User','Contributor','Edge',
+   function($scope,$filter,$route,Auth,Note,Task,Tag,Topic,Comment,User,Contributor,Edge) {
 //HKA 14.11.2013 Controller to show Notes and add comments
      $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Tasks").addClass("active");
@@ -28,6 +28,8 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
           Task.get($scope,taskid);
 
           User.list($scope,{});
+           var varTagname = {'about_kind':'Task'};
+          Tag.list($scope,varTagname);
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -91,6 +93,11 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
         $scope.user = $scope.slected_memeber.google_display_name;
 
      };
+
+     $scope.edgeInserted = function () {
+       var taskid = {'id':$route.current.params.taskId};
+          Task.get($scope,taskid);
+     }
      $scope.addNewContributor = function(selected_user,role){
       console.log('*************** selected user ***********************');
       console.log(selected_user);
@@ -121,7 +128,41 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
                      'order':'-created_at'};
       Contributor.list($scope,params);
       };
+    $scope.closeTask = function(task){
+          params = {'id':task.id,
+            'status':'closed'
+            };
+            Task.patch($scope,params);
+      };
+      $scope.reopenTask = function(task){
+          params = {'id':task.id,
+            'status':'open'
+            };
+            Task.patch($scope,params);
+      };
+      $scope.addTags=function(task){
+        var tags=[];
+        var items = [];
+        tags=$('#select2_sample2').select2("val");
+        
+            angular.forEach(tags, function(tag){
+              var edge = {
+                'start_node': task.entityKey,
+                'end_node': tag,
+                'kind':'tags',
+                'inverse_edge': 'tagged_on'
+              };
+              items.push(edge);
+            });
 
+        params = {
+          'items': items
+        }
+
+        Edge.insert($scope,params);
+        $('#assigneeTagsToTask').modal('hide');
+
+     };
     $scope.addComment = function(comment){
 
       var params ={
@@ -152,6 +193,9 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
       $('#EditTaskModal').modal('show');
       
     };
+         $scope.showAssigneeTags=function(){
+        $('#assigneeTagsToTask').modal('show');
+     };
     $scope.updateTask = function(task){
       if (task.due){
 

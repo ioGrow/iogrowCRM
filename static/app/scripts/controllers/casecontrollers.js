@@ -51,6 +51,16 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
             var paramsTag = {'about_kind':'Case'};
             Tag.list($scope,paramsTag);
        };
+
+      $scope.getPosition= function(index){
+        if(index<3){
+         
+          return index+1;
+        }else{
+          console.log((index%3)+1);
+          return (index%3)+1;
+        }
+     };
         // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
             Auth.refreshToken();

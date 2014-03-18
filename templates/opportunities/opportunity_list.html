@@ -300,13 +300,15 @@
          <div class="col-md-9">
               <div class="inner-cards-container">
             
-              <div ng-repeat="opp in opportunities" class="col-lg-4 col-md-3 col-sm-6 col-xs-12">
-                <div class="dashboard-stat cards-small" droppable ng-drop="dropTag(opp)">
-                  
-                  <div class="details">
+              <div droppable ng-repeat="opp in opportunities" data-column="<%=getPosition($index)%>" class="cardElement" ng-drop="dropTag(opp)">
+                 <div class="cardHeader">
                     <a href="/#/opportunities/show/<%= opp.id %>"><h2 class="cardTitle">
                        <%=opp.name %>
                     </h2></a>
+                 </div>
+                  <hr>            
+                  <div class="cardDetails">
+                    
                     <div class="desc">
                     <div class="row margin-bottom-5"> 
                        <div class="col-md-12">                         
@@ -317,8 +319,9 @@
                                     </span>
                        </div>
                     </div> 
+                    </div>
                     <br/>
-                          <div class="row">
+                          <div class="row cardTags">
                           <div class="col-md-12">
                                <a ng-repeat="tag in opp.tags" href="/#/search/type:Opportunity tags:<%=tag.id%>"> <span class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
                                </a>
@@ -326,11 +329,17 @@
                           
                         </div>              
                     </div>
-                  </div>
-                                  
-                </div>
+                               
+                
               </div>
-               <div ng-show="blankStateopportunity" class="col-md-12 responsive" data-tablet="col-md-6" data-desktop="col-md-12">
+              <script type="text/javascript">
+                  $('.inner-cards-container').waterfall({ 
+                      colMinWidth: 200, 
+                      defaultContainerWidth: 800,
+                      autoresize: true
+                    });
+               </script>
+               <div ng-show="blankStateopportunity" data-span="3" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
                 <div class="dashboard-stat cards">
                   
                   
@@ -341,7 +350,7 @@
                   </div>
                 </div>
                 </div>
-                <div ng-show="isFiltering * !opportunities" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
+                <div ng-show="isFiltering * !opportunities" data-span="3" class="col-md-12  responsive" data-tablet="span6" data-desktop="span12">
                 <div class="dashboard-stat cards">
                   
                   
@@ -398,6 +407,9 @@
                          <!--div class="tag-color" style="border-left: 4px solid <%=tag_item.color%>;">
                          </div-->
                          <span draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;"><%= tag_item.name %></span>
+                         <span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
+                         <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>  
+                         </span>
                          <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
                          <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
                          </form>

@@ -250,7 +250,7 @@ class AccountListHandler(BaseHandler, SessionEnabledHandler):
             self.set_user_locale()
             # Render the template
             template_values = {'ME':user.google_user_id,'tabs':tabs}
-            template = jinja_environment.get_template('templates/accounts/list.html')
+            template = jinja_environment.get_template('templates/accounts/account_list.html')
             #self.response.cache_control = 'public'
             #self.response.cache_control.max_age = 300
             self.response.out.write(template.render(template_values))
@@ -268,7 +268,7 @@ class AccountShowHandler(BaseHandler, SessionEnabledHandler):
             # Render the template
             template_values = {'ME':user.google_user_id,
              'tabs':tabs}
-            template = jinja_environment.get_template('templates/accounts/show.html')
+            template = jinja_environment.get_template('templates/accounts/account_show.html')
             #self.response.cache_control = 'public'
             #self.response.cache_control.max_age = 300
             self.response.out.write(template.render(template_values))
@@ -281,7 +281,7 @@ class ContactListHandler(BaseHandler, SessionEnabledHandler):
       self.set_user_locale()
       template_values = {'ME':user.google_user_id,
              'tabs':tabs}
-      template = jinja_environment.get_template('templates/contacts/list.html')
+      template = jinja_environment.get_template('templates/contacts/contact_list.html')
       #self.response.cache_control = 'public'
       #self.response.cache_control.max_age = 300
       self.response.out.write(template.render(template_values))
@@ -293,7 +293,7 @@ class ContactShowHandler(BaseHandler,SessionEnabledHandler):
       tabs = user.get_user_active_tabs()
       self.set_user_locale()
       template_values={'tabs':tabs}
-      template = jinja_environment.get_template('templates/contacts/show.html')
+      template = jinja_environment.get_template('templates/contacts/contact_show.html')
       #self.response.cache_control = 'public'
       #self.response.cache_control.max_age = 300
       
@@ -307,7 +307,7 @@ class OpportunityListHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       template_values = {'ME':user.google_user_id,
              'tabs':tabs}
-      template = jinja_environment.get_template('templates/opportunities/list.html')
+      template = jinja_environment.get_template('templates/opportunities/opportunity_list.html')
       #self.response.cache_control = 'public'
       #self.response.cache_control.max_age = 300
       
