@@ -1,3 +1,30 @@
+               <div id="assigneeTagsToTask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                      <h3 id="myModalLabel" class="modal-title">Add Tags </h3>
+                    </div>
+                    <div class="modal-body">
+                       <form id="seletesho" name="deletesho" class="form-horizontal"> 
+                       <div class="form-group">
+                            <select id="select2_sample2" class="form-control select2" multiple>
+                              <option ng-repeat="tag in tags" 
+                              value='<%=tag.entityKey%>'>
+                                <%=tag.name%>
+                              </option>
+                            </select>
+                        </div>
+                    </div>
+                      <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                        <input ng-hide="isLoadingTask" ng-click="addTags(task)" type="submit" class="btn green" value="Add">
+                        <input ng-show="isLoadingTask" type="submit" class="btn green" value="Loading..." disabled>
+                      </div>
+                  </form>
+                </div>
+              </div>
+             </div>
 <div id="EditTaskModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
             <div class="modal-content">
@@ -82,8 +109,8 @@
 
     <!--HKA 19.11.2013 BEGIN Span comments-->
       <div class="col-md-8">
-            <h2 class="page-title showTaskTitle">
-              <input id="checkTaskInShow" type="checkbox" ng-checked="isSelectedAll" ng-click="checkOptions()">  
+            <h2 class="page-title showTaskTitle" ng-class="{task_closed: task.status=='closed'}">
+              <input id="checkTaskInShow" type="checkbox" ng-checked="isSelectedAll"  ng-click="checkOptions()">  
               <%=task.title%>
             </h2>
       <!-- BEGIN PORTLET-->
@@ -91,25 +118,25 @@
       <div class="row">
                  <div class="col-md-12 margin-bottom-10">
                      <ul class="list-unstyled pull-right">
-                       <li class="inline-tags">Tags:</li>
+                       <li ng-hide="task.tag.length==0" class="inline-tags">Tags:</li>
                        <li ng-repeat="tag in task.tags" class="inline-tags">
                          <a href="#">#<%=tag.name%>  </a>
                        </li>
                      </ul>
                      <form ng-show="taskSelected">
-                         <button   ng-show="task.status=='pending'"class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
+                         <button   ng-show="task.status=='open'"class="btn btn-sm btn-default task_action" ng-click="closeTask(task)">
                           <i class="fa fa-lock"></i>
                             <span class="btn-text">
                               Close  
                             </span>
                           </button>
-                           <button   ng-show="task.status=='closed'" class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
+                           <button   ng-show="task.status=='closed'" class="btn btn-sm btn-default task_action" ng-click="reopenTask(task)">
                           <i class="fa fa-unlock"></i>
                           <span class="btn-text">
                           Reopen
                           </span>
                           </button>
-                          <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
+                          <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action">
                           <i class="fa fa-tags"></i>
                            <span class="btn-text">
                               Tags
@@ -121,36 +148,43 @@
         </div>
         <div class="row">
         <div class="col-md-12">
-             <p class⁼"lead"=""><strong>Discuss this task :</strong> </p>
-                          <form id="addComment" ng-submit="addComment(comment)" class="ng-pristine ng-valid">
-                          <div class="form-group">
-                                            <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="comment.content"></textarea>
-                                          
-                           </div>                
-                                         
-                           <div class="pull-right">
-                          
-                            <input ng-hide="isLoading" type="submit" class="btn green" value="Add comment">
-                            <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
-                            </div>
-                      </form>
+             <div class="portlet">
+                <div class="portlet-title line">
+                  <div class="caption"><i class="icon-comments"></i>Comments</div>    
+                </div>
+                <div class="portlet-body">
+                      <ul class="chats">
+                        <li class="in" ng-repeat="comment in comments" id="comment_<%=$index%>">
+                          <img class="avatar" alt="" ng-src="<%=comment.author.photo%>" />
+                          <div class="message">
+                            <span class="arrow"></span>
+                            <a href="#" class="name"><%=comment.author.display_name%></a>
+                            <span class="datetime">at <%=comment.updated_at | date:'yyyy-MM-dd - HH:mm:ss '%></span>
+                            <span class="body">
+                            <%=comment.content%>
+                            </span>
+                          </div>
+                        </li>
+                      </ul>
+                     <p class⁼"lead"=""><strong>Discuss this task :</strong> </p>
+                      <form id="addComment" ng-submit="addComment(comment)" class="ng-pristine ng-valid">
+                      <div class="form-group">
+                                        <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="comment.content"></textarea>
+                                      
+                       </div>                
+                                     
+                       <div class="pull-right">
+                      
+                        <input ng-hide="isLoading" type="submit" class="btn green" value="Add comment">
+                        <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                        </div>
+                  </form>
+                </div>
+                  
+              </div>
         </div>
           
         </div>
-      <ul class="chats">
-                  <li class="in" ng-repeat="comment in comments" id="comment_<%=$index%>">
-                    <img class="avatar" alt="" ng-src="<%=comment.author.photo%>" />
-                    <div class="message">
-                      <span class="arrow"></span>
-                      <a href="#" class="name"><%=comment.author.display_name%></a>
-                      <span class="datetime">at <%=comment.updated_at | date:'yyyy-MM-dd - HH:mm:ss '%></span>
-                      <span class="body">
-                      <%=comment.content%>
-                      </span>
-                    </div>
-                  </li>
-                  
-        </ul>
         <div class="row">
                                 <div class="pagination pull-right" ng-hide="isLoading">
                                       
@@ -261,6 +295,10 @@
 
     <script type="text/javascript">
     $('#checkTaskInShow').uniform();
+      $("#select2_sample2").select2({
+        placeholder: "Click to Select a label",
+        allowClear: false
+    });
     </script>
 
 
