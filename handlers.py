@@ -171,7 +171,7 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
 
     @staticmethod
     def folder_created_callback(request_id, response, exception):
-        
+        global folders
         if exception is not None:
             # Do something with the exception
             pass
@@ -226,11 +226,7 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
               if folder_name in folders.keys():
                   setattr(organization, FOLDERS[folder_name], folders[folder_name])
           organization.put()
-          print '@@@@@@@@@@@@@================Org======================'
-          print organization
           profile = model.Profile.query(model.Profile.name=='Super Administrator', model.Profile.organization==organization.key).get()
-          print '@@@@@@@@@@@@@================Profile======================'
-          print profile
           user.init_user_config(organization.key,profile)
           self.redirect('/')
         else:
