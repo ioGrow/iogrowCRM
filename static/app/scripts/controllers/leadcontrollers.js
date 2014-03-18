@@ -821,6 +821,7 @@ $scope.updateintro = function(lead){
 
       };
       $scope.convert = function(){
+        $('#convertLeadModal').modal('hide');
         var leadid = {'id':$route.current.params.leadId};
         Lead.convert($scope,leadid);
       };
