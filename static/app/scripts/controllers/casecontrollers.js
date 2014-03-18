@@ -808,7 +808,7 @@ $scope.updatCasetHeader = function(casee){
      $('#BeforedeleteCase').modal('show');
    };
 $scope.deletecase = function(){
-     var caseid = {'id':$route.current.params.caseId};
+     var caseid = {'entityKey':$scope.casee.entityKey};
      Case.delete($scope,caseid);
      $('#BeforedeleteCase').modal('hide');
      };

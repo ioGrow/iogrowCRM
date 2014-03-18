@@ -1355,7 +1355,7 @@ $scope.editbeforedelete = function(){
      $('#BeforedeleteAccount').modal('show');
    };
 $scope.deleteaccount = function(){
-     var accountid = {'id':$route.current.params.accountId};
+     var accountid = {'entityKey':$scope.account.entityKey};
      Account.delete($scope,accountid);
      $('#BeforedeleteAccount').modal('hide');
      };

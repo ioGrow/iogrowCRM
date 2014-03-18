@@ -854,7 +854,7 @@ $scope.updateintro = function(lead){
      $('#BeforedeleteLead').modal('show');
    };
 $scope.deletelead = function(){
-     var leadid = {'id':$route.current.params.leadId};
+     var leadid = {'entityKey':$scope.lead.entityKey};
      Lead.delete($scope,leadid);
      $('#BeforedeleteLead').modal('hide');
      };
