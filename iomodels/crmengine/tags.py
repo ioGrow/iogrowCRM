@@ -49,11 +49,8 @@ class Tag(EndpointsModel):
 
     @classmethod
     def list_by_kind(cls,user_from_email,kind):
-        print '*************************************************'
-        print kind
-        print user_from_email
         tags = cls.query(cls.about_kind==kind, cls.organization == user_from_email.organization).fetch()
-        tag_list = None
+        tag_list = []
         if tags:
             tag_list = []
             for tag in tags:

@@ -73,13 +73,17 @@ class Edge(ndb.Expando):
             if existing_edge:
                 return existing_edge.key
             if inverse_edge is not None:
-                inversed_edge = Edge(kind = inverse_edge, 
+                inversed_edge = Edge(
+                           kind = inverse_edge, 
                            start_node = end_node,
-                           end_node = start_node)
-                inversed_edge.put()
-            edge = Edge(kind = kind, 
-                           start_node = start_node,
-                           end_node = end_node)
+                           end_node = start_node
+                                    )
+                inversed_edge.put_async()
+            edge = Edge(
+                        kind = kind, 
+                        start_node = start_node,
+                        end_node = end_node
+                        )
             edge_key = edge.put()
             return edge_key
     

@@ -108,6 +108,7 @@
                   <li>
                     <ul class="dropdown-menu-list scroller">
                        {%for application in apps %}
+                       {%if application.key !=active_app.key %}
                         <li class="gb_a">
                           <a href="/apps/{{ application.id }}">
                           <span class="task">
@@ -118,6 +119,7 @@
                           </span>               
                           </a>
                         </li> 
+                         {%endif%}   
                        {%endfor%} 
                          <li class="gb_a">
                           <a href="https://drive.google.com/?tab=mo&authuser=0" target="new">
