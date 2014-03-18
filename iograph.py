@@ -10,7 +10,13 @@ INVERSED_EDGES = {
             'documents':'parents',
             'events':'parents',
             'needs': 'parents',
-            'parents': ['cases','comments', 'contacts','documents','events','needs','tasks','topics'],
+            'infos':'parents',
+            'parents': ['cases','comments', 'contacts','documents','events','infos', 'needs','tasks','topics'],
+            'permissions': 'has_access_on',
+            'related_cases':'status',
+            'related_opportunities':'stages',
+            'stages':'related_opportunities',
+            'status':'related_cases',
             'tagged_on': 'tags',
             'tags': 'tagged_on',
             'tasks' : 'parents',
@@ -60,20 +66,21 @@ class Edge(ndb.Expando):
     
     @classmethod
     def insert(cls, start_node,end_node,kind,inverse_edge=None):
-        # create the inverse edge
-        existing_edge = cls.query(cls.start_node==start_node, cls.end_node == end_node, cls.kind==kind).get()
-        if existing_edge:
-            return existing_edge.key
-        if inverse_edge is not None:
-            inversed_edge = Edge(kind = inverse_edge, 
-                       start_node = end_node,
-                       end_node = start_node)
-            inversed_edge.put()
-        edge = Edge(kind = kind, 
-                       start_node = start_node,
-                       end_node = end_node)
-        edge_key = edge.put()
-        return edge_key
+        # check if the edge is in the available edge list
+        if kind in INVERSED_EDGES.keys():
+            existing_edge = cls.query(cls.start_node==start_node, cls.end_node == end_node, cls.kind==kind).get()
+            if existing_edge:
+                return existing_edge.key
+            if inverse_edge is not None:
+                inversed_edge = Edge(kind = inverse_edge, 
+                           start_node = end_node,
+                           end_node = start_node)
+                inversed_edge.put()
+            edge = Edge(kind = kind, 
+                           start_node = start_node,
+                           end_node = end_node)
+            edge_key = edge.put()
+            return edge_key
     
     @classmethod
     def list(cls,start_node,kind,limit=1000,pageToken=None,order='DESC'):

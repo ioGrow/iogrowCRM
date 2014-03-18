@@ -2282,7 +2282,8 @@ class CrmEngineApi(remote.Service):
         Edge.insert(
                     start_node = parent_key,
                     end_node = entityKey,
-                    kind = 'infos'
+                    kind = 'infos',
+                    inverse_edge = 'parents'
                 )
         indexed_edge = '_' + request.kind + ' ' + " ".join(node_values)
         EndpointsHelper.update_edge_indexes(
