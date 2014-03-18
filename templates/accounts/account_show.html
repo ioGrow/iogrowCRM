@@ -226,7 +226,7 @@
                                  
                                 </div>
                                   <ul class="list-unstyled contact-infos">
-                                    <li ng-repeat="phone in infonodes.phones"> <a editable-text="phone.number" onbeforesave="patchPhoneNumber(phone.entityKey,$data)"> <%=phone.number%> </a>, <a editable-select="phone.type" e-ng-options="s.value as s.text for s in statuses"> <%= phone.type%> </a></li>
+                                    <li ng-repeat="phone in infonodes.phones"> <a editable-text="phone.number" onbeforesave="inlinePatch('Infonode','phones', 'number',phone.entityKey,$data)"> <%=phone.number%> </a>, <a editable-select="phone.type" e-ng-options="s.value as s.text for s in statuses" onbeforesave="inlinePatch('Infonode','phones', 'type_number',phone.entityKey,$data)"> <%= phone.type%> </a></li>
           
                                     <li><a href="#phonemodal"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new Phone</a></li>
 
@@ -236,7 +236,7 @@
                                  
                                 </div>
                                   <ul class="list-unstyled contact-infos">
-                                    <li ng-repeat="email in infonodes.emails"> <a ng-click="assignParams('Infonode','email',email.entityKey,email.email)" editable-text="email.email" > <%=email.email%> </a>  </li>
+                                    <li ng-repeat="email in infonodes.emails"> <a editable-text="email.email" onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)" > <%=email.email%> </a>  </li>
                                     
                                     <li><a href="#emailmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new email address </a></li>
 
