@@ -32,6 +32,9 @@
    <script src="static/plugins/jquery-1.10.1.min.js"  type="text/javascript"></script>
   <script src="static/plugins/jquery-migrate-1.2.1.min.js"  type="text/javascript"></script>
   <script type="text/javascript">
+  $( document ).ajaxStart(function() {
+       $('#loading').show();
+  });
 var helper = (function() {
   var authResult = undefined;
 
@@ -244,6 +247,10 @@ function onSignInCallback(authResult) {
                               data-width="wide"
                               data-height="tall">
                           </button>
+                      </div>
+                      <div id="loading" style="display:none;" >
+                          <center><img src="/static/img/google_loading.gif"  style="height:30px; width:30px; margin-top:50px;">
+                          </center>
                       </div>
                      </div>
                   </div>
