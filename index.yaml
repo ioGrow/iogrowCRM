@@ -79,6 +79,45 @@ indexes:
   properties:
   - name: access
   - name: organization
+  - name: name
+
+- kind: Case
+  properties:
+  - name: access
+  - name: organization
+  - name: priority
+    direction: desc
+
+- kind: Case
+  properties:
+  - name: access
+  - name: organization
+  - name: status
+  - name: updated_at
+    direction: desc
+
+- kind: Case
+  properties:
+  - name: access
+  - name: organization
+  - name: updated_at
+    direction: desc
+
+- kind: Case
+  properties:
+  - name: collaborators_ids
+  - name: name
+
+- kind: Case
+  properties:
+  - name: collaborators_ids
+  - name: priority
+    direction: desc
+
+- kind: Case
+  properties:
+  - name: collaborators_ids
+  - name: status
   - name: updated_at
     direction: desc
 
@@ -91,6 +130,24 @@ indexes:
 - kind: Case
   properties:
   - name: organization
+  - name: updated_at
+    direction: desc
+
+- kind: Case
+  properties:
+  - name: owner
+  - name: name
+
+- kind: Case
+  properties:
+  - name: owner
+  - name: priority
+    direction: desc
+
+- kind: Case
+  properties:
+  - name: owner
+  - name: status
   - name: updated_at
     direction: desc
 
@@ -275,6 +332,11 @@ indexes:
   properties:
   - name: organization
   - name: lastname
+
+- kind: Lead
+  properties:
+  - name: organization
+  - name: status
 
 - kind: Lead
   properties:
