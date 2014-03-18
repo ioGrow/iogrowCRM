@@ -258,7 +258,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
          {'name':'green','color':'#BBE535'},
          {'name':'blue','color':'#66CCDD'},
          {'name':'gray','color':'#B5C5C5'},
-         {'name':'teal','color':'77DDBB'},
+         {'name':'teal','color':'#77DDBB'},
          {'name':'purple','color':'#E874D6'},
      ];
      $scope.tag.color= {'name':'green','color':'#BBE535'};
