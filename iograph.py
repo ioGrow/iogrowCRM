@@ -3,25 +3,25 @@ from google.appengine.datastore.datastore_query import Cursor
 from protorpc import messages
 from endpoints_helper import EndpointsHelper
 INVERSED_EDGES = {
-            'assignees' : 'assigned_to',
-            'cases' : 'parents',
-            'comments': 'parents',
-            'contacts': 'parents',
-            'documents':'parents',
-            'events':'parents',
-            'has_access_on':'permissions',
-            'infos':'parents',
-            'needs': 'parents',
+            'assignees' : ['assigned_to'],
+            'cases' : ['parents'],
+            'comments': ['parents'],
+            'contacts': ['parents'],
+            'documents':['parents'],
+            'events':['parents'],
+            'has_access_on':['permissions'],
+            'infos':['parents'],
+            'needs': ['parents'],
             'parents': ['cases','comments', 'contacts','documents','events','infos', 'needs','tasks','topics'],
-            'permissions': 'has_access_on',
-            'related_cases':'status',
-            'related_opportunities':'stages',
-            'stages':'related_opportunities',
-            'status':'related_cases',
-            'tagged_on': 'tags',
-            'tags': 'tagged_on',
-            'tasks' : 'parents',
-            'topics':'parents'
+            'permissions': ['has_access_on'],
+            'related_cases':['status'],
+            'related_opportunities':['stages'],
+            'stages':['related_opportunities'],
+            'status':['related_cases'],
+            'tagged_on': ['tags'],
+            'tags': ['tagged_on'],
+            'tasks' : ['parents'],
+            'topics':['parents']
             }
 
 DELETED_ON_CASCADE = {
