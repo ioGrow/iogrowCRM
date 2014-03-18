@@ -605,22 +605,20 @@ $scope.ContactlistNextPageItems = function(){
           Account.get($scope,params);
      }
 /// update account with inlineEdit
-  $scope.inlinePatch=function(currentParam){
-    var data={};
-       data=currentParam.data;
-       console.log('currentParam');
-       console.log(currentParam);
-       var name=data.name;
-       var value=data.value;
-       var entityKey=currentParam.entityKey;
-   if (currentParam.entity=='Account') {
+  $scope.inlinePatch=function(kind,edge,name,entityKey,value){
+   
+   if ($scope.currentParam.kind=='Account') {
+         params = {};
          Account.patch($scope,params);
    }else{
+
+     
+     
       /****the problem si in params object !!!!!!!!!!!!*/
         params = {
                   'entityKey': entityKey,
                   'parent':$scope.account.entityKey,
-                  'kind':'emails',
+                  'kind':edge,
                   'fields':[
                      
                       {
@@ -629,12 +627,14 @@ $scope.ContactlistNextPageItems = function(){
                       }
                   ]
         };
+         console.log('-----I am Here-----');
+           console.log(params);
          InfoNode.patch($scope,params);
    }
 
   }
-  $scope.assignParams=function(entity,name,entityKey,value){
-    $scope.currentParam={'entity':entity,'data':{'name':name,'value':value,'entityKey':entityKey}};
+  $scope.assignParams=function(kind,name,entityKey,value){
+    $scope.currentParam={'kind':kind,'data':{'name':name,'value':value,'entityKey':entityKey}};
   }
 //HKA 07.12.2013 Manage Prev & Next Page on Related List Opportunities
 $scope.OpplistNextPageItems = function(){

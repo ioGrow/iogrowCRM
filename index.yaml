@@ -232,6 +232,11 @@ indexes:
 - kind: Contact
   properties:
   - name: organization
+  - name: account_name
+
+- kind: Contact
+  properties:
+  - name: organization
   - name: firstname
 
 - kind: Contact
