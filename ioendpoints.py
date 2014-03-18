@@ -592,21 +592,10 @@ class CrmEngineApi(remote.Service):
     # accounts.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
                       path='accounts', http_method='DELETE',
-                      name='accounts.deletev2')
+                      name='accounts.delete')
     def account_delete(self, request):
         entityKey = ndb.Key(urlsafe=request.entityKey)
         Edge.delete_all_cascade(start_node = entityKey)
-        return message_types.VoidMessage()
-    # accounts.delete api
-    @Account.method(request_fields=('id',),
-                    response_message=message_types.VoidMessage,
-                    http_method='DELETE',
-                    path='accounts/{id}',
-                    name='accounts.delete'
-                    )
-    def AccountDelete(self, my_model):
-        #user_from_email = EndpointsHelper.require_iogrow_user()
-        my_model.key.delete()
         return message_types.VoidMessage()
 
     # accounts.insert API
@@ -745,20 +734,10 @@ class CrmEngineApi(remote.Service):
     # cases.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
                       path='cases', http_method='DELETE',
-                      name='cases.deletev2')
+                      name='cases.delete')
     def case_delete(self, request):
         entityKey = ndb.Key(urlsafe=request.entityKey)
         Edge.delete_all_cascade(start_node = entityKey)
-        return message_types.VoidMessage()
-
-    # cases.delete
-    @Case.method(request_fields=('id',),
-      response_message=message_types.VoidMessage,
-      http_method ='DELETE',path='cases/{id}',name='cases.delete'
-      )
-    def CaseDelete(self,my_model):
-        user_from_email=EndpointsHelper.require_iogrow_user()
-        my_model.key.delete()
         return message_types.VoidMessage()
 
     # cases.getv2 api
@@ -861,23 +840,12 @@ class CrmEngineApi(remote.Service):
     # casestatuses.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
                       path='casestatuses', http_method='DELETE',
-                      name='casestatuses.deletev2')
+                      name='casestatuses.delete')
     def casestatuses_delete(self, request):
         entityKey = ndb.Key(urlsafe=request.entityKey)
         Edge.delete_all_cascade(start_node = entityKey)
         return message_types.VoidMessage()
-    # casestatuses.delete api
-    @Casestatus.method(
-                       request_fields=('id',),
-                       response_message=message_types.VoidMessage,
-                       http_method ='DELETE',
-                       path='casestatuses/{id}',
-                       name='casestatuses.delete'
-                       )
-    def CasestatusDelete(self, my_model):
-        #user_from_email=EndpointsHelper.require_iogrow_user()
-        my_model.key.delete()
-        return message_types.VoidMessage()
+    
 
     # casestatuses.get api
     @Casestatus.method(
@@ -937,7 +905,7 @@ class CrmEngineApi(remote.Service):
     # comments.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
                       path='comments', http_method='DELETE',
-                      name='comments.deletev2')
+                      name='comments.delete')
     def comment_delete(self, request):
         entityKey = ndb.Key(urlsafe=request.entityKey)
         Edge.delete_all_cascade(start_node = entityKey)
@@ -1159,23 +1127,12 @@ class CrmEngineApi(remote.Service):
     # contacts.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
                       path='contacts', http_method='DELETE',
-                      name='contacts.deletev2')
+                      name='contacts.delete')
     def contact_delete(self, request):
         entityKey = ndb.Key(urlsafe=request.entityKey)
         Edge.delete_all_cascade(start_node = entityKey)
         return message_types.VoidMessage()
-    # contacts.delete api
-    @Contact.method(
-                    request_fields=('id',),
-                    response_message=message_types.VoidMessage,
-                    http_method='DELETE',
-                    path='contacts/{id}',
-                    name='contacts.delete'
-                    )
-    def ContactDelete(self, my_model):
-        #user_from_email=EndpointsHelper.require_iogrow_user()
-        my_model.key.delete()
-        return message_types.VoidMessage()
+    
 
     # contacts.insertv2 api
     @endpoints.method(ContactInsertRequest, ContactSchema,
@@ -1374,7 +1331,7 @@ class CrmEngineApi(remote.Service):
     # documents.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
                       path='documents', http_method='DELETE',
-                      name='documents.deletev2')
+                      name='documents.delete')
     def document_delete(self, request):
         entityKey = ndb.Key(urlsafe=request.entityKey)
         Edge.delete_all_cascade(start_node = entityKey)
@@ -1542,7 +1499,7 @@ class CrmEngineApi(remote.Service):
     # events.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
                       path='events', http_method='DELETE',
-                      name='events.deletev2')
+                      name='events.delete')
     def event_delete(self, request):
         entityKey = ndb.Key(urlsafe=request.entityKey)
         Edge.delete_all_cascade(start_node = entityKey)
@@ -1753,10 +1710,10 @@ class CrmEngineApi(remote.Service):
                                      )
 
     # Groups API
-    # events.delete api
+    # groups.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
                       path='groups', http_method='DELETE',
-                      name='groups.deletev2')
+                      name='groups.delete')
     def group_delete(self, request):
         entityKey = ndb.Key(urlsafe=request.entityKey)
         Edge.delete_all_cascade(start_node = entityKey)
@@ -1807,7 +1764,7 @@ class CrmEngineApi(remote.Service):
     # leads.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
                       path='leads', http_method='DELETE',
-                      name='leads.deletev2')
+                      name='leads.delete')
     def lead_delete(self, request):
         entityKey = ndb.Key(urlsafe=request.entityKey)
         Edge.delete_all_cascade(start_node = entityKey)
@@ -1873,16 +1830,6 @@ class CrmEngineApi(remote.Service):
             event.put()
         lead.key.delete()
         return ConvertedLead(id = contact.key.id())
-    
-    # leads.delete api
-    @Lead.method(request_fields=('id',),
-      response_message=message_types.VoidMessage,
-      http_method ='DELETE',path='leads/{id}',name='leads.delete'
-      )
-    def LeadDelete(self,my_model):
-        user_from_email=EndpointsHelper.require_iogrow_user()
-        my_model.key.delete()
-        return message_types.VoidMessage()
 
     # leads.get api v2
     @endpoints.method(LeadGetRequest, LeadSchema,
@@ -2000,21 +1947,13 @@ class CrmEngineApi(remote.Service):
     # leadstatuses.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
                       path='leadstatuses', http_method='DELETE',
-                      name='leadstatuses.deletev2')
+                      name='leadstatuses.delete')
     def leadstatuses_delete(self, request):
         entityKey = ndb.Key(urlsafe=request.entityKey)
         Edge.delete_all_cascade(start_node = entityKey)
         return message_types.VoidMessage()
 
-    # leadstatuses.delete api
-    @Leadstatus.method(request_fields=('id',),
-      response_message=message_types.VoidMessage,
-      http_method ='DELETE',path='leadstatuses/{id}',name='leadstatuses.delete'
-      )
-    def LeadstatusDelete(self,my_model):
-        user_from_email=EndpointsHelper.require_iogrow_user()
-        my_model.key.delete()
-        return message_types.VoidMessage()
+   
 
     # leadstatuses.get api
     @Leadstatus.method(
@@ -2116,7 +2055,7 @@ class CrmEngineApi(remote.Service):
     # needs.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
                       path='needs', http_method='DELETE',
-                      name='needs.deletev2')
+                      name='needs.delete')
     def need_delete(self, request):
         entityKey = ndb.Key(urlsafe=request.entityKey)
         Edge.delete_all_cascade(start_node = entityKey)
@@ -2179,7 +2118,7 @@ class CrmEngineApi(remote.Service):
     # notes.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
                       path='notes', http_method='DELETE',
-                      name='notes.deletev2')
+                      name='notes.delete')
     def note_delete(self, request):
         entityKey = ndb.Key(urlsafe=request.entityKey)
         Edge.delete_all_cascade(start_node = entityKey)
@@ -2300,7 +2239,7 @@ class CrmEngineApi(remote.Service):
     # infonode.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
                       path='infonode', http_method='DELETE',
-                      name='infonode.deletev2')
+                      name='infonode.delete')
     def infonode_delete(self, request):
         entityKey = ndb.Key(urlsafe=request.entityKey)
         Edge.delete_all_cascade(start_node = entityKey)
@@ -2346,24 +2285,12 @@ class CrmEngineApi(remote.Service):
     # opportunities.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
                       path='opportunities', http_method='DELETE',
-                      name='opportunities.deletev2')
+                      name='opportunities.delete')
     def opportunity_delete(self, request):
         entityKey = ndb.Key(urlsafe=request.entityKey)
         Edge.delete_all_cascade(start_node = entityKey)
         return message_types.VoidMessage()
-    # opportunities.delete api
-    @Opportunity.method(
-                        request_fields=('id',),
-                        response_message=message_types.VoidMessage,
-                        http_method ='DELETE',
-                        path='opportunities/{id}',
-                        name='opportunities.delete'
-                        )
-    def OpportunityDelete(self,my_model):
-        user_from_email=EndpointsHelper.require_iogrow_user()
-        my_model.key.delete()
-        return message_types.VoidMessage()
-
+    
     # opportunities.get api v2
     @endpoints.method(OpportunityGetRequest, OpportunitySchema,
                       path='opportunities/getv2', http_method='POST',
@@ -2506,21 +2433,13 @@ class CrmEngineApi(remote.Service):
     # opportunitystage.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
                       path='opportunitystage', http_method='DELETE',
-                      name='opportunitystage.deletev2')
+                      name='opportunitystage.delete')
     def opportunitystage_delete(self, request):
         entityKey = ndb.Key(urlsafe=request.entityKey)
         Edge.delete_all_cascade(start_node = entityKey)
         return message_types.VoidMessage()
 
-    # opportunitystages.delete api
-    @Opportunitystage.method(request_fields=('id',),
-      response_message=message_types.VoidMessage,
-      http_method ='DELETE',path='opportunitystage/{id}',name='opportunitystages.delete'
-      )
-    def OpportunitystageDelete(self,my_model):
-        user_from_email=EndpointsHelper.require_iogrow_user()
-        my_model.key.delete()
-        return message_types.VoidMessage()
+   
 
     # opportunitystages.get api
     @Opportunitystage.method(
