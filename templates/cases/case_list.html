@@ -233,13 +233,15 @@
             <div class="col-md-9">
             
               <div class="inner-cards-container">
-              <div  ng-repeat="casee in cases" class="col-lg-4 col-md-3 col-sm-6 col-xs-12">
-                <div class="dashboard-stat cards-med"  droppable ng-drop="dropTag(casee)">
-                  
-                  <div class="details">
-                    <a href="/#/cases/show/<%= casee.id %>"><h2 class="cardTitle">
+              <div  droppable ng-repeat="casee in cases" data-column="<%=getPosition($index)%>" class="cardElement"  ng-drop="dropTag(casee)">
+                 <div class="cardHeader">
+                     <a href="/#/cases/show/<%= casee.id %>"><h2 class="cardTitle">
                     <%=casee.name%>
                     </h2></a>
+                 </div>
+                   <hr>
+                  <div class="cardDetails">
+                    
                     <div class="desc">
                        <div class="row margin-bottom-10">
                           <div class="col-md-12">
@@ -257,8 +259,9 @@
                                     
                           </div>
                     </div>
+                    </div>
                       <br/>
-                          <div class="row">
+                          <div class="row cardTags">
                           <div class="col-md-12">
                                <a ng-repeat="tag in casee.tags" href="/#/search/type:Case tags:<%=tag.id%>"> <span class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
                                </a>
@@ -266,10 +269,16 @@
                           
                         </div>               
                   </div>
-                  </div>
-                                 
-                </div>
               </div>
+              <script type="text/javascript">
+                  $('.inner-cards-container').waterfall({ 
+                      colMinWidth: 200, 
+                      defaultContainerWidth: 800,
+                      autoresize: true
+                    });
+               </script>                 
+               
+              
                <div ng-show="blankStatecase" class="col-md-12 responsive" data-tablet="col-md-6" data-desktop="col-md-12">
                 <div class="dashboard-stat cards">
                   
@@ -339,6 +348,9 @@
                     <!--div class="tag-color" style="border-left: 4px solid <%=tag_item.color%>;">
                     </div-->
                     <span draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;"><%= tag_item.name %></span>
+                    <span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
+                      <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>  
+                    </span>
                     <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
                       <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
                     </form>
