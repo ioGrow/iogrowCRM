@@ -795,36 +795,27 @@ class GooglePlusConnect(SessionEnabledHandler):
       """
       if user_id:
         user = model.User.get_by_id(user_id)
-        profile = GooglePlusConnect.get_user_profile(credentials)
-        email = GooglePlusConnect.get_user_email(credentials)
+        userinfo = GooglePlusConnect.get_user_email(credentials)
         user.status = 'active'
-        user.google_user_id = profile.get('id')
-        user.google_display_name = profile.get('displayName')
-        user.google_public_profile_url = profile.get('url')
-        user.email = email.get('email')
-        image = profile.get('image')
-        if image is not None:
-          user.google_public_profile_photo_url = image.get('url')
+        user.google_user_id = userinfo.get('id')
+        user.google_display_name = userinfo.get('name')
+        user.google_public_profile_url = userinfo.get('link')
+        user.email = userinfo.get('email')
+        user.google_public_profile_photo_url = userinfo.get('picture') 
       else:
         user = model.User.query(model.User.google_user_id == google_user_id).get()     
       #user = model.User.all().filter('google_user_id =', google_user_id).get()
       
       if user is None:
-        
-        # Couldn't find User in datastore.  Register a new user.
-        profile = GooglePlusConnect.get_user_profile(credentials)
-        email = GooglePlusConnect.get_user_email(credentials)
-
+        userinfo = GooglePlusConnect.get_user_email(credentials)
         user = model.User()
         user.type = 'public_user'
         user.status = 'active'
-        user.google_user_id = profile.get('id')
-        user.google_display_name = profile.get('displayName')
-        user.google_public_profile_url = profile.get('url')
-        user.email = email.get('email')
-        image = profile.get('image')
-        if image is not None:
-          user.google_public_profile_photo_url = image.get('url')
+        user.google_user_id = userinfo.get('id')
+        user.google_display_name = userinfo.get('name')
+        user.google_public_profile_url = userinfo.get('link')
+        user.email = userinfo.get('email')
+        user.google_public_profile_photo_url = userinfo.get('picture')
       user.google_credentials = credentials
       user.put()
       return user
