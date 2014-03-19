@@ -24,6 +24,7 @@ import string
 import datetime
 import types
 from google.appengine.api import memcache
+from google.appengine.api import taskqueue
 from apiclient.discovery import build
 from apiclient.http import BatchHttpRequest
 from google.appengine.api import images
@@ -118,77 +119,22 @@ class Organization(EndpointsModel):
     shows_folder = ndb.StringProperty()
     feedbacks_folder = ndb.StringProperty()
 
-    @staticmethod
-    def init_drive_folder(http,driveservice,folder_name,parent=None):
-        folder = {
-                'title': folder_name,
-                'mimeType': 'application/vnd.google-apps.folder'          
-        }
-        if parent:
-            folder['parents'] = [{'id': parent}]
-        try:
-            created_folder = driveservice.files().insert(fields='id',body=folder).execute()
-            return created_folder['id']
-        except errors.HttpError, error:
-            print 'An error occured: %s' % error
-            return None
-    @classmethod
-    def init_default_values(cls,org_key):
-        #HKA 17.12.2013 Add an opportunity stage
-        for oppstage in Default_Opp_Stages:
-          created_opp_stage = Opportunitystage(organization=org_key,name=oppstage['name'],probability=oppstage['probability'])
-          created_opp_stage.put_async()
-        #HKA 17.12.2013 Add an Case status
-        for casestat in Default_Case_Status:
-          created_case_status = Casestatus(status=casestat['status'],organization=org_key)
-          created_case_status.put_async()
-        #HKA 17.12.2013 Add an Lead status
-        for leadstat in Default_Lead_Status:
-          created_lead_stat = Leadstatus(status=leadstat['status'],organization=org_key)
-          created_lead_stat.put_async()
-
-    @staticmethod
-    def folder_created_callback(request_id, response, exception):
-        global folders
-        if exception is not None:
-            # Do something with the exception
-            pass
-        else:
-            # Do something with the response
-            folder_name = response['title']
-            folders[folder_name] = response['id']
-
     # Create a standard instance for this organization  
     @classmethod
     def create_instance(cls,org_name, admin):
         # init google drive folders
-        credentials = admin.google_credentials
-        http = credentials.authorize(httplib2.Http(memcache))
-        driveservice = build('drive', 'v2', http=http)
-        # init the root folder
-        org_folder = cls.init_drive_folder(http,driveservice,org_name+' (ioGrow)')
-        # init objects folders
-        batch = BatchHttpRequest()
-        for folder_name in FOLDERS.keys():
-            folder = {
-                    'title': folder_name,
-                    'mimeType': 'application/vnd.google-apps.folder',
-                    'parents' : [{'id': org_folder}]       
-            }
-            batch.add(driveservice.files().insert(
-                                                fields='id,title',
-                                                body=folder),
-                                                callback=cls.folder_created_callback
-                                                )
-        batch.execute(http=http)
+        # Add the task to the default queue.
         organization = cls(
-                        name=org_name,
-                        org_folder=org_folder
+                        name=org_name
                         )
-        for folder_name in FOLDERS.keys():
-            if folder_name in folders.keys():
-                setattr(organization, FOLDERS[folder_name], folders[folder_name])
         org_key = organization.put()
+        taskqueue.add(
+                    url='/workers/createorgfolders', 
+                    params={
+                            'email': admin.email,
+                            'org_key':org_key.urlsafe()
+                            }
+                    )
         # create standard tabs
         created_tabs = []
         for tab in STANDARD_TABS:
