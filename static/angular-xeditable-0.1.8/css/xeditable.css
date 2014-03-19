@@ -40,6 +40,8 @@ Build date: 2014-01-10
     width: auto;
     /*update***/
     height: 25px;
+    font-size: 12px;
+	padding: 1px;
     /*update***/
 }
 .editable-bstime .editable-input input[type=text] {
