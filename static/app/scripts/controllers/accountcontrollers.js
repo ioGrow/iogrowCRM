@@ -607,8 +607,9 @@ $scope.ContactlistNextPageItems = function(){
 /// update account with inlineEdit
   $scope.inlinePatch=function(kind,edge,name,entityKey,value){
    
-   if ($scope.currentParam.kind=='Account') {
-         params = {};
+   if (kind=='Account') {
+          params = {'id':$scope.account.id,
+             name:value}
          Account.patch($scope,params);
    }else{
 
@@ -632,9 +633,6 @@ $scope.ContactlistNextPageItems = function(){
          InfoNode.patch($scope,params);
    }
 
-  }
-  $scope.assignParams=function(kind,name,entityKey,value){
-    $scope.currentParam={'kind':kind,'data':{'name':name,'value':value,'entityKey':entityKey}};
   }
 //HKA 07.12.2013 Manage Prev & Next Page on Related List Opportunities
 $scope.OpplistNextPageItems = function(){
