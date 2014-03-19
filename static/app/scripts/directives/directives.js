@@ -1,3 +1,37 @@
+/*app.directive('editTooltip', function() {
+  return {
+    restrict: 'A',
+    require:'?ngModel',
+    link: function ($scope, elem, attrs,ngModel) {
+     var field=$(elem);
+     var position=field.position();
+    console.log("woooooooooooo");
+        field.hover(function() {
+          console.log('test hover');
+          $(this).append('<div class="cusTooltip" id="inlineEditTooltip"><a href=""><i class="fa fa-trash-o"></i></a><a href="">edit</a></div>');   
+          $('#inlineEditTooltip').css('top', position.top);
+          $('#inlineEditTooltip').css('left', position.left - 59 );
+        });
+  }
+}});*/
+app.directive('edittooltip',  function() {
+   return {
+    restrict: 'A',
+    require:'?ngModel',
+    link: function ($scope, elem, attrs,ngModel) {
+     var field=$(elem);
+     var position=field.position();
+        field.hover(function() {
+          console.log('test hover');
+          $(this).parent().append('<div class="cusTooltip" id="inlineEditTooltip"><a href=""><i class="fa fa-trash-o"></i></a><a href="">edit</a></div>');   
+          $('#inlineEditTooltip').css('top', position.top);
+          $('#inlineEditTooltip').css('left', position.left - 59 );
+        });
+        field.mouseout(function() {
+          $(this).parent().children('#inlineEditTooltip').remove();
+        });
+  }
+}});
 app.directive('ngBlur', ['$parse', function($parse) {
   return function(scope, element, attr) {
     var fn = $parse(attr['ngBlur']);
@@ -89,6 +123,7 @@ app.directive('currency',  function() {
           $.each(all_currency, function (i, item) {
             $(elem).append('<option value='+item.value+'>'+item.symbol+ " - "+item.value+'</option>');
           });
+
      }
 }});
 app.directive('amount', function() {
@@ -316,3 +351,4 @@ app.directive('taggable', ['$parse',function($parse) {
       }
   }
 }]);
+
