@@ -152,36 +152,6 @@ class SignInHandler(BaseHandler, SessionEnabledHandler):
         self.response.out.write(template.render(template_values))
           
 class SignUpHandler(BaseHandler, SessionEnabledHandler):
-    
-    @staticmethod
-    def init_drive_folder(http,driveservice,folder_name,parent=None):
-      """Return the public Google+ profile data for the given user."""
-      folder = {
-                'title': folder_name,
-                'mimeType': 'application/vnd.google-apps.folder'          
-      }
-      if parent:
-        folder['parents'] = [{'id': parent}]
-      try:
-        created_folder = driveservice.files().insert(fields='id',body=folder).execute()
-        return created_folder['id']
-      except errors.HttpError, error:
-        print 'An error occured: %s' % error
-        return None
-
-    @staticmethod
-    def folder_created_callback(request_id, response, exception):
-        global folders
-        if exception is not None:
-            # Do something with the exception
-            pass
-        else:
-            # Do something with the response
-            folder_name = response['title']
-            folders[folder_name] = response['id']
-
-      
-      
     def get(self):
           if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
@@ -198,36 +168,13 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
             self.response.out.write(template.render(template_values))
           else:
             self.redirect('/sign-in')
+    @ndb.toplevel
     def post(self):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
           user = self.get_user_from_session()
           org_name = self.request.get('org_name')
           mob_phone = self.request.get('mob_phone')
-          # init organization folders in Google drive
-          credentials = user.google_credentials
-          http = credentials.authorize(httplib2.Http(memcache))
-          driveservice = build('drive', 'v2', http=http)
-          current_time = time.time()
-          org_folder = self.init_drive_folder(http,driveservice,org_name+' (ioGrow)')
-          batch = BatchHttpRequest()
-          for folder_name in FOLDERS.keys():
-              folder = {
-                    'title': folder_name,
-                    'mimeType': 'application/vnd.google-apps.folder',
-                    'parents' : [{'id': org_folder}]       
-              }
-              batch.add(driveservice.files().insert(fields='id,title',body=folder), callback=self.folder_created_callback)
-          batch.execute(http=http)
-          organization = model.Organization(
-                                            name=org_name,
-                                            org_folder=org_folder
-                                            )
-          for folder_name in FOLDERS.keys():
-              if folder_name in folders.keys():
-                  setattr(organization, FOLDERS[folder_name], folders[folder_name])
-          organization.put()
-          profile = model.Profile.query(model.Profile.name=='Super Administrator', model.Profile.organization==organization.key).get()
-          user.init_user_config(organization.key,profile)
+          model.Organization.create_instance(org_name,user)
           self.redirect('/')
         else:
           self.redirect('/sign-in')
@@ -1104,7 +1051,8 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
             try:
                 user = self.get_user_from_session()
                 logout_url = 'https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://gcdc2013-iogrow.appspot.com/sign-in'
-                if user is None or user.type=='public_user':
+                if user is None:
+                  
                   self.redirect('/welcome/')
                   return
                 # Set the user locale from user's settings
@@ -1135,8 +1083,10 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
 
                 self.response.out.write(template.render(template_values))
             except UserNotAuthorizedException as e:
+               
                 self.redirect('/welcome/')
         else:
+          
           self.redirect('/welcome/')
 
 # Change the current app for example from sales to customer support           

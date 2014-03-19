@@ -52,6 +52,8 @@ class EndpointsHelper():
             raise endpoints.UnauthorizedException(cls.NO_ACCOUNT)
         return user_from_email
 
+    
+            
     @classmethod
     def insert_folder(cls, user, folder_name, kind):
         try:

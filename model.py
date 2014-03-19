@@ -15,7 +15,7 @@
 #
 
 """Persistent datamodel for I/Ogrow."""
-
+import httplib2
 import json
 import logging
 import random
@@ -25,6 +25,7 @@ import datetime
 import types
 from google.appengine.api import memcache
 from apiclient.discovery import build
+from apiclient.http import BatchHttpRequest
 from google.appengine.api import images
 
 from google.appengine.ext import db
@@ -39,6 +40,7 @@ from endpoints_proto_datastore import MessageFieldsSchema
 from google.appengine.api import search
 from endpoints_proto_datastore import MessageFieldsSchema
 from search_helper import tokenize_autocomplete
+
 
 STANDARD_TABS = [{'name': 'Accounts','label': 'Accounts','url':'/#/accounts/','icon':'book'},{'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},{'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/','icon':'money'},
 {'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},{'name': 'Cases','label': 'Cases','url':'/#/cases/','icon':'suitcase'},{'name': 'Tasks','label': 'Tasks','url':'/#/tasks/','icon':'check'}]
@@ -57,6 +59,14 @@ Default_Opp_Stages = [{'name':'Incoming','probability':5},{'name':'Qualified','p
 Default_Case_Status =[{'status':'pending'},{'status':'open'},{'status':'closed'}]
 Default_Lead_Status =[{'status':'New'},{'status':'Working'},{'status':'Unqualified'},{'status':'Closed converted'}]
 
+FOLDERS = {
+            'Accounts': 'accounts_folder',
+            'Contacts': 'contacts_folder',
+            'Leads': 'leads_folder',
+            'Opportunities': 'opportunities_folder',
+            'Cases': 'cases_folder'
+        }
+folders = {}
  
 
 # Models for Appcfg
@@ -108,60 +118,22 @@ class Organization(EndpointsModel):
     shows_folder = ndb.StringProperty()
     feedbacks_folder = ndb.StringProperty()
 
-    def put(self, **kwargs):
-      ndb.Model.put(self, **kwargs)
-      self._setup()
-    # Create a standard instance for this organization  
-    def _setup(self):
-        # Check if there is no instance for this organization
-        if self.instance_created is None:
-          org_key = self.key
-          org_id = str(self.key.id())
-          # Add tabs:
-          created_tabs = list()
-          for tab in STANDARD_TABS:
-            created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
-            created_tab.put()
-            created_tabs.append(created_tab.key)
-          admin_tabs = list()
-          for tab in ADMIN_TABS:
-              created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
-              created_tab.put()
-              admin_tabs.append(created_tab.key)
-          """live_tabs = list()
-          for tab in Iogrowlive_TABS:
-            if tab['name']=='Company_profile':
-              tab['url'] = "/#/live/company_profile/%s" % org_id
-            created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],organization=org_key)
-            created_tab.put()
-            live_tabs.append(created_tab.key)"""
-
-          # Add apps:
-          created_apps = list()
-          sales_app = None
-          #marketing_app = None
-          support_app = None
-          for app in STANDARD_APPS:
-
-            created_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=created_tabs,organization=org_key)
-            created_app.put()
-            if app['name']=='sales':
-
-              sales_app = created_app.key
-            created_apps.append(created_app.key)
-          
-          app = ADMIN_APP
-          admin_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=admin_tabs,organization=org_key)
-          admin_app.put()
-          
-          for profile in STANDARD_PROFILES:
-            default_app = sales_app
-            if profile=='Super Administrator':
-              created_apps.append(admin_app.key)
-              created_tabs.extend(admin_tabs)
-            
-            created_profile = Profile(name=profile,apps=created_apps,default_app=default_app,tabs=created_tabs,organization=org_key)
-            created_profile.put()
+    @staticmethod
+    def init_drive_folder(http,driveservice,folder_name,parent=None):
+        folder = {
+                'title': folder_name,
+                'mimeType': 'application/vnd.google-apps.folder'          
+        }
+        if parent:
+            folder['parents'] = [{'id': parent}]
+        try:
+            created_folder = driveservice.files().insert(fields='id',body=folder).execute()
+            return created_folder['id']
+        except errors.HttpError, error:
+            print 'An error occured: %s' % error
+            return None
+    @classmethod
+    def init_default_values(cls,org_key):
         #HKA 17.12.2013 Add an opportunity stage
         for oppstage in Default_Opp_Stages:
           created_opp_stage = Opportunitystage(organization=org_key,name=oppstage['name'],probability=oppstage['probability'])
@@ -174,6 +146,94 @@ class Organization(EndpointsModel):
         for leadstat in Default_Lead_Status:
           created_lead_stat = Leadstatus(status=leadstat['status'],organization=org_key)
           created_lead_stat.put_async()
+
+    @staticmethod
+    def folder_created_callback(request_id, response, exception):
+        global folders
+        if exception is not None:
+            # Do something with the exception
+            pass
+        else:
+            # Do something with the response
+            folder_name = response['title']
+            folders[folder_name] = response['id']
+
+    # Create a standard instance for this organization  
+    @classmethod
+    def create_instance(cls,org_name, admin):
+        # init google drive folders
+        credentials = admin.google_credentials
+        http = credentials.authorize(httplib2.Http(memcache))
+        driveservice = build('drive', 'v2', http=http)
+        # init the root folder
+        org_folder = cls.init_drive_folder(http,driveservice,org_name+' (ioGrow)')
+        # init objects folders
+        batch = BatchHttpRequest()
+        for folder_name in FOLDERS.keys():
+            folder = {
+                    'title': folder_name,
+                    'mimeType': 'application/vnd.google-apps.folder',
+                    'parents' : [{'id': org_folder}]       
+            }
+            batch.add(driveservice.files().insert(
+                                                fields='id,title',
+                                                body=folder),
+                                                callback=cls.folder_created_callback
+                                                )
+        batch.execute(http=http)
+        organization = cls(
+                        name=org_name,
+                        org_folder=org_folder
+                        )
+        for folder_name in FOLDERS.keys():
+            if folder_name in folders.keys():
+                setattr(organization, FOLDERS[folder_name], folders[folder_name])
+        org_key = organization.put()
+        # create standard tabs
+        created_tabs = []
+        for tab in STANDARD_TABS:
+            created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
+            tab_key = created_tab.put()
+            created_tabs.append(tab_key)
+        # create admin tabs
+        admin_tabs = []
+        for tab in ADMIN_TABS:
+            created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
+            tab_key =created_tab.put()
+            admin_tabs.append(tab_key)
+        # create standard apps
+        created_apps = []
+        sales_app = None
+        for app in STANDARD_APPS:
+            created_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=created_tabs,organization=org_key)
+            app_key = created_app.put()
+            if app['name']=='sales':
+                sales_app = app_key
+            created_apps.append(app_key)
+        # create admin app
+        app = ADMIN_APP
+        admin_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=admin_tabs,organization=org_key)
+        admin_app_key = admin_app.put()
+        # create standard profiles
+        for profile in STANDARD_PROFILES:
+            default_app = sales_app
+            if profile=='Super Administrator':
+                created_apps.append(admin_app_key)
+                created_tabs.extend(admin_tabs)
+            created_profile = Profile(name=profile,apps=created_apps,default_app=default_app,tabs=created_tabs,organization=org_key)
+            # init admin config
+            if profile=='Super Administrator':
+                admin_profile_key = created_profile.put()
+                admin.init_user_config(org_key,admin_profile_key)
+            else:
+                created_profile.put_async()
+        # init default stages,status, default values...
+        cls.init_default_values(org_key)
+                
+    
+          
+        
+
      
 class Permission(EndpointsModel):
     about_kind = ndb.StringProperty(required=True)
@@ -275,7 +335,10 @@ class User(EndpointsModel):
             ndb.Model.put(self, **kwargs)
             
 
-    def init_user_config(self,org_key,profile):
+    def init_user_config(self,org_key,profile_key):
+        profile = profile_key.get()
+        active_app_mem_key = '%s_active_app' % self.google_user_id
+        memcache.add(active_app_mem_key, profile.default_app.get(), 100)
         # Get Apps for this profile:
         apps = profile.apps
         # Prepare user to be updated
@@ -284,8 +347,7 @@ class User(EndpointsModel):
         self.apps = apps
         self.active_app = profile.default_app
         self.type = 'business_user'
-        # Put it 
-        self.put()
+        self.put_async()
     
     def get_user_apps(self):
       
@@ -321,7 +383,7 @@ class User(EndpointsModel):
             return tabs
         else:
             if self.app_changed:
-                active_app = self.active_app.get()
+                active_app = self.get_user_active_app()
                 self.active_tabs = active_app.tabs
                 self.app_changed = False
                 self.put()
