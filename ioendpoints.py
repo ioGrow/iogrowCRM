@@ -50,8 +50,7 @@ from iomodels.crmengine.casestatuses import Casestatus
 from iomodels.crmengine.feedbacks import Feedback
 from iomodels.crmengine.needs import Need,NeedInsertRequest,NeedListResponse,NeedSchema
 #from iomodels.crmengine.emails import Email
-from iomodels.crmengine.tags import Tag, TagSchema
-
+from iomodels.crmengine.tags import Tag,TagSchema,TagListRequest,TagListResponse
 from model import User
 from model import Organization
 from model import Profile
@@ -2895,24 +2894,16 @@ class CrmEngineApi(remote.Service):
         my_model.put()
         return my_model
 
-    # tags.list API
-    @Tag.query_method(
-                      user_required=True,
-                      query_fields=(
-                                    'about_kind',
-                                    'limit',
-                                    'order',
-                                    'pageToken',
-                                    'color'
-                                    ),
-                      path='tags',
-                      name='tags.list'
-                      )
-    def tags_list(self, query):
+    # tags.list api v2
+    @endpoints.method(TagListRequest, TagListResponse,
+                      path='tags/list', http_method='POST',
+                      name='tags.list')
+    def tag_list(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        return query.filter(Tag.organization==user_from_email.organization)
-
-
+        return Tag.list_by_kind(
+                            user_from_email = user_from_email,
+                            kind = request.about_kind
+                            )
     # Tasks APIs
     # edges.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,

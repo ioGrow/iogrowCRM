@@ -6,9 +6,17 @@ from iograph import Edge
 
 class TagSchema(messages.Message):
     id = messages.StringField(1)
-    edgeKey = messages.StringField(2)
-    name  = messages.StringField(3)
-    color = messages.StringField(4)
+    entityKey = messages.StringField(2)
+    edgeKey = messages.StringField(3)
+    name  = messages.StringField(4)
+    color = messages.StringField(5)
+
+class TagListRequest(messages.Message):
+    about_kind = messages.StringField(1,required=True)
+
+class TagListResponse(messages.Message):
+    items = messages.MessageField(TagSchema, 1, repeated=True)
+        
 
 class Tag(EndpointsModel):
 
@@ -38,4 +46,21 @@ class Tag(EndpointsModel):
                                     )
                             )
         return tag_list
+
+    @classmethod
+    def list_by_kind(cls,user_from_email,kind):
+        tags = cls.query(cls.about_kind==kind, cls.organization == user_from_email.organization).fetch()
+        tag_list = []
+        if tags:
+            tag_list = []
+            for tag in tags:
+                tag_list.append(
+                                TagSchema(
+                                        id = str(tag.key.id()),
+                                        entityKey = tag.key.urlsafe(),
+                                        name = tag.name,
+                                        color = tag.color
+                                        )
+                            )
+        return TagListResponse(items = tag_list)
 

@@ -785,7 +785,7 @@ $scope.createNote = function(){
      $('#BeforedeleteOpportunity').modal('show');
    };
 $scope.deleteopportunity= function(){
-     var opportunityid = {'id':$route.current.params.opportunityId};
+     var opportunityid = {'entityKey':$scope.opportunity.entityKey};
      Opportunity.delete($scope,opportunityid);
      $('#BeforedeleteOpportunity').modal('hide');
      };

@@ -171,12 +171,7 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
 
     @staticmethod
     def folder_created_callback(request_id, response, exception):
-        print '********************'
         global folders
-        print folders
-        print response
-        print exception
-        print request_id
         if exception is not None:
             # Do something with the exception
             pass
@@ -231,10 +226,8 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
               if folder_name in folders.keys():
                   setattr(organization, FOLDERS[folder_name], folders[folder_name])
           organization.put()
-          comp_prof = model.Companyprofile(name=org_name,organization=organization.key,organizationid=organization.key.id(),owner=user.google_user_id)
-          comp_prof.put()
           profile = model.Profile.query(model.Profile.name=='Super Administrator', model.Profile.organization==organization.key).get()
-          user.init_user_config(organization.key,profile.key)
+          user.init_user_config(organization.key,profile)
           self.redirect('/')
         else:
           self.redirect('/sign-in')
@@ -1111,9 +1104,6 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
             try:
                 user = self.get_user_from_session()
                 logout_url = 'https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://gcdc2013-iogrow.appspot.com/sign-in'
-                
-                print '*************************************'
-                print user
                 if user is None or user.type=='public_user':
                   self.redirect('/welcome/')
                   return
@@ -1121,30 +1111,20 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                 self.set_user_locale()
                 apps = user.get_user_apps()
                 admin_app = None
-                org_key = user.organization
-                org = model.Organization.query(model.Organization.key==org_key).get()
-                org_id = org.key.id()
-                
-                
                 active_app = user.get_user_active_app()
                 tabs = user.get_user_active_tabs()
-                print '#*******************************************'
+                print '==========================Active Tabs====================='
                 print tabs
-                print '#####################################'
                 for app in apps:
                     if app.name=='admin':
                         admin_app = app
-                
-                
-
                 template_values = {
                   'tabs':tabs,
                   'user':user,
                   'logout_url' : logout_url,
                   'CLIENT_ID': CLIENT_ID,
                   'active_app':active_app,
-                  'apps': apps,
-                  'org_id':org_id
+                  'apps': apps
                 }
                 if admin_app:
                     template_values['admin_app']=admin_app
@@ -1171,11 +1151,8 @@ class ChangeActiveAppHandler(SessionEnabledHandler):
             new_active_app = model.Application.get_by_id(new_app_id)
             if new_active_app:
               if new_active_app.organization==user.organization:
-                future = user.set_user_active_app(new_active_app.key)
-                # To-do resolve this: we are waiting for the active_app to be refreshed
-                #time.sleep(1)
+                user.set_user_active_app(new_active_app.key)
                 self.redirect(new_active_app.url)
-                future.get_result()
               else:
                 self.redirect('/error')
             else:

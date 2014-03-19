@@ -23,7 +23,7 @@ import re
 import string
 import datetime
 import types
-
+from google.appengine.api import memcache
 from apiclient.discovery import build
 from google.appengine.api import images
 
@@ -42,7 +42,7 @@ from search_helper import tokenize_autocomplete
 
 STANDARD_TABS = [{'name': 'Accounts','label': 'Accounts','url':'/#/accounts/','icon':'book'},{'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},{'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/','icon':'money'},
 {'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},{'name': 'Cases','label': 'Cases','url':'/#/cases/','icon':'suitcase'},{'name': 'Tasks','label': 'Tasks','url':'/#/tasks/','icon':'check'}]
-STANDARD_PROFILES = ['Super Administrator', 'Standard User', 'Sales User', 'Marketing User', 'Read Only', 'Support User', 'Contract Manager','Read Only']
+STANDARD_PROFILES = ['Super Administrator', 'Standard User']
 STANDARD_APPS = [{'name': 'sales', 'label': 'Customer Development', 'url':'/#/accounts/'},#{'name': 'marketing', 'label':'Marketing', 'url':'/#/compaigns/'},{'name':'call_center','label': 'Customer Support','url':'/#/cases/'}
 ]
 STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
@@ -117,19 +117,9 @@ class Organization(EndpointsModel):
         if self.instance_created is None:
           org_key = self.key
           org_id = str(self.key.id())
-          
-          # Add standard objects:
-          for obj in STANDARD_OBJECTS:
-            created_object = Object(name=obj,organization=org_key)
-            created_object.put()
-            object_default_settings = SharingSettings(related_object=created_object.key,organization=org_key)
-            object_default_settings.put()
-
-         
           # Add tabs:
           created_tabs = list()
           for tab in STANDARD_TABS:
-
             created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
             created_tab.put()
             created_tabs.append(created_tab.key)
@@ -158,57 +148,32 @@ class Organization(EndpointsModel):
             if app['name']=='sales':
 
               sales_app = created_app.key
-            #if app['name']=='marketing':
-              #marketing_app = created_app.key
-            """if app['name']=='call_center':
-              support_app = created_app.key
-
             created_apps.append(created_app.key)
-          app = Iogrowlive_APP
-          live_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=live_tabs,organization=org_key)
-          live_app.put()
-          created_apps.append(live_app.key)
-          created_tabs.extend(live_tabs)"""
-          
           
           app = ADMIN_APP
           admin_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=admin_tabs,organization=org_key)
           admin_app.put()
           
-          
-          
-
-          
-          # Add profiles
-          
-          
           for profile in STANDARD_PROFILES:
             default_app = sales_app
-            #if profile=='Marketing User':
-             # default_app = marketing_app
-            if profile=='Support User':
-              default_app = support_app
-            elif profile=='Super Administrator':
+            if profile=='Super Administrator':
               created_apps.append(admin_app.key)
               created_tabs.extend(admin_tabs)
-              
-
-
-
+            
             created_profile = Profile(name=profile,apps=created_apps,default_app=default_app,tabs=created_tabs,organization=org_key)
             created_profile.put()
         #HKA 17.12.2013 Add an opportunity stage
         for oppstage in Default_Opp_Stages:
           created_opp_stage = Opportunitystage(organization=org_key,name=oppstage['name'],probability=oppstage['probability'])
-          created_opp_stage.put()
+          created_opp_stage.put_async()
         #HKA 17.12.2013 Add an Case status
         for casestat in Default_Case_Status:
           created_case_status = Casestatus(status=casestat['status'],organization=org_key)
-          created_case_status.put()
+          created_case_status.put_async()
         #HKA 17.12.2013 Add an Lead status
         for leadstat in Default_Lead_Status:
           created_lead_stat = Leadstatus(status=leadstat['status'],organization=org_key)
-          created_lead_stat.put()
+          created_lead_stat.put_async()
      
 class Permission(EndpointsModel):
     about_kind = ndb.StringProperty(required=True)
@@ -310,17 +275,14 @@ class User(EndpointsModel):
             ndb.Model.put(self, **kwargs)
             
 
-    def init_user_config(self,org_key,profile_key):
-        profile = profile_key.get()
+    def init_user_config(self,org_key,profile):
         # Get Apps for this profile:
         apps = profile.apps
-        # Get active_app
-        active_app = profile.default_app
         # Prepare user to be updated
         self.organization = org_key
-        self.profile = profile_key
+        self.profile = profile.key
         self.apps = apps
-        self.active_app = active_app
+        self.active_app = profile.default_app
         self.type = 'business_user'
         # Put it 
         self.put()
@@ -329,26 +291,52 @@ class User(EndpointsModel):
       
         return ndb.get_multi(self.apps)
     def get_user_active_app(self):
+        mem_key = '%s_active_app' % self.google_user_id
+        active_app = memcache.get(mem_key)
+        if active_app is not None:
+            return active_app
         return self.active_app.get()
     
     def set_user_active_app(self,app_key):
       if app_key in self.apps:
         self.active_app = app_key
         self.app_changed = True
-        future = self.put_async()
-        return future
+        active_app =app_key.get()
+        active_tabs = active_app.tabs
+        mem_key = '%s_tabs' % self.google_user_id
+        if memcache.get(mem_key) :
+            memcache.set(mem_key, ndb.get_multi(active_app.tabs), 100)
+        else:
+            memcache.add(mem_key, ndb.get_multi(active_app.tabs), 100)
+        active_app_mem_key = '%s_active_app' % self.google_user_id
+        if memcache.get(active_app_mem_key) :
+            memcache.set(active_app_mem_key, active_app, 100)
+        else:
+            memcache.add(active_app_mem_key, active_app, 100)
+        self.put()
     def get_user_active_tabs(self):
-        
-          active_app = self.active_app.get()
-          profile = self.profile.get()
-          visible_tabs_to_profile = profile.tabs 
-          tabs = list()
-          for tab in active_app.tabs:
-            
-              tabs.append(tab)
-          self.active_tabs = tabs
-          self.put()
-          return ndb.get_multi(active_app.tabs)
+        mem_key = '%s_tabs' % self.google_user_id
+        tabs = memcache.get(mem_key)
+        if tabs is not None:
+            return tabs
+        else:
+            if self.app_changed:
+                active_app = self.active_app.get()
+                self.active_tabs = active_app.tabs
+                self.app_changed = False
+                self.put()
+                memcache.add(mem_key, ndb.get_multi(self.active_tabs), 100)
+                return ndb.get_multi(active_app.tabs)
+            elif self.active_tabs:
+                memcache.add(mem_key, ndb.get_multi(self.active_tabs), 100)
+                return ndb.get_multi(self.active_tabs)
+            else:
+                active_app = self.active_app.get()
+                self.active_tabs = active_app.tabs
+                self.put()
+                memcache.add(mem_key, ndb.get_multi(self.active_tabs), 100)
+                return ndb.get_multi(active_app.tabs)
+                
 
     def get_user_groups(self):
         list_of_groups = list()

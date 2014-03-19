@@ -489,6 +489,7 @@ class Lead(EndpointsModel):
             edge.put()
 
         lead.key.delete()
+        EndpointsHelper.delete_document_from_index( id = request.id )
         return LeadSchema(id = str(contact_key_async.id()) )
 
 

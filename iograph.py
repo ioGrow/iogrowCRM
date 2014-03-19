@@ -3,25 +3,25 @@ from google.appengine.datastore.datastore_query import Cursor
 from protorpc import messages
 from endpoints_helper import EndpointsHelper
 INVERSED_EDGES = {
-            'assignees' : 'assigned_to',
-            'cases' : 'parents',
-            'comments': 'parents',
-            'contacts': 'parents',
-            'documents':'parents',
-            'events':'parents',
-            'has_access_on':'permissions',
-            'infos':'parents',
-            'needs': 'parents',
+            'assignees' : ['assigned_to'],
+            'cases' : ['parents'],
+            'comments': ['parents'],
+            'contacts': ['parents'],
+            'documents':['parents'],
+            'events':['parents'],
+            'has_access_on':['permissions'],
+            'infos':['parents'],
+            'needs': ['parents'],
             'parents': ['cases','comments', 'contacts','documents','events','infos', 'needs','tasks','topics'],
-            'permissions': 'has_access_on',
-            'related_cases':'status',
-            'related_opportunities':'stages',
-            'stages':'related_opportunities',
-            'status':'related_cases',
-            'tagged_on': 'tags',
-            'tags': 'tagged_on',
-            'tasks' : 'parents',
-            'topics':'parents'
+            'permissions': ['has_access_on'],
+            'related_cases':['status'],
+            'related_opportunities':['stages'],
+            'stages':['related_opportunities'],
+            'status':['related_cases'],
+            'tagged_on': ['tags'],
+            'tags': ['tagged_on'],
+            'tasks' : ['parents'],
+            'topics':['parents']
             }
 
 DELETED_ON_CASCADE = {
@@ -73,13 +73,17 @@ class Edge(ndb.Expando):
             if existing_edge:
                 return existing_edge.key
             if inverse_edge is not None:
-                inversed_edge = Edge(kind = inverse_edge, 
+                inversed_edge = Edge(
+                           kind = inverse_edge, 
                            start_node = end_node,
-                           end_node = start_node)
-                inversed_edge.put()
-            edge = Edge(kind = kind, 
-                           start_node = start_node,
-                           end_node = end_node)
+                           end_node = start_node
+                                    )
+                inversed_edge.put_async()
+            edge = Edge(
+                        kind = kind, 
+                        start_node = start_node,
+                        end_node = end_node
+                        )
             edge_key = edge.put()
             return edge_key
     
