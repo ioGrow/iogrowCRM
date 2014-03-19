@@ -114,14 +114,10 @@ class SessionEnabledHandler(webapp2.RequestHandler):
     """Convenience method for retrieving the users crendentials from an
     authenticated session.
     """
-    google_user_id = self.session.get(self.CURRENT_USER_SESSION_KEY)
-    if google_user_id is None:
-      raise UserNotAuthorizedException('Session did not contain user id.')
-    user = model.User.query(model.User.google_user_id == google_user_id).get()
-    
-    #if not user:
-    # raise UserNotAuthorizedException(
-    #   'Session user ID could not be found in the datastore.')
+    email = self.session.get(self.CURRENT_USER_SESSION_KEY)
+    if email is None:
+      raise UserNotAuthorizedException('Session did not contain user email.')
+    user = model.User.get_by_email(email)
     return user
 
 
@@ -767,6 +763,10 @@ class GooglePlusConnect(SessionEnabledHandler):
         code = self.request.get("code")
         try:
             credentials = GooglePlusConnect.exchange_code(code)
+            print '======================= Credentials ========================='
+            print credentials.access_token
+            print '======================= refresh_token ========================='
+            print credentials.refresh_token
         except FlowExchangeError:
             return
         token_info = GooglePlusConnect.get_token_info(credentials)
@@ -807,7 +807,7 @@ class GooglePlusConnect(SessionEnabledHandler):
             isNewUser = True
 
         # Store the user ID in the session for later use.
-        self.session[self.CURRENT_USER_SESSION_KEY] = token_info.get('user_id')
+        self.session[self.CURRENT_USER_SESSION_KEY] = user.email
         self.response.headers['Content-Type'] = 'application/json'  
         self.response.out.write(json.dumps(isNewUser))
 
@@ -852,9 +852,12 @@ class PublicUsersHandler(SessionEnabledHandler):
         code = self.request.get("code")
         try:
             credentials = GooglePlusConnect.exchange_code(code)
+            print '======================= Credential ========================='
+            print credentials
         except FlowExchangeError:
             return
         token_info = GooglePlusConnect.get_token_info(credentials)
+
         if token_info.status_code != 200:
             return
         token_info = json.loads(token_info.content)
@@ -880,7 +883,7 @@ class PublicUsersHandler(SessionEnabledHandler):
         userinfo['photo'] = user.google_public_profile_photo_url
 
         # Store the user ID in the session for later use.
-        self.session[self.CURRENT_USER_SESSION_KEY] = token_info.get('user_id')
+        self.session[self.CURRENT_USER_SESSION_KEY] = user.email
         self.response.headers['Content-Type'] = 'application/json'  
         self.response.out.write(json.dumps(userinfo))
 

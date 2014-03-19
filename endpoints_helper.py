@@ -47,7 +47,7 @@ class EndpointsHelper():
         user = endpoints.get_current_user()
         if user is None:
             raise endpoints.UnauthorizedException(cls.INVALID_TOKEN)
-        user_from_email = User.query(User.email == user.email()).get()
+        user_from_email = User.get_by_email(user.email())
         if user_from_email is None:
             raise endpoints.UnauthorizedException(cls.NO_ACCOUNT)
         return user_from_email

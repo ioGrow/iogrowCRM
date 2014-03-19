@@ -327,6 +327,7 @@ class User(EndpointsModel):
     google_public_profile_url = ndb.StringProperty()
     photo = ndb.StringProperty()
 
+
     def put(self, **kwargs):
         existing_user = User.query(User.google_user_id == self.google_user_id).get()
         if existing_user:
@@ -338,7 +339,7 @@ class User(EndpointsModel):
     def init_user_config(self,org_key,profile_key):
         profile = profile_key.get()
         active_app_mem_key = '%s_active_app' % self.google_user_id
-        memcache.add(active_app_mem_key, profile.default_app.get(), 100)
+        memcache.add(active_app_mem_key, profile.default_app.get())
         # Get Apps for this profile:
         apps = profile.apps
         # Prepare user to be updated
@@ -349,6 +350,22 @@ class User(EndpointsModel):
         self.type = 'business_user'
         self.put_async()
     
+    @classmethod
+    def get_by_email(cls,email):
+        user_from_email = memcache.get(email)
+        if user_from_email is not None:
+            print '========================User form memcache=================='
+            print user_from_email
+            return user_from_email
+        user_from_email = cls.query(cls.email == email).get()
+        if memcache.get(email) :
+            memcache.set(email, user_from_email)
+        else:
+            memcache.add(email, user_from_email)
+        print '========================User form datastore=================='
+        print user_from_email
+        return user_from_email
+
     def get_user_apps(self):
       
         return ndb.get_multi(self.apps)
@@ -367,14 +384,14 @@ class User(EndpointsModel):
         active_tabs = active_app.tabs
         mem_key = '%s_tabs' % self.google_user_id
         if memcache.get(mem_key) :
-            memcache.set(mem_key, ndb.get_multi(active_app.tabs), 100)
+            memcache.set(mem_key, ndb.get_multi(active_app.tabs))
         else:
-            memcache.add(mem_key, ndb.get_multi(active_app.tabs), 100)
+            memcache.add(mem_key, ndb.get_multi(active_app.tabs))
         active_app_mem_key = '%s_active_app' % self.google_user_id
         if memcache.get(active_app_mem_key) :
-            memcache.set(active_app_mem_key, active_app, 100)
+            memcache.set(active_app_mem_key, active_app)
         else:
-            memcache.add(active_app_mem_key, active_app, 100)
+            memcache.add(active_app_mem_key, active_app)
         self.put()
     def get_user_active_tabs(self):
         mem_key = '%s_tabs' % self.google_user_id
@@ -387,16 +404,16 @@ class User(EndpointsModel):
                 self.active_tabs = active_app.tabs
                 self.app_changed = False
                 self.put()
-                memcache.add(mem_key, ndb.get_multi(self.active_tabs), 100)
+                memcache.add(mem_key, ndb.get_multi(self.active_tabs))
                 return ndb.get_multi(active_app.tabs)
             elif self.active_tabs:
-                memcache.add(mem_key, ndb.get_multi(self.active_tabs), 100)
+                memcache.add(mem_key, ndb.get_multi(self.active_tabs))
                 return ndb.get_multi(self.active_tabs)
             else:
                 active_app = self.active_app.get()
                 self.active_tabs = active_app.tabs
                 self.put()
-                memcache.add(mem_key, ndb.get_multi(self.active_tabs), 100)
+                memcache.add(mem_key, ndb.get_multi(self.active_tabs))
                 return ndb.get_multi(active_app.tabs)
                 
 
