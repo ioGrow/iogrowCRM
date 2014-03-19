@@ -444,10 +444,10 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        $scope.opportunities = [];
        $scope.opportunities = {};
         $scope.statuses = [
-    {value: 1, text: 'Home'},
-    {value: 2, text: 'Work'},
-    {value: 3, text: 'Mob'},
-    {value: 4, text: 'Other'}
+    {value: 'Home', text: 'Home'},
+    {value: 'Work', text: 'Work'},
+    {value: 'Mob', text: 'Mob'},
+    {value: 'Other', text: 'Other'}
   ];
 
 
@@ -614,8 +614,7 @@ $scope.ContactlistNextPageItems = function(){
 
      
      
-      /****the problem si in params object !!!!!!!!!!!!*/
-        params = {
+          params = {
                   'entityKey': entityKey,
                   'parent':$scope.account.entityKey,
                   'kind':edge,
@@ -627,15 +626,12 @@ $scope.ContactlistNextPageItems = function(){
                       }
                   ]
         };
-         console.log('-----I am Here-----');
-           console.log(params);
+         
          InfoNode.patch($scope,params);
    }
 
-  }
-  $scope.assignParams=function(kind,name,entityKey,value){
-    $scope.currentParam={'kind':kind,'data':{'name':name,'value':value,'entityKey':entityKey}};
-  }
+  };
+  
 //HKA 07.12.2013 Manage Prev & Next Page on Related List Opportunities
 $scope.OpplistNextPageItems = function(){
         
