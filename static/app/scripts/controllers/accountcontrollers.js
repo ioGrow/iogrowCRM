@@ -20,6 +20,7 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
      $scope.draggedTag=null;
      $scope.tag = {};
      $scope.showNewTag=false;
+     //Manage Color
      $scope.color_pallet=[
          {'name':'red','color':'#F7846A'},
          {'name':'orange','color':'#FFBB22'},
@@ -607,8 +608,9 @@ $scope.ContactlistNextPageItems = function(){
 /// update account with inlineEdit
   $scope.inlinePatch=function(kind,edge,name,entityKey,value){
    
-   if ($scope.currentParam.kind=='Account') {
-         params = {};
+   if (kind=='Account') {
+          params = {'id':$scope.account.id,
+             name:value}
          Account.patch($scope,params);
    }else{
 
@@ -630,8 +632,10 @@ $scope.ContactlistNextPageItems = function(){
          InfoNode.patch($scope,params);
    }
 
+
   };
   
+
 //HKA 07.12.2013 Manage Prev & Next Page on Related List Opportunities
 $scope.OpplistNextPageItems = function(){
         
