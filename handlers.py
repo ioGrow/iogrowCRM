@@ -68,6 +68,15 @@ TOKEN_INFO_ENDPOINT = ('https://www.googleapis.com/oauth2/v1/tokeninfo' +
     '?access_token=%s')
 TOKEN_REVOKE_ENDPOINT = 'https://accounts.google.com/o/oauth2/revoke?token=%s'
 
+FOLDERS_ATTR = {
+            'Account': 'accounts_folder',
+            'Contact': 'contacts_folder',
+            'Lead': 'leads_folder',
+            'Opportunity': 'opportunities_folder',
+            'Case': 'cases_folder',
+            'Show': 'shows_folder',
+            'Feedback': 'feedbacks_folder'
+        }
 FOLDERS = {
             'Accounts': 'accounts_folder',
             'Contacts': 'contacts_folder',
@@ -1175,6 +1184,42 @@ class CreateOrganizationFolders(webapp2.RequestHandler):
                 setattr(organization, FOLDERS[folder_name], folders[folder_name])
         organization.put()
 
+class CreateObjectFolder(webapp2.RequestHandler):
+    @staticmethod
+    def insert_folder(user, folder_name, kind):
+        try:
+            credentials = user.google_credentials
+            http = credentials.authorize(httplib2.Http(memcache))
+            service = build('drive', 'v2', http=http)
+            organization = user.organization.get()
+
+            # prepare params to insert
+            folder_params = {
+                        'title': folder_name,
+                        'mimeType':  'application/vnd.google-apps.folder'
+            }#get the accounts_folder or contacts_folder or ..
+            parent_folder = eval('organization.'+FOLDERS_ATTR[kind])
+            if parent_folder:
+                folder_params['parents'] = [{'id': parent_folder}]
+
+            # execute files.insert and get resource_id
+            created_folder = service.files().insert(body=folder_params,fields='id').execute()
+        except:
+            raise endpoints.UnauthorizedException(cls.INVALID_GRANT)
+        return created_folder
+    @ndb.toplevel
+    def post(self): 
+        folder_name = self.request.get('folder_name')
+        kind = self.request.get('kind')
+        user = model.User.get_by_email(self.request.get('email'))
+        created_folder = self.insert_folder(user,folder_name,kind)
+        object_key_str = self.request.get('obj_key')
+        object_key = ndb.Key(urlsafe=object_key_str)
+        obj = object_key.get()
+        obj.folder = created_folder['id']
+        obj.put_async()
+        
+
 def get_base_url():
   """Returns the base URL for this application."""
   base = get_default_version_hostname()
@@ -1185,6 +1230,7 @@ def get_base_url():
 routes = [
     # Task Queues Handlers
     ('/workers/createorgfolders',CreateOrganizationFolders),
+    ('/workers/createobjectfolder',CreateObjectFolder),
     ('/',IndexHandler),
     
     # Templates Views Routes
