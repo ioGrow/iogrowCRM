@@ -97,6 +97,30 @@
         </div>
        </div>
          <!-- BEFORE DELETE MODEL END-->
+           <!--HKA 24.12.2013 Modal before Deleting Account-->
+          <!-- BEFORE DELETE MODEL-->
+         <div id="BeforedeleteInfonode" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">Delete Information</h3>
+              </div>
+              <div class="modal-body">
+                 <form id="seletesho" name="deletesho" class="form-horizontal"> 
+                  <p>{{_("Are you sure you want to delete")}} :  <%=account.name %> .</p>
+              </div>
+                <div class="modal-footer">
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                  
+                  <input  ng-click="deleteaccount(account)" type="submit" class="btn red" value="Delete this Information">
+                  <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
+                </div>
+            </form>
+          </div>
+        </div>
+       </div>
+         <!-- BEFORE DELETE MODEL END-->
       <div ng-show="isContentLoaded">
         
         <!-- END PAGE HEADER-->
@@ -115,7 +139,7 @@
                 
             <h2 class="page-title" >
             <a href="/#/accounts/" data-toggle="tooltip" id='testEdit' data-placement="bottom" title="Back to Accounts">
-            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="/static/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Accounts")}} > <a editable-text="account.name"  data-popover="true" onbeforesave="inlinePatch('Account','', 'name',account.entityKey,$data)" edittooltip e-form="account_name_form"> <%= account.name %></a></h2>
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="/static/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Accounts")}} > <a editable-text="account.name"  onbeforesave="inlinePatch('Account','', 'name',account.entityKey,$data)" > <%= account.name %></a></h2>
             
 
            <span ng-show="account.account_type">{{_("Type")}}: <a class="tag"  href="/#/search/type:Account <%=account.account_type%>">#<%=account.account_type%></a></span><br>
@@ -227,7 +251,7 @@
                                 </div>
                                   <ul class="list-unstyled contact-infos">
 
-                                    <li ng-repeat="phone in infonodes.phones"> <a editable-text="phone.number" onbeforesave="inlinePatch('Infonode','phones', 'number',phone.entityKey,$data)"  edittooltip e-form="phonenumber"> <%=phone.number%> </a>, <a editable-select="phone.type" e-ng-options="s.value as s.text for s in statuses" onbeforesave="inlinePatch('Infonode','phones', 'type',phone.entityKey,$data)" edittooltip e-form="phone_type_form"> <%= phone.type%> </a></li>
+                                    <li ng-repeat="phone in infonodes.phones"> <span editable-text="phone.number" onbeforesave="inlinePatch('Infonode','phones', 'number',phone.entityKey,$data)"  edittooltip e-form="phonenumber"> <%=phone.number%> </span>, <span editable-select="phone.type" e-ng-options="s.value as s.text for s in statuses" onbeforesave="inlinePatch('Infonode','phones', 'type',phone.entityKey,$data)" > <%= phone.type%> </span></li>
 
           
                                     <li><a href="#phonemodal"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new Phone</a></li>
@@ -238,7 +262,7 @@
                                  
                                 </div>
                                   <ul class="list-unstyled contact-infos">
-                                    <li ng-repeat="email in infonodes.emails"> <a editable-text="email.email" onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)" edittooltip e-form="phonenumber"> <%=email.email%> </a>  </li>
+                                    <li ng-repeat="email in infonodes.emails"> <span editable-text="email.email" onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)" edittooltip e-form="phonenumber"> <%=email.email%> </span>  </li>
                                     
                                     <li><a href="#emailmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new email address </a></li>
 
@@ -1488,4 +1512,9 @@
         }
       };
  /* $('body').popover({ selector: '[data-popover]', trigger: 'click hover', placement: 'left', delay: {show: 50, hide: 400}});*/
+ 
+          $('#assigeeList').slimScroll({
+              height: '200px'
+          });
+       
 </script>

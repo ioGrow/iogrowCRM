@@ -728,9 +728,15 @@ $scope.CaselistNextPageItems = function(){
      $scope.inlinePatch=function(kind,edge,name,entityKey,value){
    
    if (kind=='Contact') {
-          params = {'id':$scope.contact.id,
-             name:value}
-         Contact.patch($scope,params);
+         
+      if (name=='firstname')
+        {params = {'id':$scope.contact.id,
+             firstname:value};
+         Contact.patch($scope,params);};
+       if (name=='lastname')
+        {params = {'id':$scope.contact.id,
+             lastname:value};
+         Contact.patch($scope,params);}
    }else{
 
      
