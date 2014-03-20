@@ -32,7 +32,7 @@ app.directive('edittooltip',  function() {
           var item=field.attr('e-form');
           $scope[item].$show();
       }).on('click', '#inlineDeleteElement', function() {
-          $scope.editbeforedelete();
+          $scope.beforedeleteInfonde();
       });
   }
 }});
