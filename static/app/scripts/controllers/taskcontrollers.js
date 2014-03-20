@@ -20,8 +20,6 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      $scope.user = undefined;
      $scope.slected_memeber = undefined;
      $scope.role= 'participant';
-
- 
     // What to do after authentication
      $scope.runTheProcess = function(){
           var taskid = {'id':$route.current.params.taskId};
