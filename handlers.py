@@ -15,6 +15,7 @@
 #
 
 """All request handlers of PhotoHunt, including its built-in API."""
+import pprint
 import httplib2
 import model
 import json
@@ -714,20 +715,18 @@ class GooglePlusConnect(SessionEnabledHandler):
     @staticmethod
     def get_user_profile(credentials):
       """Return the public Google+ profile data for the given user."""
-      http = httplib2.Http()
+      http = credentials.authorize(httplib2.Http(memcache))
       plus = build('plus', 'v1', http=http)
-      credentials.authorize(http)
       return plus.people().get(userId='me').execute()
     @staticmethod
     def get_user_email(credentials):
       """Return the public Google+ profile data for the given user."""
-      http = httplib2.Http()
+      http = credentials.authorize(httplib2.Http(memcache))
       userinfo = build('oauth2', 'v1', http=http)
-      credentials.authorize(http)
       return userinfo.userinfo().get().execute()
 
     @staticmethod
-    def save_token_for_user(google_user_id, credentials,user_id=None):
+    def save_token_for_user(email, credentials,user_id=None):
       """Creates a user for the given ID and credential or updates the existing
       user with the existing credential.
 
@@ -748,9 +747,7 @@ class GooglePlusConnect(SessionEnabledHandler):
         user.email = userinfo.get('email')
         user.google_public_profile_photo_url = userinfo.get('picture') 
       else:
-        user = model.User.query(model.User.google_user_id == google_user_id).get()     
-      #user = model.User.all().filter('google_user_id =', google_user_id).get()
-      
+        user = model.User.get_by_email(email)    
       if user is None:
         userinfo = GooglePlusConnect.get_user_email(credentials)
         user = model.User()
@@ -762,6 +759,10 @@ class GooglePlusConnect(SessionEnabledHandler):
         user.email = userinfo.get('email')
         user.google_public_profile_photo_url = userinfo.get('picture')
       user.google_credentials = credentials
+      if memcache.get(user.email) :
+            memcache.set(user.email, user)
+      else:
+            memcache.add(user.email, user)
       user.put()
       return user
 
@@ -772,16 +773,14 @@ class GooglePlusConnect(SessionEnabledHandler):
         code = self.request.get("code")
         try:
             credentials = GooglePlusConnect.exchange_code(code)
-            print '======================= Credentials ========================='
-            print credentials.access_token
-            print '======================= refresh_token ========================='
-            print credentials.refresh_token
         except FlowExchangeError:
             return
         token_info = GooglePlusConnect.get_token_info(credentials)
+        print '=========================Token Info ============================'
         if token_info.status_code != 200:
             return
         token_info = json.loads(token_info.content)
+        pprint.pprint(token_info)
         # If there was an error in the token info, abort.
         if token_info.get('error') is not None:
             return
@@ -804,11 +803,11 @@ class GooglePlusConnect(SessionEnabledHandler):
         # Store our credentials with in the datastore with our user.
         if invited_user_id:
 
-          user = GooglePlusConnect.save_token_for_user(token_info.get('user_id'),
+          user = GooglePlusConnect.save_token_for_user(token_info.get('email'),
                                                   credentials,invited_user_id)
         else:
 
-          user = GooglePlusConnect.save_token_for_user(token_info.get('user_id'),
+          user = GooglePlusConnect.save_token_for_user(token_info.get('email'),
                                                   credentials)
         # if user doesn't have organization redirect him to sign-up
         isNewUser = False
@@ -1063,7 +1062,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
             try:
                 user = self.get_user_from_session()
                 logout_url = 'https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://gcdc2013-iogrow.appspot.com/sign-in'
-                if user is None:
+                if user is None or user.type=='public_user':
                   
                   self.redirect('/welcome/')
                   return
