@@ -119,6 +119,20 @@ class Organization(EndpointsModel):
     shows_folder = ndb.StringProperty()
     feedbacks_folder = ndb.StringProperty()
 
+    @classmethod
+    def init_default_values(cls,org_key):
+        #HKA 17.12.2013 Add an opportunity stage
+        for oppstage in Default_Opp_Stages:
+          created_opp_stage = Opportunitystage(organization=org_key,name=oppstage['name'],probability=oppstage['probability'])
+          created_opp_stage.put_async()
+        #HKA 17.12.2013 Add an Case status
+        for casestat in Default_Case_Status:
+          created_case_status = Casestatus(status=casestat['status'],organization=org_key)
+          created_case_status.put_async()
+        #HKA 17.12.2013 Add an Lead status
+        for leadstat in Default_Lead_Status:
+          created_lead_stat = Leadstatus(status=leadstat['status'],organization=org_key)
+          created_lead_stat.put_async()
     # Create a standard instance for this organization  
     @classmethod
     def create_instance(cls,org_name, admin):
@@ -294,6 +308,10 @@ class User(EndpointsModel):
         self.apps = apps
         self.active_app = profile.default_app
         self.type = 'business_user'
+        if memcache.get(self.email) :
+            memcache.set(self.email, self)
+        else:
+            memcache.add(self.email, self)
         self.put_async()
     
     @classmethod
