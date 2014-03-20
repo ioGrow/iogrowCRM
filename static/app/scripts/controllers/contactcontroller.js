@@ -433,6 +433,12 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
       $scope.casee = {};
       $scope.casee.priority = 4;
       $scope.sharing_with = [];
+      $scope.statuses = [
+      {value: 'Home', text: 'Home'},
+      {value: 'Work', text: 'Work'},
+      {value: 'Mob', text: 'Mob'},
+      {value: 'Other', text: 'Other'}
+      ];
       
       // What to do after authentication
       $scope.runTheProcess = function(){
@@ -718,7 +724,35 @@ $scope.CaselistNextPageItems = function(){
     $scope.editintro = function() {
        $('#EditIntroModal').modal('show');
     };
+// HKA 19.03.2014 inline update infonode
+     $scope.inlinePatch=function(kind,edge,name,entityKey,value){
+   
+   if (kind=='Contact') {
+          params = {'id':$scope.contact.id,
+             name:value}
+         Contact.patch($scope,params);
+   }else{
 
+     
+     
+          params = {
+                  'entityKey': entityKey,
+                  'parent':$scope.contact.entityKey,
+                  'kind':edge,
+                  'fields':[
+                     
+                      {
+                        "field": name,
+                        "value": value
+                      }
+                  ]
+        };
+         
+         InfoNode.patch($scope,params);
+   }
+
+
+  };
  //HKA 09.11.2013 Add a new Task
    $scope.addTask = function(task){
       
