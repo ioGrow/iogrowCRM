@@ -1390,6 +1390,9 @@ $scope.updatAccountHeader = function(account){
 $scope.editbeforedelete = function(){
      $('#BeforedeleteAccount').modal('show');
    };
+$scope.beforedeleteInfonde = function(){
+    $('#BeforedeleteInfonode').modal('show');
+}
 $scope.deleteaccount = function(){
      var accountid = {'entityKey':$scope.account.entityKey};
      Account.delete($scope,accountid);
