@@ -160,7 +160,7 @@
            
             <div class="row cards-container">
             <div class="col-md-9">
-            <div class="inner-cards-container">
+            <div class="inner-cards-container waterfall" ng-hide="blankStatecontact" >
             
               <div droppable ng-repeat="contact in contacts"  data-column="<%=getPosition($index)%>" class="cardElement"  ng-drop="dropTag(contact)" >
                
@@ -193,13 +193,6 @@
                     
                     </div>
                 </div>
-              <script type="text/javascript">
-                  $('.inner-cards-container').waterfall({ 
-                      colMinWidth: 200, 
-                      defaultContainerWidth: 800,
-                      autoresize: true
-                    });
-               </script>
                <div ng-show="blankStatecontact" data-span="3" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
                 <div class="dashboard-stat cards">
                   
@@ -221,6 +214,22 @@
                   <div class="thumbnail blank_slate_body">
                       
                       <p class="lead">No results found, try with another filter</p>
+                  </div>
+               
+                                  
+                </div>
+              </div>
+              <div class="clearfix"></div>
+              </div><!--innercardcontaine-->
+              <div class="inner-cards-container" ng-show="blankStatecontact" >
+               <div data-span="3" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
+                <div class="dashboard-stat cards">
+                  
+                  
+                  <div class="blank_slate_arrow"></div>
+                  <div class="blank_slate_body">
+                      <img src="/static/img/contacts_blank.png">
+                      <p class="lead">Each contact gets a page in i/oGrow. You and your co-workers can add notes from calls,conversations, meetings, or any other historic information about this person.</p>
                   </div>
                
                                   
@@ -341,5 +350,10 @@
         }
     }
     handleUniform();
+    $('.waterfall').waterfall({ 
+      colMinWidth: 200, 
+      defaultContainerWidth: 800,
+      autoresize: true
+    });
 </script>
 
