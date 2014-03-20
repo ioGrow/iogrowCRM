@@ -100,12 +100,12 @@ leadservices.factory('Lead', function($http) {
                if (resp.topics){
                     $scope.hilightTopic();
                 };
-                if (resp.tasks){
-                    $scope.hilightTask();
-                }
-                if (resp.events){
-                    $scope.hilightEvent();
-                }
+                // if (resp.tasks){
+                //     $scope.hilightTask();
+                // }
+                // if (resp.events){
+                //     $scope.hilightEvent();
+                // }
             }else {
                if(resp.code==401){
                 $scope.refreshToken();
