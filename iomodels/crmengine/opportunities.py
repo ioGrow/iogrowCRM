@@ -1,4 +1,5 @@
 from google.appengine.ext import ndb
+from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.api import search
 from protorpc import messages
@@ -452,20 +453,23 @@ class Opportunity(EndpointsModel):
 
     @classmethod
     def insert(cls,user_from_email,request):
-        created_folder = EndpointsHelper.insert_folder(
-                                                       user_from_email,
-                                                       request.name,
-                                                       'Opportunity'
-                                                       )
         opportunity = cls(
                     owner = user_from_email.google_user_id,
                     organization = user_from_email.organization,
                     name = request.name,
-                    amount = int(request.amount),
-                    folder = created_folder['id']
+                    amount = int(request.amount)
                     )
         opportunity_key = opportunity.put_async()
         opportunity_key_async = opportunity_key.get_result()
+        taskqueue.add(
+                    url='/workers/createobjectfolder', 
+                    params={
+                            'kind': "Opportunity",
+                            'folder_name': request.name,
+                            'email': user_from_email.email,
+                            'obj_key':opportunity_key_async.urlsafe()
+                            }
+                    )
         indexed = False
         if request.stage:
             stage_key = ndb.Key(urlsafe=request.stage)

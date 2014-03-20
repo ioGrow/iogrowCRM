@@ -1,4 +1,5 @@
 from google.appengine.ext import ndb
+from google.appengine.api import taskqueue
 import datetime
 import endpoints
 from google.appengine.datastore.datastore_query import Cursor
@@ -462,28 +463,15 @@ class Task(EndpointsModel):
                     organization = user_from_email.organization,
                     author = author)
         if request.due:
-            task.due = datetime.datetime.strptime(request.due,"%Y-%m-%dT%H:%M:00.000000")
-            try:
-                credentials = user_from_email.google_credentials
-                http = credentials.authorize(httplib2.Http(memcache))
-                service = build('calendar', 'v3', http=http)
-                # prepare params to insert
-                params = {
-                 "start":
-                  {
-                    "dateTime": task.due.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
-                  },
-                 "end":
-                  {
-                    "dateTime": task.due.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
-                  },
-                  "summary": str(request.title)
-                }
-                created_event = service.events().insert(calendarId='primary',body=params).execute()
-                
-            except:
-                raise endpoints.UnauthorizedException('Invalid grant' )
-                return
+            taskqueue.add(
+                    url='/workers/syncevent', 
+                    params={
+                            'email': user_from_email.email,
+                            'starts_at': request.due,
+                            'ends_at': request.due,
+                            'summary': request.title
+                            }
+                    )
 
         if request.reminder:
             pass
@@ -520,7 +508,15 @@ class Task(EndpointsModel):
                       end_node = ndb.Key(urlsafe=tag.entityKey),
                       kind = 'tags',
                       inverse_edge = 'tagged_on')
-        return TaskSchema()
+        task_schema = TaskSchema(
+                                  id = str( task_key_async.id() ),
+                                  entityKey = task_key_async.urlsafe(),
+                                  title = task.title,
+                                  status = task.status
+                                )
+        if task.due:
+            task_schema.due =  task.due.isoformat()
+        return task_schema
 
     @classmethod
     def patch(cls,user_from_email,request):

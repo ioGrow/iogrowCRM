@@ -38,7 +38,11 @@ Opportunitystage.list = function($scope,params){
 
 		}
 		else{
-          alert("Error, response is: " + angular.toJson(resp));
+          if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+          };
 		};
 
 	})
@@ -124,7 +128,11 @@ settingservices.factory('Casestatus',function($http){
       }
 
         else{
-          alert("Error, response is:"+angular.toJson(resp));
+            if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+            };
         }
 
     }
@@ -196,7 +204,11 @@ settingservices.factory('Leadstatus',function($http){
       }
 
         else{
-          alert("Error, response is:"+angular.toJson(resp));
+              if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+              };
         }
 
     }
