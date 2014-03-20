@@ -1,4 +1,5 @@
 from google.appengine.ext import ndb
+from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
 from endpoints_proto_datastore.ndb import EndpointsModel
 from google.appengine.api import search 
@@ -443,22 +444,25 @@ class Contact(EndpointsModel):
     @classmethod
     def insert(cls,user_from_email,request):
         folder_name = request.firstname + ' ' + request.lastname
-        created_folder = EndpointsHelper.insert_folder(
-                                                       user_from_email,
-                                                       folder_name,
-                                                       'Contact'
-                                                       )
         contact = cls(
                     firstname = request.firstname,
                     lastname = request.lastname,
                     title = request.title,
                     owner = user_from_email.google_user_id,
                     organization = user_from_email.organization,
-                    access = request.access,
-                    folder = created_folder['id']
+                    access = request.access
                     )
         contact_key = contact.put_async()
         contact_key_async = contact_key.get_result()
+        taskqueue.add(
+                    url='/workers/createobjectfolder', 
+                    params={
+                            'kind': "Contact",
+                            'folder_name': folder_name,
+                            'email': user_from_email.email,
+                            'obj_key':contact_key_async.urlsafe()
+                            }
+                    )
         account_schema = None
         if request.account:
             account_key = ndb.Key(urlsafe=request.account)

@@ -178,10 +178,10 @@ topicservices.factory('Tag', function($http) {
                  
               }else {
                  if(resp.code==401){
-                $scope.refreshToken();
-                $scope.isLoading = false;
-                $scope.$apply();
-               };
+                    $scope.refreshToken();
+                    $scope.isLoading = false;
+                    $scope.$apply();
+                  };
               }
       });
   };

@@ -1,4 +1,5 @@
 from google.appengine.ext import ndb
+from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.api import search 
 from endpoints_proto_datastore.ndb import EndpointsModel
@@ -402,11 +403,6 @@ class Lead(EndpointsModel):
     @classmethod
     def insert(cls,user_from_email,request):
         folder_name = request.firstname + ' ' + request.lastname
-        created_folder = EndpointsHelper.insert_folder(
-                                                       user_from_email,
-                                                       folder_name,
-                                                       'Lead'
-                                                       )
         lead = cls(
                     firstname = request.firstname,
                     lastname = request.lastname,
@@ -416,11 +412,19 @@ class Lead(EndpointsModel):
                     source = request.source,
                     owner = user_from_email.google_user_id,
                     organization = user_from_email.organization,
-                    access = request.access,
-                    folder = created_folder['id']
+                    access = request.access
                     )
         lead_key = lead.put_async()
         lead_key_async = lead_key.get_result()
+        taskqueue.add(
+                    url='/workers/createobjectfolder', 
+                    params={
+                            'kind': "Lead",
+                            'folder_name': folder_name,
+                            'email': user_from_email.email,
+                            'obj_key':lead_key_async.urlsafe()
+                            }
+                    )
         data = {}
         data['id'] = lead_key_async.id()
         lead.put_index(data)
