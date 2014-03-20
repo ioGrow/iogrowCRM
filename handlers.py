@@ -760,11 +760,11 @@ class GooglePlusConnect(SessionEnabledHandler):
         user.email = userinfo.get('email')
         user.google_public_profile_photo_url = userinfo.get('picture')
       user.google_credentials = credentials
+      user.put()
       if memcache.get(user.email) :
             memcache.set(user.email, user)
       else:
             memcache.add(user.email, user)
-      user.put()
       return user
 
   

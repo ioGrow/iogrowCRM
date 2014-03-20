@@ -318,16 +318,12 @@ class User(EndpointsModel):
     def get_by_email(cls,email):
         user_from_email = memcache.get(email)
         if user_from_email is not None:
-            print '========================User form memcache=================='
-            print user_from_email
             return user_from_email
         user_from_email = cls.query(cls.email == email).get()
         if memcache.get(email) :
             memcache.set(email, user_from_email)
         else:
             memcache.add(email, user_from_email)
-        print '========================User form datastore=================='
-        print user_from_email
         return user_from_email
 
     def get_user_apps(self):
