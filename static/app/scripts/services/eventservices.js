@@ -76,7 +76,10 @@ eventservices.factory('Event', function($http) {
       
       gapi.client.crmengine.events.insertv2(params).execute(function(resp) {
           if(!resp.code){
-            $scope.listEvents();
+            if ($scope.events == undefined){
+            $scope.events = [];
+          }
+            $scope.events.push(resp);
             $scope.isLoading = false;
 
             $scope.$apply();

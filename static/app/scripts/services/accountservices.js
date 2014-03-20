@@ -200,16 +200,6 @@ accountservices.factory('Account', function($http) {
                   }
 
                $scope.isContentLoaded = true;
-               //$scope.listInfonodes();
-               //$scope.listTopics(resp);
-               //$scope.listTasks();
-               //$scope.listEvents();
-               //$scope.listContacts();
-               //$scope.listOpportunities();
-               //$scope.listCases();
-               //$scope.listNeeds();
-               
-               //$scope.listDocuments();
                
                
                $scope.email.to = '';
@@ -221,16 +211,17 @@ accountservices.factory('Account', function($http) {
                 
                 });
                // Call the method $apply to make the update on the scope
-                $scope.$apply();
                 if (resp.topics){
                     $scope.hilightTopic();
                 };
-                if (resp.tasks){
-                    $scope.hilightTask();
-                }
-                if (resp.events){
-                    $scope.hilightEvent();
-                }
+                // if (resp.tasks){
+                //     $scope.hilightTask();
+                // }
+                // if (resp.events){
+                //     $scope.hilightEvent();
+                // }
+                $scope.$apply();
+                
                 
 
             }else {

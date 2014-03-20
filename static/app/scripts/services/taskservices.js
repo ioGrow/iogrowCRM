@@ -102,14 +102,15 @@ topicservices.factory('Task', function($http) {
 
          if(!resp.code){
         
-          // TME_02_11_13 when a note is inserted reload topics
-          var effects = true;
-          $scope.listTasks(effects);
-          $scope.isLoading = false;
+          if ($scope.tasks == undefined){
+            $scope.tasks = [];
+          }
+            $scope.tasks.push(resp);
+            $scope.isLoading = false;
+            // $scope.hilightTask();
 
           $scope.$apply();
-         // $('#addAccountModal').modal('hide');
-         // window.location.replace('#/accounts/show/'+resp.id);
+       
           
          }else{
           console.log(resp.code);
