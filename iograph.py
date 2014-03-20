@@ -160,10 +160,6 @@ class Edge(ndb.Expando):
 
             
 
-    @classmethod
-    def list_all_inbound(cls, end_node):
-        edges = cls.query( cls.end_node==end_node ).fetch()
-        return edges
 
     @classmethod
     def find(cls, start_node,end_node_set,kind,operation):
