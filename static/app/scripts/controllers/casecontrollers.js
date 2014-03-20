@@ -1011,6 +1011,15 @@ $scope.listInfonodes = function(kind) {
    
  };
 
+ // HKA 19.03.2014 inline update infonode
+     $scope.inlinePatch=function(kind,edge,name,entityKey,value){
+   
+   if (kind=='Case') {
+          params = {'id':$scope.casee.id,
+             name:value}
+         Case.patch($scope,params);}
+       };
+
      // Google+ Authentication 
      Auth.init($scope);
 
