@@ -431,6 +431,12 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.documentpages=[];
     $scope.selectedTab = 2;
     $scope.sharing_with = [];
+    $scope.statuses = [
+      {value: 'Home', text: 'Home'},
+      {value: 'Work', text: 'Work'},
+      {value: 'Mob', text: 'Mob'},
+      {value: 'Other', text: 'Other'}
+      ];
 
       // What to do after authentication
       $scope.runTheProcess = function(){
@@ -1014,6 +1020,42 @@ $scope.deletelead = function(){
           } 
           InfoNode.insert($scope,params);
       };
+
+  // HKA 19.03.2014 inline update infonode
+     $scope.inlinePatch=function(kind,edge,name,entityKey,value){
+   
+   if (kind=='Lead') {
+      if (name=='firstname')
+        {params = {'id':$scope.lead.id,
+             firstname:value};
+         Lead.patch($scope,params);};
+       if (name=='lastname')
+        {params = {'id':$scope.lead.id,
+             lastname:value};
+         Lead.patch($scope,params);}
+          
+   }else{
+
+     
+     
+          params = {
+                  'entityKey': entityKey,
+                  'parent':$scope.lead.entityKey,
+                  'kind':edge,
+                  'fields':[
+                     
+                      {
+                        "field": name,
+                        "value": value
+                      }
+                  ]
+        };
+         
+         InfoNode.patch($scope,params);
+   }
+
+
+  };
       
     // Google+ Authentication 
      Auth.init($scope);

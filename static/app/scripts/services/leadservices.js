@@ -117,8 +117,8 @@ leadservices.factory('Lead', function($http) {
           });
   };
   Lead.patch = function($scope,params) {
-          console.log('in accounts.patch service');
-          console.log(params);
+          console.log('in leads.patch service');
+         
           gapi.client.crmengine.leads.patch(params).execute(function(resp) {
             if(!resp.code){
                $scope.lead = resp;

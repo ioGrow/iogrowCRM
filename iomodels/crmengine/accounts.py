@@ -58,6 +58,7 @@ class AccountSchema(messages.Message):
     created_at = messages.StringField(18)
     updated_at = messages.StringField(19)
     access = messages.StringField(20)
+    folder = messages.StringField(21)
 
 class AccountListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -258,6 +259,7 @@ class Account(EndpointsModel):
                                   id = str( account.key.id() ),
                                   entityKey = account.key.urlsafe(),
                                   access = account.access,
+                                  folder = account.folder,
                                   name = account.name,
                                   account_type = account.account_type,
                                   industry = account.industry,
