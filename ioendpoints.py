@@ -16,6 +16,7 @@ import time
 from google.appengine.ext import ndb
 from google.appengine.api import search
 from google.appengine.api import memcache
+from google.appengine.api import taskqueue
 from google.appengine.api import mail
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.tools import run
@@ -606,16 +607,19 @@ class CrmEngineApi(remote.Service):
                     )
     def AccountInsert(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        created_folder = EndpointsHelper.insert_folder(
-                                                       user_from_email,
-                                                       my_model.name,
-                                                       'Account'
-                                                       )
         # Todo: Check permissions
         my_model.owner = user_from_email.google_user_id
         my_model.organization = user_from_email.organization
-        my_model.folder = created_folder['id']
         my_model.put()
+        taskqueue.add(
+                    url='/workers/createobjectfolder', 
+                    params={
+                            'kind': "Account",
+                            'folder_name': my_model.name,
+                            'email': user_from_email.email,
+                            'obj_key':my_model.entityKey
+                            }
+                    )
         return my_model
 
     # accounts.get api v2

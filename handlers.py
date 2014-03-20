@@ -68,6 +68,15 @@ TOKEN_INFO_ENDPOINT = ('https://www.googleapis.com/oauth2/v1/tokeninfo' +
     '?access_token=%s')
 TOKEN_REVOKE_ENDPOINT = 'https://accounts.google.com/o/oauth2/revoke?token=%s'
 
+FOLDERS_ATTR = {
+            'Account': 'accounts_folder',
+            'Contact': 'contacts_folder',
+            'Lead': 'leads_folder',
+            'Opportunity': 'opportunities_folder',
+            'Case': 'cases_folder',
+            'Show': 'shows_folder',
+            'Feedback': 'feedbacks_folder'
+        }
 FOLDERS = {
             'Accounts': 'accounts_folder',
             'Contacts': 'contacts_folder',
@@ -114,14 +123,10 @@ class SessionEnabledHandler(webapp2.RequestHandler):
     """Convenience method for retrieving the users crendentials from an
     authenticated session.
     """
-    google_user_id = self.session.get(self.CURRENT_USER_SESSION_KEY)
-    if google_user_id is None:
-      raise UserNotAuthorizedException('Session did not contain user id.')
-    user = model.User.query(model.User.google_user_id == google_user_id).get()
-    
-    #if not user:
-    # raise UserNotAuthorizedException(
-    #   'Session user ID could not be found in the datastore.')
+    email = self.session.get(self.CURRENT_USER_SESSION_KEY)
+    if email is None:
+      raise UserNotAuthorizedException('Session did not contain user email.')
+    user = model.User.get_by_email(email)
     return user
 
 
@@ -152,36 +157,6 @@ class SignInHandler(BaseHandler, SessionEnabledHandler):
         self.response.out.write(template.render(template_values))
           
 class SignUpHandler(BaseHandler, SessionEnabledHandler):
-    
-    @staticmethod
-    def init_drive_folder(http,driveservice,folder_name,parent=None):
-      """Return the public Google+ profile data for the given user."""
-      folder = {
-                'title': folder_name,
-                'mimeType': 'application/vnd.google-apps.folder'          
-      }
-      if parent:
-        folder['parents'] = [{'id': parent}]
-      try:
-        created_folder = driveservice.files().insert(fields='id',body=folder).execute()
-        return created_folder['id']
-      except errors.HttpError, error:
-        print 'An error occured: %s' % error
-        return None
-
-    @staticmethod
-    def folder_created_callback(request_id, response, exception):
-        global folders
-        if exception is not None:
-            # Do something with the exception
-            pass
-        else:
-            # Do something with the response
-            folder_name = response['title']
-            folders[folder_name] = response['id']
-
-      
-      
     def get(self):
           if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
@@ -198,36 +173,13 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
             self.response.out.write(template.render(template_values))
           else:
             self.redirect('/sign-in')
+    @ndb.toplevel
     def post(self):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
           user = self.get_user_from_session()
           org_name = self.request.get('org_name')
           mob_phone = self.request.get('mob_phone')
-          # init organization folders in Google drive
-          credentials = user.google_credentials
-          http = credentials.authorize(httplib2.Http(memcache))
-          driveservice = build('drive', 'v2', http=http)
-          current_time = time.time()
-          org_folder = self.init_drive_folder(http,driveservice,org_name+' (ioGrow)')
-          batch = BatchHttpRequest()
-          for folder_name in FOLDERS.keys():
-              folder = {
-                    'title': folder_name,
-                    'mimeType': 'application/vnd.google-apps.folder',
-                    'parents' : [{'id': org_folder}]       
-              }
-              batch.add(driveservice.files().insert(fields='id,title',body=folder), callback=self.folder_created_callback)
-          batch.execute(http=http)
-          organization = model.Organization(
-                                            name=org_name,
-                                            org_folder=org_folder
-                                            )
-          for folder_name in FOLDERS.keys():
-              if folder_name in folders.keys():
-                  setattr(organization, FOLDERS[folder_name], folders[folder_name])
-          organization.put()
-          profile = model.Profile.query(model.Profile.name=='Super Administrator', model.Profile.organization==organization.key).get()
-          user.init_user_config(organization.key,profile)
+          model.Organization.create_instance(org_name,user)
           self.redirect('/')
         else:
           self.redirect('/sign-in')
@@ -820,6 +772,10 @@ class GooglePlusConnect(SessionEnabledHandler):
         code = self.request.get("code")
         try:
             credentials = GooglePlusConnect.exchange_code(code)
+            print '======================= Credentials ========================='
+            print credentials.access_token
+            print '======================= refresh_token ========================='
+            print credentials.refresh_token
         except FlowExchangeError:
             return
         token_info = GooglePlusConnect.get_token_info(credentials)
@@ -860,7 +816,7 @@ class GooglePlusConnect(SessionEnabledHandler):
             isNewUser = True
 
         # Store the user ID in the session for later use.
-        self.session[self.CURRENT_USER_SESSION_KEY] = token_info.get('user_id')
+        self.session[self.CURRENT_USER_SESSION_KEY] = user.email
         self.response.headers['Content-Type'] = 'application/json'  
         self.response.out.write(json.dumps(isNewUser))
 
@@ -905,9 +861,12 @@ class PublicUsersHandler(SessionEnabledHandler):
         code = self.request.get("code")
         try:
             credentials = GooglePlusConnect.exchange_code(code)
+            print '======================= Credential ========================='
+            print credentials
         except FlowExchangeError:
             return
         token_info = GooglePlusConnect.get_token_info(credentials)
+
         if token_info.status_code != 200:
             return
         token_info = json.loads(token_info.content)
@@ -933,7 +892,7 @@ class PublicUsersHandler(SessionEnabledHandler):
         userinfo['photo'] = user.google_public_profile_photo_url
 
         # Store the user ID in the session for later use.
-        self.session[self.CURRENT_USER_SESSION_KEY] = token_info.get('user_id')
+        self.session[self.CURRENT_USER_SESSION_KEY] = user.email
         self.response.headers['Content-Type'] = 'application/json'  
         self.response.out.write(json.dumps(userinfo))
 
@@ -1104,7 +1063,8 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
             try:
                 user = self.get_user_from_session()
                 logout_url = 'https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://gcdc2013-iogrow.appspot.com/sign-in'
-                if user is None or user.type=='public_user':
+                if user is None:
+                  
                   self.redirect('/welcome/')
                   return
                 # Set the user locale from user's settings
@@ -1135,8 +1095,10 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
 
                 self.response.out.write(template.render(template_values))
             except UserNotAuthorizedException as e:
+               
                 self.redirect('/welcome/')
         else:
+          
           self.redirect('/welcome/')
 
 # Change the current app for example from sales to customer support           
@@ -1165,7 +1127,98 @@ class ChangeActiveAppHandler(SessionEnabledHandler):
         
 
 
+class CreateOrganizationFolders(webapp2.RequestHandler):
+    @staticmethod
+    def init_drive_folder(http,driveservice,folder_name,parent=None):
+        folder = {
+                'title': folder_name,
+                'mimeType': 'application/vnd.google-apps.folder'          
+        }
+        if parent:
+            folder['parents'] = [{'id': parent}]
+        try:
+            created_folder = driveservice.files().insert(fields='id',body=folder).execute()
+            return created_folder['id']
+        except errors.HttpError, error:
+            print 'An error occured: %s' % error
+            return None
+    
+    @staticmethod
+    def folder_created_callback(request_id, response, exception):
+        global folders
+        if exception is not None:
+            # Do something with the exception
+            pass
+        else:
+            # Do something with the response
+            folder_name = response['title']
+            folders[folder_name] = response['id']
+    
+    def post(self): # should run at most 1/s due to entity group limit
+        admin = model.User.get_by_email(self.request.get('email'))
+        credentials = admin.google_credentials
+        org_key_str = self.request.get('org_key')
+        org_key = ndb.Key(urlsafe=org_key_str)
+        organization = org_key.get()
+        http = credentials.authorize(httplib2.Http(memcache))
+        driveservice = build('drive', 'v2', http=http)
+        # init the root folder
+        org_folder = self.init_drive_folder(http,driveservice,organization.name+' (ioGrow)')
+        # init objects folders
+        batch = BatchHttpRequest()
+        for folder_name in FOLDERS.keys():
+            folder = {
+                    'title': folder_name,
+                    'mimeType': 'application/vnd.google-apps.folder',
+                    'parents' : [{'id': org_folder}]       
+            }
+            batch.add(driveservice.files().insert(
+                                                fields='id,title',
+                                                body=folder),
+                                                callback=self.folder_created_callback
+                                                )
+        batch.execute(http=http)
+        organization.org_folder = org_folder
+        for folder_name in FOLDERS.keys():
+            if folder_name in folders.keys():
+                setattr(organization, FOLDERS[folder_name], folders[folder_name])
+        organization.put()
 
+class CreateObjectFolder(webapp2.RequestHandler):
+    @staticmethod
+    def insert_folder(user, folder_name, kind):
+        try:
+            credentials = user.google_credentials
+            http = credentials.authorize(httplib2.Http(memcache))
+            service = build('drive', 'v2', http=http)
+            organization = user.organization.get()
+
+            # prepare params to insert
+            folder_params = {
+                        'title': folder_name,
+                        'mimeType':  'application/vnd.google-apps.folder'
+            }#get the accounts_folder or contacts_folder or ..
+            parent_folder = eval('organization.'+FOLDERS_ATTR[kind])
+            if parent_folder:
+                folder_params['parents'] = [{'id': parent_folder}]
+
+            # execute files.insert and get resource_id
+            created_folder = service.files().insert(body=folder_params,fields='id').execute()
+        except:
+            raise endpoints.UnauthorizedException(cls.INVALID_GRANT)
+        return created_folder
+    @ndb.toplevel
+    def post(self): 
+        folder_name = self.request.get('folder_name')
+        kind = self.request.get('kind')
+        user = model.User.get_by_email(self.request.get('email'))
+        created_folder = self.insert_folder(user,folder_name,kind)
+        object_key_str = self.request.get('obj_key')
+        object_key = ndb.Key(urlsafe=object_key_str)
+        obj = object_key.get()
+        obj.folder = created_folder['id']
+        obj.put_async()
+        
 
 def get_base_url():
   """Returns the base URL for this application."""
@@ -1175,6 +1228,9 @@ def get_base_url():
   return "http://%s" % base
 
 routes = [
+    # Task Queues Handlers
+    ('/workers/createorgfolders',CreateOrganizationFolders),
+    ('/workers/createobjectfolder',CreateObjectFolder),
     ('/',IndexHandler),
     
     # Templates Views Routes
@@ -1244,6 +1300,7 @@ routes = [
     ('/sign-in',SignInHandler),
     ('/sign-up',SignUpHandler),
     ('/gconnect',GooglePlusConnect),
+
     ('/gconnectpublic',PublicUsersHandler)
     ]
 config = {}

@@ -22,7 +22,7 @@ accountservices.factory('Auth', function($http) {
       }
   };
   Auth.signIn = function(authResult){
-      Auth.connectServer(authResult);
+      //Auth.connectServer(authResult);
       Auth.processAuth(authResult);
   };
   Auth.connectServer = function(authResult){
@@ -56,7 +56,7 @@ accountservices.factory('Auth', function($http) {
   };
   Auth.refreshToken = function(){
       gapi.signin.render('myGsignin', {
-            'callback': Auth.connectServer,
+            'callback': Auth.processAuth,
             'clientid': '987765099891.apps.googleusercontent.com',
             'requestvisibleactions': 'http://schemas.google.com/AddActivity ' +
                 'http://schemas.google.com/ReviewActivity',
