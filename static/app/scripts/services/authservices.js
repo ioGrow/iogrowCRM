@@ -4,9 +4,23 @@ accountservices.factory('Auth', function($http) {
     angular.extend(this, data);
   };
   Auth.init = function($scope){
+      
+      var timeNow = new Date().getTime()/1000;
       Auth.$scope = $scope;
       if (window.is_signed_in){
-          Auth.processAuth(window.authResult);
+          
+          
+          var diff = window.authResultexpiration - timeNow;
+
+          if (diff>0){
+             Auth.processAuth(window.authResult); 
+          }
+          else{
+              // refresh token
+              Auth.refreshToken();
+
+          }
+          
       }else{
             gapi.signin.render('myGsignin', {
             'callback': Auth.signIn,
@@ -22,10 +36,12 @@ accountservices.factory('Auth', function($http) {
       }
   };
   Auth.signIn = function(authResult){
+      
       //Auth.connectServer(authResult);
       Auth.processAuth(authResult);
   };
   Auth.connectServer = function(authResult){
+    
       $.ajax({
         type: 'POST',
         url: '/gconnect',
@@ -36,12 +52,19 @@ accountservices.factory('Auth', function($http) {
       });
   };
   Auth.processAuth = function(authResult) {
+   
       Auth.$scope.immediateFailed = true;
       if (authResult['access_token']) {
+          
           Auth.$scope.immediateFailed = false;
           Auth.$scope.isSignedIn = true;
-          window.is_signed_in = true;
-          window.authResult = authResult;
+          if (!window.authResult) {
+              
+              window.is_signed_in = true;
+              window.authResult = authResult;
+              window.authResultexpiration =  authResult.expires_at;
+          }
+          
           // run the process
           Auth.$scope.runTheProcess();
       } else if (authResult['error']) {
@@ -54,17 +77,9 @@ accountservices.factory('Auth', function($http) {
       };
       
   };
+
   Auth.refreshToken = function(){
-      gapi.signin.render('myGsignin', {
-            'callback': Auth.processAuth,
-            'clientid': '987765099891.apps.googleusercontent.com',
-            'requestvisibleactions': 'http://schemas.google.com/AddActivity ' +
-                'http://schemas.google.com/ReviewActivity',
-            'scope': 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar',
-            'theme': 'dark',
-            'cookiepolicy': 'single_host_origin',
-            'accesstype': 'offline'
-      });      
+     window.location.reload(true);    
   };
 
   return Auth;
