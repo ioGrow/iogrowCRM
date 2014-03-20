@@ -1025,9 +1025,15 @@ $scope.deletelead = function(){
      $scope.inlinePatch=function(kind,edge,name,entityKey,value){
    
    if (kind=='Lead') {
-          params = {'id':$scope.lead.id,
-             name:value}
-         Lead.patch($scope,params);
+      if (name=='firstname')
+        {params = {'id':$scope.lead.id,
+             firstname:value};
+         Lead.patch($scope,params);};
+       if (name=='lastname')
+        {params = {'id':$scope.lead.id,
+             lastname:value};
+         Lead.patch($scope,params);}
+          
    }else{
 
      
