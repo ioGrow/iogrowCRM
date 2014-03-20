@@ -1,6 +1,7 @@
 import datetime
 import endpoints
 from google.appengine.ext import ndb
+from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.api import search 
 from apiclient.discovery import build
@@ -248,42 +249,15 @@ class Event(EndpointsModel):
                     where = request.where,
                     author = author
                     )
-        try:
-            credentials = user_from_email.google_credentials
-            print credentials
-            http = credentials.authorize(httplib2.Http(memcache))
-            print 'bad bad'
-            service = build('calendar', 'v3', http=http)
-            # prepare params to insert
-            params = {
-                     "start":
-                          {
-                          "dateTime": event.starts_at.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
-                          },
-                     "end":
-                          {
-                           "dateTime": event.ends_at.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
-                      },
-                    "summary": request.title,
-                    "location": request.where,
-                    "reminders":
-                    {
-                      "overrides":
-                      [
-                      {
-                        "method": 'email',
-                        "minutes": 30
-                      }
-                    ],
-                    "useDefault": False
-                  }
-
-            }
-            created_event = service.events().insert(calendarId='primary',body=params).execute()
-
-        except:
-            raise endpoints.UnauthorizedException('Invalid grant' )
-            
+        taskqueue.add(
+                    url='/workers/syncevent', 
+                    params={
+                            'email': user_from_email.email,
+                            'starts_at': request.starts_at,
+                            'ends_at': request.ends_at,
+                            'summary': request.title
+                            }
+                    )
         event_key = event.put_async()
         event_key_async = event_key.get_result()
         if request.parent:
@@ -302,4 +276,14 @@ class Event(EndpointsModel):
             data = {}
             data['id'] = event_key_async.id()
             event.put_index(data)
-        return EventSchema(id=str(event_key_async.id()))
+        event_schema = EventSchema(
+                                    id = str( event_key_async.id() ),
+                                    entityKey = event_key_async.urlsafe(),
+                                    title = event.title,
+                                    starts_at = event.starts_at.isoformat(),
+                                    ends_at = event.ends_at.isoformat(),
+                                    where = event.where,
+                                    created_at = event.created_at.isoformat(),
+                                    updated_at = event.updated_at.isoformat()
+                                )
+        return event_schema

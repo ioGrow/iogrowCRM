@@ -27,6 +27,7 @@ import webapp2
 import datetime
 from webapp2_extras import jinja2
 import datetime
+import endpoints
 import re
 from google.appengine.api import users
 from apiclient.discovery import build
@@ -759,11 +760,11 @@ class GooglePlusConnect(SessionEnabledHandler):
         user.email = userinfo.get('email')
         user.google_public_profile_photo_url = userinfo.get('picture')
       user.google_credentials = credentials
+      user.put()
       if memcache.get(user.email) :
             memcache.set(user.email, user)
       else:
             memcache.add(user.email, user)
-      user.put()
       return user
 
   
@@ -1217,6 +1218,40 @@ class CreateObjectFolder(webapp2.RequestHandler):
         obj = object_key.get()
         obj.folder = created_folder['id']
         obj.put_async()
+
+class SyncCalendarEvent(webapp2.RequestHandler):
+    def post(self):
+        user_from_email = model.User.get_by_email(self.request.get('email'))
+        starts_at = datetime.datetime.strptime(
+                                              self.request.get('starts_at'),
+                                              "%Y-%m-%dT%H:%M:00.000000"
+                                              )
+        summary = self.request.get('summary')
+        location = self.request.get('location')
+        ends_at = datetime.datetime.strptime(
+                                              self.request.get('ends_at'),
+                                              "%Y-%m-%dT%H:%M:00.000000"
+                                              )
+        try:
+            credentials = user_from_email.google_credentials
+            http = credentials.authorize(httplib2.Http(memcache))
+            service = build('calendar', 'v3', http=http)
+            # prepare params to insert
+            params = {
+                 "start":
+                  {
+                    "dateTime": starts_at.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
+                  },
+                 "end":
+                  {
+                    "dateTime": ends_at.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
+                  },
+                  "summary": summary
+            }
+
+            created_event = service.events().insert(calendarId='primary',body=params).execute()
+        except:
+            raise endpoints.UnauthorizedException('Invalid grant' )
         
 
 def get_base_url():
@@ -1230,6 +1265,8 @@ routes = [
     # Task Queues Handlers
     ('/workers/createorgfolders',CreateOrganizationFolders),
     ('/workers/createobjectfolder',CreateObjectFolder),
+    ('/workers/syncevent',SyncCalendarEvent),
+
     ('/',IndexHandler),
     
     # Templates Views Routes

@@ -213,6 +213,7 @@ accountservices.factory('Case', function() {
           }
           $scope.cases.push(resp);
           $scope.casee = {};
+          $scope.isLoading = false;
           $scope.$apply();
           
          }else{
