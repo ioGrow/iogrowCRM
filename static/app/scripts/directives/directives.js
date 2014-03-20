@@ -20,16 +20,20 @@ app.directive('edittooltip',  function() {
     require:'?ngModel',
     link: function ($scope, elem, attrs,ngModel) {
      var field=$(elem);
-     var position=field.position();
-        field.hover(function() {
-          console.log('test hover');
-          $(this).parent().append('<div class="cusTooltip" id="inlineEditTooltip"><a href=""><i class="fa fa-trash-o"></i></a><a href="">edit</a></div>');   
-          $('#inlineEditTooltip').css('top', position.top);
-          $('#inlineEditTooltip').css('left', position.left - 59 );
-        });
-        field.mouseout(function() {
-          $(this).parent().children('#inlineEditTooltip').remove();
-        });
+     field.popover({
+          html: true,
+          placement: 'auto',
+          delay: {show: 50, hide: 400},
+          trigger:'click hover',
+          content: '<div class="customTip"><span id="inlineDeleteElement" ><i class="fa fa-trash-o"></i></span><span  id="inlineEditElement">edit</span></div>'
+      }).parent().on('click', '#inlineEditElement', function() {
+          /*$scope.textBtnForm.$show();*/
+          console.log("e-form");
+          var item=field.attr('e-form');
+          $scope[item].$show();
+      }).on('click', '#inlineDeleteElement', function() {
+          $scope.editbeforedelete();
+      });
   }
 }});
 app.directive('ngBlur', ['$parse', function($parse) {

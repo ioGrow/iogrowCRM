@@ -445,11 +445,11 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        $scope.opportunities = [];
        $scope.opportunities = {};
         $scope.statuses = [
-    {value: 'Home', text: 'Home'},
-    {value: 'Work', text: 'Work'},
-    {value: 'Mob', text: 'Mob'},
-    {value: 'Other', text: 'Other'}
-  ];
+          {value: 'Home', text: 'Home'},
+          {value: 'Work', text: 'Work'},
+          {value: 'Mob', text: 'Mob'},
+          {value: 'Other', text: 'Other'}
+        ];
 
 
        // What to do after authentication
@@ -529,6 +529,9 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
           
           $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ; 
           Account.get($scope,params);
+     }
+     $scope.editTrigger=function(name){
+        name.$show();
      }
      $scope.TopiclistPrevPageItems = function(){
        
