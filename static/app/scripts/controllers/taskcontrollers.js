@@ -389,7 +389,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
 
      $scope.getUrl = function(type,id){
         var base_url = undefined;
-        console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+        
     console.log(type);
     console.log(id);
           switch (type)
