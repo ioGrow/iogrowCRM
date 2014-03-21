@@ -47,6 +47,8 @@ from google.appengine.api import memcache
 from iomodels.crmengine.shows import Show
 import time
 from apiclient.http import BatchHttpRequest
+from endpoints_helper import EndpointsHelper
+import endpoints
 
 jinja_environment = jinja2.Environment(
   loader=jinja2.FileSystemLoader(os.getcwd()),
@@ -89,10 +91,14 @@ FOLDERS = {
 folders = {}
 
 class BaseHandler(webapp2.RequestHandler):
-    def set_user_locale(self):
-        # Get user's Localization settings
-        locale = self.request.GET.get('locale', 'en_US')
-        i18n.get_i18n().set_locale('en')
+    def set_user_locale(self,language):
+        if language:
+            locale = self.request.GET.get('locale', 'en_US')
+            i18n.get_i18n().set_locale(language)
+                        
+        else:
+            locale = self.request.GET.get('locale', 'en_US')
+            i18n.get_i18n().set_locale('en')
       
 
 
@@ -149,8 +155,10 @@ class SignInHandler(BaseHandler, SessionEnabledHandler):
         
         
         # Set the user locale from user's settings
-        self.set_user_locale()
+        
         user_id = self.request.get('id')
+        lang = self.request.get('language')
+        self.set_user_locale(lang)
             # Render the template
         template_values = {'CLIENT_ID': CLIENT_ID,
                                'ID' : user_id
@@ -165,7 +173,7 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
         
         
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             # Render the template
             
             template_values = {
@@ -190,11 +198,11 @@ class AccountListHandler(BaseHandler, SessionEnabledHandler):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             tabs = user.get_user_active_tabs()
 
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             # Render the template
             template_values = {'ME':user.google_user_id,'tabs':tabs}
             template = jinja_environment.get_template('templates/accounts/account_list.html')
@@ -207,11 +215,11 @@ class AccountShowHandler(BaseHandler, SessionEnabledHandler):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             tabs = user.get_user_active_tabs()
 
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             # Render the template
             template_values = {'ME':user.google_user_id,
              'tabs':tabs}
@@ -223,9 +231,9 @@ class ContactListHandler(BaseHandler, SessionEnabledHandler):
   def get(self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
       user = self.get_user_from_session()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       template_values = {'ME':user.google_user_id,
              'tabs':tabs}
       template = jinja_environment.get_template('templates/contacts/contact_list.html')
@@ -236,9 +244,9 @@ class ContactShowHandler(BaseHandler,SessionEnabledHandler):
   def get(self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
       user = self.get_user_from_session()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/contacts/contact_show.html')
       #self.response.cache_control = 'public'
@@ -249,9 +257,9 @@ class OpportunityListHandler(BaseHandler,SessionEnabledHandler):
   def get(self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
       user = self.get_user_from_session()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       template_values = {'ME':user.google_user_id,
              'tabs':tabs}
       template = jinja_environment.get_template('templates/opportunities/opportunity_list.html')
@@ -263,9 +271,9 @@ class OpportunityShowHandler(BaseHandler,SessionEnabledHandler):
   def get (self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
       user = self.get_user_from_session()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/opportunities/opportunity_show.html')
       #self.response.cache_control = 'public'
@@ -277,9 +285,9 @@ class LeadListHandler(BaseHandler,SessionEnabledHandler):
   def get(self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
       user = self.get_user_from_session()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       template_values = {'ME':user.google_user_id,'tabs':tabs}
       template = jinja_environment.get_template('templates/leads/lead_list.html')
       #self.response.cache_control = 'public'
@@ -290,9 +298,9 @@ class LeadShowHandler(BaseHandler,SessionEnabledHandler):
   def get (self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
       user = self.get_user_from_session()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/leads/lead_show.html')
       #self.response.cache_control = 'public'
@@ -304,9 +312,9 @@ class CaseListHandler(BaseHandler,SessionEnabledHandler):
   def get(self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
       user = self.get_user_from_session()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       template_values = {'ME':user.google_user_id,'tabs':tabs}
       template = jinja_environment.get_template('templates/cases/case_list.html')
       #self.response.cache_control = 'public'
@@ -317,9 +325,9 @@ class CaseShowHandler(BaseHandler,SessionEnabledHandler):
   def get (self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
       user = self.get_user_from_session()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/cases/case_show.html')
       #self.response.cache_control = 'public'
@@ -331,9 +339,9 @@ class NeedShowHandler(BaseHandler,SessionEnabledHandler):
   def get (self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
       user = self.get_user_from_session()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/needs/show.html')
       #self.response.cache_control = 'public'
@@ -344,9 +352,9 @@ class CampaignListHandler(BaseHandler,SessionEnabledHandler):
   def get(self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
       user = self.get_user_from_session()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       template_values = {'tabs':tabs}
       template = jinja_environment.get_template('templates/campaigns/campaign_list.html')
       #self.response.cache_control = 'public'
@@ -357,9 +365,9 @@ class CampaignShowHandler(BaseHandler,SessionEnabledHandler):
   def get (self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
       user = self.get_user_from_session()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/campaigns/campaign_show.html')
       #self.response.cache_control = 'public'
@@ -370,9 +378,9 @@ class NoteShowHandler (BaseHandler,SessionEnabledHandler):
   def get(self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
       user = self.get_user_from_session()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/accounts/note_show.html')
       #self.response.cache_control = 'public'
@@ -384,9 +392,9 @@ class DocumentShowHandler(BaseHandler,SessionEnabledHandler):
   def get(self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
       user = self.get_user_from_session()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/documents/show.html')
       #self.response.cache_control = 'public'
@@ -399,11 +407,11 @@ class AllTasksHandler(BaseHandler, SessionEnabledHandler):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             tabs = user.get_user_active_tabs()
 
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             # Render the template
             template_values = {'tabs':tabs,'ME':user.google_user_id}
             template = jinja_environment.get_template('templates/activities/all_tasks.html')
@@ -416,11 +424,11 @@ class TaskShowHandler(BaseHandler, SessionEnabledHandler):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             tabs = user.get_user_active_tabs()
 
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             # Render the template
             template_values = {'tabs':tabs}
             template = jinja_environment.get_template('templates/activities/task_show.html')
@@ -433,11 +441,11 @@ class EventShowHandler(BaseHandler, SessionEnabledHandler):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             tabs = user.get_user_active_tabs()
 
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             # Render the template
             template_values = {'tabs':tabs}
             template = jinja_environment.get_template('templates/activities/event_show.html')
@@ -450,11 +458,11 @@ class ProductListHandler(BaseHandler, SessionEnabledHandler):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             tabs = user.get_user_active_tabs()
 
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             # Render the template
             template_values = {'tabs':tabs}
             template = jinja_environment.get_template('templates/products/list.html')
@@ -464,11 +472,11 @@ class RoadMapListHandler(BaseHandler, SessionEnabledHandler):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             tabs = user.get_user_active_tabs()
 
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             # Render the template
             template_values = {'tabs':tabs}
             template = jinja_environment.get_template('templates/products/roadmaps/list.html')
@@ -478,11 +486,11 @@ class FeatureListHandler(BaseHandler, SessionEnabledHandler):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             tabs = user.get_user_active_tabs()
 
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             # Render the template
             template_values = {'tabs':tabs}
             template = jinja_environment.get_template('templates/products/features/list.html')
@@ -492,11 +500,11 @@ class FeatureShowHandler(BaseHandler, SessionEnabledHandler):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             tabs = user.get_user_active_tabs()
 
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             # Render the template
             template_values = {'tabs':tabs}
 
@@ -507,11 +515,11 @@ class ShowListHandler(BaseHandler, SessionEnabledHandler):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             tabs = user.get_user_active_tabs()
 
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             # Render the template
             template_values = {'ME':'user.google_user_id','tabs':tabs}
             template = jinja_environment.get_template('templates/live/shows/list_show.html')
@@ -521,11 +529,11 @@ class ShowShowHandler(BaseHandler, SessionEnabledHandler):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             tabs = user.get_user_active_tabs()
 
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             # Render the template
             template_values = {'tabs':tabs}
             template = jinja_environment.get_template('templates/live/shows/show.html')
@@ -535,11 +543,11 @@ class UserListHandler(BaseHandler, SessionEnabledHandler):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             tabs = user.get_user_active_tabs()
 
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             # Render the template
             template_values = {'tabs':tabs}
             template = jinja_environment.get_template('templates/admin/users/list.html')
@@ -550,11 +558,11 @@ class GroupListHandler(BaseHandler, SessionEnabledHandler):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             tabs = user.get_user_active_tabs()
 
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             # Render the template
             template_values = {'tabs':tabs}
             template = jinja_environment.get_template('templates/admin/groups/list.html')
@@ -565,11 +573,11 @@ class GroupShowHandler(BaseHandler, SessionEnabledHandler):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             tabs = user.get_user_active_tabs()
 
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             # Render the template
             template_values = {'tabs':tabs}
             template = jinja_environment.get_template('templates/admin/groups/show.html')
@@ -579,11 +587,11 @@ class settingsShowHandler(BaseHandler, SessionEnabledHandler):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             tabs = user.get_user_active_tabs()
 
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             # Render the template
             template_values = {'tabs':tabs}
             template = jinja_environment.get_template('templates/admin/settings/settings.html')
@@ -592,9 +600,9 @@ class CompanyProfileListHandlers(BaseHandler,SessionEnabledHandler):
   def get(self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
       user = self.get_user_from_session()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       template_values = {'tabs':tabs}
       template = jinja_environment.get_template('templates/live/company_profile/comp_profile_show.html')
       self.response.out.write(template.render(template_values))
@@ -602,9 +610,9 @@ class ProductVideosListHandlers (BaseHandler,SessionEnabledHandler):
   def get(self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
       user = self.get_user_from_session()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       template_values = {'tabs':tabs}
       template = jinja_environment.get_template('templates/live/product_videos/product_videos_list.html')
       self.response.out.write(template.render(template_values))
@@ -613,11 +621,11 @@ class ProductVideosShowHandlers(BaseHandler, SessionEnabledHandler):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             tabs = user.get_user_active_tabs()
 
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             # Render the template
             template_values = {'tabs':tabs}
             template = jinja_environment.get_template('templates/live/product_videos/product_videos_show.html')
@@ -626,9 +634,9 @@ class CustomerStoriesListHandlers (BaseHandler,SessionEnabledHandler):
   def get(self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
       user = self.get_user_from_session()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       template_values = {'tabs':tabs}
       template = jinja_environment.get_template('templates/live/customer_stories/customer_stories_list.html')
       self.response.out.write(template.render(template_values))
@@ -637,11 +645,11 @@ class CustomerStoriesShowHandlers(BaseHandler, SessionEnabledHandler):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             tabs = user.get_user_active_tabs()
 
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             # Render the template
             template_values = {'tabs':tabs}
             template = jinja_environment.get_template('templates/live/customer_stories/customer_stories_show.html')
@@ -650,9 +658,9 @@ class FeedBacksListHandlers (BaseHandler,SessionEnabledHandler):
   def get(self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
       user = self.get_user_from_session()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
-      self.set_user_locale()
+      self.set_user_locale(user.language)
       template_values = {'tabs':tabs}
       template = jinja_environment.get_template('templates/live/feedbacks/feedbacks_list.html')
       self.response.out.write(template.render(template_values))
@@ -661,11 +669,11 @@ class FeedBacksShowHandlers(BaseHandler, SessionEnabledHandler):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             tabs = user.get_user_active_tabs()
 
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             # Render the template
             template_values = {'tabs':tabs}
             template = jinja_environment.get_template('templates/live/feedbacks/feedbacks_show.html')
@@ -675,11 +683,11 @@ class FeedBacksShowHandlers(BaseHandler, SessionEnabledHandler):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             tabs = user.get_user_active_tabs()
 
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             # Render the template
             template_values = {'tabs':tabs}
             template = jinja_environment.get_template('templates/live/feedbacks/feedbacks_show.html')
@@ -902,11 +910,11 @@ class SearchListHandler(BaseHandler, SessionEnabledHandler):
       if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             tabs = user.get_user_active_tabs()
 
             # Set the user locale from user's settings
-            self.set_user_locale()
+            self.set_user_locale(user.language)
             # Render the template
             template_values = {'tabs':tabs}
             template = jinja_environment.get_template('templates/search/list.html')
@@ -1031,7 +1039,7 @@ class PublicLiveShowHandler(BaseHandler, SessionEnabledHandler):
             if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
                 user = self.get_user_from_session()
                 # Set the user locale from user's settings
-                self.set_user_locale()
+                self.set_user_locale(user.language)
             else:
                 user = None
             show_id = int(id)
@@ -1068,7 +1076,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                   self.redirect('/welcome/')
                   return
                 # Set the user locale from user's settings
-                self.set_user_locale()
+                self.set_user_locale(user.language)
                 apps = user.get_user_apps()
                 admin_app = None
                 active_app = user.get_user_active_app()

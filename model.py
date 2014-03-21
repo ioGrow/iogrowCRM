@@ -264,7 +264,7 @@ class User(EndpointsModel):
     google_credentials = CredentialsNDBProperty()
     mobile_phone = ndb.StringProperty()
     # Store the informations about the user settings
-    language = ndb.StringProperty()
+    language = ndb.StringProperty(default='en')
     timezone = ndb.StringProperty()
     # Is the user a public user or business user
     type = ndb.StringProperty()
