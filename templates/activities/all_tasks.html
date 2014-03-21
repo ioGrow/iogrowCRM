@@ -695,8 +695,8 @@
 
                   </div>
                   <div class="col-md-6">
-                    <input type="submit" ng-hide="isLoading" ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
-                    <input type="submit" ng-show="isLoading" class="btn green pull-right" value="{{ _('Loading...') }}">
+                    <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
+                    <!--input type="submit" ng-show="isLoading" class="btn green pull-right" value="{{ _('Loading...') }}"-->
                   </div>
                   </div>
                 </form>
@@ -721,7 +721,7 @@
                     </button></li>
                   </ul>
                 </div>
-                <h3 class="pagination pull-right" ng-show="isLoading">{{ _('Loading') }}...</h3>
+                <!--h3 class="pagination pull-right" ng-show="isLoading">{{ _('Loading') }}...</h3-->
           </div>
         <!-- END PAGE CONTENT-->
       </div>
