@@ -892,7 +892,7 @@ $scope.deletecase = function(){
 
      };
      $scope.createPickerUploader = function() {
-          var developerKey = 'AIzaSyD___EKeONhEP1JDWsNQi0zQhlGGzuwRI4';
+          var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
           var projectfolder = $scope.casee.folder;
           var docsView = new google.picker.DocsView()
               .setIncludeFolders(true) 
