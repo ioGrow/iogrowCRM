@@ -1,3 +1,9 @@
+ #!/usr/bin/python
+ # -*- coding: utf-8 -*-
+import csv
+import re
+import json
+from StringIO import StringIO
 from google.appengine.ext import ndb
 from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
@@ -16,6 +22,14 @@ from iomodels.crmengine.cases import Case,CaseListResponse
 from iomodels.crmengine.documents import Document,DocumentListResponse
 import model
 
+ATTRIBUTES_MATCHING = {
+    'firstname' : ['First Name','Given Name'],
+    'lastname':['Last Name','Family Name'],
+    'title': ['Job Title',r'Organization\s*\d\s*-\s*Title'],
+    'account' : ['Company',r'Organization\s*\d\s*-\s*Name'],
+    'phones':['Primary Phone','Home Phone', 'Mobile Phone' ,r'Phone\s*\d\s*-\s*Value'],
+    'emails':['E-mail Address',r'E-mail\s*\d\s*Address', r'E-mail\s*\d\s*-\s*Value']
+}
 # The message class that defines the EntityKey schema
 class EntityKeyRequest(messages.Message):
     entityKey = messages.StringField(1)
@@ -498,6 +512,137 @@ class Contact(EndpointsModel):
                                   updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
         return contact_schema
+
+    @classmethod
+    def import_from_csv(cls,user_from_email,request):
+        # read the csv file from Google Drive
+        csv_file = EndpointsHelper.import_file(user_from_email,request.file_id)
+        csvreader = csv.reader(csv_file.splitlines())
+        headings = csvreader.next()
+        i = 0
+        # search for the matched columns in this csv 
+        # the mapping rules are in ATTRIBUTES_MATCHING
+        matched_columns = {}
+        for column in headings:
+            for key in ATTRIBUTES_MATCHING.keys():
+                for index in ATTRIBUTES_MATCHING[key]:
+                    pattern = '%s'%index
+                    regex = re.compile(pattern)
+                    match = regex.search(column)
+                    if match:
+                        matched_columns[i] = key
+            i = i + 1
+        imported_accounts = {}
+        # if is there some columns that match our mapping rules
+        if len(matched_columns)>0:
+            # parse each row in the csv
+            for row in csvreader:
+                i = 0
+                contact = {}
+                for key in matched_columns.keys():
+                    if row[key]:
+                        # check if this contact is related to an account
+                        if matched_columns[key] == 'account':
+                            from iomodels.crmengine.accounts import Account
+                            # Check if the account exist to not duplicate it
+                            if row[key] in imported_accounts.keys():
+                                # check first if in those imported accounts 
+                                account_key_async = imported_accounts[row[key]]
+                            else:
+                                # search if it exists in the datastore
+                                account = Account.get_key_by_name(
+                                                                user_from_email= user_from_email,
+                                                                name = row[key]
+                                                                )
+                                if account:
+                                    account_key_async = account
+                                else:
+                                    # the account doesn't exist, create it
+                                    account = Account(
+                                                    name=row[key],
+                                                    owner = user_from_email.google_user_id,
+                                                    organization = user_from_email.organization,
+                                                    access = 'public'
+                                                    )
+                                    account_key = account.put_async()
+                                    account_key_async = account_key.get_result()
+                                    taskqueue.add(
+                                                url='/workers/createobjectfolder', 
+                                                params={
+                                                    'kind': "Account",
+                                                    'folder_name': account.name,
+                                                    'email': user_from_email.email,
+                                                    'obj_key':account_key_async.urlsafe()
+                                                    }
+                                                )
+                                    data = {}
+                                    data['id'] = account_key_async.id()
+                                    account.put_index(data)
+                                # add the account to imported accounts dictionary
+                                imported_accounts[row[key]] = account_key_async
+                        # prepare the extracted contact info in a dictionary 
+                        # if has multiple value with for the same field
+                        if matched_columns[key] in contact.keys():
+                            new_list = []
+                            if isinstance(contact[matched_columns[key]], list):
+                                existing_list = contact[matched_columns[key]]
+                                existing_list.append(row[key].decode('cp1252'))
+                                contact[matched_columns[key]] = existing_list
+                            else:
+                                new_list.append(contact[matched_columns[key]])
+                                new_list.append(row[key].decode('cp1252'))
+                                contact[matched_columns[key]] = new_list
+                        else:
+                            contact[matched_columns[key]] = row[key].decode('cp1252')
+                    i = i+1
+                # check if the contact has required fields
+                if 'firstname' in contact.keys() and 'lastname' in contact.keys():
+                    # insert contact
+                    for key in matched_columns:
+                        if matched_columns[key] not in contact.keys():
+                            contact[matched_columns[key]] = None
+                    imported_contact  = cls(
+                                        firstname = contact['firstname'],
+                                        lastname = contact['lastname'],
+                                        title = contact['title'],
+                                        owner = user_from_email.google_user_id,
+                                        organization = user_from_email.organization,
+                                        access = 'public'
+                                        )
+                    contact_key = imported_contact.put_async()
+                    contact_key_async = contact_key.get_result()
+                    folder_name = contact['firstname'] + contact['lastname']
+                    taskqueue.add(
+                                    url='/workers/createobjectfolder', 
+                                    params={
+                                            'kind': "Contact",
+                                            'folder_name': folder_name,
+                                            'email': user_from_email.email,
+                                            'obj_key':contact_key_async.urlsafe()
+                                            }
+                                    )
+                    # insert the edge between the contact and related account
+                    if contact['account']:
+                            # insert edges
+                            Edge.insert(start_node = account_key_async,
+                                      end_node = contact_key_async,
+                                      kind = 'contacts',
+                                      inverse_edge = 'parents')
+                            EndpointsHelper.update_edge_indexes(
+                                                            parent_key = contact_key_async,
+                                                            kind = 'contacts',
+                                                            indexed_edge = str(account_key_async.id())
+                                                            )
+
+                    else:
+                        data = {}
+                        data['id'] = contact_key_async.id()
+                        imported_contact.put_index(data)
+                    # TODO insert info nodes
+
+
+
+
 
 
 

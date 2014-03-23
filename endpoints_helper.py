@@ -1,6 +1,9 @@
+ #!/usr/bin/python
+ # -*- coding: utf-8 -*-
 from google.appengine.api import search
 from google.appengine.api import memcache
 from apiclient.discovery import build
+from apiclient import errors
 import httplib2
 import endpoints
 from model import User
@@ -98,3 +101,40 @@ class EndpointsHelper():
                                                     "fields": 'id'
                                                     }).execute()
             return moved_folder
+    @classmethod
+    def read_file(cls, service, drive_file):
+            """Download a file's content.
+
+            Args:
+                service: Drive API service instance.
+                drive_file: Drive File instance.
+
+            Returns:
+                File's content if successful, None otherwise.
+            """
+            download_url = drive_file.get('downloadUrl')
+            if download_url:
+                print '======Download file=========='
+                resp, content = service._http.request(download_url)
+                if resp.status == 200:
+                    print 'Status: %s' % resp
+                    return content.replace('\x00', '')
+                else:
+                    print 'An error occurred: %s' % resp
+                    return None
+            else:
+                # The file doesn't have any content stored on Drive.
+                return None
+    @classmethod
+    def import_file(cls, user, file_id):
+        credentials = user.google_credentials
+        http = credentials.authorize(httplib2.Http(memcache))
+        service = build('drive', 'v2', http=http)
+        try:
+            drive_file = service.files().get(fileId=file_id).execute()
+            return cls.read_file(service,drive_file)
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+            return None
+
+            

@@ -608,18 +608,29 @@ class CrmEngineApi(remote.Service):
     def AccountInsert(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
         # Todo: Check permissions
-        my_model.owner = user_from_email.google_user_id
-        my_model.organization = user_from_email.organization
-        my_model.put()
-        taskqueue.add(
-                    url='/workers/createobjectfolder', 
-                    params={
-                            'kind': "Account",
-                            'folder_name': my_model.name,
-                            'email': user_from_email.email,
-                            'obj_key':my_model.entityKey
-                            }
-                    )
+        account_key = Account.get_key_by_name(
+                                        user_from_email= user_from_email,
+                                        name = my_model.name
+                                        )
+        if account_key:
+            account = account_key.get()
+            my_model.id = account_key.id()
+            my_model.entityKey = account_key.urlsafe()
+            my_model.name = account.name
+            return my_model
+        else:
+            my_model.owner = user_from_email.google_user_id
+            my_model.organization = user_from_email.organization
+            my_model.put()
+            taskqueue.add(
+                        url='/workers/createobjectfolder', 
+                        params={
+                                'kind': "Account",
+                                'folder_name': my_model.name,
+                                'email': user_from_email.email,
+                                'obj_key':my_model.entityKey
+                                }
+                        )
         return my_model
 
     # accounts.get api v2

@@ -1,4 +1,5 @@
 from google.appengine.ext import ndb
+from google.appengine.api import memcache
 from google.appengine.datastore.datastore_query import Cursor
 from endpoints_proto_datastore.ndb import EndpointsModel
 from endpoints_proto_datastore import MessageFieldsSchema
@@ -73,6 +74,12 @@ class AccountListRequest(messages.Message):
 class AccountListResponse(messages.Message):
     items = messages.MessageField(AccountSchema, 1, repeated=True)
     nextPageToken = messages.StringField(2)
+
+# The message class that defines the Search Request attributes
+class SearchRequest(messages.Message):
+    q = messages.StringField(1, required=True)
+    limit = messages.IntegerField(2)
+    pageToken = messages.StringField(3)
 
 # The message class that defines the accounts.search response
 class AccountSearchResult(messages.Message):
@@ -281,6 +288,8 @@ class Account(EndpointsModel):
 
         return  account_schema
     
+    
+        
     @classmethod
     def list(cls,user_from_email,request):
         curs = Cursor(urlsafe=request.pageToken)
@@ -403,6 +412,35 @@ class Account(EndpointsModel):
                                     items=search_results,
                                     nextPageToken=next_cursor
                                     )
+    @classmethod
+    def get_key_by_name(cls,user_from_email,name):
+        index = search.Index(name="GlobalIndex")
+        options = search.QueryOptions(limit=1)
+        query_string = 'type:Account AND title:\"' + name +'\" AND organization:' + str(user_from_email.organization.id())
+        query = search.Query(query_string=query_string, options=options)
+        search_results = []
+        try:
+            if query:
+                result = index.search(query)
+                results = result.results
+                for scored_document in results:
+                    kwargs = {
+                        'id': scored_document.doc_id
+                    }
+                    for e in scored_document.fields:
+                        if e.name in ["entityKey", "title"]:
+                            if e.name == "title":
+                                kwargs["name"] = e.value
+                            else:
+                                kwargs[e.name] = e.value
+                    search_results.append(AccountSearchResult(**kwargs))
+        except search.Error:
+            logging.exception('Search failed')
+        if search_results:
+            account_key = ndb.Key(urlsafe=search_results[0].entityKey)
+            return account_key
+        else:
+            return None
 
 
 
