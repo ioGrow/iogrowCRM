@@ -28,8 +28,15 @@ ATTRIBUTES_MATCHING = {
     'title': ['Job Title',r'Organization\s*\d\s*-\s*Title'],
     'account' : ['Company',r'Organization\s*\d\s*-\s*Name'],
     'phones':['Primary Phone','Home Phone', 'Mobile Phone' ,r'Phone\s*\d\s*-\s*Value'],
-    'emails':['E-mail Address',r'E-mail\s*\d\s*Address', r'E-mail\s*\d\s*-\s*Value']
+    'emails':['E-mail Address',r'E-mail\s*\d\s*Address', r'E-mail\s*\d\s*-\s*Value'],
+    'addresses':['Business Address',r'Address\s*\d\s*-\s*Formatted']
 }
+INFO_NODES = {
+            'phones':{'default_field':"number"},
+            'emails':{'default_field':"email"},
+            'addresses':{'default_field':"formatted"}
+            }
+
 # The message class that defines the EntityKey schema
 class EntityKeyRequest(messages.Message):
     entityKey = messages.StringField(1)
@@ -637,8 +644,62 @@ class Contact(EndpointsModel):
                     else:
                         data = {}
                         data['id'] = contact_key_async.id()
-                        imported_contact.put_index(data)
-                    # TODO insert info nodes
+                        imported_contact. put_index(data) 
+                    # insert info nodes
+                    for attribute in contact.keys():
+                        if attribute in INFO_NODES.keys():
+                            # check if we have multiple value
+                            if isinstance(contact[attribute], list):
+                                for value in contact[attribute]:
+                                    node = Node(kind=attribute)
+                                    kind_dict = INFO_NODES[attribute]
+                                    print kind_dict
+                                    default_field = kind_dict['default_field']
+                                    print default_field
+                                    setattr(
+                                            node,
+                                            default_field,
+                                            value
+                                            )
+                                    entityKey_async = node.put_async()
+                                    entityKey = entityKey_async.get_result()
+                                    Edge.insert(
+                                                start_node = contact_key_async,
+                                                end_node = entityKey,
+                                                kind = 'infos',
+                                                inverse_edge = 'parents'
+                                            )
+                                    indexed_edge = '_' + attribute + ' ' + value
+                                    EndpointsHelper.update_edge_indexes(
+                                                                        parent_key = contact_key_async,
+                                                                        kind = 'infos',
+                                                                        indexed_edge = indexed_edge
+                            # signle info node                                            )
+                            else:
+                                node = Node(kind=attribute)
+                                kind_dict = INFO_NODES[attribute]
+                                print kind_dict
+                                default_field = kind_dict['default_field']
+                                print default_field
+                                setattr(
+                                        node,
+                                        default_field,
+                                        contact[attribute]
+                                        )
+                                entityKey_async = node.put_async()
+                                entityKey = entityKey_async.get_result()
+                                Edge.insert(
+                                            start_node = contact_key_async,
+                                            end_node = entityKey,
+                                            kind = 'infos',
+                                            inverse_edge = 'parents'
+                                            )
+                                indexed_edge = '_' + attribute + ' ' + value
+                                EndpointsHelper.update_edge_indexes(
+                                                                    parent_key = contact_key_async,
+                                                                    kind = 'infos',
+                                                                    indexed_edge = indexed_edge
+                                                                    )
 
 
 
