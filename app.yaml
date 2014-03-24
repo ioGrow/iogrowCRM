@@ -11,6 +11,8 @@ libraries:
   version: latest
 - name: endpoints
   version: latest
+- name: django
+  version: "1.4"
 
 handlers:
 - url: /static
