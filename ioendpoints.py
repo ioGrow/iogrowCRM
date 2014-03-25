@@ -32,7 +32,7 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 
 # Our libraries
 from iograph import Node,Edge,RecordSchema,InfoNodeResponse,InfoNodeConnectionSchema,InfoNodeListResponse
-from iomodels.crmengine.accounts import Account,AccountGetRequest,AccountSchema,AccountListRequest,AccountListResponse,AccountSearchResult,AccountSearchResults
+from iomodels.crmengine.accounts import Account,AccountGetRequest,AccountSchema,AccountListRequest,AccountListResponse,AccountSearchResult,AccountSearchResults,AccountInsertRequest
 from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertRequest,ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults,ContactImportRequest
 from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema,NoteSchema
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
@@ -594,41 +594,16 @@ class CrmEngineApi(remote.Service):
         Edge.delete_all_cascade(start_node = entityKey)
         return message_types.VoidMessage()
 
-    # accounts.insert API
-    @Account.method(
-                    user_required=True,
-                    path='accounts',
-                    http_method='POST',
-                    name='accounts.insert'
-                    )
-    def AccountInsert(self, my_model):
+    # accounts.insert api v2
+    @endpoints.method(AccountInsertRequest, AccountSchema,
+                      path='accounts/insert', http_method='POST',
+                      name='accounts.insert')
+    def accounts_insert_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        # Todo: Check permissions
-        account_key = Account.get_key_by_name(
-                                        user_from_email= user_from_email,
-                                        name = my_model.name
-                                        )
-        if account_key:
-            account = account_key.get()
-            my_model.id = account_key.id()
-            my_model.entityKey = account_key.urlsafe()
-            my_model.name = account.name
-            return my_model
-        else:
-            my_model.owner = user_from_email.google_user_id
-            my_model.organization = user_from_email.organization
-            my_model.put()
-            taskqueue.add(
-                        url='/workers/createobjectfolder', 
-                        params={
-                                'kind': "Account",
-                                'folder_name': my_model.name,
-                                'email': user_from_email.email,
-                                'obj_key':my_model.entityKey
-                                }
-                        )
-        return my_model
-
+        return Account.insert(
+                                user_from_email = user_from_email,
+                                request = request
+                            )
     # accounts.get api v2
     @endpoints.method(AccountGetRequest, AccountSchema,
                       path='accounts/getv2', http_method='POST',

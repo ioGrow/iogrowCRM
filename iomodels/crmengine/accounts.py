@@ -1,5 +1,6 @@
 from google.appengine.ext import ndb
 from google.appengine.api import memcache
+from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
 from endpoints_proto_datastore.ndb import EndpointsModel
 from endpoints_proto_datastore import MessageFieldsSchema
@@ -18,6 +19,7 @@ from iomodels.crmengine.notes import Note,TopicListResponse
 from iomodels.crmengine.cases import Case,CaseListResponse
 from iomodels.crmengine.documents import Document,DocumentListResponse
 from iomodels.crmengine.needs import Need, NeedListResponse
+import iomessages
 # The message class that defines the EntityKey schema
 class EntityKeyRequest(messages.Message):
     entityKey = messages.StringField(1)
@@ -91,6 +93,18 @@ class AccountSearchResult(messages.Message):
 class AccountSearchResults(messages.Message):
     items = messages.MessageField(AccountSearchResult, 1, repeated=True)
     nextPageToken = messages.StringField(2)
+
+class AccountInsertRequest(messages.Message):
+    name = messages.StringField(1)
+    account_type = messages.StringField(2)
+    industry = messages.StringField(3)
+    access = messages.StringField(4)
+    tagline = messages.StringField(5)
+    introduction = messages.StringField(6)
+    phones = messages.MessageField(iomessages.PhoneSchema,7, repeated = True)
+    emails = messages.MessageField(iomessages.EmailSchema,8, repeated = True)
+    addresses = messages.MessageField(iomessages.AddressSchema,9, repeated = True)
+    infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema,10, repeated = True)
 
 class Account(EndpointsModel):
     _message_fields_schema = ('id','entityKey','created_at','updated_at', 'folder','access','collaborators_list','phones','emails','addresses','websites','sociallinks', 'collaborators_ids','name','owner','account_type','industry','tagline','introduction')
@@ -290,6 +304,115 @@ class Account(EndpointsModel):
     
     
         
+    @classmethod
+    def insert(cls,user_from_email,request):
+        account_key = cls.get_key_by_name(
+                                        user_from_email= user_from_email,
+                                        name = request.name
+                                        )
+        if account_key:
+            account_key_async = account_key
+        else:
+            account = cls(
+                        name = request.name,
+                        account_type = request.account_type,
+                        industry = request.industry,
+                        tagline = request.tagline,
+                        introduction = request.introduction,
+                        owner = user_from_email.google_user_id,
+                        organization = user_from_email.organization,
+                        access = request.access
+                        )
+            account_key = account.put_async()
+            account_key_async = account_key.get_result()
+            taskqueue.add(
+                            url='/workers/createobjectfolder', 
+                            params={
+                                    'kind': "Account",
+                                    'folder_name': request.name,
+                                    'email': user_from_email.email,
+                                    'obj_key':my_model.entityKey
+                                    }
+                            )
+        for email in request.emails:
+            Node.insert_info_node(
+                            account_key_async,
+                            iomessages.InfoNodeRequestSchema(
+                                                            kind='emails',
+                                                            fields=[
+                                                                iomessages.RecordSchema(
+                                                                field = 'email',
+                                                                value = email.email
+                                                                )
+                                                            ]
+                                                        )
+                                                    )
+        for phone in request.phones:
+            Node.insert_info_node(
+                            account_key_async,
+                            iomessages.InfoNodeRequestSchema(
+                                                            kind='phones',
+                                                            fields=[
+                                                                iomessages.RecordSchema(
+                                                                field = 'type',
+                                                                value = phone.type
+                                                                ),
+                                                                iomessages.RecordSchema(
+                                                                field = 'number',
+                                                                value = phone.number
+                                                                )
+                                                            ]
+                                                        )
+                                                    )
+        for address in request.addresses:
+            Node.insert_info_node(
+                            account_key_async,
+                            iomessages.InfoNodeRequestSchema(
+                                                            kind='addresses',
+                                                            fields=[
+                                                                iomessages.RecordSchema(
+                                                                field = 'street',
+                                                                value = address.street
+                                                                ),
+                                                                iomessages.RecordSchema(
+                                                                field = 'city',
+                                                                value = address.city
+                                                                ),
+                                                                iomessages.RecordSchema(
+                                                                field = 'state',
+                                                                value = address.state
+                                                                ),
+                                                                iomessages.RecordSchema(
+                                                                field = 'postal_code',
+                                                                value = address.postal_code
+                                                                ),
+                                                                iomessages.RecordSchema(
+                                                                field = 'country',
+                                                                value = address.country
+                                                                ),
+                                                                iomessages.RecordSchema(
+                                                                field = 'formatted',
+                                                                value = address.formatted
+                                                                )
+                                                            ]
+                                                        )
+                                                    )
+        for infonode in request.infonodes:
+            Node.insert_info_node(
+                            account_key_async,
+                            iomessages.InfoNodeRequestSchema(
+                                                            kind = infonode.kind,
+                                                            fields = infonode.fields
+                                                        )
+                                                    )
+            
+            
+           
+        account_schema = AccountSchema(
+                                  id = str( account_key_async.id() ),
+                                  entityKey = account_key_async.urlsafe()
+                                  )
+        return account_schema
     @classmethod
     def list(cls,user_from_email,request):
         curs = Cursor(urlsafe=request.pageToken)
