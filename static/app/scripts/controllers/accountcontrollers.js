@@ -891,7 +891,7 @@ $scope.CaselistNextPageItems = function(){
      };
      $scope.createPickerUploader = function() {
           var projectfolder = $scope.account.folder;
-          var developerKey = 'AIzaSyD___EKeONhEP1JDWsNQi0zQhlGGzuwRI4';
+          var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
           var docsView = new google.picker.DocsView()
               .setIncludeFolders(true) 
               .setSelectFolderEnabled(true);
@@ -1390,6 +1390,9 @@ $scope.updatAccountHeader = function(account){
 $scope.editbeforedelete = function(){
      $('#BeforedeleteAccount').modal('show');
    };
+$scope.beforedeleteInfonde = function(){
+    $('#BeforedeleteInfonode').modal('show');
+}
 $scope.deleteaccount = function(){
      var accountid = {'entityKey':$scope.account.entityKey};
      Account.delete($scope,accountid);

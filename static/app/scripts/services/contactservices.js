@@ -195,6 +195,26 @@ accountservices.factory('Contact', function($http) {
             console.log('Contact.patch gapi #end_execute');
           });
   };
+  Contact.import = function($scope,params) {
+          $scope.isLoading = true;
+          $scope.$apply();
+          gapi.client.crmengine.contacts.import(params).execute(function(resp) {
+            console.log('====================================');
+            console.log(params);
+            if(!resp.code){
+               $scope.listcontacts();
+            }else {
+              $('#errorModal').modal('show');
+               if(resp.code==401){
+                $scope.refreshToken();
+                
+               };
+               $scope.isLoading = false;
+                $scope.$apply();
+            }
+            console.log('Contact.patch gapi #end_execute');
+          });
+  };
   Contact.list = function($scope,params){
         $scope.isLoading = true;
       gapi.client.crmengine.contacts.listv2(params).execute(function(resp) {

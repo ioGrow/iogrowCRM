@@ -7,7 +7,25 @@
       </div>
       
     </div>
-
+<div class="modal fade"  id="importModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+              <h3 id="myModalLabel">{{_("Import contacts")}}</h3>
+            </div>
+            <div class="modal-body">
+                <p>{{_("We support importing CSV files from Google Contacts, Outlook, Outlook Expressand some other apps. Please select a CSV file to upload:")}}</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn default" data-dismiss="modal">{{_("Close")}}</button>
+              <button ng-click="createPickerUploader()"  type="submit" class="btn green btn-primary addContactNow">{{_("Import")}} </button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
    <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
       <div id="portlet-config" class="modal hide">
         <div class="modal-header">
@@ -108,11 +126,22 @@
           </div>
         <div class="row">
         
-          <div class="col-md-2" > 
-                    <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
-                    {{ _("New Contact") }} <i class="icon-plus"></i>
-                    </button> 
-          </div>
+          <div class="col-md-3" > 
+                    
+                <div class="btn-group">
+                                        <a class="btn red" href="#" ng-click="showModal()" data-toggle="dropdown">
+                                        <i class="icon-plus"></i> {{ _("New Contact") }}
+                                       
+                                        </a>
+                                        
+                                    </div>
+                                    <div class="btn-group">
+                                        <button  ng-click="showImportModal()" id="sample_editable_1_new" class="btn red">
+                                        <i class="icon-upload-alt"></i>
+                                        </button>
+
+                                    </div>
+              </div>
           <div class="col-md-2" ng-show="contacts+isFiltering">
               <div class="btn-group btn-filter">
                                     <a class="btn btn-default" href="#" data-toggle="dropdown">
@@ -125,7 +154,7 @@
                                     </ul>
               </div>
           </div>
-          <div class="col-md-5" ng-show="contacts+isFiltering">  
+          <div class="col-md-4" ng-show="contacts+isFiltering">  
                     <form clss="ng-pristine ng-valid" ng-submit="executeSearch(searchQuery)">
                       <div class="input-group">
 

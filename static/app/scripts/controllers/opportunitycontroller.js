@@ -869,7 +869,7 @@ $scope.deleteopportunity= function(){
 
      };
      $scope.createPickerUploader = function() {
-          var developerKey = 'AIzaSyD___EKeONhEP1JDWsNQi0zQhlGGzuwRI4';
+          var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
           var projectfolder = $scope.opportunity.folder;
           var docsView = new google.picker.DocsView()
               .setIncludeFolders(true) 
@@ -1014,7 +1014,35 @@ $scope.listInfonodes = function(kind) {
    
  };
 
+  /// update account with inlineEdit
+  $scope.inlinePatch=function(kind,edge,name,entityKey,value){
+   
+   if (kind=='Opportunity') {
+          params = {'id':$scope.opportunity.id,
+             name:value}
+         Opportunity.patch($scope,params);
+   }else{
 
+     
+     
+          params = {
+                  'entityKey': entityKey,
+                  'parent':$scope.opportunity.entityKey,
+                  'kind':edge,
+                  'fields':[
+                     
+                      {
+                        "field": name,
+                        "value": value
+                      }
+                  ]
+        };
+         
+         InfoNode.patch($scope,params);
+   }
+
+
+  };
     
      // Google+ Authentication 
      Auth.init($scope);

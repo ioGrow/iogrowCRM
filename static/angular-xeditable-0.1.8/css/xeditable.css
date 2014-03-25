@@ -73,7 +73,7 @@ Build date: 2014-01-10
 }
 .editable-click, a.editable-click {
     text-decoration: none;
-    color: #428bca;
+    color: #666;
 }
 .editable-click:hover, a.editable-click:hover {
     text-decoration: none;
