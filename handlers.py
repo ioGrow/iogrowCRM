@@ -300,6 +300,17 @@ class LeadShowHandler(BaseHandler,SessionEnabledHandler):
       
       self.response.out.write(template.render(template_values))
 
+class LeadNewHandler(BaseHandler,SessionEnabledHandler):
+  def get (self):
+    if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+      user = self.get_user_from_session()
+      self.set_user_locale()
+      tabs = user.get_user_active_tabs()
+      self.set_user_locale()
+      template_values={'tabs':tabs}
+      template = jinja_environment.get_template('templates/leads/lead_new.html')
+      self.response.out.write(template.render(template_values))
+
 class CaseListHandler(BaseHandler,SessionEnabledHandler):
   def get(self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
@@ -1290,6 +1301,7 @@ routes = [
     # Leads Views
     ('/views/leads/list',LeadListHandler),
     ('/views/leads/show',LeadShowHandler),
+    ('/views/leads/new',LeadNewHandler),
     # Cases Views
     ('/views/cases/list',CaseListHandler),
     ('/views/cases/show',CaseShowHandler),
