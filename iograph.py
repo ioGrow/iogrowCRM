@@ -23,7 +23,6 @@ INVERSED_EDGES = {
             'tasks' : ['parents'],
             'topics':['parents']
             }
-
 DELETED_ON_CASCADE = {
             'Task' : ['comments'],
             'Event' : ['comments'],

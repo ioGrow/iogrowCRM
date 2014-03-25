@@ -9,22 +9,29 @@ from endpoints_helper import EndpointsHelper
 from iomodels.crmengine.tags import Tag,TagSchema
 from iomodels.crmengine.tasks import Task,TaskRequest,TaskListResponse
 from iomodels.crmengine.events import Event,EventListResponse
-from iograph import Node,Edge,InfoNodeListResponse
+from iograph import Node,Edge,InfoNodeListResponse,InfoNodeRequestSchema
 from iomodels.crmengine.notes import Note,TopicListResponse
 from iomodels.crmengine.documents import Document,DocumentListResponse
 from iomodels.crmengine.contacts import Contact
 from iomodels.crmengine.accounts import Account
 import model
+import iomessages
 
 
 class LeadInsertRequest(messages.Message):
-    company = messages.StringField(1)
-    firstname = messages.StringField(2)
-    lastname = messages.StringField(3)
+    firstname = messages.StringField(1)
+    lastname = messages.StringField(2)
     title = messages.StringField(4)
+    company = messages.StringField(3)
     access = messages.StringField(5)
     source = messages.StringField(6)
     status = messages.StringField(7)
+    tagline = messages.StringField(8)
+    introduction = messages.StringField(9)
+    phones = messages.MessageField(iomessages.PhoneSchema,10, repeated = True)
+    emails = messages.MessageField(iomessages.EmailSchema,11, repeated = True)
+    addresses = messages.MessageField(iomessages.AddressSchema,12, repeated = True)
+    infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema,13, repeated = True)
 
  # The message class that defines the ListRequest schema
 class ListRequest(messages.Message):

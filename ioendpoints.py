@@ -183,10 +183,6 @@ class EdgesRequest(messages.Message):
 class EdgesResponse(messages.Message):
     items = messages.MessageField(EdgeSchema, 1, repeated=True)
 
-
-
-
-
 class InfoNodeSchema(messages.Message):
     kind = messages.StringField(1, required=True)
     fields = messages.MessageField(RecordSchema, 2, repeated=True)
