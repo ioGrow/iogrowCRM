@@ -86,6 +86,39 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact','Tag','Ed
             $scope.contactCurrentPage = $scope.contactCurrentPage - 1 ;
             Contact.list($scope,params);
        };
+        $scope.showImportModal = function(){
+          $('#importModal').modal('show');
+        }
+        $scope.createPickerUploader = function() {
+          $('#importModal').modal('hide');
+          var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
+          var projectfolder = $scope.contact.folder;
+          var docsView = new google.picker.DocsView()
+              .setIncludeFolders(true) 
+              .setSelectFolderEnabled(true);
+          var picker = new google.picker.PickerBuilder().
+              addView(new google.picker.DocsUploadView().setParent(projectfolder)).
+              addView(docsView).
+              setCallback($scope.uploaderCallback).
+              setOAuthToken(window.authResult.access_token).
+              setDeveloperKey(developerKey).
+              setAppId(987765099891).
+                enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
+              build();
+          picker.setVisible(true);
+      };
+      $scope.uploaderCallback = function(data) {
+        
+
+        if (data.action == google.picker.Action.PICKED) {
+                if(data.docs){
+                    var params = {
+                                  'file_id': data.docs[0].id
+                                  };
+                    Contact.import($scope,params);
+                }
+        }
+      }
       // new Contact
       $scope.showModal = function(){
         $('#addContactModal').modal('show');

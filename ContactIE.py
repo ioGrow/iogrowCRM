@@ -1,5 +1,5 @@
 """
-A script to inport and export contact info into vcf, vcard, csv, excel, files, 
+A script to import and export contact info into vcf, vcard, csv, excel, files, 
 text files
 
 dependencies: pyvcf, xlrd
