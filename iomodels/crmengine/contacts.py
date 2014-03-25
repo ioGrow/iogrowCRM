@@ -5,6 +5,7 @@ import csv
 import re
 import json
 from StringIO import StringIO
+from django.utils.encoding import smart_str
 from google.appengine.ext import ndb
 from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
@@ -22,7 +23,7 @@ from iomodels.crmengine.opportunities import Opportunity,OpportunityListResponse
 from iomodels.crmengine.cases import Case,CaseListResponse
 from iomodels.crmengine.documents import Document,DocumentListResponse
 import model
-from django.utils.encoding import smart_str
+import iomessages
 
 ATTRIBUTES_MATCHING = {
     'firstname' : ['First Name','Given Name'],
@@ -70,6 +71,12 @@ class ContactInsertRequest(messages.Message):
     lastname = messages.StringField(3)
     title = messages.StringField(4)
     access = messages.StringField(5)
+    tagline = messages.StringField(6)
+    introduction = messages.StringField(7)
+    phones = messages.MessageField(iomessages.PhoneSchema,8, repeated = True)
+    emails = messages.MessageField(iomessages.EmailSchema,9, repeated = True)
+    addresses = messages.MessageField(iomessages.AddressSchema,10, repeated = True)
+    infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema,11, repeated = True)
     
 class ContactSchema(messages.Message):
     id = messages.StringField(1)
@@ -481,6 +488,77 @@ class Contact(EndpointsModel):
                     )
         contact_key = contact.put_async()
         contact_key_async = contact_key.get_result()
+        for email in request.emails:
+            Node.insert_info_node(
+                        contact_key_async,
+                        iomessages.InfoNodeRequestSchema(
+                                                        kind='emails',
+                                                        fields=[
+                                                            iomessages.RecordSchema(
+                                                            field = 'email',
+                                                            value = email.email
+                                                            )
+                                                        ]
+                                                    )
+                                                )
+        for phone in request.phones:
+            Node.insert_info_node(
+                        contact_key_async,
+                        iomessages.InfoNodeRequestSchema(
+                                                        kind='phones',
+                                                        fields=[
+                                                            iomessages.RecordSchema(
+                                                            field = 'type',
+                                                            value = phone.type
+                                                            ),
+                                                            iomessages.RecordSchema(
+                                                            field = 'number',
+                                                            value = phone.number
+                                                            )
+                                                        ]
+                                                    )
+                                                )
+        for address in request.addresses:
+            Node.insert_info_node(
+                        contact_key_async,
+                        iomessages.InfoNodeRequestSchema(
+                                                        kind='addresses',
+                                                        fields=[
+                                                            iomessages.RecordSchema(
+                                                            field = 'street',
+                                                            value = address.street
+                                                            ),
+                                                            iomessages.RecordSchema(
+                                                            field = 'city',
+                                                            value = address.city
+                                                            ),
+                                                            iomessages.RecordSchema(
+                                                            field = 'state',
+                                                            value = address.state
+                                                            ),
+                                                            iomessages.RecordSchema(
+                                                            field = 'postal_code',
+                                                            value = address.postal_code
+                                                            ),
+                                                            iomessages.RecordSchema(
+                                                            field = 'country',
+                                                            value = address.country
+                                                            ),
+                                                            iomessages.RecordSchema(
+                                                            field = 'formatted',
+                                                            value = address.formatted
+                                                            )
+                                                        ]
+                                                    )
+                                                )
+        for infonode in request.infonodes:
+            Node.insert_info_node(
+                        contact_key_async,
+                        iomessages.InfoNodeRequestSchema(
+                                                        kind = infonode.kind,
+                                                        fields = infonode.fields
+                                                    )
+                                                )
         taskqueue.add(
                     url='/workers/createobjectfolder', 
                     params={
