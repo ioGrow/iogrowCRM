@@ -173,7 +173,7 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
         
         
             # Set the user locale from user's settings
-            self.set_user_locale(user.language)
+            #self.set_user_locale(user.language)
             # Render the template
             
             template_values = {
@@ -1077,6 +1077,8 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                   return
                 # Set the user locale from user's settings
                 self.set_user_locale(user.language)
+                uSerid = user.id
+                uSerlanguage = user.language
                 apps = user.get_user_apps()
                 admin_app = None
                 active_app = user.get_user_active_app()
@@ -1092,7 +1094,9 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                   'logout_url' : logout_url,
                   'CLIENT_ID': CLIENT_ID,
                   'active_app':active_app,
-                  'apps': apps
+                  'apps': apps,
+                  'uSerid':uSerid,
+                  'uSerlanguage':uSerlanguage
                 }
                 if admin_app:
                     template_values['admin_app']=admin_app
