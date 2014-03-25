@@ -44,6 +44,10 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'LeadShowCtrl',        
         templateUrl:'/views/leads/show'
       }).
+      when('/leads/new', {
+        controller: 'LeadNewCtrl',        
+        templateUrl:'/views/leads/new'
+      }).
       // Cases
       when('/cases/', {
         controller: 'CaseListCtrl',        
