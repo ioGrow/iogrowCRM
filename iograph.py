@@ -218,6 +218,27 @@ class Node(ndb.Expando):
         return InfoNodeListResponse(
                                     items = connections_list
                                     )
+    @classmethod
+    def insert_info_node(cls,parent_key,request):
+        node = Node(kind=request.kind)
+        node_values = []
+        for record in request.fields:
+            setattr(node, record.field, record.value)
+            node_values.append(str(record.value))
+        entityKey_async = node.put_async()
+        entityKey = entityKey_async.get_result()
+        Edge.insert(
+                    start_node = parent_key,
+                    end_node = entityKey,
+                    kind = 'infos',
+                    inverse_edge = 'parents'
+                )
+        indexed_edge = '_' + request.kind + ' ' + " ".join(node_values)
+        EndpointsHelper.update_edge_indexes(
+                                            parent_key = parent_key,
+                                            kind = 'infos',
+                                            indexed_edge = indexed_edge
+                                            )
 
 
 class InfoNode(ndb.Expando):

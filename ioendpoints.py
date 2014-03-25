@@ -2232,7 +2232,6 @@ class CrmEngineApi(remote.Service):
                         name='infonode.insert')
     def infonode_insert(self, request):
         parent_key = ndb.Key(urlsafe=request.parent)
-
         node = Node(kind=request.kind)
         node_values = []
         for record in request.fields:

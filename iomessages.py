@@ -15,6 +15,12 @@ class AddressSchema(messages.Message):
     country = messages.StringField(5)
     formatted = messages.StringField(6)
 
+class RecordSchema(messages.Message):
+    field = messages.StringField(1)
+    value = messages.StringField(2)
+    property_type = messages.StringField(3, default='StringProperty')
+    is_indexed = messages.BooleanField(4)
+    
 class InfoNodeRequestSchema(messages.Message):
     kind = messages.StringField(1, required=True)
     fields = messages.MessageField(RecordSchema, 2, repeated=True)
