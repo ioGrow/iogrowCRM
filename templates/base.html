@@ -93,13 +93,13 @@
         <!-- BEGIN TOP NAVIGATION MENU --> 
                     
         <ul class="nav navbar-nav pull-right">      
-              <!--li class="dropdown user">
-                <a href="/live/companies/{{org_id}}/" class="dropdown-tog" target="new">       
+              <li class="dropdown user">
+                <a href="/#/admin/users" class="dropdown-tog" target="new">       
                   <span class="username">
-                    My company
+                    My Team
                   </span>
                 </a>        
-              </li-->
+              </li>
               <li class="dropdown user" id="header_task_bar">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" >
                 <img alt="" src="static/bootstrap3/img/glyphicons_156_show_thumbnails.png" width="18">
@@ -163,7 +163,7 @@
               <!-- BEGIN USER LOGIN DROPDOWN -->
               <li class="dropdown user">
                 <a href="{{user.google_public_profile_url}}" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                  <img alt="" src="https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=29" class="user-photo" />
+                  <img alt="" src="{{user.google_public_profile_photo_url }}" class="user-photo" />
                   <span class="username">
                     {{user.google_display_name}}
                   </span>

@@ -183,6 +183,14 @@ class Node(ndb.Expando):
     updated_at = ndb.DateTimeProperty(auto_now=True)
 
     @classmethod
+    def check_permission(cls, user, node):
+        if node.access != 'public' and node.owner!=user.google_user_id:
+            end_node_set = [user.key]
+            if not Edge.find(start_node=node.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
+                return False
+        return True
+
+    @classmethod
     def list_info_nodes(cls,parent_key,request):
         edge_list = Edge.list(
                             start_node = parent_key,

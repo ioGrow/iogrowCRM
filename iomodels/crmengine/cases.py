@@ -193,87 +193,89 @@ class Case(EndpointsModel):
         case = cls.get_by_id(int(request.id))
         if case is None:
             raise endpoints.NotFoundException('Opportunity not found.')
-        parents_edge_list = Edge.list(
-                                    start_node = case.key,
-                                    kind = 'parents'
+        case_schema = None
+        if Node.check_permission(user_from_email,case):
+            parents_edge_list = Edge.list(
+                                        start_node = case.key,
+                                        kind = 'parents'
+                                        )
+            account_schema = None
+            for parent in parents_edge_list['items']:
+                if parent.end_node.kind() == 'Account':
+                    account = parent.end_node.get()
+                    account_schema = AccountSchema(
+                                            id = str( account.key.id() ),
+                                            entityKey = account.key.urlsafe(),
+                                            name = account.name
+                                            )
+            tag_list = Tag.list_by_parent(parent_key = case.key)
+            # list of infonodes
+            infonodes = Node.list_info_nodes(
+                                            parent_key = case.key,
+                                            request = request
+                                            )
+            #list of topics related to this account
+            topics = None
+            if request.topics:
+                topics = Note.list_by_parent(
+                                            parent_key = case.key,
+                                            request = request
+                                            )
+            tasks = None
+            if request.tasks:
+                tasks = Task.list_by_parent(
+                                            parent_key = case.key,
+                                            request = request
+                                            )
+            events = None
+            if request.events:
+                events = Event.list_by_parent(
+                                            parent_key = case.key,
+                                            request = request
+                                            )
+            documents = None
+            if request.documents:
+                documents = Document.list_by_parent(
+                                            parent_key = case.key,
+                                            request = request
+                                            )
+            case_status_edges = Edge.list(
+                                        start_node = case.key,
+                                        kind = 'status',
+                                        limit = 1
+                                        )
+            current_status_schema = None
+            if len(case_status_edges['items'])>0:
+                                current_status = case_status_edges['items'][0].end_node.get()
+                                current_status_schema = CaseStatusSchema(  
+                                                                        name = current_status.status,
+                                                                        status_changed_at = case_status_edges['items'][0].created_at.isoformat()
+                                                                        )
+            
+            closed_date = None
+            if case.closed_date:
+                closed_date = case.closed_date.strftime("%Y-%m-%dT%H:%M:00.000")
+            case_schema = CaseSchema(
+                                      id = str( case.key.id() ),
+                                      entityKey = case.key.urlsafe(),
+                                      name = case.name,
+                                      folder = case.folder,
+                                      current_status = current_status_schema,
+                                      priority = case.priority,
+                                      tags = tag_list,
+                                      topics = topics,
+                                      tasks = tasks,
+                                      events = events,
+                                      documents = documents,
+                                      infonodes = infonodes,
+                                      access = case.access,
+                                      description = case.description,
+                                      case_origin = case.case_origin,
+                                      closed_date = closed_date,
+                                      type_case = case.type_case,
+                                      created_at = case.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                      updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                     )
-        account_schema = None
-        for parent in parents_edge_list['items']:
-            if parent.end_node.kind() == 'Account':
-                account = parent.end_node.get()
-                account_schema = AccountSchema(
-                                        id = str( account.key.id() ),
-                                        entityKey = account.key.urlsafe(),
-                                        name = account.name
-                                        )
-        tag_list = Tag.list_by_parent(parent_key = case.key)
-        # list of infonodes
-        infonodes = Node.list_info_nodes(
-                                        parent_key = case.key,
-                                        request = request
-                                        )
-        #list of topics related to this account
-        topics = None
-        if request.topics:
-            topics = Note.list_by_parent(
-                                        parent_key = case.key,
-                                        request = request
-                                        )
-        tasks = None
-        if request.tasks:
-            tasks = Task.list_by_parent(
-                                        parent_key = case.key,
-                                        request = request
-                                        )
-        events = None
-        if request.events:
-            events = Event.list_by_parent(
-                                        parent_key = case.key,
-                                        request = request
-                                        )
-        documents = None
-        if request.documents:
-            documents = Document.list_by_parent(
-                                        parent_key = case.key,
-                                        request = request
-                                        )
-        case_status_edges = Edge.list(
-                                    start_node = case.key,
-                                    kind = 'status',
-                                    limit = 1
-                                    )
-        current_status_schema = None
-        if len(case_status_edges['items'])>0:
-                            current_status = case_status_edges['items'][0].end_node.get()
-                            current_status_schema = CaseStatusSchema(  
-                                                                    name = current_status.status,
-                                                                    status_changed_at = case_status_edges['items'][0].created_at.isoformat()
-                                                                    )
-        
-        closed_date = None
-        if case.closed_date:
-            closed_date = case.closed_date.strftime("%Y-%m-%dT%H:%M:00.000")
-        case_schema = CaseSchema(
-                                  id = str( case.key.id() ),
-                                  entityKey = case.key.urlsafe(),
-                                  name = case.name,
-                                  folder = case.folder,
-                                  current_status = current_status_schema,
-                                  priority = case.priority,
-                                  tags = tag_list,
-                                  topics = topics,
-                                  tasks = tasks,
-                                  events = events,
-                                  documents = documents,
-                                  infonodes = infonodes,
-                                  access = case.access,
-                                  description = case.description,
-                                  case_origin = case.case_origin,
-                                  closed_date = closed_date,
-                                  type_case = case.type_case,
-                                  created_at = case.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
-                                )
         return case_schema
     @classmethod
     def list(cls,user_from_email,request):
@@ -305,10 +307,6 @@ class Case(EndpointsModel):
             for case in cases:
                 if count<= limit:
                     is_filtered = True
-                    if case.access != 'public' and case.owner!=user_from_email.google_user_id:
-                        end_node_set = [user_from_email.key]
-                        if not Edge.find(start_node=case.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
-                            is_filtered = False
                     if request.tags and is_filtered:
                         end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
                         if not Edge.find(start_node=case.key,kind='tags',end_node_set=end_node_set,operation='AND'):
@@ -319,7 +317,7 @@ class Case(EndpointsModel):
                         is_filtered = False
                     if request.priority and case.priority!=request.priority and is_filtered:
                         is_filtered = False
-                    if is_filtered:
+                    if is_filtered and Node.check_permission(user_from_email,case):
                         count = count + 1
                         #list of tags related to this case
                         tag_list = Tag.list_by_parent(parent_key = case.key)
@@ -431,12 +429,7 @@ class Case(EndpointsModel):
                                     )
                 for edge in case_edge_list['items']:
                     case = edge.end_node.get()
-                    is_filtered = True
-                    if case.access != 'public' and case.owner!=user_from_email.google_user_id:
-                        end_node_set = [user_from_email.key]
-                        if not Edge.find(start_node=case.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
-                            is_filtered = False
-                    if is_filtered:
+                    if Node.check_permission(user_from_email,case):
                         count = count + 1
                         tag_list = Tag.list_by_parent(parent_key = case.key)
                         case_status_edges = Edge.list(

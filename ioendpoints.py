@@ -721,9 +721,13 @@ class CrmEngineApi(remote.Service):
                       path='cases', http_method='DELETE',
                       name='cases.delete')
     def case_delete(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
         entityKey = ndb.Key(urlsafe=request.entityKey)
-        Edge.delete_all_cascade(start_node = entityKey)
-        return message_types.VoidMessage()
+        if Node.check_permission(user_from_email,entityKey.get()):
+            Edge.delete_all_cascade(start_node = entityKey)
+            return message_types.VoidMessage()
+        else:
+            raise endpoints.UnauthorizedException('You don\'t have permissions.')
 
     # cases.getv2 api
     @endpoints.method(CaseGetRequest, CaseSchema,

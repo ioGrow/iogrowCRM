@@ -331,7 +331,7 @@ class Account(EndpointsModel):
                                     'kind': "Account",
                                     'folder_name': request.name,
                                     'email': user_from_email.email,
-                                    'obj_key':my_model.entityKey
+                                    'obj_key':account_key_async
                                     }
                             )
         for email in request.emails:

@@ -604,16 +604,16 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
 
      };
      $scope.share = function(slected_memeber){
-        console.log('permissions.insert share');
-        console.log(slected_memeber);
+        
         $scope.$watch($scope.casee.access, function() {
-         var body = {'access':$scope.casee.access};
-         var id = $scope.account.id;
-         var params ={'id':id,
-                      'access':$scope.casee.access};
-          console.log('patching');
-          console.log(params);
-         Case.patch($scope,params);
+           var id = $scope.casee.id;
+           var params ={
+                        'id':id,
+                        'access':$scope.casee.access
+                      };
+
+            
+           Case.patch($scope,params);
         });
         $('#sharingSettingsModal').modal('hide');
 
@@ -641,9 +641,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
           $scope.sharing_with = [];
           
           
-        }else{ 
-          alert('select a user to be invited');
-        };
+        }
 
      };
      
