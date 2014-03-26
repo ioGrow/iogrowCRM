@@ -218,89 +218,92 @@ class Account(EndpointsModel):
         account = Account.get_by_id(int(request.id))
         if account is None:
             raise endpoints.NotFoundException('Account not found.')
-        #list of tags related to this account
-        tag_list = Tag.list_by_parent(account.key)
-        # list of infonodes
-        infonodes = Node.list_info_nodes(
-                                        parent_key = account.key,
-                                        request = request
-                                        )
-        #list of contacts to this account
-        contacts = None
-        if request.contacts:
-            contacts = Contact.list_by_parent(
+        account_schema = None
+        if Node.check_permission(user_from_email,account):
+            #list of tags related to this account
+            tag_list = Tag.list_by_parent(account.key)
+            # list of infonodes
+            infonodes = Node.list_info_nodes(
                                             parent_key = account.key,
                                             request = request
-                                        )
-        #list of topics related to this account
-        topics = None
-        if request.topics:
-            topics = Note.list_by_parent(
-                                        parent_key = account.key,
-                                        request = request
-                                        )
-        tasks = None
-        if request.tasks:
-            tasks = Task.list_by_parent(
-                                        parent_key = account.key,
-                                        request = request
-                                        )
-        events = None
-        if request.events:
-            events = Event.list_by_parent(
-                                        parent_key = account.key,
-                                        request = request
-                                        )
-        needs = None
-        if request.needs:
-            needs = Need.list_by_parent(
-                                        parent_key = account.key,
-                                        request = request
-                                        )
-        opportunities = None
-        if request.opportunities:
-            opportunities = Opportunity.list_by_parent(
-                                        parent_key = account.key,
-                                        request = request
-                                        )
-        cases = None
-        if request.cases:
-            cases = Case.list_by_parent(
-                                        user_from_email = user_from_email,
-                                        parent_key = account.key,
-                                        request = request
-                                        )
-        documents = None
-        if request.documents:
-            documents = Document.list_by_parent(
-                                        parent_key = account.key,
-                                        request = request
-                                        )
-        account_schema = AccountSchema(
-                                  id = str( account.key.id() ),
-                                  entityKey = account.key.urlsafe(),
-                                  access = account.access,
-                                  folder = account.folder,
-                                  name = account.name,
-                                  account_type = account.account_type,
-                                  industry = account.industry,
-                                  tagline = account.tagline,
-                                  introduction = account.introduction,
-                                  tags = tag_list,
-                                  contacts = contacts,
-                                  topics = topics,
-                                  tasks = tasks,
-                                  events = events,
-                                  needs = needs,
-                                  opportunities = opportunities,
-                                  cases = cases,
-                                  documents = documents,
-                                  infonodes = infonodes,
-                                  created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
-                                )
-
-        return  account_schema
+                                            )
+            #list of contacts to this account
+            contacts = None
+            if request.contacts:
+                contacts = Contact.list_by_parent(
+                                                parent_key = account.key,
+                                                request = request
+                                            )
+            #list of topics related to this account
+            topics = None
+            if request.topics:
+                topics = Note.list_by_parent(
+                                            parent_key = account.key,
+                                            request = request
+                                            )
+            tasks = None
+            if request.tasks:
+                tasks = Task.list_by_parent(
+                                            parent_key = account.key,
+                                            request = request
+                                            )
+            events = None
+            if request.events:
+                events = Event.list_by_parent(
+                                            parent_key = account.key,
+                                            request = request
+                                            )
+            needs = None
+            if request.needs:
+                needs = Need.list_by_parent(
+                                            parent_key = account.key,
+                                            request = request
+                                            )
+            opportunities = None
+            if request.opportunities:
+                opportunities = Opportunity.list_by_parent(
+                                            parent_key = account.key,
+                                            request = request
+                                            )
+            cases = None
+            if request.cases:
+                cases = Case.list_by_parent(
+                                            user_from_email = user_from_email,
+                                            parent_key = account.key,
+                                            request = request
+                                            )
+            documents = None
+            if request.documents:
+                documents = Document.list_by_parent(
+                                            parent_key = account.key,
+                                            request = request
+                                            )
+            account_schema = AccountSchema(
+                                      id = str( account.key.id() ),
+                                      entityKey = account.key.urlsafe(),
+                                      access = account.access,
+                                      folder = account.folder,
+                                      name = account.name,
+                                      account_type = account.account_type,
+                                      industry = account.industry,
+                                      tagline = account.tagline,
+                                      introduction = account.introduction,
+                                      tags = tag_list,
+                                      contacts = contacts,
+                                      topics = topics,
+                                      tasks = tasks,
+                                      events = events,
+                                      needs = needs,
+                                      opportunities = opportunities,
+                                      cases = cases,
+                                      documents = documents,
+                                      infonodes = infonodes,
+                                      created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                      updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                    )
+            return  account_schema
+        else:
+            raise endpoints.NotFoundException('Permission denied')
     
     
         
@@ -443,17 +446,13 @@ class Account(EndpointsModel):
             for account in accounts:
                 if count<= limit:
                     is_filtered = True
-                    if account.access == 'private' and account.owner!=user_from_email.google_user_id:
-                        end_node_set = [user_from_email.key]
-                        if not Edge.find(start_node=account.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
-                            is_filtered = False
                     if request.tags and is_filtered:
                         end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
                         if not Edge.find(start_node=account.key,kind='tags',end_node_set=end_node_set,operation='AND'):
                             is_filtered = False
                     if request.owner and account.owner!=request.owner and is_filtered:
                         is_filtered = False
-                    if is_filtered:
+                    if is_filtered and Node.check_permission(user_from_email,account):
                         count = count + 1
                         #list of tags related to this account
                         tag_list = Tag.list_by_parent(parent_key = account.key)

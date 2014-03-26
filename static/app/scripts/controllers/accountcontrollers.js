@@ -968,10 +968,7 @@ $scope.CaselistNextPageItems = function(){
           $scope.sharing_with = [];
           
           
-        }else{ 
-          alert('select a user to be invited');
-        };
-
+        }
 
      };
      

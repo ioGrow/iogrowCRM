@@ -591,8 +591,11 @@ class CrmEngineApi(remote.Service):
                       name='accounts.delete')
     def account_delete(self, request):
         entityKey = ndb.Key(urlsafe=request.entityKey)
-        Edge.delete_all_cascade(start_node = entityKey)
-        return message_types.VoidMessage()
+        if Node.check_permission(user_from_email,entityKey.get()):
+            Edge.delete_all_cascade(start_node = entityKey)
+            return message_types.VoidMessage()
+        else:
+            raise endpoints.UnauthorizedException('You don\'t have permissions.')
 
     # accounts.insert api v2
     @endpoints.method(AccountInsertRequest, AccountSchema,

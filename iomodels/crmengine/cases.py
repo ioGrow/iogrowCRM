@@ -276,7 +276,9 @@ class Case(EndpointsModel):
                                       created_at = case.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                       updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                     )
-        return case_schema
+            return case_schema
+        else:
+            raise endpoints.NotFoundException('Permission denied')
     @classmethod
     def list(cls,user_from_email,request):
         curs = Cursor(urlsafe=request.pageToken)

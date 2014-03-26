@@ -611,10 +611,9 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
                         'id':id,
                         'access':$scope.casee.access
                       };
-
-            
            Case.patch($scope,params);
         });
+
         $('#sharingSettingsModal').modal('hide');
 
         if ($scope.sharing_with.length>0){
