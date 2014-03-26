@@ -1067,41 +1067,49 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Leads").addClass("active");
       
-      document.title = "Leads: Home";
-       $("#id_Leads").addClass("active");
-     $scope.isSignedIn = false;
-     $scope.immediateFailed = false;
-     $scope.nextPageToken = undefined;
-     $scope.prevPageToken = undefined;
-     $scope.isLoading = false;
-     $scope.leadpagination = {};
-     $scope.currentPage = 01;
-     $scope.pages = [];
-     $scope.stage_selected={};
-      
+      document.title = "Leads: New";
+      $("#id_Leads").addClass("active");
+      $scope.isSignedIn = false;
+      $scope.immediateFailed = false;
+      $scope.nextPageToken = undefined;
+      $scope.prevPageToken = undefined;
+      $scope.isLoading = false;
+      $scope.leadpagination = {};
+      $scope.currentPage = 01;
+      $scope.pages = [];
+      $scope.stage_selected={};
       $scope.leads = [];
       $scope.lead = {};
-      
       $scope.lead.access ='public';
       $scope.order = '-updated_at';
       $scope.status = 'New';
-      $scope.selected_tags = [];
-      $scope.draggedTag=null;
-      $scope.tag = {};
-        $scope.showNewTag=false;
-        $scope.color_pallet=[
-         {'name':'red','color':'#F7846A'},
-         {'name':'orange','color':'#FFBB22'},
-         {'name':'yellow','color':'#EEEE22'},
-         {'name':'green','color':'#BBE535'},
-         {'name':'blue','color':'#66CCDD'},
-         {'name':'gray','color':'#B5C5C5'},
-         {'name':'teal','color':'#77DDBB'},
-         {'name':'purple','color':'#E874D6'},
-         ];
-         $scope.tag.color= {'name':'green','color':'#BBE535'};
+      $scope.showPhoneForm=false;
+      $scope.showEmailForm=false;
+      $scope.showWebsiteForm=false;
+      $scope.showSociallinkForm=false;
+      $scope.showCustomFieldForm =false;
+      $scope.phones=[];
+      $scope.addresses=[];
+      $scope.emails=[];
+      $scope.websites=[];
+      $scope.sociallinks=[];
+      $scope.customfields=[];
+      $scope.initObject=function(obj){
+          for (var key in obj) {
+                obj[key]=null;
+              }
+      }
+      $scope.pushElement=function(elem,arr){
+          if (arr.indexOf(elem) == -1) {
+              var copyOfElement = angular.copy(elem);
+              arr.push(copyOfElement);
+              console.log(elem);
+              $scope.initObject(elem);
 
-      // What to do after authentication
+          }else{
+            alert("item already exit");
+          }
+      }
        $scope.runTheProcess = function(){
             
             Leadstatus.list($scope,{});

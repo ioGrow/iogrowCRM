@@ -1,17 +1,16 @@
   <div id="sendingEmail" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-              
-              <div class="modal-body">
-                
-                  
-                    <p ng-show="sending">Sending...</p>
-                    <p ng-show="emailSent">You email has been sent</p>
+    <div class="modal-body">
+      
+        
+          <p ng-show="sending">Sending...</p>
+          <p ng-show="emailSent">You email has been sent</p>
 
 
-                  
-                    
-                 
-                
-              </div>
+        
+          
+       
+      
+    </div>
 </div>
 <div id="newDocument" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -22,18 +21,15 @@
             </div>
             <div class="modal-body">
                      <div class="controls controls-row">
-                                          <form id="addTask" ng-submit="createDocument(newdocument)" class="ng-pristine ng-valid">
-                                                  <input class="form-control" autofocus type="text" placeholder="Enter a new <%=mimeType%> name" id="taskTitle" ng-model="newdocument.title" required>
-                                                  
-                                                  
+                          <form id="addTask" ng-submit="createDocument(newdocument)" class="ng-pristine ng-valid">
+                          <input class="form-control" autofocus type="text" placeholder="Enter a new <%=mimeType%> name" id="taskTitle" ng-model="newdocument.title" required>
                      </div>
             </div>
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
               
                <input  type="submit" class="btn green" value="Create this document">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
-                                        
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->           
             </form>
             </div>
             </div>
@@ -87,11 +83,6 @@
                
 
                   <p>Converting a lead will create a person contact and company. All documents,notes,tasks and events will be transfered. You should only convert a lead if it is qualified.</p>
-                    
-
-                    
-                 
-                
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
@@ -205,39 +196,15 @@
           
           <div class="col-md-12">
             <div class="pull-right sharebuttonDiv"> 
-                   <a ng-click="showConvertModal()" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
-                          <i class="icon-refresh"></i> {{_("Convert")}}
-                   </a>
-                  
-                   <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
-                    <i class="icon-lock"></i> Share
+                   <a href="#sharingSettingsModal" class="btn red jfk-button jfk-button-action" data-toggle="modal">
+                     Create
                   </a>
-                 
-                 
-                        
-                        
-                     
-                </div>
+            </div>
                 
             <h2 class="page-title">
             <a href="/#/leads" data-toggle="tooltip" data-placement="bottom" title="Back to Leads">
             <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Leads")}} > <a editable-text="lead.firstname" onbeforesave="inlinePatch('Lead','', 'firstname',lead.entityKey,$data)"> <%= lead.firstname %>  </a> <a editable-text="lead.lastname" onbeforesave="inlinePatch('Lead','', 'lastname',lead.entityKey,$data)" > <%= lead.lastname %> </a></h2>
-            
-
-              <span ng-show="lead.updated_at" class="contact-title" >Updated at:  <%=lead.updated_at | date:'yyyy-MM-dd - HH:mm:ss ' %> </span><br>
-              <span ng-show="lead.title">{{_("Title")}} : <a   href="/#/search/type:Lead <%=lead.title%>" class="tag" ng-show="lead.title"> #<%= lead.title %> </a></span><span ng-show="lead.company">{{_("Company")}} : <a   href="/#/search/type:Lead <%=lead.company%>" class="tag" ng-show="lead.company"> #<%= lead.company %></a></span> <br>
-              <span>{{_("Lead Source")}} : </span>
-              <a   href="/#/search/type:Lead <%=lead.source%>" class="tag" ng-show="lead.source"> #<%= lead.source %></a> <br>
-              <span>{{_("Lead Status")}} : </span>
-              <a   href="/#/search/type:Lead <%=lead.status%>" class="tag" ng-show="lead.company"> #<%= lead.status %></a> <br>
-
-            </ul>  
-             <span class="page-meta"><i class="icon-pencil"><a ng-click="editLead()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}}</a></i> |  <i class="icon-trash"><a ng-click="editbeforedelete()" class="btn-link addAnotherPhone"> {{_("Delete")}}</a></i></span>
-
-           
-            
-            <hr/>
-            
+            <hr>
           </div>
         </div>
         
@@ -246,87 +213,45 @@
             <div class="row">
               <div class="col-md-9">
               <!-- BEGIN PORTLET-->
-              <div class="portlet paddingless custom-small-tab">
-                <div class="portlet-title line">
-                  <div class="caption">Lead Feeds</div>
-                  
-                </div>
-                <div class="portlet-body">
-                  <!--BEGIN TABS-->
-                  <div class="tabbable tabbable-custom">
-                    <ul class="nav nav-tabs">
-                      <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;" >Notes</a></li>
-                      <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;renderMaps();">About</a></li>
-                      <li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">Attach Documents</a></li>
-                      <li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">Send an Email</a></li>
-                      <!--li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">Opportunities</a></li-->
-                      <!--li class="ng-tab"  ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">Cases</a></li-->
-                    </ul>
-                    <div class="tab-content">
-                      <div class="tab-pane active" id="tab_1_1" ng-show="selectedTab == 1">
-                        
-                         <div class="row">
-                           <div class="col-md-12 margin-bottom-10"> 
-                          <p class⁼"lead"=""><strong>Just add notes to remember what's important :</strong> </p>
-                          <form id="addNote" ng-submit="addNote(note)" class="ng-pristine ng-valid">
-                                            <div class="form-group"> 
-                                               <input class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="Add a new subject" id="messageSubject" ng-model="note.title">
-                                            </div>
-                                            <div class="form-group"> 
-                                                <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="note.content"></textarea>
-                                            </div>
-                                            <div class="form-group"> 
-                                              <input ng-init="note.organization=1" required="" id="id_organization" type="hidden" name="organization" value="1" class="form-control"> 
-                                            </div>
-                                            <div class="form-group"> 
-                                              <input class="form-control" type="hidden" id="id_related_object" ng-init="note.related_object=1" value="1">
-                                            </div>
-                                          
-                                         
-                                         <div class="pull-right">
-                                         <!-- <input type="submit" class="btn btn-primary" value="Attach file">-->
-                                          <input ng-disabled="isLoading"  type="submit" class="btn green" value="Add this note">
-                                          <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
-                                          </div>
-                                        </form>
-                                       </div>
-                                      </div>
-
-                                        
-                            <ul class="chats">
-                              <li class="in" ng-repeat="topic in topics" id="topic_<%=$index%>">
-                                <img class="avatar" alt="" src="<%= topic.last_updater.photo%>" />
-                                <div class="message">
-                                  <span class="arrow"></span>
-                                  <a href="#" class="name"><%= topic.last_updater.display_name%></a>
-                                  <span class="datetime">at <%=topic.updated_at | date:'yyyy-MM-dd - HH:mm:ss' %></span>
-                                  <span class="body">
-                                  <a href="/#/notes/show/<%=topic.discussionId%>" class="discussion-content"><strong class="ng-binding"><%= topic.title%></strong> - <span class="excerpt ng-binding" ng-bind-html-unsafe="topic.excerpt"></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <%= topic.comments%> comments</span></a>
-                                  </span>
-                                </div>
-                              </li>
-                              
-                            </ul>
-                            <div class="row">
-                            <div class="col-md-12">
-                                <div class="pagination pull-right" >
-                                      
-                                   
-                                       <button ng-click="TopiclistPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="topicpagination.prev">
-                                        {{_("Prev")}} 
-                                        </button>
-                                    <button ng-click="TopiclistNextPageItems()"  class="btn" ng-show="topicpagination.next">
-                                        {{_("Next")}} 
-                                        </button>
-                                     
-                                    </div>
-                                    <!--h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3-->
-                              </div>
+                <form class="form-horizontal ">
+                          <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label class="control-label col-md-4">First Name</label>
+                              <div class="col-md-8">
+                                <input ng-model="lead.firstname" type="text" class="form-control">
                               </div>
                             </div>
-                      <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
-                        
-                        <div class="row">
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label class="control-label col-md-4">Last Name</label>
+                              <div class="col-md-8">
+                                <input type="text" ng-model="lead.lastname" class="form-control">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                         <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label class="control-label col-md-4">Title</label>
+                              <div class="col-md-8">
+                                <input type="text" ng-model="lead.title" class="form-control">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label class="control-label col-md-4">Company</label>
+                              <div class="col-md-8">
+                                <input type="text" ng-model="lead.company" class="form-control">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                       <div class="row">
                           <div class="col-md-6">
                             
                                 <div class="news-blocks blank-card blank-card-yellow">
@@ -336,9 +261,30 @@
                                  
                                 </div>
                                   <ul class="list-unstyled contact-infos">
-                                    <li ng-repeat="phone in infonodes.phones"> <a editable-text="phone.number" onbeforesave="inlinePatch('Infonode','phones', 'number',phone.entityKey,$data)"> <%=phone.number%> </a> - <a editable-select="phone.type" e-ng-options="s.value as s.text for s in statuses" onbeforesave="inlinePatch('Infonode','phones', 'type',phone.entityKey,$data)"> <%=phone.type%> </a> <a ><img class="ctodeal"  /></a></li>
-          
-                                    <li><a href="#phonemodal"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new Phone</a></li>
+                                     <li ng-show="showPhoneForm">
+                                      <div class="row">
+                                        <form class="form-inline newLeadForm" role="form">
+                                          <div class="form-group sm-group" style="">
+                                            <label class="sr-only" for="exampleInputEmail2">Number</label>
+                                            <input type="text" class="form-control" id="exampleInputEmail2" ng-model="phone.number" placeholder="Enter a number">
+                                          </div>
+                                          <div class="form-group sm-group" style="">
+                                            <label class="sr-only" for="exampleInputPassword2">Type</label>
+                                            <select ng-model="phone.type" class="form-control">
+                                              <option value="home" selected="selected" >{{_('home')}}</option>
+                                              <option>{{_('work')}}</option>
+                                              <option>{{_('mobile')}}</option>
+                                              <option>{{_('other')}}</option>
+                                            </select>
+                                          </div>
+                                          
+                                           <button type="submit" ng-click="pushElement(phone,phones)" class="btn blue jfk-button jfk-button-action">Add</button>
+                                            <button type="submit" class="btn btn-default" ng-click="showPhoneForm=false">X</button>
+                                        </form>
+                                      </div>
+                                    </li>
+                                    <li ng-repeat="phone in phones"> <a editable-text="phone.number" onbeforesave="inlinePatch('Infonode','phones', 'number',phone.entityKey,$data)"> <%=phone.number%> </a> - <a editable-select="phone.type" e-ng-options="s.value as s.text for s in statuses" onbeforesave="inlinePatch('Infonode','phones', 'type',phone.entityKey,$data)"> <%=phone.type%> </a> <a ><img class="ctodeal"  /></a></li>
+                                    <li><a ng-hide="showPhoneForm" ng-click="showPhoneForm=true" class="btn-link addAnotherPhone" ><i class="icon-plus"></i>Add a new Phone</a></li>
 
                                   </ul>
                                 <div class="news-block-tags">
@@ -346,9 +292,21 @@
                                  
                                 </div>
                                   <ul class="list-unstyled contact-infos">
-                                    <li ng-repeat="email in infonodes.emails"> <a editable-text="email.email" onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)"> <%=email.email %>  </a> </li>
+                                    <li ng-show="showEmailForm">
+                                        <div class="row">
+                                          <form class="form-inline newLeadForm" role="form">
+                                            <div class="form-group lg-group" style="">
+                                              <label class="sr-only" for="exampleInputEmail2">Email</label>
+                                              <input type="email" class="form-control" id="exampleInputEmail2" ng-model="email.email" placeholder="Enter a number">
+                                            </div>
+                                             <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(email,emails)" >Add</button>
+                                              <button type="submit" ng-click="showEmailForm=false" class="btn btn-default">X</button>
+                                          </form>
+                                        </div>
+                                      </li>
+                                    <li ng-repeat="email in emails"> <a editable-text="email.email" onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)"> <%=email.email %>  </a> </li>
                                     
-                                    <li><a href="#emailmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new email address </a></li>
+                                    <li><a class="btn-link addAnotherPhone" ng-hide="showEmailForm" ng-click="showEmailForm=true"><i class="icon-plus"></i> Add a new email address </a></li>
 
                                   </ul>
                                 <div class="news-block-tags">
@@ -356,9 +314,7 @@
                                  
                                 </div>
                                  <ul class="list-unstyled contact-infos">
-                                    <li ng-repeat="address in infonodes.addresses">- <span editable-text="address.country" onbeforesave="inlinePatch('Infonode','addresses', 'street',address.entityKey,$data)" ng-show="address.street"><%=address.street%>, </span> <span editable-text="address.city" onbeforesave="inlinePatch('Infonode','addresses', 'city',address.entityKey,$data)" ng-show="address.city"><%=address.city%>, </span> <span editable-text="address.country" onbeforesave="inlinePatch('Infonode','addresses', 'country',address.entityKey,$data)" ng-show="address.country"><%=address.country%></span></li><a href="#addressmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new address </a></li>
-
-                  
+                                    <li ng-repeat="address in addresses">- <span editable-text="address.country" onbeforesave="inlinePatch('Infonode','addresses', 'street',address.entityKey,$data)" ng-show="address.street"><%=address.street%>, </span> <span editable-text="address.city" onbeforesave="inlinePatch('Infonode','addresses', 'city',address.entityKey,$data)" ng-show="address.city"><%=address.city%>, </span> <span editable-text="address.country" onbeforesave="inlinePatch('Infonode','addresses', 'country',address.entityKey,$data)" ng-show="address.country"><%=address.country%></span></li><a href="#addressmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new address </a></li>
                                   </ul>
 
                                                               
@@ -368,39 +324,44 @@
                                 <h3>Links</h3>
                                 <div class="news-block-tags">
                                   <strong>Website</strong>
-                                  
                                 </div>
                                 <ul class="list-unstyled contact-infos" >
-                                    <li ng-repeat="website in infonodes.websites"><a editable-text="website.url" onbeforesave="inlinePatch('Infonode','websites', 'url',website.entityKey,$data)" href="http://<%=website.url%>"  target="_blank" ><%=website.url%></a> </li>
-                                    <li><a href="#websitemodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new Website </a></li>
+                                  <li ng-show="showWebsiteForm">
+                                      <div class="row">
+                                        <form class="form-inline newLeadForm" role="form">
+                                          <div class="form-group lg-group" style="">
+                                            <label class="sr-only" for="exampleInputEmail2">Website</label>
+                                            <input type="text" ng-model="website.url" class="form-control" id="exampleInputEmail2" placeholder="Enter a Website">
+                                          </div>
+                                      <button type="submit" ng-click="pushElement(website,websites)" class="btn blue jfk-button jfk-button-action">Add</button>
+                                      <button type="submit" ng-click="showWebsiteForm=false" class="btn btn-default">X</button>
+                                        </form>
+                                      </div>
+                                    </li>
+                                    <li ng-repeat="website in websites"><a editable-text="website.url" onbeforesave="inlinePatch('Infonode','websites', 'url',website.entityKey,$data)" href="http://<%=website.url%>"  target="_blank" ><%=website.url%></a> </li>
+                                    <li><a   ng-hide="showWebsiteForm" ng-click="showWebsiteForm=true" class="btn-link addAnotherPhone"><i class="icon-plus"></i> Add a new Website </a></li>
                                     
                                 </ul>
                                 <div class="news-block-tags">
                                   <strong>Social Links</strong>
-                                  
                                 </div>
                                 <ul class="list-unstyled contact-infos" >
-                                    <li ng-repeat="sociallink in infonodes.sociallinks"><a editable-text="sociallink.url" onbeforesave="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,$data)" href="<%=sociallink.url%>" target="_blank"> <%=sociallink.url%> </a></li>
-                                  <li><a href="#socialmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new social links </a></li> 
+                                    <li ng-show="showSociallinkForm">
+                                          <div class="row">
+                                            <form class="form-inline newLeadForm" role="form">
+                                              <div class="form-group lg-group" style="">
+                                                <label class="sr-only" for="exampleInputEmail2">Social link</label>
+                                                <input type="text" class="form-control" id="exampleInputEmail2" ng-model='sociallink.url' placeholder="Enter a social link">
+                                              </div>
+                                               <button ng-click="pushElement(sociallink,sociallinks)" type="submit" class="btn blue jfk-button jfk-button-action">Add</button>
+                                                <button type="submit" ng-click="showSociallinkForm=false" class="btn btn-default">X</button>
+                                            </form>
+                                          </div>
+                                    </li>
+                                    <li ng-repeat="sociallink in sociallinks"><a editable-text="sociallink.url" onbeforesave="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,$data)" href="<%=sociallink.url%>" target="_blank"> <%=sociallink.url%> </a></li>
+                                  <li><a class="btn-link addAnotherPhone" ng-hide="showSociallinkForm" ng-click="showSociallinkForm=true"><i class="icon-plus"></i> Add a new social links </a></li> 
                                      
                                 </ul>                      
-                              </div>
-
-                               <div class="news-blocks blank-card blank-card-yellow">
-                                <h3>{{ _('Custom Fields') }}</h3>
-                                
-                                <ul class="list-unstyled contact-infos" >
-                                    <li ng-repeat="customfield in infonodes.customfields">
-                                    <span ng-repeat="record in customfield.fields">
-                                    <%= record.field%>  : <%= record.value%> </span>
-
-                                    </li>
-                                    <li><a href="#customfields" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new custom field </a></li>
-                                    
-                                </ul>
-                                 
-                                
-                                                    
                               </div>
 
                           </div>
@@ -421,115 +382,43 @@
                                 </div>
                                 <p><%=lead.introduction%></p>                        
                               </div>
-                              <div class="news-blocks blank-card blank-card-yellow">
+                               <div class="news-blocks blank-card blank-card-yellow">
+                                <h3>{{ _('Custom Fields') }}</h3>
                                 
-                               <div id="gmap_canvas" style="width:100%;height:300px;"></div>
-                              </div>
-                            
-                          </div>
-                          
-                        </div>
-                          
-                        
-                      </div>
-                      <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3">
-                          
-                         <div class="row cards-container iodrive">
-                         <div class="btn-group relbutton">
-            
-                                <div class="btn-group">
-                                    <a class="btn red" href="#" data-toggle="dropdown">
-                                    <i class="icon-plus"></i> Create
-                                    <i class="icon-angle-down"></i>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                      <li><a  ng-click="showCreateDocument('document')" href="#" data-toggle="modal"><i class="icon-plus"></i> Document</a></li>
-                                      <li><a ng-click="showCreateDocument('presentation')" href="#" data-toggle="modal"><i class="icon-plus"></i> Presentation</a></li>
-                                      <li><a ng-click="showCreateDocument('spreadsheet')" href="#" data-toggle="modal"><i class="icon-plus"></i> Spreadsheet</a></li>
-                                     
-                                    </ul>
-                                </div>
-                                <div class="btn-group">
-                                    <button  ng-click="createPickerUploader()" id="sample_editable_1_new" class="btn red">
-                                    <i class="icon-upload-alt"></i>
-                                    </button>
+                                <ul class="list-unstyled contact-infos" >
+                                    <li ng-show="showCustomFieldForm">
+                                          <div class="row">
+                                            <form class="form-inline newLeadForm" role="form">
+                                              <div class="form-group sm-group" style="">
+                                                <label class="sr-only" for="exampleInputEmail2">Field</label>
+                                                <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="Enter field name">
+                                              </div>
+                                              <div class="form-group sm-group" style="">
+                                                <label class="sr-only" for="exampleInputEmail2">Value</label>
+                                                <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="Enter a value">
+                                              </div>
+                                               <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(customfield,customfields)">Add</button>
+                                                <button type="submit" class="btn btn-default" ng-click="showCustomFieldForm=false">X</button>
+                                            </form>
+                                          </div>
+                                    </li>
+                                    <li ng-repeat="custom in customfields">
+                                    <span>
+                                    <%= custom.field%>  : <%= custom.value%> </span>
 
-                                </div>
-                          </div>
-                          <div class="col-md-12">
-                            <div class="inner-cards-container">
-                                                        
-                             <div  class="col-md-4 responsive" ng-repeat="attachment in documents" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-med">
-                                  
-                                  <div class="details">
-                                    <a href="/#/documents/show/<%= attachment.id %>"><h3 class="relatedcardOppTitle">
-                                     <%=attachment.title%>
-                                    </h3></a>
-                                    <div class="desc">                           
-                                    <center> <span class="contact-title" ><img class="google-drive-icon" ng-src="/static/img/google_drive/<%=attachment.mimeType%>.png"/></span> </center>
+                                    </li>
+                                    <li><a ng-click="showCustomFieldForm=true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new custom field </a></li>
                                     
-                                    </div>
-                                  </div>
-                                                 
-                                </div>
+                                </ul>
+                                 
+                                
+                                                    
                               </div>
-                           <div ng-show="blankStatdocuments" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
-                             <div class="dashboard-stat cards">
-                               <div class="blank_slate_arrow"></div>
-                               <div class="thumbnail blank_slate_body">
-                                  <img class="img-responsive" src="/static/img/documents_blanks.png">
-                                    <p class="lead">Manage easily your documments using Google drive</p>
-                               </div>                               
-                           </div>
+                            
                           </div>
-                            <div class="clearfix"></div>
-                              </div>
-                            </div>
-                            </div>
-                      </div>
-                      <div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 4">
-                        
-                         <div class="row">
-                           <div class="col-md-12 margin-bottom-10"> 
-                          <p class⁼"lead"=""><strong>Send an Email to :</strong> </p>
-                          <form  ng-submit="sendEmail(email)" class="ng-pristine ng-valid">    <div class="form-group">   
-                              <input required class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="To" id="messageSubject" ng-model="email.to">
-                              </div>
-                              <div class="form-group">
-                              <input class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="CC" id="messageSubject" ng-model="email.cc">
-                              </div>
-                              <div class="form-group">
-                              <input class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="BCC" id="messageSubject" ng-model="email.bcc">
-                              </div>
-                              <div class="form-group">
-                               <input  required class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="Add a subject" id="messageSubject" ng-model="email.subject">
-                              </div>
-                              <div class="form-group">
-                              <textarea id="some-textarea" placeholder="Enter text ..." id="noteBody" class="form-control ng-pristine ng-valid" rows="7" ng-model="email.body"></textarea>
-                              </div>
-                             
-                    
-                            
-                            
-                           
-                           <div class="pull-right">
-                           
-                              <input ng-disabled="isLoading"  type="submit" class="btn green" value="Send">
-
-                            
-                            </div>
-                          </form>
-                         </div>
+                          
                         </div>
-                      </div>
-                    
-                    </div>
-                  </div>
-                  <!--END TABS-->
-                </div>
-              </div>
-              <!-- END PORTLET-->
+
             </div>
             <div class="col-md-3">
               <!-- BEGIN PORTLET-->
@@ -862,7 +751,7 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("Add Address")}}</h3>
             </div>
             <div class="modal-body">
-                  <form id="addAddress" name="addemail" ng-submit="addAddress(address)" class="form-horizontal"> 
+                  <form id="addAddress" name="addemail"  class="form-horizontal"> 
                
                     <div class="form-group">
                         <label  class="col-md-3 control-label">{{_("Street")}} </label>
@@ -898,7 +787,7 @@
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
               
-                  <input  type="submit" class="btn green" value="Add this address">
+                  <input  type="submit" ng-click="pushElement(address,addresses)" class="btn green" value="Add this address">
                   <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
               </div>
                 </form>
