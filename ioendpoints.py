@@ -1774,8 +1774,11 @@ class CrmEngineApi(remote.Service):
                       name='leads.delete')
     def lead_delete(self, request):
         entityKey = ndb.Key(urlsafe=request.entityKey)
-        Edge.delete_all_cascade(start_node = entityKey)
-        return message_types.VoidMessage()
+        if Node.check_permission(user_from_email,entityKey.get()):
+            Edge.delete_all_cascade(start_node = entityKey)
+            return message_types.VoidMessage()
+        else:
+            raise endpoints.UnauthorizedException('You don\'t have permissions.')
 
     # leads.convert api
     @endpoints.method(ID_RESOURCE, LeadSchema,

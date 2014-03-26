@@ -226,6 +226,8 @@ class Lead(EndpointsModel):
         lead = Lead.get_by_id(int(request.id))
         if lead is None:
             raise endpoints.NotFoundException('Lead not found.')
+        if not Node.check_permission( user_from_email, lead ):
+            raise endpoints.UnauthorizedException('You don\'t have permissions.')
         #list of tags related to this account
         tag_list = Tag.list_by_parent(lead.key)
         # list of infonodes
@@ -310,10 +312,6 @@ class Lead(EndpointsModel):
             for lead in leads:
                 if count<= limit:
                     is_filtered = True
-                    if lead.access == 'private' and lead.owner!=user_from_email.google_user_id:
-                        end_node_set = [user_from_email.key]
-                        if not Edge.find(start_node=lead.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
-                            is_filtered = False
                     if request.tags and is_filtered:
                         end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
                         if not Edge.find(start_node=lead.key,kind='tags',end_node_set=end_node_set,operation='AND'):
@@ -322,7 +320,7 @@ class Lead(EndpointsModel):
                         is_filtered = False
                     if request.status and lead.status!=request.status and is_filtered:
                         is_filtered = False
-                    if is_filtered:
+                    if is_filtered and Node.check_permission( user_from_email, lead ):
                         count = count + 1
                         #list of tags related to this lead
                         edge_list = Edge.list(start_node=lead.key,kind='tags')
