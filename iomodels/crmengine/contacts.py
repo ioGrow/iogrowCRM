@@ -231,6 +231,8 @@ class Contact(EndpointsModel):
         contact = Contact.get_by_id(int(request.id))
         if contact is None:
             raise endpoints.NotFoundException('Contact not found.')
+        if not Node.check_permission( user_from_email, contact ):
+            raise endpoints.UnauthorizedException('You don\'t have permissions.')
         parents_edge_list = Edge.list(
                                     start_node = contact.key,
                                     kind = 'parents',
@@ -313,22 +315,50 @@ class Contact(EndpointsModel):
                                 )
         return  contact_schema
     @classmethod
-    def list_by_parent(cls,parent_key,request):
+    def list_by_parent(cls,user_from_email,parent_key,request):
         contact_list = []
-        contact_edge_list = Edge.list(
-                                start_node = parent_key,
-                                kind='contacts',
-                                limit=request.contacts.limit,
-                                pageToken=request.contacts.pageToken
-                                )
-        for edge in contact_edge_list['items']:
-                contact_list.append(
+        you_can_loop = True
+        count = 0
+        if request.contacts.limit:
+            limit = int(request.contacts.limit)
+        else:
+            limit = 10
+        contact_next_curs = request.contacts.pageToken
+        while you_can_loop:
+            edge_limit = int(request.contacts.limit) - count
+            if edge_limit>0:
+                contact_edge_list = Edge.list(
+                                    start_node = parent_key,
+                                    kind='contacts',
+                                    limit=edge_limit,
+                                    pageToken=contact_next_curs
+                                    )
+                for edge in contact_edge_list['items']:
+                    contact = edge.end_node.get()
+                    if Node.check_permission(user_from_email,contact):
+                        count = count + 1
+                        contact_list.append(
                                     ContactSchema(
-                                               firstname = edge.end_node.get().firstname,
-                                               lastname = edge.end_node.get().lastname,
-                                               title = edge.end_node.get().title
+                                               id = str(contact.key.id()),
+                                               entityKey = contact.key.urlsafe(),
+                                               firstname = contact.firstname,
+                                               lastname = contact.lastname,
+                                               title = contact.title
                                                )
                                     )
+                if contact_edge_list['next_curs'] and contact_edge_list['more']:
+                    contact_next_curs = contact_edge_list['next_curs'].urlsafe()
+                else:
+                    you_can_loop = False
+                    contact_next_curs = None
+            
+            if (count == limit):
+                you_can_loop = False
+
+        return ContactListResponse(
+                                    items = contact_list,
+                                    nextPageToken = contact_next_curs
+                                )                
         if contact_edge_list['next_curs'] and contact_edge_list['more']:
             contact_next_curs = contact_edge_list['next_curs'].urlsafe()
         else:
@@ -367,17 +397,13 @@ class Contact(EndpointsModel):
             for contact in contacts:
                 if count<= limit:
                     is_filtered = True
-                    if contact.access == 'private' and contact.owner!=user_from_email.google_user_id:
-                        end_node_set = [user_from_email.key]
-                        if not Edge.find(start_node=contact.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
-                            is_filtered = False
                     if request.tags and is_filtered:
                         end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
                         if not Edge.find(start_node=contact.key,kind='tags',end_node_set=end_node_set,operation='AND'):
                             is_filtered = False
                     if request.owner and contact.owner!=request.owner and is_filtered:
                         is_filtered = False
-                    if is_filtered:
+                    if is_filtered and Node.check_permission( user_from_email, contact ):
                         count = count + 1
                         parents_edge_list = Edge.list(
                                                     start_node = contact.key,

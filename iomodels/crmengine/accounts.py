@@ -231,8 +231,9 @@ class Account(EndpointsModel):
             contacts = None
             if request.contacts:
                 contacts = Contact.list_by_parent(
-                                                parent_key = account.key,
-                                                request = request
+                                            user_from_email = user_from_email,
+                                            parent_key = account.key,
+                                            request = request
                                             )
             #list of topics related to this account
             topics = None
