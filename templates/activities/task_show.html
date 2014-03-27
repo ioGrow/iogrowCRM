@@ -143,18 +143,8 @@
                         Tags
                      </span>
                     </button>
-                    <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action">
-                    <i class="fa fa-tags"></i>
-                     <span class="btn-text">
-                        Tags
-                     </span>
-                    </button>
-                    <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action">
-                    <i class="fa fa-tags"></i>
-                     <span class="btn-text">
-                        Tags
-                     </span>
-                    </button>
+                    <datetimepick icon-class='fa fa-bell-o' label-format='MMM d, h:mm a' ng-model='newTask.reminder' class="new-task-reminder"></datetimepick>
+                    <datetimepick ng-model='newTask.due' class="new-task-date" label-format='MMM d, h:mm a'></datetimepick>
                </form>
             </div>
               
