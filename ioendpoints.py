@@ -2297,8 +2297,11 @@ class CrmEngineApi(remote.Service):
                       name='opportunities.delete')
     def opportunity_delete(self, request):
         entityKey = ndb.Key(urlsafe=request.entityKey)
-        Edge.delete_all_cascade(start_node = entityKey)
-        return message_types.VoidMessage()
+        if Node.check_permission(user_from_email,entityKey.get()):
+            Edge.delete_all_cascade(start_node = entityKey)
+            return message_types.VoidMessage()
+        else:
+            raise endpoints.UnauthorizedException('You don\'t have permissions.')
     
     # opportunities.get api v2
     @endpoints.method(OpportunityGetRequest, OpportunitySchema,

@@ -263,6 +263,7 @@ class Account(EndpointsModel):
             opportunities = None
             if request.opportunities:
                 opportunities = Opportunity.list_by_parent(
+                                            user_from_email = user_from_email,
                                             parent_key = account.key,
                                             request = request
                                             )
