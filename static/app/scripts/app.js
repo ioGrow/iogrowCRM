@@ -18,6 +18,9 @@ app.config(['$routeProvider', function($routeProvider) {
       }).when('/accounts/show/:accountId', {
         controller: 'AccountShowCtrl',
         templateUrl:'/views/accounts/show'
+      }).when('/accounts/new', {
+        controller: 'AccountNewCtrl',
+        templateUrl:'/views/accounts/new'
       }).
       // Contacts
       when('/contacts/', {
@@ -27,6 +30,9 @@ app.config(['$routeProvider', function($routeProvider) {
       }).when('/contacts/show/:contactId', {
         controller: 'ContactShowCtrl',        
         templateUrl:'/views/contacts/show'
+      }).when('/contacts/new', {
+        controller: 'ContactNewCtrl',      
+        templateUrl:'/views/contacts/new'
       }).
       // Opportunities
       when('/opportunities/', {

@@ -219,6 +219,24 @@ class AccountShowHandler(BaseHandler, SessionEnabledHandler):
             #self.response.cache_control = 'public'
             #self.response.cache_control.max_age = 300
             self.response.out.write(template.render(template_values))
+
+class AccountNewHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+      if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            tabs = user.get_user_active_tabs()
+
+            # Set the user locale from user's settings
+            self.set_user_locale()
+            # Render the template
+            template_values = {'ME':user.google_user_id,
+             'tabs':tabs}
+            template = jinja_environment.get_template('templates/accounts/account_new.html')
+            #self.response.cache_control = 'public'
+            #self.response.cache_control.max_age = 300
+            self.response.out.write(template.render(template_values))
 class ContactListHandler(BaseHandler, SessionEnabledHandler):
   def get(self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
@@ -241,6 +259,17 @@ class ContactShowHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/contacts/contact_show.html')
+
+class ContactNewHandler(BaseHandler,SessionEnabledHandler):
+  def get(self):
+    if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+      user = self.get_user_from_session()
+      self.set_user_locale()
+      tabs = user.get_user_active_tabs()
+      self.set_user_locale()
+      template_values={'tabs':tabs}
+      template = jinja_environment.get_template('templates/contacts/contact_new.html')
+      self.response.out.write(template.render(template_values))
       #self.response.cache_control = 'public'
       #self.response.cache_control.max_age = 300
       
@@ -1284,9 +1313,11 @@ routes = [
     # Accounts Views
     ('/views/accounts/list',AccountListHandler),
     ('/views/accounts/show',AccountShowHandler),
+    ('/views/accounts/new',AccountNewHandler),   
     # Contacts Views
     ('/views/contacts/list',ContactListHandler),
     ('/views/contacts/show',ContactShowHandler),
+    ('/views/contacts/new',ContactNewHandler),
     # Shows Views
     ('/views/shows/list',ShowListHandler),
     ('/views/shows/show',ShowShowHandler),
