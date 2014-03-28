@@ -1115,9 +1115,9 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
       }
        $scope.runTheProcess = function(){
             
-            Leadstatus.list($scope,{});
-            var paramsTag = {'about_kind':'Lead'};
-          Tag.list($scope,paramsTag);
+          //   Leadstatus.list($scope,{});
+          //   var paramsTag = {'about_kind':'Lead'};
+          // Tag.list($scope,paramsTag);
 
 
        };
@@ -1217,24 +1217,23 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
         return infonodes;
     }
       $scope.save = function(lead){
+        if(lead.firstname && lead.lastname){
+          var params ={
+                        'firstname':lead.firstname,
+                        'lastname':lead.lastname,
+                        'company':lead.company,
+                        'title':lead.title,
+                        'tagline':lead.tagline,
+                        'introduction':lead.introduction,
+                        'phones':$scope.phones,
+                        'emails':$scope.emails,
+                        'infonodes':$scope.prepareInfonodes(),
+                        'access': 'public'
+                      };
         
-        var params ={
-                      'firstname':lead.firstname,
-                      'lastname':lead.lastname,
-                      'company':lead.company,
-                      'title':lead.title,
-                      'tagline':lead.tagline,
-                      'introduction':lead.introduction,
-                      'phones':$scope.phones,
-                      'emails':$scope.emails,
-                      'infonodes':$scope.prepareInfonodes(),
-                      'access': 'public',
-                      'status':$scope.stage_selected.status
-                    };
-        console.log('params');
-        console.log(params);
-        Lead.insert($scope,params);
-        window.location.replace('/#/leads');
+          Lead.insert($scope,params);
+          window.location.replace('/#/leads');
+        }
       };
       $scope.addLeadOnKey = function(lead){
         if(event.keyCode == 13 && lead){

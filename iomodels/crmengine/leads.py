@@ -414,7 +414,7 @@ class Lead(EndpointsModel):
                     lastname = request.lastname,
                     title = request.title,
                     company = request.company,
-                    status = request.status,
+                    status = "New",
                     source = request.source,
                     tagline = request.tagline,
                     introduction = request.introduction,
