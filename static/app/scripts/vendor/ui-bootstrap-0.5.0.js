@@ -2941,7 +2941,7 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position'])
     link:function (originalScope, element, attrs, modelCtrl) {
 
       //SUPPORTED ATTRIBUTES (OPTIONS)
-      alert($(element));
+
       //minimal no of characters that needs to be entered before typeahead kicks-in
       var minSearch = originalScope.$eval(attrs.typeaheadMinLength) || 1;
 
@@ -3042,7 +3042,7 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position'])
 
       //Declare the timeout promise var outside the function scope so that stacked calls can be cancelled later 
       var timeoutPromise;
-
+       
       //plug into $parsers pipeline to open a typeahead on view changes initiated from DOM
       //$parsers kick-in on all the changes coming from the view as well as manually triggered by $setViewValue
       modelCtrl.$parsers.push(function (inputValue) {
