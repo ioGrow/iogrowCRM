@@ -1336,7 +1336,7 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
       $scope.nextPageToken = undefined;
       $scope.prevPageToken = undefined;
       $scope.isLoading = false;
-      $scope.contactpagination = {};
+      $scope.pagination = {};
       $scope.currentPage = 01;
       $scope.pages = [];
       $scope.stage_selected={};
@@ -1381,16 +1381,25 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
        };
       // new Lead
      $scope.save = function(contact){
-          var params = {};
+            contact.account=$scope.searchAccountQuery;
+           var params ={
+                      'firstname':contact.firstname,
+                      'lastname':contact.lastname,
+                      'account':contact.account,
+                      'title':contact.title,
+                      'access': contact.access
+                    };
+          console.log('params');
+          console.log(params);
           var contact_name = new Array();
 
           
           contact.display_name = contact_name;
           if (typeof(contact.account)=='object'){
-            contact.account_name = contact.account.name;
-            contact.account = contact.account.entityKey;
+           /* contact.account_name = contact.account.name;
+            contact.account = contact.account.entityKey;*/
             
-            Contact.insert($scope,contact);
+            Contact.insert($scope,params);
 
           }else if($scope.searchAccountQuery.length>0){
               // create a new account with this account name
@@ -1400,22 +1409,8 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
               $scope.contact = contact;
               Account.insert($scope,params);
           };
-          $('#addContactModal').modal('hide');
       };
-      $scope.save = function(contact){
-        var params ={
-                      'firstname':contact.firstname,
-                      'lastname':contact.lastname,
-                      'account':contact.account,
-                      'title':contact.title,
-                      'source': contact.source,
-                      'access': contact.access,
-                      'status':$scope.stage_selected.status
-                    };
-        console.log(params);
-        Lead.insert($scope,params);
-        $('#addLeadModal').modal('hide')
-      };
+     
       $scope.addLeadOnKey = function(lead){
         if(event.keyCode == 13 && lead){
             $scope.save(lead);
