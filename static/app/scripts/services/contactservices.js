@@ -171,8 +171,7 @@ accountservices.factory('Contact', function($http) {
           });
   };
   Contact.patch = function($scope,params) {
-          console.log('in contacts.patch service');
-          console.log(params);
+        
           gapi.client.crmengine.contacts.patch(params).execute(function(resp) {
             if(!resp.code){
                $scope.contact = resp;

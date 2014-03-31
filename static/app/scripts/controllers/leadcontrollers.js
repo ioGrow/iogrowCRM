@@ -14,7 +14,7 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge'
      $scope.currentPage = 01;
      $scope.pages = [];
      $scope.stage_selected={};
-    	
+      
       $scope.leads = [];
       $scope.lead = {};
       
@@ -1093,15 +1093,15 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
       $scope.emails=[];
       $scope.websites=[];
       $scope.sociallinks=[];
-      $scope.sociallinks=[];
-      $scope.sociallinks=[];
       $scope.customfields=[];
+      $scope.phone = {'type':'work'};
       $scope.initObject=function(obj){
           for (var key in obj) {
                 obj[key]=null;
               }
       }
       $scope.pushElement=function(elem,arr){
+        if (elem){
           if (arr.indexOf(elem) == -1) {
               var copyOfElement = angular.copy(elem);
               arr.push(copyOfElement);
@@ -1111,12 +1111,13 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
           }else{
             alert("item already exit");
           }
+        }
       }
        $scope.runTheProcess = function(){
             
-            Leadstatus.list($scope,{});
-            var paramsTag = {'about_kind':'Lead'};
-          Tag.list($scope,paramsTag);
+          //   Leadstatus.list($scope,{});
+          //   var paramsTag = {'about_kind':'Lead'};
+          // Tag.list($scope,paramsTag);
 
 
        };
@@ -1172,20 +1173,67 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
       };
 
       
-    
+    $scope.prepareInfonodes = function(){
+        var infonodes = [];
+        angular.forEach($scope.websites, function(website){
+            var infonode = {
+                            'kind':'websites',
+                            'fields':[
+                                    {
+                                    'field':"url",
+                                    'value':website.url
+                                    }
+                            ]
+                          
+                          }
+            infonodes.push(infonode);
+        });
+        angular.forEach($scope.sociallinks, function(sociallink){
+            var infonode = {
+                            'kind':'sociallinks',
+                            'fields':[
+                                    {
+                                    'field':"url",
+                                    'value':sociallink.url
+                                    }
+                            ]
+                          
+                          }
+            infonodes.push(infonode);
+        });
+        angular.forEach($scope.customfields, function(customfield){
+            var infonode = {
+                            'kind':'customfields',
+                            'fields':[
+                                    {
+                                    'field':customfield.field,
+                                    'value':customfield.value
+                                    }
+                            ]
+                          
+                          }
+            infonodes.push(infonode);
+        });
+        return infonodes;
+    }
       $scope.save = function(lead){
-        var params ={
-                      'firstname':lead.firstname,
-                      'lastname':lead.lastname,
-                      'company':lead.company,
-                      'title':lead.title,
-                      'source': lead.source,
-                      'access': lead.access,
-                      'status':$scope.stage_selected.status
-                    };
-        console.log(params);
-        Lead.insert($scope,params);
-        $('#addLeadModal').modal('hide')
+        if(lead.firstname && lead.lastname){
+          var params ={
+                        'firstname':lead.firstname,
+                        'lastname':lead.lastname,
+                        'company':lead.company,
+                        'title':lead.title,
+                        'tagline':lead.tagline,
+                        'introduction':lead.introduction,
+                        'phones':$scope.phones,
+                        'emails':$scope.emails,
+                        'infonodes':$scope.prepareInfonodes(),
+                        'access': 'public'
+                      };
+        
+          Lead.insert($scope,params);
+          window.location.replace('/#/leads');
+        }
       };
       $scope.addLeadOnKey = function(lead){
         if(event.keyCode == 13 && lead){

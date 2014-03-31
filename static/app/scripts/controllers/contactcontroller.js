@@ -151,10 +151,7 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact','Tag','Ed
               $scope.save(contact);
           }
       };
-      $scope.accountInserted = function(resp){
-          $scope.contact.account = resp;
-          $scope.save($scope.contact);
-      };
+      
       
      var params_search_account ={};
      $scope.result = undefined;
@@ -472,9 +469,11 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
       {value: 'Mob', text: 'Mob'},
       {value: 'Other', text: 'Other'}
       ];
+
       
       // What to do after authentication
       $scope.runTheProcess = function(){
+        
           var params = {
                           'id':$route.current.params.contactId,
                           
@@ -1356,6 +1355,7 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
       $scope.websites=[];
       $scope.sociallinks=[];
       $scope.customfields=[];
+      $scope.results=[];
       $scope.initObject=function(obj){
           for (var key in obj) {
                 obj[key]=null;
@@ -1373,35 +1373,125 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
           }
       }
       $scope.runTheProcess = function(){
-            Account.list($scope,{});
+           
        };
         // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
             Auth.refreshToken();
        };
-      // new Lead
+
+       $scope.accountInserted = function(resp){
+          $scope.contact.account = resp;
+          $scope.save($scope.contact);
+      };
+      
+       var params_search_account ={};
+       $scope.result = undefined;
+       $scope.q = undefined;
+       $scope.$watch('searchAccountQuery', function() {
+            console.log('i am searching');
+           params_search_account['q'] = $scope.searchAccountQuery;
+           Account.search($scope,params_search_account);
+          
+        });
+        $scope.selectAccount = function(){
+          $scope.contact.account = $scope.searchAccountQuery;
+
+       };
+       $scope.accountInserted = function(resp){
+          console.log('account inserted ok');
+          console.log(resp);
+          $scope.contact.account = resp;
+          $scope.save($scope.contact);
+      };
+       $scope.prepareInfonodes = function(){
+        var infonodes = [];
+        angular.forEach($scope.websites, function(website){
+            var infonode = {
+                            'kind':'websites',
+                            'fields':[
+                                    {
+                                    'field':"url",
+                                    'value':website.url
+                                    }
+                            ]
+                          
+                          }
+            infonodes.push(infonode);
+        });
+        angular.forEach($scope.sociallinks, function(sociallink){
+            var infonode = {
+                            'kind':'sociallinks',
+                            'fields':[
+                                    {
+                                    'field':"url",
+                                    'value':sociallink.url
+                                    }
+                            ]
+                          
+                          }
+            infonodes.push(infonode);
+        });
+        angular.forEach($scope.customfields, function(customfield){
+            var infonode = {
+                            'kind':'customfields',
+                            'fields':[
+                                    {
+                                    'field':customfield.field,
+                                    'value':customfield.value
+                                    }
+                            ]
+                          
+                          }
+            infonodes.push(infonode);
+        });
+        return infonodes;
+    }
+      // new Contact
      $scope.save = function(contact){
-            contact.account=$scope.searchAccountQuery;
+
+           if(!contact.account){
+              if($scope.searchAccountQuery){
+                  contact.account=$scope.searchAccountQuery;
+              }
+              else{
+                var params ={
+                        'firstname':contact.firstname,
+                        'lastname':contact.lastname,
+                        'title':contact.title,
+                        'tagline':contact.tagline,
+                        'introduction':contact.introduction,
+                        'phones':$scope.phones,
+                        'emails':$scope.emails,
+                        'infonodes':$scope.prepareInfonodes(),
+                        'access': contact.access
+                      };
+                Contact.insert($scope,params);
+                window.location.replace('/#/contacts');
+              }
+            }
            var params ={
                       'firstname':contact.firstname,
                       'lastname':contact.lastname,
                       'account':contact.account,
                       'title':contact.title,
+                      'tagline':contact.tagline,
+                      'introduction':contact.introduction,
+                      'phones':$scope.phones,
+                      'emails':$scope.emails,
+                      'infonodes':$scope.prepareInfonodes(),
                       'access': contact.access
                     };
-          console.log('params');
-          console.log(params);
-          var contact_name = new Array();
 
-          
-          contact.display_name = contact_name;
           if (typeof(contact.account)=='object'){
-           /* contact.account_name = contact.account.name;
-            contact.account = contact.account.entityKey;*/
+            console.log('account is object');
+           
+            params['account'] = contact.account.entityKey;
             
-            Contact.insert($scope,params);
+            
 
           }else if($scope.searchAccountQuery.length>0){
+              console.log('i will insert account');
               // create a new account with this account name
               var params = {'name': $scope.searchAccountQuery,
                             'access': contact.access
@@ -1411,35 +1501,9 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
           };
       };
      
-      $scope.addLeadOnKey = function(lead){
-        if(event.keyCode == 13 && lead){
-            $scope.save(lead);
-        }
-      };
-
-
-     // Quick Filtering
-     var searchParams ={};
-     $scope.result = undefined;
-     $scope.q = undefined;
      
-     $scope.$watch('searchQuery', function() {
-         searchParams['q'] = $scope.searchQuery;
-         searchParams['limit'] = 7;
-         if ($scope.searchQuery){
-         Lead.search($scope,searchParams);
-       };
-     });
 
-     
-     /***********************************************
-      HKA 19.02.2014  tags 
-***************************************************************************************/
-
- 
-$scope.edgeInserted = function () {
-       $scope.listleads();
-     };
+    
 
 
    // Google+ Authentication 

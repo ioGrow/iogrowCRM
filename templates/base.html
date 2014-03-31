@@ -67,7 +67,7 @@
   <!-- BEGIN HEADER -->   
   <div class="header navbar navbar-default navbar-fixed-top ">
     <!-- BEGIN TOP NAVIGATION BAR -->
-    <div class="header-inner">
+    <div class="header-inner"  >
       <!-- BEGIN LOGO -->
       <a class="navbar-brand" href="/">
         <img src="static/bootstrap3/img/IO_Grow_min.png" alt="logo" class="img-responsive"/>
@@ -79,13 +79,15 @@
       </a>
       <!-- END RESPONSIVE MENU TOGGLER -->
       <!-- BEGIN TOP NAVIGATION MENU -->
-      <div id="navbarSearch">
-        <form id="navbarSearchForm" ng-controller="SearchFormController" class="navbar-form ng-pristine ng-valid " ng-submit="executeSearch(searchQuery)" role="search">
+      <div id="navbarSearch" >
+        <form id="navbarSearchForm"  ng-controller="SearchFormController" class="navbar-form ng-pristine ng-valid " ng-submit="executeSearch(searchQuery)" role="search">
               <div class="form-group">
                 <input type="text" ng-model="searchQuery" typeahead="result as result.title + ' (' + result.type + ')' for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="form-control" placeholder="Search">
               </div>  
                <button class="gbqfb gbqfb-hvr"><span class="gbqfi"></span></button>                              
         </form>
+
+        
 
       </div><!--/navbarSearch-->
            
@@ -168,16 +170,15 @@
                     {{user.google_display_name}}
                   </span>
                 </a>
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu" >
                   <li>
                     <a href="{{logout_url}}">
-                      Sign Out
+                      Sign Out 
                     </a>
                   </li>
                   <li >
-                    <a href="">
-                      My Setting
-                    </a>
+                <a href="#EditSetting"  class="btn-link addAnotherPhone" data-toggle="modal">My Setting </a>
+                    
                   </li>
                 </ul>        
               </li>
@@ -186,8 +187,47 @@
         <!-- END TOP NAVIGATION MENU --> 
       </div>
     </div><!--navbar inner-->
-    <!-- END TOP NAVIGATION BAR -->
+    <!-- END TOP NAVIGATION BAR ng-controller="SearchFormController"  -->
 </div>
+<div ng-controller="MysettingShowController" >
+     <!--HKA 11.10.2013 Edit Introduction  -->
+             <div id="EditSetting" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+              <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{_("My setting")}}</h3>
+              </div>
+
+              <div class="modal-body">
+                 <form id="editSetting" name="edittag" class="form-horizontal"> 
+                
+
+                  <div class="form-group">
+                        <label  class=" col-md-3 control-label">{{_("Language")}} </label>
+                       
+                        <div class="col-md-9">
+                         
+                          <select class="form-control" curr ng-model="user.language" >
+                                        <option value="">{{uSerlanguage}}</option>
+                                        <option value="en" >English </option>
+                                        <option value="ar">Arabic</option>
+                                        <option value="fr" >French</option>
+                            </select>
+
+                        </div>
+                    </div>             
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
+                <button  type="submit"  ng-click="updatelanguage(user,{{uSerid}})" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+              </div>
+               </form>
+               </div>
+               </div>
+            </div>
+</div>
+
   <div class="modal fade"  id="errorModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -206,7 +246,44 @@
         </div>
         <!-- /.modal-dialog -->
       </div>
+    
       <!-- /.modal -->
+       <!--HKA 11.10.2013 Edit Introduction  -->
+             <div id="EditSetting" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+              <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{_("My setting")}}</h3>
+              </div>
+
+              <div class="modal-body">
+                 <form id="editSetting" name="edittag" class="form-horizontal"> 
+                
+
+                  <div class="form-group">
+                        <label  class=" col-md-3 control-label">{{_("Language")}} </label>
+                       
+                        <div class="col-md-9">
+                         
+                          <select class="form-control" curr ng-model="user.language">
+                                        <option >English</option>
+                                        <option >Arabic</option>
+                                        <option >French</option>
+                                      </select>
+
+                        </div>
+                    </div>             
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
+                <button  type="submit"  ng-click="updatelanguage(user,{{uSerid}})" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+              </div>
+               </form>
+               </div>
+               </div>
+            </div>
+
 <div class="page-container">
 
   <!-- BEGIN SIDEBAR -->
@@ -399,6 +476,7 @@
 
   <script src="static/app/scripts/app.js" ></script>
    <script src="static/app/scripts/controllers/productcontrollers.js" ></script>
+   <script src="static/app/scripts/controllers/mysettingcontrollers.js" ></script>
    <script src="static/app/scripts/controllers/searchcontrollers.js" ></script>
   <script src="static/app/scripts/controllers/accountcontrollers.js" ></script>
   <script src="static/app/scripts/controllers/contactcontroller.js"></script>  
@@ -460,5 +538,7 @@
  
   <!-- END JAVASCRIPTS -->
 </body>
+
+
 <!-- END BODY -->
 </html>

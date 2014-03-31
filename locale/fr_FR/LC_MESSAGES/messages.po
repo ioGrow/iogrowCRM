@@ -4,6 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
 #
 # fuzzy
+# HKA 21.03.2014 Account List
 msgid "Account"
 msgstr "Compte"
 msgid "Accounts"
@@ -16,3 +17,23 @@ msgid "Sort by"
 msgstr "Tri par "
 msgid "Quick Filtering"
 msgstr "Filtrage Rapide"
+msgid "Labels"
+msgstr "Etiquettes"
+msgid "Add a new Label"
+msgstr "Ajouter une nouvelle étiquette"
+msgid "Name"
+msgstr "Nom"
+msgid "Type"
+msgstr "Type"
+msgid "Industry"
+msgstr "Industrie"
+msgid "Who can access?"
+msgstr "Qui peut accéder ?"
+msgid "public"
+msgstr "publique"
+msgid "private"
+msgstr "privé"
+
+#HKA 21.03.2014 Accout show page
+
+
