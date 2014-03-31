@@ -1,5 +1,5 @@
-app.controller('SearchFormController', ['$scope','Search',
-    function($scope,Search) {
+app.controller('SearchFormController', ['$scope','Search','User',
+    function($scope,Search,User) {
      if (annyang) {
         
         // Let's define our first command. First the text we expect, and then the function it should call
@@ -25,14 +25,14 @@ app.controller('SearchFormController', ['$scope','Search',
           'search :account contacts': function(account) {
             $scope.searchQuery = account + ' and type:Contact';
 
-            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+          
             $scope.$apply();
             $scope.executeSearch($scope.searchQuery);
           },
           'search *term': function(term) {
             $scope.searchQuery = term;
 
-            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+          
             $scope.$apply();
             $scope.executeSearch($scope.searchQuery);
           }
@@ -76,10 +76,19 @@ app.controller('SearchFormController', ['$scope','Search',
       }
       
      };
+//HKA 25.03.2014 update user language
+$scope.updatelanguage = function(user){
+   //var params = {'id':$scope.user.id,
+   // 'language':user.language};
+    console.log('-----------hello user language--------');
+   //User.patch($scope,params);
+   $('#EditSetting').modal('hide');
+}
+
 }]);
 
-app.controller('SearchShowController', ['$scope','$route', 'Auth','Search',
-    function($scope,$route,Auth,Search) {
+app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User',
+    function($scope,$route,Auth,Search,User) {
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -133,6 +142,19 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search',
           Search.list($scope,params);
      };   
 
+     
+//HKA 25.03.2014 update user language
+$scope.updatelanguage = function(user,idUser){
+  console.log(user.language);
+  console.log('i am here');
+  
+  var params = {'id':idUser,
+     'language':user.language};
+   console.log('-----------hello user language--------');
+   console.log(params);
+   User.patch($scope,params);
+   $('#EditSetting').modal('hide');
+}
      // Google+ Authentication 
      Auth.init($scope);
      
