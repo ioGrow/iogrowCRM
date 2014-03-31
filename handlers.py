@@ -91,7 +91,7 @@ FOLDERS = {
 folders = {}
 
 class BaseHandler(webapp2.RequestHandler):
-    def set_user_locale(self,language):
+    def set_user_locale(self,language=None):
         if language:
             locale = self.request.GET.get('locale', 'en_US')
             i18n.get_i18n().set_locale(language)
