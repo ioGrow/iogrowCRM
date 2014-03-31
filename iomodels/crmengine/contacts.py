@@ -280,6 +280,7 @@ class Contact(EndpointsModel):
                                             parent_key = contact.key,
                                             request = request
                                             )
+        cases = None
         if request.cases:
             cases = Case.list_by_parent(
                                         user_from_email = user_from_email,

@@ -311,6 +311,7 @@ class Account(EndpointsModel):
         
     @classmethod
     def insert(cls,user_from_email,request):
+        account=None
         account_key = cls.get_key_by_name(
                                         user_from_email= user_from_email,
                                         name = request.name
@@ -413,6 +414,10 @@ class Account(EndpointsModel):
             
             
            
+        if account:
+            data = {}
+            data['id'] = account_key_async.id()
+            account.put_index(data)
         account_schema = AccountSchema(
                                   id = str( account_key_async.id() ),
                                   entityKey = account_key_async.urlsafe()

@@ -259,7 +259,8 @@ class ContactShowHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/contacts/contact_show.html')
-
+      self.response.out.write(template.render(template_values))
+      
 class ContactNewHandler(BaseHandler,SessionEnabledHandler):
   def get(self):
     if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
@@ -269,10 +270,6 @@ class ContactNewHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/contacts/contact_new.html')
-      # self.response.out.write(template.render(template_values))
-      #self.response.cache_control = 'public'
-      #self.response.cache_control.max_age = 300
-      
       self.response.out.write(template.render(template_values))
 class OpportunityListHandler(BaseHandler,SessionEnabledHandler):
   def get(self):

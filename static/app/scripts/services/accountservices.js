@@ -298,7 +298,9 @@ accountservices.factory('Account', function($http) {
       });
   };
   Account.search = function($scope,params){
+      console.log(params);
       gapi.client.crmengine.accounts.search(params).execute(function(resp) {
+        console.log(resp);
            if (resp.items){
               $scope.results = resp.items;
               
