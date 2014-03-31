@@ -23,16 +23,16 @@ app.config(['$routeProvider', function($routeProvider) {
         templateUrl:'/views/accounts/new'
       }).
       // Contacts
-      when('/contacts/', {
+      when('/contacts/new', {
+        controller: 'ContactNewCtrl',      
+        templateUrl:'/views/contacts/new'
+      }).when('/contacts/', {
         controller: 'ContactListCtrl',      
         templateUrl:'/views/contacts/list'
         
       }).when('/contacts/show/:contactId', {
         controller: 'ContactShowCtrl',        
         templateUrl:'/views/contacts/show'
-      }).when('/contacts/new', {
-        controller: 'ContactNewCtrl',      
-        templateUrl:'/views/contacts/new'
       }).
       // Opportunities
       when('/opportunities/', {
