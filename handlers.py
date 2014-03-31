@@ -269,7 +269,7 @@ class ContactNewHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       template_values={'tabs':tabs}
       template = jinja_environment.get_template('templates/contacts/contact_new.html')
-      self.response.out.write(template.render(template_values))
+      # self.response.out.write(template.render(template_values))
       #self.response.cache_control = 'public'
       #self.response.cache_control.max_age = 300
       
