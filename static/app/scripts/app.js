@@ -164,3 +164,13 @@ app.config(function(ngQuickDateDefaultsProvider) {
     }
   });
 });
+
+/***header scroll detection for bottom shadow***/
+$(window).scroll(function(){
+  var y = $(window).scrollTop();
+  if( y > 0 ){
+      $(".header").addClass("header-bottom-shadow");
+  } else {
+       $(".header").removeClass("header-bottom-shadow");
+  }
+ });
