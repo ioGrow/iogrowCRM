@@ -1,18 +1,79 @@
 import logging
 import webapp2
+import re
+from google.appengine.ext import ndb
 from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
+from iomodels.crmengine.notes import Note
+from model import User,Userinfo
+from django.utils.encoding import smart_str
+from iograph import Node,Edge
+from endpoints_helper import EndpointsHelper
 
-class LogSenderHandler(InboundMailHandler):
+class GetEmailsHandler(InboundMailHandler):
     def receive(self, mail_message):
-        print '#######################'
-        print mail_message.to
-        print '**********************'
-        print mail_message.body
-        print 'getting the id of the email to place the reply in the correct place'
-        beforat = mail_message.to.split("@")[0]
-        afterio = beforat.split("io-")[1]
-        print afterio
+        sender_id = mail_message.to.split("@")[0]
+        user = User.get_by_gid(sender_id)
+        if user:
+            sender_email=re.findall(r'[\w\.-]+@[\w\.-]+', mail_message.sender)
+            print sender_email
+            if user.email==sender_email[0]:
+                print 'authorized'
+                html_bodies = mail_message.bodies('text/html')
+                email_body = ''
+                for content_type, body in html_bodies:
+                    decoded_html = smart_str(body.decode())
+                    email_body+=decoded_html
+                emails = re.findall(r'[\w\.-]+@[\w\.-]+', email_body)
+                for email in emails:
+                    generic_prop = ndb.GenericProperty()
+                    generic_prop._name = 'email'
+                    nodes = Node.query(generic_prop==email).fetch()
+                    if len(nodes)>0:
+                        for node in nodes:
+                            parents_edge_list = Edge.list(
+                                                      start_node = node.key,
+                                                      kind = 'parents'
+                                                      )
+                            for edge in parents_edge_list['items']:
+                                parent_key = edge.end_node
+                                  # insert a note related to the parent node
+                                note_author = Userinfo()
+                                note_author.display_name = user.google_display_name
+                                note_author.photo = user.google_public_profile_photo_url
+                                note = Note(
+                                            owner = user.google_user_id,
+                                            organization = user.organization,
+                                            author = note_author,
+                                            title = mail_message.subject,
+                                            content = email_body
+                                        )
+                                entityKey_async = note.put_async()
+                                entityKey = entityKey_async.get_result()
+                                Edge.insert(
+                                            start_node = parent_key,
+                                            end_node = entityKey,
+                                            kind = 'topics',
+                                            inverse_edge = 'parents'
+                                        )
+                                EndpointsHelper.update_edge_indexes(
+                                                                parent_key=entityKey,
+                                                                kind='topics',
+                                                                indexed_edge=str(parent_key.id())
+                                                                )
+                    else:
+                        pass
+                          # We should create a lead related to this email
+                          # and attach this email with this lead
+            else:
+                print user
+                print mail_message.sender
+                print 'not authorized'
+
+        else:
+            print 'user doesnt exist'
 
 
-        
-app = webapp2.WSGIApplication([LogSenderHandler.mapping()], debug=True)
+
+
+
+app = webapp2.WSGIApplication([GetEmailsHandler.mapping()], debug=True)

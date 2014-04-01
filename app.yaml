@@ -20,6 +20,10 @@ handlers:
 # Endpoints handler
 - url: /_ah/spi/.*
   script: services.application
+
+- url: /_ah/mail/.+
+  script: handle_incoming_email.app
+  login: admin
 - url: /.*
   script: handlers.app
 

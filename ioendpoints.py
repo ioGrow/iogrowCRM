@@ -2171,9 +2171,9 @@ class CrmEngineApi(remote.Service):
                     inverse_edge = 'parents'
                 )
         EndpointsHelper.update_edge_indexes(
-                                            parent_key = entityKey,
+                                            parent_key = parent_key,
                                             kind = 'topics',
-                                            indexed_edge = str(parent_key.id())
+                                            indexed_edge = str(entityKey.id())
                                             )
         return message_types.VoidMessage()
 

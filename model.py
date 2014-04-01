@@ -326,6 +326,11 @@ class User(EndpointsModel):
             memcache.add(email, user_from_email)
         return user_from_email
 
+    @classmethod
+    def get_by_gid(cls,gid):
+        return cls.query(cls.google_user_id == gid).get()
+         
+
     def get_user_apps(self):
       
         return ndb.get_multi(self.apps)
