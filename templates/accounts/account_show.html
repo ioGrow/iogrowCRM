@@ -172,8 +172,9 @@
                   <!--BEGIN TABS-->
                   <div class="tabbable tabbable-custom">
                     <ul class="nav nav-tabs">
-                      <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;" >{{ _("Notes") }}</a></li>
+                      
                       <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;renderMaps();">{{ _("About") }}</a></li>
+                      <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;" >{{ _("Conversations") }}</a></li>
                       <li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">{{ _("Contacts") }}</a></li>
                       <li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">{{ _("Needs") }}</a></li>
                       <li class="ng-tab" ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">{{ _("Opportunities") }}</a></li>
@@ -187,9 +188,12 @@
                          <div class="row">
                            <div class="col-md-12 margin-bottom-10"> 
                               <p class⁼"lead"="">
-                                <strong>
-                                  {{ _("Just add notes to remember what's important :") }}
-                                </strong> 
+                                
+                                  {{ _("You can forward or BCC an email to this address:") }}
+                                  <a href="mailto:{{ME}}@gcdc2013-iogrow.appspotmail.com">{{ME}}@gcdc2013-iogrow.appspotmail.com</a><br/>
+                                  {{ _("Or just add notes to remember what's important.") }}<br/>
+
+                                
                               </p>
                                     <form id="addNote" ng-submit="addNote(note)" class="ng-pristine ng-valid">
                                        <div class="form-group">   

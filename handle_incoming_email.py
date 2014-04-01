@@ -23,7 +23,8 @@ class GetEmailsHandler(InboundMailHandler):
                 for content_type, body in html_bodies:
                     decoded_html = smart_str(body.decode())
                     email_body+=decoded_html
-                emails = re.findall(r'[\w\.-]+@[\w\.-]+', email_body)
+                re_emails = re.findall(r'[\w\.-]+@[\w\.-]+', email_body)
+                emails = list(set(re_emails))
                 for email in emails:
                     generic_prop = ndb.GenericProperty()
                     generic_prop._name = 'email'

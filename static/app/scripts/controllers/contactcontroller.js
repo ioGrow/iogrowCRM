@@ -511,6 +511,9 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
       $scope.refreshToken = function() {
             Auth.refreshToken();
       };
+      $scope.getTopicUrl = function(type,id){
+      return Topic.getUrl(type,id);
+    };
      //HKA 11.11.2013 
     $scope.TopiclistNextPageItems = function(){
         

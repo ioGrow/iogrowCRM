@@ -183,8 +183,9 @@
                   <!--BEGIN TABS-->
                   <div class="tabbable tabbable-custom">
                     <ul class="nav nav-tabs">
-                      <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;" >Notes</a></li>
+                      
                       <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;renderMaps();">About</a></li>
+                      <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;" >{{ _("Conversations") }}</a></li>
                       <!--li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">Contacts</a></li-->
                       <li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">Opportunities</a></li>
                       <li class="ng-tab"  ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">Cases</a></li>
@@ -196,7 +197,14 @@
                         
                          <div class="row">
                            <div class="col-md-12 margin-bottom-10"> 
-                          <p class⁼"lead"=""><strong>Just add notes to remember what's important :</strong> </p>
+                          <p class⁼"lead"="">
+                                
+                                  {{ _("You can forward or BCC an email to this address:") }}
+                                  <a href="mailto:{{ME}}@gcdc2013-iogrow.appspotmail.com">{{ME}}@gcdc2013-iogrow.appspotmail.com</a><br/>
+                                  {{ _("Or just add notes to remember what's important.") }}<br/>
+
+                                
+                              </p>
                           <form id="addNote" ng-submit="addNote(note)" class="ng-pristine ng-valid">
                                <div class="form-group">             
                                 <input class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="Add a new subject" id="messageSubject" ng-model="note.title">
@@ -217,13 +225,13 @@
                                         
                             <ul class="chats">
                               <li class="in" ng-repeat="topic in topics" id="topic_<%=$index%>">
-                                <img class="avatar" alt="" src="<%= topic.last_updater.photo%>" />
+                                <img class="avatar" alt="" ng-src="<%= topic.last_updater.photo%>" />
                                 <div class="message">
                                   <span class="arrow"></span>
                                   <a href="#" class="name"><%= topic.last_updater.display_name%></a>
-                                  <span class="datetime">at <%=topic.updated_at | date:'yyyy-MM-dd - HH:mm:ss' %></span>
+                                  <span class="datetime">at <%=topic.updated_at | date:'yyyy-MM-dd - HH:mm:ss '  %> </span>
                                   <span class="body">
-                                  <a href="/#/notes/show/<%=topic.discussionId%>" class="discussion-content"><strong class="ng-binding"><%= topic.title%></strong> - <span class="excerpt ng-binding" ng-bind-html-unsafe="topic.excerpt"></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <%= topic.comments%> comments</span></a>
+                                  <a href="<%=getTopicUrl(topic.topic_kind,topic.id)%>" class="discussion-content"><strong class="ng-binding"><%= topic.title%></strong> - <span class="excerpt ng-binding" ng-bind-html-unsafe="topic.excerpt"></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <%= topic.comments%> comments</span></a>
                                   </span>
                                 </div>
                               </li>

@@ -265,7 +265,7 @@ class ContactShowHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
       self.set_user_locale(user.language)
-      template_values={'tabs':tabs}
+      template_values={'ME':user.google_user_id,'tabs':tabs}
       template = jinja_environment.get_template('templates/contacts/contact_show.html')
       self.response.out.write(template.render(template_values))
       
