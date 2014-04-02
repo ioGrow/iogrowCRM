@@ -169,8 +169,10 @@ app.config(function(ngQuickDateDefaultsProvider) {
 $(window).scroll(function(){
   var y = $(window).scrollTop();
   if( y > 0 ){
-      $(".header").addClass("header-bottom-shadow");
+      $(".subHeader").addClass("header-bottom-shadow");
+      /*$(".page-sidebar-wrapper").addClass("sidebar-left-shadow");*/
   } else {
-       $(".header").removeClass("header-bottom-shadow");
+       $(".subHeader").removeClass("header-bottom-shadow");
+       /*$(".page-sidebar-wrapper").removeClass("sidebar-left-shadow");*/
   }
  });
