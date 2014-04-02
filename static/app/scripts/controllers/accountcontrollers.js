@@ -1562,6 +1562,7 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
       $scope.websites=[];
       $scope.sociallinks=[];
       $scope.customfields=[];
+      $scope.account.account_type = 'Customer';
       $scope.initObject=function(obj){
           for (var key in obj) {
                 obj[key]=null;
@@ -1591,6 +1592,74 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
            Account.insert($scope,account);
          }; 
       };
+      $scope.prepareInfonodes = function(){
+        var infonodes = [];
+        angular.forEach($scope.websites, function(website){
+            var infonode = {
+                            'kind':'websites',
+                            'fields':[
+                                    {
+                                    'field':"url",
+                                    'value':website.url
+                                    }
+                            ]
+                          
+                          }
+            infonodes.push(infonode);
+        });
+        angular.forEach($scope.sociallinks, function(sociallink){
+            var infonode = {
+                            'kind':'sociallinks',
+                            'fields':[
+                                    {
+                                    'field':"url",
+                                    'value':sociallink.url
+                                    }
+                            ]
+                          
+                          }
+            infonodes.push(infonode);
+        });
+        angular.forEach($scope.customfields, function(customfield){
+            var infonode = {
+                            'kind':'customfields',
+                            'fields':[
+                                    {
+                                    'field':customfield.field,
+                                    'value':customfield.value
+                                    }
+                            ]
+                          
+                          }
+            infonodes.push(infonode);
+        });
+        return infonodes;
+    };
+     
+       $scope.accountInserted = function(resp){
+          console.log('***********inserted***********');
+        window.location.replace('/#/accounts');
+      };
+      $scope.save = function(account){
+        if(account.name){
+          var params ={
+                        'name':account.name,
+                        'account_type':account.account_type,
+                        'industry':account.industry,
+                        'tagline':account.tagline,
+                        'introduction':account.introduction,
+                        'phones':$scope.phones,
+                        'emails':$scope.emails,
+                        'infonodes':$scope.prepareInfonodes(),
+                        'access': account.access
+                      };
+        
+          Account.insert($scope,params);
+          
+        }
+      };
+
+
      
     $scope.addAccountOnKey = function(account){
       if(event.keyCode == 13 && account){
@@ -1601,15 +1670,7 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
     };
 
 
-     $scope.accountInserted = function(resp){
-          if ($scope.accounts == undefined){
-            $scope.accounts = [];
-            $scope.blankStateaccount = false;
-          }
-          $scope.account.name ='';
-          $scope.accounts.push(resp);
-          $scope.$apply();
-     };
+    
    // Google+ Authentication 
      Auth.init($scope);
 

@@ -312,13 +312,10 @@ accountservices.factory('Account', function($http) {
   Account.insert = function($scope,params){
       $scope.isLoading = true;
       gapi.client.crmengine.accounts.insert(params).execute(function(resp) {
-         
-         
          if(!resp.code){
             $scope.accountInserted(resp);
-            $('#addAccountModal').modal('hide');
             $scope.isLoading = false;
-            $scope.$apply();
+             $scope.$apply();
           
          }else{
 

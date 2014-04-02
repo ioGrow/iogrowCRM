@@ -45,7 +45,7 @@
                 
             <h2 class="page-title">
             <a href="/#/accounts" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
-            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Accounts")}} > <a editable-text="account.firstname" onbeforesave="inlinePatch('Account','', 'firstname',account.entityKey,$data)"> <%= account.firstname %>  </a> <a editable-text="account.lastname" onbeforesave="inlinePatch('Account','', 'lastname',account.entityKey,$data)" > <%= account.lastname %> </a></h2>
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Accounts")}} > <a editable-text="account.firstname" onbeforesave="inlinePatch('Account','', 'firstname',account.entityKey,$data)"> <%= account.name %>  </a> </h2>
             <hr>
           </div>
         </div>
@@ -60,7 +60,7 @@
                             <div class="form-group">
                               <label class="control-label col-md-2">Name</label>
                               <div class="col-md-10">
-                                <input autofocus ng-model="account.name" type="text" class="form-control">
+                                <input autofocus ng-model="account.name" placeholder="{{_('Type here the company name of your customer,parnter,investor...')}}" type="text" class="form-control">
                               </div>
                             </div>
                           </div>
