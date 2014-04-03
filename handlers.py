@@ -312,8 +312,12 @@ class OpportunityListHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
       self.set_user_locale(user.language)
-      template_values = {'ME':user.google_user_id,
-             'tabs':tabs}
+      active_app = user.get_user_active_app()
+      template_values={
+                      'ME':user.google_user_id,
+                      'active_app':active_app,
+                      'tabs':tabs
+                      }
       template = jinja_environment.get_template('templates/opportunities/opportunity_list.html')
       #self.response.cache_control = 'public'
       #self.response.cache_control.max_age = 300
@@ -326,7 +330,12 @@ class OpportunityShowHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
       self.set_user_locale(user.language)
-      template_values={'tabs':tabs}
+      active_app = user.get_user_active_app()
+      template_values={
+                      'ME':user.google_user_id,
+                      'active_app':active_app,
+                      'tabs':tabs
+                      }
       template = jinja_environment.get_template('templates/opportunities/opportunity_show.html')
       #self.response.cache_control = 'public'
       #self.response.cache_control.max_age = 300
@@ -340,7 +349,12 @@ class LeadListHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
       self.set_user_locale(user.language)
-      template_values = {'ME':user.google_user_id,'tabs':tabs}
+      active_app = user.get_user_active_app()
+      template_values={
+                      'ME':user.google_user_id,
+                      'active_app':active_app,
+                      'tabs':tabs
+                      }
       template = jinja_environment.get_template('templates/leads/lead_list.html')
       #self.response.cache_control = 'public'
       #self.response.cache_control.max_age = 300
@@ -353,7 +367,12 @@ class LeadShowHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
       self.set_user_locale(user.language)
-      template_values={'tabs':tabs}
+      active_app = user.get_user_active_app()
+      template_values={
+                      'ME':user.google_user_id,
+                      'active_app':active_app,
+                      'tabs':tabs
+                      }
       template = jinja_environment.get_template('templates/leads/lead_show.html')
       #self.response.cache_control = 'public'
       #self.response.cache_control.max_age = 300
@@ -369,6 +388,7 @@ class LeadNewHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       active_app = user.get_user_active_app()
       template_values={
+                      'ME':user.google_user_id,
                       'active_app':active_app,
                       'tabs':tabs
                       }
@@ -382,7 +402,12 @@ class CaseListHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
       self.set_user_locale(user.language)
-      template_values = {'ME':user.google_user_id,'tabs':tabs}
+      active_app = user.get_user_active_app()
+      template_values={
+                      'ME':user.google_user_id,
+                      'active_app':active_app,
+                      'tabs':tabs
+                      }
       template = jinja_environment.get_template('templates/cases/case_list.html')
       #self.response.cache_control = 'public'
       #self.response.cache_control.max_age = 300
@@ -395,7 +420,12 @@ class CaseShowHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
       self.set_user_locale(user.language)
-      template_values={'tabs':tabs}
+      active_app = user.get_user_active_app()
+      template_values={
+                      'ME':user.google_user_id,
+                      'active_app':active_app,
+                      'tabs':tabs
+                      }
       template = jinja_environment.get_template('templates/cases/case_show.html')
       #self.response.cache_control = 'public'
       #self.response.cache_control.max_age = 300
@@ -409,7 +439,12 @@ class NeedShowHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
       self.set_user_locale(user.language)
-      template_values={'tabs':tabs}
+      active_app = user.get_user_active_app()
+      template_values={
+                      'ME':user.google_user_id,
+                      'active_app':active_app,
+                      'tabs':tabs
+                      }
       template = jinja_environment.get_template('templates/needs/show.html')
       #self.response.cache_control = 'public'
       #self.response.cache_control.max_age = 300
@@ -448,7 +483,12 @@ class NoteShowHandler (BaseHandler,SessionEnabledHandler):
       self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
       self.set_user_locale(user.language)
-      template_values={'tabs':tabs}
+      active_app = user.get_user_active_app()
+      template_values={
+                      'ME':user.google_user_id,
+                      'active_app':active_app,
+                      'tabs':tabs
+                      }
       template = jinja_environment.get_template('templates/accounts/note_show.html')
       #self.response.cache_control = 'public'
       #self.response.cache_control.max_age = 300
@@ -462,7 +502,12 @@ class DocumentShowHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
       self.set_user_locale(user.language)
-      template_values={'tabs':tabs}
+      active_app = user.get_user_active_app()
+      template_values={
+                      'ME':user.google_user_id,
+                      'active_app':active_app,
+                      'tabs':tabs
+                      }
       template = jinja_environment.get_template('templates/documents/show.html')
       #self.response.cache_control = 'public'
       #self.response.cache_control.max_age = 300
@@ -480,7 +525,12 @@ class AllTasksHandler(BaseHandler, SessionEnabledHandler):
             # Set the user locale from user's settings
             self.set_user_locale(user.language)
             # Render the template
-            template_values = {'tabs':tabs,'ME':user.google_user_id}
+            active_app = user.get_user_active_app()
+            template_values={
+                            'ME':user.google_user_id,
+                            'active_app':active_app,
+                            'tabs':tabs
+                            }
             template = jinja_environment.get_template('templates/activities/all_tasks.html')
             #self.response.cache_control = 'public'
             #self.response.cache_control.max_age = 300
@@ -497,7 +547,12 @@ class TaskShowHandler(BaseHandler, SessionEnabledHandler):
             # Set the user locale from user's settings
             self.set_user_locale(user.language)
             # Render the template
-            template_values = {'tabs':tabs}
+            active_app = user.get_user_active_app()
+            template_values={
+                            'ME':user.google_user_id,
+                            'active_app':active_app,
+                            'tabs':tabs
+                            }
             template = jinja_environment.get_template('templates/activities/task_show.html')
             #self.response.cache_control = 'public'
             #self.response.cache_control.max_age = 300
@@ -983,7 +1038,12 @@ class SearchListHandler(BaseHandler, SessionEnabledHandler):
             # Set the user locale from user's settings
             self.set_user_locale(user.language)
             # Render the template
-            template_values = {'tabs':tabs}
+            active_app = user.get_user_active_app()
+            template_values={
+                            'ME':user.google_user_id,
+                            'active_app':active_app,
+                            'tabs':tabs
+                            }
             template = jinja_environment.get_template('templates/search/list.html')
             self.response.out.write(template.render(template_values))
 class PublicLiveHomeHandler(BaseHandler, SessionEnabledHandler):
