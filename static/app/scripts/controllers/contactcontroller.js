@@ -1496,12 +1496,15 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
           }else if($scope.searchAccountQuery.length>0){
               console.log('i will insert account');
               // create a new account with this account name
-              var params = {'name': $scope.searchAccountQuery,
+              var accountparams = {'name': $scope.searchAccountQuery,
                             'access': contact.access
               };
               $scope.contact = contact;
-              Account.insert($scope,params);
+              Account.insert($scope,accountparams);
           };
+          
+          Contact.insert($scope,params);
+          window.location.replace('/#/contacts');
       };
      
      

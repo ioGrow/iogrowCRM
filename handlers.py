@@ -204,7 +204,12 @@ class AccountListHandler(BaseHandler, SessionEnabledHandler):
             # Set the user locale from user's settings
             self.set_user_locale(user.language)
             # Render the template
-            template_values = {'ME':user.google_user_id,'tabs':tabs}
+            active_app = user.get_user_active_app()
+            template_values={
+                      'ME':user.google_user_id,
+                      'active_app':active_app,
+                      'tabs':tabs
+                      }
             template = jinja_environment.get_template('templates/accounts/account_list.html')
             #self.response.cache_control = 'public'
             #self.response.cache_control.max_age = 300
@@ -221,8 +226,12 @@ class AccountShowHandler(BaseHandler, SessionEnabledHandler):
             # Set the user locale from user's settings
             self.set_user_locale(user.language)
             # Render the template
-            template_values = {'ME':user.google_user_id,
-             'tabs':tabs}
+            active_app = user.get_user_active_app()
+            template_values={
+                      'ME':user.google_user_id,
+                      'active_app':active_app,
+                      'tabs':tabs
+                      }
             template = jinja_environment.get_template('templates/accounts/account_show.html')
             #self.response.cache_control = 'public'
             #self.response.cache_control.max_age = 300
@@ -239,8 +248,11 @@ class AccountNewHandler(BaseHandler, SessionEnabledHandler):
             # Set the user locale from user's settings
             self.set_user_locale()
             # Render the template
-            template_values = {'ME':user.google_user_id,
-             'tabs':tabs}
+            active_app = user.get_user_active_app()
+            template_values={
+                      'active_app':active_app,
+                      'tabs':tabs
+                      }
             template = jinja_environment.get_template('templates/accounts/account_new.html')
             #self.response.cache_control = 'public'
             #self.response.cache_control.max_age = 300
@@ -252,8 +264,12 @@ class ContactListHandler(BaseHandler, SessionEnabledHandler):
       self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
       self.set_user_locale(user.language)
-      template_values = {'ME':user.google_user_id,
-             'tabs':tabs}
+      active_app = user.get_user_active_app()
+      template_values={
+                      'ME':user.google_user_id,
+                      'active_app':active_app,
+                      'tabs':tabs
+                      }
       template = jinja_environment.get_template('templates/contacts/contact_list.html')
       #self.response.cache_control = 'public'
       #self.response.cache_control.max_age = 300
@@ -265,7 +281,12 @@ class ContactShowHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale(user.language)
       tabs = user.get_user_active_tabs()
       self.set_user_locale(user.language)
-      template_values={'ME':user.google_user_id,'tabs':tabs}
+      active_app = user.get_user_active_app()
+      template_values={
+                      'ME':user.google_user_id,
+                      'active_app':active_app,
+                      'tabs':tabs
+                      }
       template = jinja_environment.get_template('templates/contacts/contact_show.html')
       self.response.out.write(template.render(template_values))
       
@@ -276,7 +297,12 @@ class ContactNewHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       tabs = user.get_user_active_tabs()
       self.set_user_locale()
-      template_values={'tabs':tabs}
+      active_app = user.get_user_active_app()
+      template_values={
+                      'ME':user.google_user_id,
+                      'active_app':active_app,
+                      'tabs':tabs
+                      }
       template = jinja_environment.get_template('templates/contacts/contact_new.html')
       self.response.out.write(template.render(template_values))
 class OpportunityListHandler(BaseHandler,SessionEnabledHandler):
@@ -341,7 +367,11 @@ class LeadNewHandler(BaseHandler,SessionEnabledHandler):
       self.set_user_locale()
       tabs = user.get_user_active_tabs()
       self.set_user_locale()
-      template_values={'tabs':tabs}
+      active_app = user.get_user_active_app()
+      template_values={
+                      'active_app':active_app,
+                      'tabs':tabs
+                      }
       template = jinja_environment.get_template('templates/leads/lead_new.html')
       self.response.out.write(template.render(template_values))
 
