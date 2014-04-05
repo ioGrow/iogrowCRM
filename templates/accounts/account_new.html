@@ -95,7 +95,7 @@
                           <div class="col-md-6">
                             
                                 <div class="news-blocks blank-card blank-card-yellow">
-                                <h3>Lead Informations</h3>
+                                <h3>Account Informations</h3>
                                 <div class="news-block-tags">
                                   <strong>Phone</strong>
                                  
@@ -273,142 +273,13 @@
             </div>
             <div class="col-md-3">
               <!-- BEGIN PORTLET-->
-              <div class="portlet">
-                <div class="portlet-title line">
-                  <div class="caption"><i class="icon-tasks"></i>Tasks & Events</div>
+                <div class="portlet">
                   
-                </div>
-                <div class="portlet-body" id="chats">
-                  <div class="scroller" style="height:200x" data-always-visible="1" data-rail-visible="0">
-                    <div id="newTask">
-                        <p><strong>Tasks:</strong></p>
-
-                         
-                          <ul id="tasks" class="list-unstyled">
-                            <li ng-repeat="task in tasks" id="task_<%=$index%>">
-                              <input value="check1" type="checkbox">
-                              <!-- Name -->
-                            <span><a href="/#/tasks/show/<%=task.id%>" class="discussion-content"><%= task.title%> </a> <span ng-show="task.due"> [before: <%= task.due | date:'yyyy-MM-dd '%>]</span></span>
-                            </li>
-                            
-                            <li><a href="#myModal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new task</a></li>
-
-                          </ul>
-                         
-                          <p><strong>Events:</strong></p>
-
-                         
-                          <ul id="tasks" class="list-unstyled">
-                            <li ng-repeat="event in events" id="event_<%=$index%>">
-                              <input value="check1" type="checkbox">
-                              <!-- Name -->
-                            <span><a href="/#/events/show/<%=event.id%>" class="discussion-content"><%= event.title%> <span ng-show="event.starts_at"> [<%= event.starts_at | date:'yyyy-MM-dd '%>]</span></a></span>
-                            </li>
-                           
-                            
-
-                            
-                            <li><a href="#newEventModal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>{{_("Add a new event")}}</a></li>
-
-                          </ul>
-                                  <!-- Modal -->
-          <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                      <h3 id="myModalLabel" class="modal-title">{{_("Add a new Task")}}</h3>
-                    </div>
-                    <div class="modal-body pickerin">
-                         <div class="controls controls-row">
-                            <form id="addTask" ng-submit="addTask(task)" class="ng-pristine ng-valid">
-                                <input class="form-control" autofocus type="text" placeholder="Add a new task" id="taskTitle" ng-model="task.title">
-                                
-                                <p><strong>{{_("When's it due?")}}</strong></p>
-                                <center>
-                                  <datetimepicker data-ng-model="task.due"
-                                  data-datetimepicker-config="{ startView:'day', minView:'day' }" />
-                                </center>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                      
-                        <input  type="submit" class="btn green" value="Add this task">
-                   
-                    </div>
-                     </form>
+                  <div class="portlet-body" id="chats">
+                    <p>{{ _('Accounts  pages includes a detailed page for each customer, partner, or investor in your ecosystem. You and your co-workers can collaborate to get a deep understanding.') }}</p>
+                    
                   </div>
                 </div>
-          </div>
-          <div id="newDocument" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                      <h3 id="myModalLabel" class="modal-title">{{_("Create a new")}} <%=mimeType%></h3>
-                    </div>
-                    <div class="modal-body">
-                         <div class="controls controls-row">
-                              <form id="addTask" ng-submit="createDocument(newdocument)" class="ng-pristine ng-valid">
-                                  <input class="form-control" autofocus type="text" placeholder="Enter a new <%=mimeType%> name" id="taskTitle" ng-model="newdocument.title" required>                
-                         </div>
-                    </div>
-                    <div class="modal-footer">
-                      <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                      
-                       <input  type="submit" class="btn green" value="Create this document">
-                        <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
-                    </div>
-                        </form>
-                  </div>
-                </div>
-          </div>
-          <!--Event Modal -->
-          <div id="newEventModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h3 id="myModalLabel" class="modal-title">{{_("New Event")}}</h3>
-                      </div>
-                      <div class="modal-body">
-                          <div class="controls controls-row">
-                              <form id="addTask" ng-submit="addEvent(ioevent)" class="ng-pristine ng-valid">
-                                    <input class="form-control" autofocus type="text" placeholder="{{_('Add a new event')}}" id="taskTitle" ng-model="ioevent.title">
-                                    <p><strong>{{_("When?")}}</strong></p>
-                                  <div class="row">
-                                    <div class="col-md-6">
-                                      <p> <strong>{{_("Starts")}}</strong>: <%=ioevent.starts_at | date:'MMMM dd, yyyy, HH:mm'%></p>
-                                          <datetimepicker data-ng-model="ioevent.starts_at"
-                                      data-datetimepicker-config="{ startView:'day', minView:'minute' }" />
-                                    </div>
-                                    <div class="col-md-6">
-                                    <p><strong>{{_("Ends")}}</strong>: <%=ioevent.ends_at | date:'MMMM dd, yyyy, HH:mm'%></p>
-                                          <datetimepicker data-ng-model="ioevent.ends_at"
-                                      data-datetimepicker-config="{ startView:'day', minView:'minute' }" />
-                                    </div>
-                                  </div>
-                                      <input class="form-control" autofocus="" type="text" placeholder="{{_('Where?')}}" id="taskTitle" ng-model="ioevent.where">
-                                  </div>
-                      </div>
-                      <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                        
-                         <input  type="submit" class="btn green" value="{{_('Add this event')}}">
-                          <!--input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled-->
-                      </div>
-                        </form>
-                    </div>
-                    </div>
-                  </div>
-                 <!-- END newEventModal-->    
-
-                                </div>
-                            </div>
-                  
-                </div>
-              </div>
               
               
               <!-- END PORTLET-->
