@@ -17,7 +17,14 @@
 </div>
  <div  class="page-content">
     
-
+<div class="loader-container row" ng-show="isLoading">
+      <div class="loader-dialog col-md-4 col-md-offset-4 ">
+        <div class="loader-content">
+          Loading...
+        </div>
+      </div>
+      
+    </div>
    <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
       <div id="portlet-config" class="modal">
         <div class="modal-dialog">
@@ -143,7 +150,7 @@
                     </button></li>
                   </ul>
                 </div>
-                <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                
           </div>
             
           

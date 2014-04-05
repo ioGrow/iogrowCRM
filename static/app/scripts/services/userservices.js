@@ -9,6 +9,7 @@ accountservices.factory('User', function($http) {
 
   
   User.get = function($scope,id) {
+
           gapi.client.crmengine.users.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.user = resp;
@@ -28,7 +29,6 @@ accountservices.factory('User', function($http) {
   };
   User.list = function($scope,params){
       $scope.isLoading = true;
-      console.log('in users.list');
       gapi.client.crmengine.users.list(params).execute(function(resp) {
               if(!resp.code){
                  $scope.users = resp.items;
@@ -60,12 +60,13 @@ accountservices.factory('User', function($http) {
       });
   };
   User.insert = function($scope,params){
+      $scope.isLoading = true;
       gapi.client.crmengine.users.insert(params).execute(function(resp) {
          console.log('in insert resp');
          console.log(resp);
          if(!resp.code){
           $scope.user.email = '';
-          $('#addAccountModal').modal('hide');
+          
           
           User.list($scope,params);
           
