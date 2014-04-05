@@ -1563,6 +1563,7 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
       $scope.sociallinks=[];
       $scope.customfields=[];
       $scope.account.account_type = 'Customer';
+      $scope.account.industry = 'Technology';
       $scope.initObject=function(obj){
           for (var key in obj) {
                 obj[key]=null;
