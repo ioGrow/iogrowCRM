@@ -1,3 +1,20 @@
+<div class="row subHeader">
+<div class="currentApp">
+  <h2 class="page-title">
+    <!-- <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
+    {{active_app.label}}
+  </h2>
+</div>
+  <div class=" subHeaderContent">
+            <div class="pull-right sharebuttonDiv"> 
+                  
+                  <!-- <button class="btn jfk-button jfk-button-action" ng-click="save(account)">
+                    <i class="fa-cog"></i>
+                  </button> -->
+            </div>
+                  <h2 class="page-title">{{ _("Tasks") }} </h2>
+  </div>
+</div>
 <div  class="page-content">
     <div class="loader-container row" ng-show="isLoading">
       <div class="loader-dialog col-md-4 col-md-offset-4 ">
@@ -199,16 +216,7 @@
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-        <div class="row"> 
-          <div class="col-md-12">
-            <h2 class="page-title">{{ _("Tasks") }} 
-                <!--img src="/static/img/test_loader.gif" ng-show="isLoading" style="margin-top: -5px !important;" class="pull-right" style="height: 40px;"-->
-
-            </h2>  
-            <hr/>
-            
-          </div>
-        </div>
+        
           <!-- Filtering and sorting -->
           <div class="row">
           <div class="col-md-9">
@@ -695,8 +703,8 @@
 
                   </div>
                   <div class="col-md-6">
-                    <input type="submit" ng-hide="isLoading" ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
-                    <input type="submit" ng-show="isLoading" class="btn green pull-right" value="{{ _('Loading...') }}">
+                    <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
+                    <!--input type="submit" ng-show="isLoading" class="btn green pull-right" value="{{ _('Loading...') }}"-->
                   </div>
                   </div>
                 </form>
@@ -721,7 +729,7 @@
                     </button></li>
                   </ul>
                 </div>
-                <h3 class="pagination pull-right" ng-show="isLoading">{{ _('Loading') }}...</h3>
+                <!--h3 class="pagination pull-right" ng-show="isLoading">{{ _('Loading') }}...</h3-->
           </div>
         <!-- END PAGE CONTENT-->
       </div>

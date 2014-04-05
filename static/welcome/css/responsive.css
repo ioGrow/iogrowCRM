@@ -1,0 +1,85 @@
+/* IE 10 in Windows 8 and Windows Phone 8 fix
+--------------------------------------------------------------------- */
+
+@-webkit-viewport   { width: device-width; }
+@-moz-viewport      { width: device-width; }
+@-ms-viewport       { width: device-width; }
+@-o-viewport        { width: device-width; }
+@viewport           { width: device-width; }
+
+
+/* Media Queries
+--------------------------------------------------------------------- */
+
+/* Small devices (phones, 480px and smaller) */
+@media (max-width: 480px) {
+	body {
+		text-align: center;
+	}
+
+	hr {
+		width: 150px;
+	}
+
+	#headerwrap h1 {
+		font-size: 40px;
+	}
+
+	#headerwrap .col-lg-2 h5,
+	#headerwrap .col-lg-2 p {
+		text-align: center;
+	}
+
+	#featureswrap .col-lg-4 {
+		padding-top: 0;
+	}
+
+	#divider01 .carousel-inner {
+		margin-bottom: 50px;
+	}
+
+	#divider02 {
+		padding-bottom: 80px;
+		min-height: 200px;
+	}
+
+	#divider02 h3,
+	#divider02 button {
+		display: block;
+		margin: 0 auto;
+	}
+
+	#divider02 a[type="button"] {
+		margin-top: 15px;
+	}
+
+	#footerwrap button {
+		margin-top: 15px;
+	}
+}
+
+/* For general tablet layouts */
+@media only screen and (min-device-width: 481px) and (max-device-width: 1024px) {
+  body {
+		text-align: center;
+	}
+
+	.navbar-default {
+		letter-spacing: normal;
+	}
+}
+
+/* Small devices (tablets, 768px and up) */
+@media (max-width: 768px) {
+	
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+	
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+
+}

@@ -41,12 +41,13 @@ from endpoints_proto_datastore import MessageFieldsSchema
 from google.appengine.api import search
 from endpoints_proto_datastore import MessageFieldsSchema
 from search_helper import tokenize_autocomplete
+import iomessages
 
 
 STANDARD_TABS = [{'name': 'Accounts','label': 'Accounts','url':'/#/accounts/','icon':'book'},{'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},{'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/','icon':'money'},
 {'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},{'name': 'Cases','label': 'Cases','url':'/#/cases/','icon':'suitcase'},{'name': 'Tasks','label': 'Tasks','url':'/#/tasks/','icon':'check'}]
 STANDARD_PROFILES = ['Super Administrator', 'Standard User']
-STANDARD_APPS = [{'name': 'sales', 'label': 'Customer Development', 'url':'/#/accounts/'},#{'name': 'marketing', 'label':'Marketing', 'url':'/#/compaigns/'},{'name':'call_center','label': 'Customer Support','url':'/#/cases/'}
+STANDARD_APPS = [{'name': 'sales', 'label': 'CRM', 'url':'/#/accounts/'},#{'name': 'marketing', 'label':'Marketing', 'url':'/#/compaigns/'},{'name':'call_center','label': 'Customer Support','url':'/#/cases/'}
 ]
 STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
 ADMIN_TABS = [{'name': 'Users','label': 'Users','url':'/#/admin/users','icon':'user'},{'name': 'Groups','label': 'Groups','url':'/#/admin/groups','icon':'group'},{'name': 'Settings','label': 'Settings','url':'/#/admin/settings','icon':'cogs'}]
@@ -264,7 +265,7 @@ class User(EndpointsModel):
     google_credentials = CredentialsNDBProperty()
     mobile_phone = ndb.StringProperty()
     # Store the informations about the user settings
-    language = ndb.StringProperty()
+    language = ndb.StringProperty(default='en')
     timezone = ndb.StringProperty()
     # Is the user a public user or business user
     type = ndb.StringProperty()
@@ -314,6 +315,7 @@ class User(EndpointsModel):
             memcache.add(self.email, self)
         self.put_async()
     
+    
     @classmethod
     def get_by_email(cls,email):
         user_from_email = memcache.get(email)
@@ -325,6 +327,11 @@ class User(EndpointsModel):
         else:
             memcache.add(email, user_from_email)
         return user_from_email
+
+    @classmethod
+    def get_by_gid(cls,gid):
+        return cls.query(cls.google_user_id == gid).get()
+         
 
     def get_user_apps(self):
       
@@ -383,6 +390,25 @@ class User(EndpointsModel):
         for group in results:
             list_of_groups.append(group.groupKey)
         return list_of_groups
+
+    @classmethod
+    def list(cls,organization):
+        items = []
+        users = cls.query(cls.organization==organization)
+        for user in users:
+            user_schema = iomessages.UserSchema(
+                                            id = str(user.key.id()),
+                                            entityKey = user.key.urlsafe(),
+                                            email = user.email,
+                                            google_display_name = user.google_display_name,
+                                            google_public_profile_url = user.google_public_profile_url,
+                                            google_public_profile_photo_url = user.google_public_profile_photo_url,
+                                            google_user_id = user.google_user_id,
+                                            is_admin = user.is_admin,
+                                            status = user.status
+                                            )
+            items.append(user_schema)
+        return iomessages.UserListSchema(items=items)
 
 class Group(EndpointsModel):
     _message_fields_schema = ('id','entityKey','name','description','status','members', 'organization')

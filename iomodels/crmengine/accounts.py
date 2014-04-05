@@ -1,5 +1,6 @@
 from google.appengine.ext import ndb
 from google.appengine.api import memcache
+from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
 from endpoints_proto_datastore.ndb import EndpointsModel
 from endpoints_proto_datastore import MessageFieldsSchema
@@ -18,6 +19,7 @@ from iomodels.crmengine.notes import Note,TopicListResponse
 from iomodels.crmengine.cases import Case,CaseListResponse
 from iomodels.crmengine.documents import Document,DocumentListResponse
 from iomodels.crmengine.needs import Need, NeedListResponse
+import iomessages
 # The message class that defines the EntityKey schema
 class EntityKeyRequest(messages.Message):
     entityKey = messages.StringField(1)
@@ -91,6 +93,18 @@ class AccountSearchResult(messages.Message):
 class AccountSearchResults(messages.Message):
     items = messages.MessageField(AccountSearchResult, 1, repeated=True)
     nextPageToken = messages.StringField(2)
+
+class AccountInsertRequest(messages.Message):
+    name = messages.StringField(1)
+    account_type = messages.StringField(2)
+    industry = messages.StringField(3)
+    access = messages.StringField(4)
+    tagline = messages.StringField(5)
+    introduction = messages.StringField(6)
+    phones = messages.MessageField(iomessages.PhoneSchema,7, repeated = True)
+    emails = messages.MessageField(iomessages.EmailSchema,8, repeated = True)
+    addresses = messages.MessageField(iomessages.AddressSchema,9, repeated = True)
+    infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema,10, repeated = True)
 
 class Account(EndpointsModel):
     _message_fields_schema = ('id','entityKey','created_at','updated_at', 'folder','access','collaborators_list','phones','emails','addresses','websites','sociallinks', 'collaborators_ids','name','owner','account_type','industry','tagline','introduction')
@@ -204,92 +218,211 @@ class Account(EndpointsModel):
         account = Account.get_by_id(int(request.id))
         if account is None:
             raise endpoints.NotFoundException('Account not found.')
-        #list of tags related to this account
-        tag_list = Tag.list_by_parent(account.key)
-        # list of infonodes
-        infonodes = Node.list_info_nodes(
-                                        parent_key = account.key,
-                                        request = request
-                                        )
-        #list of contacts to this account
-        contacts = None
-        if request.contacts:
-            contacts = Contact.list_by_parent(
+        account_schema = None
+        if Node.check_permission(user_from_email,account):
+            #list of tags related to this account
+            tag_list = Tag.list_by_parent(account.key)
+            # list of infonodes
+            infonodes = Node.list_info_nodes(
                                             parent_key = account.key,
                                             request = request
-                                        )
-        #list of topics related to this account
-        topics = None
-        if request.topics:
-            topics = Note.list_by_parent(
-                                        parent_key = account.key,
-                                        request = request
-                                        )
-        tasks = None
-        if request.tasks:
-            tasks = Task.list_by_parent(
-                                        parent_key = account.key,
-                                        request = request
-                                        )
-        events = None
-        if request.events:
-            events = Event.list_by_parent(
-                                        parent_key = account.key,
-                                        request = request
-                                        )
-        needs = None
-        if request.needs:
-            needs = Need.list_by_parent(
-                                        parent_key = account.key,
-                                        request = request
-                                        )
-        opportunities = None
-        if request.opportunities:
-            opportunities = Opportunity.list_by_parent(
-                                        parent_key = account.key,
-                                        request = request
-                                        )
-        cases = None
-        if request.cases:
-            cases = Case.list_by_parent(
-                                        user_from_email = user_from_email,
-                                        parent_key = account.key,
-                                        request = request
-                                        )
-        documents = None
-        if request.documents:
-            documents = Document.list_by_parent(
-                                        parent_key = account.key,
-                                        request = request
-                                        )
-        account_schema = AccountSchema(
-                                  id = str( account.key.id() ),
-                                  entityKey = account.key.urlsafe(),
-                                  access = account.access,
-                                  folder = account.folder,
-                                  name = account.name,
-                                  account_type = account.account_type,
-                                  industry = account.industry,
-                                  tagline = account.tagline,
-                                  introduction = account.introduction,
-                                  tags = tag_list,
-                                  contacts = contacts,
-                                  topics = topics,
-                                  tasks = tasks,
-                                  events = events,
-                                  needs = needs,
-                                  opportunities = opportunities,
-                                  cases = cases,
-                                  documents = documents,
-                                  infonodes = infonodes,
-                                  created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
-                                )
-
-        return  account_schema
+                                            )
+            #list of contacts to this account
+            contacts = None
+            if request.contacts:
+                contacts = Contact.list_by_parent(
+                                            user_from_email = user_from_email,
+                                            parent_key = account.key,
+                                            request = request
+                                            )
+            #list of topics related to this account
+            topics = None
+            if request.topics:
+                topics = Note.list_by_parent(
+                                            parent_key = account.key,
+                                            request = request
+                                            )
+            tasks = None
+            if request.tasks:
+                tasks = Task.list_by_parent(
+                                            parent_key = account.key,
+                                            request = request
+                                            )
+            events = None
+            if request.events:
+                events = Event.list_by_parent(
+                                            parent_key = account.key,
+                                            request = request
+                                            )
+            needs = None
+            if request.needs:
+                needs = Need.list_by_parent(
+                                            parent_key = account.key,
+                                            request = request
+                                            )
+            opportunities = None
+            if request.opportunities:
+                opportunities = Opportunity.list_by_parent(
+                                            user_from_email = user_from_email,
+                                            parent_key = account.key,
+                                            request = request
+                                            )
+            cases = None
+            if request.cases:
+                cases = Case.list_by_parent(
+                                            user_from_email = user_from_email,
+                                            parent_key = account.key,
+                                            request = request
+                                            )
+            documents = None
+            if request.documents:
+                documents = Document.list_by_parent(
+                                            parent_key = account.key,
+                                            request = request
+                                            )
+            account_schema = AccountSchema(
+                                      id = str( account.key.id() ),
+                                      entityKey = account.key.urlsafe(),
+                                      access = account.access,
+                                      folder = account.folder,
+                                      name = account.name,
+                                      account_type = account.account_type,
+                                      industry = account.industry,
+                                      tagline = account.tagline,
+                                      introduction = account.introduction,
+                                      tags = tag_list,
+                                      contacts = contacts,
+                                      topics = topics,
+                                      tasks = tasks,
+                                      events = events,
+                                      needs = needs,
+                                      opportunities = opportunities,
+                                      cases = cases,
+                                      documents = documents,
+                                      infonodes = infonodes,
+                                      created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                      updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                    )
+            return  account_schema
+        else:
+            raise endpoints.NotFoundException('Permission denied')
     
     
         
+    @classmethod
+    def insert(cls,user_from_email,request):
+        account=None
+        account_key = cls.get_key_by_name(
+                                        user_from_email= user_from_email,
+                                        name = request.name
+                                        )
+        if account_key:
+            account_key_async = account_key
+        else:
+            account = cls(
+                        name = request.name,
+                        account_type = request.account_type,
+                        industry = request.industry,
+                        tagline = request.tagline,
+                        introduction = request.introduction,
+                        owner = user_from_email.google_user_id,
+                        organization = user_from_email.organization,
+                        access = request.access
+                        )
+            account_key = account.put_async()
+            account_key_async = account_key.get_result()
+            taskqueue.add(
+                            url='/workers/createobjectfolder', 
+                            params={
+                                    'kind': "Account",
+                                    'folder_name': request.name,
+                                    'email': user_from_email.email,
+                                    'obj_key':account_key_async
+                                    }
+                            )
+        for email in request.emails:
+            Node.insert_info_node(
+                            account_key_async,
+                            iomessages.InfoNodeRequestSchema(
+                                                            kind='emails',
+                                                            fields=[
+                                                                iomessages.RecordSchema(
+                                                                field = 'email',
+                                                                value = email.email
+                                                                )
+                                                            ]
+                                                        )
+                                                    )
+        for phone in request.phones:
+            Node.insert_info_node(
+                            account_key_async,
+                            iomessages.InfoNodeRequestSchema(
+                                                            kind='phones',
+                                                            fields=[
+                                                                iomessages.RecordSchema(
+                                                                field = 'type',
+                                                                value = phone.type
+                                                                ),
+                                                                iomessages.RecordSchema(
+                                                                field = 'number',
+                                                                value = phone.number
+                                                                )
+                                                            ]
+                                                        )
+                                                    )
+        for address in request.addresses:
+            Node.insert_info_node(
+                            account_key_async,
+                            iomessages.InfoNodeRequestSchema(
+                                                            kind='addresses',
+                                                            fields=[
+                                                                iomessages.RecordSchema(
+                                                                field = 'street',
+                                                                value = address.street
+                                                                ),
+                                                                iomessages.RecordSchema(
+                                                                field = 'city',
+                                                                value = address.city
+                                                                ),
+                                                                iomessages.RecordSchema(
+                                                                field = 'state',
+                                                                value = address.state
+                                                                ),
+                                                                iomessages.RecordSchema(
+                                                                field = 'postal_code',
+                                                                value = address.postal_code
+                                                                ),
+                                                                iomessages.RecordSchema(
+                                                                field = 'country',
+                                                                value = address.country
+                                                                ),
+                                                                iomessages.RecordSchema(
+                                                                field = 'formatted',
+                                                                value = address.formatted
+                                                                )
+                                                            ]
+                                                        )
+                                                    )
+        for infonode in request.infonodes:
+            Node.insert_info_node(
+                            account_key_async,
+                            iomessages.InfoNodeRequestSchema(
+                                                            kind = infonode.kind,
+                                                            fields = infonode.fields
+                                                        )
+                                                    )
+            
+            
+           
+        if account:
+            data = {}
+            data['id'] = account_key_async.id()
+            account.put_index(data)
+        account_schema = AccountSchema(
+                                  id = str( account_key_async.id() ),
+                                  entityKey = account_key_async.urlsafe()
+                                  )
+        return account_schema
     @classmethod
     def list(cls,user_from_email,request):
         curs = Cursor(urlsafe=request.pageToken)
@@ -320,17 +453,13 @@ class Account(EndpointsModel):
             for account in accounts:
                 if count<= limit:
                     is_filtered = True
-                    if account.access == 'private' and account.owner!=user_from_email.google_user_id:
-                        end_node_set = [user_from_email.key]
-                        if not Edge.find(start_node=account.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
-                            is_filtered = False
                     if request.tags and is_filtered:
                         end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
                         if not Edge.find(start_node=account.key,kind='tags',end_node_set=end_node_set,operation='AND'):
                             is_filtered = False
                     if request.owner and account.owner!=request.owner and is_filtered:
                         is_filtered = False
-                    if is_filtered:
+                    if is_filtered and Node.check_permission(user_from_email,account):
                         count = count + 1
                         #list of tags related to this account
                         tag_list = Tag.list_by_parent(parent_key = account.key)

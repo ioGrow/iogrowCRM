@@ -9,15 +9,13 @@ accountservices.factory('User', function($http) {
 
   
   User.get = function($scope,id) {
-          gapi.client.crmengine.accounts.get(id).execute(function(resp) {
+
+          gapi.client.crmengine.users.get(id).execute(function(resp) {
             if(!resp.code){
-               $scope.account = resp;
-               $scope.isContentLoaded = true;
-               $scope.listTopics(resp);
-               $scope.listTasks();
-               $scope.listEvents();
+               $scope.user = resp;
+               
                // Call the method $apply to make the update on the scope
-               //$scope.apply();
+               $scope.apply();
 
             }else {
                if(resp.code==401){
@@ -31,7 +29,6 @@ accountservices.factory('User', function($http) {
   };
   User.list = function($scope,params){
       $scope.isLoading = true;
-      console.log('in users.list');
       gapi.client.crmengine.users.list(params).execute(function(resp) {
               if(!resp.code){
                  $scope.users = resp.items;
@@ -63,12 +60,13 @@ accountservices.factory('User', function($http) {
       });
   };
   User.insert = function($scope,params){
+      $scope.isLoading = true;
       gapi.client.crmengine.users.insert(params).execute(function(resp) {
          console.log('in insert resp');
          console.log(resp);
          if(!resp.code){
           $scope.user.email = '';
-          $('#addAccountModal').modal('hide');
+          
           
           User.list($scope,params);
           
@@ -87,6 +85,27 @@ accountservices.factory('User', function($http) {
          }
       });
   };
+
+  User.patch = function($scope,params){
+      gapi.client.crmengine.users.patch(params).execute(function(resp) {
+            if(!resp.code){
+               $scope.user = resp;
+               window.location.reload();
+              
+               
+               // Call the method $apply to make the update on the scope
+                $scope.$apply();
+
+            }else {
+               if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+            }
+            console.log('User.patch gapi #end_execute');
+          });
+  }
   
 
 return User;

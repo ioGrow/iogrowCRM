@@ -23,7 +23,6 @@ INVERSED_EDGES = {
             'tasks' : ['parents'],
             'topics':['parents']
             }
-
 DELETED_ON_CASCADE = {
             'Task' : ['comments'],
             'Event' : ['comments'],
@@ -184,6 +183,14 @@ class Node(ndb.Expando):
     updated_at = ndb.DateTimeProperty(auto_now=True)
 
     @classmethod
+    def check_permission(cls, user, node):
+        if node.access != 'public' and node.owner!=user.google_user_id:
+            end_node_set = [user.key]
+            if not Edge.find(start_node=node.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
+                return False
+        return True
+
+    @classmethod
     def list_info_nodes(cls,parent_key,request):
         edge_list = Edge.list(
                             start_node = parent_key,
@@ -219,6 +226,27 @@ class Node(ndb.Expando):
         return InfoNodeListResponse(
                                     items = connections_list
                                     )
+    @classmethod
+    def insert_info_node(cls,parent_key,request):
+        node = Node(kind=request.kind)
+        node_values = []
+        for record in request.fields:
+            setattr(node, record.field, record.value)
+            node_values.append(str(record.value))
+        entityKey_async = node.put_async()
+        entityKey = entityKey_async.get_result()
+        Edge.insert(
+                    start_node = parent_key,
+                    end_node = entityKey,
+                    kind = 'infos',
+                    inverse_edge = 'parents'
+                )
+        indexed_edge = '_' + request.kind + ' ' + " ".join(node_values)
+        EndpointsHelper.update_edge_indexes(
+                                            parent_key = parent_key,
+                                            kind = 'infos',
+                                            indexed_edge = indexed_edge
+                                            )
 
 
 class InfoNode(ndb.Expando):

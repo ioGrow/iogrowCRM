@@ -1,3 +1,16 @@
+<div class="row subHeader">
+<div class="currentApp">
+  <h2 class="page-title">
+    <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png">
+    {{active_app.label}}
+  </h2>
+</div>
+  <div class=" subHeaderContent">
+             
+            <h2 class="page-title">
+              {{_("Search results")}} </h2>
+  </div>
+</div>
 <div  class="page-content">
 <div class="loader-container row" ng-show="isLoading">
       <div class="loader-dialog col-md-4 col-md-offset-4 ">
@@ -77,17 +90,7 @@
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-        <div class="row">
-          
-          <div class="col-md-12">
-            <h2 class="page-title">{{ _("Search results") }} </h2>
-            
-           
-               
-            <hr/>
-            
-          </div>
-        </div>
+       
 
             
             <div class="row cards-container">

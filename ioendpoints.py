@@ -1,3 +1,4 @@
+
 """
 
 This file is the main part of ioGrow API. It contains all request, response
@@ -26,13 +27,12 @@ from protorpc import remote
 from protorpc import messages
 from protorpc import message_types
 import endpoints
-
 # Third party libraries
 from endpoints_proto_datastore.ndb import EndpointsModel
 
 # Our libraries
 from iograph import Node,Edge,RecordSchema,InfoNodeResponse,InfoNodeConnectionSchema,InfoNodeListResponse
-from iomodels.crmengine.accounts import Account,AccountGetRequest,AccountSchema,AccountListRequest,AccountListResponse,AccountSearchResult,AccountSearchResults
+from iomodels.crmengine.accounts import Account,AccountGetRequest,AccountSchema,AccountListRequest,AccountListResponse,AccountSearchResult,AccountSearchResults,AccountInsertRequest
 from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertRequest,ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults,ContactImportRequest
 from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema,NoteSchema
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
@@ -63,6 +63,7 @@ from model import Contributor
 from model import Companyprofile
 from search_helper import SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
+import iomessages
 
 
 # The ID of javascript client authorized to access to our api
@@ -182,10 +183,6 @@ class EdgesRequest(messages.Message):
 
 class EdgesResponse(messages.Message):
     items = messages.MessageField(EdgeSchema, 1, repeated=True)
-
-
-
-
 
 class InfoNodeSchema(messages.Message):
     kind = messages.StringField(1, required=True)
@@ -595,44 +592,22 @@ class CrmEngineApi(remote.Service):
                       name='accounts.delete')
     def account_delete(self, request):
         entityKey = ndb.Key(urlsafe=request.entityKey)
-        Edge.delete_all_cascade(start_node = entityKey)
-        return message_types.VoidMessage()
-
-    # accounts.insert API
-    @Account.method(
-                    user_required=True,
-                    path='accounts',
-                    http_method='POST',
-                    name='accounts.insert'
-                    )
-    def AccountInsert(self, my_model):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        # Todo: Check permissions
-        account_key = Account.get_key_by_name(
-                                        user_from_email= user_from_email,
-                                        name = my_model.name
-                                        )
-        if account_key:
-            account = account_key.get()
-            my_model.id = account_key.id()
-            my_model.entityKey = account_key.urlsafe()
-            my_model.name = account.name
-            return my_model
+        if Node.check_permission(user_from_email,entityKey.get()):
+            Edge.delete_all_cascade(start_node = entityKey)
+            return message_types.VoidMessage()
         else:
-            my_model.owner = user_from_email.google_user_id
-            my_model.organization = user_from_email.organization
-            my_model.put()
-            taskqueue.add(
-                        url='/workers/createobjectfolder', 
-                        params={
-                                'kind': "Account",
-                                'folder_name': my_model.name,
-                                'email': user_from_email.email,
-                                'obj_key':my_model.entityKey
-                                }
-                        )
-        return my_model
+            raise endpoints.UnauthorizedException('You don\'t have permissions.')
 
+    # accounts.insert api v2
+    @endpoints.method(AccountInsertRequest, AccountSchema,
+                      path='accounts/insert', http_method='POST',
+                      name='accounts.insert')
+    def accounts_insert_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Account.insert(
+                                user_from_email = user_from_email,
+                                request = request
+                            )
     # accounts.get api v2
     @endpoints.method(AccountGetRequest, AccountSchema,
                       path='accounts/getv2', http_method='POST',
@@ -750,9 +725,13 @@ class CrmEngineApi(remote.Service):
                       path='cases', http_method='DELETE',
                       name='cases.delete')
     def case_delete(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
         entityKey = ndb.Key(urlsafe=request.entityKey)
-        Edge.delete_all_cascade(start_node = entityKey)
-        return message_types.VoidMessage()
+        if Node.check_permission(user_from_email,entityKey.get()):
+            Edge.delete_all_cascade(start_node = entityKey)
+            return message_types.VoidMessage()
+        else:
+            raise endpoints.UnauthorizedException('You don\'t have permissions.')
 
     # cases.getv2 api
     @endpoints.method(CaseGetRequest, CaseSchema,
@@ -1144,8 +1123,11 @@ class CrmEngineApi(remote.Service):
                       name='contacts.delete')
     def contact_delete(self, request):
         entityKey = ndb.Key(urlsafe=request.entityKey)
-        Edge.delete_all_cascade(start_node = entityKey)
-        return message_types.VoidMessage()
+        if Node.check_permission(user_from_email,entityKey.get()):
+            Edge.delete_all_cascade(start_node = entityKey)
+            return message_types.VoidMessage()
+        else:
+            raise endpoints.UnauthorizedException('You don\'t have permissions.')
     
 
     # contacts.insertv2 api
@@ -1793,8 +1775,11 @@ class CrmEngineApi(remote.Service):
                       name='leads.delete')
     def lead_delete(self, request):
         entityKey = ndb.Key(urlsafe=request.entityKey)
-        Edge.delete_all_cascade(start_node = entityKey)
-        return message_types.VoidMessage()
+        if Node.check_permission(user_from_email,entityKey.get()):
+            Edge.delete_all_cascade(start_node = entityKey)
+            return message_types.VoidMessage()
+        else:
+            raise endpoints.UnauthorizedException('You don\'t have permissions.')
 
     # leads.convert api
     @endpoints.method(ID_RESOURCE, LeadSchema,
@@ -2186,9 +2171,9 @@ class CrmEngineApi(remote.Service):
                     inverse_edge = 'parents'
                 )
         EndpointsHelper.update_edge_indexes(
-                                            parent_key = entityKey,
+                                            parent_key = parent_key,
                                             kind = 'topics',
-                                            indexed_edge = str(parent_key.id())
+                                            indexed_edge = str(entityKey.id())
                                             )
         return message_types.VoidMessage()
 
@@ -2236,7 +2221,6 @@ class CrmEngineApi(remote.Service):
                         name='infonode.insert')
     def infonode_insert(self, request):
         parent_key = ndb.Key(urlsafe=request.parent)
-
         node = Node(kind=request.kind)
         node_values = []
         for record in request.fields:
@@ -2314,8 +2298,11 @@ class CrmEngineApi(remote.Service):
                       name='opportunities.delete')
     def opportunity_delete(self, request):
         entityKey = ndb.Key(urlsafe=request.entityKey)
-        Edge.delete_all_cascade(start_node = entityKey)
-        return message_types.VoidMessage()
+        if Node.check_permission(user_from_email,entityKey.get()):
+            Edge.delete_all_cascade(start_node = entityKey)
+            return message_types.VoidMessage()
+        else:
+            raise endpoints.UnauthorizedException('You don\'t have permissions.')
     
     # opportunities.get api v2
     @endpoints.method(OpportunityGetRequest, OpportunitySchema,
@@ -3072,21 +3059,35 @@ class CrmEngineApi(remote.Service):
         mail.send_mail(sender_address, my_model.email , subject, body)
         return my_model
 
-    # users.list api
-    @User.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='users', name='users.list')
-    def UserList(self, query):
+    
+    # users.list api v2
+    @endpoints.method(message_types.VoidMessage, iomessages.UserListSchema,
+                      path='users/list', http_method='POST',
+                      name='users.list')
+    def user_list(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        organization = user_from_email.organization
-        return query.filter(User.organization == organization)
+        return User.list(organization=user_from_email.organization)
 
     # users.patch API
     @User.method(user_required=True,
                   http_method='PATCH', path='users/{id}', name='users.patch')
     def UserPatch(self, my_model):
-        user_from_email = EndpointsHelper.require_iogrow_user()
+        #user_from_email = EndpointsHelper.require_iogrow_user()
         # Todo: Check permissions
-        my_model.put()
-        return my_model
+        if not my_model.from_datastore:
+            raise endpoints.NotFoundException('Account not found.')
+        patched_model_key = my_model.entityKey
+        patched_model = ndb.Key(urlsafe=patched_model_key).get()
+        properties = User().__class__.__dict__
+        for p in properties.keys():
+            patched_p = eval('patched_model.' + p)
+            my_p = eval('my_model.' + p)
+            if (patched_p != my_p) \
+            and (my_p and not(p in ['put', 'set_perm', 'put_index'])):
+                exec('patched_model.' + p + '= my_model.' + p)
+        patched_model.put()
+        return patched_model
+        
 
     # users.update API
     @User.method(user_required=True,

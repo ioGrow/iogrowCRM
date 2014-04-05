@@ -1,3 +1,20 @@
+<div class="row subHeader">
+<div class="currentApp">
+  <h2 class="page-title">
+    <!-- <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
+    {{active_app.label}}
+  </h2>
+</div>
+  <div class=" subHeaderContent">
+            <div class="pull-right sharebuttonDiv"> 
+                  
+                  <!-- <button class="btn jfk-button jfk-button-action" ng-click="save(account)">
+                    <i class="fa-cog"></i>
+                  </button> -->
+            </div>
+                  <h2 class="page-title">{{ _("Contacts") }} </h2>
+  </div>
+</div>
 <div  class="page-content">
  <div class="loader-container row" ng-show="isLoading">
       <div class="loader-dialog col-md-4 col-md-offset-4 ">
@@ -121,15 +138,13 @@
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-        <div class="row ">
-            <div class="col-md-12"> <h2 class="page-title">{{ _("Contacts") }} </h2></div>
-          </div>
+        
         <div class="row">
         
           <div class="col-md-3" > 
                     
                 <div class="btn-group">
-                                        <a class="btn red" href="#" ng-click="showModal()" data-toggle="dropdown">
+                                        <a class="btn red" href="/#/contacts/new" >
                                         <i class="icon-plus"></i> {{ _("New Contact") }}
                                        
                                         </a>
@@ -166,7 +181,7 @@
                     </form>
           </div>
           <div class="col-md-2" ng-show="contacts+isFiltering">
-              <div class="btn-group  tbtn-sort">
+              <div class="btn-group  btn-sort">
                                     <a class="btn btn-default" href="#" data-toggle="dropdown">
                                     Sort by
                                     <i class="icon-angle-down"></i>

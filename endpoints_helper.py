@@ -7,7 +7,6 @@ from apiclient import errors
 import httplib2
 import endpoints
 from model import User
-
 FOLDERS = {
             'Account': 'accounts_folder',
             'Contact': 'contacts_folder',
@@ -136,5 +135,6 @@ class EndpointsHelper():
         except errors.HttpError, error:
             print 'An error occurred: %s' % error
             return None
+
 
             

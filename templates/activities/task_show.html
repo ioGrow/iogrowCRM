@@ -1,3 +1,18 @@
+<div class="row subHeader">
+<div class="currentApp">
+  <h2 class="page-title">
+    <!-- <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
+    {{active_app.label}}
+  </h2>
+</div>
+  <div class=" subHeaderContent">
+             
+            <h2 class="page-title">
+            <a href="/#/tasks/" data-toggle="tooltip" data-placement="bottom" title="Back to Cases">
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Tasks")}}  </a></h2>
+  </div>
+</div>
+
                <div id="assigneeTagsToTask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                   <div class="modal-dialog">
                     <div class="modal-content">
@@ -143,18 +158,8 @@
                         Tags
                      </span>
                     </button>
-                    <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action">
-                    <i class="fa fa-tags"></i>
-                     <span class="btn-text">
-                        Tags
-                     </span>
-                    </button>
-                    <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action">
-                    <i class="fa fa-tags"></i>
-                     <span class="btn-text">
-                        Tags
-                     </span>
-                    </button>
+                    <datetimepick icon-class='fa fa-bell-o' label-format='MMM d, h:mm a' ng-model='newTask.reminder' class="new-task-reminder"></datetimepick>
+                    <datetimepick ng-model='newTask.due' class="new-task-date" label-format='MMM d, h:mm a'></datetimepick>
                </form>
             </div>
               

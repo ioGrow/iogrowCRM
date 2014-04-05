@@ -1,0 +1,385 @@
+/* Base Styles
+--------------------------------------------------------------------- */
+
+body {
+	background-color: #fff;
+	font-family: 'Lato', sans-serif;
+	font-weight: 300;
+	font-size: 16px;
+	color: #555;
+	padding-top: 50px;
+	-webkit-font-smoothing: antialiased;
+	-webkit-overflow-scrolling: touch;
+}
+
+/* Titles */
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: 'Lato', sans-serif;
+	font-weight: 300;
+	color: #333;
+}
+
+/* Paragraph & Typographic */
+
+p {
+	line-height: 28px;
+	margin-bottom: 25px;
+}
+
+/* Links */
+
+a {
+	color: #428bca;
+	word-wrap: break-word;
+
+	-webkit-transition: color 0.1s ease-in, background 0.1s ease-in;
+	-moz-transition: color 0.1s ease-in, background 0.1s ease-in;
+	-ms-transition: color 0.1s ease-in, background 0.1s ease-in;
+	-o-transition: color 0.1s ease-in, background 0.1s ease-in;
+	transition: color 0.1s ease-in, background 0.1s ease-in;
+}
+
+a:hover,
+a:focus {
+	color: #05888e;
+	text-decoration: none;
+	outline: 0;
+}
+
+a:before,
+a:after {
+	-webkit-transition: color 0.1s ease-in, background 0.1s ease-in;
+	-moz-transition: color 0.1s ease-in, background 0.1s ease-in;
+	-ms-transition: color 0.1s ease-in, background 0.1s ease-in;
+	-o-transition: color 0.1s ease-in, background 0.1s ease-in;
+	transition: color 0.1s ease-in, background 0.1s ease-in;
+}
+
+ hr {
+	display: block;
+	width: 500px;
+	height: 1px;
+	border: 0;
+	border-top: 1px solid #ccc;
+	padding: 0;
+}
+
+.pad-top {
+	padding-top: 80px;
+}
+
+/* Button Modifications */
+
+.btn-theme {
+	background-color: #CA4242;
+	color: #fff;
+	border-color: #CA4242;
+}
+
+.btn-theme:hover,
+.btn-theme:focus {
+	border-color: #428bca; /* change to darker hue than bg hover color */
+	background-color: transparent;
+	color: #428bca;
+	box-shadow: none;
+}
+
+.btn-theme2 {
+	border-color: #fff;
+	background-color: transparent;
+	color: #fff;
+}
+
+.btn-theme2:hover,
+.btn-theme2:active {
+	border-color: #fff;
+	background-color: #fff;
+	color: #428bca;
+	box-shadow: none;
+}
+
+
+/* Navigation
+--------------------------------------------------------------------- */
+
+.navbar-default {
+	font-family: 'Lato', sans-serif;
+	font-size: 13px;
+	font-weight: 400;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	background-color: #fff;
+}
+
+.navbar-default .navbar-toggle {
+	border: 0;
+}
+
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+	background-color: transparent;
+}
+
+.navbar-default .navbar-toggle > .icon-bar {
+	background-color: #428bca;
+}
+
+.navbar-default .navbar-brand {
+	color: #428bca;
+}
+
+.navbar-default .navbar-brand:hover {
+	color: #bdc3c7;
+}
+
+.navbar-default .navbar-nav > li > a {
+	color: #428bca;
+}
+
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+	color: #bdc3c7;
+	background-color: transparent;
+}
+
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+	background-color: transparent;
+	color: #bdc3c7;
+}
+
+.navbar-default .navbar-right a[type="button"] {
+	padding: 6px 20px 6px 20px;
+	color: #fff;
+}
+
+.navbar-default .navbar-right a[type="button"]:hover,
+.navbar-default .navbar-right a[type="button"]:focus {
+	background-color: transparent;
+	color: #428bca;
+}
+
+
+/* Wrap Sections
+--------------------------------------------------------------------- */
+
+/* Header Wrap */
+
+#headerwrap {
+	background: url("../img/header-bg.jpg") no-repeat center top;
+	background-size: cover;
+	padding-top: 80px;
+}
+
+#headerwrap .col-lg-2 {
+	padding-top: 40px;
+}
+
+#headerwrap h1 {
+	margin-top: 30px;
+	color: white;
+	font-size: 46px;
+}
+
+#headerwrap h3 {
+	color: white;
+	font-size: 30px;
+}
+
+#headerwrap h4 {
+	padding-top: 10px;
+	padding-bottom: 20px;
+	color: #fff;
+}
+
+#headerwrap h5 {
+	color: white;
+	font-weight: 700;
+	text-align: left;
+}
+
+#headerwrap p {
+	text-align: left;
+	color: #fff;
+}
+
+/* Intro Wrap */
+
+#intro {
+	padding-top: 80px;
+	padding-bottom: 80px;
+}
+
+#intro licon {
+	font-size: 60px;
+	color: #428bca;
+	padding: 20px;
+	vertical-align: middle;
+}
+
+/* Features Wrap */
+
+#featureswrap {
+	background-color: #f5f5f5;
+	padding-top: 80px;
+	padding-bottom: 80px;
+}
+
+#featureswrap .col-lg-6 img {
+	display: table;
+	margin: 0 auto;
+}
+
+#featureswrap .ac a {
+	font-size: 20px;
+}
+
+#featureswrap .col-lg-6 h4,
+#featureswrap .col-lg-6 licon {
+	font-size: 20px;
+	color: #428bca;
+}
+
+/* Divider 1 & 2 Wrap */
+
+#divider01 {
+	background: url("../img/divider1.jpg") no-repeat center center;
+	background-size: cover;
+	min-height: 400px;
+	padding-top: 120px;
+}
+
+#divider01 h3 {
+	font-size: 34px;
+	color: #fff;
+}
+
+#divider01 h4 {
+	padding-top: 15px;
+	color: #fff;
+}
+
+#divider02 {
+	background-color: #428bca;
+	height: 150px;
+	padding-top: 55px;
+}
+
+#divider02 h3 {
+	color: #fff;
+	padding-right: 40px;
+}
+
+#divider02 h3,
+#divider02 button {
+	display: inline;
+	vertical-align: middle;
+}
+
+
+/* Pricing Wrap */
+
+#pricingwrap {
+	background-color: #fff;
+	padding-top: 80px;
+	padding-bottom: 120px;
+}
+
+#pricingwrap small {
+	padding-left: 10px;
+}
+
+/* Pricing Tables */
+
+.panel {
+	text-align: center;
+}
+
+.panel-custom {
+	border-color: #428bca;
+}
+
+.panel-custom > .panel-heading {
+	background-color: #428bca;
+	color: #fff;
+}
+
+.panel-heading > .panel-title {
+	font-weight: 900;
+	text-transform: uppercase;
+}
+
+.panel-body {
+	padding: 0px;
+	text-align: center;
+}
+
+.the-price {
+	background-color: rgba(220,220,220,0.17);
+	box-shadow: 0 1px 0 #dcdcdc, inset 0 1px 0 #dcdcdc;
+	padding: 20px;
+	margin: 0;
+}
+
+.the-price h2 {
+	font-size: 44px;
+	font-weight: 700;
+	line-height: 1em;
+	padding: 0;
+	margin: 0;
+}
+
+.subscript {
+	font-size: 25px;
+	font-weight: 400;
+}
+
+/* Footer Wrap */
+
+#footerwrap {
+	background-color: #333;
+	color: #777;
+	padding-top: 80px;
+	padding-bottom: 100px;
+}
+
+#footerwrap h3 {
+	font-size: 20px;
+	font-weight: 400;
+	color: #fff;
+}
+
+#footerwrap p {
+	color: #fff;
+	font-size: 14px;
+}
+
+#footerwrap #social {
+	margin: 20px auto 0px auto;
+	display: inline-block;
+}
+
+#footerwrap input:focus {
+	outline: 0;
+}
+
+/* Copyright Wrap */
+
+#copywrap {
+	background: #222;
+	padding-top: 20px;
+	font-size: 14px;
+	color: #bdc3c7;
+}
+
+
+/* Sign In & Sign Up Modal */
+
+.modal .nav-tabs {
+	padding-left: 5px;
+	padding-right: 5px;
+}

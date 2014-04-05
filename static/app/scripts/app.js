@@ -18,9 +18,15 @@ app.config(['$routeProvider', function($routeProvider) {
       }).when('/accounts/show/:accountId', {
         controller: 'AccountShowCtrl',
         templateUrl:'/views/accounts/show'
+      }).when('/accounts/new', {
+        controller: 'AccountNewCtrl',
+        templateUrl:'/views/accounts/new'
       }).
       // Contacts
-      when('/contacts/', {
+      when('/contacts/new', {
+        controller: 'ContactNewCtrl',      
+        templateUrl:'/views/contacts/new'
+      }).when('/contacts/', {
         controller: 'ContactListCtrl',      
         templateUrl:'/views/contacts/list'
         
@@ -43,6 +49,10 @@ app.config(['$routeProvider', function($routeProvider) {
       }).when('/leads/show/:leadId', {
         controller: 'LeadShowCtrl',        
         templateUrl:'/views/leads/show'
+      }).
+      when('/leads/new', {
+        controller: 'LeadNewCtrl',        
+        templateUrl:'/views/leads/new'
       }).
       // Cases
       when('/cases/', {
@@ -154,3 +164,15 @@ app.config(function(ngQuickDateDefaultsProvider) {
     }
   });
 });
+
+/***header scroll detection for bottom shadow***/
+$(window).scroll(function(){
+  var y = $(window).scrollTop();
+  if( y > 0 ){
+      $(".subHeader").addClass("header-bottom-shadow");
+      /*$(".page-sidebar-wrapper").addClass("sidebar-left-shadow");*/
+  } else {
+       $(".subHeader").removeClass("header-bottom-shadow");
+       /*$(".page-sidebar-wrapper").removeClass("sidebar-left-shadow");*/
+  }
+ });

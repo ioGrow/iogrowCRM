@@ -1,3 +1,20 @@
+<div class="row subHeader">
+<div class="currentApp">
+  <h2 class="page-title">
+    <!-- <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
+    {{active_app.label}}
+  </h2>
+</div>
+  <div class=" subHeaderContent">
+            <div class="pull-right sharebuttonDiv"> 
+                  
+                  <!-- <button class="btn jfk-button jfk-button-action" ng-click="save(account)">
+                    <i class="fa-cog"></i>
+                  </button> -->
+            </div>
+                  <h2 class="page-title">{{ _("Leads") }} </h2>
+  </div>
+</div>
 <div  class="page-content">
 <div class="loader-container row" ng-show="isLoading">
       <div class="loader-dialog col-md-4 col-md-offset-4 ">
@@ -136,17 +153,12 @@
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-        
-            <div class="row ">
-                <div class="col-md-12"> <h2 class="page-title">{{ _("Leads") }} </h2></div>
-            </div>
-
         <div class="row">
           
           <div class="col-md-2"> 
-                  <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
+                  <a  href="/#/leads/new"  id="sample_editable_1_new" class="btn red">
                     {{ _("New Lead") }} <i class="icon-plus"></i>
-                    </button>          
+                    </a>          
           </div>
           <div class="col-md-2" ng-show="leads+isFiltering">
               <div class="btn-group btn-filter">
@@ -213,11 +225,11 @@
                   <div class="desc">
                     <div class="row margin-bottom-5">
                       <div class="col-md-12">
-                      <span ng-show="lead.status" class="contact-title" >Updated at:  <%=lead.updated_at | date:'yyyy-MM-dd - HH:mm:ss ' %> </span>
+                      <span  class="contact-title" >Updated at:  <%=lead.updated_at | date:'yyyy-MM-dd - HH:mm:ss ' %> </span>
                       <span ng-show="lead.status" class="contact-title" >Status: <a class="desc" href="/#/search/type:Lead <%=lead.status%>">#<%=lead.status %></a>  </span>
                       <br>
                       <span ng-show="lead.title"><a  class="desc" href="/#/search/type:Lead <%=lead.title%>">#<%=lead.title%></a></span>
-                      <span ng-show="lead.company"> <span ng-show="lead.title" class="contact-title">,</span> <a  class="desc" href="/#/search/type:Lead <%=lead.company%>">#<%=lead.company%></a></span>
+                      <span ng-show="lead.company"> <span ng-show="lead.title" class="contact-title"> at </span> <a  class="desc" href="/#/search/type:Lead <%=lead.company%>">#<%=lead.company%></a></span>
                      </div>
                      </div>
                    

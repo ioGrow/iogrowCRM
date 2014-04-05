@@ -38,6 +38,7 @@ class OpportunityInsertRequest(messages.Message):
     stage = messages.StringField(3, required = True)
     account = messages.StringField(4, required = True)
     contact = messages.StringField(5)
+    access = messages.StringField(6)
 
 class OpportunitySchema(messages.Message):
     id = messages.StringField(1)
@@ -197,6 +198,8 @@ class Opportunity(EndpointsModel):
         opportunity = Opportunity.get_by_id(int(request.id))
         if opportunity is None:
             raise endpoints.NotFoundException('Opportunity not found.')
+        if not Node.check_permission( user_from_email, opportunity ):
+            raise endpoints.UnauthorizedException('You don\'t have permissions.')
         parents_edge_list = Edge.list(
                                     start_node = opportunity.key,
                                     kind = 'parents'
@@ -312,10 +315,6 @@ class Opportunity(EndpointsModel):
             for opportunity in opportunities:
                 if count<= limit:
                     is_filtered = True
-                    if opportunity.access == 'private' and opportunity.owner!=user_from_email.google_user_id:
-                        end_node_set = [user_from_email.key]
-                        if not Edge.find(start_node=opportunity.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
-                            is_filtered = False
                     if request.tags and is_filtered:
                         end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
                         if not Edge.find(start_node=opportunity.key,kind='tags',end_node_set=end_node_set,operation='AND'):
@@ -324,7 +323,7 @@ class Opportunity(EndpointsModel):
                         is_filtered = False
                     if request.stagename and opportunity.stagename!=request.stagename and is_filtered:
                         is_filtered = False
-                    if is_filtered:
+                    if is_filtered and Node.check_permission( user_from_email, opportunity ):
                         count = count + 1
                         #list of tags related to this opportunity
                         tag_list = Tag.list_by_parent(parent_key = opportunity.key)
@@ -351,46 +350,62 @@ class Opportunity(EndpointsModel):
         return  OpportunityListResponse(items = items, nextPageToken = next_curs_url_safe)
 
     @classmethod
-    def list_by_parent(cls,parent_key,request):
+    def list_by_parent(cls,user_from_email,parent_key,request):
         opportunity_list = []
-        opportunity_edge_list = Edge.list(
+        you_can_loop = True
+        count = 0
+        if request.opportunities.limit:
+            limit = int(request.opportunities.limit)
+        else:
+            limit = 10
+        opportunity_next_curs = request.opportunities.pageToken
+        while you_can_loop:
+            edge_limit = int(request.cases.limit) - count
+            if edge_limit>0:
+                opportunity_edge_list = Edge.list(
                                     start_node = parent_key,
                                     kind='opportunities',
                                     limit=request.opportunities.limit,
                                     pageToken=request.opportunities.pageToken
                                 )
-        for edge in opportunity_edge_list['items']:
-            opportunity = edge.end_node.get()
-            tag_list = Tag.list_by_parent(parent_key = opportunity.key)
-            opportunity_stage_edges = Edge.list(
-                                                start_node = opportunity.key,
-                                                kind = 'stages',
-                                                limit = 1
-                                                )
-            current_stage_schema = None
-            if len(opportunity_stage_edges['items'])>0:
-                current_stage = opportunity_stage_edges['items'][0].end_node.get()
-                current_stage_schema = OpportunitystageSchema(  
-                                                        name=current_stage.name,
-                                                        probability= str(current_stage.probability),
-                                                        stage_changed_at=opportunity_stage_edges['items'][0].created_at.isoformat()
-                                                        )
-                            
-            opportunity_schema = OpportunitySchema(
-                                  id = str( opportunity.key.id() ),
-                                  entityKey = opportunity.key.urlsafe(),
-                                  name = opportunity.name,
-                                  amount = str(opportunity.amount),
-                                  current_stage = current_stage_schema,
-                                  tags = tag_list,
-                                  created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
-                                )
-            opportunity_list.append(opportunity_schema)
-        if opportunity_edge_list['next_curs'] and opportunity_edge_list['more']:
-            opportunity_next_curs = opportunity_edge_list['next_curs'].urlsafe()
-        else:
-            opportunity_next_curs = None
+                for edge in opportunity_edge_list['items']:
+                    opportunity = edge.end_node.get()
+                    if Node.check_permission(user_from_email,opportunity):
+                        tag_list = Tag.list_by_parent(parent_key = opportunity.key)
+                        opportunity_stage_edges = Edge.list(
+                                                            start_node = opportunity.key,
+                                                            kind = 'stages',
+                                                            limit = 1
+                                                            )
+                        current_stage_schema = None
+                        if len(opportunity_stage_edges['items'])>0:
+                            current_stage = opportunity_stage_edges['items'][0].end_node.get()
+                            current_stage_schema = OpportunitystageSchema(  
+                                                                    name=current_stage.name,
+                                                                    probability= str(current_stage.probability),
+                                                                    stage_changed_at=opportunity_stage_edges['items'][0].created_at.isoformat()
+                                                                    )
+                                        
+                        opportunity_schema = OpportunitySchema(
+                                              id = str( opportunity.key.id() ),
+                                              entityKey = opportunity.key.urlsafe(),
+                                              name = opportunity.name,
+                                              amount = str(opportunity.amount),
+                                              current_stage = current_stage_schema,
+                                              tags = tag_list,
+                                              created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                              updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                            )
+                        opportunity_list.append(opportunity_schema)
+        
+                if opportunity_edge_list['next_curs'] and opportunity_edge_list['more']:
+                    opportunity_next_curs = opportunity_edge_list['next_curs'].urlsafe()
+                else:
+                    you_can_loop = False
+                    opportunity_next_curs = None
+            if (count == limit):
+                you_can_loop = False
+
         return OpportunityListResponse(
                                     items = opportunity_list,
                                     nextPageToken = opportunity_next_curs
@@ -456,6 +471,7 @@ class Opportunity(EndpointsModel):
         opportunity = cls(
                     owner = user_from_email.google_user_id,
                     organization = user_from_email.organization,
+                    access = request.access,
                     name = request.name,
                     amount = int(request.amount)
                     )

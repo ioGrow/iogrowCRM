@@ -1,3 +1,26 @@
+<div class="row subHeader">
+<div class="currentApp">
+  <h2 class="page-title">
+    <!-- <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
+    {{active_app.label}}
+  </h2>
+</div>
+  <div class=" subHeaderContent">
+             <div class="pull-right sharebuttonDiv"> 
+                  
+                 <a ng-click="showConvertModal()" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
+                          <i class="icon-refresh"></i> {{_("Convert")}}
+                   </a>
+                  
+                   <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
+                    <i class="icon-lock"></i> Share
+                  </a>
+            </div> 
+                  <h2 class="page-title">
+            <a href="/#/leads" data-toggle="tooltip" data-placement="bottom" title="Back to Leads">
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Leads")}} > <a editable-text="lead.firstname" onbeforesave="inlinePatch('Lead','', 'firstname',lead.entityKey,$data)"> <%= lead.firstname %>  </a> <a editable-text="lead.lastname" onbeforesave="inlinePatch('Lead','', 'lastname',lead.entityKey,$data)" > <%= lead.lastname %> </a></h2>
+  </div>
+</div>
   <div id="sendingEmail" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               
               <div class="modal-body">
@@ -204,24 +227,9 @@
         <div class="row">
           
           <div class="col-md-12">
-            <div class="pull-right sharebuttonDiv"> 
-                   <a ng-click="showConvertModal()" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
-                          <i class="icon-refresh"></i> {{_("Convert")}}
-                   </a>
-                  
-                   <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
-                    <i class="icon-lock"></i> Share
-                  </a>
-                 
-                 
-                        
-                        
-                     
-                </div>
+            
                 
-            <h2 class="page-title">
-            <a href="/#/leads" data-toggle="tooltip" data-placement="bottom" title="Back to Leads">
-            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Leads")}} > <a editable-text="lead.firstname" onbeforesave="inlinePatch('Lead','', 'firstname',lead.entityKey,$data)"> <%= lead.firstname %>  </a> <a editable-text="lead.lastname" onbeforesave="inlinePatch('Lead','', 'lastname',lead.entityKey,$data)" > <%= lead.lastname %> </a></h2>
+            
             
 
               <span ng-show="lead.updated_at" class="contact-title" >Updated at:  <%=lead.updated_at | date:'yyyy-MM-dd - HH:mm:ss ' %> </span><br>

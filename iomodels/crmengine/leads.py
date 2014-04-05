@@ -1,3 +1,4 @@
+import endpoints
 from google.appengine.ext import ndb
 from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
@@ -15,16 +16,24 @@ from iomodels.crmengine.documents import Document,DocumentListResponse
 from iomodels.crmengine.contacts import Contact
 from iomodels.crmengine.accounts import Account
 import model
+import iomessages
+
 
 
 class LeadInsertRequest(messages.Message):
-    company = messages.StringField(1)
-    firstname = messages.StringField(2)
-    lastname = messages.StringField(3)
+    firstname = messages.StringField(1)
+    lastname = messages.StringField(2)
     title = messages.StringField(4)
+    company = messages.StringField(3)
     access = messages.StringField(5)
     source = messages.StringField(6)
     status = messages.StringField(7)
+    tagline = messages.StringField(8)
+    introduction = messages.StringField(9)
+    phones = messages.MessageField(iomessages.PhoneSchema,10, repeated = True)
+    emails = messages.MessageField(iomessages.EmailSchema,11, repeated = True)
+    addresses = messages.MessageField(iomessages.AddressSchema,12, repeated = True)
+    infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema,13, repeated = True)
 
  # The message class that defines the ListRequest schema
 class ListRequest(messages.Message):
@@ -58,7 +67,6 @@ class LeadSchema(messages.Message):
     created_at = messages.StringField(17)
     updated_at = messages.StringField(18)
     access = messages.StringField(19)
-
 
 class LeadListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -218,6 +226,8 @@ class Lead(EndpointsModel):
         lead = Lead.get_by_id(int(request.id))
         if lead is None:
             raise endpoints.NotFoundException('Lead not found.')
+        if not Node.check_permission( user_from_email, lead ):
+            raise endpoints.UnauthorizedException('You don\'t have permissions.')
         #list of tags related to this account
         tag_list = Tag.list_by_parent(lead.key)
         # list of infonodes
@@ -302,10 +312,6 @@ class Lead(EndpointsModel):
             for lead in leads:
                 if count<= limit:
                     is_filtered = True
-                    if lead.access == 'private' and lead.owner!=user_from_email.google_user_id:
-                        end_node_set = [user_from_email.key]
-                        if not Edge.find(start_node=lead.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
-                            is_filtered = False
                     if request.tags and is_filtered:
                         end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
                         if not Edge.find(start_node=lead.key,kind='tags',end_node_set=end_node_set,operation='AND'):
@@ -314,7 +320,7 @@ class Lead(EndpointsModel):
                         is_filtered = False
                     if request.status and lead.status!=request.status and is_filtered:
                         is_filtered = False
-                    if is_filtered:
+                    if is_filtered and Node.check_permission( user_from_email, lead ):
                         count = count + 1
                         #list of tags related to this lead
                         edge_list = Edge.list(start_node=lead.key,kind='tags')
@@ -408,14 +414,88 @@ class Lead(EndpointsModel):
                     lastname = request.lastname,
                     title = request.title,
                     company = request.company,
-                    status = request.status,
+                    status = "New",
                     source = request.source,
+                    tagline = request.tagline,
+                    introduction = request.introduction,
                     owner = user_from_email.google_user_id,
                     organization = user_from_email.organization,
                     access = request.access
                     )
         lead_key = lead.put_async()
         lead_key_async = lead_key.get_result()
+        for email in request.emails:
+            Node.insert_info_node(
+                        lead_key_async,
+                        iomessages.InfoNodeRequestSchema(
+                                                        kind='emails',
+                                                        fields=[
+                                                            iomessages.RecordSchema(
+                                                            field = 'email',
+                                                            value = email.email
+                                                            )
+                                                        ]
+                                                    )
+                                                )
+        for phone in request.phones:
+            Node.insert_info_node(
+                        lead_key_async,
+                        iomessages.InfoNodeRequestSchema(
+                                                        kind='phones',
+                                                        fields=[
+                                                            iomessages.RecordSchema(
+                                                            field = 'type',
+                                                            value = phone.type
+                                                            ),
+                                                            iomessages.RecordSchema(
+                                                            field = 'number',
+                                                            value = phone.number
+                                                            )
+                                                        ]
+                                                    )
+                                                )
+        for address in request.addresses:
+            Node.insert_info_node(
+                        lead_key_async,
+                        iomessages.InfoNodeRequestSchema(
+                                                        kind='addresses',
+                                                        fields=[
+                                                            iomessages.RecordSchema(
+                                                            field = 'street',
+                                                            value = address.street
+                                                            ),
+                                                            iomessages.RecordSchema(
+                                                            field = 'city',
+                                                            value = address.city
+                                                            ),
+                                                            iomessages.RecordSchema(
+                                                            field = 'state',
+                                                            value = address.state
+                                                            ),
+                                                            iomessages.RecordSchema(
+                                                            field = 'postal_code',
+                                                            value = address.postal_code
+                                                            ),
+                                                            iomessages.RecordSchema(
+                                                            field = 'country',
+                                                            value = address.country
+                                                            ),
+                                                            iomessages.RecordSchema(
+                                                            field = 'formatted',
+                                                            value = address.formatted
+                                                            )
+                                                        ]
+                                                    )
+                                                )
+        for infonode in request.infonodes:
+            Node.insert_info_node(
+                        lead_key_async,
+                        iomessages.InfoNodeRequestSchema(
+                                                        kind = infonode.kind,
+                                                        fields = infonode.fields
+                                                    )
+                                                )
+
         taskqueue.add(
                     url='/workers/createobjectfolder', 
                     params={

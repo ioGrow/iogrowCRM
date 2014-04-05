@@ -151,10 +151,7 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact','Tag','Ed
               $scope.save(contact);
           }
       };
-      $scope.accountInserted = function(resp){
-          $scope.contact.account = resp;
-          $scope.save($scope.contact);
-      };
+      
       
      var params_search_account ={};
      $scope.result = undefined;
@@ -472,9 +469,11 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
       {value: 'Mob', text: 'Mob'},
       {value: 'Other', text: 'Other'}
       ];
+
       
       // What to do after authentication
       $scope.runTheProcess = function(){
+        
           var params = {
                           'id':$route.current.params.contactId,
                           
@@ -512,6 +511,9 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
       $scope.refreshToken = function() {
             Auth.refreshToken();
       };
+      $scope.getTopicUrl = function(type,id){
+      return Topic.getUrl(type,id);
+    };
      //HKA 11.11.2013 
     $scope.TopiclistNextPageItems = function(){
         
@@ -729,9 +731,7 @@ $scope.CaselistNextPageItems = function(){
           $scope.sharing_with = [];
           
           
-        }else{ 
-          alert('select a user to be invited');
-        };
+        }
 
 
      };
@@ -1324,3 +1324,195 @@ $scope.updateintro = function(contact){
      // Google+ Authentication 
      Auth.init($scope);
 }]);
+
+
+
+app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
+    function($scope,Auth,Contact,Account,Edge) {
+      $("ul.page-sidebar-menu li").removeClass("active");
+      $("#id_Contacts").addClass("active");
+      
+      document.title = "Contacts: New";
+      $scope.isSignedIn = false;
+      $scope.immediateFailed = false;
+      $scope.nextPageToken = undefined;
+      $scope.prevPageToken = undefined;
+      $scope.isLoading = false;
+      $scope.pagination = {};
+      $scope.currentPage = 01;
+      $scope.pages = [];
+      $scope.stage_selected={};
+      $scope.contacts = [];
+      $scope.contact = {};
+      $scope.contact.access ='public';
+      $scope.order = '-updated_at';
+      $scope.status = 'New';
+      $scope.showPhoneForm=false;
+      $scope.showEmailForm=false;
+      $scope.showWebsiteForm=false;
+      $scope.showSociallinkForm=false;
+      $scope.showCustomFieldForm =false;
+      $scope.phones=[];
+      $scope.addresses=[];
+      $scope.emails=[];
+      $scope.websites=[];
+      $scope.sociallinks=[];
+      $scope.customfields=[];
+      $scope.results=[];
+      $scope.initObject=function(obj){
+          for (var key in obj) {
+                obj[key]=null;
+              }
+      }
+      $scope.pushElement=function(elem,arr){
+          if (arr.indexOf(elem) == -1) {
+              var copyOfElement = angular.copy(elem);
+              arr.push(copyOfElement);
+              console.log(elem);
+              $scope.initObject(elem);
+
+          }else{
+            alert("item already exit");
+          }
+      }
+      $scope.runTheProcess = function(){
+           
+       };
+        // We need to call this to refresh token when user credentials are invalid
+       $scope.refreshToken = function() {
+            Auth.refreshToken();
+       };
+
+       $scope.accountInserted = function(resp){
+          $scope.contact.account = resp;
+          $scope.save($scope.contact);
+      };
+      
+       var params_search_account ={};
+       $scope.result = undefined;
+       $scope.q = undefined;
+       $scope.$watch('searchAccountQuery', function() {
+            console.log('i am searching');
+           params_search_account['q'] = $scope.searchAccountQuery;
+           Account.search($scope,params_search_account);
+          
+        });
+        $scope.selectAccount = function(){
+          $scope.contact.account = $scope.searchAccountQuery;
+
+       };
+       $scope.accountInserted = function(resp){
+          console.log('account inserted ok');
+          console.log(resp);
+          $scope.contact.account = resp;
+          $scope.save($scope.contact);
+      };
+       $scope.prepareInfonodes = function(){
+        var infonodes = [];
+        angular.forEach($scope.websites, function(website){
+            var infonode = {
+                            'kind':'websites',
+                            'fields':[
+                                    {
+                                    'field':"url",
+                                    'value':website.url
+                                    }
+                            ]
+                          
+                          }
+            infonodes.push(infonode);
+        });
+        angular.forEach($scope.sociallinks, function(sociallink){
+            var infonode = {
+                            'kind':'sociallinks',
+                            'fields':[
+                                    {
+                                    'field':"url",
+                                    'value':sociallink.url
+                                    }
+                            ]
+                          
+                          }
+            infonodes.push(infonode);
+        });
+        angular.forEach($scope.customfields, function(customfield){
+            var infonode = {
+                            'kind':'customfields',
+                            'fields':[
+                                    {
+                                    'field':customfield.field,
+                                    'value':customfield.value
+                                    }
+                            ]
+                          
+                          }
+            infonodes.push(infonode);
+        });
+        return infonodes;
+    }
+      // new Contact
+     $scope.save = function(contact){
+
+           if(!contact.account){
+              if($scope.searchAccountQuery){
+                  contact.account=$scope.searchAccountQuery;
+              }
+              else{
+                var params ={
+                        'firstname':contact.firstname,
+                        'lastname':contact.lastname,
+                        'title':contact.title,
+                        'tagline':contact.tagline,
+                        'introduction':contact.introduction,
+                        'phones':$scope.phones,
+                        'emails':$scope.emails,
+                        'infonodes':$scope.prepareInfonodes(),
+                        'access': contact.access
+                      };
+                Contact.insert($scope,params);
+                window.location.replace('/#/contacts');
+              }
+            }
+           var params ={
+                      'firstname':contact.firstname,
+                      'lastname':contact.lastname,
+                      'account':contact.account,
+                      'title':contact.title,
+                      'tagline':contact.tagline,
+                      'introduction':contact.introduction,
+                      'phones':$scope.phones,
+                      'emails':$scope.emails,
+                      'infonodes':$scope.prepareInfonodes(),
+                      'access': contact.access
+                    };
+
+          if (typeof(contact.account)=='object'){
+            console.log('account is object');
+           
+            params['account'] = contact.account.entityKey;
+            
+            
+
+          }else if($scope.searchAccountQuery.length>0){
+              console.log('i will insert account');
+              // create a new account with this account name
+              var accountparams = {'name': $scope.searchAccountQuery,
+                            'access': contact.access
+              };
+              $scope.contact = contact;
+              Account.insert($scope,accountparams);
+          };
+          
+          Contact.insert($scope,params);
+          window.location.replace('/#/contacts');
+      };
+     
+     
+
+    
+
+
+   // Google+ Authentication 
+     Auth.init($scope);      
+}]);
+

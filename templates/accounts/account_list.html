@@ -1,3 +1,39 @@
+<div class="row subHeader">
+<div class="currentApp">
+  <h2 class="page-title">
+   <!--  <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
+    {{active_app.label}}
+  </h2>
+</div>
+  <div class=" subHeaderContent">
+            <div class="pull-right sharebuttonDiv"> 
+                  
+              <div class="btn-group btn-filter">
+                      <a class="btn btn-default" href="#" data-toggle="dropdown">
+                        {{ _('Filter by') }}
+                      <i class="icon-angle-down"></i>
+                      </a>
+                      <ul class="dropdown-menu">
+                        <li><a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All accounts') }}</a></li>
+                        <li><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My accounts') }}</a></li>
+                      </ul>
+              </div>
+              <div class="btn-group btn-sort">
+                    <a class="btn btn-default" href="#" data-toggle="dropdown">
+                    {{ _('Sort by') }}
+                    <i class="icon-angle-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a></li>
+                      <li><a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a></li>
+                      
+                     
+                    </ul>
+              </div>
+            </div>
+                  <h2 class="page-title">{{ _("Accounts") }} </h2>
+  </div>
+</div>
 <div  class="page-content">
 <div class="loader-container row" ng-show="isLoading">
       <div class="loader-dialog col-md-4 col-md-offset-4 ">
@@ -106,68 +142,21 @@
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-          <div class="row ">
-            <div class="col-md-12"><h2 class="page-title">{{ _("Accounts") }} </h2></div>
-          </div>
+          
         <div class="row "  >
             
           <div class="col-md-2">
 
           
             
-                    <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
+                    <a href="/#/accounts/new" class="btn red">
                     {{ _("New Account") }} <i class="icon-plus"></i>
-                    </button>
-               
-            
-            
-          </div>
-          <div class="col-md-2" ng-show="accounts+isFiltering">
-          
-            
-            
-                     <div class="btn-group btn-filter">
-                      <a class="btn btn-default" href="#" data-toggle="dropdown">
-                        {{ _('Filter by') }}
-                      <i class="icon-angle-down"></i>
-                      </a>
-                      <ul class="dropdown-menu">
-                        <li><a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All accounts') }}</a></li>
-                        <li><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My accounts') }}</a></li>
-                      </ul>
-              </div>
-               
-            
-            
-          </div>
-          <div class="col-md-5" ng-show="accounts+isFiltering">
-               
-                    <form class=" ng-pristine ng-valid" ng-submit="executeSearch(searchQuery)">
-                      <div class="input-group">
-                        <input type="text" ng-model="searchQuery" typeahead="result as result.name  for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="form-control" placeholder="{{ _('Quick Filtering') }}">
-                        <span class="input-group-btn">
-                          <button class="gbqfb gbqfb-hvr" type="button"><i class="icon-filter"></i></button>
-                        </span>
-                      </div>
-                     
-                    </form>
-                 
-            </div>
-            <div class="col-md-2" ng-show="accounts+isFiltering">
-              <div class="btn-group btn-sort">
-                    <a class="btn btn-default" href="#" data-toggle="dropdown">
-                    {{ _('Sort by') }}
-                    <i class="icon-angle-down"></i>
                     </a>
-                    <ul class="dropdown-menu">
-                      <li><a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a></li>
-                      <li><a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a></li>
-                      
-                     
-                    </ul>
-              </div>
-
-            </div>
+               
+            
+            
+          </div>
+          
         </div>
         <hr/>
         
@@ -176,31 +165,37 @@
             <div class="col-md-9">
              <div class="inner-cards-container waterfall" ng-hide="blankStateaccount">
                 <div droppable  ng-repeat="account in accounts" data-column="<%=getPosition($index)%>" class="cardElement" ng-drop="dropTag(account)">
-                    <div class="cardHeader">
-                          <a href="/#/accounts/show/<%= account.id %>">
-                              <h2 class="cardTitle">
-                                <%= account .name %>
-                              </h2>
-                          </a>  
-                    </div>
-                    <hr>
-                    <div class="cardDetails">
-                      <div class="desc">
-                        <div class="row margin-bottom-5">
-                          <div class="col-md-12"><a ng-show="account.industry" class="desc" href="/#/search/type:Account <%=account.industry%>">#<%=account.industry%></a>
-                          </div>
-                          
-                        </div>
-                      </div>
-                      <br>
-                      <div class="row cardTags">
-                        <div class="col-md-12">
-                             <a ng-repeat="tag in account.tags" href="/#/search/type:Account tags:<%=tag.id%>"> <span class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
-                             </a>
-                        </div>
-                      </div>
-                    </div>
-                </div>
+                <!-- <div class="industrySection">
+                      <img class="industryPics" src="static/img/food_industry.jpg">
+                      
+                </div> -->
+        <div class="detailsSection">
+          <div class="head">
+            <div class="pic">
+                <a href="/#/accounts/show/<%= account.id %>" class="startup-link" title="Zesty"><img alt="Zesty" class="angel_image" data-id="126085" data-type="Startup" src="https://s3.amazonaws.com/photos.angel.co/startups/i/126085-4af1a2b184ccd1f1e2e140f9149617bb-thumb_jpg.jpg?buster=1383554004" data-hasqtip="2"></a>
+            </div>
+            <div class="text">
+                <div class="name"><a href="/#/accounts/show/<%= account.id %>" class="profile-link" data-id="126085" data-type="Startup"><%= account.name %></a></div>
+                 <div class="pitch">
+                    <span  ng-show="account.account_type">
+                      <a href="/#/search/type:Account <%=account.account_type%>"> #<%= account.account_type %></a>
+                    </span> 
+                    <span ng-show="account.industry">
+                        <a href="/#/search/type:Account <%=account.industry%>"> #<%= account.industry %>
+                    </span></a>
+                  </div>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+        <div class="tagsSection">
+            <div class="sectionContent">
+                 <a ng-repeat="tag in account.tags" href="/#/search/type:Account tags:<%=tag.id%>"> <span class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
+                 </a>
+            </div>
+          </div>
+</div>
+
               <div ng-show="blankStateaccount" data-span="3" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
                 <div class="dashboard-stat cards">
                   
@@ -295,7 +290,7 @@
                   </li>
                   <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
                        <a ng-click="" class="btn-link addAnotherPhone">
-                        <i class="fa fa-tags"></i>  Add a new label</a>
+                        <i class="fa fa-tags"></i>  Add a new label </a>
                   </li>
                   </div>
                 </ul>

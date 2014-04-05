@@ -1,3 +1,22 @@
+<div class="row subHeader">
+<div class="currentApp">
+  <h2 class="page-title">
+    <!-- <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
+    {{active_app.label}}
+  </h2>
+</div>
+  <div class=" subHeaderContent">
+             <div class="pull-right sharebuttonDiv"> 
+                  
+                   <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
+                    <i class="icon-lock"></i> Share
+                  </a>
+            </div> 
+                  <h2 class="page-title">
+            <a href="/#/opportunities/" data-toggle="tooltip" data-placement="bottom" title="Back to Opportunities">
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>    {{_("Opportunities")}} > <a editable-text="opportunity.name"  onbeforesave="inlinePatch('Opportunity','', 'name',opportunity.entityKey,$data)"> <%=opportunity.name %></a></h2>
+  </div>
+</div>
   <div id="sendingEmail" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               
               <div class="modal-body">
@@ -176,18 +195,7 @@
         <div class="row">
           
           <div class="col-md-12">
-            <div class="pull-right sharebuttonDiv"> 
-                   <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
-                    <i class="icon-lock"></i> Share
-                  </a>
-                        
-                        
-                     
-                </div>
-                
-            <h2 class="page-title">
-            <a href="/#/opportunities/" data-toggle="tooltip" data-placement="bottom" title="Back to Opportunities">
-            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>    {{_("Opportunities")}} > <a editable-text="opportunity.name"  onbeforesave="inlinePatch('Opportunity','', 'name',opportunity.entityKey,$data)"> <%=opportunity.name %></a></h2>
+           
             
 
            <span class="opportunity-amount" >$<%=opportunity.amount %>  </span><span>

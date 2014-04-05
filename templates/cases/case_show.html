@@ -1,3 +1,22 @@
+<div class="row subHeader">
+<div class="currentApp">
+  <h2 class="page-title">
+    <!-- <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
+    {{active_app.label}}
+  </h2>
+</div>
+  <div class=" subHeaderContent">
+             <div class="pull-right sharebuttonDiv"> 
+                  
+                   <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
+                    <i class="icon-lock"></i> Share
+                  </a>
+            </div> 
+            <h2 class="page-title">
+            <a href="/#/cases/" data-toggle="tooltip" data-placement="bottom" title="Back to Cases">
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Cases")}} > <a editable-text="casee.name" onbeforesave="inlinePatch('Case','', 'name',casee.entityKey,$data)"> <%=casee.name %> </a></h2>
+  </div>
+</div>
 <div id="sendingEmail" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               
               <div class="modal-body">
@@ -174,19 +193,7 @@
         <!-- BEGIN PAGE CONTENT-->
         <div class="row">
           
-          <div class="col-md-12">
-            <div class="pull-right sharebuttonDiv"> 
-                 <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
-                    <i class="icon-lock"></i> Share
-                  </a>
-                        
-                        
-                     
-                </div>
-                
-            <h2 class="page-title">
-            <a href="/#/cases/" data-toggle="tooltip" data-placement="bottom" title="Back to Cases">
-            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Cases")}} > <a editable-text="casee.name" onbeforesave="inlinePatch('Case','', 'name',casee.entityKey,$data)"> <%=casee.name %> </a></h2>
+          
             
            <span ng-show="casee.priority">{{_("Priority")}}: <a class="tag" href="/#/search/type:Case <%=casee.priority%>"><%=casee.priority %></a></span><br>
            <span ng-show="casee.status">{{_("Status")}}: <a class="tag" href="/#/search/type:Case <%=casee.status%>"><%=casee.status %></a></span><br>

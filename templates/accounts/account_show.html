@@ -1,3 +1,22 @@
+<div class="row subHeader">
+<div class="currentApp">
+  <h2 class="page-title">
+    <!-- <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
+    {{active_app.label}}
+  </h2>
+</div>
+  <div class=" subHeaderContent">
+             <div class="pull-right sharebuttonDiv"> 
+                  
+                 <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
+                    <i class="icon-lock"></i> {{ _("Share") }}
+                  </a>
+            </div> 
+                  <h2 class="page-title" >
+            <a href="/#/accounts/" data-toggle="tooltip" id='testEdit' data-placement="bottom" title="Back to Accounts">
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="/static/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Accounts")}} > <a editable-text="account.name"  onbeforesave="inlinePatch('Account','', 'name',account.entityKey,$data)" > <%= account.name %></a></h2>
+  </div>
+</div>
 <div  class="page-content">
 <div class="loader-container row" ng-show="isLoading">
       <div class="loader-dialog col-md-4 col-md-offset-4 ">
@@ -128,18 +147,9 @@
         <div class="row">
           
           <div class="col-md-12">
-            <div class="pull-right sharebuttonDiv"> 
-                  <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
-                    <i class="icon-lock"></i> {{ _("Share") }}
-                  </a>
-                        
-                        
-                     
-            </div>
+            
                 
-            <h2 class="page-title" >
-            <a href="/#/accounts/" data-toggle="tooltip" id='testEdit' data-placement="bottom" title="Back to Accounts">
-            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="/static/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Accounts")}} > <a editable-text="account.name"  onbeforesave="inlinePatch('Account','', 'name',account.entityKey,$data)" > <%= account.name %></a></h2>
+           
             
 
            <span ng-show="account.account_type">{{_("Type")}}: <a class="tag"  href="/#/search/type:Account <%=account.account_type%>">#<%=account.account_type%></a></span><br>
@@ -172,8 +182,9 @@
                   <!--BEGIN TABS-->
                   <div class="tabbable tabbable-custom">
                     <ul class="nav nav-tabs">
-                      <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;" >{{ _("Notes") }}</a></li>
+                      
                       <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;renderMaps();">{{ _("About") }}</a></li>
+                      <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;" >{{ _("Conversations") }}</a></li>
                       <li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">{{ _("Contacts") }}</a></li>
                       <li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">{{ _("Needs") }}</a></li>
                       <li class="ng-tab" ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">{{ _("Opportunities") }}</a></li>
@@ -187,9 +198,12 @@
                          <div class="row">
                            <div class="col-md-12 margin-bottom-10"> 
                               <p class⁼"lead"="">
-                                <strong>
-                                  {{ _("Just add notes to remember what's important :") }}
-                                </strong> 
+                                
+                                  {{ _("You can forward or BCC an email to this address:") }}
+                                  <a href="mailto:{{ME}}@gcdc2013-iogrow.appspotmail.com">{{ME}}@gcdc2013-iogrow.appspotmail.com</a><br/>
+                                  {{ _("Or just add notes to remember what's important.") }}<br/>
+
+                                
                               </p>
                                     <form id="addNote" ng-submit="addNote(note)" class="ng-pristine ng-valid">
                                        <div class="form-group">   
