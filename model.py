@@ -46,7 +46,7 @@ from search_helper import tokenize_autocomplete
 STANDARD_TABS = [{'name': 'Accounts','label': 'Accounts','url':'/#/accounts/','icon':'book'},{'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},{'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/','icon':'money'},
 {'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},{'name': 'Cases','label': 'Cases','url':'/#/cases/','icon':'suitcase'},{'name': 'Tasks','label': 'Tasks','url':'/#/tasks/','icon':'check'}]
 STANDARD_PROFILES = ['Super Administrator', 'Standard User']
-STANDARD_APPS = [{'name': 'sales', 'label': 'Customer Development', 'url':'/#/accounts/'},#{'name': 'marketing', 'label':'Marketing', 'url':'/#/compaigns/'},{'name':'call_center','label': 'Customer Support','url':'/#/cases/'}
+STANDARD_APPS = [{'name': 'sales', 'label': 'CRM', 'url':'/#/accounts/'},#{'name': 'marketing', 'label':'Marketing', 'url':'/#/compaigns/'},{'name':'call_center','label': 'Customer Support','url':'/#/cases/'}
 ]
 STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
 ADMIN_TABS = [{'name': 'Users','label': 'Users','url':'/#/admin/users','icon':'user'},{'name': 'Groups','label': 'Groups','url':'/#/admin/groups','icon':'group'},{'name': 'Settings','label': 'Settings','url':'/#/admin/settings','icon':'cogs'}]
