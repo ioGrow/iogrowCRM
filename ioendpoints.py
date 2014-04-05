@@ -27,7 +27,6 @@ from protorpc import remote
 from protorpc import messages
 from protorpc import message_types
 import endpoints
-
 # Third party libraries
 from endpoints_proto_datastore.ndb import EndpointsModel
 
@@ -64,6 +63,7 @@ from model import Contributor
 from model import Companyprofile
 from search_helper import SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
+import iomessages
 
 
 # The ID of javascript client authorized to access to our api
@@ -3059,12 +3059,14 @@ class CrmEngineApi(remote.Service):
         mail.send_mail(sender_address, my_model.email , subject, body)
         return my_model
 
-    # users.list api
-    @User.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='users', name='users.list')
-    def UserList(self, query):
+    
+    # users.list api v2
+    @endpoints.method(message_types.VoidMessage, iomessages.UserListSchema,
+                      path='users/list', http_method='POST',
+                      name='users.list')
+    def user_list(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        organization = user_from_email.organization
-        return query.filter(User.organization == organization)
+        return User.list(organization=user_from_email.organization)
 
     # users.patch API
     @User.method(user_required=True,

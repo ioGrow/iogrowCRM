@@ -671,7 +671,12 @@ class UserListHandler(BaseHandler, SessionEnabledHandler):
             # Set the user locale from user's settings
             self.set_user_locale(user.language)
             # Render the template
-            template_values = {'tabs':tabs}
+            active_app = user.get_user_active_app()
+            template_values={
+                            'ME':user.google_user_id,
+                            'active_app':active_app,
+                            'tabs':tabs
+                            }
             template = jinja_environment.get_template('templates/admin/users/list.html')
             self.response.out.write(template.render(template_values))
 

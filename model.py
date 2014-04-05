@@ -41,6 +41,7 @@ from endpoints_proto_datastore import MessageFieldsSchema
 from google.appengine.api import search
 from endpoints_proto_datastore import MessageFieldsSchema
 from search_helper import tokenize_autocomplete
+import iomessages
 
 
 STANDARD_TABS = [{'name': 'Accounts','label': 'Accounts','url':'/#/accounts/','icon':'book'},{'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},{'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/','icon':'money'},
@@ -314,6 +315,7 @@ class User(EndpointsModel):
             memcache.add(self.email, self)
         self.put_async()
     
+    
     @classmethod
     def get_by_email(cls,email):
         user_from_email = memcache.get(email)
@@ -388,6 +390,25 @@ class User(EndpointsModel):
         for group in results:
             list_of_groups.append(group.groupKey)
         return list_of_groups
+
+    @classmethod
+    def list(cls,organization):
+        items = []
+        users = cls.query(cls.organization==organization)
+        for user in users:
+            user_schema = iomessages.UserSchema(
+                                            id = str(user.key.id()),
+                                            entityKey = user.key.urlsafe(),
+                                            email = user.email,
+                                            google_display_name = user.google_display_name,
+                                            google_public_profile_url = user.google_public_profile_url,
+                                            google_public_profile_photo_url = user.google_public_profile_photo_url,
+                                            google_user_id = user.google_user_id,
+                                            is_admin = user.is_admin,
+                                            status = user.status
+                                            )
+            items.append(user_schema)
+        return iomessages.UserListSchema(items=items)
 
 class Group(EndpointsModel):
     _message_fields_schema = ('id','entityKey','name','description','status','members', 'organization')
