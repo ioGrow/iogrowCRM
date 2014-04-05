@@ -8,9 +8,28 @@
   <div class=" subHeaderContent">
             <div class="pull-right sharebuttonDiv"> 
                   
-                  <!-- <button class="btn jfk-button jfk-button-action" ng-click="save(account)">
-                    <i class="fa-cog"></i>
-                  </button> -->
+              <div class="btn-group btn-filter">
+                      <a class="btn btn-default" href="#" data-toggle="dropdown">
+                        {{ _('Filter by') }}
+                      <i class="icon-angle-down"></i>
+                      </a>
+                      <ul class="dropdown-menu">
+                        <li><a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All accounts') }}</a></li>
+                        <li><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My accounts') }}</a></li>
+                      </ul>
+              </div>
+              <div class="btn-group btn-sort">
+                    <a class="btn btn-default" href="#" data-toggle="dropdown">
+                    {{ _('Sort by') }}
+                    <i class="icon-angle-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a></li>
+                      <li><a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a></li>
+                      
+                     
+                    </ul>
+              </div>
             </div>
                   <h2 class="page-title">{{ _("Accounts") }} </h2>
   </div>
@@ -137,52 +156,7 @@
             
             
           </div>
-          <div class="col-md-2" ng-show="accounts+isFiltering">
           
-            
-            
-                     <div class="btn-group btn-filter">
-                      <a class="btn btn-default" href="#" data-toggle="dropdown">
-                        {{ _('Filter by') }}
-                      <i class="icon-angle-down"></i>
-                      </a>
-                      <ul class="dropdown-menu">
-                        <li><a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All accounts') }}</a></li>
-                        <li><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My accounts') }}</a></li>
-                      </ul>
-              </div>
-               
-            
-            
-          </div>
-          <div class="col-md-5" ng-show="accounts+isFiltering">
-               
-                    <form class=" ng-pristine ng-valid" ng-submit="executeSearch(searchQuery)">
-                      <div class="input-group">
-                        <input type="text" ng-model="searchQuery" typeahead="result as result.name  for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="form-control" placeholder="{{ _('Quick Filtering') }}">
-                        <span class="input-group-btn">
-                          <button class="gbqfb gbqfb-hvr" type="button"><i class="icon-filter"></i></button>
-                        </span>
-                      </div>
-                     
-                    </form>
-                 
-            </div>
-            <div class="col-md-2" ng-show="accounts+isFiltering">
-              <div class="btn-group btn-sort">
-                    <a class="btn btn-default" href="#" data-toggle="dropdown">
-                    {{ _('Sort by') }}
-                    <i class="icon-angle-down"></i>
-                    </a>
-                    <ul class="dropdown-menu">
-                      <li><a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a></li>
-                      <li><a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a></li>
-                      
-                     
-                    </ul>
-              </div>
-
-            </div>
         </div>
         <hr/>
         
@@ -198,11 +172,18 @@
         <div class="detailsSection">
           <div class="head">
             <div class="pic">
-                <a href="https://angel.co/zesty-1" class="startup-link" title="Zesty"><img alt="Zesty" class="angel_image" data-id="126085" data-type="Startup" src="https://s3.amazonaws.com/photos.angel.co/startups/i/126085-4af1a2b184ccd1f1e2e140f9149617bb-thumb_jpg.jpg?buster=1383554004" data-hasqtip="2"></a>
+                <a href="/#/accounts/show/<%= account.id %>" class="startup-link" title="Zesty"><img alt="Zesty" class="angel_image" data-id="126085" data-type="Startup" src="https://s3.amazonaws.com/photos.angel.co/startups/i/126085-4af1a2b184ccd1f1e2e140f9149617bb-thumb_jpg.jpg?buster=1383554004" data-hasqtip="2"></a>
             </div>
             <div class="text">
-                <div class="name"><a href="https://angel.co/zesty-1" class="profile-link" data-id="126085" data-type="Startup"><%= account .name %></a></div>
-                 <div class="pitch"><%= account.account_type %>, <%= account.industry %>.</div>
+                <div class="name"><a href="/#/accounts/show/<%= account.id %>" class="profile-link" data-id="126085" data-type="Startup"><%= account.name %></a></div>
+                 <div class="pitch">
+                    <span  ng-show="account.account_type">
+                      <a href="/#/search/type:Account <%=account.account_type%>"> #<%= account.account_type %></a>
+                    </span> 
+                    <span ng-show="account.industry">
+                        <a href="/#/search/type:Account <%=account.industry%>"> #<%= account.industry %>
+                    </span></a>
+                  </div>
             </div>
             <div class="clearfix"></div>
           </div>
