@@ -6,7 +6,7 @@
   </h2>
 </div>
   <div class=" subHeaderContent">
-            <div class="pull-right sharebuttonDiv"> 
+            <div class="pull-right sharebuttonDiv" ng-show="!blankStateaccount"> 
                   
               <div class="btn-group btn-filter">
                       <a class="btn btn-default" href="#" data-toggle="dropdown">
@@ -157,16 +157,36 @@
             
           </div>
           
+
+            
+            
+                     <!-- <div class="btn-group btn-filter">
+                      <a class="btn btn-default" href="#" data-toggle="dropdown">
+                        {{ _('Filter by') }}
+                      <i class="icon-angle-down"></i>
+                      </a>
+                      <ul class="dropdown-menu">
+                        <li><a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All accounts') }}</a></li>
+                        <li><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My accounts') }}</a></li>
+                      </ul>
+              </div> -->
+               
+            
+            
+          </div>
+
         </div>
-        <hr/>
-        
             <div class="row cards-container">
 
             <div class="col-md-9">
              <div class="inner-cards-container waterfall" ng-hide="blankStateaccount">
                 <div droppable  ng-repeat="account in accounts" data-column="<%=getPosition($index)%>" class="cardElement" ng-drop="dropTag(account)">
-                <!-- <div class="industrySection">
-                      <img class="industryPics" src="static/img/food_industry.jpg">
+
+                
+                <!-- 
+                <div class="industrySection">
+                      <img class="industryPics" src="static/img/industry.jpg">
+
                       
                 </div> -->
         <div class="detailsSection">
@@ -188,7 +208,7 @@
             <div class="clearfix"></div>
           </div>
         </div>
-        <div class="tagsSection">
+        <div class="tagsSection" ng-class="{hidden: account.tags==null}">
             <div class="sectionContent">
                  <a ng-repeat="tag in account.tags" href="/#/search/type:Account tags:<%=tag.id%>"> <span class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
                  </a>
@@ -267,7 +287,7 @@
                 });
           </script>
             <div class="col-md-3">
-              <div class="portlet">
+              <div class="portlet cardElement labelsCard">
                 <div class="portlet-title">
                   <div class="caption">
                     <!-- class="fa fa-reorder"--><i></i>Labels
@@ -353,7 +373,7 @@
     }
     handleUniform();
     $('.waterfall').waterfall({ 
-        colMinWidth: 200, 
+        colMinWidth: 210, 
         defaultContainerWidth: 800,
         autoresize: true
     });
