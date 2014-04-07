@@ -1564,6 +1564,10 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
       $scope.customfields=[];
       $scope.account.account_type = 'Customer';
       $scope.account.industry = 'Technology';
+      $scope.logo = {
+                    'logo_img_id':null,
+                    'logo_img_url':null
+                  };
       $scope.initObject=function(obj){
           for (var key in obj) {
                 obj[key]=null;
@@ -1636,10 +1640,37 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
         });
         return infonodes;
     };
+      $scope.createPickerUploader = function() {
+          var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
+          var picker = new google.picker.PickerBuilder().
+              addView(new google.picker.DocsUploadView()).
+              setCallback($scope.uploaderCallback).
+              setOAuthToken(window.authResult.access_token).
+              setDeveloperKey(developerKey).
+              setAppId(987765099891).
+              build();
+          picker.setVisible(true);
+      };
+      // A simple callback implementation.
+      $scope.uploaderCallback = function(data) {
+          if (data.action == google.picker.Action.PICKED) {
+                var params = {
+                              'access': $scope.account.access,
+                              'parent':$scope.account.entityKey
+                            };
+                params.items = new Array();
+                if(data.docs){
+                  console.log(data.docs[0]);
+                  console.log('*****************************');
+                  $scope.logo.logo_img_id = data.docs[0].id ;
+                  $scope.logo.logo_img_url = data.docs[0].url ;
+                  $scope.$apply();
+                }
+          }
+      }
      
-       $scope.accountInserted = function(resp){
-          console.log('***********inserted***********');
-        window.location.replace('/#/accounts');
+      $scope.accountInserted = function(resp){
+          window.location.replace('/#/accounts');
       };
       $scope.save = function(account){
         if(account.name){
@@ -1652,9 +1683,12 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
                         'phones':$scope.phones,
                         'emails':$scope.emails,
                         'infonodes':$scope.prepareInfonodes(),
-                        'access': account.access
+                        'access': account.access,
                       };
-        
+          if ($scope.logo.logo_img_id){
+              params['logo_img_id'] = $scope.logo.logo_img_id;
+              params['logo_img_url'] = $scope.logo.logo_img_url;
+          }
           Account.insert($scope,params);
           
         }

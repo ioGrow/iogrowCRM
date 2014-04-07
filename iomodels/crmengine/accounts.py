@@ -62,6 +62,8 @@ class AccountSchema(messages.Message):
     updated_at = messages.StringField(19)
     access = messages.StringField(20)
     folder = messages.StringField(21)
+    logo_img_id = messages.StringField(22)
+    logo_img_url = messages.StringField(23)
 
 class AccountListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -105,9 +107,12 @@ class AccountInsertRequest(messages.Message):
     emails = messages.MessageField(iomessages.EmailSchema,8, repeated = True)
     addresses = messages.MessageField(iomessages.AddressSchema,9, repeated = True)
     infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema,10, repeated = True)
+    logo_img_id = messages.StringField(11)
+    logo_img_url = messages.StringField(12)
+
 
 class Account(EndpointsModel):
-    _message_fields_schema = ('id','entityKey','created_at','updated_at', 'folder','access','collaborators_list','phones','emails','addresses','websites','sociallinks', 'collaborators_ids','name','owner','account_type','industry','tagline','introduction')
+    _message_fields_schema = ('id','entityKey','created_at','updated_at', 'folder','access','collaborators_list','collaborators_ids','name','owner','account_type','industry','tagline','introduction')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
@@ -123,11 +128,10 @@ class Account(EndpointsModel):
     introduction =ndb.TextProperty()
     # public or private
     access = ndb.StringProperty()
-    phones = ndb.StructuredProperty(model.Phone,repeated=True)
-    emails = ndb.StructuredProperty(model.Email,repeated=True)
-    addresses = ndb.StructuredProperty(model.Address,repeated=True)
-    websites = ndb.StructuredProperty(model.Website,repeated=True)
-    sociallinks= ndb.StructuredProperty(model.Social,repeated=True)
+    logo_img_id = ndb.StringProperty()
+    logo_img_url = ndb.StringProperty()
+
+    
 
 
     def put(self, **kwargs):
@@ -150,9 +154,6 @@ class Account(EndpointsModel):
         empty_string = lambda x: x if x else ""
         collaborators = " ".join(self.collaborators_ids)
         organization = str(self.organization.id())
-        emails = " ".join(map(lambda x: x.email,  self.emails))
-        phones = " ".join(map(lambda x: x.number,  self.phones))
-        websites =  " ".join(map(lambda x: x.website,  self.websites))
         title_autocomplete = ','.join(tokenize_autocomplete(self.name))
         
         #addresses = " \n".join(map(lambda x: " ".join([x.street,x.city,x.state, str(x.postal_code), x.country]) if x else "", self.addresses))
@@ -178,9 +179,6 @@ class Account(EndpointsModel):
                 search.TextField(name='industry', value = empty_string(self.industry)),
                 search.TextField(name='tagline', value = empty_string(self.tagline)),
                 search.TextField(name='introduction', value = empty_string(self.introduction)),
-                search.TextField(name='emails', value = empty_string(emails)),
-                search.TextField(name='phones', value = empty_string(phones)),
-                search.TextField(name='websites', value = empty_string(websites)),
                 search.TextField(name='infos', value= data['infos']),
                 search.TextField(name='tags', value= data['tags']),
                 search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
@@ -204,9 +202,6 @@ class Account(EndpointsModel):
                 search.TextField(name='industry', value = empty_string(self.industry)),
                 search.TextField(name='tagline', value = empty_string(self.tagline)),
                 search.TextField(name='introduction', value = empty_string(self.introduction)),
-                search.TextField(name='emails', value = empty_string(emails)),
-                search.TextField(name='phones', value = empty_string(phones)),
-                search.TextField(name='websites', value = empty_string(websites)),
                 search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
                 #search.TextField(name='addresses', value = empty_string(addresses)),
                ])
@@ -290,6 +285,8 @@ class Account(EndpointsModel):
                                       industry = account.industry,
                                       tagline = account.tagline,
                                       introduction = account.introduction,
+                                      logo_img_id = account.logo_img_id,
+                                      logo_img_url = account.logo_img_url,
                                       tags = tag_list,
                                       contacts = contacts,
                                       topics = topics,
@@ -327,7 +324,9 @@ class Account(EndpointsModel):
                         introduction = request.introduction,
                         owner = user_from_email.google_user_id,
                         organization = user_from_email.organization,
-                        access = request.access
+                        access = request.access,
+                        logo_img_id = request.logo_img_id,
+                        logo_img_url = request.logo_img_url
                         )
             account_key = account.put_async()
             account_key_async = account_key.get_result()
@@ -337,7 +336,8 @@ class Account(EndpointsModel):
                                     'kind': "Account",
                                     'folder_name': request.name,
                                     'email': user_from_email.email,
-                                    'obj_key':account_key_async
+                                    'obj_key':account_key_async.urlsafe(),
+                                    'logo_img_id':request.logo_img_id
                                     }
                             )
         for email in request.emails:
@@ -469,6 +469,8 @@ class Account(EndpointsModel):
                                   name = account.name,
                                   account_type = account.account_type,
                                   industry = account.industry,
+                                  logo_img_id = account.logo_img_id,
+                                  logo_img_url = account.logo_img_url,
                                   tags = tag_list,
                                   created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")

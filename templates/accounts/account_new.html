@@ -274,11 +274,15 @@
             <div class="col-md-3">
               <!-- BEGIN PORTLET-->
                 <div class="portlet">
-                  <div class="portlet-title line">
-                    
-                  </div>
-                  <div class="portlet-body" id="chats">
-                    <p>{{ _('Accounts  pages includes a detailed page for each customer, partner, or investor in your ecosystem.') }}</p>
+                  
+                  <div class="portlet-body left-sidebar" id="chats">
+                    <img ng-hide="logo.logo_img_id" alt="Zesty" class="angel_image logo_img" data-id="126085" data-type="Startup" src="https://s3.amazonaws.com/photos.angel.co/startups/i/126085-4af1a2b184ccd1f1e2e140f9149617bb-thumb_jpg.jpg?buster=1383554004" data-hasqtip="2">
+                    <img ng-show="logo.logo_img_id" alt="Zesty" class="angel_image logo_img" data-id="126085" data-type="Startup" src="https://docs.google.com/uc?id=<%= logo.logo_img_id %>" data-hasqtip="2">
+                    <button ng-click="createPickerUploader()" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
+                    {{ _("Change photo") }}
+                    </button>
+                       
+                   
                     
                   </div>
                 </div>
