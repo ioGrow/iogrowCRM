@@ -202,7 +202,7 @@
         <div class="detailsSection">
           <div class="head">
             <div class="pic">
-                <a href="/#/accounts/show/<%= account.id %>" class="startup-link" title="Zesty"><img alt="Zesty" class="angel_image" data-id="126085" data-type="Startup" src="https://s3.amazonaws.com/photos.angel.co/startups/i/126085-4af1a2b184ccd1f1e2e140f9149617bb-thumb_jpg.jpg?buster=1383554004" data-hasqtip="2"></a>
+                <a href="/#/accounts/show/<%= account.id %>" class="startup-link" title="Zesty"><img ng-hide="account.logo_img_id" alt="Zesty" class="angel_image" data-id="126085" data-type="Startup" src="https://s3.amazonaws.com/photos.angel.co/startups/i/126085-4af1a2b184ccd1f1e2e140f9149617bb-thumb_jpg.jpg?buster=1383554004" data-hasqtip="2"><img ng-show="account.logo_img_id" alt="Zesty" class="angel_image" data-id="126085" data-type="Startup" src="https://docs.google.com/uc?id=<%= account.logo_img_id %>" data-hasqtip="2"></a>
             </div>
             <div class="text">
                 <div class="name"><a href="/#/accounts/show/<%= account.id %>" class="profile-link" data-id="126085" data-type="Startup"><%= account.name %></a></div>
