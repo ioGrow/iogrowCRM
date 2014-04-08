@@ -31,14 +31,8 @@ accountservices.factory('Account', function($http) {
   }
 
   
-  Account.get = function($scope,params) {
-         // gapi.client.crmengine.accounts.getv2(params).execute(function(resp) {
-          gapi.client.request({
-  "path": "/crmengine/v1/accounts/getv2",
-  "root": "/_ah/api",
-  "method":"POST",
-  "params":params
-}).execute(function (resp) { 
+  Account.get = function($scope,id) {
+          gapi.client.crmengine.accounts.getv2(id).execute(function(resp) {
             if(!resp.code){
                $scope.account = resp;
                if (resp.contacts){
@@ -264,14 +258,7 @@ accountservices.factory('Account', function($http) {
   };
   Account.list = function($scope,params){
       $scope.isLoading = true;
-
-      //gapi.client.crmengine.accounts.listv2(params).execute(function(resp) {
-      gapi.client.request({
-  "path": "/crmengine/v1/accounts/listv2",
-  "root": "/_ah/api",
-  "method":"POST",
-  "params":params
-}).execute(function (resp) { 
+      gapi.client.crmengine.accounts.listv2(params).execute(function(resp) {
               if(!resp.code){
                   
                   if (!resp.items){
@@ -324,13 +311,7 @@ accountservices.factory('Account', function($http) {
   };
   Account.insert = function($scope,params){
       $scope.isLoading = true;
-      //gapi.client.crmengine.accounts.insert(params).execute(function(resp) {
-      gapi.client.request({
-  "path": "/crmengine/v1/accounts/insert",
-  "root": "/_ah/api",
-  "method":"POST",
-  "params":params
-}).execute(function (resp) { 
+      gapi.client.crmengine.accounts.insert(params).execute(function(resp) {
          if(!resp.code){
             $scope.accountInserted(resp);
             $scope.isLoading = false;
