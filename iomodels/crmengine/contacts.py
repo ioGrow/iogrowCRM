@@ -126,7 +126,7 @@ class ContactSearchResults(messages.Message):
     nextPageToken = messages.StringField(2)
 
 class Contact(EndpointsModel):
-    _message_fields_schema = ('id','entityKey','owner', 'folder','created_at','updated_at',  'access','collaborators_list','collaborators_ids','display_name', 'firstname','lastname','title','company','account','account_name','introduction','tagline','phones','emails','addresses','websites','sociallinks')
+    _message_fields_schema = ('id','entityKey','owner', 'folder','created_at','updated_at',  'access','collaborators_list','collaborators_ids','display_name', 'firstname','lastname','title','company','account','account_name','introduction','tagline')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
@@ -144,11 +144,7 @@ class Contact(EndpointsModel):
     updated_at = ndb.DateTimeProperty(auto_now=True)
     department = ndb.StringProperty()
     description = ndb.StringProperty()
-    phones = ndb.StructuredProperty(model.Phone,repeated=True)
-    emails = ndb.StructuredProperty(model.Email,repeated=True)
-    addresses = ndb.StructuredProperty(model.Address,repeated=True)
-    websites = ndb.StructuredProperty(model.Website,repeated=True)
-    sociallinks= ndb.StructuredProperty(model.Social,repeated=True)
+    
     # public or private
     access = ndb.StringProperty()
     tagline = ndb.StringProperty()

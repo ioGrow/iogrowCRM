@@ -171,7 +171,6 @@ class EdgeSchema(messages.Message):
     end_node = messages.StringField(4)
     kind = messages.StringField(5)
 
-
 class EdgeRequest(messages.Message):
     start_node = messages.StringField(1)
     end_node = messages.StringField(2)
@@ -199,19 +198,9 @@ class InfoNodePatchResponse(messages.Message):
     entityKey = messages.StringField(1, required=True)
     fields = messages.MessageField(RecordSchema, 2, repeated=True)
 
-#TODOS
-# ADD PHONE SCHEMA, LISTOFPHONES SCHEMA, EMAILS, ADDRESSES,...
-# ADD ANOTHER SCHEMA FOR CUSTOM FIELDS
-
-
-
 class InfoNodeListRequest(messages.Message):
     parent = messages.StringField(1, required=True)
     connections = messages.StringField(2, repeated=True)
-
-
-
-
 
 # The message class that defines the SendEmail Request attributes
 class EmailRequest(messages.Message):
@@ -224,13 +213,11 @@ class EmailRequest(messages.Message):
     about_kind = messages.StringField(7)
     about_item = messages.StringField(8)
 
-
 # The message class that defines the Search Request attributes
 class SearchRequest(messages.Message):
     q = messages.StringField(1, required=True)
     limit = messages.IntegerField(2)
     pageToken = messages.StringField(3)
-
 
 # The message class that defines the Search Result attributes
 class SearchResult(messages.Message):
@@ -239,12 +226,10 @@ class SearchResult(messages.Message):
     type = messages.StringField(3)
     rank = messages.IntegerField(4)
 
-
 # The message class that defines a set of search results
 class SearchResults(messages.Message):
     items = messages.MessageField(SearchResult, 1, repeated=True)
     nextPageToken = messages.StringField(2)
-
 
 # The message class that defines the Live Search Result attributes
 class LiveSearchResult(messages.Message):
@@ -358,166 +343,6 @@ class PermissionInsertRequest(messages.Message):
     items = messages.MessageField(PermissionRequest, 2, repeated=True)
 
 
-
-@endpoints.api(
-              name='iogrowlive',
-              version='v1',
-              description='i/oGrow Live APIs',
-              allowed_client_ids=[CLIENT_ID, endpoints.API_EXPLORER_CLIENT_ID],
-              scopes=SCOPES
-              )
-class LiveApi(remote.Service):
-    ID_RESOURCE = endpoints.ResourceContainer(
-              message_types.VoidMessage,
-            id=messages.StringField(1))
-
-    @Feedback.method(
-                     user_required=True,
-                     request_fields=(
-                                     'show_url',
-                                     'type_url',
-                                     'name',
-                                     'content'
-                                     ),
-                     path='feedbacks',
-                     http_method='POST',
-                     name='feedbacks.insert'
-                     )
-    def insert_feedback_live(self, my_model):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        who = Userinfo()
-        who.display_name = user_from_email.google_display_name
-        who.photo = user_from_email.google_public_profile_photo_url
-        who.email = user_from_email.email
-        my_model.who = who
-        my_model.status = "Pending"
-        if my_model.type_url == 'show':
-            show_id = int(my_model.show_url.split("/")[5])
-            show = Show.get_by_id(show_id)
-            my_model.related_to = show.key
-            my_model.organization = show.organization
-            my_model.owner = show.owner
-            organization = show.organization.get()
-            my_model.organization_name = organization.name
-            my_model.source = "i/oGrow Live"
-            my_model.put()
-        if my_model.type_url == 'company':
-            org_id = int(my_model.show_url.split("/")[5])
-            org = Organization.get_by_id(org_id)
-            org_key = org.key
-            with Companyprofile as Cp:
-                companyprof = Cp.query(
-                                       Cp.organizationid == org_id
-                                      ).get()
-            my_model.organization = org_key
-            my_model.owner = companyprof.owner
-            my_model.organization_name = companyprof.name
-            my_model.source = "i/oGrow Live Company Page"
-            my_model.put()
-        return my_model
-
-    @endpoints.method(
-                      SearchRequest,
-                      CompanyProfileResponse,
-                      path='companies', http_method='POST',
-                      name='companies.list')
-    def list_companies(self, request):
-        companies = Companyprofile.query().fetch()
-        company_list = list()
-        for company in companies:
-            if company.addresses:
-                addresses = list()
-                for address in company.addresses:
-                    latlon = AddressSchema(lat=address.lat, lon=address.lon)
-                    addresses.append(latlon)
-            with CompanyProfileSchema as CPS:
-                company_profile = CPS(
-                                      id=str(company.organizationid),
-                                      name=company.name,
-                                      addresses=addresses
-                                      )
-                company_list.append(company_profile)
-        return CompanyProfileResponse(items=company_list, nextPageToken=None)
-
-    # Search API
-    @endpoints.method(
-                      SearchRequest,
-                      LiveSearchResults,
-                      path='search',
-                      http_method='POST',
-                      name='search'
-                      )
-    def live_search_method(self, request):
-        index = search.Index(name="ioGrowLiveIndex")
-        #Show only objects where you have permissions
-        query_string = request.q
-        search_results = []
-        limit = request.limit
-        next_cursor = None
-        if request.pageToken:
-            cursor = search.Cursor(web_safe_string=request.pageToken)
-        else:
-            cursor = search.Cursor(per_result=True)
-        if limit:
-            options = search.QueryOptions(limit=limit, cursor=cursor)
-        else:
-            options = search.QueryOptions(cursor=cursor)
-        query = search.Query(query_string=query_string, options=options)
-        try:
-            if query:
-                results = index.search(query)
-                #total_matches = results.number_found
-                # Iterate over the documents in the results
-                for scored_document in results:
-                    kwargs = {
-                        "id": scored_document.doc_id,
-                        "rank": scored_document.rank
-                    }
-                    for e in scored_document.fields:
-                        if e.name in ["title", "organization", "type"]:
-                            kwargs[e.name] = e.value
-                    search_results.append(LiveSearchResult(**kwargs))
-
-                    next_cursor = scored_document.cursor.web_safe_string
-                if next_cursor:
-                    next_query_options = search.QueryOptions(
-                                                            limit=1,
-                                                            cursor=scored_document.cursor
-                                                            )
-                    next_query = search.Query(
-                                              query_string=query_string,
-                                              options=next_query_options
-                                              )
-                    if next_query:
-                        next_results = index.search(next_query)
-                        if len(next_results.results) == 0:
-                            next_cursor = None
-        except search.Error:
-            logging.exception('Search failed')
-        return LiveSearchResults(
-                                 items=search_results,
-                                 nextPageToken=next_cursor
-                                 )
-
-
-@endpoints.api(
-               name='androgrow',
-               version='v1',
-               description='AndroGrow APIs',
-               allowed_client_ids=[
-                                   CLIENT_ID,
-                                   endpoints.API_EXPLORER_CLIENT_ID
-                                   ],
-               scopes=SCOPES
-               )
-class EndGrow(remote.Service):
-    @endpoints.method(SearchRequest, SearchRequest,
-                          path='something/insert', http_method='POST',
-                          name='something.insert')
-    def something(self, request):
-        return SearchRequest(q=request.q)
-
-
 @endpoints.api(
                name='crmengine',
                version='v1',
@@ -618,17 +443,6 @@ class CrmEngineApi(remote.Service):
                                     user_from_email = user_from_email,
                                     request = request
                                 )
-    # accounts.get API
-    @Account.method(
-                    request_fields=('id',),
-                    path='accounts/{id}',
-                    http_method='GET',
-                    name='accounts.get'
-                    )
-    def AccountGet(self, my_model):
-        if not my_model.from_datastore:
-            raise endpoints.NotFoundException('Account not found.')
-        return my_model
 
     # accounts.list api v2
     @endpoints.method(AccountListRequest, AccountListResponse,
@@ -640,30 +454,6 @@ class CrmEngineApi(remote.Service):
                             user_from_email = user_from_email,
                             request = request
                             )
-    # accounts.list api
-    @Account.query_method(
-                          user_required=True,
-                          query_fields=(
-                                        'owner',
-                                        'limit',
-                                        'order',
-                                        'pageToken'
-                                        ),
-                          path='accounts',
-                          name='accounts.list'
-                          )
-    def Account_List(self, query):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        return query.filter(
-                            ndb.OR(
-                                   ndb.AND(
-                                           Account.access == 'public',
-                                           Account.organization == user_from_email.organization
-                                           ),
-                                   Account.owner == user_from_email.google_user_id,
-                                   Account.collaborators_ids == user_from_email.google_user_id
-                                   )
-                            ).order(Account._key)
     # accounts.patch API
     @Account.method(
                     user_required=True,
@@ -1074,7 +864,7 @@ class CrmEngineApi(remote.Service):
 
         my_model.put()
         return my_model
-
+    """
     # Company Profile APIs
     # companyprofiles.get API
     @Companyprofile.method(
@@ -1115,7 +905,7 @@ class CrmEngineApi(remote.Service):
         print patched_model
         patched_model.put()
         return patched_model
-
+    """
     # Contacts APIs
     # contacts.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
@@ -1153,28 +943,28 @@ class CrmEngineApi(remote.Service):
                             )
         return message_types.VoidMessage()
 
-    # contacts.insert API
-    @Contact.method(
-                    user_required=True,
-                    path='contacts',
-                    http_method='POST',
-                    name='contacts.insert'
-                    )
-    def ContactInsert(self, my_model):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        # OAuth flow
-        folder_name = my_model.firstname + ' ' + my_model.lastname
-        created_folder = EndpointsHelper.insert_folder(
-                                                       user_from_email,
-                                                       folder_name,
-                                                       'Contact'
-                                                       )
-        # TODO: Check permissions
-        my_model.owner = user_from_email.google_user_id
-        my_model.organization = user_from_email.organization
-        my_model.folder = created_folder['id']
-        my_model.put()
-        return my_model
+    # # contacts.insert API
+    # @Contact.method(
+    #                 user_required=True,
+    #                 path='contacts',
+    #                 http_method='POST',
+    #                 name='contacts.insert'
+    #                 )
+    # def ContactInsert(self, my_model):
+    #     user_from_email = EndpointsHelper.require_iogrow_user()
+    #     # OAuth flow
+    #     folder_name = my_model.firstname + ' ' + my_model.lastname
+    #     created_folder = EndpointsHelper.insert_folder(
+    #                                                    user_from_email,
+    #                                                    folder_name,
+    #                                                    'Contact'
+    #                                                    )
+    #     # TODO: Check permissions
+    #     my_model.owner = user_from_email.google_user_id
+    #     my_model.organization = user_from_email.organization
+    #     my_model.folder = created_folder['id']
+    #     my_model.put()
+    #     return my_model
 
     # contacts.get api v2
     @endpoints.method(ContactGetRequest, ContactSchema,
@@ -1186,17 +976,17 @@ class CrmEngineApi(remote.Service):
                             user_from_email = user_from_email,
                             request = request
                             )
-    #contacts.get API
-    @Contact.method(
-                    request_fields=('id',),
-                    path='contacts/{id}',
-                    http_method='GET',
-                    name='contacts.get'
-                    )
-    def ContactGet(self, my_model):
-        if not my_model.from_datastore:
-            raise endpoints.NotFoundException('Contact not found.')
-        return my_model
+    # #contacts.get API
+    # @Contact.method(
+    #                 request_fields=('id',),
+    #                 path='contacts/{id}',
+    #                 http_method='GET',
+    #                 name='contacts.get'
+    #                 )
+    # def ContactGet(self, my_model):
+    #     if not my_model.from_datastore:
+    #         raise endpoints.NotFoundException('Contact not found.')
+    #     return my_model
 
     # contacts.list api v2
     @endpoints.method(ContactListRequest, ContactListResponse,
@@ -1210,30 +1000,30 @@ class CrmEngineApi(remote.Service):
                             )
         
 
-    # contacts.list API
-    @Contact.query_method(
-                          user_required=True,
-                          query_fields=(
-                                        'owner',
-                                        'limit',
-                                        'order',
-                                        'account',
-                                        'account_name',
-                                        'pageToken'
-                                        ),
-                          path='contacts',
-                          name='contacts.list'
-                          )
-    def ContactList(self, query):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        return LISTING_QUERY(
-                             query=query,
-                             access='public',
-                             organization=user_from_email.organization,
-                             owner=user_from_email.google_user_id,
-                             collaborators=user_from_email.google_user_id,
-                             order=Contact._key,
-                             )
+    # # contacts.list API
+    # @Contact.query_method(
+    #                       user_required=True,
+    #                       query_fields=(
+    #                                     'owner',
+    #                                     'limit',
+    #                                     'order',
+    #                                     'account',
+    #                                     'account_name',
+    #                                     'pageToken'
+    #                                     ),
+    #                       path='contacts',
+    #                       name='contacts.list'
+    #                       )
+    # def ContactList(self, query):
+    #     user_from_email = EndpointsHelper.require_iogrow_user()
+    #     return LISTING_QUERY(
+    #                          query=query,
+    #                          access='public',
+    #                          organization=user_from_email.organization,
+    #                          owner=user_from_email.google_user_id,
+    #                          collaborators=user_from_email.google_user_id,
+    #                          order=Contact._key,
+    #                          )
 
     # contacts.patch API
     @Contact.method(
@@ -2508,12 +2298,7 @@ class CrmEngineApi(remote.Service):
         return my_model
 
     # Permissions APIs (Sharing Settings)
-    # permissions.get api
-    @Permission.method(request_fields=('id',),path='permissions/{id}', http_method='GET', name='permissions.get')
-    def PermissionGet(self, my_model):
-        if not my_model.from_datastore:
-            raise endpoints.NotFoundException('Permission not found')
-        return my_model
+    
 
     # permissions.insertv2 api
     @endpoints.method(PermissionInsertRequest, message_types.VoidMessage,
@@ -2558,75 +2343,6 @@ class CrmEngineApi(remote.Service):
                 # for each member insert the edge
                 # update indexes on search for  collaborators_id
         return message_types.VoidMessage()
-    # permissions.insert API
-    @Permission.method(user_required=True,path='permissions', http_method='POST', name='permissions.insert')
-    def PermissionInsert(self, my_model):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        my_model.organization = user_from_email.organization
-        my_model.created_by = user_from_email.google_user_id
-        #Check if the user has permission to invite people
-        perm_object = Permission()
-        perm = perm_object.get_user_perm(user_from_email,my_model.about_kind,my_model.about_item)
-        print perm
-        if perm is None or perm.role == 'readonly':
-            raise endpoints.UnauthorizedException('You dont have permission to share this')
-        if my_model.type == 'user':
-            #try to get informations about this user and check if is in the same organization
-            invited_user = User.query( User.email == my_model.value, User.organization==user_from_email.organization).get()
-            if invited_user is None:
-                raise endpoints.UnauthorizedException('The user does not exist')
-
-            my_model.value = invited_user.google_user_id
-            my_model.organization = user_from_email.organization
-            my_model.put()
-                #update collaborators on this objects:
-            item_id = int(my_model.about_item)
-            item = OBJECTS[my_model.about_kind].get_by_id(item_id)
-            userinfo = Userinfo()
-            if item.collaborators_ids:
-                item.collaborators_ids.append(invited_user.google_user_id)
-                new_collaborator = userinfo.get_basic_info(invited_user)
-                item.collaborators_list.append(new_collaborator)
-
-            else:
-                collaborators_ids = list()
-                collaborators= list()
-                collaborators_ids.append(invited_user.google_user_id)
-                item.collaborators_ids = collaborators_ids
-                new_collaborator = userinfo.get_basic_info(invited_user)
-                collaborators.append(new_collaborator)
-                item.collaborators_list = collaborators
-            print item
-            item.put()
-        #Todo Check if type is group
-        return my_model
-
-    # permissions.list api
-    @Permission.query_method(user_required=True,query_fields=('limit', 'order', 'pageToken'),path='permissions',name='permissions.list')
-    def PermissionList(self,query):
-        return query
-
-    # permissions.patch api
-    @Permission.method(user_required=True,
-                  http_method='PATCH', path='permissions/{id}', name='permissions.patch')
-    def PermissionPatch(self, my_model):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        # Todo: Check permissions
-        my_model.put()
-        return my_model
-
-    # permissions.update api
-    @Permission.method(user_required=True,
-                  http_method='PUT', path='permissions/{id}', name='permissions.update')
-    def PermissionUpdate(self, my_model):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        # Todo: Check permissions
-        #my_model.owner = user_from_email.google_user_id
-        #my_model.organization =  user_from_email.organization
-
-        my_model.put()
-        return my_model
-
     # Shows: Customer Stories  Search API
     # showcustomerstories.search api
     @endpoints.method(SearchRequest, ShowSearchResults,
@@ -3100,3 +2816,149 @@ class CrmEngineApi(remote.Service):
 
         my_model.put()
         return my_model
+
+
+"""
+@endpoints.api(
+              name='iogrowlive',
+              version='v1',
+              description='i/oGrow Live APIs',
+              allowed_client_ids=[CLIENT_ID, endpoints.API_EXPLORER_CLIENT_ID],
+              scopes=SCOPES
+              )
+class LiveApi(remote.Service):
+    ID_RESOURCE = endpoints.ResourceContainer(
+              message_types.VoidMessage,
+            id=messages.StringField(1))
+
+    @Feedback.method(
+                     user_required=True,
+                     request_fields=(
+                                     'show_url',
+                                     'type_url',
+                                     'name',
+                                     'content'
+                                     ),
+                     path='feedbacks',
+                     http_method='POST',
+                     name='feedbacks.insert'
+                     )
+    def insert_feedback_live(self, my_model):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        who = Userinfo()
+        who.display_name = user_from_email.google_display_name
+        who.photo = user_from_email.google_public_profile_photo_url
+        who.email = user_from_email.email
+        my_model.who = who
+        my_model.status = "Pending"
+        if my_model.type_url == 'show':
+            show_id = int(my_model.show_url.split("/")[5])
+            show = Show.get_by_id(show_id)
+            my_model.related_to = show.key
+            my_model.organization = show.organization
+            my_model.owner = show.owner
+            organization = show.organization.get()
+            my_model.organization_name = organization.name
+            my_model.source = "i/oGrow Live"
+            my_model.put()
+        if my_model.type_url == 'company':
+            org_id = int(my_model.show_url.split("/")[5])
+            org = Organization.get_by_id(org_id)
+            org_key = org.key
+            with Companyprofile as Cp:
+                companyprof = Cp.query(
+                                       Cp.organizationid == org_id
+                                      ).get()
+            my_model.organization = org_key
+            my_model.owner = companyprof.owner
+            my_model.organization_name = companyprof.name
+            my_model.source = "i/oGrow Live Company Page"
+            my_model.put()
+        return my_model
+
+    @endpoints.method(
+                      SearchRequest,
+                      CompanyProfileResponse,
+                      path='companies', http_method='POST',
+                      name='companies.list')
+    def list_companies(self, request):
+        companies = Companyprofile.query().fetch()
+        company_list = list()
+        for company in companies:
+            if company.addresses:
+                addresses = list()
+                for address in company.addresses:
+                    latlon = AddressSchema(lat=address.lat, lon=address.lon)
+                    addresses.append(latlon)
+            with CompanyProfileSchema as CPS:
+                company_profile = CPS(
+                                      id=str(company.organizationid),
+                                      name=company.name,
+                                      addresses=addresses
+                                      )
+                company_list.append(company_profile)
+        return CompanyProfileResponse(items=company_list, nextPageToken=None)
+
+    # Search API
+    @endpoints.method(
+                      SearchRequest,
+                      LiveSearchResults,
+                      path='search',
+                      http_method='POST',
+                      name='search'
+                      )
+    def live_search_method(self, request):
+        index = search.Index(name="ioGrowLiveIndex")
+        #Show only objects where you have permissions
+        query_string = request.q
+        search_results = []
+        limit = request.limit
+        next_cursor = None
+        if request.pageToken:
+            cursor = search.Cursor(web_safe_string=request.pageToken)
+        else:
+            cursor = search.Cursor(per_result=True)
+        if limit:
+            options = search.QueryOptions(limit=limit, cursor=cursor)
+        else:
+            options = search.QueryOptions(cursor=cursor)
+        query = search.Query(query_string=query_string, options=options)
+        try:
+            if query:
+                results = index.search(query)
+                #total_matches = results.number_found
+                # Iterate over the documents in the results
+                for scored_document in results:
+                    kwargs = {
+                        "id": scored_document.doc_id,
+                        "rank": scored_document.rank
+                    }
+                    for e in scored_document.fields:
+                        if e.name in ["title", "organization", "type"]:
+                            kwargs[e.name] = e.value
+                    search_results.append(LiveSearchResult(**kwargs))
+
+                    next_cursor = scored_document.cursor.web_safe_string
+                if next_cursor:
+                    next_query_options = search.QueryOptions(
+                                                            limit=1,
+                                                            cursor=scored_document.cursor
+                                                            )
+                    next_query = search.Query(
+                                              query_string=query_string,
+                                              options=next_query_options
+                                              )
+                    if next_query:
+                        next_results = index.search(next_query)
+                        if len(next_results.results) == 0:
+                            next_cursor = None
+        except search.Error:
+            logging.exception('Search failed')
+        return LiveSearchResults(
+                                 items=search_results,
+                                 nextPageToken=next_cursor
+                                 )
+
+
+
+"""
