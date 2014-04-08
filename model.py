@@ -1,66 +1,59 @@
-#!/usr/bin/python
-# Copyright 2013 Google Inc. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
-"""Persistent datamodel for I/Ogrow."""
-import httplib2
-import json
-import logging
-import random
-import re
-import string
-import datetime
-import types
+# Google libs
+from google.appengine.ext import ndb
 from google.appengine.api import memcache
 from google.appengine.api import taskqueue
-from apiclient.discovery import build
-from apiclient.http import BatchHttpRequest
-from google.appengine.api import images
-
-from google.appengine.ext import db
-from google.appengine.ext import blobstore
+from google.appengine.api import search
 from oauth2client.appengine import CredentialsNDBProperty
-from google.appengine.ext import ndb
+# Third parties
 from endpoints_proto_datastore.ndb import EndpointsModel
+# Our libraries
 from iomodels.crmengine.opportunitystage import Opportunitystage
 from iomodels.crmengine.leadstatuses import Leadstatus 
 from iomodels.crmengine.casestatuses import Casestatus
-from endpoints_proto_datastore import MessageFieldsSchema
-from google.appengine.api import search
-from endpoints_proto_datastore import MessageFieldsSchema
 from search_helper import tokenize_autocomplete
 import iomessages
 
-
-STANDARD_TABS = [{'name': 'Accounts','label': 'Accounts','url':'/#/accounts/','icon':'book'},{'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},{'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/','icon':'money'},
-{'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},{'name': 'Cases','label': 'Cases','url':'/#/cases/','icon':'suitcase'},{'name': 'Tasks','label': 'Tasks','url':'/#/tasks/','icon':'check'}]
+STANDARD_TABS = [
+                {'name': 'Accounts','label': 'Accounts','url':'/#/accounts/','icon':'book'},
+                {'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},
+                {'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/','icon':'money'},
+                {'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},
+                {'name': 'Cases','label': 'Cases','url':'/#/cases/','icon':'suitcase'},
+                {'name': 'Tasks','label': 'Tasks','url':'/#/tasks/','icon':'check'}
+                ]
 STANDARD_PROFILES = ['Super Administrator', 'Standard User']
-STANDARD_APPS = [{'name': 'sales', 'label': 'CRM', 'url':'/#/accounts/'},#{'name': 'marketing', 'label':'Marketing', 'url':'/#/compaigns/'},{'name':'call_center','label': 'Customer Support','url':'/#/cases/'}
-]
+STANDARD_APPS = [{'name': 'sales', 'label': 'CRM', 'url':'/#/accounts/'}]
 STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
-ADMIN_TABS = [{'name': 'Users','label': 'Users','url':'/#/admin/users','icon':'user'},{'name': 'Groups','label': 'Groups','url':'/#/admin/groups','icon':'group'},{'name': 'Settings','label': 'Settings','url':'/#/admin/settings','icon':'cogs'}]
+ADMIN_TABS = [
+            {'name': 'Users','label': 'Users','url':'/#/admin/users','icon':'user'},
+            {'name': 'Groups','label': 'Groups','url':'/#/admin/groups','icon':'group'},
+            {'name': 'Settings','label': 'Settings','url':'/#/admin/settings','icon':'cogs'}
+            ]
 ADMIN_APP = {'name': 'admin', 'label': 'Admin Console', 'url':'/#/admin/users'}
 """Iogrowlive_APP = {'name':'iogrowLive','label': 'i/oGrow Live','url':'/#/live/shows'}
 
 Iogrowlive_TABS = [{'name': 'Shows','label': 'Shows','url':'/#/live/shows'},{'name': 'Company_profile','label': 'Company Profile','url':'/#/live/company_profile/'},
 {'name': 'Product_videos','label': 'Product Videos','url':'/#/live/product_videos'},{'name': 'Customer_Stories','label': 'Customer stories','url':'/#/live/customer_stories'},
 {'name': 'Feedbacks','label': 'Feedbacks','url':'/#/live/feedbacks'},{'name': 'Leads','label': 'Leads','url':'/#/leads/'}]"""
-Default_Opp_Stages = [{'name':'Incoming','probability':5},{'name':'Qualified','probability':10},{'name':'Need Analysis','probability':40},{'name':'Negociating','probability':80},{'name':'Close won','probability':100},{'name':'Close lost','probability':0}]
-Default_Case_Status =[{'status':'pending'},{'status':'open'},{'status':'closed'}]
-Default_Lead_Status =[{'status':'New'},{'status':'Working'},{'status':'Unqualified'},{'status':'Closed converted'}]
-
+Default_Opp_Stages = [
+                    {'name':'Incoming','probability':5},
+                    {'name':'Qualified','probability':10},
+                    {'name':'Need Analysis','probability':40},
+                    {'name':'Negociating','probability':80},
+                    {'name':'Close won','probability':100},
+                    {'name':'Close lost','probability':0}
+                    ]
+Default_Case_Status =[
+                    {'status':'pending'},
+                    {'status':'open'},
+                    {'status':'closed'}
+                    ]
+Default_Lead_Status =[
+                    {'status':'New'},
+                    {'status':'Working'},
+                    {'status':'Unqualified'},
+                    {'status':'Closed converted'}
+                    ]
 FOLDERS = {
             'Accounts': 'accounts_folder',
             'Contacts': 'contacts_folder',
@@ -71,21 +64,8 @@ FOLDERS = {
 folders = {}
  
 
-# Models for Appcfg
-# The Object class will be useful to manage Default Sharing setting to each organization
-class Object(EndpointsModel):
-    name = ndb.StringProperty(required=True)
-    description = ndb.TextProperty()
-    is_custom = ndb.BooleanProperty()
-    organization = ndb.KeyProperty(required=True)
-# This class will manage the default access for each object under the organization    
-class SharingSettings(EndpointsModel):
-    related_object = ndb.KeyProperty(required=True)
-    default_access = ndb.StringProperty(required=True,default='pc_r_w')
-    grant_access = ndb.BooleanProperty(default=True)
-    organization = ndb.KeyProperty(required=True)
 
-class Application(EndpointsModel):
+class Application(ndb.Model):
     name = ndb.StringProperty(required=True)
     label = ndb.StringProperty(required=True)
     url = ndb.StringProperty()
@@ -93,7 +73,7 @@ class Application(EndpointsModel):
     tabs = ndb.KeyProperty(repeated=True)
     organization = ndb.KeyProperty(required=True)
 
-class Tab(EndpointsModel):
+class Tab(ndb.Model):
     name = ndb.StringProperty(required=True)
     label = ndb.StringProperty(required=True)
     url = ndb.StringProperty()
@@ -102,7 +82,7 @@ class Tab(EndpointsModel):
     tabs = ndb.KeyProperty(repeated=True)
 
 # We use the Organization model to separate the data of each organization from each other
-class Organization(EndpointsModel):
+class Organization(ndb.Model):
     name = ndb.StringProperty()
     # We can use status property later for checking if the organization is active or suspended
     status = ndb.StringProperty()
@@ -196,7 +176,7 @@ class Organization(EndpointsModel):
         
 
      
-class Permission(EndpointsModel):
+class Permission(ndb.Model):
     about_kind = ndb.StringProperty(required=True)
     about_item = ndb.StringProperty(required=True)
     # is it writer, readonly,...
@@ -228,7 +208,7 @@ class Contributor(EndpointsModel):
     organization = ndb.KeyProperty()
         
 # We use the Profile model to describe what each user can do?
-class Profile(EndpointsModel):
+class Profile(ndb.Model):
     name = ndb.StringProperty(required=True)
     organization = ndb.KeyProperty(required=True)
     # Apps he can work with
@@ -411,12 +391,12 @@ class User(EndpointsModel):
         return iomessages.UserListSchema(items=items)
 
 class Group(EndpointsModel):
-    _message_fields_schema = ('id','entityKey','name','description','status','members', 'organization')
+    _message_fields_schema = ('id','entityKey','name','description','status', 'organization')
     owner = ndb.KeyProperty()
     name = ndb.StringProperty(required=True)
     description = ndb.TextProperty()
     status = ndb.StringProperty()
-    members = ndb.StructuredProperty(Userinfo,repeated=True)
+    # members = ndb.StructuredProperty(Userinfo,repeated=True)
     organization = ndb.KeyProperty()
 
 class Member(EndpointsModel):
@@ -445,14 +425,14 @@ class Member(EndpointsModel):
 
 
 #HKA 19.11.2013 Class for Phone on all Object
-class Phone(EndpointsModel) :
+class Phone(ndb.Model) :
     type_number = ndb.StringProperty()
     number = ndb.StringProperty()
 # HKA 19.11.2013 Class for email
-class Email(EndpointsModel):
+class Email(ndb.Model):
   email = ndb.StringProperty()
 # HKA 19.11.2013 Class for Address
-class Address(EndpointsModel):
+class Address(ndb.Model):
   street = ndb.StringProperty()
   city = ndb.StringProperty()
   state = ndb.StringProperty()
@@ -461,20 +441,20 @@ class Address(EndpointsModel):
   lat = ndb.StringProperty()
   lon = ndb.StringProperty()
 # HKA 19.11.2013 Add Website class
-class Website(EndpointsModel):
+class Website(ndb.Model):
   website = ndb.StringProperty()
 # HKA 19.11.2013 Add Social links
-class Social(EndpointsModel):
+class Social(ndb.Model):
   sociallink = ndb.StringProperty()
 
 #HKA 30.12.2013 Manage Company Profile
 
 class Companyprofile(EndpointsModel):
-  _message_fields_schema = ('id','entityKey','name','tagline','owner','introduction','organization','organizationid','phones','emails','addresses','websites','sociallinks','youtube_channel')
+  # _message_fields_schema = ('id','entityKey','name','tagline','owner','introduction','organization','organizationid','phones','emails','addresses','websites','sociallinks','youtube_channel')
 
   owner = ndb.StringProperty()
-  collaborators_list = ndb.StructuredProperty(Userinfo,repeated=True)
-  collaborators_ids = ndb.StringProperty(repeated=True)
+  # collaborators_list = ndb.StructuredProperty(Userinfo,repeated=True)
+  # collaborators_ids = ndb.StringProperty(repeated=True)
   organization = ndb.KeyProperty()
   organizationid = ndb.IntegerProperty()
   name = ndb.StringProperty()
@@ -485,11 +465,7 @@ class Companyprofile(EndpointsModel):
   updated_at = ndb.DateTimeProperty(auto_now=True)
     # public or private
   access = ndb.StringProperty()
-  phones = ndb.StructuredProperty(Phone,repeated=True)
-  emails = ndb.StructuredProperty(Email,repeated=True)
-  addresses = ndb.StructuredProperty(Address,repeated=True)
-  websites = ndb.StructuredProperty(Website,repeated=True)
-  sociallinks= ndb.StructuredProperty(Social,repeated=True)
+  
 
   def put(self, **kwargs):
         ndb.Model.put(self, **kwargs)
