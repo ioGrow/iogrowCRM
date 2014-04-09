@@ -120,6 +120,7 @@
  </div>
     <div ng-show="isContentLoaded" >
       <!--HKA 19.11.2013 Begin  row-2 who is involved -->
+      <div class="showPage">
     <div class="row">
 
     <!--HKA 19.11.2013 BEGIN Span comments-->
@@ -133,13 +134,7 @@
       <!-- End Portlet -->
       <div class="row">
            <div class="col-md-12 margin-bottom-10">
-               <ul class="list-unstyled pull-right">
-                 <li ng-show="task.tags" class="inline-tags">Tags:</li>
-                 <li ng-repeat="tag in task.tags" class="inline-tags">
-                   <a href="#">#<%=tag.name%>  </a>
-                 </li>
-               </ul>
-               <form ng-show="taskSelected">
+                 <form ng-show="taskSelected" class="pull-right">
                    <button   ng-show="task.status=='open'"class="btn btn-sm btn-default task_action" ng-click="closeTask(task)">
                     <i class="fa fa-lock"></i>
                       <span class="btn-text">
@@ -161,6 +156,12 @@
                     <datetimepick icon-class='fa fa-bell-o' label-format='MMM d, h:mm a' ng-model='newTask.reminder' class="new-task-reminder"></datetimepick>
                     <datetimepick ng-model='newTask.due' class="new-task-date" label-format='MMM d, h:mm a'></datetimepick>
                </form>
+               <ul class="list-unstyled ">
+                 <li ng-show="task.tags" class="inline-tags">Tags:</li>
+                 <li ng-repeat="tag in task.tags" class="inline-tags">
+                   <a href="#">#<%=tag.name%>  </a>
+                 </li>
+               </ul>
             </div>
               
         </div>
@@ -309,6 +310,7 @@
     
 
 
+    </div>
     </div>
     <!--HKA 19.11.2013 END row-2 Span who is involved -->
 
