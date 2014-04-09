@@ -148,27 +148,38 @@
         <div class="row">
           <div class="col-md-2" >
               <div class="pic">
-                           <img ng-hide="account.logo_img_id" alt="Zesty" class="thumbnail angel_image" data-id="126085" data-type="Startup" src="https://s3.amazonaws.com/photos.angel.co/startups/i/126085-4af1a2b184ccd1f1e2e140f9149617bb-thumb_jpg.jpg?buster=1383554004" data-hasqtip="2"><img ng-show="account.logo_img_id" alt="Zesty" class="angel_image" data-id="126085" data-type="Startup" src="https://docs.google.com/uc?id=<%= account.logo_img_id %>" data-hasqtip="2">
-                        </div>  
+                           <img ng-hide="account.logo_img_id" alt="Zesty" class="thumbnail angel_image" data-id="126085" data-type="Startup" src="https://s3.amazonaws.com/photos.angel.co/startups/i/126085-4af1a2b184ccd1f1e2e140f9149617bb-thumb_jpg.jpg?buster=1383554004" data-hasqtip="2">
+               </div>  
+               <a href="" class="btn btn-default btn-upload">
+                 <img src="/static/img/upload_logo.png">
+               </a>
             </div>
             <div class="col-md-10">
-              
-                  
-             
-              
-
+            <div class="row">
+            <div class="col-md-12">
+               <span class="page-meta pull-right"><i class="icon-pencil"><a ng-click="editaccount()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |  <i class="icon-trash"><a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  {{_("Delete")}}</a></i></span>
              <span ng-show="account.account_type">{{_("Type")}}: <a class="tag"  href="/#/search/type:Account <%=account.account_type%>">#<%=account.account_type%></a></span><br>
              
              <span ng-show="account.industry">{{_("Industry")}}: <a class="tag" href="/#/search/type:Account <%=account.industry%>">#<%=account.industry%></a></span><br>
-              
+             <hr/>
+            </div>
+
+            </div>
               <!--div class="tags">
                 <span  ng-repeat="account_tag in account.tags" class="task-label badge badge-roundless" style="background-color: <%=account_tag.color%>;color:<%=idealTextColor(account_tag.color)%>;">  <%= account_tag.name %></span>
               </div-->
-               <span class="page-meta"><i class="icon-pencil"><a ng-click="editaccount()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |  <i class="icon-trash"><a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  {{_("Delete")}}</a></i></span>
-
-             
               
-              <hr/>
+            <div class="row">
+                <div class="col-md-12">
+                <div class="tags-section" ng-class="{hidden: account.tags==null}">
+                    <div class="section-content">
+                       <span class="pull-left">Tags: </span>
+                       <a ng-repeat="tag in account.tags" href="/#/search/type:Account tags:<%=tag.id%>"> <span class="pull-left task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
+                       </a>
+                    </div>
+                </div>
+                </div>
+            </div>
               
             </div>
         </div>
