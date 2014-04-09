@@ -144,18 +144,16 @@
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-        <div class="col-md-9 showPage">
-          <div class="col-md-1" style="padding-bottom: 15px;">
+        <div class="showPage col-md-9">
+        <div class="row">
+          <div class="col-md-2" >
               <div class="pic">
-                            <a href="/#/accounts/show/4820258976169984" class="startup-link" title="Zesty"><img alt="Zesty" class="angel_image" data-id="126085" data-type="Startup" src="https://s3.amazonaws.com/photos.angel.co/startups/i/126085-4af1a2b184ccd1f1e2e140f9149617bb-thumb_jpg.jpg?buster=1383554004" data-hasqtip="2" style="width: 80px;height: 76px; border: 1px solid #eaeaea;"></a>
+                           <img ng-hide="account.logo_img_id" alt="Zesty" class="thumbnail angel_image" data-id="126085" data-type="Startup" src="https://s3.amazonaws.com/photos.angel.co/startups/i/126085-4af1a2b184ccd1f1e2e140f9149617bb-thumb_jpg.jpg?buster=1383554004" data-hasqtip="2"><img ng-show="account.logo_img_id" alt="Zesty" class="angel_image" data-id="126085" data-type="Startup" src="https://docs.google.com/uc?id=<%= account.logo_img_id %>" data-hasqtip="2">
                         </div>  
             </div>
-            <div class="col-md-8">
-              
-                  
-             
-              
-
+            <div class="col-md-10">
+              <span class="page-meta pull-right"><i class="icon-pencil"><a ng-click="editaccount()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |  <i class="icon-trash"><a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  {{_("Delete")}}</a></i>
+              </span> 
              <span ng-show="account.account_type">{{_("Type")}}: <a class="tag"  href="/#/search/type:Account <%=account.account_type%>">#<%=account.account_type%></a></span><br>
              
              <span ng-show="account.industry">{{_("Industry")}}: <a class="tag" href="/#/search/type:Account <%=account.industry%>">#<%=account.industry%></a></span><br>
@@ -163,7 +161,6 @@
               <!--div class="tags">
                 <span  ng-repeat="account_tag in account.tags" class="task-label badge badge-roundless" style="background-color: <%=account_tag.color%>;color:<%=idealTextColor(account_tag.color)%>;">  <%= account_tag.name %></span>
               </div-->
-               <span class="page-meta"><i class="icon-pencil"><a ng-click="editaccount()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |  <i class="icon-trash"><a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  {{_("Delete")}}</a></i></span>
 
              
               
@@ -174,7 +171,7 @@
 
             
             <div class="row">
-              <div class="col-md-9">
+              <div class="col-md-12">
               <!-- BEGIN PORTLET-->
               <div id="account-tab" class="portlet paddingless">
                 <div class="portlet-title line">
@@ -202,7 +199,7 @@
                            <div class="col-md-12 margin-bottom-10"> 
                               <p class⁼"lead"="">
                                 
-                                  {{ _("You can forward or BCC an email to this address:") }}
+                                  {{ _("To add an outside email to this account, forward or BCC to:") }}
                                   <a href="mailto:{{ME}}@gcdc2013-iogrow.appspotmail.com">{{ME}}@gcdc2013-iogrow.appspotmail.com</a><br/>
                                   {{ _("Or just add notes to remember what's important.") }}<br/>
 
@@ -986,14 +983,19 @@
               
               <!-- END PORTLET-->
             </div>
-            </div>   
+
+            </div>
+            
+
         </div>
-        <div class="col-md-3 ">
+        </div>
+                  <div class="col-md-3 ">
+          <div class="row">
+            <div class="col-md-12">
               <!-- BEGIN PORTLET-->
-              <div class="showPage">
-              <div class="portlet">
+              <div class="portlet showPage">
                 <div class="portlet-title line">
-                  <div class="caption"><i class="icon-tasks"></i>Tasks & Events</div>
+                  <div class="caption"><i class="fa fa-check"></i>Tasks</div>
                   
                 </div>
                 <div class="portlet-body" id="chats">
@@ -1027,6 +1029,126 @@
                                         </div>  
                                       </div>
                                   </div>
+                                    
+
+                                  <!-- Modal -->
+          <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h3 id="myModalLabel" class="modal-title">{{_("Add a new Task")}}</h3>
+            </div>
+            <div class="modal-body pickerin">
+                     <div class="controls controls-row">
+                                          <form id="addTask" ng-submit="addTask(task)" class="ng-pristine ng-valid">
+                                                  <input class="form-control" autofocus type="text" placeholder="Add a new task" id="taskTitle" ng-model="task.title">
+                                                  
+                                                  <p><strong>{{_("When's it due?")}}</strong></p>
+                                                  <center>
+                                                    <datetimepicker data-ng-model="task.due"
+                                                    data-datetimepicker-config="{ startView:'day', minView:'day' }" />
+                                                  </center>
+                  </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+              
+               <input ng-hide="isLoading" type="submit" class="btn green" value="Add this task">
+                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                                        
+            </form>
+            </div>
+            </div>
+            </div>
+          </div>
+          <div id="newDocument" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h3 id="myModalLabel" class="modal-title">{{_("Create a new")}} <%=mimeType%></h3>
+            </div>
+            <div class="modal-body">
+                     <div class="controls controls-row">
+                                          <form id="addTask" ng-submit="createDocument(newdocument)" class="ng-pristine ng-valid">
+                                                  <input class="form-control" autofocus type="text" placeholder="Enter a new <%=mimeType%> name" id="taskTitle" ng-model="newdocument.title" required>
+                                                  
+                                                  
+                     </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              
+               <input ng-hide="isLoading" type="submit" class="btn green" value="Create this document">
+                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                                        
+            </form>
+            </div>
+            </div>
+            </div>
+          </div>
+
+          <!--Event Modal -->
+          <div id="newEventModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h3 id="myModalLabel" class="modal-title">{{_("New Event")}}</h3>
+            </div>
+            <div class="modal-body">
+                     <div class="controls controls-row">
+                            <form id="addTask" ng-submit="addEvent(ioevent)" class="ng-pristine ng-valid">
+                                                  <input class="form-control" autofocus type="text" placeholder="{{_('Add a new event')}}" id="taskTitle" ng-model="ioevent.title">
+                                                  <p><strong>{{_("When?")}}</strong></p>
+                                                <div class="row">
+                                                  <div class="col-md-6">
+                                                    <p> <strong>{{_("Starts")}}</strong>: <%=ioevent.starts_at | date:'MMMM dd, yyyy, HH:mm'%></p>
+                                                        <datetimepicker data-ng-model="ioevent.starts_at"
+                                                    data-datetimepicker-config="{ startView:'day', minView:'minute' }" />
+                                                  </div>
+                                                  <div class="col-md-6">
+                                                  <p><strong>{{_("Ends")}}</strong>: <%=ioevent.ends_at | date:'MMMM dd, yyyy, HH:mm'%></p>
+                                                        <datetimepicker data-ng-model="ioevent.ends_at"
+                                                    data-datetimepicker-config="{ startView:'day', minView:'minute' }" />
+                                                  </div>
+                                                </div>
+                                                    <input class="form-control" autofocus="" type="text" placeholder="{{_('Where?')}}" id="taskTitle" ng-model="ioevent.where">
+                                                </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+              
+               <input ng-hide="isLoading" type="submit" class="btn green" value="{{_('Add this event')}}">
+                <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
+                                        
+            </form>
+            </div>
+            </div>
+            </div>
+          </div>
+                                    
+
+                                </div>
+                            </div>
+                  
+                </div>
+              </div>
+              </div>
+              
+              </div>
+              <div class="row">
+            <div class="col-md-12">
+              <!-- BEGIN PORTLET-->
+              <div class="portlet showPage">
+                <div class="portlet-title line">
+                  <div class="caption"><i class="fa fa-calendar"></i>Events</div>
+                  
+                </div>
+                <div class="portlet-body" id="chats">
+                  <div class="scroller" style="height:200x" data-always-visible="1" data-rail-visible="0">
+                    <div id="newTask">
                                    
                                   <p><strong>Events:</strong></p>
 
@@ -1151,14 +1273,12 @@
                   
                 </div>
               </div>
+              </div>
               
               </div>
               <!-- END PORTLET-->
               
             </div>
-
-                  
-        
         <!-- END PAGE CONTENT-->
       </div>
       <!--HKA 11.10.2013 Edit Account -->
