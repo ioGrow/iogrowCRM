@@ -152,8 +152,11 @@
                         </div>  
             </div>
             <div class="col-md-10">
-              <span class="page-meta pull-right"><i class="icon-pencil"><a ng-click="editaccount()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |  <i class="icon-trash"><a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  {{_("Delete")}}</a></i>
-              </span> 
+              
+                  
+             
+              
+
              <span ng-show="account.account_type">{{_("Type")}}: <a class="tag"  href="/#/search/type:Account <%=account.account_type%>">#<%=account.account_type%></a></span><br>
              
              <span ng-show="account.industry">{{_("Industry")}}: <a class="tag" href="/#/search/type:Account <%=account.industry%>">#<%=account.industry%></a></span><br>
@@ -161,13 +164,15 @@
               <!--div class="tags">
                 <span  ng-repeat="account_tag in account.tags" class="task-label badge badge-roundless" style="background-color: <%=account_tag.color%>;color:<%=idealTextColor(account_tag.color)%>;">  <%= account_tag.name %></span>
               </div-->
+               <span class="page-meta"><i class="icon-pencil"><a ng-click="editaccount()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |  <i class="icon-trash"><a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  {{_("Delete")}}</a></i></span>
 
              
               
               <hr/>
               
             </div>
-                 
+        </div>
+        
 
             
             <div class="row">
@@ -988,8 +993,7 @@
             
 
         </div>
-        </div>
-                  <div class="col-md-3 ">
+          <div class="col-md-3 ">
           <div class="row">
             <div class="col-md-12">
               <!-- BEGIN PORTLET-->
@@ -1277,8 +1281,8 @@
               
               </div>
               <!-- END PORTLET-->
-              
             </div>
+
         <!-- END PAGE CONTENT-->
       </div>
       <!--HKA 11.10.2013 Edit Account -->
