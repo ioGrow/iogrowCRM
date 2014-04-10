@@ -48,17 +48,35 @@
           </span>
     </div>
   </div>
-  <div class="showPage" >
+  <div class="row" >
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-        
-        
-
-            <div class="row">
-              <div class="col-md-9">
+       <div class="showPage col-md-9">
+                     <div class="row">
+              <div class="col-md-12">
               <!-- BEGIN PORTLET-->
-                <form class="form-horizontal ">
+              <div class="row">
+                    <div class="col-md-3">
+                    <!-- BEGIN PORTLET-->
+                      <div class="portlet">
+                        
+                        <div class="portlet-body left-sidebar" id="chats">
+                          <div class="pic">
+                                     <img ng-hide="account.logo_img_id" alt="Zesty" class=" angel_image" data-id="126085" data-type="Startup" src="/static/img/default_company.png" data-hasqtip="2">
+                         </div>  
+                          <a ng-click="createPickerUploader()" href="" class="btn btn-default btn-upload" data-toggle="modal">
+                               <img src="/static/img/upload_logo.png">
+                          </a>
+                                        
+                        </div>
+                      </div>
+                    
+                    
+                    <!-- END PORTLET-->
+                  </div>
+                  <div class="col-md-9">
+                      <form class="form-horizontal ">
                           <div class="row">
                           <div class="col-md-12">
                        
@@ -91,6 +109,8 @@
                           </div>
                         </div>
                       </form>
+                  </div>
+              </div>
                        <div class="row">
                           <div class="col-md-6">
                             
@@ -271,26 +291,32 @@
                         </div>
 
             </div>
-            <div class="col-md-3">
-              <!-- BEGIN PORTLET-->
-                <div class="portlet">
-                  
-                  <div class="portlet-body left-sidebar" id="chats">
-                    <img ng-hide="logo.logo_img_id" alt="Zesty" class="angel_image logo_img" data-id="126085" data-type="Startup" src="https://s3.amazonaws.com/photos.angel.co/startups/i/126085-4af1a2b184ccd1f1e2e140f9149617bb-thumb_jpg.jpg?buster=1383554004" data-hasqtip="2">
-                    <img ng-show="logo.logo_img_id" alt="Zesty" class="angel_image logo_img" data-id="126085" data-type="Startup" src="https://docs.google.com/uc?id=<%= logo.logo_img_id %>" data-hasqtip="2">
-                    <button ng-click="createPickerUploader()" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
-                    {{ _("Change photo") }}
-                    </button>
-                       
-                   
-                    
+       </div> 
+
+            </div>
+              <div class="col-md-3 ">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <!-- BEGIN PORTLET-->
+                      <div class="portlet showPage">
+                        <div class="portlet-title line">
+                          <div class="caption"><i class="fa fa-lock"></i>Who can access ?</div>
+                          
+                        </div>
+                        <div class="portlet-body" id="chats">
+                                  <label class="radio line">
+                                        <input type="radio" value="public" ng-model="account.access" />
+                                        public: Anyone within your organization can access and find
+                                  </label>
+                                  <label class="radio line">
+                                        <input type="radio"  value="private" ng-model="account.access" />
+                                        private: only you and your collaborators
+                                  </label>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              
-              
-              <!-- END PORTLET-->
-            </div>
-            </div>
+              </div>
         <!-- END PAGE CONTENT-->
       </div>
 
