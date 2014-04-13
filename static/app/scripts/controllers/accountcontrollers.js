@@ -450,6 +450,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
           {value: 'Mob', text: 'Mob'},
           {value: 'Other', text: 'Other'}
         ];
+        $scope.showUpload=false;
 
 
        // What to do after authentication

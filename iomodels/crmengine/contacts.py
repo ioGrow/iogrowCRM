@@ -692,9 +692,10 @@ class Contact(EndpointsModel):
         full_name = contact_schema.firstname + ' ' + contact_schema.lastname
           # Set the contact's name.
         gcontact_schema.name = gdata.data.Name(
-              given_name=gdata.data.GivenName(text=contact_schema.firstname),
-              family_name=gdata.data.FamilyName(text=contact_schema.lastname),
-              full_name=gdata.data.FullName(text=full_name))
+                  given_name=gdata.data.GivenName(text=contact_schema.firstname),
+                  family_name=gdata.data.FamilyName(text=contact_schema.lastname),
+                  full_name=gdata.data.FullName(text=full_name)
+                )
         structured_data = Node.to_structured_data(contact_schema.infonodes)
         if 'emails' in structured_data.keys():
             for item in structured_data['emails'].items:

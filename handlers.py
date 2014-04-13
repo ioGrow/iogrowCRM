@@ -2,10 +2,10 @@
 import httplib2
 import json
 import os
-import webapp2
 import datetime
 from webapp2_extras import sessions
 from webapp2_extras import i18n
+import webapp2
 import datetime
 import time
 import re
@@ -144,6 +144,7 @@ class WelcomeHandler(BaseHandler, SessionEnabledHandler):
         template_values = {}
         template = jinja_environment.get_template('templates/live/welcome.html')
         self.response.out.write(template.render(template_values))
+
 
 class IndexHandler(BaseHandler,SessionEnabledHandler):
     def get(self):
