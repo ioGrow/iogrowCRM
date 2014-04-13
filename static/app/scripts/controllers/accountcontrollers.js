@@ -1392,8 +1392,8 @@ $scope.beforedeleteInfonde = function(){
     $('#BeforedeleteInfonode').modal('show');
 }
 $scope.deleteaccount = function(){
-     var accountid = {'entityKey':$scope.account.entityKey};
-     Account.delete($scope,accountid);
+     var accountKey = {'entityKey':$scope.account.entityKey};
+     Account.delete($scope,accountKey);
      $('#BeforedeleteAccount').modal('hide');
      };
 
