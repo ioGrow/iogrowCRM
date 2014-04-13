@@ -58,7 +58,7 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("New User")}}</h3>
               </div>
               <div class="modal-body">
-                 <form id="addAccount" name="addaccount" ng-submit="addNewUser(user)" class="form-horizontal"> 
+                 <form id="addAccount" name="addaccount"  class="form-horizontal"> 
                  
                   
                     <p>Invite people from your team and start working together in seconds. Everyone you invite will receive a welcome email.</p>
@@ -77,7 +77,7 @@
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button  type="submit" class="btn blue addContactNow">{{_("Add this user")}}</button>
+                <button  type="submit" class="btn blue addContactNow" ng-click="addNewUser(user)">{{_("Add this user")}}</button>
               </div>
                </form>
               </div>

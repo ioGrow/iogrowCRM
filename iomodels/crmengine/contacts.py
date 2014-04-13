@@ -11,6 +11,7 @@ from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
 from endpoints_proto_datastore.ndb import EndpointsModel
 from google.appengine.api import search 
+import gdata.contacts.data
 from protorpc import messages
 from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
@@ -98,6 +99,9 @@ class ContactSchema(messages.Message):
     created_at = messages.StringField(17)
     updated_at = messages.StringField(18)
     access = messages.StringField(19)
+    phones = messages.MessageField(iomessages.PhoneListSchema,20)
+    emails = messages.MessageField(iomessages.EmailListSchema,21)
+    addresses = messages.MessageField(iomessages.AddressListSchema,22)
 
 class ContactListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -250,6 +254,17 @@ class Contact(EndpointsModel):
                                         parent_key = contact.key,
                                         request = request
                                         )
+        structured_data = Node.to_structured_data(infonodes)
+        phones = None
+        if 'phones' in structured_data.keys():
+            phones = structured_data['phones']
+        emails = None
+        if 'emails' in structured_data.keys():
+            emails = structured_data['emails']
+        addresses = None
+        if 'addresses' in structured_data.keys():
+            addresses = structured_data['addresses']
+
         #list of topics related to this account
         topics = None
         if request.topics:
@@ -307,6 +322,9 @@ class Contact(EndpointsModel):
                                   cases = cases,
                                   documents = documents,
                                   infonodes = infonodes,
+                                  phones = phones,
+                                  emails = emails,
+                                  addresses = addresses,
                                   created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
@@ -625,6 +643,13 @@ class Contact(EndpointsModel):
                                   created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
+        taskqueue.add(
+                    url='/workers/sync_contacts', 
+                    params={
+                            'email': user_from_email.email,
+                            'id':contact_schema.id
+                            }
+                    )
         return contact_schema
     @classmethod
     def get_key_by_name(cls,user_from_email,name):
@@ -660,6 +685,94 @@ class Contact(EndpointsModel):
                 return contact_key
         else:
             return None
+    @classmethod
+    def to_gcontact_schema(cls,contact_schema,group_membership_info=None):
+        empty_string = lambda x: x if x else " "
+        gcontact_schema = gdata.contacts.data.ContactEntry()
+        full_name = contact_schema.firstname + ' ' + contact_schema.lastname
+          # Set the contact's name.
+        gcontact_schema.name = gdata.data.Name(
+              given_name=gdata.data.GivenName(text=contact_schema.firstname),
+              family_name=gdata.data.FamilyName(text=contact_schema.lastname),
+              full_name=gdata.data.FullName(text=full_name))
+        structured_data = Node.to_structured_data(contact_schema.infonodes)
+        if 'emails' in structured_data.keys():
+            for item in structured_data['emails'].items:
+                gcontact_schema.email.append(
+                                            gdata.data.Email(
+                                                            address= item.email,
+                                                            rel=gdata.data.WORK_REL, 
+                                                            display_name=full_name
+                                                            )
+                                            )
+        phone_types = {
+                        'work':gdata.data.WORK_REL,
+                        'home':gdata.data.HOME_REL,
+                        'mobile':gdata.data.MOBILE_REL,
+                        'other':gdata.data.OTHER_REL
+                    }
+        if 'phones' in structured_data.keys():
+            for item in structured_data['phones'].items:
+                gcontact_schema.phone_number.append(
+                                                    gdata.data.PhoneNumber(
+                                                                text=item.number,
+                                                                rel=phone_types[item.type]
+                                                                )
+                                                    )
+        if 'addresses' in structured_data.keys():
+                gcontact_schema.structured_postal_address.append(
+                                                    gdata.data.StructuredPostalAddress(
+                                                        rel=gdata.data.WORK_REL,
+                                                        street=gdata.data.Street(text=empty_string(item.street)),
+                                                        city=gdata.data.City(text=empty_string(item.city)),
+                                                        region=gdata.data.Region(text=empty_string(item.state)),
+                                                        postcode=gdata.data.Postcode(text=empty_string(item.postal_code)),
+                                                        country=gdata.data.Country(text=empty_string(item.country))
+                                                    )
+                                        )
+
+        # insert the contact on ioGrow contacts group
+        if group_membership_info:
+            gcontact_schema.group_membership_info.append(
+                    gdata.contacts.data.GroupMembershipInfo(href=group_membership_info)
+                                                        )
+        return gcontact_schema
+
+    @classmethod
+    def gcontact_sync(cls,user,contact_schema):
+        contact_key = ndb.Key(urlsafe=contact_schema.entityKey)
+        google_contact_schema = cls.to_gcontact_schema(
+                                                        contact_schema,
+                                                        user.google_contacts_group
+                                                    ) 
+        created_contact=EndpointsHelper.create_contact(
+                                                        user.google_credentials,
+                                                        google_contact_schema
+                                                    )
+        # create a node to store the id of the created contact
+        node = Node(
+                    kind='gcontacts',
+                    gcontact_id=created_contact,
+                    user=user.email
+                    )
+        entityKey_async = node.put_async()
+        entityKey = entityKey_async.get_result()
+        Edge.insert(
+                    start_node = contact_key,
+                    end_node = entityKey,
+                    kind = 'gcontacts',
+                    inverse_edge = 'synced_with'
+                )
+
+    @classmethod
+    def sync_with_google_contacts(cls,user_from_email,id):
+        request = ContactGetRequest(id=int(id))
+        contact_schema = cls.get_schema(user_from_email,request)
+        contact_key = ndb.Key(urlsafe=contact_schema.entityKey)
+        contact = contact_key.get()
+        users = Node.list_permissions(contact)
+        for user in users:
+            cls.gcontact_sync(user,contact_schema)
 
     @classmethod
     def import_from_csv(cls,user_from_email,request):
@@ -847,6 +960,7 @@ class Contact(EndpointsModel):
                                                                                 kind = 'infos',
                                                                                 indexed_edge = smart_str(indexed_edge)
                                                                                 )
+
                     
 
 

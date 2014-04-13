@@ -65,7 +65,7 @@ app.controller('UserListCtrl', ['$scope','Auth','User',
       };
       
     $scope.addNewUser = function(user){
-      
+      console.log('add a new user');
       $('#addAccountModal').modal('hide');
       User.insert($scope,user);
     };

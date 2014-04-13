@@ -15,6 +15,7 @@ import jinja2
 import endpoints
 from google.appengine.ext import ndb
 from google.appengine.api import memcache
+from google.appengine.api import taskqueue
 from google.appengine.api import urlfetch
 from apiclient import errors
 from apiclient.discovery import build
@@ -26,6 +27,7 @@ from oauth2client.client import FlowExchangeError
 from iomodels.crmengine.shows import Show
 from endpoints_helper import EndpointsHelper
 import model
+from iomodels.crmengine.contacts import Contact
 
 jinja_environment = jinja2.Environment(
   loader=jinja2.FileSystemLoader(os.getcwd()),
@@ -139,16 +141,9 @@ class RevokeException(Exception):
 
 class WelcomeHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
-        # Render the template
-        user = None
-        if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
-            try:
-                user = self.get_user_from_session()
-            except:
-                user = None
-            template_values = {'user': user}
-            template = jinja_environment.get_template('templates/live/welcome.html')
-            self.response.out.write(template.render(template_values))
+        template_values = {}
+        template = jinja_environment.get_template('templates/live/welcome.html')
+        self.response.out.write(template.render(template_values))
 
 class IndexHandler(BaseHandler,SessionEnabledHandler):
     def get(self):
@@ -327,6 +322,13 @@ class GooglePlusConnect(SessionEnabledHandler):
             memcache.set(user.email, user)
         else:
             memcache.add(user.email, user)
+        if not user.google_contacts_group:
+            taskqueue.add(
+                            url='/workers/createcontactsgroup', 
+                            params={
+                                    'email': user.email
+                                    }
+                        )
         return user
 
     def post(self):
@@ -542,6 +544,27 @@ class CreateOrganizationFolders(webapp2.RequestHandler):
                 setattr(organization, FOLDERS[folder_name], folders[folder_name])
         organization.put()
 
+class CreateContactsGroup(webapp2.RequestHandler):
+    @ndb.toplevel
+    def post(self):
+        email = self.request.get('email')
+        user = model.User.get_by_email(email)
+        contacts_group_id = EndpointsHelper.create_contact_group(user.google_credentials)
+        user.google_contacts_group = contacts_group_id
+        user.put_async()
+        model.User.memcache_update(user,email)
+
+class SyncContact(webapp2.RequestHandler):
+    @ndb.toplevel
+    def post(self):
+        # get request params
+        email = self.request.get('email')
+        id = self.request.get('id')
+        user = model.User.get_by_email(email)
+
+        # sync contact
+        Contact.sync_with_google_contacts(user,id)
+
 class CreateObjectFolder(webapp2.RequestHandler):
     @staticmethod
     def insert_folder(user, folder_name, kind,logo_img_id=None):
@@ -572,7 +595,7 @@ class CreateObjectFolder(webapp2.RequestHandler):
                                     body=params,
                                     fields='id').execute()
         except:
-            raise endpoints.UnauthorizedException(cls.INVALID_GRANT)
+            raise endpoints.UnauthorizedException(EndpointsHelper.INVALID_GRANT)
 
         return created_folder
     @ndb.toplevel
@@ -631,6 +654,8 @@ routes = [
     ('/workers/createorgfolders',CreateOrganizationFolders),
     ('/workers/createobjectfolder',CreateObjectFolder),
     ('/workers/syncevent',SyncCalendarEvent),
+    ('/workers/createcontactsgroup',CreateContactsGroup),
+    ('/workers/sync_contacts',SyncContact),
 
     ('/',IndexHandler),
     
