@@ -39,6 +39,17 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
           var paramsTag = {'about_kind':'Account'};
           Tag.list($scope,paramsTag);
           
+          // for (var i=0;i<500;i++)
+          // { 
+          //     var params = { 
+          //               'name': i.toString(),
+          //               'account_type': 'Customer',
+          //               'industry':'Technology',
+          //               'access':'public'
+          //             }
+          //     Account.insert($scope,params);
+          // }
+          
      };
      $scope.getPosition= function(index){
         if(index<3){
@@ -1719,17 +1730,8 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
       if(event.keyCode == 13 && account){
           $scope.save(account);
       }
-      
-      
     };
-    $scope.getAccountLogo = function(){
-      
-      if($scope.account.logo_img_id){
-          imageSrc =  'https://docs.google.com/uc?id='+$scope.account.logo_img_id;
-      }
-      return imageSrc;
-    };
-
+    
 
     
    // Google+ Authentication 
