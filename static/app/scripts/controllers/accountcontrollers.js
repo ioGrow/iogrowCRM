@@ -34,10 +34,11 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
      $scope.tag.color= {'name':'green','color':'#BBE535'};
      $scope.runTheProcess = function(){
           var params = { 'order': $scope.order,
-                        'limit':6}
+                        'limit':20}
           Account.list($scope,params);
           var paramsTag = {'about_kind':'Account'};
           Tag.list($scope,paramsTag);
+          
      };
      $scope.getPosition= function(index){
         if(index<3){
@@ -67,6 +68,21 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
           $scope.currentPage = $scope.currentPage + 1 ; 
           Account.list($scope,params);
      };
+     $scope.listMoreItems = function(){
+        console.log('try to load more');
+        var nextPage = $scope.currentPage + 1;
+        var params = {};
+          if ($scope.pages[nextPage]){
+            console.log('now you can load more');
+            params = {'limit':20,
+                      'order' : $scope.order,
+                      'pageToken':$scope.pages[nextPage]
+            }
+            $scope.currentPage = $scope.currentPage + 1 ; 
+            Account.list_more($scope,params);
+          }
+          
+     };
      $scope.listPrevPageItems = function(){
        var prevPage = $scope.currentPage - 1;
        var params = {};
@@ -92,14 +108,7 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
             $scope.save(account);
         };
      };
-     // inserting the account  
-     $scope.save = function(account){
-          if (account.name) {
-             Account.insert($scope,account);
-              $('#addAccountModal').modal('hide');
-             
-           };
-      };
+    
 
     $scope.addAccountOnKey = function(account){
       if(event.keyCode == 13 && account){
@@ -382,6 +391,15 @@ $scope.addTags=function(){
 
      // Google+ Authentication 
      Auth.init($scope);
+     $(window).scroll(function() {
+          if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
+              
+              $scope.listMoreItems();
+              console.log('bottom ***************');
+
+              
+          }
+      });
 
 }]);
 app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account','Contact','Case','Opportunity', 'Topic','Note','Task','Event','Permission','User','Attachement','Email','Need','Opportunitystage','Casestatus','Map','InfoNode',
@@ -1569,6 +1587,7 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
                     'logo_img_id':null,
                     'logo_img_url':null
                   };
+      $scope.imageSrc = '/static/img/default_company.png';
       $scope.initObject=function(obj){
           for (var key in obj) {
                 obj[key]=null;
@@ -1661,10 +1680,9 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
                             };
                 params.items = new Array();
                 if(data.docs){
-                  console.log(data.docs[0]);
-                  console.log('*****************************');
                   $scope.logo.logo_img_id = data.docs[0].id ;
                   $scope.logo.logo_img_url = data.docs[0].url ;
+                  $scope.imageSrc = 'https://docs.google.com/uc?id='+data.docs[0].id;
                   $scope.$apply();
                 }
           }
@@ -1703,6 +1721,13 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
       }
       
       
+    };
+    $scope.getAccountLogo = function(){
+      
+      if($scope.account.logo_img_id){
+          imageSrc =  'https://docs.google.com/uc?id='+$scope.account.logo_img_id;
+      }
+      return imageSrc;
     };
 
 
