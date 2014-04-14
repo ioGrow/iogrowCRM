@@ -271,6 +271,8 @@ accountservices.factory('Contact', function($http) {
   };
   Contact.insert = function($scope,params){
       $scope.isLoading = true;
+      console.log('********** I am Inserting a contact**********');
+      console.log(params);
       gapi.client.crmengine.contacts.insertv2(params).execute(function(resp) {
          
          if(!resp.code){

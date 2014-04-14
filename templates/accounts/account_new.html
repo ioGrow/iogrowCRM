@@ -63,10 +63,10 @@
                         
                         <div class="portlet-body left-sidebar" id="chats">
                           <div class="pic">
-                                     <img ng-hide="account.logo_img_id" alt="Zesty" class=" angel_image" data-id="126085" data-type="Startup" src="/static/img/default_company.png" data-hasqtip="2">
+                              <img alt="<%=account.name%>" ng-src="<%=imageSrc%>">
                          </div>  
                           <a ng-click="createPickerUploader()" href="" class="btn btn-default btn-upload" data-toggle="modal">
-                               <img src="/static/img/upload_logo.png">
+                                <img src="/static/img/upload_logo.png" >
                           </a>
                                         
                         </div>
@@ -83,7 +83,7 @@
                             <div class="form-group">
                               <label class="control-label col-md-2">Name</label>
                               <div class="col-md-10">
-                                <input autofocus ng-model="account.name" placeholder="{{_('Type here the company name of your customer,parnter,investor...')}}" type="text" class="form-control">
+                                <input autofocus ng-model="account.name" placeholder="{{_('Type here the company name of your customer,parnter...')}}" type="text" class="form-control">
                               </div>
                             </div>
                           </div>
@@ -274,17 +274,7 @@
                                 
                                                     
                               </div>
-                              <div class="news-blocks blank-card blank-card-yellow">
-                                <h3>Who can access ?</h3>
-                                  <label class="radio line">
-                                        <input type="radio" value="public" ng-model="account.access" />
-                                        public: Anyone within your organization can access and find
-                                  </label>
-                                  <label class="radio line">
-                                        <input type="radio"  value="private" ng-model="account.access" />
-                                        private: only you and your collaborators
-                                  </label>
-                              </div>
+                              
                             
                           </div>
                           

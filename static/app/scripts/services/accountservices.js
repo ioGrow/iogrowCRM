@@ -297,6 +297,47 @@ accountservices.factory('Account', function($http) {
               }
       });
   };
+  Account.list_more = function($scope,params){
+      console.log('Loading more results');
+      $scope.isLoading = true;
+      $scope.$apply();
+      gapi.client.crmengine.accounts.listv2(params).execute(function(resp) {
+              if(!resp.code){
+                  
+                  angular.forEach(resp.items, function(item){
+                      $scope.accounts.push(item);
+                  });
+                 
+                 if ($scope.currentPage>1){
+                      $scope.pagination.prev = true;
+                   }else{
+                       $scope.pagination.prev = false;
+                   }
+                 if (resp.nextPageToken){
+                   var nextPage = $scope.currentPage + 1;
+                   // Store the nextPageToken
+                   $scope.pages[nextPage] = resp.nextPageToken;
+                   $scope.pagination.next = true;
+                   
+                 }else{
+                  $scope.pagination.next = false;
+                 }
+                 // Loaded succefully
+                 $scope.isLoading = false;
+                 // Call the method $apply to make the update on the scope
+                 $scope.$apply();
+                 console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+                 console.log($scope.accounts);
+              }else {
+               
+               if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+              }
+      });
+  };
   Account.search = function($scope,params){
       console.log(params);
       gapi.client.crmengine.accounts.search(params).execute(function(resp) {

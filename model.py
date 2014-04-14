@@ -261,12 +261,7 @@ class User(EndpointsModel):
     # Active tabs the user can see in this active_app
     active_tabs = ndb.KeyProperty(repeated=True)
     app_changed = ndb.BooleanProperty(default=True)
-
-    
-    google_user_id = ndb.StringProperty()
-    display_name = ndb.StringProperty()
-    google_public_profile_url = ndb.StringProperty()
-    photo = ndb.StringProperty()
+    google_contacts_group = ndb.StringProperty()
 
 
     def put(self, **kwargs):
@@ -293,9 +288,21 @@ class User(EndpointsModel):
             memcache.set(self.email, self)
         else:
             memcache.add(self.email, self)
+        if self.google_credentials:
+            taskqueue.add(
+                        url='/workers/createcontactsgroup', 
+                        params={
+                                'email': self.email
+                                }
+                        )
         self.put_async()
     
-    
+    @classmethod
+    def memcache_update(cls,user,email):
+        if memcache.get(user.email) :
+            memcache.set(user.email, user)
+        else:
+            memcache.add(user.email, user)
     @classmethod
     def get_by_email(cls,email):
         user_from_email = memcache.get(email)

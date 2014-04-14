@@ -1466,6 +1466,7 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
                         'introduction':contact.introduction,
                         'phones':$scope.phones,
                         'emails':$scope.emails,
+                        'addresses':$scope.addresses,
                         'infonodes':$scope.prepareInfonodes(),
                         'access': contact.access
                       };
