@@ -55,7 +55,12 @@ accountservices.factory('Account', function($http) {
                     $scope.contactpagination.next = false;
                    }
                 }
-
+                if (resp.logo_img_id){
+                    $scope.imageSrc = 'https://docs.google.com/uc?id='+resp.logo_img_id;
+                }
+                else{
+                     $scope.imageSrc = '/static/img/default_company.png';
+                }
                // list infonodes
                 var renderMap = false;
                 if (resp.infonodes){

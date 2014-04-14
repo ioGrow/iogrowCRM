@@ -480,6 +480,11 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
           {value: 'Other', text: 'Other'}
         ];
         $scope.showUpload=false;
+        $scope.logo = {
+                    'logo_img_id':null,
+                    'logo_img_url':null
+                  };
+    
 
 
        // What to do after authentication
