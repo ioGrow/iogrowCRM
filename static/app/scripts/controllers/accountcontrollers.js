@@ -38,18 +38,6 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
           Account.list($scope,params);
           var paramsTag = {'about_kind':'Account'};
           Tag.list($scope,paramsTag);
-          
-          // for (var i=0;i<500;i++)
-          // { 
-          //     var params = { 
-          //               'name': i.toString(),
-          //               'account_type': 'Customer',
-          //               'industry':'Technology',
-          //               'access':'public'
-          //             }
-          //     Account.insert($scope,params);
-          // }
-          
      };
      $scope.getPosition= function(index){
         if(index<3){
