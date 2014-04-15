@@ -3,6 +3,7 @@ from google.appengine.api import search
 from endpoints_proto_datastore.ndb import EndpointsModel
 from protorpc import messages
 from iograph import Edge
+from endpoints_helper import EndpointsHelper
 
 class TagSchema(messages.Message):
     id = messages.StringField(1)
@@ -27,6 +28,31 @@ class Tag(EndpointsModel):
     color = ndb.StringProperty()
     about_kind = ndb.StringProperty()
     organization = ndb.KeyProperty()
+
+    @classmethod
+    def attach_tag(cls,user_from_email, request):
+        start_node = ndb.Key(urlsafe=request.parent)
+        end_node = ndb.Key(urlsafe=request.tag_key)
+        edge_key = Edge.insert(
+                            start_node=start_node,
+                            end_node = end_node,
+                            kind = 'tags',
+                            inverse_edge = 'tagged_on'
+                        )
+        edge = edge_key.get()
+        EndpointsHelper.update_edge_indexes(
+                                            parent_key = start_node,
+                                            kind = 'tags',
+                                            indexed_edge = str(end_node.id())
+                                        )
+
+        return TagSchema(
+                        edgeKey = edge.key.urlsafe(),
+                        id = str(edge.end_node.id()),
+                        entityKey = edge.end_node .urlsafe(),
+                        name = edge.end_node.get().name,
+                        color = edge.end_node.get().color
+                    )
 
     @classmethod
     def list_by_parent(cls,parent_key):

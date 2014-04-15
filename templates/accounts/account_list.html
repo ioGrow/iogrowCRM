@@ -190,7 +190,7 @@
 
             <div class="col-md-9">
              <div class="inner-cards-container waterfall" ng-hide="blankStateaccount">
-                <div droppable  ng-repeat="account in accounts" data-column="<%=getPosition($index)%>" class="cardElement" ng-drop="dropTag(account)">
+                <div ng-repeat="account in accounts" droppable data-column="<%=getPosition($index)%>" id="card_<%=$index%>"class="cardElement" ng-drop="dropTag(account,$index)">
 
                 
                 <!-- 

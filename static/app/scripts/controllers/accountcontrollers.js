@@ -42,7 +42,7 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
           // for (var i=0;i<500;i++)
           // { 
           //     var params = { 
-          //               'name': i.toString(),
+          //               'name': 'Account ' + i.toString(),
           //               'account_type': 'Customer',
           //               'industry':'Technology',
           //               'access':'public'
@@ -56,7 +56,6 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
          
           return index+1;
         }else{
-          console.log((index%3)+1);
           return (index%3)+1;
         }
      };
@@ -332,6 +331,7 @@ $scope.addTags=function(){
       }
       console.log('************** Edge *********************');
       console.log(params);
+
       Edge.insert($scope,params);
       $('#assigneeTagsToTask').modal('hide');
 
@@ -375,23 +375,33 @@ $scope.addTags=function(){
         $scope.draggedTag=tag;
         
       }
-      $scope.dropTag=function(account){
+      $scope.dropTag=function(account,index){
         var items = [];
         
-        var edge = {
-             'start_node': account.entityKey,
-              'end_node': $scope.draggedTag.entityKey,
-              'kind':'tags',
-              'inverse_edge': 'tagged_on'
+        var params = {
+              'parent': account.entityKey,
+              'tag_key': $scope.draggedTag.entityKey
         };
-        items.push(edge);
-        params = {
-          'items': items
-        }
-        
-        Edge.insert($scope,params);
         $scope.draggedTag=null;
+        Tag.attach($scope,params,index);
+        
       };
+      $scope.tagattached=function(tag,index){
+        console.log('*********');
+        console.log(tag);
+        console.log(index);
+          if ($scope.accounts[index].tags == undefined){
+            $scope.accounts[index].tags = [];
+          }
+          $scope.accounts[index].tags.push(tag);
+          console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+          console.log($scope.accounts[index].tags);
+          var card_index = '#card_'+index;
+          $(card_index).removeClass('over');
+
+          $scope.$apply();
+      };
+      
       
  // HKA 12.03.2014 Pallet color on Tags
       $scope.checkColor=function(color){

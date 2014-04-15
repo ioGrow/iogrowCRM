@@ -160,7 +160,23 @@ topicservices.factory('Tag', function($http) {
     angular.extend(this, data);
   }
 
-
+  Tag.attach = function($scope,params,index){
+    
+      $scope.isLoading = true;
+      gapi.client.crmengine.tags.attach(params).execute(function(resp) {
+        
+         if(!resp.code){
+            $scope.isLoading = false;
+            $scope.tagattached(resp,index);
+            $scope.$apply();
+         // $('#addAccountModal').modal('hide');
+         // window.location.replace('#/accounts/show/'+resp.id);
+          
+         }else{
+          console.log(resp.code);
+         }
+      });
+  };
   Tag.list = function($scope,params){
      
       $scope.isLoading = true;
@@ -315,6 +331,7 @@ topicservices.factory('Edge', function($http) {
       $scope.isLoading = true;
       gapi.client.crmengine.edges.insert(params).execute(function(resp) {
          if(!resp.code){
+
             $scope.edgeInserted();
             $scope.isLoading = false;
 
