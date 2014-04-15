@@ -220,10 +220,13 @@
 </div>
 
 <script type="text/javascript">
+ $('#slimtest1').slimScroll({
+                    height: '20px'
+  });
   $("#select2_sample2").select2({
         placeholder: "Click to Select a label",
         allowClear: false
-    });
+  });
   var handleUniform = function () {
         if (!jQuery().uniform) {
             return;
@@ -239,10 +242,10 @@
         }
     }
     handleUniform();
-    $('.waterfall').waterfall({ 
-      colMinWidth: 200, 
-      defaultContainerWidth: 800,
-      autoresize: true
-    });
+   $('.waterfall').waterfall({ 
+        colMinWidth: 210, 
+        defaultContainerWidth: 800,
+        autoresize: true
+  });
 </script>
 

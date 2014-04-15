@@ -387,15 +387,10 @@ $scope.addTags=function(){
         
       };
       $scope.tagattached=function(tag,index){
-        console.log('*********');
-        console.log(tag);
-        console.log(index);
           if ($scope.accounts[index].tags == undefined){
             $scope.accounts[index].tags = [];
           }
           $scope.accounts[index].tags.push(tag);
-          console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$');
-          console.log($scope.accounts[index].tags);
           var card_index = '#card_'+index;
           $(card_index).removeClass('over');
 

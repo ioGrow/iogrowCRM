@@ -68,7 +68,6 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact','Tag','Ed
        };
        
        $scope.listMoreItems = function(){
-        console.log('try to load more');
         var nextPage = $scope.contactCurrentPage + 1;
         var params = {};
         if ($scope.contactpages[nextPage]){
@@ -417,21 +416,26 @@ $scope.addTags=function(){
         $scope.draggedTag=tag;
          //$scope.$apply();
       };
-      $scope.dropTag=function(account){
+      $scope.dropTag=function(contact,index){
         var items = [];
         
-        var edge = {
-             'start_node': account.entityKey,
-              'end_node': $scope.draggedTag.entityKey,
-              'kind':'tags',
-              'inverse_edge': 'tagged_on'
+        var params = {
+              'parent': contact.entityKey,
+              'tag_key': $scope.draggedTag.entityKey
         };
-        items.push(edge);
-        params = {
-          'items': items
-        };
-                Edge.insert($scope,params);
         $scope.draggedTag=null;
+        Tag.attach($scope,params,index);
+        
+      };
+      $scope.tagattached=function(tag,index){
+          if ($scope.contacts[index].tags == undefined){
+            $scope.contacts[index].tags = [];
+          }
+          $scope.contacts[index].tags.push(tag);
+          var card_index = '#card_'+index;
+          $(card_index).removeClass('over');
+
+          $scope.$apply();
       };
 
   // HKA 12.03.2014 Pallet color on Tags
