@@ -1,44 +1,44 @@
 <div class="row subHeader">
-<div class="currentApp">
-  <h2 class="page-title">
-   <!--  <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
-    {{active_app.label}}
-  </h2>
-</div>
-<div class=" subHeaderContent">
-  <div class="pull-right sharebuttonDiv" ng-show="!blankStateaccount"> 
-    <div class="btn-group btn-filter">
+  <div class="currentApp">
+    <h2 class="page-title">
+     <!--  <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
+      {{active_app.label}}
+    </h2>
+  </div>
+  <div class=" subHeaderContent">
+    <div class="pull-right sharebuttonDiv" ng-show="!blankStateaccount"> 
+      <div class="btn-group btn-filter">
+          <a class="btn btn-default" href="#" data-toggle="dropdown">
+              {{ _('Filter by') }}
+              <i class="icon-angle-down"></i>
+          </a>
+          <ul class="dropdown-menu">
+              <li>
+                <a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All accounts') }}
+                </a>
+              </li>
+              <li>
+                <a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My accounts') }}</a>
+              </li>
+          </ul>
+      </div>
+      <div class="btn-group btn-sort">
         <a class="btn btn-default" href="#" data-toggle="dropdown">
-            {{ _('Filter by') }}
-            <i class="icon-angle-down"></i>
+          {{ _('Sort by') }}
+          <i class="icon-angle-down"></i>
         </a>
         <ul class="dropdown-menu">
-            <li>
-              <a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All accounts') }}
-              </a>
-            </li>
-            <li>
-              <a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My accounts') }}</a>
-            </li>
+          <li>
+            <a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a>
+          </li>
+          <li>
+            <a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a>
+          </li>
         </ul>
+      </div>
     </div>
-    <div class="btn-group btn-sort">
-      <a class="btn btn-default" href="#" data-toggle="dropdown">
-        {{ _('Sort by') }}
-        <i class="icon-angle-down"></i>
-      </a>
-      <ul class="dropdown-menu">
-        <li>
-          <a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a>
-        </li>
-        <li>
-          <a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a>
-        </li>
-      </ul>
-    </div>
+    <h2 class="page-title">{{ _("Accounts") }} </h2>
   </div>
-  <h2 class="page-title">{{ _("Accounts") }} </h2>
-</div>
 </div>
 <div  class="page-content">
 <div class="loader-container row" ng-show="isLoading">
@@ -60,7 +60,7 @@
         </div>
 </div>
 <div ng-show="isSignedIn">
-  <div class="row "  >
+  <div class="row"  >
     <div class="col-md-9">
       <a href="/#/accounts/new" class="btn red newBtn">
           {{ _("New Account") }} <i class="icon-plus"></i>

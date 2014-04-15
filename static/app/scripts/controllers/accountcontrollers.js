@@ -83,17 +83,16 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
         console.log('try to load more');
         var nextPage = $scope.currentPage + 1;
         var params = {};
-          if ($scope.pages[nextPage]){
-            console.log('now you can load more');
-            params = {'limit':20,
+        if ($scope.pages[nextPage]){
+            params = {
+                      'limit':20,
                       'order' : $scope.order,
                       'pageToken':$scope.pages[nextPage]
-            }
+                    }
             $scope.currentPage = $scope.currentPage + 1 ; 
-            Account.list_more($scope,params);
-          }
-          
-     };
+            Account.listMore($scope,params);
+        }
+      };
      $scope.listPrevPageItems = function(){
        var prevPage = $scope.currentPage - 1;
        var params = {};
@@ -415,11 +414,7 @@ $scope.addTags=function(){
      Auth.init($scope);
      $(window).scroll(function() {
           if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
-              
               $scope.listMoreItems();
-              console.log('bottom ***************');
-
-              
           }
       });
 

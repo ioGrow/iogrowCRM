@@ -38,10 +38,19 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact','Tag','Ed
         
         // What to do after authentication
        $scope.runTheProcess = function(){
-            var params = {'order' : $scope.order,'limit':6}
+            var params = {'order' : $scope.order,'limit':20}
             Contact.list($scope,params);
             var paramsTag = {'about_kind':'Contact'};
-          Tag.list($scope,paramsTag);
+            Tag.list($scope,paramsTag);
+            // for (var i=0;i<100;i++)
+            // { 
+            //     var params = { 
+            //               'firstname': 'Dja3fer',
+            //               'lastname':'M3amer ' + i.toString(),
+            //               'access':'public'
+            //             }
+            //     Contact.insert($scope,params);
+            // }
 
        };
        $scope.getPosition= function(index){
@@ -57,6 +66,21 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact','Tag','Ed
        $scope.refreshToken = function() {
             Auth.refreshToken();
        };
+       
+       $scope.listMoreItems = function(){
+        console.log('try to load more');
+        var nextPage = $scope.contactCurrentPage + 1;
+        var params = {};
+        if ($scope.contactpages[nextPage]){
+            params = {
+                      'limit':20,
+                      'order' : $scope.order,
+                      'pageToken':$scope.contactpages[nextPage]
+                    }
+            $scope.contactCurrentPage = $scope.contactCurrentPage + 1 ; 
+            Contact.listMore($scope,params);
+        }
+      };
        $scope.listNextPageItems = function(){
           
           var nextPage = $scope.contactCurrentPage + 1;
@@ -417,6 +441,11 @@ $scope.addTags=function(){
 
      // Google+ Authentication 
      Auth.init($scope);
+     $(window).scroll(function() {
+          if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
+              $scope.listMoreItems();
+          }
+      });
 }]);
 
 
