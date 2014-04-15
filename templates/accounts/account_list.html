@@ -149,7 +149,7 @@
 
           
             
-                    <a href="/#/accounts/new" class="btn red">
+                    <a href="/#/accounts/new" class="btn red newBtn">
                     {{ _("New Account") }} <i class="icon-plus"></i>
                     </a>
                
@@ -188,9 +188,9 @@
         </div>
             <div class="row cards-container">
 
-            <div class="col-md-9">
-             <div class="inner-cards-container waterfall" ng-hide="blankStateaccount">
-                <div ng-repeat="account in accounts" droppable data-column="<%=getPosition($index)%>" id="card_<%=$index%>"class="cardElement" ng-drop="dropTag(account,$index)">
+            <div class="">
+             <div ng-repeat="account in accounts" droppable data-column="<%=getPosition($index)%>" id="card_<%=$index%>"class="cardElement" ng-drop="dropTag(account,$index)">
+
 
                 
                 <!-- 
@@ -225,7 +225,7 @@
                  <a ng-repeat="tag in account.tags" href="/#/search/type:Account tags:<%=tag.id%>"> <span class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
                  </a>
             </div>
-          </div>
+        </div>
 </div>
 
               <div ng-show="blankStateaccount" data-span="3" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
@@ -257,9 +257,9 @@
               <div class="clearfix"></div>
               
               </div><!--/inner-cards-container-->
-              <div class="inner-cards-container" ng-show="blankStateaccount">
-              <div  data-span="3" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
-                <div class="dashboard-stat cards">
+              <div class="col-md-9 inner-cards-container" ng-show="blankStateaccount">
+              <div  data-span="3" class="cardElement blankState" data-tablet="span6" data-desktop="span12">
+                <div class="">
                   
                   
                   <div class="blank_slate_arrow"></div>
@@ -279,7 +279,8 @@
                     height: '20px'
                 });
           </script>
-            <div class="col-md-3">
+            <div class="col-md-3 fixed-labelsCard">
+            <div class="row">
               <div class="portlet cardElement labelsCard">
                 <div class="portlet-title">
                   <div class="caption">
@@ -333,7 +334,7 @@
                 <div class="form-group btn-manage-tags" ng-show="tags">
                   <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()"> Manage Tags</button>
                 </div>
-                  
+                </div>
                 </div>
               </div>
             </div>

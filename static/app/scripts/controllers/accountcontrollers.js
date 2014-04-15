@@ -38,6 +38,7 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
           Account.list($scope,params);
           var paramsTag = {'about_kind':'Account'};
           Tag.list($scope,paramsTag);
+
           
           // for (var i=0;i<500;i++)
           // { 
