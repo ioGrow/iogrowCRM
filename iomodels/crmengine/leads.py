@@ -146,9 +146,6 @@ class Lead(EndpointsModel):
         collaborators = " ".join(self.collaborators_ids)
         organization = str(self.organization.id())
         title_autocomplete = ','.join(tokenize_autocomplete(self.firstname + ' ' + self.lastname +' '+ empty_string(self.title)+ ' ' +empty_string(self.company) + ' ' + empty_string(self.status)))
-        emails = " ".join(map(lambda x: x.email,  self.emails))
-        phones = " ".join(map(lambda x: x.number,  self.phones))
-        websites = " ".join(map(lambda x: x.website,  self.websites))
         #addresses = " \n".join(map(lambda x: " ".join([x.street,x.city,x.state, x.postal_code, x.country]), self.addresses))
         if data:
             search_key = ['infos','contacts','tags','collaborators']
@@ -178,9 +175,6 @@ class Lead(EndpointsModel):
             search.TextField(name='show_name', value = empty_string(self.show_name)),
             search.TextField(name='tagline', value = empty_string(self.tagline)),
             search.TextField(name='introduction', value = empty_string(self.introduction)),
-            search.TextField(name='emails', value = empty_string(emails)),
-            search.TextField(name='phones', value = empty_string(phones)),
-            search.TextField(name='websites', value = empty_string(websites)),
             search.TextField(name='infos', value= data['infos']),
             search.TextField(name='tags', value= data['tags']),
             search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
@@ -209,9 +203,6 @@ class Lead(EndpointsModel):
                 search.TextField(name='show_name', value = empty_string(self.show_name)),
                 search.TextField(name='tagline', value = empty_string(self.tagline)),
                 search.TextField(name='introduction', value = empty_string(self.introduction)),
-                search.TextField(name='emails', value = empty_string(emails)),
-                search.TextField(name='phones', value = empty_string(phones)),
-                search.TextField(name='websites', value = empty_string(websites)),
                 search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
                ])
         my_index = search.Index(name="GlobalIndex")

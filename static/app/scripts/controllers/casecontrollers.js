@@ -45,11 +45,20 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
      
       // What to do after authentication
        $scope.runTheProcess = function(){
-            var params = {'order' : $scope.order,'limit':6}
+            var params = {'order' : $scope.order,'limit':20}
             Case.list($scope,params);
             Casestatus.list($scope,{});
             var paramsTag = {'about_kind':'Case'};
             Tag.list($scope,paramsTag);
+            // for (var i=0;i<100;i++)
+            // { 
+            //     var casee = { 
+            //               'name':  i.toString() + ' kass ta3 lban',
+            //               'access':'public'
+            //             }
+            //     $scope.searchAccountQuery = 'dja3fer company'
+            //     $scope.save(casee);
+            // }
        };
 
       $scope.getPosition= function(index){
@@ -57,7 +66,6 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
          
           return index+1;
         }else{
-          console.log((index%3)+1);
           return (index%3)+1;
         }
      };
@@ -80,6 +88,20 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
           console.log('in listNextPageItems');
           $scope.caseCurrentPage = $scope.caseCurrentPage + 1 ; 
           Case.list($scope,params);
+     }
+     $scope.listMoreItems = function(){
+        
+        var nextPage = $scope.caseCurrentPage + 1;
+        var params = {};
+          if ($scope.casepages[nextPage]){
+            params = {
+                      'order' : $scope.order,
+                      'limit':20,
+                      'pageToken':$scope.casepages[nextPage]
+                     }
+            $scope.caseCurrentPage = $scope.caseCurrentPage + 1 ; 
+            Case.listMore($scope,params);
+          }   
      }
      $scope.listPrevPageItems = function(){
                 
@@ -440,21 +462,26 @@ $scope.addTags=function(){
         $scope.draggedTag=tag;
          $scope.$apply();
       };
-      $scope.dropTag=function(casee){
+      $scope.dropTag=function(casee,index){
         var items = [];
         
-        var edge = {
-             'start_node': casee.entityKey,
-              'end_node': $scope.draggedTag.entityKey,
-              'kind':'tags',
-              'inverse_edge': 'tagged_on'
+        var params = {
+              'parent': casee.entityKey,
+              'tag_key': $scope.draggedTag.entityKey
         };
-        items.push(edge);
-        params = {
-          'items': items
-        };
-                Edge.insert($scope,params);
         $scope.draggedTag=null;
+        Tag.attach($scope,params,index);
+        
+      };
+      $scope.tagattached=function(tag,index){
+          if ($scope.cases[index].tags == undefined){
+            $scope.cases[index].tags = [];
+          }
+          $scope.cases[index].tags.push(tag);
+          var card_index = '#card_'+index;
+          $(card_index).removeClass('over');
+
+          $scope.$apply();
       }; 
     
   // HKA 12.03.2014 Pallet color on Tags
@@ -463,6 +490,11 @@ $scope.addTags=function(){
       };
    // Google+ Authentication 
      Auth.init($scope);
+     $(window).scroll(function() {
+          if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
+              $scope.listMoreItems();
+          }
+      });
 
     
 }]);
