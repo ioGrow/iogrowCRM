@@ -1582,7 +1582,8 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
       $scope.customfields=[];
       $scope.account.account_type = 'Customer';
       $scope.account.industry = 'Technology';
-      $scope.logo = {
+      $scope.phone = {'type':'work'};
+            $scope.logo = {
                     'logo_img_id':null,
                     'logo_img_url':null
                   };
