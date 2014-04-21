@@ -44,7 +44,7 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
 
       // What to do after authentication
        $scope.runTheProcess = function(){
-          var params = {'order' : $scope.order,'limit':6};
+          var params = {'order' : $scope.order,'limit':20};
           Opportunity.list($scope,params);
           Opportunitystage.list($scope,{'order':'probability'});
           var paramsTag = {'about_kind':'Opportunity'};

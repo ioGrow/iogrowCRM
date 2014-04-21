@@ -350,8 +350,7 @@ class PermissionInsertRequest(messages.Message):
                allowed_client_ids=[
                                    CLIENT_ID,
                                    endpoints.API_EXPLORER_CLIENT_ID
-                                   ],
-               scopes=SCOPES
+                                   ]
                )
 class CrmEngineApi(remote.Service):
 
