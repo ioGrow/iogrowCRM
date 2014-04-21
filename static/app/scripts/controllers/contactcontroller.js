@@ -1392,6 +1392,7 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
       $scope.sociallinks=[];
       $scope.customfields=[];
       $scope.results=[];
+      $scope.imageSrc = '/static/img/default_company.png';
       $scope.initObject=function(obj){
           for (var key in obj) {
                 obj[key]=null;
