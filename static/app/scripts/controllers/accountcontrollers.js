@@ -536,6 +536,22 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
          
 
        };
+       $scope.getPosition= function(index){
+        if(index<4){
+         
+          return index+1;
+        }else{
+          return (index%4)+1;
+        }
+     };
+     $scope.waterfall= function(){
+
+    
+           /* $('.waterfall').hide();
+          $('.waterfall').show();*/
+          $( window ).trigger( "resize" );
+     };
+     
        // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
             Auth.refreshToken();
@@ -1600,7 +1616,8 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
       $scope.customfields=[];
       $scope.account.account_type = 'Customer';
       $scope.account.industry = 'Technology';
-      $scope.logo = {
+      $scope.phone = {'type':'work'};
+            $scope.logo = {
                     'logo_img_id':null,
                     'logo_img_url':null
                   };
