@@ -147,7 +147,7 @@
             <div class="row margin-bottom-10">
           <div class="col-md-2" ng-mouseenter="showUpload= true" ng-mouseleave="showUpload = false">
               <div class="pic">
-                           <img ng-hide="account.logo_img_id" alt="Zesty" class=" angel_image" data-id="126085" data-type="Startup" src="/static/img/default_company.png" data-hasqtip="2">
+                           <img alt="<%=account.name%>" class=" angel_image" ng-src="<%=imageSrc%>">
                </div>  
                <a ng-show="showUpload" ng-click="createPickerUploader()" href="" class="btn btn-default btn-upload" data-toggle="modal" style="display: none;">
                  <img src="/static/img/upload_logo.png">
@@ -193,8 +193,8 @@
                       <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;renderMaps();">About</a></li>
                       <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;">Notes</a></li>
                       <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==8}"><a ng-click="selectedTab = 8;">Send an Email</a></li>
-                      <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">Contacts</a></li>
-                      <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 7}"><a ng-click="selectedTab = 7;">Attach Documents</a>
+                      <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 3}"><a ng-click="waterfall(); selectedTab = 3;">Contacts</a></li>
+                      <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 7}"><a ng-click="waterfall();selectedTab = 7;">Attach Documents</a>
                       <li class="ng-tab md-menu" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">Needs</a></li>
                       <li class="ng-tab md-menu" ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">Opportunities</a></li>
                       <li class="ng-tab md-menu" ng-class="{active: selectedTab == 6}"><a ng-click="selectedTab = 6;">Cases</a></li>
@@ -224,10 +224,10 @@
               <div class="">
                   <!--BEGIN TABS-->
                     <div class="tab-content">
-                      <div class="tab-pane" id="tab_1_1" ng-show="selectedTab == 1">
-                        
+                      <div class="tab-pane active" id="tab_1_1" ng-show="selectedTab == 1">
+                        <div class="showPage">
                          <div class="row">
-                           <div class="col-md-12 margin-bottom-10"> 
+                           <div class="col-md-12  margin-bottom-10"> 
                               <p class⁼"lead"="">
                                 
                                   To add an outside email to this account, forward or BCC to:
@@ -250,8 +250,18 @@
                                     </form>
                                 </div>
                               </div>
-                            <ul class="chats">
-                              <!-- ngRepeat: topic in topics -->
+                           <ul class="chats">
+                              <li class="in" ng-repeat="topic in topics" id="topic_<%=$index%>">
+                                <img class="avatar" alt="" ng-src="<%= topic.last_updater.photo%>" />
+                                <div class="message">
+                                  <span class="arrow"></span>
+                                  <a href="#" class="name"><%= topic.last_updater.display_name%></a>
+                                  <span class="datetime">at <%=topic.updated_at | date:'yyyy-MM-dd - HH:mm:ss '  %> </span>
+                                  <span class="body">
+                                  <a href="<%=getTopicUrl(topic.topic_kind,topic.id)%>" class="discussion-content"><strong class="ng-binding"><%= topic.title%></strong> - <span class="excerpt ng-binding" ng-bind-html-unsafe="topic.excerpt"></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <%= topic.comments%> comments</span></a>
+                                  </span>
+                                </div>
+                              </li>
                               
                             </ul>
                             <div class="row">
@@ -271,6 +281,7 @@
                                     <!--h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3-->
                                 </div>
                               </div>
+                            </div>
                             </div>
                       <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
                         
@@ -389,27 +400,61 @@
                          <div class="row cards-container">     
                          <div class="btn-group relbutton">
                                 <button ng-click="addContactModal()" id="sample_editable_1_new" class="btn red">
-                               Add a person to this account<i class="icon-plus"></i>
+                               Add person
                                 </button>                                
                          </div>                     
 
                            <div class="col-md-12">
-                            <div class="inner-cards-container">
-                              <!-- ngRepeat: contact in contacts -->
-                              <div ng-show="blankStatecontact" class="col-md-12" data-tablet="span6" data-desktop="span12" style="">
-                                <div class="dashboard-stat cards">
-                                  
-                                  
-                                  <div class="blank_slate_arrow"></div>
-                                  <div class="thumbnail blank_slate_body">
-                                      <img src="/static/img/contacts_blank.png" class="img-responsive">
-                                      <p class="lead">Each contact gets a page in i/oGrow. You and your co-workers can add notes from calls,conversations, meetings, or any other historic information about this person.</p>
-                                  </div>    
-                                </div>
-                             </div>
-                              <br>
-                              
-                              <div class="clearfix"></div>
+                            <div class="row">
+                              <div class="col-md-12 waterfall" ng-hide="blankStateaccount">
+                                <div droppable  ng-repeat="contact in contacts" data-column="<%=getPosition($index)%>" class="cardElement" ng-drop="dropTag(contact)" ng-class="{rightcards: getPosition($index)==4}">
+                                    <div class="detailsSection">
+                                      <div class="head">
+                                        <div class="pic">
+                                            <a href="/#/contact/show/<%= contact.id %>" class="startup-link" title="contact.firstname"><img ng-hide="contact.logo_img_id" alt="contact.firstname" class="img-responsive img-thumbnail" src="/static/img/default_company.png" >
+                                            <img ng-show="account.logo_img_id" alt="account.name" class="img-responsive img-thumbnail" ng-src="https://docs.google.com/uc?id=<%= account.logo_img_id %>" data-hasqtip="2">
+                                            </a>
+                                        </div>
+                                        <div class="text">
+                                            <div class="name"><a href="/#/contact/show/<%= contact.id %>" class="profile-link" data-id="126085" data-type="Startup"><%= contact.firstname %> <%= contact.lastname %></a></div>
+                                             <div class="pitch">
+                                                <span  ng-show="contact.account_type">
+                                                  <a href="/#/search/type:contact <%=contact.title%>"> #<%= contact.title %></a>
+                                                </span> 
+                                              </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                      </div>
+                                    </div>
+                                    <div class="tagsSection" ng-class="{hidden: contact.tags==null}">
+                                        <div class="sectionContent">
+                                             <a ng-repeat="tag in contact.tags" href="/#/search/type:contact tags:<%=tag.id%>"> <span class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
+                                             </a>
+                                        </div>
+                                    </div>
+                            </div>
+                             <!--blank stat-->
+                            <div ng-show="blankStateaccount" data-span="3" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
+                              <div class="dashboard-stat cards">
+                                <div class="blank_slate_arrow"></div>
+                                <div class="thumbnail blank_slate_body">
+                                    <img class="img-responsive" src="/static/img/accounts_blank.png">
+                                    <p class="lead">{{ _('Accounts  pages includes a detailed page for each customer, partner, or investor in your ecosystem. You and your co-workers can collaborate to get a deep understanding.') }}</p>
+                                </div>       
+                              </div>
+                            </div>
+                            <div ng-show="isFiltering * !accounts" data-span="3" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
+                              <div class="dashboard-stat cards" >
+                                <div class="blank_slate_arrow"></div>
+                                    <div class="thumbnail blank_slate_body">
+                                        
+                                        <p class="lead">{{ _('No results found, try with another filter') }}</p>
+                                    </div>
+                              </div>
+                            </div>
+                            <div class="clearfix"></div>
+                                          
+                            </div><!--/inner-cards-container-->
                               </div><!--/inner-cards-container-->
                               </div>
                             </div>
@@ -436,12 +481,12 @@
                          <div class="row cards-container">     
                          <div class="btn-group relbutton">
                                 <button ng-click="addNeedModal()" id="sample_editable_1_new" class="btn red">
-                               Add a new Need<i class="icon-plus"></i>
+                               Add Need
                                 </button>                                
                          </div>                     
 
                            <div class="col-md-12">
-                            <div class="inner-cards-container">
+                            <div class="row">
                               <!-- ngRepeat: need in needs -->
                               <div ng-show="blankStateneeds" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12" style="">
                                 <div class="dashboard-stat cards">
@@ -491,11 +536,11 @@
                          <div class="btn-group relbutton">
             
                                 <button ng-click="addOppModal()" id="sample_editable_1_new" class="btn red">
-                                Add a new opportunity <i class="icon-plus"></i>
+                                Add opportunity
                                 </button>
                           </div>
                           <div class="col-md-12">
-                            <div class="inner-cards-container">
+                            <div class="row">
                               <!-- ngRepeat: opp in opportunities -->
                         <div ng-show="blankStateopportunity" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12" style="">
                          <div class="dashboard-stat cards">
@@ -538,11 +583,11 @@
                          <div class="btn-group relbutton">
             
                                 <button ng-click="addCaseModal()" id="sample_editable_1_new" class="btn red">
-                                Add a new case <i class="icon-plus"></i>
+                                Add case 
                                 </button>
                           </div>
                           <div class="col-md-12">
-                            <div class="inner-cards-container">
+                            <div class="row">
                                                         
                              <!-- ngRepeat: casee in cases -->
                               <div ng-show="blankStatecase" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12" style="">
@@ -589,13 +634,13 @@
             
                                 <div class="btn-group">
                                     <a class="btn red" href="#" data-toggle="dropdown">
-                                    <i class="icon-plus"></i> Create
+                                     Create
                                     <i class="icon-angle-down"></i>
                                     </a>
                                     <ul class="dropdown-menu">
-                                      <li><a ng-click="showCreateDocument('document')" href="#" data-toggle="modal"><i class="icon-plus"></i> Document</a></li>
-                                      <li><a ng-click="showCreateDocument('presentation')" href="#" data-toggle="modal"><i class="icon-plus"></i> Presentation</a></li>
-                                      <li><a ng-click="showCreateDocument('spreadsheet')" href="#" data-toggle="modal"><i class="icon-plus"></i> Spreadsheet</a></li>
+                                      <li><a ng-click="showCreateDocument('document')" href="#" data-toggle="modal"> Document</a></li>
+                                      <li><a ng-click="showCreateDocument('presentation')" href="#" data-toggle="modal">Presentation</a></li>
+                                      <li><a ng-click="showCreateDocument('spreadsheet')" href="#" data-toggle="modal"> Spreadsheet</a></li>
                                      
                                     </ul>
                                 </div>
@@ -607,19 +652,41 @@
                                 </div>
                           </div>
                           <div class="col-md-12">
-                            <div class="inner-cards-container">
-                                                        
+                            <div class="row">         
                              <!-- ngRepeat: attachment in documents -->
-                        <div ng-show="blankStatdocuments" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12" style="">
-                           <div class="dashboard-stat cards">
-                               <div class="blank_slate_arrow"></div>
-                               <div class=" thumbnail blank_slate_body">
-                                  <img src="/static/img/documents_blanks.png" class="img-responsive">
-                                    <p class="lead">Manage easily your documments using Google drive</p>
-                               </div>                               
-                           </div>
-                          </div>
-                                 <div class="clearfix"></div>
+                                   <div class="col-md-12 waterfall2" ng-hide="blankStateaccount">
+                                      <div ng-repeat="attachment in documents" data-column="<%=getPosition($index)%>" class="cardElement"  ng-class="{rightcards: getPosition($index)==4}">
+                                          <div class="detailsSection">
+                                            <div class="head">
+                                              <div class="pic">
+                                                  <a href="/#/documents/show/<%= attachment.id %>" class="startup-link" title="attachment.title"><img ng-hide="" alt="attachment.title" class="img-responsive img-thumbnail" src="/static/img/default_company.png" >
+                                                  <img ng-show="account.logo_img_id" alt="account.name" class="google-drive-icon img-responsive img-thumbnail" ng-src="/static/img/google_drive/<%=attachment.mimeType%>.png" >
+                                                  </a>
+                                              </div>
+                                              <div class="text">
+                                                  <div class="name"><a href="/#/documents/show/<%= attachment.id %>" class="profile-link" ><%=attachment.title%></a></div>
+                                                   <div class="pitch">
+                                                      <span  ng-show="contact.account_type">
+                                                        <a href="/#/search/type:contact <%=contact.title%>"> #<%= contact.title %></a>
+                                                      </span> 
+                                                    </div>
+                                              </div>
+                                              <div class="clearfix"></div>
+                                            </div>
+                                          </div>
+                                       </div>
+                                   <!--blank stat-->
+                                  <div ng-show="blankStatdocuments" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
+                                       <div class="dashboard-stat cards">
+                                           <div class="blank_slate_arrow"></div>
+                                           <div class=" thumbnail blank_slate_body">
+                                              <img src="/static/img/documents_blanks.png" class="img-responsive">
+                                                <p class="lead">Manage easily your documments using Google drive</p>
+                                           </div>                               
+                                       </div>
+                                   </div>
+                                  <div class="clearfix"></div>         
+                              </div><!--/inner-cards-container-->
                               </div>
                            
                               </div>
@@ -644,7 +711,7 @@
                               </div>
                       </div>
                       <div class="tab-pane active" id="tab_1_8" ng-show="selectedTab == 8" style="display: none;">
-                        
+                        <div class="showPage">
                          <div class="row">
                            <div class="col-md-12 margin-bottom-10"> 
                           <p class⁼"lead"=""><strong>Send an Email to :</strong> </p>
@@ -674,6 +741,8 @@
                                        </div>
                                       </div>
                                     </div>
+                                    </div>
+
                     </div>
                   <!--END TABS-->
             </div>
@@ -688,7 +757,7 @@
           <div class="row"> 
             <div class="col-md-12">
               <!-- BEGIN PORTLET-->
-              <div class="portlet showPage">
+              <div class="portlet showCard">
                 <div class="portlet-title line">
                   <div class="caption"><i class="fa fa-check"></i>Tasks</div>
                   
@@ -706,7 +775,7 @@
                                     <span><a href="/#/tasks/show/<%=task.id%>" class="discussion-content"><%= task.title%> </a> <span ng-show="task.due"> [before: <%= task.due | date:'yyyy-MM-dd '%>]</span></span>
                                     </li>
                                     
-                                     <li><a href="#myModal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new task</a></li>
+                                     <li><a href="#myModal" class="btn-link addAnotherPhone" data-toggle="modal">Add a new task</a></li>
 
                                   </ul>
                                   <div class="newTask" ng-show="addingTask">
@@ -836,7 +905,7 @@
               <div class="row">
             <div class="col-md-12">
               <!-- BEGIN PORTLET-->
-              <div class="portlet showPage">
+              <div class="portlet showCard">
                 <div class="portlet-title line">
                   <div class="caption"><i class="fa fa-calendar"></i>Events</div>
                   
@@ -858,7 +927,7 @@
                                     
 
                                     
-                                    <li><a href="#newEventModal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>{{_("Add a new event")}}</a></li>
+                                    <li><a href="#newEventModal" class="btn-link addAnotherPhone" data-toggle="modal">{{_("Add a new event")}}</a></li>
 
 
                                   </ul>
@@ -1314,6 +1383,50 @@
     </div>
       <!-- END PAGE CONTAINER-->
 </div>
+ <!--HKA 18.11.2013 Add Contact modal -->
+
+                    <div id="addContactModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                          <h3 id="myModalLabel" class="modal-title">{{_("New Contact")}}</h3>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addContact" name="addcontact"  ng-submit="savecontact(contact)" class="form-horizontal" role="form"> 
+                            <div class="form-group">
+                              <label  class="required col-md-3 control-label">{{_("First Name")}} </label>
+                       
+                              <div class="col-md-9">
+                              <input class="form-control" type="text" required id="id_firstname" ng-model="contact.firstname">
+                          
+                               </div>
+                            </div>
+                           <div class="form-group">
+                              <label  class="required col-md-3 control-label">{{_("Last Name")}}</label>
+                              <div class="col-md-9">
+                              <input class="form-control" type="text"  id="id_lastname" ng-model="contact.lastname">
+                          
+                              </div>
+                           </div>
+                           <div class="form-group">
+                             <label  class="required col-md-3 control-label">{{_("Tittle")}} </label>
+                       
+                             <div class="col-md-9">
+                              <input class="form-control" type="text"  id="id_account" ng-model="contact.title">
+                          
+                              </div>
+                           </div>                
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <button  type="submit" class="btn green addContactNow">{{_("Add Contact")}}</button>
+              </div>
+               </form>
+             </div>
+           </div>
+       </div>
+    <!--End Contact Modal -->
 <script type="text/javascript">
   $(function() {
     $('#datetimepicker2').datetimepicker({
@@ -1346,6 +1459,16 @@
  
           $('#assigeeList').slimScroll({
               height: '200px'
+          });
+  $('.waterfall').waterfall({ 
+              colMinWidth: 210, 
+              defaultContainerWidth: 840,
+              autoresize: true
+          });
+  $('.waterfall2').waterfall({ 
+              colMinWidth: 210, 
+              defaultContainerWidth: 840,
+              autoresize: true
           });
        
 </script>

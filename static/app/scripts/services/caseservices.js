@@ -200,6 +200,42 @@ accountservices.factory('Case', function() {
               }
       });
   };
+  Case.listMore = function($scope,params){
+      $scope.isLoading = true;
+      $scope.$apply();
+      gapi.client.crmengine.cases.listv2(params).execute(function(resp) {
+              if(!resp.code){
+                 
+                  angular.forEach(resp.items, function(item){
+                      $scope.cases.push(item);
+                  });       
+                 if ($scope.caseCurrentPage>1){
+                      $scope.casepagination.prev = true;
+                   }else{
+                       $scope.casepagination.prev = false;
+                   }
+                 if (resp.nextPageToken){
+                   var nextPage = $scope.caseCurrentPage + 1;
+                   // Store the nextPageToken
+                   $scope.casepages[nextPage] = resp.nextPageToken;
+                   $scope.casepagination.next = true;
+                   
+                 }else{
+                  $scope.casepagination.next = false;
+                 }
+                 // Loaded succefully
+                 $scope.isLoading = false;
+                 // Call the method $apply to make the update on the scope
+                 $scope.$apply();
+              }else {
+                 if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+              }
+      });
+  };
   Case.insert = function($scope,casee){
      $scope.isLoading = true;
       gapi.client.crmengine.cases.insertv2(casee).execute(function(resp) {

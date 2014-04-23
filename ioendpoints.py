@@ -350,8 +350,7 @@ class PermissionInsertRequest(messages.Message):
                allowed_client_ids=[
                                    CLIENT_ID,
                                    endpoints.API_EXPLORER_CLIENT_ID
-                                   ],
-               scopes=SCOPES
+                                   ]
                )
 class CrmEngineApi(remote.Service):
 
@@ -1716,6 +1715,16 @@ class CrmEngineApi(remote.Service):
         return message_types.VoidMessage()
 
     # Tags APIs
+    # tags.attachtag api v2
+    @endpoints.method(iomessages.AddTagSchema, TagSchema,
+                      path='tags/attach', http_method='POST',
+                      name='tags.attach')
+    def attach_tag(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Tag.attach_tag(
+                                user_from_email = user_from_email,
+                                request = request
+                            )
     # tags.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
                       path='tags', http_method='DELETE',

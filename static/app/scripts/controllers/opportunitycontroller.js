@@ -44,11 +44,21 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
 
       // What to do after authentication
        $scope.runTheProcess = function(){
-          var params = {'order' : $scope.order,'limit':6};
+          var params = {'order' : $scope.order,'limit':20};
           Opportunity.list($scope,params);
           Opportunitystage.list($scope,{'order':'probability'});
           var paramsTag = {'about_kind':'Opportunity'};
           Tag.list($scope,paramsTag);
+          // for (var i=0;i<100;i++)
+          //   { 
+          //       var opportunity = { 
+          //                 'name':  i.toString() + ' kass ta3 lban',
+          //                 'amount':'99',
+          //                 'access':'public'
+          //               }
+          //       $scope.searchAccountQuery = 'dja3fer company'
+          //       $scope.save(opportunity);
+          //   }
        };
         // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
@@ -80,6 +90,20 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
           console.log('in listNextPageItems');
           $scope.oppCurrentPage = $scope.oppCurrentPage + 1 ; 
           Opportunity.list($scope,params);
+     }
+     $scope.listMoreItems = function(){
+        
+        var nextPage = $scope.oppCurrentPage + 1;
+        var params = {};
+          if ($scope.opppages[nextPage]){
+            params = {'order' : $scope.order,
+                      'limit':20,
+                      'pageToken':$scope.opppages[nextPage]
+                     }
+            $scope.oppCurrentPage = $scope.oppCurrentPage + 1 ; 
+            Opportunity.listMore($scope,params);
+          }
+          
      }
      $scope.listPrevPageItems = function(){
 
@@ -410,22 +434,26 @@ $scope.addTags=function(){
        
         $scope.$apply();
       }
-      $scope.dropTag=function(opportunity){
+      $scope.dropTag=function(opportunity,index){
         var items = [];
         
-        var edge = {
-             'start_node': opportunity.entityKey,
-              'end_node': $scope.draggedTag.entityKey,
-              'kind':'tags',
-              'inverse_edge': 'tagged_on'
+        var params = {
+              'parent': opportunity.entityKey,
+              'tag_key': $scope.draggedTag.entityKey
         };
-        items.push(edge);
-        params = {
-          'items': items
-        }
-        
-        Edge.insert($scope,params);
         $scope.draggedTag=null;
+        Tag.attach($scope,params,index);
+        
+      };
+      $scope.tagattached=function(tag,index){
+          if ($scope.opportunities[index].tags == undefined){
+            $scope.opportunities[index].tags = [];
+          }
+          $scope.opportunities[index].tags.push(tag);
+          var card_index = '#card_'+index;
+          $(card_index).removeClass('over');
+
+          $scope.$apply();
       };
 
      // HKA 12.03.2014 Pallet color on Tags
@@ -436,6 +464,11 @@ $scope.addTags=function(){
 
      // Google+ Authentication 
      Auth.init($scope);
+     $(window).scroll(function() {
+          if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
+              $scope.listMoreItems();
+          }
+      });
      
 }]);
 app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage','Email','Attachement','InfoNode',

@@ -184,6 +184,48 @@ leadservices.factory('Lead', function($http) {
   	
 
   };
+    Lead.listMore = function($scope,params){
+     $scope.isLoading = true;
+     $scope.$apply();
+      gapi.client.crmengine.leads.listv2(params).execute(function(resp) {
+
+              if(!resp.code){
+                
+                  angular.forEach(resp.items, function(item){
+                      $scope.leads.push(item);
+                  });
+                  if ($scope.currentPage>1){
+                      $scope.leadpagination.prev = true;
+                   }else{
+                       $scope.leadpagination.prev = false;
+                   }
+                 if (resp.nextPageToken){
+                   var nextPage = $scope.currentPage + 1;
+                   // Store the nextPageToken
+                   $scope.pages[nextPage] = resp.nextPageToken;
+                   $scope.leadpagination.next = true;
+                   
+                 }else{
+                  $scope.leadpagination.next = false;
+                 }
+                 // Call the method $apply to make the update on the scope
+                 $scope.isLoading = false;
+                 $scope.$apply();
+                 
+
+              }else {
+                if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+              }
+              console.log('gapi #end_execute');
+        });
+    
+    
+
+  };
   Lead.insert = function($scope,lead){
       $scope.isLoading = true;
       gapi.client.crmengine.leads.insertv2(lead).execute(function(resp) {

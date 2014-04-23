@@ -32,6 +32,7 @@ accountservices.factory('Account', function($http) {
 
   
   Account.get = function($scope,id) {
+          
           gapi.client.crmengine.accounts.getv2(id).execute(function(resp) {
             if(!resp.code){
                $scope.account = resp;
@@ -55,7 +56,12 @@ accountservices.factory('Account', function($http) {
                     $scope.contactpagination.next = false;
                    }
                 }
-
+                if (resp.logo_img_id){
+                    $scope.imageSrc = 'https://docs.google.com/uc?id='+resp.logo_img_id;
+                }
+                else{
+                     $scope.imageSrc = '/static/img/default_company.png';
+                }
                // list infonodes
                 var renderMap = false;
                 if (resp.infonodes){
@@ -297,8 +303,7 @@ accountservices.factory('Account', function($http) {
               }
       });
   };
-  Account.list_more = function($scope,params){
-      console.log('Loading more results');
+  Account.listMore = function($scope,params){
       $scope.isLoading = true;
       $scope.$apply();
       gapi.client.crmengine.accounts.listv2(params).execute(function(resp) {
@@ -326,8 +331,6 @@ accountservices.factory('Account', function($http) {
                  $scope.isLoading = false;
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
-                 console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-                 console.log($scope.accounts);
               }else {
                
                if(resp.code==401){

@@ -38,13 +38,25 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
           Account.list($scope,params);
           var paramsTag = {'about_kind':'Account'};
           Tag.list($scope,paramsTag);
+
+          
+          // for (var i=0;i<500;i++)
+          // { 
+          //     var params = { 
+          //               'name': 'Account ' + i.toString(),
+          //               'account_type': 'Customer',
+          //               'industry':'Technology',
+          //               'access':'public'
+          //             }
+          //     Account.insert($scope,params);
+          // }
+          
      };
      $scope.getPosition= function(index){
         if(index<3){
          
           return index+1;
         }else{
-          console.log((index%3)+1);
           return (index%3)+1;
         }
      };
@@ -71,17 +83,16 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
         console.log('try to load more');
         var nextPage = $scope.currentPage + 1;
         var params = {};
-          if ($scope.pages[nextPage]){
-            console.log('now you can load more');
-            params = {'limit':20,
+        if ($scope.pages[nextPage]){
+            params = {
+                      'limit':20,
                       'order' : $scope.order,
                       'pageToken':$scope.pages[nextPage]
-            }
+                    }
             $scope.currentPage = $scope.currentPage + 1 ; 
-            Account.list_more($scope,params);
-          }
-          
-     };
+            Account.listMore($scope,params);
+        }
+      };
      $scope.listPrevPageItems = function(){
        var prevPage = $scope.currentPage - 1;
        var params = {};
@@ -320,6 +331,7 @@ $scope.addTags=function(){
       }
       console.log('************** Edge *********************');
       console.log(params);
+
       Edge.insert($scope,params);
       $('#assigneeTagsToTask').modal('hide');
 
@@ -363,23 +375,28 @@ $scope.addTags=function(){
         $scope.draggedTag=tag;
         
       }
-      $scope.dropTag=function(account){
+      $scope.dropTag=function(account,index){
         var items = [];
         
-        var edge = {
-             'start_node': account.entityKey,
-              'end_node': $scope.draggedTag.entityKey,
-              'kind':'tags',
-              'inverse_edge': 'tagged_on'
+        var params = {
+              'parent': account.entityKey,
+              'tag_key': $scope.draggedTag.entityKey
         };
-        items.push(edge);
-        params = {
-          'items': items
-        }
-        
-        Edge.insert($scope,params);
         $scope.draggedTag=null;
+        Tag.attach($scope,params,index);
+        
       };
+      $scope.tagattached=function(tag,index){
+          if ($scope.accounts[index].tags == undefined){
+            $scope.accounts[index].tags = [];
+          }
+          $scope.accounts[index].tags.push(tag);
+          var card_index = '#card_'+index;
+          $(card_index).removeClass('over');
+
+          $scope.$apply();
+      };
+      
       
  // HKA 12.03.2014 Pallet color on Tags
       $scope.checkColor=function(color){
@@ -392,11 +409,7 @@ $scope.addTags=function(){
      Auth.init($scope);
      $(window).scroll(function() {
           if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
-              
               $scope.listMoreItems();
-              console.log('bottom ***************');
-
-              
           }
       });
 
@@ -468,6 +481,11 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
           {value: 'Other', text: 'Other'}
         ];
         $scope.showUpload=false;
+        $scope.logo = {
+                    'logo_img_id':null,
+                    'logo_img_url':null
+                  };
+    
 
 
        // What to do after authentication
@@ -518,6 +536,22 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
          
 
        };
+       $scope.getPosition= function(index){
+        if(index<4){
+         
+          return index+1;
+        }else{
+          return (index%4)+1;
+        }
+     };
+     $scope.waterfall= function(){
+
+    
+           /* $('.waterfall').hide();
+          $('.waterfall').show();*/
+          $( window ).trigger( "resize" );
+     };
+     
        // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
             Auth.refreshToken();

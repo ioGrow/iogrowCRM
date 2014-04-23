@@ -47,3 +47,7 @@ class UserSchema(messages.Message):
 
 class UserListSchema(messages.Message):
     items = messages.MessageField(UserSchema, 1, repeated=True)
+
+class AddTagSchema(messages.Message):
+    parent = messages.StringField(1,required=True)
+    tag_key = messages.StringField(2,required=True)
