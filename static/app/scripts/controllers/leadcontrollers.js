@@ -1127,6 +1127,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
       $scope.sociallinks=[];
       $scope.customfields=[];
       $scope.phone = {'type':'work'};
+      $scope.imageSrc = '/static/img/default_company.png';
       $scope.initObject=function(obj){
           for (var key in obj) {
                 obj[key]=null;
