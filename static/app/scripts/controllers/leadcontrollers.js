@@ -38,22 +38,29 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge'
          $scope.tag.color= {'name':'green','color':'#BBE535'};
 
       // What to do after authentication
-       $scope.runTheProcess = function(){
-            var params = {'order' : $scope.order,'limit':6};
+        $scope.runTheProcess = function(){
+            var params = {'order' : $scope.order,'limit':20};
             Lead.list($scope,params);
             Leadstatus.list($scope,{});
             var paramsTag = {'about_kind':'Lead'};
           Tag.list($scope,paramsTag);
-
-
-       };
+          // for (var i=0;i<100;i++)
+          //   { 
+          //       var params = { 
+          //                 'firstname': 'Dja3fer',
+          //                 'lastname':'M3amer ' + i.toString(),
+          //                 'access':'public'
+          //               }
+          //       Lead.insert($scope,params);
+          //   }
+        };
 
        $scope.getPosition= function(index){
         if(index<3){
          
           return index+1;
         }else{
-          console.log((index%3)+1);
+          
           return (index%3)+1;
         }
      };
@@ -77,6 +84,19 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge'
           $scope.currentPage = $scope.currentPage + 1 ; 
           Lead.list($scope,params);
      }
+     $scope.listMoreItems = function(){
+        var nextPage = $scope.currentPage + 1;
+        var params = {};
+        if ($scope.pages[nextPage]){
+            params = {
+                      'limit':20,
+                      'order' : $scope.order,
+                      'pageToken':$scope.pages[nextPage]
+                    }
+            $scope.currentPage = $scope.currentPage + 1 ; 
+            Lead.listMore($scope,params);
+        }
+      };
      $scope.listPrevPageItems = function(){
        
        var prevPage = $scope.currentPage - 1;
@@ -364,23 +384,30 @@ $scope.addTags=function(){
       }
       $scope.dragTag=function(tag){
         $scope.draggedTag=tag;
-        $scope.$apply();
+        // $scope.$apply();
       };
-      $scope.dropTag=function(lead){
+      $scope.dropTag=function(lead,index){
         var items = [];
         
-        var edge = {
-             'start_node': lead.entityKey,
-              'end_node': $scope.draggedTag.entityKey,
-              'kind':'tags',
-              'inverse_edge': 'tagged_on'
+        var params = {
+              'parent': lead.entityKey,
+              'tag_key': $scope.draggedTag.entityKey
         };
-        items.push(edge);
-        params = {
-          'items': items
-        };
-                Edge.insert($scope,params);
         $scope.draggedTag=null;
+        console.log('**********************************************');
+        console.log(params);
+        Tag.attach($scope,params,index);
+        
+      };
+      $scope.tagattached=function(tag,index){
+          if ($scope.leads[index].tags == undefined){
+            $scope.leads[index].tags = [];
+          }
+          $scope.leads[index].tags.push(tag);
+          var card_index = '#card_'+index;
+          $(card_index).removeClass('over');
+
+          $scope.$apply();
       };
 
   // HKA 12.03.2014 Pallet color on Tags
@@ -390,6 +417,11 @@ $scope.addTags=function(){
 
    // Google+ Authentication 
      Auth.init($scope);
+     $(window).scroll(function() {
+          if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
+              $scope.listMoreItems();
+          }
+      });
 
       
 }]);
@@ -1095,6 +1127,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
       $scope.sociallinks=[];
       $scope.customfields=[];
       $scope.phone = {'type':'work'};
+      $scope.imageSrc = '/static/img/default_company.png';
       $scope.initObject=function(obj){
           for (var key in obj) {
                 obj[key]=null;

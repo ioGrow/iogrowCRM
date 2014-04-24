@@ -1,222 +1,44 @@
 <div class="row subHeader">
-<div class="currentApp">
-  <h2 class="page-title">
-    <!-- <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
-    {{active_app.label}}
-  </h2>
-</div>
+  <div class="currentApp">
+    <h2 class="page-title">
+      <!-- <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
+      {{active_app.label}}
+    </h2>
+  </div>
   <div class=" subHeaderContent">
-            <div class="pull-right sharebuttonDiv"> 
+    <div class="pull-right sharebuttonDiv"> 
                   
                   <!-- <button class="btn jfk-button jfk-button-action" ng-click="save(account)">
                     <i class="fa-cog"></i>
                   </button> -->
-            </div>
-                  <h2 class="page-title">{{ _("Tasks") }} </h2>
+    </div>
+    <h2 class="page-title">{{ _("Tasks") }} </h2>
   </div>
 </div>
 <div  class="page-content">
-    <div class="loader-container row" ng-show="isLoading">
-      <div class="loader-dialog col-md-4 col-md-offset-4 ">
-        <div class="loader-content">
+  <div class="loader-container row" ng-show="isLoading">
+    <div class="loader-dialog col-md-4 col-md-offset-4 ">
+      <div class="loader-content">
           Loading...
-        </div>
       </div>
-      
     </div>
-   <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
-      <div id="portlet-config" class="modal ">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button data-dismiss="modal" class="close" type="button"></button>
-              <h3>{{ _("Portlet Settings") }}</h3>
-            </div>
-            <div class="modal-body">
-              <p>{{ _("Here will be a configuration form") }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
+  </div>
+   
       <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
       <!-- BEGIN PAGE CONTAINER-->
-      <div class="" ng-show="immediateFailed">
-         <div class="col-md-12">  
-          <h1>{{ _("Sign-in Button;") }}</h1>
-              <span id="signin">
-                  <span id="myGsignin"></span>
-              </span>
-        </div>
-      </div>
-              <!--HKA 24.12.2013 Modal before Deleting Account-->
-                <!-- BEFORE DELETE MODEL-->
-               <div id="beforecloseTask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                      <h3 id="myModalLabel" class="modal-title">Close Task</h3>
-                    </div>
-                    <div class="modal-body">
-                       <form id="seletesho" name="deletesho" class="form-horizontal"> 
-                        <p>{{_("Are you sure you want to close selected tasks")}} .</p>
-                    </div>
-                      <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                        
-                        <input ng-hide="isLoading" ng-click="closeTask()" type="submit" class="btn red" value="Close">
-                        <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
-                      </div>
-                  </form>
-                </div>
-              </div>
-             </div>
-               <!-- BEFORE DELETE MODEL END-->
-                             <!--HKA 24.12.2013 Modal before Deleting Account-->
-                <!-- BEFORE DELETE MODEL-->
-               <div id="assigneeTagsToTask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                      <h3 id="myModalLabel" class="modal-title">Add Tags </h3>
-                    </div>
-                    <div class="modal-body">
-                       <form id="seletesho" name="deletesho" class="form-horizontal"> 
-                       <div class="form-group">
-                            <select id="select2_sample2" class="form-control select2" multiple>
-                              <option ng-repeat="tag in tags" 
-                              value='<%=tag.entityKey%>'>
-                                <%=tag.name%>
-                              </option>
-                            </select>
-                        </div>
-                    </div>
-                      <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                        <input ng-hide="isLoadingTask" ng-click="addTags()" type="submit" class="btn green" value="Add">
-                        <input ng-show="isLoadingTask" type="submit" class="btn green" value="Loading..." disabled>
-                      </div>
-                  </form>
-                </div>
-              </div>
-             </div>
-               <!-- BEFORE DELETE MODEL END-->
-            <div id="assigneeModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-           <div class="modal-dialog">
-              <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">
-                <i class="fa fa-tasks"></i>
-                   {{_("Assign someone to this task")}}</h3>
-              </div>
-              <div class="modal-body">
-                 <form id="addMember" name="addaccount" ng-submit="share(slected_memeber)" class="form-horizontal"> 
-                    <div class=''>
-                        <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group') }}">
-                      <div id="assigeeList" class="list-group">
-                        <div class="invitation list-group-item" ng-repeat="selected_us in slected_members">
-                          <button type="button" class="close" ng-click="unselectMember($index)" data-dismiss="alert"></button>
-                          <img class="google-avatar" src="<%= selected_us.google_public_profile_photo_url%>"/>
-                            <strong> <%= selected_us.google_display_name %> < <%=selected_us.email%> ></strong>
-                        </div>
-                      </div>
-                    </div>
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                
-                <input ng-hide="isLoading" ng-click="addNewContributors()" type="submit" class="btn green" value="{{ _('Add this account') }}">
-                <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
-              </div>
-               </form>
-               </div>
-               </div>
-
-       </div>
-       <script type="text/javascript">
-          $('#assigeeList').slimScroll({
-              height: '200px'
-          });
-       </script>
-      <div id="addAccountModal" class="modal  fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-       <div class="modal-dialog">
-          <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">{{_("New Task")}}</h3>
-              </div>
-              <div class="modal-body">
-                 <form id="addAccount" name="addaccount"  class="form-horizontal"  ng-keyup="addAccountOnKey(account)"> 
-                  <fieldset>
-                  
-                    
-
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Name")}} *</label>
-                       
-                        <div class="controls">
-                          <input type="text" required  ng-model="account.name">
-                          
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Type")}}</label>
-                       
-                        <div class="controls">
-                         
-                          <select value="Customer" ng-model="account.account_type"> 
-                         <option value="Competitor">Competitor</option><option value="Customer">Customer</option><option value="Distributor">Distributor</option><option value="Integrator">Integrator</option><option value="Investor">Investor</option><option value="Partner">Partner</option><option value="Press">Press</option><option value="Prospect">Prospect</option><option value="Reseller">Reseller</option><option value="Supplier">Supplier</option><option value="Vendor">Vendor</option><option value="Other">Other</option></select>
-                          
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label  class="required control-label">{{_("Industry")}} </label>
-                       
-                        <div class="controls">
-                         
-                          <select ng-model="account.industry">
-                          <option value="">--None--</option><option value="Agriculture">Agriculture</option><option value="Apparel">Apparel</option><option value="Banking">Banking</option><option value="Biotechnology">Biotechnology</option><option value="Chemicals">Chemicals</option><option value="Communications">Communications</option><option value="Construction">Construction</option><option value="Consulting">Consulting</option><option value="Education">Education</option><option value="Electronics">Electronics</option><option value="Energy">Energy</option><option value="Engineering">Engineering</option><option value="Entertainment">Entertainment</option><option value="Environmental">Environmental</option><option value="Finance">Finance</option><option value="Food &amp; Beverage">Food &amp; Beverage</option><option value="Government">Government</option><option value="Healthcare">Healthcare</option><option value="Hospitality">Hospitality</option><option value="Insurance">Insurance</option><option value="Machinery">Machinery</option><option value="Manufacturing">Manufacturing</option><option value="Media">Media</option><option value="Not For Profit">Not For Profit</option><option value="Recreation">Recreation</option><option value="Retail">Retail</option><option value="Shipping">Shipping</option><option value="Technology">Technology</option><option value="Telecommunications">Telecommunications</option><option value="Transportation">Transportation</option><option value="Utilities">Utilities</option><option value="Other">Other</option></select>
-                          
-                        </div>
-                    </div>
-                    <hr/>
-                    <p> {{ _('Who can access?') }}</p>
-                     <div class=''>
-
-                     
-                          
-                            <label class="radio line">
-                            <input type="radio" value="public" ng-model="account.access" />
-                             {{ _('public: Anyone within your organization') }}
-                            </label>
-                            <label class="radio line">
-                            <input type="radio"  value="private" ng-model="account.access" />
-                            {{ _('private: only you and your collaborators') }}
-                            </label>  
-                           
-                       
-                      
-                    </div>
-                    </fieldset>
-                
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                
-                <input ng-hide="isLoading" ng-click="save(account)" type="submit" class="btn green" value="{{ _('Add this account') }}">
-                <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
-              </div>
-               </form>
-            </div>
-        </div>
-       </div>
-      <div class="" ng-show="isSignedIn">
+  <div class="" ng-show="immediateFailed">
+    <div class="col-md-12">  
+      <h1>{{ _("Sign-in Button;") }}</h1>
+      <span id="signin">
+        <span id="myGsignin"></span>
+      </span>
+    </div>
+  </div>
+  <div ng-show="isSignedIn">
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-        
+        <div class="showPage">
           <!-- Filtering and sorting -->
           <div class="row">
           <div class="col-md-9">
@@ -716,6 +538,7 @@
               </div>
           </div>
           </div> 
+          </div>
           <div class="row">
             <div class="pagination pull-right" ng-hide="isLoading">
                   
@@ -735,6 +558,93 @@
       </div>
       <!-- END PAGE CONTAINER--> 
 </div>
+<div id="beforecloseTask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                      <h3 id="myModalLabel" class="modal-title">Close Task</h3>
+                    </div>
+                    <div class="modal-body">
+                       <form id="seletesho" name="deletesho" class="form-horizontal"> 
+                        <p>{{_("Are you sure you want to close selected tasks")}} .</p>
+                    </div>
+                      <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                        
+                        <input ng-hide="isLoading" ng-click="closeTask()" type="submit" class="btn red" value="Close">
+                        <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                      </div>
+                  </form>
+                </div>
+              </div>
+             </div>
+<div id="assigneeTagsToTask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                      <h3 id="myModalLabel" class="modal-title">Add Tags </h3>
+                    </div>
+                    <div class="modal-body">
+                       <form id="seletesho" name="deletesho" class="form-horizontal"> 
+                       <div class="form-group">
+                            <select id="select2_sample2" class="form-control select2" multiple>
+                              <option ng-repeat="tag in tags" 
+                              value='<%=tag.entityKey%>'>
+                                <%=tag.name%>
+                              </option>
+                            </select>
+                        </div>
+                    </div>
+                      <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                        <input ng-hide="isLoadingTask" ng-click="addTags()" type="submit" class="btn green" value="Add">
+                        <input ng-show="isLoadingTask" type="submit" class="btn green" value="Loading..." disabled>
+                      </div>
+                  </form>
+                </div>
+              </div>
+             </div>
+<div id="assigneeModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+           <div class="modal-dialog">
+              <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">
+                <i class="fa fa-tasks"></i>
+                   {{_("Assign someone to this task")}}</h3>
+              </div>
+              <div class="modal-body">
+                 <form id="addMember" name="addaccount" ng-submit="share(slected_memeber)" class="form-horizontal"> 
+                    <div class=''>
+                        <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group') }}">
+                      <div id="assigeeList" class="list-group">
+                        <div class="invitation list-group-item" ng-repeat="selected_us in slected_members">
+                          <button type="button" class="close" ng-click="unselectMember($index)" data-dismiss="alert"></button>
+                          <img class="google-avatar" src="<%= selected_us.google_public_profile_photo_url%>"/>
+                            <strong> <%= selected_us.google_display_name %> < <%=selected_us.email%> ></strong>
+                        </div>
+                      </div>
+                    </div>
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                
+                <input ng-hide="isLoading" ng-click="addNewContributors()" type="submit" class="btn green" value="{{ _('Add this account') }}">
+                <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
+              </div>
+               </form>
+               </div>
+               </div>
+
+       </div>
+       <script type="text/javascript">
+          $('#assigeeList').slimScroll({
+              height: '200px'
+          });
+       </script>
+
 <script type="text/javascript">
   $("#select2_sample2").select2({
         placeholder: "Click to Select a label",

@@ -38,10 +38,19 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact','Tag','Ed
         
         // What to do after authentication
        $scope.runTheProcess = function(){
-            var params = {'order' : $scope.order,'limit':6}
+            var params = {'order' : $scope.order,'limit':20}
             Contact.list($scope,params);
             var paramsTag = {'about_kind':'Contact'};
-          Tag.list($scope,paramsTag);
+            Tag.list($scope,paramsTag);
+            // for (var i=0;i<100;i++)
+            // { 
+            //     var params = { 
+            //               'firstname': 'Dja3fer',
+            //               'lastname':'M3amer ' + i.toString(),
+            //               'access':'public'
+            //             }
+            //     Contact.insert($scope,params);
+            // }
 
        };
        $scope.getPosition= function(index){
@@ -57,6 +66,20 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact','Tag','Ed
        $scope.refreshToken = function() {
             Auth.refreshToken();
        };
+       
+       $scope.listMoreItems = function(){
+        var nextPage = $scope.contactCurrentPage + 1;
+        var params = {};
+        if ($scope.contactpages[nextPage]){
+            params = {
+                      'limit':20,
+                      'order' : $scope.order,
+                      'pageToken':$scope.contactpages[nextPage]
+                    }
+            $scope.contactCurrentPage = $scope.contactCurrentPage + 1 ; 
+            Contact.listMore($scope,params);
+        }
+      };
        $scope.listNextPageItems = function(){
           
           var nextPage = $scope.contactCurrentPage + 1;
@@ -393,21 +416,26 @@ $scope.addTags=function(){
         $scope.draggedTag=tag;
          //$scope.$apply();
       };
-      $scope.dropTag=function(account){
+      $scope.dropTag=function(contact,index){
         var items = [];
         
-        var edge = {
-             'start_node': account.entityKey,
-              'end_node': $scope.draggedTag.entityKey,
-              'kind':'tags',
-              'inverse_edge': 'tagged_on'
+        var params = {
+              'parent': contact.entityKey,
+              'tag_key': $scope.draggedTag.entityKey
         };
-        items.push(edge);
-        params = {
-          'items': items
-        };
-                Edge.insert($scope,params);
         $scope.draggedTag=null;
+        Tag.attach($scope,params,index);
+        
+      };
+      $scope.tagattached=function(tag,index){
+          if ($scope.contacts[index].tags == undefined){
+            $scope.contacts[index].tags = [];
+          }
+          $scope.contacts[index].tags.push(tag);
+          var card_index = '#card_'+index;
+          $(card_index).removeClass('over');
+
+          $scope.$apply();
       };
 
   // HKA 12.03.2014 Pallet color on Tags
@@ -417,6 +445,11 @@ $scope.addTags=function(){
 
      // Google+ Authentication 
      Auth.init($scope);
+     $(window).scroll(function() {
+          if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
+              $scope.listMoreItems();
+          }
+      });
 }]);
 
 
@@ -1359,6 +1392,7 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
       $scope.sociallinks=[];
       $scope.customfields=[];
       $scope.results=[];
+      $scope.imageSrc = '/static/img/default_company.png';
       $scope.initObject=function(obj){
           for (var key in obj) {
                 obj[key]=null;
@@ -1466,6 +1500,7 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
                         'introduction':contact.introduction,
                         'phones':$scope.phones,
                         'emails':$scope.emails,
+                        'addresses':$scope.addresses,
                         'infonodes':$scope.prepareInfonodes(),
                         'access': contact.access
                       };

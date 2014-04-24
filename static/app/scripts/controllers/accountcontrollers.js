@@ -34,17 +34,29 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
      $scope.tag.color= {'name':'green','color':'#BBE535'};
      $scope.runTheProcess = function(){
           var params = { 'order': $scope.order,
-                        'limit':6}
+                        'limit':20}
           Account.list($scope,params);
           var paramsTag = {'about_kind':'Account'};
           Tag.list($scope,paramsTag);
+
+          
+          // for (var i=0;i<500;i++)
+          // { 
+          //     var params = { 
+          //               'name': 'Account ' + i.toString(),
+          //               'account_type': 'Customer',
+          //               'industry':'Technology',
+          //               'access':'public'
+          //             }
+          //     Account.insert($scope,params);
+          // }
+          
      };
      $scope.getPosition= function(index){
         if(index<3){
          
           return index+1;
         }else{
-          console.log((index%3)+1);
           return (index%3)+1;
         }
      };
@@ -67,6 +79,20 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
           $scope.currentPage = $scope.currentPage + 1 ; 
           Account.list($scope,params);
      };
+     $scope.listMoreItems = function(){
+        console.log('try to load more');
+        var nextPage = $scope.currentPage + 1;
+        var params = {};
+        if ($scope.pages[nextPage]){
+            params = {
+                      'limit':20,
+                      'order' : $scope.order,
+                      'pageToken':$scope.pages[nextPage]
+                    }
+            $scope.currentPage = $scope.currentPage + 1 ; 
+            Account.listMore($scope,params);
+        }
+      };
      $scope.listPrevPageItems = function(){
        var prevPage = $scope.currentPage - 1;
        var params = {};
@@ -92,14 +118,7 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
             $scope.save(account);
         };
      };
-     // inserting the account  
-     $scope.save = function(account){
-          if (account.name) {
-             Account.insert($scope,account);
-              $('#addAccountModal').modal('hide');
-             
-           };
-      };
+    
 
     $scope.addAccountOnKey = function(account){
       if(event.keyCode == 13 && account){
@@ -312,6 +331,7 @@ $scope.addTags=function(){
       }
       console.log('************** Edge *********************');
       console.log(params);
+
       Edge.insert($scope,params);
       $('#assigneeTagsToTask').modal('hide');
 
@@ -355,23 +375,28 @@ $scope.addTags=function(){
         $scope.draggedTag=tag;
         
       }
-      $scope.dropTag=function(account){
+      $scope.dropTag=function(account,index){
         var items = [];
         
-        var edge = {
-             'start_node': account.entityKey,
-              'end_node': $scope.draggedTag.entityKey,
-              'kind':'tags',
-              'inverse_edge': 'tagged_on'
+        var params = {
+              'parent': account.entityKey,
+              'tag_key': $scope.draggedTag.entityKey
         };
-        items.push(edge);
-        params = {
-          'items': items
-        }
-        
-        Edge.insert($scope,params);
         $scope.draggedTag=null;
+        Tag.attach($scope,params,index);
+        
       };
+      $scope.tagattached=function(tag,index){
+          if ($scope.accounts[index].tags == undefined){
+            $scope.accounts[index].tags = [];
+          }
+          $scope.accounts[index].tags.push(tag);
+          var card_index = '#card_'+index;
+          $(card_index).removeClass('over');
+
+          $scope.$apply();
+      };
+      
       
  // HKA 12.03.2014 Pallet color on Tags
       $scope.checkColor=function(color){
@@ -382,6 +407,11 @@ $scope.addTags=function(){
 
      // Google+ Authentication 
      Auth.init($scope);
+     $(window).scroll(function() {
+          if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
+              $scope.listMoreItems();
+          }
+      });
 
 }]);
 app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account','Contact','Case','Opportunity', 'Topic','Note','Task','Event','Permission','User','Attachement','Email','Need','Opportunitystage','Casestatus','Map','InfoNode',
@@ -450,6 +480,12 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
           {value: 'Mob', text: 'Mob'},
           {value: 'Other', text: 'Other'}
         ];
+        $scope.showUpload=false;
+        $scope.logo = {
+                    'logo_img_id':null,
+                    'logo_img_url':null
+                  };
+    
 
 
        // What to do after authentication
@@ -500,6 +536,22 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
          
 
        };
+       $scope.getPosition= function(index){
+        if(index<4){
+         
+          return index+1;
+        }else{
+          return (index%4)+1;
+        }
+     };
+     $scope.waterfall= function(){
+
+    
+           /* $('.waterfall').hide();
+          $('.waterfall').show();*/
+          $( window ).trigger( "resize" );
+     };
+     
        // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
             Auth.refreshToken();
@@ -1391,8 +1443,8 @@ $scope.beforedeleteInfonde = function(){
     $('#BeforedeleteInfonode').modal('show');
 }
 $scope.deleteaccount = function(){
-     var accountid = {'entityKey':$scope.account.entityKey};
-     Account.delete($scope,accountid);
+     var accountKey = {'entityKey':$scope.account.entityKey};
+     Account.delete($scope,accountKey);
      $('#BeforedeleteAccount').modal('hide');
      };
 
@@ -1564,6 +1616,12 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
       $scope.customfields=[];
       $scope.account.account_type = 'Customer';
       $scope.account.industry = 'Technology';
+      $scope.phone = {'type':'work'};
+            $scope.logo = {
+                    'logo_img_id':null,
+                    'logo_img_url':null
+                  };
+      $scope.imageSrc = '/static/img/default_company.png';
       $scope.initObject=function(obj){
           for (var key in obj) {
                 obj[key]=null;
@@ -1636,10 +1694,36 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
         });
         return infonodes;
     };
+      $scope.createPickerUploader = function() {
+          var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
+          var picker = new google.picker.PickerBuilder().
+              addView(new google.picker.DocsUploadView()).
+              setCallback($scope.uploaderCallback).
+              setOAuthToken(window.authResult.access_token).
+              setDeveloperKey(developerKey).
+              setAppId(987765099891).
+              build();
+          picker.setVisible(true);
+      };
+      // A simple callback implementation.
+      $scope.uploaderCallback = function(data) {
+          if (data.action == google.picker.Action.PICKED) {
+                var params = {
+                              'access': $scope.account.access,
+                              'parent':$scope.account.entityKey
+                            };
+                params.items = new Array();
+                if(data.docs){
+                  $scope.logo.logo_img_id = data.docs[0].id ;
+                  $scope.logo.logo_img_url = data.docs[0].url ;
+                  $scope.imageSrc = 'https://docs.google.com/uc?id='+data.docs[0].id;
+                  $scope.$apply();
+                }
+          }
+      }
      
-       $scope.accountInserted = function(resp){
-          console.log('***********inserted***********');
-        window.location.replace('/#/accounts');
+      $scope.accountInserted = function(resp){
+          window.location.replace('/#/accounts');
       };
       $scope.save = function(account){
         if(account.name){
@@ -1652,9 +1736,12 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
                         'phones':$scope.phones,
                         'emails':$scope.emails,
                         'infonodes':$scope.prepareInfonodes(),
-                        'access': account.access
+                        'access': account.access,
                       };
-        
+          if ($scope.logo.logo_img_id){
+              params['logo_img_id'] = $scope.logo.logo_img_id;
+              params['logo_img_url'] = $scope.logo.logo_img_url;
+          }
           Account.insert($scope,params);
           
         }
@@ -1666,10 +1753,8 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
       if(event.keyCode == 13 && account){
           $scope.save(account);
       }
-      
-      
     };
-
+    
 
     
    // Google+ Authentication 

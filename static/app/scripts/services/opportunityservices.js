@@ -159,6 +159,41 @@ opportunityservices.factory('Opportunity', function($http) {
               }
       });
   };
+  Opportunity.listMore = function($scope,params){
+      $scope.isLoading = true;
+      $scope.$apply();
+      gapi.client.crmengine.opportunities.listv2(params).execute(function(resp) {
+              if(!resp.code){
+                  angular.forEach(resp.items, function(item){
+                      $scope.opportunities.push(item);
+                  });
+                 if ($scope.oppCurrentPage>1){
+                      $scope.opppagination.prev = true;
+                   }else{
+                       $scope.opppagination.prev = false;
+                   }
+                 if (resp.nextPageToken){
+                   var nextPage = $scope.oppCurrentPage + 1;
+                   // Store the nextPageToken
+                   $scope.opppages[nextPage] = resp.nextPageToken;
+                   $scope.opppagination.next = true;
+                   
+                 }else{
+                  $scope.opppagination.next = false;
+                 }
+                 // Loaded succefully
+                 $scope.isLoading = false;
+                 // Call the method $apply to make the update on the scope
+                 $scope.$apply();
+              }else {
+
+                if(resp.code==401){
+                       $scope.refreshToken();;
+                };
+                 
+              }
+      });
+  };
   Opportunity.search = function($scope,params){
       gapi.client.crmengine.opportunities.search(params).execute(function(resp) {
           console.log(resp);

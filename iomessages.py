@@ -15,6 +15,15 @@ class AddressSchema(messages.Message):
     country = messages.StringField(5)
     formatted = messages.StringField(6)
 
+class PhoneListSchema(messages.Message):
+    items = messages.MessageField(PhoneSchema, 1 , repeated=True)
+
+class EmailListSchema(messages.Message):
+    items = messages.MessageField(EmailSchema, 1 , repeated=True)
+
+class AddressListSchema(messages.Message):
+    items = messages.MessageField(AddressSchema, 1 , repeated=True)
+
 class RecordSchema(messages.Message):
     field = messages.StringField(1)
     value = messages.StringField(2)
@@ -38,3 +47,7 @@ class UserSchema(messages.Message):
 
 class UserListSchema(messages.Message):
     items = messages.MessageField(UserSchema, 1, repeated=True)
+
+class AddTagSchema(messages.Message):
+    parent = messages.StringField(1,required=True)
+    tag_key = messages.StringField(2,required=True)

@@ -2,6 +2,8 @@ from google.appengine.ext import ndb
 from google.appengine.datastore.datastore_query import Cursor
 from protorpc import messages
 from endpoints_helper import EndpointsHelper
+import iomessages
+from model import User
 INVERSED_EDGES = {
             'assignees' : ['assigned_to'],
             'cases' : ['parents'],
@@ -9,6 +11,7 @@ INVERSED_EDGES = {
             'contacts': ['parents'],
             'documents':['parents'],
             'events':['parents'],
+            'gcontacts':['synced_with'],
             'has_access_on':['permissions'],
             'infos':['parents'],
             'needs': ['parents'],
@@ -18,6 +21,7 @@ INVERSED_EDGES = {
             'related_opportunities':['stages'],
             'stages':['related_opportunities'],
             'status':['related_cases'],
+            'synced_with':['gcontacts'],
             'tagged_on': ['tags'],
             'tags': ['tagged_on'],
             'tasks' : ['parents'],
@@ -29,7 +33,7 @@ DELETED_ON_CASCADE = {
             'Note' : ['comments'],
             'Document' : ['comments'],
             'Account' : ['tasks','topics','documents','events','needs'],
-            'Contact' : ['tasks','topics','documents','events'],
+            'Contact' : ['tasks','topics','documents','events','gcontacts'],
             'Opportunity' : ['tasks','topics','documents','events'],
             'Case': ['tasks','topics','documents','events'],
             'Lead': ['tasks','topics','documents','events']
@@ -189,6 +193,23 @@ class Node(ndb.Expando):
             if not Edge.find(start_node=node.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
                 return False
         return True
+    @classmethod
+    def list_permissions(cls,node):
+        if node.access == 'public':
+            users =  User.query(User.organization==node.organization)
+        else:
+            owner = User.get_by_gid(node.owner)
+            # list collaborators
+            edge_list = Edge.list(
+                                    start_node = node.key,
+                                    kind = 'permissions'
+                            )
+            users_list_of_keys = []
+            for edge in edge_list['items']:
+                users_list_of_keys.append(edge.end_node)
+            users = ndb.get_multi(users_list_of_keys)
+            users.append(owner)
+        return users
 
     @classmethod
     def list_info_nodes(cls,parent_key,request):
@@ -226,6 +247,60 @@ class Node(ndb.Expando):
         return InfoNodeListResponse(
                                     items = connections_list
                                     )
+    @classmethod
+    def to_structured_data(cls,infodones):
+        structured_data = {}
+        for infonodecollection in infodones.items:
+            structured_data[infonodecollection.kind]=[]
+            for infonode in infonodecollection.items:
+                structured_object = {}
+                for item in infonode.fields:
+                    structured_object[item.field] = item.value
+                structured_data[infonodecollection.kind].append(structured_object)
+        phones = None
+        if 'phones' in structured_data.keys():
+            phones = iomessages.PhoneListSchema()
+            for phone in structured_data['phones']:
+                phone_schema = iomessages.PhoneSchema(
+                                                    type=phone['type'],
+                                                    number=phone['number']
+                                                )
+                phones.items.append(phone_schema)
+            if phones.items:
+                structured_data['phones']=phones
+            else:
+                del structured_data['phones']
+        emails = None
+        if 'emails' in structured_data.keys():
+            emails = iomessages.EmailListSchema()
+            for email in structured_data['emails']:
+                email_schema = iomessages.EmailSchema(
+                                                    email=email['email']
+                                                )
+                emails.items.append(email_schema)
+            if emails.items:
+                structured_data['emails']=emails
+            else:
+                del structured_data['emails']
+        addresses = None
+        if 'addresses' in structured_data.keys():
+            addresses = iomessages.AddressListSchema()
+            for address in structured_data['addresses']:
+                address_schema = iomessages.AddressSchema(
+                                                    street=address['street'],
+                                                    city=address['city'],
+                                                    state=address['state'],
+                                                    postal_code=address['postal_code'],
+                                                    country=address['country'],
+                                                    formatted=address['formatted']
+                                                    )
+                addresses.items.append(address_schema)
+            if addresses.items:
+                structured_data['addresses']=addresses
+            else:
+                del structured_data['addresses']
+        return structured_data
+
     @classmethod
     def insert_info_node(cls,parent_key,request):
         node = Node(kind=request.kind)

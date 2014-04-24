@@ -48,24 +48,42 @@
           </span>
     </div>
   </div>
-  <div class="" >
+  <div class="row" >
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-        
-        
-
-            <div class="row">
-              <div class="col-md-9">
+       <div class="showPage newPage col-md-9">
+                     <div class="row">
+              <div class="col-md-12">
               <!-- BEGIN PORTLET-->
-                <form class="form-horizontal ">
+              <div class="row">
+                    <div class="col-md-3">
+                    <!-- BEGIN PORTLET-->
+                      <div class="portlet">
+                        
+                        <div class="portlet-body left-sidebar" id="chats">
+                          <div class="pic">
+                              <img alt="<%=account.name%>" ng-src="<%=imageSrc%>" class="img-responsive img-thumbnail">
+                         </div>  
+                          <a ng-click="createPickerUploader()" href="" class="btn btn-default btn-upload" data-toggle="modal">
+                                <img src="/static/img/upload_logo.png" >
+                          </a>
+                                        
+                        </div>
+                      </div>
+                    
+                    
+                    <!-- END PORTLET-->
+                  </div>
+                  <div class="col-md-9">
+                      <form class="form-horizontal ">
                           <div class="row">
                           <div class="col-md-12">
                        
                             <div class="form-group">
                               <label class="control-label col-md-2">Name</label>
                               <div class="col-md-10">
-                                <input autofocus ng-model="account.name" placeholder="{{_('Type here the company name of your customer,parnter,investor...')}}" type="text" class="form-control">
+                                <input autofocus ng-model="account.name" placeholder="{{_('Type here the company name of your customer,parnter...')}}" type="text" class="form-control">
                               </div>
                             </div>
                           </div>
@@ -91,6 +109,8 @@
                           </div>
                         </div>
                       </form>
+                  </div>
+              </div>
                        <div class="row">
                           <div class="col-md-6">
                             
@@ -105,10 +125,6 @@
                                       <div class="row">
                                         <form class="form-inline newLeadForm" role="form">
                                           <div class="form-group sm-group" style="">
-                                            <label class="sr-only" for="exampleInputEmail2">Number</label>
-                                            <input type="text" class="form-control" id="exampleInputEmail2" ng-model="phone.number" placeholder="Enter a number">
-                                          </div>
-                                          <div class="form-group sm-group" style="">
                                             <label class="sr-only" for="exampleInputPassword2">Type</label>
                                             <select ng-model="phone.type" class="form-control">
                                               <option value="home" selected="selected" >{{_('home')}}</option>
@@ -116,8 +132,11 @@
                                               <option>{{_('mobile')}}</option>
                                               <option>{{_('other')}}</option>
                                             </select>
+                                          </div>                                          
+                                          <div class="form-group sm-group" style="">
+                                            <label class="sr-only" for="exampleInputEmail2">Number</label>
+                                            <input type="text" class="form-control" id="exampleInputEmail2" ng-model="phone.number" placeholder="Enter a number">
                                           </div>
-                                          
                                            <button type="submit" ng-click="pushElement(phone,phones)" class="btn blue jfk-button jfk-button-action">Add</button>
                                             <button type="submit" class="btn btn-default" ng-click="showPhoneForm=false">X</button>
                                         </form>
@@ -254,39 +273,39 @@
                                 
                                                     
                               </div>
-                              <div class="news-blocks blank-card blank-card-yellow">
-                                <h3>Who can access ?</h3>
-                                  <label class="radio line">
-                                        <input type="radio" value="public" ng-model="account.access" />
-                                        public: Anyone within your organization can access and find
-                                  </label>
-                                  <label class="radio line">
-                                        <input type="radio"  value="private" ng-model="account.access" />
-                                        private: only you and your collaborators
-                                  </label>
-                              </div>
+                              
                             
                           </div>
                           
                         </div>
 
             </div>
-            <div class="col-md-3">
-              <!-- BEGIN PORTLET-->
-                <div class="portlet">
-                  <div class="portlet-title line">
-                    
-                  </div>
-                  <div class="portlet-body" id="chats">
-                    <p>{{ _('Accounts  pages includes a detailed page for each customer, partner, or investor in your ecosystem.') }}</p>
-                    
-                  </div>
-                </div>
-              
-              
-              <!-- END PORTLET-->
+       </div> 
+
             </div>
-            </div>
+              <div class="col-md-3 ">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <!-- BEGIN PORTLET-->
+                      <div class="portlet showPage">
+                        <div class="portlet-title line">
+                          <div class="caption"><i class="fa fa-lock"></i>Who can access ?</div>
+                          
+                        </div>
+                        <div class="portlet-body" id="chats">
+                                  <label class="radio line inbox-label">
+                                        <input type="radio" value="public" ng-model="account.access" />
+                                        public: Anyone within your organization can access and find
+                                  </label>
+                                  <label class="radio line inbox-label">
+                                        <input type="radio"  value="private" ng-model="account.access" />
+                                        private: only you and your collaborators
+                                  </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
         <!-- END PAGE CONTENT-->
       </div>
 

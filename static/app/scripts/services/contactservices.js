@@ -216,6 +216,7 @@ accountservices.factory('Contact', function($http) {
   };
   Contact.list = function($scope,params){
         $scope.isLoading = true;
+
       gapi.client.crmengine.contacts.listv2(params).execute(function(resp) {
 
     
@@ -269,8 +270,60 @@ accountservices.factory('Contact', function($http) {
             
       });
   };
+  Contact.listMore = function($scope,params){
+      $scope.isLoading = true;
+      $scope.$apply();
+      gapi.client.crmengine.contacts.listv2(params).execute(function(resp) {
+          if(!resp.code){
+                  angular.forEach(resp.items, function(item){
+                      $scope.contacts.push(item);
+                  });
+                  if ($scope.contactCurrentPage>1){
+                      $scope.contactpagination.prev = true;
+                   }else{
+                       $scope.contactpagination.prev = false;
+                   }
+                 if (resp.nextPageToken){
+                   var nextPage = $scope.contactCurrentPage + 1;
+                   // Store the nextPageToken
+                   $scope.contactpages[nextPage] = resp.nextPageToken;
+                   $scope.contactpagination.next = true;
+                   
+                 }else{
+                  $scope.contactpagination.next = false;
+                 }
+                 // Loaded succefully
+                 $scope.isLoading = false;
+                 // Call the method $apply to make the update on the scope
+                 $scope.$apply();
+
+              } else {
+                 if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+              }
+              
+        });
+    
+    
+
+  };
+  Contact.search = function($scope,params){
+      gapi.client.crmengine.contacts.search(params).execute(function(resp) {
+           if (resp.items){
+              $scope.results = resp.items;
+              
+              $scope.$apply();
+            };
+            
+      });
+  };
   Contact.insert = function($scope,params){
       $scope.isLoading = true;
+      console.log('********** I am Inserting a contact**********');
+      console.log(params);
       gapi.client.crmengine.contacts.insertv2(params).execute(function(resp) {
          
          if(!resp.code){

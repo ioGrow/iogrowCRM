@@ -6,6 +6,13 @@ from apiclient.discovery import build
 from apiclient import errors
 import httplib2
 import endpoints
+# gdata
+import atom.data
+import gdata.data
+import gdata.contacts.client
+import gdata.contacts.data
+from gdata.gauth import OAuth2Token
+from gdata.contacts.client import ContactsClient
 from model import User
 FOLDERS = {
             'Account': 'accounts_folder',
@@ -16,6 +23,30 @@ FOLDERS = {
             'Show': 'shows_folder',
             'Feedback': 'feedbacks_folder'
         }
+
+class OAuth2TokenFromCredentials(OAuth2Token):
+    def __init__(self, credentials):
+        self.credentials = credentials
+        super(OAuth2TokenFromCredentials, self).__init__(None, None, None, None)
+        self.UpdateFromCredentials()
+ 
+    def UpdateFromCredentials(self):
+        self.client_id = self.credentials.client_id
+        self.client_secret = self.credentials.client_secret
+        self.user_agent = self.credentials.user_agent
+        self.token_uri = self.credentials.token_uri
+        self.access_token = self.credentials.access_token
+        self.refresh_token = self.credentials.refresh_token
+        self.token_expiry = self.credentials.token_expiry
+        self._invalid = self.credentials.invalid
+ 
+    def generate_authorize_url(self, *args, **kwargs): raise NotImplementedError
+    def get_access_token(self, *args, **kwargs): raise NotImplementedError
+    def revoke(self, *args, **kwargs): raise NotImplementedError
+    def _extract_tokens(self, *args, **kwargs): raise NotImplementedError
+    def _refresh(self, unused_request):
+        self.credentials._refresh(httplib2.Http().request)
+        self.UpdateFromCredentials()
 
 class EndpointsHelper():
     INVALID_TOKEN = 'Invalid token'
@@ -54,8 +85,6 @@ class EndpointsHelper():
             raise endpoints.UnauthorizedException(cls.NO_ACCOUNT)
         return user_from_email
 
-    
-            
     @classmethod
     def insert_folder(cls, user, folder_name, kind):
         try:
@@ -135,6 +164,24 @@ class EndpointsHelper():
         except errors.HttpError, error:
             print 'An error occurred: %s' % error
             return None
+
+    @classmethod
+    def create_contact_group(cls,credentials):
+        auth_token = OAuth2TokenFromCredentials(credentials)
+        gd_client = ContactsClient()
+        auth_token.authorize(gd_client)
+        new_group = gdata.contacts.data.GroupEntry(title=atom.data.Title(text='ioGrow Contacts'))
+        created_group = gd_client.CreateGroup(new_group)
+        return created_group.id.text
+
+    @classmethod
+    def create_contact(cls,credentials,google_contact_schema):
+        auth_token = OAuth2TokenFromCredentials(credentials)
+        gd_client = ContactsClient()
+        auth_token.authorize(gd_client)
+        contact_entry = gd_client.CreateContact(google_contact_schema)
+        return contact_entry.id.text
+
 
 
             
