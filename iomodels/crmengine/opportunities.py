@@ -360,7 +360,7 @@ class Opportunity(EndpointsModel):
             limit = 10
         opportunity_next_curs = request.opportunities.pageToken
         while you_can_loop:
-            edge_limit = int(request.cases.limit) - count
+            edge_limit = int(request.opportunities.limit) - count
             if edge_limit>0:
                 opportunity_edge_list = Edge.list(
                                     start_node = parent_key,
@@ -385,7 +385,7 @@ class Opportunity(EndpointsModel):
                                                                     probability= str(current_stage.probability),
                                                                     stage_changed_at=opportunity_stage_edges['items'][0].created_at.isoformat()
                                                                     )
-                                        
+                        count = count + 1               
                         opportunity_schema = OpportunitySchema(
                                               id = str( opportunity.key.id() ),
                                               entityKey = opportunity.key.urlsafe(),
