@@ -1083,6 +1083,198 @@ $scope.listInfonodes = function(kind) {
 }]);
 
 
+app.controller('OpportunityNewCtrl', ['$scope','Auth','Account','Tag','Edge',
+    function($scope,Auth,Account,Tag,Edge) {
+      $("ul.page-sidebar-menu li").removeClass("active");
+      $("#id_Accounts").addClass("active");
+      
+      document.title = "Accounts: New";
+      $scope.isSignedIn = false;
+      $scope.immediateFailed = false;
+      $scope.nextPageToken = undefined;
+      $scope.prevPageToken = undefined;
+      $scope.isLoading = false;
+      $scope.leadpagination = {};
+      $scope.currentPage = 01;
+      $scope.pages = [];
+      $scope.stage_selected={};
+      $scope.accounts = [];
+      $scope.account = {};
+      $scope.account.access ='public';
+      $scope.order = '-updated_at';
+      $scope.status = 'New';
+      $scope.showPhoneForm=false;
+      $scope.showEmailForm=false;
+      $scope.showWebsiteForm=false;
+      $scope.showSociallinkForm=false;
+      $scope.showCustomFieldForm =false;
+      $scope.phones=[];
+      $scope.addresses=[];
+      $scope.emails=[];
+      $scope.websites=[];
+      $scope.sociallinks=[];
+      $scope.customfields=[];
+      $scope.account.account_type = 'Customer';
+      $scope.account.industry = 'Technology';
+      $scope.phone = {'type':'work'};
+            $scope.logo = {
+                    'logo_img_id':null,
+                    'logo_img_url':null
+                  };
+       $scope.percent = 65;
+        $scope.options = {
+            animate:{
+                duration:0,
+                enabled:false
+            },
+            barColor:'#2C3E50',
+            scaleColor:false,
+            lineWidth:20,
+            lineCap:'circle'
+        };
+      $scope.imageSrc = '/static/img/default_company.png';
+      $scope.initObject=function(obj){
+          for (var key in obj) {
+                obj[key]=null;
+              }
+      }
+      $scope.pushElement=function(elem,arr){
+          if (arr.indexOf(elem) == -1) {
+              var copyOfElement = angular.copy(elem);
+              arr.push(copyOfElement);
+              console.log(elem);
+              $scope.initObject(elem);
+
+          }else{
+            alert("item already exit");
+          }
+      }
+      $scope.runTheProcess = function(){
+            /*Account.list($scope,{});*/
+       };
+        // We need to call this to refresh token when user credentials are invalid
+       $scope.refreshToken = function() {
+            Auth.refreshToken();
+       };
+      // new Lead
+     $scope.save = function(account){
+          if (account.name) {
+           Account.insert($scope,account);
+         }; 
+      };
+      $scope.prepareInfonodes = function(){
+        var infonodes = [];
+        angular.forEach($scope.websites, function(website){
+            var infonode = {
+                            'kind':'websites',
+                            'fields':[
+                                    {
+                                    'field':"url",
+                                    'value':website.url
+                                    }
+                            ]
+                          
+                          }
+            infonodes.push(infonode);
+        });
+        angular.forEach($scope.sociallinks, function(sociallink){
+            var infonode = {
+                            'kind':'sociallinks',
+                            'fields':[
+                                    {
+                                    'field':"url",
+                                    'value':sociallink.url
+                                    }
+                            ]
+                          
+                          }
+            infonodes.push(infonode);
+        });
+        angular.forEach($scope.customfields, function(customfield){
+            var infonode = {
+                            'kind':'customfields',
+                            'fields':[
+                                    {
+                                    'field':customfield.field,
+                                    'value':customfield.value
+                                    }
+                            ]
+                          
+                          }
+            infonodes.push(infonode);
+        });
+        return infonodes;
+    };
+      $scope.createPickerUploader = function() {
+          var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
+          var picker = new google.picker.PickerBuilder().
+              addView(new google.picker.DocsUploadView()).
+              setCallback($scope.uploaderCallback).
+              setOAuthToken(window.authResult.access_token).
+              setDeveloperKey(developerKey).
+              setAppId(987765099891).
+              build();
+          picker.setVisible(true);
+      };
+      // A simple callback implementation.
+      $scope.uploaderCallback = function(data) {
+          if (data.action == google.picker.Action.PICKED) {
+                var params = {
+                              'access': $scope.account.access,
+                              'parent':$scope.account.entityKey
+                            };
+                params.items = new Array();
+                if(data.docs){
+                  $scope.logo.logo_img_id = data.docs[0].id ;
+                  $scope.logo.logo_img_url = data.docs[0].url ;
+                  $scope.imageSrc = 'https://docs.google.com/uc?id='+data.docs[0].id;
+                  $scope.$apply();
+                }
+          }
+      }
+     
+      $scope.accountInserted = function(resp){
+          window.location.replace('/#/accounts');
+      };
+      $scope.save = function(account){
+        if(account.name){
+          var params ={
+                        'name':account.name,
+                        'account_type':account.account_type,
+                        'industry':account.industry,
+                        'tagline':account.tagline,
+                        'introduction':account.introduction,
+                        'phones':$scope.phones,
+                        'emails':$scope.emails,
+                        'infonodes':$scope.prepareInfonodes(),
+                        'access': account.access,
+                      };
+          if ($scope.logo.logo_img_id){
+              params['logo_img_id'] = $scope.logo.logo_img_id;
+              params['logo_img_url'] = $scope.logo.logo_img_url;
+          }
+          Account.insert($scope,params);
+          
+        }
+      };
+
+
+     
+    $scope.addAccountOnKey = function(account){
+      if(event.keyCode == 13 && account){
+          $scope.save(account);
+      }
+    };
+    
+
+    
+   // Google+ Authentication 
+     Auth.init($scope);
+
+      
+}]);
+
+
 
 
 

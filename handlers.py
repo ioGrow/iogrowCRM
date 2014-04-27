@@ -415,6 +415,10 @@ class OpportunityShowHandler(BaseHandler,SessionEnabledHandler):
     def get (self):
         self.prepare_template('templates/opportunities/opportunity_show.html')
 
+class OpportunityNewHandler(BaseHandler,SessionEnabledHandler):
+    def get (self):
+        self.prepare_template('templates/opportunities/opportunity_new.html')
+
 class LeadListHandler(BaseHandler,SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/leads/lead_list.html')
@@ -676,6 +680,8 @@ routes = [
     # Opportunities Views
     ('/views/opportunities/list',OpportunityListHandler),
     ('/views/opportunities/show',OpportunityShowHandler),
+    ('/views/opportunities/new',OpportunityNewHandler),
+    
     # Leads Views
     ('/views/leads/list',LeadListHandler),
     ('/views/leads/show',LeadShowHandler),

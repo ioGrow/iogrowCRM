@@ -1,5 +1,5 @@
 
-var app = angular.module('crmEngine',['ui.bootstrap.datetimepicker','xeditable','ngQuickDate','ui.bootstrap','ui.select2', 'crmEngine.authservices', 'crmEngine.showservices', 'crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.eventservices', 'crmEngine.leadservices','crmEngine.opportunityservices','crmEngine.caseservices','crmEngine.userservices','crmEngine.groupservices','crmEngine.noteservices','crmEngine.commentservices','crmEngine.settingservices','crmEngine.feedbackservices','crmEngine.companyprofileservices','mapServices','crmEngine.needservices','crmEngine.infonodeservices']);
+var app = angular.module('crmEngine',['ui.bootstrap.datetimepicker','easypiechart','xeditable','ngQuickDate','ui.bootstrap','ui.select2', 'crmEngine.authservices', 'crmEngine.showservices', 'crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.eventservices', 'crmEngine.leadservices','crmEngine.opportunityservices','crmEngine.caseservices','crmEngine.userservices','crmEngine.groupservices','crmEngine.noteservices','crmEngine.commentservices','crmEngine.settingservices','crmEngine.feedbackservices','crmEngine.companyprofileservices','mapServices','crmEngine.needservices','crmEngine.infonodeservices']);
 
 app.config(function($interpolateProvider){
   $interpolateProvider.startSymbol('<%=');
@@ -41,6 +41,9 @@ app.config(['$routeProvider', function($routeProvider) {
       }).when('/opportunities/show/:opportunityId', {
         controller: 'OpportunityShowCtrl',        
         templateUrl:'/views/opportunities/show'
+      }).when('/opportunities/new', {
+        controller: 'OpportunityNewCtrl',        
+        templateUrl:'/views/opportunities/new'
       }).
       // Leads
       when('/leads/', {
