@@ -34,17 +34,22 @@ class OpportunityGetRequest(messages.Message):
 
 class OpportunityInsertRequest(messages.Message):
     name = messages.StringField(1)
-    amount = messages.StringField(2)
     stage = messages.StringField(3, required = True)
     account = messages.StringField(4, required = True)
     contact = messages.StringField(5)
     access = messages.StringField(6)
+    opportunity_type = messages.StringField(7)
+    duration =  messages.IntegerField(8)
+    duration_unit  = messages.StringField(9)
+    currency = messages.StringField(10)
+    amount_per_unit = messages.IntegerField(11)
+    amount_total = messages.IntegerField(12)
 
 class OpportunitySchema(messages.Message):
     id = messages.StringField(1)
     entityKey = messages.StringField(2)
     name = messages.StringField(3)
-    amount = messages.StringField(4)
+    source = messages.StringField(4)
     current_stage = messages.MessageField(OpportunitystageSchema,5) 
     stages = messages.MessageField(OpportunitystageSchema,6,repeated = True)
     infonodes = messages.MessageField(InfoNodeListResponse,7)
@@ -61,8 +66,12 @@ class OpportunitySchema(messages.Message):
     reason_lost = messages.StringField(18)
     description = messages.StringField(19)
     opportunity_type = messages.StringField(20)
-    source = messages.StringField(21)
-    account = messages.MessageField(AccountSchema,22)
+    duration =  messages.IntegerField(21)
+    duration_unit  = messages.StringField(22)
+    currency = messages.StringField(23)
+    amount_per_unit = messages.IntegerField(24)
+    amount_total = messages.IntegerField(25)
+    account = messages.MessageField(AccountSchema,26)
 
 class OpportunityListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -88,13 +97,7 @@ class OpportunitySearchResults(messages.Message):
     nextPageToken = messages.StringField(2)
 
 class Opportunity(EndpointsModel):
-
-    _message_fields_schema = ('id','entityKey','owner', 'created_at', 'updated_at', 'folder', 'access','collaborators_list','collaborators_ids', 'name','description','amount','account','account_name','account_id','contact','contact_name','contact_id','updated_at','stagename','stage_probability','closed_date','reason_lost','opportunity_type','competitor','source')
-
-    # Sharing fields
     owner = ndb.StringProperty()
-    collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
-    collaborators_ids = ndb.StringProperty(repeated=True)
     organization = ndb.KeyProperty()
     folder = ndb.StringProperty()
     account = ndb.KeyProperty()
@@ -106,7 +109,6 @@ class Opportunity(EndpointsModel):
     name = ndb.StringProperty()
     description = ndb.StringProperty()
     industry = ndb.StringProperty()
-    amount = ndb.IntegerProperty()
     closed_date = ndb.DateTimeProperty()
     reason_lost = ndb.StringProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
@@ -119,9 +121,14 @@ class Opportunity(EndpointsModel):
     competitor = ndb.StringProperty()
     source = ndb.StringProperty()
     opportunity_type = ndb.StringProperty()
-    
+    duration =  ndb.IntegerProperty()
+    duration_unit  = ndb.StringProperty()
+    currency = ndb.StringProperty()
+    amount_per_unit = ndb.IntegerProperty()
+    amount_total = ndb.IntegerProperty()
     # public or private
     access = ndb.StringProperty()
+
 
 
     def put(self, **kwargs):
@@ -144,7 +151,6 @@ class Opportunity(EndpointsModel):
     def put_index(self,data=None):
         """ index the element at each"""
         empty_string = lambda x: x if x else ""
-        collaborators = " ".join(self.collaborators_ids)
         organization = str(self.organization.id())
         title_autocomplete = ','.join(tokenize_autocomplete(self.name))
         if data:
@@ -164,7 +170,7 @@ class Opportunity(EndpointsModel):
                 search.TextField(name='stagename', value = empty_string(self.stagename) ),
                 search.TextField(name='description', value = empty_string(self.description)),
                 search.TextField(name='account_name', value = empty_string(self.account_name)),
-                search.NumberField(name='amount', value = int(self.amount)),
+                search.NumberField(name='amount_total', value = int(self.amount_total)),
                 search.DateField(name='created_at', value = self.created_at),
                 search.TextField(name='infos', value= data['infos']),
                 search.TextField(name='tags', value= data['tags']),
@@ -179,12 +185,12 @@ class Opportunity(EndpointsModel):
                 search.TextField(name='organization', value = empty_string(organization) ),
                 search.TextField(name='access', value = empty_string(self.access) ),
                 search.TextField(name='owner', value = empty_string(self.owner) ),
-                search.TextField(name='collaborators', value = collaborators ),
+                
                 search.TextField(name='title', value = empty_string(self.name) ),
                 search.TextField(name='stagename', value = empty_string(self.stagename) ),
                 search.TextField(name='description', value = empty_string(self.description)),
                 search.TextField(name='account_name', value = empty_string(self.account_name)),
-                search.NumberField(name='amount', value = int(self.amount)),
+                search.NumberField(name='amount_total', value = int(self.amount_total)),
                 #search.DateField(name='closed_date', value = self.closed_date),
                 search.DateField(name='created_at', value = self.created_at),
                 #search.DateField(name='reason_lost', value = self.reason_lost),
@@ -468,12 +474,22 @@ class Opportunity(EndpointsModel):
 
     @classmethod
     def insert(cls,user_from_email,request):
+        if request.opportunity_type=='fixed_bid':
+            amount_total = request.amount_total
+        elif request.amount_per_unit and request.duration:
+            amount_total = request.amount_per_unit * request.duration
+
         opportunity = cls(
                     owner = user_from_email.google_user_id,
                     organization = user_from_email.organization,
                     access = request.access,
                     name = request.name,
-                    amount = int(request.amount)
+                    opportunity_type = request.opportunity_type,
+                    amount_total = amount_total,
+                    amount_per_unit = request.amount_per_unit,
+                    duration = request.duration,
+                    duration_unit = request.duration_unit,
+                    currency = request.currency
                     )
         opportunity_key = opportunity.put_async()
         opportunity_key_async = opportunity_key.get_result()
@@ -529,7 +545,7 @@ class Opportunity(EndpointsModel):
                                   id = str( opportunity_key_async.id() ),
                                   entityKey = opportunity_key_async.urlsafe(),
                                   name = opportunity.name,
-                                  amount = str(opportunity.amount),
+                                  amount_total = opportunity.amount_total,
                                   created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
