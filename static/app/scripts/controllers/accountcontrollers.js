@@ -486,7 +486,18 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
                     'logo_img_url':null
                   };
     
-
+        $scope.percent = 65;
+        $scope.chartOptions = {
+            animate:{
+                duration:0,
+                enabled:false
+            },
+            size:110,
+            barColor:'#58a618',
+            scaleColor:false,
+            lineWidth:9,
+            lineCap:'circle'
+        };
 
        // What to do after authentication
        $scope.runTheProcess = function(){
