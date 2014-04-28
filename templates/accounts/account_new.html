@@ -229,8 +229,15 @@
                             <div class="news-blocks blank-card blank-card-red">
                                 <h3>Story</h3>
                                 <div class="news-block-tags">
-                                  <strong>Tagline </strong>
-                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="edittagline()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span>
+                                  <!--strong>Tagline </strong>
+                                  <span class="page-meta"><i class="icon-pencil"><a ng-click="edittagline()" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i></span-->
+                                  
+                                  <div class="form-group">
+                                   <label class="control-label col-md-4">Tagline</label>
+                                    <div class="col-md-8">
+                                     <input type="text" required id="id_tagline" class="form-control" ng-model="account.tagline">
+                                   </div>
+                                  </div>
                                   
                                 </div>
                                 <p><%=lead.tagline%> </p>
