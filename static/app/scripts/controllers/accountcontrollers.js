@@ -164,7 +164,7 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
      $scope.orderBy = function(order){
       
         var params = { 'order': order,
-                        'limit':6};
+                        'limit':20};
         $scope.order = order;
         Account.list($scope,params);
      };
@@ -172,13 +172,13 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
         if (filter){
           var params = { 'owner': filter,
                          'order': $scope.order, 
-                         'limit':6}
+                         'limit':20}
         }
         else{
           var params = {
               'order': $scope.order, 
               
-              'limit':6}
+              'limit':20}
         };
         $scope.isFiltering = true;
         Account.list($scope,params);
