@@ -190,6 +190,7 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
 $scope.listTags=function(){
       var paramsTag = {'about_kind':'Account'}
       Tag.list($scope,paramsTag);
+
      };
 $scope.edgeInserted = function () {
        $scope.listaccounts();
@@ -385,6 +386,9 @@ $scope.addTags=function(){
         $scope.draggedTag=null;
         Tag.attach($scope,params,index);
         
+        
+
+        
       };
       $scope.tagattached=function(tag,index){
           if ($scope.accounts[index].tags == undefined){
@@ -395,6 +399,8 @@ $scope.addTags=function(){
           $(card_index).removeClass('over');
 
           $scope.$apply();
+          $( window ).trigger( "resize" );
+          console.log('trigged');
       };
       
       
@@ -1456,6 +1462,7 @@ $scope.beforedeleteInfonde = function(){
 $scope.deleteaccount = function(){
      var accountKey = {'entityKey':$scope.account.entityKey};
      Account.delete($scope,accountKey);
+     
      $('#BeforedeleteAccount').modal('hide');
      };
 
