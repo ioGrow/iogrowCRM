@@ -1463,6 +1463,7 @@ $scope.beforedeleteInfonde = function(){
 $scope.deleteaccount = function(){
      var accountKey = {'entityKey':$scope.account.entityKey};
      Account.delete($scope,accountKey);
+     
      $('#BeforedeleteAccount').modal('hide');
      };
 
