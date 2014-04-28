@@ -69,15 +69,15 @@
                   </span>
                   <span ng-show="account.account_type" style="">
                     Type: 
-                    <a class="tag ng-binding" href="/#/search/type:Account Customer">
-                      #Customer
+                    <a class="tag ng-binding" href="/#/search/type:Account #<%= account.account_type %>">
+                      #<%= account.account_type %>
                     </a>
                   </span>
                   <br>
                   <span ng-show="account.industry" style="">
                     Industry: 
-                    <a class="tag ng-binding" href="/#/search/type:Account Technology">
-                      #Technology
+                    <a class="tag ng-binding" href="/#/search/type:Account  #<%= account.industry %>">
+                      #<%= account.industry %>
                     </a>
                   </span>
                   <br>
