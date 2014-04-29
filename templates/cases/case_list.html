@@ -54,26 +54,26 @@
       </span>
     </div>
   </div>
-  <div class="container-fluid" ng-show="isSignedIn">
+  <div class="row" ng-show="isSignedIn">
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-    <div class="row">
-      <div class="col-md-2"> 
-        <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red">
-          {{ _("New Case") }} <i class="icon-plus"></i>
+    <div class="col-md-9"> 
+        <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red newBtn">
+          {{ _("New Case") }} 
         </button> 
-      </div>
     </div>
-    <div class="row cards-container">
-    <div class="">
-      <div class="col-md-9 inner-cards-container waterfall" ng-hide="blankStatecase">
-        <div ng-repeat="casee in cases" droppable data-column="<%=getPosition($index)%>" id="card_<%=$index%>"class="cardElement" ng-drop="dropTag(casee,$index)">
+    <div class="col-md-9">
+     <div class="row">
+      <div class="tab-pane">
+      <div class="row">
+      <div class="col-md-12 waterfall" ng-hide="blankStatecase">
+        <div ng-repeat="casee in cases" ng-class="{rightcards: getPosition($index)==4}" droppable data-column="<%=getPosition($index)%>" id="card_<%=$index%>"class="cardElement" ng-drop="dropTag(casee,$index)">
           <div class="detailsSection">
             <div class="head">
               <div class="pic">
-                <a href="/#/cases/show/<%= casee.id %>" class="startup-link" title="casee.name"><img ng-hide="casee.logo_img_id" alt="casee.name" class="angel_image" src="/static/img/default_company.png" >
-                <img ng-show="casee.logo_img_id" alt="casee.name" class="angel_image" ng-src="https://docs.google.com/uc?id=<%= casee.logo_img_id %>" data-hasqtip="2">
+                <a href="/#/cases/show/<%= casee.id %>" class="startup-link" title="casee.name"><img ng-hide="casee.logo_img_id" alt="casee.name" class="img-responsive img-thumbnail" src="/static/img/default_company.png" >
+                <img ng-show="casee.logo_img_id" alt="casee.name" class="img-responsive img-thumbnail" ng-src="https://docs.google.com/uc?id=<%= casee.logo_img_id %>" data-hasqtip="2">
                 </a>
               </div>
               <div class="text">
@@ -142,8 +142,8 @@
         <div class="clearfix"></div>
       </div><!--/inner-cards-container-->
       <!--$Blank state-->
-      <div class="col-md-9 inner-cards-container" ng-show="blankStatecase">
-        <div  data-span="3" class="cardElement blankState" data-tablet="span6" data-desktop="span12">
+      <div class="col-md-12 " ng-show="blankStatecase">
+        <div  data-span="3" class="dashboard-stat cards" data-tablet="span6" data-desktop="span12">
           <div class="">
             <div class="blank_slate_arrow"></div>
             <div class="thumbnail blank_slate_body">
@@ -157,9 +157,13 @@
         <div class="clearfix"></div>
       </div><!--/inner-cards-container-->
     </div>
-    <div class="col-md-3 fixed-labelsCard">
+    </div>
+    </div>
+  </div>
+      <div class="col-md-3 ">
       <div class="row">
-        <div class="portlet cardElement labelsCard">
+       <div class="col-md-12">
+        <div class="portlet showCard">
           <div class="portlet-title">
             <div class="caption">
                     <!-- class="fa fa-reorder"--><i></i>Labels
@@ -213,8 +217,8 @@
           </div>
         </div>
       </div>
+      </div>
     </div>
-  </div>
       <!-- END PAGE CONTAINER--> 
 </div>
 
