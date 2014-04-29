@@ -34,14 +34,14 @@
       </span>
     </div>
   </div>
-  <div ng-show="isSignedIn">
+  <div ng-show="isSignedIn" class="row">
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-        <div class="showPage">
+        <div class="showPage col-md-9 margin-bottom-15">
           <!-- Filtering and sorting -->
           <div class="row">
-          <div class="col-md-9">
+          <div class="col-md-12">
             <div class="row">
               <div class="col-md-12">
                 <form ng-submit="addNewTask()" class="newTaskForm">
@@ -470,8 +470,12 @@
                     height: '20px'
                 });
           </script>
-          <div class="col-md-3">
-              <div class="portlet">
+          </div>
+          </div> 
+            <div class="col-md-3">
+           <div class="row">
+            <div class="col-md-12">
+              <div class="portlet showCard">
                 <div class="portlet-title">
                   <div class="caption">
                     <i class="fa fa-reorder"></i>Tags
@@ -537,8 +541,7 @@
                 </div>
               </div>
           </div>
-          </div> 
-          </div>
+
           <div class="row">
             <div class="pagination pull-right" ng-hide="isLoading">
                   
@@ -636,6 +639,8 @@
               </div>
                </form>
                </div>
+               </div>
+                </div>
                </div>
 
        </div>

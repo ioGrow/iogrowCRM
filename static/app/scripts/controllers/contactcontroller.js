@@ -54,12 +54,12 @@ app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact','Tag','Ed
 
        };
        $scope.getPosition= function(index){
-        if(index<3){
+        if(index<4){
          
           return index+1;
         }else{
-          console.log((index%3)+1);
-          return (index%3)+1;
+          console.log((index%4)+1);
+          return (index%4)+1;
         }
      };
         // We need to call this to refresh token when user credentials are invalid
