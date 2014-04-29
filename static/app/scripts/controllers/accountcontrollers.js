@@ -165,7 +165,7 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
      $scope.orderBy = function(order){
       
         var params = { 'order': order,
-                        'limit':6};
+                        'limit':20};
         $scope.order = order;
         Account.list($scope,params);
      };
@@ -173,13 +173,13 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
         if (filter){
           var params = { 'owner': filter,
                          'order': $scope.order, 
-                         'limit':6}
+                         'limit':20}
         }
         else{
           var params = {
               'order': $scope.order, 
               
-              'limit':6}
+              'limit':20}
         };
         $scope.isFiltering = true;
         Account.list($scope,params);
@@ -492,7 +492,9 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
                     'logo_img_id':null,
                     'logo_img_url':null
                   };
-    
+        
+
+
         $scope.percent = 65;
         $scope.chartOptions = {
             animate:{
@@ -554,6 +556,13 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
          
 
        };
+       
+       $scope.preparePercent = function(percent){
+              console.log('************************');
+            console.log(percent);
+            return parseInt(percent);
+       };
+
        $scope.getPosition= function(index){
         if(index<4){
          
