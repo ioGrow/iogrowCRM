@@ -69,6 +69,14 @@ app.controller('UserListCtrl', ['$scope','Auth','User',
       $('#addAccountModal').modal('hide');
       User.insert($scope,user);
     };
+    $scope.getPosition= function(index){
+        if(index<4){
+         
+          return index+1;
+        }else{
+          return (index%4)+1;
+        }
+     };
      
      
    
