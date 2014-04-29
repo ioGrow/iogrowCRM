@@ -14,6 +14,8 @@ from iomodels.crmengine.tasks import Task,TaskRequest,TaskListResponse
 from iomodels.crmengine.events import Event,EventListResponse
 from endpoints_helper import EndpointsHelper
 import model
+import iomessages
+import datetime
 
 
 class AccountSchema(messages.Message):
@@ -44,6 +46,11 @@ class OpportunityInsertRequest(messages.Message):
     currency = messages.StringField(10)
     amount_per_unit = messages.IntegerField(11)
     amount_total = messages.IntegerField(12)
+    closed_date = messages.StringField(13)
+    competitor = messages.StringField(14)
+    description = messages.StringField(15)
+    infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema,16,repeated=True)
+
 
 class OpportunitySchema(messages.Message):
     id = messages.StringField(1)
@@ -261,7 +268,7 @@ class Opportunity(EndpointsModel):
             current_stage = opportunity_stage_edges['items'][0].end_node.get()
             current_stage_schema = OpportunitystageSchema(  
                                                         name=current_stage.name,
-                                                        probability= str(current_stage.probability),
+                                                        probability= current_stage.probability,
                                                         stage_changed_at=opportunity_stage_edges['items'][0].created_at.isoformat()
                                                         )
         closed_date = None
@@ -336,6 +343,9 @@ class Opportunity(EndpointsModel):
                         count = count + 1
                         #list of tags related to this opportunity
                         tag_list = Tag.list_by_parent(parent_key = opportunity.key)
+                        closed_date = None
+                        if opportunity.closed_date:
+                            closed_date = opportunity.closed_date.strftime("%Y-%m-%dT%H:%M:00.000")
                         opportunity_schema = OpportunitySchema(
                                   id = str( opportunity.key.id() ),
                                   entityKey = opportunity.key.urlsafe(),
@@ -346,6 +356,7 @@ class Opportunity(EndpointsModel):
                                   amount_per_unit = opportunity.amount_per_unit,
                                   amount_total = opportunity.amount_total,
                                   currency = opportunity.currency,
+                                  closed_date=closed_date,
                                   tags = tag_list,
                                   created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
@@ -491,6 +502,12 @@ class Opportunity(EndpointsModel):
             amount_total = request.amount_total
         elif request.amount_per_unit and request.duration:
             amount_total = request.amount_per_unit * request.duration
+        closed_date = None
+        if request.closed_date:
+            closed_date = datetime.datetime.strptime(
+                                                    request.closed_date,
+                                                    "%Y-%m-%d"
+                                                )
 
         opportunity = cls(
                     owner = user_from_email.google_user_id,
@@ -502,7 +519,10 @@ class Opportunity(EndpointsModel):
                     amount_per_unit = request.amount_per_unit,
                     duration = request.duration,
                     duration_unit = request.duration_unit,
-                    currency = request.currency
+                    currency = request.currency,
+                    closed_date = closed_date,
+                    competitor = request.competitor,
+                    description = request.description
                     )
         opportunity_key = opportunity.put_async()
         opportunity_key_async = opportunity_key.get_result()
@@ -524,8 +544,6 @@ class Opportunity(EndpointsModel):
                       kind = 'stages',
                       inverse_edge = 'related_opportunities')
         if request.account:
-            print '*****************************************************'
-            print request.account
             account_key = ndb.Key(urlsafe=request.account)
             # insert edges
             Edge.insert(start_node = account_key,
@@ -551,6 +569,14 @@ class Opportunity(EndpointsModel):
                                             indexed_edge = str(contact_key.id())
                                             )
             indexed = True
+        for infonode in request.infonodes:
+            Node.insert_info_node(
+                            opportunity_key_async,
+                            iomessages.InfoNodeRequestSchema(
+                                                            kind = infonode.kind,
+                                                            fields = infonode.fields
+                                                        )
+                                                    )
         if not indexed:
             data = {}
             data['id'] = opportunity_key_async.id()
