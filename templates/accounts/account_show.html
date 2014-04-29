@@ -443,8 +443,7 @@
                                                   <div class="col-md-2 col-sm-2 col-xs-12 hidden-xs">
                                                     <div easypiechart class="chart" options="chartOptions" percent="opportunity.current_stage.probability">
 
-                                                      <span class="percent" ng-bind="" > 
-                                                        <%=opportunity.current_stage.probability%>
+                                                      <span class="percent" ng-bind="percent=<%=opportunity.current_stage.probability%>" > 
                                                       </span>
                                                     </div>
                                                   </div>

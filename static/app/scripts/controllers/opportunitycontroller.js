@@ -66,12 +66,12 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
        };
       
     $scope.getPosition= function(index){
-        if(index<3){
+        if(index<4){
          
           return index+1;
         }else{
-          console.log((index%3)+1);
-          return (index%3)+1;
+          console.log((index%4)+1);
+          return (index%4)+1;
         }
      };
 
