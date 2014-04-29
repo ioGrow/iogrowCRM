@@ -523,6 +523,8 @@ class Contact(EndpointsModel):
                     firstname = request.firstname,
                     lastname = request.lastname,
                     title = request.title,
+                    tagline = request.tagline,
+                    introduction = request.introduction,
                     owner = user_from_email.google_user_id,
                     organization = user_from_email.organization,
                     access = request.access
