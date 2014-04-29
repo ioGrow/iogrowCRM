@@ -167,6 +167,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                 for app in apps:
                     if app.name=='admin':
                         admin_app = app
+
                 template_values = {
                                   'tabs':tabs,
                                   'user':user,
