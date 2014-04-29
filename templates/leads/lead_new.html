@@ -248,24 +248,36 @@
               <div class="news-blocks blank-card blank-card-red">
                 <h3>Story</h3>
                 <div class="news-block-tags">
-                  <strong>Tagline </strong>
+                  <!--strong>Tagline </strong>
                   <span class="page-meta"><i class="icon-pencil">
                     <a ng-click="edittagline()" class="btn-link addAnotherPhone" data-toggle="modal"> 
                       {{_("Edit")}} 
                     </a></i>
-                  </span>
+                  </span-->
+                    <div class="form-group row">
+                        <label class="control-label col-md-4">Tagline</label>
+                        <div class="col-md-8">
+                              <input type="text" required id="id_tagline" class="form-control" ng-model="lead.tagline">
+                        </div>
+                    </div>                  
                 </div>
-                <p><%=lead.tagline%> </p>
+                
                 <div class="news-block-tags">
-                  <strong>Introduction</strong>
+                  <!--strong>Introduction</strong>
                   <span class="page-meta">
                     <i class="icon-pencil">
                     <a ng-click="editintro()" class="btn-link addAnotherPhone" data-toggle="modal" >
                       {{_("Edit")}} 
                     </a></i>
-                  </span>
+                  </span-->
+                   <div class="form-group row">
+                        <label class="control-label col-md-4">Introduction</label>
+                        <div class="col-md-8"> 
+                            <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="lead.introduction"></textarea>
+                        </div>
+                  </div>                  
                 </div>
-                <p><%=lead.introduction%></p>                        
+                                    
               </div>
               <div class="news-blocks blank-card blank-card-yellow">
                 <h3>{{ _('Custom Fields') }}</h3>
