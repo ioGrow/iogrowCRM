@@ -7,7 +7,7 @@ import model
 
 class OpportunitystageSchema(messages.Message):
     name  = messages.StringField(1)
-    probability = messages.StringField(2)
+    probability = messages.IntegerField(2)
     stage_changed_at = messages.StringField(3)
 
 
