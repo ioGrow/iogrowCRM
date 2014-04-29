@@ -198,7 +198,7 @@
            
             
 
-           <span class="opportunity-amount" >$<%=opportunity.amount %>  </span><span>
+           <span class="opportunity-amount" ><%=opportunity.amount_total %>  </span><span>
            <span ng-show="opportunity.contact_name">{{_("associated with")}}: <a class="tag" href="/#/search/type:Opportunity <%=opportunity.contact_name %>">#<%=opportunity.contact_name %></a> from <a class="tag" ng-show="opportunity.account_name" href="/#/search/type:Opportunity <%=opportunity.contact_name %>">#<%=opportunity.account_name %></a></span>
             <span ng-show="opportunity.account" >{{_("associated with")}}:  <a class="tag" href="/#/accounts/show/<%=opportunity.account.id %>">#<%=opportunity.account.name %></a></span>
            
