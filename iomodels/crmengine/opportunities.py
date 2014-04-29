@@ -273,12 +273,15 @@ class Opportunity(EndpointsModel):
                                   access = opportunity.access,
                                   account = account_schema,
                                   name = opportunity.name,
-                                  amount = str(opportunity.amount),
+                                  opportunity_type = opportunity.opportunity_type,
+                                  duration = opportunity.duration,
+                                  duration_unit = opportunity.duration_unit,
+                                  amount_per_unit = opportunity.amount_per_unit,
+                                  amount_total = opportunity.amount_total,
                                   closed_date = closed_date,
                                   competitor = opportunity.competitor,
                                   reason_lost = opportunity.reason_lost,
                                   description = opportunity.description,
-                                  opportunity_type = opportunity.opportunity_type,
                                   source = opportunity.source, 
                                   current_stage = current_stage_schema,
                                   tags = tag_list,
@@ -337,7 +340,12 @@ class Opportunity(EndpointsModel):
                                   id = str( opportunity.key.id() ),
                                   entityKey = opportunity.key.urlsafe(),
                                   name = opportunity.name,
-                                  amount = str(opportunity.amount),
+                                  opportunity_type = opportunity.opportunity_type,
+                                  duration = opportunity.duration,
+                                  duration_unit = opportunity.duration_unit,
+                                  amount_per_unit = opportunity.amount_per_unit,
+                                  amount_total = opportunity.amount_total,
+                                  currency = opportunity.currency,
                                   tags = tag_list,
                                   created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
@@ -388,7 +396,7 @@ class Opportunity(EndpointsModel):
                             current_stage = opportunity_stage_edges['items'][0].end_node.get()
                             current_stage_schema = OpportunitystageSchema(  
                                                                     name=current_stage.name,
-                                                                    probability= str(current_stage.probability),
+                                                                    probability= int(current_stage.probability),
                                                                     stage_changed_at=opportunity_stage_edges['items'][0].created_at.isoformat()
                                                                     )
                         count = count + 1               
@@ -396,7 +404,12 @@ class Opportunity(EndpointsModel):
                                               id = str( opportunity.key.id() ),
                                               entityKey = opportunity.key.urlsafe(),
                                               name = opportunity.name,
-                                              amount = str(opportunity.amount),
+                                              opportunity_type = opportunity.opportunity_type,
+                                              duration = opportunity.duration,
+                                              duration_unit = opportunity.duration_unit,
+                                              amount_per_unit = opportunity.amount_per_unit,
+                                              amount_total = opportunity.amount_total,
+                                              currency = opportunity.currency,
                                               current_stage = current_stage_schema,
                                               tags = tag_list,
                                               created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
@@ -511,6 +524,8 @@ class Opportunity(EndpointsModel):
                       kind = 'stages',
                       inverse_edge = 'related_opportunities')
         if request.account:
+            print '*****************************************************'
+            print request.account
             account_key = ndb.Key(urlsafe=request.account)
             # insert edges
             Edge.insert(start_node = account_key,

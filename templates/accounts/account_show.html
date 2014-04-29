@@ -435,52 +435,39 @@
                             <div class="row">
                               <!-- ngRepeat: opp in opportunities -->
                                <div class="col-md-12 waterfall3" ng-hide="blankStateaccount">
-                                  <div  ng-repeat="contact in contacts" data-column="<%=getPosition($index)%>" class="rightcards cardElement"  ng-class="{rightcards: getPosition($index)==4}">
+                                  <div  ng-repeat="opportunity in opportunities" data-column="<%=getPosition($index)%>" class="rightcards cardElement"  ng-class="{rightcards: getPosition($index)==4}">
                                           <div class="detailsSection">
                                             <div class="head">
-                                              <!--<div class="pic">
-                                                  <a href="/#/needs/show/<%= need.id %>" class="startup-link" title="need.name"><img ng-hide="" alt="contact.firstname" class="img-responsive img-thumbnail" src="/static/img/default_company.png" >
-                                                  <img ng-show="account.logo_img_id" alt="account.name" class="img-responsive img-thumbnail" ng-src="https://docs.google.com/uc?id=<%= account.logo_img_id %>" data-hasqtip="2">
-                                                  </a>
-                                              </div>
-                                              <div class="text">
-                                                  <div class="name"><a href="/#/contact/show/<%= contact.id %>" class="profile-link" data-id="126085" data-type="Startup"><%= contact.firstname %> <%= contact.lastname %></a></div>
-                                                   <div class="pitch">
-                                                      <span  ng-show="contact.account_type">
-                                                        <a href="/#/search/type:contact <%=contact.title%>"> #<%= contact.title %></a>
-                                                      </span> 
-                                                    </div>
-                                              </div>
-                                              <div class="clearfix"></div>-->
+                                              
                                                 <div class="row">
                                                   <div class="col-md-2 col-sm-2 col-xs-12 hidden-xs">
-                                                    <div easypiechart class="chart" options="chartOptions" percent="percent">
-                                                      <span class="percent" ng-bind="percent"></span>
+                                                    <div easypiechart class="chart" options="chartOptions" percent="opportunity.current_stage.probability">
+
+                                                      <span class="percent" ng-bind="" > 
+                                                        <%=opportunity.current_stage.probability%>
+                                                      </span>
                                                     </div>
                                                   </div>
                                                   <div class="col-md-7 col-sm-7 col-xs-12" style="border-left: 1px solid rgb(218, 218, 218);">
                                                     <div class="row">
-                                                      <div class="col-md-3 col-sm-3 col-xs-6 col-xs-offset-3 oppAccount">
+                                                      <!-- <div class="col-md-3 col-sm-3 col-xs-6 col-xs-offset-3 oppAccount">
                                                           <div class="pic">
                                                                        <img alt="test" class="img-responsive img-thumbnail" ng-src="/static/img/default_company.png" src="/static/img/default_company.png">
                                                            </div>
-                                                      </div>
+                                                      </div> -->
                                                       <div class="col-md-9 col-sm-9 col-xs-12">
                                                         <div class="oppDescription">
                                                           <h3>
-                                                            <a href="">LCD Screen cleaning kit LCD Screen cleaning kit</a>
+                                                            <a href=""><%= opportunity.name %></a>
                                                           </h3>
-                                                          <span class="accountName">
+                                                          <!-- <span class="accountName">
                                                             NearBee
-                                                          </span>
-                                                          <span class="industry">
+                                                          </span> -->
+                                                          <!-- <span class="industry">
                                                             Engineering
-                                                          </span>                                           
+                                                          </span>  -->                                          
                                                           <p class="description ellipsis">
-                                                              I can help will basic and advanced questions pertaining to:
-                                                              Slope/derivatives, Variation, Rational Expressions, Polynomials, Geometric Proofs, Conic Sections, Rational Expressions, Radicals, Factoring, Solving Quadratics, Functions, Absolute Value Equations, Inequalities, Systems of Equations, etc
-
-                                                                Completion of a pre-helpout survey is required and must be completed at least 2 hours before 
+                                                              <%= opportunity.description %>
                                                                 <i></i>
                                                           </p>
 
@@ -496,10 +483,12 @@
                                                   </div>
                                                   <div class="col-md-3 col-sm-3 col-xs-6">
                                                       <div class="oppPrice">
-                                                        $1500.00
+                                                        <%= opportunity.currency %><%= opportunity.amount_total %>
                                                       </div>
                                                       <div class="oppStage">
-                                                        Close Won
+                                                        <%= opportunity.current_stage.name %>
+
+
                                                       </div>
                                                       <div class="oppEstDate">
                                                         Estimated close date
