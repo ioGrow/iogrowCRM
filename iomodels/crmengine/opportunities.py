@@ -396,7 +396,7 @@ class Opportunity(EndpointsModel):
                             current_stage = opportunity_stage_edges['items'][0].end_node.get()
                             current_stage_schema = OpportunitystageSchema(  
                                                                     name=current_stage.name,
-                                                                    probability= str(current_stage.probability),
+                                                                    probability= int(current_stage.probability),
                                                                     stage_changed_at=opportunity_stage_edges['items'][0].created_at.isoformat()
                                                                     )
                         count = count + 1               

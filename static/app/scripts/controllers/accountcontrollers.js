@@ -491,7 +491,9 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
                     'logo_img_id':null,
                     'logo_img_url':null
                   };
-    
+        
+
+
         $scope.percent = 65;
         $scope.chartOptions = {
             animate:{
@@ -553,6 +555,13 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
          
 
        };
+       
+       $scope.preparePercent = function(percent){
+              console.log('************************');
+            console.log(percent);
+            return parseInt(percent);
+       };
+
        $scope.getPosition= function(index){
         if(index<4){
          
