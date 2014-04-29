@@ -56,12 +56,12 @@ app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge'
         };
 
        $scope.getPosition= function(index){
-        if(index<3){
+        if(index<4){
          
           return index+1;
         }else{
           
-          return (index%3)+1;
+          return (index%4)+1;
         }
      };
         // We need to call this to refresh token when user credentials are invalid

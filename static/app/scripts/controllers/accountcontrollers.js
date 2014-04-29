@@ -38,8 +38,6 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
           Account.list($scope,params);
           var paramsTag = {'about_kind':'Account'};
           Tag.list($scope,paramsTag);
-
-          
           // for (var i=0;i<500;i++)
           // { 
           //     var params = { 
@@ -50,14 +48,17 @@ app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
           //             }
           //     Account.insert($scope,params);
           // }
-          
+          $("card_5").resize(function(){
+            console.log("slqdhsqlkdhsqlkhdsq");
+            $( window ).trigger( "resize" );
+          });
      };
      $scope.getPosition= function(index){
-        if(index<3){
+        if(index<4){
          
           return index+1;
         }else{
-          return (index%3)+1;
+          return (index%4)+1;
         }
      };
      // We need to call this to refresh token when user credentials are invalid

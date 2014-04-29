@@ -133,126 +133,98 @@
                 <!-- /.modal-dialog -->
      </div>
       
-      <div ng-show="isSignedIn">
+      <div ng-show="isSignedIn"  class="row">
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
           
-        <div class="row "  >
-            
           <div class="col-md-9">
-
-          
-            
                     <a href="/#/accounts/new" class="btn red newBtn">
                     {{ _("New Account") }} 
                     </a>
                
-          <!-- <div class="pagination pull-right" >
-
-                   <button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="pagination.prev">
-                    <i class="fa fa-chevron-left"></i>
-                    </button>
-                    <li ng-repeat="page in pagination.pages" ng-class='{active: page.isCurrent}'><a  href="#/accounts/"><%= page.id %></a></li>
-                   <button ng-click="listNextPageItems()"  class="btn"  ng-show="pagination.next">
-                    <i class="fa fa-chevron-right"></i> 
-                    </button>
-                      
-            </div>
-            
-          </div> -->
-          
-
-            
-            
-                     <!-- <div class="btn-group btn-filter">
-                      <a class="btn btn-default" href="#" data-toggle="dropdown">
-                        {{ _('Filter by') }}
-                      <i class="icon-angle-down"></i>
-                      </a>
-                      <ul class="dropdown-menu">
-                        <li><a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All accounts') }}</a></li>
-                        <li><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My accounts') }}</a></li>
-                      </ul>
-              </div> -->
-               
-    </div>
-  </div>
-  <div class="row cards-container">
-    <div class="">
-      <div class="col-md-9 inner-cards-container waterfall" ng-hide="blankStateaccount">
-        <div ng-repeat="account in accounts" droppable data-column="<%=getPosition($index)%>" id="card_<%=$index%>"class="cardElement" ng-drop="dropTag(account,$index)">
-          <div class="detailsSection">
-            <div class="head">
-              <div class="pic">
-                <a href="/#/accounts/show/<%= account.id %>" class="startup-link" title="account.name"><img ng-hide="account.logo_img_id" alt="account.name" class="img-resonsive img-thumbnail" src="/static/img/default_company.png" >
-                <img ng-show="account.logo_img_id" alt="account.name" class="img-resonsive img-thumbnail" ng-src="https://docs.google.com/uc?id=<%= account.logo_img_id %>" data-hasqtip="2">
-                </a>
-              </div>
-              <div class="text">
-                <div class="name">
-                  <a href="/#/accounts/show/<%= account.id %>" class="profile-link" data-id="126085" data-type="Startup"><%= account.name %>
+          </div>
+  <div class="col-md-9">
+    <div class="row">
+      <div class="tab-pane">
+      <div class="row">
+        <div class="col-md-12 waterfall" ng-hide="blankStateaccount">
+          <div ng-repeat="account in accounts" ng-class="{rightcards: getPosition($index)==4}" droppable data-column="<%=getPosition($index)%>" id="card_<%=$index%>"class="cardElement" ng-drop="dropTag(account,$index)">
+            <div class="detailsSection">
+              <div class="head">
+                <div class="pic">
+                  <a href="/#/accounts/show/<%= account.id %>" class="startup-link" title="account.name"><img ng-hide="account.logo_img_id" alt="account.name" class="img-resonsive img-thumbnail" src="/static/img/default_company.png" >
+                  <img  ng-show="account.logo_img_id" alt="account.name" class="img-thumbnail" ng-src="https://docs.google.com/uc?id=<%= account.logo_img_id %>" data-hasqtip="2">
                   </a>
                 </div>
-                <div class="pitch">
-                  <span  ng-show="account.account_type">
-                      <a href="/#/search/type:Account <%=account.account_type%>"> #<%= account.account_type %></a>
-                  </span> 
-                  <span ng-show="account.industry">
-                        <a href="/#/search/type:Account <%=account.industry%>"> #<%= account.industry %>
-                        </a>
-                  </span>
+                <div class="text">
+                  <div class="name">
+                    <a href="/#/accounts/show/<%= account.id %>" class="profile-link" data-id="126085" data-type="Startup"><%= account.name %>
+                    </a>
+                  </div>
+                  <div class="pitch">
+                    <span  ng-show="account.account_type">
+                        <a href="/#/search/type:Account <%=account.account_type%>"> #<%= account.account_type %></a>
+                    </span> 
+                    <span ng-show="account.industry">
+                          <a href="/#/search/type:Account <%=account.industry%>"> #<%= account.industry %>
+                          </a>
+                    </span>
+                  </div>
                 </div>
+                <div class="clearfix"></div>
               </div>
-              <div class="clearfix"></div>
+            </div>
+            <div class="tagsSection" ng-class="{hidden: account.tags==null}">
+              <div class="sectionContent">
+                <a ng-repeat="tag in account.tags" href="/#/search/type:Account tags:<%=tag.id%>"> <span class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
+                </a>
+              </div>
             </div>
           </div>
-          <div class="tagsSection" ng-class="{hidden: account.tags==null}">
-            <div class="sectionContent">
-              <a ng-repeat="tag in account.tags" href="/#/search/type:Account tags:<%=tag.id%>"> <span class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
-              </a>
+          <div ng-show="blankStateaccount" data-span="3" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
+            <div class="dashboard-stat cards">
+              <div class="blank_slate_arrow"></div>
+                <div class="thumbnail blank_slate_body">
+                  <img class="img-responsive" src="/static/img/accounts_blank.png">
+                    <p class="lead">{{ _('Accounts  pages includes a detailed page for each customer, partner, or investor in your ecosystem. You and your co-workers can collaborate to get a deep understanding.') }}
+                    </p>
+                </div>
             </div>
           </div>
-        </div>
-        <div ng-show="blankStateaccount" data-span="3" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
-          <div class="dashboard-stat cards">
-            <div class="blank_slate_arrow"></div>
+          <div ng-show="isFiltering * !accounts" data-span="all" class="" data-tablet="span6" data-desktop="span12">
+            <div class="dashboard-stat cards" >
+              <div class="blank_slate_arrow"></div>
+              <div class="thumbnail blank_slate_body">
+                <p class="lead">{{ _('No results found, try with another filter') }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </div><!--/inner-cards-container-->
+        <!--$Blank state-->
+        <div class="col-md-12 " ng-show="blankStateaccount">
+          <div  data-span="3" class="dashboard-stat cards" data-tablet="span6" data-desktop="span12">
+            <div class="">
+              <div class="blank_slate_arrow"></div>
               <div class="thumbnail blank_slate_body">
                 <img class="img-responsive" src="/static/img/accounts_blank.png">
-                  <p class="lead">{{ _('Accounts  pages includes a detailed page for each customer, partner, or investor in your ecosystem. You and your co-workers can collaborate to get a deep understanding.') }}
-                  </p>
+                <p class="lead">
+                  {{ _('Accounts  pages includes a detailed page for each customer, partner, or investor in your ecosystem. You and your co-workers can collaborate to get a deep understanding.') }}
+                </p>
               </div>
-          </div>
-        </div>
-        <div ng-show="isFiltering * !accounts" data-span="3" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
-          <div class="dashboard-stat cards" >
-            <div class="blank_slate_arrow"></div>
-            <div class="thumbnail blank_slate_body">
-              <p class="lead">{{ _('No results found, try with another filter') }}</p>
             </div>
           </div>
-        </div>
-        <div class="clearfix"></div>
-      </div><!--/inner-cards-container-->
-      <!--$Blank state-->
-      <div class="col-md-9 inner-cards-container" ng-show="blankStateaccount">
-        <div  data-span="3" class="cardElement blankState" data-tablet="span6" data-desktop="span12">
-          <div class="">
-            <div class="blank_slate_arrow"></div>
-            <div class="thumbnail blank_slate_body">
-              <img class="img-responsive" src="/static/img/accounts_blank.png">
-              <p class="lead">
-                {{ _('Accounts  pages includes a detailed page for each customer, partner, or investor in your ecosystem. You and your co-workers can collaborate to get a deep understanding.') }}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="clearfix"></div>
-      </div><!--/inner-cards-container-->
+          <div class="clearfix"></div>
+        </div><!--/inner-cards-container-->
+      </div>
+      </div>
     </div>
-    <div class="col-md-3 fixed-labelsCard">
+  </div>
+  <div class="col-md-3 tasks-col">
       <div class="row">
-        <div class="portlet cardElement labelsCard">
+  <div class="col-md-12">
+        <div class="portlet showCard">
           <div class="portlet-title">
             <div class="caption">
                     <!-- class="fa fa-reorder"--><i></i>Labels
@@ -288,13 +260,13 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-8">
                   <ul class="color_pallet_menu">
                     <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
                     </li>
                   </ul>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                   <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
                 </div>
               </div>
@@ -304,10 +276,10 @@
               </button>
             </div>
           </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
       <!-- END PAGE CONTAINER--> 
 </div>
 
