@@ -321,8 +321,8 @@ class User(EndpointsModel):
          
 
     def get_user_apps(self):
-      
         return ndb.get_multi(self.apps)
+        
     def get_user_active_app(self):
         mem_key = '%s_active_app' % self.google_user_id
         active_app = memcache.get(mem_key)

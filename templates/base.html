@@ -119,7 +119,7 @@
                        {%for application in apps %}
                        {%if application.key !=active_app.key %}
                         <li class="gb_a">
-                          <a href="/apps/{{ application.id }}">
+                          <a href="/apps/{{ application.key.id() }}">
                           <span class="task">
                             <span class="desc">
                                <img class="platform_icons" height="50" width="50" src="static/img/admin_console.png">
