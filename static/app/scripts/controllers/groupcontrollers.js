@@ -62,6 +62,14 @@ app.controller('GroupListCtrl', ['$scope','Auth','Group',
       Group.insert($scope,group);
       $('#addGroupModal').modal('hide');
     };
+    $scope.getPosition= function(index){
+        if(index<4){
+         
+          return index+1;
+        }else{
+          return (index%4)+1;
+        }
+     };
     // Google+ Authentication 
     Auth.init($scope);
      
