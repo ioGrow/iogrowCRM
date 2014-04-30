@@ -1607,8 +1607,8 @@ class CrmEngineApi(remote.Service):
     # Opportunity stages APIs
     # opportunitystage.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
-                      path='opportunitystage', http_method='DELETE',
-                      name='opportunitystage.delete')
+                      path='opportunitystages', http_method='DELETE',
+                      name='opportunitystages.delete')
     def opportunitystage_delete(self, request):
         entityKey = ndb.Key(urlsafe=request.entityKey)
         Edge.delete_all_cascade(start_node = entityKey)

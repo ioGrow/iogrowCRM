@@ -56,16 +56,7 @@ Opportunitystage.list = function($scope,params){
 
     })
     };
-  Opportunitystage.delete = function($scope,id){
-     $scope.isLoading = true;
-    gapi.client.crmengine.opportunitystages.delete(id).execute(function(resp){
-     console.log('I am on delete services');
-     console.log(id);
-     $scope.listoppstage();
-      $scope.isLoading = false;
-          $scope.$apply();
-    }) 
-  };
+  
   Opportunitystage.update= function($scope,params){
      $scope.isLoading = true;
      gapi.client.crmengine.opportunitystages.patch(params).execute(function(resp){
@@ -99,6 +90,24 @@ Opportunitystage.list = function($scope,params){
     }
 
   )};
+  Opportunitystage.delete = function($scope,params){
+      $scope.isLoading = true;
+      gapi.client.crmengine.opportunitystages.delete(params).execute(function(resp) {
+              if(!resp.code){
+                  
+                  
+                 $scope.listoppstage();
+                 // Loaded succefully
+                 $scope.isLoading = false;
+                 // Call the method $apply to make the update on the scope
+                 $scope.$apply();
+              }else {
+                  $scope.isLoading = false;
+                 // Call the method $apply to make the update on the scope
+                  $scope.$apply();
+              }
+      });
+  };
 return Opportunitystage;
 });
 //HKA 14.12.2013 Case status Services
