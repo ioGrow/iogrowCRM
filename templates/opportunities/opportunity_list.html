@@ -63,7 +63,7 @@
       <div class="tab-pane">
       <div class="row">
       <div class="col-md-12 waterfall" ng-hide="blankStateopportunity">
-        <div ng-repeat="opportunity in opportunities" ng-class="{rightcards: getPosition($index)==4}" droppable data-column="<%=getPosition($index)%>" id="card_<%=$index%>"class="cardElement" ng-drop="dropTag(opportunity,$index)">
+        <div ng-repeat="opportunity in opportunities" droppable id="card_<%=$index%>"class="cardElement" ng-drop="dropTag(opportunity,$index)">
           <div class="detailsSection">
             <div class="head">
               <div class="pic">
