@@ -107,7 +107,7 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
 //HKA 18.12.2013 Delete Opportunity stage
   $scope.deleteoppstage = function(oppstage){
     
-    var params={'id':oppstage.id};
+    var params={'entityKey':oppstage.entityKey};
     Opportunitystage.delete($scope,params);
 
   };
@@ -156,7 +156,7 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
 //HKA 18.12.2013 Delete case status
   $scope.deletecasestatus = function(casestate){
     
-     var params={'id':casestate.id};
+     var params={'entityKey':casestate.entityKey};
     Casestatus.delete($scope,params);
 
   };
@@ -195,7 +195,7 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
   };
 //HKA 22.12.2013 Delete Lead status
   $scope.deletleadstatus = function(leadstat){
-     var params={'id':leadstat.id};
+     var params={'entityKey':leadstat.entityKey};
     Leadstatus.delete($scope,params);
 
   };
