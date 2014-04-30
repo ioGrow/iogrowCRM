@@ -75,8 +75,8 @@ accountservices.factory('Group', function($http) {
          console.log('in insert resp');
          console.log(resp);
          if(!resp.code){
-          $('#addGroupModal').modal('hide');
-          window.location.replace('#/admin/groups/show/'+resp.id);
+          $scope.groups.push(resp);
+          $scope.$apply();
           
          }else{
           console.log(resp.code);

@@ -11,6 +11,7 @@ app.controller('GroupListCtrl', ['$scope','Auth','Group',
      $scope.currentPage = 01;
      $scope.pages = [];
      $scope.users = [];
+     $scope.groups = [];
      // What to do after authentication
      $scope.runTheProcess = function(){
           var params = {'limit':7}
