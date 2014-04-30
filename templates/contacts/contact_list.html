@@ -76,7 +76,7 @@
       <div class="tab-pane">
       <div class="row">
         <div class="col-md-12 waterfall" ng-hide="blankStateaccount">
-          <div ng-repeat="contact in contacts" ng-class="{rightcards: getPosition($index)==4}" droppable data-column="<%=getPosition($index)%>" id="card_<%=$index%>"class="cardElement" ng-drop="dropTag(contact,$index)">
+          <div ng-repeat="contact in contacts"  droppable id="card_<%=$index%>"class="cardElement" ng-drop="dropTag(contact,$index)">
             <div class="detailsSection">
               <div class="head">
                 <div class="pic">
