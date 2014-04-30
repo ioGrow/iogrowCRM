@@ -759,6 +759,7 @@ class CrmEngineApi(remote.Service):
                       path='contacts', http_method='DELETE',
                       name='contacts.delete')
     def contact_delete(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
         entityKey = ndb.Key(urlsafe=request.entityKey)
         if Node.check_permission(user_from_email,entityKey.get()):
             Edge.delete_all_cascade(start_node = entityKey)
