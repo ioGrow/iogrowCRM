@@ -63,7 +63,7 @@
                           <div class="col-md-12">
                             <div class="form-group">
                               <label class="control-label col-md-2">Name</label>
-                              <div class="col-md-10">
+                              <div class="col-md-10 inline-div">
                                 <input autofocus ng-model="opportunity.name" placeholder="{{_('Type here the opportunity name...')}}" type="text" class="form-control">
                               </div>
                             </div>
@@ -72,11 +72,11 @@
                                                 <div class="row">
                           <div class="col-md-12">
                             <div class="form-group">
-                              <label class="control-label col-md-3">Amount</label>
+                              <label class="control-label col-md-2">Amount</label>
                               <div class="col-md-6 inline-div">
                                   <input type="text" required id="id_name" class="form-control" ng-model="opportunity.amount">
                                </div>
-                              <div class="col-md-3 inline-div">
+                              <div class="col-md-4 inline-div">
                                <select  class="form-control" ng-model="opportunity.currency">
                                 <option value="USD">$ - USD</option>
                                 <option value="EUR">€ - EUR</option>
@@ -160,7 +160,7 @@
                           <div class="col-md-12">
                             <div class="form-group">
                               <label class="control-label col-md-2">Account</label>
-                              <div class="col-md-10">
+                              <div class="col-md-10 inline-div">
                                 <input autofocus ng-model="opportunity.name" placeholder="{{_('Type here the opportunity name...')}}" type="text" class="form-control">
                               </div>
                             </div>
@@ -169,7 +169,7 @@
                         <div class="row">
                             <div class="col-md-12">
                             <div class="form-group">
-                              <label class="control-label col-md-3"></label>
+                              <label class="control-label col-md-2"></label>
                                 <div class="col-md-6 inline-div">
                                     <select   class="form-control" ng-model="opportunity.price_type">
                                         <option value="fixed">Fixed bid</option>
@@ -178,12 +178,28 @@
                                         <option value="year">Per year</option>
                                     </select>
                                 </div>
-                                <div class="col-md-3 inline-div">
+                                <div class="col-md-4 inline-div">
                                    <input ng-hide="opportunity.price_type=='fixed'" type="text" pattern="\d*"  required id="" class="form-control" ng-model="opportunity.quantity">
                                 </div>
                               </div>
                             </div>
                         </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="required col-md-2 control-label">Stage </label>
+                        
+                       <div class="col-md-10 inline-div">
+                          <select ng-model="stage_selected" ng-options="opps.name + ' - ( ' + opps.probability + '% )' for opps in opportunitystages | orderBy: 'name':true" class="form-control" >
+                            <option value="">-- choose Stage --</option>
+                          
+                          </select>
+                          
+                      </div> 
+                        
+
+                          
+                    </div>
                   </div>
                   </div>
                       </form>
@@ -194,7 +210,7 @@
                                 <div class="news-blocks blank-card blank-card-yellow">
                                 <h3>Account Informations</h3>
                                 <div class="news-block-tags">
-                                  <strong>Phone</strong>
+                                  <strong>Description</strong>
                                  
                                 </div>
                                   <ul class="list-unstyled contact-infos">

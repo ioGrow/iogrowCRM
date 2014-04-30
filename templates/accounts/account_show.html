@@ -314,7 +314,7 @@
                     <div class="col-md-12">
                             <div class="row">
                               <div class="col-md-12 waterfall" ng-hide="blankStateaccount">
-                                <div droppable  ng-repeat="contact in contacts" data-column="<%=getPosition($index)%>" class="cardElement" ng-drop="dropTag(contact)" ng-class="{rightcards: getPosition($index)==4}">
+                                <div droppable  ng-repeat="contact in contacts"  class="cardElement" ng-drop="dropTag(contact)" >
                                     <div class="detailsSection">
                                       <div class="head">
                                         <div class="pic">
@@ -435,7 +435,7 @@
                             <div class="row">
                               <!-- ngRepeat: opp in opportunities -->
                                <div class="col-md-12 waterfall3" ng-hide="blankStateaccount">
-                                  <div  ng-repeat="opportunity in opportunities" data-column="<%=getPosition($index)%>" class="rightcards cardElement"  ng-class="{rightcards: getPosition($index)==4}">
+                                  <div  ng-repeat="opportunity in opportunities"  class="rightcards cardElement"  >
                                           <div class="detailsSection">
                                             <div class="head">
                                               
@@ -605,7 +605,7 @@
                                     </a>
                                     <ul class="dropdown-menu">
                                       <li><a ng-click="showCreateDocument('document')" href="#" data-toggle="modal"> 
-                                           <img src="/static/img/google_drive/text/plain.png" class="">
+                                           <img src="/static/img/google_drive/text/plain.png" class=" ">
                                           Document
                                           </a>
                                       </li>
@@ -633,7 +633,7 @@
                             <div class="row">         
                              <!-- ngRepeat: attachment in documents -->
                                    <div class="col-md-12 waterfall2" ng-hide="blankStateaccount">
-                                      <div ng-repeat="attachment in documents" data-column="<%=getPosition($index)%>" class="cardElement"  ng-class="{rightcards: getPosition($index)==4}">
+                                      <div ng-repeat="attachment in documents"  class="cardElement"  >
                                           <div class="detailsSection">
                                             <div class="head">
                                               <div class="pic">

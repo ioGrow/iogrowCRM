@@ -1083,8 +1083,8 @@ $scope.listInfonodes = function(kind) {
 }]);
 
 
-app.controller('OpportunityNewCtrl', ['$scope','Auth','Account','Tag','Edge',
-    function($scope,Auth,Account,Tag,Edge) {
+app.controller('OpportunityNewCtrl', ['$scope','Auth','Account','Tag','Opportunitystage','Edge',
+    function($scope,Auth,Account,Opportunitystage,Tag,Edge) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Accounts").addClass("active");
       
@@ -1121,6 +1121,8 @@ app.controller('OpportunityNewCtrl', ['$scope','Auth','Account','Tag','Edge',
                     'logo_img_id':null,
                     'logo_img_url':null
                   };
+      $scope.stage_selected={};
+      $scope.opportunitystages=[];
        $scope.percent = 65;
         $scope.options = {
             animate:{
@@ -1151,6 +1153,9 @@ app.controller('OpportunityNewCtrl', ['$scope','Auth','Account','Tag','Edge',
       }
       $scope.runTheProcess = function(){
             /*Account.list($scope,{});*/
+            Opportunitystage.list($scope,{});
+            console.log($scope.opportunitystages);
+
        };
         // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
