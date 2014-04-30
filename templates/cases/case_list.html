@@ -68,7 +68,7 @@
       <div class="tab-pane">
       <div class="row">
       <div class="col-md-12 waterfall" ng-hide="blankStatecase">
-        <div ng-repeat="casee in cases" ng-class="{rightcards: getPosition($index)==4}" droppable data-column="<%=getPosition($index)%>" id="card_<%=$index%>"class="cardElement" ng-drop="dropTag(casee,$index)">
+        <div ng-repeat="casee in cases" droppable id="card_<%=$index%>"class="cardElement" ng-drop="dropTag(casee,$index)">
           <div class="detailsSection">
             <div class="head">
               <div class="pic">
