@@ -12,6 +12,17 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
      $scope.leadstat={};
      $scope.leadstatedit={};
      $scope.isLoading = false;
+     $scope.chartOptions = {
+            animate:{
+                duration:0,
+                enabled:false
+            },
+            size:50,
+            barColor:'#58a618',
+            scaleColor:false,
+            lineWidth:5,
+            lineCap:'circle'
+        };
 
       switch (tab)
         {
@@ -96,7 +107,7 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
 //HKA 18.12.2013 Delete Opportunity stage
   $scope.deleteoppstage = function(oppstage){
     
-    var params={'id':oppstage.id};
+    var params={'entityKey':oppstage.entityKey};
     Opportunitystage.delete($scope,params);
 
   };
@@ -145,7 +156,7 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
 //HKA 18.12.2013 Delete case status
   $scope.deletecasestatus = function(casestate){
     
-     var params={'id':casestate.id};
+     var params={'entityKey':casestate.entityKey};
     Casestatus.delete($scope,params);
 
   };
@@ -184,7 +195,7 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
   };
 //HKA 22.12.2013 Delete Lead status
   $scope.deletleadstatus = function(leadstat){
-     var params={'id':leadstat.id};
+     var params={'entityKey':leadstat.entityKey};
     Leadstatus.delete($scope,params);
 
   };
@@ -192,7 +203,21 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
   $scope.listleadstatus = function(){
     Leadstatus.list($scope,{});
   };
- 
+  $scope.getPosition= function(index){
+        if(index<4){
+         
+          return index+1;
+        }else{
+          return (index%4)+1;
+        }
+  };
+  $scope.waterfall= function(){
+
+    
+           /* $('.waterfall').hide();
+          $('.waterfall').show();*/
+          $( window ).trigger( "resize" );
+     };
 
 
   // Google+ Authentication 
