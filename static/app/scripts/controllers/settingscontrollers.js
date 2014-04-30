@@ -12,6 +12,17 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
      $scope.leadstat={};
      $scope.leadstatedit={};
      $scope.isLoading = false;
+     $scope.chartOptions = {
+            animate:{
+                duration:0,
+                enabled:false
+            },
+            size:50,
+            barColor:'#58a618',
+            scaleColor:false,
+            lineWidth:5,
+            lineCap:'circle'
+        };
 
       switch (tab)
         {
@@ -192,7 +203,21 @@ app.controller('SettingsShowCtrl',['$scope','$route','Auth','Opportunitystage','
   $scope.listleadstatus = function(){
     Leadstatus.list($scope,{});
   };
- 
+  $scope.getPosition= function(index){
+        if(index<4){
+         
+          return index+1;
+        }else{
+          return (index%4)+1;
+        }
+  };
+  $scope.waterfall= function(){
+
+    
+           /* $('.waterfall').hide();
+          $('.waterfall').show();*/
+          $( window ).trigger( "resize" );
+     };
 
 
   // Google+ Authentication 
