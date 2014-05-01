@@ -1133,8 +1133,9 @@ $scope.updateintro = function(contact){
      $('#BeforedeleteContact').modal('show');
    };
    $scope.deletecontact = function(){
-     var contactid = {'entityKey':$scope.contact.entityKey};
-     Contact.delete($scope,contactid);
+     var params = {'entityKey':$scope.contact.entityKey};
+     console.log(params);
+     Contact.delete($scope,params);
      $('#BeforedeleteContact').modal('hide');
      };
 
