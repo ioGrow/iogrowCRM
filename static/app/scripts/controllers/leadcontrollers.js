@@ -893,8 +893,8 @@ $scope.updateintro = function(lead){
      $('#BeforedeleteLead').modal('show');
    };
 $scope.deletelead = function(){
-     var leadid = {'entityKey':$scope.lead.entityKey};
-     Lead.delete($scope,leadid);
+     var params = {'entityKey':$scope.lead.entityKey};
+     Lead.delete($scope,params);
      $('#BeforedeleteLead').modal('hide');
      };
 

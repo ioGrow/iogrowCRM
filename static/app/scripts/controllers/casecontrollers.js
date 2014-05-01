@@ -133,14 +133,15 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
         casee.status_name = $scope.status_selected.status;
         if (typeof(casee.account)=='object'){
           
-          casee.account_name = casee.account.name;
-          casee.account = casee.account.entityKey;
+          casee.account = $scope.searchAccountQuery.entityKey;
           
           if (typeof(casee.contact)=='object'){
               
               casee.contact_name = casee.contact.firstname + ' '+ casee.contact.lastname ;
               casee.contact = casee.contact.entityKey;
           }
+          console.log('***************************');
+          console.log(casee);
           Case.insert($scope,casee);
 
         }else if($scope.searchAccountQuery.length>0){
@@ -190,6 +191,7 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
       });
       $scope.selectAccount = function(){
         $scope.casee.account = $scope.searchAccountQuery;
+        $scope.$apply();
 
      };
      var params_search_contact ={};

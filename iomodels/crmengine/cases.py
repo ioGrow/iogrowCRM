@@ -34,11 +34,10 @@ class CaseGetRequest(messages.Message):
 class CaseInsertRequest(messages.Message):
     name = messages.StringField(1)
     priority = messages.IntegerField(2)
-    status = messages.StringField(3, required = True)
-    account = messages.StringField(4, required = True)
+    status = messages.StringField(3,required = True)
+    account = messages.StringField(4,required = True)
     contact = messages.StringField(5)
     access = messages.StringField(6)
-    status_name = messages.StringField(7)
 
 class CaseListRequest(messages.Message):
     limit = messages.IntegerField(1)

@@ -349,8 +349,9 @@ accountservices.factory('Contact', function($http) {
          }
       });
   };
-Contact.delete = function($scope,id){
-    gapi.client.crmengine.contacts.delete(id).execute(function(resp){
+Contact.delete = function($scope,params){
+    console.log('i am in contacts.delete api');
+    gapi.client.crmengine.contacts.delete(params).execute(function(resp){
         window.location.replace('#/contacts');
     }
 

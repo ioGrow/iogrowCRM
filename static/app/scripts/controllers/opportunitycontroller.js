@@ -130,7 +130,7 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
       
     $scope.save = function(opportunity){
       var params = {};
-     
+      opportunity.opportunity_type = 'fixed_bid';
 
        opportunity.stagename= $scope.stage_selected.name;
        opportunity.stage_probability= $scope.stage_selected.probability;
@@ -818,8 +818,8 @@ $scope.createNote = function(){
      $('#BeforedeleteOpportunity').modal('show');
    };
 $scope.deleteopportunity= function(){
-     var opportunityid = {'entityKey':$scope.opportunity.entityKey};
-     Opportunity.delete($scope,opportunityid);
+     var params = {'entityKey':$scope.opportunity.entityKey};
+     Opportunity.delete($scope,params);
      $('#BeforedeleteOpportunity').modal('hide');
      };
 
