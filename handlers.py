@@ -589,7 +589,6 @@ class CreateObjectFolder(webapp2.RequestHandler):
             if parent_folder:
                 folder_params['parents'] = [{'id': parent_folder}]
 
-            # execute files.insert and get resource_id
             created_folder = service.files().insert(body=folder_params,fields='id').execute()
             # move the image to the created folder 
             if logo_img_id:
@@ -609,9 +608,9 @@ class CreateObjectFolder(webapp2.RequestHandler):
         folder_name = self.request.get('folder_name')
         kind = self.request.get('kind')
         user = model.User.get_by_email(self.request.get('email'))
-        logo_img_id = None
-        if self.request.get('logo_img_id'):
-            logo_img_id = self.request.get('logo_img_id')
+        logo_img_id = self.request.get('logo_img_id')
+        if logo_img_id == 'None':
+            logo_img_id = None
         created_folder = self.insert_folder(user,folder_name,kind,logo_img_id)
         object_key_str = self.request.get('obj_key')
         object_key = ndb.Key(urlsafe=object_key_str)
