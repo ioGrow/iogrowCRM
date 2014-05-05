@@ -1055,3 +1055,205 @@ $scope.listInfonodes = function(kind) {
      Auth.init($scope);
 
 }]);
+
+app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','Contact',
+    function($scope,Auth,Casestatus,Case,Account,Contact) {
+      document.title = "Cases: Home";
+      $("ul.page-sidebar-menu li").removeClass("active");
+      $("#id_Cases").addClass("active");
+      $scope.isSignedIn = false;
+      $scope.immediateFailed = false;
+      $scope.nextPageToken = undefined;
+      $scope.prevPageToken = undefined;
+      $scope.isLoading = false;
+      $scope.pagination = {};
+      $scope.currentPage = 01;
+      $scope.pages = [];
+      $scope.stage_selected={};
+      $scope.contacts = [];
+      $scope.casee = {};
+      $scope.order = '-updated_at';
+      $scope.showPhoneForm=false;
+      $scope.showEmailForm=false;
+      $scope.showWebsiteForm=false;
+      $scope.showSociallinkForm=false;
+      $scope.showCustomFieldForm =false;
+      $scope.phones=[];
+      $scope.addresses=[];
+      $scope.emails=[];
+      $scope.websites=[];
+      $scope.sociallinks=[];
+      $scope.customfields=[];
+      $scope.results=[];
+      $scope.imageSrc = '/static/img/default_company.png';
+      $scope.casee = {
+                      'access': 'public',
+                      'priority':4
+                    };
+
+      $scope.status_selected={};
+      $scope.initObject=function(obj){
+          for (var key in obj) {
+                obj[key]=null;
+              }
+      }
+      $scope.pushElement=function(elem,arr){
+          if (arr.indexOf(elem) == -1) {
+              var copyOfElement = angular.copy(elem);
+              arr.push(copyOfElement);
+              console.log(elem);
+              $scope.initObject(elem);
+
+          }else{
+            alert("item already exit");
+          }
+      }
+      $scope.runTheProcess = function(){
+          Casestatus.list($scope,{});
+      };
+        // We need to call this to refresh token when user credentials are invalid
+       $scope.refreshToken = function() {
+            Auth.refreshToken();
+       };
+
+       $scope.accountInserted = function(resp){
+          $scope.contact.account = resp;
+          $scope.save($scope.contact);
+      };
+      
+       var params_search_account ={};
+       $scope.result = undefined;
+       $scope.q = undefined;
+       $scope.$watch('searchAccountQuery', function() {
+            console.log('i am searching');
+           params_search_account['q'] = $scope.searchAccountQuery;
+           Account.search($scope,params_search_account);
+          
+        });
+        $scope.selectAccount = function(){
+          $scope.contact.account = $scope.searchAccountQuery;
+
+       };
+       $scope.accountInserted = function(resp){
+          console.log('account inserted ok');
+          console.log(resp);
+          $scope.contact.account = resp;
+          $scope.save($scope.contact);
+      };
+       
+
+      
+      var params_search_contact ={};
+      $scope.$watch('searchContactQuery', function() {
+        if($scope.searchContactQuery){
+            if($scope.searchContactQuery.length>1){
+              params_search_contact['q'] = $scope.searchContactQuery;
+              gapi.client.crmengine.contacts.search(params_search_contact).execute(function(resp) {
+                if (resp.items){
+                $scope.contactsResults = resp.items;
+                $scope.$apply();
+              };
+            });
+          }
+        }
+      });
+     $scope.selectContact = function(){
+        console.log($scope.searchContactQuery);
+        $scope.casee.contact = $scope.searchContactQuery;
+        var account = {'entityKey':$scope.searchContactQuery.account,
+                      'name':$scope.searchContactQuery.account_name};
+        $scope.casee.account = account;
+        $scope.searchAccountQuery = $scope.searchContactQuery.contacts;
+      };
+
+      var params_search_account ={};
+      $scope.result = undefined;
+      $scope.q = undefined;
+      $scope.$watch('searchAccountQuery', function() {
+          params_search_account['q'] = $scope.searchAccountQuery;
+          Account.search($scope,params_search_account);
+      });
+
+      $scope.selectAccount = function(){
+          $scope.casee.account  = $scope.searchAccountQuery;
+      };
+      $scope.prepareInfonodes = function(){
+        var infonodes = [];
+        angular.forEach($scope.customfields, function(customfield){
+            var infonode = {
+                            'kind':'customfields',
+                            'fields':[
+                                    {
+                                    'field':customfield.field,
+                                    'value':customfield.value
+                                    }
+                            ]
+                          
+                          };
+            infonodes.push(infonode);
+        });
+        return infonodes;
+    };
+      $scope.save = function(casee){
+        var hasContact = false;
+        var hasAccount = false;
+        casee.status = $scope.status_selected.entityKey;
+        if (typeof(casee.account)=='object'){
+            hasAccount = true;
+            casee.account = casee.account.entityKey;
+            if (typeof(casee.contact)=='object'){
+                casee.contact = casee.contact.entityKey;
+                hasContact = true;
+            }
+            else if($scope.searchContactQuery){
+              if($scope.searchContactQuery.length>0){
+                var firstName = $scope.searchContactQuery.split(' ').slice(0, -1).join(' ') || " ";
+                var lastName = $scope.searchContactQuery.split(' ').slice(-1).join(' ') || " ";
+                var params = {
+                              'firstname':  firstName ,
+                              'lastname': lastName ,
+                              'account': casee.account,
+                              'access': casee.access
+                            };
+                Contact.insert($scope,params);
+              }
+            };
+            
+            
+        }else if($scope.searchAccountQuery.length>0){
+            // create a new account with this account name
+            var params = {
+                          'name': $scope.searchAccountQuery,
+                          'access': casee.access
+                        };
+            $scope.casee = casee;
+            Account.insert($scope,params);
+        };
+        if (hasContact && hasAccount){
+            casee.infonodes = $scope.prepareInfonodes();
+            Case.insert($scope,casee);
+        }else{
+            // should highlight contact and account
+        }
+        
+      };
+      $scope.accountInserted = function(resp){
+          $scope.casee.account = resp;
+          $scope.save($scope.casee);
+      };
+      $scope.contactInserted = function(resp){
+          $scope.casee.contact = resp;
+          $scope.save($scope.casee);
+      }
+      $scope.caseInserted = function(resp){
+          window.location.replace('#/cases');
+      }
+      
+     
+
+    
+
+
+   // Google+ Authentication 
+     Auth.init($scope);      
+}]);

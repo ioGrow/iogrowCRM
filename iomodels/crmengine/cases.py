@@ -14,6 +14,7 @@ from iomodels.crmengine.tasks import Task,TaskRequest,TaskListResponse
 from iomodels.crmengine.events import Event,EventListResponse
 from endpoints_helper import EndpointsHelper
 import model
+import iomessages
 
 class AccountSchema(messages.Message):
     id = messages.StringField(1)
@@ -34,10 +35,12 @@ class CaseGetRequest(messages.Message):
 class CaseInsertRequest(messages.Message):
     name = messages.StringField(1)
     priority = messages.IntegerField(2)
-    status = messages.StringField(3,required = True)
-    account = messages.StringField(4,required = True)
+    status = messages.StringField(3)
+    account = messages.StringField(4)
     contact = messages.StringField(5)
     access = messages.StringField(6)
+    infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema,7,repeated=True)
+    description = messages.StringField(8)
 
 class CaseListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -477,7 +480,8 @@ class Case(EndpointsModel):
                     organization = user_from_email.organization,
                     access = request.access,
                     name = request.name,
-                    priority = request.priority
+                    priority = request.priority,
+                    description = request.description
                     )
         case_key = case.put_async()
         case_key_async = case_key.get_result()
@@ -498,44 +502,64 @@ class Case(EndpointsModel):
                       end_node = status_key,
                       kind = 'status',
                       inverse_edge = 'related_cases')
-        if request.account:
-            account_key = ndb.Key(urlsafe=request.account)
-            # insert edges
-            Edge.insert(start_node = account_key,
-                      end_node = case_key_async,
-                      kind = 'cases',
-                      inverse_edge = 'parents')
-            EndpointsHelper.update_edge_indexes(
-                                            parent_key = case_key_async,
-                                            kind = 'cases',
-                                            indexed_edge = str(account_key.id())
-                                            )
-            indexed = True
         if request.contact:
             contact_key = ndb.Key(urlsafe=request.contact)
-            # insert edges
-            Edge.insert(start_node = contact_key,
-                      end_node = case_key_async,
-                      kind = 'cases',
-                      inverse_edge = 'parents')
-            EndpointsHelper.update_edge_indexes(
-                                            parent_key = case_key_async,
-                                            kind = 'cases',
-                                            indexed_edge = str(contact_key.id())
-                                            )
-            indexed = True
+            if contact_key:
+                # insert edges
+                Edge.insert(start_node = contact_key,
+                          end_node = case_key_async,
+                          kind = 'cases',
+                          inverse_edge = 'parents')
+                EndpointsHelper.update_edge_indexes(
+                                                parent_key = case_key_async,
+                                                kind = 'cases',
+                                                indexed_edge = str(contact_key.id())
+                                                )
+                parents_edge_list = Edge.list(
+                                    start_node = contact_key,
+                                    kind = 'parents',
+                                    limit = 1
+                                    )
+                if len(parents_edge_list['items'])>0:
+                    request.account = parents_edge_list['items'][0].end_node.urlsafe()
+                indexed = True
+        if request.account:
+            account_key = ndb.Key(urlsafe=request.account)
+            if account_key:
+                # insert edges
+                Edge.insert(start_node = account_key,
+                          end_node = case_key_async,
+                          kind = 'cases',
+                          inverse_edge = 'parents'
+                          )
+                EndpointsHelper.update_edge_indexes(
+                                                parent_key = case_key_async,
+                                                kind = 'cases',
+                                                indexed_edge = str(account_key.id())
+                                                )
+                indexed = True
+        for infonode in request.infonodes:
+            Node.insert_info_node(
+                            case_key_async,
+                            iomessages.InfoNodeRequestSchema(
+                                                            kind = infonode.kind,
+                                                            fields = infonode.fields
+                                                        )
+                                                    )
+
+
         if not indexed:
             data = {}
             data['id'] = case_key_async.id()
             case.put_index(data)
-        current_status_schema = CaseStatusSchema(
-                                        name = request.status
-                                        )
+        # current_status_schema = CaseStatusSchema(
+        #                                 name = request.status_name
+        #                                 )
         case_schema = CaseSchema(
                                   id = str( case_key_async.id() ),
                                   entityKey = case_key_async.urlsafe(),
                                   name = case.name,
-                                  current_status = current_status_schema,
+                                  # current_status = current_status_schema,
                                   priority = case.priority,
                                   created_at = case.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
