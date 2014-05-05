@@ -474,7 +474,7 @@ $scope.addTags=function(){
 app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage','Email','Attachement','InfoNode',
     function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email,Attachement,InfoNode) {
       $("ul.page-sidebar-menu li").removeClass("active");
-      $("#id_Opportunities").addClass("active");
+     $("#id_Opportunities").addClass("active");
      $scope.selectedTab = 2;
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
@@ -1085,8 +1085,8 @@ $scope.listInfonodes = function(kind) {
 
 app.controller('OpportunityNewCtrl', ['$scope','Auth','Account','Tag','Edge',
     function($scope,Auth,Account,Tag,Edge) {
-      $("ul.page-sidebar-menu li").removeClass("active");
-      $("#id_Accounts").addClass("active");
+     $("ul.page-sidebar-menu li").removeClass("active");
+     $("#id_Opportunities").addClass("active");
       
       document.title = "Accounts: New";
       $scope.isSignedIn = false;

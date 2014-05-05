@@ -529,7 +529,7 @@ class Case(EndpointsModel):
             data['id'] = case_key_async.id()
             case.put_index(data)
         current_status_schema = CaseStatusSchema(
-                                        name = request.status_name
+                                        name = request.status
                                         )
         case_schema = CaseSchema(
                                   id = str( case_key_async.id() ),
