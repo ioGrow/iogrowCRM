@@ -120,7 +120,7 @@ class ContactSearchResult(messages.Message):
     entityKey = messages.StringField(2)
     firstname = messages.StringField(3)
     lastname = messages.StringField(4)
-    account_name = messages.StringField(5)
+    contacts = messages.StringField(5)
     account = messages.StringField(6)
     position = messages.StringField(7)
 
@@ -505,7 +505,7 @@ class Contact(EndpointsModel):
                                       "firstname",
                                       "lastname",
                                       "account",
-                                      "account_name",
+                                      "contacts",
                                       "position"
                                       ]:
                             kwargs[e.name] = e.value
@@ -628,7 +628,7 @@ class Contact(EndpointsModel):
             EndpointsHelper.update_edge_indexes(
                                             parent_key = contact_key_async,
                                             kind = 'contacts',
-                                            indexed_edge = str(account_key.id())
+                                            indexed_edge = str(account_key.get().name)
                                             )
 
         else:

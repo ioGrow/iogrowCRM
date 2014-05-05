@@ -64,6 +64,9 @@ app.config(['$routeProvider', function($routeProvider) {
       }).when('/cases/show/:caseId', {
         controller: 'CaseShowCtrl',        
         templateUrl:'/views/cases/show'
+      }).when('/cases/new', {
+        controller: 'CaseNewCtrl',        
+        templateUrl:'/views/cases/new'
       }).
       // Needs
       when('/needs/show/:needId', {

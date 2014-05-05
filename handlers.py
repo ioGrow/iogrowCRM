@@ -432,6 +432,10 @@ class LeadNewHandler(BaseHandler,SessionEnabledHandler):
     def get (self):
         self.prepare_template('templates/leads/lead_new.html')
 
+class CaseNewHandler(BaseHandler,SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/cases/case_new.html')
+
 class CaseListHandler(BaseHandler,SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/cases/case_list.html')
@@ -689,6 +693,8 @@ routes = [
     # Cases Views
     ('/views/cases/list',CaseListHandler),
     ('/views/cases/show',CaseShowHandler),
+    ('/views/cases/new',CaseNewHandler),
+    
     # Needs Views
     ('/views/needs/show',NeedShowHandler),
   

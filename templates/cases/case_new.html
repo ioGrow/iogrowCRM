@@ -1,0 +1,298 @@
+<div class="row subHeader">
+  <div class="currentApp">
+    <h2 class="page-title">
+      <!-- <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
+      {{active_app.label}}
+    </h2>
+  </div>
+  <div class=" subHeaderContent">
+    <div class="pull-right sharebuttonDiv"> 
+      <a class="btn red jfk-button jfk-button-action" ng-click="save(casee)">
+        Create
+      </a>
+    </div>
+    <h2 class="page-title">
+      <a href="/#/cases" data-toggle="tooltip" data-placement="bottom" title="Back to cases">
+        <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
+      </a>
+      {{_("Cases")}} >  
+        <%= casee.name %>
+    </h2>
+  </div>
+</div>
+<div  class="page-content">
+  <div class="loader-container row" ng-show="isLoading">
+    <div class="loader-dialog col-md-4 col-md-offset-4 ">
+      <div class="loader-content">
+        Loading...
+      </div>
+    </div>
+  </div>
+  <div class="" ng-show="immediateFailed">
+     <div class="col-md-12">  
+      <h1>Sign-in Button;</h1>
+          <span id="signin">
+              <span id="myGsignin"></span>
+          </span>
+    </div>
+  </div>
+  <div class="row" >
+    <div class="showPage newPage col-md-9">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            
+            <div class="col-md-12">
+              <form class="form-horizontal ">
+                
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                     
+                      <div class="col-md-12">
+                        <input type="text" required id="id_firstname" class="form-control" ng-model="casee.name" placeholder="What’s the subject of this issue? " autofocus>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <div class="col-md-12">
+                        <input type="text" required ng-model="searchContactQuery" typeahead="contactResult as contactResult.firstname + ' '+  contactResult.lastname for contactResult in contactsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectContact()" class="form-control" placeholder="Contact">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <div class="col-md-12">
+                        <input type="text" required  ng-model="searchAccountQuery" typeahead="accountResult as accountResult.name  for accountResult in accountsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectAccount()" class="form-control" placeholder="Account">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+               </form>
+              </div>
+            </div>
+            <div class="row">
+            <div class="col-md-6">
+              <div class="news-blocks blank-card blank-card-yellow">
+                <h3>Case Informations</h3>
+                <div class="row"> 
+                  <div class="form-group selector-margin">
+                    <label  class="required col-md-3 control-label">{{_("Status")}} </label>
+                    <div class="col-md-9">
+                             <select class="form-control" ng-model="status_selected" ng-options="stat.status for stat in casesatuses" >
+                              <option value="">-- {{_("Choose a status")}} --</option>
+                            </select>
+                            
+                    </div>
+                  </div>
+                  <div class="form-group selector-margin">
+                        <label  class="required col-md-3 control-label">{{_("Priority")}} </label>
+                       
+                        <div class="col-md-9">
+                          <select class="form-control" ng-model="casee.priority">
+                            <option value="">-- {{_("Choose a priority")}} --</option>
+                            <option value="1">1 - Low</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10 - Critical</option>
+                          </select>
+                          
+                        </div>
+                        
+                    </div>
+                  <br>
+                </div>
+              </div>
+              <div class="news-blocks blank-card blank-card-bluep">
+                <h3>{{ _('Custom Fields') }}</h3>
+                <ul class="list-unstyled contact-infos" >
+                  <li ng-show="showCustomFieldForm">
+                    <div class="row">
+                      <form class="form-inline newLeadForm" role="form">
+                        <div class="form-group sm-group" style="">
+                          <label class="sr-only" for="exampleInputEmail2">Field</label>
+                          <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="Enter field name">
+                        </div>
+                        <div class="form-group sm-group" style="">
+                          <label class="sr-only" for="exampleInputEmail2">Value</label>
+                          <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="Enter a value">
+                        </div>
+                        <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(customfield,customfields)">Add</button>
+                        <button type="submit" class="btn btn-default" ng-click="showCustomFieldForm=false">X</button>
+                      </form>
+                    </div>
+                  </li>
+                  <li ng-repeat="custom in customfields">
+                    <span>
+                      <%= custom.field%>  : <%= custom.value%> 
+                    </span>
+                  </li>
+                  <li>
+                    <a ng-click="showCustomFieldForm=true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal">
+                      <i class="icon-plus"></i> Add a new custom field 
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              
+            </div>
+            <div class="col-md-6">
+              <div class="news-blocks blank-card blank-card-red">
+                <h3>Description</h3>
+                
+                
+                <div class="news-block-tags">
+                  
+                    <div class="form-group row">
+                        <div class="col-md-12"> 
+                            <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="casee.description"></textarea>
+                        </div>
+                  </div>
+                </div>
+                                      
+              </div>
+             
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 ">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="portlet showPage">
+            <div class="portlet-title line">
+              <div class="caption">
+                <i class="fa fa-lock"></i>Who can access ?
+              </div>
+            </div>
+            <div class="portlet-body" id="chats">
+              <label class="radio line">
+                <input type="radio" value="public" ng-model="casee.access" />
+                  public: Anyone within your organization can access and find
+              </label>
+              <label class="radio line">
+                <input type="radio"  value="private" ng-model="casee.access" />
+                private: only you and your collaborators
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+<div id="addressmodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel" class="modal-title">{{_("Add Address")}}</h3>
+      </div>
+      <div class="modal-body">
+        <form id="addAddress" name="addemail"  class="form-horizontal"> 
+          <div class="form-group">
+            <label  class="col-md-3 control-label">{{_("Street")}} </label>
+            <div class="col-md-9">
+              <input type="text"   class="form-control" id="id_street" ng-model="address.street">
+            </div>
+          </div>
+          <div class="form-group">
+            <label  class="col-md-3 control-label">{{_("City")}} </label>
+            <div class="col-md-9">
+              <input type="text"  class="form-control" id="id_city" ng-model="address.city">
+            </div>
+          </div>
+          <div class="form-group">
+            <label  class="col-md-3 control-label">{{_("State/Province")}} </label>
+            <div class="col-md-9">
+              <input type="text" class="form-control"  id="id_state" ng-model="address.state">
+            </div>
+          </div>
+          <div class="form-group">
+            <label  class="col-md-3 control-label">{{_("Postal Code")}} </label>
+            <div class="col-md-9">
+              <input type="text"   class="form-control" id="id_postal" ng-model="address.postal">
+            </div>
+          </div>
+          <div class="form-group">
+            <label  class="col-md-3 control-label">{{_("Country")}} </label>
+            <div class="col-md-9">
+              <input type="text"  class="form-control"  id="id_country" ng-model="address.country">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+          <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+          <input  type="submit" ng-click="pushElement(address,addresses)" class="btn green" value="Add this address">
+      </div>
+    </div>
+  </div>
+</div>
+<div id="EditTagModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel" class="modal-title">{{_("Edit Lead")}}</h3>
+      </div>
+      <div class="modal-body">
+        <form id="editTagline" name="editlead" class="form-horizontal"> 
+          <div class="form-group">
+            <label  class="col-md-3 control-label">{{_("Tagline")}} </label>
+            <div class="col-md-9">
+              <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="lead.tagline"></textarea>
+            </div>
+          </div>  
+        </form>           
+      </div>
+      <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
+        <button  type="submit" class="btn btn-primary addContactNow" ng-click="updateTagline(lead)">{{_("Save")}} </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="EditIntroModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel" class="modal-title">{{_("Edit Lead")}}</h3>
+      </div>
+      <div class="modal-body">
+        <form id="editTagline" name="edittag" ng-submit="updateintro(lead)" class="form-horizontal"> 
+          <div class="form-group">
+            <label  class=" col-md-3 control-label">{{_("Introduction")}} </label>
+            <div class="col-md-9">
+              <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="lead.introduction"></textarea>
+            </div>
+          </div> 
+        </form>            
+      </div>
+      <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
+        <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  $(function() {
+    $('#datetimepicker2').datetimepicker({
+      language: 'fr',
+      pickTime: false
+    });
+  });
+</script>
