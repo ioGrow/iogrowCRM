@@ -434,7 +434,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      
       $scope.editLead = function(){
       $('#EditLeadModal').modal('show');
-     }
+     };
 
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
