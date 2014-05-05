@@ -332,6 +332,9 @@ accountservices.factory('Contact', function($http) {
             $scope.contacts = [];
             $scope.blankStatecontact = false;
           }
+          if ($scope.contactInserted){
+            $scope.contactInserted(resp);
+          }
           $scope.contacts.push(resp);
           $scope.contact = {};
           $scope.searchAccountQuery = '';

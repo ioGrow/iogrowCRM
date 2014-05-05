@@ -558,8 +558,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        };
        
        $scope.preparePercent = function(percent){
-              console.log('************************');
-            console.log(percent);
+            
             return parseInt(percent);
        };
 
@@ -969,48 +968,30 @@ $scope.CaselistNextPageItems = function(){
        
      };
      $scope.createPickerUploader = function() {
-          var projectfolder = $scope.account.folder;
           var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
-          var docsView = new google.picker.DocsView()
-              .setIncludeFolders(true) 
-              .setSelectFolderEnabled(true);
           var picker = new google.picker.PickerBuilder().
-              addView(new google.picker.DocsUploadView().setParent(projectfolder)).
-              addView(docsView).
+              addView(new google.picker.DocsUploadView()).
               setCallback($scope.uploaderCallback).
               setOAuthToken(window.authResult.access_token).
               setDeveloperKey(developerKey).
               setAppId(987765099891).
-                enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
               build();
           picker.setVisible(true);
       };
       // A simple callback implementation.
       $scope.uploaderCallback = function(data) {
-        
-
-        if (data.action == google.picker.Action.PICKED) {
-                var params = {
-                              'access': $scope.account.access,
-                              'parent':$scope.account.entityKey
-                            };
-                params.items = new Array();
-               
-                 $.each(data.docs, function(index) {
-                     
-                      var item = { 'id':data.docs[index].id,
-                                  'title':data.docs[index].name,
-                                  'mimeType': data.docs[index].mimeType,
-                                  'embedLink': data.docs[index].url
-
-                      };
-                      params.items.push(item);
-                
-                  });
-                 Attachement.attachfiles($scope,params);
-                    
-                  
+          if (data.action == google.picker.Action.PICKED) {
+                if(data.docs){
+                  $scope.logo.logo_img_id = data.docs[0].id ;
+                  $scope.logo.logo_img_url = data.docs[0].url ;
+                  $scope.imageSrc = 'https://docs.google.com/uc?id='+data.docs[0].id;
+                  $scope.$apply();
+                  var params ={'id':$scope.account.id};
+                  params['logo_img_id'] = $scope.logo.logo_img_id;
+                  params['logo_img_url'] = $scope.logo.logo_img_url;
+                  Account.patch($scope,params);
                 }
+          }
       }
      $scope.share = function(slected_memeber){
         
@@ -1733,14 +1714,9 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
               build();
           picker.setVisible(true);
       };
-      // A simple callback implementation.
+  
       $scope.uploaderCallback = function(data) {
           if (data.action == google.picker.Action.PICKED) {
-                var params = {
-                              'access': $scope.account.access,
-                              'parent':$scope.account.entityKey
-                            };
-                params.items = new Array();
                 if(data.docs){
                   $scope.logo.logo_img_id = data.docs[0].id ;
                   $scope.logo.logo_img_url = data.docs[0].url ;

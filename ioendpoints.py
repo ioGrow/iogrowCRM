@@ -464,6 +464,7 @@ class CrmEngineApi(remote.Service):
     def AccountPatch(self, my_model):
         # user_from_email = EndpointsHelper.require_iogrow_user()
         # Todo: Check permissions
+        user = EndpointsHelper.require_iogrow_user()
         if not my_model.from_datastore:
             raise endpoints.NotFoundException('Account not found.')
         patched_model_key = my_model.entityKey
@@ -480,6 +481,18 @@ class CrmEngineApi(remote.Service):
             and (my_p and not(p in ['put', 'set_perm', 'put_index'])):
                 exec('patched_model.' + p + '= my_model.' + p)
         patched_model.put()
+        if my_model.logo_img_id:
+            if patched_model.folder:
+                credentials = user.google_credentials
+                http = credentials.authorize(httplib2.Http(memcache))
+                service = build('drive', 'v2', http=http)
+                params = {
+                          'parents': [{'id': patched_model.folder}]
+                        }
+                service.files().patch(
+                                    fileId=my_model.logo_img_id,
+                                    body=params,
+                                    fields='id').execute()
         return patched_model
 
     # accounts.search API
