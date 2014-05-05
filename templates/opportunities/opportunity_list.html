@@ -54,10 +54,12 @@
   <!-- $cards container -->
   <div class="row ">
     <div class="col-md-9" ng-show="isSignedIn" style="">
-        <button ng-click="showModal()" id="sample_editable_1_new" class="btn red newBtn">
-          New Opportunity 
-        </button>                
+  <div class="btn-group newBtn">
+     <a class="btn red " href="/#/opportunities/new" >
+     {{ _("New Opportunity") }}</a>
+  </div>                 
     </div>
+    
     <div class="col-md-9">
     <div class="row">
       <div class="tab-pane">
