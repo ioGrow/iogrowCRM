@@ -480,6 +480,8 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        //$scope.cases = {};
        //$scope.cases = [];
        $scope.opportunities = [];
+       $scope.phones=[];
+       $scope.emails=[];
        $scope.opportunities = {};
         $scope.statuses = [
           {value: 'Home', text: 'Home'},
