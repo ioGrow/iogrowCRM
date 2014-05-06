@@ -135,17 +135,18 @@ class Edge(ndb.Expando):
     @classmethod
     def delete(cls, edge_key):
         existing_edge = edge_key.get()
-        start_node = existing_edge.start_node 
-        end_node = existing_edge.end_node
-        kind = existing_edge.kind
-        existing_edge.key.delete()
-        if kind in INVERSED_EDGES.keys():
-            inversed_edge = cls.query(
-                                    cls.start_node==end_node,
-                                    cls.end_node == start_node,
-                                    cls.kind.IN(INVERSED_EDGES[kind])).get()
-            if inversed_edge:
-                inversed_edge.key.delete()
+        if existing_edge:
+            start_node = existing_edge.start_node 
+            end_node = existing_edge.end_node
+            kind = existing_edge.kind
+            existing_edge.key.delete()
+            if kind in INVERSED_EDGES.keys():
+                inversed_edge = cls.query(
+                                        cls.start_node==end_node,
+                                        cls.end_node == start_node,
+                                        cls.kind.IN(INVERSED_EDGES[kind])).get()
+                if inversed_edge:
+                    inversed_edge.key.delete()
     @classmethod
     def delete_all(cls, start_node):
          edges = cls.query(ndb.OR(cls.start_node==start_node,cls.end_node==start_node) ).fetch()
