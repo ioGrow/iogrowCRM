@@ -381,6 +381,11 @@ $scope.addTags=function(){
         $scope.disassociated=tag;
         
       }
+      $scope.inTag=function(tag){
+        
+        $scope.disassociated=tag;
+        
+      }
       $scope.dropTag=function(account,index){
         var items = [];
         
