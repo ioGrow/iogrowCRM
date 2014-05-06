@@ -50,7 +50,7 @@
               <div class="portlet">
                 <div class="portlet-body left-sidebar" id="chats">
                   <div class="pic">
-                    <img alt="<%=contact.firstname%> <%=contact.lastname%>" ng-src="<%=imageSrc%>" class="">
+                    <img alt="<%=contact.firstname%> <%=contact.lastname%>" ng-src="<%=imageSrc%>" class="contact-photo">
                   </div>  
                   <a ng-click="createPickerUploader()" href="" class="btn btn-default btn-upload" data-toggle="modal">
                     <img src="/static/img/upload_logo.png" class="" >
@@ -63,17 +63,15 @@
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label class="control-label col-md-4">First Name</label>
-                      <div class="col-md-8">
-                        <input type="text" required id="id_firstname" class="form-control" ng-model="contact.firstname">
+                      <div class="col-md-12">
+                        <input type="text" required id="id_firstname" class="form-control" ng-model="contact.firstname" placeholder="First Name">
                       </div>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label class="control-label col-md-4">Last Name</label>
-                      <div class="col-md-8">
-                        <input type="text"  required id="id_lastname" class="form-control" ng-model="contact.lastname">
+                      <div class="col-md-12">
+                        <input type="text"  required id="id_lastname" class="form-control" ng-model="contact.lastname" placeholder="Last Name">
                       </div>
                     </div>
                   </div>
@@ -81,17 +79,15 @@
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label class="control-label col-md-4">Title</label>
-                      <div class="col-md-8">
-                        <input type="text"  id="id_lastname" class="form-control" ng-model="contact.title">
+                      <div class="col-md-12">
+                        <input type="text"  id="id_lastname" class="form-control" ng-model="contact.title" placeholder="Title">
                       </div>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label class="control-label col-md-4">Account</label>
-                      <div class="col-md-8">
-                        <input type="text"  ng-model="searchAccountQuery" typeahead="result as result.name  for result in results | filter:$viewValue | limitTo:10" typeahead-on-select="selectAccount()" class="form-control"placeholder="Search">
+                      <div class="col-md-12">
+                        <input type="text"  ng-model="searchAccountQuery" typeahead="result as result.name  for result in accountsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectAccount()" class="form-control"placeholder="Account">
                       </div>
                     </div>
                   </div>

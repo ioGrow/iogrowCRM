@@ -353,9 +353,14 @@ accountservices.factory('Contact', function($http) {
       });
   };
 Contact.delete = function($scope,params){
-    console.log('i am in contacts.delete api');
+    $scope.isLoading = true;
     gapi.client.crmengine.contacts.delete(params).execute(function(resp){
-        window.location.replace('#/contacts');
+
+        if ($scope.contactDeleted){
+            $scope.contactDeleted(resp);
+            $scope.isLoading = false;
+            $scope.$apply();
+        }
     }
 
     )};
