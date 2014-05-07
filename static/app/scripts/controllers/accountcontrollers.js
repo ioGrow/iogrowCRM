@@ -480,6 +480,8 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        //$scope.cases = {};
        //$scope.cases = [];
        $scope.opportunities = [];
+       $scope.phones=[];
+       $scope.emails=[];
        $scope.opportunities = {};
         $scope.statuses = [
           {value: 'Home', text: 'Home'},
@@ -1573,7 +1575,7 @@ $scope.deleteaccount = function(){
     };
 //HKA 12.03.2014 Edit infonode
 $scope.edit_email=function(email){
-  console.log('----------thanks----------');
+
         $scope.edited_email=email;
      };
 
@@ -1583,7 +1585,25 @@ $scope.editTag=function(tag){
 $scope.doneEditTag=function(tag){
         $scope.edited_tag=null;
         $scope.updateTag(tag);
-     }
+     };
+
+     $scope.initObject=function(obj){
+          for (var key in obj) {
+                obj[key]=null;
+              }
+      }
+
+          $scope.pushElement=function(elem,arr){
+          if (arr.indexOf(elem) == -1) {
+              var copyOfElement = angular.copy(elem);
+              arr.push(copyOfElement);
+              console.log(elem);
+              $scope.initObject(elem);
+
+          }else{
+            alert("item already exit");
+          }
+      }
 
 
      // Google+ Authentication 
