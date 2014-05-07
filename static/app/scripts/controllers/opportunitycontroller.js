@@ -1082,17 +1082,16 @@ $scope.listInfonodes = function(kind) {
 
 }]);
 
-
-app.controller('OpportunityNewCtrl', ['$scope','Auth','Account','Tag','Edge',
-    function($scope,Auth,Account,Tag,Edge) {
-     $("ul.page-sidebar-menu li").removeClass("active");
-     $("#id_Opportunities").addClass("active");
-      
-      document.title = "Accounts: New";
+app.controller('OpportunityNewCtrl', ['$scope','Auth','User','Account','Tag','Opportunitystage','Edge',
+    function($scope,Auth,Account,Opportunitystage,User,Tag,Edge) {
+      $("ul.page-sidebar-menu li").removeClass("active");
+      $("#id_Opportunities").addClass("active");
+      document.title = "Opportunities: New";
       $scope.isSignedIn = false;
       $scope.immediateFailed = false;
       $scope.nextPageToken = undefined;
       $scope.prevPageToken = undefined;
+      $scope.pagination = {};
       $scope.isLoading = false;
       $scope.leadpagination = {};
       $scope.currentPage = 01;
@@ -1103,40 +1102,32 @@ app.controller('OpportunityNewCtrl', ['$scope','Auth','Account','Tag','Edge',
       $scope.account.access ='public';
       $scope.order = '-updated_at';
       $scope.status = 'New';
-      $scope.showPhoneForm=false;
-      $scope.showEmailForm=false;
-      $scope.showWebsiteForm=false;
-      $scope.showSociallinkForm=false;
       $scope.showCustomFieldForm =false;
-      $scope.phones=[];
-      $scope.addresses=[];
-      $scope.emails=[];
-      $scope.websites=[];
-      $scope.sociallinks=[];
       $scope.customfields=[];
       $scope.account.account_type = 'Customer';
       $scope.account.industry = 'Technology';
-      $scope.phone = {'type':'work'};
-            $scope.logo = {
-                    'logo_img_id':null,
-                    'logo_img_url':null
-                  };
-       $scope.percent = 65;
-        $scope.options = {
-            animate:{
-                duration:0,
-                enabled:false
-            },
-            barColor:'#2C3E50',
-            scaleColor:false,
-            lineWidth:20,
-            lineCap:'circle'
-        };
+      $scope.stage_selected={};
+      $scope.opportunitystages=[];
+      $scope.opportunity={currency:'USD',price_type:'fixed',estimated_close_date:new Date()};
+
+      $scope.users=[];
+      $scope.opportunity.estimated=null;
       $scope.imageSrc = '/static/img/default_company.png';
       $scope.initObject=function(obj){
           for (var key in obj) {
                 obj[key]=null;
               }
+      }
+      $scope.pullElement=function(index,elem,arr){
+        if ($scope.customfields.indexOf(elem) != -1) {
+            $scope.customfields.splice(index, 1);
+        }
+      }
+      $scope.showRemove=function(id){
+        $('#'+id).addClass('hidden');
+      }
+      $scope.hideRemove=function(id){
+       $('#'+id).removeClass('hidden'); 
       }
       $scope.pushElement=function(elem,arr){
           if (arr.indexOf(elem) == -1) {
@@ -1151,6 +1142,9 @@ app.controller('OpportunityNewCtrl', ['$scope','Auth','Account','Tag','Edge',
       }
       $scope.runTheProcess = function(){
             /*Account.list($scope,{});*/
+           /* Opportunitystage.list($scope,{'order':'probability'});
+            console.log($scope.opportunitystages);*/
+
        };
         // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
