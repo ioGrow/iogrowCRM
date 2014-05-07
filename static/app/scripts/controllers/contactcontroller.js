@@ -1143,8 +1143,14 @@ $scope.updateintro = function(contact){
 
      var params = {'entityKey':$scope.contact.entityKey};
      console.log(params);
-     Contact.delete($scope,params);
+     Contact.delete($scope, params);
      $('#BeforedeleteContact').modal('hide');
+     
+     };
+     $scope.contactDeleted = function(resp){
+        
+        window.location.replace('/#/contacts');
+
      };
 
      $scope.DocumentlistNextPageItems = function(){
@@ -1416,7 +1422,7 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
       $scope.sociallinks=[];
       $scope.customfields=[];
       $scope.results=[];
-      $scope.imageSrc = '/static/img/default_company.png';
+      $scope.imageSrc = '/static/img/avatar_contact.jpg';
       $scope.initObject=function(obj){
           for (var key in obj) {
                 obj[key]=null;
@@ -1510,13 +1516,8 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
     }
       // new Contact
      $scope.save = function(contact){
-
-           if(!contact.account){
-              if($scope.searchAccountQuery){
-                  contact.account=$scope.searchAccountQuery;
-              }
-              else{
-                var params ={
+          var delayInsert = false;
+          var params ={
                         'firstname':contact.firstname,
                         'lastname':contact.lastname,
                         'title':contact.title,
@@ -1528,43 +1529,33 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
                         'infonodes':$scope.prepareInfonodes(),
                         'access': contact.access
                       };
-                Contact.insert($scope,params);
-                window.location.replace('/#/contacts');
-              }
-            }
-           var params ={
-                      'firstname':contact.firstname,
-                      'lastname':contact.lastname,
-                      'account':contact.account,
-                      'title':contact.title,
-                      'tagline':contact.tagline,
-                      'introduction':contact.introduction,
-                      'phones':$scope.phones,
-                      'emails':$scope.emails,
-                      'infonodes':$scope.prepareInfonodes(),
-                      'access': contact.access
-                    };
-
           if (typeof(contact.account)=='object'){
-            console.log('account is object');
-           
-            params['account'] = contact.account.entityKey;
-            
-            
-
-          }else if($scope.searchAccountQuery.length>0){
-              console.log('i will insert account');
-              // create a new account with this account name
-              var accountparams = {'name': $scope.searchAccountQuery,
-                            'access': contact.access
+              params['account'] = contact.account.entityKey;
+          }else if($scope.searchAccountQuery){
+              if ($scope.searchAccountQuery.length>0){
+                // create a new account with this account name
+                var accountparams = {
+                                      'name': $scope.searchAccountQuery,
+                                      'access': contact.access
+                                    };
+                $scope.contact = contact;
+                Account.insert($scope,accountparams);
+                delayInsert = true;
               };
-              $scope.contact = contact;
-              Account.insert($scope,accountparams);
           };
+          if(!delayInsert){
+            Contact.insert($scope,params);
+          }
           
-          Contact.insert($scope,params);
-          window.location.replace('/#/contacts');
       };
+      $scope.contactInserted = function(resp){
+          window.location.replace('/#/contacts');
+      }
+      
+      $scope.selectAccount = function(){
+        $scope.contact.account = $scope.searchAccountQuery;
+
+     };
 
 
      
