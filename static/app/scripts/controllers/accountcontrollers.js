@@ -624,12 +624,17 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
      }
      $scope.showOptions=function($event){
         var element=$($event.target);
-        element.find(".page-meta").remove();
-        element.append('<span class="page-meta"><i class="icon-pencil"><a ng-click="editintro()" class="btn-link addAnotherPhone" data-toggle="modal"> Edit </a></i></span>');
+        if(element.prop("tagName")!='A'){
+              element.find(".page-meta").remove();
+        element.append('<span class="page-meta"><i class="icon-pencil"><a ng-click="editintro()" class="btn-link addAnotherPhone" data-toggle="modal"></a></i></span><span class="page-meta"><i class="fa fa-trash-o"><a ng-click="deleteInfonode()" class="btn-link addAnotherPhone" data-toggle="modal"></a></i></span>');
+         }
      }
      $scope.hideOptions=function($event){
-        var element=$($event.target);
+      var element=$($event.target);
+       if(element.prop("tagName")!='A'){
+        console.log(element);
         element.find(".page-meta").remove();
+          }
      }
      $scope.TopiclistPrevPageItems = function(){
        
