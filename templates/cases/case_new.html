@@ -6,7 +6,7 @@
     </h2>
   </div>
   <div class=" subHeaderContent">
-    <div class="pull-right sharebuttonDiv"> 
+    <div class="pull-right sharebuttonDiv">
       <a class="btn red jfk-button jfk-button-action" ng-click="save(casee)">
         Create
       </a>
@@ -15,7 +15,7 @@
       <a href="/#/cases" data-toggle="tooltip" data-placement="bottom" title="Back to cases">
         <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
       </a>
-      {{_("Cases")}} >  
+      {{_("Cases")}} >
         <%= casee.name %>
     </h2>
   </div>
@@ -29,7 +29,7 @@
     </div>
   </div>
   <div class="" ng-show="immediateFailed">
-     <div class="col-md-12">  
+     <div class="col-md-12">
       <h1>Sign-in Button;</h1>
           <span id="signin">
               <span id="myGsignin"></span>
@@ -41,14 +41,14 @@
       <div class="row">
         <div class="col-md-12">
           <div class="row">
-            
+
             <div class="col-md-12">
               <form class="form-horizontal ">
-                
+
                 <div class="row">
                   <div class="col-md-12">
                     <div class="form-group">
-                     
+
                       <div class="col-md-12">
                         <input type="text" required id="id_firstname" class="form-control" ng-model="casee.name" placeholder="What’s the subject of this issue? " autofocus>
                       </div>
@@ -78,19 +78,19 @@
             <div class="col-md-6">
               <div class="news-blocks blank-card blank-card-yellow">
                 <h3>Case Informations</h3>
-                <div class="row"> 
+                <div class="row">
                   <div class="form-group selector-margin">
                     <label  class="required col-md-3 control-label">{{_("Status")}} </label>
                     <div class="col-md-9">
                              <select class="form-control" ng-model="status_selected" ng-options="stat.status for stat in casesatuses" >
                               <option value="">-- {{_("Choose a status")}} --</option>
                             </select>
-                            
+
                     </div>
                   </div>
                   <div class="form-group selector-margin">
                         <label  class="required col-md-3 control-label">{{_("Priority")}} </label>
-                       
+
                         <div class="col-md-9">
                           <select class="form-control" ng-model="casee.priority">
                             <option value="">-- {{_("Choose a priority")}} --</option>
@@ -105,9 +105,9 @@
                             <option value="9">9</option>
                             <option value="10">10 - Critical</option>
                           </select>
-                          
+
                         </div>
-                        
+
                     </div>
                   <br>
                 </div>
@@ -133,34 +133,34 @@
                   </li>
                   <li ng-repeat="custom in customfields">
                     <span>
-                      <%= custom.field%>  : <%= custom.value%> 
+                      <%= custom.field%>  : <%= custom.value%>
                     </span>
                   </li>
                   <li>
                     <a ng-click="showCustomFieldForm=true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal">
-                      <i class="icon-plus"></i> Add a new custom field 
+                      <i class="icon-plus"></i> Add a new custom field
                     </a>
                   </li>
                 </ul>
               </div>
-              
+
             </div>
             <div class="col-md-6">
               <div class="news-blocks blank-card blank-card-red">
                 <h3>Description</h3>
-                
-                
+
+
                 <div class="news-block-tags">
-                  
+
                     <div class="form-group row">
-                        <div class="col-md-12"> 
+                        <div class="col-md-12">
                             <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="casee.description"></textarea>
                         </div>
                   </div>
                 </div>
-                                      
+
               </div>
-             
+
             </div>
           </div>
         </div>
@@ -191,7 +191,7 @@
     </div>
   </div>
 </div>
-    
+
 <div id="addressmodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -200,7 +200,7 @@
         <h3 id="myModalLabel" class="modal-title">{{_("Add Address")}}</h3>
       </div>
       <div class="modal-body">
-        <form id="addAddress" name="addemail"  class="form-horizontal"> 
+        <form id="addAddress" name="addemail"  class="form-horizontal">
           <div class="form-group">
             <label  class="col-md-3 control-label">{{_("Street")}} </label>
             <div class="col-md-9">
@@ -248,14 +248,14 @@
         <h3 id="myModalLabel" class="modal-title">{{_("Edit Lead")}}</h3>
       </div>
       <div class="modal-body">
-        <form id="editTagline" name="editlead" class="form-horizontal"> 
+        <form id="editTagline" name="editlead" class="form-horizontal">
           <div class="form-group">
             <label  class="col-md-3 control-label">{{_("Tagline")}} </label>
             <div class="col-md-9">
               <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="lead.tagline"></textarea>
             </div>
-          </div>  
-        </form>           
+          </div>
+        </form>
       </div>
       <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
@@ -272,14 +272,14 @@
         <h3 id="myModalLabel" class="modal-title">{{_("Edit Lead")}}</h3>
       </div>
       <div class="modal-body">
-        <form id="editTagline" name="edittag" ng-submit="updateintro(lead)" class="form-horizontal"> 
+        <form id="editTagline" name="edittag" ng-submit="updateintro(lead)" class="form-horizontal">
           <div class="form-group">
             <label  class=" col-md-3 control-label">{{_("Introduction")}} </label>
             <div class="col-md-9">
               <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="lead.introduction"></textarea>
             </div>
-          </div> 
-        </form>            
+          </div>
+        </form>
       </div>
       <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
