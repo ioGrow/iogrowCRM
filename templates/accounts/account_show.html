@@ -45,8 +45,7 @@
           <div class="row margin-bottom-10">
             <div class="col-md-2" ng-mouseenter="showUpload= true" ng-mouseleave="showUpload = false">
               <div class="pic">
-
-                           <img alt="<%=account.name%>" class=" img-responsive img-thumbnail" ng-src="<%=imageSrc%>">
+                  <img alt="<%=account.name%>" class=" img-responsive img-thumbnail" ng-src="<%=imageSrc%>">
                </div>  
                <a ng-show="showUpload" ng-click="createPickerUploader()" href="" class="btn btn-default btn-upload" data-toggle="modal" style="display: none;">
                  <img src="/static/img/upload_logo.png">
@@ -240,12 +239,12 @@
                                             <label class="sr-only" for="exampleInputEmail2">Number</label>
                                             <input type="text" class="form-control" id="exampleInputEmail2" ng-model="phone.number" placeholder="Enter a number">
                                           </div>
-                                           <button type="submit" ng-click="pushElement(phone,phones)" class="btn blue jfk-button jfk-button-action">Add</button>
+                                           <button type="submit" ng-click="addPhone(phone)" class="btn blue jfk-button jfk-button-action">Add</button>
                                             <button type="submit" class="btn btn-default" ng-click="showPhoneForm=false">X</button>
                                         </form>
                                       </div>
                                     </li>
-                           <li ng-repeat="phone in phones"> <a editable-text="phone.number" onbeforesave="inlinePatch('Infonode','phones', 'number',phone.entityKey,$data)"> <%=phone.number%> </a> - <a editable-select="phone.type" e-ng-options="s.value as s.text for s in statuses" onbeforesave="inlinePatch('Infonode','phones', 'type',phone.entityKey,$data)"> <%=phone.type%> </a> <a ><img class="ctodeal"  /></a></li>
+                           <li ng-repeat="phone in infonodes.phones"> <a editable-text="phone.number" onbeforesave="inlinePatch('Infonode','phones', 'number',phone.entityKey,$data)"> <%=phone.number%> </a> - <a editable-select="phone.type" e-ng-options="s.value as s.text for s in statuses" onbeforesave="inlinePatch('Infonode','phones', 'type',phone.entityKey,$data)"> <%=phone.type%> </a> <a ><img class="ctodeal"  /></a></li>
                              <li><a ng-hide="showPhoneForm" ng-click="showPhoneForm=true" class="btn-link addAnotherPhone" ><i class="icon-plus"></i>Add a new Phone</a></li>
                           
                         </ul>
@@ -265,7 +264,7 @@
                                           </form>
                                         </div>
                           </li>
-                        <li ng-repeat="email in emails"> <a editable-text="email.email" onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)"> <%=email.email %>  </a> </li>
+                        <li ng-repeat="email in emails" ng-mouseenter="showOptions($event)" ng-mouseleave="hideOptions($event)"> <a editable-text="email.email" onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)"> <%=email.email %>  </a> </li>
                           <li><a class="btn-link addAnotherPhone" ng-hide="showEmailForm" ng-click="showEmailForm=true"><i class="icon-plus"></i> Add a new email address </a></li>
                           
                         </ul>
@@ -356,7 +355,7 @@
                     <div class="col-md-12">
                             <div class="row">
                               <div class="col-md-12 waterfall" ng-hide="blankStateaccount">
-                                <div droppable  ng-repeat="contact in contacts" data-column="<%=getPosition($index)%>" class="cardElement" ng-drop="dropTag(contact)" ng-class="{rightcards: getPosition($index)==4}">
+                                <div droppable  ng-repeat="contact in contacts"  class="cardElement" ng-drop="dropTag(contact)" >
                                     <div class="detailsSection">
                                       <div class="head">
                                         <div class="pic">
@@ -477,7 +476,7 @@
                             <div class="row">
                               <!-- ngRepeat: opp in opportunities -->
                                <div class="col-md-12 waterfall3" ng-hide="blankStateaccount">
-                                  <div  ng-repeat="opportunity in opportunities" data-column="<%=getPosition($index)%>" class="rightcards cardElement"  ng-class="{rightcards: getPosition($index)==4}">
+                                  <div  ng-repeat="opportunity in opportunities"  class="rightcards cardElement"  >
                                           <div class="detailsSection">
                                             <div class="head">
                                               
@@ -647,7 +646,7 @@
                                     </a>
                                     <ul class="dropdown-menu">
                                       <li><a ng-click="showCreateDocument('document')" href="#" data-toggle="modal"> 
-                                           <img src="/static/img/google_drive/text/plain.png" class="">
+                                           <img src="/static/img/google_drive/text/plain.png" class=" ">
                                           Document
                                           </a>
                                       </li>
@@ -675,7 +674,7 @@
                             <div class="row">         
                              <!-- ngRepeat: attachment in documents -->
                                    <div class="col-md-12 waterfall2" ng-hide="blankStateaccount">
-                                      <div ng-repeat="attachment in documents" data-column="<%=getPosition($index)%>" class="cardElement"  ng-class="{rightcards: getPosition($index)==4}">
+                                      <div ng-repeat="attachment in documents"  class="cardElement"  >
                                           <div class="detailsSection">
                                             <div class="head">
                                               <div class="pic">
