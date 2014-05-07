@@ -1267,8 +1267,3 @@ app.controller('OpportunityNewCtrl', ['$scope','Auth','User','Account','Tag','Op
 
       
 }]);
-
-
-
-
-

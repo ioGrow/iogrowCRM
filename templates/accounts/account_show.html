@@ -239,12 +239,12 @@
                                             <label class="sr-only" for="exampleInputEmail2">Number</label>
                                             <input type="text" class="form-control" id="exampleInputEmail2" ng-model="phone.number" placeholder="Enter a number">
                                           </div>
-                                           <button type="submit" ng-click="pushElement(phone,phones)" class="btn blue jfk-button jfk-button-action">Add</button>
+                                           <button type="submit" ng-click="addPhone(phone)" class="btn blue jfk-button jfk-button-action">Add</button>
                                             <button type="submit" class="btn btn-default" ng-click="showPhoneForm=false">X</button>
                                         </form>
                                       </div>
                                     </li>
-                           <li ng-repeat="phone in phones"> <a editable-text="phone.number" onbeforesave="inlinePatch('Infonode','phones', 'number',phone.entityKey,$data)"> <%=phone.number%> </a> - <a editable-select="phone.type" e-ng-options="s.value as s.text for s in statuses" onbeforesave="inlinePatch('Infonode','phones', 'type',phone.entityKey,$data)"> <%=phone.type%> </a> <a ><img class="ctodeal"  /></a></li>
+                           <li ng-repeat="phone in infonodes.phones"> <a editable-text="phone.number" onbeforesave="inlinePatch('Infonode','phones', 'number',phone.entityKey,$data)"> <%=phone.number%> </a> - <a editable-select="phone.type" e-ng-options="s.value as s.text for s in statuses" onbeforesave="inlinePatch('Infonode','phones', 'type',phone.entityKey,$data)"> <%=phone.type%> </a> <a ><img class="ctodeal"  /></a></li>
                              <li><a ng-hide="showPhoneForm" ng-click="showPhoneForm=true" class="btn-link addAnotherPhone" ><i class="icon-plus"></i>Add a new Phone</a></li>
                           
                         </ul>
@@ -264,7 +264,7 @@
                                           </form>
                                         </div>
                           </li>
-                        <li ng-repeat="email in emails"> <a editable-text="email.email" onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)"> <%=email.email %>  </a> </li>
+                        <li ng-repeat="email in emails" ng-mouseenter="showOptions($event)" ng-mouseleave="hideOptions($event)"> <a editable-text="email.email" onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)"> <%=email.email %>  </a> </li>
                           <li><a class="btn-link addAnotherPhone" ng-hide="showEmailForm" ng-click="showEmailForm=true"><i class="icon-plus"></i> Add a new email address </a></li>
                           
                         </ul>

@@ -622,6 +622,15 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
      $scope.editTrigger=function(name){
         name.$show();
      }
+     $scope.showOptions=function($event){
+        var element=$($event.target);
+        element.find(".page-meta").remove();
+        element.append('<span class="page-meta"><i class="icon-pencil"><a ng-click="editintro()" class="btn-link addAnotherPhone" data-toggle="modal"> Edit </a></i></span>');
+     }
+     $scope.hideOptions=function($event){
+        var element=$($event.target);
+        element.find(".page-meta").remove();
+     }
      $scope.TopiclistPrevPageItems = function(){
        
        var prevPage = $scope.topicCurrentPage - 1;
