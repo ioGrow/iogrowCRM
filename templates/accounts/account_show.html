@@ -45,8 +45,7 @@
           <div class="row margin-bottom-10">
             <div class="col-md-2" ng-mouseenter="showUpload= true" ng-mouseleave="showUpload = false">
               <div class="pic">
-
-                           <img alt="<%=account.name%>" class=" img-responsive img-thumbnail" ng-src="<%=imageSrc%>">
+                  <img alt="<%=account.name%>" class=" img-responsive img-thumbnail" ng-src="<%=imageSrc%>">
                </div>  
                <a ng-show="showUpload" ng-click="createPickerUploader()" href="" class="btn btn-default btn-upload" data-toggle="modal" style="display: none;">
                  <img src="/static/img/upload_logo.png">

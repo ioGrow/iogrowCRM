@@ -26,7 +26,7 @@
                   </button>
             </div>
                   <h2 class="page-title">
-            <a href="/#/accounts" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
+            <a href="/#/opportunities" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
             <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Opportunities")}} > <%= opportunity.name %>  </h2>
   </div>
 </div>
@@ -54,6 +54,8 @@
         <!-- BEGIN PAGE CONTENT-->
        <div class="showPage newPage col-md-9">
             <div class="row">
+            <div class="col-md-12">
+            <div class="row">
               <div class="col-md-12">
               <!-- BEGIN PORTLET-->
               <form class="form-horizontal ">
@@ -62,8 +64,7 @@
                         <div class="row">
                           <div class="col-md-12">
                             <div class="form-group">
-                              <label class="control-label col-md-2">Name</label>
-                              <div class="col-md-10 inline-div">
+                              <div class="col-md-12">
                                 <input autofocus ng-model="opportunity.name" placeholder="{{_('Type here the opportunity name...')}}" type="text" class="form-control">
                               </div>
                             </div>
@@ -72,13 +73,12 @@
                         <div class="row">
                           <div class="col-md-12">
                             <div class="form-group">
-                              <label class="control-label col-md-2">Amount</label>
-                              <div class="col-md-6 inline-div">
-                                  <input type="text" required id="id_name" class="form-control" ng-model="opportunity.amount">
+                              <div class="col-md-7 ">
+                                  <input type="text" required id="id_name" class="form-control" placeholder="{{_('Opportunity amount...')}}" ng-model="opportunity.amount">
                                </div>
-                              <div class="col-md-4 inline-div">
+                              <div class="col-md-5 ">
                                <select  class="form-control" ng-model="opportunity.currency">
-                                <option value="USD">$ - USD</option>
+                                <option value="USD" selected>$ - USD</option>
                                 <option value="EUR">€ - EUR</option>
                                 <option value="CAD">$ - CAD</option>
                                 <option value="GBP">£ - GBP</option>
@@ -157,8 +157,7 @@
                           <div class="row">
                             <div class="col-md-12">
                             <div class="form-group">
-                              <label class="control-label col-md-2"></label>
-                                <div class="col-md-6 inline-div">
+                                <div class="col-md-7 ">
                                     <select   class="form-control" ng-model="opportunity.price_type">
                                         <option value="fixed">Fixed bid</option>
                                         <option value="hour">Per hour</option>
@@ -166,7 +165,7 @@
                                         <option value="year">Per year</option>
                                     </select>
                                 </div>
-                                <div class="col-md-4 inline-div">
+                                <div class="col-md-5 ">
                                    <input ng-hide="opportunity.price_type=='fixed'" type="text" pattern="\d*"  required id="" class="form-control" ng-model="opportunity.quantity">
                                 </div>
                               </div>
@@ -174,22 +173,9 @@
                         </div>
                   </div>
                   <div class="col-md-6">
-                        <div class="row">
-                          <div class="col-md-12">
-                            <div class="form-group">
-                              <label class="control-label col-md-2">Account</label>
-                              <div class="col-md-10 inline-div">
-                                <input autofocus ng-model="opportunity.name" placeholder="{{_('Type here the opportunity name...')}}" type="text" class="form-control">
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                  </div>
-                  <div class="col-md-6">
                     <div class="form-group">
-                        <label class="required col-md-2 control-label">Stage </label>
                         
-                       <div class="col-md-10 inline-div">
+                       <div class="col-md-12">
                           <select ng-model="stage_selected" ng-options="opps.name + ' - ( ' + opps.probability + '% )' for opps in opportunitystages | orderBy: 'name':true" class="form-control" >
                             <option value="">-- choose Stage --</option>
                           
@@ -201,8 +187,31 @@
                           
                     </div>
                   </div>
+                  <div class="col-md-6">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <div class="col-md-12">
+                                 <input type="text" required  ng-model="searchAccountQuery" typeahead="accountResult as accountResult.name  for accountResult in accountsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectAccount()" class="form-control" placeholder="Account">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                  </div>
+                  <div class="col-md-6">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <div class="col-md-12">
+                                <input type="text" required ng-model="searchContactQuery" typeahead="contactResult as contactResult.firstname + ' '+  contactResult.lastname for contactResult in contactsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectContact()" class="form-control" placeholder="Contact">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                  </div>
                   </div>
                       </form>
+              </div>
               </div>
                        <div class="row">
                           <div class="col-md-6">
@@ -212,7 +221,7 @@
                                     <div class="form-group row">
                                         <label class="control-label col-md-4">Estimated close date</label>
                                         <div class="col-md-8"> 
-                                            <datetimepick ng-model='opportunity.estimated_close_date' class="opp_ecd" label-format='EEEE, MMMM d, yyyy'></datetimepick>
+                                            <datetimepick ng-model='opportunity.estimated_close_date' class="" label-format='EEEE, MMMM d, yyyy'></datetimepick>
                                         </div>
                                   </div>
                                 </div>  
@@ -236,25 +245,6 @@
                           </div>
                           <div class="col-md-6">
                           
-                            <div class="news-blocks blank-card blank-card-red">
-                                <h3>Contacts</h3>
-                                <div class="news-block-tags">
-                                  <form id="addMember" name="addaccount" ng-submit="share(slected_memeber)" class="form-horizontal"> 
-                                          <div class=''>
-                                            <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group') }}">
-                                            <div id="assigeeList" class="list-group">
-                                              <div class="invitation list-group-item" ng-repeat="selected_us in slected_members">
-                                                <button type="button" class="close" ng-click="unselectMember($index)" data-dismiss="alert"></button>
-                                                <img class="google-avatar" src="<%= selected_us.google_public_profile_photo_url%>"/>
-                                                  <strong> <%= selected_us.google_display_name %> < <%=selected_us.email%> ></strong>
-                                              </div>
-                                            </div>
-                                          </div>
-                                  </form>
-                                  
-                                </div>
-                                <p><%=lead.tagline%> </p>                     
-                              </div>
                                <div class="news-blocks blank-card blank-card-yellow">
                                 <h3>{{ _('Custom Fields') }}</h3>
                                 
@@ -275,9 +265,11 @@
                                             </form>
                                           </div>
                                     </li>
-                                    <li ng-repeat="custom in customfields">
+                                    <li ng-repeat="custom in customfields" class="newItems"  >
                                     <span>
-                                    <%= custom.field%>  : <%= custom.value%> </span>
+                                    <%= custom.field%>  : <%= custom.value%> 
+                                    <a id="custom_<%=$index%>" href="" ng-click="pullElement($index,custom,customfields)" class="removeItem">x</a>
+                                    </span>
 
                                     </li>
                                     <li><a ng-click="showCustomFieldForm=true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new custom field </a></li>
@@ -291,6 +283,7 @@
                           
                         </div>
 
+            </div>
             </div>
        </div> 
               <div class="col-md-3 ">
@@ -445,10 +438,4 @@
       <!-- END PAGE CONTAINER-->
 </div>
 <script type="text/javascript">
-  $(function() {
-    $('#datetimepicker2').datetimepicker({
-      language: 'fr',
-      pickTime: false
-    });
-  });
 </script>

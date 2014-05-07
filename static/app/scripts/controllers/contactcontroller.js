@@ -483,6 +483,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
      $scope.documentpagination = {};
      $scope.documentCurrentPage=01;
      $scope.documentpages=[];
+     $scope.showPhoneForm=false;
 
       $scope.accounts = [];
       $scope.opportunities = [];
@@ -502,6 +503,12 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
       {value: 'Mob', text: 'Mob'},
       {value: 'Other', text: 'Other'}
       ];
+      $scope.showUpload=false;
+       $scope.logo = {
+                    'logo_img_id':null,
+                    'logo_img_url':null
+                  };
+
 
       
       // What to do after authentication
@@ -769,7 +776,7 @@ $scope.CaselistNextPageItems = function(){
 
      };
 
-  $scope.editacontact = function(contact){
+  $scope.editacontact = function(){
     $('#EditContactModal').modal('show');
   }
   //HKA 27.11.2013 Update Contact updatecontact
@@ -982,7 +989,7 @@ $scope.updatContactHeader = function(contact){
         
         var params = {'name':casee.name,
                       'priority':casee.priority,
-                      'status': $scope.status_selected.entityKey,
+                      'status_name': $scope.status_selected.entityKey,
                       'account':$scope.contact.account.entityKey,
                       'contact':$scope.contact.entityKey,
                       'access': $scope.contact.access
@@ -1133,6 +1140,7 @@ $scope.updateintro = function(contact){
      $('#BeforedeleteContact').modal('show');
    };
    $scope.deletecontact = function(){
+
      var params = {'entityKey':$scope.contact.entityKey};
      console.log(params);
      Contact.delete($scope,params);
@@ -1355,6 +1363,21 @@ $scope.updateintro = function(contact){
           } 
           InfoNode.insert($scope,params);
       };
+
+       //HKA 04.05.2014 To push element
+  $scope.pushElement=function(elem,arr){
+    console.log('Push Element -------------');
+          if (arr.indexOf(elem) == -1) {
+              var copyOfElement = angular.copy(elem);
+              arr.push(copyOfElement);
+              console.log(elem);
+              $scope.initObject(elem);
+
+          }else{
+            alert("item already exit");
+          }
+      };
+
      // Google+ Authentication 
      Auth.init($scope);
 }]);
@@ -1542,6 +1565,8 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
           Contact.insert($scope,params);
           window.location.replace('/#/contacts');
       };
+
+
      
      
 

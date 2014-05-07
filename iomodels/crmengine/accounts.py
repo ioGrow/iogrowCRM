@@ -112,7 +112,7 @@ class AccountInsertRequest(messages.Message):
 
 
 class Account(EndpointsModel):
-    _message_fields_schema = ('id','entityKey','created_at','updated_at', 'folder','access','collaborators_list','collaborators_ids','name','owner','account_type','industry','tagline','introduction')
+    _message_fields_schema = ('id','entityKey','created_at','updated_at', 'folder','access','collaborators_list','collaborators_ids','name','owner','account_type','industry','tagline','introduction','logo_img_id','logo_img_url')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)

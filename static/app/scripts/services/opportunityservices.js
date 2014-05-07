@@ -148,12 +148,13 @@ opportunityservices.factory('Opportunity', function($http) {
                  }
                  // Loaded succefully
                  $scope.isLoading = false;
+
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
               }else {
 
                 if(resp.code==401){
-                       $scope.refreshToken();;
+                       $scope.refreshToken();
                 };
                  
               }
