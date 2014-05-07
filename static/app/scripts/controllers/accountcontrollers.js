@@ -377,6 +377,15 @@ $scope.addTags=function(){
         $scope.draggedTag=tag;
 
       }
+      $scope.disassociate=function(tag){
+        $scope.disassociated=tag;
+        
+      }
+      $scope.inTag=function(tag){
+        
+        $scope.disassociated=tag;
+        
+      }
       $scope.dropTag=function(account,index){
         var items = [];
 
@@ -480,6 +489,8 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        //$scope.cases = {};
        //$scope.cases = [];
        $scope.opportunities = [];
+       $scope.phones=[];
+       $scope.emails=[];
        $scope.opportunities = {};
         $scope.statuses = [
           {value: 'Home', text: 'Home'},
@@ -610,6 +621,15 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
      }
      $scope.editTrigger=function(name){
         name.$show();
+     }
+     $scope.showOptions=function($event){
+        var element=$($event.target);
+        element.find(".page-meta").remove();
+        element.append('<span class="page-meta"><i class="icon-pencil"><a ng-click="editintro()" class="btn-link addAnotherPhone" data-toggle="modal"> Edit </a></i></span>');
+     }
+     $scope.hideOptions=function($event){
+        var element=$($event.target);
+        element.find(".page-meta").remove();
      }
      $scope.TopiclistPrevPageItems = function(){
 
@@ -1573,7 +1593,7 @@ $scope.deleteaccount = function(){
     };
 //HKA 12.03.2014 Edit infonode
 $scope.edit_email=function(email){
-  console.log('----------thanks----------');
+
         $scope.edited_email=email;
      };
 
@@ -1583,7 +1603,25 @@ $scope.editTag=function(tag){
 $scope.doneEditTag=function(tag){
         $scope.edited_tag=null;
         $scope.updateTag(tag);
-     }
+     };
+
+     $scope.initObject=function(obj){
+          for (var key in obj) {
+                obj[key]=null;
+              }
+      }
+
+          $scope.pushElement=function(elem,arr){
+          if (arr.indexOf(elem) == -1) {
+              var copyOfElement = angular.copy(elem);
+              arr.push(copyOfElement);
+              console.log(elem);
+              $scope.initObject(elem);
+
+          }else{
+            alert("item already exit");
+          }
+      }
 
 
      // Google+ Authentication
