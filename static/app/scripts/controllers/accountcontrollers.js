@@ -650,9 +650,9 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
           }
      };
   // HKA 08.05.2014 Delete infonode
-  $scope.deleteInfonode = function(info){
-    
-    var params = {'entityKey':info.entityKey};
+  $scope.deleteInfonode = function(entityKey,kind){
+    var params = {'entityKey':entityKey,'kind':kind};
+    console.log(params);
     InfoNode.delete($scope,params);
 
   };

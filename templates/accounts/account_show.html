@@ -268,7 +268,7 @@
                                           </form>
                                         </div>
                           </li>
-                        <li ng-repeat="email in emails"> <a onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)" editoptions editdataattr="test('<%=email.entityKey%>')"> <%=email.email %>  </a> </li>
+                        <li ng-repeat="email in infonodes.emails"> <a onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)" editoptions editdataattr="deleteInfonode('<%=email.entityKey%>','email')"> <%=email.email %>  </a> </li>
                           <li><a class="btn-link addAnotherPhone" ng-hide="showEmailForm" ng-click="showEmailForm=true"><i class="icon-plus"></i> Add a new email address </a></li>
 
                         </ul>
