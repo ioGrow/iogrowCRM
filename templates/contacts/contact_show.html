@@ -1286,18 +1286,18 @@
                     <div class="radio-list">
                          
                             <label >
-                            <input type="radio" name="optionRadio" value="public" ng-model="account.access" />
+                            <input type="radio" name="optionRadio" value="public" ng-model="contact.access" />
                             {{ _("public: Anyone within your organization can access and find") }}
                             </label>
                             <label >
-                            <input type="radio" name="optionRadio"  value="private" ng-model="account.access" />
+                            <input type="radio" name="optionRadio"  value="private" ng-model="contact.access" />
                             {{ _("private: only you and your collaborators") }}
                             </label>                       
                     </div>
                     <hr/>
                     <div class=''>
                     <p>{{ _("Collaborators:") }}</p>
-                        <div ng-repeat="collaborator in account.collaborators_list" class="invitation">
+                        <div ng-repeat="collaborator in contact.collaborators_list" class="invitation">
                           <img class="google-avatar" ng-src="<%=collaborator.photo%>"/>
                            <%=collaborator.display_name%> < <%=collaborator.email%> >
                         </div>

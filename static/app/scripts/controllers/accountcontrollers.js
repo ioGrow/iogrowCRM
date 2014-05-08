@@ -625,12 +625,20 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
      $scope.showOptions=function($event){
         var element=$($event.target);
         element.find(".page-meta").remove();
-        element.append('<span class="page-meta"><i class="icon-pencil"><a ng-click="editintro()" class="btn-link addAnotherPhone" data-toggle="modal"> Edit </a></i></span>');
+        element.find(".page-meta").remove();
+        element.append('<span class="page-meta"><i class="icon-pencil"><a ng-click="editintro()" class="btn-link addAnotherPhone" data-toggle="modal"></a></i></span><span class="page-meta"><i class="fa fa-trash-o" ><a ng-click="deleteInfonode()" class="btn-link addAnotherPhone" data-toggle="modal"></a></i></span>');
      }
      $scope.hideOptions=function($event){
         var element=$($event.target);
         element.find(".page-meta").remove();
-     }
+     };
+  // HKA 08.05.2014 Delete infonode
+  $scope.deleteInfonode = function(info){
+    console.log('hello world');
+    var params = {'entityKey':info.entityKey};
+    InfoNode.delete($scope,params);
+
+  };
      $scope.TopiclistPrevPageItems = function(){
        
        var prevPage = $scope.topicCurrentPage - 1;

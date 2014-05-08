@@ -4,25 +4,20 @@
       {{active_app.label}}
     </h2>
   </div>
-  <div class=" subHeaderContent">
-    <div class="pull-right sharebuttonDiv"> 
-      <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
-        <i class="icon-lock"></i> 
-        {{ _("Share") }}
-      </a>
-    </div> 
-    <h2 class="page-title" >
-      <a href="/#/leads/" data-toggle="tooltip" id='testEdit' data-placement="bottom" title="Back to Leads">
-        <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="/static/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
-      </a>     
-      {{_("Leads")}} > 
-      <a editable-text="lead.firstname"  onbeforesave="inlinePatch('Lead','', 'firstname',lead.entityKey,$data)"> 
-        <%= lead.firstname %>
-      </a>
-      <a editable-text="lead.lastname"  onbeforesave="inlinePatch('Lead','', 'lastname',lead.entityKey,$data)"> 
-        <%= lead.lastname %>
-      </a>
-    </h2>
+   <div class=" subHeaderContent">
+             <div class="pull-right sharebuttonDiv"> 
+                  
+                 <a ng-click="showConvertModal()" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
+                          <i class="icon-refresh"></i> {{_("Convert")}}
+                   </a>
+                  
+                   <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
+                    <i class="icon-lock"></i> Share
+                  </a>
+            </div> 
+                  <h2 class="page-title">
+            <a href="/#/leads" data-toggle="tooltip" data-placement="bottom" title="Back to Leads">
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Leads")}} > <a editable-text="lead.firstname" onbeforesave="inlinePatch('Lead','', 'firstname',lead.entityKey,$data)"> <%= lead.firstname %>  </a> <a editable-text="lead.lastname" onbeforesave="inlinePatch('Lead','', 'lastname',lead.entityKey,$data)" > <%= lead.lastname %> </a></h2>
   </div>
 </div>
 <div  class="page-content">
@@ -1068,7 +1063,35 @@
              </div>
            </div>
        </div>
+  <!-- Convert Modal -->
+   <div id="convertLeadModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{_("Are you sure you want to convert")}} <%=lead.firstname%> <%=lead.lastname%></h3>
+              </div>
+              <div class="modal-body">
+                 <form id="addLead" name="addaccount" ng-keyup="convertLeadOnKey(lead)" class="form-horizontal"> 
+               
 
+                  <p>Converting a lead will create a person contact and company. All documents,notes,tasks and events will be transfered. You should only convert a lead if it is qualified.</p>
+                    
+
+                    
+                 
+                
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                
+                <input  ng-click="convert(lead)" type="submit" class="btn green" value="Convert this lead">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
+              </div>
+               </form>
+               </div>
+          </div>
+       </div>
 
 <div id="sharingSettingsModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
            <div class="modal-dialog">
@@ -1084,18 +1107,18 @@
                     <div class="radio-list">
                          
                             <label >
-                            <input type="radio" name="optionRadio" value="public" ng-model="account.access" />
+                            <input type="radio" name="optionRadio" value="public" ng-model="lead.access" />
                             {{ _("public: Anyone within your organization can access and find") }}
                             </label>
                             <label >
-                            <input type="radio" name="optionRadio"  value="private" ng-model="account.access" />
+                            <input type="radio" name="optionRadio"  value="private" ng-model="lead.access" />
                             {{ _("private: only you and your collaborators") }}
                             </label>                       
                     </div>
                     <hr/>
                     <div class=''>
                     <p>{{ _("Collaborators:") }}</p>
-                        <div ng-repeat="collaborator in account.collaborators_list" class="invitation">
+                        <div ng-repeat="collaborator in lead.collaborators_list" class="invitation">
                           <img class="google-avatar" ng-src="<%=collaborator.photo%>"/>
                            <%=collaborator.display_name%> < <%=collaborator.email%> >
                         </div>
