@@ -1054,7 +1054,7 @@ $scope.addWebsite = function(website){
             'fields':[
                 {
                   "field": "url",
-                  "value": website.website
+                  "value": website.url
                 }
             ]
   };
@@ -1069,7 +1069,7 @@ $scope.addSocial = function(social){
             'fields':[
                 {
                   "field": "url",
-                  "value": social.sociallink
+                  "value": social.url
                 }
             ]
   };
