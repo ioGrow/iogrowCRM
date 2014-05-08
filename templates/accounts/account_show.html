@@ -245,7 +245,9 @@
                                       </div>
                             </li>
                            <li ng-repeat="phone in infonodes.phones"> <a editable-text="phone.number" onbeforesave="inlinePatch('Infonode','phones', 'number',phone.entityKey,$data)"> <%=phone.number%> </a> - <a editable-select="phone.type" e-ng-options="s.value as s.text for s in statuses" onbeforesave="inlinePatch('Infonode','phones', 'type',phone.entityKey,$data)"> <%=phone.type%> </a> <a ><img class="ctodeal"  /></a></li>
-                             <li><a ng-hide="showPhoneForm" ng-click="showPhoneForm=true" class="btn-link addAnotherPhone" ><i class="icon-plus"></i>Add a new Phone</a></li>
+                             <li>
+                                 <a ng-hide="showPhoneForm" ng-click="showPhoneForm=true" class="btn-link addAnotherPhone" ><i class="icon-plus"></i>Add a new Phone</a>
+                              </li>
                           
                         </ul>
                         <div class="news-block-tags">
