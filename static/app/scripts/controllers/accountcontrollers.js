@@ -1391,8 +1391,8 @@ $scope.addEmail = function(email){
             ]
   };
   InfoNode.insert($scope,params);
-  $('#emailmodal').modal('hide');
-  $scope.emaill={};
+  $scope.email={};
+ $scope.showEmailForm = false;
   };
 
 
