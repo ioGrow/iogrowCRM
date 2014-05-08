@@ -505,7 +505,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
                   };
         
 
-
+        $scope.editdata={'edit':'test()'};
         $scope.percent = 65;
         $scope.chartOptions = {
             animate:{
@@ -567,7 +567,9 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
          
 
        };
-       
+       $scope.test=function(email){
+        console.log(email);
+       };
        $scope.preparePercent = function(percent){
             
             return parseInt(percent);
@@ -624,14 +626,18 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
      }
      $scope.showOptions=function($event){
         var element=$($event.target);
-        if(element.prop("tagName")!='A'){
-              element.find(".page-meta").remove();
-        element.append('<span class="page-meta"><i class="icon-pencil"><a ng-click="editintro()" class="btn-link addAnotherPhone" data-toggle="modal"></a></i></span><span class="page-meta"><i class="fa fa-trash-o"><a ng-click="deleteInfonode()" class="btn-link addAnotherPhone" data-toggle="modal"></a></i></span>');
-         }
+        console.log(element);
+        if(element.prop("tagName")=='LI'){
+        element.find(".page-meta").remove();
+        var compiledElement = $compile(fieldHtml)($scope);
+        element.append('<span class="page-meta"><i class="icon-pencil"><a ng-click="test" class="btn-link addAnotherPhone" ></a></i></span><span class="page-meta"><i class="fa fa-trash-o"><a ng-click="deleteInfonode()" class="btn-link addAnotherPhone" ></a></i></span>');
+        }
      }
      $scope.hideOptions=function($event){
       var element=$($event.target);
-       if(element.prop("tagName")!='A'){
+      console.log(element);
+       if(element.prop("tagName")=='LI'){
+         console.log('hide');
         console.log(element);
         element.find(".page-meta").remove();
           }

@@ -264,7 +264,7 @@
                                           </form>
                                         </div>
                           </li>
-                        <li ng-repeat="email in emails" ng-mouseenter="showOptions($event)" ng-mouseleave="hideOptions($event)"> <a editable-text="email.email" onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)"> <%=email.email %>  </a> </li>
+                        <li ng-repeat="email in emails"> <a onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)" editoptions editdataattr="test('<%=email.entityKey%>')"> <%=email.email %>  </a> </li>
                           <li><a class="btn-link addAnotherPhone" ng-hide="showEmailForm" ng-click="showEmailForm=true"><i class="icon-plus"></i> Add a new email address </a></li>
                           
                         </ul>
