@@ -2,19 +2,19 @@ var contactservices = angular.module('crmEngine.infonodeservices',[]);
 // Base sercice (create, delete, get)
 
 accountservices.factory('InfoNode', function($http) {
-  
+
   var InfoNode = function(data) {
     angular.extend(this, data);
   }
 
-  
-  
+
+
   InfoNode.list = function($scope,params){
       gapi.client.crmengine.infonode.list(params).execute(function(resp) {
             if(!resp.code){
               var renderMap = false;
                 for (var i=0;i<resp.items.length;i++)
-                { 
+                {
                   if (resp.items[i].kind == 'addresses'){
                     renderMap = true;
                   }
@@ -32,6 +32,8 @@ accountservices.factory('InfoNode', function($http) {
                 }
                 // Loaded succefully
                  $scope.isLoading = false;
+                 console.log('======After infonode.list====');
+                 console.log($scope.infonodes);
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
 
@@ -42,13 +44,13 @@ accountservices.factory('InfoNode', function($http) {
                 $scope.$apply();
                };
               }
-              
+
       });
-    
-  	
+
+
 
   };
-  
+
   InfoNode.insert = function($scope,params){
       $scope.isLoading = true;
       gapi.client.crmengine.infonode.insert(params).execute(function(resp) {
@@ -57,7 +59,7 @@ accountservices.factory('InfoNode', function($http) {
           $scope.listInfonodes(params.kind);
         }else{
             console.log(resp.message);
-             
+
              $('#errorModal').modal('show');
              if(resp.message=="Invalid grant"){
                 $scope.refreshToken();
@@ -75,7 +77,7 @@ accountservices.factory('InfoNode', function($http) {
           $scope.listInfonodes(params.kind);
         }else{
             console.log(resp.message);
-             
+
              $('#errorModal').modal('show');
              if(resp.message=="Invalid grant"){
                 $scope.refreshToken();
@@ -86,8 +88,7 @@ accountservices.factory('InfoNode', function($http) {
       });
   };
 
-  
+
 
 return InfoNode;
 });
-

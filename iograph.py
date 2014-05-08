@@ -78,7 +78,7 @@ class Edge(ndb.Expando):
     end_node = ndb.KeyProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
-    
+
     @classmethod
     def insert(cls, start_node,end_node,kind,inverse_edge=None):
         # check if the edge is in the available edge list
@@ -88,19 +88,19 @@ class Edge(ndb.Expando):
                 return existing_edge.key
             if inverse_edge is not None:
                 inversed_edge = Edge(
-                           kind = inverse_edge, 
+                           kind = inverse_edge,
                            start_node = end_node,
                            end_node = start_node
                                     )
                 inversed_edge.put_async()
             edge = Edge(
-                        kind = kind, 
+                        kind = kind,
                         start_node = start_node,
                         end_node = end_node
                         )
             edge_key = edge.put()
             return edge_key
-    
+
     @classmethod
     def list(cls,start_node,kind,limit=1000,pageToken=None,order='DESC'):
         curs = Cursor(urlsafe=pageToken)
@@ -110,7 +110,7 @@ class Edge(ndb.Expando):
             limit = 1000
         if order == 'DESC':
             edges, next_curs, more =  cls.query(
-                                                    cls.start_node==start_node, 
+                                                    cls.start_node==start_node,
                                                     cls.kind==kind
                                                 ).order(
                                                         -cls.updated_at
@@ -119,7 +119,7 @@ class Edge(ndb.Expando):
                                                     )
         elif order == 'ASC':
             edges, next_curs, more =  cls.query(
-                                                    cls.start_node==start_node, 
+                                                    cls.start_node==start_node,
                                                     cls.kind==kind
                                                 ).order(
                                                         cls.updated_at
@@ -136,7 +136,7 @@ class Edge(ndb.Expando):
     def delete(cls, edge_key):
         existing_edge = edge_key.get()
         if existing_edge:
-            start_node = existing_edge.start_node 
+            start_node = existing_edge.start_node
             end_node = existing_edge.end_node
             kind = existing_edge.kind
             existing_edge.key.delete()
@@ -152,7 +152,7 @@ class Edge(ndb.Expando):
          edges = cls.query(ndb.OR(cls.start_node==start_node,cls.end_node==start_node) ).fetch()
          for edge in edges:
             edge.key.delete()
-    
+
     @classmethod
     def delete_all_cascade(cls, start_node):
         EndpointsHelper.delete_document_from_index(start_node.id())
@@ -173,7 +173,7 @@ class Edge(ndb.Expando):
         print '$$$$$$$$$$$$$$$$$$$$$$$@@@@@@===delete the node ======$$$$$$$$$$$$$$$$$$$$$$$$$'
         start_node.delete()
 
-            
+
 
 
     @classmethod
@@ -191,7 +191,7 @@ class Edge(ndb.Expando):
         elif operation == 'OR':
             return len( set(end_node_found).intersection(end_node_set) ) > 0
 
-        
+
 class Node(ndb.Expando):
     """Node Class to store all objects"""
     kind = ndb.StringProperty()
@@ -342,5 +342,3 @@ class InfoNode(ndb.Expando):
     parent = ndb.KeyProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
-    
-    
