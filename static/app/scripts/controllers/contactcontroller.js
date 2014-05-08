@@ -1029,7 +1029,7 @@ $scope.listInfonodes = function(kind) {
 
 //HKA 20.11.2013 Add Email
 $scope.addEmail = function(email){
-  var emailsArray = undefined;
+  
   
    params = {'parent':$scope.contact.entityKey,
             'kind':'emails',

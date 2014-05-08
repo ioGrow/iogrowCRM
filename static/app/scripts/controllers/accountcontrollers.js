@@ -486,6 +486,11 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        $scope.sharing_with = [];
        $scope.edited_email = null;
        $scope.currentParam={};
+       $scope.showPhoneForm=false;
+      $scope.showEmailForm=false;
+      $scope.showWebsiteForm=false;
+      $scope.showSociallinkForm=false;
+      $scope.showCustomFieldForm =false;
        //$scope.cases = {};
        //$scope.cases = [];
        $scope.opportunities = [];
@@ -634,7 +639,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
      };
   // HKA 08.05.2014 Delete infonode
   $scope.deleteInfonode = function(info){
-    console.log('hello world');
+    
     var params = {'entityKey':info.entityKey};
     InfoNode.delete($scope,params);
 
@@ -1382,17 +1387,18 @@ $scope.addEmail = function(email){
 
 //HKA 22.11.2013 Add Website
 $scope.addWebsite = function(website){
+  console.log('iam here');
   params = {'parent':$scope.account.entityKey,
             'kind':'websites',
             'fields':[
                 {
                   "field": "url",
-                  "value": website.website
+                  "value": website.url
                 }
             ]
   };
   InfoNode.insert($scope,params);
-  $('#websitemodal').modal('hide');
+  //$('#websitemodal').modal('hide');
 };
 
 //HKA 22.11.2013 Add Social
@@ -1402,7 +1408,7 @@ $scope.addSocial = function(social){
             'fields':[
                 {
                   "field": "url",
-                  "value": social.sociallink
+                  "value": social.url
                 }
             ]
   };
