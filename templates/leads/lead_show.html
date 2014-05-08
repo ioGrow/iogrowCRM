@@ -211,7 +211,7 @@
                   <div class="row slimform">
                     <div class="col-md-6">
                       <div class="news-blocks blank-card blank-card-yellow newsCard">
-                        <h3>Contact Informations</h3>
+                        <h3>Lead Informations</h3>
                         <div class="news-block-tags">
                           <strong>Phone</strong>
                         </div>
@@ -342,7 +342,7 @@
                           </li>
                           <li ng-repeat="custom in infonodes.customfields">
                                     <span>
-                                    <%= custom.field%>  : <%= custom.value%> </span>
+                                    <%= custom.fields[0].field%>  : <%= custom.fields[0].value%> </span>
 
                           </li>
                           <li>

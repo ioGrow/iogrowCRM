@@ -1,6 +1,6 @@
 app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Casestatus','Tag','Edge',
     function($scope,Auth,Case,Account,Contact,Casestatus,Tag,Edge) {
-    
+
      document.title = "Cases: Home";
      $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Cases").addClass("active");
@@ -42,7 +42,7 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
          {'name':'purple','color':'#E874D6'},
          ];
       $scope.tag.color= {'name':'green','color':'#BBE535'};
-     
+
       // What to do after authentication
        $scope.runTheProcess = function(){
             var params = {'order' : $scope.order,'limit':20}
@@ -51,8 +51,8 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
             var paramsTag = {'about_kind':'Case'};
             Tag.list($scope,paramsTag);
             // for (var i=0;i<100;i++)
-            // { 
-            //     var casee = { 
+            // {
+            //     var casee = {
             //               'name':  i.toString() + ' kass ta3 lban',
             //               'access':'public'
             //             }
@@ -63,7 +63,7 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
 
       $scope.getPosition= function(index){
         if(index<4){
-         
+
           return index+1;
         }else{
           return (index%4)+1;
@@ -73,9 +73,9 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
        $scope.refreshToken = function() {
             Auth.refreshToken();
        };
-     
+
      $scope.listNextPageItems = function(){
-                    
+
         var nextPage = $scope.caseCurrentPage + 1;
         var params = {};
           if ($scope.casepages[nextPage]){
@@ -86,11 +86,11 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
             params = {'order' : $scope.order,'limit':6}
           }
           console.log('in listNextPageItems');
-          $scope.caseCurrentPage = $scope.caseCurrentPage + 1 ; 
+          $scope.caseCurrentPage = $scope.caseCurrentPage + 1 ;
           Case.list($scope,params);
      }
      $scope.listMoreItems = function(){
-        
+
         var nextPage = $scope.caseCurrentPage + 1;
         var params = {};
           if ($scope.casepages[nextPage]){
@@ -99,12 +99,12 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
                       'limit':20,
                       'pageToken':$scope.casepages[nextPage]
                      }
-            $scope.caseCurrentPage = $scope.caseCurrentPage + 1 ; 
+            $scope.caseCurrentPage = $scope.caseCurrentPage + 1 ;
             Case.listMore($scope,params);
-          }   
+          }
      }
      $scope.listPrevPageItems = function(){
-                
+
        var prevPage = $scope.caseCurrentPage - 1;
        var params = {};
           if ($scope.casepages[prevPage]){
@@ -117,26 +117,26 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
           $scope.caseCurrentPage = $scope.caseCurrentPage - 1 ;
           Case.list($scope,params);
      }
-     
-     
-     
+
+
+
      $scope.showModal = function(){
         console.log('button clicked');
         $('#addCaseModal').modal('show');
 
       };
-      
-    
+
+
     $scope.save = function(casee){
 
         casee.status = $scope.status_selected.entityKey;
         casee.status_name = $scope.status_selected.status;
         if (typeof(casee.account)=='object'){
-          
+
           casee.account = $scope.searchAccountQuery.entityKey;
-          
+
           if (typeof(casee.contact)=='object'){
-              
+
               casee.contact_name = casee.contact.firstname + ' '+ casee.contact.lastname ;
               casee.contact = casee.contact.entityKey;
           }
@@ -155,7 +155,7 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
 
         };
 
-        
+
         $('#addCaseModal').modal('hide');
       };
       $scope.addCaseOnKey = function(casee){
@@ -167,26 +167,26 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
           $scope.casee.account = resp;
           $scope.save($scope.casee);
       };
-      
+
      var params_search_account ={};
      $scope.contactResult = undefined;
      $scope.accountResult = undefined;
      $scope.q = undefined;
-     
+
       $scope.$watch('searchAccountQuery', function() {
         if($scope.searchAccountQuery){
-         
+
            params_search_account['q'] = $scope.searchAccountQuery;
            gapi.client.crmengine.accounts.search(params_search_account).execute(function(resp) {
-              
+
               if (resp.items){
                 $scope.accountsResults = resp.items;
-                
+
                 $scope.$apply();
               };
-              
+
             });
-          
+
         }
       });
       $scope.selectAccount = function(){
@@ -200,17 +200,17 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
         if($scope.searchContactQuery.length>1){
          params_search_contact['q'] = $scope.searchContactQuery;
          gapi.client.crmengine.contacts.search(params_search_contact).execute(function(resp) {
-            
+
             if (resp.items){
               $scope.contactsResults = resp.items;
-              
+
               $scope.$apply();
             };
-            
+
           });
          }
       }
-        
+
       });
      $scope.selectContact = function(){
         $scope.casee.contact = $scope.searchContactQuery;
@@ -223,7 +223,7 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
      var searchParams ={};
      $scope.result = undefined;
      $scope.q = undefined;
-     
+
      $scope.$watch('searchQuery', function() {
          searchParams['q'] = $scope.searchQuery;
          searchParams['limit'] = 7;
@@ -254,13 +254,13 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
      $scope.filterByOwner = function(filter){
         if (filter){
           var params = { 'owner': filter,
-                         'order': $scope.order, 
+                         'order': $scope.order,
                          'limit':6}
         }
         else{
           var params = {
-              'order': $scope.order, 
-              
+              'order': $scope.order,
+
               'limit':6}
         };
         $scope.isFiltering = true;
@@ -269,22 +269,22 @@ app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Case
      $scope.filterByStatus = function(filter){
         if (filter){
           var params = { 'status': filter,
-                         'order': $scope.order, 
+                         'order': $scope.order,
                          'limit':6}
         }
         else{
           var params = {
-              'order': $scope.order, 
-              
+              'order': $scope.order,
+
               'limit':6}
         };
         $scope.isFiltering = true;
         Case.list($scope,params);
      };
 
-    
+
     /***********************************************
-      HKA 19.02.2014  tags 
+      HKA 19.02.2014  tags
 ***************************************************************************************/
 $scope.listTags=function(){
       var paramsTag = {'about_kind':'Case'}
@@ -301,7 +301,7 @@ $scope.listcases = function(){
 
 
 $scope.addNewtag = function(tag){
-       var params = {   
+       var params = {
                           'name': tag.name,
                           'about_kind':'Case',
                           'color':tag.color.color
@@ -311,7 +311,7 @@ $scope.addNewtag = function(tag){
         $scope.tag.color= {'name':'green','color':'#BBE535'};
         var paramsTag = {'about_kind':'Case'};
         Tag.list($scope,paramsTag);
-        
+
      }
 $scope.updateTag = function(tag){
             params ={ 'id':tag.id,
@@ -325,11 +325,11 @@ $scope.updateTag = function(tag){
             'entityKey': tag.entityKey
           }
           Tag.delete($scope,params);
-          
+
       };
 
 
- 
+
 $scope.selectTag= function(tag,index,$event){
       if(!$scope.manage_tags){
          var element=$($event.target);
@@ -390,7 +390,7 @@ $scope.manage=function(){
 $scope.tag_save = function(tag){
           if (tag.name) {
              Tag.insert($scope,tag);
-             
+
            };
       };
 
@@ -405,7 +405,7 @@ $scope.addTags=function(){
       var tags=[];
       var items = [];
       tags=$('#select2_sample2').select2("val");
-      
+
       angular.forEach($scope.selected_tasks, function(selected_task){
           angular.forEach(tags, function(tag){
             var edge = {
@@ -421,7 +421,7 @@ $scope.addTags=function(){
       params = {
         'items': items
       }
-      
+
       Edge.insert($scope,params);
       $('#assigneeTagsToTask').modal('hide');
 
@@ -430,14 +430,14 @@ $scope.addTags=function(){
      var handleColorPicker = function () {
           if (!jQuery().colorpicker) {
               return;
-              
+
           }
           $('.colorpicker-default').colorpicker({
               format: 'hex'
           });
       }
       handleColorPicker();
-     
+
       $('#addMemberToTask > *').on('click', null, function(e) {
             e.stopPropagation();
         });
@@ -446,9 +446,9 @@ $scope.addTags=function(){
          var components = getRGBComponents(bgColor);
          var bgDelta = (components.R * 0.299) + (components.G * 0.587) + (components.B * 0.114);
 
-         return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";  
+         return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";
       }
-      function getRGBComponents(color) {       
+      function getRGBComponents(color) {
 
           var r = color.substring(1, 3);
           var g = color.substring(3, 5);
@@ -466,14 +466,14 @@ $scope.addTags=function(){
       };
       $scope.dropTag=function(casee,index){
         var items = [];
-        
+
         var params = {
               'parent': casee.entityKey,
               'tag_key': $scope.draggedTag.entityKey
         };
         $scope.draggedTag=null;
         Tag.attach($scope,params,index);
-        
+
       };
       $scope.tagattached=function(tag,index){
           if ($scope.cases[index].tags == undefined){
@@ -484,13 +484,13 @@ $scope.addTags=function(){
           $(card_index).removeClass('over');
 
           $scope.$apply();
-      }; 
-    
+      };
+
   // HKA 12.03.2014 Pallet color on Tags
       $scope.checkColor=function(color){
         $scope.tag.color=color;
       };
-   // Google+ Authentication 
+   // Google+ Authentication
      Auth.init($scope);
      $(window).scroll(function() {
           if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
@@ -498,14 +498,14 @@ $scope.addTags=function(){
           }
       });
 
-    
+
 }]);
 
 app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Topic','Note','Task','Event','Permission','User','Casestatus','Email','Attachement','InfoNode',
     function($scope,$filter,$route,Auth,Case,Topic,Note,Task,Event,Permission,User,Casestatus,Email,Attachement,InfoNode) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Cases").addClass("active");
-      
+
      $scope.selectedTab = 2;
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
@@ -532,13 +532,14 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
      $scope.documentpages=[];
      $scope.infonodes = {};
      $scope.sharing_with = [];
-     
-   
+     $scope.customfield={};
+
+
      // What to do after authentication
        $scope.runTheProcess = function(){
           var params = {
                           'id':$route.current.params.caseId,
-                          
+
                           'topics':{
                             'limit': '7'
                           },
@@ -548,11 +549,11 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
                           },
 
                           'tasks':{
-                            
+
                           },
 
                           'events':{
-                            
+
                           }
                       };
           Case.get($scope,params);
@@ -564,8 +565,8 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
             Auth.refreshToken();
        };
      $scope.TopiclistNextPageItems = function(){
-        
-        
+
+
         var nextPage = $scope.topicCurrentPage + 1;
         var params = {};
           if ($scope.topicpages[nextPage]){
@@ -584,15 +585,15 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
                         }
                      }
           }
-          
-          $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ; 
+
+          $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ;
           Case.get($scope,params);
      }
      $scope.TopiclistPrevPageItems = function(){
-       
+
        var prevPage = $scope.topicCurrentPage - 1;
        var params = {};
-       
+
           if ($scope.topicpages[prevPage]){
             params = {
                       'id':$scope.casee.id,
@@ -611,9 +612,9 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
           }
           $scope.topicCurrentPage = $scope.topicCurrentPage - 1 ;
           Case.get($scope,params);
-          
+
      }
-    
+
      $scope.listTopics = function(opportunity){
         var params = {
                       'id':$scope.casee.id,
@@ -625,12 +626,12 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
 
      }
      $scope.hilightTopic = function(){
-        
+
        $('#topic_0').effect( "bounce", "slow" );
        $('#topic_0 .message').effect("highlight","slow");
      }
 
-    
+
      $scope.selectMember = function(){
         $scope.slected_memeber = $scope.user;
         $scope.user = '';
@@ -638,7 +639,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
 
      };
      $scope.share = function(slected_memeber){
-        
+
         $scope.$watch($scope.casee.access, function() {
            var id = $scope.casee.id;
            var params ={
@@ -651,35 +652,35 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
         $('#sharingSettingsModal').modal('hide');
 
         if ($scope.sharing_with.length>0){
-        
+
           var items = [];
-          
+
           angular.forEach($scope.sharing_with, function(user){
-                      var item = { 
+                      var item = {
                                   'type':"user",
                                   'value':user.entityKey
                                 };
                       items.push(item);
           });
-          
+
           if(items.length>0){
               var params = {
                             'about': $scope.casee.entityKey,
                             'items': items
               }
-              Permission.insert($scope,params); 
+              Permission.insert($scope,params);
           }
-          
-          
+
+
           $scope.sharing_with = [];
-          
-          
+
+
         }
 
      };
-     
+
      $scope.updateCollaborators = function(){
-         
+
           Case.get($scope,$scope.casee.id);
 
      };
@@ -688,7 +689,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
         $('#addCaseModal').modal('show');
 
       };
-      
+
     $scope.addNote = function(note){
         var params ={
                     'about': $scope.casee.entityKey,
@@ -699,7 +700,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
       $scope.note.title='';
       $scope.note.content='';
     };
-      
+
 
 
 
@@ -708,18 +709,18 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
     }
 //HKA 09.11.2013 Add a new Task
    $scope.addTask = function(task){
-      
+
           $('#myModal').modal('hide');
         if (task.due){
 
             var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
-            
+
             params ={'title': task.title,
                       'due': dueDate,
                       'parent': $scope.casee.entityKey
             }
-            
-            
+
+
         }else{
             params ={'title': task.title,
                      'parent': $scope.casee.entityKey
@@ -731,10 +732,10 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
      }
 
      $scope.hilightTask = function(){
-        
+
         $('#task_0').effect("highlight","slow");
         $('#task_0').effect( "bounce", "slow" );
-       
+
      }
      $scope.listTasks = function(){
         var params = {
@@ -744,12 +745,12 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
         Case.get($scope,params);
 
      }
- //HKA 10.11.2013 Add event 
+ //HKA 10.11.2013 Add event
  $scope.addEvent = function(ioevent){
-      
+
          $('#newEventModal').modal('hide');
-        var params ={}       
-        
+        var params ={}
+
         if (ioevent.starts_at){
             if (ioevent.ends_at){
               params ={'title': ioevent.title,
@@ -767,7 +768,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
                       'parent':$scope.casee.entityKey
               }
             }
-            
+
             Event.insert($scope,params);
             $scope.ioevent.title='';
             $scope.ioevent.where='';
@@ -778,22 +779,22 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
         console.log('Should higll');
         $('#event_0').effect("highlight","slow");
         $('#event_0').effect( "bounce", "slow" );
-       
+
      }
      $scope.listEvents = function(){
         var params = {
                         'id':$scope.casee.id,
                         'events':{
-                          
+
                         }
                       };
         Case.get($scope,params);
 
      };
- 
+
 //HKA 22.11.2013 Update Case
 $scope.updatCasetHeader = function(casee){
- 
+
   params = {'id':$scope.casee.id,
              'name':casee.name,
              'priority' :casee.priority,
@@ -805,21 +806,21 @@ $scope.updatCasetHeader = function(casee){
                   'about_kind': 'Case',
                   'about_item': $scope.casee.id,
                   'title': 'status updated to '+ casee.priority
-                  
+
       };
       console.log('inserting a new note');
       console.log(paramsNote);
-      
+
       Note.insert($scope,paramsNote);
    });*/
-  
+
  $('#EditCaseModal').modal('hide');
 };
     $('#some-textarea').wysihtml5();
-      
+
       $scope.sendEmail = function(email){
         email.body = $('#some-textarea').val();
-        
+
         var params = {
                   'to': email.to,
                   'cc': email.cc,
@@ -829,7 +830,7 @@ $scope.updatCasetHeader = function(casee){
 
                   'about_item':$scope.casee.id,
                   'about_kind':'Case' };
-        
+
         Email.send($scope,params);
       };
 
@@ -845,8 +846,8 @@ $scope.deletecase = function(){
      };
 
      $scope.DocumentlistNextPageItems = function(){
-        
- 
+
+
         var nextPage = $scope.documentCurrentPage + 1;
         var params = {};
           if ($scope.documentpages[nextPage]){
@@ -857,7 +858,7 @@ $scope.deletecase = function(){
                           'pageToken':$scope.documentpages[nextPage]
                         }
                       }
-            
+
           }else{
             params = {
                         'id':$scope.casee.id,
@@ -867,12 +868,12 @@ $scope.deletecase = function(){
                       }
             }
           $scope.documentCurrentPage = $scope.documentCurrentPage + 1 ;
-          
+
           Case.get($scope,params);
-          
+
      }
      $scope.DocumentPrevPageItems = function(){
-            
+
        var prevPage = $scope.documentCurrentPage - 1;
        var params = {};
           if ($scope.documentpages[prevPage]){
@@ -883,7 +884,7 @@ $scope.deletecase = function(){
                           'pageToken':$scope.documentpages[prevPage]
                         }
                       }
-            
+
           }else{
             params = {
                         'id':$scope.casee.id,
@@ -895,7 +896,7 @@ $scope.deletecase = function(){
           $scope.documentCurrentPage = $scope.documentCurrentPage - 1 ;
           Case.get($scope,params);
 
-              
+
      };
      $scope.listDocuments = function(){
         var params = {
@@ -908,7 +909,7 @@ $scope.deletecase = function(){
 
      };
      $scope.showCreateDocument = function(type){
-        
+
         $scope.mimeType = type;
         $('#newDocument').modal('show');
      };
@@ -917,7 +918,7 @@ $scope.deletecase = function(){
         var params = {
                       'parent': $scope.casee.entityKey,
                       'title':newdocument.title,
-                      'mimeType':mimeType 
+                      'mimeType':mimeType
                      };
         Attachement.insert($scope,params);
 
@@ -926,7 +927,7 @@ $scope.deletecase = function(){
           var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
           var projectfolder = $scope.casee.folder;
           var docsView = new google.picker.DocsView()
-              .setIncludeFolders(true) 
+              .setIncludeFolders(true)
               .setSelectFolderEnabled(true);
           var picker = new google.picker.PickerBuilder().
               addView(new google.picker.DocsUploadView().setParent(projectfolder)).
@@ -941,7 +942,7 @@ $scope.deletecase = function(){
       };
       // A simple callback implementation.
       $scope.uploaderCallback = function(data) {
-        
+
 
         if (data.action == google.picker.Action.PICKED) {
                 var params = {
@@ -949,7 +950,7 @@ $scope.deletecase = function(){
                               'parent':$scope.casee.entityKey
                             };
                 params.items = new Array();
-               
+
                  $.each(data.docs, function(index) {
                       console.log(data.docs);
                       /*
@@ -965,15 +966,15 @@ $scope.deletecase = function(){
 
                       };
                       params.items.push(item);
-                
+
                   });
                  Attachement.attachfiles($scope,params);
-                    
+
           }
       };
 
    //01.03.2014 Edit Close date, Type, Description, Source : show Modal
-    
+
      $scope.editclosedate = function(){
      $('#EditCloseDate').modal('show')
      };
@@ -986,9 +987,9 @@ $scope.deletecase = function(){
     $scope.editcaseorigin = function(){
      $('#EditOrigin').modal('show')
      };
-      
 
-    
+
+
     $scope.updateDescription = function(casem){
       params = {'id':$scope.casee.id,
               'description':casem.description};
@@ -1014,44 +1015,53 @@ $scope.deletecase = function(){
       Case.patch($scope,params);
       $('#EditCloseDate').modal('hide');
      };
-      
+
 
 //HKA 11.03.2014 Add Custom field
 
     $scope.addCustomField = function(customField){
-      params = {'parent':$scope.casee.entityKey,
-            'kind':'customfields',
-            'fields':[
-                {
-                  "field": customField.field,
-                  "value": customField.value
-                }
-            ]
-  };
-  InfoNode.insert($scope,params);
+      console.log('*****************************');
+      console.log(customField);
+      params = {
+                'parent':$scope.casee.entityKey,
+                'kind':'customfields',
+                'fields':[
+                  {
+                    "field": customField.field,
+                    "value": customField.value
+                  }
+                  ]
+              };
 
-  $('#customfields').modal('hide');
-  
+
+    InfoNode.insert($scope,params);
+    $scope.customfield={};
+    $scope.showCustomFieldForm = false;
+
 };
 
 $scope.listInfonodes = function(kind) {
-     params = {'parent':$scope.casee.entityKey,
+     params = {
+               'parent':$scope.casee.entityKey,
                'connections': kind
               };
+      console.log('-----Listing infonodes----');
+      console.log(params);
+
      InfoNode.list($scope,params);
-   
+
  };
 
  // HKA 19.03.2014 inline update infonode
      $scope.inlinePatch=function(kind,edge,name,entityKey,value){
-   
+
    if (kind=='Case') {
           params = {'id':$scope.casee.id,
              name:value}
          Case.patch($scope,params);}
        };
 
-     // Google+ Authentication 
+     // Google+ Authentication
      Auth.init($scope);
 
 }]);
@@ -1120,7 +1130,7 @@ app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','C
           $scope.contact.account = resp;
           $scope.save($scope.contact);
       };
-      
+
        var params_search_account ={};
        $scope.result = undefined;
        $scope.q = undefined;
@@ -1128,7 +1138,7 @@ app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','C
             console.log('i am searching');
            params_search_account['q'] = $scope.searchAccountQuery;
            Account.search($scope,params_search_account);
-          
+
         });
         $scope.selectAccount = function(){
           $scope.contact.account = $scope.searchAccountQuery;
@@ -1140,9 +1150,9 @@ app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','C
           $scope.contact.account = resp;
           $scope.save($scope.contact);
       };
-       
 
-      
+
+
       var params_search_contact ={};
       $scope.$watch('searchContactQuery', function() {
         if($scope.searchContactQuery){
@@ -1188,7 +1198,7 @@ app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','C
                                     'value':customfield.value
                                     }
                             ]
-                          
+
                           };
             infonodes.push(infonode);
         });
@@ -1218,8 +1228,8 @@ app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','C
                 Contact.insert($scope,params);
               }
             };
-            
-            
+
+
         }else if($scope.searchAccountQuery.length>0){
             // create a new account with this account name
             var params = {
@@ -1235,7 +1245,7 @@ app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','C
         }else{
             // should highlight contact and account
         }
-        
+
       };
       $scope.accountInserted = function(resp){
           $scope.casee.account = resp;
@@ -1248,12 +1258,12 @@ app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','C
       $scope.caseInserted = function(resp){
           window.location.replace('#/cases');
       }
-      
-     
-
-    
 
 
-   // Google+ Authentication 
-     Auth.init($scope);      
+
+
+
+
+   // Google+ Authentication
+     Auth.init($scope);
 }]);
