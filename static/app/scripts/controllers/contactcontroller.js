@@ -1015,9 +1015,8 @@ $scope.updatContactHeader = function(contact){
             ]
   };
   InfoNode.insert($scope,params);
-  $('#phonemodal').modal('hide');
-  $scope.phone.type='work';
-  $scope.phone.number='';
+    $scope.phone={};
+    $scope.showPhoneForm=false;
   };
 $scope.listInfonodes = function(kind) {
     console.log($scope.contact.entityKey);
@@ -1041,8 +1040,8 @@ $scope.addEmail = function(email){
             ]
   };
   InfoNode.insert($scope,params);
-  $('#emailmodal').modal('hide');
   $scope.email={};
+  $scope.showEmailForm = false;
   };
   
 
@@ -1059,7 +1058,8 @@ $scope.addWebsite = function(website){
             ]
   };
   InfoNode.insert($scope,params);
-  $('#websitemodal').modal('hide');
+  $scope.website={};
+  $scope.showWebsiteForm=false;
 };
 
 //HKA 22.11.2013 Add Social
@@ -1074,7 +1074,8 @@ $scope.addSocial = function(social){
             ]
   };
   InfoNode.insert($scope,params);
-  $('#socialmodal').modal('hide');
+  $scope.sociallink={};
+  $scope.showSociallinkForm=false;
   
 };
 $scope.addCustomField = function(customField){
@@ -1089,7 +1090,8 @@ $scope.addCustomField = function(customField){
   };
   InfoNode.insert($scope,params);
 
-  $('#customfields').modal('hide');
+    $scope.customfield={};
+    $scope.showCustomFieldForm = false;
   
 };
 
