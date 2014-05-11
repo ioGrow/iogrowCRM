@@ -8,8 +8,6 @@ opportunityservices.factory('Opportunity', function($http) {
   var Opportunity = function(data) {
     angular.extend(this, data);
   }
-
-
   //HKA .5.112013 Add function get Opportunity
   Opportunity.get = function($scope,id){
     gapi.client.crmengine.opportunities.getv2(id).execute(function(resp){
@@ -90,7 +88,10 @@ opportunityservices.factory('Opportunity', function($http) {
                   }
 
         $scope.isContentLoaded = true;
-        // $scope.listTopics(resp);
+        if (resp.current_stage){
+          $scope.opportunity.currentStageSelect = resp.current_stage.name+ ' - ( ' + resp.current_stage.probability + '% )'
+        };
+          // $scope.listTopics(resp);
         // $scope.listTasks();
         // $scope.listEvents();
         // $scope.listDocuments();
@@ -205,8 +206,8 @@ opportunityservices.factory('Opportunity', function($http) {
             };
 
       });
-  };
-    Opportunity.patch = function($scope,params) {
+};
+Opportunity.patch = function($scope,params) {
 
           gapi.client.crmengine.opportunities.patch(params).execute(function(resp) {
             if(!resp.code){
@@ -224,9 +225,9 @@ opportunityservices.factory('Opportunity', function($http) {
             }
             console.log('opportunities.patch gapi #end_execute');
           });
-  };
+};
     //HKA 09.11.2013 Add an opportunity
-    Opportunity.insert = function($scope,params){
+Opportunity.insert = function($scope,params){
       $scope.isLoading = true;
       gapi.client.crmengine.opportunities.insertv2(params).execute(function(resp) {
 
@@ -256,15 +257,13 @@ opportunityservices.factory('Opportunity', function($http) {
              };
          }
       });
-  };
+};
 Opportunity.delete = function($scope,params){
     console.log(params);
     gapi.client.crmengine.opportunities.delete(params).execute(function(resp){
         window.location.replace('#/opportunities');
     }
     )};
-
-
 return Opportunity;
 });
 //HKA 06.11.2013 retrive an Opportunity
@@ -275,6 +274,4 @@ opportunityservices.factory('OpportunityLoader',['Opportunity','$route','$q',
     var opportunityId = $route.current.params.opportunityId;
   return Opportunity.get($route.current.params.opportunityId);
    };
-
-
-  }]);
+}]);

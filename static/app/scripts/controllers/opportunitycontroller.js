@@ -499,6 +499,18 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
      $scope.documentCurrentPage=01;
      $scope.documentpages=[];
      $scope.sharing_with = [];
+     
+     $scope.chartOptions = {
+         animate:{
+             duration:0,
+             enabled:false
+         },
+         size:57,
+         barColor:'#58a618',
+         scaleColor:false,
+         lineWidth:7,
+         lineCap:'circle'
+     };
 
 
       // What to do after authentication

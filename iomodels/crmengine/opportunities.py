@@ -285,6 +285,7 @@ class Opportunity(EndpointsModel):
                                   duration_unit = opportunity.duration_unit,
                                   amount_per_unit = opportunity.amount_per_unit,
                                   amount_total = opportunity.amount_total,
+                                  currency = opportunity.currency,
                                   closed_date = closed_date,
                                   competitor = opportunity.competitor,
                                   reason_lost = opportunity.reason_lost,
