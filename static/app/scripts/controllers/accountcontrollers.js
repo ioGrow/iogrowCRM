@@ -475,7 +475,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        $scope.status_selected={};
        $scope.infonodes = {};
        $scope.phone={};
-       $scope.phone.type_number= 'work';
+       $scope.phone.type_number='work';
        $scope.need = {};
        $scope.need.need_status = 'pending';
        $scope.need.priority = 'Medium';
@@ -1342,9 +1342,10 @@ $scope.CaselistNextPageItems = function(){
               ]
     };
     InfoNode.insert($scope,params);
-    $('#phonemodal').modal('hide');
-    $scope.phone.type_number='work';
-    $scope.phone.number='';
+      $scope.phone = {}; 
+      $scope.showPhoneForm=false;
+      
+      
   };
 
    $scope.patchPhoneNumber = function(entityKey, data){
@@ -1379,15 +1380,17 @@ $scope.addEmail = function(email){
             ]
   };
   InfoNode.insert($scope,params);
-  $('#emailmodal').modal('hide');
-  $scope.emaill={};
+  
+  $scope.email={};
+  $scope.showEmailForm = false;
+  
   };
 
 
 
 //HKA 22.11.2013 Add Website
 $scope.addWebsite = function(website){
-  console.log('iam here');
+  
   params = {'parent':$scope.account.entityKey,
             'kind':'websites',
             'fields':[
@@ -1398,7 +1401,8 @@ $scope.addWebsite = function(website){
             ]
   };
   InfoNode.insert($scope,params);
-  //$('#websitemodal').modal('hide');
+      $scope.website={};
+      $scope.showWebsiteForm=false;
 };
 
 //HKA 22.11.2013 Add Social
@@ -1413,7 +1417,8 @@ $scope.addSocial = function(social){
             ]
   };
   InfoNode.insert($scope,params);
-  $('#socialmodal').modal('hide');
+  $scope.sociallink={};
+  $scope.showSociallinkForm=false;
 
 };
 $scope.addCustomField = function(customField){
@@ -1427,8 +1432,8 @@ $scope.addCustomField = function(customField){
             ]
   };
   InfoNode.insert($scope,params);
-
-  $('#customfields').modal('hide');
+    $scope.customfield={};
+    $scope.showCustomFieldForm = false;
 
 };
 //HKA 22.11.2013 Add Tagline
