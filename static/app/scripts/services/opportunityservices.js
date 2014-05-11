@@ -4,12 +4,12 @@ var opportunityservices = angular.module('crmEngine.opportunityservices',[]);
 
 
 opportunityservices.factory('Opportunity', function($http) {
-  
+
   var Opportunity = function(data) {
     angular.extend(this, data);
   }
 
-  
+
   //HKA .5.112013 Add function get Opportunity
   Opportunity.get = function($scope,id){
     gapi.client.crmengine.opportunities.getv2(id).execute(function(resp){
@@ -20,7 +20,7 @@ opportunityservices.factory('Opportunity', function($http) {
                 if (resp.infonodes){
                     if (resp.infonodes.items){
                         for (var i=0;i<resp.infonodes.items.length;i++)
-                        { 
+                        {
                           if (resp.infonodes.items[i].kind == 'addresses'){
                             renderMap = true;
                           }
@@ -41,7 +41,7 @@ opportunityservices.factory('Opportunity', function($http) {
                 }
                 if (resp.topics){
                   $scope.topics = resp.topics.items;
-                   
+
                     if ($scope.topicCurrentPage >1){
                       $scope.topicpagination.prev = true;
                     }else{
@@ -57,8 +57,8 @@ opportunityservices.factory('Opportunity', function($http) {
                     $scope.topicpagination.next = false;
                    }
                   }
-                  
-                  
+
+
                   if (resp.documents){
                       if (!resp.documents.items){
                         $scope.blankStatdocuments = true;
@@ -70,12 +70,12 @@ opportunityservices.factory('Opportunity', function($http) {
                            $scope.documentpagination.prev = false;
                       }
                      if (resp.documents.nextPageToken){
-                      
+
                        var nextPage = $scope.documentCurrentPage + 1;
                        // Store the nextPageToken
                        $scope.documentpages[nextPage] = resp.documents.nextPageToken;
                        $scope.documentpagination.next = true;
-                       
+
                      }else{
                       $scope.documentpagination.next = false;
                      }
@@ -87,7 +87,7 @@ opportunityservices.factory('Opportunity', function($http) {
 
                   if (resp.events){
                      $scope.events = resp.events.items;
-                  }  
+                  }
 
         $scope.isContentLoaded = true;
         // $scope.listTopics(resp);
@@ -95,9 +95,9 @@ opportunityservices.factory('Opportunity', function($http) {
         // $scope.listEvents();
         // $scope.listDocuments();
         // $scope.listInfonodes();
-        
+
         document.title = "Opportunity: " + $scope.opportunity.name ;
-       
+
         $scope.$apply();
         if (resp.topics){
             $scope.hilightTopic();
@@ -142,7 +142,7 @@ opportunityservices.factory('Opportunity', function($http) {
                    // Store the nextPageToken
                    $scope.opppages[nextPage] = resp.nextPageToken;
                    $scope.opppagination.next = true;
-                   
+
                  }else{
                   $scope.opppagination.next = false;
                  }
@@ -156,7 +156,7 @@ opportunityservices.factory('Opportunity', function($http) {
                 if(resp.code==401){
                        $scope.refreshToken();
                 };
-                 
+
               }
       });
   };
@@ -178,7 +178,7 @@ opportunityservices.factory('Opportunity', function($http) {
                    // Store the nextPageToken
                    $scope.opppages[nextPage] = resp.nextPageToken;
                    $scope.opppagination.next = true;
-                   
+
                  }else{
                   $scope.opppagination.next = false;
                  }
@@ -191,7 +191,7 @@ opportunityservices.factory('Opportunity', function($http) {
                 if(resp.code==401){
                        $scope.refreshToken();;
                 };
-                 
+
               }
       });
   };
@@ -200,14 +200,14 @@ opportunityservices.factory('Opportunity', function($http) {
           console.log(resp);
            if (resp.items){
               $scope.results = resp.items;
-              
+
               $scope.$apply();
             };
-            
+
       });
   };
     Opportunity.patch = function($scope,params) {
-          
+
           gapi.client.crmengine.opportunities.patch(params).execute(function(resp) {
             if(!resp.code){
                $scope.opportunity = resp;
@@ -226,23 +226,25 @@ opportunityservices.factory('Opportunity', function($http) {
           });
   };
     //HKA 09.11.2013 Add an opportunity
-    Opportunity.insert = function($scope,opportunity){
+    Opportunity.insert = function($scope,params){
       $scope.isLoading = true;
-      
-      gapi.client.crmengine.opportunities.insertv2(opportunity).execute(function(resp) {
-         
+      gapi.client.crmengine.opportunities.insertv2(params).execute(function(resp) {
+
          if(!resp.code){
           $scope.isLoading = false;
-          
+
           if ($scope.opportunities == undefined){
             $scope.opportunities = [];
             $scope.blankStateopportunity = false;
+          }
+          if ($scope.opportunityInserted){
+            $scope.opportunityInserted(resp);
           }
           $scope.opportunities.push(resp);
           $scope.opportunity = {};
           $scope.searchAccountQuery = '';
           $scope.$apply();
-          
+
          }else{
           console.log(resp.message);
              $('#addOpportunityModal').modal('hide');
@@ -261,7 +263,7 @@ Opportunity.delete = function($scope,params){
         window.location.replace('#/opportunities');
     }
     )};
-  
+
 
 return Opportunity;
 });
@@ -272,8 +274,7 @@ opportunityservices.factory('OpportunityLoader',['Opportunity','$route','$q',
     var delay = $q.defer();
     var opportunityId = $route.current.params.opportunityId;
   return Opportunity.get($route.current.params.opportunityId);
-   };  
-    
+   };
+
 
   }]);
-

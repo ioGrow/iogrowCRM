@@ -40,7 +40,7 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
          {'name':'purple','color':'#E874D6'},
      ];
      $scope.tag.color= {'name':'green','color':'#BBE535'};
-     
+
 
       // What to do after authentication
        $scope.runTheProcess = function(){
@@ -50,8 +50,8 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
           var paramsTag = {'about_kind':'Opportunity'};
           Tag.list($scope,paramsTag);
           // for (var i=0;i<100;i++)
-          //   { 
-          //       var opportunity = { 
+          //   {
+          //       var opportunity = {
           //                 'name':  i.toString() + ' kass ta3 lban',
           //                 'amount':'99',
           //                 'access':'public'
@@ -64,10 +64,10 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
        $scope.refreshToken = function() {
             Auth.refreshToken();
        };
-      
+
     $scope.getPosition= function(index){
         if(index<4){
-         
+
           return index+1;
         }else{
           console.log((index%4)+1);
@@ -76,7 +76,7 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
      };
 
      $scope.listNextPageItems = function(){
-        
+
         var nextPage = $scope.oppCurrentPage + 1;
         var params = {};
           if ($scope.opppages[nextPage]){
@@ -88,11 +88,11 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
             params = {'order' : $scope.order,'limit':6}
           }
           console.log('in listNextPageItems');
-          $scope.oppCurrentPage = $scope.oppCurrentPage + 1 ; 
+          $scope.oppCurrentPage = $scope.oppCurrentPage + 1 ;
           Opportunity.list($scope,params);
      }
      $scope.listMoreItems = function(){
-        
+
         var nextPage = $scope.oppCurrentPage + 1;
         var params = {};
           if ($scope.opppages[nextPage]){
@@ -100,10 +100,10 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
                       'limit':20,
                       'pageToken':$scope.opppages[nextPage]
                      }
-            $scope.oppCurrentPage = $scope.oppCurrentPage + 1 ; 
+            $scope.oppCurrentPage = $scope.oppCurrentPage + 1 ;
             Opportunity.listMore($scope,params);
           }
-          
+
      }
      $scope.listPrevPageItems = function(){
 
@@ -119,15 +119,15 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
           $scope.oppCurrentPage = $scope.oppCurrentPage - 1 ;
           Opportunity.list($scope,params);
      }
-    
 
-     
+
+
      $scope.showModal = function(){
         console.log('button clicked');
         $('#addOpportunityModal').modal('show');
 
       };
-      
+
     $scope.save = function(opportunity){
       var params = {};
       opportunity.opportunity_type = 'fixed_bid';
@@ -135,14 +135,14 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
        opportunity.stagename= $scope.stage_selected.name;
        opportunity.stage_probability= $scope.stage_selected.probability;
        opportunity.stage = $scope.stage_selected.entityKey;
-        
+
         if (typeof(opportunity.account)=='object'){
           opportunity.account_name = opportunity.account.name;
           opportunity.account_id = opportunity.account.id;
           opportunity.account = opportunity.account.entityKey;
-          
-          
-          
+
+
+
           Opportunity.insert($scope,opportunity);
             $('#addOpportunityModal').modal('hide');
 
@@ -157,24 +157,24 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
 
         };
 
-     
+
     };
     $scope.addOpportunityOnKey = function(opportunity){
       if(event.keyCode == 13 && opportunity.amount){
           $scope.save(opportunity);
       }
-      
-      
+
+
     };
     $scope.accountInserted = function(resp){
           $scope.opportunity.account = resp;
           $scope.save($scope.opportunity);
       };
-      
+
     var params_search_account ={};
      $scope.result = undefined;
      $scope.q = undefined;
-     
+
       $scope.$watch('searchAccountQuery', function() {
          params_search_account['q'] = $scope.searchAccountQuery;
          if ($scope.searchAccountQuery){
@@ -189,7 +189,7 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
      var searchParams ={};
      $scope.result = undefined;
      $scope.q = undefined;
-     
+
      $scope.$watch('searchQuery', function() {
          searchParams['q'] = $scope.searchQuery;
          searchParams['limit'] = 7;
@@ -220,13 +220,13 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
      $scope.filterByOwner = function(filter){
         if (filter){
           var params = { 'owner': filter,
-                         'order': $scope.order, 
+                         'order': $scope.order,
                          'limit':6}
         }
         else{
           var params = {
-              'order': $scope.order, 
-              
+              'order': $scope.order,
+
               'limit':6}
         };
         $scope.isFiltering = true;
@@ -235,13 +235,13 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
      $scope.filterByStage = function(filter){
         if (filter){
           var params = { 'stagename': filter,
-                         'order': $scope.order, 
+                         'order': $scope.order,
                          'limit':6}
         }
         else{
           var params = {
-              'order': $scope.order, 
-              
+              'order': $scope.order,
+
               'limit':6}
         };
         $scope.isFiltering = true;
@@ -249,7 +249,7 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
      };
 
 /***********************************************
-      HKA 14.02.2014  tags 
+      HKA 14.02.2014  tags
 *************************************************/
 $scope.listTags=function(){
       var paramsTag = {'about_kind':'Opportunity'}
@@ -266,7 +266,7 @@ $scope.listopportunities = function(){
 
 
 $scope.addNewtag = function(tag){
-       var params = {   
+       var params = {
                           'name': tag.name,
                           'about_kind':'Opportunity',
                           'color':tag.color.color
@@ -276,7 +276,7 @@ $scope.addNewtag = function(tag){
         $scope.tag.color= {'name':'green','color':'#BBE535'};
         var paramsTag = {'about_kind':'Opportunity'};
         Tag.list($scope,paramsTag);
-        
+
      }
 $scope.updateTag = function(tag){
             params ={ 'id':tag.id,
@@ -290,7 +290,7 @@ $scope.updateTag = function(tag){
             'entityKey': tag.entityKey
           }
           Tag.delete($scope,params);
-          
+
       };
 
  $scope.listTags=function(){
@@ -316,7 +316,7 @@ $scope.selectTag= function(tag,index,$event){
             $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
              text.css('color','#000000');
          }
-         
+
          $scope.filterByTags($scope.selected_tags);
 
       }
@@ -358,7 +358,7 @@ $scope.manage=function(){
 $scope.tag_save = function(tag){
           if (tag.name) {
              Tag.insert($scope,tag);
-            
+
            };
       };
 
@@ -373,7 +373,7 @@ $scope.addTags=function(){
       var tags=[];
       var items = [];
       tags=$('#select2_sample2').select2("val");
-      
+
       angular.forEach($scope.selected_tasks, function(selected_task){
           angular.forEach(tags, function(tag){
             var edge = {
@@ -389,7 +389,7 @@ $scope.addTags=function(){
       params = {
         'items': items
       }
-     
+
       Edge.insert($scope,params);
       $('#assigneeTagsToTask').modal('hide');
 
@@ -406,7 +406,7 @@ $scope.addTags=function(){
           });
       }
       handleColorPicker();
-      
+
       $('#addMemberToTask > *').on('click', null, function(e) {
             e.stopPropagation();
         });
@@ -415,9 +415,9 @@ $scope.addTags=function(){
          var components = getRGBComponents(bgColor);
          var bgDelta = (components.R * 0.299) + (components.G * 0.587) + (components.B * 0.114);
 
-         return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";  
+         return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";
       }
-      function getRGBComponents(color) {       
+      function getRGBComponents(color) {
 
           var r = color.substring(1, 3);
           var g = color.substring(3, 5);
@@ -431,19 +431,19 @@ $scope.addTags=function(){
       };
       $scope.dragTag=function(tag){
         $scope.draggedTag=tag;
-       
+
         $scope.$apply();
       }
       $scope.dropTag=function(opportunity,index){
         var items = [];
-        
+
         var params = {
               'parent': opportunity.entityKey,
               'tag_key': $scope.draggedTag.entityKey
         };
         $scope.draggedTag=null;
         Tag.attach($scope,params,index);
-        
+
       };
       $scope.tagattached=function(tag,index){
           if ($scope.opportunities[index].tags == undefined){
@@ -462,14 +462,14 @@ $scope.addTags=function(){
       }
 
 
-     // Google+ Authentication 
+     // Google+ Authentication
      Auth.init($scope);
      $(window).scroll(function() {
           if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
               $scope.listMoreItems();
           }
       });
-     
+
 }]);
 app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage','Email','Attachement','InfoNode',
     function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email,Attachement,InfoNode) {
@@ -505,7 +505,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
        $scope.runTheProcess = function(){
           var params = {
                           'id':$route.current.params.opportunityId,
-                          
+
                           'topics':{
                             'limit': '7'
                           },
@@ -515,11 +515,11 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
                           },
 
                           'tasks':{
-                            
+
                           },
 
                           'events':{
-                            
+
                           }
                       };
           Opportunity.get($scope,params);
@@ -533,18 +533,18 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
        };
      //HKA 09.11.2013 Add a new Task
      $scope.addTask = function(task){
-      
+
           $('#myModal').modal('hide');
         if (task.due){
 
             var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
-            
+
             params ={'title': task.title,
                       'due': dueDate,
                       'parent': $scope.opportunity.entityKey
             }
-            
-            
+
+
         }else{
             params ={'title': task.title,
                      'parent': $scope.opportunity.entityKey
@@ -559,7 +559,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
         console.log('Should higll');
         $('#task_0').effect("highlight","slow");
         $('#task_0').effect( "bounce", "slow" );
-       
+
      }
      $scope.listTasks = function(){
         var params = {
@@ -575,8 +575,8 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
      }
 
      $scope.TopiclistNextPageItems = function(){
-        
-        
+
+
         var nextPage = $scope.topicCurrentPage + 1;
         var params = {};
           if ($scope.topicpages[nextPage]){
@@ -595,15 +595,15 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
                         }
                      }
           }
-          
-          $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ; 
+
+          $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ;
           Opportunity.get($scope,params);
      }
      $scope.TopiclistPrevPageItems = function(){
-       
+
        var prevPage = $scope.topicCurrentPage - 1;
        var params = {};
-       
+
           if ($scope.topicpages[prevPage]){
             params = {
                       'id':$scope.opportunity.id,
@@ -622,9 +622,9 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
           }
           $scope.topicCurrentPage = $scope.topicCurrentPage - 1 ;
           Opportunity.get($scope,params);
-          
+
      }
-    
+
      $scope.listTopics = function(opportunity){
         var params = {
                       'id':$scope.opportunity.id,
@@ -636,13 +636,13 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
 
      }
      $scope.hilightTopic = function(){
-        
+
        $('#topic_0').effect( "bounce", "slow" );
        $('#topic_0 .message').effect("highlight","slow");
      }
 
 
-     
+
      $scope.selectMember = function(){
         $scope.slected_memeber = $scope.user;
         $scope.user = '';
@@ -662,36 +662,36 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
         $('#sharingSettingsModal').modal('hide');
 
         if ($scope.sharing_with.length>0){
-        
+
           var items = [];
-          
+
           angular.forEach($scope.sharing_with, function(user){
-                      var item = { 
+                      var item = {
                                   'type':"user",
                                   'value':user.entityKey
                                 };
                       items.push(item);
           });
-          
+
           if(items.length>0){
               var params = {
                             'about': $scope.opportunity.entityKey,
                             'items': items
               }
-              Permission.insert($scope,params); 
+              Permission.insert($scope,params);
           }
-          
-          
+
+
           $scope.sharing_with = [];
-          
-          
-        }else{ 
+
+
+        }else{
           alert('select a user to be invited');
         };
 
 
      };
-     
+
      $scope.updateCollaborators = function(){
           var opportunityid = {'id':$scope.opportunity.id};
           Opportunity.get($scope,opportunityid);
@@ -700,10 +700,10 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
 
 //HKA 11.11.2013 Add new Event
  $scope.addEvent = function(ioevent){
-      
+
          $('#newEventModal').modal('hide');
-        var params ={}       
-        
+        var params ={}
+
         if (ioevent.starts_at){
             if (ioevent.ends_at){
               params ={'title': ioevent.title,
@@ -721,7 +721,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
                       'parent':$scope.opportunity.entityKey
               }
             }
-            
+
             Event.insert($scope,params);
             $scope.ioevent.title='';
             $scope.ioevent.where='';
@@ -729,16 +729,16 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
           };
      };
      $scope.hilightEvent = function(){
-        
+
         $('#event_0').effect("highlight","slow");
         $('#event_0').effect( "bounce", "slow" );
-       
+
      };
      $scope.listEvents = function(){
         var params = {
                         'id':$scope.opportunity.id,
                         'events':{
-                          
+
                         }
                       };
         Opportunity.get($scope,params);
@@ -765,7 +765,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
                  'stage_probability':$scope.stage_selected.probability,
                 'amount':opportunity.amount,
                 'description':opportunity.description};
-    
+
   console.log($scope.opportunity.stagename);
   Opportunity.patch($scope,params);
 
@@ -775,31 +775,31 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
                   'about_kind': 'Opportunity',
                   'about_item': $scope.opportunity.id,
                   'title': 'stage updated to '+ $scope.stage_selected.name
-                  
+
       };
-      
-      
+
+
       Note.insert($scope,paramsNote);
-   });*/     
+   });*/
   $('#EditOpportunityModal').modal('hide');
  };
 
 $scope.createNote = function(){
-  
+
     var paramsNote = {
                   'about_kind': 'Opportunity',
                   'about_item': $scope.opportunity.id,
                   'title': 'stage updated to '+ $scope.stage_selected.name
-                  
+
       };
        Note.insert($scope,paramsNote);
 };
 
       $('#some-textarea').wysihtml5();
-      
+
       $scope.sendEmail = function(email){
         email.body = $('#some-textarea').val();
-        
+
         var params = {
                   'to': email.to,
                   'cc': email.cc,
@@ -809,7 +809,7 @@ $scope.createNote = function(){
 
                   'about_item':$scope.opportunity.id,
                   'about_kind':'Opportunity' };
-        
+
         Email.send($scope,params);
       };
 
@@ -824,8 +824,8 @@ $scope.deleteopportunity= function(){
      };
 
      $scope.DocumentlistNextPageItems = function(){
-        
- 
+
+
         var nextPage = $scope.documentCurrentPage + 1;
         var params = {};
           if ($scope.documentpages[nextPage]){
@@ -836,7 +836,7 @@ $scope.deleteopportunity= function(){
                           'pageToken':$scope.documentpages[nextPage]
                         }
                       }
-            
+
           }else{
             params = {
                         'id':$scope.opportunity.id,
@@ -846,12 +846,12 @@ $scope.deleteopportunity= function(){
                       }
             }
           $scope.documentCurrentPage = $scope.documentCurrentPage + 1 ;
-          
+
           Opportunity.get($scope,params);
-          
+
      }
      $scope.DocumentPrevPageItems = function(){
-            
+
        var prevPage = $scope.documentCurrentPage - 1;
        var params = {};
           if ($scope.documentpages[prevPage]){
@@ -862,7 +862,7 @@ $scope.deleteopportunity= function(){
                           'pageToken':$scope.documentpages[prevPage]
                         }
                       }
-            
+
           }else{
             params = {
                         'id':$scope.opportunity.id,
@@ -874,7 +874,7 @@ $scope.deleteopportunity= function(){
           $scope.documentCurrentPage = $scope.documentCurrentPage - 1 ;
           Opportunity.get($scope,params);
 
-              
+
      };
      $scope.listDocuments = function(){
         var params = {
@@ -887,7 +887,7 @@ $scope.deleteopportunity= function(){
 
      };
      $scope.showCreateDocument = function(type){
-        
+
         $scope.mimeType = type;
         $('#newDocument').modal('show');
      };
@@ -896,7 +896,7 @@ $scope.deleteopportunity= function(){
         var params = {
                       'parent': $scope.opportunity.entityKey,
                       'title':newdocument.title,
-                      'mimeType':mimeType 
+                      'mimeType':mimeType
                      };
         Attachement.insert($scope,params);
 
@@ -905,7 +905,7 @@ $scope.deleteopportunity= function(){
           var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
           var projectfolder = $scope.opportunity.folder;
           var docsView = new google.picker.DocsView()
-              .setIncludeFolders(true) 
+              .setIncludeFolders(true)
               .setSelectFolderEnabled(true);
           var picker = new google.picker.PickerBuilder().
               addView(new google.picker.DocsUploadView().setParent(projectfolder)).
@@ -920,7 +920,7 @@ $scope.deleteopportunity= function(){
       };
       // A simple callback implementation.
       $scope.uploaderCallback = function(data) {
-        
+
 
         if (data.action == google.picker.Action.PICKED) {
                 var params = {
@@ -928,7 +928,7 @@ $scope.deleteopportunity= function(){
                               'parent':$scope.opportunity.entityKey
                             };
                 params.items = new Array();
-               
+
                  $.each(data.docs, function(index) {
                       console.log(data.docs);
                       /*
@@ -944,10 +944,10 @@ $scope.deleteopportunity= function(){
 
                       };
                       params.items.push(item);
-                
+
                   });
                  Attachement.attachfiles($scope,params);
-                    
+
           }
       };
 
@@ -1020,7 +1020,7 @@ $scope.deleteopportunity= function(){
       Opportunity.patch($scope,params);
       $('#EditSource').modal('hide');
      };
-     
+
     //HKA 07.03.2014 Add Custom field
 
     $scope.addCustomField = function(customField){
@@ -1036,7 +1036,7 @@ $scope.deleteopportunity= function(){
   InfoNode.insert($scope,params);
 
   $('#customfields').modal('hide');
-  
+
 };
 
 $scope.listInfonodes = function(kind) {
@@ -1044,46 +1044,46 @@ $scope.listInfonodes = function(kind) {
                'connections': kind
               };
      InfoNode.list($scope,params);
-   
+
  };
 
   /// update account with inlineEdit
   $scope.inlinePatch=function(kind,edge,name,entityKey,value){
-   
+
    if (kind=='Opportunity') {
           params = {'id':$scope.opportunity.id,
              name:value}
          Opportunity.patch($scope,params);
    }else{
 
-     
-     
+
+
           params = {
                   'entityKey': entityKey,
                   'parent':$scope.opportunity.entityKey,
                   'kind':edge,
                   'fields':[
-                     
+
                       {
                         "field": name,
                         "value": value
                       }
                   ]
         };
-         
+
          InfoNode.patch($scope,params);
    }
 
 
   };
-    
-     // Google+ Authentication 
+
+     // Google+ Authentication
      Auth.init($scope);
 
 }]);
 
-app.controller('OpportunityNewCtrl', ['$scope','Auth','User','Account','Tag','Opportunitystage','Edge',
-    function($scope,Auth,Account,Opportunitystage,User,Tag,Edge) {
+app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Contact', 'Opportunitystage','Opportunity',
+    function($scope,$filter,Auth,Account,Contact,Opportunitystage,Opportunity) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Opportunities").addClass("active");
       document.title = "Opportunities: New";
@@ -1108,7 +1108,7 @@ app.controller('OpportunityNewCtrl', ['$scope','Auth','User','Account','Tag','Op
       $scope.account.industry = 'Technology';
       $scope.stage_selected={};
       $scope.opportunitystages=[];
-      $scope.opportunity={currency:'USD',price_type:'fixed',estimated_close_date:new Date()};
+      $scope.opportunity={currency:'USD',duration_unit:'fixed',closed_date:new Date()};
 
       $scope.users=[];
       $scope.opportunity.estimated=null;
@@ -1127,7 +1127,7 @@ app.controller('OpportunityNewCtrl', ['$scope','Auth','User','Account','Tag','Op
         $('#'+id).addClass('hidden');
       }
       $scope.hideRemove=function(id){
-       $('#'+id).removeClass('hidden'); 
+       $('#'+id).removeClass('hidden');
       }
       $scope.pushElement=function(elem,arr){
           if (arr.indexOf(elem) == -1) {
@@ -1141,49 +1141,19 @@ app.controller('OpportunityNewCtrl', ['$scope','Auth','User','Account','Tag','Op
           }
       }
       $scope.runTheProcess = function(){
-            /*Account.list($scope,{});*/
-           /* Opportunitystage.list($scope,{'order':'probability'});
-            console.log($scope.opportunitystages);*/
+
+           Opportunitystage.list($scope,{'order':'probability'});
+
 
        };
         // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
             Auth.refreshToken();
        };
-      // new Lead
-     $scope.save = function(account){
-          if (account.name) {
-           Account.insert($scope,account);
-         }; 
-      };
+
       $scope.prepareInfonodes = function(){
         var infonodes = [];
-        angular.forEach($scope.websites, function(website){
-            var infonode = {
-                            'kind':'websites',
-                            'fields':[
-                                    {
-                                    'field':"url",
-                                    'value':website.url
-                                    }
-                            ]
-                          
-                          }
-            infonodes.push(infonode);
-        });
-        angular.forEach($scope.sociallinks, function(sociallink){
-            var infonode = {
-                            'kind':'sociallinks',
-                            'fields':[
-                                    {
-                                    'field':"url",
-                                    'value':sociallink.url
-                                    }
-                            ]
-                          
-                          }
-            infonodes.push(infonode);
-        });
+
         angular.forEach($scope.customfields, function(customfield){
             var infonode = {
                             'kind':'customfields',
@@ -1193,77 +1163,127 @@ app.controller('OpportunityNewCtrl', ['$scope','Auth','User','Account','Tag','Op
                                     'value':customfield.value
                                     }
                             ]
-                          
+
                           }
             infonodes.push(infonode);
         });
         return infonodes;
     };
-      $scope.createPickerUploader = function() {
-          var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
-          var picker = new google.picker.PickerBuilder().
-              addView(new google.picker.DocsUploadView()).
-              setCallback($scope.uploaderCallback).
-              setOAuthToken(window.authResult.access_token).
-              setDeveloperKey(developerKey).
-              setAppId(987765099891).
-              build();
-          picker.setVisible(true);
-      };
-      // A simple callback implementation.
-      $scope.uploaderCallback = function(data) {
-          if (data.action == google.picker.Action.PICKED) {
-                var params = {
-                              'access': $scope.account.access,
-                              'parent':$scope.account.entityKey
-                            };
-                params.items = new Array();
-                if(data.docs){
-                  $scope.logo.logo_img_id = data.docs[0].id ;
-                  $scope.logo.logo_img_url = data.docs[0].url ;
-                  $scope.imageSrc = 'https://docs.google.com/uc?id='+data.docs[0].id;
-                  $scope.$apply();
-                }
+
+
+
+
+      var params_search_contact ={};
+      $scope.$watch('searchContactQuery', function() {
+        if($scope.searchContactQuery){
+            if($scope.searchContactQuery.length>1){
+              params_search_contact['q'] = $scope.searchContactQuery;
+              gapi.client.crmengine.contacts.search(params_search_contact).execute(function(resp) {
+                if (resp.items){
+                $scope.contactsResults = resp.items;
+                $scope.$apply();
+              };
+            });
           }
-      }
-     
-      $scope.accountInserted = function(resp){
-          window.location.replace('/#/accounts');
-      };
-      $scope.save = function(account){
-        if(account.name){
-          var params ={
-                        'name':account.name,
-                        'account_type':account.account_type,
-                        'industry':account.industry,
-                        'tagline':account.tagline,
-                        'introduction':account.introduction,
-                        'phones':$scope.phones,
-                        'emails':$scope.emails,
-                        'infonodes':$scope.prepareInfonodes(),
-                        'access': account.access,
-                      };
-          if ($scope.logo.logo_img_id){
-              params['logo_img_id'] = $scope.logo.logo_img_id;
-              params['logo_img_url'] = $scope.logo.logo_img_url;
-          }
-          Account.insert($scope,params);
-          
         }
+      });
+     $scope.selectContact = function(){
+
+        $scope.opportunity.contact = $scope.searchContactQuery;
+        var account = {
+                      'entityKey':$scope.searchContactQuery.account
+                    };
+        $scope.opportunity.account = account;
+        $scope.searchAccountQuery = $scope.searchContactQuery.contacts;
+      };
+
+      var params_search_account ={};
+      $scope.result = undefined;
+      $scope.q = undefined;
+      $scope.$watch('searchAccountQuery', function() {
+          params_search_account['q'] = $scope.searchAccountQuery;
+          Account.search($scope,params_search_account);
+      });
+
+      $scope.selectAccount = function(){
+          $scope.opportunity.account  = $scope.searchAccountQuery;
+      };
+      $scope.insertNewContact = function(account,access){
+          if($scope.searchContactQuery.length>0){
+            var firstName = $scope.searchContactQuery.split(' ').slice(0, -1).join(' ') || " ";
+            var lastName = $scope.searchContactQuery.split(' ').slice(-1).join(' ') || " ";
+            var params = {
+                          'firstname':  firstName ,
+                          'lastname': lastName ,
+                          'account': account,
+                          'access': access
+                        };
+            Contact.insert($scope,params);
+          };
+      }
+
+      $scope.save = function(opportunity){
+        var hasContact = false;
+        var hasAccount = false;
+        opportunity.closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
+        opportunity.stage = $scope.stage_selected.entityKey;
+        if (typeof(opportunity.account)=='object'){
+            hasAccount = true;
+            opportunity.account = opportunity.account.entityKey;
+            if (typeof(opportunity.contact)=='object'){
+                opportunity.contact = opportunity.contact.entityKey;
+                hasContact = true;
+            }
+            else if($scope.searchContactQuery){
+                $scope.insertNewContact(opportunity.account,opportunity.access);
+            };
+        }else if($scope.searchAccountQuery){
+            if($scope.searchAccountQuery.length>0){
+              // create a new account with this account name
+              var params = {
+                            'name': $scope.searchAccountQuery,
+                            'access': opportunity.access
+                          };
+              $scope.opportunity = opportunity;
+              Account.insert($scope,params);
+            };
+        };
+
+        if (hasAccount|hasContact){
+            opportunity.infonodes = $scope.prepareInfonodes();
+            // prepare amount attributes
+            if (opportunity.duration_unit=='fixed'){
+              opportunity.amount_total = opportunity.amount_per_unit;
+              opportunity.opportunity_type = 'fixed_bid';
+            }else{
+              opportunity.opportunity_type = 'per_' + opportunity.duration;
+            }
+            Opportunity.insert($scope,opportunity);
+        }else{
+            // should highlight contact and account
+        }
+
+      };
+      $scope.accountInserted = function(resp){
+          $scope.opportunity.account = resp;
+          $scope.save($scope.opportunity);
+      };
+      $scope.contactInserted = function(resp){
+          $scope.opportunity.contact = resp;
+          $scope.save($scope.opportunity);
+      }
+      $scope.opportunityInserted = function(resp){
+          window.location.replace('#/opportunities');
       };
 
 
-     
-    $scope.addAccountOnKey = function(account){
-      if(event.keyCode == 13 && account){
-          $scope.save(account);
-      }
-    };
-    
 
-    
-   // Google+ Authentication 
+
+
+
+
+   // Google+ Authentication
      Auth.init($scope);
 
-      
+
 }]);
