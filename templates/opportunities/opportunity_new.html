@@ -1,13 +1,13 @@
 <div class="page-sidebar nav-collapse collapse">
-      <!-- BEGIN SIDEBAR MENU -->        
+      <!-- BEGIN SIDEBAR MENU -->
       <ul class="page-sidebar-menu">
-        
+
         {% for tab in tabs %}
            <li id="id_{{tab.name}}"  ><a href="{{ tab.url }}"><i class="icon-cogs"></i><span class="title">{{tab.label}}</span></a></li>
           {% endfor %}
 
 
-        
+
       </ul>
       <!-- END SIDEBAR MENU -->
 </div>
@@ -19,9 +19,9 @@
   </h2>
 </div>
   <div class=" subHeaderContent">
-            <div class="pull-right sharebuttonDiv"> 
-                  
-                  <button class="btn red jfk-button jfk-button-action" ng-click="save(account)">
+            <div class="pull-right sharebuttonDiv">
+
+                  <button class="btn red jfk-button jfk-button-action" ng-click="save(opportunity)">
                     Create
                   </button>
             </div>
@@ -37,11 +37,11 @@
             Loading...
           </div>
         </div>
-        
+
   </div>
 
   <div class="" ng-show="immediateFailed">
-     <div class="col-md-12">  
+     <div class="col-md-12">
       <h1>Sign-in Button;</h1>
           <span id="signin">
               <span id="myGsignin"></span>
@@ -49,7 +49,7 @@
     </div>
   </div>
   <div class="row" >
-        
+
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
        <div class="showPage slimForm col-md-9">
@@ -59,22 +59,25 @@
               <div class="col-md-12">
               <!-- BEGIN PORTLET-->
               <form class="form-horizontal ">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <input autofocus ng-model="opportunity.name" placeholder="{{_('Type here the opportunity name...')}}" type="text" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+              <!-- BEGIN PORTLET-->
+              <form class="form-horizontal ">
+
               <div class="row">
                   <div class="col-md-6">
                         <div class="row">
                           <div class="col-md-12">
                             <div class="form-group">
-                              <div class="col-md-12">
-                                <input autofocus ng-model="opportunity.name" placeholder="{{_('Type here the opportunity name...')}}" type="text" class="form-control">
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-12">
-                            <div class="form-group">
                               <div class="col-md-7 ">
-                                  <input type="text" required id="id_name" class="form-control" placeholder="{{_('Opportunity amount...')}}" ng-model="opportunity.amount">
+                                  <input type="text" required id="id_name" class="form-control" placeholder="{{_('Opportunity amount...')}}" ng-model="opportunity.amount_per_unit">
                                </div>
                               <div class="col-md-5 ">
                                <select  class="form-control" ng-model="opportunity.currency">
@@ -158,7 +161,7 @@
                             <div class="col-md-12">
                             <div class="form-group">
                                 <div class="col-md-7 ">
-                                    <select   class="form-control" ng-model="opportunity.price_type">
+                                    <select   class="form-control" ng-model="opportunity.duration_unit">
                                         <option value="fixed">Fixed bid</option>
                                         <option value="hour">Per hour</option>
                                         <option value="month">Per month</option>
@@ -166,27 +169,13 @@
                                     </select>
                                 </div>
                                 <div class="col-md-5 ">
-                                   <input ng-hide="opportunity.price_type=='fixed'" type="text" pattern="\d*"  required id="" class="form-control" ng-model="opportunity.quantity">
+                                   <input ng-hide="opportunity.duration_unit=='fixed'" type="text" pattern="\d*"  required id="" class="form-control" ng-model="opportunity.duration">
                                 </div>
                               </div>
                             </div>
                         </div>
                   </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        
-                       <div class="col-md-12">
-                          <select ng-model="stage_selected" ng-options="opps.name + ' - ( ' + opps.probability + '% )' for opps in opportunitystages | orderBy: 'name':true" class="form-control" >
-                            <option value="">-- choose Stage --</option>
-                          
-                          </select>
-                          
-                      </div> 
-                        
 
-                          
-                    </div>
-                  </div>
                   <div class="col-md-6">
                         <div class="row">
                           <div class="col-md-12">
@@ -209,83 +198,104 @@
                           </div>
                         </div>
                   </div>
+
                   </div>
-                      </form>
-              </div>
-              </div>
-                       <div class="row">
-                          <div class="col-md-6">
-                               <div class="news-blocks blank-card blank-card-yellow">
-                                <h3>Opportunity Informations</h3>
-                                <div class="news-block-tags">
-                                    <div class="form-group row">
-                                        <label class="control-label col-md-4">Estimated close date</label>
-                                        <div class="col-md-8"> 
-                                            <datetimepick ng-model='opportunity.estimated_close_date' class="" label-format='EEEE, MMMM d, yyyy'></datetimepick>
-                                        </div>
-                                  </div>
-                                </div>  
-                                <div class="news-block-tags">
-                                    <div class="form-group row">
-                                        <label class="control-label col-md-4">Description</label>
-                                        <div class="col-md-8"> 
-                                            <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="opportunity.description"></textarea>
-                                        </div>
-                                  </div>
-                                </div>  
-                                 <div class="news-block-tags">
-                                    <div class="form-group row">
-                                        <label class="control-label col-md-4">Competitors</label>
-                                        <div class="col-md-8"> 
-                                            <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="opportunity.competitors"></textarea>
-                                        </div>
-                                  </div>
-                                </div>      
-                              </div>
-                          </div>
-                          <div class="col-md-6">
-                          
-                               <div class="news-blocks blank-card blank-card-yellow">
-                                <h3>{{ _('Custom Fields') }}</h3>
-                                
-                                <ul class="list-unstyled contact-infos" >
-                                    <li ng-show="showCustomFieldForm">
-                                          <div class="row">
-                                            <form class="form-inline newLeadForm" role="form">
-                                              <div class="form-group sm-group" style="">
-                                                <label class="sr-only" for="exampleInputEmail2">Field</label>
-                                                <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="Enter field name">
-                                              </div>
-                                              <div class="form-group sm-group" style="">
-                                                <label class="sr-only" for="exampleInputEmail2">Value</label>
-                                                <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="Enter a value">
-                                              </div>
-                                               <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(customfield,customfields)">Add</button>
-                                                <button type="submit" class="btn btn-default" ng-click="showCustomFieldForm=false">X</button>
-                                            </form>
-                                          </div>
-                                    </li>
-                                    <li ng-repeat="custom in customfields" class="newItems"  >
-                                    <span>
-                                    <%= custom.field%>  : <%= custom.value%> 
-                                    <a id="custom_<%=$index%>" href="" ng-click="pullElement($index,custom,customfields)" class="removeItem">x</a>
-                                    </span>
 
-                                    </li>
-                                    <li><a ng-click="showCustomFieldForm=true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new custom field </a></li>
-                                    
-                                </ul>
-                                                    
+              </div>
+              </div>
+              <div class="row">
+                         <div class="col-md-6">
+
+                               <div class="news-blocks blank-card blank-card-yellow">
+                                <h3>{{ _('Opportunity Stage') }}</h3>
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <div class="form-group">
+
+                                        <div class="col-md-12">
+                                          <select ng-model="stage_selected" ng-options="opps.name + ' - ( ' + opps.probability + '% )' for opps in opportunitystages | orderBy: 'name':true" class="form-control selector-margin" >
+                                            <option value="">-- choose Stage --</option>
+                                          </select>
+                                        </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <p>{{ _('Estimated closed date') }}:</p>
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <datetimepick ng-model='opportunity.closed_date' class="" label-format='EEEE, MMMM d, yyyy'></datetimepick>
+                                        </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+
                               </div>
-                              
-                            
+                              <div class="news-blocks blank-card blank-card-bluep">
+                               <h3>{{ _('Custom Fields') }}</h3>
+
+                               <ul class="list-unstyled contact-infos" >
+                                   <li ng-show="showCustomFieldForm">
+                                         <div class="row">
+                                           <form class="form-inline newLeadForm" role="form">
+                                             <div class="form-group sm-group" style="">
+                                               <label class="sr-only" for="exampleInputEmail2">Field</label>
+                                               <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="Enter field name">
+                                             </div>
+                                             <div class="form-group sm-group" style="">
+                                               <label class="sr-only" for="exampleInputEmail2">Value</label>
+                                               <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="Enter a value">
+                                             </div>
+                                              <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(customfield,customfields)">Add</button>
+                                               <button type="submit" class="btn btn-default" ng-click="showCustomFieldForm=false">X</button>
+                                           </form>
+                                         </div>
+                                   </li>
+                                   <li ng-repeat="custom in customfields" class="newItems"  >
+                                   <span>
+                                   <%= custom.field%>  : <%= custom.value%>
+                                   <a id="custom_<%=$index%>" href="" ng-click="pullElement($index,custom,customfields)" class="removeItem">x</a>
+                                   </span>
+
+                                   </li>
+                                   <li><a ng-click="showCustomFieldForm=true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new custom field </a></li>
+
+                               </ul>
+
+                             </div>
+
+
                           </div>
-                          
-                        </div>
+
+              <div class="col-md-6">
+                   <div class="news-blocks blank-card blank-card-red">
+                    <h3>Opportunity Informations</h3>
+
+                    <div class="news-block-tags">
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">Description</label>
+                            <div class="col-md-9">
+                                <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="opportunity.description"></textarea>
+                            </div>
+                      </div>
+                    </div>
+                     <div class="news-block-tags">
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">Competitors</label>
+                            <div class="col-md-9">
+                                <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="opportunity.competitor"></textarea>
+                            </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+              </div>
 
             </div>
             </div>
-       </div> 
+       </div>
               <div class="col-md-3 ">
                   <div class="row">
                     <div class="col-md-12">
@@ -293,7 +303,7 @@
                       <div class="portlet showPage">
                         <div class="portlet-title line">
                           <div class="caption"><i class="fa fa-lock"></i>Who can access ?</div>
-                          
+
                         </div>
                         <div class="portlet-body" id="chats">
                                   <label class="radio line inbox-label">
@@ -324,8 +334,8 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("Add Address")}}</h3>
             </div>
             <div class="modal-body">
-                  <form id="addAddress" name="addemail"  class="form-horizontal"> 
-               
+                  <form id="addAddress" name="addemail"  class="form-horizontal">
+
                     <div class="form-group">
                         <label  class="col-md-3 control-label">{{_("Street")}} </label>
                         <div class="col-md-9">
@@ -359,7 +369,7 @@
               </div>
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-              
+
                   <input  type="submit" ng-click="pushElement(address,addresses)" class="btn green" value="Add this address">
                   <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
               </div>
@@ -367,7 +377,7 @@
                 </div>
           </div>
         </div>
-    
+
 <!--HKA 11.10.2013 Edit Tagline -->
    <div id="EditTagModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
@@ -379,18 +389,18 @@
               </div>
 
               <div class="modal-body">
-                 <form id="editTagline" name="editlead" ng-submit="updateTagline(lead)" class="form-horizontal"> 
-                
+                 <form id="editTagline" name="editlead" ng-submit="updateTagline(lead)" class="form-horizontal">
+
 
                   <div class="form-group">
                         <label  class="col-md-3 control-label">{{_("Tagline")}} </label>
-                       
+
                         <div class="col-md-9">
                           <!--textarea rows="2" cols="50"  id="id_tagline" ng-model="account.tagline"/-->
                            <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="lead.tagline"></textarea>
 
                         </div>
-                    </div>             
+                    </div>
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
@@ -412,17 +422,17 @@
                   </div>
 
                   <div class="modal-body">
-                       <form id="editTagline" name="edittag" ng-submit="updateintro(lead)" class="form-horizontal"> 
+                       <form id="editTagline" name="edittag" ng-submit="updateintro(lead)" class="form-horizontal">
 
                         <div class="form-group">
                               <label  class=" col-md-3 control-label">{{_("Introduction")}} </label>
-                             
+
                               <div class="col-md-9">
-                               
+
                                  <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="lead.introduction"></textarea>
 
                               </div>
-                          </div>             
+                          </div>
                   </div>
                   <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>

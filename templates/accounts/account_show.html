@@ -249,7 +249,7 @@
                              <li>
                                  <a ng-hide="showPhoneForm" ng-click="showPhoneForm=true" class="btn-link addAnotherPhone" ><i class="icon-plus"></i>Add a new Phone</a>
                               </li>
-                          
+
 
                         </ul>
                         <div class="news-block-tags">
@@ -323,8 +323,8 @@
                                           </div>
                               </li>
                           <li ng-repeat="sociallink in infonodes.sociallinks"><a editable-text="sociallink.url" onbeforesave="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,$data)" href="<%=sociallink.url%>" target="_blank"> <%=sociallink.url%> </a></li>
-                           
-                           <li><a class="btn-link addAnotherPhone" ng-hide="showSociallinkForm" ng-click="showSociallinkForm=true"><i class="icon-plus"></i> Add a new social links </a></li> 
+
+                           <li><a class="btn-link addAnotherPhone" ng-hide="showSociallinkForm" ng-click="showSociallinkForm=true"><i class="icon-plus"></i> Add a new social links </a></li>
                         </ul>
                       </div>
                       <div class="news-blocks blank-card blank-card-yellow newsCard">
@@ -524,10 +524,12 @@
 
                                                 <div class="row">
                                                   <div class="col-md-2 col-sm-2 col-xs-12 hidden-xs">
-                                                    <div easypiechart class="chart" options="chartOptions" percent="opportunity.current_stage.probability">
 
-                                                      <span class="percent" ng-bind="percent=<%=opportunity.current_stage.probability%>" >
-                                                      </span>
+                                                    <div easypiechart class="chart" options="chartOptions" percent="opportunity.current_stage.probability"></div>
+                                                    <div class="oppStage">
+                                                      <span><%=opportunity.current_stage.name%></span><br>
+                                                      <span><%=opportunity.current_stage.probability%> %</span>
+
                                                     </div>
                                                   </div>
                                                   <div class="col-md-7 col-sm-7 col-xs-12" style="border-left: 1px solid rgb(218, 218, 218);">
@@ -559,22 +561,21 @@
                                                     </div>
                                                   </div>
                                                   <div class="visible-xs col-xs-6">
-                                                    <div easypiechart class="chart" options="chartOptions" percent="percent">
-                                                      <span class="percent" ng-bind="percent"></span>
+                                                    <div easypiechart class="chart" options="chartOptions" percent="opportunity.current_stage.probability">
+                                                      
                                                     </div>
                                                   </div>
                                                   <div class="col-md-3 col-sm-3 col-xs-6">
                                                       <div class="oppPrice">
                                                         <%= opportunity.currency %><%= opportunity.amount_total %>
+                                                        <p class="amount-details">
+                                                            <%= opportunity.duration %> × <%= opportunity.amount_per_unit %>/<%= opportunity.duration_unit %>
+                                                        </p>
                                                       </div>
-                                                      <div class="oppStage">
-                                                        <%= opportunity.current_stage.name %>
 
-
-                                                      </div>
                                                       <div class="oppEstDate">
-                                                        Estimated close date
-                                                        Apr 23, 2014 at 6:00PM
+                                                        Estimated close date:
+                                                        <%= opportunity.duration %>
                                                       </div>
 
                                                   </div>

@@ -36,8 +36,8 @@ class OpportunityGetRequest(messages.Message):
 
 class OpportunityInsertRequest(messages.Message):
     name = messages.StringField(1)
-    stage = messages.StringField(3, required = True)
-    account = messages.StringField(4, required = True)
+    stage = messages.StringField(3)
+    account = messages.StringField(4)
     contact = messages.StringField(5)
     access = messages.StringField(6)
     opportunity_type = messages.StringField(7)
@@ -57,7 +57,7 @@ class OpportunitySchema(messages.Message):
     entityKey = messages.StringField(2)
     name = messages.StringField(3)
     source = messages.StringField(4)
-    current_stage = messages.MessageField(OpportunitystageSchema,5) 
+    current_stage = messages.MessageField(OpportunitystageSchema,5)
     stages = messages.MessageField(OpportunitystageSchema,6,repeated = True)
     infonodes = messages.MessageField(InfoNodeListResponse,7)
     topics = messages.MessageField(TopicListResponse,8)
@@ -153,7 +153,7 @@ class Opportunity(EndpointsModel):
                          value = self.owner)
         perm.put()
 
-    
+
 
     def put_index(self,data=None):
         """ index the element at each"""
@@ -192,7 +192,7 @@ class Opportunity(EndpointsModel):
                 search.TextField(name='organization', value = empty_string(organization) ),
                 search.TextField(name='access', value = empty_string(self.access) ),
                 search.TextField(name='owner', value = empty_string(self.owner) ),
-                
+
                 search.TextField(name='title', value = empty_string(self.name) ),
                 search.TextField(name='stagename', value = empty_string(self.stagename) ),
                 search.TextField(name='description', value = empty_string(self.description)),
@@ -266,7 +266,7 @@ class Opportunity(EndpointsModel):
         current_stage_schema = None
         if len(opportunity_stage_edges['items'])>0:
             current_stage = opportunity_stage_edges['items'][0].end_node.get()
-            current_stage_schema = OpportunitystageSchema(  
+            current_stage_schema = OpportunitystageSchema(
                                                         name=current_stage.name,
                                                         probability= current_stage.probability,
                                                         stage_changed_at=opportunity_stage_edges['items'][0].created_at.isoformat()
@@ -289,7 +289,7 @@ class Opportunity(EndpointsModel):
                                   competitor = opportunity.competitor,
                                   reason_lost = opportunity.reason_lost,
                                   description = opportunity.description,
-                                  source = opportunity.source, 
+                                  source = opportunity.source,
                                   current_stage = current_stage_schema,
                                   tags = tag_list,
                                   topics = topics,
@@ -405,12 +405,12 @@ class Opportunity(EndpointsModel):
                         current_stage_schema = None
                         if len(opportunity_stage_edges['items'])>0:
                             current_stage = opportunity_stage_edges['items'][0].end_node.get()
-                            current_stage_schema = OpportunitystageSchema(  
+                            current_stage_schema = OpportunitystageSchema(
                                                                     name=current_stage.name,
                                                                     probability= int(current_stage.probability),
                                                                     stage_changed_at=opportunity_stage_edges['items'][0].created_at.isoformat()
                                                                     )
-                        count = count + 1               
+                        count = count + 1
                         opportunity_schema = OpportunitySchema(
                                               id = str( opportunity.key.id() ),
                                               entityKey = opportunity.key.urlsafe(),
@@ -427,7 +427,7 @@ class Opportunity(EndpointsModel):
                                               updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                             )
                         opportunity_list.append(opportunity_schema)
-        
+
                 if opportunity_edge_list['next_curs'] and opportunity_edge_list['more']:
                     opportunity_next_curs = opportunity_edge_list['next_curs'].urlsafe()
                 else:
@@ -488,7 +488,7 @@ class Opportunity(EndpointsModel):
                             else:
                                 kwargs[e.name] = e.value
                     search_results.append(OpportunitySearchResult(**kwargs))
-                    
+
         except search.Error:
             logging.exception('Search failed')
         return OpportunitySearchResults(
@@ -527,7 +527,7 @@ class Opportunity(EndpointsModel):
         opportunity_key = opportunity.put_async()
         opportunity_key_async = opportunity_key.get_result()
         taskqueue.add(
-                    url='/workers/createobjectfolder', 
+                    url='/workers/createobjectfolder',
                     params={
                             'kind': "Opportunity",
                             'folder_name': request.name,
@@ -543,6 +543,26 @@ class Opportunity(EndpointsModel):
                       end_node = stage_key,
                       kind = 'stages',
                       inverse_edge = 'related_opportunities')
+        if request.contact:
+            contact_key = ndb.Key(urlsafe=request.contact)
+            # insert edges
+            Edge.insert(start_node = contact_key,
+                      end_node = opportunity_key_async,
+                      kind = 'opportunities',
+                      inverse_edge = 'parents')
+            EndpointsHelper.update_edge_indexes(
+                                            parent_key = opportunity_key_async,
+                                            kind = 'opportunities',
+                                            indexed_edge = str(contact_key.id())
+                                            )
+            parents_edge_list = Edge.list(
+                                start_node = contact_key,
+                                kind = 'parents',
+                                limit = 1
+                                )
+            if len(parents_edge_list['items'])>0:
+                request.account = parents_edge_list['items'][0].end_node.urlsafe()
+            indexed = True
         if request.account:
             account_key = ndb.Key(urlsafe=request.account)
             # insert edges
@@ -556,19 +576,7 @@ class Opportunity(EndpointsModel):
                                             indexed_edge = str(account_key.id())
                                             )
             indexed = True
-        if request.contact:
-            contact_key = ndb.Key(urlsafe=request.contact)
-            # insert edges
-            Edge.insert(start_node = contact_key,
-                      end_node = opportunity_key_async,
-                      kind = 'opportunities',
-                      inverse_edge = 'parents')
-            EndpointsHelper.update_edge_indexes(
-                                            parent_key = opportunity_key_async,
-                                            kind = 'opportunities',
-                                            indexed_edge = str(contact_key.id())
-                                            )
-            indexed = True
+
         for infonode in request.infonodes:
             Node.insert_info_node(
                             opportunity_key_async,
@@ -581,7 +589,7 @@ class Opportunity(EndpointsModel):
             data = {}
             data['id'] = opportunity_key_async.id()
             opportunity.put_index(data)
-            
+
         opportunity_schema = OpportunitySchema(
                                   id = str( opportunity_key_async.id() ),
                                   entityKey = opportunity_key_async.urlsafe(),

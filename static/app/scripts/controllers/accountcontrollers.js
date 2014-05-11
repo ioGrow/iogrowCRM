@@ -379,12 +379,12 @@ $scope.addTags=function(){
       }
       $scope.disassociate=function(tag){
         $scope.disassociated=tag;
-        
+
       }
       $scope.inTag=function(tag){
-        
+
         $scope.disassociated=tag;
-        
+
       }
       $scope.dropTag=function(account,index){
         var items = [];
@@ -517,10 +517,10 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
                 duration:0,
                 enabled:false
             },
-            size:110,
+            size:57,
             barColor:'#58a618',
             scaleColor:false,
-            lineWidth:9,
+            lineWidth:7,
             lineCap:'circle'
         };
 
@@ -639,7 +639,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
      };
   // HKA 08.05.2014 Delete infonode
   $scope.deleteInfonode = function(info){
-    
+
     var params = {'entityKey':info.entityKey};
     InfoNode.delete($scope,params);
 

@@ -30,7 +30,11 @@ settingservices.factory('Opportunitystage', function($http) {
 Opportunitystage.list = function($scope,params){
 	$scope.isLoading = true;
 	gapi.client.crmengine.opportunitystages.list(params).execute(function(resp){
+    console.log('************************************');
+    console.log(params);
 		if(!resp.code){
+
+      console.log(resp.items);
 			$scope.opportunitystages = resp.items;
      $scope.isLoading = false;
 
@@ -56,7 +60,7 @@ Opportunitystage.list = function($scope,params){
 
     })
     };
-  
+
   Opportunitystage.update= function($scope,params){
      $scope.isLoading = true;
      gapi.client.crmengine.opportunitystages.patch(params).execute(function(resp){
@@ -73,10 +77,10 @@ Opportunitystage.list = function($scope,params){
 
     }
 
-      ) 
+      )
 
   };
-  
+
 
 
   Opportunitystage.insert = function($scope,params){
@@ -94,8 +98,8 @@ Opportunitystage.list = function($scope,params){
       $scope.isLoading = true;
       gapi.client.crmengine.opportunitystages.delete(params).execute(function(resp) {
               if(!resp.code){
-                  
-                  
+
+
                  $scope.listoppstage();
                  // Loaded succefully
                  $scope.isLoading = false;
@@ -122,16 +126,16 @@ settingservices.factory('Casestatus',function($http){
        $scope.casestatuslist();
        $scope.isLoading = false;
        $scope.$apply();
-     
+
     }
      )};
   //HKA 14.12.2013 Case status list
   Casestatus.list = function($scope,params){
-    
+
     gapi.client.crmengine.casestatuses.list(params).execute(function(resp){
       if(!resp.code){
         $scope.casesatuses = resp.items;
-        
+
         $scope.$apply();
 
       }
@@ -153,7 +157,7 @@ settingservices.factory('Casestatus',function($http){
         $scope.casestatuslist();
         $scope.isLoading = false;
         $scope.$apply();
-        
+
 
       }
         else{
@@ -167,13 +171,13 @@ settingservices.factory('Casestatus',function($http){
      $scope.isLoading = true;
     gapi.client.crmengine.casestatuses.delete(id).execute(function(resp){
        console.log('I am on casestatuses delete services');
-       
+
        $scope.casestatuslist();
        $scope.isLoading = false;
        $scope.$apply();
-    }) 
+    })
   };
-  
+
 
 
    return Casestatus;
@@ -198,12 +202,12 @@ settingservices.factory('Leadstatus',function($http){
         else{
           alert("Error, response is:"+angular.toJson(resp));
         }
-     
+
     }
      )};
   //HKA 14.12.2013 Case status list
   Leadstatus.list = function($scope,params){
-    
+
     gapi.client.crmengine.leadstatuses.list(params).execute(function(resp){
       if(!resp.code){
         $scope.leadstatuses = resp.items;
@@ -244,16 +248,14 @@ settingservices.factory('Leadstatus',function($http){
   Leadstatus.delete = function($scope,id){
      $scope.isLoading = true;
     gapi.client.crmengine.leadstatuses.delete(id).execute(function(resp){
-      
-       
+
+
         $scope.listleadstatus();
        $scope.isLoading = false;
        $scope.$apply();
-    }) 
+    })
   };
 
 
    return Leadstatus;
   });
-
- 
