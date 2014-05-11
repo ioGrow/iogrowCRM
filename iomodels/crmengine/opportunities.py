@@ -347,6 +347,19 @@ class Opportunity(EndpointsModel):
                         closed_date = None
                         if opportunity.closed_date:
                             closed_date = opportunity.closed_date.strftime("%Y-%m-%dT%H:%M:00.000")
+                        opportunity_stage_edges = Edge.list(
+                                                                start_node = opportunity.key,
+                                                                kind = 'stages',
+                                                                limit = 1
+                                                                )
+                        current_stage_schema = None
+                        if len(opportunity_stage_edges['items'])>0:
+                            current_stage = opportunity_stage_edges['items'][0].end_node.get()
+                            current_stage_schema = OpportunitystageSchema(
+                                                                        name=current_stage.name,
+                                                                        probability= current_stage.probability,
+                                                                        stage_changed_at=opportunity_stage_edges['items'][0].created_at.isoformat()
+                                                                        )
                         opportunity_schema = OpportunitySchema(
                                   id = str( opportunity.key.id() ),
                                   entityKey = opportunity.key.urlsafe(),
@@ -358,6 +371,7 @@ class Opportunity(EndpointsModel):
                                   amount_total = opportunity.amount_total,
                                   currency = opportunity.currency,
                                   closed_date=closed_date,
+                                  current_stage = current_stage_schema,
                                   tags = tag_list,
                                   created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
