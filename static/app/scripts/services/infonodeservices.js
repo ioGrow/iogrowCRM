@@ -88,7 +88,21 @@ accountservices.factory('InfoNode', function($http) {
       });
   };
 
-
+  InfoNode.delete = function($scope,params){
+      $scope.isLoading = true;
+      gapi.client.crmengine.infonode.delete(params).execute(function(resp) {
+          if(!resp.code){
+          $scope.isLoading = false;
+          $scope.listInfonodes(params.kind);
+        }else{
+             if(resp.message=="Invalid grant"){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+             };
+         }
+      });
+  };
 
 return InfoNode;
 });

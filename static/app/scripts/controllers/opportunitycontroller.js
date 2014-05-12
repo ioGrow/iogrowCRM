@@ -40,6 +40,18 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
          {'name':'purple','color':'#E874D6'},
      ];
      $scope.tag.color= {'name':'green','color':'#BBE535'};
+      $scope.percent = 0;
+        $scope.chartOptions = {
+            animate:{
+                duration:0,
+                enabled:false
+            },
+            size:100,
+            barColor:'#58a618',
+            scaleColor:false,
+            lineWidth:7,
+            lineCap:'circle'
+        };
 
 
       // What to do after authentication

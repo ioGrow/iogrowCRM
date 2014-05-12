@@ -510,8 +510,8 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
                   };
 
 
-
-        $scope.percent = 65;
+        $scope.editdata={'edit':'test()'};
+        $scope.percent = 0;
         $scope.chartOptions = {
             animate:{
                 duration:0,
@@ -573,6 +573,9 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
 
        };
 
+       $scope.test=function(email){
+        console.log(email);
+       };
        $scope.preparePercent = function(percent){
 
             return parseInt(percent);
@@ -629,18 +632,28 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
      }
      $scope.showOptions=function($event){
         var element=$($event.target);
-        element.find(".page-meta").remove();
+        console.log(element);
+        if(element.prop("tagName")=='LI'){
+        var compiledElement = $compile(fieldHtml)($scope);
+        element.append('<span class="page-meta"><i class="icon-pencil"><a ng-click="test" class="btn-link addAnotherPhone" ></a></i></span><span class="page-meta"><i class="fa fa-trash-o"><a ng-click="deleteInfonode()" class="btn-link addAnotherPhone" ></a></i></span>');
+        }
         element.find(".page-meta").remove();
         element.append('<span class="page-meta"><i class="icon-pencil"><a ng-click="editintro()" class="btn-link addAnotherPhone" data-toggle="modal"></a></i></span><span class="page-meta"><i class="fa fa-trash-o" ><a ng-click="deleteInfonode()" class="btn-link addAnotherPhone" data-toggle="modal"></a></i></span>');
      }
      $scope.hideOptions=function($event){
-        var element=$($event.target);
+      var element=$($event.target);
+      console.log(element);
+       if(element.prop("tagName")=='LI'){
+         console.log('hide');
+        console.log(element);
         element.find(".page-meta").remove();
+          }
      };
   // HKA 08.05.2014 Delete infonode
-  $scope.deleteInfonode = function(info){
 
-    var params = {'entityKey':info.entityKey};
+  $scope.deleteInfonode = function(entityKey,kind){
+    var params = {'entityKey':entityKey,'kind':kind};
+
     InfoNode.delete($scope,params);
 
   };
@@ -1380,10 +1393,8 @@ $scope.addEmail = function(email){
             ]
   };
   InfoNode.insert($scope,params);
-  
   $scope.email={};
   $scope.showEmailForm = false;
-  
   };
 
 

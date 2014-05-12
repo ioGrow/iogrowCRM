@@ -223,6 +223,7 @@ app.directive('draggable', function() {
         );
     }
 });
+
 app.directive('droppable', function() {
     return function(scope, element) {
         var el = element[0];
@@ -255,6 +256,30 @@ app.directive('droppable', function() {
             false
         );
     }
+});
+app.directive('editoptions', function($compile) {
+      return {
+      restrict: 'A',
+      require:'?ngModel',
+       link: function($scope, element, attrs,ngModel) {
+        var el = element[0];
+        $scope.data=attrs.editdataattr;
+        $(element).mouseenter(function() {
+          console.log('enter');
+              if($(element).prop("tagName")=='A'){
+                    $(element).find(".page-meta").remove();
+                     var el = $compile('<span class="page-meta"><a ng-click="'+$scope.data+'" class="btn-link addAnotherPhone" ><i class="icon-pencil"></i></a></span><span class="page-meta"><a ng-click="deleteInfonode()" class="btn-link addAnotherPhone"><i class="fa fa-trash-o"></i></a></span>')($scope);
+                   $(element).append(el);
+               }
+            });
+         $(element).mouseleave(function() {
+          console.log('live');
+              if($(element).prop("tagName")=='A'){
+                $(element).find(".page-meta").remove();
+              }
+        });
+    }
+  }
 });
 app.directive('taggable', ['$parse',function($parse) {
     return {
