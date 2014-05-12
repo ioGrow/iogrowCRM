@@ -360,6 +360,19 @@ class Opportunity(EndpointsModel):
                                                                         probability= current_stage.probability,
                                                                         stage_changed_at=opportunity_stage_edges['items'][0].created_at.isoformat()
                                                                         )
+                        parents_edge_list = Edge.list(
+                                                    start_node = opportunity.key,
+                                                    kind = 'parents'
+                                                    )
+                        account_schema = None
+                        for parent in parents_edge_list['items']:
+                            if parent.end_node.kind() == 'Account':
+                                account = parent.end_node.get()
+                                account_schema = AccountSchema(
+                                                        id = str( account.key.id() ),
+                                                        entityKey = account.key.urlsafe(),
+                                                        name = account.name
+                                                        )
                         opportunity_schema = OpportunitySchema(
                                   id = str( opportunity.key.id() ),
                                   entityKey = opportunity.key.urlsafe(),
@@ -372,6 +385,7 @@ class Opportunity(EndpointsModel):
                                   currency = opportunity.currency,
                                   closed_date=closed_date,
                                   current_stage = current_stage_schema,
+                                  account = account_schema,
                                   tags = tag_list,
                                   created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
