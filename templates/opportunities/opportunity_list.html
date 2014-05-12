@@ -65,50 +65,55 @@
       <div class="tab-pane">
       <div class="row">
       <div class="col-md-12 waterfall" ng-hide="blankStateopportunity">
-         <div  ng-repeat="opportunity in opportunities"  class="rightcards cardElement"  >
+         <div  ng-repeat="opportunity in opportunities"  class=" cardElement"  >
                   <div class="detailsSection">
                     <div class="head">
 
                         <div class="row">
                           <div class="col-md-12">
-
-                            <div easypiechart class="chart" options="chartOptions" percent="opportunity.current_stage.probability"></div>
-                            <div class="oppStage col-md-12">
-                              <span><%=opportunity.current_stage.name%></span><br>
-                              <span><%=opportunity.current_stage.probability%> %</span>
-
-                            </div>
-                          </div>
-                          <div class="col-md-12" style="border-left: 1px solid rgb(218, 218, 218);">
-                            <div class="row">
-                              <div class="col-md-12">
-                                <div class="oppDescription">
-                                  <h3>
-                                    <a href=""><%= opportunity.name %></a>
-                                  </h3>
-                                  <p class="description ellipsis">
-                                      <%= opportunity.description %>
-                                        <i></i>
-                                  </p>
+                            <div class="stage col-md-10 col-md-offset-1 ">
+                                <div easypiechart class="chart" options="chartOptions" percent="opportunity.current_stage.probability"></div>
+                                <div class="oppStage col-md-12">
+                                  <span><%=opportunity.current_stage.name%></span><br>
+                                  <span><%=opportunity.current_stage.probability%> %</span>
 
                                 </div>
-
-                              </div>
                             </div>
                           </div>
-                          <div class="col-md-12 col-sm-12 col-xs-6">
-                              <div class="oppPrice">
-                                <%= opportunity.currency %><%= opportunity.amount_total %>
-                                <p class="amount-details">
-                                    <%= opportunity.duration %> × <%= opportunity.amount_per_unit %>/<%= opportunity.duration_unit %>
-                                </p>
-                              </div>
+                          <div class="oppDetails">
+                            <div class="col-md-12" style="border-left: 1px solid rgb(218, 218, 218);">
+                              <div class="row">
+                                <div class="col-md-12">
+                                  <div class="oppDescription">
+                                    <h3>
+                                      <a href="/#/opportunities/show/<%= opportunity.id %>"><%= opportunity.name %></a>
+                                    </h3>
+                                    <p class="description ellipsis">
+                                        <%= opportunity.description %>
+                                          <i></i>
+                                    </p>
 
-                              <div class="oppEstDate">
-                                Estimated close date:
-                                <%= opportunity.duration %>
-                              </div>
+                                  </div>
 
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12 col-xs-6">
+                                <div class="oppPrice">
+                                  <%= opportunity.currency %><%= opportunity.amount_total %>
+                                  <p class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
+                                      <%= opportunity.duration %> × <%= opportunity.amount_per_unit %>/<%= opportunity.duration_unit %>
+                                  </p>
+                                </div>
+
+                                <div class="oppEstDate">
+                                  Estimated close date:
+                                </div>
+                                <div class="oppEstDate">
+                                  <%=opportunity.closed_date | date:'MMMM dd, yyyy'%>
+                                </div>
+
+                            </div>
                           </div>
                         </div>
                     </div>

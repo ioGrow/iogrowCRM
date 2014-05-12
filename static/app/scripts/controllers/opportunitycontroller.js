@@ -46,7 +46,7 @@ app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','
                 duration:0,
                 enabled:false
             },
-            size:57,
+            size:100,
             barColor:'#58a618',
             scaleColor:false,
             lineWidth:7,
