@@ -152,6 +152,9 @@ opportunityservices.factory('Opportunity', function($http) {
 
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
+                  var leftMargin=$(".chart").parent().width()-$(".chart").width();
+                  $(".chart").css( "left",leftMargin/2);
+                  $(".oppStage").css( "left",leftMargin/2-2);
               }else {
 
                 if(resp.code==401){

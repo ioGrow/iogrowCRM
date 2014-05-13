@@ -167,13 +167,25 @@
                   <div class="row">
                     <div class="col-md-6">
                       <div class="news-blocks blank-card blank-card-yellow newsCard">
-                        <h3>Opportunity Stage</h3>
+                        <h3>Opportunity Details</h3>
                         <div class="stage-chart-block">
-                          <div easypiechart class="chart" options="chartOptions" percent="opportunity.current_stage.probability"></div>
-                          <div class="oppStage">
-                            <span><%=opportunity.current_stage.name%></span><br>
-                            <span><%=opportunity.current_stage.probability%> %</span>
+                          <div class="col-md-5 ">
+                            <div class="stage" >
+                              <div easypiechart class="chart" options="chartOptions" percent="opportunity.current_stage.probability"></div>                         
+                              <div class="oppStage  col-md-12">
+                                <span><%=opportunity.current_stage.name%></span><br>
+                                <span><%=opportunity.current_stage.probability%> %</span>
+                              </div>
+                            </div>
                           </div>
+                           <div class="oppPrice col-md-7">
+                                  <span><%= opportunity.currency %></span>
+                                  <span><%= opportunity.amount_total %></span>
+                                  <p class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
+                                      <%= opportunity.duration %> × <%= opportunity.amount_per_unit %>/<%= opportunity.duration_unit %>
+                                  </p>
+                           </div>
+                          
                         </div>
                         <div class="row">
                           <div class="col-md-12">
@@ -181,15 +193,12 @@
 
                                 <div class="col-md-12">
 
-                                  <select ng-model="opportunity.currentStageSelect" ng-options="opps.name + ' - ( ' + opps.probability + '% )' for opps in opportunitystages | orderBy: 'name':true" class="form-control selector-margin" >
-                                    <option value="opportunity.currentStageSelect"><%=opportunity.current_stage.name%></option>
+                                  <select ng-model="opportunity.current_stage" ng-options="opps as opps.name + ' - ( ' + opps.probability + '% )'   for opps in opportunitystages track by opps.probability" class="form-control">
                                   </select>
                                 </div>
                             </div>
                           </div>
                         </div>
-
-
                       </div>
                       <div class="news-blocks blank-card blank-card-yellow newsCard">
                         <h3>Custom Fields</h3>
@@ -226,13 +235,7 @@
                     <div class="col-md-6">
                       <div class="right-col">
                         <div class="news-blocks blank-card blank-card-red newsCard">
-                          <h3>Opportunity Informations</h3>
-                          <div class="oppPrice">
-                            <%= opportunity.currency %><%= opportunity.amount_total %>
-                            <p class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
-                                <%= opportunity.duration %> × <%= opportunity.amount_per_unit %>/<%= opportunity.duration_unit %>
-                            </p>
-                          </div>
+                          <h3>Additional informations</h3>
                           <div class="news-block-tags">
                             <div class="form-group row">
                               <label class="control-label col-md-3">Description</label>
