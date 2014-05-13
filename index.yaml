@@ -496,6 +496,12 @@ indexes:
   - name: organization
   - name: probability
 
+- kind: Opportunitystage
+  properties:
+  - name: organization
+  - name: probability
+    direction: desc
+
 - kind: Show
   properties:
   - name: access
