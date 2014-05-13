@@ -1323,7 +1323,7 @@ $scope.CaselistNextPageItems = function(){
 //HKA 19.11.2013 Add Phone
  $scope.addPhone = function(phone){
  console.log('----------i am here on the Key---------');
- console.log(phone);
+ console.log(phone.type_number);
     params = {'parent':$scope.account.entityKey,
               'kind':'phones',
               'fields':[

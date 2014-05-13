@@ -265,7 +265,7 @@ app.directive('editoptions', function($compile) {
         $scope.data=attrs.editdataattr;
         var element=$(element).parent();
         $(element).mouseenter(function() {
-          console.log('enter');
+         
               if($(element).prop("tagName")=='LI'){
                     $(element).find(".page-meta").remove();
                      var el = $compile('<span class="page-meta"><a ng-click="'+$scope.data+'"  class="btn-link addAnotherPhone"><i class="fa fa-trash-o"></i></a></span>')($scope);
@@ -273,7 +273,7 @@ app.directive('editoptions', function($compile) {
                }
             });
          $(element).mouseleave(function() {
-          console.log('live');
+     
               if($(element).prop("tagName")=='LI'){
                 $(element).find(".page-meta").remove();
               }

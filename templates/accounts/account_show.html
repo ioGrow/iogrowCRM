@@ -1031,11 +1031,11 @@
                         <label  class="col-md-3 control-label">{{_("Type")}} </label>
                         <div class="col-md-9">
                           <!--input type="text" placeholder="{{_('home')}},{{_('work')}},{{_('mobile')}},{{_('other')}} ..." required id="id_name" ng-model="phone.type_number"-->
-                          <select ng-model="phone.type_number" class="form-control">
-                            <option >{{_('home')}}</option>
-                            <option>{{_('work')}}</option>
-                            <option>{{_('mobile')}}</option>
-                            <option>{{_('other')}}</option>
+                          <select ng-model="phone.type_number"  class="form-control">
+                            <option value="home">{{_('home')}}</option>
+                            <option value="work">{{_('work')}}</option>
+                            <option value="mobile">{{_('mobile')}}</option>
+                            <option value="other">{{_('other')}}</option>
 
                           </select>
                         </div>
