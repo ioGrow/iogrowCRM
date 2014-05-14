@@ -1,5 +1,5 @@
-app.controller('CaseListCtrl', ['$scope','Auth','Case','Account','Contact','Casestatus','Tag','Edge',
-    function($scope,Auth,Case,Account,Contact,Casestatus,Tag,Edge) {
+app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Contact','Casestatus','Tag','Edge',
+    function($scope,$filter,Auth,Case,Account,Contact,Casestatus,Tag,Edge) {
 
      document.title = "Cases: Home";
      $("ul.page-sidebar-menu li").removeClass("active");
@@ -479,11 +479,17 @@ $scope.addTags=function(){
           if ($scope.cases[index].tags == undefined){
             $scope.cases[index].tags = [];
           }
-          $scope.cases[index].tags.push(tag);
-          var card_index = '#card_'+index;
-          $(card_index).removeClass('over');
-
-          $scope.$apply();
+          var ind = $filter('exists')(tag, $scope.cases[index].tags);
+           if (ind == -1) {
+                $scope.cases[index].tags.push(tag);
+                var card_index = '#card_'+index;
+                $(card_index).removeClass('over');
+            }else{
+                 var card_index = '#card_'+index;
+                $(card_index).removeClass('over');
+            }
+            
+              $scope.$apply();
       };
 
   // HKA 12.03.2014 Pallet color on Tags

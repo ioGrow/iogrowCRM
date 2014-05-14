@@ -65,13 +65,13 @@
       <div class="tab-pane">
       <div class="row">
       <div class="col-md-12 waterfall" ng-hide="blankStateopportunity">
-         <div  ng-repeat="opportunity in opportunities"  class=" cardElement"  >
+         <div  ng-repeat="opportunity in opportunities"  droppable id="card_<%=$index%>"  class=" cardElement"  ng-drop="dropTag(opportunity,$index)" >
                   <div class="detailsSection">
                     <div class="head">
 
                         <div class="row">
-                          <div class="col-md-12">
-                            <div class="stage col-md-10 col-md-offset-1 ">
+                          <div class="col-md-12 col-xs-5">
+                            <div class="stage" >
                                 <div easypiechart class="chart" options="chartOptions" percent="opportunity.current_stage.probability"></div>
                                 <div class="oppStage col-md-12">
                                   <span><%=opportunity.current_stage.name%></span><br>
@@ -80,8 +80,8 @@
                                 </div>
                             </div>
                           </div>
-                          <div class="oppDetails">
-                            <div class="col-md-12" style="border-left: 1px solid rgb(218, 218, 218);">
+                          <div class="oppDetails col-md-12 col-xs-7">
+                            <div class="col-md-12">
                               <div class="row">
                                 <div class="col-md-12">
                                   <div class="oppDescription">
@@ -98,9 +98,10 @@
                                 </div>
                               </div>
                             </div>
-                            <div class="col-md-12 col-sm-12 col-xs-6">
+                            <div class="col-md-12 col-sm-12">
                                 <div class="oppPrice">
-                                  <%= opportunity.currency %><%= opportunity.amount_total %>
+                                  <span><%= opportunity.currency %></span>
+                                  <span><%= opportunity.amount_total %></span>
                                   <p class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
                                       <%= opportunity.duration %> × <%= opportunity.amount_per_unit %>/<%= opportunity.duration_unit %>
                                   </p>
@@ -118,9 +119,9 @@
                         </div>
                     </div>
                   </div>
-                  <div class="tagsSection" ng-class="{hidden: contact.tags==null}">
+                  <div class="tagsSection" ng-class="{hidden: opportunity.tags==null}">
                       <div class="sectionContent">
-                           <a ng-repeat="tag in contact.tags" href="/#/search/type:contact tags:<%=tag.id%>"> <span class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
+                           <a ng-repeat="tag in opportunity.tags" href="/#/search/type:opportunity tags:<%=tag.id%>"> <span class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
                            </a>
                       </div>
                   </div>
@@ -436,7 +437,7 @@
     }
     handleUniform();
     $('.waterfall').waterfall({ 
-        colMinWidth: 200, 
+        colMinWidth: 250, 
         defaultContainerWidth: 800,
         autoresize: true
       });

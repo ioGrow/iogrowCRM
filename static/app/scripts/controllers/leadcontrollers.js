@@ -1,5 +1,5 @@
-app.controller('LeadListCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
-    function($scope,Auth,Lead,Leadstatus,Tag,Edge) {
+app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','Tag','Edge',
+    function($scope,$filter,Auth,Lead,Leadstatus,Tag,Edge) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Leads").addClass("active");
       
@@ -403,11 +403,17 @@ $scope.addTags=function(){
           if ($scope.leads[index].tags == undefined){
             $scope.leads[index].tags = [];
           }
-          $scope.leads[index].tags.push(tag);
-          var card_index = '#card_'+index;
-          $(card_index).removeClass('over');
-
-          $scope.$apply();
+          var ind = $filter('exists')(tag, $scope.leads[index].tags);
+           if (ind == -1) {
+                $scope.leads[index].tags.push(tag);
+                var card_index = '#card_'+index;
+                $(card_index).removeClass('over');
+            }else{
+                 var card_index = '#card_'+index;
+                $(card_index).removeClass('over');
+            }
+            
+              $scope.$apply();
       };
 
   // HKA 12.03.2014 Pallet color on Tags
