@@ -630,25 +630,6 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
      $scope.editTrigger=function(name){
         name.$show();
      }
-     $scope.showOptions=function($event){
-        var element=$($event.target);
-        console.log(element);
-        if(element.prop("tagName")=='LI'){
-        var compiledElement = $compile(fieldHtml)($scope);
-        element.append('<span class="page-meta"><i class="icon-pencil"><a ng-click="test" class="btn-link addAnotherPhone" ></a></i></span><span class="page-meta"><i class="fa fa-trash-o"><a ng-click="deleteInfonode()" class="btn-link addAnotherPhone" ></a></i></span>');
-        }
-        element.find(".page-meta").remove();
-        element.append('<span class="page-meta"><i class="icon-pencil"><a ng-click="editintro()" class="btn-link addAnotherPhone" data-toggle="modal"></a></i></span><span class="page-meta"><i class="fa fa-trash-o" ><a ng-click="deleteInfonode()" class="btn-link addAnotherPhone" data-toggle="modal"></a></i></span>');
-     }
-     $scope.hideOptions=function($event){
-      var element=$($event.target);
-      console.log(element);
-       if(element.prop("tagName")=='LI'){
-         console.log('hide');
-        console.log(element);
-        element.find(".page-meta").remove();
-          }
-     };
   // HKA 08.05.2014 Delete infonode
 
   $scope.deleteInfonode = function(entityKey,kind){
@@ -1336,11 +1317,13 @@ $scope.CaselistNextPageItems = function(){
                'connections': kind
               };
      InfoNode.list($scope,params);
+      $scope.$apply();
 
  }
 //HKA 19.11.2013 Add Phone
  $scope.addPhone = function(phone){
-
+ console.log('----------i am here on the Key---------');
+ console.log(phone.type_number);
     params = {'parent':$scope.account.entityKey,
               'kind':'phones',
               'fields':[

@@ -262,19 +262,19 @@ app.directive('editoptions', function($compile) {
       restrict: 'A',
       require:'?ngModel',
        link: function($scope, element, attrs,ngModel) {
-        var el = element[0];
         $scope.data=attrs.editdataattr;
+        var element=$(element).parent();
         $(element).mouseenter(function() {
-          console.log('enter');
-              if($(element).prop("tagName")=='A'){
+         
+              if($(element).prop("tagName")=='LI'){
                     $(element).find(".page-meta").remove();
-                     var el = $compile('<span class="page-meta"><a ng-click="'+$scope.data+'" class="btn-link addAnotherPhone" ><i class="icon-pencil"></i></a></span><span class="page-meta"><a ng-click="deleteInfonode()" class="btn-link addAnotherPhone"><i class="fa fa-trash-o"></i></a></span>')($scope);
+                     var el = $compile('<span class="page-meta"><a ng-click="'+$scope.data+'"  class="btn-link addAnotherPhone"><i class="fa fa-trash-o"></i></a></span>')($scope);
                    $(element).append(el);
                }
             });
          $(element).mouseleave(function() {
-          console.log('live');
-              if($(element).prop("tagName")=='A'){
+     
+              if($(element).prop("tagName")=='LI'){
                 $(element).find(".page-meta").remove();
               }
         });
