@@ -810,14 +810,13 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
   };
 // 26.11.2013 Update Opportunity
  $scope.UpdateOpportunity = function(opportunity){
-  var params = {'id':$scope.opportunity.id,
+  var params = {
+                'id':$scope.opportunity.id,
                 'name':opportunity.name,
-                 'stagename':$scope.stage_selected.name,
-                 'stage_probability':$scope.stage_selected.probability,
-                'amount':opportunity.amount,
-                'description':opportunity.description};
+                'description':opportunity.description
+              };
 
-  console.log($scope.opportunity.stagename);
+  
   Opportunity.patch($scope,params);
 
  //$scope.$watch($scope.opportunity.stagename, $scope.createNote());
