@@ -211,12 +211,14 @@ opportunityservices.factory('Opportunity', function($http) {
       });
 };
 Opportunity.patch = function($scope,params) {
-
+        $scope.isLoading = true;
           gapi.client.crmengine.opportunities.patch(params).execute(function(resp) {
             if(!resp.code){
                $scope.opportunity = resp;
                $scope.opportunity.stagename= resp.stagename;
                // Call the method $apply to make the update on the scope
+                $scope.isLoading = false;
+                console.log("error");
                 $scope.$apply();
 
             }else {

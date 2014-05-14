@@ -1,5 +1,5 @@
-app.controller('ContactListCtrl', ['$scope','Auth','Account','Contact','Tag','Edge',
-    function($scope,Auth,Account,Contact,Tag,Edge) {
+app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact','Tag','Edge',
+    function($scope,$filter,Auth,Account,Contact,Tag,Edge) {
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Contacts").addClass("active");
 
@@ -431,11 +431,17 @@ $scope.addTags=function(){
           if ($scope.contacts[index].tags == undefined){
             $scope.contacts[index].tags = [];
           }
-          $scope.contacts[index].tags.push(tag);
-          var card_index = '#card_'+index;
-          $(card_index).removeClass('over');
-
-          $scope.$apply();
+           var ind = $filter('exists')(tag, $scope.contacts[index].tags);
+           if (ind == -1) {
+                $scope.contacts[index].tags.push(tag);
+                var card_index = '#card_'+index;
+                $(card_index).removeClass('over');
+            }else{
+                 var card_index = '#card_'+index;
+                $(card_index).removeClass('over');
+            }
+            
+              $scope.$apply();
       };
 
   // HKA 12.03.2014 Pallet color on Tags

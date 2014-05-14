@@ -65,7 +65,7 @@
       <div class="tab-pane">
       <div class="row">
       <div class="col-md-12 waterfall" ng-hide="blankStateopportunity">
-         <div  ng-repeat="opportunity in opportunities"  class=" cardElement"  >
+         <div  ng-repeat="opportunity in opportunities"  droppable id="card_<%=$index%>"  class=" cardElement"  ng-drop="dropTag(opportunity,$index)" >
                   <div class="detailsSection">
                     <div class="head">
 
@@ -119,9 +119,9 @@
                         </div>
                     </div>
                   </div>
-                  <div class="tagsSection" ng-class="{hidden: contact.tags==null}">
+                  <div class="tagsSection" ng-class="{hidden: opportunity.tags==null}">
                       <div class="sectionContent">
-                           <a ng-repeat="tag in contact.tags" href="/#/search/type:contact tags:<%=tag.id%>"> <span class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
+                           <a ng-repeat="tag in opportunity.tags" href="/#/search/type:opportunity tags:<%=tag.id%>"> <span class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
                            </a>
                       </div>
                   </div>

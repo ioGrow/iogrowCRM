@@ -1,5 +1,5 @@
-app.controller('OpportunityListCtrl', ['$scope','Auth','Account','Opportunity','Opportunitystage','Search','Tag','Edge',
-    function($scope,Auth,Account,Opportunity,Opportunitystage,Search,Tag,Edge) {
+app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Opportunity','Opportunitystage','Search','Tag','Edge',
+    function($scope,$filter,Auth,Account,Opportunity,Opportunitystage,Search,Tag,Edge) {
      $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Opportunities").addClass("active");
      document.title = "Opportunities: Home";
@@ -447,29 +447,35 @@ $scope.addTags=function(){
       };
       $scope.dragTag=function(tag){
         $scope.draggedTag=tag;
-
-        $scope.$apply();
       }
       $scope.dropTag=function(opportunity,index){
+        console.log("droooooooooooooooop");
         var items = [];
 
         var params = {
               'parent': opportunity.entityKey,
               'tag_key': $scope.draggedTag.entityKey
         };
+        console.log(params);
         $scope.draggedTag=null;
         Tag.attach($scope,params,index);
 
       };
-      $scope.tagattached=function(tag,index){
+       $scope.tagattached=function(tag,index){
           if ($scope.opportunities[index].tags == undefined){
             $scope.opportunities[index].tags = [];
           }
-          $scope.opportunities[index].tags.push(tag);
-          var card_index = '#card_'+index;
-          $(card_index).removeClass('over');
-
-          $scope.$apply();
+          var ind = $filter('exists')(tag, $scope.opportunities[index].tags);
+         if (ind == -1) {
+              $scope.opportunities[index].tags.push(tag);
+              var card_index = '#card_'+index;
+              $(card_index).removeClass('over');
+          }else{
+               var card_index = '#card_'+index;
+              $(card_index).removeClass('over');
+          }
+          
+              $scope.$apply();
       };
 
      // HKA 12.03.2014 Pallet color on Tags
@@ -559,9 +565,18 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
           Opportunitystage.list($scope,{'order':'probability'});
        };
         // We need to call this to refresh token when user credentials are invalid
-       $scope.refreshToken = function() {
-            Auth.refreshToken();
-       };
+     $scope.refreshToken = function() {
+          Auth.refreshToken();
+     };
+      $scope.beforedeleteOpportunity = function(){
+          $('#BeforedeleteOpportunity').modal('show');
+      }
+      $scope.deleteopportunity = function(){
+           var opportunityKey = {'entityKey':$scope.opportunity.entityKey};
+           Opportunity.delete($scope,opportunityKey);
+
+           $('#BeforedeleteOpportunity').modal('hide');
+      };
      //HKA 09.11.2013 Add a new Task
      $scope.addTask = function(task){
 
@@ -604,7 +619,12 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
 
       $('#EditOpportunityModal').modal('show')
      }
-
+     $scope.updateOpportunity=function(params){
+      console.log("test");
+      console.log(params);
+      Opportunity.patch($scope,params);
+     }
+     
      $scope.TopiclistNextPageItems = function(){
 
 
