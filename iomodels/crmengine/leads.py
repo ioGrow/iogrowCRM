@@ -545,7 +545,8 @@ class Lead(EndpointsModel):
         import_request = LeadInsertRequest(
                                           firstname = twitter_lead.name.split()[0],
                                           lastname = " ".join(twitter_lead.name.split()[1:]),
-                                          introduction = twitter_lead.description
+                                          introduction = twitter_lead.description,
+                                          profile_img_url = twitter_lead.profile_image_url
                                           )
         lead = cls.insert(user_from_email,import_request)
         return lead
