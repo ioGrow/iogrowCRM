@@ -46,7 +46,7 @@
             <div class="col-md-2" ng-mouseenter="showUpload= true" ng-mouseleave="showUpload = false">
               <div class="pic">
                   <img alt="<%=account.name%>" class=" img-responsive img-thumbnail" ng-src="<%=imageSrc%>">
-               </div>
+              </div>
                <a ng-show="showUpload" ng-click="createPickerUploader()" href="" class="btn btn-default btn-upload" data-toggle="modal" style="display: none;">
                  <img src="/static/img/upload_logo.png">
                </a>
@@ -562,7 +562,7 @@
                                                   </div>
                                                   <div class="visible-xs col-xs-6">
                                                     <div easypiechart class="chart" options="chartOptions" percent="opportunity.current_stage.probability">
-                                                      
+
                                                     </div>
                                                   </div>
                                                   <div class="col-md-3 col-sm-3 col-xs-6">

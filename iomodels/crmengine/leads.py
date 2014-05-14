@@ -2,7 +2,7 @@ import endpoints
 from google.appengine.ext import ndb
 from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
-from google.appengine.api import search 
+from google.appengine.api import search
 from endpoints_proto_datastore.ndb import EndpointsModel
 from protorpc import messages
 from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
@@ -17,7 +17,11 @@ from iomodels.crmengine.contacts import Contact
 from iomodels.crmengine.accounts import Account
 import model
 import iomessages
+import tweepy
 
+
+class LeadFromTwitterRequest(messages.Message):
+    user_id = messages.IntegerField(1,required=True)
 
 
 class LeadInsertRequest(messages.Message):
@@ -34,6 +38,8 @@ class LeadInsertRequest(messages.Message):
     emails = messages.MessageField(iomessages.EmailSchema,11, repeated = True)
     addresses = messages.MessageField(iomessages.AddressSchema,12, repeated = True)
     infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema,13, repeated = True)
+    profile_img_id = messages.StringField(14)
+    profile_img_url = messages.StringField(15)
 
  # The message class that defines the ListRequest schema
 class ListRequest(messages.Message):
@@ -46,7 +52,7 @@ class LeadGetRequest(messages.Message):
     tasks = messages.MessageField(ListRequest, 3)
     events = messages.MessageField(ListRequest, 4)
     documents = messages.MessageField(ListRequest, 5)
-    
+
 class LeadSchema(messages.Message):
     id = messages.StringField(1)
     entityKey = messages.StringField(2)
@@ -67,6 +73,9 @@ class LeadSchema(messages.Message):
     created_at = messages.StringField(17)
     updated_at = messages.StringField(18)
     access = messages.StringField(19)
+    folder = messages.StringField(20)
+    profile_img_id = messages.StringField(21)
+    profile_img_url = messages.StringField(22)
 
 class LeadListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -121,7 +130,9 @@ class Lead(EndpointsModel):
     access = ndb.StringProperty()
     tagline = ndb.StringProperty()
     introduction = ndb.StringProperty()
-    
+    profile_img_id = ndb.StringProperty()
+    profile_img_url = ndb.StringProperty()
+
 
 
     def put(self, **kwargs):
@@ -265,6 +276,8 @@ class Lead(EndpointsModel):
                                   events = events,
                                   documents = documents,
                                   infonodes = infonodes,
+                                  profile_img_id = lead.profile_img_id,
+                                  profile_img_url = lead.profile_img_url,
                                   created_at = lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
@@ -320,6 +333,8 @@ class Lead(EndpointsModel):
                                   title = lead.title,
                                   company = lead.company,
                                   tags = tag_list,
+                                  profile_img_id = lead.profile_img_id,
+                                  profile_img_url = lead.profile_img_url,
                                   created_at = lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
@@ -385,7 +400,7 @@ class Lead(EndpointsModel):
                                       ]:
                             kwargs[e.name] = e.value
                     search_results.append(LeadSearchResult(**kwargs))
-                    
+
         except search.Error:
             logging.exception('Search failed')
         return LeadSearchResults(
@@ -407,7 +422,9 @@ class Lead(EndpointsModel):
                     introduction = request.introduction,
                     owner = user_from_email.google_user_id,
                     organization = user_from_email.organization,
-                    access = request.access
+                    access = request.access,
+                    profile_img_id = request.profile_img_id,
+                    profile_img_url = request.profile_img_url
                     )
         lead_key = lead.put_async()
         lead_key_async = lead_key.get_result()
@@ -484,12 +501,13 @@ class Lead(EndpointsModel):
                                                 )
 
         taskqueue.add(
-                    url='/workers/createobjectfolder', 
+                    url='/workers/createobjectfolder',
                     params={
                             'kind': "Lead",
                             'folder_name': folder_name,
                             'email': user_from_email.email,
-                            'obj_key':lead_key_async.urlsafe()
+                            'obj_key':lead_key_async.urlsafe(),
+                            'logo_img_id':request.profile_img_id
                             }
                     )
         data = {}
@@ -508,7 +526,29 @@ class Lead(EndpointsModel):
                                   updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
         return lead_schema
-    
+    @classmethod
+    def from_twitter(cls,user_from_email,request):
+        try:
+            credentials = {
+            	'consumer_key' : 'YM7Glbdf9M9WyaaKh6DNOQ',
+            	'consumer_secret' : 'CGDvSvuohsJF1YUJwDFc3EsuTg8BQvHplsYiv7h6Uw',
+            	'access_token_key' : '50290670-HYBgH5DOmLB2LqRB1NXkA2Y28bMCfi5a0yvq9YWUw',
+            	'access_token_secret' : 'UfehG5RWaTNZTwCEERImSeUVwVlXM6mY1ly3lYjiWaqIc'
+            }
+            auth = tweepy.OAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
+            auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
+            api = tweepy.API(auth)
+            twitter_lead = api.get_user(user_id=request.user_id)
+        except (IndexError, TypeError):
+            raise endpoints.NotFoundException('an error has occured try again' %
+                                                  (request.screen_name,))
+        import_request = LeadInsertRequest(
+                                          firstname = twitter_lead.name.split()[0],
+                                          lastname = " ".join(twitter_lead.name.split()[1:]),
+                                          introduction = twitter_lead.description
+                                          )
+        lead = cls.insert(user_from_email,import_request)
+        return lead
     @classmethod
     def convert(cls,user_from_email,request):
         try:
@@ -562,5 +602,3 @@ class Lead(EndpointsModel):
         lead.key.delete()
         EndpointsHelper.delete_document_from_index( id = request.id )
         return LeadSchema(id = str(contact_key_async.id()) )
-
-

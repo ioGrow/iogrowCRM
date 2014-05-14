@@ -41,7 +41,7 @@ from iomodels.crmengine.opportunities import Opportunity,OpportunitySchema,Oppor
 from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema
 from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest
 from iomodels.crmengine.shows import Show
-from iomodels.crmengine.leads import Lead,LeadInsertRequest,LeadListRequest,LeadListResponse,LeadSearchResults,LeadGetRequest,LeadSchema
+from iomodels.crmengine.leads import Lead,LeadFromTwitterRequest,LeadInsertRequest,LeadListRequest,LeadListResponse,LeadSearchResults,LeadGetRequest,LeadSchema
 from iomodels.crmengine.cases import Case,CaseGetRequest,CaseInsertRequest,CaseSchema,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
 #from iomodels.crmengine.products import Product
 from iomodels.crmengine.comments import Comment
@@ -589,7 +589,7 @@ class CrmEngineApi(remote.Service):
         entityKey = ndb.Key(urlsafe=request.entityKey)
         Edge.delete_all_cascade(start_node = entityKey)
         return message_types.VoidMessage()
-    
+
 
     # casestatuses.get api
     @Casestatus.method(
@@ -779,7 +779,7 @@ class CrmEngineApi(remote.Service):
             return message_types.VoidMessage()
         else:
             raise endpoints.UnauthorizedException('You don\'t have permissions.')
-    
+
 
     # contacts.insertv2 api
     @endpoints.method(ContactInsertRequest, ContactSchema,
@@ -857,8 +857,8 @@ class CrmEngineApi(remote.Service):
                             user_from_email = user_from_email,
                             request = request
                             )
-    
-    
+
+
 
     # Contributors APIs
     # contributors.insert API
@@ -1024,7 +1024,7 @@ class CrmEngineApi(remote.Service):
         return message_types.VoidMessage()
 
     # Events APIs
-    
+
     # events.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
                       path='events', http_method='DELETE',
@@ -1177,6 +1177,16 @@ class CrmEngineApi(remote.Service):
         lead.key.delete()
         return ConvertedLead(id = contact.key.id())
 
+    # leads.insertv2 api
+    @endpoints.method(LeadFromTwitterRequest, LeadSchema,
+                      path='leads/from_twitter', http_method='POST',
+                      name='leads.from_twitter')
+    def lead_from_twitter(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Lead.from_twitter(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
     # leads.get api v2
     @endpoints.method(LeadGetRequest, LeadSchema,
                       path='leads/getv2', http_method='POST',
@@ -1198,6 +1208,7 @@ class CrmEngineApi(remote.Service):
                             user_from_email = user_from_email,
                             request = request
                             )
+
 
     # leads.list api v2
     @endpoints.method(LeadListRequest, LeadListResponse,
@@ -1247,7 +1258,7 @@ class CrmEngineApi(remote.Service):
         Edge.delete_all_cascade(start_node = entityKey)
         return message_types.VoidMessage()
 
-   
+
 
     # leadstatuses.get api
     @Leadstatus.method(
@@ -1559,7 +1570,7 @@ class CrmEngineApi(remote.Service):
             return message_types.VoidMessage()
         else:
             raise endpoints.UnauthorizedException('You don\'t have permissions.')
-    
+
     # opportunities.get api v2
     @endpoints.method(OpportunityGetRequest, OpportunitySchema,
                       path='opportunities/getv2', http_method='POST',
@@ -1631,7 +1642,7 @@ class CrmEngineApi(remote.Service):
         Edge.delete_all_cascade(start_node = entityKey)
         return message_types.VoidMessage()
 
-   
+
 
     # opportunitystages.get api
     @Opportunitystage.method(
@@ -1721,8 +1732,8 @@ class CrmEngineApi(remote.Service):
                                             parent_key = about_key,
                                             kind = 'collaborators',
                                             indexed_edge = indexed_edge
-                                            )  
-                        shared_with_user = None       
+                                            )
+                        shared_with_user = None
             elif item.type == 'group':
                 pass
                 # get the group
@@ -1889,7 +1900,7 @@ class CrmEngineApi(remote.Service):
         mail.send_mail(sender_address, my_model.email , subject, body)
         return my_model
 
-    
+
     # users.list api v2
     @endpoints.method(message_types.VoidMessage, iomessages.UserListSchema,
                       path='users/list', http_method='POST',
@@ -1917,4 +1928,3 @@ class CrmEngineApi(remote.Service):
                 exec('patched_model.' + p + '= my_model.' + p)
         patched_model.put()
         return patched_model
-    
