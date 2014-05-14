@@ -232,23 +232,24 @@ class Node(ndb.Expando):
         connections_dict = {}
         for edge in edge_list['items']:
             node = edge.end_node.get()
-            if node.kind not in connections_dict.keys():
-                connections_dict[node.kind] = []
-            node_fields = []
-            for key, value in node.to_dict().iteritems():
-                if key not in['kind', 'created_at', 'updated_at']:
-                    record = RecordSchema(
-                                          field = key,
-                                          value = node.to_dict()[key]
-                                          )
-                    node_fields.append(record)
-            info_node = InfoNodeResponse(
-                                         id = str(node.key.id()),
-                                         entityKey = node.key.urlsafe(),
-                                         kind = node.kind,
-                                         fields = node_fields
-                                         )
-            connections_dict[node.kind].append(info_node)
+            if node is not None:
+                if node.kind not in connections_dict.keys():
+                    connections_dict[node.kind] = []
+                node_fields = []
+                for key, value in node.to_dict().iteritems():
+                    if key not in['kind', 'created_at', 'updated_at']:
+                        record = RecordSchema(
+                                              field = key,
+                                              value = node.to_dict()[key]
+                                              )
+                        node_fields.append(record)
+                info_node = InfoNodeResponse(
+                                             id = str(node.key.id()),
+                                             entityKey = node.key.urlsafe(),
+                                             kind = node.kind,
+                                             fields = node_fields
+                                             )
+                connections_dict[node.kind].append(info_node)
         connections_list = []
         for key, value in connections_dict.iteritems():
             infonodeconnection = InfoNodeConnectionSchema(

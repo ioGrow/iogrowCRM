@@ -1,5 +1,5 @@
 from google.appengine.ext import ndb
-from google.appengine.api import search 
+from google.appengine.api import search
 from protorpc import messages
 from endpoints_proto_datastore.ndb import EndpointsModel
 from model import Userinfo
@@ -49,7 +49,7 @@ class TopicListResponse(messages.Message):
 class Topic(EndpointsModel):
 
     _message_fields_schema = ('id','title','entityKey','last_updater','updated_at','excerpt','discussionId','created_at')
-    
+
 
     last_updater = ndb.StructuredProperty(Userinfo)
 
@@ -93,7 +93,7 @@ class Note(EndpointsModel):
     # public or private
     access = ndb.StringProperty()
 
-    
+
     def put(self, **kwargs):
         ndb.Model.put(self, **kwargs)
         self._setup()
@@ -180,7 +180,7 @@ class Note(EndpointsModel):
                     about_name = parent.firstname + ' ' + parent.lastname
                 else:
                     about_name = parent.name
-                about = DiscussionAboutSchema(  
+                about = DiscussionAboutSchema(
                                                 kind=about_kind,
                                                 id=str(parent.key.id()),
                                                 name=about_name
@@ -196,7 +196,7 @@ class Note(EndpointsModel):
                                     updated_at = note.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
         return note_schema
-                           
+
 
     @classmethod
     def list_by_parent(cls,parent_key,request):
@@ -212,7 +212,10 @@ class Note(EndpointsModel):
             if end_node.key.kind() == 'Note':
                 if end_node.comments == 0:
                     last_updater = end_node.author
-                    excerpt = end_node.content[0:100]
+                    excerpt = None
+                    if end_node.content:
+                        excerpt = end_node.content[0:100]
+
                 else:
                     # get the last comment
                     comments_edge_list = Edge.list(
@@ -223,7 +226,9 @@ class Note(EndpointsModel):
                     if len(comments_edge_list['items'])>0:
                             last_comment = comments_edge_list['items'][0].end_node.get()
                             last_updater = last_comment.author
-                            excerpt = last_comment.content[0:100]
+                            excerpt = None
+                            if last_comment.content:
+                                excerpt = last_comment.content[0:100]
             else:
                 # get the last comment
                 comments_edge_list = Edge.list(
@@ -234,7 +239,9 @@ class Note(EndpointsModel):
                 if len(comments_edge_list['items'])>0:
                         last_comment = comments_edge_list['items'][0].end_node.get()
                         last_updater = last_comment.author
-                        excerpt = last_comment.content[0:100]
+                        excerpt = None
+                        if last_comment.content:
+                            excerpt = last_comment.content[0:100]
 
             author = AuthorSchema(
                                 google_user_id = last_updater.google_user_id,
@@ -264,7 +271,7 @@ class Note(EndpointsModel):
                                 )
 
 
-    # Attach a topic to this note  
+    # Attach a topic to this note
     def _setup(self):
         topic = Topic()
         topic.last_updater = self.author
@@ -277,8 +284,3 @@ class Note(EndpointsModel):
         topic.discussionId = str(self.key.id())
         topic.organization = self.organization
         topic.put()
-
-
-
-
-  
