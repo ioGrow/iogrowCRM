@@ -237,7 +237,7 @@
                                         </form>
                                       </div>
                             </li>
-                          <li ng-repeat="phone in infonodes.phones"> <a editable-text="phone.number" onbeforesave="inlinePatch('Infonode','phones', 'number',phone.entityKey,$data)"> <%=phone.number%> </a> - <a editable-select="phone.type" e-ng-options="s.value as s.text for s in statuses" onbeforesave="inlinePatch('Infonode','phones', 'type',phone.entityKey,$data)"> <%=phone.type%> </a> <a ><img class="ctodeal"  /></a></li>
+                          <li ng-repeat="phone in infonodes.phones"> <a editable-text="phone.number" editoptions editdataattr="deleteInfonode('<%=phone.entityKey%>','phones')" onbeforesave="inlinePatch('Infonode','phones', 'number',phone.entityKey,$data)"> <%=phone.number%> </a> - <a editable-select="phone.type" e-ng-options="s.value as s.text for s in statuses" onbeforesave="inlinePatch('Infonode','phones', 'type',phone.entityKey,$data)"> <%=phone.type%> </a> <a ><img class="ctodeal"  /></a></li>
                           <li>
                             <a ng-hide="showPhoneForm" ng-click="showPhoneForm=true" class="btn-link addAnotherPhone" ><i class="icon-plus"></i>Add a new Phone</a>
                           </li>
@@ -259,7 +259,7 @@
                                           </form>
                                         </div>
                           </li>
-                        <li ng-repeat="email in infonodes.emails"> <a editable-text="email.email" onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)"> <%=email.email %>  </a> </li>
+                        <li ng-repeat="email in infonodes.emails"> <a editable-text="email.email" editoptions editdataattr="deleteInfonode('<%=email.entityKey%>','emails')"  onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)"> <%=email.email %>  </a> </li>
                           <li>
                             <a class="btn-link addAnotherPhone" ng-hide="showEmailForm" ng-click="showEmailForm=true"><i class="icon-plus"></i> Add a new email address </a>
                           </li>
@@ -269,7 +269,7 @@
                           <strong>Address</strong>
                         </div>
                         <ul class="list-unstyled contact-infos">
-                           <li ng-repeat="address in infonodes.addresses">- <span editable-text="address.country" onbeforesave="inlinePatch('Infonode','addresses', 'street',address.entityKey,$data)" ng-show="address.street"><%=address.street%>, </span> <span editable-text="address.city" onbeforesave="inlinePatch('Infonode','addresses', 'city',address.entityKey,$data)" ng-show="address.city"><%=address.city%>, </span> <span editable-text="address.country" onbeforesave="inlinePatch('Infonode','addresses', 'country',address.entityKey,$data)" ng-show="address.country"><%=address.country%></span></li>
+                           <li ng-repeat="address in infonodes.addresses">- <span editable-text="address.country" editoptions editdataattr="deleteInfonode('<%=address.entityKey%>','addresses')"  onbeforesave="inlinePatch('Infonode','addresses', 'street',address.entityKey,$data)" ng-show="address.street"><%=address.street%>, </span> <span editable-text="address.city" onbeforesave="inlinePatch('Infonode','addresses', 'city',address.entityKey,$data)" ng-show="address.city"><%=address.city%>, </span> <span editable-text="address.country" onbeforesave="inlinePatch('Infonode','addresses', 'country',address.entityKey,$data)" ng-show="address.country"><%=address.country%></span></li>
                           <li>
                             <a href="#addressmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new address </a>
                           </li>
@@ -294,7 +294,7 @@
                                         </form>
                                       </div>
                             </li>
-                          <li ng-repeat="website in infonodes.websites"><a editable-text="website.url" onbeforesave="inlinePatch('Infonode','websites', 'url',website.entityKey,$data)" href="http://<%=website.url%>"  target="_blank" ><%=website.url%></a> </li>
+                          <li ng-repeat="website in infonodes.websites"><a editable-text="website.url" onbeforesave="inlinePatch('Infonode','websites', 'url',website.entityKey,$data)" href="http://<%=website.url%>"  target="_blank" editoptions editdataattr="deleteInfonode('<%=website.entityKey%>','websites')" ><%=website.url%></a> </li>
                           <li>
                                <a  ng-hide="showWebsiteForm" ng-click="showWebsiteForm=true" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new Website </a>
                           </li>
@@ -315,7 +315,7 @@
                                             </form>
                                           </div>
                             </li>
-                          <li ng-repeat="sociallink in infonodes.sociallinks"><a editable-text="sociallink.url" onbeforesave="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,$data)" href="<%=sociallink.url%>" target="_blank"> <%=sociallink.url%> </a></li>
+                          <li ng-repeat="sociallink in infonodes.sociallinks"><a editable-text="sociallink.url" onbeforesave="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,$data)" href="<%=sociallink.url%>" target="_blank" editoptions editdataattr="deleteInfonode('<%=sociallink.entityKey%>','sociallinks')"> <%=sociallink.url%> </a></li>
                           <li>
                             <a class="btn-link addAnotherPhone" ng-hide="showSociallinkForm" ng-click="showSociallinkForm=true"><i class="icon-plus"></i> Add a new social links </a>
                           </li>
@@ -341,7 +341,7 @@
                                           </div>
                           </li>
                           <li ng-repeat="custom in infonodes.customfields">
-                                    <span>
+                                    <span editoptions editdataattr="deleteInfonode('<%=custom.entityKey%>','customfields')">
                                     <%= custom.fields[0].field%>  : <%= custom.fields[0].value%> </span>
 
                           </li>

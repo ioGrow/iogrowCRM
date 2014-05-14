@@ -501,6 +501,15 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
               Auth.refreshToken();
       };
       
+      // HKA 08.05.2014 Delete infonode
+
+  $scope.deleteInfonode = function(entityKey,kind){
+    var params = {'entityKey':entityKey,'kind':kind};
+
+    InfoNode.delete($scope,params);
+
+  };
+
      $scope.TopiclistNextPageItems = function(){
         
          
