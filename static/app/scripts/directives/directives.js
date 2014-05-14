@@ -223,6 +223,7 @@ app.directive('draggable', function() {
         );
     }
 });
+
 app.directive('droppable', function() {
     return function(scope, element) {
         var el = element[0];
@@ -255,6 +256,30 @@ app.directive('droppable', function() {
             false
         );
     }
+});
+app.directive('editoptions', function($compile) {
+      return {
+      restrict: 'A',
+      require:'?ngModel',
+       link: function($scope, element, attrs,ngModel) {
+        $scope.data=attrs.editdataattr;
+        var element=$(element).parent();
+        $(element).mouseenter(function() {
+         
+              if($(element).prop("tagName")=='LI'){
+                    $(element).find(".page-meta").remove();
+                     var el = $compile('<span class="page-meta"><a ng-click="'+$scope.data+'"  class="btn-link addAnotherPhone"><i class="fa fa-trash-o"></i></a></span>')($scope);
+                   $(element).append(el);
+               }
+            });
+         $(element).mouseleave(function() {
+     
+              if($(element).prop("tagName")=='LI'){
+                $(element).find(".page-meta").remove();
+              }
+        });
+    }
+  }
 });
 app.directive('taggable', ['$parse',function($parse) {
     return {

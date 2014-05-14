@@ -510,8 +510,8 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
                   };
 
 
-
-        $scope.percent = 65;
+        $scope.editdata={'edit':'test()'};
+        $scope.percent = 0;
         $scope.chartOptions = {
             animate:{
                 duration:0,
@@ -573,6 +573,9 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
 
        };
 
+       $scope.test=function(email){
+        console.log(email);
+       };
        $scope.preparePercent = function(percent){
 
             return parseInt(percent);
@@ -627,20 +630,11 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
      $scope.editTrigger=function(name){
         name.$show();
      }
-     $scope.showOptions=function($event){
-        var element=$($event.target);
-        element.find(".page-meta").remove();
-        element.find(".page-meta").remove();
-        element.append('<span class="page-meta"><i class="icon-pencil"><a ng-click="editintro()" class="btn-link addAnotherPhone" data-toggle="modal"></a></i></span><span class="page-meta"><i class="fa fa-trash-o" ><a ng-click="deleteInfonode()" class="btn-link addAnotherPhone" data-toggle="modal"></a></i></span>');
-     }
-     $scope.hideOptions=function($event){
-        var element=$($event.target);
-        element.find(".page-meta").remove();
-     };
   // HKA 08.05.2014 Delete infonode
-  $scope.deleteInfonode = function(info){
 
-    var params = {'entityKey':info.entityKey};
+  $scope.deleteInfonode = function(entityKey,kind){
+    var params = {'entityKey':entityKey,'kind':kind};
+
     InfoNode.delete($scope,params);
 
   };
@@ -1323,11 +1317,13 @@ $scope.CaselistNextPageItems = function(){
                'connections': kind
               };
      InfoNode.list($scope,params);
+      $scope.$apply();
 
  }
 //HKA 19.11.2013 Add Phone
  $scope.addPhone = function(phone){
-
+ console.log('----------i am here on the Key---------');
+ console.log(phone.type_number);
     params = {'parent':$scope.account.entityKey,
               'kind':'phones',
               'fields':[
@@ -1380,10 +1376,8 @@ $scope.addEmail = function(email){
             ]
   };
   InfoNode.insert($scope,params);
-
   $scope.email={};
   $scope.showEmailForm = false;
-
   };
 
 

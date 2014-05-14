@@ -1016,10 +1016,11 @@ $scope.updatContactHeader = function(contact){
   };
   InfoNode.insert($scope,params);
     $scope.phone={};
+    $scope.phone.type= 'work';
     $scope.showPhoneForm=false;
   };
 $scope.listInfonodes = function(kind) {
-    console.log($scope.contact.entityKey);
+    
      params = {'parent':$scope.contact.entityKey,
                'connections': kind
               };
@@ -1371,7 +1372,14 @@ $scope.updateintro = function(contact){
           } 
           InfoNode.insert($scope,params);
       };
+  // HKA 13.05.2014 Delete infonode
 
+  $scope.deleteInfonode = function(entityKey,kind){
+    var params = {'entityKey':entityKey,'kind':kind};
+
+    InfoNode.delete($scope,params);
+
+  };
        //HKA 04.05.2014 To push element
   $scope.pushElement=function(elem,arr){
     console.log('Push Element -------------');
