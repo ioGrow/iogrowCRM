@@ -479,7 +479,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        $scope.status_selected={};
        $scope.infonodes = {};
        $scope.phone={};
-       $scope.phone.type_number='work';
+       $scope.phone.type= 'work';
        $scope.need = {};
        $scope.need.need_status = 'pending';
        $scope.need.priority = 'Medium';
@@ -1340,14 +1340,13 @@ $scope.CaselistNextPageItems = function(){
  }
 //HKA 19.11.2013 Add Phone
  $scope.addPhone = function(phone){
- console.log('----------i am here on the Key---------');
- console.log(phone.type_number);
+
     params = {'parent':$scope.account.entityKey,
               'kind':'phones',
               'fields':[
                   {
                     "field": "type",
-                    "value": phone.type_number
+                    "value": phone.type
                   },
                   {
                     "field": "number",
@@ -1356,7 +1355,10 @@ $scope.CaselistNextPageItems = function(){
               ]
     };
     InfoNode.insert($scope,params);
-      $scope.phone = {};
+
+      $scope.phone={};
+       $scope.phone.type= 'work'; 
+
       $scope.showPhoneForm=false;
 
 
