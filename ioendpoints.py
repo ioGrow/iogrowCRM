@@ -37,7 +37,7 @@ from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertR
 from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema,NoteSchema
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
-from iomodels.crmengine.opportunities import Opportunity,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest
+from iomodels.crmengine.opportunities import Opportunity,UpdateStageRequest,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest
 from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema
 from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest
 from iomodels.crmengine.shows import Show
@@ -1630,6 +1630,17 @@ class CrmEngineApi(remote.Service):
                                 user_from_email = user_from_email,
                                 request = request
                                 )
+    # opportunities.update_stage api
+    @endpoints.method(UpdateStageRequest, message_types.VoidMessage,
+                      path='opportunities.update_stage', http_method='POST',
+                      name='opportunities.update_stage')
+    def opportunity_update_stage(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        Opportunity.update_stage(
+                                user_from_email = user_from_email,
+                                request = request
+                                )
+        return message_types.VoidMessage()
 
     # Opportunity stages APIs
     # opportunitystage.delete api

@@ -17,6 +17,9 @@ import model
 import iomessages
 import datetime
 
+class UpdateStageRequest(messages.Message):
+    entityKey = messages.StringField(1,required=True)
+    stage = messages.StringField(2,required=True)
 
 class AccountSchema(messages.Message):
     id = messages.StringField(1)
@@ -651,3 +654,12 @@ class Opportunity(EndpointsModel):
                                   updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
         return opportunity_schema
+    @classmethod
+    def update_stage(cls,user_from_email,request):
+        opportunity_key =  ndb.Key(urlsafe=request.entityKey)
+        stage_key = ndb.Key(urlsafe=request.stage)
+        # insert edges
+        Edge.insert(start_node = opportunity_key,
+                  end_node = stage_key,
+                  kind = 'stages',
+                  inverse_edge = 'related_opportunities')
