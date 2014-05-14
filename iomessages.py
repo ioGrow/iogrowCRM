@@ -1,5 +1,12 @@
 from protorpc import messages
 
+class ContactSchema(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    firstname = messages.StringField(3)
+    lastname = messages.StringField(4)
+    title = messages.StringField(6)
+
 class PhoneSchema(messages.Message):
     type = messages.StringField(1)
     number = messages.StringField(2,required=True)
@@ -29,7 +36,7 @@ class RecordSchema(messages.Message):
     value = messages.StringField(2)
     property_type = messages.StringField(3, default='StringProperty')
     is_indexed = messages.BooleanField(4)
-    
+
 class InfoNodeRequestSchema(messages.Message):
     kind = messages.StringField(1, required=True)
     fields = messages.MessageField(RecordSchema, 2, repeated=True)

@@ -71,8 +71,8 @@ class AccountListRequest(messages.Message):
     order = messages.StringField(3)
     tags = messages.StringField(4,repeated = True)
     owner = messages.StringField(5)
-    
-    
+
+
 
 
 class AccountListResponse(messages.Message):
@@ -131,7 +131,7 @@ class Account(EndpointsModel):
     logo_img_id = ndb.StringProperty()
     logo_img_url = ndb.StringProperty()
 
-    
+
 
 
     def put(self, **kwargs):
@@ -155,7 +155,7 @@ class Account(EndpointsModel):
         collaborators = " ".join(self.collaborators_ids)
         organization = str(self.organization.id())
         title_autocomplete = ','.join(tokenize_autocomplete(self.name))
-        
+
         #addresses = " \n".join(map(lambda x: " ".join([x.street,x.city,x.state, str(x.postal_code), x.country]) if x else "", self.addresses))
         if data:
             search_key = ['infos','tags','collaborators']
@@ -303,9 +303,9 @@ class Account(EndpointsModel):
             return  account_schema
         else:
             raise endpoints.NotFoundException('Permission denied')
-    
-    
-        
+
+
+
     @classmethod
     def insert(cls,user_from_email,request):
         account=None
@@ -331,7 +331,7 @@ class Account(EndpointsModel):
             account_key = account.put_async()
             account_key_async = account_key.get_result()
             taskqueue.add(
-                            url='/workers/createobjectfolder', 
+                            url='/workers/createobjectfolder',
                             params={
                                     'kind': "Account",
                                     'folder_name': request.name,
@@ -411,9 +411,9 @@ class Account(EndpointsModel):
                                                             fields = infonode.fields
                                                         )
                                                     )
-            
-            
-           
+
+
+
         if account:
             data = {}
             data['id'] = account_key_async.id()
@@ -487,7 +487,7 @@ class Account(EndpointsModel):
         else:
             next_curs_url_safe = None
         return  AccountListResponse(items = items, nextPageToken = next_curs_url_safe)
-    
+
     @classmethod
     def search(cls,user_from_email,request):
         organization = str(user_from_email.organization.id())
@@ -536,7 +536,7 @@ class Account(EndpointsModel):
                             else:
                                 kwargs[e.name] = e.value
                     search_results.append(AccountSearchResult(**kwargs))
-                    
+
         except search.Error:
             logging.exception('Search failed')
         return AccountSearchResults(
@@ -572,11 +572,3 @@ class Account(EndpointsModel):
             return account_key
         else:
             return None
-
-
-
-
-
-
-
-

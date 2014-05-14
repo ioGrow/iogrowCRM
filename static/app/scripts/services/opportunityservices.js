@@ -231,6 +231,11 @@ Opportunity.patch = function($scope,params) {
             console.log('opportunities.patch gapi #end_execute');
           });
 };
+Opportunity.update_stage = function($scope,params){
+    gapi.client.crmengine.opportunities.update_stage(params).execute(function(resp){
+        console.log(resp);
+    });
+};
     //HKA 09.11.2013 Add an opportunity
 Opportunity.insert = function($scope,params){
       $scope.isLoading = true;

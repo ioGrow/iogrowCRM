@@ -17,6 +17,9 @@ import model
 import iomessages
 import datetime
 
+class UpdateStageRequest(messages.Message):
+    entityKey = messages.StringField(1,required=True)
+    stage = messages.StringField(2,required=True)
 
 class AccountSchema(messages.Message):
     id = messages.StringField(1)
@@ -79,6 +82,7 @@ class OpportunitySchema(messages.Message):
     amount_per_unit = messages.IntegerField(24)
     amount_total = messages.IntegerField(25)
     account = messages.MessageField(AccountSchema,26)
+    contact = messages.MessageField(iomessages.ContactSchema,27)
 
 class OpportunityListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -218,6 +222,7 @@ class Opportunity(EndpointsModel):
                                     kind = 'parents'
                                     )
         account_schema = None
+        contact_schema = None
         for parent in parents_edge_list['items']:
             if parent.end_node.kind() == 'Account':
                 account = parent.end_node.get()
@@ -225,6 +230,15 @@ class Opportunity(EndpointsModel):
                                         id = str( account.key.id() ),
                                         entityKey = account.key.urlsafe(),
                                         name = account.name
+                                        )
+            elif parent.end_node.kind() == 'Contact':
+                contact = parent.end_node.get()
+                contact_schema = iomessages.ContactSchema(
+                                        id = str( contact.key.id() ),
+                                        entityKey = contact.key.urlsafe(),
+                                        firstname = contact.firstname,
+                                        lastname = contact.lastname,
+                                        title = contact.title
                                         )
         #list of tags related to this account
         tag_list = Tag.list_by_parent(opportunity.key)
@@ -279,6 +293,7 @@ class Opportunity(EndpointsModel):
                                   entityKey = opportunity.key.urlsafe(),
                                   access = opportunity.access,
                                   account = account_schema,
+                                  contact = contact_schema,
                                   name = opportunity.name,
                                   opportunity_type = opportunity.opportunity_type,
                                   duration = opportunity.duration,
@@ -365,6 +380,7 @@ class Opportunity(EndpointsModel):
                                                     kind = 'parents'
                                                     )
                         account_schema = None
+                        contact_schema = None
                         for parent in parents_edge_list['items']:
                             if parent.end_node.kind() == 'Account':
                                 account = parent.end_node.get()
@@ -372,6 +388,15 @@ class Opportunity(EndpointsModel):
                                                         id = str( account.key.id() ),
                                                         entityKey = account.key.urlsafe(),
                                                         name = account.name
+                                                        )
+                            elif parent.end_node.kind() == 'Contact':
+                                contact = parent.end_node.get()
+                                contact_schema = iomessages.ContactSchema(
+                                                        id = str( contact.key.id() ),
+                                                        entityKey = contact.key.urlsafe(),
+                                                        firstname = contact.firstname,
+                                                        lastname = contact.lastname,
+                                                        title = contact.title
                                                         )
                         opportunity_schema = OpportunitySchema(
                                   id = str( opportunity.key.id() ),
@@ -386,6 +411,7 @@ class Opportunity(EndpointsModel):
                                   closed_date=closed_date,
                                   current_stage = current_stage_schema,
                                   account = account_schema,
+                                  contact = contact_schema,
                                   tags = tag_list,
                                   created_at = opportunity.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
@@ -628,3 +654,12 @@ class Opportunity(EndpointsModel):
                                   updated_at = opportunity.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
         return opportunity_schema
+    @classmethod
+    def update_stage(cls,user_from_email,request):
+        opportunity_key =  ndb.Key(urlsafe=request.entityKey)
+        stage_key = ndb.Key(urlsafe=request.stage)
+        # insert edges
+        Edge.insert(start_node = opportunity_key,
+                  end_node = stage_key,
+                  kind = 'stages',
+                  inverse_edge = 'related_opportunities')

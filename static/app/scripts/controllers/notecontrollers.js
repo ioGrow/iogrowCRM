@@ -12,14 +12,15 @@ app.controller('NoteShowController',['$scope','$filter','$route','Auth','Note','
      $scope.paginationcomment = {};
      $scope.currentPagecomment = 01;
      $scope.pagescomment = [];
-     
+
      $scope.notes = [];
      $scope.users = [];
      $scope.user = undefined;
      $scope.slected_memeber = undefined;
      $scope.role= 'participant';
+		 $scope.isContentLoaded = true;
 
- 
+
       // What to do after authentication
      $scope.runTheProcess = function(){
           var noteId = $route.current.params.noteId;
@@ -32,14 +33,14 @@ app.controller('NoteShowController',['$scope','$filter','$route','Auth','Note','
             Auth.refreshToken();
      };
     $scope.listNextPageItemscomment= function(){
-        
-        
+
+
         var nextPage = $scope.currentPagecomment + 1;
         console.log(nextPage);
         var params = {};
           if ($scope.pagescomment[nextPage]){
             params = {'limit':5,
-                      'discussion':$scope.note.entityKey,                    
+                      'discussion':$scope.note.entityKey,
                       'order':'-updated_at',
                       'pageToken':$scope.pagescomment[nextPage]
                      }
@@ -50,11 +51,11 @@ app.controller('NoteShowController',['$scope','$filter','$route','Auth','Note','
                       'discussion':$scope.note.entityKey}
           }
           console.log('in listNextPageItems');
-          $scope.currentPagecomment = $scope.currentPagecomment + 1 ; 
+          $scope.currentPagecomment = $scope.currentPagecomment + 1 ;
           Comment.list($scope,params);
      }
      $scope.listPrevPageItemscomment = function(){
-       
+
        var prevPage = $scope.currentPagecomment - 1;
        var params = {};
           if ($scope.pagescomment[prevPage]){
@@ -71,8 +72,8 @@ app.controller('NoteShowController',['$scope','$filter','$route','Auth','Note','
           $scope.currentPagecomment = $scope.currentPagecomment - 1 ;
           Comment.list($scope,params);
      }
-   
-     
+
+
      $scope.showModal = function(){
         console.log('button clicked');
         $('#addAccountModal').modal('show');
@@ -87,16 +88,16 @@ app.controller('NoteShowController',['$scope','$filter','$route','Auth','Note','
       };
       Comment.insert($scope,params);
       $scope.comment.content='';
-     
-      
+
+
     };
     $scope.ListComments = function(){
       var params = {'discussion':$scope.note.entityKey,
                      'limit':5,
                       'order':'-updated_at'};
       Comment.list($scope,params);
-      
-      
+
+
     };
 //HKA 18.11.2013 highlight the comment
    $scope.hilightComment = function(){
@@ -106,7 +107,7 @@ app.controller('NoteShowController',['$scope','$filter','$route','Auth','Note','
      };
 
   $scope.selectMember = function(){
-        
+
         $scope.slected_memeber = $scope.user;
         $scope.user = $scope.slected_memeber.google_display_name;
 
@@ -114,8 +115,8 @@ app.controller('NoteShowController',['$scope','$filter','$route','Auth','Note','
      $scope.addNewContributor = function(selected_user,role){
       console.log('*************** selected user ***********************');
       console.log(selected_user);
-      
-      var params = {   
+
+      var params = {
                       'discussionKey': $scope.note.entityKey,
 
                       'type': 'user',
@@ -128,11 +129,11 @@ app.controller('NoteShowController',['$scope','$filter','$route','Auth','Note','
                       // Create Contributor Service
                       // Create contributors.list api
                       //list all contributors after getting the task.
-                     
-                      
-        }  
+
+
+        }
         console.log('selected member');
-        console.log(params); 
+        console.log(params);
         Contributor.insert($scope,params);
      $('#addContributor').modal('hide');
      };
@@ -143,8 +144,7 @@ app.controller('NoteShowController',['$scope','$filter','$route','Auth','Note','
       Contributor.list($scope,params);
       };
 
-    // Google+ Authentication 
+    // Google+ Authentication
     Auth.init($scope);
 
 	}]);
-

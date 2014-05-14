@@ -1356,10 +1356,10 @@ $scope.CaselistNextPageItems = function(){
               ]
     };
     InfoNode.insert($scope,params);
-      $scope.phone = {}; 
+      $scope.phone = {};
       $scope.showPhoneForm=false;
-      
-      
+
+
   };
 
    $scope.patchPhoneNumber = function(entityKey, data){
@@ -1402,7 +1402,7 @@ $scope.addEmail = function(email){
 
 //HKA 22.11.2013 Add Website
 $scope.addWebsite = function(website){
-  
+
   params = {'parent':$scope.account.entityKey,
             'kind':'websites',
             'fields':[

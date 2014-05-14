@@ -2,7 +2,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
     function($scope,$filter,Auth,Lead,Leadstatus,Tag,Edge) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Leads").addClass("active");
-      
+
       document.title = "Leads: Home";
        $("#id_Leads").addClass("active");
      $scope.isSignedIn = false;
@@ -14,10 +14,10 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
      $scope.currentPage = 01;
      $scope.pages = [];
      $scope.stage_selected={};
-      
+
       $scope.leads = [];
       $scope.lead = {};
-      
+
       $scope.lead.access ='public';
       $scope.order = '-updated_at';
       $scope.status = 'New';
@@ -45,8 +45,8 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
             var paramsTag = {'about_kind':'Lead'};
           Tag.list($scope,paramsTag);
           // for (var i=0;i<100;i++)
-          //   { 
-          //       var params = { 
+          //   {
+          //       var params = {
           //                 'firstname': 'Dja3fer',
           //                 'lastname':'M3amer ' + i.toString(),
           //                 'access':'public'
@@ -57,10 +57,10 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
        $scope.getPosition= function(index){
         if(index<4){
-         
+
           return index+1;
         }else{
-          
+
           return (index%4)+1;
         }
      };
@@ -69,8 +69,8 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
             Auth.refreshToken();
        };
      $scope.listNextPageItems = function(){
-        
-        
+
+
         var nextPage = $scope.currentPage + 1;
         var params = {};
           if ($scope.pages[nextPage]){
@@ -81,7 +81,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
             params = {'order' : $scope.order,'limit':6}
           }
           console.log('in listNextPageItems');
-          $scope.currentPage = $scope.currentPage + 1 ; 
+          $scope.currentPage = $scope.currentPage + 1 ;
           Lead.list($scope,params);
      }
      $scope.listMoreItems = function(){
@@ -93,12 +93,12 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
                       'order' : $scope.order,
                       'pageToken':$scope.pages[nextPage]
                     }
-            $scope.currentPage = $scope.currentPage + 1 ; 
+            $scope.currentPage = $scope.currentPage + 1 ;
             Lead.listMore($scope,params);
         }
       };
      $scope.listPrevPageItems = function(){
-       
+
        var prevPage = $scope.currentPage - 1;
        var params = {};
           if ($scope.pages[prevPage]){
@@ -111,15 +111,15 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           $scope.currentPage = $scope.currentPage - 1 ;
           Lead.list($scope,params);
      }
-    
+
       // new Lead
       $scope.showModal = function(){
         $('#addLeadModal').modal('show');
 
       };
 
-      
-    
+
+
       $scope.save = function(lead){
         var params ={
                       'firstname':lead.firstname,
@@ -145,7 +145,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
      var searchParams ={};
      $scope.result = undefined;
      $scope.q = undefined;
-     
+
      $scope.$watch('searchQuery', function() {
          searchParams['q'] = $scope.searchQuery;
          searchParams['limit'] = 7;
@@ -176,13 +176,13 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
      $scope.filterByOwner = function(filter){
         if (filter){
           var params = { 'owner': filter,
-                         'order': $scope.order, 
+                         'order': $scope.order,
                          'limit':6}
         }
         else{
           var params = {
-              'order': $scope.order, 
-              
+              'order': $scope.order,
+
               'limit':6}
         };
         $scope.isFiltering = true;
@@ -191,28 +191,28 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
      $scope.filterByStatus = function(filter){
         if (filter){
           var params = { 'status': filter,
-                         'order': $scope.order, 
+                         'order': $scope.order,
                          'limit':6}
         }
         else{
           var params = {
-              'order': $scope.order, 
-              
+              'order': $scope.order,
+
               'limit':6}
         };
         $scope.isFiltering = true;
         Lead.list($scope,params);
      };
 
-     
+
      /***********************************************
-      HKA 19.02.2014  tags 
+      HKA 19.02.2014  tags
 ***************************************************************************************/
 $scope.listTags=function(){
       var paramsTag = {'about_kind':'Lead'}
       Tag.list($scope,paramsTag);
      };
- 
+
 $scope.edgeInserted = function () {
        $scope.listleads();
      };
@@ -224,7 +224,7 @@ $scope.listleads = function(){
 
 
 $scope.addNewtag = function(tag){
-       var params = {   
+       var params = {
                           'name': tag.name,
                           'about_kind':'Lead',
                           'color':tag.color.color
@@ -234,7 +234,7 @@ $scope.addNewtag = function(tag){
         $scope.tag.color= {'name':'green','color':'#BBE535'};
         var paramsTag = {'about_kind':'Lead'};
         Tag.list($scope,paramsTag);
-        
+
      }
 $scope.updateTag = function(tag){
             params ={ 'id':tag.id,
@@ -248,7 +248,7 @@ $scope.updateTag = function(tag){
             'entityKey': tag.entityKey
           }
           Tag.delete($scope,params);
-          
+
       };
 
 
@@ -312,7 +312,7 @@ $scope.manage=function(){
 $scope.tag_save = function(tag){
           if (tag.name) {
              Tag.insert($scope,tag);
-             
+
            };
       };
 
@@ -327,7 +327,7 @@ $scope.addTags=function(){
       var tags=[];
       var items = [];
       tags=$('#select2_sample2').select2("val");
-      
+
       angular.forEach($scope.selected_tasks, function(selected_task){
           angular.forEach(tags, function(tag){
             var edge = {
@@ -343,7 +343,7 @@ $scope.addTags=function(){
       params = {
         'items': items
       }
-      
+
       Edge.insert($scope,params);
       $('#assigneeTagsToTask').modal('hide');
 
@@ -352,14 +352,14 @@ $scope.addTags=function(){
      var handleColorPicker = function () {
           if (!jQuery().colorpicker) {
               return;
-              
+
           }
           $('.colorpicker-default').colorpicker({
               format: 'hex'
           });
       }
       handleColorPicker();
-     
+
       $('#addMemberToTask > *').on('click', null, function(e) {
             e.stopPropagation();
         });
@@ -368,9 +368,9 @@ $scope.addTags=function(){
          var components = getRGBComponents(bgColor);
          var bgDelta = (components.R * 0.299) + (components.G * 0.587) + (components.B * 0.114);
 
-         return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";  
+         return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";
       }
-      function getRGBComponents(color) {       
+      function getRGBComponents(color) {
 
           var r = color.substring(1, 3);
           var g = color.substring(3, 5);
@@ -388,7 +388,7 @@ $scope.addTags=function(){
       };
       $scope.dropTag=function(lead,index){
         var items = [];
-        
+
         var params = {
               'parent': lead.entityKey,
               'tag_key': $scope.draggedTag.entityKey
@@ -397,7 +397,7 @@ $scope.addTags=function(){
         console.log('**********************************************');
         console.log(params);
         Tag.attach($scope,params,index);
-        
+
       };
       $scope.tagattached=function(tag,index){
           if ($scope.leads[index].tags == undefined){
@@ -419,9 +419,9 @@ $scope.addTags=function(){
   // HKA 12.03.2014 Pallet color on Tags
       $scope.checkColor=function(color){
         $scope.tag.color=color;
-      } 
+      }
 
-   // Google+ Authentication 
+   // Google+ Authentication
      Auth.init($scope);
      $(window).scroll(function() {
           if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
@@ -429,15 +429,15 @@ $scope.addTags=function(){
           }
       });
 
-      
+
 }]);
 
 app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Topic','Note','Lead','Permission','User','Leadstatus','Attachement','Map','InfoNode',
     function($scope,$filter,$route,Auth,Email,Task,Event,Topic,Note,Lead,Permission,User,Leadstatus,Attachement,Map,InfoNode) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Leads").addClass("active");
-      
-     
+
+
       $scope.editLead = function(){
       $('#EditLeadModal').modal('show');
      };
@@ -480,7 +480,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
       $scope.runTheProcess = function(){
             var params = {
                           'id':$route.current.params.leadId,
-                          
+
                           'topics':{
                             'limit': '7'
                           },
@@ -490,23 +490,24 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                           },
 
                           'tasks':{
-                            
+
                           },
 
                           'events':{
-                            
+
                           }
                       };
           Lead.get($scope,params);
           User.list($scope,{});
-          Leadstatus.list($scope,{}); 
-            
+          Leadstatus.list($scope,{});
+
       };
       // We need to call this to refresh token when user credentials are invalid
       $scope.refreshToken = function() {
               Auth.refreshToken();
       };
-      
+
+
       // HKA 08.05.2014 Delete infonode
 
   $scope.deleteInfonode = function(entityKey,kind){
@@ -516,9 +517,10 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
 
   };
 
+
      $scope.TopiclistNextPageItems = function(){
-        
-         
+
+
         var nextPage = $scope.topicCurrentPage + 1;
         var params = {};
           if ($scope.topicpages[nextPage]){
@@ -537,15 +539,15 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                         }
                      }
           }
-          
-          $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ; 
+
+          $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ;
           Lead.get($scope,params);
      }
      $scope.TopiclistPrevPageItems = function(){
 
        var prevPage = $scope.topicCurrentPage - 1;
        var params = {};
-       
+
           if ($scope.topicpages[prevPage]){
             params = {
                       'id':$scope.lead.id,
@@ -565,7 +567,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
           $scope.topicCurrentPage = $scope.topicCurrentPage - 1 ;
           Lead.get($scope,params);
      }
-     
+
      $scope.listTopics = function(contact){
         var params = {
                       'id':$scope.lead.id,
@@ -582,7 +584,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
        $('#topic_0 .message').effect("highlight","slow");
      }
 
-    
+
      $scope.selectMember = function(){
         $scope.slected_memeber = $scope.user;
         $scope.user = '';
@@ -602,57 +604,57 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
         $('#sharingSettingsModal').modal('hide');
 
         if ($scope.sharing_with.length>0){
-        
+
           var items = [];
-          
+
           angular.forEach($scope.sharing_with, function(user){
-                      var item = { 
+                      var item = {
                                   'type':"user",
                                   'value':user.entityKey
                                 };
                       items.push(item);
           });
-          
+
           if(items.length>0){
               var params = {
                             'about': $scope.lead.entityKey,
                             'items': items
               }
-              Permission.insert($scope,params); 
+              Permission.insert($scope,params);
           }
-          
-          
+
+
           $scope.sharing_with = [];
-          
-          
-        }else{ 
+
+
+        }else{
           alert('select a user to be invited');
         };
 
 
      };
 
-     
+
      $scope.updateCollaborators = function(){
-          
+
           Lead.get($scope,$scope.lead.id);
 
      };
      //$('#addLeadModal').modal('show');
   //HKA 09.11.2013 Add a new Task
    $scope.addTask = function(task){
-      
+
         $('#myModal').modal('hide');
         if (task.due){
 
             var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
-            
+
             params ={'title': task.title,
                       'due': dueDate,
                       'parent': $scope.lead.entityKey
             }
-            
-            
+
+
         }else{
             params ={'title': task.title,
                      'parent': $scope.lead.entityKey
@@ -667,7 +669,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
         console.log('Should higll');
         $('#task_0').effect("highlight","slow");
         $('#task_0').effect( "bounce", "slow" );
-       
+
      }
      $scope.listTasks = function(){
         var params = {
@@ -677,12 +679,12 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
         Lead.get($scope,params);
 
      }
- //HKA 10.11.2013 Add event 
+ //HKA 10.11.2013 Add event
  $scope.addEvent = function(ioevent){
-      
+
         $('#newEventModal').modal('hide');
-        var params ={}       
-        
+        var params ={}
+
         if (ioevent.starts_at){
             if (ioevent.ends_at){
               params ={'title': ioevent.title,
@@ -700,7 +702,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                       'parent':$scope.lead.entityKey
               }
             }
-            
+
             Event.insert($scope,params);
             $scope.ioevent.title='';
             $scope.ioevent.where='';
@@ -711,13 +713,13 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
         console.log('Should higll');
         $('#event_0').effect("highlight","slow");
         $('#event_0').effect( "bounce", "slow" );
-       
+
      }
      $scope.listEvents = function(){
         var params = {
                         'id':$scope.lead.id,
                         'events':{
-                          
+
                         }
                       };
         Lead.get($scope,params);
@@ -748,7 +750,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
 
   };
 
-   
+
  $scope.listInfonodes = function(kind) {
      params = {'parent':$scope.lead.entityKey,
                'connections': kind
@@ -757,7 +759,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
  }
 //HKA 19.11.2013 Add Phone
  $scope.addPhone = function(phone){
-  
+
   params = {'parent':$scope.lead.entityKey,
             'kind':'phones',
             'fields':[
@@ -779,7 +781,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
 
 //HKA 20.11.2013 Add Email
 $scope.addEmail = function(email){
-  
+
   params = {'parent':$scope.lead.entityKey,
             'kind':'emails',
             'fields':[
@@ -793,7 +795,7 @@ $scope.addEmail = function(email){
   $scope.email={};
   $scope.showEmailForm = false;
   };
-  
+
 
 
 //HKA 22.11.2013 Add Website
@@ -826,8 +828,8 @@ $scope.addSocial = function(social){
   InfoNode.insert($scope,params);
   $scope.sociallink={};
       $scope.showSociallinkForm=false;
-  
-  
+
+
 };
 $scope.addCustomField = function(customField){
   params = {'parent':$scope.lead.entityKey,
@@ -844,7 +846,7 @@ $scope.addCustomField = function(customField){
   $('#customfields').modal('hide');
   $scope.customfield={};
   $scope.showCustomFieldForm = false;
-  
+
 };
 //HKA 22.11.2013 Edit tagline of Account
 $scope.edittagline = function() {
@@ -857,7 +859,7 @@ $scope.editintro = function() {
 
 //HKA 22.11.2013 Add Tagline
 $scope.updateTagline = function(lead){
- 
+
   params = {'id':$scope.lead.id,
              'tagline':lead.tagline}
   Lead.patch($scope,params);
@@ -866,7 +868,7 @@ $scope.updateTagline = function(lead){
 
 //HKA 22.11.2013 Add Introduction
 $scope.updateintro = function(lead){
- 
+
   params = {'id':$scope.lead.id,
              'introduction':lead.introduction}
   Lead.patch($scope,params);
@@ -883,7 +885,7 @@ $scope.updateintro = function(lead){
         Lead.convert($scope,leadid);
       };
       $('#some-textarea').wysihtml5();
-      
+
       $scope.sendEmail = function(email){
         email.body = $('#some-textarea').val();
         console.log(email);
@@ -907,7 +909,7 @@ $scope.updateintro = function(lead){
                   'about_kind':'Lead' };
         Email.send($scope,params);
       };
-//HKA 
+//HKA
   $scope.editbeforedelete = function(){
      $('#BeforedeleteLead').modal('show');
    };
@@ -928,7 +930,7 @@ $scope.deletelead = function(){
 
      };
      $scope.showCreateDocument = function(type){
-        
+
         $scope.mimeType = type;
         $('#newDocument').modal('show');
      };
@@ -937,7 +939,7 @@ $scope.deletelead = function(){
         var params = {
                       'parent': $scope.lead.entityKey,
                       'title':newdocument.title,
-                      'mimeType':mimeType 
+                      'mimeType':mimeType
                      };
         Attachement.insert($scope,params);
 
@@ -946,7 +948,7 @@ $scope.deletelead = function(){
           var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
           var projectfolder = $scope.lead.folder;
           var docsView = new google.picker.DocsView()
-              .setIncludeFolders(true) 
+              .setIncludeFolders(true)
               .setSelectFolderEnabled(true);
           var picker = new google.picker.PickerBuilder().
               addView(new google.picker.DocsUploadView().setParent(projectfolder)).
@@ -961,7 +963,7 @@ $scope.deletelead = function(){
       };
       // A simple callback implementation.
       $scope.uploaderCallback = function(data) {
-        
+
 
         if (data.action == google.picker.Action.PICKED) {
                 var params = {
@@ -969,7 +971,7 @@ $scope.deletelead = function(){
                               'parent':$scope.lead.entityKey
                             };
                 params.items = new Array();
-               
+
                  $.each(data.docs, function(index) {
                       console.log(data.docs);
                       /*
@@ -985,10 +987,10 @@ $scope.deletelead = function(){
 
                       };
                       params.items.push(item);
-                
+
                   });
                  Attachement.attachfiles($scope,params);
-                    
+
           }
       }
       $scope.renderMaps = function(){
@@ -996,7 +998,7 @@ $scope.deletelead = function(){
           Map.render($scope);
       };
       $scope.addAddress = function(address){
-      
+
         Map.searchLocation($scope,address);
 
         $('#addressmodal').modal('hide');
@@ -1068,13 +1070,13 @@ $scope.deletelead = function(){
                 }
               ]
             };
-          } 
+          }
           InfoNode.insert($scope,params);
       };
 
   // HKA 19.03.2014 inline update infonode
      $scope.inlinePatch=function(kind,edge,name,entityKey,value){
-   
+
    if (kind=='Lead') {
       if (name=='firstname')
         {params = {'id':$scope.lead.id,
@@ -1084,31 +1086,31 @@ $scope.deletelead = function(){
         {params = {'id':$scope.lead.id,
              lastname:value};
          Lead.patch($scope,params);}
-          
+
    }else{
 
-     
-     
+
+
           params = {
                   'entityKey': entityKey,
                   'parent':$scope.lead.entityKey,
                   'kind':edge,
                   'fields':[
-                     
+
                       {
                         "field": name,
                         "value": value
                       }
                   ]
         };
-         
+
          InfoNode.patch($scope,params);
    }
 
 
   };
-      
-    // Google+ Authentication 
+
+    // Google+ Authentication
      Auth.init($scope);
 
 }]);
@@ -1117,7 +1119,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
     function($scope,Auth,Lead,Leadstatus,Tag,Edge) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Leads").addClass("active");
-      
+
       document.title = "Leads: New";
       $("#id_Leads").addClass("active");
       $scope.isSignedIn = false;
@@ -1146,7 +1148,35 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
       $scope.sociallinks=[];
       $scope.customfields=[];
       $scope.phone = {'type':'work'};
-      $scope.imageSrc = '/static/img/default_company.png';
+      $scope.imageSrc = '/static/img/avatar_contact.jpg';
+      $scope.profile_img = {
+                            'profile_img_id':null,
+                            'profile_img_url':null
+                          }
+      $scope.createPickerUploader = function() {
+          var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
+          var picker = new google.picker.PickerBuilder().
+              addView(new google.picker.DocsUploadView()).
+              setCallback($scope.uploaderCallback).
+              setOAuthToken(window.authResult.access_token).
+              setDeveloperKey(developerKey).
+              setAppId(987765099891).
+              build();
+          picker.setVisible(true);
+      };
+
+      $scope.uploaderCallback = function(data) {
+          if (data.action == google.picker.Action.PICKED) {
+                if(data.docs){
+                  $scope.profile_img.profile_img_id = data.docs[0].id ;
+                  $scope.profile_img.profile_img_url = data.docs[0].url ;
+                  $scope.imageSrc = 'https://docs.google.com/uc?id='+data.docs[0].id;
+                  $scope.$apply();
+                }
+          }
+      }
+
+
       $scope.initObject=function(obj){
           for (var key in obj) {
                 obj[key]=null;
@@ -1166,7 +1196,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
         }
       }
        $scope.runTheProcess = function(){
-            
+
           //   Leadstatus.list($scope,{});
           //   var paramsTag = {'about_kind':'Lead'};
           // Tag.list($scope,paramsTag);
@@ -1176,7 +1206,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
 
        $scope.getPosition= function(index){
         if(index<3){
-         
+
           return index+1;
         }else{
           console.log((index%3)+1);
@@ -1188,8 +1218,8 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
             Auth.refreshToken();
        };
      $scope.listNextPageItems = function(){
-        
-        
+
+
         var nextPage = $scope.currentPage + 1;
         var params = {};
           if ($scope.pages[nextPage]){
@@ -1200,11 +1230,11 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
             params = {'order' : $scope.order,'limit':6}
           }
           console.log('in listNextPageItems');
-          $scope.currentPage = $scope.currentPage + 1 ; 
+          $scope.currentPage = $scope.currentPage + 1 ;
           Lead.list($scope,params);
      }
      $scope.listPrevPageItems = function(){
-       
+
        var prevPage = $scope.currentPage - 1;
        var params = {};
           if ($scope.pages[prevPage]){
@@ -1217,14 +1247,14 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
           $scope.currentPage = $scope.currentPage - 1 ;
           Lead.list($scope,params);
      }
-    
+
       // new Lead
       $scope.showModal = function(){
         $('#addLeadModal').modal('show');
 
       };
 
-      
+
     $scope.prepareInfonodes = function(){
         var infonodes = [];
         angular.forEach($scope.websites, function(website){
@@ -1236,7 +1266,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
                                     'value':website.url
                                     }
                             ]
-                          
+
                           }
             infonodes.push(infonode);
         });
@@ -1249,7 +1279,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
                                     'value':sociallink.url
                                     }
                             ]
-                          
+
                           }
             infonodes.push(infonode);
         });
@@ -1262,7 +1292,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
                                     'value':customfield.value
                                     }
                             ]
-                          
+
                           }
             infonodes.push(infonode);
         });
@@ -1282,7 +1312,10 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
                         'infonodes':$scope.prepareInfonodes(),
                         'access': 'public'
                       };
-        
+          if ($scope.profile_img.profile_img_id){
+              params['profile_img_id'] = $scope.profile_img.profile_img_id;
+              params['profile_img_url'] = 'https://docs.google.com/uc?id='+$scope.profile_img.profile_img_id;
+          }
           Lead.insert($scope,params);
           window.location.replace('/#/leads');
         }
@@ -1298,7 +1331,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
      var searchParams ={};
      $scope.result = undefined;
      $scope.q = undefined;
-     
+
      $scope.$watch('searchQuery', function() {
          searchParams['q'] = $scope.searchQuery;
          searchParams['limit'] = 7;
@@ -1329,13 +1362,13 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
      $scope.filterByOwner = function(filter){
         if (filter){
           var params = { 'owner': filter,
-                         'order': $scope.order, 
+                         'order': $scope.order,
                          'limit':6}
         }
         else{
           var params = {
-              'order': $scope.order, 
-              
+              'order': $scope.order,
+
               'limit':6}
         };
         $scope.isFiltering = true;
@@ -1344,28 +1377,28 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
      $scope.filterByStatus = function(filter){
         if (filter){
           var params = { 'status': filter,
-                         'order': $scope.order, 
+                         'order': $scope.order,
                          'limit':6}
         }
         else{
           var params = {
-              'order': $scope.order, 
-              
+              'order': $scope.order,
+
               'limit':6}
         };
         $scope.isFiltering = true;
         Lead.list($scope,params);
      };
 
-     
+
      /***********************************************
-      HKA 19.02.2014  tags 
+      HKA 19.02.2014  tags
 ***************************************************************************************/
 $scope.listTags=function(){
       var paramsTag = {'about_kind':'Lead'}
       Tag.list($scope,paramsTag);
      };
- 
+
 $scope.edgeInserted = function () {
        $scope.listleads();
      };
@@ -1377,7 +1410,7 @@ $scope.listleads = function(){
 
 
 $scope.addNewtag = function(tag){
-       var params = {   
+       var params = {
                           'name': tag.name,
                           'about_kind':'Lead',
                           'color':tag.color.color
@@ -1387,7 +1420,7 @@ $scope.addNewtag = function(tag){
         $scope.tag.color= {'name':'green','color':'#BBE535'};
         var paramsTag = {'about_kind':'Lead'};
         Tag.list($scope,paramsTag);
-        
+
      }
 $scope.updateTag = function(tag){
             params ={ 'id':tag.id,
@@ -1401,7 +1434,7 @@ $scope.updateTag = function(tag){
             'entityKey': tag.entityKey
           }
           Tag.delete($scope,params);
-          
+
       };
 
 
@@ -1465,7 +1498,7 @@ $scope.manage=function(){
 $scope.tag_save = function(tag){
           if (tag.name) {
              Tag.insert($scope,tag);
-             
+
            };
       };
 
@@ -1480,7 +1513,7 @@ $scope.addTags=function(){
       var tags=[];
       var items = [];
       tags=$('#select2_sample2').select2("val");
-      
+
       angular.forEach($scope.selected_tasks, function(selected_task){
           angular.forEach(tags, function(tag){
             var edge = {
@@ -1496,7 +1529,7 @@ $scope.addTags=function(){
       params = {
         'items': items
       }
-      
+
       Edge.insert($scope,params);
       $('#assigneeTagsToTask').modal('hide');
 
@@ -1505,14 +1538,14 @@ $scope.addTags=function(){
      var handleColorPicker = function () {
           if (!jQuery().colorpicker) {
               return;
-              
+
           }
           $('.colorpicker-default').colorpicker({
               format: 'hex'
           });
       }
       handleColorPicker();
-     
+
       $('#addMemberToTask > *').on('click', null, function(e) {
             e.stopPropagation();
         });
@@ -1521,9 +1554,9 @@ $scope.addTags=function(){
          var components = getRGBComponents(bgColor);
          var bgDelta = (components.R * 0.299) + (components.G * 0.587) + (components.B * 0.114);
 
-         return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";  
+         return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";
       }
-      function getRGBComponents(color) {       
+      function getRGBComponents(color) {
 
           var r = color.substring(1, 3);
           var g = color.substring(3, 5);
@@ -1541,7 +1574,7 @@ $scope.addTags=function(){
       };
       $scope.dropTag=function(lead){
         var items = [];
-        
+
         var edge = {
              'start_node': lead.entityKey,
               'end_node': $scope.draggedTag.entityKey,
@@ -1559,10 +1592,10 @@ $scope.addTags=function(){
   // HKA 12.03.2014 Pallet color on Tags
       $scope.checkColor=function(color){
         $scope.tag.color=color;
-      } 
+      }
 
-   // Google+ Authentication 
+   // Google+ Authentication
      Auth.init($scope);
 
-      
+
 }]);
