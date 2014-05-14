@@ -456,8 +456,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.isLoading = false;
      $scope.email = {};
      $scope.infonodes = {};
-    $scope.phone={};
-    $scope.phone.type_number = 'work';
+     $scope.phone={};
+     $scope.phone.type= 'work';
     $scope.documentpagination = {};
      $scope.documentCurrentPage=01;
      $scope.documentpages=[];
@@ -757,7 +757,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
             'fields':[
                 {
                   "field": "type",
-                  "value": phone.type_number
+                  "value": phone.type
                 },
                 {
                   "field": "number",
@@ -767,6 +767,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
   };
   InfoNode.insert($scope,params);
   $scope.phone={};
+  $scope.phone.type= 'work';
   $scope.showPhoneForm=false;
   };
 
