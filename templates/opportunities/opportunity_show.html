@@ -47,6 +47,21 @@
             <div class="col-md-12">
               <div class="row">
                 <div class="col-md-12">
+                  <div class="oppRelatedTo">
+                     <span ng-show="opportunity.account.name" style="">
+                        Account name:
+                        <a class="tag ng-binding" href="http://localhost:8090/#/accounts/show/<%= opportunity.account.id %>">
+                          <%= opportunity.account.name %>
+                        </a>
+                      </span>
+                      <br>
+                      <span  style="">
+                        Contact name:
+                        <a class="tag ng-binding" href="http://localhost:8090/#/accounts/show/<%= opportunity.account.id %>">
+                          jib contact name
+                        </a>
+                      </span>
+                  </div>
                   <span class="page-meta pull-right">
                     <i class="icon-pencil">
                       <a ng-click="editaccount()" class="btn-link addAnotherPhone" data-toggle="modal">
@@ -55,7 +70,7 @@
                     </i>
                      |
                     <i class="icon-trash">
-                      <a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  Delete
+                      <a ng-click="beforedeleteOpportunity()" class="btn-link addAnotherPhone">  Delete
                       </a>
                     </i>
                   </span>
@@ -167,29 +182,38 @@
                   <div class="row">
                     <div class="col-md-6">
                       <div class="news-blocks blank-card blank-card-yellow newsCard">
-                        <h3>Opportunity Stage</h3>
+                        <h3>Opportunity Details</h3>
                         <div class="stage-chart-block">
-                          <div easypiechart class="chart" options="chartOptions" percent="opportunity.current_stage.probability"></div>
-                          <div class="oppStage">
-                            <span><%=opportunity.current_stage.name%></span><br>
-                            <span><%=opportunity.current_stage.probability%> %</span>
+                          <div class="col-md-5 ">
+                            <div class="stage" >
+                              <div easypiechart class="chart"  options="chartOptions" percent="opportunity.current_stage.probability"></div>
+                              <div class="oppStage  col-md-12">
+                                <span><%=opportunity.current_stage.name%></span><br>
+                                <span><%=opportunity.current_stage.probability%> %</span>
+                              </div>
+                            </div>
                           </div>
+                           <div class="oppPrice col-md-7">
+                                  <span><%= opportunity.currency %></span>
+                                  <span><%= opportunity.amount_total | customCurrency:"":",":".":0 %></span>
+                                  <p class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
+                                      <%= opportunity.duration %> × <%= opportunity.amount_per_unit| customCurrency:"":",":".":0 %>/<%= opportunity.duration_unit %>
+                                  </p>
+                           </div>
+
                         </div>
-                        <div class="row">
+                        <div class="row padding-bottom-15">
                           <div class="col-md-12">
                             <div class="form-group">
 
                                 <div class="col-md-12">
 
-                                  <select ng-model="opportunity.currentStageSelect" ng-options="opps.name + ' - ( ' + opps.probability + '% )' for opps in opportunitystages | orderBy: 'name':true" class="form-control selector-margin" >
-                                    <option value="opportunity.currentStageSelect"><%=opportunity.current_stage.name%></option>
+                                  <select ng-model="opportunity.current_stage" ng-change="updateOpportunityStage()" ng-options="opps as opps.name + ' - ( ' + opps.probability + '% )'   for opps in opportunitystages track by opps.probability" class="form-control">
                                   </select>
                                 </div>
                             </div>
                           </div>
                         </div>
-
-
                       </div>
                       <div class="news-blocks blank-card blank-card-yellow newsCard">
                         <h3>Custom Fields</h3>
@@ -226,18 +250,12 @@
                     <div class="col-md-6">
                       <div class="right-col">
                         <div class="news-blocks blank-card blank-card-red newsCard">
-                          <h3>Opportunity Informations</h3>
-                          <div class="oppPrice">
-                            <%= opportunity.currency %><%= opportunity.amount_total %>
-                            <p class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
-                                <%= opportunity.duration %> × <%= opportunity.amount_per_unit %>/<%= opportunity.duration_unit %>
-                            </p>
-                          </div>
+                          <h3>Additional informations</h3>
                           <div class="news-block-tags">
                             <div class="form-group row">
                               <label class="control-label col-md-3">Description</label>
                               <div class="col-md-9">
-                                <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="opportunity.description"></textarea>
+                                <textarea id="noteBody" ng-blur="updateOpportunity({'id':opportunity.id,'description':opportunity.description})" class="form-control ng-pristine ng-valid" rows="3" ng-model="opportunity.description"></textarea>
                               </div>
                             </div>
                           </div>
@@ -245,7 +263,7 @@
                             <div class="form-group row">
                               <label class="control-label col-md-3">Competitors</label>
                               <div class="col-md-9">
-                                <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="opportunity.competitor"></textarea>
+                                <textarea id="noteBody"  ng-blur="updateOpportunity({'id':opportunity.id,'competitor':opportunity.competitor})" class="form-control ng-pristine ng-valid" rows="3" ng-model="opportunity.competitor"></textarea>
                               </div>
                             </div>
                           </div>
@@ -626,18 +644,18 @@
 
        </div>
         <!--HKA 24.12.2013 Modal before Deleting Case-->
-         <div id="BeforedeleteCase" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+         <div id="BeforedeleteOpportunity" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">Delete Case</h3>
+                <h3 id="myModalLabel" class="modal-title">Delete Opportunity</h3>
               </div>
               <div class="modal-body">
                  <form id="seletesho" name="deletesho" class="form-horizontal">
                   <fieldset>
 
-                  <p>{{_("Are you sure you want to delete")}} :  <%=casee.name %> .</p>
+                  <p>{{_("Are you sure you want to delete")}} :  <%=opportunity.name %> .</p>
 
 
 

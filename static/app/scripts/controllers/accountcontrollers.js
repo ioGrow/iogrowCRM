@@ -1,5 +1,5 @@
-app.controller('AccountListCtrl', ['$scope','Auth','Account','Tag','Edge',
-    function($scope,Auth,Account,Tag,Edge) {
+app.controller('AccountListCtrl', ['$scope','$filter','Auth','Account','Tag','Edge',
+    function($scope,$filter,Auth,Account,Tag,Edge) {
      $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Accounts").addClass("active");
      document.title = "Accounts: Home";
@@ -404,13 +404,17 @@ $scope.addTags=function(){
           if ($scope.accounts[index].tags == undefined){
             $scope.accounts[index].tags = [];
           }
-          $scope.accounts[index].tags.push(tag);
-          var card_index = '#card_'+index;
-          $(card_index).removeClass('over');
-
-          $scope.$apply();
-          $( window ).trigger( "resize" );
-          console.log('trigged');
+          var ind = $filter('exists')(tag, $scope.accounts[index].tags);
+           if (ind == -1) {
+                $scope.accounts[index].tags.push(tag);
+                var card_index = '#card_'+index;
+                $(card_index).removeClass('over');
+            }else{
+                 var card_index = '#card_'+index;
+                $(card_index).removeClass('over');
+            }
+            
+              $scope.$apply();
       };
 
 
@@ -517,7 +521,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
                 duration:0,
                 enabled:false
             },
-            size:57,
+            size:100,
             barColor:'#58a618',
             scaleColor:false,
             lineWidth:7,
@@ -572,7 +576,11 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
 
 
        };
-
+        $(window).resize(function() {
+            var leftMargin=$(".chart").parent().width()-$(".chart").width();
+            $(".chart").css( "left",leftMargin/2);
+            $(".oppStage").css( "left",leftMargin/2);
+        });
        $scope.test=function(email){
         console.log(email);
        };
@@ -589,12 +597,22 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
           return (index%4)+1;
         }
      };
-     $scope.waterfall= function(){
+     $scope.waterfallTrigger= function(){
 
 
            /* $('.waterfall').hide();
           $('.waterfall').show();*/
           $( window ).trigger( "resize" );
+          if($(".chart").parent().width()==0){
+           var leftMargin=210-$(".chart").width();
+                  $(".chart").css( "left",leftMargin/2);
+                  $(".oppStage").css( "left",leftMargin/2-2);
+          }else{
+              var leftMargin=$(".chart").parent().width()-$(".chart").width();
+                  $(".chart").css( "left",leftMargin/2);
+                  $(".oppStage").css( "left",leftMargin/2-2);
+
+          }
      };
 
        // We need to call this to refresh token when user credentials are invalid
@@ -1322,8 +1340,7 @@ $scope.CaselistNextPageItems = function(){
  }
 //HKA 19.11.2013 Add Phone
  $scope.addPhone = function(phone){
- console.log('----------i am here on the Key---------');
- console.log(phone.type_number);
+
     params = {'parent':$scope.account.entityKey,
               'kind':'phones',
               'fields':[
@@ -1338,11 +1355,13 @@ $scope.CaselistNextPageItems = function(){
               ]
     };
     InfoNode.insert($scope,params);
+
       $scope.phone={};
        $scope.phone.type= 'work'; 
+
       $scope.showPhoneForm=false;
-      
-      
+
+
   };
 
    $scope.patchPhoneNumber = function(entityKey, data){
@@ -1385,7 +1404,7 @@ $scope.addEmail = function(email){
 
 //HKA 22.11.2013 Add Website
 $scope.addWebsite = function(website){
-  
+
   params = {'parent':$scope.account.entityKey,
             'kind':'websites',
             'fields':[
@@ -1489,7 +1508,7 @@ $scope.deleteaccount = function(){
      Account.delete($scope,accountKey);
 
      $('#BeforedeleteAccount').modal('hide');
-     };
+};
 
       $scope.renderMaps = function(){
 
@@ -1677,7 +1696,7 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
       $scope.customfields=[];
       $scope.account.account_type = 'Customer';
       $scope.account.industry = 'Technology';
-      $scope.phone = {'type':'work'};
+      $scope.phone = {'type_number':'work'};
             $scope.logo = {
                     'logo_img_id':null,
                     'logo_img_url':null

@@ -12,11 +12,12 @@
     </div>
     <h2 class="page-title">
       <a href="/#/leads" data-toggle="tooltip" data-placement="bottom" title="Back to Leads">
-        <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Leads")}} <i class="fa  fa-angle-right"></i> <a editable-text="lead.firstname" onbeforesave="inlinePatch('Lead','', 'firstname',lead.entityKey,$data)"> <%= lead.firstname %>  </a> <a editable-text="lead.lastname" onbeforesave="inlinePatch('Lead','', 'lastname',lead.entityKey,$data)" > <%= lead.lastname %> 
+        <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Leads")}} <i class="fa  fa-angle-right"></i> <a editable-text="lead.firstname" onbeforesave="inlinePatch('Lead','', 'firstname',lead.entityKey,$data)"> <%= lead.firstname %>  </a> <a editable-text="lead.lastname"
+        onbeforesave="inlinePatch('Lead','', 'lastname',lead.entityKey,$data)" > <%= lead.lastname %>
       </a>
     </h2>
   </div>
-</div>    
+</div>
 <div  class="page-content">
   <div class="loader-container row" ng-show="isLoading">
     <div class="loader-dialog col-md-4 col-md-offset-4 ">
@@ -26,7 +27,7 @@
     </div>
   </div>
   <div class="" ng-show="immediateFailed">
-     <div class="col-md-12">  
+     <div class="col-md-12">
       <h1>Sign-in Button;</h1>
           <span id="signin">
               <span id="myGsignin"></span>
@@ -42,8 +43,8 @@
               <div class="portlet">
                 <div class="portlet-body left-sidebar" id="chats">
                   <div class="pic">
-                    <img alt="<%=lead.firstname%> <%=lead.lastname%>" class="img-responsive img-thumbnail" ng-src="<%=imageSrc%>">
-                  </div>  
+                    <img alt="<%=lead.firstname%> <%=lead.lastname%>" ng-src="<%=imageSrc%>" class="contact-photo">
+                  </div>
                   <a ng-click="createPickerUploader()" href="" class="btn btn-default btn-upload" data-toggle="modal">
                     <img src="/static/img/upload_logo.png" >
                   </a>
@@ -121,13 +122,13 @@
                     </div>
                   </li>
                   <li ng-repeat="phone in phones">
-                    <a editable-text="phone.number" onbeforesave="inlinePatch('Infonode','phones', 'number',phone.entityKey,$data)"> 
+                    <a editable-text="phone.number" onbeforesave="inlinePatch('Infonode','phones', 'number',phone.entityKey,$data)">
                       <%=phone.number%>
                     </a>
-                     - 
-                    <a editable-select="phone.type" e-ng-options="s.value as s.text for s in statuses" onbeforesave="inlinePatch('Infonode','phones', 'type',phone.entityKey,$data)"> 
-                      <%=phone.type%> 
-                    </a> 
+                     -
+                    <a editable-select="phone.type" e-ng-options="s.value as s.text for s in statuses" onbeforesave="inlinePatch('Infonode','phones', 'type',phone.entityKey,$data)">
+                      <%=phone.type%>
+                    </a>
                     <a>
                       <img class="ctodeal"  />
                     </a>
@@ -154,10 +155,10 @@
                       </form>
                     </div>
                   </li>
-                  <li ng-repeat="email in emails"> 
-                    <a editable-text="email.email" onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)"> 
-                      <%=email.email %>  
-                    </a> 
+                  <li ng-repeat="email in emails">
+                    <a editable-text="email.email" onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)">
+                      <%=email.email %>
+                    </a>
                   </li>
                   <li>
                     <a class="btn-link addAnotherPhone" ng-hide="showEmailForm" ng-click="showEmailForm=true">
@@ -169,20 +170,20 @@
                 </div>
                 <ul class="list-unstyled contact-infos">
                   <li ng-repeat="address in addresses">
-                    - 
+                    -
                     <span editable-text="address.country" onbeforesave="inlinePatch('Infonode','addresses', 'street',address.entityKey,$data)" ng-show="address.street">
-                      <%=address.street%>, 
-                    </span> 
+                      <%=address.street%>,
+                    </span>
                     <span editable-text="address.city" onbeforesave="inlinePatch('Infonode','addresses', 'city',address.entityKey,$data)" ng-show="address.city"
-                      ><%=address.city%>, 
-                    </span> 
+                      ><%=address.city%>,
+                    </span>
                     <span editable-text="address.country" onbeforesave="inlinePatch('Infonode','addresses', 'country',address.entityKey,$data)" ng-show="address.country">
                       <%=address.country%>
                     </span>
                   </li>
                   <li>
                     <a href="#addressmodal" class="btn-link addAnotherPhone" data-toggle="modal">
-                      <i class="icon-plus"></i> Add a new address 
+                      <i class="icon-plus"></i> Add a new address
                     </a>
                   </li>
                 </ul>
@@ -212,7 +213,7 @@
                   </li>
                   <li>
                     <a   ng-hide="showWebsiteForm" ng-click="showWebsiteForm=true" class="btn-link addAnotherPhone">
-                      <i class="icon-plus"></i> Add a new Website 
+                      <i class="icon-plus"></i> Add a new Website
                     </a>
                   </li>
                 </ul>
@@ -233,15 +234,15 @@
                     </div>
                   </li>
                   <li ng-repeat="sociallink in sociallinks">
-                    <a editable-text="sociallink.url" onbeforesave="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,$data)" href="<%=sociallink.url%>" target="_blank"> <%=sociallink.url%> 
+                    <a editable-text="sociallink.url" onbeforesave="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,$data)" href="<%=sociallink.url%>" target="_blank"> <%=sociallink.url%>
                     </a>
                   </li>
                   <li>
                     <a class="btn-link addAnotherPhone" ng-hide="showSociallinkForm" ng-click="showSociallinkForm=true">
-                      <i class="icon-plus"></i> Add a new social links 
+                      <i class="icon-plus"></i> Add a new social links
                     </a>
                   </li>
-                </ul>                      
+                </ul>
               </div>
             </div>
             <div class="col-md-6">
@@ -250,8 +251,8 @@
                 <div class="news-block-tags">
                   <!--strong>Tagline </strong>
                   <span class="page-meta"><i class="icon-pencil">
-                    <a ng-click="edittagline()" class="btn-link addAnotherPhone" data-toggle="modal"> 
-                      {{_("Edit")}} 
+                    <a ng-click="edittagline()" class="btn-link addAnotherPhone" data-toggle="modal">
+                      {{_("Edit")}}
                     </a></i>
                   </span-->
                     <div class="form-group row">
@@ -259,25 +260,25 @@
                         <div class="col-md-8">
                               <input type="text" required id="id_tagline" class="form-control" ng-model="lead.tagline">
                         </div>
-                    </div>                  
+                    </div>
                 </div>
-                
+
                 <div class="news-block-tags">
                   <!--strong>Introduction</strong>
                   <span class="page-meta">
                     <i class="icon-pencil">
                     <a ng-click="editintro()" class="btn-link addAnotherPhone" data-toggle="modal" >
-                      {{_("Edit")}} 
+                      {{_("Edit")}}
                     </a></i>
                   </span-->
                    <div class="form-group row">
                         <label class="control-label col-md-4">Introduction</label>
-                        <div class="col-md-8"> 
+                        <div class="col-md-8">
                             <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="lead.introduction"></textarea>
                         </div>
-                  </div>                  
+                  </div>
                 </div>
-                                    
+
               </div>
               <div class="news-blocks blank-card blank-card-yellow">
                 <h3>{{ _('Custom Fields') }}</h3>
@@ -300,12 +301,12 @@
                   </li>
                   <li ng-repeat="custom in customfields">
                     <span>
-                      <%= custom.field%>  : <%= custom.value%> 
+                      <%= custom.field%>  : <%= custom.value%>
                     </span>
                   </li>
                   <li>
                     <a ng-click="showCustomFieldForm=true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal">
-                      <i class="icon-plus"></i> Add a new custom field 
+                      <i class="icon-plus"></i> Add a new custom field
                     </a>
                   </li>
                 </ul>
@@ -340,7 +341,7 @@
     </div>
   </div>
 </div>
-    
+
 <div id="addressmodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -349,7 +350,7 @@
         <h3 id="myModalLabel" class="modal-title">{{_("Add Address")}}</h3>
       </div>
       <div class="modal-body">
-        <form id="addAddress" name="addemail"  class="form-horizontal"> 
+        <form id="addAddress" name="addemail"  class="form-horizontal">
           <div class="form-group">
             <label  class="col-md-3 control-label">{{_("Street")}} </label>
             <div class="col-md-9">
@@ -397,14 +398,14 @@
         <h3 id="myModalLabel" class="modal-title">{{_("Edit Lead")}}</h3>
       </div>
       <div class="modal-body">
-        <form id="editTagline" name="editlead" class="form-horizontal"> 
+        <form id="editTagline" name="editlead" class="form-horizontal">
           <div class="form-group">
             <label  class="col-md-3 control-label">{{_("Tagline")}} </label>
             <div class="col-md-9">
               <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="lead.tagline"></textarea>
             </div>
-          </div>  
-        </form>           
+          </div>
+        </form>
       </div>
       <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
@@ -421,14 +422,14 @@
         <h3 id="myModalLabel" class="modal-title">{{_("Edit Lead")}}</h3>
       </div>
       <div class="modal-body">
-        <form id="editTagline" name="edittag" ng-submit="updateintro(lead)" class="form-horizontal"> 
+        <form id="editTagline" name="edittag" ng-submit="updateintro(lead)" class="form-horizontal">
           <div class="form-group">
             <label  class=" col-md-3 control-label">{{_("Introduction")}} </label>
             <div class="col-md-9">
               <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="lead.introduction"></textarea>
             </div>
-          </div> 
-        </form>            
+          </div>
+        </form>
       </div>
       <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>

@@ -13,6 +13,9 @@ libraries:
   version: latest
 - name: django
   version: "1.4"
+- name: ssl
+  version: latest
+
 
 handlers:
 - url: /static
@@ -26,4 +29,3 @@ handlers:
   login: admin
 - url: /.*
   script: handlers.app
-

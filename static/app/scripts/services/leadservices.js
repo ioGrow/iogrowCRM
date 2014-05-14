@@ -1,7 +1,8 @@
+
 var leadservices = angular.module('crmEngine.leadservices',[]);
 
 leadservices.factory('Lead', function($http) {
-  
+
   var Lead = function(data) {
     angular.extend(this, data);
   }
@@ -15,7 +16,7 @@ leadservices.factory('Lead', function($http) {
                 if (resp.infonodes){
                     if (resp.infonodes.items){
                         for (var i=0;i<resp.infonodes.items.length;i++)
-                        { 
+                        {
                           if (resp.infonodes.items[i].kind == 'addresses'){
                             renderMap = true;
                           }
@@ -36,7 +37,7 @@ leadservices.factory('Lead', function($http) {
                 }
                 if (resp.topics){
                   $scope.topics = resp.topics.items;
-                   
+
                     if ($scope.topicCurrentPage >1){
                         console.log('Should show PREV');
                       $scope.topicpagination.prev = true;
@@ -64,12 +65,12 @@ leadservices.factory('Lead', function($http) {
                            $scope.documentpagination.prev = false;
                       }
                      if (resp.documents.nextPageToken){
-                      
+
                        var nextPage = $scope.documentCurrentPage + 1;
                        // Store the nextPageToken
                        $scope.documentpages[nextPage] = resp.documents.nextPageToken;
                        $scope.documentpagination.next = true;
-                       
+
                      }else{
                       $scope.documentpagination.next = false;
                      }
@@ -87,13 +88,19 @@ leadservices.factory('Lead', function($http) {
                 // $scope.listEvents();
                 // $scope.listDocuments();
                 // $scope.listInfonodes();
-                
+
                 //$scope.renderMaps();
                 $scope.email.to = '';
+                if (resp.profile_img_url){
+                  $scope.imageSrc=resp.profile_img_url;
+                }else{
+                  $scope.imageSrc='/static/img/avatar_contact.jpg';
+                }
+
                 document.title = "Lead: " + $scope.lead.firstname +' '+ $scope.lead.lastname ;
                 angular.forEach($scope.lead.emails, function(value, key){
                   $scope.email.to = $scope.email.to + value.email + ',';
-                  
+
                 });
                // Call the method $apply to make the update on the scope
                $scope.$apply();
@@ -118,16 +125,16 @@ leadservices.factory('Lead', function($http) {
   };
   Lead.patch = function($scope,params) {
           console.log('in leads.patch service');
-         
+
           gapi.client.crmengine.leads.patch(params).execute(function(resp) {
             if(!resp.code){
                $scope.lead = resp;
                $scope.email.to = '';
                 angular.forEach($scope.lead.emails, function(value, key){
                   $scope.email.to = $scope.email.to + value.email + ',';
-                  
+
                 });
-               
+
                // Call the method $apply to make the update on the scope
                 $scope.$apply();
 
@@ -162,14 +169,14 @@ leadservices.factory('Lead', function($http) {
                    // Store the nextPageToken
                    $scope.pages[nextPage] = resp.nextPageToken;
                    $scope.leadpagination.next = true;
-                   
+
                  }else{
                   $scope.leadpagination.next = false;
                  }
                  // Call the method $apply to make the update on the scope
                  $scope.isLoading = false;
                  $scope.$apply();
-                 
+
 
               }else {
                 if(resp.code==401){
@@ -180,8 +187,8 @@ leadservices.factory('Lead', function($http) {
               }
               console.log('gapi #end_execute');
         });
-    
-  	
+
+
 
   };
     Lead.listMore = function($scope,params){
@@ -190,7 +197,7 @@ leadservices.factory('Lead', function($http) {
       gapi.client.crmengine.leads.listv2(params).execute(function(resp) {
 
               if(!resp.code){
-                
+
                   angular.forEach(resp.items, function(item){
                       $scope.leads.push(item);
                   });
@@ -204,14 +211,14 @@ leadservices.factory('Lead', function($http) {
                    // Store the nextPageToken
                    $scope.pages[nextPage] = resp.nextPageToken;
                    $scope.leadpagination.next = true;
-                   
+
                  }else{
                   $scope.leadpagination.next = false;
                  }
                  // Call the method $apply to make the update on the scope
                  $scope.isLoading = false;
                  $scope.$apply();
-                 
+
 
               }else {
                 if(resp.code==401){
@@ -222,17 +229,17 @@ leadservices.factory('Lead', function($http) {
               }
               console.log('gapi #end_execute');
         });
-    
-    
+
+
 
   };
   Lead.insert = function($scope,lead){
       $scope.isLoading = true;
       gapi.client.crmengine.leads.insertv2(lead).execute(function(resp) {
-         
+
          if(!resp.code){
           $scope.isLoading = false;
-          
+
           if ($scope.leads == undefined){
             $scope.leads = [];
             $scope.blankStatelead = false;
@@ -240,7 +247,7 @@ leadservices.factory('Lead', function($http) {
           $scope.leads.push(resp);
           $scope.lead = {};
           $scope.$apply();
-          
+
          }else{
             console.log(resp.message);
              $('#addLeadModal').modal('hide');
@@ -256,12 +263,12 @@ leadservices.factory('Lead', function($http) {
   Lead.convert = function($scope,id){
       $scope.isLoading = true;
       gapi.client.crmengine.leads.convertv2(id).execute(function(resp) {
-         
+
          if(!resp.code){
           $scope.isLoading = false;
           $('#convertLeadModal').modal('hide');
           window.location.replace('#/contacts/show/'+resp.id);
-          
+
          }else{
             console.log(resp.message);
              $('#addLeadModal').modal('hide');
@@ -290,13 +297,13 @@ leadservices.factory('Lead', function($http) {
           console.log(resp);
            if (resp.items){
               $scope.results = resp.items;
-              
+
               $scope.$apply();
             };
-            
+
       });
   };
-  
+
 
 return Lead;
 });
@@ -307,10 +314,10 @@ contactservices.factory('LeadLoader', ['Lead', '$route', '$q',
     function(Lead, $route, $q) {
   return function() {
     var delay = $q.defer();
-    
+
     var leadId = $route.current.params.leadId;
-    
-    
+
+
     return Lead.get($route.current.params.leadId);
   };
 }]);
