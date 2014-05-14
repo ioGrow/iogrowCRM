@@ -12,7 +12,7 @@ class PhoneSchema(messages.Message):
     number = messages.StringField(2,required=True)
 
 class EmailSchema(messages.Message):
-    email = messages.StringField(1,required=True)
+    email = messages.StringField(1)
 
 class AddressSchema(messages.Message):
     street = messages.StringField(1)
