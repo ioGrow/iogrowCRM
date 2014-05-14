@@ -52,7 +52,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
             lineWidth:7,
             lineCap:'circle'
         };
-      
+
       // What to do after authentication
        $scope.runTheProcess = function(){
           var params = {'order' : $scope.order,'limit':20};
@@ -69,7 +69,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
           //               }
           //       $scope.searchAccountQuery = 'dja3fer company'
           //       $scope.save(opportunity);
-          //   }  
+          //   }
        };
        $(window).resize(function() {
             var leftMargin=$(".chart").parent().width()-$(".chart").width();
@@ -474,7 +474,7 @@ $scope.addTags=function(){
                var card_index = '#card_'+index;
               $(card_index).removeClass('over');
           }
-          
+
               $scope.$apply();
       };
 
@@ -624,7 +624,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
       console.log(params);
       Opportunity.patch($scope,params);
      }
-     
+
      $scope.TopiclistNextPageItems = function(){
 
 
@@ -834,6 +834,13 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
    });*/
   $('#EditOpportunityModal').modal('hide');
  };
+ $scope.updateOpportunityStage = function(){
+    var params = {
+                  'entityKey':$scope.opportunity.entityKey,
+                  'stage': $scope.opportunity.current_stage.entityKey
+    };
+    Opportunity.update_stage($scope,params);
+ }
 
 $scope.createNote = function(){
 
