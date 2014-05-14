@@ -214,8 +214,12 @@ Opportunity.patch = function($scope,params) {
         $scope.isLoading = true;
           gapi.client.crmengine.opportunities.patch(params).execute(function(resp) {
             if(!resp.code){
-               $scope.opportunity = resp;
-               $scope.opportunity.stagename= resp.stagename;
+
+               for (var k in params){
+                 if (k!='id'&&k!='entityKey'){
+                   $scope.opportunity[k] = resp[k];
+                 }
+               }
                // Call the method $apply to make the update on the scope
                 $scope.isLoading = false;
                 console.log("error");
