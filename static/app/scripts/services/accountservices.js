@@ -244,11 +244,13 @@ accountservices.factory('Account', function($http) {
           });
   };
   Account.patch = function($scope,params) {
-          console.log('in accounts.patch service');
-          console.log(params);
           gapi.client.crmengine.accounts.patch(params).execute(function(resp) {
             if(!resp.code){
-               $scope.account = resp;
+                for (var k in params){
+                 if (k!='id'&&k!='entityKey'){
+                   $scope.account[k] = resp[k];
+                 }
+               }
                $scope.email.to = '';
                 angular.forEach($scope.account.emails, function(value, key){
                   $scope.email.to = $scope.email.to + value.email + ',';

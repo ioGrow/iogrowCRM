@@ -128,7 +128,11 @@ leadservices.factory('Lead', function($http) {
 
           gapi.client.crmengine.leads.patch(params).execute(function(resp) {
             if(!resp.code){
-               $scope.lead = resp;
+                for (var k in params){
+                 if (k!='id'&&k!='entityKey'){
+                   $scope.lead[k] = resp[k];
+                 }
+               }
                $scope.email.to = '';
                 angular.forEach($scope.lead.emails, function(value, key){
                   $scope.email.to = $scope.email.to + value.email + ',';

@@ -173,14 +173,20 @@ accountservices.factory('Contact', function($http) {
   Contact.patch = function($scope,params) {
         
           gapi.client.crmengine.contacts.patch(params).execute(function(resp) {
+            
             if(!resp.code){
-               $scope.contact = resp;
+                for (var k in params){
+                 if (k!='id'&&k!='entityKey'){
+                   $scope.contact[k] = resp[k];
+                 }
+               }
                $scope.email.to = '';
                 angular.forEach($scope.contact.emails, function(value, key){
                   $scope.email.to = $scope.email.to + value.email + ',';
                   
                 });
                
+              
                // Call the method $apply to make the update on the scope
                 $scope.$apply();
 
