@@ -268,13 +268,14 @@ accountservices.factory('Case', function() {
       });
   };
   Case.patch = function($scope,params) {
-          console.log('in cases.patch service');
-          console.log(params);
+          
           gapi.client.crmengine.cases.patch(params).execute(function(resp) {
             if(!resp.code){
-                console.log('in cases.patch');
-                console.log(resp);
-               $scope.casee = resp;
+                 for (var k in params){
+                 if (k!='id'&&k!='entityKey'){
+                   $scope.casee[k] = resp[k];
+                 }
+               }
                
                // Call the method $apply to make the update on the scope
                 $scope.$apply();
