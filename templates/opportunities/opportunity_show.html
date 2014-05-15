@@ -199,6 +199,13 @@
                                   <p class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
                                       <%= opportunity.duration %> × <%= opportunity.amount_per_unit| customCurrency:"":",":".":0 %>/<%= opportunity.duration_unit %>
                                   </p>
+                                  <div class="oppEstDate">
+                                     Estimated close date:
+                                  </div>
+                                  <div class="oppEstDate">
+                                    <%=opportunity.closed_date | date:'MMMM dd, yyyy'%>
+                                  </div>
+
                            </div>
 
                         </div>
