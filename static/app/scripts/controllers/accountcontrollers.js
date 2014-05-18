@@ -413,7 +413,7 @@ $scope.addTags=function(){
                  var card_index = '#card_'+index;
                 $(card_index).removeClass('over');
             }
-            
+
               $scope.$apply();
       };
 
@@ -1013,10 +1013,54 @@ $scope.CaselistNextPageItems = function(){
 
      };
      $scope.createPickerUploader = function() {
+          var projectfolder = $scope.account.folder;
+          var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
+          var docsView = new google.picker.DocsView()
+              .setIncludeFolders(true)
+              .setSelectFolderEnabled(true);
+          var picker = new google.picker.PickerBuilder().
+              addView(new google.picker.DocsUploadView().setParent(projectfolder)).
+              addView(docsView).
+              setCallback($scope.uploaderCallback).
+              setOAuthToken(window.authResult.access_token).
+              setDeveloperKey(developerKey).
+              setAppId(987765099891).
+                enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
+              build();
+          picker.setVisible(true);
+      };
+      // A simple callback implementation.
+      $scope.uploaderCallback = function(data) {
+
+
+        if (data.action == google.picker.Action.PICKED) {
+                var params = {
+                              'access': $scope.account.access,
+                              'parent':$scope.account.entityKey
+                            };
+                params.items = new Array();
+
+                 $.each(data.docs, function(index) {
+
+                      var item = { 'id':data.docs[index].id,
+                                  'title':data.docs[index].name,
+                                  'mimeType': data.docs[index].mimeType,
+                                  'embedLink': data.docs[index].url
+
+                      };
+                      params.items.push(item);
+
+                  });
+                 Attachement.attachfiles($scope,params);
+
+
+                }
+      }
+     $scope.createLogoPickerUploader = function() {
           var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
           var picker = new google.picker.PickerBuilder().
               addView(new google.picker.DocsUploadView()).
-              setCallback($scope.uploaderCallback).
+              setCallback($scope.logoUploaderCallback).
               setOAuthToken(window.authResult.access_token).
               setDeveloperKey(developerKey).
               setAppId(987765099891).
@@ -1024,7 +1068,7 @@ $scope.CaselistNextPageItems = function(){
           picker.setVisible(true);
       };
       // A simple callback implementation.
-      $scope.uploaderCallback = function(data) {
+      $scope.logoUploaderCallback = function(data) {
           if (data.action == google.picker.Action.PICKED) {
                 if(data.docs){
                   $scope.logo.logo_img_id = data.docs[0].id ;
@@ -1357,7 +1401,7 @@ $scope.CaselistNextPageItems = function(){
     InfoNode.insert($scope,params);
 
       $scope.phone={};
-       $scope.phone.type= 'work'; 
+       $scope.phone.type= 'work';
 
       $scope.showPhoneForm=false;
 
