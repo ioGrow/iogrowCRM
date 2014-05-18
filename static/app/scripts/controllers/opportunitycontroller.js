@@ -675,7 +675,9 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
           Opportunity.get($scope,params);
 
      }
-
+     $scope.waterfallTrigger= function(){
+          $( window ).trigger( "resize" );
+     };
      $scope.listTopics = function(opportunity){
         var params = {
                       'id':$scope.opportunity.id,

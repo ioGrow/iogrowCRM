@@ -57,8 +57,8 @@
                       <br>
                       <span  style="">
                         Contact name:
-                        <a class="tag ng-binding" href="http://localhost:8090/#/accounts/show/<%= opportunity.account.id %>">
-                          <%= opportunity.contact.firstname %>
+                        <a class="tag ng-binding" href="http://localhost:8090/#/contacts/show/<%= opportunity.contact.id %>">
+                          <%= opportunity.contact.firstname %> <%= opportunity.contact.lastname %>
                         </a>
                       </span>
                   </div>
@@ -108,7 +108,7 @@
                     <a ng-click="selectedTab = 8;">Send an Email</a>
                   </li>
                   <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 7}">
-                    <a ng-click="waterfall();selectedTab = 7;">Attach Documents</a>
+                    <a ng-click="waterfallTrigger();selectedTab = 7;">Attach Documents</a>
                   </li>
                   <li class="dropdown md-menu-inv">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -194,18 +194,17 @@
                             </div>
                           </div>
                            <div class="oppPrice col-md-7">
-                                  <span><%= opportunity.currency %></span>
-                                  <span><%= opportunity.amount_total | customCurrency:"":",":".":0 %></span>
-                                  <p class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
-                                      <%= opportunity.duration %> × <%= opportunity.amount_per_unit| customCurrency:"":",":".":0 %>/<%= opportunity.duration_unit %>
-                                  </p>
-                                  <div class="oppEstDate">
-                                     Estimated close date:
-                                  </div>
-                                  <div class="oppEstDate">
-                                    <%=opportunity.closed_date | date:'MMMM dd, yyyy'%>
-                                  </div>
-
+                              <span><%= opportunity.currency %></span>
+                              <span><%= opportunity.amount_total | customCurrency:"":",":".":0 %></span>
+                              <p class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
+                                  <%= opportunity.duration %> × <%= opportunity.amount_per_unit| customCurrency:"":",":".":0 %>/<%= opportunity.duration_unit %>
+                              </p>
+                              <div class="oppEstDate">
+                                 Estimated close date
+                              </div>
+                              <div class="oppEstDate">
+                                <%=opportunity.closed_date | date:'MMMM dd, yyyy'%>
+                              </div>
                            </div>
 
                         </div>
@@ -320,8 +319,8 @@
                                 <div class="col-md-12">
                                   <div class="row">
                                    <!-- ngRepeat: attachment in documents -->
-                                         <div class="col-md-12 waterfall2" ng-hide="blankStateaccount">
-                                            <div ng-repeat="attachment in documents" data-column="<%=getPosition($index)%>" class="cardElement"  ng-class="{rightcards: getPosition($index)==4}">
+                                         <div class="col-md-12 waterfall" ng-hide="blankStateaccount">
+                                            <div ng-repeat="attachment in documents"  class="cardElement"  ng-class="{rightcards: getPosition($index)==4}">
                                                 <div class="detailsSection">
                                                   <div class="head">
                                                     <div class="pic">
@@ -1027,5 +1026,10 @@
       language: 'fr',
       pickTime: false
     });
+  });
+    $('.waterfall').waterfall({ 
+        colMinWidth: 210, 
+        defaultContainerWidth: 800,
+        autoresize: true
   });
 </script>
