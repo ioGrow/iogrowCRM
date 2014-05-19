@@ -527,7 +527,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
             lineWidth:7,
             lineCap:'circle'
         };
-
+        $scope.closed_date=new Date();
        // What to do after authentication
        $scope.runTheProcess = function(){
           var params = {
