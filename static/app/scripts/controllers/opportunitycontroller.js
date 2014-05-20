@@ -1261,6 +1261,9 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
                 obj[key]=null;
               }
       }
+      $scope.test=function(){
+        console.log('testtest');
+      }
       $scope.pullElement=function(index,elem,arr){
         if ($scope.customfields.indexOf(elem) != -1) {
             $scope.customfields.splice(index, 1);

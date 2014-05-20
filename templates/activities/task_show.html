@@ -118,54 +118,60 @@
               </span>
         </div>
  </div>
-    <div ng-show="isContentLoaded" >
+  <div ng-show="isContentLoaded" class="row">
       <!--HKA 19.11.2013 Begin  row-2 who is involved -->
-      <div class="showPage">
+    <div class="col-md-9">
     <div class="row">
 
     <!--HKA 19.11.2013 BEGIN Span comments-->
-      <div class="col-md-8">
+      <div class="col-md-12 showPage taskShowHead margin-bottom-15">
             <h2 class="page-title showTaskTitle" ng-class="{task_closed: task.status=='closed'}">
-              <input id="checkTaskInShow" type="checkbox" ng-checked="isSelectedAll"  ng-click="checkOptions()">  
               <%=task.title%>
             </h2>
-            <hr>
+            <hr class="sepLine">
       <!-- BEGIN PORTLET-->
       <!-- End Portlet -->
       <div class="row">
-           <div class="col-md-12 margin-bottom-10">
-                 <form ng-show="taskSelected" class="pull-right">
-                   <button   ng-show="task.status=='open'"class="btn btn-sm btn-default task_action" ng-click="closeTask(task)">
+           <div class="col-md-12 ">
+                 <form  class="pull-right">
+                   <button   ng-show="task.status=='open'"class="btn btn-unstyled btn-sm btn-default task_action" ng-click="closeTask(task)">
                     <i class="fa fa-lock"></i>
                       <span class="btn-text">
                         Close  
                       </span>
                     </button>
-                     <button   ng-show="task.status=='closed'" class="btn btn-sm btn-default task_action" ng-click="reopenTask(task)">
+                     <button   ng-show="task.status=='closed'" class="btn btn-unstyled btn-sm btn-default task_action" ng-click="reopenTask(task)">
                     <i class="fa fa-unlock"></i>
                     <span class="btn-text">
                     Reopen
                     </span>
                     </button>
-                    <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action">
+                    <button ng-click="showAssigneeTags()" class="btn btn-sm  btn-unstyled btn-default task_action">
                     <i class="fa fa-tags"></i>
                      <span class="btn-text">
                         Tags
                      </span>
                     </button>
-                    <datetimepick icon-class='fa fa-bell-o' label-format='MMM d, h:mm a' ng-model='newTask.reminder' class="new-task-reminder"></datetimepick>
-                    <datetimepick ng-model='newTask.due' class="new-task-date" label-format='MMM d, h:mm a'></datetimepick>
+                    <datetimepick icon-class='fa fa-bell-o' label-format='MMM d, h:mm a' ng-model='newTask.reminder' class="new-task-reminder btn-unstyled  "></datetimepick>
+                    <datetimepick ng-model='newTask.due' class="new-task-date btn-unstyled" label-format='MMM d, h:mm a'></datetimepick>
                </form>
                <ul class="list-unstyled ">
                  <li ng-show="task.tags" class="inline-tags">Tags:</li>
                  <li ng-repeat="tag in task.tags" class="inline-tags">
-                   <a href="#">#<%=tag.name%>  </a>
+                   <a  href="/#/search/type:Task tags:<%=tag.id%>">
+                        <span class="pull-left task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
+                          <%= tag.name %>
+                        </span>
+                      </a>
                  </li>
                </ul>
             </div>
               
         </div>
-        <div class="row">
+      </div>
+    <!--HKA 19.11.2013 END Span comments-->
+      <div class=" col-md-12">
+                  <div class="row">
         <div class="col-md-12">
              <div class="portlet">
                 <div class="portlet-title line">
@@ -185,8 +191,21 @@
                           </div>
                         </li>
                       </ul>
-                     <p class⁼"lead"=""><strong>Discuss this task :</strong> </p>
-                      <form id="addComment" ng-submit="addComment(comment)" class="well ng-pristine ng-valid">
+                     
+                </div>
+                  
+              </div>
+        </div>
+          
+        </div>
+      </div>
+            <div class="showPage col-md-12">
+                  <div class="row">
+        <div class="col-md-12">
+             <div class="portlet">
+                <div class="portlet-body">
+                     <p class⁼"lead"=""><strong>Add New Comment :</strong> </p>
+                      <form id="addComment" ng-submit="addComment(comment)" class=" ng-pristine ng-valid">
                       <div class="form-group">
                                         <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="comment.content"></textarea>
                                       
@@ -205,60 +224,10 @@
         </div>
           
         </div>
-        <div class="row">
-                                <div class="pagination pull-right" ng-hide="isLoading">
-                                      
-                                      <ul>
-                                        <li ng-show="paginationcomment.prev"><button ng-click="listPrevPageItemscomment()" id="sample_editable_1_new" class="btn">
-                                        {{_("Prev")}} 
-                                        </button></li>
-                                        
-                                        <li  ng-show="paginationcomment.next"><button ng-click="listNextPageItemscomment()"  class="btn">
-                                        {{_("Next")}} 
-                                        </button></li>
-                                      </ul>
-                                    </div>
-                                    <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
-                              </div>
-
-        
       </div>
-    <!--HKA 19.11.2013 END Span comments-->
-
 
 
   <!--HKA 19.11.2013 BEGIN Span who is involved -->
-      <div class="col-md-4">
-        <div class="portlet  task-assignees">
-                  <div class="portlet-title line">
-                    <div class="caption"><i class="icon-user"></i>Who's involved</div>
-                    
-                  </div>
-                  <div class="portlet-body">
-                  <ul class="chats">
-                   
-                   <li>                      
-                        <span class="arrow">Created By: <%=task.created_by.display_name%></span>
-                   </li>
-                  </ul>
-                   <div class="caption"><i class="fa fa-group"></i>Assignees</div>
-                    <ul class="chats">
-                 
-                 <li  ng-repeat="assigned in task.assignees">
-                    
-                    
-                      <span class="arrow"><%=assigned.display_name%></span>
-                     
-                   
-                 </li>
-                  <li><a href="#addContributor"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new assignee</a></li>
-
-                 
-                </ul>
-                  </div>
-                  
-         </div>
-
         <div id="addContributor" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -311,7 +280,42 @@
 
 
     </div>
+    <!-- tasks cards -->
+<div class="col-md-3 tasks-col">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="portlet showCard">
+        <div class="portlet-title line">
+          <div class="caption">
+            <i class="icon-user"></i>Who's involved
+          </div>
+        </div>
+                  <div class="portlet-body">
+                  <ul class="chats">
+                   
+                   <li>                      
+                        <span class="arrow">Created By: <%=task.created_by.display_name%></span>
+                   </li>
+                  </ul>
+                   <div class="caption"><i class="fa fa-group"></i>Assignees</div>
+                    <ul class="chats">
+                 
+                 <li  ng-repeat="assigned in task.assignees">
+                    
+                    
+                      <span class="arrow"><%=assigned.display_name%></span>
+                     
+                   
+                 </li>
+                  <li><a href="#addContributor"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new assignee</a></li>
+
+                 
+                </ul>
+                  </div>
+      </div>
     </div>
+  </div>
+</div>
     <!--HKA 19.11.2013 END row-2 Span who is involved -->
 
     <script type="text/javascript">
