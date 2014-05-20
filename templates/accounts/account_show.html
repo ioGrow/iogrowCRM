@@ -301,7 +301,7 @@
                                         </form>
                                       </div>
                             </li>
-                          <li ng-repeat="website in infonodes.websites"><a editable-text="website.url" onbeforesave="inlinePatch('Infonode','websites', 'url',website.entityKey,$data)" href="http://<%=website.url%>"  target="_blank" ><%=website.url%></a> </li>
+                          <li ng-repeat="website in infonodes.websites"><a editable-text="website.url" onbeforesave="inlinePatch('Infonode','websites', 'url',website.entityKey,$data)" href="http://<%=website.url%>"  target="_blank" editoptions editdataattr="deleteInfonode('<%=website.entityKey%>','websites')" ><%=website.url%></a> </li>
                           <li>
                             <a  ng-hide="showWebsiteForm" ng-click="showWebsiteForm=true" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new Website </a>
                           </li>
@@ -322,7 +322,7 @@
                                             </form>
                                           </div>
                               </li>
-                          <li ng-repeat="sociallink in infonodes.sociallinks"><a editable-text="sociallink.url" onbeforesave="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,$data)" href="<%=sociallink.url%>" target="_blank"> <%=sociallink.url%> </a></li>
+                          <li ng-repeat="sociallink in infonodes.sociallinks"><a editable-text="sociallink.url" onbeforesave="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,$data)"  editoptions editdataattr="deleteInfonode('<%=sociallink.entityKey%>','sociallinks')" href="<%=sociallink.url%>" target="_blank"> <%=sociallink.url%> </a></li>
 
                            <li><a class="btn-link addAnotherPhone" ng-hide="showSociallinkForm" ng-click="showSociallinkForm=true"><i class="icon-plus"></i> Add a new social links </a></li>
                         </ul>
@@ -347,7 +347,7 @@
                                           </div>
                             </li>
                           <li ng-repeat="custom in infonodes.customfields">
-                                    <span>
+                                    <span editoptions editdataattr="deleteInfonode('<%=custom.entityKey%>','customfields')">
                                     <%= custom.fields[0].field%>  : <%= custom.fields[0].value%> </span>
 
                           </li>

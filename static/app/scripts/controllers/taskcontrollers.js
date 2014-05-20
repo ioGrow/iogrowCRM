@@ -232,10 +232,20 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
 
       Task.patch($scope,params);
     };
+
+   $scope.inlineUpdateTask = function(id,title){    
+           var params ={ 'id':id,
+                      'title': title
+            };
+            console.log(params);
+      Task.patch($scope,params);
+    };
   // Google+ Authentication 
     Auth.init($scope);
 
   }]);
+
+
 app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','Contributor','Tag','Edge',
     function($scope,$filter,Auth,Task,User,Contributor,Tag,Edge) {
      $("ul.page-sidebar-menu li").removeClass("active");

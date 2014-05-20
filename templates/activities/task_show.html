@@ -110,6 +110,13 @@
       <!-- END SIDEBAR MENU -->
 </div>
 <div  class="page-content">
+  <div class="loader-container row" ng-show="isLoading">
+    <div class="loader-dialog col-md-4 col-md-offset-4 ">
+      <div class="loader-content">
+        Loading...
+      </div>
+    </div>
+  </div>
 <div class="" ng-show="immediateFailed">
          <div class="col-md-12">  
           <h1>Sign-in Button;</h1>
@@ -126,7 +133,10 @@
     <!--HKA 19.11.2013 BEGIN Span comments-->
       <div class="col-md-12 showPage taskShowHead margin-bottom-15">
             <h2 class="page-title showTaskTitle" ng-class="{task_closed: task.status=='closed'}">
-              <%=task.title%>
+             <span editable-text="task.title"  ng-model='task.title' onbeforesave="inlineUpdateTask(task.id,task.title)">
+              <%=task.title%> 
+             </span>
+              
             </h2>
             <hr class="sepLine">
       <!-- BEGIN PORTLET-->
@@ -152,7 +162,7 @@
                         Tags
                      </span>
                     </button>
-                    <datetimepick icon-class='fa fa-bell-o' label-format='MMM d, h:mm a' ng-model='newTask.reminder' class="new-task-reminder btn-unstyled  "></datetimepick>
+                    <datetimepick icon-class='fa fa-bell-o' label-format='MMM d, h:mm a' on-change="updateTask(task)" ng-model='newTask.reminder' class="new-task-reminder btn-unstyled  "></datetimepick>
                     <datetimepick ng-model='newTask.due' class="new-task-date btn-unstyled" label-format='MMM d, h:mm a'></datetimepick>
                </form>
                <ul class="list-unstyled ">
@@ -172,7 +182,7 @@
     <!--HKA 19.11.2013 END Span comments-->
       <div class=" col-md-12">
                   <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 commentsShow">
              <div class="portlet">
                 <div class="portlet-title line">
                   <div class="caption"><i class="icon-comments"></i>Comments</div>    

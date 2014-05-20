@@ -570,6 +570,13 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
        $scope.refreshToken = function() {
             Auth.refreshToken();
        };
+
+  $scope.deleteInfonode = function(entityKey,kind){
+    var params = {'entityKey':entityKey,'kind':kind};
+
+    InfoNode.delete($scope,params);
+
+  };
      $scope.TopiclistNextPageItems = function(){
 
 
