@@ -212,7 +212,7 @@
                                   <div class="col-md-12">
                                     <div class="form-group">
 
-                                        <div class="col-md-12">
+                                        <div class="">
                                           <select ng-model="stage_selected" ng-options="opps.name + ' - ( ' + opps.probability + '% )' for opps in opportunitystages " class="form-control selector-margin" >
                                             <option value="">-- choose Stage --</option>
                                           </select>
@@ -225,7 +225,7 @@
                                     <p>{{ _('Estimated closed date') }}:</p>
                                     <div class="form-group row">
                                         <div class="col-md-12">
-                                            <datetimepick ng-model='opportunity.closed_date' class="" label-format='EEEE, MMMM d, yyyy'></datetimepick>
+                                            <datetimepick on-change="test()" ng-model='opportunity.closed_date' class="" label-format='EEEE, MMMM d, yyyy'></datetimepick>
                                         </div>
                                     </div>
                                   </div>
