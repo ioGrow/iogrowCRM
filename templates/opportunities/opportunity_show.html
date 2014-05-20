@@ -58,7 +58,7 @@
                       <span  style="">
                         Contact name:
                         <a class="tag ng-binding" href="http://localhost:8090/#/accounts/show/<%= opportunity.account.id %>">
-                          <%= opportunity.contact.firstname %>
+                          <%= opportunity.contact.firstname %> <%= opportunity.contact.firstname %>
                         </a>
                       </span>
                   </div>
@@ -195,7 +195,7 @@
                           </div>
                            <div class="oppPrice col-md-7">
                                   <span><%= opportunity.currency %></span>
-                                  <span><%= opportunity.amount_total | customCurrency:"":",":".":0 %></span>
+                                  <span  editable-text="opportunity.amount_total"  ><%= opportunity.amount_total | customCurrency:"":",":".":0 %></span>
                                   <p class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
                                       <%= opportunity.duration %> × <%= opportunity.amount_per_unit| customCurrency:"":",":".":0 %>/<%= opportunity.duration_unit %>
                                   </p>
