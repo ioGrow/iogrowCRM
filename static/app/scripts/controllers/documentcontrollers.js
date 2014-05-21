@@ -74,9 +74,10 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
     $scope.addComment = function(comment){
 
       var params ={
-        'discussion':$scope.attachment.entityKey,
+        'about':$scope.attachment.entityKey,
         'content':$scope.comment.content
       };
+      console.log(params);
       Comment.insert($scope,params);
       $scope.comment.content='';
      
