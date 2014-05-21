@@ -57,7 +57,9 @@
                       <br>
                       <span  style="">
                         Contact name:
+
                         <a class="tag ng-binding" href="/#/contacts/show/<%= opportunity.contact.id %>">
+
                           <%= opportunity.contact.firstname %> <%= opportunity.contact.firstname %>
                         </a>
                       </span>
@@ -108,7 +110,7 @@
                     <a ng-click="selectedTab = 8;">Send an Email</a>
                   </li>
                   <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 7}">
-                    <a ng-click="waterfall();selectedTab = 7;">Attach Documents</a>
+                    <a ng-click="waterfallTrigger();selectedTab = 7;">Attach Documents</a>
                   </li>
                   <li class="dropdown md-menu-inv">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -194,18 +196,120 @@
                             </div>
                           </div>
                            <div class="oppPrice col-md-7">
-                                  <span><%= opportunity.currency %></span>
-                                  <span  editable-text="opportunity.amount_total"  ><%= opportunity.amount_total | customCurrency:"":",":".":0 %></span>
-                                  <p class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
-                                      <%= opportunity.duration %> × <%= opportunity.amount_per_unit| customCurrency:"":",":".":0 %>/<%= opportunity.duration_unit %>
-                                  </p>
-                                  <div class="oppEstDate">
-                                     Estimated close date:
+                            <div class="form-group currencyForm" ng-show="showPriceForm">
+                              <div class="col-md-12 margin-bottom-10">
+                                  <input type="text" required id="id_name" class="form-control" placeholder="{{_('Opportunity amount...')}}" ng-model="opportunity.amount_per_unit ">
+                               </div>
+                              <div class="col-md-12 margin-bottom-10">
+                               <select  class="form-control" ng-model="opportunity.currency">
+                                <option value="USD" selected>$ - USD</option>
+                                <option value="EUR">€ - EUR</option>
+                                <option value="CAD">$ - CAD</option>
+                                <option value="GBP">£ - GBP</option>
+                                <option value="AUD">$ - AUD</option>
+                                <option value="">---</option>
+                                <option value="AED">د.إ - AED</option>
+                                <option value="ANG">ƒ - ANG</option>
+                                <option value="AOA">AOA - AOA</option>
+                                <option value="ARS">$ - ARS</option>
+                                <option value="BAM">KM - BAM</option>
+                                <option value="BBD">$ - BBD</option>
+                                <option value="BGL">лв - BGL</option>
+                                <option value="BHD">BD - BHD</option>
+                                <option value="BND">$ - BND</option>
+                                <option value="BRL">R$ - BRL</option>
+                                <option value="BTC">฿ - BTC</option>
+                                <option value="CHF">Fr - CHF</option>
+                                <option value="CLF">UF - CLF</option>
+                                <option value="CLP">$ - CLP</option>
+                                <option value="CNY">¥ - CNY</option>
+                                <option value="COP">$ - COP</option>
+                                <option value="CRC">₡ - CRC</option>
+                                <option value="CZK">Kč - CZK</option>
+                                <option value="DKK">kr - DKK</option>
+                                <option value="EEK">KR - EEK</option>
+                                <option value="EGP">E£ - EGP</option>
+                                <option value="FJD">FJ$ - FJD</option>
+                                <option value="GTQ">Q - GTQ</option>
+                                <option value="HKD">$ - HKD</option>
+                                <option value="HRK">kn  - HRK</option>
+                                <option value="HUF">Ft - HUF</option>
+                                <option value="IDR">Rp - IDR</option>
+                                <option value="ILS">₪ - ILS</option>
+                                <option value="INR">₨ - INR</option>
+                                <option value="IRR">ریال - IRR</option>
+                                <option value="ISK">kr - ISK</option>
+                                <option value="JOD">د.ا - JOD</option>
+                                <option value="JPY">¥ - JPY</option>
+                                <option value="KES">KSh - KES</option>
+                                <option value="KRW">₩ - KRW</option>
+                                <option value="KWD">KD - KWD</option>
+                                <option value="KYD">$ - KYD</option>
+                                <option value="LTL">Lt - LTL</option>
+                                <option value="LVL">Ls - LVL</option>
+                                <option value="MAD">د.م. - MAD</option>
+                                <option value="MVR">Rf - MVR</option>
+                                <option value="MXN">$ - MXN</option>
+                                <option value="MYR">RM - MYR</option>
+                                <option value="NGN">₦ - NGN</option>
+                                <option value="NOK">kr - NOK</option>
+                                <option value="NZD">$ - NZD</option>
+                                <option value="OMR">ر.ع - OMR</option>
+                                <option value="PEN">S/. - PEN</option>
+                                <option value="PHP">₱ - PHP</option>
+                                <option value="PLN">zł - PLN</option>
+                                <option value="QAR">ر.ق - QAR</option>
+                                <option value="RON">L - RON</option>
+                                <option value="RUB">руб. - RUB</option>
+                                <option value="SAR">ر.س - SAR</option>
+                                <option value="SEK">kr - SEK</option>
+                                <option value="SGD">$ - SGD</option>
+                                <option value="THB">฿ - THB</option>
+                                <option value="TRY">TL - TRY</option>
+                                <option value="TTD">$ - TTD</option>
+                                <option value="TWD">$ - TWD</option>
+                                <option value="UAH">₴ - UAH</option>
+                                <option value="VEF">Bs F - VEF</option>
+                                <option value="VND">₫ - VND</option>
+                                <option value="XCD">$ - XCD</option>
+                                <option value="ZAR">R - ZAR</option>
+                              </select>
+                              </div>
+                                <div class="col-md-12 margin-bottom-10">
+                                    <select   ng-click="showPriceForm=true" class="form-control" ng-model="opportunity.duration_unit">
+                                        <option value="fixed">Fixed bid</option>
+                                        <option value="hour">Per hour</option>
+                                        <option value="month">Per month</option>
+                                        <option value="year">Per year</option>
+                                    </select>
+                                </div>
+                                <div ng-hide="opportunity.duration_unit=='fixed'" class="col-md-12 margin-bottom-10">
+                                   <input ng-click="showPriceForm=true"  type="text" pattern="\d*"  required id="" class="form-control" ng-model="opportunity.duration">
+                                </div>
+                                <div class="col-md-12 margin-bottom-10">
+                                  <div class="pull-right">
+                                   <button class="btn blue btn-sm" ng-click="updateOpportunityPrice()">{{_("Ok")}}</button>
+                                   <button class="btn btn-sm" ng-click="showPriceForm=falsee">{{_("Cancel")}}</button> 
                                   </div>
-                                  <div class="oppEstDate">
-                                    <%=opportunity.closed_date | date:'MMMM dd, yyyy'%>
-                                  </div>
+                                   
+                                </div>
+                            </div>
+                              <span ng-hide="showPriceForm" ng-click="showPriceForm=true"><%= opportunity.currency %></span>
+                              <span ng-hide="showPriceForm" ng-click="showPriceForm=true"><%= opportunity.amount_total | customCurrency:"":",":".":0 %></span>
 
+                              <p class="amount-details" ng-click="showPriceForm=true"  ng-show="opportunity.duration_unit!='fixed'">
+                                  <%= opportunity.duration %> × <%= opportunity.amount_per_unit| customCurrency:"":",":".":0 %>/<%= opportunity.duration_unit %>
+                              </p>
+                              <div class="oppEstDate">
+                                 Estimated close date
+                              </div>
+                              <div class="oppEstDate" >
+                                <%=opportunity.closed_date | date:'MMMM dd, yyyy'%>
+                              </div>
+                              <span  class="margin-bottom-15">
+                                <datetimepick ng-model='opportunity.closed_date'  label-format='EEEE, MMMM d, yyyy'></datetimepick>  
+                              </span>
+                              
                            </div>
 
                         </div>
@@ -320,8 +424,8 @@
                                 <div class="col-md-12">
                                   <div class="row">
                                    <!-- ngRepeat: attachment in documents -->
-                                         <div class="col-md-12 waterfall2" ng-hide="blankStateaccount">
-                                            <div ng-repeat="attachment in documents" data-column="<%=getPosition($index)%>" class="cardElement"  ng-class="{rightcards: getPosition($index)==4}">
+                                         <div class="col-md-12 waterfall" ng-hide="blankStateaccount">
+                                            <div ng-repeat="attachment in documents"  class="cardElement"  ng-class="{rightcards: getPosition($index)==4}">
                                                 <div class="detailsSection">
                                                   <div class="head">
                                                     <div class="pic">
@@ -1027,5 +1131,10 @@
       language: 'fr',
       pickTime: false
     });
+  });
+    $('.waterfall').waterfall({ 
+        colMinWidth: 210, 
+        defaultContainerWidth: 800,
+        autoresize: true
   });
 </script>

@@ -38,15 +38,16 @@ topicservices.factory('Task', function($http) {
           });
   };
   Task.patch = function($scope,params){
-      $scope.isLoadingTask = true;
+      $scope.isLoading = true;
       
       gapi.client.crmengine.tasks.patch(params).execute(function(resp) {
        
           if(!resp.code){
             $scope.task = resp;
+            console.log(" working");
             /*$scope.ListComments();
             $scope.listContributors();*/
-            $scope.isLoadingTask = false;
+            $scope.isLoading = false;
            /* $scope.listTags();
             $scope.listTasks();*/
             $scope.$apply();
@@ -54,12 +55,13 @@ topicservices.factory('Task', function($http) {
             $('#EditTaskModal').modal('hide');
           
          }else{
-            
+            console.log("not working");
              $('#EditTaskModal').modal('hide');
              $('#errorModal').modal('show');
              if(resp.message=="Invalid grant"){
+              console.log("Invalid grant");
                 $scope.refreshToken();
-                $scope.isLoadingTask = false;
+                $scope.isLoading = false;
                 $scope.listTags();
                 $scope.listTasks();
                 $scope.$apply();

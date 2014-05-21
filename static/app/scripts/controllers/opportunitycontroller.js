@@ -523,8 +523,8 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
      $scope.sharing_with = [];
      $scope.opportunitystages=[];
      $scope.opportunity={'current_stage':{'name':'Incoming','probability':5}};
+     $scope.closed_date=new Date();
      $scope.opportunity.current_stage.name=$scope.opportunitystages.name;
-     console.log($scope.opportunity.current_stage.name);
      $scope.chartOptions = {
          animate:{
              duration:0,
@@ -536,7 +536,79 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
          lineWidth:7,
          lineCap:'circle'
      };
-
+     $scope.showeditdate=false;
+      $scope.allcurrency=[
+        { value:"USD", text:"$ - USD"},
+        { value:"EUR", text:"€ - EUR"},
+        { value:"CAD", text:"$ - CAD"},
+        { value:"GBP", text:"£ - GBP"},
+        { value:"AUD", text:"$ - AUD"},
+        { value:"", text:"---"},
+        { value:"AED", text:"د.إ - AED"},
+        { value:"ANG", text:"ƒ - ANG"},
+        { value:"AOA", text:"AOA - AOA"},
+        { value:"ARS", text:"$ - ARS"},
+        { value:"BAM", text:"KM - BAM"},
+        { value:"BBD", text:"$ - BBD"},
+        { value:"BGL", text:"лв - BGL"},
+        { value:"BHD", text:"BD - BHD"},
+        { value:"BND", text:"$ - BND"},
+        { value:"BRL", text:"R$ - BRL"},
+        { value:"BTC", text:"฿ - BTC"},
+        { value:"CHF", text:"Fr - CHF"},
+        { value:"CLF", text:"UF - CLF"},
+        { value:"CLP", text:"$ - CLP"},
+        { value:"CNY", text:"¥ - CNY"},
+        { value:"COP", text:"$ - COP"},
+        { value:"CRC", text:"₡ - CRC"},
+        { value:"CZK", text:"Kč - CZK"},
+        { value:"DKK", text:"kr - DKK"},
+        { value:"EEK", text:"KR - EEK"},
+        { value:"EGP", text:"E£ - EGP"},
+        { value:"FJD", text:"FJ$ - FJD"},
+        { value:"GTQ", text:"Q - GTQ"},
+        { value:"HKD", text:"$ - HKD"},
+        { value:"HRK", text:"kn  - HRK"},
+        { value:"HUF", text:"Ft - HUF"},
+        { value:"IDR", text:"Rp - IDR"},
+        { value:"ILS", text:"₪ - ILS"},
+        { value:"INR", text:"₨ - INR"},
+        { value:"IRR", text:"ریال - IRR"},
+        { value:"ISK", text:"kr - ISK"},
+        { value:"JOD", text:"د.ا - JOD"},
+        { value:"JPY", text:"¥ - JPY"},
+        { value:"KES", text:"KSh - KES"},
+        { value:"KRW", text:"₩ - KRW"},
+        { value:"KWD", text:"KD - KWD"},
+        { value:"KYD", text:"$ - KYD"},
+        { value:"LTL", text:"Lt - LTL"},
+        { value:"LVL", text:"Ls - LVL"},
+        { value:"MAD", text:"د.م. - MAD"},
+        { value:"MVR", text:"Rf - MVR"},
+        { value:"MXN", text:"$ - MXN"},
+        { value:"MYR", text:"RM - MYR"},
+        { value:"NGN", text:"₦ - NGN"},
+        { value:"NOK", text:"kr - NOK"},
+        { value:"NZD", text:"$ - NZD"},
+        { value:"OMR", text:"ر.ع - OMR"},
+        { value:"PEN", text:"S/. - PEN"},
+        { value:"PHP", text:"₱ - PHP"},
+        { value:"PLN", text:"zł - PLN"},
+        { value:"QAR", text:"ر.ق - QAR"},
+        { value:"RON", text:"L - RON"},
+        { value:"RUB", text:"руб. - RUB"},
+        { value:"SAR", text:"ر.س - SAR"},
+        { value:"SEK", text:"kr - SEK"},
+        { value:"SGD", text:"$ - SGD"},
+        { value:"THB", text:"฿ - THB"},
+        { value:"TRY", text:"TL - TRY"},
+        { value:"TTD", text:"$ - TTD"},
+        { value:"TWD", text:"$ - TWD"},
+        { value:"UAH", text:"₴ - UAH"},
+        { value:"VEF", text:"Bs F - VEF"},
+        { value:"VND", text:"₫ - VND"},
+        { value:"XCD", text:"$ - XCD"},
+        { value:"ZAR", text:"R - ZAR"}];
 
       // What to do after authentication
        $scope.runTheProcess = function(){
@@ -577,7 +649,13 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
 
            $('#BeforedeleteOpportunity').modal('hide');
       };
+      $scope.test=function(){
+        console.log('testtest');
+      }
      //HKA 09.11.2013 Add a new Task
+     $scope.$watch($scope.opportunity.closed_date, function() {
+        console.log("work");
+     });
      $scope.addTask = function(task){
 
           $('#myModal').modal('hide');
@@ -620,11 +698,17 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
       $('#EditOpportunityModal').modal('show')
      }
      $scope.updateOpportunity=function(params){
-      console.log("test");
-      console.log(params);
       Opportunity.patch($scope,params);
      }
-
+     $scope.updateOpportunityPrice=function(){
+      if($scope.opportunity.duration_unit!='fixed'){
+        $scope.opportunity.amount_total=$scope.opportunity.duration*$scope.opportunity.amount_per_unit;
+      }else{
+        $scope.opportunity.amount_total=$scope.opportunity.amount_per_unit;
+      }
+      var params={'id':$scope.opportunity.id, 'currency':$scope.opportunity.currency, 'duration_unit':$scope.opportunity.duration_unit,'duration':$scope.opportunity.duration, 'amount_per_unit':$scope.opportunity.amount_per_unit,'amount_total':$scope.opportunity.amount_total}
+      Opportunity.patch($scope,params);
+     }
      $scope.TopiclistNextPageItems = function(){
 
 
@@ -675,7 +759,9 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
           Opportunity.get($scope,params);
 
      }
-
+     $scope.waterfallTrigger= function(){
+          $( window ).trigger( "resize" );
+     };
      $scope.listTopics = function(opportunity){
         var params = {
                       'id':$scope.opportunity.id,
@@ -1159,7 +1245,7 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
       $scope.account.access ='public';
       $scope.order = '-updated_at';
       $scope.status = 'New';
-      $scope.showCustomFieldForm =false;
+      $scope.showPriceForm =false;
       $scope.customfields=[];
       $scope.account.account_type = 'Customer';
       $scope.account.industry = 'Technology';
@@ -1174,6 +1260,9 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
           for (var key in obj) {
                 obj[key]=null;
               }
+      }
+      $scope.test=function(){
+        console.log('testtest');
       }
       $scope.pullElement=function(index,elem,arr){
         if ($scope.customfields.indexOf(elem) != -1) {
