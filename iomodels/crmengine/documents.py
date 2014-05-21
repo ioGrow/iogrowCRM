@@ -1,6 +1,6 @@
 from google.appengine.ext import ndb
 from google.appengine.datastore.datastore_query import Cursor
-from google.appengine.api import search 
+from google.appengine.api import search
 from apiclient.discovery import build
 import httplib2
 from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
@@ -158,7 +158,7 @@ class Document(EndpointsModel):
             raise endpoints.NotFoundException('Document not found.')
         tag_list = Tag.list_by_parent(parent_key = document.key)
         about = None
-        edge_list = Edge.list(start_node=document.key,kind='related_to')
+        edge_list = Edge.list(start_node=document.key,kind='parents')
         for edge in edge_list['items']:
             about_kind = edge.end_node.kind()
             parent = edge.end_node.get()
@@ -167,7 +167,7 @@ class Document(EndpointsModel):
                     about_name = parent.firstname + ' ' + parent.lastname
                 else:
                     about_name = parent.name
-                about = DiscussionAboutSchema(  
+                about = DiscussionAboutSchema(
                                                 kind=about_kind,
                                                 id=str(parent.key.id()),
                                                 name=about_name
@@ -288,8 +288,8 @@ class Document(EndpointsModel):
             data['id'] = document_key_async.id()
             document.put_index(data)
         return DocumentSchema(id=str(document_key_async.id()))
-    
-    @classmethod 
+
+    @classmethod
     def attach_files(cls,user_from_email,request):
         items = request.items
         author = Userinfo()
