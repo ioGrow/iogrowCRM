@@ -9,12 +9,13 @@ eventservices.factory('Event', function($http) {
   Event.get = function($scope,id) {
           gapi.client.crmengine.events.get(id).execute(function(resp) {
             if(!resp.code){
-               $scope.eventt = resp;
-               var url = Event.getUrl($scope.eventt.about.kind,$scope.eventt.about.id);
-               $scope.uri =url;
-               $scope.listContributors();
-               $scope.ListComments();
-              
+               $scope.event = resp;
+               /*var url = Event.getUrl($scope.eventt.about.kind,$scope.eventt.about.id);
+               $scope.uri =url;*/
+              /* $scope.listContributors();
+               $scope.ListComments();*/
+               console.log($scope.eventt);
+               $scope.isContentLoaded=true;
                // Call the method $apply to make the update on the scope
                 $scope.$apply();
 
