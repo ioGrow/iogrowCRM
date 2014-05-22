@@ -589,6 +589,7 @@ accountservices.factory('Attachement', function($http) {
                $scope.prepareUrls();
                
                $scope.isContentLoaded = true;
+               $scope.entityKey=$scope.attachment.entityKey;
                
                // Call the method $apply to make the update on the scope
                 $scope.$apply();
@@ -621,6 +622,27 @@ accountservices.factory('Attachement', function($http) {
                if(resp.code==401){
                   $scope.refreshToken();
                    $scope.blankStatdocuments = false;
+                  $scope.isLoading = false;
+                  $scope.$apply();
+               };
+         }
+     });
+      
+  };
+  Attachement.delete = function($scope,entityKey){
+      $scope.isLoading = true;
+      console.log(entityKey);
+      gapi.client.crmengine.documents.delete(entityKey).execute(function(resp) {
+            if(!resp.code){ 
+             $scope.isLoading = false;
+             $scope.blankStatdocuments = false;
+             $scope.$apply();
+              window.location.replace($scope.uri);
+            }else{
+               console.log(resp.message);
+               if(resp.code==401){
+                  $scope.refreshToken();
+                  $scope.blankStatdocuments = false;
                   $scope.isLoading = false;
                   $scope.$apply();
                };

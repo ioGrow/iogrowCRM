@@ -10,8 +10,10 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
      $scope.paginationcomment = {};
      $scope.currentPagecomment = 01;
      $scope.pagescomment = [];
-        
+     $scope.attachment={};
      $scope.notes = [];  
+     $scope.entityKey="";
+     $scope.attachment.assignees=[];
 
  
       // What to do after authentication
@@ -19,6 +21,7 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
           var noteId = $route.current.params.noteId;
           var params = {'id':$route.current.params.documentId};
           Attachement.get($scope,params);
+
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -97,8 +100,10 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
        $('#comment_0').effect( "bounce", "slow" );
        $('#comment_0 .message').effect("highlight","slow");
      };
-
-
+   $scope.deleteAttachement = function(){
+    var params={'entityKey':$scope.attachment.entityKey};
+    Attachement.delete($scope,params);
+   }
     // Google+ Authentication 
     Auth.init($scope);
 

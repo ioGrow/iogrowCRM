@@ -12,7 +12,7 @@
       </a>
     </div> 
     <h2 class="page-title" >
-      <a href="/#/contacts/" data-toggle="tooltip" id='testEdit' data-placement="bottom" title="Back to Accounts">
+      <a href="<%=uri%>" data-toggle="tooltip" id='testEdit' data-placement="bottom" title="Back to Accounts">
         <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="/static/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
       </a>     
       {{_("Documents")}} >
@@ -42,16 +42,16 @@
           <div class="row">
             <div class="col-md-12">
                     <span editable-text="attachment.title" ng-model="attachment.title" onbeforesave="inlineUpdateTask(task.id,task.title)" class="documentTitle" >
-                        <%= attachment.title%>
+                        <%= attachment.title%> 
                     </span>
                     <span class="page-meta pull-right">
-                       <a href="<%=attachment.embedLink%>" class="btn-link addAnotherPhone">
+                       <a href=" https://docs.google.com/file/d/<%=attachment.resource_id%>/edit?usp=drive_web" class="btn-link addAnotherPhone">
                           <img src="/static/img/drive_icon.png" width="16">
                           Open with Google Drive
                         </a>
                        |
                       <i class="icon-trash">
-                        <a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  Delete
+                        <a ng-click="deleteAttachement()" class="btn-link addAnotherPhone">  Delete
                         </a>
                       </i>
                     </span>
@@ -63,7 +63,7 @@
       <div class="row">
            <div class="col-md-12 ">
                 <img class="avatar user-photo" alt="" ng-src="<%=attachment.created_by.photo %>" />
-                <a href="#" class="name"><%= attachment.created_by.display_name%></a>
+                <a href="" class="name"><%= attachment.created_by.display_name%></a>
                 <span class="datetime">at <%=attachment.updated_at | date:'yyyy-MM-dd - HH:mm:ss '%></span>
                <ul class="list-unstyled ">
                  <li ng-show="task.tags" class="inline-tags">Tags:</li>
@@ -145,35 +145,27 @@
     <div class="col-md-3 tasks-col">
       <div class="row"> 
         <div class="col-md-12">
-      <div class="portlet showCard">
-        <div class="portlet-title line">
-          <div class="caption">
-            <i class="icon-user"></i>Who's involved
-          </div>
-        </div>
-                  <div class="portlet-body">
-                  <ul class="chats">
-                   
-                   <li>                      
-                        <span class="arrow">Created By: <%=task.created_by.display_name%></span>
-                   </li>
-                  </ul>
-                   <div class="caption"><i class="fa fa-group"></i>Assignees</div>
-                    <ul class="chats">
-                 
-                 <li  ng-repeat="assigned in task.assignees">
-                    
-                    
-                      <span class="arrow"><%=assigned.display_name%></span>
-                     
-                   
-                 </li>
-                  <li><a href="#addContributor"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new assignee</a></li>
-
-                 
+          <div class="portlet showCard">
+            <div class="portlet-title line">
+              <div class="caption">
+                <i class="icon-user"></i>Who's involved
+              </div>
+            </div>
+            <div class="portlet-body">
+                <ul class="chats">
                 </ul>
-                  </div>
-      </div>
+                 <div class="caption" ng-class="{hidden: attachment.assignees==null}"><i class="fa fa-group"></i>Assignees</div>
+                  <ul class="chats">
+               
+                       <li  ng-repeat="assigned in attachement.assignees">
+                            <span class="arrow"><%=assigned.display_name%></span>
+                       </li>
+                       <li><a href="#addContributor"  class="btn-link addAnotherPhone" data-toggle="modal">
+                          <i class="icon-plus"></i>Add a new assignee</a>
+                       </li>
+                  </ul>
+            </div>
+          </div>
         </div>
       </div>
       <!-- $ Events -->
