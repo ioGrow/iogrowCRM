@@ -1,13 +1,13 @@
 var commentservices = angular.module('crmEngine.commentservices',[]);
 
 commentservices.factory('Comment', function($http) {
-  
+
   var Comment = function(data) {
     angular.extend(this, data);
   }
 
-  
-  
+
+
   Comment.list = function($scope,params){
       console.log('in comments.list');
       console.log(params);
@@ -17,8 +17,8 @@ commentservices.factory('Comment', function($http) {
               if(!resp.code){
                 console.log(resp);
                  $scope.comments = resp.items;
-             
-                 
+
+
 
                   if ($scope.currentPagecomment>1){
                       console.log('Should show PREV');
@@ -40,7 +40,7 @@ commentservices.factory('Comment', function($http) {
 
 
                  // Call the method $apply to make the update on the scope
-                 
+
                  $scope.hilightComment();
                  $scope.$apply();
                  //$scope.hilightComment();
@@ -54,7 +54,7 @@ commentservices.factory('Comment', function($http) {
           gapi.client.crmengine.comments.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.comment = resp;
-              
+
                // $scope.isContentLoaded = true;
                // $scope.listTopics(resp);
                // $scope.listTasks();
@@ -69,10 +69,12 @@ commentservices.factory('Comment', function($http) {
           });
   };
 
-Comment.insert = function($scope,comment){
+Comment.insert = function($scope,params){
       $scope.isLoading = true;
-      gapi.client.crmengine.comments.insertv2(comment).execute(function(resp) {
-         
+
+      gapi.client.crmengine.comments.insertv2(params).execute(function(resp) {
+          console.log(params);
+          console.log(resp);
          if(!resp.code){
           // TME_02_11_13 when a note is inserted reload topics
           //$scope.listTopics();
@@ -80,17 +82,17 @@ Comment.insert = function($scope,comment){
           $scope.$apply();
            $scope.ListComments();
 
-          
-         
-          
-         
-     
+
+
+
+
+
          }else{
           console.log(resp.code);
          }
       });
   };
-  
+
 
 return Comment;
 });

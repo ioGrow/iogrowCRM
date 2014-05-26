@@ -8,7 +8,7 @@ from oauth2client.appengine import CredentialsNDBProperty
 from endpoints_proto_datastore.ndb import EndpointsModel
 # Our libraries
 from iomodels.crmengine.opportunitystage import Opportunitystage
-from iomodels.crmengine.leadstatuses import Leadstatus 
+from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.casestatuses import Casestatus
 from search_helper import tokenize_autocomplete
 import iomessages
@@ -62,7 +62,7 @@ FOLDERS = {
             'Cases': 'cases_folder'
         }
 folders = {}
- 
+
 
 
 class Application(ndb.Model):
@@ -114,7 +114,7 @@ class Organization(ndb.Model):
         for leadstat in Default_Lead_Status:
           created_lead_stat = Leadstatus(status=leadstat['status'],organization=org_key)
           created_lead_stat.put_async()
-    # Create a standard instance for this organization  
+    # Create a standard instance for this organization
     @classmethod
     def create_instance(cls,org_name, admin):
         # init google drive folders
@@ -124,7 +124,7 @@ class Organization(ndb.Model):
                         )
         org_key = organization.put()
         taskqueue.add(
-                    url='/workers/createorgfolders', 
+                    url='/workers/createorgfolders',
                     params={
                             'email': admin.email,
                             'org_key':org_key.urlsafe()
@@ -161,7 +161,13 @@ class Organization(ndb.Model):
             if profile=='Super Administrator':
                 created_apps.append(admin_app_key)
                 created_tabs.extend(admin_tabs)
-            created_profile = Profile(name=profile,apps=created_apps,default_app=default_app,tabs=created_tabs,organization=org_key)
+            created_profile = Profile(
+                                      name=profile,
+                                      apps=created_apps,
+                                      default_app=default_app,
+                                      tabs=created_tabs,
+                                      organization=org_key
+                                    )
             # init admin config
             if profile=='Super Administrator':
                 admin_profile_key = created_profile.put()
@@ -170,12 +176,12 @@ class Organization(ndb.Model):
                 created_profile.put_async()
         # init default stages,status, default values...
         cls.init_default_values(org_key)
-                
-    
-          
-        
 
-     
+
+
+
+
+
 class Permission(ndb.Model):
     about_kind = ndb.StringProperty(required=True)
     about_item = ndb.StringProperty(required=True)
@@ -184,7 +190,7 @@ class Permission(ndb.Model):
     additionalRoles = ndb.StringProperty(repeated=True)
     # is it a group or user
     type = ndb.StringProperty(required=True)
-    
+
     value = ndb.StringProperty(required=True)
     name = ndb.StringProperty()
     photoLink = ndb.StringProperty()
@@ -199,14 +205,14 @@ class Contributor(EndpointsModel):
     additionalRoles = ndb.StringProperty(repeated=True)
     # is it a group or user
     type = ndb.StringProperty(required=True)
-    
+
     value = ndb.StringProperty(required=True)
     name = ndb.StringProperty()
     photoLink = ndb.StringProperty()
     created_by = ndb.StringProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     organization = ndb.KeyProperty()
-        
+
 # We use the Profile model to describe what each user can do?
 class Profile(ndb.Model):
     name = ndb.StringProperty(required=True)
@@ -233,7 +239,7 @@ class Userinfo(EndpointsModel):
         self.google_public_profile_url= user.google_public_profile_url
         self.photo = user.google_public_profile_photo_url
         return self
-    
+
 class User(EndpointsModel):
     # General informations about the user
     _message_fields_schema = ('id','email','entityKey', 'google_user_id','google_display_name','google_public_profile_photo_url','language','status')
@@ -249,7 +255,7 @@ class User(EndpointsModel):
     timezone = ndb.StringProperty()
     # Is the user a public user or business user
     type = ndb.StringProperty()
-    # If the user is a business user, we store the informations about him 
+    # If the user is a business user, we store the informations about him
     organization = ndb.KeyProperty()
     status = ndb.StringProperty()
     profile = ndb.KeyProperty()
@@ -270,7 +276,7 @@ class User(EndpointsModel):
             ndb.Model.put(existing_user, **kwargs)
         else:
             ndb.Model.put(self, **kwargs)
-            
+
 
     def init_user_config(self,org_key,profile_key):
         profile = profile_key.get()
@@ -290,13 +296,13 @@ class User(EndpointsModel):
             memcache.add(self.email, self)
         if self.google_credentials:
             taskqueue.add(
-                        url='/workers/createcontactsgroup', 
+                        url='/workers/createcontactsgroup',
                         params={
                                 'email': self.email
                                 }
                         )
-        self.put_async()
-    
+        self.put()
+
     @classmethod
     def memcache_update(cls,user,email):
         if memcache.get(user.email) :
@@ -318,18 +324,18 @@ class User(EndpointsModel):
     @classmethod
     def get_by_gid(cls,gid):
         return cls.query(cls.google_user_id == gid).get()
-         
+
 
     def get_user_apps(self):
         return ndb.get_multi(self.apps)
-        
+
     def get_user_active_app(self):
         mem_key = '%s_active_app' % self.google_user_id
         active_app = memcache.get(mem_key)
         if active_app is not None:
             return active_app
         return self.active_app.get()
-    
+
     def set_user_active_app(self,app_key):
       if app_key in self.apps:
         self.active_app = app_key
@@ -369,7 +375,7 @@ class User(EndpointsModel):
                 self.put()
                 memcache.add(mem_key, ndb.get_multi(self.active_tabs))
                 return ndb.get_multi(active_app.tabs)
-                
+
 
     def get_user_groups(self):
         list_of_groups = list()
@@ -467,12 +473,12 @@ class Companyprofile(EndpointsModel):
   name = ndb.StringProperty()
   youtube_channel = ndb.StringProperty()
   tagline = ndb.TextProperty()
-  introduction =ndb.TextProperty() 
+  introduction =ndb.TextProperty()
   created_at = ndb.DateTimeProperty(auto_now_add=True)
   updated_at = ndb.DateTimeProperty(auto_now=True)
     # public or private
   access = ndb.StringProperty()
-  
+
 
   def put(self, **kwargs):
         ndb.Model.put(self, **kwargs)
@@ -491,5 +497,3 @@ class Companyprofile(EndpointsModel):
            ])
         live_index = search.Index(name="ioGrowLiveIndex")
         live_index.put(show_document_for_live)
-        
-    
