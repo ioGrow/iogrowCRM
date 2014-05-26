@@ -680,7 +680,22 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
         $scope.task.dueDate='0000-00-00T00:00:00-00:00';
         Task.insert($scope,params);
      }
+     $scope.$watch('opportunity.closed_date', function(newValue, oldValue) {
+            if (newValue!=oldValue){
+                $scope.patchDate(newValue);
+            }
 
+     });
+     $scope.patchDate = function(newValue){
+        var closed_at = $filter('date')(newValue,['yyyy-MM-ddTHH:mm:00.000000']);
+        var params = {
+                    'id':$scope.opportunity.id,
+                    'closed_date':closed_at
+        };
+        if (!$scope.isLoading){
+          Opportunity.patch($scope,params);
+        }
+     }
      $scope.hilightTask = function(){
         console.log('Should higll');
         $('#task_0').effect("highlight","slow");
