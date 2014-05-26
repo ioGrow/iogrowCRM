@@ -59,7 +59,7 @@ class CaseSchema(messages.Message):
     status = messages.StringField(4)
     folder = messages.StringField(5)
     type_case = messages.StringField(6)
-    current_status = messages.MessageField(CaseStatusSchema,7) 
+    current_status = messages.MessageField(CaseStatusSchema,7)
     all_status = messages.MessageField(CaseStatusSchema,8,repeated = True)
     tags = messages.MessageField(TagSchema,9, repeated = True)
     infonodes = messages.MessageField(InfoNodeListResponse,10)
@@ -74,6 +74,8 @@ class CaseSchema(messages.Message):
     description = messages.StringField(19)
     case_origin = messages.StringField(20)
     closed_date = messages.StringField(21)
+    account = messages.MessageField(iomessages.AccountSchema,22)
+    contact = messages.MessageField(iomessages.ContactSchema,23)
 
 class CaseListResponse(messages.Message):
     items = messages.MessageField(CaseSchema, 1, repeated=True)
@@ -119,7 +121,7 @@ class Case(EndpointsModel):
     closed_date = ndb.DateTimeProperty()
     # public or private
     access = ndb.StringProperty()
-    
+
     def put(self, **kwargs):
         ndb.Model.put(self, **kwargs)
         self.put_index()
@@ -189,7 +191,7 @@ class Case(EndpointsModel):
                ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)
-    
+
     @classmethod
     def get_schema(cls,user_from_email,request):
         case = cls.get_by_id(int(request.id))
@@ -202,13 +204,23 @@ class Case(EndpointsModel):
                                         kind = 'parents'
                                         )
             account_schema = None
+            contact_schema = None
             for parent in parents_edge_list['items']:
                 if parent.end_node.kind() == 'Account':
                     account = parent.end_node.get()
-                    account_schema = AccountSchema(
+                    account_schema = iomessages.AccountSchema(
                                             id = str( account.key.id() ),
                                             entityKey = account.key.urlsafe(),
                                             name = account.name
+                                            )
+                elif parent.end_node.kind() == 'Contact':
+                    contact = parent.end_node.get()
+                    contact_schema = iomessages.ContactSchema(
+                                            id = str( contact.key.id() ),
+                                            entityKey = contact.key.urlsafe(),
+                                            firstname = contact.firstname,
+                                            lastname = contact.lastname,
+                                            title = contact.title
                                             )
             tag_list = Tag.list_by_parent(parent_key = case.key)
             # list of infonodes
@@ -249,11 +261,11 @@ class Case(EndpointsModel):
             current_status_schema = None
             if len(case_status_edges['items'])>0:
                                 current_status = case_status_edges['items'][0].end_node.get()
-                                current_status_schema = CaseStatusSchema(  
+                                current_status_schema = CaseStatusSchema(
                                                                         name = current_status.status,
                                                                         status_changed_at = case_status_edges['items'][0].created_at.isoformat()
                                                                         )
-            
+
             closed_date = None
             if case.closed_date:
                 closed_date = case.closed_date.strftime("%Y-%m-%dT%H:%M:00.000")
@@ -275,6 +287,8 @@ class Case(EndpointsModel):
                                       case_origin = case.case_origin,
                                       closed_date = closed_date,
                                       type_case = case.type_case,
+                                      account = account_schema,
+                                      contact = contact_schema,
                                       created_at = case.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                       updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                     )
@@ -333,7 +347,7 @@ class Case(EndpointsModel):
                         current_status_schema = None
                         if len(case_status_edges['items'])>0:
                             current_status = case_status_edges['items'][0].end_node.get()
-                            current_status_schema = CaseStatusSchema(  
+                            current_status_schema = CaseStatusSchema(
                                                                     name = current_status.status,
                                                                     status_changed_at = case_status_edges['items'][0].created_at.isoformat()
                                                                     )
@@ -408,7 +422,7 @@ class Case(EndpointsModel):
                                       ]:
                             kwargs[e.name] = e.value
                     search_results.append(CaseSearchResult(**kwargs))
-                    
+
         except search.Error:
             logging.exception('Search failed')
         return CaseSearchResults(
@@ -444,7 +458,7 @@ class Case(EndpointsModel):
                         current_status_schema = None
                         if len(case_status_edges['items'])>0:
                             current_status = case_status_edges['items'][0].end_node.get()
-                            current_status_schema = CaseStatusSchema(  
+                            current_status_schema = CaseStatusSchema(
                                                                     name = current_status.status,
                                                                     status_changed_at = case_status_edges['items'][0].created_at.isoformat()
                                                                     )
@@ -465,7 +479,7 @@ class Case(EndpointsModel):
                 else:
                     you_can_loop = False
                     case_next_curs = None
-            
+
             if (count == limit):
                 you_can_loop = False
 
@@ -486,7 +500,7 @@ class Case(EndpointsModel):
         case_key = case.put_async()
         case_key_async = case_key.get_result()
         taskqueue.add(
-                    url='/workers/createobjectfolder', 
+                    url='/workers/createobjectfolder',
                     params={
                             'kind': "Case",
                             'folder_name': request.name,
@@ -565,7 +579,3 @@ class Case(EndpointsModel):
                                   updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
         return case_schema
-
-    
-
-  
