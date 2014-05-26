@@ -77,19 +77,19 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
     $scope.addComment = function(comment){
 
       var params ={
-        'about':$scope.attachment.entityKey,
-        'content':$scope.comment.content
-      };
-      console.log(params);
+                  'about':$scope.attachment.entityKey,
+                  'content':$scope.comment.content
+                };
       Comment.insert($scope,params);
       $scope.comment.content='';
      
       
     };
     $scope.ListComments = function(){
-      var params = {'discussion':$scope.attachment.entityKey,
-                     'limit':5,
-                      'order':'-updated_at'};
+      var params = {
+                    'about':$scope.attachment.entityKey,
+                    'limit':7
+                   };
       Comment.list($scope,params);
       
       

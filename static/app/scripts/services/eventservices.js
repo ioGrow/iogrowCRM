@@ -18,6 +18,8 @@ eventservices.factory('Event', function($http) {
                $scope.isContentLoaded=true;
                // Call the method $apply to make the update on the scope
                 $scope.$apply();
+                console.log($scope.event.where);
+                $scope.renderMaps();
 
             }else {
                if(resp.code==401){
@@ -28,6 +30,34 @@ eventservices.factory('Event', function($http) {
             }
             console.log('gapi #end_execute');
           });
+  };
+  Event.patch = function($scope,params){
+      $scope.isLoading = true;
+      
+      gapi.client.crmengine.events.patch(params).execute(function(resp) {
+       
+          if(!resp.code){
+            $scope.event = resp;
+            console.log("working");
+            /*$scope.ListComments();
+            $scope.listContributors();*/
+            $scope.isLoading = false;
+           /* $scope.listTags();
+            $scope.listTasks();*/
+            $scope.$apply();
+          
+         }else{
+            console.log("not working");
+             if(resp.message=="Invalid grant"){
+              console.log("Invalid grant");
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.listTags();
+                $scope.listTasks();
+                $scope.$apply();
+             };
+         }
+      });
   };
   Event.list = function($scope,params){
       
