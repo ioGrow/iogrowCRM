@@ -1073,6 +1073,10 @@ $scope.listInfonodes = function(kind) {
              name:value}
          Case.patch($scope,params);}
        };
+  // HKA 26.05.2014 return URL topic     
+  $scope.getTopicUrl = function(type,id){
+      return Topic.getUrl(type,id);
+    };
 
      // Google+ Authentication
      Auth.init($scope);
