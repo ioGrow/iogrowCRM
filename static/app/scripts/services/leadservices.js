@@ -244,12 +244,7 @@ leadservices.factory('Lead', function($http) {
          if(!resp.code){
           $scope.isLoading = false;
 
-          if ($scope.leads == undefined){
-            $scope.leads = [];
-            $scope.blankStatelead = false;
-          }
-          $scope.leads.push(resp);
-          $scope.lead = {};
+          $scope.leadInserted();
           $scope.$apply();
 
          }else{

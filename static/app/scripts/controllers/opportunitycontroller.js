@@ -902,7 +902,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
                 'description':opportunity.description
               };
 
-  
+
   Opportunity.patch($scope,params);
 
  //$scope.$watch($scope.opportunity.stagename, $scope.createNote());
@@ -1337,10 +1337,11 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
 
         $scope.opportunity.contact = $scope.searchContactQuery;
         var account = {
-                      'entityKey':$scope.searchContactQuery.account
+                      'entityKey':$scope.searchContactQuery.account.entityKey,
+                      'name':$scope.searchContactQuery.account.name
                     };
         $scope.opportunity.account = account;
-        $scope.searchAccountQuery = $scope.searchContactQuery.contacts;
+        $scope.searchAccountQuery = $scope.searchContactQuery.account.name;
       };
 
       var params_search_account ={};
