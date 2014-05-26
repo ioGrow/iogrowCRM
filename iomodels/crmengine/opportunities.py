@@ -90,7 +90,7 @@ class OpportunityListRequest(messages.Message):
     order = messages.StringField(3)
     tags = messages.StringField(4,repeated = True)
     owner = messages.StringField(5)
-    stagename = messages.StringField(6)
+    stage = messages.StringField(6)
 
 class OpportunityListResponse(messages.Message):
     items = messages.MessageField(OpportunitySchema, 1, repeated=True)
@@ -353,8 +353,13 @@ class Opportunity(EndpointsModel):
                             is_filtered = False
                     if request.owner and opportunity.owner!=request.owner and is_filtered:
                         is_filtered = False
-                    if request.stagename and opportunity.stagename!=request.stagename and is_filtered:
-                        is_filtered = False
+                    if request.stage and is_filtered:
+                        end_node_set = [ndb.Key(urlsafe=request.stage)]
+                        if not Edge.find(start_node=opportunity.key,
+                                        kind='stages',
+                                        end_node_set=end_node_set,
+                                        operation='AND'):
+                            is_filtered = False
                     if is_filtered and Node.check_permission( user_from_email, opportunity ):
                         count = count + 1
                         #list of tags related to this opportunity
