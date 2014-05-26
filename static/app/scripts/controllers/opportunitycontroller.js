@@ -1373,7 +1373,7 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
         var hasContact = false;
         var hasAccount = false;
         opportunity.closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
-        opportunity.stage = $scope.stage_selected.entityKey;
+        opportunity.stage = $scope.initialStage.entityKey;
         if (typeof(opportunity.account)=='object'){
             hasAccount = true;
             opportunity.account = opportunity.account.entityKey;
