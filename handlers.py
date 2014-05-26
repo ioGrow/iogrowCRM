@@ -74,7 +74,7 @@ class BaseHandler(webapp2.RequestHandler):
         if language:
             locale = self.request.GET.get('locale', 'en_US')
             i18n.get_i18n().set_locale(language)
-                        
+
         else:
             locale = self.request.GET.get('locale', 'en_US')
             i18n.get_i18n().set_locale('en')
@@ -97,7 +97,7 @@ class BaseHandler(webapp2.RequestHandler):
                       }
             template = jinja_environment.get_template(template_name)
             self.response.out.write(template.render(template_values))
-      
+
 class SessionEnabledHandler(webapp2.RequestHandler):
     """Base type which ensures that derived types always have an HTTP session."""
     CURRENT_USER_SESSION_KEY = 'me'
@@ -187,7 +187,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
         else:
             self.redirect('/welcome/')
 
-# Change the current app for example from sales to customer support           
+# Change the current app for example from sales to customer support
 class ChangeActiveAppHandler(SessionEnabledHandler):
     def get(self,appid):
         new_app_id = int(appid)
@@ -219,7 +219,7 @@ class SignInHandler(BaseHandler, SessionEnabledHandler):
                           }
         template = jinja_environment.get_template('templates/sign-in.html')
         self.response.out.write(template.render(template_values))
-          
+
 class SignUpHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
@@ -242,7 +242,7 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
         else:
             self.redirect('/sign-in')
 
-class GooglePlusConnect(SessionEnabledHandler): 
+class GooglePlusConnect(SessionEnabledHandler):
     @staticmethod
     def exchange_code(code):
         """Exchanges the `code` member of the given AccessToken object, and returns
@@ -305,9 +305,9 @@ class GooglePlusConnect(SessionEnabledHandler):
             user.google_display_name = userinfo.get('name')
             user.google_public_profile_url = userinfo.get('link')
             user.email = userinfo.get('email')
-            user.google_public_profile_photo_url = userinfo.get('picture') 
+            user.google_public_profile_photo_url = userinfo.get('picture')
         else:
-            user = model.User.get_by_email(email)    
+            user = model.User.get_by_email(email)
         if user is None:
             userinfo = GooglePlusConnect.get_user_email(credentials)
             user = model.User()
@@ -326,7 +326,7 @@ class GooglePlusConnect(SessionEnabledHandler):
             memcache.add(user.email, user)
         if not user.google_contacts_group:
             taskqueue.add(
-                            url='/workers/createcontactsgroup', 
+                            url='/workers/createcontactsgroup',
                             params={
                                     'email': user.email
                                     }
@@ -356,13 +356,13 @@ class GooglePlusConnect(SessionEnabledHandler):
             or not local_id_match
             or issued_to_match.group(1) != local_id_match.group(1)):
             return
-        #Check if is it an invitation to sign-in or just a simple sign-in 
+        #Check if is it an invitation to sign-in or just a simple sign-in
         invited_user_id = None
         invited_user_id_request = self.request.get("id")
         if invited_user_id_request:
             invited_user_id = long(invited_user_id_request)
         #user = model.User.query(model.User.google_user_id == token_info.get('user_id')).get()
-        
+
         # Store our credentials with in the datastore with our user.
         if invited_user_id:
             user = GooglePlusConnect.save_token_for_user(
@@ -381,7 +381,7 @@ class GooglePlusConnect(SessionEnabledHandler):
             isNewUser = True
         # Store the user ID in the session for later use.
         self.session[self.CURRENT_USER_SESSION_KEY] = user.email
-        self.response.headers['Content-Type'] = 'application/json'  
+        self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(isNewUser))
 
 class AccountListHandler(BaseHandler, SessionEnabledHandler):
@@ -403,7 +403,7 @@ class ContactListHandler(BaseHandler, SessionEnabledHandler):
 class ContactShowHandler(BaseHandler,SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/contacts/contact_show.html')
-      
+
 class ContactNewHandler(BaseHandler,SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/contacts/contact_new.html')
@@ -494,7 +494,7 @@ class settingsShowHandler(BaseHandler, SessionEnabledHandler):
 
 class SearchListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
-        self.prepare_template('templates/search/list.html')        
+        self.prepare_template('templates/search/list.html')
 
 # Workers
 class CreateOrganizationFolders(webapp2.RequestHandler):
@@ -502,7 +502,7 @@ class CreateOrganizationFolders(webapp2.RequestHandler):
     def init_drive_folder(http,driveservice,folder_name,parent=None):
         folder = {
                 'title': folder_name,
-                'mimeType': 'application/vnd.google-apps.folder'          
+                'mimeType': 'application/vnd.google-apps.folder'
         }
         if parent:
             folder['parents'] = [{'id': parent}]
@@ -512,7 +512,7 @@ class CreateOrganizationFolders(webapp2.RequestHandler):
         except errors.HttpError, error:
             print 'An error occured: %s' % error
             return None
-    
+
     @staticmethod
     def folder_created_callback(request_id, response, exception):
         global folders
@@ -523,7 +523,7 @@ class CreateOrganizationFolders(webapp2.RequestHandler):
             # Do something with the response
             folder_name = response['title']
             folders[folder_name] = response['id']
-    
+
     def post(self): # should run at most 1/s due to entity group limit
         admin = model.User.get_by_email(self.request.get('email'))
         credentials = admin.google_credentials
@@ -540,7 +540,7 @@ class CreateOrganizationFolders(webapp2.RequestHandler):
             folder = {
                     'title': folder_name,
                     'mimeType': 'application/vnd.google-apps.folder',
-                    'parents' : [{'id': org_folder}]       
+                    'parents' : [{'id': org_folder}]
             }
             batch.add(driveservice.files().insert(
                                                 fields='id,title',
@@ -594,7 +594,7 @@ class CreateObjectFolder(webapp2.RequestHandler):
                 folder_params['parents'] = [{'id': parent_folder}]
 
             created_folder = service.files().insert(body=folder_params,fields='id').execute()
-            # move the image to the created folder 
+            # move the image to the created folder
             if logo_img_id:
                 params = {
                       'parents': [{'id': created_folder['id']}]
@@ -655,7 +655,7 @@ class SyncCalendarEvent(webapp2.RequestHandler):
             created_event = service.events().insert(calendarId='primary',body=params).execute()
         except:
             raise endpoints.UnauthorizedException('Invalid grant' )
-        
+
 
 
 routes = [
@@ -667,12 +667,12 @@ routes = [
     ('/workers/sync_contacts',SyncContact),
 
     ('/',IndexHandler),
-    
+
     # Templates Views Routes
     # Accounts Views
     ('/views/accounts/list',AccountListHandler),
     ('/views/accounts/show',AccountShowHandler),
-    ('/views/accounts/new',AccountNewHandler),   
+    ('/views/accounts/new',AccountNewHandler),
     # Contacts Views
     ('/views/contacts/list',ContactListHandler),
     ('/views/contacts/show',ContactShowHandler),
@@ -685,7 +685,7 @@ routes = [
     ('/views/opportunities/list',OpportunityListHandler),
     ('/views/opportunities/show',OpportunityShowHandler),
     ('/views/opportunities/new',OpportunityNewHandler),
-    
+
     # Leads Views
     ('/views/leads/list',LeadListHandler),
     ('/views/leads/show',LeadShowHandler),
@@ -694,14 +694,14 @@ routes = [
     ('/views/cases/list',CaseListHandler),
     ('/views/cases/show',CaseShowHandler),
     ('/views/cases/new',CaseNewHandler),
-    
+
     # Needs Views
     ('/views/needs/show',NeedShowHandler),
-  
+
     # Notes, Documents, Taks, Events, Search Views
     ('/views/notes/show',NoteShowHandler),
     ('/views/documents/show',DocumentShowHandler),
-    
+
     ('/views/search/list',SearchListHandler),
     ('/views/tasks/show',TaskShowHandler),
     ('/views/tasks/list',AllTasksHandler),
@@ -725,4 +725,3 @@ config['webapp2_extras.sessions'] = {
     'secret_key': 'YOUR_SESSION_SECRET'
 }
 app = webapp2.WSGIApplication(routes, config=config, debug=True)
-

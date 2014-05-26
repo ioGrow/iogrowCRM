@@ -10,7 +10,7 @@ from google.appengine.ext import ndb
 from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
 from endpoints_proto_datastore.ndb import EndpointsModel
-from google.appengine.api import search 
+from google.appengine.api import search
 import gdata.contacts.data
 from protorpc import messages
 from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
@@ -78,7 +78,7 @@ class ContactInsertRequest(messages.Message):
     emails = messages.MessageField(iomessages.EmailSchema,9, repeated = True)
     addresses = messages.MessageField(iomessages.AddressSchema,10, repeated = True)
     infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema,11, repeated = True)
-    
+
 class ContactSchema(messages.Message):
     id = messages.StringField(1)
     entityKey = messages.StringField(2)
@@ -136,9 +136,9 @@ class Contact(EndpointsModel):
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
     collaborators_ids = ndb.StringProperty(repeated=True)
     account = ndb.KeyProperty()
-    account_name = ndb.StringProperty() 
+    account_name = ndb.StringProperty()
     organization = ndb.KeyProperty()
-    folder = ndb.StringProperty() 
+    folder = ndb.StringProperty()
     firstname = ndb.StringProperty()
     lastname = ndb.StringProperty()
     display_name = ndb.StringProperty(repeated=True)
@@ -148,7 +148,7 @@ class Contact(EndpointsModel):
     updated_at = ndb.DateTimeProperty(auto_now=True)
     department = ndb.StringProperty()
     description = ndb.StringProperty()
-    
+
     # public or private
     access = ndb.StringProperty()
     tagline = ndb.StringProperty()
@@ -160,7 +160,7 @@ class Contact(EndpointsModel):
     sociallinks= ndb.StructuredProperty(model.Social,repeated=True)
 
     def put(self, **kwargs):
-        
+
         ndb.Model.put(self, **kwargs)
         self.put_index()
         self.set_perm()
@@ -366,14 +366,14 @@ class Contact(EndpointsModel):
                 else:
                     you_can_loop = False
                     contact_next_curs = None
-            
+
             if (count == limit):
                 you_can_loop = False
 
         return ContactListResponse(
                                     items = contact_list,
                                     nextPageToken = contact_next_curs
-                                )                
+                                )
         if contact_edge_list['next_curs'] and contact_edge_list['more']:
             contact_next_curs = contact_edge_list['next_curs'].urlsafe()
         else:
@@ -381,7 +381,7 @@ class Contact(EndpointsModel):
         return ContactListResponse(
                                     items = contact_list,
                                     nextPageToken = contact_next_curs
-                                ) 
+                                )
     @classmethod
     def list(cls,user_from_email,request):
         curs = Cursor(urlsafe=request.pageToken)
@@ -603,7 +603,7 @@ class Contact(EndpointsModel):
                                                     )
                                                 )
         taskqueue.add(
-                    url='/workers/createobjectfolder', 
+                    url='/workers/createobjectfolder',
                     params={
                             'kind': "Contact",
                             'folder_name': folder_name,
@@ -628,7 +628,7 @@ class Contact(EndpointsModel):
             EndpointsHelper.update_edge_indexes(
                                             parent_key = contact_key_async,
                                             kind = 'contacts',
-                                            indexed_edge = str(account_key.get().name)
+                                            indexed_edge = str(account_key.id())
                                             )
 
         else:
@@ -646,7 +646,7 @@ class Contact(EndpointsModel):
                                   updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
         taskqueue.add(
-                    url='/workers/sync_contacts', 
+                    url='/workers/sync_contacts',
                     params={
                             'email': user_from_email.email,
                             'id':contact_schema.id
@@ -704,7 +704,7 @@ class Contact(EndpointsModel):
                 gcontact_schema.email.append(
                                             gdata.data.Email(
                                                             address= item.email,
-                                                            rel=gdata.data.WORK_REL, 
+                                                            rel=gdata.data.WORK_REL,
                                                             display_name=full_name
                                                             )
                                             )
@@ -747,7 +747,7 @@ class Contact(EndpointsModel):
         google_contact_schema = cls.to_gcontact_schema(
                                                         contact_schema,
                                                         user.google_contacts_group
-                                                    ) 
+                                                    )
         created_contact=EndpointsHelper.create_contact(
                                                         user.google_credentials,
                                                         google_contact_schema
@@ -784,7 +784,7 @@ class Contact(EndpointsModel):
         csvreader = csv.reader(csv_file.splitlines())
         headings = csvreader.next()
         i = 0
-        # search for the matched columns in this csv 
+        # search for the matched columns in this csv
         # the mapping rules are in ATTRIBUTES_MATCHING
         matched_columns = {}
         for column in headings:
@@ -810,7 +810,7 @@ class Contact(EndpointsModel):
                                 from iomodels.crmengine.accounts import Account
                                 # Check if the account exist to not duplicate it
                                 if row[key] in imported_accounts.keys():
-                                    # check first if in those imported accounts 
+                                    # check first if in those imported accounts
                                     account_key_async = imported_accounts[row[key]]
                                 else:
                                     # search if it exists in the datastore
@@ -831,7 +831,7 @@ class Contact(EndpointsModel):
                                         account_key = account.put_async()
                                         account_key_async = account_key.get_result()
                                         taskqueue.add(
-                                                    url='/workers/createobjectfolder', 
+                                                    url='/workers/createobjectfolder',
                                                     params={
                                                         'kind': "Account",
                                                         'folder_name': account.name,
@@ -844,7 +844,7 @@ class Contact(EndpointsModel):
                                         account.put_index(data)
                                     # add the account to imported accounts dictionary
                                     imported_accounts[row[key]] = account_key_async
-                            # prepare the extracted contact info in a dictionary 
+                            # prepare the extracted contact info in a dictionary
                             # if has multiple value with for the same field
                             if matched_columns[key] in contact.keys():
                                 new_list = []
@@ -884,7 +884,7 @@ class Contact(EndpointsModel):
                             contact_key_async = contact_key.get_result()
                             folder_name = contact['firstname'] + contact['lastname']
                             taskqueue.add(
-                                            url='/workers/createobjectfolder', 
+                                            url='/workers/createobjectfolder',
                                             params={
                                                     'kind': "Contact",
                                                     'folder_name': folder_name,
@@ -909,7 +909,7 @@ class Contact(EndpointsModel):
                             else:
                                 data = {}
                                 data['id'] = contact_key_async.id()
-                                imported_contact. put_index(data) 
+                                imported_contact. put_index(data)
                             # insert info nodes
                             for attribute in contact.keys():
                                 if contact[attribute]:
@@ -963,12 +963,3 @@ class Contact(EndpointsModel):
                                                                                 kind = 'infos',
                                                                                 indexed_edge = smart_str(indexed_edge)
                                                                                 )
-
-                    
-
-
-
-
-
-
-
