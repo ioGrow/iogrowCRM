@@ -53,7 +53,7 @@ class ListRequest(messages.Message):
     pageToken = messages.StringField(2)
 
 class AccountSchema(messages.Message):
-    id = messages.StringField(1)
+    id = messages.IntegerField(1)
     entityKey = messages.StringField(2)
     name = messages.StringField(3)
 
@@ -121,7 +121,7 @@ class ContactSearchResult(messages.Message):
     firstname = messages.StringField(3)
     lastname = messages.StringField(4)
     contacts = messages.StringField(5)
-    account = messages.StringField(6)
+    account = messages.MessageField(AccountSchema,6)
     position = messages.StringField(7)
 
 # The message class that defines a set of contacts.search results
@@ -243,7 +243,7 @@ class Contact(EndpointsModel):
             account = parents_edge_list['items'][0].end_node.get()
             if account:
                 account_schema = AccountSchema(
-                                        id = str( account.key.id() ),
+                                        id = int( account.key.id() ),
                                         entityKey = account.key.urlsafe(),
                                         name = account.name
                                         )
@@ -430,7 +430,7 @@ class Contact(EndpointsModel):
                             account = parents_edge_list['items'][0].end_node.get()
                             if account:
                                 account_schema = AccountSchema(
-                                                        id = str( account.key.id() ),
+                                                        id = int( account.key.id() ),
                                                         entityKey = account.key.urlsafe(),
                                                         name = account.name
                                                         )
@@ -499,6 +499,7 @@ class Contact(EndpointsModel):
                     kwargs = {
                         'id': scored_document.doc_id
                     }
+                    account_schema = None
                     for e in scored_document.fields:
                         if e.name in [
                                       "entityKey",
@@ -509,6 +510,21 @@ class Contact(EndpointsModel):
                                       "position"
                                       ]:
                             kwargs[e.name] = e.value
+                            if e.name == 'contacts':
+                                #get account_schema related to this contact
+                                account_document = index.get( str( e.value ) )
+                                if account_document:
+                                    account_kwargs = {
+                                                      'id':int(e.value)
+                                                    }
+                                    for field in account_document.fields:
+                                        if field.name in ['entityKey','title']:
+                                            if field.name == 'title':
+                                                account_kwargs['name'] = field.value
+                                            else:
+                                                account_kwargs[field.name] = field.value
+                                    kwargs['account'] = account_kwargs
+
                     search_results.append(ContactSearchResult(**kwargs))
         except search.Error:
             logging.exception('Search failed')
@@ -616,7 +632,7 @@ class Contact(EndpointsModel):
             account_key = ndb.Key(urlsafe=request.account)
             account = account_key.get()
             account_schema = AccountSchema(
-                                        id = str( account_key.id() ),
+                                        id = int( account_key.id() ),
                                         entityKey = request.account,
                                         name = account.name
                                         )

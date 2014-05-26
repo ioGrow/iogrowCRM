@@ -488,7 +488,7 @@ $scope.addTags=function(){
                  var card_index = '#card_'+index;
                 $(card_index).removeClass('over');
             }
-            
+
               $scope.$apply();
       };
 
@@ -1183,10 +1183,10 @@ app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','C
      $scope.selectContact = function(){
         console.log($scope.searchContactQuery);
         $scope.casee.contact = $scope.searchContactQuery;
-        var account = {'entityKey':$scope.searchContactQuery.account,
-                      'name':$scope.searchContactQuery.account_name};
+        var account = {'entityKey':$scope.searchContactQuery.account.entityKey,
+                      'name':$scope.searchContactQuery.account.name};
         $scope.casee.account = account;
-        $scope.searchAccountQuery = $scope.searchContactQuery.contacts;
+        $scope.searchAccountQuery = $scope.searchContactQuery.account.name;
       };
 
       var params_search_account ={};
