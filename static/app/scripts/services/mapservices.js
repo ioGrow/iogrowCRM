@@ -41,6 +41,43 @@ mapservices.factory('Map', function($http) {
       });
 
   };
+  Map.renderEvent = function($scope){
+     
+      var mapOptions = {
+                  center: new google.maps.LatLng(0, 0),
+                  zoom: 01
+      };
+      $('#gmap_canvas').gmap(mapOptions).bind('init', function(event, map) { 
+
+        if($scope.addresses){
+          for (var i=0; i<$scope.addresses.length; i++) {
+            if ($scope.addresses[i].lat){
+              var lat = parseFloat($scope.addresses[i].lat);
+              var lon = parseFloat($scope.addresses[i].lon);
+             
+              $('#gmap_canvas').gmap('addMarker', {
+                      'position': lat+ ','+ lon, 
+                      'draggable': true, 
+                      'bounds': true,
+                      'address':$scope.addresses[i]
+                    }, function(map, marker) {
+                      // should be deleted;
+                    }).dragend( function(event) {
+                        Map.updateLocation($scope,event.latLng, this);
+              });
+            }
+                  
+          }
+        }
+        x = map.getZoom();
+        c = map.getCenter();
+        google.maps.event.trigger(map, 'resize');
+        map.setZoom(x);
+        map.setCenter(c);
+        
+      });
+
+  };
   Map.updateLocation = function($scope,location,marker){
               marker.address.lat = location.lat();
               marker.address.lon = location.lng();
@@ -59,9 +96,11 @@ mapservices.factory('Map', function($http) {
   Map.searchLocation = function($scope,address){
               
               var addressArray = [];
-              var addressToSearch = Map.emptyString(address.street,false) + Map.emptyString(address.city,false) + Map.emptyString(address.country,false);
-
-              
+              if(address.street||address.city||address.country){
+                var addressToSearch = Map.emptyString(address.street,false) + Map.emptyString(address.city,false) + Map.emptyString(address.country,false);  
+              }else{
+                var addressToSearch =address;  
+              }      
               $('#gmap_canvas').gmap('search', {'address': addressToSearch}, function(results, status) {
                 
               if ( status == 'OK' ) {

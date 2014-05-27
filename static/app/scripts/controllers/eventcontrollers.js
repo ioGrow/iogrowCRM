@@ -1,5 +1,5 @@
-app.controller('EventShowController',['$scope','$filter','$route','Auth','Note','Event','Task','Topic','Comment','User','Contributor','Show',
-   function($scope,$filter,$route,Auth,Note,Event,Task,Topic,Comment,User,Contributor,Show) {
+app.controller('EventShowController',['$scope','$filter','$route','Auth','Note','Event','Task','Topic','Comment','User','Contributor','Show','Map',
+   function($scope,$filter,$route,Auth,Note,Event,Task,Topic,Comment,User,Contributor,Show,Map) {
 //HKA 14.11.2013 Controller to show Events and add comments
    $scope.isSignedIn = false;
      $scope.immediateFailed = false;
@@ -12,7 +12,8 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
      $scope.paginationcomment = {};
      $scope.currentPagecomment = 01;
      $scope.pagescomment = [];
-     
+     $scope.addresses=[];
+     $scope.event={};
      $scope.notes = [];
      $scope.users = [];
      $scope.user = undefined;
@@ -68,7 +69,10 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
           Comment.list($scope,params);
      };
    
-   
+     $scope.renderMaps = function(){
+
+          Map.searchLocation($scope,$scope.event.where);
+      };
     
 
      
@@ -81,20 +85,19 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
     $scope.addComment = function(comment){
 
       var params ={
-        'discussion':$scope.eventt.entityKey,
-        'content':$scope.comment.content
-      };
+                  'about':$scope.event.entityKey,
+                  'content':$scope.comment.content
+                };
       Comment.insert($scope,params);
       $scope.comment.content='';
      
       
     };
     $scope.ListComments = function(){
-
       var params = {
-                     'discussion':$scope.eventt.entityKey,
-                     'limit':5,
-                      'order':'-updated_at'};
+                    'about':$scope.event.entityKey,
+                    'limit':7
+                   };
       Comment.list($scope,params);
       
       
@@ -150,6 +153,11 @@ $scope.listContributors = function(){
  $scope.getshow = function(showId){
      var show = Show.get($scope.showId);
      return show;
+
+ }
+ $scope.updateEvent=function(params){
+  console.log("wooooooooooooooooooooooooooooooooooooooooooooork");
+   Event.patch($scope,params);
 
  }
 

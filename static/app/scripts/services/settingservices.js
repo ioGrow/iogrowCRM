@@ -30,11 +30,14 @@ settingservices.factory('Opportunitystage', function($http) {
 Opportunitystage.list = function($scope,params){
 	$scope.isLoading = true;
 	gapi.client.crmengine.opportunitystages.list(params).execute(function(resp){
-    
+
 		if(!resp.code){
 
-      
+
 			$scope.opportunitystages = resp.items;
+      $scope.initialStage = resp.items[1];
+      $scope.initialStageValue = $scope.initialStage.name + ' - ( ' + $scope.initialStage.probability + '% )' ;
+      console.log($scope.initialStageValue);
      $scope.isLoading = false;
 
 			$scope.$apply();
@@ -169,7 +172,7 @@ settingservices.factory('Casestatus',function($http){
   Casestatus.delete = function($scope,id){
      $scope.isLoading = true;
     gapi.client.crmengine.casestatuses.delete(id).execute(function(resp){
-      
+
 
        $scope.casestatuslist();
        $scope.isLoading = false;
