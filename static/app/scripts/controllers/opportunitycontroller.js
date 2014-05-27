@@ -250,9 +250,11 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
      };
      $scope.filterByStage = function(filter){
         if (filter){
-          var params = { 'stagename': filter,
+          var params = {
+                         'stage': filter,
                          'order': $scope.order,
-                         'limit':6}
+                         'limit':20
+                       }
         }
         else{
           var params = {
@@ -678,7 +680,22 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
         $scope.task.dueDate='0000-00-00T00:00:00-00:00';
         Task.insert($scope,params);
      }
+     $scope.$watch('opportunity.closed_date', function(newValue, oldValue) {
+            if (newValue!=oldValue){
+                $scope.patchDate(newValue);
+            }
 
+     });
+     $scope.patchDate = function(newValue){
+        var closed_at = $filter('date')(newValue,['yyyy-MM-ddTHH:mm:00.000000']);
+        var params = {
+                    'id':$scope.opportunity.id,
+                    'closed_date':closed_at
+        };
+        if (!$scope.isLoading){
+          Opportunity.patch($scope,params);
+        }
+     }
      $scope.hilightTask = function(){
         console.log('Should higll');
         $('#task_0').effect("highlight","slow");
@@ -902,7 +919,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
                 'description':opportunity.description
               };
 
-  
+
   Opportunity.patch($scope,params);
 
  //$scope.$watch($scope.opportunity.stagename, $scope.createNote());
@@ -1337,10 +1354,11 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
 
         $scope.opportunity.contact = $scope.searchContactQuery;
         var account = {
-                      'entityKey':$scope.searchContactQuery.account
+                      'entityKey':$scope.searchContactQuery.account.entityKey,
+                      'name':$scope.searchContactQuery.account.name
                     };
         $scope.opportunity.account = account;
-        $scope.searchAccountQuery = $scope.searchContactQuery.contacts;
+        $scope.searchAccountQuery = $scope.searchContactQuery.account.name;
       };
 
       var params_search_account ={};
@@ -1372,7 +1390,7 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
         var hasContact = false;
         var hasAccount = false;
         opportunity.closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
-        opportunity.stage = $scope.stage_selected.entityKey;
+        opportunity.stage = $scope.initialStage.entityKey;
         if (typeof(opportunity.account)=='object'){
             hasAccount = true;
             opportunity.account = opportunity.account.entityKey;

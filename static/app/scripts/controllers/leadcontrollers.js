@@ -412,7 +412,7 @@ $scope.addTags=function(){
                  var card_index = '#card_'+index;
                 $(card_index).removeClass('over');
             }
-            
+
               $scope.$apply();
       };
 
@@ -1299,6 +1299,9 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
         });
         return infonodes;
     }
+    $scope.leadInserted = function(){
+      window.location.replace('/#/leads');
+    };
       $scope.save = function(lead){
         if(lead.firstname && lead.lastname){
           var params ={
@@ -1318,7 +1321,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
               params['profile_img_url'] = 'https://docs.google.com/uc?id='+$scope.profile_img.profile_img_id;
           }
           Lead.insert($scope,params);
-          window.location.replace('/#/leads');
+
         }
       };
       $scope.addLeadOnKey = function(lead){
@@ -1326,6 +1329,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
             $scope.save(lead);
         }
       };
+
 
 
      // Quick Filtering

@@ -1,5 +1,10 @@
 from protorpc import messages
 
+class AccountSchema(messages.Message):
+    id = messages.StringField(1)
+    entityKey = messages.StringField(2)
+    name = messages.StringField(3)
+    
 class ContactSchema(messages.Message):
     id = messages.StringField(1)
     entityKey = messages.StringField(2)

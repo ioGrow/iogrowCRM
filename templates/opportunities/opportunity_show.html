@@ -50,15 +50,16 @@
                   <div class="oppRelatedTo">
                      <span ng-show="opportunity.account.name" style="">
                         Account name:
-                        <a class="tag ng-binding" href="http://localhost:8090/#/accounts/show/<%= opportunity.account.id %>">
+                        <a class="tag ng-binding" href="/#/accounts/show/<%= opportunity.account.id %>">
                           <%= opportunity.account.name %>
                         </a>
                       </span>
                       <br>
                       <span  style="">
                         Contact name:
-                        <a class="tag ng-binding" href="http://localhost:8090/#/contacts/show/<%= opportunity.contact.id %>">
-                          <%= opportunity.contact.firstname %> <%= opportunity.contact.lastname %>
+
+                        <a class="tag ng-binding" href="/#/contacts/show/<%= opportunity.contact.id %>">
+
                           <%= opportunity.contact.firstname %> <%= opportunity.contact.firstname %>
                         </a>
                       </span>
@@ -288,9 +289,9 @@
                                 <div class="col-md-12 margin-bottom-10">
                                   <div class="pull-right">
                                    <button class="btn blue btn-sm" ng-click="updateOpportunityPrice()">{{_("Ok")}}</button>
-                                   <button class="btn btn-sm" ng-click="showPriceForm=falsee">{{_("Cancel")}}</button> 
+                                   <button class="btn btn-sm" ng-click="showPriceForm=falsee">{{_("Cancel")}}</button>
                                   </div>
-                                   
+
                                 </div>
                             </div>
                               <span ng-hide="showPriceForm" ng-click="showPriceForm=true"><%= opportunity.currency %></span>
@@ -306,9 +307,9 @@
                                 <%=opportunity.closed_date | date:'MMMM dd, yyyy'%>
                               </div>
                               <span  class="margin-bottom-15">
-                                <datetimepick ng-model='opportunity.closed_date'  label-format='EEEE, MMMM d, yyyy'></datetimepick>  
+                                <datetimepick ng-model='opportunity.closed_date'  label-format='EEEE, MMMM d, yyyy'></datetimepick>
                               </span>
-                              
+
                            </div>
 
                         </div>
@@ -1131,8 +1132,8 @@
       pickTime: false
     });
   });
-    $('.waterfall').waterfall({ 
-        colMinWidth: 210, 
+    $('.waterfall').waterfall({
+        colMinWidth: 210,
         defaultContainerWidth: 800,
         autoresize: true
   });

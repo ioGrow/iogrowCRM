@@ -11,11 +11,11 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
      $scope.currentPagecomment = 01;
      $scope.pagescomment = [];
      $scope.attachment={};
-     $scope.notes = [];  
+     $scope.notes = [];
      $scope.entityKey="";
      $scope.attachment.assignees=[];
 
- 
+
       // What to do after authentication
      $scope.runTheProcess = function(){
           var noteId = $route.current.params.noteId;
@@ -28,8 +28,8 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
             Auth.refreshToken();
      };
    $scope.listNextPageItems= function(){
-        
-        
+
+
         var nextPage = $scope.currentPage + 1;
         var params = {};
           if ($scope.pages[nextPage]){
@@ -42,11 +42,11 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
             params = {'limit':5}
           }
           console.log('in listNextPageItems');
-          $scope.currentPage = $scope.currentPage + 1 ; 
+          $scope.currentPage = $scope.currentPage + 1 ;
           Comment.list($scope,params);
      }
      $scope.listPrevPageItems = function(){
-       
+
        var prevPage = $scope.currentPage - 1;
        var params = {};
           if ($scope.pages[prevPage]){
@@ -60,14 +60,14 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
           $scope.currentPage = $scope.currentPage - 1 ;
           Comment.list($scope,params);
      }
-   
+
      $scope.prepareUrls = function(){
 
                var url = Note.getUrl($scope.attachment.about.kind,$scope.attachment.about.id);
                $scope.uri =url;
                $scope.attachment.embedLink = $scope.attachment.content;
      };
-     
+
      $scope.showModal = function(){
         console.log('button clicked');
         $('#addAccountModal').modal('show');
@@ -82,17 +82,17 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
                 };
       Comment.insert($scope,params);
       $scope.comment.content='';
-     
-      
+
+
     };
     $scope.ListComments = function(){
       var params = {
-                    'about':$scope.attachment.entityKey,
-                    'limit':7
-                   };
+                    'about':$scope.attachment.entityKey
+                  };
+
       Comment.list($scope,params);
-      
-      
+
+
     };
 //HKA 18.11.2013 highlight the comment
    $scope.hilightComment = function(){
@@ -104,7 +104,7 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
     var params={'entityKey':$scope.attachment.entityKey};
     Attachement.delete($scope,params);
    }
-    // Google+ Authentication 
+    // Google+ Authentication
     Auth.init($scope);
 
   }]);
