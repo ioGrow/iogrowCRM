@@ -101,7 +101,7 @@
                             <div class="col-md-12 col-sm-12">
                                 <div class="oppPrice">
                                   <span><%= opportunity.currency %></span>
-                                  <span><%= opportunity.amount_total | customCurrency:"":",":".":0 %> <span ng-show="opportunity.account.name"> with </span> <%= opportunity.account.name %></span>
+                                  <span><%= opportunity.amount_total | customCurrency:"":",":".":0 %> <span ng-show="opportunity.account.name"> with </span> <a href="/#/accounts/show/<%= opportunity.account.id %>"> <%= opportunity.account.name %></a> </span>
                                   <p class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
                                       <%= opportunity.duration %> × <%= opportunity.amount_per_unit | customCurrency:"":",":".":0 %>/<%= opportunity.duration_unit %>
                                   </p>
