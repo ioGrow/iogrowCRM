@@ -3,7 +3,7 @@ import endpoints
 from google.appengine.ext import ndb
 from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
-from google.appengine.api import search 
+from google.appengine.api import search
 from apiclient.discovery import build
 from google.appengine.api import memcache
 import httplib2
@@ -34,11 +34,12 @@ class EventSchema(messages.Message):
     starts_at = messages.StringField(4)
     ends_at = messages.StringField(5)
     where = messages.StringField(6)
-    about = messages.MessageField(DiscussionAboutSchema,7)
-    created_by = messages.MessageField(AuthorSchema,8)
-    tags = messages.MessageField(TagSchema,9, repeated = True)
-    created_at = messages.StringField(10)
-    updated_at = messages.StringField(11)
+    description = messages.StringField(7)
+    about = messages.MessageField(DiscussionAboutSchema,8)
+    created_by = messages.MessageField(AuthorSchema,9)
+    tags = messages.MessageField(TagSchema,10, repeated = True)
+    created_at = messages.StringField(11)
+    updated_at = messages.StringField(12)
 
 class EventInsertRequest(messages.Message):
     parent = messages.StringField(1)
@@ -47,12 +48,22 @@ class EventInsertRequest(messages.Message):
     ends_at = messages.StringField(4)
     where = messages.StringField(5)
     access = messages.StringField(6)
+    description = messages.StringField(7)
+
+
+class EventPatchRequest(messages.Message):
+    entityKey = messages.StringField(1)
+    title = messages.StringField(2)
+    starts_at = messages.StringField(3)
+    ends_at = messages.StringField(4)
+    where = messages.StringField(5)
+    access = messages.StringField(6)
+    description = messages.StringField(7)
 
 class EventListRequest(messages.Message):
     limit = messages.IntegerField(1)
     pageToken = messages.StringField(2)
     order = messages.StringField(3)
-    status = messages.StringField(4)
     tags = messages.StringField(5,repeated = True)
     owner = messages.StringField(6)
     assignee = messages.BooleanField(7)
@@ -78,7 +89,7 @@ class Event(EndpointsModel):
     where = ndb.StringProperty()
     starts_at = ndb.DateTimeProperty()
     ends_at = ndb.DateTimeProperty()
-    status = ndb.StringProperty()
+    description = ndb.StringProperty()
     # number of comments in this topic
     comments = ndb.IntegerProperty(default=0)
     # A Topic is attached to an object for example Account or Opportunity..
@@ -124,7 +135,7 @@ class Event(EndpointsModel):
                 search.TextField(name='owner', value = empty_string(self.owner) ),
                 search.TextField(name='collaborators', value = collaborators ),
                 search.TextField(name='where', value = empty_string(self.where) ),
-                search.TextField(name='status', value = empty_string(self.status)),
+                search.TextField(name='description', value = empty_string(self.description)),
                 search.TextField(name='title', value = empty_string(self.title)),
                 search.DateField(name='created_at', value = self.created_at),
                 search.DateField(name='updated_at', value = self.updated_at),
@@ -146,7 +157,7 @@ class Event(EndpointsModel):
                 search.TextField(name='owner', value = empty_string(self.owner) ),
                 search.TextField(name='collaborators', value = collaborators ),
                 search.TextField(name='where', value = empty_string(self.where) ),
-                search.TextField(name='status', value = empty_string(self.status)),
+                search.TextField(name='description', value = empty_string(self.description)),
                 search.TextField(name='title', value = empty_string(self.title)),
                 search.DateField(name='created_at', value = self.created_at),
                 search.DateField(name='updated_at', value = self.updated_at),
@@ -176,7 +187,7 @@ class Event(EndpointsModel):
                     about_name = parent.firstname + ' ' + parent.lastname
                 else:
                     about_name = parent.name
-                about = DiscussionAboutSchema(  
+                about = DiscussionAboutSchema(
                                                 kind=about_kind,
                                                 id=str(parent.key.id()),
                                                 name=about_name
@@ -195,6 +206,7 @@ class Event(EndpointsModel):
                                     starts_at = event.starts_at.isoformat(),
                                     ends_at = event.ends_at.isoformat(),
                                     where = event.where,
+                                    description = event.description,
                                     about = about,
                                     created_by = author_schema,
                                     tags = tag_list,
@@ -247,10 +259,11 @@ class Event(EndpointsModel):
                     starts_at = datetime.datetime.strptime(request.starts_at,"%Y-%m-%dT%H:%M:00.000000"),
                     ends_at = datetime.datetime.strptime(request.ends_at,"%Y-%m-%dT%H:%M:00.000000"),
                     where = request.where,
+                    description = request.description,
                     author = author
                     )
         taskqueue.add(
-                    url='/workers/syncevent', 
+                    url='/workers/syncevent',
                     params={
                             'email': user_from_email.email,
                             'starts_at': request.starts_at,
