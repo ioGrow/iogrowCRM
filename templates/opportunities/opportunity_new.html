@@ -213,8 +213,8 @@
                                     <div class="form-group">
 
                                         <div class="">
-                                          <select ng-model="stage_selected" ng-options="opps.name + ' - ( ' + opps.probability + '% )' for opps in opportunitystages " class="form-control selector-margin" >
-                                            <option value="">-- choose Stage --</option>
+                                          <select ng-model="initialStage" ng-options="opps as opps.name + ' - ( ' + opps.probability + '% )'   for opps in opportunitystages track by opps.probability" class="form-control selector-margin" >
+
                                           </select>
                                         </div>
                                     </div>

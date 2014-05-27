@@ -211,6 +211,7 @@ opportunityservices.factory('Opportunity', function($http) {
       });
 };
 Opportunity.patch = function($scope,params) {
+        console.log('*****************JJjjjj');
         $scope.isLoading = true;
           gapi.client.crmengine.opportunities.patch(params).execute(function(resp) {
             if(!resp.code){
