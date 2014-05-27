@@ -6,7 +6,7 @@
     </h2>
   </div>
   <div class=" subHeaderContent">
-    <div class="pull-right sharebuttonDiv" ng-show="!blankStateopportunity"> 
+    <div class="pull-right sharebuttonDiv" ng-show="!blankStateopportunity">
       <div class="btn-group btn-filter">
         <a class="btn btn-default" href="#" data-toggle="dropdown">
           {{ _('Filter by') }}
@@ -15,7 +15,7 @@
         <ul class="dropdown-menu">
           <li><a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All opportunities') }}</a></li>
           <li><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My opportunities') }}</a></li>
-          <li ng-repeat="stage in opportunitystages"><a ng-click="filterByStage('<%=stage.name%>')" href="#" data-toggle="modal"><%= stage.name %></a></li>
+          <li ng-repeat="stage in opportunitystages"><a ng-click="filterByStage('<%=stage.entityKey%>')" href="#" data-toggle="modal"><%= stage.name %></a></li>
         </ul>
       </div>
       <div class="btn-group btn-sort">
@@ -44,7 +44,7 @@
     </div>
   </div>
   <div class="container-fluid"ng-show="immediateFailed">
-    <div class="col-md-12">  
+    <div class="col-md-12">
       <h1>Sign-in Button;</h1>
       <span id="signin">
         <span id="myGsignin"></span>
@@ -57,9 +57,9 @@
   <div class="btn-group newBtn">
      <a class="btn red " href="/#/opportunities/new" >
      {{ _("New Opportunity") }}</a>
-  </div>                 
+  </div>
     </div>
-    
+
     <div class="col-md-9">
     <div class="row">
       <div class="tab-pane">
@@ -182,7 +182,7 @@
                       <%= tag_item.name %>
                   </span>
                   <span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
-                      <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>  
+                      <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>
                   </span>
                   <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
                     <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
@@ -192,7 +192,7 @@
               </li>
               <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
                 <a ng-click="" class="btn-link addAnotherPhone">
-                  <i class="fa fa-tags"></i>  Add a new label 
+                  <i class="fa fa-tags"></i>  Add a new label
                 </a>
               </li>
             </ul>
@@ -225,7 +225,7 @@
       </div>
     </div>
   </div>
-      <!-- END PAGE CONTAINER--> 
+      <!-- END PAGE CONTAINER-->
 </div>
 <div id="addOpportunityModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-dialog">
@@ -235,31 +235,31 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("New Opportunity")}}</h3>
               </div>
               <div class="modal-body">
-                <form id="addOpportunity" name="addOpportunity"  ng-keyup="addOpportunityOnKey(opportunity)" class="form-horizontal"> 
-                  
-                  
-                    
+                <form id="addOpportunity" name="addOpportunity"  ng-keyup="addOpportunityOnKey(opportunity)" class="form-horizontal">
+
+
+
 
                     <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Name")}}</label>
-                       
+
                        <div class="col-md-9">
                           <input type="text" required id="id_name" class="form-control" ng-model="opportunity.name">
                        </div>
-                        
+
                     </div>
                     <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Account")}} *</label>
-                       
+
                         <div class="col-md-9">
                           <input type="text"  ng-model="searchAccountQuery" typeahead="result as result.name  for result in results | filter:$viewValue | limitTo:10" typeahead-on-select="selectAccount()" class="form-control"placeholder="Search">
                         </div>
-                          
-                        
+
+
                     </div>
                     <!--div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Labels")}} </label>
-                       
+
                        <div class="col-md-9">
                           <input type="text"  id="id_description" class="form-control" ng-model="opportunity.description" placeholder="Add labels to categorize your deals">
                        </div>
@@ -267,11 +267,11 @@
                     <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Amount")}} </label>
 
-                       
+
                        <div class="col-md-9">
                           <input type="text" required id="id_name" class="form-control" ng-model="opportunity.amount_total">
                        </div>
-                       
+
                         <div class="col-md-9">
                         <div class="row">
                           <div class="col-md-3 inline-div">
@@ -364,31 +364,31 @@
                              <input ng-hide="opportunity.price_type=='fixed'" type="text" pattern="\d*"  required id="" class="form-control" ng-model="opportunity.quantity">
                           </div>
                         </div>
-                         
-                          
+
+
                         </div>
-                        
+
                     </div>
                     <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Stage")}} </label>
-                        
+
                        <div class="col-md-9">
                           <select ng-model="stage_selected" ng-options="opps.name + ' - ( ' + opps.probability + '% )' for opps in opportunitystages | orderBy: 'name':true" class="form-control" >
                             <option value="">-- choose Stage --</option>
-                          
-                          </select>
-                          
-                      </div> 
-                        
 
-                          
+                          </select>
+
+                      </div>
+
+
+
                     </div>
                     <hr/>
                     <p>Who can access?</p>
-                     
+
 
                      <div class='radio-list'>
-                          
+
                             <label >
                             <input type="radio" name="optionsRadios"  value="public" ng-model="opportunity.access" checked />
                             public: Anyone within your organization
@@ -396,17 +396,17 @@
                             <label >
                             <input type="radio"  name="optionsRadios" value="private" ng-model="opportunity.access" />
                             private: only you and your collaborators
-                            </label>  
-                           
-                       
-                    </div> 
-                    
-                   
-                
+                            </label>
+
+
+                    </div>
+
+
+
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                
+
                 <input  ng-click="save(opportunity)" type="submit" class="btn green" value="Add this opportunity">
                 <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
               </div>
@@ -436,8 +436,8 @@
         }
     }
     handleUniform();
-    $('.waterfall').waterfall({ 
-        colMinWidth: 250, 
+    $('.waterfall').waterfall({
+        colMinWidth: 250,
         defaultContainerWidth: 800,
         autoresize: true
       });
