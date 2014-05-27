@@ -47,6 +47,23 @@
             <div class="col-md-12">
               <div class="row">
                 <div class="col-md-12">
+                <div class="oppRelatedTo">
+                     <span  style="">
+                        Account name:
+                        <a class="tag ng-binding" href="/#/accounts/show/<%= opportunity.account.id %>">
+                          <%= opportunity.account.name %>
+                        </a>
+                      </span>
+                      <br>
+                      <span   style="">
+                        Contact name:
+
+                        <a class="tag ng-binding" href="/#/contacts/show/<%= opportunity.contact.id %>">
+
+                          <%= casee.contact.firstname %> <%= casee.contact.firstname %>
+                        </a>
+                      </span>
+                  </div>
                   <span class="page-meta pull-right">
                     <i class="icon-pencil">
                       <a ng-click="editaccount()" class="btn-link addAnotherPhone" data-toggle="modal">
