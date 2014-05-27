@@ -77,10 +77,9 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
     $scope.addComment = function(comment){
 
       var params ={
-        'about':$scope.attachment.entityKey,
-        'content':$scope.comment.content
-      };
-      console.log(params);
+                  'about':$scope.attachment.entityKey,
+                  'content':$scope.comment.content
+                };
       Comment.insert($scope,params);
       $scope.comment.content='';
 
@@ -90,6 +89,7 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
       var params = {
                     'about':$scope.attachment.entityKey
                   };
+
       Comment.list($scope,params);
 
 
