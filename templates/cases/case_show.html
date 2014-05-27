@@ -48,10 +48,10 @@
               <div class="row">
                 <div class="col-md-12">
                 <div class="oppRelatedTo">
-                     <span  style="">
+                     <span ng-show="casee.account.name"  style="">
                         Account name:
-                        <a class="tag ng-binding" href="/#/accounts/show/<%= opportunity.account.id %>">
-                          <%= opportunity.account.name %>
+                        <a class="tag ng-binding" href="/#/accounts/show/<%= casee.account.id %>">
+                          <%= casee.account.name %>
                         </a>
                       </span>
                       <br>
@@ -60,7 +60,7 @@
 
                         <a class="tag ng-binding" href="/#/contacts/show/<%= opportunity.contact.id %>">
 
-                          <%= casee.contact.firstname %> <%= casee.contact.firstname %>
+                          <%= casee.contact.firstname %> <%= casee.contact.lastname %>
                         </a>
                       </span>
                   </div>
