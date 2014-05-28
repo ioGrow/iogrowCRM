@@ -1438,6 +1438,8 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
       $scope.sociallinks=[];
       $scope.customfields=[];
       $scope.results=[];
+      $scope.phone={};
+      $scope.phone.type= 'work';
       $scope.imageSrc = '/static/img/avatar_contact.jpg';
       $scope.initObject=function(obj){
           for (var key in obj) {
@@ -1450,6 +1452,7 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
               arr.push(copyOfElement);
               console.log(elem);
               $scope.initObject(elem);
+               $scope.phone.type= 'work';
 
           }else{
             alert("item already exit");

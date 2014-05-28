@@ -810,7 +810,7 @@ $scope.updatCasetHeader = function(casee){
   params = {'id':$scope.casee.id,
              'name':casee.name,
              'priority' :casee.priority,
-             'status':$scope.status_selected.status,
+             'status':$scope.casee.current_status.name,
              'type_case':casee.type_case}
   Case.patch($scope,params);
   /*$scope.$watch($scope.casee.priority, function() {
