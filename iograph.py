@@ -299,7 +299,7 @@ class Node(ndb.Expando):
         if 'addresses' in structured_data.keys():
             addresses = iomessages.AddressListSchema()
             for address in structured_data['addresses']:
-                formatted_address = None:
+                formatted_address = None
                 if hasattr(address,'formatted'):
                     formatted_address = address['formatted']
                 address_schema = iomessages.AddressSchema(
