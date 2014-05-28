@@ -162,6 +162,7 @@ app.config(function(ngQuickDateDefaultsProvider) {
     buttonIconHtml: "<i class='fa fa-clock-o'></i>",
     nextLinkHtml: "<i class='fa fa-chevron-right'></i>",
     prevLinkHtml: "<i class='fa fa-chevron-left'></i>",
+    placeholder:'',
     // Take advantage of Sugar.js date parsing
     parseDateFunction: function(str) {
       d = Date.create(str);

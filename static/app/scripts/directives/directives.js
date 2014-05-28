@@ -358,20 +358,23 @@ app.directive('taggable', ['$parse',function($parse) {
                   }
           }
         $scope.selectItem = function(value){
+          console.log("fired");
+         console.log($scope.modelName); 
           angular.forEach($scope.tagInfo, function(item){
               if (item.data.name==$scope.objectName) {
+                  console.log(value);
                   if ($scope.currentAttribute!='name') {
                       delete value["value"];
                   };
                   if (item.selected.indexOf(value) == -1) {
                    item.selected.push(value);
                    }
-
                   var text= ReturnWord($(elem).val(),$(elem).caret()).word;
                   var beforeText= ReturnWord($(elem).val(),$(elem).caret()).before;
                   var afterText= ReturnWord($(elem).val(),$(elem).caret()).after;
                   var tag= text.substring(0,1);
                   $parse(attrs.ngModel).assign($scope, beforeText+' '+tag+value[item.data.attribute]+' '+afterText);
+                  console.log($parse(attrs.ngModel).assign($scope, beforeText+' '+tag+value[item.data.attribute]+' '+afterText));
               }; 
            });
            

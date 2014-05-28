@@ -6,7 +6,7 @@ body {
 	font-family: 'Lato', sans-serif;
 	font-weight: 300;
 	font-size: 16px;
-	color: #555;
+	color: #000000;
 	padding-top: 50px;
 	-webkit-font-smoothing: antialiased;
 	-webkit-overflow-scrolling: touch;
@@ -30,7 +30,7 @@ p {
 /* Links */
 
 a {
-	color: #428bca;
+	color: #000000;
 	word-wrap: break-word;
 
 	-webkit-transition: color 0.1s ease-in, background 0.1s ease-in;
@@ -42,7 +42,7 @@ a {
 
 a:hover,
 a:focus {
-	color: #05888e;
+	color: #DD2913;
 	text-decoration: none;
 	outline: 0;
 }
@@ -79,9 +79,9 @@ a:after {
 
 .btn-theme:hover,
 .btn-theme:focus {
-	border-color: #428bca; /* change to darker hue than bg hover color */
+	border-color: #000000; /* change to darker hue than bg hover color */
 	background-color: transparent;
-	color: #428bca;
+	color: #000000;
 	box-shadow: none;
 }
 
@@ -95,7 +95,7 @@ a:after {
 .btn-theme2:active {
 	border-color: #fff;
 	background-color: #fff;
-	color: #428bca;
+	color: #000000;
 	box-shadow: none;
 }
 
@@ -124,24 +124,24 @@ a:after {
 }
 
 .navbar-default .navbar-toggle > .icon-bar {
-	background-color: #428bca;
+	background-color: #000000;
 }
 
 .navbar-default .navbar-brand {
-	color: #428bca;
+	color: #000000;
 }
 
 .navbar-default .navbar-brand:hover {
-	color: #bdc3c7;
+	color: #176DED;
 }
 
 .navbar-default .navbar-nav > li > a {
-	color: #428bca;
+	color: #000000;
 }
 
 .navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus {
-	color: #bdc3c7;
+	color: #C91313;
 	background-color: transparent;
 }
 
@@ -149,7 +149,7 @@ a:after {
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus {
 	background-color: transparent;
-	color: #bdc3c7;
+	color: #176DED;
 }
 
 .navbar-default .navbar-right a[type="button"] {
@@ -160,7 +160,7 @@ a:after {
 .navbar-default .navbar-right a[type="button"]:hover,
 .navbar-default .navbar-right a[type="button"]:focus {
 	background-color: transparent;
-	color: #428bca;
+	color: #323232;
 }
 
 
@@ -216,7 +216,7 @@ a:after {
 
 #intro licon {
 	font-size: 60px;
-	color: #428bca;
+	color: #000000;
 	padding: 20px;
 	vertical-align: middle;
 }
@@ -241,7 +241,7 @@ a:after {
 #featureswrap .col-lg-6 h4,
 #featureswrap .col-lg-6 licon {
 	font-size: 20px;
-	color: #428bca;
+	color: #000000;
 }
 
 /* Divider 1 & 2 Wrap */
@@ -264,7 +264,7 @@ a:after {
 }
 
 #divider02 {
-	background-color: #428bca;
+	background-color: #000000;
 	height: 150px;
 	padding-top: 55px;
 }
@@ -300,11 +300,11 @@ a:after {
 }
 
 .panel-custom {
-	border-color: #428bca;
+	border-color: #000000;
 }
 
 .panel-custom > .panel-heading {
-	background-color: #428bca;
+	background-color: #000000;
 	color: #fff;
 }
 
@@ -373,7 +373,7 @@ a:after {
 	background: #222;
 	padding-top: 20px;
 	font-size: 14px;
-	color: #bdc3c7;
+	color: #176DED;
 }
 
 

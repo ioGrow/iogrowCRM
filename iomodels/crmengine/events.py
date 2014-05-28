@@ -52,7 +52,7 @@ class EventInsertRequest(messages.Message):
 
 
 class EventPatchRequest(messages.Message):
-    entityKey = messages.StringField(1)
+    entityKey = messages.StringField(1,required=True)
     title = messages.StringField(2)
     starts_at = messages.StringField(3)
     ends_at = messages.StringField(4)

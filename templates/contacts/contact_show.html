@@ -49,7 +49,7 @@
             <div class="col-md-2" ng-mouseenter="showUpload= true" ng-mouseleave="showUpload = false">
               <div class="pic">
 
-                           <img alt=" " ng-src="<%=imageSrc%>" class="img-responsive img-thumbnail" >
+                           <img alt="<%=contact.firstname%> <%=contact.lastname%>" ng-src="<%=imageSrc%>" class="img-responsive profile-photo-large" >
                </div>
                <a ng-show="showUpload" ng-click="createLogoPickerUploader()" href="" class="btn btn-default btn-upload" data-toggle="modal" style="display: none;">
                  <img src="/static/img/upload_logo.png">
