@@ -38,7 +38,7 @@ from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,Topic
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
 from iomodels.crmengine.opportunities import Opportunity,UpdateStageRequest,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest
-from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema
+from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema,EventPatchRequest
 from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest
 from iomodels.crmengine.shows import Show
 from iomodels.crmengine.leads import Lead,LeadFromTwitterRequest,LeadInsertRequest,LeadListRequest,LeadListResponse,LeadSearchResults,LeadGetRequest,LeadSchema
@@ -1058,10 +1058,32 @@ class CrmEngineApi(remote.Service):
                             )
 
     # events.list API
-    @Event.query_method(user_required=True,query_fields=('about_kind','about_item','id','status', 'starts_at','ends_at', 'limit', 'order', 'pageToken'),path='events', name='events.list')
+    @Event.query_method(user_required=True,query_fields=('about_kind','about_item','id', 'starts_at','ends_at', 'limit', 'order', 'pageToken'),path='events', name='events.list')
     def EventList(self, query):
         return query
 
+    # events.patch api
+    @endpoints.method(EventPatchRequest, message_types.VoidMessage,
+                        path='events/patch', http_method='POST',
+                        name='events.patch')
+    def events_patch(self, request):
+        event_key = ndb.Key(urlsafe = request.entityKey)
+        event = event_key.get()
+        if event is None:
+            raise endpoints.NotFoundException('Event not found')
+        event_patch_keys = ['title','starts_at','ends_at','description','where']
+        date_props = ['starts_at','ends_at']
+        patched = False
+        for prop in event_patch_keys:
+            new_value = getattr(request,prop)
+            if new_value:
+                if prop in date_props:
+                    new_value = datetime.datetime.strptime(new_value,"%Y-%m-%dT%H:%M:00.000000")
+                setattr(event,prop,new_value)
+                patched = True
+        if patched:
+            event.put()
+        return message_types.VoidMessage()
     # Groups API
     # groups.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
