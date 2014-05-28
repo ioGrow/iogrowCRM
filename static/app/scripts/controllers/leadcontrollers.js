@@ -478,7 +478,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
     $scope.profile_img = {
                           'profile_img_id':null,
                           'profile_img_url':null
-                        }
+                        };
 
       // What to do after authentication
       $scope.runTheProcess = function(){
