@@ -48,8 +48,8 @@ topicservices.factory('Task', function($http) {
             /*$scope.ListComments();
             $scope.listContributors();*/
             $scope.isLoading = false;
-           /* $scope.listTags();
-            $scope.listTasks();*/
+            $scope.listTags();
+            $scope.listTasks();
             $scope.$apply();
 
             $('#EditTaskModal').modal('hide');
@@ -109,7 +109,8 @@ topicservices.factory('Task', function($http) {
           }
             $scope.tasks.push(resp);
             $scope.isLoading = false;
-            // $scope.hilightTask();
+            $scope.listTags();
+            $scope.listTasks();
 
           $scope.$apply();
        

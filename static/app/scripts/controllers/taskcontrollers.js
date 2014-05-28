@@ -26,7 +26,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
           Task.get($scope,taskid);
 
           User.list($scope,{});
-           var varTagname = {'about_kind':'Task'};
+           var varTagname = {'about_kind':'Task','limit':1};
           Tag.list($scope,varTagname);
      };
      // We need to call this to refresh token when user credentials are invalid
@@ -237,7 +237,6 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
            var params ={ 'id':id,
                       'title': title
             };
-            console.log(params);
       Task.patch($scope,params);
     };
   // Google+ Authentication 
@@ -403,11 +402,12 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
      $scope.runTheProcess = function(){
           var params = { 'order': $scope.order,
                          
-                        'limit':7}
+                        'limit':20}
           Task.list($scope,params,true);
           User.list($scope,{});
           var varTagname = {'about_kind':'Task'};
           Tag.list($scope,varTagname);
+
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -416,9 +416,6 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
 
      $scope.getUrl = function(type,id){
         var base_url = undefined;
-        
-    console.log(type);
-    console.log(id);
           switch (type)
               {
               case 'Account':
@@ -524,6 +521,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
     $scope.addNewTask=function(){
         if ($scope.newTask.due){
               console.log("here work!");
+              console.log($scope.newTask.title);
               console.log($scope.newTask.due);
             var dueDate= $filter('date')($scope.newTask.due,['yyyy-MM-ddTHH:mm:00.000000']);
            /* dueDate = dueDate +'T00:00:00.000000'*/
@@ -535,6 +533,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
             
         }else{
             console.log("here not work!");
+            console.log($scope.newTask.title);
             params ={'title': $scope.newTask.title}
         };
         angular.forEach($scope.taggableOptions, function(option){
@@ -597,6 +596,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           $('#beforecloseTask').modal('show');
          };
       $scope.closeTask = function(){
+        console.log($scope.selected_tasks);
         angular.forEach($scope.selected_tasks, function(selected_task){
           console.log(selected_task.id);
           params = {'id':selected_task.id,
