@@ -1,12 +1,11 @@
 <div class="row subHeader">
-  <div class="currentApp">
-    <h2 class="page-title">
+  <div class="subHContent">
+    <div class="currentApp">
+     <h2 class="page-title">
      <!--  <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
       {{active_app.label}}
     </h2>
-  </div>
-  <div class=" subHeaderContent">
-    <div class="pull-right sharebuttonDiv" ng-show="!blankStateaccount"> 
+        <div class="pull-right sharebuttonDiv" ng-show="!blankStateaccount"> 
       <div class="btn-group btn-filter">
           <a class="btn btn-default" href="#" data-toggle="dropdown">
               {{ _('Filter by') }}
@@ -37,7 +36,7 @@
         </ul>
       </div>
     </div>
-    <h2 class="page-title">{{ _("Accounts") }} </h2>
+    </div> 
   </div>
 </div>
 <div  class="page-content">
@@ -137,14 +136,25 @@
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-          
-          <div class="col-md-9">
-                    <a href="/#/accounts/new" class="btn red newBtn">
-                    {{ _("New Account") }} 
-                    </a>
-               
-          </div>
-  <div class="col-md-9">
+<div class="col-md-9">
+<div class="row subHeaderContainer">
+   <div class=" col-md-9 col-sm-9 col-xs-9 subHeaderContent">
+      <div class="row">
+          <h2 class="page-title">{{ _("Accounts") }} </h2>
+     </div>
+  </div>
+  <div class="col-md-3 col-sm-3 col-xs-3">
+      <div class="row">
+        <div class="pull-right" ng-show="!blankStateaccount"> 
+         <a href="/#/accounts/new" class="btn red newBtn">
+                        New Account 
+         </a>
+      </div>
+      </div>
+  </div>
+</div>
+<div class="row">      
+  <div class="col-md-12">
     <div class="row">
       <div class="tab-pane">
       <div class="row">
@@ -158,16 +168,16 @@
                   </a>
                 </div>
                 <div class="text">
-                  <div class="name">
-                    <a href="/#/accounts/show/<%= account.id %>" class="profile-link" data-id="126085" data-type="Startup"><%= account.name %>
+                  <div class="name " >
+                    <a href="/#/accounts/show/<%= account.id %>" style="" class="textfill profile-link" data-id="126085" data-type="Startup"><%= account.name %>
                     </a>
                   </div>
                   <div class="pitch">
                     <span  ng-show="account.account_type">
-                        <a href="/#/search/type:Account <%=account.account_type%>"> #<%= account.account_type %></a>
+                        <a href="/#/search/type:Account <%=account.account_type%>"> <%= account.account_type %></a>
                     </span> 
                     <span ng-show="account.industry">
-                          <a href="/#/search/type:Account <%=account.industry%>"> #<%= account.industry %>
+                          <a href="/#/search/type:Account <%=account.industry%>"> - <%= account.industry %>
                           </a>
                     </span>
                   </div>
@@ -212,6 +222,8 @@
         </div><!--/inner-cards-container-->
       </div>
       </div>
+    </div>
+  </div>
     </div>
   </div>
   <div class="col-md-3 tasks-col">
@@ -304,4 +316,5 @@
         defaultContainerWidth: 800,
         autoresize: true
   });
+  $('.textfill').textfill({debug: true, maxFontPixels: 16});
 </script>
