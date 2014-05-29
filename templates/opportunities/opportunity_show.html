@@ -66,7 +66,7 @@
                   </div>
                   <span class="page-meta pull-right">
                     <i class="icon-pencil">
-                      <a ng-click="editaccount()" class="btn-link addAnotherPhone" data-toggle="modal">
+                      <a ng-click="editOpp()" class="btn-link addAnotherPhone" data-toggle="modal">
                         Edit
                       </a>
                     </i>
@@ -1053,6 +1053,58 @@
                 </form>
                 </div>
                 </div>
+        </div>
+ <!--HKA 11.10.2013 Edit Opportunity -->
+             <div id="EditOpportunityModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+             <div class="modal-dialog">
+              <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{_("Edit Opportunity")}}</h3>
+              </div>
+
+              <div class="modal-body">
+                 <form id="editAccount" name="editlead"  class="form-horizontal"> 
+                
+
+                  <div class="form-group">
+                        <label  class="required col-md-3 control-label">{{_("Name")}} </label>
+                       
+                        <div class="col-md-9">
+                          <input type="text"  class="form-control" required id="id_name" ng-model="opportunity.name">
+                          
+                        </div>
+                    </div>
+                  <!--div class="form-group">
+                        <label  class="required col-md-3 control-label">{{_( "Amount")}} </label>
+                       
+                        <div class="col-md-9">
+                          <input type="text" class="form-control"  id="id_amount" ng-model="opportunity.amount">
+                          
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="required col-md-3 control-label">{{_("Stage")}} </label>
+
+                        <div class="col-md-9">
+                          <select ng-model="stage_selected" ng-options="opps.name + ' - ( ' + opps.probability + '% )' for opps in opportunitystages | orderBy: 'name':true" class="form-control" >
+                            <option value=""><%=opportunity.stagename%> </option>
+                            
+
+                          </select>
+                         
+                        </div>                          
+                    </div-->               
+                
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
+                <button  type="submit" ng-click="UpdateOpportunity(opportunity)" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+              </div>
+               </form>
+              </div>
+              </div>
+            </div>
         </div>
 <div id="newEventModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 <div class="modal-dialog">
