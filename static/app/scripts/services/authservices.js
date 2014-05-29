@@ -70,7 +70,8 @@ accountservices.factory('Auth', function($http) {
       } else if (authResult['error']) {
           if (authResult['error'] == 'immediate_failed') {
             Auth.$scope.immediateFailed = true;
-            window.location.replace('/sign-in');
+            console.log(authResult);
+            //window.location.replace('/sign-in');
           } else {
             console.log('Error:' + authResult['error']);
           }
