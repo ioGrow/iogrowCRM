@@ -1,4 +1,4 @@
-var accountservices = angular.module('crmEngine.accountservices',[]);
+accountservices = angular.module('crmEngine.accountservices',[]);
 // Base sercice (create, delete, get)
 accountservices.factory('Conf', function($location) {
       function getRootUrl() {
@@ -31,31 +31,41 @@ accountservices.factory('Account', function($http) {
   }
 
 
-  Account.get = function($scope,id) {
-
-          gapi.client.crmengine.accounts.getv2(id).execute(function(resp) {
+  Account.get = function($scope,params) {
+    $scope.isLoading = true;
+    $scope.$apply();
+          gapi.client.crmengine.accounts.getv2(params).execute(function(resp) {
             if(!resp.code){
                $scope.account = resp;
                if (resp.contacts){
                  if (!resp.contacts.items){
                      $scope.blankStatecontact = true;
                  }
-                 $scope.contacts = resp.contacts.items;
-                   if ($scope.contactCurrentPage>1){
+                 if (params.contacts.pageToken){
+                    angular.forEach(resp.contacts.items, function(item){
+                        $scope.contacts.push(item);
+                    });
+                 }
+                 else{
+                    $scope.contacts = resp.contacts.items;
+                 }
+                 if ($scope.contactCurrentPage>1){
                         $scope.contactpagination.prev = true;
-                     }else{
+                 }else{
+
                          $scope.contactpagination.prev = false;
-                     }
-                   if (resp.contacts.nextPageToken){
+                 }
+                 if (resp.contacts.nextPageToken){
                      var nextPage = $scope.contactCurrentPage + 1;
                      // Store the nextPageToken
                      $scope.contactpages[nextPage] = resp.contacts.nextPageToken;
                      $scope.contactpagination.next = true;
 
-                   }else{
+                  }else{
                     $scope.contactpagination.next = false;
-                   }
+                  }
                 }
+
                 if (resp.logo_img_id){
                     $scope.imageSrc = 'https://docs.google.com/uc?id='+resp.logo_img_id;
                 }
@@ -135,7 +145,14 @@ accountservices.factory('Account', function($http) {
                       if (!resp.opportunities.items){
                         $scope.blankStateopportunity = true;
                       }
-                       $scope.opportunities = resp.opportunities.items;
+                      if (params.opportunities.pageToken){
+                         angular.forEach(resp.opportunities.items, function(item){
+                             $scope.opportunities.push(item);
+                         });
+                      }
+                      else{
+                         $scope.opportunities = resp.opportunities.items;
+                      }
                        if ($scope.oppCurrentPage>1){
                            $scope.opppagination.prev = true;
                        }else{
@@ -157,7 +174,16 @@ accountservices.factory('Account', function($http) {
                       if (!resp.cases.items){
                         $scope.blankStatecase = true;
                       }
-                       $scope.cases = resp.cases.items;
+                       if (params.cases.pageToken){
+                          console.log('**=======88');
+                          angular.forEach(resp.cases.items, function(item){
+                              $scope.cases.push(item);
+                          });
+                       }
+                       else{
+                         console.log('999');
+                          $scope.cases = resp.cases.items;
+                       }
                        if ($scope.caseCurrentPage>1){
                           $scope.casepagination.prev = true;
                        }else{
@@ -226,6 +252,7 @@ accountservices.factory('Account', function($http) {
                 // if (resp.events){
                 //     $scope.hilightEvent();
                 // }
+                $scope.isLoading = false;
                 $scope.$apply();
                 var leftMargin=$(".chart").parent().width()-$(".chart").width();
                   $(".chart").css( "left",leftMargin/2);

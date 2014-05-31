@@ -60,14 +60,16 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
           Opportunitystage.list($scope,{'order':'probability'});
           var paramsTag = {'about_kind':'Opportunity'};
           Tag.list($scope,paramsTag);
-          // for (var i=0;i<100;i++)
+          // for (var i=0;i<50;i++)
           //   {
+          //       var randomAmount = Math.floor((Math.random() * 100) + 1);
           //       var opportunity = {
           //                 'name':  i.toString() + ' kass ta3 lban',
-          //                 'amount':'99',
+          //                 'amount_total':randomAmount.toString(),
+          //
           //                 'access':'public'
           //               }
-          //       $scope.searchAccountQuery = 'dja3fer company'
+          //       $scope.searchAccountQuery = 'ioCompare'
           //       $scope.save(opportunity);
           //   }
        };

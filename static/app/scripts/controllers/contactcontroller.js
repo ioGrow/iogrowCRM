@@ -47,7 +47,8 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
             //     var params = {
             //               'firstname': 'Dja3fer',
             //               'lastname':'M3amer ' + i.toString(),
-            //               'access':'public'
+            //               'access':'public',
+            //               'account': 'ahNkZXZ-Z2NkYzIwMTMtaW9ncm93chQLEgdBY2NvdW50GICAgICAgIgKDA'
             //             }
             //     Contact.insert($scope,params);
             // }

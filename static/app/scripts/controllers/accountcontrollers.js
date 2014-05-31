@@ -86,7 +86,6 @@ app.controller('AccountListCtrl', ['$scope','$filter','Auth','Account','Tag','Ed
           Account.list($scope,params);
      };
      $scope.listMoreItems = function(){
-        console.log('try to load more');
         var nextPage = $scope.currentPage + 1;
         var params = {};
         if ($scope.pages[nextPage]){
@@ -149,7 +148,7 @@ app.controller('AccountListCtrl', ['$scope','$filter','Auth','Account','Tag','Ed
      $scope.result = undefined;
      $scope.q = undefined;
 
-     
+
      $scope.selectResult = function(){
           window.location.replace('#/accounts/show/'+$scope.searchQuery.id);
      };
@@ -540,19 +539,15 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
                           },
 
                           'contacts':{
-                            'limit': '6'
-                          },
-
-                          'needs':{
-                            'limit': '6'
+                            'limit': '20'
                           },
 
                           'opportunities':{
-                            'limit': '6'
+                            'limit': '20'
                           },
 
                           'cases':{
-                            'limit': '6'
+                            'limit': '20'
                           },
 
                           'documents':{
@@ -694,21 +689,13 @@ $scope.ContactlistNextPageItems = function(){
             params = {
                         'id':$scope.account.id,
                         'contacts':{
-                          'limit': '6',
+                          'limit': '15',
                           'pageToken':$scope.contactpages[nextPage]
                         }
                      }
-          }else{
-            params = {
-                        'id':$scope.account.id,
-                        'contacts':{
-                          'limit': '6'
-                        }
-                      }
+            $scope.contactCurrentPage = $scope.contactCurrentPage + 1 ;
+            Account.get($scope,params);
           }
-
-          $scope.contactCurrentPage = $scope.contactCurrentPage + 1 ;
-          Account.get($scope,params);
      }
      $scope.ContactlistPrevPageItems = function(){
 
@@ -774,44 +761,15 @@ $scope.OpplistNextPageItems = function(){
             params = {
                       'id':$scope.account.id,
                         'opportunities':{
-                          'limit': '6',
+                          'limit': '15',
                           'pageToken':$scope.opppages[nextPage]
                         }
                      }
-            }else{
-            params = {
-                      'id':$scope.account.id,
-                        'opportunities':{
-                          'limit': '6'
-                        }
-                     }
+            $scope.oppCurrentPage = $scope.oppCurrentPage + 1 ;
+            Account.get($scope,params);
           }
-          $scope.oppCurrentPage = $scope.oppCurrentPage + 1 ;
-          Account.get($scope,params);
-     }
-     $scope.OppPrevPageItems = function(){
 
-       var prevPage = $scope.oppCurrentPage - 1;
-       var params = {};
-          if ($scope.opppages[prevPage]){
-            params = {
-                      'id':$scope.account.id,
-                        'opportunities':{
-                          'limit': '6',
-                          'pageToken':$scope.opppages[prevPage]
-                        }
-                     }
-            }else{
-            params = {
-                      'id':$scope.account.id,
-                        'opportunities':{
-                          'limit': '6'
-                        }
-                     }
-          }
-          $scope.oppCurrentPage = $scope.oppCurrentPage - 1 ;
-          Account.get($scope,params);
-     };
+     }
 
      //HKA 07.12.2013 Manage Prev & Next Page on Related List Cases
 $scope.CaselistNextPageItems = function(){
@@ -823,20 +781,14 @@ $scope.CaselistNextPageItems = function(){
             params = {
                       'id':$scope.account.id,
                         'cases':{
-                          'limit': '6',
+                          'limit': '15',
                           'pageToken':$scope.casepages[nextPage]
                         }
                      }
-          }else{
-            params = {
-                      'id':$scope.account.id,
-                        'cases':{
-                          'limit': '6'
-                        }
-                     }
+            $scope.caseCurrentPage = $scope.caseCurrentPage + 1 ;
+            Account.get($scope,params);
           }
-          $scope.caseCurrentPage = $scope.caseCurrentPage + 1 ;
-          Account.get($scope,params);
+
      }
      $scope.CasePrevPageItems = function(){
 
@@ -1702,9 +1654,43 @@ $scope.doneEditTag=function(tag){
           }
       }
 
+    $scope.listMoreOnScroll = function(){
+      switch ($scope.selectedTab)
+          {
+          case 3:
+            $scope.ContactlistNextPageItems();
+            break;
+          case 5:
+            $scope.OpplistNextPageItems();
+            break;
+          case 6:
+            $scope.CaselistNextPageItems();
+            break;
+          case 'Opportunity':
+            base_url = '/#/opportunities/show/';
+            break;
+          case 'Case':
+            base_url = '/#/cases/show/';
+            break;
+          case 'Show':
+            base_url = '/#/live/shows/show/';
+            break;
+            case 'Feedback':
+            base_url='/#/live/feedbacks/feedback/';
+            break;
+            case 'ProductVideo':
+            base_url='/#/live/feedbacks/feedback/';
+            break;
 
+          }
+    };
      // Google+ Authentication
      Auth.init($scope);
+     $(window).scroll(function() {
+          if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
+              $scope.listMoreOnScroll();
+          }
+      });
 
 }]);
 
@@ -1758,7 +1744,7 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
               var copyOfElement = angular.copy(elem);
               arr.push(copyOfElement);
               $scope.initObject(elem);
-              
+
           }else{
             alert("item already exit");
           }
