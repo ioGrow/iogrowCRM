@@ -5,7 +5,10 @@
      <!--  <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
       {{active_app.label}}
     </h2>
-        <div class="pull-right sharebuttonDiv" ng-show="!blankStateaccount"> 
+        <div class="pull-right sharebuttonDiv" ng-show="!blankStateaccount">  
+         <a href="/#/accounts/new" class="btn red hidden afterScrollBtn">
+                        New Account 
+         </a>
       <div class="btn-group btn-filter">
           <a class="btn btn-default" href="#" data-toggle="dropdown">
               {{ _('Filter by') }}
@@ -169,7 +172,8 @@
                 </div>
                 <div class="text">
                   <div class="name " >
-                    <a href="/#/accounts/show/<%= account.id %>" style="" class="textfill profile-link" data-id="126085" data-type="Startup"><%= account.name %>
+                    <a class="profile-link" href="/#/accounts/show/<%= account.id %>">
+                      <p class="fittext autoresizeName" max-font-size="20" text="account.name"></p>
                     </a>
                   </div>
                   <div class="pitch">
