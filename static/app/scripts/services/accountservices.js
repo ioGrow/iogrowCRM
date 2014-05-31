@@ -235,6 +235,7 @@ accountservices.factory('Account', function($http) {
             }else {
               alert(resp.message);
                if(resp.code==401){
+                console.log('invalid token');
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
@@ -443,6 +444,7 @@ accountservices.factory('Search', function($http) {
       $scope.isLoading = true;
       console.log('in search api go ahead');
       console.log(params);
+      if (params['q']!=undefined){
       gapi.client.crmengine.search(params).execute(function(resp) {
               if(!resp.code){
 
@@ -490,6 +492,7 @@ accountservices.factory('Search', function($http) {
                };
               }
       });
+    };
   };
 
 
