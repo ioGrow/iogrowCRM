@@ -1,12 +1,11 @@
 <div class="row subHeader">
-  <div class="currentApp">
-    <h2 class="page-title">
+  <div class="subHContent">
+    <div class="currentApp">
+     <h2 class="page-title">
       <!-- <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
       {{active_app.label}}
     </h2>
-  </div>
-  <div class=" subHeaderContent">
-    <div class="pull-right sharebuttonDiv" ng-show="!blankStateaccount">
+     <div class="pull-right sharebuttonDiv" ng-show="!blankStateaccount">
       <div class="btn-group btn-filter">
         <a class="btn btn-default" href="#" data-toggle="dropdown">
           {{ _('Filter by') }}
@@ -35,8 +34,9 @@
         </ul>
       </div>
     </div>
-    <h2 class="page-title">{{ _("Contacts") }} </h2>
-  </div>
+   </div>
+  
+ </div>
 </div>
 <div  class="page-content">
   <div class="loader-container row" ng-show="isLoading">
@@ -59,19 +59,31 @@
   <div ng-show="isSignedIn" class="row">
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-    <div class="col-md-9" >
-        <div class="btn-group newBtn">
-          <a class="btn red " href="/#/contacts/new" >
-            {{ _("New Contact") }}
-          </a>
+<div class="col-md-9">
+    <div class="row subHeaderContainer">
+        <div class=" col-md-9 col-sm-9 col-xs-9 subHeaderContent">
+           <div class="row">
+              <h2 class="page-title">{{ _("Contacts") }} </h2>
+           </div>
         </div>
-        <div class="btn-group newBtn">
+     <div class="col-md-3 col-sm-3 col-xs-3">
+        <div class="row">
+         <div class="pull-right" > 
+           <a href="/#/contacts/new" class="btn red newBtn">
+                        New Contact 
+          </a>
+            <div class="btn-group newBtn">
           <button  ng-click="showImportModal()" id="sample_editable_1_new" class="btn red">
             <i class="icon-upload-alt"></i>
           </button>
         </div>
+         </div>
+         </div>
     </div>
-    <div class="col-md-9">
+  </div>
+ <div class="row">      
+   <div class="col-md-12">
+
      <div class="row">
       <div class="tab-pane">
       <div class="row">
@@ -150,7 +162,9 @@
         </div><!--/inner-cards-container-->
       </div>
     </div>
-    </div>
+  </div>
+  </div>
+  </div>
   </div>
       <div class="col-md-3 fixed-labelsCard">
       <div class="row">
@@ -242,4 +256,5 @@
         defaultContainerWidth: 800,
         autoresize: true
   });
+  $('.textfill').textfill({debug: true, maxFontPixels: 16});
 </script>

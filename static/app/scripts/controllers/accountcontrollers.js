@@ -1758,6 +1758,7 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
               var copyOfElement = angular.copy(elem);
               arr.push(copyOfElement);
               $scope.initObject(elem);
+              
           }else{
             alert("item already exit");
           }
