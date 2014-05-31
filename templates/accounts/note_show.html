@@ -89,12 +89,12 @@
             <div class="row comments-block">
               <div class="col-md-12">
                 <p class⁼"lead"><strong>{{ _("Discuss this message") }}</strong> </p>
-                  <form id="addComment" ng-submit="addComment(comment)" class="ng-pristine ng-valid">
+                  <form id="addComment" class="ng-pristine ng-valid">
                     <div class="form-group">
                       <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="comment.content"></textarea>
                     </div>
                     <div class="pull-right">
-                      <input ng-hide="isLoading" type="submit" class="btn green" value="Add comment">
+                      <input ng-hide="isLoading" ng-click="addComment(comment)"  type="submit" class="btn green" value="Add comment">
                       <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
                     </div>
                   </form>
