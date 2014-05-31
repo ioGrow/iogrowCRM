@@ -29,6 +29,20 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
      $scope.refreshToken = function() {
             Auth.refreshToken();
      };
+     $scope.$watch('event.starts_at', function(newValue, oldValue) {
+              $scope.patchDate($scope.event.starts_at);
+     });
+     $scope.patchDate = function(newValue){
+        var starts_at = $filter('date')(newValue,['yyyy-MM-ddTHH:mm:00.000000']);
+
+        var params = {
+                    'entityKey':$scope.event.entityKey,
+                    'starts_at':starts_at
+        };
+        if ((!$scope.isLoading) && (params.entityKey != undefined )){
+            Event.patch($scope,params);
+        }
+     }
       $scope.listNextPageItemscomment= function(){
         
          console.log('i am in list next comment page')
@@ -50,6 +64,7 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
           $scope.currentPagecomment = $scope.currentPagecomment + 1 ; 
           Comment.list($scope,params);
      }
+     
      $scope.listPrevPageItemscomment = function(){
        
        var prevPage = $scope.currentPagecomment - 1;
@@ -153,11 +168,6 @@ $scope.listContributors = function(){
  $scope.getshow = function(showId){
      var show = Show.get($scope.showId);
      return show;
-
- }
- $scope.updateEvent=function(params){
-  console.log("wooooooooooooooooooooooooooooooooooooooooooooork");
-   Event.patch($scope,params);
 
  }
 

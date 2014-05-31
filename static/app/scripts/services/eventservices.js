@@ -14,7 +14,7 @@ eventservices.factory('Event', function($http) {
                $scope.uri =url;*/
               /* $scope.listContributors();
                $scope.ListComments();*/
-               console.log($scope.eventt);
+               console.log($scope.event);
                $scope.isContentLoaded=true;
                // Call the method $apply to make the update on the scope
                 $scope.$apply();
@@ -33,11 +33,17 @@ eventservices.factory('Event', function($http) {
   };
   Event.patch = function($scope,params){
       $scope.isLoading = true;
-      
       gapi.client.crmengine.events.patch(params).execute(function(resp) {
-       
+          
           if(!resp.code){
-            $scope.event = resp;
+            /*
+            for (var k in params){
+                 if (k!='id'&&k!='entityKey'){
+                   $scope.event[k] = resp[k];
+                 }
+            }
+            */
+            $scope.runTheProcess();
             console.log("working");
             /*$scope.ListComments();
             $scope.listContributors();*/

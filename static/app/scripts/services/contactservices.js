@@ -2,14 +2,14 @@ var contactservices = angular.module('crmEngine.contactservices',[]);
 // Base sercice (create, delete, get)
 
 accountservices.factory('Contact', function($http) {
-  
+
   var Contact = function(data) {
     angular.extend(this, data);
   }
 
-  
+
   Contact.get = function($scope,id) {
-          
+
           gapi.client.crmengine.contacts.getv2(id).execute(function(resp) {
             if(!resp.code){
                $scope.contact = resp;
@@ -18,7 +18,7 @@ accountservices.factory('Contact', function($http) {
                 if (resp.infonodes){
                     if (resp.infonodes.items){
                         for (var i=0;i<resp.infonodes.items.length;i++)
-                        { 
+                        {
                           if (resp.infonodes.items[i].kind == 'addresses'){
                             renderMap = true;
                           }
@@ -39,7 +39,7 @@ accountservices.factory('Contact', function($http) {
                 }
                 if (resp.topics){
                   $scope.topics = resp.topics.items;
-                   
+
                     if ($scope.topicCurrentPage >1){
                         console.log('Should show PREV');
                       $scope.topicpagination.prev = true;
@@ -56,7 +56,7 @@ accountservices.factory('Contact', function($http) {
                     $scope.topicpagination.next = false;
                    }
                   }
-                  
+
                   if (resp.opportunities){
                       if (!resp.opportunities.items){
                         $scope.blankStateopportunity = true;
@@ -72,7 +72,7 @@ accountservices.factory('Contact', function($http) {
                          // Store the nextPageToken
                          $scope.opppages[nextPage] = resp.opportunities.nextPageToken;
                          $scope.opppagination.next = true;
-                         
+
                        }else{
                         $scope.opppagination.next = false;
                        }
@@ -94,7 +94,7 @@ accountservices.factory('Contact', function($http) {
                        // Store the nextPageToken
                        $scope.casepages[nextPage] = resp.cases.nextPageToken;
                        $scope.casepagination.next = true;
-                       
+
                      }else{
                       $scope.casepagination.next = false;
                      }
@@ -112,12 +112,12 @@ accountservices.factory('Contact', function($http) {
                            $scope.documentpagination.prev = false;
                       }
                      if (resp.documents.nextPageToken){
-                      
+
                        var nextPage = $scope.documentCurrentPage + 1;
                        // Store the nextPageToken
                        $scope.documentpages[nextPage] = resp.documents.nextPageToken;
                        $scope.documentpagination.next = true;
-                       
+
                      }else{
                       $scope.documentpagination.next = false;
                      }
@@ -130,6 +130,11 @@ accountservices.factory('Contact', function($http) {
                   if (resp.events){
                      $scope.events = resp.events.items;
                   }
+                  if (resp.profile_img_url){
+                    $scope.imageSrc=resp.profile_img_url;
+                  }else{
+                    $scope.imageSrc='/static/img/avatar_contact.jpg';
+                  }
                $scope.isContentLoaded = true;
                //$scope.listInfonodes();
                // $scope.listTopics(resp);
@@ -138,14 +143,14 @@ accountservices.factory('Contact', function($http) {
                // $scope.listOpportunities();
                // $scope.listCases();
                // $scope.listDocuments();
-               
+
                //$scope.renderMaps();
 
               document.title = "Contact: " + $scope.contact.firstname +' ' +$scope.contact.lastname ;
               $scope.email.to = '';
                 angular.forEach($scope.contact.emails, function(value, key){
                   $scope.email.to = $scope.email.to + value.email + ',';
-                  
+
                 });
                // Call the method $apply to make the update on the scope
                 $scope.isLoading = false;
@@ -171,9 +176,9 @@ accountservices.factory('Contact', function($http) {
           });
   };
   Contact.patch = function($scope,params) {
-        
+
           gapi.client.crmengine.contacts.patch(params).execute(function(resp) {
-            
+
             if(!resp.code){
                 for (var k in params){
                  if (k!='id'&&k!='entityKey'){
@@ -183,10 +188,10 @@ accountservices.factory('Contact', function($http) {
                $scope.email.to = '';
                 angular.forEach($scope.contact.emails, function(value, key){
                   $scope.email.to = $scope.email.to + value.email + ',';
-                  
+
                 });
-               
-              
+
+
                // Call the method $apply to make the update on the scope
                 $scope.$apply();
 
@@ -212,7 +217,7 @@ accountservices.factory('Contact', function($http) {
               $('#errorModal').modal('show');
                if(resp.code==401){
                 $scope.refreshToken();
-                
+
                };
                $scope.isLoading = false;
                 $scope.$apply();
@@ -225,9 +230,9 @@ accountservices.factory('Contact', function($http) {
 
       gapi.client.crmengine.contacts.listv2(params).execute(function(resp) {
 
-    
+
               if(!resp.code){
-                  
+
                    if (!resp.items){
                     if(!$scope.isFiltering){
                         $scope.blankStatecontact = true;
@@ -244,7 +249,7 @@ accountservices.factory('Contact', function($http) {
                    // Store the nextPageToken
                    $scope.contactpages[nextPage] = resp.nextPageToken;
                    $scope.contactpagination.next = true;
-                   
+
                  }else{
                   $scope.contactpagination.next = false;
                  }
@@ -262,18 +267,18 @@ accountservices.factory('Contact', function($http) {
               }
               console.log('gapi #end_execute');
         });
-    
-  	
+
+
 
   };
   Contact.search = function($scope,params){
       gapi.client.crmengine.contacts.search(params).execute(function(resp) {
            if (resp.items){
               $scope.results = resp.items;
-              
+
               $scope.$apply();
             };
-            
+
       });
   };
   Contact.listMore = function($scope,params){
@@ -294,7 +299,7 @@ accountservices.factory('Contact', function($http) {
                    // Store the nextPageToken
                    $scope.contactpages[nextPage] = resp.nextPageToken;
                    $scope.contactpagination.next = true;
-                   
+
                  }else{
                   $scope.contactpagination.next = false;
                  }
@@ -310,20 +315,20 @@ accountservices.factory('Contact', function($http) {
                 $scope.$apply();
                };
               }
-              
+
         });
-    
-    
+
+
 
   };
   Contact.search = function($scope,params){
       gapi.client.crmengine.contacts.search(params).execute(function(resp) {
            if (resp.items){
               $scope.results = resp.items;
-              
+
               $scope.$apply();
             };
-            
+
       });
   };
   Contact.insert = function($scope,params){
@@ -331,7 +336,7 @@ accountservices.factory('Contact', function($http) {
       console.log('********** I am Inserting a contact**********');
       console.log(params);
       gapi.client.crmengine.contacts.insertv2(params).execute(function(resp) {
-         
+
          if(!resp.code){
           $scope.isLoading = false;
           if ($scope.contacts == undefined){
@@ -345,7 +350,7 @@ accountservices.factory('Contact', function($http) {
           $scope.contact = {};
           $scope.searchAccountQuery = '';
           $scope.$apply();
-          
+
          }else{
             console.log(resp.message);
              $('#addAContactModal').modal('hide');
@@ -370,8 +375,7 @@ Contact.delete = function($scope,params){
     }
 
     )};
-  
+
 
 return Contact;
 });
-
