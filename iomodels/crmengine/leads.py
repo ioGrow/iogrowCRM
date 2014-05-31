@@ -429,7 +429,7 @@ class Lead(EndpointsModel):
                     profile_img_url = request.profile_img_url
                     )
         sl = scor_new_lead()
-      
+        print('----------idrisssssss----------')
         at =  request.title
         ssl = sl.predict(at)
         print ssl
