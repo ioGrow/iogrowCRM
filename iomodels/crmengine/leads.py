@@ -6,7 +6,7 @@ from google.appengine.api import search
 from endpoints_proto_datastore.ndb import EndpointsModel
 from protorpc import messages
 from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
-from endpoints_helper import EndpointsHelper
+from endpoints_helper import EndpointsHelper,scor_new_lead
 from iomodels.crmengine.tags import Tag,TagSchema
 from iomodels.crmengine.tasks import Task,TaskRequest,TaskListResponse
 from iomodels.crmengine.events import Event,EventListResponse
@@ -18,6 +18,7 @@ from iomodels.crmengine.accounts import Account
 import model
 import iomessages
 import tweepy
+
 
 
 class LeadFromTwitterRequest(messages.Message):
@@ -427,6 +428,11 @@ class Lead(EndpointsModel):
                     profile_img_id = request.profile_img_id,
                     profile_img_url = request.profile_img_url
                     )
+        #sl = scor_new_lead()
+        #print('----------idrisssssss----------')
+        #at =  request.title
+        #ssl = sl.predict(at)
+        #print ssl
         lead_key = lead.put_async()
         lead_key_async = lead_key.get_result()
         for email in request.emails:

@@ -464,7 +464,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.infonodes = {};
      $scope.phone={};
      $scope.phone.type= 'work';
-    $scope.documentpagination = {};
+     $scope.documentpagination = {};
      $scope.documentCurrentPage=01;
      $scope.documentpages=[];
     $scope.selectedTab = 2;
@@ -1178,7 +1178,8 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
       $scope.websites=[];
       $scope.sociallinks=[];
       $scope.customfields=[];
-      $scope.phone = {'type':'work'};
+      $scope.phone={};
+      $scope.phone.type= 'work';
       $scope.imageSrc = '/static/img/avatar_contact.jpg';
       $scope.profile_img = {
                             'profile_img_id':null,
@@ -1220,7 +1221,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
               arr.push(copyOfElement);
               console.log(elem);
               $scope.initObject(elem);
-
+             $scope.phone.type= 'work';
           }else{
             alert("item already exit");
           }
