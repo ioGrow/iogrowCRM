@@ -33,6 +33,11 @@ app.controller('AccountListCtrl', ['$scope','$filter','Auth','Account','Tag','Ed
      ];
      $scope.tag.color= {'name':'green','color':'#BBE535'};
      $scope.runTheProcess = function(){
+          console.log('i am in account list run the process');
+          console.log('here is the access token in the gapi');
+          console.log(gapi.auth.getToken());
+          console.log('and here is the auth result saved in the window');
+          console.log(window.authResult);
           var params = { 'order': $scope.order,
                         'limit':20}
           Account.list($scope,params);
@@ -144,10 +149,7 @@ app.controller('AccountListCtrl', ['$scope','$filter','Auth','Account','Tag','Ed
      $scope.result = undefined;
      $scope.q = undefined;
 
-     $scope.$watch('searchQuery', function() {
-         searchParams['q'] = $scope.searchQuery;
-         Account.search($scope,searchParams);
-     });
+     
      $scope.selectResult = function(){
           window.location.replace('#/accounts/show/'+$scope.searchQuery.id);
      };

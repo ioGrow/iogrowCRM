@@ -1,12 +1,24 @@
 var accountservices = angular.module('crmEngine.authservices',[]);
 accountservices.factory('Auth', function($http) {
   var Auth = function(data) {
-    angular.extend(this, data);
+     angular.extend(this, data);
   };
+  Auth.checkGapiToken = function(){
+      var timeNow = new Date().getTime()/1000;
+      var gapiToken = gapi.auth.getToken();
+      if (gapiToken){
+          var expirationTime = gapiToken.expires_at;
+          var diff = expirationTime - timeNow;
+          if (diff>0){
+              return true;
+          }
+      }
+      return false;
+  }
   Auth.init = function($scope){
-      console.log('*******INIT********');
       var timeNow = new Date().getTime()/1000;
       Auth.$scope = $scope;
+
       if (window.is_signed_in){
 
 
@@ -22,44 +34,33 @@ accountservices.factory('Auth', function($http) {
           }
 
       }else{
-            console.log('*******I will render signin********');
-            gapi.signin.render('myGsignin', {
-            'callback': Auth.signIn,
-            'clientid': '987765099891.apps.googleusercontent.com',
-            'scope': 'https://www.googleapis.com/auth/userinfo.email',
-            'theme': 'dark',
-            'cookiepolicy': 'single_host_origin',
-            'accesstype': 'offline'
-            });
-
+            var isGapiOk = Auth.checkGapiToken();
+            if (isGapiOk){
+                var gapiToken = gapi.auth.getToken();
+                Auth.processAuth(window.authResult);
+            }else{
+              gapi.signin.render('myGsignin', {
+                'callback': Auth.signIn,
+                'clientid': '987765099891.apps.googleusercontent.com',
+                'scope': 'https://www.googleapis.com/auth/userinfo.email',
+                'theme': 'dark',
+                'cookiepolicy': 'single_host_origin',
+                'accesstype': 'online',
+                'width':'wide'
+              });
+            }
       }
   };
   Auth.signIn = function(authResult){
-      console.log('***************');
-      console.log(authResult);
-      //Auth.connectServer(authResult);
       Auth.processAuth(authResult);
   };
-  Auth.connectServer = function(authResult){
-
-      $.ajax({
-        type: 'POST',
-        url: '/gconnect',
-        success: function(result) {
-          // success
-        },
-        data: {code:authResult.code}
-      });
-  };
   Auth.processAuth = function(authResult) {
-
       Auth.$scope.immediateFailed = true;
-      if (authResult['access_token']) {
-
+      if (authResult) {
+        if (authResult['access_token']){
           Auth.$scope.immediateFailed = false;
           Auth.$scope.isSignedIn = true;
           if (!window.authResult) {
-
               window.is_signed_in = true;
               window.authResult = authResult;
               window.authResultexpiration =  authResult.expires_at;
@@ -67,18 +68,31 @@ accountservices.factory('Auth', function($http) {
 
           // run the process
           Auth.$scope.runTheProcess();
-      } else if (authResult['error']) {
-          if (authResult['error']) {
-            Auth.$scope.immediateFailed = true;
-            console.log(authResult);
-            //window.location.replace('/sign-in');
-          } else {
-            console.log('Error:' + authResult['error']);
-          }
+        }
+        else{
+          Auth.renderForcedSignIn();
+        }
+
+      } else {
+            Auth.renderForcedSignIn();
       };
 
   };
-
+  Auth.renderForcedSignIn = function(){
+    window.authResult = null;
+    Auth.$scope.immediateFailed = true;
+    Auth.$scope.$apply();
+    gapi.signin.render('myGsignin', {
+      'callback': Auth.signIn,
+      'clientid': '987765099891.apps.googleusercontent.com',
+      'scope': 'https://www.googleapis.com/auth/userinfo.email',
+      'theme': 'dark',
+      'cookiepolicy': 'single_host_origin',
+      'accesstype': 'online',
+      'approvalprompt':'force',
+      'width':'wide'
+    });
+  }
   Auth.refreshToken = function(){
      window.location.reload(true);
   };

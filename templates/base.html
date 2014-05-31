@@ -337,106 +337,37 @@
   <script src="static/angular-xeditable-0.1.8/js/xeditable.js"></script>
    <script src="static/app/scripts/vendor/ui-select2.js" ></script>
   <script type="text/javascript">
-    window.is_signed_in = false;
-    function auth() {
-        var config = {
-      'client_id': '{{CLIENT_ID}}',
-          'scope': 'https://www.googleapis.com/auth/userinfo.email',
-          'immediate' : true
-        };
-        gapi.auth.authorize(config, function(authResult) {
-          console.log('in authCallback');
-          console.log(authResult);
-          if (authResult && !authResult.error){
-              console.log('login complete');
-              console.log(gapi.auth.getToken());
-              window.logged_in = true;
-          } else{
-            var config_for_new = {
-              'client_id': '{{CLIENT_ID}}',
-              'scope': 'https://www.googleapis.com/auth/userinfo.email',
-              'immediate' : false
-             };
-            gapi.auth.authorize(config_for_new);
-
-          }
-
-        });
-      }
-      var apisToLoad;
-  var callback = function() {
-    console.log('callback');
-    if (--apisToLoad == 0) {
-      signin(true, userAuthed);
-
-    }
-  }
-
-    function loadGapi() {
-       window.is_signed_in = false;
-       window.authResult = undefined;
-       var apisToLoad;
-
-
-
-     var ROOT = '/_ah/api';
-
-
-
-  //  var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
-
-
-
-
-
-
-
-            var callback = function() {
+    var apisToLoad;
+    var callback = function() {
+        console.log('callback');
         if (--apisToLoad == 0) {
-          apiLoaded();
+          signin(true, userAuthed);
+
         }
-       }
-
-      apisToLoad = 2; // must match number of calls to gapi.client.load()
-      console.log('before loading');
-      gapi.client.load('crmengine', 'v1', callback, ROOT);
-      gapi.load('picker', {'callback': callback});
-
-
+    }
+    function loadGapi() {
+        window.is_signed_in = false;
+        window.authResult = undefined;
+        var apisToLoad;
+        var ROOT = '/_ah/api';
+        // var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+        var callback = function() {
+            if (--apisToLoad == 0) {
+                apiLoaded();
+            }
+        }
+        apisToLoad = 2; // must match number of calls to gapi.client.load()
+        console.log('before loading');
+        gapi.client.load('crmengine', 'v1', callback, ROOT);
+        gapi.load('picker', {'callback': callback});
     }
     function apiLoaded(){
-
       // When the API is loaded start angularJS app
       var $injector = angular.bootstrap(document, ['crmEngine']);
-            console.log('angular bootstraped');
-      console.log('before redirection');
       if (!window.location.hash){
-      window.location.replace('{{active_app.url}}');
+          window.location.replace('{{active_app.url}}');
       };
     }
-
-    function signin(mode, callback) {
-      gapi.auth.authorize({client_id: "{{CLIENT_ID}}",
-        scope: "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar", immediate: mode},
-        callback);
-    }
-
-
-    function userAuthed() {
-
-
-          var $injector = angular.bootstrap(document, ['crmEngine']);
-            console.log('angular bootstraped');
-
-          // User is signed in, call my Endpoint
-
-
-    }
-
-    function callbackoauth(){
-       console.log('oauth2 loaded');
-    }
-
   </script>
 
   <script src="https://apis.google.com/js/client.js?onload=loadGapi">
