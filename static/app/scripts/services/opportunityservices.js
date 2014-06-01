@@ -9,8 +9,10 @@ opportunityservices.factory('Opportunity', function($http) {
     angular.extend(this, data);
   }
   //HKA .5.112013 Add function get Opportunity
-  Opportunity.get = function($scope,id){
-    gapi.client.crmengine.opportunities.getv2(id).execute(function(resp){
+  Opportunity.get = function($scope,params){
+    $scope.isLoading = true;
+    $scope.$apply();
+    gapi.client.crmengine.opportunities.getv2(params).execute(function(resp){
       if(!resp.code){
         $scope.opportunity = resp;
                 // list infonodes
@@ -38,7 +40,14 @@ opportunityservices.factory('Opportunity', function($http) {
                     }
                 }
                 if (resp.topics){
-                  $scope.topics = resp.topics.items;
+                  if (params.topics.pageToken){
+                     angular.forEach(resp.topics.items, function(item){
+                         $scope.topics.push(item);
+                     });
+                  }
+                  else{
+                      $scope.topics = resp.topics.items;
+                  }
 
                     if ($scope.topicCurrentPage >1){
                       $scope.topicpagination.prev = true;
@@ -61,7 +70,14 @@ opportunityservices.factory('Opportunity', function($http) {
                       if (!resp.documents.items){
                         $scope.blankStatdocuments = true;
                       }
-                      $scope.documents = resp.documents.items;
+                      if (params.documents.pageToken){
+                         angular.forEach(resp.documents.items, function(item){
+                             $scope.documents.push(item);
+                         });
+                      }
+                      else{
+                          $scope.documents = resp.documents.items;
+                      }
                       if ($scope.documentCurrentPage >1){
                           $scope.documentpagination.prev = true;
                       }else{
@@ -88,6 +104,7 @@ opportunityservices.factory('Opportunity', function($http) {
                   }
 
         $scope.isContentLoaded = true;
+        $scope.isLoading = false;
         if (resp.current_stage){
           $scope.opportunity.currentStageSelect = resp.current_stage.name+ ' - ( ' + resp.current_stage.probability + '% )'
         };
@@ -100,7 +117,7 @@ opportunityservices.factory('Opportunity', function($http) {
         document.title = "Opportunity: " + $scope.opportunity.name ;
 
         $scope.$apply();
-        if (resp.topics){
+        if (resp.topics && !params.topics.pageToken){
             $scope.hilightTopic();
         };
         // if (resp.tasks){

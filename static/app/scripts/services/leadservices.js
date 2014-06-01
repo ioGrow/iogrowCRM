@@ -7,8 +7,10 @@ leadservices.factory('Lead', function($http) {
     angular.extend(this, data);
   }
 
-  Lead.get = function($scope,id) {
-          gapi.client.crmengine.leads.getv2(id).execute(function(resp) {
+  Lead.get = function($scope,params) {
+          $scope.isLoading = true;
+          $scope.$apply();
+          gapi.client.crmengine.leads.getv2(params).execute(function(resp) {
             if(!resp.code){
                $scope.lead = resp;
                $scope.isContentLoaded = true;
@@ -35,8 +37,15 @@ leadservices.factory('Lead', function($http) {
                         }
                     }
                 }
-                if (resp.topics){
-                  $scope.topics = resp.topics.items;
+                if (resp.topics && !params.topics.pageToken){
+                    if (params.topics.pageToken){
+                       angular.forEach(resp.topics.items, function(item){
+                           $scope.topics.push(item);
+                       });
+                    }
+                    else{
+                        $scope.topics = resp.topics.items;
+                    }
 
                     if ($scope.topicCurrentPage >1){
                         console.log('Should show PREV');
@@ -58,7 +67,14 @@ leadservices.factory('Lead', function($http) {
                       if (!resp.documents.items){
                         $scope.blankStatdocuments = true;
                       }
-                      $scope.documents = resp.documents.items;
+                      if (params.documents.pageToken){
+                         angular.forEach(resp.documents.items, function(item){
+                             $scope.documents.push(item);
+                         });
+                      }
+                      else{
+                          $scope.documents = resp.documents.items;
+                      }
                       if ($scope.documentCurrentPage >1){
                           $scope.documentpagination.prev = true;
                       }else{
@@ -102,6 +118,7 @@ leadservices.factory('Lead', function($http) {
                   $scope.email.to = $scope.email.to + value.email + ',';
 
                 });
+                $scope.isLoading = false;
                // Call the method $apply to make the update on the scope
                $scope.$apply();
                if (resp.topics){

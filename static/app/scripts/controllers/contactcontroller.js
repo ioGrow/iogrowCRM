@@ -47,7 +47,8 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
             //     var params = {
             //               'firstname': 'Dja3fer',
             //               'lastname':'M3amer ' + i.toString(),
-            //               'access':'public'
+            //               'access':'public',
+            //               'account': 'ahNkZXZ-Z2NkYzIwMTMtaW9ncm93chQLEgdBY2NvdW50GICAgICAgIgKDA'
             //             }
             //     Contact.insert($scope,params);
             // }
@@ -516,7 +517,23 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
                           };
 
 
+      $scope.waterfallTrigger= function(){
 
+
+            /* $('.waterfall').hide();
+           $('.waterfall').show();*/
+           $( window ).trigger( "resize" );
+           if($(".chart").parent().width()==0){
+            var leftMargin=210-$(".chart").width();
+                   $(".chart").css( "left",leftMargin/2);
+                   $(".oppStage").css( "left",leftMargin/2-2);
+           }else{
+               var leftMargin=$(".chart").parent().width()-$(".chart").width();
+                   $(".chart").css( "left",leftMargin/2);
+                   $(".oppStage").css( "left",leftMargin/2-2);
+
+           }
+      };
       // What to do after authentication
       $scope.runTheProcess = function(){
 
@@ -528,15 +545,15 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
                           },
 
                           'opportunities':{
-                            'limit': '6'
+                            'limit': '15'
                           },
 
                           'cases':{
-                            'limit': '6'
+                            'limit': '15'
                           },
 
                           'documents':{
-                            'limit': '6'
+                            'limit': '15'
                           },
 
                           'tasks':{
@@ -574,42 +591,13 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
                           'pageToken':$scope.topicpages[nextPage]
                         }
                      }
-            }else{
-            params = {
-                      'id':$scope.contact.id,
-                        'topics':{
-                          'limit': '7'
-                        }
-                     }
-          }
+              $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ;
+              Contact.get($scope,params);
+            }
 
-          $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ;
-          Contact.get($scope,params);
+
      }
-     $scope.TopiclistPrevPageItems = function(){
 
-       var prevPage = $scope.topicCurrentPage - 1;
-       var params = {};
-
-          if ($scope.topicpages[prevPage]){
-            params = {
-                      'id':$scope.contact.id,
-                        'topics':{
-                          'limit': '7',
-                          'pageToken':$scope.topicpages[prevPage]
-                        }
-                     }
-          }else{
-            params = {
-                      'id':$scope.contact.id,
-                        'topics':{
-                          'limit': '7'
-                        }
-                     }
-          }
-          $scope.topicCurrentPage = $scope.topicCurrentPage - 1 ;
-          Contact.get($scope,params);
-     }
 
      $scope.listTopics = function(contact){
         var params = {
@@ -635,41 +623,12 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
                           'pageToken':$scope.opppages[nextPage]
                         }
                      }
-            }else{
-            params = {
-                      'id':$scope.contact.id,
-                        'opportunities':{
-                          'limit': '6'
-                        }
-                     }
-          }
-          $scope.oppCurrentPage = $scope.oppCurrentPage + 1 ;
-          Contact.get($scope,params);
-     };
-     $scope.OppPrevPageItems = function(){
+            $scope.oppCurrentPage = $scope.oppCurrentPage + 1 ;
+            Contact.get($scope,params);
+            }
 
-
-       var prevPage = $scope.oppCurrentPage - 1;
-       var params = {};
-          if ($scope.opppages[prevPage]){
-            params = {
-                      'id':$scope.contact.id,
-                        'opportunities':{
-                          'limit': '6',
-                          'pageToken':$scope.opppages[prevPage]
-                        }
-                     }
-            }else{
-            params = {
-                      'id':$scope.contact.id,
-                        'opportunities':{
-                          'limit': '6'
-                        }
-                     }
-          }
-          $scope.oppCurrentPage = $scope.oppCurrentPage - 1 ;
-          Contact.get($scope,params);
      };
+
     //HKA 07.12.2013 Manage Prev & Next Page on Related List Cases
 $scope.CaselistNextPageItems = function(){
 
@@ -680,44 +639,16 @@ $scope.CaselistNextPageItems = function(){
             params = {
                       'id':$scope.contact.id,
                         'cases':{
-                          'limit': '6',
+                          'limit': '15',
                           'pageToken':$scope.casepages[nextPage]
                         }
                      }
-          }else{
-            params = {
-                      'id':$scope.contact.id,
-                        'cases':{
-                          'limit': '6'
-                        }
-                     }
+            $scope.caseCurrentPage = $scope.caseCurrentPage + 1 ;
+            Contact.get($scope,params);
           }
-          $scope.caseCurrentPage = $scope.caseCurrentPage + 1 ;
-          Contact.get($scope,params);
-     }
-     $scope.CasePrevPageItems = function(){
 
-       var prevPage = $scope.caseCurrentPage - 1;
-       var params = {};
-          if ($scope.casepages[prevPage]){
-            params = {
-                      'id':$scope.contact.id,
-                        'cases':{
-                          'limit': '6',
-                          'pageToken':$scope.casepages[prevPage]
-                        }
-                     }
-            }else{
-            params = {
-                      'id':$scope.contact.id,
-                        'cases':{
-                          'limit': '6'
-                        }
-                     }
-          }
-          $scope.caseCurrentPage = $scope.caseCurrentPage - 1 ;
-          Contact.get($scope,params);
-     };
+     }
+
 
 
      $scope.hilightTopic = function(){
@@ -1171,22 +1102,16 @@ $scope.updateintro = function(contact){
             params = {
                         'id':$scope.contact.id,
                         'documents':{
-                          'limit': '6',
+                          'limit': '15',
                           'pageToken':$scope.documentpages[nextPage]
                         }
                       }
+            $scope.documentCurrentPage = $scope.documentCurrentPage + 1 ;
 
-          }else{
-            params = {
-                        'id':$scope.contact.id,
-                        'documents':{
-                          'limit': '6'
-                        }
-                      }
-            }
-          $scope.documentCurrentPage = $scope.documentCurrentPage + 1 ;
+            Contact.get($scope,params);
 
-          Contact.get($scope,params);
+          }
+
 
      }
      $scope.DocumentPrevPageItems = function(){
@@ -1425,9 +1350,32 @@ $scope.updateintro = function(contact){
             alert("item already exit");
           }
       };
+      $scope.listMoreOnScroll = function(){
+        switch ($scope.selectedTab)
+            {
+            case 5:
+              $scope.OpplistNextPageItems();
+              break;
+            case 6:
+              $scope.CaselistNextPageItems();
+              break;
+            case 7:
+              $scope.DocumentlistNextPageItems();
+              break;
+            case 1:
+              $scope.TopiclistNextPageItems();
+              break;
 
+            }
+      };
      // Google+ Authentication
      Auth.init($scope);
+     $(window).scroll(function() {
+          if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
+              $scope.listMoreOnScroll();
+          }
+      });
+
 }]);
 
 

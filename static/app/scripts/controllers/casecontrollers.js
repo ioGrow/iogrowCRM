@@ -50,15 +50,15 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
             Casestatus.list($scope,{});
             var paramsTag = {'about_kind':'Case'};
             Tag.list($scope,paramsTag);
-            // for (var i=0;i<100;i++)
-            // {
-            //     var casee = {
-            //               'name':  i.toString() + ' kass ta3 lban',
-            //               'access':'public'
-            //             }
-            //     $scope.searchAccountQuery = 'dja3fer company'
-            //     $scope.save(casee);
-            // }
+              // for (var i=0;i<100;i++)
+              // {
+              //     var casee = {
+              //               'name':  i.toString() + ' Sync with Microsoft',
+              //               'access':'public',
+              //               'account': 'ahNkZXZ-Z2NkYzIwMTMtaW9ncm93chQLEgdBY2NvdW50GICAgICAgIgKDA'
+              //             }
+              //     Case.insert($scope,casee);
+              // }
        };
 
       $scope.getPosition= function(index){
@@ -140,7 +140,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
               casee.contact_name = casee.contact.firstname + ' '+ casee.contact.lastname ;
               casee.contact = casee.contact.entityKey;
           }
-       
+
           Case.insert($scope,casee);
 
         }else if($scope.searchAccountQuery.length>0){
@@ -1073,7 +1073,7 @@ $scope.listInfonodes = function(kind) {
              name:value}
          Case.patch($scope,params);}
        };
-  // HKA 26.05.2014 return URL topic     
+  // HKA 26.05.2014 return URL topic
   $scope.getTopicUrl = function(type,id){
       return Topic.getUrl(type,id);
     };
@@ -1225,7 +1225,7 @@ app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','C
         var hasContact = false;
         var hasAccount = false;
         casee.status = $scope.status_selected.entityKey;
-       
+
         if (typeof(casee.account)=='object'){
             hasAccount = true;
             casee.account = casee.account.entityKey;
