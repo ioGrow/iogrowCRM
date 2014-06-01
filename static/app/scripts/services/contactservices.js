@@ -8,9 +8,10 @@ accountservices.factory('Contact', function($http) {
   }
 
 
-  Contact.get = function($scope,id) {
-
-          gapi.client.crmengine.contacts.getv2(id).execute(function(resp) {
+  Contact.get = function($scope,params) {
+          $scope.isLoading = true;
+          $scope.$apply();
+          gapi.client.crmengine.contacts.getv2(params).execute(function(resp) {
             if(!resp.code){
                $scope.contact = resp;
                // list infonodes
@@ -38,7 +39,14 @@ accountservices.factory('Contact', function($http) {
                     }
                 }
                 if (resp.topics){
-                  $scope.topics = resp.topics.items;
+                  if (params.topics.pageToken){
+                     angular.forEach(resp.topics.items, function(item){
+                         $scope.topics.push(item);
+                     });
+                  }
+                  else{
+                      $scope.topics = resp.topics.items;
+                  }
 
                     if ($scope.topicCurrentPage >1){
                         console.log('Should show PREV');
@@ -61,7 +69,14 @@ accountservices.factory('Contact', function($http) {
                       if (!resp.opportunities.items){
                         $scope.blankStateopportunity = true;
                       }
-                       $scope.opportunities = resp.opportunities.items;
+                       if (params.opportunities.pageToken){
+                          angular.forEach(resp.opportunities.items, function(item){
+                              $scope.opportunities.push(item);
+                          });
+                       }
+                       else{
+                          $scope.opportunities = resp.opportunities.items;
+                       }
                        if ($scope.oppCurrentPage>1){
                            $scope.opppagination.prev = true;
                        }else{
@@ -83,7 +98,14 @@ accountservices.factory('Contact', function($http) {
                       if (!resp.cases.items){
                         $scope.blankStatecase = true;
                       }
-                       $scope.cases = resp.cases.items;
+                       if (params.cases.pageToken){
+                          angular.forEach(resp.cases.items, function(item){
+                              $scope.cases.push(item);
+                          });
+                       }
+                       else{
+                          $scope.cases = resp.cases.items;
+                       }
                        if ($scope.caseCurrentPage>1){
                           $scope.casepagination.prev = true;
                        }else{
@@ -105,7 +127,14 @@ accountservices.factory('Contact', function($http) {
                       if (!resp.documents.items){
                         $scope.blankStatdocuments = true;
                       }
-                      $scope.documents = resp.documents.items;
+                      if (params.documents.pageToken){
+                         angular.forEach(resp.documents.items, function(item){
+                             $scope.documents.push(item);
+                         });
+                      }
+                      else{
+                          $scope.documents = resp.documents.items;
+                      }
                       if ($scope.documentCurrentPage >1){
                           $scope.documentpagination.prev = true;
                       }else{
@@ -155,7 +184,7 @@ accountservices.factory('Contact', function($http) {
                // Call the method $apply to make the update on the scope
                 $scope.isLoading = false;
                $scope.$apply();
-               if (resp.topics){
+               if (resp.topics && !params.topics.pageToken){
                     $scope.hilightTopic();
                 };
                 // if (resp.tasks){
