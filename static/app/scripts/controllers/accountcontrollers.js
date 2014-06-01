@@ -3,6 +3,7 @@ app.controller('AccountListCtrl', ['$scope','$filter','Auth','Account','Tag','Ed
      $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Accounts").addClass("active");
      document.title = "Accounts: Home";
+     $scope.selectedOption = 'all';
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
