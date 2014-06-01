@@ -350,7 +350,7 @@ $scope.selectTag= function(tag,index,$event){
          var params = {
           'tags': tags,
           'order': $scope.order,
-                      'limit':6
+                      'limit':20
          };
          $scope.isFiltering = true;
          Opportunity.list($scope,params);

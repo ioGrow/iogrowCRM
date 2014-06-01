@@ -199,7 +199,7 @@ $scope.edgeInserted = function () {
      };
 $scope.listaccounts = function(){
   var params = { 'order': $scope.order,
-                      'limit':6/*,
+                      'limit':20/*,
                       'pageToken':$scope.pages[currentPage]*/}
           Account.list($scope,params);
 };
@@ -273,7 +273,7 @@ $scope.selectTag= function(tag,index,$event){
          var params = {
           'tags': tags,
           'order': $scope.order,
-          'limit':6
+          'limit':20
          };
          $scope.isFiltering = true;
          Account.list($scope,params);
