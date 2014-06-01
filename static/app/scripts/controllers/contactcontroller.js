@@ -1498,18 +1498,43 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
                 obj[key]=null;
               }
       }
-      $scope.pushElement=function(elem,arr){
+      $scope.pushElement=function(elem,arr,infos){
           if (arr.indexOf(elem) == -1) {
               var copyOfElement = angular.copy(elem);
               arr.push(copyOfElement);
-              console.log(elem);
               $scope.initObject(elem);
-               $scope.phone.type= 'work';
-
+               switch(infos){
+                case 'phones' :
+                   $scope.showPhoneForm=false;
+                   $scope.phone.type= 'work';
+                break;
+                case 'emails' :
+                   $scope.showEmailForm=false;
+                break;
+                case 'websites' :
+                    $scope.showWebsiteForm=false;
+                break;
+                case 'sociallinks' :
+                   $scope.showSociallinkForm=false;
+                break;
+                case 'customfields' :
+                   $scope.showCustomFieldForm=false;
+                break; 
+                case 'addresses' :
+                    $('#addressmodal').modal('hide');
+                
+                break;
+              }
+         
           }else{
             alert("item already exit");
           }
-      }
+      };
+  //HKA 01.06.2014 Delete the infonode on DOM
+      $scope.deleteInfos = function(arr,index){
+          arr.splice(index, 1);
+      };
+
       $scope.runTheProcess = function(){
 
        };
