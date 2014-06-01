@@ -531,6 +531,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
         $scope.closed_date=new Date();
        // What to do after authentication
        $scope.runTheProcess = function(){
+
           var params = {
                           'id':$route.current.params.accountId,
 
@@ -539,19 +540,19 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
                           },
 
                           'contacts':{
-                            'limit': '20'
+                            'limit': '15'
                           },
 
                           'opportunities':{
-                            'limit': '20'
+                            'limit': '15'
                           },
 
                           'cases':{
-                            'limit': '20'
+                            'limit': '15'
                           },
 
                           'documents':{
-                            'limit': '6'
+                            'limit': '15'
                           },
 
                           'tasks':{
@@ -630,17 +631,11 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
                           'pageToken':$scope.topicpages[nextPage]
                         }
                      }
-            }else{
-            params = {
-                      'id':$scope.account.id,
-                        'topics':{
-                          'limit': '7'
-                        }
-                     }
-          }
+            $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ;
+            Account.get($scope,params);
+            }
 
-          $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ;
-          Account.get($scope,params);
+
      }
      $scope.editTrigger=function(name){
         name.$show();
@@ -871,50 +866,17 @@ $scope.CaselistNextPageItems = function(){
             params = {
                         'id':$scope.account.id,
                         'documents':{
-                          'limit': '6',
+                          'limit': '15',
                           'pageToken':$scope.documentpages[nextPage]
                         }
                       }
+            $scope.documentCurrentPage = $scope.documentCurrentPage + 1 ;
 
-          }else{
-            params = {
-                        'id':$scope.account.id,
-                        'documents':{
-                          'limit': '6'
-                        }
-                      }
-            }
-          $scope.documentCurrentPage = $scope.documentCurrentPage + 1 ;
+            Account.get($scope,params);
+          }
 
-          Account.get($scope,params);
 
      }
-     $scope.DocumentPrevPageItems = function(){
-
-       var prevPage = $scope.documentCurrentPage - 1;
-       var params = {};
-          if ($scope.documentpages[prevPage]){
-            params = {
-                        'id':$scope.account.id,
-                        'documents':{
-                          'limit': '6',
-                          'pageToken':$scope.documentpages[prevPage]
-                        }
-                      }
-
-          }else{
-            params = {
-                        'id':$scope.account.id,
-                        'documents':{
-                          'limit': '6'
-                        }
-                      }
-          }
-          $scope.documentCurrentPage = $scope.documentCurrentPage - 1 ;
-          Account.get($scope,params);
-
-
-     };
 
 
      $scope.listTopics = function(account){
@@ -931,7 +893,7 @@ $scope.CaselistNextPageItems = function(){
         var params = {
                         'id':$scope.account.id,
                         'documents':{
-                          'limit': '6'
+                          'limit': '15'
                         }
                       }
         Account.get($scope,params);
@@ -1666,20 +1628,11 @@ $scope.doneEditTag=function(tag){
           case 6:
             $scope.CaselistNextPageItems();
             break;
-          case 'Opportunity':
-            base_url = '/#/opportunities/show/';
+          case 7:
+            $scope.DocumentlistNextPageItems();
             break;
-          case 'Case':
-            base_url = '/#/cases/show/';
-            break;
-          case 'Show':
-            base_url = '/#/live/shows/show/';
-            break;
-            case 'Feedback':
-            base_url='/#/live/feedbacks/feedback/';
-            break;
-            case 'ProductVideo':
-            base_url='/#/live/feedbacks/feedback/';
+          case 1:
+            $scope.TopiclistNextPageItems();
             break;
 
           }

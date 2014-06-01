@@ -100,7 +100,14 @@ accountservices.factory('Account', function($http) {
                     }
                 }
                 if (resp.topics){
-                  $scope.topics = resp.topics.items;
+                  if (params.topics.pageToken){
+                     angular.forEach(resp.topics.items, function(item){
+                         $scope.topics.push(item);
+                     });
+                  }
+                  else{
+                      $scope.topics = resp.topics.items;
+                  }
 
                     if ($scope.topicCurrentPage >1){
                         console.log('Should show PREV');
@@ -205,7 +212,15 @@ accountservices.factory('Account', function($http) {
                       if (!resp.documents.items){
                         $scope.blankStatdocuments = true;
                       }
-                      $scope.documents = resp.documents.items;
+                      if (params.documents.pageToken){
+                         angular.forEach(resp.documents.items, function(item){
+                             $scope.documents.push(item);
+                         });
+                      }
+                      else{
+                          $scope.documents = resp.documents.items;
+                      }
+
                       if ($scope.documentCurrentPage >1){
                           $scope.documentpagination.prev = true;
                       }else{
@@ -243,7 +258,7 @@ accountservices.factory('Account', function($http) {
 
                 });
                // Call the method $apply to make the update on the scope
-                if (resp.topics){
+                if (resp.topics && !params.topics.pageToken){
                     $scope.hilightTopic();
                 };
                 // if (resp.tasks){

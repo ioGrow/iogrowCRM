@@ -199,18 +199,6 @@
                         </div>
                       </li>
                     </ul>
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div class="pagination pull-right">
-                          <button ng-click="TopiclistPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="topicpagination.prev" style="display: none;">
-                            Prev
-                          </button>
-                          <button ng-click="TopiclistNextPageItems()" class="btn" ng-show="topicpagination.next" style="display: none;">
-                            Next
-                          </button>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
                 <!-- $ about tab -->
@@ -424,12 +412,12 @@
                                     </div>
                             </div>
                              <!--blank stat-->
-                            <div ng-show="blankStateaccount" data-span="3" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
+                            <div ng-show="blankStatecontact" data-span="3" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
                               <div class="dashboard-stat cards">
                                 <div class="blank_slate_arrow"></div>
                                 <div class="thumbnail blank_slate_body">
-                                    <img class="img-responsive" src="/static/img/accounts_blank.png">
-                                    <p class="lead">{{ _('Accounts  pages includes a detailed page for each customer, partner, or investor in your ecosystem. You and your co-workers can collaborate to get a deep understanding.') }}</p>
+                                    <img class="img-responsive" src="/static/img/contacts_blank.png">
+                                    <p class="lead">{{ _('Each contact gets a page in i/oGrow. You and your co-workers can add notes from calls,conversations, meetings, or any other historic information about this person.') }}</p>
                                 </div>
                               </div>
                             </div>
@@ -715,23 +703,7 @@
                               </div>
 
                             </div>
-                           <div class="row">
-                             <div class="col-md-12">
-                                <div class="pagination pull-right" ng-hide="isLoading">
 
-
-                                        <button ng-click="DocumentPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="documentpagination.prev" style="display: none;">
-                                        Prev
-                                        </button>
-
-                                        <button ng-click="DocumentlistNextPageItems()" class="btn" ng-show="documentpagination.next" style="display: none;">
-                                        Next
-                                        </button>
-
-                                    </div>
-                                    <!--h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3-->
-                              </div>
-                              </div>
                       </div>
                 <!-- $ send email tab -->
                 <div class="tab-pane active" id="tab_1_8" ng-show="selectedTab == 8" style="display: none;">
