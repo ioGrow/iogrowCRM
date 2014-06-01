@@ -624,7 +624,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
                           },
 
                           'documents':{
-                            'limit': '6'
+                            'limit': '15'
                           },
 
                           'tasks':{
@@ -741,43 +741,13 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
                           'pageToken':$scope.topicpages[nextPage]
                         }
                      }
-            }else{
-            params = {
-                      'id':$scope.opportunity.id,
-                        'topics':{
-                          'limit': '7'
-                        }
-                     }
-          }
+            $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ;
+            Opportunity.get($scope,params);
+            }
 
-          $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ;
-          Opportunity.get($scope,params);
-     }
-     $scope.TopiclistPrevPageItems = function(){
-
-       var prevPage = $scope.topicCurrentPage - 1;
-       var params = {};
-
-          if ($scope.topicpages[prevPage]){
-            params = {
-                      'id':$scope.opportunity.id,
-                        'topics':{
-                          'limit': '7',
-                          'pageToken':$scope.topicpages[prevPage]
-                        }
-                     }
-          }else{
-            params = {
-                      'id':$scope.opportunity.id,
-                        'topics':{
-                          'limit': '7'
-                        }
-                     }
-          }
-          $scope.topicCurrentPage = $scope.topicCurrentPage - 1 ;
-          Opportunity.get($scope,params);
 
      }
+
      $scope.waterfallTrigger= function(){
           $( window ).trigger( "resize" );
      };
@@ -994,55 +964,24 @@ $scope.deleteopportunity= function(){
             params = {
                         'id':$scope.opportunity.id,
                         'documents':{
-                          'limit': '6',
+                          'limit': '15',
                           'pageToken':$scope.documentpages[nextPage]
                         }
                       }
+            $scope.documentCurrentPage = $scope.documentCurrentPage + 1 ;
 
-          }else{
-            params = {
-                        'id':$scope.opportunity.id,
-                        'documents':{
-                          'limit': '6'
-                        }
-                      }
-            }
-          $scope.documentCurrentPage = $scope.documentCurrentPage + 1 ;
+            Opportunity.get($scope,params);
 
-          Opportunity.get($scope,params);
+          }
+
 
      }
-     $scope.DocumentPrevPageItems = function(){
 
-       var prevPage = $scope.documentCurrentPage - 1;
-       var params = {};
-          if ($scope.documentpages[prevPage]){
-            params = {
-                        'id':$scope.opportunity.id,
-                        'documents':{
-                          'limit': '6',
-                          'pageToken':$scope.documentpages[prevPage]
-                        }
-                      }
-
-          }else{
-            params = {
-                        'id':$scope.opportunity.id,
-                        'documents':{
-                          'limit': '6'
-                        }
-                      }
-          }
-          $scope.documentCurrentPage = $scope.documentCurrentPage - 1 ;
-          Opportunity.get($scope,params);
-
-
-     };
      $scope.listDocuments = function(){
         var params = {
                         'id':$scope.opportunity.id,
                         'documents':{
-                          'limit': '6'
+                          'limit': '15'
                         }
                       }
         Opportunity.get($scope,params);
@@ -1239,8 +1178,25 @@ $scope.listInfonodes = function(kind) {
 
   };
 
-     // Google+ Authentication
-     Auth.init($scope);
+     $scope.listMoreOnScroll = function(){
+       switch ($scope.selectedTab)
+           {
+           case 7:
+             $scope.DocumentlistNextPageItems();
+             break;
+           case 1:
+             $scope.TopiclistNextPageItems();
+             break;
+
+           }
+     };
+    // Google+ Authentication
+    Auth.init($scope);
+    $(window).scroll(function() {
+         if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
+             $scope.listMoreOnScroll();
+         }
+     });
 
 }]);
 
