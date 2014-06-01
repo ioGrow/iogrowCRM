@@ -1742,7 +1742,9 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
       $scope.customfields=[];
       $scope.account.account_type = 'Customer';
       $scope.account.industry = 'Technology';
-      $scope.phone = {'type_number':'work'};
+      $scope.phone = {}
+      $scope.phone.type= 'work';
+    
             $scope.logo = {
                     'logo_img_id':null,
                     'logo_img_url':null
@@ -1753,11 +1755,35 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
                 obj[key]=null;
               }
       }
-      $scope.pushElement=function(elem,arr){
-          if (arr.indexOf(elem) == -1) {
+      $scope.pushElement=function(elem,arr,infos){
+        
+                  if (arr.indexOf(elem) == -1) {
               var copyOfElement = angular.copy(elem);
               arr.push(copyOfElement);
               $scope.initObject(elem);
+              switch(infos){
+                case 'phones' :
+                   $scope.showPhoneForm=false;
+                   $scope.phone.type= 'work';
+                break;
+                case 'emails' :
+                   $scope.showEmailForm=false;
+                break;
+                case 'websites' :
+                    $scope.showWebsiteForm=false;
+                break;
+                case 'sociallinks' :
+                   $scope.showSociallinkForm=false;
+                break;
+                case 'customfields' :
+                   $scope.showCustomFieldForm=false;
+                break; 
+                case 'addresses' :
+                    $('#addressmodal').modal('hide');
+                
+                break;
+              }
+
               
           }else{
             alert("item already exit");
