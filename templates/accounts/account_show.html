@@ -389,12 +389,12 @@
                                     <div class="detailsSection">
                                       <div class="head">
                                         <div class="pic">
-                                            <a href="/#/contact/show/<%= contact.id %>" class="startup-link" title="contact.firstname"><img ng-hide="account.logo_img_id" alt="contact.firstname" class="img-responsive img-thumbnail" src="/static/img/default_company.png" >
+                                            <a href="/#/contacts/show/<%= contact.id %>" class="startup-link" title="contact.firstname"><img ng-hide="account.logo_img_id" alt="contact.firstname" class="img-responsive img-thumbnail" src="/static/img/default_company.png" >
                                             <img ng-show="account.logo_img_id" alt="account.name" class="img-responsive img-thumbnail" ng-src="https://docs.google.com/uc?id=<%= account.logo_img_id %>" data-hasqtip="2">
                                             </a>
                                         </div>
                                         <div class="text">
-                                            <div class="name"><a href="/#/contact/show/<%= contact.id %>" class="profile-link" data-id="126085" data-type="Startup"><%= contact.firstname %> <%= contact.lastname %></a></div>
+                                            <div class="name"><a href="/#/contacts/show/<%= contact.id %>" class="profile-link" data-id="126085" data-type="Startup"><%= contact.firstname %> <%= contact.lastname %></a></div>
                                              <div class="pitch">
                                                 <span  ng-show="contact.account_type">
                                                   <a href="/#/search/type:contact <%=contact.title%>"> #<%= contact.title %></a>
@@ -665,7 +665,7 @@
                           <div class="col-md-12">
                             <div class="row">
                              <!-- ngRepeat: attachment in documents -->
-                                   <div class="col-md-12 waterfall2" ng-hide="blankStateaccount">
+                                   <div class="col-md-12 waterfall2" ng-hide="blankStatdocuments">
                                       <div ng-repeat="attachment in documents"  class="cardElement"  >
                                           <div class="detailsSection">
                                             <div class="head">
@@ -877,11 +877,9 @@
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
-<<<<<<< HEAD
-                <button  type="submit" ng-click="updatAccountHeader(account)" class="btn btn-primary addContactNow">{{_("Save")}} </button>
-=======
+
                 <button   ng-click="updatAccountHeader(account)" class="btn btn-primary addContactNow">{{_("Save")}} </button>
->>>>>>> 770916d53acd406c4ba1654aba814d17747ca827
+
               </div>
                </form>
               </div>

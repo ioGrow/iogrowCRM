@@ -182,13 +182,11 @@ accountservices.factory('Account', function($http) {
                         $scope.blankStatecase = true;
                       }
                        if (params.cases.pageToken){
-                          console.log('**=======88');
                           angular.forEach(resp.cases.items, function(item){
                               $scope.cases.push(item);
                           });
                        }
                        else{
-                         console.log('999');
                           $scope.cases = resp.cases.items;
                        }
                        if ($scope.caseCurrentPage>1){
