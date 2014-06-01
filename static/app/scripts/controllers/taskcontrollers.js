@@ -808,7 +808,8 @@ $scope.selectTag= function(tag,index,$event){
             tags.push(tag.entityKey);
          });
          var params = {
-          'tags': tags
+          'tags': tags,
+          'limit':20
          }
          Task.list($scope,params);
 
