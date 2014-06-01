@@ -6,8 +6,36 @@
       {{active_app.label}}
     </h2>
       <div class="filterOptions">
-        <span role="button" class="filterItem activeFilter" ng-click="filterByOwner()">All Accounts</span>
-        <span role="button" class="filterItem" ng-click="filterByOwner('{{ME}}')">My Accounts</span>
+        <span role="button" class="filterItem activeFilter" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">All Accounts</span>
+        <span role="button" class="filterItem" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">My Accounts</span>
+        <div class="btn-group">
+            <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" ng-click="filterByOwner('{{ME}}');selectedOption ='sort'">
+              More
+              <i class="icon-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a>
+              </li>
+              <li>
+                <a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a>
+              </li>
+            </ul>
+        </div>
+        <div class="btn-group">
+            <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" ng-click="filterByOwner('{{ME}}');selectedOption ='sort'">
+              Sort by
+              <i class="icon-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a>
+              </li>
+              <li>
+                <a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a>
+              </li>
+            </ul>
+      </div>
         <a href="/#/accounts/new" class="btn red afterScrollBtn hidden">
            New Account 
          </a>
@@ -130,7 +158,7 @@
                 <div class="text">
                   <div class="name " >
                     <a class="profile-link" href="/#/accounts/show/<%= account.id %>">
-                      <p class="fittext autoresizeName" max-font-size="20" text="account.name"></p>
+                      <p class="fittext autoresizeName" max-font-size="18" text="account.name"></p>
                     </a>
                   </div>
                   <div class="pitch">

@@ -5,32 +5,39 @@
       <!-- <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
       {{active_app.label}}
     </h2>
-    <div class="pull-right sharebuttonDiv" ng-show="!blankStateopportunity">
-      <div class="btn-group btn-filter">
-        <a class="btn btn-default" href="#" data-toggle="dropdown">
-          {{ _('Filter by') }}
-          <i class="icon-angle-down"></i>
-        </a>
-        <ul class="dropdown-menu">
-          <li><a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All opportunities') }}</a></li>
-          <li><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My opportunities') }}</a></li>
-          <li ng-repeat="stage in opportunitystages"><a ng-click="filterByStage('<%=stage.entityKey%>')" href="#" data-toggle="modal"><%= stage.name %></a></li>
-        </ul>
+        <div class="filterOptions">
+        <div class="btn-group">
+            <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" ng-click="filterByOwner('{{ME}}');selectedOption ='sort'">
+              Filter
+              <i class="icon-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a>
+              </li>
+              <li>
+                <a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a>
+              </li>
+            </ul>
+        </div>
+        <div class="btn-group">
+            <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" ng-click="filterByOwner('{{ME}}');selectedOption ='sort'">
+              Sort
+              <i class="icon-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a>
+              </li>
+              <li>
+                <a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a>
+              </li>
+            </ul>
       </div>
-      <div class="btn-group btn-sort">
-        <a class="btn btn-default" href="#" data-toggle="dropdown">
-          {{ _('Sort by') }}
-          <i class="icon-angle-down"></i>
-        </a>
-        <ul class="dropdown-menu">
-          <li><a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a></li>
-          <li><a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a></li>
-          <li><a ng-click="orderBy('-amount')" href="#" data-toggle="modal">{{ _('Amount') }}</a></li>
-          <li><a ng-click="orderBy('account_name')" href="#" data-toggle="modal">{{ _('Company') }}</a></li>
-          <li><a ng-click="orderBy('-stage_probability')" href="#" data-toggle="modal">{{ _('Stage probability') }}</a></li>
-        </ul>
+        <a href="/#/accounts/new" class="btn red afterScrollBtn hidden">
+           New <span class="hidden-xs hiddenOnxs">Account</span> 
+         </a>
       </div>
-    </div>
     
   </div>
   </div>
