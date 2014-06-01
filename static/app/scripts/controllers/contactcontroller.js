@@ -1529,7 +1529,12 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
           }else{
             alert("item already exit");
           }
-      }
+      };
+  //HKA 01.06.2014 Delete the infonode on DOM
+      $scope.deleteInfos = function(arr,index){
+          arr.splice(index, 1);
+      };
+
       $scope.runTheProcess = function(){
 
        };

@@ -1219,7 +1219,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
           if (arr.indexOf(elem) == -1) {
               var copyOfElement = angular.copy(elem);
               arr.push(copyOfElement);
-              console.log(elem);
+              
               $scope.initObject(elem);
              switch(infos){
                 case 'phones' :
@@ -1247,7 +1247,13 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
             alert("item already exit");
           }
         }
+      };
+      
+      //HKA 01.06.2014 Delete the infonode on DOM
+      $scope.deleteInfos = function(arr,index){
+          arr.splice(index, 1);
       }
+
        $scope.runTheProcess = function(){
 
           //   Leadstatus.list($scope,{});

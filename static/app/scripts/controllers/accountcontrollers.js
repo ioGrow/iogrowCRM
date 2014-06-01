@@ -1788,6 +1788,10 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
           }else{
             alert("item already exit");
           }
+      };
+   //HKA 01.06.2014 Delete the infonode on DOM
+      $scope.deleteInfos = function(arr,index){
+          arr.splice(index, 1);
       }
       $scope.runTheProcess = function(){
             /*Account.list($scope,{});*/

@@ -122,7 +122,7 @@
                     </div>
                   </li>
                   <li ng-repeat="phone in phones">
-                    <a editable-text="phone.number" onbeforesave="inlinePatch('Infonode','phones', 'number',phone.entityKey,$data)">
+                    <a editoptions editdataattr="deleteInfos(phones,$index)" editable-text="phone.number" onbeforesave="inlinePatch('Infonode','phones', 'number',phone.entityKey,$data)">
                       <%=phone.number%>
                     </a>
                      -
@@ -156,7 +156,7 @@
                     </div>
                   </li>
                   <li ng-repeat="email in emails">
-                    <a editable-text="email.email" onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)">
+                    <a editoptions editdataattr="deleteInfos(emails,$index)" editable-text="email.email" onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)">
                       <%=email.email %>
                     </a>
                   </li>
@@ -171,7 +171,7 @@
                 <ul class="list-unstyled contact-infos">
                   <li ng-repeat="address in addresses">
                     -
-                    <span editable-text="address.country" onbeforesave="inlinePatch('Infonode','addresses', 'street',address.entityKey,$data)" ng-show="address.street">
+                    <span editoptions editdataattr="deleteInfos(addresses,$index)" editable-text="address.country" onbeforesave="inlinePatch('Infonode','addresses', 'street',address.entityKey,$data)" ng-show="address.street">
                       <%=address.street%>,
                     </span>
                     <span editable-text="address.city" onbeforesave="inlinePatch('Infonode','addresses', 'city',address.entityKey,$data)" ng-show="address.city"
@@ -207,7 +207,7 @@
                     </div>
                   </li>
                   <li ng-repeat="website in websites">
-                    <a editable-text="website.url" onbeforesave="inlinePatch('Infonode','websites', 'url',website.entityKey,$data)" href="http://<%=website.url%>"  target="_blank" >
+                    <a editoptions editdataattr="deleteInfos(websites,$index)" editable-text="website.url" onbeforesave="inlinePatch('Infonode','websites', 'url',website.entityKey,$data)" href="http://<%=website.url%>"  target="_blank" >
                       <%=website.url%>
                     </a>
                   </li>
@@ -234,7 +234,7 @@
                     </div>
                   </li>
                   <li ng-repeat="sociallink in sociallinks">
-                    <a editable-text="sociallink.url" onbeforesave="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,$data)" href="<%=sociallink.url%>" target="_blank"> <%=sociallink.url%>
+                    <a editoptions editdataattr="deleteInfos(sociallinks,$index)" editable-text="sociallink.url" onbeforesave="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,$data)" href="<%=sociallink.url%>" target="_blank"> <%=sociallink.url%>
                     </a>
                   </li>
                   <li>
@@ -300,7 +300,7 @@
                     </div>
                   </li>
                   <li ng-repeat="custom in customfields">
-                    <span>
+                    <span editoptions editdataattr="deleteInfos(customfields,$index)">
                       <%= custom.field%>  : <%= custom.value%>
                     </span>
                   </li>
