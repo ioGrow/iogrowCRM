@@ -231,10 +231,16 @@ $(window).scroll(function(){
   var y = $(window).scrollTop();
   if( y > 0 ){
       $(".subHeader").addClass("header-bottom-shadow");
+   if (y > 48) {
+        $(".afterScrollBtn").removeClass("hidden");
+   }else{
+       $(".afterScrollBtn").addClass("hidden");
+   }
       /*$(".fixed-labelsCard").addClass("labelsCardScroll");*/
       /*$(".page-sidebar-wrapper").addClass("sidebar-left-shadow");*/
   } else {
        $(".subHeader").removeClass("header-bottom-shadow");
+            
        /*$(".fixed-labelsCard").removeClass("labelsCardScroll");*/
        /*$(".page-sidebar-wrapper").removeClass("sidebar-left-shadow");*/
   }
