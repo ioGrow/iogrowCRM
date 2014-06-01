@@ -900,7 +900,7 @@
               </div>
 
               <div class="modal-body">
-                 <form id="editAccount" name="editlead" ng-submit="updatAccountHeader(account)" class="form-horizontal">
+                 <form id="editAccount" name="editlead"  class="form-horizontal">
 
 
                   <div class="form-group">
@@ -933,7 +933,7 @@
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
-                <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+                <button  type="submit" ng-click="updatAccountHeader(account)" class="btn btn-primary addContactNow">{{_("Save")}} </button>
               </div>
                </form>
               </div>
