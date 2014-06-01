@@ -127,6 +127,8 @@ leadservices.factory('Lead', function($http) {
           console.log('in leads.patch service');
 
           gapi.client.crmengine.leads.patch(params).execute(function(resp) {
+            console.log(params);
+            console.log(resp);
             if(!resp.code){
                 for (var k in params){
                  if (k!='id'&&k!='entityKey'){

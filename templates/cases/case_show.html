@@ -32,7 +32,7 @@
   </div>
   <div class="container" ng-show="immediateFailed">
     <div class="col-md-12">
-      <h1>{{ _("Sign-in Button;") }}</h1>
+       
       <span id="signin">
         <span id="myGsignin"></span>
       </span>
@@ -47,9 +47,26 @@
             <div class="col-md-12">
               <div class="row">
                 <div class="col-md-12">
+                <div class="oppRelatedTo">
+                     <span ng-show="casee.account.name"  style="">
+                        Account name:
+                        <a class="tag ng-binding" href="/#/accounts/show/<%= casee.account.id %>">
+                          <%= casee.account.name %>
+                        </a>
+                      </span>
+                      <br>
+                      <span   style="">
+                        Contact name:
+
+                        <a class="tag ng-binding" href="/#/contacts/show/<%= opportunity.contact.id %>">
+
+                          <%= casee.contact.firstname %> <%= casee.contact.lastname %>
+                        </a>
+                      </span>
+                  </div>
                   <span class="page-meta pull-right">
                     <i class="icon-pencil">
-                      <a ng-click="editaccount()" class="btn-link addAnotherPhone" data-toggle="modal">
+                      <a ng-click="editcase()" class="btn-link addAnotherPhone" data-toggle="modal">
                         Edit
                       </a>
                     </i>
@@ -126,7 +143,7 @@
                           Or just add notes to remember what's important.
                           <br>
                         </p>
-                        <form id="addNote" ng-submit="addNote(note)" class="ng-pristine ng-valid">
+                        <form id="addNote"  class="ng-pristine ng-valid">
                           <div class="form-group">
                             <input class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="Add a new subject" id="messageSubject" ng-model="note.title">
                           </div>
@@ -134,7 +151,7 @@
                             <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="note.content"></textarea>
                           </div>
                           <div class="pull-right">
-                            <input ng-disabled="isLoading" type="submit" class="btn green" value="Add this note">
+                            <input ng-disabled="isLoading" ng-click="addNote(note)" type="submit" class="btn green" value="Add this note">
                           </div>
                         </form>
                       </div>
@@ -172,7 +189,7 @@
                           <label  class="required col-md-3 control-label">{{_("Status")}} </label>
                           <div class="col-md-9">
                                    <select class="form-control" ng-model="casee.current_status.name" ng-options="stat.status for stat in casesatuses" >
-                                       <option value="casee.current_status.name" ><%=casee.current_status.name%></option>
+                                       <option value="" ><%=casee.current_status.name%></option>
                                   </select>
 
                           </div>
@@ -348,7 +365,7 @@
                            <div class="row">
                              <div class="col-md-12  margin-bottom-10">
                           <p class⁼"lead"=""><strong>Send an Email to :</strong> </p>
-                          <form  ng-submit="sendEmail(email)" class="ng-pristine ng-valid">
+                          <form   class="ng-pristine ng-valid">
                                             <div class="form-group">
                                             <input required class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="To" id="messageSubject" ng-model="email.to">
                                             </div>
@@ -366,7 +383,7 @@
                                              </div>
                                          <div class="pull-right">
 
-                                            <input ng-disabled="isLoading" type="submit" class="btn green" value="Send">
+                                            <input ng-disabled="isLoading" ng-click="sendEmail(email)" type="submit" class="btn green" value="Send">
 
 
                                           </div>
@@ -485,7 +502,7 @@
               </div>
 
               <div class="modal-body">
-                 <form id="editCase" name="editlead" ng-submit="updatCasetHeader(casee)" class="form-horizontal">
+                 <form id="editCase" name="editlead"  class="form-horizontal">
 
 
                   <div class="form-group">
@@ -527,10 +544,10 @@
                         <label  class="required col-md-3 control-label">{{_("Status")}} </label>
 
                         <div class="col-md-9">
-                          <select ng-model="status_selected" ng-options="stat.status for stat in casesatuses" class="form-control">
-                            <option value=""><%=casee.status%> </option>
-
-                          </select>
+                         
+                          <select class="form-control" ng-model="casee.current_status.name" ng-options="stat.status for stat in casesatuses" >
+                                       <option value="" ><%=casee.current_status.name%></option>
+                                  </select>
 
                         </div>
 
@@ -543,7 +560,7 @@
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
-                <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+                <button  type="submit" ng-click="updatCasetHeader(casee)" class="btn btn-primary addContactNow">{{_("Save")}} </button>
               </div>
                </form>
               </div>
@@ -558,7 +575,7 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("Sharing Settings")}}</h3>
               </div>
               <div class="modal-body">
-                 <form id="addMember" name="addaccount" ng-submit="share(slected_memeber)" class="form-horizontal">
+                 <form id="addMember" name="addaccount"  class="form-horizontal">
                   <fieldset>
 
                     <p>Who has access:</p>
@@ -609,7 +626,7 @@
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button  type="submit" class="btn blue addContactNow">{{_("Share")}}</button>
+                <button  type="submit" ng-click="share(slected_memeber)" class="btn blue addContactNow">{{_("Share")}}</button>
               </div>
                </form>
                </div>
@@ -669,7 +686,7 @@
             </div>
             <div class="modal-body">
                      <div class="controls controls-row">
-                                          <form id="addTask" ng-submit="createDocument(newdocument)" class="ng-pristine ng-valid">
+                                          <form id="addTask"  class="ng-pristine ng-valid">
                                                   <input class="form-control" autofocus type="text" placeholder="Enter a new <%=mimeType%> name" id="taskTitle" ng-model="newdocument.title" required>
 
 
@@ -678,7 +695,7 @@
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
 
-               <input  type="submit" class="btn green" value="Create this document">
+               <input  type="submit" ng-click="createDocument(newdocument)" class="btn green" value="Create this document">
                 <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
 
             </form>

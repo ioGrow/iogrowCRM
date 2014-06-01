@@ -140,8 +140,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
               casee.contact_name = casee.contact.firstname + ' '+ casee.contact.lastname ;
               casee.contact = casee.contact.entityKey;
           }
-          console.log('***************************');
-          console.log(casee);
+       
           Case.insert($scope,casee);
 
         }else if($scope.searchAccountQuery.length>0){
@@ -811,8 +810,9 @@ $scope.updatCasetHeader = function(casee){
   params = {'id':$scope.casee.id,
              'name':casee.name,
              'priority' :casee.priority,
-           'status':$scope.status_selected.status,
-           'type_case':casee.type_case}
+             //'status':$scope.casee.current_status.name,
+             //'type_case':casee.type_case
+           }
   Case.patch($scope,params);
   /*$scope.$watch($scope.casee.priority, function() {
       var paramsNote = {
@@ -1225,6 +1225,7 @@ app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','C
         var hasContact = false;
         var hasAccount = false;
         casee.status = $scope.status_selected.entityKey;
+       
         if (typeof(casee.account)=='object'){
             hasAccount = true;
             casee.account = casee.account.entityKey;

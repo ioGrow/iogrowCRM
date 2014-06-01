@@ -1,7 +1,7 @@
 app.controller('SearchFormController', ['$scope','Search','User',
     function($scope,Search,User) {
      if (annyang) {
-        
+
         // Let's define our first command. First the text we expect, and then the function it should call
         var commands = {
           'go to contacts': function(account) {
@@ -25,18 +25,18 @@ app.controller('SearchFormController', ['$scope','Search','User',
           'search :account contacts': function(account) {
             $scope.searchQuery = account + ' and type:Contact';
 
-          
+
             $scope.$apply();
             $scope.executeSearch($scope.searchQuery);
           },
           'search *term': function(term) {
             $scope.searchQuery = term;
 
-          
+
             $scope.$apply();
             $scope.executeSearch($scope.searchQuery);
           }
-          
+
         };
 
 
@@ -50,15 +50,19 @@ app.controller('SearchFormController', ['$scope','Search','User',
      $scope.results =[];
      $scope.result = undefined;
      $scope.q = undefined;
+     $scope.searchQuery = undefined;
      $scope.$watch('searchQuery', function() {
-         params['q'] = $scope.searchQuery;
-         gapi.client.crmengine.search(params).execute(function(resp) {
-            if (resp.items){
-              $scope.results = resp.items;
-              $scope.$apply();
-            };
-            
-          });
+
+         if($scope.searchQuery!=undefined){
+           params['q'] = $scope.searchQuery;
+           gapi.client.crmengine.search(params).execute(function(resp) {
+              if (resp.items){
+                $scope.results = resp.items;
+                $scope.$apply();
+              };
+
+            });
+        }
      });
      $scope.selectResult = function(){
       console.log('You are welcome On the morning day');
@@ -74,7 +78,7 @@ app.controller('SearchFormController', ['$scope','Search','User',
         $scope.searchQuery=' ';
         window.location.replace(url);
       }
-      
+
      };
 //HKA 25.03.2014 update user language
 $scope.updatelanguage = function(user){
@@ -97,7 +101,7 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
      $scope.pagination = {};
      $scope.currentPage = 01;
      $scope.pages = [];
-    
+
      // What to do after authentication
      $scope.runTheProcess = function(){
           var params = {'limit':7,'q':$route.current.params.q};
@@ -107,14 +111,14 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
      $scope.refreshToken = function() {
           Auth.refreshToken();
      };
-     
+
      $scope.listNextPageItems = function(){
         var nextPage = $scope.currentPage + 1;
         var params = {};
           if ($scope.pages[nextPage]){
             params = {'q':$route.current.params.q,
                       'limit':7,
-                      
+
                       'pageToken':$scope.pages[nextPage]
                      }
           }else{
@@ -122,7 +126,7 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
                       'limit':7}
           }
 
-          $scope.currentPage = $scope.currentPage + 1 ; 
+          $scope.currentPage = $scope.currentPage + 1 ;
           Search.list($scope,params);
      };
      $scope.listPrevPageItems = function(){
@@ -140,14 +144,14 @@ app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User
           }
           $scope.currentPage = $scope.currentPage - 1 ;
           Search.list($scope,params);
-     };   
+     };
 
-     
+
 //HKA 25.03.2014 update user language
 $scope.updatelanguage = function(user,idUser){
   console.log(user.language);
   console.log('i am here');
-  
+
   var params = {'id':idUser,
      'language':user.language};
    console.log('-----------hello user language--------');
@@ -155,7 +159,7 @@ $scope.updatelanguage = function(user,idUser){
    User.patch($scope,params);
    $('#EditSetting').modal('hide');
 }
-     // Google+ Authentication 
+     // Google+ Authentication
      Auth.init($scope);
-     
+
 }]);
