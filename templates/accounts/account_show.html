@@ -628,7 +628,26 @@
                             <div class="row">
 
                              <!-- ngRepeat: casee in cases -->
-                              <div ng-show="blankStatecase" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12" style="">
+                      <div  class="col-md-4 responsive" ng-repeat="casee in cases" data-tablet="span6" data-desktop="span4">
+                                <div class="dashboard-stat cards-small">
+
+                                  <div class="details">
+                                    <a href="/#/cases/show/<%= casee.id %>"><h3 class="relatedcardOppTitle">
+                                     <%=casee.name%>
+                                    </h3></a>
+                                    <div class="desc">
+                                    <span class="contact-title" ng-show="casee.status">Status:<a  class="desc" href="/#/search/type:Case <%=casee.status%>"># <%=casee.status%></a></span> <br>
+                                    <span ng-show="casee.priority" class="contact-title" >Priority:<a class="desc" href="/#/search/type:Case <%=casee.priority%>">#<%=casee.priority%> </a></span><br>
+                                      <span ng-show="casee.current_status.name" class="contact-title" >Status :<a class="desc" href="/#/search/type:Case <%=casee.type_case%>">#<%=casee.current_status.name%></a>  </span>
+
+                                    </div>
+                                  </div>
+                                  <!--a class="more" href="/#/cases/show/<%=casee.id%>">
+                                  View more <i class="m-icon-swapright m-icon-white"></i>
+                                  </a-->
+                                </div>
+                              </div>
+                      <div ng-show="blankStatecase" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12" style="">
                           <div class="dashboard-stat cards">
 
 
@@ -640,7 +659,7 @@
 
 
                           </div>
-              </div>
+                        </div>
                                 <div class="clearfix"></div>
                               </div>
                               </div>
@@ -933,11 +952,9 @@
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
-<<<<<<< HEAD
+
                 <button  type="submit" ng-click="updatAccountHeader(account)" class="btn btn-primary addContactNow">{{_("Save")}} </button>
-=======
-                <button   ng-click="updatAccountHeader(account)" class="btn btn-primary addContactNow">{{_("Save")}} </button>
->>>>>>> 770916d53acd406c4ba1654aba814d17747ca827
+
               </div>
                </form>
               </div>
