@@ -2,23 +2,26 @@ var caseservices = angular.module('crmEngine.caseservices',[]);
 // Base sercice (create, delete, get)
 
 accountservices.factory('Case', function() {
-  
+
   var Case = function(data) {
     angular.extend(this, data);
   }
 
-  
-  Case.get = function($scope,id) {
-          gapi.client.crmengine.cases.getv2(id).execute(function(resp) {
+
+  Case.get = function($scope,params) {
+          $scope.isLoading = true;
+          $scope.$apply();
+          gapi.client.crmengine.cases.getv2(params).execute(function(resp) {
             if(!resp.code){
                $scope.casee = resp;
                $scope.isContentLoaded = true;
+               $scope.isLoading = false;
                // list infonodes
                 var renderMap = false;
                 if (resp.infonodes){
                     if (resp.infonodes.items){
                         for (var i=0;i<resp.infonodes.items.length;i++)
-                        { 
+                        {
                           if (resp.infonodes.items[i].kind == 'addresses'){
                             renderMap = true;
                           }
@@ -37,9 +40,16 @@ accountservices.factory('Case', function() {
                         }
                     }
                 }
-                if (resp.topics){
-                  $scope.topics = resp.topics.items;
-                   
+                if (resp.topics && !params.topics.pageToken){
+                    if (params.topics.pageToken){
+                       angular.forEach(resp.topics.items, function(item){
+                           $scope.topics.push(item);
+                       });
+                    }
+                    else{
+                        $scope.topics = resp.topics.items;
+                    }
+
                     if ($scope.topicCurrentPage >1){
                       $scope.topicpagination.prev = true;
                     }else{
@@ -55,7 +65,7 @@ accountservices.factory('Case', function() {
                     $scope.topicpagination.next = false;
                    }
                   }
-                  
+
                   if (resp.opportunities){
                       if (!resp.opportunities.items){
                         $scope.blankStateopportunity = true;
@@ -71,7 +81,7 @@ accountservices.factory('Case', function() {
                          // Store the nextPageToken
                          $scope.opppages[nextPage] = resp.opportunities.nextPageToken;
                          $scope.opppagination.next = true;
-                         
+
                        }else{
                         $scope.opppagination.next = false;
                        }
@@ -93,7 +103,7 @@ accountservices.factory('Case', function() {
                        // Store the nextPageToken
                        $scope.casepages[nextPage] = resp.cases.nextPageToken;
                        $scope.casepagination.next = true;
-                       
+
                      }else{
                       $scope.casepagination.next = false;
                      }
@@ -104,19 +114,26 @@ accountservices.factory('Case', function() {
                       if (!resp.documents.items){
                         $scope.blankStatdocuments = true;
                       }
-                      $scope.documents = resp.documents.items;
+                      if (params.documents.pageToken){
+                         angular.forEach(resp.documents.items, function(item){
+                             $scope.documents.push(item);
+                         });
+                      }
+                      else{
+                          $scope.documents = resp.documents.items;
+                      }
                       if ($scope.documentCurrentPage >1){
                           $scope.documentpagination.prev = true;
                       }else{
                            $scope.documentpagination.prev = false;
                       }
                      if (resp.documents.nextPageToken){
-                      
+
                        var nextPage = $scope.documentCurrentPage + 1;
                        // Store the nextPageToken
                        $scope.documentpages[nextPage] = resp.documents.nextPageToken;
                        $scope.documentpagination.next = true;
-                       
+
                      }else{
                       $scope.documentpagination.next = false;
                      }
@@ -128,13 +145,13 @@ accountservices.factory('Case', function() {
 
                   if (resp.events){
                      $scope.events = resp.events.items;
-                  }  
-               
+                  }
+
                // $scope.listTopics(resp);
                // $scope.listTasks();
                // $scope.listEvents();
                // $scope.listDocuments();
-              
+
                document.title = "Case: " + $scope.casee.name ;
                // Call the method $apply to make the update on the scope
               $scope.$apply();
@@ -143,7 +160,7 @@ accountservices.factory('Case', function() {
                if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
-                
+
                };
             }
             console.log('gapi #end_execute');
@@ -154,10 +171,10 @@ accountservices.factory('Case', function() {
           console.log(resp);
            if (resp.items){
               $scope.results = resp.items;
-              
+
               $scope.$apply();
             };
-            
+
       });
   };
 
@@ -165,14 +182,14 @@ accountservices.factory('Case', function() {
       $scope.isLoading = true;
       gapi.client.crmengine.cases.listv2(params).execute(function(resp) {
               if(!resp.code){
-                 
+
                   if (!resp.items){
                     if(!$scope.isFiltering){
                         $scope.blankStatecase = true;
                     }
                   }
                  $scope.cases = resp.items;
-                         
+
                  if ($scope.caseCurrentPage>1){
                       $scope.casepagination.prev = true;
                    }else{
@@ -183,7 +200,7 @@ accountservices.factory('Case', function() {
                    // Store the nextPageToken
                    $scope.casepages[nextPage] = resp.nextPageToken;
                    $scope.casepagination.next = true;
-                   
+
                  }else{
                   $scope.casepagination.next = false;
                  }
@@ -205,10 +222,10 @@ accountservices.factory('Case', function() {
       $scope.$apply();
       gapi.client.crmengine.cases.listv2(params).execute(function(resp) {
               if(!resp.code){
-                 
+
                   angular.forEach(resp.items, function(item){
                       $scope.cases.push(item);
-                  });       
+                  });
                  if ($scope.caseCurrentPage>1){
                       $scope.casepagination.prev = true;
                    }else{
@@ -219,7 +236,7 @@ accountservices.factory('Case', function() {
                    // Store the nextPageToken
                    $scope.casepages[nextPage] = resp.nextPageToken;
                    $scope.casepagination.next = true;
-                   
+
                  }else{
                   $scope.casepagination.next = false;
                  }
@@ -239,10 +256,10 @@ accountservices.factory('Case', function() {
   Case.insert = function($scope,casee){
      $scope.isLoading = true;
       gapi.client.crmengine.cases.insertv2(casee).execute(function(resp) {
-         
+
          if(!resp.code){
           $scope.isLoading = false;
-          
+
           if ($scope.cases == undefined){
             $scope.cases = [];
             $scope.blankStatecase = false;
@@ -254,7 +271,7 @@ accountservices.factory('Case', function() {
               $scope.caseInserted(resp);
           }
           $scope.$apply();
-          
+
          }else{
           console.log(resp.message);
              $('#addCaseModal').modal('hide');
@@ -268,7 +285,7 @@ accountservices.factory('Case', function() {
       });
   };
   Case.patch = function($scope,params) {
-          
+
           gapi.client.crmengine.cases.patch(params).execute(function(resp) {
             if(!resp.code){
                  for (var k in params){
@@ -276,7 +293,7 @@ accountservices.factory('Case', function() {
                    $scope.casee[k] = resp[k];
                  }
                }
-               
+
                // Call the method $apply to make the update on the scope
                 $scope.$apply();
 

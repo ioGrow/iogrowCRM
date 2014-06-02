@@ -37,7 +37,7 @@ leadservices.factory('Lead', function($http) {
                         }
                     }
                 }
-                if (resp.topics && !params.topics.pageToken){
+                if (resp.topics){
                     if (params.topics.pageToken){
                        angular.forEach(resp.topics.items, function(item){
                            $scope.topics.push(item);
@@ -121,7 +121,7 @@ leadservices.factory('Lead', function($http) {
                 $scope.isLoading = false;
                // Call the method $apply to make the update on the scope
                $scope.$apply();
-               if (resp.topics){
+               if (resp.topics && !params.topics.pageToken){
                     $scope.hilightTopic();
                 };
                 // if (resp.tasks){
