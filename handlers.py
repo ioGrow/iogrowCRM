@@ -39,7 +39,7 @@ CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 
 SCOPES = [
-    'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar'
+    'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/prediction https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar'
 ]
 
 VISIBLE_ACTIONS = [

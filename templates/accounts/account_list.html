@@ -1,44 +1,47 @@
 <div class="row subHeader">
-  <div class="currentApp">
-    <h2 class="page-title">
+  <div class="subHContent">
+    <div class="currentApp">
+     <h2 class="page-title">
      <!--  <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
       {{active_app.label}}
     </h2>
-  </div>
-  <div class=" subHeaderContent">
-    <div class="pull-right sharebuttonDiv" ng-show="!blankStateaccount"> 
-      <div class="btn-group btn-filter">
-          <a class="btn btn-default" href="#" data-toggle="dropdown">
-              {{ _('Filter by') }}
+      <div class="filterOptions">
+        <span role="button" class="filterItem activeFilter" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">All Accounts</span>
+        <span role="button" class="filterItem" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">My Accounts</span>
+        <div class="btn-group">
+            <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" ng-click="filterByOwner('{{ME}}');selectedOption ='sort'">
+              More
               <i class="icon-angle-down"></i>
-          </a>
-          <ul class="dropdown-menu">
+            </a>
+            <ul class="dropdown-menu">
               <li>
-                <a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All accounts') }}
-                </a>
+                <a ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a>
               </li>
               <li>
-                <a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My accounts') }}</a>
+                <a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a>
               </li>
-          </ul>
+            </ul>
+        </div>
+        <div class="btn-group">
+            <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" ng-click="filterByOwner('{{ME}}');selectedOption ='sort'">
+              Sort by
+              <i class="icon-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a>
+              </li>
+              <li>
+                <a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a>
+              </li>
+            </ul>
       </div>
-      <div class="btn-group btn-sort">
-        <a class="btn btn-default" href="#" data-toggle="dropdown">
-          {{ _('Sort by') }}
-          <i class="icon-angle-down"></i>
-        </a>
-        <ul class="dropdown-menu">
-          <li>
-            <a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a>
-          </li>
-          <li>
-            <a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a>
-          </li>
-        </ul>
+        <a href="/#/accounts/new" class="btn red afterScrollBtn hidden">
+           New Account 
+         </a>
       </div>
+    </div> 
     </div>
-    <h2 class="page-title">{{ _("Accounts") }} </h2>
-  </div>
 </div>
 <div  class="page-content">
 <div class="loader-container row" ng-show="isLoading">
@@ -47,13 +50,13 @@
           Loading...
         </div>
       </div>
-      
+
 </div>
 <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 <!-- BEGIN PAGE CONTAINER-->
 <div ng-show="immediateFailed">
-         <div class="col-md-12">  
-          <h1>{{ _("Sign-in Button;") }}</h1>
+         <div class="col-md-12">
+
               <span id="signin">
                   <span id="myGsignin"></span>
               </span>
@@ -68,43 +71,27 @@
                     </div>
                     <div class="modal-body">
                        <form id="addAccount" name="addaccount"  class=""  ng-keyup="addAccountOnKey(account)"> 
-                              
-                  
-                    
-
                     <div class="form-group">
                         <label  class="required">{{_("Name")}}</label>
-                       
-                        
                           <input type="text" class="form-control" required  ng-model="account.name">
-                          
-                       
                     </div>
                     <div class="form-group">
                         <label  class="required">{{_("Type")}}</label>
-                       
-                       
-                         
-                          <select value="Customer" ng-model="account.account_type" class="form-control"> 
+                          <select value="Customer" ng-model="account.account_type" class="form-control">
                          <option value="Competitor">Competitor</option><option value="Customer">Customer</option><option value="Distributor">Distributor</option><option value="Integrator">Integrator</option><option value="Investor">Investor</option><option value="Partner">Partner</option><option value="Press">Press</option><option value="Prospect">Prospect</option><option value="Reseller">Reseller</option><option value="Supplier">Supplier</option><option value="Vendor">Vendor</option><option value="Other">Other</option></select>
-                          
-                       
                     </div>
                     <div class="form-group">
                         <label  class="required control-label">{{_("Industry")}} </label>
-                       
-                       
-                         
                           <select ng-model="account.industry" class="form-control">
                           <option value="">--None--</option><option value="Agriculture">Agriculture</option><option value="Apparel">Apparel</option><option value="Banking">Banking</option><option value="Biotechnology">Biotechnology</option><option value="Chemicals">Chemicals</option><option value="Communications">Communications</option><option value="Construction">Construction</option><option value="Consulting">Consulting</option><option value="Education">Education</option><option value="Electronics">Electronics</option><option value="Energy">Energy</option><option value="Engineering">Engineering</option><option value="Entertainment">Entertainment</option><option value="Environmental">Environmental</option><option value="Finance">Finance</option><option value="Food &amp; Beverage">Food &amp; Beverage</option><option value="Government">Government</option><option value="Healthcare">Healthcare</option><option value="Hospitality">Hospitality</option><option value="Insurance">Insurance</option><option value="Machinery">Machinery</option><option value="Manufacturing">Manufacturing</option><option value="Media">Media</option><option value="Not For Profit">Not For Profit</option><option value="Recreation">Recreation</option><option value="Retail">Retail</option><option value="Shipping">Shipping</option><option value="Technology">Technology</option><option value="Telecommunications">Telecommunications</option><option value="Transportation">Transportation</option><option value="Utilities">Utilities</option><option value="Other">Other</option></select>
-                          
-                        
+
+
                     </div>
                     <hr/>
                     <p> {{ _('Who can access?') }}</p>
                   <div class="form-group">
                      <div class="radio-list">
-                         
+
                             <label >
                             <input type="radio" name="optionsRadios" value="public" ng-model="account.access" checked />
                              {{ _('public: Anyone within your organization') }}
@@ -112,19 +99,19 @@
                             <label >
                             <input type="radio" name="optionsRadios" value="private" ng-model="account.access" />
                             {{ _('private: only you and your collaborators') }}
-                            </label>  
-                           
-                       
-                      
+                            </label>
+
+
+
                     </div>
-                  </div>                               
+                  </div>
                     </div>
                     <div class="modal-footer">
                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                
+
                       <input  ng-click="save(account)" type="submit" class="btn green" value="{{ _('Add this account') }}">
-                      <!--input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled-->                      
-                    
+                      <!--input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled-->
+
                     </div>
                     </form>
                   </div>
@@ -132,19 +119,30 @@
                 </div>
                 <!-- /.modal-dialog -->
      </div>
-      
+
       <div ng-show="isSignedIn"  class="row">
-        
+
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-          
-          <div class="col-md-9">
-                    <a href="/#/accounts/new" class="btn red newBtn">
-                    {{ _("New Account") }} 
-                    </a>
-               
-          </div>
-  <div class="col-md-9">
+<div class="col-md-9">
+<div class="row subHeaderContainer">
+   <div class=" col-md-9 col-sm-9 col-xs-9 subHeaderContent">
+      <div class="row">
+          <h2 class="page-title">{{ _("Accounts") }} </h2>
+     </div>
+  </div>
+  <div class="col-md-3 col-sm-3 col-xs-3">
+      <div class="row">
+        <div class="pull-right" >
+         <a href="/#/accounts/new" class="btn red newBtn">
+                        New Account
+         </a>
+      </div>
+      </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
     <div class="row">
       <div class="tab-pane">
       <div class="row">
@@ -158,16 +156,17 @@
                   </a>
                 </div>
                 <div class="text">
-                  <div class="name">
-                    <a href="/#/accounts/show/<%= account.id %>" class="profile-link" data-id="126085" data-type="Startup"><%= account.name %>
+                  <div class="name " >
+                    <a class="profile-link" href="/#/accounts/show/<%= account.id %>">
+                      <p class="fittext autoresizeName" max-font-size="18" text="account.name"></p>
                     </a>
                   </div>
                   <div class="pitch">
                     <span  ng-show="account.account_type">
-                        <a href="/#/search/type:Account <%=account.account_type%>"> #<%= account.account_type %></a>
-                    </span> 
+                        <a href="/#/search/type:Account <%=account.account_type%>"> <%= account.account_type %></a>
+                    </span>
                     <span ng-show="account.industry">
-                          <a href="/#/search/type:Account <%=account.industry%>"> #<%= account.industry %>
+                          <a href="/#/search/type:Account <%=account.industry%>"> - <%= account.industry %>
                           </a>
                     </span>
                   </div>
@@ -179,24 +178,6 @@
               <div class="sectionContent">
                 <a ng-repeat="tag in account.tags" href="/#/search/type:Account tags:<%=tag.id%>"> <span class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
                 </a>
-              </div>
-            </div>
-          </div>
-          <div ng-show="blankStateaccount" data-span="3" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
-            <div class="dashboard-stat cards">
-              <div class="blank_slate_arrow"></div>
-                <div class="thumbnail blank_slate_body">
-                  <img class="img-responsive" src="/static/img/accounts_blank.png">
-                    <p class="lead">{{ _('Accounts  pages includes a detailed page for each customer, partner, or investor in your ecosystem. You and your co-workers can collaborate to get a deep understanding.') }}
-                    </p>
-                </div>
-            </div>
-          </div>
-          <div ng-show="isFiltering * !accounts" data-span="all" class="" data-tablet="span6" data-desktop="span12">
-            <div class="dashboard-stat cards" >
-              <div class="blank_slate_arrow"></div>
-              <div class="thumbnail blank_slate_body">
-                <p class="lead">{{ _('No results found, try with another filter') }}</p>
               </div>
             </div>
           </div>
@@ -217,8 +198,21 @@
           </div>
           <div class="clearfix"></div>
         </div><!--/inner-cards-container-->
+         <div ng-show="isFiltering * !accounts"  class="col-md-12 " ng-show="blankStateaccount">
+          <div  data-span="3" class="dashboard-stat cards" data-tablet="span6" data-desktop="span12">
+            <div class="">
+              <div class="blank_slate_arrow"></div>
+              <div class="thumbnail blank_slate_body">
+                <p class="lead">{{ _('No results found, try with another filter') }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </div><!--/inner-cards-container-->
       </div>
       </div>
+    </div>
+  </div>
     </div>
   </div>
   <div class="col-md-3 tasks-col">
@@ -238,7 +232,7 @@
                       <%= tag_item.name %>
                   </span>
                   <span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
-                      <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>  
+                      <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>
                   </span>
                   <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
                     <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
@@ -248,7 +242,7 @@
               </li>
               <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
                 <a ng-click="" class="btn-link addAnotherPhone">
-                  <i class="fa fa-tags"></i>  Add a new label 
+                  <i class="fa fa-tags"></i>  Add a new label
                 </a>
               </li>
             </ul>
@@ -280,7 +274,7 @@
         </div>
       </div>
     </div>
-      <!-- END PAGE CONTAINER--> 
+      <!-- END PAGE CONTAINER-->
 </div>
 
 <script type="text/javascript">
@@ -306,9 +300,10 @@
       }
   };
   handleUniform();
-  $('.waterfall').waterfall({ 
-        colMinWidth: 210, 
+  $('.waterfall').waterfall({
+        colMinWidth: 210,
         defaultContainerWidth: 800,
         autoresize: true
   });
+  $('.textfill').textfill({debug: true, maxFontPixels: 16});
 </script>

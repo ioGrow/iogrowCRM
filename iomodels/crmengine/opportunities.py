@@ -354,12 +354,16 @@ class Opportunity(EndpointsModel):
                     if request.owner and opportunity.owner!=request.owner and is_filtered:
                         is_filtered = False
                     if request.stage and is_filtered:
-                        end_node_set = [ndb.Key(urlsafe=request.stage)]
-                        if not Edge.find(start_node=opportunity.key,
-                                        kind='stages',
-                                        end_node_set=end_node_set,
-                                        operation='AND'):
-                            is_filtered = False
+                        is_filtered = False
+                        opportunity_stage_edges = Edge.list(
+                                                            start_node = opportunity.key,
+                                                            kind = 'stages',
+                                                            limit = 1
+                                                            )
+                        if len(opportunity_stage_edges['items'])>0:
+                            current_stage_key = opportunity_stage_edges['items'][0].end_node
+                            if current_stage_key.urlsafe() == request.stage:
+                                is_filtered = True 
                     if is_filtered and Node.check_permission( user_from_email, opportunity ):
                         count = count + 1
                         #list of tags related to this opportunity

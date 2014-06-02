@@ -284,7 +284,7 @@ $scope.selectTag= function(tag,index,$event){
          var params = {
           'tags': tags,
           'order': $scope.order,
-                        'limit':6
+                        'limit':20
          };
          $scope.isFiltering = true;
          Lead.list($scope,params);
@@ -464,7 +464,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.infonodes = {};
      $scope.phone={};
      $scope.phone.type= 'work';
-    $scope.documentpagination = {};
+     $scope.documentpagination = {};
      $scope.documentCurrentPage=01;
      $scope.documentpages=[];
     $scope.selectedTab = 2;
@@ -475,6 +475,10 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
       {value: 'Mob', text: 'Mob'},
       {value: 'Other', text: 'Other'}
       ];
+    $scope.profile_img = {
+                          'profile_img_id':null,
+                          'profile_img_url':null
+                        };
 
       // What to do after authentication
       $scope.runTheProcess = function(){
@@ -486,7 +490,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                           },
 
                           'documents':{
-                            'limit': '6'
+                            'limit': '15'
                           },
 
                           'tasks':{
@@ -531,42 +535,12 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                           'pageToken':$scope.topicpages[nextPage]
                         }
                      }
-            }else{
-            params = {
-                      'id':$scope.lead.id,
-                        'topics':{
-                          'limit': '7'
-                        }
-                     }
-          }
+            $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ;
+            Lead.get($scope,params);
+            }
 
-          $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ;
-          Lead.get($scope,params);
      }
-     $scope.TopiclistPrevPageItems = function(){
 
-       var prevPage = $scope.topicCurrentPage - 1;
-       var params = {};
-
-          if ($scope.topicpages[prevPage]){
-            params = {
-                      'id':$scope.lead.id,
-                        'topics':{
-                          'limit': '7',
-                          'pageToken':$scope.topicpages[prevPage]
-                        }
-                     }
-          }else{
-            params = {
-                      'id':$scope.lead.id,
-                        'topics':{
-                          'limit': '7'
-                        }
-                     }
-          }
-          $scope.topicCurrentPage = $scope.topicCurrentPage - 1 ;
-          Lead.get($scope,params);
-     }
 
      $scope.listTopics = function(contact){
         var params = {
@@ -743,6 +717,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                 'lastname':lead.lastname,
                 'company':lead.company,
                  'source':lead.source,
+                 'industry':lead.industry,
                  'title' : lead.title,
                 'status':$scope.status_selected.status};
         Lead.patch($scope,params);
@@ -919,12 +894,32 @@ $scope.deletelead = function(){
      Lead.delete($scope,params);
      $('#BeforedeleteLead').modal('hide');
      };
+     $scope.DocumentlistNextPageItems = function(){
 
+
+        var nextPage = $scope.documentCurrentPage + 1;
+        var params = {};
+          if ($scope.documentpages[nextPage]){
+            params = {
+                        'id':$scope.lead.id,
+                        'documents':{
+                          'limit': '15',
+                          'pageToken':$scope.documentpages[nextPage]
+                        }
+                      }
+            $scope.documentCurrentPage = $scope.documentCurrentPage + 1 ;
+
+            Lead.get($scope,params);
+
+          }
+
+
+     }
      $scope.listDocuments = function(){
         var params = {
                         'id':$scope.lead.id,
                         'documents':{
-                          'limit': '6'
+                          'limit': '15'
                         }
                       }
         Lead.get($scope,params);
@@ -994,6 +989,32 @@ $scope.deletelead = function(){
 
           }
       }
+      $scope.createLogoPickerUploader = function() {
+           var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
+           var picker = new google.picker.PickerBuilder().
+               addView(new google.picker.DocsUploadView()).
+               setCallback($scope.logoUploaderCallback).
+               setOAuthToken(window.authResult.access_token).
+               setDeveloperKey(developerKey).
+               setAppId(987765099891).
+               build();
+           picker.setVisible(true);
+       };
+       // A simple callback implementation.
+       $scope.logoUploaderCallback = function(data) {
+           if (data.action == google.picker.Action.PICKED) {
+                 if(data.docs){
+                   $scope.profile_img.profile_img_id = data.docs[0].id ;
+                   $scope.profile_img.profile_img_url = 'https://docs.google.com/uc?id='+data.docs[0].id;
+                   $scope.imageSrc = 'https://docs.google.com/uc?id='+data.docs[0].id;
+                   $scope.$apply();
+                   var params ={'id':$scope.lead.id};
+                   params['profile_img_id'] = $scope.profile_img.profile_img_id;
+                   params['profile_img_url'] = $scope.profile_img.profile_img_url;
+                   Lead.patch($scope,params);
+                 }
+           }
+       }
       $scope.renderMaps = function(){
           $scope.addresses = $scope.lead.addresses;
           Map.render($scope);
@@ -1111,8 +1132,44 @@ $scope.deletelead = function(){
 
   };
 
-    // Google+ Authentication
-     Auth.init($scope);
+    $scope.waterfallTrigger= function(){
+
+
+          /* $('.waterfall').hide();
+         $('.waterfall').show();*/
+         $( window ).trigger( "resize" );
+         if($(".chart").parent().width()==0){
+          var leftMargin=210-$(".chart").width();
+                 $(".chart").css( "left",leftMargin/2);
+                 $(".oppStage").css( "left",leftMargin/2-2);
+         }else{
+             var leftMargin=$(".chart").parent().width()-$(".chart").width();
+                 $(".chart").css( "left",leftMargin/2);
+                 $(".oppStage").css( "left",leftMargin/2-2);
+
+         }
+    };
+
+    $scope.listMoreOnScroll = function(){
+      switch ($scope.selectedTab)
+          {
+
+          case 7:
+            $scope.DocumentlistNextPageItems();
+            break;
+          case 1:
+            $scope.TopiclistNextPageItems();
+            break;
+
+          }
+    };
+   // Google+ Authentication
+   Auth.init($scope);
+   $(window).scroll(function() {
+        if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
+            $scope.listMoreOnScroll();
+        }
+    });
 
 }]);
 
@@ -1148,7 +1205,8 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
       $scope.websites=[];
       $scope.sociallinks=[];
       $scope.customfields=[];
-      $scope.phone = {'type':'work'};
+      $scope.phone={};
+      $scope.phone.type= 'work';
       $scope.imageSrc = '/static/img/avatar_contact.jpg';
       $scope.profile_img = {
                             'profile_img_id':null,
@@ -1183,19 +1241,46 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
                 obj[key]=null;
               }
       }
-      $scope.pushElement=function(elem,arr){
+      $scope.pushElement=function(elem,arr,infos){
         if (elem){
           if (arr.indexOf(elem) == -1) {
               var copyOfElement = angular.copy(elem);
               arr.push(copyOfElement);
-              console.log(elem);
-              $scope.initObject(elem);
 
+              $scope.initObject(elem);
+             switch(infos){
+                case 'phones' :
+                   $scope.showPhoneForm=false;
+                   $scope.phone.type= 'work';
+                break;
+                case 'emails' :
+                   $scope.showEmailForm=false;
+                break;
+                case 'websites' :
+                    $scope.showWebsiteForm=false;
+                break;
+                case 'sociallinks' :
+                   $scope.showSociallinkForm=false;
+                break;
+                case 'customfields' :
+                   $scope.showCustomFieldForm=false;
+                break;
+                case 'addresses' :
+                    $('#addressmodal').modal('hide');
+
+                break;
+              }
           }else{
             alert("item already exit");
           }
         }
+      };
+
+      //HKA 01.06.2014 Delete the infonode on DOM
+      $scope.deleteInfos = function(arr,index){
+          arr.splice(index, 1);
       }
+
        $scope.runTheProcess = function(){
 
           //   Leadstatus.list($scope,{});
@@ -1313,6 +1398,8 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
                         'introduction':lead.introduction,
                         'phones':$scope.phones,
                         'emails':$scope.emails,
+                        'industry':lead.industry,
+                        'source':lead.source,
                         'infonodes':$scope.prepareInfonodes(),
                         'access': 'public'
                       };

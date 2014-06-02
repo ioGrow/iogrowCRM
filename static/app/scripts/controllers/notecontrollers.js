@@ -83,8 +83,8 @@ app.controller('NoteShowController',['$scope','$filter','$route','Auth','Note','
     $scope.addComment = function(comment){
 
       var params ={
-        'discussion':$scope.note.entityKey,
-        'content':$scope.comment.content
+        					'about':$scope.note.entityKey,
+        					'content':$scope.comment.content
       };
       Comment.insert($scope,params);
       $scope.comment.content='';
@@ -92,9 +92,10 @@ app.controller('NoteShowController',['$scope','$filter','$route','Auth','Note','
 
     };
     $scope.ListComments = function(){
-      var params = {'discussion':$scope.note.entityKey,
-                     'limit':5,
-                      'order':'-updated_at'};
+      var params = {
+										'about':$scope.note.entityKey,
+                    'order':'-updated_at'
+									};
       Comment.list($scope,params);
 
 

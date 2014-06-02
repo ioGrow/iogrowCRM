@@ -1,87 +1,101 @@
 var accountservices = angular.module('crmEngine.authservices',[]);
 accountservices.factory('Auth', function($http) {
   var Auth = function(data) {
-    angular.extend(this, data);
+     angular.extend(this, data);
   };
+  Auth.checkGapiToken = function(){
+      var timeNow = new Date().getTime()/1000;
+      var gapiToken = gapi.auth.getToken();
+      if (gapiToken){
+          var expirationTime = gapiToken.expires_at;
+          var diff = expirationTime - timeNow;
+          if (diff>0){
+              return true;
+          }
+      }
+      return false;
+  }
   Auth.init = function($scope){
-      
       var timeNow = new Date().getTime()/1000;
       Auth.$scope = $scope;
+
       if (window.is_signed_in){
-          
-          
+
+
           var diff = window.authResultexpiration - timeNow;
 
           if (diff>0){
-             Auth.processAuth(window.authResult); 
+             Auth.processAuth(window.authResult);
           }
           else{
               // refresh token
               Auth.refreshToken();
 
           }
-          
+
       }else{
-            gapi.signin.render('myGsignin', {
-            'callback': Auth.signIn,
-            'clientid': '987765099891.apps.googleusercontent.com',
-            'requestvisibleactions': 'http://schemas.google.com/AddActivity ' +
-                'http://schemas.google.com/ReviewActivity',
-            'scope': 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar',
-            'theme': 'dark',
-            'cookiepolicy': 'single_host_origin',
-            'accesstype': 'offline'
-            });
-            
+            var isGapiOk = Auth.checkGapiToken();
+            if (isGapiOk){
+                var gapiToken = gapi.auth.getToken();
+                Auth.processAuth(window.authResult);
+            }else{
+              gapi.signin.render('myGsignin', {
+                'callback': Auth.signIn,
+                'clientid': '987765099891.apps.googleusercontent.com',
+                'scope': 'https://www.googleapis.com/auth/userinfo.email',
+                'theme': 'dark',
+                'cookiepolicy': 'single_host_origin',
+                'accesstype': 'online',
+                'width':'wide'
+              });
+            }
       }
   };
   Auth.signIn = function(authResult){
-      
-      //Auth.connectServer(authResult);
       Auth.processAuth(authResult);
   };
-  Auth.connectServer = function(authResult){
-    
-      $.ajax({
-        type: 'POST',
-        url: '/gconnect',
-        success: function(result) {
-          // success
-        },
-        data: {code:authResult.code}
-      });
-  };
   Auth.processAuth = function(authResult) {
-   
       Auth.$scope.immediateFailed = true;
-      if (authResult['access_token']) {
-          
+      if (authResult) {
+        if (authResult['access_token']){
           Auth.$scope.immediateFailed = false;
           Auth.$scope.isSignedIn = true;
           if (!window.authResult) {
-              
               window.is_signed_in = true;
               window.authResult = authResult;
               window.authResultexpiration =  authResult.expires_at;
           }
-          
+
           // run the process
           Auth.$scope.runTheProcess();
-      } else if (authResult['error']) {
-          if (authResult['error'] == 'immediate_failed') {
-            Auth.$scope.immediateFailed = true;
-            window.location.replace('/sign-in');
-          } else {
-            console.log('Error:' + authResult['error']);
-          }
-      };
-      
-  };
+        }
+        else{
+          Auth.renderForcedSignIn();
+        }
 
+      } else {
+            Auth.renderForcedSignIn();
+      };
+
+  };
+  Auth.renderForcedSignIn = function(){
+    window.authResult = null;
+    Auth.$scope.immediateFailed = true;
+    Auth.$scope.$apply();
+    gapi.signin.render('myGsignin', {
+      'callback': Auth.signIn,
+      'clientid': '987765099891.apps.googleusercontent.com',
+      'scope': 'https://www.googleapis.com/auth/userinfo.email',
+      'theme': 'dark',
+      'cookiepolicy': 'single_host_origin',
+      'accesstype': 'online',
+      'approvalprompt':'force',
+      'width':'wide'
+    });
+  }
   Auth.refreshToken = function(){
-     window.location.reload(true);    
+     window.location.reload(true);
   };
 
   return Auth;
 });
-

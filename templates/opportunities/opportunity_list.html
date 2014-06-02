@@ -1,38 +1,45 @@
 <div class="row subHeader">
-  <div class="currentApp">
-    <h2 class="page-title">
+  <div class="subHContent">
+    <div class="currentApp">
+     <h2 class="page-title">
       <!-- <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
       {{active_app.label}}
     </h2>
+        <div class="filterOptions">
+        <div class="btn-group">
+            <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" ng-click="filterByOwner('{{ME}}');selectedOption ='sort'">
+              Filter
+              <i class="icon-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a>
+              </li>
+              <li>
+                <a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a>
+              </li>
+            </ul>
+        </div>
+        <div class="btn-group">
+            <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" ng-click="filterByOwner('{{ME}}');selectedOption ='sort'">
+              Sort
+              <i class="icon-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a>
+              </li>
+              <li>
+                <a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a>
+              </li>
+            </ul>
+      </div>
+        <a href="/#/accounts/new" class="btn red afterScrollBtn hidden">
+           New <span class="hidden-xs hiddenOnxs">Account</span> 
+         </a>
+      </div>
+    
   </div>
-  <div class=" subHeaderContent">
-    <div class="pull-right sharebuttonDiv" ng-show="!blankStateopportunity">
-      <div class="btn-group btn-filter">
-        <a class="btn btn-default" href="#" data-toggle="dropdown">
-          {{ _('Filter by') }}
-          <i class="icon-angle-down"></i>
-        </a>
-        <ul class="dropdown-menu">
-          <li><a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All opportunities') }}</a></li>
-          <li><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My opportunities') }}</a></li>
-          <li ng-repeat="stage in opportunitystages"><a ng-click="filterByStage('<%=stage.entityKey%>')" href="#" data-toggle="modal"><%= stage.name %></a></li>
-        </ul>
-      </div>
-      <div class="btn-group btn-sort">
-        <a class="btn btn-default" href="#" data-toggle="dropdown">
-          {{ _('Sort by') }}
-          <i class="icon-angle-down"></i>
-        </a>
-        <ul class="dropdown-menu">
-          <li><a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a></li>
-          <li><a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a></li>
-          <li><a ng-click="orderBy('-amount')" href="#" data-toggle="modal">{{ _('Amount') }}</a></li>
-          <li><a ng-click="orderBy('account_name')" href="#" data-toggle="modal">{{ _('Company') }}</a></li>
-          <li><a ng-click="orderBy('-stage_probability')" href="#" data-toggle="modal">{{ _('Stage probability') }}</a></li>
-        </ul>
-      </div>
-    </div>
-    <h2 class="page-title">{{ _("Opportunities") }} </h2>
   </div>
 </div>
 <div  class="page-content">
@@ -53,14 +60,23 @@
   </div>
   <!-- $cards container -->
   <div class="row ">
-    <div class="col-md-9" ng-show="isSignedIn" style="">
-  <div class="btn-group newBtn">
-     <a class="btn red " href="/#/opportunities/new" >
-     {{ _("New Opportunity") }}</a>
-  </div>
+   <div class="col-md-9">
+     <div class="row subHeaderContainer">
+        <div class=" col-md-9 col-sm-9 col-xs-9 subHeaderContent">
+           <div class="row">
+              <h2 class="page-title">{{ _("Opportunities") }} </h2>
+           </div>
+        </div>
+     <div class="col-md-3 col-sm-3 col-xs-3">
+        <div class="row">
+         <div class="pull-right" > 
+           <a href="/#/opportunities/new" class="btn red newBtn">
+                        {{ _('New Opportunity') }} 
+          </a>
+         </div>
+         </div>
     </div>
-
-    <div class="col-md-9">
+  </div>
     <div class="row">
       <div class="tab-pane">
       <div class="row">
@@ -101,7 +117,7 @@
                             <div class="col-md-12 col-sm-12">
                                 <div class="oppPrice">
                                   <span><%= opportunity.currency %></span>
-                                  <span><%= opportunity.amount_total | customCurrency:"":",":".":0 %> <span ng-show="opportunity.account.name"> with </span> <%= opportunity.account.name %></span>
+                                  <span><%= opportunity.amount_total | customCurrency:"":",":".":0 %> <span ng-show="opportunity.account.name"> with </span> <a href="/#/accounts/show/<%= opportunity.account.id %>"> <%= opportunity.account.name %></a> </span>
                                   <p class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
                                       <%= opportunity.duration %> × <%= opportunity.amount_per_unit | customCurrency:"":",":".":0 %>/<%= opportunity.duration_unit %>
                                   </p>
@@ -136,14 +152,6 @@
               </div>
           </div>
         </div>
-        <div ng-show="isFiltering * !opportunities" data-span="all" class="" data-tablet="span6" data-desktop="span12">
-          <div class="dashboard-stat cards" >
-            <div class="blank_slate_arrow"></div>
-            <div class="thumbnail blank_slate_body">
-              <p class="lead">{{ _('No results found, try with another filter') }}</p>
-            </div>
-          </div>
-        </div>
         <div class="clearfix"></div>
       </div><!--/inner-cards-container-->
       <!--$Blank state-->
@@ -161,6 +169,17 @@
         </div>
         <div class="clearfix"></div>
       </div><!--/inner-cards-container-->
+      <div ng-show="isFiltering * !opportunities"  class="col-md-12 " ng-show="blankStateaccount">
+          <div  data-span="3" class="dashboard-stat cards" data-tablet="span6" data-desktop="span12">
+            <div class="">
+              <div class="blank_slate_arrow"></div>
+              <div class="thumbnail blank_slate_body">
+                <p class="lead">{{ _('No results found, try with another filter') }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </div><!--/inner-cards-container-->
           </div>
        </div>
      </div>
@@ -441,4 +460,5 @@
         defaultContainerWidth: 800,
         autoresize: true
       });
+ $('.textfill').textfill({debug: true, maxFontPixels: 16});
 </script>

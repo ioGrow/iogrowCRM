@@ -358,20 +358,23 @@ app.directive('taggable', ['$parse',function($parse) {
                   }
           }
         $scope.selectItem = function(value){
+          console.log("fired");
+         console.log($scope.modelName); 
           angular.forEach($scope.tagInfo, function(item){
               if (item.data.name==$scope.objectName) {
+                  console.log(value);
                   if ($scope.currentAttribute!='name') {
                       delete value["value"];
                   };
                   if (item.selected.indexOf(value) == -1) {
                    item.selected.push(value);
                    }
-
                   var text= ReturnWord($(elem).val(),$(elem).caret()).word;
                   var beforeText= ReturnWord($(elem).val(),$(elem).caret()).before;
                   var afterText= ReturnWord($(elem).val(),$(elem).caret()).after;
                   var tag= text.substring(0,1);
                   $parse(attrs.ngModel).assign($scope, beforeText+' '+tag+value[item.data.attribute]+' '+afterText);
+                  console.log($parse(attrs.ngModel).assign($scope, beforeText+' '+tag+value[item.data.attribute]+' '+afterText));
               }; 
            });
            
@@ -380,4 +383,68 @@ app.directive('taggable', ['$parse',function($parse) {
       }
   }
 }]);
+app.directive('fittext', function($timeout) {
+  'use strict';
 
+  return {
+    scope: {
+      minFontSize: '@',
+      maxFontSize: '@',
+      fontt: '@',
+      text: '='
+    },
+    restrict: 'C',
+    transclude: true,
+    template: '<span ng-transclude class="textContainer" ng-bind="text"></span>',
+    controller: function($scope, $element, $attrs) {
+      var maxFontSize = $scope.maxFontSize || 50;
+      var minFontSize = $scope.minFontSize || 8;
+
+      // text container
+      var textContainer = $element[0].querySelector('.textContainer');
+
+      // max dimensions for text container
+      var maxHeight = $element[0].offsetHeight;
+      var maxWidth = $element[0].offsetWidth;
+
+      var textContainerHeight;
+      var textContainerWidth;
+      var fontSize = maxFontSize;
+
+      var resizeText = function(){
+        $timeout(function(){
+          // set new font size and determine resulting dimensions
+          textContainer.style.fontSize = fontSize + 'px';
+          textContainerHeight = textContainer.offsetHeight;
+          textContainerWidth = textContainer.offsetWidth;
+
+          if((textContainerHeight > maxHeight || textContainerWidth > maxWidth) && fontSize > minFontSize){
+
+            // shrink font size
+            var ratioHeight = Math.floor(textContainerHeight / maxHeight);
+            var ratioWidth = Math.floor(textContainerWidth / maxWidth);
+            var shrinkFactor = ratioHeight > ratioWidth ? ratioHeight : ratioWidth;
+            fontSize -= shrinkFactor;
+            // console.log("fontSize", fontSize);
+            resizeText();
+          }else{
+            /*textContainer.style.visibility = "visible";*/
+          }
+        }, 0);
+      };
+
+      // watch for changes to text
+      $scope.$watch('text', function(newText, oldText){
+        if(newText === undefined) return;
+
+        // text was deleted
+        if(oldText !== undefined && newText.length < oldText.length){
+          fontSize = maxFontSize;
+           console.log("Letter was deleted");
+        }
+        /*textContainer.style.visibility = "hidden";*/
+        resizeText();
+      });
+    }
+  };
+});

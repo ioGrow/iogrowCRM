@@ -30,7 +30,7 @@
   </div>
   <div class="container" ng-show="immediateFailed">
     <div class="col-md-12">
-      <h1>{{ _("Sign-in Button;") }}</h1>
+
       <span id="signin">
         <span id="myGsignin"></span>
       </span>
@@ -43,9 +43,9 @@
           <div class="row margin-bottom-10">
             <div class="col-md-2" ng-mouseenter="showUpload= true" ng-mouseleave="showUpload = false">
               <div class="pic">
-                  <img alt="<%= lead.firstname %> <%= lead.lastname %>" class=" img-responsive img-thumbnail" ng-src="<%=imageSrc%>">
+                  <img alt="<%= lead.firstname %> <%= lead.lastname %>" class="img-responsive profile-photo-large" ng-src="<%=imageSrc%>">
               </div>
-               <a ng-show="showUpload" ng-click="createPickerUploader()" href="" class="btn btn-default btn-upload" data-toggle="modal" style="display: none;">
+               <a ng-show="showUpload" ng-click="createLogoPickerUploader()" href="" class="btn btn-default btn-upload" data-toggle="modal" style="display: none;">
                  <img src="/static/img/upload_logo.png">
                </a>
             </div>
@@ -67,9 +67,11 @@
 
           <span ng-show="lead.updated_at" class="contact-title" >Updated at:  <%=lead.updated_at | date:'yyyy-MM-dd - HH:mm:ss ' %> </span><br>
               <span ng-show="lead.title">{{_("Title")}} : <a   href="/#/search/type:Lead <%=lead.title%>" class="tag" ng-show="lead.title"> #<%= lead.title %> </a></span><span ng-show="lead.company">{{_("Company")}} : <a   href="/#/search/type:Lead <%=lead.company%>" class="tag" ng-show="lead.company"> #<%= lead.company %></a></span> <br>
-              <span>{{_("Lead Source")}} : </span>
+              <span>{{_("Industry")}} : </span>
+              <a   href="/#/search/type:Lead <%=lead.industry%>" class="tag" ng-show="lead.industry"> #<%= lead.industry %></a> <br>
+              <span>{{_("Source")}} : </span>
               <a   href="/#/search/type:Lead <%=lead.source%>" class="tag" ng-show="lead.source"> #<%= lead.source %></a> <br>
-              <span>{{_("Lead Status")}} : </span>
+              <span>{{_("Status")}} : </span>
               <a   href="/#/search/type:Lead <%=lead.status%>" class="tag" ng-show="lead.company"> #<%= lead.status %></a> <br>
                   <br>
                   <hr>
@@ -109,7 +111,7 @@
                     <a ng-click="waterfall(); selectedTab = 3;">Contacts</a>
                   </li-->
                   <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 7}">
-                    <a ng-click="waterfall();selectedTab = 7;">Attach Documents</a>
+                    <a ng-click="waterfallTrigger();selectedTab = 7;">Attach Documents</a>
                   </li>
                   <!-- <li class="ng-tab md-menu" ng-class="{active: selectedTab == 4}">
                     <a ng-click="selectedTab = 4;">Needs</a>
@@ -159,7 +161,7 @@
                           Or just add notes to remember what's important.
                           <br>
                         </p>
-                        <form id="addNote" ng-submit="addNote(note)" class="ng-pristine ng-valid">
+                        <form id="addNote" class="ng-pristine ng-valid">
                           <div class="form-group">
                             <input class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="Add a new subject" id="messageSubject" ng-model="note.title">
                           </div>
@@ -167,7 +169,7 @@
                             <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="note.content"></textarea>
                           </div>
                           <div class="pull-right">
-                            <input ng-disabled="isLoading" type="submit" class="btn green" value="Add this note">
+                            <input ng-disabled="isLoading" ng-click="addNote(note)"  type="submit" class="btn green" value="Add this note">
                           </div>
                         </form>
                       </div>
@@ -191,18 +193,7 @@
                         </div>
                       </li>
                     </ul>
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div class="pagination pull-right">
-                          <button ng-click="TopiclistPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="topicpagination.prev" style="display: none;">
-                            Prev
-                          </button>
-                          <button ng-click="TopiclistNextPageItems()" class="btn" ng-show="topicpagination.next" style="display: none;">
-                            Next
-                          </button>
-                        </div>
-                      </div>
-                    </div>
+
                   </div>
                 </div>
                 <!-- $ about tab -->
@@ -340,9 +331,13 @@
                                           </div>
                           </li>
                           <li ng-repeat="custom in infonodes.customfields">
-                                    <span editoptions editdataattr="deleteInfonode('<%=custom.entityKey%>','customfields')">
-                                    <%= custom.fields[0].field%>  : <%= custom.fields[0].value%> </span>
+                              <span editoptions editdataattr="deleteInfonode('<%=custom.entityKey%>','customfields')"   >
+                                    <%= custom.fields[0].field%>  : 
+                              </span>
 
+                              <span editable-text="custom.fields[0].value" onbeforesave="inlinePatch('Infonode','customfields', '<%= custom.fields[0].field%>',custom.entityKey,$data)" >   <%= custom.fields[0].value%> 
+                              </span>
+                                   
                           </li>
                           <li>
                             <a ng-click="showCustomFieldForm=true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new custom field </a>
@@ -442,22 +437,7 @@
                               </div><!--/inner-cards-container-->
                               </div>
                             </div>
-                            <div class="row">
-                             <div class="col-md-12">
-                                <div class="pagination pull-right" ng-hide="isLoading">
 
-
-                                        <button ng-click="ContactlistPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="contactpagination.prev" style="display: none;">
-                                        Prev
-                                        </button>
-                                        <button ng-click="ContactlistNextPageItems()" class="btn" ng-show="contactpagination.next" style="display: none;">
-                                        Next
-                                        </button>
-
-                                    </div>
-                                    <!--h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3-->
-                              </div>
-                              </div>
 
                       </div>
                   <!--HKA 24.12.2013 Modal before Deleting Lead-->
@@ -533,12 +513,12 @@
                             <div class="row">
                              <!-- ngRepeat: attachment in documents -->
                                    <div class="col-md-12 waterfall2" ng-hide="blankStateaccount">
-                                      <div ng-repeat="attachment in documents" data-column="<%=getPosition($index)%>" class="cardElement"  ng-class="{rightcards: getPosition($index)==4}">
+                                      <div ng-repeat="attachment in documents"  class="cardElement"  >
                                           <div class="detailsSection">
                                             <div class="head">
                                               <div class="pic">
                                                   <a href="/#/documents/show/<%= attachment.id %>" class="startup-link" title="attachment.title">
-                                                  <img ng-show="account.logo_img_id" alt="account.name" class="google-drive-icon img-responsive img-thumbnail" ng-src="/static/img/google_drive/<%=attachment.mimeType%>.png" >
+                                                  <img  alt="attachment.title" class="google-drive-icon img-responsive img-thumbnail" ng-src="/static/img/google_drive/<%=attachment.mimeType%>.png" >
                                                   </a>
                                               </div>
                                               <div class="text">
@@ -570,23 +550,7 @@
                               </div>
 
                             </div>
-                           <div class="row">
-                             <div class="col-md-12">
-                                <div class="pagination pull-right" ng-hide="isLoading">
 
-
-                                        <button ng-click="DocumentPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="documentpagination.prev" style="display: none;">
-                                        Prev
-                                        </button>
-
-                                        <button ng-click="DocumentlistNextPageItems()" class="btn" ng-show="documentpagination.next" style="display: none;">
-                                        Next
-                                        </button>
-
-                                    </div>
-                                    <!--h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3-->
-                              </div>
-                              </div>
                       </div>
                 <!-- $ send email tab -->
                 <div class="tab-pane active" id="tab_1_8" ng-show="selectedTab == 8" style="display: none;">
@@ -594,7 +558,7 @@
                          <div class="row">
                            <div class="col-md-12 margin-bottom-10">
                           <p class⁼"lead"=""><strong>Send an Email to :</strong> </p>
-                          <form ng-submit="sendEmail(email)" class="ng-pristine ng-invalid ng-invalid-required">
+                          <form class="ng-pristine ng-invalid ng-invalid-required">
                                             <div class="form-group">
                                             <input required="" class="form-control ng-pristine ng-invalid ng-invalid-required" autofocus="" type="text" placeholder="To" id="messageSubject" ng-model="email.to">
                                             </div>
@@ -612,7 +576,7 @@
                                              </div>
                                          <div class="pull-right">
 
-                                            <input ng-disabled="isLoading" type="submit" class="btn green" value="Send">
+                                            <input ng-click="sendEmail(email)"  ng-disabled="isLoading" type="submit" class="btn green" value="Send">
 
 
                                           </div>
@@ -1173,7 +1137,7 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("Sharing Settings")}}</h3>
               </div>
               <div class="modal-body">
-                 <form id="addMember" name="addaccount" ng-submit="share(slected_memeber)" class="form-horizontal">
+                 <form id="addMember" name="addaccount" class="form-horizontal">
 
                     <p>{{ _("Who has access:") }}</p>
                     <div class="radio-list">
@@ -1215,7 +1179,7 @@
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button  type="submit" class="btn blue addContactNow">{{_("Share")}}</button>
+                <button  type="submit"  ng-click="share(slected_memeber)"  class="btn blue addContactNow">{{_("Share")}}</button>
               </div>
                </form>
                </div>
@@ -1278,7 +1242,7 @@
             </div>
             <div class="modal-body pickerin">
                      <div class="controls controls-row">
-                                          <form id="addTask" ng-submit="addTask(task)" class="ng-pristine ng-valid">
+                                          <form id="addTask" class="ng-pristine ng-valid">
                                                   <input class="form-control" autofocus type="text" placeholder="Add a new task" id="taskTitle" ng-model="task.title">
 
                                                   <p><strong>{{_("When's it due?")}}</strong></p>
@@ -1291,8 +1255,8 @@
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-               <input ng-hide="isLoading" type="submit" class="btn green" value="Add this task">
-                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+               <input ng-hide="isLoading" ng-click="addTask(task)"  type="submit" class="btn green" value="Add this task">
+
 
             </form>
             </div>
@@ -1337,7 +1301,7 @@
               </div>
 
               <div class="modal-body">
-                 <form id="editLead" name="editlead" ng-submit="updatelead(lead)" class="form-horizontal">
+                 <form id="editLead" name="editlead"  class="form-horizontal">
 
 
                   <div class="form-group">
@@ -1374,6 +1338,14 @@
                         </div>
                     </div>
                     <div class="form-group">
+                       <label  class="required col-md-3 control-label">{{_("Industry")}}</label>
+                         <div class="col-md-9">
+                            <select class="form-control" ng-model="lead.industry">
+                            <option value="">--None--</option><option value="Agriculture">Agriculture</option><option value="Apparel">Apparel</option><option value="Banking">Banking</option><option value="Biotechnology">Biotechnology</option><option value="Chemicals">Chemicals</option><option value="Communications">Communications</option><option value="Construction">Construction</option><option value="Consulting">Consulting</option><option value="Education">Education</option><option value="Electronics">Electronics</option><option value="Energy">Energy</option><option value="Engineering">Engineering</option><option value="Entertainment">Entertainment</option><option value="Environmental">Environmental</option><option value="Finance">Finance</option><option value="Food &amp; Beverage">Food &amp; Beverage</option><option value="Government">Government</option><option value="Healthcare">Healthcare</option><option value="Hospitality">Hospitality</option><option value="Insurance">Insurance</option><option value="Machinery">Machinery</option><option value="Manufacturing">Manufacturing</option><option value="Media">Media</option><option value="Not For Profit">Not For Profit</option><option value="Recreation">Recreation</option><option value="Retail">Retail</option><option value="Shipping">Shipping</option><option value="Technology">Technology</option><option value="Telecommunications">Telecommunications</option><option value="Transportation">Transportation</option><option value="Utilities">Utilities</option><option value="Other">Other</option>>
+                          </select>
+                         </div>
+                    </div>
+                    <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Source")}}</label>
 
                         <div class="col-md-9">
@@ -1407,7 +1379,7 @@
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
-                <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+                <button  type="submit" ng-click="updatelead(lead)" class="btn btn-primary addContactNow">{{_("Save")}} </button>
               </div>
                </form>
                </div>
@@ -1468,7 +1440,7 @@
             </div>
             <div class="modal-body pickerin">
                      <div class="controls controls-row">
-                                          <form id="addTask" ng-submit="addTask(task)" class="ng-pristine ng-valid">
+                                          <form id="addTask"  class="ng-pristine ng-valid">
                                                   <input class="form-control" autofocus type="text" placeholder="Add a new task" id="taskTitle" ng-model="task.title">
 
                                                   <p><strong>{{_("When's it due?")}}</strong></p>
@@ -1481,8 +1453,8 @@
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-               <input ng-hide="isLoading" type="submit" class="btn green" value="Add this task">
-                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+               <input ng-hide="isLoading" ng-click="addTask(task)" type="submit" class="btn green" value="Add this task">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
 
             </form>
             </div>
@@ -1498,7 +1470,7 @@
             </div>
             <div class="modal-body">
                      <div class="controls controls-row">
-                                          <form id="addTask" ng-submit="createDocument(newdocument)" class="ng-pristine ng-valid">
+                                          <form id="addTask"  class="ng-pristine ng-valid">
                                                   <input class="form-control" autofocus type="text" placeholder="Enter a new <%=mimeType%> name" id="taskTitle" ng-model="newdocument.title" required>
 
 
@@ -1507,8 +1479,8 @@
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
 
-               <input ng-hide="isLoading" type="submit" class="btn green" value="Create this document">
-                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+               <input ng-hide="isLoading" ng-click="createDocument(newdocument)" type="submit" class="btn green" value="Create this document">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
 
             </form>
             </div>
@@ -1526,7 +1498,7 @@
             </div>
             <div class="modal-body">
                      <div class="controls controls-row">
-                            <form id="addTask" ng-submit="addEvent(ioevent)" class="ng-pristine ng-valid">
+                            <form id="addTask"  class="ng-pristine ng-valid">
                                                   <input class="form-control" autofocus type="text" placeholder="{{_('Add a new event')}}" id="taskTitle" ng-model="ioevent.title">
                                                   <p><strong>{{_("When?")}}</strong></p>
                                                 <div class="row">
@@ -1547,8 +1519,8 @@
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-               <input ng-hide="isLoading" type="submit" class="btn green" value="{{_('Add this event')}}">
-                <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
+               <input ng-hide="isLoading" ng-click="addEvent(ioevent)" type="submit" class="btn green" value="{{_('Add this event')}}">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled-->
 
             </form>
             </div>

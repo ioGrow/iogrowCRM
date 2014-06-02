@@ -78,6 +78,8 @@ class ContactInsertRequest(messages.Message):
     emails = messages.MessageField(iomessages.EmailSchema,9, repeated = True)
     addresses = messages.MessageField(iomessages.AddressSchema,10, repeated = True)
     infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema,11, repeated = True)
+    profile_img_id = messages.StringField(12)
+    profile_img_url = messages.StringField(13)
 
 class ContactSchema(messages.Message):
     id = messages.StringField(1)
@@ -102,6 +104,8 @@ class ContactSchema(messages.Message):
     phones = messages.MessageField(iomessages.PhoneListSchema,20)
     emails = messages.MessageField(iomessages.EmailListSchema,21)
     addresses = messages.MessageField(iomessages.AddressListSchema,22)
+    profile_img_id = messages.StringField(23)
+    profile_img_url = messages.StringField(24)
 
 class ContactListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -130,7 +134,7 @@ class ContactSearchResults(messages.Message):
     nextPageToken = messages.StringField(2)
 
 class Contact(EndpointsModel):
-    _message_fields_schema = ('id','entityKey','owner', 'folder','created_at','updated_at',  'access','collaborators_list','collaborators_ids','display_name', 'firstname','lastname','title','company','account','account_name','introduction','tagline')
+    _message_fields_schema = ('id','entityKey','owner', 'folder','created_at','updated_at',  'access','collaborators_list','collaborators_ids','display_name', 'firstname','lastname','title','company','account','account_name','introduction','tagline','profile_img_id','profile_img_url')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
@@ -158,6 +162,8 @@ class Contact(EndpointsModel):
     addresses = ndb.StructuredProperty(model.Address,repeated=True)
     websites = ndb.StructuredProperty(model.Website,repeated=True)
     sociallinks= ndb.StructuredProperty(model.Social,repeated=True)
+    profile_img_id = ndb.StringProperty()
+    profile_img_url = ndb.StringProperty()
 
     def put(self, **kwargs):
 
@@ -325,6 +331,8 @@ class Contact(EndpointsModel):
                                   phones = phones,
                                   emails = emails,
                                   addresses = addresses,
+                                  profile_img_id = contact.profile_img_id,
+                                  profile_img_url = contact.profile_img_url,
                                   created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
@@ -444,6 +452,8 @@ class Contact(EndpointsModel):
                                   title = contact.title,
                                   account = account_schema,
                                   tags = tag_list,
+                                  profile_img_id = contact.profile_img_id,
+                                  profile_img_url = contact.profile_img_url,
                                   created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
@@ -543,7 +553,9 @@ class Contact(EndpointsModel):
                     introduction = request.introduction,
                     owner = user_from_email.google_user_id,
                     organization = user_from_email.organization,
-                    access = request.access
+                    access = request.access,
+                    profile_img_id = request.profile_img_id,
+                    profile_img_url = request.profile_img_url
                     )
         contact_key = contact.put_async()
         contact_key_async = contact_key.get_result()
@@ -624,7 +636,8 @@ class Contact(EndpointsModel):
                             'kind': "Contact",
                             'folder_name': folder_name,
                             'email': user_from_email.email,
-                            'obj_key':contact_key_async.urlsafe()
+                            'obj_key':contact_key_async.urlsafe(),
+                            'logo_img_id':request.profile_img_id
                             }
                     )
         account_schema = None

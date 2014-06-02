@@ -2,7 +2,7 @@
  # -*- coding: utf-8 -*-
 from google.appengine.api import search
 from google.appengine.api import memcache
-from apiclient.discovery import build
+from apiclient.discovery import build 
 from apiclient import errors
 import httplib2
 import endpoints
@@ -181,7 +181,14 @@ class EndpointsHelper():
         auth_token.authorize(gd_client)
         contact_entry = gd_client.CreateContact(google_contact_schema)
         return contact_entry.id.text
-
+class scor_new_lead(): 
+    def predict(predd,tedd) :
+        user = User.get_by_email('hakim@iogrow.com')
+        credentials=user.google_credentials
+        http = credentials.authorize(httplib2.Http())
+        service=build('prediction','v1.6',http=http)
+        result=service.trainedmodels().predict(project='987765099891',id='7',body={'input':{'csvInstance':['Sofware Engineer','Purchase List']}}).execute()
+        return result
 
 
             
