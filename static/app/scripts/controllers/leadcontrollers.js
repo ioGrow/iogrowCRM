@@ -1397,6 +1397,8 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
                         'introduction':lead.introduction,
                         'phones':$scope.phones,
                         'emails':$scope.emails,
+                        'industry':lead.industry,
+                        'source':lead.source,
                         'infonodes':$scope.prepareInfonodes(),
                         'access': 'public'
                       };
