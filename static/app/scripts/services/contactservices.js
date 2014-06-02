@@ -165,6 +165,7 @@ accountservices.factory('Contact', function($http) {
                     $scope.imageSrc='/static/img/avatar_contact.jpg';
                   }
                $scope.isContentLoaded = true;
+              
                //$scope.listInfonodes();
                // $scope.listTopics(resp);
                // $scope.listTasks();
