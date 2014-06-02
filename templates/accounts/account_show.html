@@ -335,10 +335,10 @@
                                           </div>
                             </li>
                           <li ng-repeat="custom in infonodes.customfields">
-                                    <span editoptions editdataattr="deleteInfonode('<%=custom.entityKey%>','customfields')" editable-text="custom.fields[0].field" onbeforesave="inlinePatch('Infonode','customfields', 'field',website.entityKey,$data)"  >
+                                    <span editoptions editdataattr="deleteInfonode('<%=custom.entityKey%>','customfields')"   >
                                     <%= custom.fields[0].field%>  : </span>
 
-                                  <span>   <%= custom.fields[0].value%> </span>
+                                  <span editable-text="custom.fields[0].value" onbeforesave="inlinePatch('Infonode','customfields', '<%= custom.fields[0].field%>',custom.entityKey,$data)" >   <%= custom.fields[0].value%> </span>
 
                           </li>
                          <li>

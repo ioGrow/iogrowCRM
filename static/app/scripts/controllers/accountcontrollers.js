@@ -719,6 +719,8 @@ $scope.ContactlistNextPageItems = function(){
 /// update account with inlineEdit
   $scope.inlinePatch=function(kind,edge,name,entityKey,value){
 
+    
+
    if (kind=='Account') {
           params = {'id':$scope.account.id,
              name:value}
