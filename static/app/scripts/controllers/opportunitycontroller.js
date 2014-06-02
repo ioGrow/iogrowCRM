@@ -1136,7 +1136,8 @@ $scope.deleteopportunity= function(){
   };
   InfoNode.insert($scope,params);
 
-  $('#customfields').modal('hide');
+    $scope.customfield={};
+    $scope.showCustomFieldForm = false;
 
 };
 
@@ -1147,6 +1148,13 @@ $scope.listInfonodes = function(kind) {
      InfoNode.list($scope,params);
 
  };
+
+  $scope.deleteInfonode = function(entityKey,kind){
+    var params = {'entityKey':entityKey,'kind':kind};
+
+    InfoNode.delete($scope,params);
+
+  };
 
   /// update account with inlineEdit
   $scope.inlinePatch=function(kind,edge,name,entityKey,value){

@@ -1199,7 +1199,7 @@ class CrmEngineApi(remote.Service):
         lead.key.delete()
         return ConvertedLead(id = contact.key.id())
 
-    # leads.insertv2 api
+    # leads.from_twitter api
     @endpoints.method(LeadFromTwitterRequest, LeadSchema,
                       path='leads/from_twitter', http_method='POST',
                       name='leads.from_twitter')

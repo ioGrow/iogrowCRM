@@ -67,9 +67,11 @@
 
           <span ng-show="lead.updated_at" class="contact-title" >Updated at:  <%=lead.updated_at | date:'yyyy-MM-dd - HH:mm:ss ' %> </span><br>
               <span ng-show="lead.title">{{_("Title")}} : <a   href="/#/search/type:Lead <%=lead.title%>" class="tag" ng-show="lead.title"> #<%= lead.title %> </a></span><span ng-show="lead.company">{{_("Company")}} : <a   href="/#/search/type:Lead <%=lead.company%>" class="tag" ng-show="lead.company"> #<%= lead.company %></a></span> <br>
-              <span>{{_("Lead Source")}} : </span>
+              <span>{{_("Industry")}} : </span>
+              <a   href="/#/search/type:Lead <%=lead.industry%>" class="tag" ng-show="lead.industry"> #<%= lead.industry %></a> <br>
+              <span>{{_("Source")}} : </span>
               <a   href="/#/search/type:Lead <%=lead.source%>" class="tag" ng-show="lead.source"> #<%= lead.source %></a> <br>
-              <span>{{_("Lead Status")}} : </span>
+              <span>{{_("Status")}} : </span>
               <a   href="/#/search/type:Lead <%=lead.status%>" class="tag" ng-show="lead.company"> #<%= lead.status %></a> <br>
                   <br>
                   <hr>
@@ -329,9 +331,13 @@
                                           </div>
                           </li>
                           <li ng-repeat="custom in infonodes.customfields">
-                                    <span editoptions editdataattr="deleteInfonode('<%=custom.entityKey%>','customfields')">
-                                    <%= custom.fields[0].field%>  : <%= custom.fields[0].value%> </span>
+                              <span editoptions editdataattr="deleteInfonode('<%=custom.entityKey%>','customfields')"   >
+                                    <%= custom.fields[0].field%>  : 
+                              </span>
 
+                              <span editable-text="custom.fields[0].value" onbeforesave="inlinePatch('Infonode','customfields', '<%= custom.fields[0].field%>',custom.entityKey,$data)" >   <%= custom.fields[0].value%> 
+                              </span>
+                                   
                           </li>
                           <li>
                             <a ng-click="showCustomFieldForm=true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new custom field </a>
@@ -1330,6 +1336,14 @@
                           <input type="text"  class="form-control" required id="id_company" ng-model="lead.company">
 
                         </div>
+                    </div>
+                    <div class="form-group">
+                       <label  class="required col-md-3 control-label">{{_("Industry")}}</label>
+                         <div class="col-md-9">
+                            <select class="form-control" ng-model="lead.industry">
+                            <option value="">--None--</option><option value="Agriculture">Agriculture</option><option value="Apparel">Apparel</option><option value="Banking">Banking</option><option value="Biotechnology">Biotechnology</option><option value="Chemicals">Chemicals</option><option value="Communications">Communications</option><option value="Construction">Construction</option><option value="Consulting">Consulting</option><option value="Education">Education</option><option value="Electronics">Electronics</option><option value="Energy">Energy</option><option value="Engineering">Engineering</option><option value="Entertainment">Entertainment</option><option value="Environmental">Environmental</option><option value="Finance">Finance</option><option value="Food &amp; Beverage">Food &amp; Beverage</option><option value="Government">Government</option><option value="Healthcare">Healthcare</option><option value="Hospitality">Hospitality</option><option value="Insurance">Insurance</option><option value="Machinery">Machinery</option><option value="Manufacturing">Manufacturing</option><option value="Media">Media</option><option value="Not For Profit">Not For Profit</option><option value="Recreation">Recreation</option><option value="Retail">Retail</option><option value="Shipping">Shipping</option><option value="Technology">Technology</option><option value="Telecommunications">Telecommunications</option><option value="Transportation">Transportation</option><option value="Utilities">Utilities</option><option value="Other">Other</option>>
+                          </select>
+                         </div>
                     </div>
                     <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Source")}}</label>

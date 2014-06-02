@@ -717,6 +717,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                 'lastname':lead.lastname,
                 'company':lead.company,
                  'source':lead.source,
+                 'industry':lead.industry,
                  'title' : lead.title,
                 'status':$scope.status_selected.status};
         Lead.patch($scope,params);
@@ -1397,6 +1398,8 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
                         'introduction':lead.introduction,
                         'phones':$scope.phones,
                         'emails':$scope.emails,
+                        'industry':lead.industry,
+                        'source':lead.source,
                         'infonodes':$scope.prepareInfonodes(),
                         'access': 'public'
                       };
