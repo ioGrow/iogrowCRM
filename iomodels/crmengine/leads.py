@@ -41,6 +41,7 @@ class LeadInsertRequest(messages.Message):
     infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema,13, repeated = True)
     profile_img_id = messages.StringField(14)
     profile_img_url = messages.StringField(15)
+    industry = messages.StringField(16)
 
  # The message class that defines the ListRequest schema
 class ListRequest(messages.Message):
@@ -77,6 +78,7 @@ class LeadSchema(messages.Message):
     folder = messages.StringField(20)
     profile_img_id = messages.StringField(21)
     profile_img_url = messages.StringField(22)
+    industry = messages.StringField(23)
 
 class LeadListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -105,7 +107,7 @@ class LeadSearchResults(messages.Message):
 
 class Lead(EndpointsModel):
     _message_fields_schema = ('id','entityKey','folder', 'owner', 'access','collaborators_list','collaborators_ids', 'firstname','lastname','company' ,'title','tagline','introduction','status','created_at','updated_at','show','show_name','feedback','feedback_name','source','profile_img_id',
-'profile_img_url')
+'profile_img_url','industry')
     # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
@@ -281,7 +283,8 @@ class Lead(EndpointsModel):
                                   profile_img_id = lead.profile_img_id,
                                   profile_img_url = lead.profile_img_url,
                                   created_at = lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                  updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                  industry = lead.industry
                                 )
         return  lead_schema
     @classmethod
@@ -426,7 +429,8 @@ class Lead(EndpointsModel):
                     organization = user_from_email.organization,
                     access = request.access,
                     profile_img_id = request.profile_img_id,
-                    profile_img_url = request.profile_img_url
+                    profile_img_url = request.profile_img_url,
+                    industry = request.industry,
                     )
         #sl = scor_new_lead()
         #print('----------idrisssssss----------')
@@ -530,7 +534,8 @@ class Lead(EndpointsModel):
                                   source = lead.source,
                                   status = lead.status,
                                   created_at = lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                  updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                  industry = lead.industry
                                 )
         return lead_schema
     @classmethod

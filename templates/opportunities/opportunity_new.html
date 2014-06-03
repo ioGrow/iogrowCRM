@@ -19,15 +19,12 @@
   </h2>
 </div>
   <div class=" subHeaderContent">
-            <div class="pull-right sharebuttonDiv">
-
-                  <button class="btn red jfk-button jfk-button-action" ng-click="save(opportunity)">
-                    Create
-                  </button>
-            </div>
+    <div class="col-md-9">
                   <h2 class="page-title">
             <a href="/#/opportunities" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
             <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Opportunities")}} > <%= opportunity.name %>  </h2>
+            <button class="btn red newAccountBtnOnscroll pull-right hidden" ng-click="save(opportunity)">Create</button>
+  </div>
   </div>
 </div>
 <div  class="page-content">
@@ -52,7 +49,14 @@
 
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-       <div class="showPage slimForm col-md-9">
+      <div class="col-md-9">
+      <div class="row">
+          <div class="showPage col-md-12 newActionsBtn">
+          <span>Creating now Account </span>
+          <button class="btn red newAccountBtn pull-right" ng-click="save(opportunity)">Create</button>
+          <div class="clearfix"></div>
+        </div>
+       <div class="showPage slimForm col-md-12">
             <div class="row">
             <div class="col-md-12">
             <div class="row">
@@ -293,6 +297,8 @@
               </div>
               </div>
 
+            </div>
+            </div>
             </div>
             </div>
        </div>

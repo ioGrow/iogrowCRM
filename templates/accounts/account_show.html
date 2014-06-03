@@ -199,18 +199,6 @@
                         </div>
                       </li>
                     </ul>
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div class="pagination pull-right">
-                          <button ng-click="TopiclistPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="topicpagination.prev" style="display: none;">
-                            Prev
-                          </button>
-                          <button ng-click="TopiclistNextPageItems()" class="btn" ng-show="topicpagination.next" style="display: none;">
-                            Next
-                          </button>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
                 <!-- $ about tab -->
@@ -244,7 +232,7 @@
                                         </form>
                                       </div>
                             </li>
-                           <li ng-repeat="phone in infonodes.phones"> <a editable-text="phone.number"  editoptions editdataattr="deleteInfonode('<%=phone.entityKey%>','phones')" onbeforesave="inlinePatch('Infonode','phones', 'number',phone.entityKey,$data)"> <%=phone.number%> </a> - <a editable-select="phone.type" e-ng-options="s.value as s.text for s in statuses" onbeforesave="inlinePatch('Infonode','phones', 'type',phone.entityKey,$data)"> <%=phone.type%> </a> <a ><img class="ctodeal"  /></a></li>
+                           <li ng-repeat="phone in infonodes.phones"> <a   editoptions editdataattr="deleteInfonode('<%=phone.entityKey%>','phones')" editable-text="phone.number" onbeforesave="inlinePatch('Infonode','phones', 'number',phone.entityKey,$data)"> <%=phone.number%> </a> - <a editable-select="phone.type" e-ng-options="s.value as s.text for s in statuses" onbeforesave="inlinePatch('Infonode','phones', 'type',phone.entityKey,$data)"> <%=phone.type%> </a> <a ><img class="ctodeal"  /></a></li>
 
                              <li>
                                  <a ng-hide="showPhoneForm" ng-click="showPhoneForm=true" class="btn-link addAnotherPhone" ><i class="icon-plus"></i>Add a new Phone</a>
@@ -347,8 +335,10 @@
                                           </div>
                             </li>
                           <li ng-repeat="custom in infonodes.customfields">
-                                    <span editoptions editdataattr="deleteInfonode('<%=custom.entityKey%>','customfields')">
-                                    <%= custom.fields[0].field%>  : <%= custom.fields[0].value%> </span>
+                                    <span editoptions editdataattr="deleteInfonode('<%=custom.entityKey%>','customfields')"   >
+                                    <%= custom.fields[0].field%>  : </span>
+
+                                  <span editable-text="custom.fields[0].value" onbeforesave="inlinePatch('Infonode','customfields', '<%= custom.fields[0].field%>',custom.entityKey,$data)" >   <%= custom.fields[0].value%> </span>
 
                           </li>
                          <li>
@@ -401,12 +391,12 @@
                                     <div class="detailsSection">
                                       <div class="head">
                                         <div class="pic">
-                                            <a href="/#/contact/show/<%= contact.id %>" class="startup-link" title="contact.firstname"><img ng-hide="account.logo_img_id" alt="contact.firstname" class="img-responsive img-thumbnail" src="/static/img/default_company.png" >
+                                            <a href="/#/contacts/show/<%= contact.id %>" class="startup-link" title="contact.firstname"><img ng-hide="account.logo_img_id" alt="contact.firstname" class="img-responsive img-thumbnail" src="/static/img/default_company.png" >
                                             <img ng-show="account.logo_img_id" alt="account.name" class="img-responsive img-thumbnail" ng-src="https://docs.google.com/uc?id=<%= account.logo_img_id %>" data-hasqtip="2">
                                             </a>
                                         </div>
                                         <div class="text">
-                                            <div class="name"><a href="/#/contact/show/<%= contact.id %>" class="profile-link" data-id="126085" data-type="Startup"><%= contact.firstname %> <%= contact.lastname %></a></div>
+                                            <div class="name"><a href="/#/contacts/show/<%= contact.id %>" class="profile-link" data-id="126085" data-type="Startup"><%= contact.firstname %> <%= contact.lastname %></a></div>
                                              <div class="pitch">
                                                 <span  ng-show="contact.account_type">
                                                   <a href="/#/search/type:contact <%=contact.title%>"> #<%= contact.title %></a>
@@ -424,12 +414,12 @@
                                     </div>
                             </div>
                              <!--blank stat-->
-                            <div ng-show="blankStateaccount" data-span="3" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
+                            <div ng-show="blankStatecontact" data-span="3" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
                               <div class="dashboard-stat cards">
                                 <div class="blank_slate_arrow"></div>
                                 <div class="thumbnail blank_slate_body">
-                                    <img class="img-responsive" src="/static/img/accounts_blank.png">
-                                    <p class="lead">{{ _('Accounts  pages includes a detailed page for each customer, partner, or investor in your ecosystem. You and your co-workers can collaborate to get a deep understanding.') }}</p>
+                                    <img class="img-responsive" src="/static/img/contacts_blank.png">
+                                    <p class="lead">{{ _('Each contact gets a page in i/oGrow. You and your co-workers can add notes from calls,conversations, meetings, or any other historic information about this person.') }}</p>
                                 </div>
                               </div>
                             </div>
@@ -448,22 +438,7 @@
                               </div><!--/inner-cards-container-->
                               </div>
                             </div>
-                            <div class="row">
-                             <div class="col-md-12">
-                                <div class="pagination pull-right" ng-hide="isLoading">
 
-
-                                        <button ng-click="ContactlistPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="contactpagination.prev" style="display: none;">
-                                        Prev
-                                        </button>
-                                        <button ng-click="ContactlistNextPageItems()" class="btn" ng-show="contactpagination.next" style="display: none;">
-                                        Next
-                                        </button>
-
-                                    </div>
-                                    <!--h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3-->
-                              </div>
-                              </div>
 
                       </div>
                 <!-- $ needs tab -->
@@ -594,23 +569,7 @@
                               </div>
                               </div>
                             </div>
-                            <div class="row">
-                              <div class="col-md-12">
-                                <div class="pagination pull-right" ng-hide="isLoading">
 
-
-                                        <button ng-click="OppPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="opppagination.prev" style="display: none;">
-                                        Prev
-                                        </button>
-
-                                        <button ng-click="OpplistNextPageItems()" class="btn" ng-show="opppagination.next" style="display: none;">
-                                        Next
-                                        </button>
-
-                                    </div>
-                                    <!--h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3-->
-                              </div>
-                              </div>
 
 
                       </div>
@@ -628,7 +587,9 @@
                             <div class="row">
 
                              <!-- ngRepeat: casee in cases -->
-                      <div  class="col-md-4 responsive" ng-repeat="casee in cases" data-tablet="span6" data-desktop="span4">
+
+                              <!-- ngRepeat: casee in cases -->
+                              <div  class="col-md-4 responsive" ng-repeat="casee in cases" data-tablet="span6" data-desktop="span4">
                                 <div class="dashboard-stat cards-small">
 
                                   <div class="details">
@@ -638,16 +599,16 @@
                                     <div class="desc">
                                     <span class="contact-title" ng-show="casee.status">Status:<a  class="desc" href="/#/search/type:Case <%=casee.status%>"># <%=casee.status%></a></span> <br>
                                     <span ng-show="casee.priority" class="contact-title" >Priority:<a class="desc" href="/#/search/type:Case <%=casee.priority%>">#<%=casee.priority%> </a></span><br>
-                                      <span ng-show="casee.current_status.name" class="contact-title" >Status :<a class="desc" href="/#/search/type:Case <%=casee.type_case%>">#<%=casee.current_status.name%></a>  </span>
+                                      <span ng-show="casee.type_case" class="contact-title" >Labels :<a class="desc" href="/#/search/type:Case <%=casee.type_case%>">#<%=casee.type_case%></a>  </span>
 
                                     </div>
                                   </div>
-                                  <!--a class="more" href="/#/cases/show/<%=casee.id%>">
+                                  <a class="more" href="/#/cases/show/<%=casee.id%>">
                                   View more <i class="m-icon-swapright m-icon-white"></i>
-                                  </a-->
+                                  </a>
                                 </div>
                               </div>
-                      <div ng-show="blankStatecase" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12" style="">
+                              <div ng-show="blankStatecase" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12" style="">
                           <div class="dashboard-stat cards">
 
 
@@ -659,28 +620,12 @@
 
 
                           </div>
-                        </div>
+              </div>
                                 <div class="clearfix"></div>
                               </div>
                               </div>
                             </div>
-                             <div class="row">
-                             <div class="col-md-12">
-                                <div class="pagination pull-right" ng-hide="isLoading">
 
-
-                                        <button ng-click="CasePrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="casepagination.prev" style="display: none;">
-                                        Prev
-                                        </button>
-
-                                        <button ng-click="CaselistNextPageItems()" class="btn" ng-show="casepagination.next" style="display: none;">
-                                        Next
-                                        </button>
-
-                                    </div>
-                                    <!--h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3-->
-                              </div>
-                              </div>
 
                 </div>
                 <!-- $ documents tab -->
@@ -724,7 +669,7 @@
                           <div class="col-md-12">
                             <div class="row">
                              <!-- ngRepeat: attachment in documents -->
-                                   <div class="col-md-12 waterfall2" ng-hide="blankStateaccount">
+                                   <div class="col-md-12 waterfall2" ng-hide="blankStatdocuments">
                                       <div ng-repeat="attachment in documents"  class="cardElement"  >
                                           <div class="detailsSection">
                                             <div class="head">
@@ -762,23 +707,7 @@
                               </div>
 
                             </div>
-                           <div class="row">
-                             <div class="col-md-12">
-                                <div class="pagination pull-right" ng-hide="isLoading">
 
-
-                                        <button ng-click="DocumentPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="documentpagination.prev" style="display: none;">
-                                        Prev
-                                        </button>
-
-                                        <button ng-click="DocumentlistNextPageItems()" class="btn" ng-show="documentpagination.next" style="display: none;">
-                                        Next
-                                        </button>
-
-                                    </div>
-                                    <!--h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3-->
-                              </div>
-                              </div>
                       </div>
                 <!-- $ send email tab -->
                 <div class="tab-pane active" id="tab_1_8" ng-show="selectedTab == 8" style="display: none;">
@@ -953,7 +882,9 @@
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
 
-                <button  type="submit" ng-click="updatAccountHeader(account)" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+
+                <button   ng-click="updatAccountHeader(account)" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+
 
               </div>
                </form>
@@ -969,23 +900,23 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("New Case")}}</h3>
               </div>
               <div class="modal-body">
-                 <form id="addCase" name="addCase"  class="form-horizontal"> 
-                
-                  
-                    
+                 <form id="addCase" name="addCase"  class="form-horizontal">
 
-                    
+
+
+
+
                     <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Name")}} </label>
-                       
+
                         <div class="col-md-9">
                           <input type="text" class="form-control"  id="id_name" ng-model="casee.name">
-                          
+
                         </div>
                     </div>
                     <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Priority")}} </label>
-                       
+
                         <div class="col-md-9">
                            <select class="form-control" ng-model="casee.priority">
                             <option value="1">1 - Low</option>
@@ -999,34 +930,34 @@
                             <option value="9">9</option>
                             <option value="10">10 - Critical</option>
                           </select>
-                          
+
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Status")}}</label>
-                       
+
                         <div class="col-md-9">
                             <select  class="form-control" ng-model="status_selected" ng-options="stat.status for stat in casesatuses" >
                             <option value="">Choose Status</option>
                             <!--option value=""><%=status_selected.status%></option-->
                           </select>
-                          
+
                         </div>
-                      
+
                     </div>
                     <!--div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Labels")}} </label>
-                       
+
                         <div class="col-md-9">
                           <input type="text" class="form-control"  id="id_description" ng-model="casee.type_case">
-                          
+
                         </div>
                     </div-->
-                   
 
-                  
-                
+
+
+
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
@@ -1036,7 +967,7 @@
                </div>
                </div>
           </div>
-               
+
                       <!--HKA 19.11.2013  End Case Modal -->
 
       <!--HKA 11.10.2013 Edit Tagline -->
@@ -1626,7 +1557,7 @@
               <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
                <input  type="submit" class="btn green" value="{{_('Add this event')}}" ng-click="addEvent(ioevent)">
-               
+
 
 
             </div>

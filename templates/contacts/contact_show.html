@@ -12,10 +12,10 @@
       </a>
     </div>
     <h2 class="page-title" >
-      <a href="/#/contacts/" data-toggle="tooltip" id='testEdit' data-placement="bottom" title="Back to Accounts">
+      <a href="/#/contacts/" data-toggle="tooltip" id='testEdit' data-placement="bottom" title="{{ _("Back to Contacts") }}">
         <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="/static/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
       </a>
-      <%=attachment.about.kind%> >
+      {{ _("Contacts") }} >
       <a editable-text="contact.firstname"  onbeforesave="inlinePatch('Contact','', 'firstname',contact.entityKey,$data)">
         <%= contact.firstname %>
       </a>
@@ -35,7 +35,7 @@
   </div>
   <div class="container" ng-show="immediateFailed">
     <div class="col-md-12">
-       
+
       <span id="signin">
         <span id="myGsignin"></span>
       </span>
@@ -121,16 +121,16 @@
                     <a ng-click="waterfall(); selectedTab = 3;">Contacts</a>
                   </li-->
                   <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 7}">
-                    <a ng-click="waterfall();selectedTab = 7;">Attach Documents</a>
+                    <a ng-click="waterfallTrigger();selectedTab = 7;">Attach Documents</a>
                   </li>
                   <!-- <li class="ng-tab md-menu" ng-class="{active: selectedTab == 4}">
                     <a ng-click="selectedTab = 4;">Needs</a>
                   </li> -->
                   <li class="ng-tab md-menu" ng-class="{active: selectedTab == 5}">
-                    <a ng-click="selectedTab = 5;">Opportunities</a>
+                    <a ng-click="waterfallTrigger();selectedTab = 5;">Opportunities</a>
                   </li>
                   <li class="ng-tab md-menu" ng-class="{active: selectedTab == 6}">
-                    <a ng-click="selectedTab = 6;">Cases</a>
+                    <a ng-click="waterfallTrigger();selectedTab = 6;">Cases</a>
                   </li>
                   <li class="dropdown md-menu-inv">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -173,7 +173,7 @@
                         </p>
 
                         <form id="addNote"  class="ng-pristine ng-valid">
-                          <div class="form-group">   
+                          <div class="form-group">
 
                             <input class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="Add a new subject" id="messageSubject" ng-model="note.title">
                           </div>
@@ -205,18 +205,6 @@
                         </div>
                       </li>
                     </ul>
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div class="pagination pull-right">
-                          <button ng-click="TopiclistPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="topicpagination.prev" style="display: none;">
-                            Prev
-                          </button>
-                          <button ng-click="TopiclistNextPageItems()" class="btn" ng-show="topicpagination.next" style="display: none;">
-                            Next
-                          </button>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
                 <!-- $ about tab -->
@@ -353,8 +341,12 @@
                                           </div>
                             </li>
                           <li ng-repeat="custom in infonodes.customfields">
-                                    <span editoptions editdataattr="deleteInfonode('<%=custom.entityKey%>','customfields')">
-                                    <%= custom.fields[0].field%>  : <%= custom.fields[0].value%></span>
+                              <span editoptions editdataattr="deleteInfonode('<%=custom.entityKey%>','customfields')"   >
+                                    <%= custom.fields[0].field%>  : 
+                              </span>
+
+                              <span editable-text="custom.fields[0].value" onbeforesave="inlinePatch('Infonode','customfields', '<%= custom.fields[0].field%>',custom.entityKey,$data)" >   <%= custom.fields[0].value%> 
+                              </span>
 
                           </li>
                           <li>
@@ -455,22 +447,7 @@
                               </div><!--/inner-cards-container-->
                               </div>
                             </div>
-                            <div class="row">
-                             <div class="col-md-12">
-                                <div class="pagination pull-right" ng-hide="isLoading">
 
-
-                                        <button ng-click="ContactlistPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="contactpagination.prev" style="display: none;">
-                                        Prev
-                                        </button>
-                                        <button ng-click="ContactlistNextPageItems()" class="btn" ng-show="contactpagination.next" style="display: none;">
-                                        Next
-                                        </button>
-
-                                    </div>
-                                    <!--h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3-->
-                              </div>
-                              </div>
 
                       </div>
                 <!-- $ needs tab -->
@@ -741,13 +718,13 @@
                           <div class="col-md-12">
                             <div class="row">
                              <!-- ngRepeat: attachment in documents -->
-                                   <div class="col-md-12 waterfall2" ng-hide="blankStateaccount">
-                                      <div ng-repeat="attachment in documents" data-column="<%=getPosition($index)%>" class="cardElement"  ng-class="{rightcards: getPosition($index)==4}">
+                                   <div class="col-md-12 waterfall2" ng-hide="blankStatdocuments">
+                                      <div ng-repeat="attachment in documents"  class="cardElement"  >
                                           <div class="detailsSection">
                                             <div class="head">
                                               <div class="pic">
                                                   <a href="/#/documents/show/<%= attachment.id %>" class="startup-link" title="attachment.title">
-                                                  <img ng-show="account.logo_img_id" alt="account.name" class="google-drive-icon img-responsive img-thumbnail" ng-src="/static/img/google_drive/<%=attachment.mimeType%>.png" >
+                                                  <img  alt="attachment.title" class="google-drive-icon img-responsive img-thumbnail" ng-src="/static/img/google_drive/<%=attachment.mimeType%>.png" >
                                                   </a>
                                               </div>
                                               <div class="text">
@@ -779,23 +756,7 @@
                               </div>
 
                             </div>
-                           <div class="row">
-                             <div class="col-md-12">
-                                <div class="pagination pull-right" ng-hide="isLoading">
 
-
-                                        <button ng-click="DocumentPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="documentpagination.prev" style="display: none;">
-                                        Prev
-                                        </button>
-
-                                        <button ng-click="DocumentlistNextPageItems()" class="btn" ng-show="documentpagination.next" style="display: none;">
-                                        Next
-                                        </button>
-
-                                    </div>
-                                    <!--h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3-->
-                              </div>
-                              </div>
                       </div>
                 <!-- $ send email tab -->
                 <div class="tab-pane active" id="tab_1_8" ng-show="selectedTab == 8" style="display: none;">
@@ -821,7 +782,7 @@
                                              </div>
                                          <div class="pull-right">
 
-                                         
+
                                             <input ng-click="sendEmail(email)" ng-disabled="isLoading" type="submit" class="btn green" value="Send">
 
 
@@ -941,8 +902,9 @@
 
               <div class="modal-body">
 
-                 <form id="editAccount" name="editlead"  class="form-horizontal"> 
-                
+                 <form id="editAccount" name="editlead"  class="form-horizontal">
+
+
 
                   <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("First Name")}} </label>
@@ -1358,8 +1320,9 @@
               </div>
               <div class="modal-body">
 
-                 <form id="addMember" name="addaccount"  class="form-horizontal"> 
-                  
+                 <form id="addMember" name="addaccount"  class="form-horizontal">
+
+
 
                     <p>{{ _("Who has access:") }}</p>
                     <div class="radio-list">
@@ -1475,12 +1438,12 @@
                   </div>
             </div>
             <div class="modal-footer">
-              <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-              
+
                <input ng-hide="isLoading" type="submit" ng-click="addTask(task)" class="btn green" value="Add this task">
-             
-                                        
+
+
+
 
             </form>
             </div>
@@ -1527,7 +1490,7 @@
                   </div>
                  <div class="modal-body">
 
-                     <form id="addOpportunity" name="addOpportunity"  class="form-horizontal"> 
+                     <form id="addOpportunity" name="addOpportunity"  class="form-horizontal">
 
                      <fieldset>
                       <div class="form-group">
@@ -1584,7 +1547,9 @@
               </div>
               <div class="modal-body">
 
-                 <form id="addCase" name="addCase"  class="form-horizontal"> 
+                 <form id="addCase" name="addCase"  class="form-horizontal">
+
+
 
 
                     <div class="form-group">
@@ -1713,12 +1678,9 @@
                   </div>
             </div>
             <div class="modal-footer">
-              <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-              
                <input ng-hide="isLoading" ng-click="addTask(task)" type="submit" class="btn green" value="Add this task">
 
-                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
 
             </form>
             </div>
@@ -1741,9 +1703,7 @@
                      </div>
             </div>
             <div class="modal-footer">
-              <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
 
-              
                <input ng-hide="isLoading"  ng-click="createDocument(newdocument)" type="submit" class="btn green" value="Create this document">
 
                 <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
@@ -1785,7 +1745,6 @@
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-              
                <input ng-hide="isLoading" ng-click="addEvent(ioevent)" type="submit" class="btn green" value="{{_('Add this event')}}">
 
                 <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
@@ -1838,5 +1797,6 @@
               defaultContainerWidth: 840,
               autoresize: true
           });
+
 
 </script>

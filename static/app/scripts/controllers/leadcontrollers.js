@@ -490,7 +490,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                           },
 
                           'documents':{
-                            'limit': '6'
+                            'limit': '15'
                           },
 
                           'tasks':{
@@ -535,42 +535,12 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                           'pageToken':$scope.topicpages[nextPage]
                         }
                      }
-            }else{
-            params = {
-                      'id':$scope.lead.id,
-                        'topics':{
-                          'limit': '7'
-                        }
-                     }
-          }
+            $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ;
+            Lead.get($scope,params);
+            }
 
-          $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ;
-          Lead.get($scope,params);
      }
-     $scope.TopiclistPrevPageItems = function(){
 
-       var prevPage = $scope.topicCurrentPage - 1;
-       var params = {};
-
-          if ($scope.topicpages[prevPage]){
-            params = {
-                      'id':$scope.lead.id,
-                        'topics':{
-                          'limit': '7',
-                          'pageToken':$scope.topicpages[prevPage]
-                        }
-                     }
-          }else{
-            params = {
-                      'id':$scope.lead.id,
-                        'topics':{
-                          'limit': '7'
-                        }
-                     }
-          }
-          $scope.topicCurrentPage = $scope.topicCurrentPage - 1 ;
-          Lead.get($scope,params);
-     }
 
      $scope.listTopics = function(contact){
         var params = {
@@ -747,6 +717,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                 'lastname':lead.lastname,
                 'company':lead.company,
                  'source':lead.source,
+                 'industry':lead.industry,
                  'title' : lead.title,
                 'status':$scope.status_selected.status};
         Lead.patch($scope,params);
@@ -923,12 +894,32 @@ $scope.deletelead = function(){
      Lead.delete($scope,params);
      $('#BeforedeleteLead').modal('hide');
      };
+     $scope.DocumentlistNextPageItems = function(){
 
+
+        var nextPage = $scope.documentCurrentPage + 1;
+        var params = {};
+          if ($scope.documentpages[nextPage]){
+            params = {
+                        'id':$scope.lead.id,
+                        'documents':{
+                          'limit': '15',
+                          'pageToken':$scope.documentpages[nextPage]
+                        }
+                      }
+            $scope.documentCurrentPage = $scope.documentCurrentPage + 1 ;
+
+            Lead.get($scope,params);
+
+          }
+
+
+     }
      $scope.listDocuments = function(){
         var params = {
                         'id':$scope.lead.id,
                         'documents':{
-                          'limit': '6'
+                          'limit': '15'
                         }
                       }
         Lead.get($scope,params);
@@ -1141,8 +1132,44 @@ $scope.deletelead = function(){
 
   };
 
-    // Google+ Authentication
-     Auth.init($scope);
+    $scope.waterfallTrigger= function(){
+
+
+          /* $('.waterfall').hide();
+         $('.waterfall').show();*/
+         $( window ).trigger( "resize" );
+         if($(".chart").parent().width()==0){
+          var leftMargin=210-$(".chart").width();
+                 $(".chart").css( "left",leftMargin/2);
+                 $(".oppStage").css( "left",leftMargin/2-2);
+         }else{
+             var leftMargin=$(".chart").parent().width()-$(".chart").width();
+                 $(".chart").css( "left",leftMargin/2);
+                 $(".oppStage").css( "left",leftMargin/2-2);
+
+         }
+    };
+
+    $scope.listMoreOnScroll = function(){
+      switch ($scope.selectedTab)
+          {
+
+          case 7:
+            $scope.DocumentlistNextPageItems();
+            break;
+          case 1:
+            $scope.TopiclistNextPageItems();
+            break;
+
+          }
+    };
+   // Google+ Authentication
+   Auth.init($scope);
+   $(window).scroll(function() {
+        if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
+            $scope.listMoreOnScroll();
+        }
+    });
 
 }]);
 
@@ -1219,7 +1246,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
           if (arr.indexOf(elem) == -1) {
               var copyOfElement = angular.copy(elem);
               arr.push(copyOfElement);
-              
+
               $scope.initObject(elem);
              switch(infos){
                 case 'phones' :
@@ -1237,10 +1264,10 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
                 break;
                 case 'customfields' :
                    $scope.showCustomFieldForm=false;
-                break; 
+                break;
                 case 'addresses' :
                     $('#addressmodal').modal('hide');
-                
+
                 break;
               }
           }else{
@@ -1248,7 +1275,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
           }
         }
       };
-      
+
       //HKA 01.06.2014 Delete the infonode on DOM
       $scope.deleteInfos = function(arr,index){
           arr.splice(index, 1);
@@ -1371,6 +1398,8 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
                         'introduction':lead.introduction,
                         'phones':$scope.phones,
                         'emails':$scope.emails,
+                        'industry':lead.industry,
+                        'source':lead.source,
                         'infonodes':$scope.prepareInfonodes(),
                         'access': 'public'
                       };

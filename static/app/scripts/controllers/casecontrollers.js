@@ -50,15 +50,15 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
             Casestatus.list($scope,{});
             var paramsTag = {'about_kind':'Case'};
             Tag.list($scope,paramsTag);
-            // for (var i=0;i<100;i++)
-            // {
-            //     var casee = {
-            //               'name':  i.toString() + ' kass ta3 lban',
-            //               'access':'public'
-            //             }
-            //     $scope.searchAccountQuery = 'dja3fer company'
-            //     $scope.save(casee);
-            // }
+              // for (var i=0;i<100;i++)
+              // {
+              //     var casee = {
+              //               'name':  i.toString() + ' Sync with Microsoft',
+              //               'access':'public',
+              //               'account': 'ahNkZXZ-Z2NkYzIwMTMtaW9ncm93chQLEgdBY2NvdW50GICAgICAgIgKDA'
+              //             }
+              //     Case.insert($scope,casee);
+              // }
        };
 
       $scope.getPosition= function(index){
@@ -140,7 +140,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
               casee.contact_name = casee.contact.firstname + ' '+ casee.contact.lastname ;
               casee.contact = casee.contact.entityKey;
           }
-       
+
           Case.insert($scope,casee);
 
         }else if($scope.searchAccountQuery.length>0){
@@ -550,7 +550,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
                           },
 
                           'documents':{
-                            'limit': '6'
+                            'limit': '15'
                           },
 
                           'tasks':{
@@ -589,41 +589,10 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
                           'pageToken':$scope.topicpages[nextPage]
                         }
                      }
-            }else{
-            params = {
-                      'id':$scope.casee.id,
-                        'topics':{
-                          'limit': '7'
-                        }
-                     }
-          }
+            $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ;
+            Case.get($scope,params);
+            }
 
-          $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ;
-          Case.get($scope,params);
-     }
-     $scope.TopiclistPrevPageItems = function(){
-
-       var prevPage = $scope.topicCurrentPage - 1;
-       var params = {};
-
-          if ($scope.topicpages[prevPage]){
-            params = {
-                      'id':$scope.casee.id,
-                        'topics':{
-                          'limit': '7',
-                          'pageToken':$scope.topicpages[prevPage]
-                        }
-                     }
-          }else{
-            params = {
-                      'id':$scope.casee.id,
-                        'topics':{
-                          'limit': '7'
-                        }
-                     }
-          }
-          $scope.topicCurrentPage = $scope.topicCurrentPage - 1 ;
-          Case.get($scope,params);
 
      }
 
@@ -867,55 +836,24 @@ $scope.deletecase = function(){
             params = {
                         'id':$scope.casee.id,
                         'documents':{
-                          'limit': '6',
+                          'limit': '15',
                           'pageToken':$scope.documentpages[nextPage]
                         }
                       }
+            $scope.documentCurrentPage = $scope.documentCurrentPage + 1 ;
 
-          }else{
-            params = {
-                        'id':$scope.casee.id,
-                        'documents':{
-                          'limit': '6'
-                        }
-                      }
-            }
-          $scope.documentCurrentPage = $scope.documentCurrentPage + 1 ;
+            Case.get($scope,params);
 
-          Case.get($scope,params);
+          }
+
 
      }
-     $scope.DocumentPrevPageItems = function(){
 
-       var prevPage = $scope.documentCurrentPage - 1;
-       var params = {};
-          if ($scope.documentpages[prevPage]){
-            params = {
-                        'id':$scope.casee.id,
-                        'documents':{
-                          'limit': '6',
-                          'pageToken':$scope.documentpages[prevPage]
-                        }
-                      }
-
-          }else{
-            params = {
-                        'id':$scope.casee.id,
-                        'documents':{
-                          'limit': '6'
-                        }
-                      }
-          }
-          $scope.documentCurrentPage = $scope.documentCurrentPage - 1 ;
-          Case.get($scope,params);
-
-
-     };
      $scope.listDocuments = function(){
         var params = {
                         'id':$scope.casee.id,
                         'documents':{
-                          'limit': '6'
+                          'limit': '15'
                         }
                       }
         Case.get($scope,params);
@@ -1073,14 +1011,48 @@ $scope.listInfonodes = function(kind) {
              name:value}
          Case.patch($scope,params);}
        };
-  // HKA 26.05.2014 return URL topic     
+  // HKA 26.05.2014 return URL topic
   $scope.getTopicUrl = function(type,id){
       return Topic.getUrl(type,id);
     };
+    $scope.waterfallTrigger= function(){
 
-     // Google+ Authentication
-     Auth.init($scope);
 
+          /* $('.waterfall').hide();
+         $('.waterfall').show();*/
+         $( window ).trigger( "resize" );
+         if($(".chart").parent().width()==0){
+          var leftMargin=210-$(".chart").width();
+                 $(".chart").css( "left",leftMargin/2);
+                 $(".oppStage").css( "left",leftMargin/2-2);
+         }else{
+             var leftMargin=$(".chart").parent().width()-$(".chart").width();
+                 $(".chart").css( "left",leftMargin/2);
+                 $(".oppStage").css( "left",leftMargin/2-2);
+
+         }
+    };
+
+     $scope.listMoreOnScroll = function(){
+       switch ($scope.selectedTab)
+           {
+
+           case 7:
+             $scope.DocumentlistNextPageItems();
+             break;
+           case 1:
+             $scope.TopiclistNextPageItems();
+             break;
+
+           }
+     };
+    // Google+ Authentication
+    Auth.init($scope);
+    $(window).scroll(function() {
+         if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
+             $scope.listMoreOnScroll();
+         }
+     });
 }]);
 
 app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','Contact',
@@ -1225,7 +1197,7 @@ app.controller('CaseNewCtrl', ['$scope','Auth','Casestatus','Case', 'Account','C
         var hasContact = false;
         var hasAccount = false;
         casee.status = $scope.status_selected.entityKey;
-       
+
         if (typeof(casee.account)=='object'){
             hasAccount = true;
             casee.account = casee.account.entityKey;

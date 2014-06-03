@@ -32,7 +32,7 @@
   </div>
   <div class="container" ng-show="immediateFailed">
     <div class="col-md-12">
-       
+
       <span id="signin">
         <span id="myGsignin"></span>
       </span>
@@ -346,9 +346,13 @@
                             </div>
                           </li>
                           <li ng-repeat="custom in infonodes.customfields">
-                                    <span>
-                                    <%= custom.fields[0].field%>  : <%= custom.fields[0].value%> </span>
+                            <span editoptions editdataattr="deleteInfonode('<%=custom.entityKey%>','customfields')"   >
+                                    <%= custom.fields[0].field%>  : 
+                              </span>
 
+                              <span editable-text="custom.fields[0].value" onbeforesave="inlinePatch('Infonode','customfields', '<%= custom.fields[0].field%>',custom.entityKey,$data)" >   <%= custom.fields[0].value%> 
+                              </span>
+                                    
                           </li>
                           <li>
                             <a ng-click="showCustomFieldForm=true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal">
@@ -430,7 +434,7 @@
                                                   <div class="head">
                                                     <div class="pic">
                                                         <a href="/#/documents/show/<%= attachment.id %>" class="startup-link" title="attachment.title">
-                                                        <img ng-show="account.logo_img_id" alt="account.name" class="google-drive-icon img-responsive img-thumbnail" ng-src="/static/img/google_drive/<%=attachment.mimeType%>.png" >
+                                                        <img  alt="attachment.title" class="google-drive-icon img-responsive img-thumbnail" ng-src="/static/img/google_drive/<%=attachment.mimeType%>.png" >
                                                         </a>
                                                     </div>
                                                     <div class="text">
@@ -462,23 +466,7 @@
                                     </div>
 
                                   </div>
-                                 <div class="row">
-                                   <div class="col-md-12">
-                                      <div class="pagination pull-right" ng-hide="isLoading">
 
-
-                                              <button ng-click="DocumentPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="documentpagination.prev" style="display: none;">
-                                              Prev
-                                              </button>
-
-                                              <button ng-click="DocumentlistNextPageItems()" class="btn" ng-show="documentpagination.next" style="display: none;">
-                                              Next
-                                              </button>
-
-                                          </div>
-                                          <!--h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3-->
-                                    </div>
-                                    </div>
                             </div>
                 <div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 8">
 
@@ -1064,23 +1052,23 @@
               </div>
 
               <div class="modal-body">
-                 <form id="editAccount" name="editlead"  class="form-horizontal"> 
-                
+                 <form id="editAccount" name="editlead"  class="form-horizontal">
+
 
                   <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Name")}} </label>
-                       
+
                         <div class="col-md-9">
                           <input type="text"  class="form-control" required id="id_name" ng-model="opportunity.name">
-                          
+
                         </div>
                     </div>
                   <!--div class="form-group">
                         <label  class="required col-md-3 control-label">{{_( "Amount")}} </label>
-                       
+
                         <div class="col-md-9">
                           <input type="text" class="form-control"  id="id_amount" ng-model="opportunity.amount">
-                          
+
                         </div>
                     </div>
                     <div class="form-group">
@@ -1089,13 +1077,13 @@
                         <div class="col-md-9">
                           <select ng-model="stage_selected" ng-options="opps.name + ' - ( ' + opps.probability + '% )' for opps in opportunitystages | orderBy: 'name':true" class="form-control" >
                             <option value=""><%=opportunity.stagename%> </option>
-                            
+
 
                           </select>
-                         
-                        </div>                          
-                    </div-->               
-                
+
+                        </div>
+                    </div-->
+
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
