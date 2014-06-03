@@ -233,8 +233,10 @@ $(window).scroll(function(){
       $(".subHeader").addClass("header-bottom-shadow");
    if (y > 48) {
         $(".afterScrollBtn").removeClass("hidden");
+         $(".newAccountBtnOnscroll").fadeIn( "slow" );
    }else{
        $(".afterScrollBtn").addClass("hidden");
+       $(".newAccountBtnOnscroll").hide();
    }
       /*$(".fixed-labelsCard").addClass("labelsCardScroll");*/
       /*$(".page-sidebar-wrapper").addClass("sidebar-left-shadow");*/
