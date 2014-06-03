@@ -5,17 +5,15 @@
     </h2>
   </div>
   <div class=" subHeaderContent">
-    <div class="pull-right sharebuttonDiv">
-      <button class="btn red jfk-button jfk-button-action" ng-click="save(lead)">
-        Create
-      </button>
-    </div>
+    <div class="col-md-9">
     <h2 class="page-title">
       <a href="/#/leads" data-toggle="tooltip" data-placement="bottom" title="Back to Leads">
         <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Leads")}} <i class="fa  fa-angle-right"></i> <a editable-text="lead.firstname" onbeforesave="inlinePatch('Lead','', 'firstname',lead.entityKey,$data)"> <%= lead.firstname %>  </a> <a editable-text="lead.lastname"
         onbeforesave="inlinePatch('Lead','', 'lastname',lead.entityKey,$data)" > <%= lead.lastname %>
       </a>
     </h2>
+    <button class="btn red newAccountBtnOnscroll pull-right hidden" ng-click="save(casee)">Create</button>
+  </div>
   </div>
 </div>
 <div  class="page-content">
@@ -35,7 +33,14 @@
     </div>
   </div>
   <div class="row" >
-    <div class="showPage slimForm col-md-9">
+  <div class="col-md-9">
+      <div class="row">
+          <div class="showPage col-md-12 newActionsBtn">
+          <span>Creating now Account </span>
+          <button class="btn red newAccountBtn pull-right" ng-click="save(casee)">Create</button>
+          <div class="clearfix"></div>
+        </div>
+    <div class="showPage slimForm col-md-12">
       <div class="row">
         <div class="col-md-12">
           <div class="row">
@@ -344,6 +349,8 @@
             </div>
           </div>
         </div>
+        </div>
+    </div>
       </div>
     </div>
     <div class="col-md-3 ">
