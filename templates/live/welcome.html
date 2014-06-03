@@ -18,6 +18,10 @@
         <link href="/static/welcome/css/linecons.css" rel="stylesheet">
         <link href="/static/welcome/css/social-icons.css" rel="stylesheet">
         <link href="/static/welcome/css/font-awesome.min.css" rel="stylesheet">
+        <link href="/static/welcome/css/lightbox.css" rel="stylesheet" />
+        <link rel='stylesheet' href="/static/welcome/css/typicons.min.css" />
+
+
         <!-- Web Fonts -->
         <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic' rel='stylesheet' type='text/css'>
         
@@ -28,6 +32,182 @@
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
         <script src="/static/welcome/js/modernizr.custom.js"></script>
+        <script src="/static/welcome/js/jquery-1.11.0.min.js"></script>
+        <script src="/static/welcome/js/lightbox.min.js"></script>
+
+         <script type="text/javascript">
+      (function() {
+       var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+       po.src = 'https://apis.google.com/js/client:plusone.js';
+       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+     })();
+    </script>
+
+    <!-- Place this asynchronous JavaScript just before your </body> tag -->
+  <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+  <script type="text/javascript">
+  (function() {
+    var po = document.createElement('script');
+    po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/client:plusone.js?onload=render';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(po, s);
+  })();
+
+  function render() {
+    gapi.signin.render('customBtn', {
+      'callback': 'signinCallback',
+      'clientid': '987765099891.apps.googleusercontent.com',
+      'cookiepolicy': 'single_host_origin',
+      'requestvisibleactions': 'http://schemas.google.com/AddActivity',
+      'scope': 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email'
+    });
+
+
+  }
+
+  function signinCallback(){
+
+       gapi.client.load('plus','v1', function(){
+         var request = gapi.client.plus.people.get({
+           'userId': 'me'
+         });
+         request.execute(function(resp) {
+           email = resp.emails[0].value;
+           image = resp['image']['url']
+           name = resp.displayName;
+
+           // add to keen io
+
+           var trackSubscribers = function () {
+                    
+                    var subscriber = {
+                        item: email,
+                        name: name,
+                        image:image,
+                        keen: {
+                                timestamp: new Date()
+                            }
+                    };
+
+                    Keen.addEvent("subscribers", subscriber);
+                };
+
+                if (email != "")
+                {
+                    trackSubscribers();
+                    console.log("added to the list");
+                }
+
+         });
+        });
+        
+        
+    }
+  </script>
+
+<script type="text/javascript">
+  // Specify the language code prior to loading the JavaScript API
+  window.___gcfg = {
+    lang: 'en'
+  };
+
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/client:plusone.js?onload=onLoadCallback';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script>
+
+  <style type="text/css">
+    #customBtn {
+      display: inline-block;
+      background: #dd4b39;
+      color: white;
+      width: 140px;
+      border-radius: 5px;
+      white-space: nowrap;
+    }
+    #customBtn:hover {
+      background: #e74b37;
+      cursor: hand;
+    }
+    #customBtn:active {
+      /* Pop */
+@-webkit-keyframes pop {
+  50% {
+    -webkit-transform: scale(1.2);
+    transform: scale(1.2);
+  }
+
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
+@keyframes pop {
+  50% {
+    -webkit-transform: scale(1.2);
+    transform: scale(1.2);
+  }
+
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
+.pop {
+  display: inline-block;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+}
+.pop:hover, .pop:focus, .pop:active {
+  -webkit-animation-name: pop;
+  animation-name: pop;
+  -webkit-animation-duration: 0.3s;
+  animation-duration: 0.3s;
+  -webkit-animation-timing-function: linear;
+  animation-timing-function: linear;
+  -webkit-animation-iteration-count: 1;
+  animation-iteration-count: 1;
+}
+}
+    span.label {
+      font-weight: bold;
+    }
+    span.icon {
+      background: url('/static/welcome/img/btn_red_32.png') transparent 5px 50% no-repeat;
+      display: inline-block;
+      vertical-align: middle;
+      width: 35px;
+      height: 35px;
+      border-right: #bb3f30 1px solid;
+    }
+    span.buttonText {
+      display: inline-block;
+      vertical-align: middle;
+      padding-left:15px;
+      padding-right: 35px;
+      font-size: 14px;
+      letter-spacing: normal !important;
+      text-transform: none !important;
+      font-weight: bolder;
+      /* Use the Roboto font that is loaded in the <head> */
+      font-family: 'Roboto',arial,sans-serif;
+    }
+  </style>
+  <!-- In the callback, you would hide the gSignInWrapper element on a
+  successful sign in -->
+  <div id="gSignInWrapper">
+    <span class="label">Sign in with:</span>
+    <div id="customBtn" class="customGPlusSignIn">
+      <span class="icon .buzz-out"></span>
+      <span class="buttonText">Subscribe></span>
+    </div>
+  </div>
 
         <script type="text/javascript">
             var Keen=Keen||{configure:function(e){this._cf=e},addEvent:function(e,t,n,i){this._eq=this._eq||[],this._eq.push([e,t,n,i])},setGlobalProperties:function(e){this._gp=e},onChartsReady:function(e){this._ocrq=this._ocrq||[],this._ocrq.push(e)}};(function(){var e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src=("https:"==document.location.protocol?"https://":"http://")+"dc8na2hxrj29i.cloudfront.net/code/keen-2.1.0-min.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})();
@@ -69,9 +249,26 @@
                     <ul class="nav navbar-nav navbar-right">
                         <!-- <li class="dropdown"><a href="#signin" data-toggle="modal" data-target=".bs-modal-sm"><i class="fa fa-lock"></i> Sign In</a></li> -->
                         <div class="navbar-form pull-left">
-                            <div class="form-inline">
-                            <input id="email" type="text" class="form-control" placeholder="Your email">
-                            <button id="subscribe" class="btn btn-theme" type="button">Subscribe</button>
+                           
+                           <div id="gSignInWrapper">
+    <span class="label">Sign in with:</span>
+    <div id="customBtn" class="customGPlusSignIn buzz-out customBtn">
+      <span class="icon"></span>
+      <span class="buttonText">Subscribe</span>
+    </div>
+    <!-- div#customBtn.customGPlusSignIn.buzz-out -->
+  </div>
+                        <!-- <span id="signinButton">
+                     <span
+                            class="g-signin"
+                            data-callback="signinCallback"
+                            data-clientid="987765099891.apps.googleusercontent.com"
+                            data-cookiepolicy="single_host_origin"
+                            data-requestvisibleactions="http://schemas.google.com/AddActivity"
+                            data-scope="https://www.googleapis.com/auth/plus.login">
+                    </span> 
+                        </span> -->
+                                                
                         </div>
                     </ul>
                 </div><!--/nav-collapse -->
@@ -237,25 +434,28 @@
                 <div class="row text-center">
                     
                     <div class="col-lg-3">
-                        <img src="/static/welcome/img/customers.png" style="margin-top: -28px;margin-bottom: -23px;">
+
+                        <span class="typcn typcn-group-outline"><span>
                         <h3>Increase customer base</h3>
                         <p>Grow your business, by capturing leads and contacts from Twitter, Linkedin, Gmail, and stay informed with their needs.<a href="http://iogrow.nerdroid.com/"> </a></p>
                     </div>
                     <div class="col-lg-3">
-                        <img src="/static/welcome/img/easy.png" style="margin-top: -28px;margin-bottom: -23px;">
+
+                        <span class="typcn typcn-star-outline"><span>
                         <h3>Easy to Use</h3>
                         <p>There is no learning curve to follow, we simplify the experience for you, so you can focus on what matters, Your Customers.</p>
                     </div>
                     <div class="col-lg-3">
-                        <img src="/static/welcome/img/scalable.png" style="margin-top: -28px;margin-bottom: -23px;">
+                        <span class="typcn typcn-lock-closed-outline"><span>
+
                         <h3>Secure & scalable</h3>
-                        <p>We willl never let you down. Our core solution is built on top of Google applications engine, secured, scalable infrastracture.</p>
+                        <p>Our core solution is built on top of the same secured, scalable and powerful infrastracture that powers Google Search.</p>
                     </div>
                     <div class="col-lg-3">
-                        <img src="/static/welcome/img/cloud.png" style="margin-top: -28px;margin-bottom: -23px;">
+                        <span class="typcn typcn-weather-cloudy"><span>
 
                         <h3>CRM on Google Apps</h3>
-                        <p>We are fully integrated with Google Apps, from Calendar, Drive, Docs and Gmail. Boost your growth using the tools you already know and love.</p>
+                        <p>We are fully integrated with Google Apps, from Calendar, Drive to Gmail. Boost your growth using the tools you already know and love.</p>
                     </div>
                 </div>
                 <br>
@@ -268,12 +468,20 @@
         <div id="featureswrap">
             <div class="container">
                 <div class="row">
-                    <h2 class="text-center">Features</h2>
+                    <h2 class="text-center">Capture Leads</h2>
                     <hr>
                     <br>
                     <br>
                     <div class="col-lg-6">
-                        <img class="img-responsive" src="/static/welcome/img/mobile.png" alt="">
+                        
+
+<a href="/static/welcome/img/mark_as_lead.gif" data-lightbox="image-1" data-title="My caption"><img class="img-responsive" src="/static/welcome/img/mark_as_lead.png" alt="" style="
+    width: 350px;
+    /* border: 2px #333 !important; */
+    border: 1px solid rgb(207, 201, 201);
+    padding: 3px;
+    -webkit-box-shadow: 4px 9px 16px -4px rgba(163,160,163,1); -moz-box-shadow: 4px 9px 16px -4px rgba(163,160,163,1); box-shadow: 4px 9px 16px -4px rgba(163,160,163,1);
+"> </a>
                     </div>
                     
                     <div class="col-lg-6">
@@ -282,83 +490,120 @@
                         <div class="accordion ac" id="accordion2">
                             <div class="accordion-group active">
                                 <div class="accordion-heading">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-                                    <i class="fa fa-cloud"></i> Collaborate in the cloud
+                                    <i class=""></i> 
                                     </a>
                                 </div><!-- /accordion-heading -->
                                 <div id="collapseOne" class="accordion-body collapse in">
                                     <div class="accordion-inner">
-                                    <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                                    <p style="width: 400px;">If you are looking to build a potential lead base, it's not just a matter of adding them manually, you can do better!
+                                     <br>
+                                     Use the free Google Chrome extension that allows you to add leads right from Linkedin, Twitter and Gmail automatically using one click. Keep the experience you know and connect with the people you need.</p>
                                     </div><!-- /accordion-inner -->
                                 </div><!-- /collapse -->
                             </div><!-- /accordion-group -->
-                            <br>
-
-                            <div class="accordion-group">
-                                <div class="accordion-heading">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-                                    <i class="fa fa-mail-forward"></i> Get started fast
-                                    </a>
-                                </div>
-                                <div id="collapseTwo" class="accordion-body collapse">
-                                    <div class="accordion-inner">
-                                    <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-                                    </div><!-- /accordion-inner -->
-                                </div><!-- /collapse -->
-                            </div><!-- /accordion-group -->
-                            <br>
-
-                            <div class="accordion-group">
-                                <div class="accordion-heading">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-                                    <i class="fa fa-bar-chart-o"></i> Deliver real time insights
-                                    </a>
-                                </div>
-                                <div id="collapseThree" class="accordion-body collapse">
-                                    <div class="accordion-inner">
-                                    <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-                                    </div><!-- /accordion-inner -->
-                                </div><!-- /collapse -->
-                            </div><!-- /accordion-group -->
-                            <br>
                             
-                            <div class="accordion-group">
-                                <div class="accordion-heading">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
-                                    <i class="fa fa-dashboard"></i> Automate business processes
-                                    </a>
-                                </div>
-                                <div id="collapseFour" class="accordion-body collapse">
-                                    <div class="accordion-inner">
-                                    <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-                                    </div><!-- /accordion-inner -->
-                                </div><!-- /collapse -->
-                            </div><!-- /accordion-group -->
                             <br>            
                         </div><!-- /accordion -->
                     </div>
                 </div><!-- /row -->
-                <br><br><br>
+                <br><br>
                 <div class="row">
-                    <h2 class="text-center">Multi Useful Components</h2>
+                    <h2 class="text-center">Instant Access</h2>
                     <hr><br><br>
                     <div class="col-lg-6">
                         <br><br>
-                        <h4><i class="fa fa-cogs"></i> Create customized business apps</h4>
-                        <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                        <h4><i class=" "></i>  </h4>
+                        <p style="width: 422px;margin-left: 120px;">When you are on a call with a customer, you can instantly access his profile for a detailed look at his information and your common interactions such as notes, tasks, opportunities, and cases.
+                        <br>
+                        So you can make each conversation more personal and productive.  
+                        </p>
                         <br><br>
                     </div>
 
                     <div class="col-lg-6">
-                        <img class="img-responsive" src="/static/welcome/img/tablet.png" alt="">
+                        <a href="/static/welcome/img/asus.gif" data-lightbox="image-1" data-title="My caption"><img class="img-responsive" src="/static/welcome/img/asus.gif" alt="" style="
+    width: 430px;
+    /* border: 2px #333 !important; */
+    border: 1px solid rgb(207, 201, 201);
+    padding: 3px;
+    -webkit-box-shadow: 4px 9px 16px -4px rgba(163,160,163,1); -moz-box-shadow: 4px 9px 16px -4px rgba(163,160,163,1); box-shadow: 4px 9px 16px -4px rgba(163,160,163,1);
+"> </a>
                     </div>
+
+                </div>
+                
+<div class="row">
+                    <h2 class="text-center">Clear & Concise</h2>
+                    <hr>
+                    <br>
+                    <br>
+                    <div class="col-lg-6">
+                        
+
+<a href="/static/welcome/img/asus.gif" data-lightbox="image-1" data-title="My caption"><img class="img-responsive" src="/static/welcome/img/asus.gif" alt="" style="
+    width: 430px;
+    /* border: 2px #333 !important; */
+    border: 1px solid rgb(207, 201, 201);
+    padding: 3px;
+    -webkit-box-shadow: 4px 9px 16px -4px rgba(163,160,163,1); -moz-box-shadow: 4px 9px 16px -4px rgba(163,160,163,1); box-shadow: 4px 9px 16px -4px rgba(163,160,163,1);
+"> </a>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <br>
+                        <!-- Accordion -->
+                        <div class="accordion ac" id="accordion2">
+                            <div class="accordion-group active">
+                                <div class="accordion-heading">
+                                    <i class=" "></i>  
+                                    </a>
+                                </div><!-- /accordion-heading -->
+                                <div id="collapseOne" class="accordion-body collapse in">
+                                    <div class="accordion-inner">
+                                    <p style="width: 400px;"> You don’t need a CRM that fights you, you need a CRM that just works!
+                                    <br>
+                                    We’ve cut the clutter out to provide a clean, fast easy to use CRM without unnecessary complexities.
+                                    Organize all of your company’s contacts, opportunities, leads, tasks and more, and share them with the appropriate teams without redundancy and confusion.</p>
+                                    </div><!-- /accordion-inner -->
+                                </div><!-- /collapse -->
+                            </div><!-- /accordion-group -->
+                            
+                            <br> 
+
+                        </div><!-- /accordion -->
+
+                    </div>
+                </div><!-- /row -->
+                <div class="row">
+                    <h2 class="text-center">Everything neatly in one place</h2>
+                    <hr><br><br>
+                    <div class="col-lg-6">
+                        <br><br>
+                        <p style="width: 422px;margin-left: 120px;">Stop wasting time struggling with spreadsheets, forms, or emails and start focusing on growing your business.
+<br>
+A clean, simple interface that collect all your customer's data, can dramatically saves you time and increase your sales productivity.
+                        </p>
+                        <br><br>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <a href="/static/welcome/img/asus.gif" data-lightbox="image-1" data-title="My caption"><img class="img-responsive" src="/static/welcome/img/mark_as_lead.png" alt="" style="
+    width: 430px;
+    /* border: 2px #333 !important; */
+    border: 1px solid rgb(207, 201, 201);
+    padding: 3px;
+    -webkit-box-shadow: 4px 9px 16px -4px rgba(163,160,163,1); -moz-box-shadow: 4px 9px 16px -4px rgba(163,160,163,1); box-shadow: 4px 9px 16px -4px rgba(163,160,163,1);
+"> </a>
+                    </div>
+
                 </div>
                 <br>
-                <br>
-                <br>
+
             </div><!-- /container -->
         </div><!-- /featureswrap -->
 
+
+        
 
         <!-- Divider 1 Section -->
         <div id="divider01">
@@ -593,7 +838,9 @@
                         <br>
                         <p>Subscribe to our newsletter and be the first to know our latest updates.</p>
                         <div class="form-inline">
-                            <input id="email" type="text" class="form-control" placeholder="Your email">
+                            <input id="email" type="text" class="form-control" placeholder="Your email" style="
+    width: 260px;
+">
                             <button id="subscribe" class="btn btn-theme" type="button">Subscribe</button>
                         </div>
                     </div>
@@ -629,43 +876,5 @@
             })
         </script>
 
-        <script type="text/javascript">
-            $("#subscribe").click(function(){
-                var email = $("#email").val();
-                var trackClick = function () {
-                    
-                    var subscriber = {
-                        item: email,
-                        keen: {
-                                timestamp: new Date()
-                            }
-                    };
-
-                    Keen.addEvent("subscribers", subscriber);
-                };
-
-                if (email != "")
-                {
-                    trackClick();
-                    $("#subscribe").text('Done!');
-                    $("#email").val("");
-                }
-              
-            });
-
-            // metric chart
-
-                Keen.onChartsReady(function() {
-                var metric = new Keen.Metric("subscribers", {
-                    analysisType: "count",
-                    timeframe: "today",
-                    targetProperty: "item.item"
-                });
-
-                metric.draw(document.getElementById("draw-chart"), {
-                    label: "Subscribers for Previous 7 Days"
-                });
-            });
-        </script>
     </body>
 </html>

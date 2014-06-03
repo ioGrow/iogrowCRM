@@ -19,9 +19,13 @@
   </h2>
 </div>
   <div class=" subHeaderContent">
+  <div class="col-md-9">
                   <h2 class="page-title">
             <a href="/#/accounts" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
             <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Accounts")}} > <%= account.name %>  </h2>
+            <button class="btn red newAccountBtnOnscroll pull-right hidden" ng-click="save(account)">Create</button>
+  </div>
+   
   </div>
 </div>
 <div  class="page-content">
@@ -49,7 +53,7 @@
   <div class="col-md-9">
     <div class="row">
         <div class="showPage col-md-12 newActionsBtn">
-          <span>Creating now Account bla bla bla</span>
+          <span>Creating now Account </span>
           <button class="btn red newAccountBtn pull-right" ng-click="save(account)">Create</button>
           <div class="clearfix"></div>
         </div>
@@ -293,14 +297,6 @@
                           </div>
 
                         </div>
-                        <div class="col-md-12">
-                        <div class="pull-right margin-bottom-15">
-
-                                <button class="btn red jfk-button jfk-button-action" ng-click="save(account)">
-                                  Create
-                                </button>
-                          </div>
-                      </div>
             </div>
        </div> 
            </div>
@@ -311,7 +307,68 @@
                   <div class="row">
                     <div class="col-md-12">
                       <!-- BEGIN PORTLET-->
-                      <div class="portlet showPage">
+                      <div class="portlet showPage rightCardContent">
+                        <div class="portlet-title line">
+                          <div class="caption"><i class="fa fa-lock"></i>Who is involved?</div>
+
+                        </div>
+                        <div class="portlet-body" id="chats">
+                          <form class=" slimForm ng-pristine ng-invalid ng-invalid-required">
+                                        <div class="row">
+                                          <div class="col-md-6 firstNameLeft">
+                                              <input type="text" id="firstName" class="form-control" placeholder="First Name">
+                                          </div>
+                                          <!--/span-->
+                                          <div class="col-md-6 lastNameRight">
+                                              <input type="text" id="lastName" class="form-control" placeholder="Last Name">
+                                          </div>
+                                          <!--/span-->
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                  <div class="input-icon margin-top-10">
+                                                  <i class="fa fa-briefcase"></i>
+                                                  <input type="text" class="form-control" placeholder="Title">
+                                                </div>
+                                            </div>
+                                        </div>   
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                  <div class="input-icon  margin-top-10">
+                                        <i class="fa fa-envelope"></i>
+                                        <input type="text" class="form-control" placeholder="Email">
+                                      </div>
+                                            </div>
+                                        </div>   
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                  <div class="input-icon  margin-top-10">
+                                        <i class="fa fa-phone"></i>
+                                        <input type="text" class="form-control" placeholder="Phone">
+                                      </div>
+                                            </div>
+                                        </div>
+                                         <div class="row">
+                                            <div class="col-md-12">
+                                                  <div class="input-icon  margin-top-10">
+                                        <i class="fa fa-map-marker"></i>
+                                        <input type="text" class="form-control" placeholder="Address">
+                                      </div>
+                                            </div>
+                                        </div>   
+                                        <div class="row">
+                                            <div class="col-md-12 margin-top-10">
+
+                                                 <button type="button" class="btn blue btn-sm pull-right"><i class="fa fa-user"></i>&nbsp;Add</button>
+                                            </div>
+                                        </div>      
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                     <div class="col-md-12">
+                      <!-- BEGIN PORTLET-->
+                      <div class="portlet showPage rightCardContent">
                         <div class="portlet-title line">
                           <div class="caption"><i class="fa fa-lock"></i>Who can access ?</div>
 
