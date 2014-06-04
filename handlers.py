@@ -655,13 +655,6 @@ class SyncCalendarEvent(webapp2.RequestHandler):
             created_event = service.events().insert(calendarId='primary',body=params).execute()
         except:
             raise endpoints.UnauthorizedException('Invalid grant' )
-class startus(webapp2.RequestHandler):
-    def post(self):
-        user = self.request.get('user')
-        credentials=user.google_credentials
-        http = credentials.authorize(httplib2.Http())
-        service=build('prediction','v1.6',http=http)
-        result=service.trainedmodels().predict(project='987765099891',id='7',body={'input':{'csvInstance':['Sofware Engineer','Purchase List']}}).execute()
 
 
 
@@ -672,7 +665,7 @@ routes = [
     ('/workers/syncevent',SyncCalendarEvent),
     ('/workers/createcontactsgroup',CreateContactsGroup),
     ('/workers/sync_contacts',SyncContact),
-    ('/workers/startus',startus),
+    
     ('/',IndexHandler),
 
     # Templates Views Routes
