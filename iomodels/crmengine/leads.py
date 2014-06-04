@@ -415,6 +415,8 @@ class Lead(EndpointsModel):
 
     @classmethod
     def insert(cls,user_from_email,request):
+        print '***'
+        print request
         folder_name = request.firstname + ' ' + request.lastname
         lead = cls(
                     firstname = request.firstname,
