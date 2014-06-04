@@ -587,7 +587,6 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
 
             return parseInt(percent);
        };
-
        $scope.getPosition= function(index){
         if(index<4){
 
@@ -1683,9 +1682,13 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
       $scope.websites=[];
       $scope.sociallinks=[];
       $scope.customfields=[];
+      $scope.newContactform=false;
       $scope.account.account_type = 'Customer';
       $scope.account.industry = 'Technology';
-      $scope.phone = {}
+      $scope.phone = {};
+      $scope.contact = {};
+      $scope.currentContact = {};
+      $scope.account.contacts = [];
       $scope.phone.type= 'work';
 
             $scope.logo = {
@@ -1737,6 +1740,7 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
       }
       $scope.runTheProcess = function(){
             /*Account.list($scope,{});*/
+            
        };
         // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
@@ -1745,9 +1749,29 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
       // new Lead
      $scope.save = function(account){
           if (account.name) {
+            console.log(account);
            Account.insert($scope,account);
          };
       };
+      $scope.addContact=function(current){
+       if($scope.newContactform==false){
+          $scope.newContactform=true;
+        }else{
+          $scope.contact={
+            'firstname':current.firstname,
+            'lastname':current.lastname,
+            'title':current.title,
+            'phones':[{'number':current.phone,'type':'work'}],
+            'emails':[{'email':current.email}]
+          }
+          $scope.account.contacts.push($scope.contact);
+          $scope.contact={};
+          $scope.newContactform=false;
+        }
+       }
+       $scope.unselectContact=function(index){
+        $scope.account.contacts.splice(index,1);
+       }
       $scope.prepareInfonodes = function(){
         var infonodes = [];
         angular.forEach($scope.websites, function(website){
@@ -1829,7 +1853,9 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
                         'emails':$scope.emails,
                         'infonodes':$scope.prepareInfonodes(),
                         'access': account.access,
+                        'contacts': account.contacts,
                       };
+                      console.log(params);
           if ($scope.logo.logo_img_id){
               params['logo_img_id'] = $scope.logo.logo_img_id;
               params['logo_img_url'] = $scope.logo.logo_img_url;

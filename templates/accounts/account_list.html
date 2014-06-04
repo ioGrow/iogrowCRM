@@ -6,22 +6,8 @@
       {{active_app.label}}
     </h2>
       <div class="filterOptions">
-        <span role="button" class="filterItem activeFilter" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">All Accounts</span>
-        <span role="button" class="filterItem" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">My Accounts</span>
-        <div class="btn-group">
-            <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" ng-click="filterByOwner('{{ME}}');selectedOption ='sort'">
-              More
-              <i class="icon-angle-down"></i>
-            </a>
-            <ul class="dropdown-menu">
-              <li>
-                <a ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a>
-              </li>
-              <li>
-                <a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a>
-              </li>
-            </ul>
-        </div>
+        <span role="button" class="filterItem activeFilter" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">All <span class="hidden-xs hiddenOnxs">Accounts</span> </span>
+        <span role="button" class="filterItem" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">My <span class="hidden-xs hiddenOnxs">Accounts</span></span>
         <div class="btn-group">
             <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" ng-click="filterByOwner('{{ME}}');selectedOption ='sort'">
               Sort by
@@ -37,7 +23,7 @@
             </ul>
       </div>
         <a href="/#/accounts/new" class="btn red afterScrollBtn hidden">
-           New Account 
+           New <span class="hidden-xs hiddenOnxs">Account</span> 
          </a>
       </div>
     </div> 
