@@ -12,7 +12,7 @@ import model
 from iomodels.crmengine.tags import Tag,TagSchema
 from iomodels.crmengine.tasks import Task,TaskRequest,TaskListResponse
 from iomodels.crmengine.events import Event,EventListResponse
-from iomodels.crmengine.contacts import Contact,ContactListRequest,ContactListResponse
+from iomodels.crmengine.contacts import Contact,ContactListRequest,ContactListResponse,ContactInsertRequest
 from iomodels.crmengine.opportunities import Opportunity,OpportunityListResponse
 from iograph import Node,Edge,InfoNodeListResponse
 from iomodels.crmengine.notes import Note,TopicListResponse
@@ -65,6 +65,7 @@ class AccountSchema(messages.Message):
     logo_img_id = messages.StringField(22)
     logo_img_url = messages.StringField(23)
 
+
 class AccountListRequest(messages.Message):
     limit = messages.IntegerField(1)
     pageToken = messages.StringField(2)
@@ -109,6 +110,7 @@ class AccountInsertRequest(messages.Message):
     infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema,10, repeated = True)
     logo_img_id = messages.StringField(11)
     logo_img_url = messages.StringField(12)
+    contacts = messages.MessageField(ContactInsertRequest,13,repeated=True)
 
 
 class Account(EndpointsModel):
@@ -340,6 +342,12 @@ class Account(EndpointsModel):
                                     'logo_img_id':request.logo_img_id
                                     }
                             )
+        if request.contacts:
+            account_key_str = account_key_async.urlsafe()
+            for contact in request.contacts:
+                contact.account = account_key_str
+                contact.access = request.access
+                Contact.insert(user_from_email,contact)
         for email in request.emails:
             Node.insert_info_node(
                             account_key_async,
