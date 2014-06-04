@@ -1687,7 +1687,7 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
       $scope.account.industry = 'Technology';
       $scope.phone = {};
       $scope.contact = {};
-      $scope.account ={};
+      $scope.currentContact = {};
       $scope.account.contacts = [];
       $scope.phone.type= 'work';
 
@@ -1749,17 +1749,22 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
       // new Lead
      $scope.save = function(account){
           if (account.name) {
+            console.log(account);
            Account.insert($scope,account);
          };
       };
-      $scope.addContact=function(){
-        console.log('work');
+      $scope.addContact=function(current){
        if($scope.newContactform==false){
-        console.log('workif');
           $scope.newContactform=true;
         }else{
+          $scope.contact={
+            'firstname':current.firstname,
+            'lastname':current.lastname,
+            'title':current.title,
+            'phones':[{'number':current.phone,'type':'work'}],
+            'emails':[{'email':current.email}]
+          }
           $scope.account.contacts.push($scope.contact);
-          console.log($scope.account.contacts);
           $scope.contact={};
           $scope.newContactform=false;
         }
@@ -1848,7 +1853,9 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
                         'emails':$scope.emails,
                         'infonodes':$scope.prepareInfonodes(),
                         'access': account.access,
+                        'contacts': account.contacts,
                       };
+                      console.log(params);
           if ($scope.logo.logo_img_id){
               params['logo_img_id'] = $scope.logo.logo_img_id;
               params['logo_img_url'] = $scope.logo.logo_img_url;

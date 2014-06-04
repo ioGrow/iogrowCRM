@@ -317,11 +317,11 @@
                               <div class="formElements" ng-show="newContactform">
                                         <div class="row">
                                           <div class="col-md-6 firstNameLeft">
-                                              <input ng-model="contact.firstName" type="text" id="firstName" class="form-control" placeholder="First Name">
+                                              <input ng-model="currentContact.firstname" type="text" id="firstName" class="form-control" placeholder="First Name">
                                           </div>
                                           <!--/span-->
                                           <div class="col-md-6 lastNameRight">
-                                              <input ng-model="contact.lastname" type="text" id="lastName" class="form-control" placeholder="Last Name">
+                                              <input ng-model="currentContact.lastname" type="text" id="lastName" class="form-control" placeholder="Last Name">
                                           </div>
                                           <!--/span-->
                                         </div>
@@ -329,7 +329,7 @@
                                             <div class="col-md-12">
                                                   <div class="input-icon margin-top-10">
                                                   <i class="fa fa-briefcase"></i>
-                                                  <input ng-model="contact.title" type="text" class="form-control" placeholder="Title">
+                                                  <input ng-model="currentContact.title" type="text" class="form-control" placeholder="Title">
                                                 </div>
                                             </div>
                                         </div>   
@@ -337,7 +337,7 @@
                                             <div class="col-md-12">
                                                   <div class="input-icon  margin-top-10">
                                         <i class="fa fa-envelope"></i>
-                                        <input ng-model="contact.email" type="email" class="form-control" placeholder="Email">
+                                        <input ng-model="currentContact.email" type="email" class="form-control" placeholder="Email">
                                       </div>
                                             </div>
                                         </div>   
@@ -345,20 +345,20 @@
                                             <div class="col-md-12">
                                                   <div class="input-icon  margin-top-10">
                                         <i class="fa fa-phone"></i>
-                                        <input ng-model="contact.phone" type="text" class="form-control" placeholder="Phone">
+                                        <input ng-model="currentContact.phone" type="text" class="form-control" placeholder="Phone">
                                       </div>
                                             </div>
                                         </div>
                               </div>
                               <div class="row">
                                   <div class="col-md-12 margin-top-10">
-                                      <p><span ng-hide="newContactform">Add New Contact</span><button type="button" ng-click="addContact()" class="btn blue btn-sm pull-right btn-inline"><i class="fa fa-user"></i>&nbsp;Add</button></p>
+                                      <p><span ng-hide="newContactform">Add New Contact</span><button type="button" ng-click="addContact(currentContact)" class="btn blue btn-sm pull-right btn-inline"><i class="fa fa-user"></i>&nbsp;Add</button></p>
                                        
                                   </div>
                               </div>      
                           </form>
                           <ul id="slimList" ng-hide="newContactform" class="chats accountContactList">
-                            <li class="in" ng-repeat="contact in contacts" id="topic_<%=$index%>"> 
+                            <li class="in" ng-repeat="contact in account.contacts" id="topic_<%=$index%>"> 
                             <div class="row">
                               <div class="col-md-2 col-xs-2">
                                 <img class="contact-photo" src="/static/img/avatar_contact.jpg">  
