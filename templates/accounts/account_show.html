@@ -44,12 +44,14 @@
         <div class="showPage custom-show margin-bottom-15  col-md-12">
           <div class="row margin-bottom-10">
             <div class="col-md-2" ng-mouseenter="showUpload= true" ng-mouseleave="showUpload = false">
-              <div class="pic">
+              <div class="pic account-photo-large">
                   <img alt="<%=account.name%>" class=" img-responsive img-thumbnail" ng-src="<%=imageSrc%>">
-               </div>
-               <a ng-show="showUpload" ng-click="createLogoPickerUploader()" href="" class="btn btn-default btn-upload" data-toggle="modal" style="display: none;">
-                 <img src="/static/img/upload_logo.png">
-               </a>
+                    <a ng-show="showUpload" ng-click="createLogoPickerUploader()" href="" class="btn btn-default btn-upload btn-upload-account" data-toggle="modal" style="display: none;">
+                      <img src="/static/img/upload_logo.png">
+                    </a>
+                     <div ng-show="showUpload" class="responsivePhotoIconAcc"></div>
+              </div>
+
             </div>
             <div class="col-md-10">
               <div class="row">
@@ -414,15 +416,6 @@
                                     </div>
                             </div>
                              <!--blank stat-->
-                            <div ng-show="blankStatecontact" data-span="3" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
-                              <div class="dashboard-stat cards">
-                                <div class="blank_slate_arrow"></div>
-                                <div class="thumbnail blank_slate_body">
-                                    <img class="img-responsive" src="/static/img/contacts_blank.png">
-                                    <p class="lead">{{ _('Each contact gets a page in i/oGrow. You and your co-workers can add notes from calls,conversations, meetings, or any other historic information about this person.') }}</p>
-                                </div>
-                              </div>
-                            </div>
                             <div ng-show="isFiltering * !accounts" data-span="3" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
                               <div class="dashboard-stat cards" >
                                 <div class="blank_slate_arrow"></div>
@@ -435,6 +428,15 @@
                             <div class="clearfix"></div>
 
                             </div><!--/inner-cards-container-->
+                            <div ng-show="blankStatecontact" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12" style="">
+                              <div class="dashboard-stat cards">
+                                <div class="blank_slate_arrow"></div>
+                                <div class="thumbnail blank_slate_body">
+                                    <img class="img-responsive" src="/static/img/contacts_blank.png">
+                                    <p class="lead">{{ _('Each contact gets a page in i/oGrow. You and your co-workers can add notes from calls,conversations, meetings, or any other historic information about this person.') }}</p>
+                                </div>
+                              </div>
+                            </div>
                               </div><!--/inner-cards-container-->
                               </div>
                             </div>
@@ -609,18 +611,18 @@
                                 </div>
                               </div>
                               <div ng-show="blankStatecase" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12" style="">
-                          <div class="dashboard-stat cards">
+                                  <div class="dashboard-stat cards">
 
 
-                                <div class="blank_slate_arrow"></div>
-                              <div class="thumbnail blank_slate_body">
-                                  <img src="/static/img/cases_blank.png" class="img-responsive">
-                                <p class="lead">The main goal of cases is to assist collaboration and focus of teams on delivering amazing customer experience.</p>
+                                   <div class="blank_slate_arrow"></div>
+                                   <div class="thumbnail blank_slate_body">
+                                        <img src="/static/img/cases_blank.png" class="img-responsive">
+                                        <p class="lead">The main goal of cases is to assist collaboration and focus of teams on delivering amazing customer experience.</p>
                                    </div>
 
 
-                          </div>
-              </div>
+                                  </div>
+                              </div>
                                 <div class="clearfix"></div>
                               </div>
                               </div>

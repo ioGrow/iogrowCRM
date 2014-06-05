@@ -70,10 +70,10 @@
                           <div class="pic">
                               <img alt="<%=account.name%>" ng-src="<%=imageSrc%>" class="img-responsive img-thumbnail">
                          </div>
-                          <a ng-click="createPickerUploader()" href="" class="btn btn-default btn-upload" data-toggle="modal">
+                          <a ng-click="createPickerUploader()" href="" class="btn btn-default btn-upload btn-upload-account" data-toggle="modal">
                                 <img src="/static/img/upload_logo.png" >
                           </a>
-
+                            <div  class="responsivePhotoIconAcc"></div>
                         </div>
                       </div>
 
@@ -365,7 +365,7 @@
                               </div>
                               <div class="col-md-8 col-xs-8">
                                 <span class="name">
-                                  <%= contact.firstName %> <%= contact.lastname %>
+                                  <%= contact.firstname %> <%= contact.lastname %>
                                   </span>
                                   <span><%= contact.title%></span>
                                 </span>

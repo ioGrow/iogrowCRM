@@ -55,11 +55,12 @@
               <div class="portlet">
                 <div class="portlet-body left-sidebar" id="chats">
                   <div class="pic">
-                    <img alt="<%=contact.firstname%> <%=contact.lastname%>" ng-src="<%=imageSrc%>" class="img-responsive profile-photo">
+                    <img alt="<%=contact.firstname%> <%=contact.lastname%>" ng-src="<%=imageSrc%>" class="img-responsive profile-photo-large">
+                      <a ng-click="createPickerUploader()" href="" class="btn btn-default btn-upload btn-upload-contact" data-toggle="modal">
+                          <img src="/static/img/upload_logo.png" class="" >
+                      </a>
+                      <div  class="responsivePhotoIcon"></div>
                   </div>
-                  <a ng-click="createPickerUploader()" href="" class="btn btn-default btn-upload" data-toggle="modal">
-                    <img src="/static/img/upload_logo.png" class="" >
-                  </a>
                 </div>
               </div>
             </div>
