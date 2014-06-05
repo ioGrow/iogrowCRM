@@ -17,7 +17,7 @@
              <ul class="dropdown-menu">
                   <li class="visible-xs"><a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All opportunities') }}</a></li>
          <li class="visible-xs"><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My opportunities') }}</a></li>
-                 <li ng-repeat="stage in opportunitystages"><a ng-click="filterByStage('<%=stage.name%>')" href="#" data-toggle="modal"><%= stage.name %></a></li>
+                 <li ng-repeat="stage in opportunitystages"><a ng-click="filterByStage('<%=stage.entityKey%>')" href="#" data-toggle="modal"><%= stage.name %> </a></li>
              </ul>
         </div>
         <div class="btn-group">
@@ -35,7 +35,7 @@
             </ul>
       </div>
         <a href="/#/accounts/new" class="btn red afterScrollBtn hidden">
-           New <span class="hidden-xs hiddenOnxs">Account</span> 
+           New <span class="hidden-xs hiddenOnxs">Opportunity</span> 
          </a>
       </div>
     
