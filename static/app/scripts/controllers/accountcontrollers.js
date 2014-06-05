@@ -20,6 +20,7 @@ app.controller('AccountListCtrl', ['$scope','$filter','Auth','Account','Tag','Ed
      $scope.account.account_type = 'Customer';
      $scope.draggedTag=null;
      $scope.tag = {};
+     $scope.testtitle = "Customer Support Customer Support";
      $scope.showNewTag=false;
      //Manage Color
      $scope.color_pallet=[
