@@ -1766,7 +1766,7 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
             'emails':[{'email':current.email}]
           }
           $scope.account.contacts.push($scope.contact);
-          $scope.contact={};
+          $scope.currentContact={};
           $scope.newContactform=false;
           }else{
             $scope.currentContact={};

@@ -5,34 +5,27 @@
     <!-- <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
       {{active_app.label}}
     </h2>
-
-    <div class="pull-right sharebuttonDiv">
-      <div class="btn-group btn-filter">
-        <a class="btn btn-default" href="#" data-toggle="dropdown">
-          {{ _('Filter by') }}
-          <i class="icon-angle-down"></i>
-        </a>
-        <ul class="dropdown-menu">
-          <li><a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All leads') }}</a></li>
-          <li><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My leads') }}</a></li>
-          <li ng-repeat="status in leadstatuses"><a ng-click="filterByStatus('<%=status.status%>')" href="#" data-toggle="modal"><%= status.status %></a></li>
-        </ul>
-      </div>
-      <div class="btn-group btn-sort" >
-        <a class="btn btn-default" href="#" data-toggle="dropdown">
-          Sort by
-          <i class="icon-angle-down"></i>
-        </a>
-        <ul class="dropdown-menu">
+    <div class="filterOptions">
+        <span role="button" class="filterItem activeFilter" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">All <span class="hidden-xs hiddenOnxs">Leads</span> </span>
+        <span role="button" class="filterItem" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">My <span class="hidden-xs hiddenOnxs">Leads</span></span>
+        <div class="btn-group">
+            <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" >
+              Sort by
+              <i class="icon-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu">
           <li><a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a></li>
           <li><a ng-click="orderBy('firstname')" href="#" data-toggle="modal">{{ _('First Name') }}</a></li>
           <li><a ng-click="orderBy('lastname')" href="#" data-toggle="modal">{{ _('Last Name') }}</a></li>
-          <li><a ng-click="orderBy('title')" href="#" data-toggle="modal">{{ _('Title') }}</a></li>
-          <li><a ng-click="orderBy('company')" href="#" data-toggle="modal">{{ _('Company') }}</a></li>
+          <!--li><a ng-click="orderBy('title')" href="#" data-toggle="modal">{{ _('Title') }}</a></li-->
+          <!--li><a ng-click="orderBy('company')" href="#" data-toggle="modal">{{ _('Company') }}</a></li-->
           <li><a ng-click="orderBy('status')" href="#" data-toggle="modal">{{ _('Status') }}</a></li>
-        </ul>
+            </ul>
       </div>
-    </div>
+        <a href="/#/contacts/new" class="btn red afterScrollBtn hidden">
+           New <span class="hidden-xs hiddenOnxs">Lead</span> 
+         </a>
+      </div>
     </div>
   </div>
 </div>

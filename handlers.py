@@ -665,7 +665,7 @@ routes = [
     ('/workers/syncevent',SyncCalendarEvent),
     ('/workers/createcontactsgroup',CreateContactsGroup),
     ('/workers/sync_contacts',SyncContact),
-
+    
     ('/',IndexHandler),
 
     # Templates Views Routes
