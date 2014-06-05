@@ -265,6 +265,7 @@ accountservices.factory('Account', function($http) {
                 // if (resp.events){
                 //     $scope.hilightEvent();
                 // }
+                $scope.renderMaps();
                 $scope.isLoading = false;
                 $scope.$apply();
                 var leftMargin=$(".chart").parent().width()-$(".chart").width();
@@ -277,6 +278,7 @@ accountservices.factory('Account', function($http) {
                if(resp.code==401){
                 console.log('invalid token');
                 $scope.refreshToken();
+            
                 $scope.isLoading = false;
                 $scope.$apply();
              };
