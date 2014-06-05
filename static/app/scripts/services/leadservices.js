@@ -32,9 +32,7 @@ leadservices.factory('Lead', function($http) {
                                   }
                               }
                         }
-                        if (renderMap){
-                          $scope.renderMaps();
-                        }
+                       
                     }
                 }
                 if (resp.topics){
@@ -119,6 +117,7 @@ leadservices.factory('Lead', function($http) {
 
                 });
                 $scope.isLoading = false;
+                $scope.renderMaps();
                // Call the method $apply to make the update on the scope
                $scope.$apply();
                if (resp.topics && !params.topics.pageToken){

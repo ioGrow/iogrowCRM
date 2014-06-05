@@ -33,9 +33,7 @@ accountservices.factory('Contact', function($http) {
                                   }
                               }
                         }
-                        if (renderMap){
-                          $scope.renderMaps();
-                        }
+                       
                     }
                 }
                 if (resp.topics){
@@ -182,9 +180,10 @@ accountservices.factory('Contact', function($http) {
                   $scope.email.to = $scope.email.to + value.email + ',';
 
                 });
+                    $scope.renderMaps();
                // Call the method $apply to make the update on the scope
                 $scope.isLoading = false;
-               $scope.$apply();
+                $scope.$apply();
                if (resp.topics && !params.topics.pageToken){
                     $scope.hilightTopic();
                 };
