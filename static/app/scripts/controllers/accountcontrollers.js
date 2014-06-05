@@ -1766,7 +1766,6 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
           }
           $scope.account.contacts.push($scope.contact);
           $scope.currentContact={};
-          $scope.currentContact={};
           $scope.newContactform=false;
         }
        }
