@@ -33,9 +33,7 @@ accountservices.factory('Contact', function($http) {
                                   }
                               }
                         }
-                        /*if (renderMap){
-                          $scope.renderMaps();
-                        }*/
+                       
                     }
                 }
                 if (resp.topics){
