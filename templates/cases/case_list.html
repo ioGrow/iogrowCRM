@@ -5,33 +5,6 @@
       <!-- <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
       {{active_app.label}}
     </h2>
-    <!--div class="pull-right sharebuttonDiv"> 
-      <div class="btn-group btn-filter">
-        <a class="btn btn-default" href="#" data-toggle="dropdown">
-          {{ _('Filter by') }}
-          <i class="icon-angle-down"></i>
-        </a>
-        <ul class="dropdown-menu">
-          <li><a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All cases') }}</a></li>
-          <li><a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My cases') }}</a></li>
-          <li ng-repeat="status in casesatuses"><a ng-click="filterByStatus('<%=status.status%>')" href="#" data-toggle="modal"><%= status.status %></a></li>
-        </ul>
-      </div>
-      <div class="btn-group btn-sort">
-        <a class="btn btn-default" href="#" data-toggle="dropdown">
-          {{ _('Sort by') }}
-          <i class="icon-angle-down"></i>
-        </a>
-        <ul class="dropdown-menu">
-          <li><a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a></li>
-          <li><a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a></li>
-          <li><a ng-click="orderBy('-priority')" href="#" data-toggle="modal">{{ _('Priority') }}</a></li>
-          <li><a ng-click="orderBy('status')" href="#" data-toggle="modal">{{ _('Status') }}</a></li>
-          <li><a ng-click="orderBy('contact_name')" href="#" data-toggle="modal">{{ _('Contact') }}</a></li>
-          <li><a ng-click="orderBy('casee_name')" href="#" data-toggle="modal">{{ _('Company') }}</a></li>
-        </ul>
-      </div>
-    </div-->
     <div class="filterOptions">
         <span role="button" class="filterItem activeFilter" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">All <span class="hidden-xs hiddenOnxs">Cases</span> </span>
         <span role="button" class="filterItem" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">My <span class="hidden-xs hiddenOnxs">Cases</span></span>
@@ -43,14 +16,14 @@
             <ul class="dropdown-menu">
           <li><a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a></li>
           <li><a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a></li>
-          <li><a ng-click="orderBy('-priority')" href="#" data-toggle="modal">{{ _('Priority') }}</a></li>
+          <!--li><a ng-click="orderBy('-priority')" href="#" data-toggle="modal">{{ _('Priority') }}</a></li-->
           <li><a ng-click="orderBy('status')" href="#" data-toggle="modal">{{ _('Status') }}</a></li>
           <!--li><a ng-click="orderBy('contact_name')" href="#" data-toggle="modal">{{ _('Contact') }}</a></li>
           <li><a ng-click="orderBy('casee_name')" href="#" data-toggle="modal">{{ _('Company') }}</a></li-->
             </ul>
       </div>
         <a href="/#/cases/new" class="btn red afterScrollBtn hidden">
-           New <span class="hidden-xs hiddenOnxs">Cases</span> 
+           New <span class="hidden-xs hiddenOnxs">Case</span> 
          </a>
       </div>
      </div>

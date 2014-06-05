@@ -141,6 +141,11 @@ indexes:
   properties:
   - name: organization
   - name: priority
+
+- kind: Case
+  properties:
+  - name: organization
+  - name: priority
     direction: desc
 
 - kind: Case
