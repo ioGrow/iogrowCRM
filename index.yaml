@@ -130,6 +130,27 @@ indexes:
 - kind: Case
   properties:
   - name: organization
+  - name: contact_name
+
+- kind: Case
+  properties:
+  - name: organization
+  - name: name
+
+- kind: Case
+  properties:
+  - name: organization
+  - name: priority
+    direction: desc
+
+- kind: Case
+  properties:
+  - name: organization
+  - name: status
+
+- kind: Case
+  properties:
+  - name: organization
   - name: updated_at
     direction: desc
 
