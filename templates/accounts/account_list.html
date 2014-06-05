@@ -1,15 +1,16 @@
 <div class="row subHeader">
   <div class="subHContent">
     <div class="currentApp">
+
      <h2 class="page-title">
+     <p class="fittext autoresizeName" max-font-size="18" text="testtitle" style="height:20px; width:195px"></p>
      <!--  <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
-      {{active_app.label}}
     </h2>
       <div class="filterOptions">
         <span role="button" class="filterItem activeFilter" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">All <span class="hidden-xs hiddenOnxs">Accounts</span> </span>
         <span role="button" class="filterItem" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">My <span class="hidden-xs hiddenOnxs">Accounts</span></span>
         <div class="btn-group">
-            <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" ">
+            <a class="filterItem" href="#" data-toggle="dropdown" ng-class="{activeFilter: selectedOption =='sort'}">
               Sort by
               <i class="icon-angle-down"></i>
             </a>

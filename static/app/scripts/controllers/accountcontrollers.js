@@ -20,6 +20,7 @@ app.controller('AccountListCtrl', ['$scope','$filter','Auth','Account','Tag','Ed
      $scope.account.account_type = 'Customer';
      $scope.draggedTag=null;
      $scope.tag = {};
+     $scope.testtitle = "Customer Support Customer Support";
      $scope.showNewTag=false;
      //Manage Color
      $scope.color_pallet=[
@@ -1757,7 +1758,8 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
        if($scope.newContactform==false){
           $scope.newContactform=true;
         }else{
-          $scope.contact={
+          if (current.firstname!=null&&current.lastname!=null) {
+                      $scope.contact={
             'firstname':current.firstname,
             'lastname':current.lastname,
             'title':current.title,
@@ -1767,6 +1769,11 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
           $scope.account.contacts.push($scope.contact);
           $scope.currentContact={};
           $scope.newContactform=false;
+          }else{
+            $scope.currentContact={};
+          $scope.newContactform=false;
+          };
+
         }
        }
        $scope.unselectContact=function(index){
