@@ -48,7 +48,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
             },
             size:100,
             barColor:'#58a618',
-            scaleColor:false,
+            scaleColor:'#58a618',
             lineWidth:7,
             lineCap:'circle'
         };
@@ -74,9 +74,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
           //   }
        };
        $(window).resize(function() {
-            var leftMargin=$(".chart").parent().width()-$(".chart").width();
-            $(".chart").css( "left",leftMargin/2);
-            $(".oppStage").css( "left",leftMargin/2);
         });
         // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
