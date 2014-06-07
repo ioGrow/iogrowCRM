@@ -1,11 +1,14 @@
 <div class="row subHeader">
-  <div class="subHContent">
     <div class="currentApp">
-
-     <h2 class="page-title">
-     <p class="fittext autoresizeName" max-font-size="18" text="testtitle" style="height:20px; width:195px"></p>
-     <!--  <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
-    </h2>
+       <h2 class="page-title">
+       {{active_app.label}}
+       <!--  <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
+      </h2>
+    </div> 
+    <div class=" subHeaderContent">
+      <div class="col-md-9">
+      <div class="row">
+      <div class="col-md-10 col-xs-10">
       <div class="filterOptions">
         <span role="button" class="filterItem activeFilter" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">All <span class="hidden-xs hiddenOnxs">Accounts</span> </span>
         <span role="button" class="filterItem" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">My <span class="hidden-xs hiddenOnxs">Accounts</span></span>
@@ -23,11 +26,15 @@
               </li>
             </ul>
       </div>
-        <a href="/#/accounts/new" class="btn red afterScrollBtn hidden">
+      </div>
+      </div>
+      <div class="col-md-2 col-xs-2">
+      <a href="/#/accounts/new" class="btn red newAccountBtnOnscroll pull-right hidden afterScrollBtn">
            New <span class="hidden-xs hiddenOnxs">Account</span> 
          </a>
       </div>
-    </div> 
+      </div>
+    </div>
     </div>
 </div>
 <div  class="page-content">
@@ -145,7 +152,7 @@
                 <div class="text">
                   <div class="name " >
                     <a class="profile-link" href="/#/accounts/show/<%= account.id %>">
-                      <p class="fittext autoresizeName" max-height="18" max-font-size="18" text="account.name"></p>
+                      <p class="fittext autoresizeName" max-heit="18" max-font-size="18" text="account.name"></p>
                     </a>
                   </div>
                   <div class="pitch">

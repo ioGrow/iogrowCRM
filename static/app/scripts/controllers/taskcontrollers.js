@@ -343,6 +343,13 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
                 } 
            }
      });
+        $scope.isBlankState=function(tasks){
+      if (typeof tasks !== 'undefined' && tasks.length > 0) {
+        return false;
+      }else{
+        return true
+      }
+    }
       $scope.idealTextColor=function(bgColor){
         var nThreshold = 105;
          var components = getRGBComponents(bgColor);
@@ -550,6 +557,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           }
 
         });
+        console.log(params);  
         Task.insert($scope,params);
         $scope.tagInfo.selected = [];
 
