@@ -317,14 +317,23 @@ app.directive('taggable', ['$parse',function($parse) {
                 $scope.newTaskValue=ReturnWord($(elem).val(),$(elem).caret()).word;
                 $scope.matchPattern=false;
                 $scope.returnedValue=undefined;
+                
                 angular.forEach($scope.tagInfo, function(item){
-                     if (item.tag=='#'){$scope.pattern = /^#([\w]*)/g;}
-                     if (item.tag=='@') {$scope.pattern = /^@([\w]*)/g;};
-                     if (item.tag=='!') {$scope.pattern = /^!([\w]*)/g;};
+                     if (item.tag=='#') {$scope.pattern = /^#([\w]*)/;}
+                     if (item.tag=='@') {$scope.pattern = /^@([\w]*)/;};
+                     if (item.tag=='!') {$scope.pattern = /^!([\w]*)/;};
                      var text=$scope.newTaskValue;
+                     console.log(value);
+                     console.log($scope.pattern);
+                     console.log($scope.newTaskValue);
+                     console.log($scope.newTaskValue);
+                     
                      if($scope.pattern.test($scope.newTaskValue)){
+                          console.log('fired');
                           $scope.returnedValue = text.replace($scope.pattern, "$1");
                           $scope.matchPattern=true;
+                        }else{
+                          console.log('not matchPattern');
                         }
                     });
                 if ($scope.matchPattern) {

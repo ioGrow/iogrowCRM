@@ -135,7 +135,6 @@ app.controller('AccountListCtrl', ['$scope','$filter','Auth','Account','Tag','Ed
 
     };
 
-
      $scope.accountInserted = function(resp){
           if ($scope.accounts == undefined){
             $scope.accounts = [];

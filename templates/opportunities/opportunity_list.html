@@ -81,60 +81,49 @@
       <div class="tab-pane">
       <div class="row">
       <div class="col-md-12 waterfall" ng-hide="blankStateopportunity">
-         <div  ng-repeat="opportunity in opportunities"  droppable id="card_<%=$index%>"  class=" cardElement"  ng-drop="dropTag(opportunity,$index)" >
+         <div  ng-repeat="opportunity in opportunities" droppable id="card_<%=$index%>"  class=" cardElement"  ng-drop="dropTag(opportunity,$index)" >
                   <div class="detailsSection">
-                    <div class="head">
-
-                        <div class="row">
-                          <div class="col-md-12 col-xs-5">
-                            <div class="stage" >
+                          <div class="col-md-4 col-xs-4">
+                            <div class="stage">
                                 <div easypiechart class="chart" options="chartOptions" percent="opportunity.current_stage.probability"></div>
-                                <div class="oppStage col-md-12">
+                                <div class="oppStage">
+                                <div class="oppStageContent">
                                   <span><%=opportunity.current_stage.name%></span><br>
                                   <span><%=opportunity.current_stage.probability%> %</span>
-
+                                </div>
                                 </div>
                             </div>
                           </div>
-                          <div class="oppDetails col-md-12 col-xs-7">
-                            <div class="col-md-12">
-                              <div class="row">
-                                <div class="col-md-12">
-                                  <div class="oppDescription">
-                                    <h3>
-                                      <a href="/#/opportunities/show/<%= opportunity.id %>"><%= opportunity.name %></a>
-                                    </h3>
-                                    <p class="description ellipsis">
-                                        <%= opportunity.description %>
-                                          <i></i>
-                                    </p>
-
-                                  </div>
-
-                                </div>
-                              </div>
+                          <div class="col-md-8 col-xs-8">
+                            <div class="oppDescription row">
+                                    <a href="/#/opportunities/show/<%= opportunity.id %>" title="<%= opportunity.name %>"><h4 style="height:26px" class="fittext ellipsis" min-font-size="14" max-font-size="22"  text="opportunity.name">                                    
+                                      <span class="fittext" max-font-size="18"  text="opportunity.name"></span>
+                                    </h4></a>
+                                    
                             </div>
-                            <div class="col-md-12 col-sm-12">
-                                <div class="oppPrice">
-                                  <span><%= opportunity.currency %></span>
-                                  <span><%= opportunity.amount_total | customCurrency:"":",":".":0 %> <span ng-show="opportunity.account.name"> with </span> <a href="/#/accounts/show/<%= opportunity.account.id %>"> <%= opportunity.account.name %></a> </span>
-                                  <p class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
-                                      <%= opportunity.duration %> × <%= opportunity.amount_per_unit | customCurrency:"":",":".":0 %>/<%= opportunity.duration_unit %>
-                                  </p>
-                                </div>
+                            <div class="oppDetails col-md-12">    
+                                    <div class="oppPrice">
+                                      <span><%= opportunity.currency %> <%= opportunity.amount_total | customCurrency:"":",":".":0 %></span>
+                                      <div>
+                                        <span ng-show="opportunity.account.name" class="withAmount">
+                                        with <a href="/#/accounts/show/<%= opportunity.account.id %>">
+                                           <%= opportunity.account.name %>
+                                        </a>
+                                      </span> 
+                                      </div>
+                                        
+                                      <p class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
+                                          <%= opportunity.duration %> × <%= opportunity.amount_per_unit | customCurrency:"":",":".":0 %>/<%= opportunity.duration_unit %>
+                                      </p>
+                                    </div>
 
-                                <div class="oppEstDate">
-                                  Estimated close date:
-                                </div>
-                                <div class="oppEstDate">
-                                  <%=opportunity.closed_date | date:'MMMM dd, yyyy'%>
-                                </div>
-
+                                    <div class="oppEstDate">
+                                      Estimated close date: <%=opportunity.closed_date | date:'MMMM dd, yyyy'%>
+                                    </div>
                             </div>
                           </div>
-                        </div>
+                          
                     </div>
-                  </div>
                   <div class="tagsSection" ng-class="{hidden: opportunity.tags==null}">
                       <div class="sectionContent">
                            <a ng-repeat="tag in opportunity.tags" href="/#/search/type:opportunity tags:<%=tag.id%>"> <span class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
@@ -456,7 +445,7 @@
     }
     handleUniform();
     $('.waterfall').waterfall({
-        colMinWidth: 250,
+        colMinWidth: 315,
         defaultContainerWidth: 800,
         autoresize: true
       });

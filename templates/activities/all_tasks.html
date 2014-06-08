@@ -38,12 +38,11 @@
         
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-        <div class="showPage col-md-9 margin-bottom-15">
-          <!-- Filtering and sorting -->
+    <div class="col-md-9">
+      <div class="row">
+        <div class="showPage custom-show margin-bottom-15  col-md-12">
           <div class="row">
-          <div class="col-md-12">
-            <div class="row">
-              <div class="col-md-12">
+               <div class="col-md-12">
                 <form ng-submit="addNewTask()" class="newTaskForm">
                     <div class="form-group">
                       <div class="input-icon right">
@@ -58,23 +57,37 @@
                   </div>  
                 </div>
               </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="tabbable tabbable-custom">
+                <ul class="nav nav-tabs">
+                  <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;allTasks();">{{ _("All Tasks") }}</a></li>
+                  <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;urgentTasks();" >{{ _("Urgent Tasks") }}</a></li>
+                  <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;createdByMe('{{ME}}');">{{ _("Created by Me") }}</a></li>
+                  <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;assignedToMe('{{ME}}');">{{ _("Assigned to Me") }}</a></li>
+                  <li class="dropdown sm-menu-inv">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                      More <i class="fa fa-angle-down"></i>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                      <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;createdByMe('{{ME}}');">{{ _("Created by Me") }}</a></li>
+                      <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;assignedToMe('{{ME}}');">{{ _("Assigned to Me") }}</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
             </div>
-              <!-- BEGIN PORTLET-->
-              <div id="account-tab" class="portlet paddingless">
-                <div class="portlet-body">
-                  <div class="tabbable tabbable-custom">
-                  <ul class="nav nav-tabs">
-                      <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;allTasks();">{{ _("All Tasks") }}</a></li>
-                      <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;urgentTasks();" >{{ _("Urgent Tasks") }}</a></li>
-                      <li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;createdByMe('{{ME}}');">{{ _("Created by Me") }}</a></li>
-                      <li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;assignedToMe('{{ME}}');">{{ _("Assigned to Me") }}</a></li>
-                  </ul>
-                  <div class="tab-content">
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+                    <div class="tab-content">
                       <div class="tab-pane active " id="tab_1_1" ng-show="selectedTab == 1">
                           <div class="row tasksList">
                             <div class="col-md-12">
                                 <ul class="list-group">
-                                    <li class="task-actions list-group-item task-actions">
+                                    <li class="task-actions taskCard list-group-item task-actions">
                                      <div class="row">
                                      <div class="col-md-12">
                                        <form id="task_actions" class="form-inline" role="form">
@@ -112,15 +125,15 @@
                                         </div>
                                     </div>
                                   </li>
-                                   <li  ng-repeat="task in tasks" class="list-group-item" droppable ng-drop="dropTag(task)" id="task_<%=$index%>">
+                                   <li  ng-repeat="task in tasks" class="taskCard list-group-item" droppable ng-drop="dropTag(task)" id="task_<%=$index%>" title="<%= task.status_label %>" style="border-left: 3px solid <%= task.status_color%>;">
                                      <div class="row">
                                         <label class="col-md-1 col-xs-1">
                                             <input type="checkbox" ng-click="select_task(task,$index,$event)" ng-checked="isSelected()">  
                                         </label>
                                        <h4 ng-dblclick="edit_task(task)" ng-show="edited_task!=task" class="col-md-6 col-xs-10 list-group-item-heading"
                                        ng-class= "{task_closed: task.status=='closed'}">
-                                       <i class="fa fa-dot-circle-o status_color" style="color:<%= task.status_color%>;" data-toggle="tooltip" data-placement="top" title="<%= task.status_label %>" ></i>
                                           <a href="/#/tasks/show/<%= task.id %>"> <%= task.title %></a> 
+                                          <%=task.due%>
                                        </h4>
                                        <div ng-show="edited_task==task" class="col-md-6 col-xs-7">
                                        <form ng-submit="done_edit_task(task)">
@@ -152,7 +165,7 @@
                           <div class="row tasksList">
                             <div class="col-md-12">
                                 <ul class="list-group">
-                                    <li class="task-actions list-group-item task-actions">
+                                    <li ng-class="{hidden: isBlankState(tasks)}" class="task-actions taskCard list-group-item task-actions">
                                      <div class="row">
                                      <div class="col-md-12">
                                        <form id="task_actions" class="form-inline" role="form">
@@ -190,7 +203,7 @@
                                         </div>
                                     </div>
                                   </li>
-                                   <li  ng-repeat="task in tasks" class="list-group-item" droppable ng-drop="dropTag(task)" id="task_<%=$index%>">
+                                   <li  ng-repeat="task in tasks" class="taskCard list-group-item" droppable ng-drop="dropTag(task)" id="task_<%=$index%>" title="<%= task.status_label %>" style="border-left: 3px solid <%= task.status_color%>;">
                                      <div class="row">
                                         <label class="col-md-1 col-xs-1">
                                             <input type="checkbox" ng-click="select_task(task,$index,$event)" ng-checked="isSelected()">  
@@ -230,7 +243,7 @@
                             <div class="row tasksList">
                             <div class="col-md-12">
                                 <ul class="list-group">
-                                    <li class="task-actions list-group-item task-actions">
+                                    <li class="task-actions taskCard list-group-item task-actions">
                                      <div class="row">
                                      <div class="col-md-12">
                                        <form id="task_actions" class="form-inline" role="form">
@@ -268,7 +281,7 @@
                                         </div>
                                     </div>
                                   </li>
-                                   <li  ng-repeat="task in tasks" class="list-group-item" droppable ng-drop="dropTag(task)" id="task_<%=$index%>">
+                                   <li  ng-repeat="task in tasks" class=" taskCard list-group-item" droppable ng-drop="dropTag(task)" id="task_<%=$index%>" title="<%= task.status_label %>" style="border-left: 3px solid <%= task.status_color%>;">
                                      <div class="row">
                                         <label class="col-md-1 col-xs-1">
                                             <input type="checkbox" ng-click="select_task(task,$index,$event)" ng-checked="isSelected()">  
@@ -308,7 +321,7 @@
                             <div class="row tasksList">
                             <div class="col-md-12">
                                 <ul class="list-group">
-                                    <li class="task-actions list-group-item task-actions">
+                                    <li class="task-actions taskCard list-group-item task-actions">
                                      <div class="row">
                                      <div class="col-md-12">
                                        <form id="task_actions" class="form-inline" role="form">
@@ -346,7 +359,7 @@
                                         </div>
                                     </div>
                                   </li>
-                                   <li  ng-repeat="task in tasks" class="list-group-item" droppable ng-drop="dropTag(task)" id="task_<%=$index%>">
+                                   <li  ng-repeat="task in tasks" class="taskCard list-group-item" droppable ng-drop="dropTag(task)" id="task_<%=$index%>" title="<%= task.status_label %>" style="border-left: 3px solid <%= task.status_color%>;">
                                      <div class="row">
                                         <label class="col-md-1 col-xs-1">
                                             <input type="checkbox" ng-click="select_task(task,$index,$event)" ng-checked="isSelected()">  
@@ -386,7 +399,7 @@
                             <div class="row tasksList">
                             <div class="col-md-12">
                                 <ul class="list-group">
-                                    <li class="task-actions list-group-item task-actions">
+                                    <li class="task-actions taskCard list-group-item task-actions">
                                      <div class="row">
                                      <div class="col-md-12">
                                        <form id="task_actions" class="form-inline" role="form">
@@ -424,7 +437,7 @@
                                         </div>
                                     </div>
                                   </li>
-                                   <li  ng-repeat="task in tasks" class="list-group-item" droppable ng-drop="dropTag(task)" id="task_<%=$index%>">
+                                   <li  ng-repeat="task in tasks" class="taskCard list-group-item" droppable ng-drop="dropTag(task)" id="task_<%=$index%>" title="<%= task.status_label %>" style="border-left: 3px solid <%= task.status_color%>;">
                                      <div class="row">
                                         <label class="col-md-1 col-xs-1">
                                             <input type="checkbox" ng-click="select_task(task,$index,$event)" ng-checked="isSelected()">  
@@ -461,16 +474,9 @@
                           </div>
                       </div>
                   </div>
-                </div>
-                </div>
-              </div>
           </div>
-          <script type="text/javascript">
-              $('#slimtest1').slimScroll({
-                    height: '20px'
-                });
-          </script>
-          </div>
+        </div>
+          </div> 
           </div> 
             <div class="col-md-3">
            <div class="row">
