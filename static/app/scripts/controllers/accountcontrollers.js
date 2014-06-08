@@ -130,7 +130,6 @@ app.controller('AccountListCtrl', ['$scope','$filter','Auth','Account','Tag','Ed
 
     };
 
-
      $scope.accountInserted = function(resp){
           if ($scope.accounts == undefined){
             $scope.accounts = [];
@@ -1755,7 +1754,7 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
             'firstname':current.firstname,
             'lastname':current.lastname,
             'title':current.title,
-            'phones':[{'number':current.phone,'type':'work'}],
+            'phones':[{'number':current.phone}],
             'emails':[{'email':current.email}]
           }
           $scope.account.contacts.push($scope.contact);
