@@ -1755,6 +1755,7 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
             'lastname':current.lastname,
             'title':current.title,
             'phones':[{'number':current.phone}],
+            'access': $scope.account.access,
             'emails':[{'email':current.email}]
           }
           $scope.account.contacts.push($scope.contact);
