@@ -39,7 +39,7 @@ topicservices.factory('Task', function($http) {
   };
   Task.patch = function($scope,params){
       $scope.isLoading = true;
-      
+      console.log(params);
       gapi.client.crmengine.tasks.patch(params).execute(function(resp) {
        
           if(!resp.code){
@@ -48,8 +48,8 @@ topicservices.factory('Task', function($http) {
             /*$scope.ListComments();
             $scope.listContributors();*/
             $scope.isLoading = false;
-            $scope.listTags();
-            $scope.listTasks();
+            /*$scope.listTags();
+            $scope.listTasks();*/
             $scope.$apply();
 
             $('#EditTaskModal').modal('hide');

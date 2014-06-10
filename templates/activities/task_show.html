@@ -133,11 +133,12 @@
     <!--HKA 19.11.2013 BEGIN Span comments-->
       <div class="col-md-12 showPage taskShowHead margin-bottom-15">
             <h2 class="page-title showTaskTitle" ng-class="{task_closed: task.status=='closed'}">
-             <span editable-text="task.title"  ng-model='task.title' onbeforesave="inlineUpdateTask(task.id,task.title)">
+             <span editable-text="task.title" onbeforesave="inlineUpdateTask(task)">
               <%=task.title%> 
              </span>
               
             </h2>
+            <a editable-text="task.title" onbeforesave="inlineUpdateTask(task)"> <%=task.title%> </a>
             <hr class="sepLine">
       <!-- BEGIN PORTLET-->
       <!-- End Portlet -->

@@ -16,7 +16,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      $scope.taskSelected=false;
      $scope.notes = [];  
      $scope.users = [];
-     
+     $scope.task={};
      $scope.user = undefined;
      $scope.slected_memeber = undefined;
      $scope.role= 'participant';
@@ -233,10 +233,11 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
       Task.patch($scope,params);
     };
 
-   $scope.inlineUpdateTask = function(id,title){    
-           var params ={ 'id':id,
-                      'title': title
+   $scope.inlineUpdateTask = function(task){  
+           var params ={ 'id':task.id,
+                      'title': task.status
             };
+            console.log(params);
       Task.patch($scope,params);
     };
   // Google+ Authentication 
@@ -766,8 +767,9 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
 ***************************************************************************************/
 $scope.listTags=function(){
      var varTagname = {'about_kind':'Task'};
+     console.log('testtesttag');
       Tag.list($scope,varTagname);
-     }
+}
 $scope.addNewtag = function(tag){
        var params = {   
                           'name': tag.name,

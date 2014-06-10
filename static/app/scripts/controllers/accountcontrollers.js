@@ -397,6 +397,7 @@ $scope.addTags=function(){
         };
         $scope.draggedTag=null;
         Tag.attach($scope,params,index);
+        $scope.$apply()
 
 
 
@@ -575,11 +576,6 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
 
 
        };
-        $(window).resize(function() {
-            var leftMargin=$(".chart").parent().width()-$(".chart").width();
-            $(".chart").css( "left",leftMargin/2);
-            $(".oppStage").css( "left",leftMargin/2);
-        });
        $scope.test=function(email){
         console.log(email);
        };
@@ -601,16 +597,6 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
            /* $('.waterfall').hide();
           $('.waterfall').show();*/
           $( window ).trigger( "resize" );
-          if($(".chart").parent().width()==0){
-           var leftMargin=210-$(".chart").width();
-                  $(".chart").css( "left",leftMargin/2);
-                  $(".oppStage").css( "left",leftMargin/2-2);
-          }else{
-              var leftMargin=$(".chart").parent().width()-$(".chart").width();
-                  $(".chart").css( "left",leftMargin/2);
-                  $(".oppStage").css( "left",leftMargin/2-2);
-
-          }
      };
 
        // We need to call this to refresh token when user credentials are invalid
@@ -1758,13 +1744,20 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
           $scope.newContactform=true;
         }else{
           if (current.firstname!=null&&current.lastname!=null) {
-                      $scope.contact={
+            $scope.contact={
             'firstname':current.firstname,
             'lastname':current.lastname,
-            'title':current.title,
-            'phones':[{'number':current.phone,'type':'work'}],
-            'emails':[{'email':current.email}]
+            'access':$scope.account.access
           }
+           if (current.title!=null) {
+             $scope.contact.title=current.title;
+          };
+          if (current.phone!=null) {
+             $scope.contact.phone=[{'number':current.phone,'type':'work'}];
+           }
+          if (current.emails!=null) {
+             $scope.contact.emails=[{'email':current.email}];
+          };
           $scope.account.contacts.push($scope.contact);
           $scope.currentContact={};
           $scope.newContactform=false;

@@ -48,6 +48,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
             var params = {'order' : $scope.order,'limit':20}
             Case.list($scope,params);
             Casestatus.list($scope,{});
+            console.log($scope.cases);
             var paramsTag = {'about_kind':'Case'};
             Tag.list($scope,paramsTag);
               // for (var i=0;i<100;i++)
@@ -157,6 +158,32 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
 
         $('#addCaseModal').modal('hide');
       };
+   $scope.priorityColor=function(pri){
+      if (pri<4) {
+          return '#BBE535';
+      }else{
+        if (pri<6) {
+             return '#EEEE22';
+        }else{
+          if (pri<8) {
+               return '#FFBB22';
+           }else{
+               return '#F7846A';
+           }    
+        }  
+      }
+     }
+     $scope.getStatusColor=function(status){
+        if (status=='open') {
+          return '#d84a38';
+        };
+        if (status=='pendding') {
+          return '#FFBB22';
+        };
+        if (status=='closed') {
+            return '#1d943b';
+        };
+     }
       $scope.addCaseOnKey = function(casee){
         if(event.keyCode == 13 && casee.name){
             $scope.save(casee);
@@ -461,9 +488,9 @@ $scope.addTags=function(){
       }
       $scope.dragTag=function(tag){
         $scope.draggedTag=tag;
-         $scope.$apply();
       };
       $scope.dropTag=function(casee,index){
+        console.log(casee);
         var items = [];
 
         var params = {
@@ -564,6 +591,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
           Case.get($scope,params);
           User.list($scope,{});
           Casestatus.list($scope,{});
+          $( window ).trigger( "resize" );
        };
         // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {
@@ -611,8 +639,6 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
        $('#topic_0').effect( "bounce", "slow" );
        $('#topic_0 .message').effect("highlight","slow");
      }
-
-
      $scope.selectMember = function(){
         $scope.slected_memeber = $scope.user;
         $scope.user = '';
