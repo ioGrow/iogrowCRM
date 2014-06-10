@@ -496,29 +496,32 @@
                             <div class="row">
                               <!-- ngRepeat: opp in opportunities -->
                                <div class="col-md-12 waterfall3" ng-hide="blankStateaccount">
-                                  <div  ng-repeat="opportunity in opportunities"  class=" cardElement"  >
+                                  <div  ng-repeat="opportunity in opportunities"  class=" cardElement oppRelList"  >
                   <div class="detailsSection">
                     <div class="head">
 
                         <div class="row">
                           <div class="col-md-12 col-xs-5">
-                            <div class="stage" >
+                            <div class="stage">
                                 <div easypiechart class="chart" options="chartOptions" percent="opportunity.current_stage.probability"></div>
-                                <div class="oppStage col-md-12">
+                                <div class="oppStage">
+                                <div class="oppStageContent">
                                   <span><%=opportunity.current_stage.name%></span><br>
                                   <span><%=opportunity.current_stage.probability%> %</span>
 
                                 </div>
+                                </div>
                             </div>
+                            <div class="clearfix"></div>
                           </div>
                           <div class="oppDetails col-md-12 col-xs-7">
                             <div class="col-md-12">
                               <div class="row">
                                 <div class="col-md-12">
                                   <div class="oppDescription">
-                                    <h3>
+                                    <h4>
                                       <a href="/#/opportunities/show/<%= opportunity.id %>"><%= opportunity.name %></a>
-                                    </h3>
+                                    </h4>
                                     <p class="description ellipsis">
                                         <%= opportunity.description %>
                                           <i></i>
@@ -538,10 +541,7 @@
                                 </div>
 
                                 <div class="oppEstDate">
-                                  Estimated close date:
-                                </div>
-                                <div class="oppEstDate">
-                                  <%=opportunity.closed_date | date:'MMMM dd, yyyy'%>
+                                      Estimated close date: <%=opportunity.closed_date | date:'MMMM dd, yyyy'%>
                                 </div>
 
                             </div>
@@ -1709,7 +1709,7 @@
               autoresize: true
           });
    $('.waterfall3').waterfall({
-              colMinWidth: 210,
+              colMinWidth: 220,
               defaultContainerWidth: 840,
               autoresize: true
           });
