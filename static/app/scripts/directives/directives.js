@@ -201,7 +201,6 @@ app.directive('draggable', function() {
             'dragend',
             function(e) {
                 this.classList.remove('drag');
-                //alert('end of draggable');
                 return false;
             },
             false

@@ -46,6 +46,11 @@
       </div>
 
 </div>
+<div class="dropOut"  ng-show="showUntag" >
+    <div class="trash">
+      <img alt="delete tag" droppable ng-drop="dropOutTag(account,$index)" class="" src="/static/img/iotrash.png" >
+    </div>
+</div>
 <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 <!-- BEGIN PAGE CONTAINER-->
 <div ng-show="immediateFailed">
@@ -170,7 +175,7 @@
             </div>
             <div class="tagsSection" ng-class="{hidden: account.tags==null}">
               <div class="sectionContent">
-                <a ng-repeat="tag in account.tags" href="/#/search/type:Account tags:<%=tag.id%>"> <span class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
+                <a ng-repeat="tag in account.tags" href="/#/search/type:Account tags:<%=tag.id%>"> <span draggable  ng-drag="dragTagItem(account.tags,$index)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
                 </a>
               </div>
             </div>
