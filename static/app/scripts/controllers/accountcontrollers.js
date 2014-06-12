@@ -37,12 +37,7 @@ app.controller('AccountListCtrl', ['$scope','$filter','Auth','Account','Tag','Ed
      ];
      $scope.tag.color= {'name':'green','color':'#BBE535'};
      $scope.runTheProcess = function(){
-          console.log('i am in account list run the process');
-          console.log('here is the access token in the gapi');
-          console.log(gapi.auth.getToken());
-          console.log('and here is the auth result saved in the window');
-          console.log(window.authResult);
-          var params = { 'order': $scope.order,
+         var params = { 'order': $scope.order,
                         'limit':20}
           Account.list($scope,params);
           var paramsTag = {'about_kind':'Account'};
@@ -58,7 +53,7 @@ app.controller('AccountListCtrl', ['$scope','$filter','Auth','Account','Tag','Ed
           //     Account.insert($scope,params);
           // }
           $("card_5").resize(function(){
-            console.log("slqdhsqlkdhsqlkhdsq");
+        
             $( window ).trigger( "resize" );
           });
      };
@@ -304,7 +299,7 @@ $scope.manage=function(){
 $scope.tag_save = function(tag){
           if (tag.name) {
              Tag.insert($scope,tag);
-             console.log("tag saved");
+           
            };
       };
 
@@ -335,8 +330,6 @@ $scope.addTags=function(){
       params = {
         'items': items
       }
-      console.log('************** Edge *********************');
-      console.log(params);
 
       Edge.insert($scope,params);
       $('#assigneeTagsToTask').modal('hide');
@@ -346,8 +339,7 @@ $scope.addTags=function(){
      var handleColorPicker = function () {
           if (!jQuery().colorpicker) {
               return;
-              console.log('errooooooooooooooor');
-              console.log("working******************************");
+             
           }
           $('.colorpicker-default').colorpicker({
               format: 'hex'
@@ -583,7 +575,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
 
        };
        $scope.test=function(email){
-        console.log(email);
+      
        };
        $scope.preparePercent = function(percent){
 
@@ -1037,7 +1029,7 @@ $scope.CaselistNextPageItems = function(){
 
      };
      $scope.showModal = function(){
-        console.log('button clicked');
+        
         $('#addAccountModal').modal('show');
 
       };
@@ -1235,7 +1227,7 @@ $scope.CaselistNextPageItems = function(){
                       'access': $scope.account.access
                       };
 
-        console.log(params);
+     
 
         Contact.insert($scope,params);
         $('#addContactModal').modal('hide');
@@ -1480,7 +1472,7 @@ $scope.deleteaccount = function(){
 
           var params = {'id':$scope.account.id,
                          'addresses':addressArray};
-          console.log(params);
+  
           Account.patch($scope,params);
       };
       $scope.addGeo = function(address){
@@ -1548,7 +1540,7 @@ $scope.deleteaccount = function(){
       };
   //HKA 08.01.2014
   $scope.About_render = function(accid){
-   console.log('we are on About Render');
+
     var acc = Account.get($scope,accountid);
 
           $scope.addresses = acc.addresses;
@@ -1602,7 +1594,6 @@ $scope.doneEditTag=function(tag){
           if (arr.indexOf(elem) == -1) {
               var copyOfElement = angular.copy(elem);
               arr.push(copyOfElement);
-              console.log(elem);
               $scope.initObject(elem);
 
           }else{
@@ -1741,11 +1732,12 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
       // new Lead
      $scope.save = function(account){
           if (account.name) {
-            console.log(account);
+          
            Account.insert($scope,account);
          };
       };
       $scope.addContact=function(current){
+        
        if($scope.newContactform==false){
           $scope.newContactform=true;
         }else{
@@ -1765,6 +1757,8 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
              $scope.contact.emails=[{'email':current.email}];
           };
           $scope.account.contacts.push($scope.contact);
+          console.log('-----------$scope.account.contacts----------');
+          console.log($scope.account.contacts);
           $scope.currentContact={};
           $scope.newContactform=false;
           }else{
@@ -1774,6 +1768,8 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
 
         }
        }
+
+
        $scope.unselectContact=function(index){
         $scope.account.contacts.splice(index,1);
        }
@@ -1858,9 +1854,10 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
                         'emails':$scope.emails,
                         'infonodes':$scope.prepareInfonodes(),
                         'access': account.access,
-                        'contacts': account.contacts,
+                        'contacts':account.contacts
                       };
-                      console.log(params);
+          console.log('----------------params----------------');
+          console.log(params);
           if ($scope.logo.logo_img_id){
               params['logo_img_id'] = $scope.logo.logo_img_id;
               params['logo_img_url'] = $scope.logo.logo_img_url;

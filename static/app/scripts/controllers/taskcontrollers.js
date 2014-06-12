@@ -240,6 +240,34 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
             console.log(params);
       Task.patch($scope,params);
     };
+  $scope.inlinePatch=function(kind,edge,name,entityKey,value){
+
+    
+
+   if (kind=='Task') {
+          params = {'id':$scope.task.id,
+             name:value}
+         Task.patch($scope,params);
+               }}
+
+  $scope.listTags=function(){
+     var varTagname = {'about_kind':'Task'};
+      Tag.list($scope,varTagname);
+     };
+
+      
+     $scope.listTasks=function(effects){
+      $scope.selected_tasks=[];/*we have to change it */
+      var params = { 'order': $scope.order,
+                        'limit':7}
+        if (effects){
+          Task.list($scope,params,effects);
+        }
+        else{
+          Task.list($scope,params);
+        }
+        
+     }
   // Google+ Authentication 
     Auth.init($scope);
 

@@ -248,19 +248,16 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
         Opportunity.list($scope,params);
      };
      $scope.filterByStage = function(filter){
-        if (filter){
+      console.log('----------hello--------');
+     
+       
+          console.log(filter);
           var params = {
                          'stage': filter,
                          'order': $scope.order,
                          'limit':20
                        }
-        }
-        else{
-          var params = {
-              'order': $scope.order,
-
-              'limit':6}
-        };
+       
         $scope.isFiltering = true;
         Opportunity.list($scope,params);
      };
