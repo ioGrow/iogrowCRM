@@ -172,6 +172,7 @@ topicservices.factory('Tag', function($http) {
             $scope.isLoading = false;
             $scope.tagattached(resp,index);
             $scope.$apply();
+            $( window ).trigger( "resize" );
          // $('#addAccountModal').modal('hide');
          // window.location.replace('#/accounts/show/'+resp.id);
           
