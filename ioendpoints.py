@@ -1920,7 +1920,7 @@ class CrmEngineApi(remote.Service):
 
             my_model.put()
             invited_user_id = my_model.id
-
+        
         confirmation_url = "http://gcdc2013-iogrow.appspot.com//sign-in?id=" + str(invited_user_id) + '&'
         sender_address = "ioGrow notifications <notifications@gcdc2013-iogrow.appspotmail.com>"
         subject = "Confirm your registration"
