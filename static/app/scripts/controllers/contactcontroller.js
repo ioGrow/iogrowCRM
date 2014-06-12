@@ -523,16 +523,6 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
             /* $('.waterfall').hide();
            $('.waterfall').show();*/
            $( window ).trigger( "resize" );
-           if($(".chart").parent().width()==0){
-            var leftMargin=210-$(".chart").width();
-                   $(".chart").css( "left",leftMargin/2);
-                   $(".oppStage").css( "left",leftMargin/2-2);
-           }else{
-               var leftMargin=$(".chart").parent().width()-$(".chart").width();
-                   $(".chart").css( "left",leftMargin/2);
-                   $(".oppStage").css( "left",leftMargin/2-2);
-
-           }
       };
       // What to do after authentication
       $scope.runTheProcess = function(){
