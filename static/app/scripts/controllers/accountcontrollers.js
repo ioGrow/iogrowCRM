@@ -22,6 +22,8 @@ app.controller('AccountListCtrl', ['$scope','$filter','Auth','Account','Tag','Ed
      $scope.tag = {};
      $scope.testtitle = "Customer Support Customer Support";
      $scope.showNewTag=false;
+     $scope.showUntag=false;   
+     $scope.tagToUnattach={tags:[],index:undefined};
      //Manage Color
      $scope.color_pallet=[
          {'name':'red','color':'#F7846A'},
@@ -382,7 +384,6 @@ $scope.addTags=function(){
       }
       $scope.dropTag=function(account,index){
         var items = [];
-
         var params = {
               'parent': account.entityKey,
               'tag_key': $scope.draggedTag.entityKey
@@ -390,11 +391,16 @@ $scope.addTags=function(){
         $scope.draggedTag=null;
         Tag.attach($scope,params,index);
         $scope.$apply()
-
-
-
-
       };
+      $scope.dropOutTag=function(){
+        $scope.showUntag=false;
+        $scope.tagToUnattach.tags.splice($scope.tagToUnattach.index, 1);
+      }
+      $scope.dragTagItem=function(tags,index){
+        $scope.showUntag=true;
+        $scope.tagToUnattach.tags=tags;
+        $scope.tagToUnattach.index=index;
+      }
       $scope.tagattached=function(tag,index){
           if ($scope.accounts[index].tags == undefined){
             $scope.accounts[index].tags = [];
@@ -1735,7 +1741,6 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
        if($scope.newContactform==false){
           $scope.newContactform=true;
         }else{
-
           if (current.firstname!=null&&current.lastname!=null) {
             $scope.contact={
             'firstname':current.firstname,

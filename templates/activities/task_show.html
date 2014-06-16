@@ -134,7 +134,9 @@
       <div class="col-md-12 showPage taskShowHead margin-bottom-15">
             <h2 class="page-title showTaskTitle" ng-class="{task_closed: task.status=='closed'}">
 
-             <span editable-text="task.title"  ng-model='task.title'  onbeforesave="inlinePatch('Task','', 'title',task.entityKey,$data)">
+
+    <span editable-text="task.title"  ng-model='task.title'  onbeforesave="inlinePatch('Task','', 'title',task.entityKey,$data)">
+
 
               <%=task.title%> 
              </span>
