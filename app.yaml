@@ -18,6 +18,8 @@ libraries:
 
 
 handlers:
+- url: /admin/.*
+  script: google.appengine.ext.admin.application
 - url: /static
   static_dir: static
 # Endpoints handler
