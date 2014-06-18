@@ -23,7 +23,7 @@ app.controller('AccountListCtrl', ['$scope','$filter','Auth','Account','Tag','Ed
      $scope.testtitle = "Customer Support Customer Support";
      $scope.showNewTag=false;
      $scope.showUntag=false;   
-     $scope.tagToUnattach={tags:[],index:undefined};
+     $scope.edgekeytoDelete=undefined;
      //Manage Color
      $scope.color_pallet=[
          {'name':'red','color':'#F7846A'},
@@ -393,13 +393,16 @@ $scope.addTags=function(){
         $scope.$apply()
       };
       $scope.dropOutTag=function(){
-        $scope.showUntag=false;
-        $scope.tagToUnattach.tags.splice($scope.tagToUnattach.index, 1);
+        
+        
+        var params={'entityKey':$scope.edgekeytoDelete}
+        Edge.delete($scope,params);
+        console.log($scope.edgekeytoDelete);
+        $scope.edgekeytoDelete=undefined;
       }
-      $scope.dragTagItem=function(tags,index){
+      $scope.dragTagItem=function(edgekey){
         $scope.showUntag=true;
-        $scope.tagToUnattach.tags=tags;
-        $scope.tagToUnattach.index=index;
+        $scope.edgekeytoDelete=edgekey;
       }
       $scope.tagattached=function(tag,index){
           if ($scope.accounts[index].tags == undefined){

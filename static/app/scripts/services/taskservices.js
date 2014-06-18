@@ -323,33 +323,3 @@ topicservices.factory('Contributor', function($http) {
 
 return Contributor;
 });
-topicservices.factory('Edge', function($http) {
-  
-  var Edge = function(data) {
-    angular.extend(this, data);
-  }
-
-
- 
-   Edge.insert = function($scope,params){
-      $scope.isLoading = true;
-      gapi.client.crmengine.edges.insert(params).execute(function(resp) {
-         if(!resp.code){
-
-            $scope.edgeInserted();
-            $scope.isLoading = false;
-
-            $scope.$apply();
-         
-         }else{
-          console.log(resp.code);
-         }
-      });
-  };
-
-
-  
-
-return Edge;
-});
-
