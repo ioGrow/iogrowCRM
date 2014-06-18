@@ -21,8 +21,14 @@ STANDARD_TABS = [
                 {'name': 'Cases','label': 'Cases','url':'/#/cases/','icon':'suitcase'},
                 {'name': 'Tasks','label': 'Tasks','url':'/#/tasks/','icon':'check'}
                 ]
+EARLY_BIRD_TABS = [
+                {'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},
+                {'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},
+                {'name': 'Tasks','label': 'Tasks','url':'/#/tasks/','icon':'check'},
+                {'name': 'Calendar','label': 'Calendar','url':'/#/calendar/','icon':'calendar'}
+                ]
 STANDARD_PROFILES = ['Super Administrator', 'Standard User']
-STANDARD_APPS = [{'name': 'sales', 'label': 'CRM', 'url':'/#/accounts/'}]
+STANDARD_APPS = [{'name': 'sales', 'label': 'Relationships', 'url':'/#/leads/'}]
 STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
 ADMIN_TABS = [
             {'name': 'Users','label': 'Users','url':'/#/admin/users','icon':'user'},
@@ -176,6 +182,67 @@ class Organization(ndb.Model):
                 created_profile.put_async()
         # init default stages,status, default values...
         cls.init_default_values(org_key)
+    @classmethod
+    def create_early_bird_instance(cls,org_name, admin):
+        # init google drive folders
+        # Add the task to the default queue.
+        organization = cls(
+                        name=org_name
+                        )
+        org_key = organization.put()
+        taskqueue.add(
+                    url='/workers/createorgfolders',
+                    params={
+                            'email': admin.email,
+                            'org_key':org_key.urlsafe()
+                            }
+                    )
+        # create standard tabs
+        created_tabs = []
+        for tab in EARLY_BIRD_TABS:
+            created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
+            tab_key = created_tab.put()
+            created_tabs.append(tab_key)
+        # create admin tabs
+        admin_tabs = []
+        for tab in ADMIN_TABS:
+            created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
+            tab_key =created_tab.put()
+            admin_tabs.append(tab_key)
+        # create standard apps
+        created_apps = []
+        sales_app = None
+        for app in STANDARD_APPS:
+            created_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=created_tabs,organization=org_key)
+            app_key = created_app.put()
+            if app['name']=='sales':
+                sales_app = app_key
+            created_apps.append(app_key)
+        # create admin app
+        app = ADMIN_APP
+        admin_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=admin_tabs,organization=org_key)
+        admin_app_key = admin_app.put()
+        # create standard profiles
+        for profile in STANDARD_PROFILES:
+            default_app = sales_app
+            if profile=='Super Administrator':
+                created_apps.append(admin_app_key)
+                created_tabs.extend(admin_tabs)
+            created_profile = Profile(
+                                      name=profile,
+                                      apps=created_apps,
+                                      default_app=default_app,
+                                      tabs=created_tabs,
+                                      organization=org_key
+                                    )
+            # init admin config
+            if profile=='Super Administrator':
+                admin_profile_key = created_profile.put()
+                admin.init_early_bird_config(org_key,admin_profile_key)
+            else:
+                created_profile.put_async()
+        # init default stages,status, default values...
+        cls.init_default_values(org_key)
 
 
 
@@ -290,6 +357,30 @@ class User(EndpointsModel):
         self.apps = apps
         self.active_app = profile.default_app
         self.type = 'business_user'
+        if memcache.get(self.email) :
+            memcache.set(self.email, self)
+        else:
+            memcache.add(self.email, self)
+        if self.google_credentials:
+            taskqueue.add(
+                        url='/workers/createcontactsgroup',
+                        params={
+                                'email': self.email
+                                }
+                        )
+        self.put()
+    def init_early_bird_config(self,org_key,profile_key):
+        profile = profile_key.get()
+        active_app_mem_key = '%s_active_app' % self.google_user_id
+        memcache.add(active_app_mem_key, profile.default_app.get())
+        # Get Apps for this profile:
+        apps = profile.apps
+        # Prepare user to be updated
+        self.organization = org_key
+        self.profile = profile.key
+        self.apps = apps
+        self.active_app = profile.default_app
+        self.type = 'early_bird'
         if memcache.get(self.email) :
             memcache.set(self.email, self)
         else:
