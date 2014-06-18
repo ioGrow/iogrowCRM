@@ -22,6 +22,8 @@ app.controller('AccountListCtrl', ['$scope','$filter','Auth','Account','Tag','Ed
      $scope.tag = {};
      $scope.testtitle = "Customer Support Customer Support";
      $scope.showNewTag=false;
+     $scope.showUntag=false;   
+     $scope.tagToUnattach={tags:[],index:undefined};
      //Manage Color
      $scope.color_pallet=[
          {'name':'red','color':'#F7846A'},
@@ -382,18 +384,23 @@ $scope.addTags=function(){
       }
       $scope.dropTag=function(account,index){
         var items = [];
-
         var params = {
               'parent': account.entityKey,
               'tag_key': $scope.draggedTag.entityKey
         };
         $scope.draggedTag=null;
         Tag.attach($scope,params,index);
-
-
-
-
+        $scope.$apply()
       };
+      $scope.dropOutTag=function(){
+        $scope.showUntag=false;
+        $scope.tagToUnattach.tags.splice($scope.tagToUnattach.index, 1);
+      }
+      $scope.dragTagItem=function(tags,index){
+        $scope.showUntag=true;
+        $scope.tagToUnattach.tags=tags;
+        $scope.tagToUnattach.index=index;
+      }
       $scope.tagattached=function(tag,index){
           if ($scope.accounts[index].tags == undefined){
             $scope.accounts[index].tags = [];
@@ -567,11 +574,6 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
 
 
        };
-        $(window).resize(function() {
-            var leftMargin=$(".chart").parent().width()-$(".chart").width();
-            $(".chart").css( "left",leftMargin/2);
-            $(".oppStage").css( "left",leftMargin/2);
-        });
        $scope.test=function(email){
       
        };
@@ -593,16 +595,6 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
            /* $('.waterfall').hide();
           $('.waterfall').show();*/
           $( window ).trigger( "resize" );
-          if($(".chart").parent().width()==0){
-           var leftMargin=210-$(".chart").width();
-                  $(".chart").css( "left",leftMargin/2);
-                  $(".oppStage").css( "left",leftMargin/2-2);
-          }else{
-              var leftMargin=$(".chart").parent().width()-$(".chart").width();
-                  $(".chart").css( "left",leftMargin/2);
-                  $(".oppStage").css( "left",leftMargin/2-2);
-
-          }
      };
 
        // We need to call this to refresh token when user credentials are invalid
@@ -1749,14 +1741,21 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
        if($scope.newContactform==false){
           $scope.newContactform=true;
         }else{
-          if (current.firstname!=null && current.lastname!=null) {
-                      $scope.contact={
+          if (current.firstname!=null&&current.lastname!=null) {
+            $scope.contact={
             'firstname':current.firstname,
             'lastname':current.lastname,
-            'title':current.title,
-            'phones':[{'number':current.phone}],
-            'emails':[{'email':current.email}]
+            'access':$scope.account.access
           }
+           if (current.title!=null) {
+             $scope.contact.title=current.title;
+          };
+          if (current.phone!=null) {
+             $scope.contact.phone=[{'number':current.phone,'type':'work'}];
+           }
+          if (current.emails!=null) {
+             $scope.contact.emails=[{'email':current.email}];
+          };
           $scope.account.contacts.push($scope.contact);
           console.log('-----------$scope.account.contacts----------');
           console.log($scope.account.contacts);

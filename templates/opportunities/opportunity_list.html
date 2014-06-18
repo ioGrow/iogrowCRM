@@ -1,11 +1,16 @@
+
 <div class="row subHeader">
-  <div class="subHContent">
     <div class="currentApp">
-     <h2 class="page-title">
-      <!-- <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
-      {{active_app.label}}
-    </h2>
-        <div class="filterOptions">
+       <h2 class="page-title">
+       {{active_app.label}}
+       <!--  <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
+      </h2>
+    </div> 
+    <div class=" subHeaderContent">
+      <div class="col-md-9">
+      <div class="row">
+      <div class="col-md-10 col-xs-10">
+      <div class="filterOptions">
         <span role="button" class="filterItem activeFilter hidden-xs hiddenOnxs" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">All <span class="hidden-xs hiddenOnxs">Opportunities</span> </span>
         <span role="button" class="filterItem hidden-xs hiddenOnxs" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">My <span class="hidden-xs hiddenOnxs">Opportunities</span></span>
         <div class="btn-group">
@@ -34,13 +39,16 @@
               </li>
             </ul>
       </div>
-        <a href="/#/accounts/new" class="btn red afterScrollBtn hidden">
+      </div>
+      </div>
+      <div class="col-md-2 col-xs-2">
+      <a href="/#/opportunities/new" class="btn red newAccountBtnOnscroll pull-right hidden afterScrollBtn">
            New <span class="hidden-xs hiddenOnxs">Opportunity</span> 
          </a>
       </div>
-    
-  </div>
-  </div>
+      </div>
+    </div>
+    </div>
 </div>
 <div  class="page-content">
   <div class="loader-container row" ng-show="isLoading">

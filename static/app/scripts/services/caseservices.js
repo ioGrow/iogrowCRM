@@ -213,6 +213,7 @@ accountservices.factory('Case', function() {
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
+                  $( window ).trigger( "resize" );
                };
               }
       });
@@ -249,6 +250,7 @@ accountservices.factory('Case', function() {
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.$apply();
+                 $( window ).trigger( "resize" );
                };
               }
       });
