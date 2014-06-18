@@ -220,6 +220,20 @@ class SignInHandler(BaseHandler, SessionEnabledHandler):
         template = jinja_environment.get_template('templates/sign-in.html')
         self.response.out.write(template.render(template_values))
 
+class EarlyBirdHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        # Set the user locale from user's settings
+        user_id = self.request.get('id')
+        lang = self.request.get('language')
+        self.set_user_locale(lang)
+            # Render the template
+        template_values = {
+                            'CLIENT_ID': CLIENT_ID,
+                            'ID' : user_id
+                          }
+        template = jinja_environment.get_template('templates/early-bird.html')
+        self.response.out.write(template.render(template_values))
+
 class SignUpHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
@@ -241,6 +255,27 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
             self.redirect('/')
         else:
             self.redirect('/sign-in')
+
+class StartEarlyBird(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            template_values = {
+              'userinfo': user,
+              'CLIENT_ID': CLIENT_ID}
+            template = jinja_environment.get_template('templates/sign-up-early-bird.html')
+            self.response.out.write(template.render(template_values))
+        else:
+            self.redirect('/early-bird')
+    @ndb.toplevel
+    def post(self):
+        if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            org_name = self.request.get('org_name')
+            model.Organization.create_early_bird_instance(org_name,user)
+            self.redirect('/')
+        else:
+            self.redirect('/early-bird')
 
 class GooglePlusConnect(SessionEnabledHandler):
     @staticmethod
@@ -306,6 +341,14 @@ class GooglePlusConnect(SessionEnabledHandler):
             user.google_public_profile_url = userinfo.get('link')
             user.email = userinfo.get('email')
             user.google_public_profile_photo_url = userinfo.get('picture')
+            invited_by = user.invited_by.get()
+            user.organization = invited_by.organization
+            profile =  model.Profile.query(
+                                            model.Profile.name=='Standard User',
+                                            model.Profile.organization==invited_by.organization
+                                          ).get()
+            model.Invitation.delete_by(user.email)
+            user.init_user_config(invited_by.organization,profile.key)
         else:
             user = model.User.get_by_email(email)
         if user is None:
@@ -665,7 +708,7 @@ routes = [
     ('/workers/syncevent',SyncCalendarEvent),
     ('/workers/createcontactsgroup',CreateContactsGroup),
     ('/workers/sync_contacts',SyncContact),
-    
+
     ('/',IndexHandler),
 
     # Templates Views Routes
@@ -716,9 +759,11 @@ routes = [
     # ioGrow Live
     ('/welcome/',WelcomeHandler),
     # Authentication Handlers
+    ('/early-bird',EarlyBirdHandler),
     ('/sign-in',SignInHandler),
     ('/sign-up',SignUpHandler),
-    ('/gconnect',GooglePlusConnect)
+    ('/gconnect',GooglePlusConnect),
+    ('/start-early-bird-account',StartEarlyBird)
     ]
 config = {}
 config['webapp2_extras.sessions'] = {

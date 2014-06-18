@@ -24,7 +24,7 @@
 
         <!-- Web Fonts -->
         <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic' rel='stylesheet' type='text/css'>
-        
+
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -80,7 +80,7 @@
            // add to keen io
 
            var trackSubscribers = function () {
-                    
+
                     var subscriber = {
                         item: email,
                         name: name,
@@ -101,8 +101,8 @@
 
          });
         });
-        
-        
+
+
     }
   </script>
 
@@ -122,14 +122,14 @@
   <style type="text/css">
     #customBtn {
       display: inline-block;
-      background: #dd4b39;
+      background: #4D90FE;
       color: white;
-      width: 140px;
+      width: 300px;
       border-radius: 5px;
       white-space: nowrap;
     }
     #customBtn:hover {
-      background: #e74b37;
+      background: #4D90FE;
       cursor: hand;
     }
     #customBtn:active {
@@ -184,14 +184,15 @@
       vertical-align: middle;
       width: 35px;
       height: 35px;
-      border-right: #bb3f30 1px solid;
+      border-right: #4D90FE 1px solid;
     }
     span.buttonText {
       display: inline-block;
       vertical-align: middle;
       padding-left:15px;
       padding-right: 35px;
-      font-size: 14px;
+      font-size: 16px;
+      font-weight:bold;
       letter-spacing: normal !important;
       text-transform: none !important;
       font-weight: bolder;
@@ -205,7 +206,7 @@
     <span class="label">Sign in with:</span>
     <div id="customBtn" class="customGPlusSignIn">
       <span class="icon .buzz-out"></span>
-      <span class="buttonText">Subscribe></span>
+      <span class="buttonText">Give ioGrow a try - it's free</span>
     </div>
   </div>
 
@@ -233,7 +234,7 @@
                         <span class="icon-bar"></span>
                     </button>
                     <a class="navbar-brand" href="/welcome/">
-                        <img src="/static/welcome/img/iogrow_logo.png" style="margin-top: -28px;padding-top: 10px;">
+                        <img src="http://storage.googleapis.com/iogrow-gs/static/img/IO_001_new.png" style="margin-top: -28px;padding-top: 10px;">
                     </a>
                 </div>
 
@@ -249,12 +250,12 @@
                     <ul class="nav navbar-nav navbar-right">
                         <!-- <li class="dropdown"><a href="#signin" data-toggle="modal" data-target=".bs-modal-sm"><i class="fa fa-lock"></i> Sign In</a></li> -->
                         <div class="navbar-form pull-left">
-                           
+
                            <div id="gSignInWrapper">
     <span class="label">Sign in with:</span>
     <div id="customBtn" class="customGPlusSignIn buzz-out customBtn">
       <span class="icon"></span>
-      <span class="buttonText">Subscribe</span>
+      <span class="buttonText">Give ioGrow a try - it's free</span>
     </div>
     <!-- div#customBtn.customGPlusSignIn.buzz-out -->
   </div>
@@ -266,15 +267,15 @@
                             data-cookiepolicy="single_host_origin"
                             data-requestvisibleactions="http://schemas.google.com/AddActivity"
                             data-scope="https://www.googleapis.com/auth/plus.login">
-                    </span> 
+                    </span>
                         </span> -->
-                                                
+
                         </div>
                     </ul>
                 </div><!--/nav-collapse -->
             </div><!-- /container -->
         </div><!-- /fixed-navbar -->
-        
+
         <!-- Sign In / Sign Up Modal -->
         <div class="modal fade bs-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-sm">
@@ -299,7 +300,7 @@
                                                 <input id="Email" name="Email" class="form-control" type="text" placeholder="Your email address" class="input-large" required="">
                                             </div>
                                         </div>
-                
+
                                         <!-- Password input-->
                                         <div class="control-group">
                                             <label class="control-label" for="passwordinput">Password:</label>
@@ -307,7 +308,7 @@
                                                 <input required="" id="passwordinput" name="passwordinput" class="form-control" type="password" placeholder="********" class="input-medium">
                                             </div>
                                         </div>
-                
+
                                         <!-- Multiple Checkboxes (inline) -->
                                         <div class="control-group">
                                             <label class="control-label" for="rememberme"></label>
@@ -318,7 +319,7 @@
                                                 </label>
                                             </div>
                                         </div>
-                
+
                                         <!-- Button -->
                                         <div class="control-group">
                                             <label class="control-label" for="signin"></label>
@@ -341,7 +342,7 @@
                                                 <input id="Email" name="Email" class="form-control" type="text" placeholder="Your email address" class="input-large" required="">
                                             </div>
                                         </div>
-                                        
+
                                         <!-- Password input-->
                                         <div class="control-group">
                                             <label class="control-label" for="password">Password:</label>
@@ -350,7 +351,7 @@
                                                 <em>1-8 Characters</em>
                                             </div>
                                         </div>
-                                        
+
                                         <!-- Text input-->
                                         <div class="control-group">
                                             <label class="control-label" for="reenterpassword">Re-Enter Password:</label>
@@ -358,7 +359,7 @@
                                                 <input id="reenterpassword" class="form-control" name="reenterpassword" type="password" placeholder="********" class="input-large" required="">
                                             </div>
                                         </div>
-                                        
+
                                         <!-- Multiple Radios (inline) -->
                                         <br>
                                         <div class="control-group">
@@ -370,7 +371,7 @@
                                                     <input type="radio" name="humancheck" id="humancheck-1" value="human">I'm Human</label>
                                             </div>
                                         </div>
-                                        
+
                                         <!-- Button -->
                                         <div class="control-group">
                                             <label class="control-label" for="confirmsignup"></label>
@@ -400,11 +401,11 @@
             <div class="container">
                 <div class="row text-center">
                     <div class="col-lg-12">
-                        <h1>Feature rich ... <b>Easy to use </b></h1>
-                        <h3>Show your product with confidence.</h3>
+                        <h1>CRM for Startups... <b>That just works</b></h1>
+                        <h3><b>Seamlessly integrated with Gmail</b></h3>
                         <br>
                     </div>
-                    
+
 
                     <div class="col-lg-2 hidden-xs hidden-sm hidden-md">
                         <h5>Automate business processes</h5>
@@ -432,7 +433,7 @@
         <div id="intro">
             <div class="container">
                 <div class="row text-center">
-                    
+
                     <div class="col-lg-3">
 
                         <span class="typcn typcn-group-outline"><span>
@@ -462,7 +463,7 @@
             </div> <!-- /container -->
         </div><!-- /introwrap -->
 
-    
+
         <!-- Features Wrap -->
         <section id="features" name="features"></section>
         <div id="featureswrap">
@@ -473,7 +474,7 @@
                     <br>
                     <br>
                     <div class="col-lg-6">
-                        
+
 
 <a href="/static/welcome/img/mark_as_lead.gif" data-lightbox="image-1" data-title="My caption"><img class="img-responsive" src="/static/welcome/img/mark_as_lead.png" alt="" style="
     width: 350px;
@@ -483,14 +484,14 @@
     -webkit-box-shadow: 4px 9px 16px -4px rgba(163,160,163,1); -moz-box-shadow: 4px 9px 16px -4px rgba(163,160,163,1); box-shadow: 4px 9px 16px -4px rgba(163,160,163,1);
 "> </a>
                     </div>
-                    
+
                     <div class="col-lg-6">
                         <br>
                         <!-- Accordion -->
                         <div class="accordion ac" id="accordion2">
                             <div class="accordion-group active">
                                 <div class="accordion-heading">
-                                    <i class=""></i> 
+                                    <i class=""></i>
                                     </a>
                                 </div><!-- /accordion-heading -->
                                 <div id="collapseOne" class="accordion-body collapse in">
@@ -501,8 +502,8 @@
                                     </div><!-- /accordion-inner -->
                                 </div><!-- /collapse -->
                             </div><!-- /accordion-group -->
-                            
-                            <br>            
+
+                            <br>
                         </div><!-- /accordion -->
                     </div>
                 </div><!-- /row -->
@@ -515,7 +516,7 @@
                         <h4><i class=" "></i>  </h4>
                         <p style="width: 422px;margin-left: 120px;">When you are on a call with a customer, you can instantly access his profile for a detailed look at his information and your common interactions such as notes, tasks, opportunities, and cases.
                         <br>
-                        So you can make each conversation more personal and productive.  
+                        So you can make each conversation more personal and productive.
                         </p>
                         <br><br>
                     </div>
@@ -531,14 +532,14 @@
                     </div>
 
                 </div>
-                
+
 <div class="row">
                     <h2 class="text-center">Clear & Concise</h2>
                     <hr>
                     <br>
                     <br>
                     <div class="col-lg-6">
-                        
+
 
 <a href="/static/welcome/img/asus.gif" data-lightbox="image-1" data-title="My caption"><img class="img-responsive" src="/static/welcome/img/asus.gif" alt="" style="
     width: 430px;
@@ -548,14 +549,14 @@
     -webkit-box-shadow: 4px 9px 16px -4px rgba(163,160,163,1); -moz-box-shadow: 4px 9px 16px -4px rgba(163,160,163,1); box-shadow: 4px 9px 16px -4px rgba(163,160,163,1);
 "> </a>
                     </div>
-                    
+
                     <div class="col-lg-6">
                         <br>
                         <!-- Accordion -->
                         <div class="accordion ac" id="accordion2">
                             <div class="accordion-group active">
                                 <div class="accordion-heading">
-                                    <i class=" "></i>  
+                                    <i class=" "></i>
                                     </a>
                                 </div><!-- /accordion-heading -->
                                 <div id="collapseOne" class="accordion-body collapse in">
@@ -567,8 +568,8 @@
                                     </div><!-- /accordion-inner -->
                                 </div><!-- /collapse -->
                             </div><!-- /accordion-group -->
-                            
-                            <br> 
+
+                            <br>
 
                         </div><!-- /accordion -->
 
@@ -603,7 +604,7 @@ A clean, simple interface that collect all your customer's data, can dramaticall
         </div><!-- /featureswrap -->
 
 
-        
+
 
         <!-- Divider 1 Section -->
         <div id="divider01">
@@ -634,7 +635,7 @@ A clean, simple interface that collect all your customer's data, can dramaticall
             </div><!-- /container -->
         </div><!-- /divider01 -->
 
-        
+
         <!-- Pricing Section -->
         <section id="pricing" name="pricing"></section>
         <div id="pricingwrap">
@@ -803,7 +804,7 @@ A clean, simple interface that collect all your customer's data, can dramaticall
             </div>
         </div><!-- /divider02 -->
 
-          
+
         <!-- Footer Wrap -->
         <section id="contact" name="contact"></section>
         <div id="footerwrap">
@@ -817,7 +818,7 @@ A clean, simple interface that collect all your customer's data, can dramaticall
                             <i class="fa fa-envelope-o"></i> <a href="mailto:support@bootstacktheme.com">support@bootstacktheme.com</a>
                         </p>
                     </div>
-                    
+
                     <div class="col-lg-4">
                         <h3>We Are Social</h3>
                         <br>
@@ -832,7 +833,7 @@ A clean, simple interface that collect all your customer's data, can dramaticall
                             <a href="#" rel="tooltip" title="YouTube" class="youtube">YouTube</a>
                         </div>
                     </div>
-                    
+
                     <div class="col-lg-4">
                         <h3>Newsletter</h3>
                         <br>

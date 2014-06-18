@@ -25,17 +25,7 @@ edgeservices.factory('Edge', function($http) {
       });
   };
 
-  /*Edge.delete = function($scope,params){
-    console.log('------------I am here 222--------------');
-    $scope.isLoading = true;
-    gapi.client.crmengine.edges.delete(params).execute(function(resp){
-        $scope.isLoading = false;
-        $scope.$apply();
-    
-    });
-    
-
-  };*/
+  
 
   Edge.delete = function($scope,params){
     $scope.isLoading = true;
