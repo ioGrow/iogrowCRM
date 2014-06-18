@@ -341,6 +341,14 @@ class GooglePlusConnect(SessionEnabledHandler):
             user.google_public_profile_url = userinfo.get('link')
             user.email = userinfo.get('email')
             user.google_public_profile_photo_url = userinfo.get('picture')
+            invited_by = user.invited_by.get()
+            user.organization = invited_by.organization
+            profile =  model.Profile.query(
+                                            model.Profile.name=='Standard User',
+                                            model.Profile.organization==invited_by.organization
+                                          ).get()
+            model.Invitation.delete_by(user.email)
+            user.init_user_config(invited_by.organization,profile.key)
         else:
             user = model.User.get_by_email(email)
         if user is None:

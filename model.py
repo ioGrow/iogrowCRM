@@ -335,6 +335,7 @@ class User(EndpointsModel):
     active_tabs = ndb.KeyProperty(repeated=True)
     app_changed = ndb.BooleanProperty(default=True)
     google_contacts_group = ndb.StringProperty()
+    invited_by = ndb.KeyProperty()
 
 
     def put(self, **kwargs):
@@ -492,7 +493,16 @@ class User(EndpointsModel):
                                             status = user.status
                                             )
             items.append(user_schema)
-        return iomessages.UserListSchema(items=items)
+        invitees_list = []
+        invitees = Invitation.list_invitees(organization)
+        for invitee in invitees:
+            invited_schema = iomessages.InvitedUserSchema(
+                                                          invited_mail=invitee['invited_mail'],
+                                                          invited_by=invitee['invited_by'],
+                                                          updated_at=invitee['updated_at'].strftime("%Y-%m-%dT%H:%M:00.000")
+                                                        )
+            invitees_list.append(invited_schema)
+        return iomessages.UserListSchema(items=items,invitees=invitees_list)
 
 class Group(EndpointsModel):
     _message_fields_schema = ('id','entityKey','name','description','status', 'organization')
@@ -526,6 +536,45 @@ class Member(EndpointsModel):
       group.put()
 
 
+class Invitation(ndb.Model) :
+    invited_mail = ndb.StringProperty()
+    invited_by = ndb.KeyProperty()
+    organization = ndb.KeyProperty()
+    updated_at = ndb.DateTimeProperty(auto_now=True)
+    @classmethod
+    def delete_by(cls,email):
+        invitations = cls.query(
+                                cls.invited_mail==email
+                              ).fetch()
+        for invitation in invitations:
+            invitation.key.delete()
+
+    @classmethod
+    def insert(cls,email,invited_by):
+        # check if the user is invited
+        invitation = cls.query(
+                                cls.invited_mail==email,
+                                cls.organization==invited_by.organization
+                              ).get()
+        if invitation is None:
+            invitation = cls(
+                            invited_mail = email,
+                            organization = invited_by.organization
+                            )
+        invitation.invited_by = invited_by.key
+        invitation.put()
+    @classmethod
+    def list_invitees(cls,organization):
+        items = []
+        invitees = cls.query(cls.organization == organization).fetch()
+        for invitee in invitees:
+            item = {
+                  'invited_mail' :invitee.invited_mail,
+                  'invited_by' :invitee.invited_by.get().google_display_name,
+                  'updated_at' : invitee.updated_at
+            }
+            items.append(item)
+        return items
 
 
 #HKA 19.11.2013 Class for Phone on all Object
