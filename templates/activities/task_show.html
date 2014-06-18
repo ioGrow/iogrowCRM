@@ -8,7 +8,7 @@
   <div class=" subHeaderContent">
              
             <h2 class="page-title">
-            <a href="/#/tasks/" data-toggle="tooltip" data-placement="bottom" title="Back to Cases">
+            <a href="/#/tasks/" data-toggle="tooltip" data-placement="bottom" title="Back to Tasks">
             <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Tasks")}}  </a></h2>
   </div>
 </div>
@@ -133,7 +133,11 @@
     <!--HKA 19.11.2013 BEGIN Span comments-->
       <div class="col-md-12 showPage taskShowHead margin-bottom-15">
             <h2 class="page-title showTaskTitle" ng-class="{task_closed: task.status=='closed'}">
-             <span editable-text="task.title" onbeforesave="inlineUpdateTask(task)">
+
+
+    <span editable-text="task.title"  ng-model='task.title'  onbeforesave="inlinePatch('Task','', 'title',task.entityKey,$data)">
+
+
               <%=task.title%> 
              </span>
               
@@ -224,8 +228,8 @@
                                      
                        <div class="pull-right">
                       
-                        <input ng-hide="isLoading" ng-click="addComment(comment)" type="submit" class="btn green" value="Add comment">
-                        <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                        <input  ng-click="addComment(comment)" type="submit" class="btn green" value="Add comment">
+                        
                         </div>
                                   <div class="clearfix"></div>
                   </form>
