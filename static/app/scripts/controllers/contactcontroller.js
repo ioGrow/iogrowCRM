@@ -460,11 +460,11 @@ $scope.addTags=function(){
         
         $scope.edgekeytoDelete=undefined;
         $scope.showUntag=false;
-      }
+      };
       $scope.dragTagItem=function(edgekey){
         $scope.showUntag=true;
         $scope.edgekeytoDelete=edgekey;
-      }
+      };
 
 
      // Google+ Authentication

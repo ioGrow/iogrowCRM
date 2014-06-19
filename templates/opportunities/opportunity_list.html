@@ -58,6 +58,11 @@
       </div>
     </div>
   </div>
+  <div class="dropOut"  ng-show="showUntag" >
+    <div class="trash">
+      <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/img/iotrash.png" >
+    </div>
+</div>
   <div class="container-fluid"ng-show="immediateFailed">
     <div class="col-md-12">
       <h1>Sign-in Button;</h1>
@@ -134,7 +139,7 @@
                     </div>
                   <div class="tagsSection" ng-class="{hidden: opportunity.tags==null}">
                       <div class="sectionContent">
-                           <a ng-repeat="tag in opportunity.tags" href="/#/search/type:opportunity tags:<%=tag.id%>"> <span class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
+                           <a ng-repeat="tag in opportunity.tags" href="/#/search/type:opportunity tags:<%=tag.id%>"> <span draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
                            </a>
                       </div>
                   </div>
