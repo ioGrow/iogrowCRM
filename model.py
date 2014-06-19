@@ -19,7 +19,8 @@ STANDARD_TABS = [
                 {'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/','icon':'money'},
                 {'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},
                 {'name': 'Cases','label': 'Cases','url':'/#/cases/','icon':'suitcase'},
-                {'name': 'Tasks','label': 'Tasks','url':'/#/tasks/','icon':'check'}
+                {'name': 'Tasks','label': 'Tasks','url':'/#/tasks/','icon':'check'},
+                {'name': 'Calendar','label': 'Calendar','url':'/#/Calendar/','icon':'calendar'}
                 ]
 STANDARD_PROFILES = ['Super Administrator', 'Standard User']
 STANDARD_APPS = [{'name': 'sales', 'label': 'CRM', 'url':'/#/accounts/'}]

@@ -435,8 +435,8 @@ $scope.addTags=function(){
       });
 
 }]);
-app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account','Contact','Case','Opportunity', 'Topic','Note','Task','Event','Permission','User','Attachement','Email','Need','Opportunitystage','Casestatus','Map','InfoNode',
-   function($scope,$filter,$route,Auth,Account,Contact,Case,Opportunity,Topic,Note,Task,Event,Permission,User,Attachement,Email,Need,Opportunitystage,Casestatus,Map,InfoNode) {
+app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account','Contact','Case','Opportunity', 'Topic','Note','Task','Event','Permission','User','Attachement','Email','Need','Opportunitystage','Casestatus','Map','InfoNode','Tag',
+   function($scope,$filter,$route,Auth,Account,Contact,Case,Opportunity,Topic,Note,Task,Event,Permission,User,Attachement,Email,Need,Opportunitystage,Casestatus,Map,InfoNode,Tag) {
        $("ul.page-sidebar-menu li").removeClass("active");
        $("#id_Accounts").addClass("active");
 
@@ -501,6 +501,9 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        $scope.opportunities = [];
        $scope.phones=[];
        $scope.emails=[];
+       $scope.newTaskform=false;
+      $scope.selected_members=[];
+     $scope.selected_member={};
        $scope.opportunities = {};
         $scope.statuses = [
           {value: 'Home', text: 'Home'},
@@ -569,6 +572,8 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
           User.list($scope,{});
           Opportunitystage.list($scope,{});
           Casestatus.list($scope,{});
+          var paramsTag = {'about_kind':'Account'};
+          Tag.list($scope,paramsTag);
 
 
 
@@ -577,6 +582,19 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
        $scope.test=function(email){
       
        };
+    $scope.selectMemberToTask = function(){
+        console.log($scope.selected_members);
+        if ($scope.selected_members.indexOf($scope.user) == -1) {
+           $scope.selected_members.push($scope.user);
+           $scope.selected_member= $scope.user;
+           $scope.user = $scope.selected_member.google_display_name;
+        }
+        $scope.user='';
+     };
+    $scope.unselectMember =function(index){
+         $scope.selected_members.splice(index, 1);
+          console.log($scope.selected_members);
+     };
        $scope.preparePercent = function(percent){
 
             return parseInt(percent);

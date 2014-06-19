@@ -495,7 +495,9 @@ class settingsShowHandler(BaseHandler, SessionEnabledHandler):
 class SearchListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/search/list.html')
-
+class CalendarShowHandler(BaseHandler,SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/calendar/show.html')
 # Workers
 class CreateOrganizationFolders(webapp2.RequestHandler):
     @staticmethod
@@ -718,7 +720,8 @@ routes = [
     # Authentication Handlers
     ('/sign-in',SignInHandler),
     ('/sign-up',SignUpHandler),
-    ('/gconnect',GooglePlusConnect)
+    ('/gconnect',GooglePlusConnect),
+    ('/views/calendar/show',CalendarShowHandler)
     ]
 config = {}
 config['webapp2_extras.sessions'] = {

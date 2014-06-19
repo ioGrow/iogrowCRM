@@ -153,7 +153,13 @@ app.config(['$routeProvider', function($routeProvider) {
       }).when('/live/feedbacks/feedback/:feedbackId',{
         controller:'FeedBacksShowCtrl',
         templateUrl:'/views/live/feedbacks/show'
+      }).
+       //Calendar
+       when('/calendar/', {
+        controller: 'EventListController',
+        templateUrl:'/views/calendar/show'
       });
+
 }]);
 app.config(function(ngQuickDateDefaultsProvider) {
   // Configure with icons from font-awesome
