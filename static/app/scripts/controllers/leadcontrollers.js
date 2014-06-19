@@ -601,9 +601,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
           $scope.sharing_with = [];
 
 
-        }else{
-          alert('select a user to be invited');
-        };
+        }
 
 
      };
