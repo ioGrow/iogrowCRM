@@ -24,6 +24,8 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
         $scope.draggedTag=null;
         $scope.tag = {};
         $scope.showNewTag=false;
+        $scope.showUntag=false;   
+        $scope.edgekeytoDelete=undefined;
         $scope.color_pallet=[
          {'name':'red','color':'#F7846A'},
          {'name':'orange','color':'#FFBB22'},
@@ -449,6 +451,21 @@ $scope.addTags=function(){
       $scope.checkColor=function(color){
         $scope.tag.color=color;
       }
+ //HKA 19.06.2014 Detache tag on contact list
+     $scope.dropOutTag=function(){
+        
+        
+        var params={'entityKey':$scope.edgekeytoDelete}
+        Edge.delete($scope,params);
+        
+        $scope.edgekeytoDelete=undefined;
+        $scope.showUntag=false;
+      };
+      $scope.dragTagItem=function(edgekey){
+        $scope.showUntag=true;
+        $scope.edgekeytoDelete=edgekey;
+      };
+
 
      // Google+ Authentication
      Auth.init($scope);

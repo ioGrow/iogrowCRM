@@ -23,6 +23,17 @@
       </div>
     </div>
   </div>
+  <div class="dropOut"  ng-show="showUntag" >
+    <div class="trash">
+      <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/img/iotrash.png" >
+    </div>
+  </div>
+
+  <div class="dropOut"  ng-show="showUntag" >
+    <div class="trash">
+      <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/img/iotrash.png" >
+    </div>
+</div>
    
       <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
       <!-- BEGIN PAGE CONTAINER-->
@@ -149,7 +160,7 @@
                                          
                                        </div>
                                         <div class="col-md-5 col-xs-12">
-                                            <span ng-repeat="task_tag in task.tags" class="pull-right task-label task-tag badge" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
+                                            <span draggable  ng-drag="dragTagItem(task_tag.edgeKey)"  ng-repeat="task_tag in task.tags" class="pull-right task-label task-tag badge" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
                                                 <%= task_tag.name %>
                                             </span>
                                             <span ng-repeat="assignee in task.assignees" class="pull-right">
@@ -489,7 +500,7 @@
                                          
                                        </div>
                                         <div class="col-md-5 col-xs-12">
-                                            <span ng-repeat="task_tag in task.tags" class="pull-right task-label task-tag badge" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
+                                            <span ng-repeat="task_tag in task.tags"  class="pull-right task-label task-tag badge" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
                                                 <%= task_tag.name %>
                                             </span>
                                             <span ng-repeat="assignee in task.assignees" class="pull-right">

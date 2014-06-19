@@ -45,7 +45,11 @@
         </div>
       </div>
   </div>
-  <div class="dropOut"></div>
+  <div class="dropOut"  ng-show="showUntag" >
+    <div class="trash">
+      <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/img/iotrash.png" >
+    </div>
+</div>
       <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
       <!-- BEGIN PAGE CONTAINER-->
   <div class="container-fluid"ng-show="immediateFailed">
@@ -121,7 +125,7 @@
                 <div class="tagsSection " ng-class="{hidden: casee.tags==null}">
                   <div class="">
                     <div class="sectionContent">
-                      <a ng-repeat="tag in casee.tags" href="/#/search/type:casee tags:<%=tag.id%>"> <span class=" task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
+                      <a ng-repeat="tag in casee.tags" href="/#/search/type:casee tags:<%=tag.id%>"> <span draggable  ng-drag="dragTagItem(tag.edgeKey)"  class=" task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
                       </a>
                     </div>
                     </div>
