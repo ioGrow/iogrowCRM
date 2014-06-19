@@ -4,7 +4,6 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $("#id_Leads").addClass("active");
 
       document.title = "Leads: Home";
-       $("#id_Leads").addClass("active");
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -25,7 +24,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.draggedTag=null;
       $scope.tag = {};
       $scope.showNewTag=false;
-      $scope.showUntag=false;   
+      $scope.showUntag=false;
      $scope.edgekeytoDelete=undefined;
         $scope.color_pallet=[
          {'name':'red','color':'#F7846A'},
@@ -57,7 +56,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           //   }
         };
       $scope.fromNow = function(fromDate){
-          return moment(fromDate).fromNow();
+          return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
        $scope.getPosition= function(index){
         if(index<4){
@@ -427,11 +426,11 @@ $scope.addTags=function(){
 
    //HKA 19.06.2014 Detache tag on contact list
      $scope.dropOutTag=function(){
-        
-        
+
+
         var params={'entityKey':$scope.edgekeytoDelete}
         Edge.delete($scope,params);
-        
+
         $scope.edgekeytoDelete=undefined;
         $scope.showUntag=false;
       };
