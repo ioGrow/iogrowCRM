@@ -397,8 +397,9 @@ $scope.addTags=function(){
         
         var params={'entityKey':$scope.edgekeytoDelete}
         Edge.delete($scope,params);
-        console.log($scope.edgekeytoDelete);
+        
         $scope.edgekeytoDelete=undefined;
+        $scope.showUntag=false;
       }
       $scope.dragTagItem=function(edgekey){
         $scope.showUntag=true;
