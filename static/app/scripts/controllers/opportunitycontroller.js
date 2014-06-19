@@ -29,6 +29,8 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
      $scope.draggedTag=null;
      $scope.showNewTag=false;
      $scope.tag = {};
+     $scope.showUntag=false;   
+     $scope.edgekeytoDelete=undefined;
      $scope.color_pallet=[
          {'name':'red','color':'#F7846A'},
          {'name':'orange','color':'#FFBB22'},

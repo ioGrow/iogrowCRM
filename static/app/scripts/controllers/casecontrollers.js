@@ -30,6 +30,8 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
      $scope.selected_tags = [];
      $scope.draggedTag=null;
      $scope.tag = {};
+     $scope.showUntag=false;   
+     $scope.edgekeytoDelete=undefined;
         $scope.showNewTag=false;
         $scope.color_pallet=[
          {'name':'red','color':'#F7846A'},
