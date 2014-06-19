@@ -35,13 +35,7 @@
         <script src="/static/welcome/js/jquery-1.11.0.min.js"></script>
         <script src="/static/welcome/js/lightbox.min.js"></script>
 
-         <script type="text/javascript">
-      (function() {
-       var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-       po.src = 'https://apis.google.com/js/client:plusone.js';
-       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-     })();
-    </script>
+
 
     <!-- Place this asynchronous JavaScript just before your </body> tag -->
   <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
@@ -55,16 +49,22 @@
   })();
 
   function render() {
-    gapi.signin.render('customBtn', {
+    console.log(gapi);
+    console.log('***');
+    gapi.signin.render('buttonText', {
+      'approvalprompt':'force',
       'callback': 'signinCallback',
       'clientid': '987765099891.apps.googleusercontent.com',
-      'cookiepolicy': 'single_host_origin',
+      'cookiepolicy': 'none',
       'requestvisibleactions': 'http://schemas.google.com/AddActivity',
-      'scope': 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email'
+      'scope': 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar https://www.google.com/m8/feeds',
+      'accesstype':'offline'
+
     });
 
 
   }
+
 
   function signinCallback(){
 
@@ -95,6 +95,7 @@
 
                 if (email != "")
                 {
+                    console.log(email);
                     trackSubscribers();
                     console.log("added to the list");
                 }
@@ -106,75 +107,39 @@
     }
   </script>
 
-<script type="text/javascript">
-  // Specify the language code prior to loading the JavaScript API
-  window.___gcfg = {
-    lang: 'en'
-  };
 
-  (function() {
-    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-    po.src = 'https://apis.google.com/js/client:plusone.js?onload=onLoadCallback';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-  })();
-</script>
 
   <style type="text/css">
+    .white-link{
+      color:white;
+      font-weight:bold;
+      font-size:14px;
+    }
     #customBtn {
       display: inline-block;
-      background: #4D90FE;
+      background: #dd4b39;
       color: white;
       width: 300px;
       border-radius: 5px;
       white-space: nowrap;
+      padding-top:5px;
+      padding-bottom:5px;
+    }
+    #customBtn a{
+      display: inline-block;
+      background: #dd4b39;
+      color: white;
+      width: 300px;
+      border-radius: 5px;
+      white-space: nowrap;
+      padding-top:5px;
+      padding-bottom:5px;
     }
     #customBtn:hover {
-      background: #4D90FE;
+      background: #dd4b39;
       cursor: hand;
     }
-    #customBtn:active {
-      /* Pop */
-@-webkit-keyframes pop {
-  50% {
-    -webkit-transform: scale(1.2);
-    transform: scale(1.2);
-  }
 
-  100% {
-    -webkit-transform: scale(1);
-    transform: scale(1);
-  }
-}
-
-@keyframes pop {
-  50% {
-    -webkit-transform: scale(1.2);
-    transform: scale(1.2);
-  }
-
-  100% {
-    -webkit-transform: scale(1);
-    transform: scale(1);
-  }
-}
-
-.pop {
-  display: inline-block;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-}
-.pop:hover, .pop:focus, .pop:active {
-  -webkit-animation-name: pop;
-  animation-name: pop;
-  -webkit-animation-duration: 0.3s;
-  animation-duration: 0.3s;
-  -webkit-animation-timing-function: linear;
-  animation-timing-function: linear;
-  -webkit-animation-iteration-count: 1;
-  animation-iteration-count: 1;
-}
-}
     span.label {
       font-weight: bold;
     }
@@ -184,7 +149,7 @@
       vertical-align: middle;
       width: 35px;
       height: 35px;
-      border-right: #4D90FE 1px solid;
+      border-right: #dd4b39 1px solid;
     }
     span.buttonText {
       display: inline-block;
@@ -234,7 +199,7 @@
                         <span class="icon-bar"></span>
                     </button>
                     <a class="navbar-brand" href="/welcome/">
-                        <img src="http://storage.googleapis.com/iogrow-gs/static/img/IO_001_new.png" style="margin-top: -28px;padding-top: 10px;">
+                        <img src="http://storage.googleapis.com/iogrow-gs/static/img/ioGrow_welcome_logo.png" style="margin-top: -28px;padding-top: 10px;height:45px;">
                     </a>
                 </div>
 
@@ -252,12 +217,11 @@
                         <div class="navbar-form pull-left">
 
                            <div id="gSignInWrapper">
-    <span class="label">Sign in with:</span>
-    <div id="customBtn" class="customGPlusSignIn buzz-out customBtn">
+    <div id="customBtn" class="customGPlusSignIn">
+      <a href="/early-bird" >
       <span class="icon"></span>
-      <span class="buttonText">Give ioGrow a try - it's free</span>
+      <span class="buttonText">Start using ioGrow for free!</span></a>
     </div>
-    <!-- div#customBtn.customGPlusSignIn.buzz-out -->
   </div>
                         <!-- <span id="signinButton">
                      <span
@@ -401,16 +365,14 @@
             <div class="container">
                 <div class="row text-center">
                     <div class="col-lg-12">
-                        <h1>CRM for Startups... <b>That just works</b></h1>
-                        <h3><b>Seamlessly integrated with Gmail</b></h3>
+                        <h1>Grow and Manage your relationships with the right people!</b></h1>
+                        <h3><b>The next generation of Google Contacts</b></h3>
                         <br>
                     </div>
 
 
                     <div class="col-lg-2 hidden-xs hidden-sm hidden-md">
-                        <h5>Automate business processes</h5>
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                        <img src="/static/welcome/img/arrow-left.png" alt="">
+
                     </div>
 
                     <div class="col-lg-8">
@@ -419,10 +381,7 @@
                         <a href="#features" type="submit" class="btn btn-lg btn-theme smoothScroll">LEARN MORE</a>-->
                     </div>
                     <div class="col-lg-2 hidden-xs hidden-sm hidden-md">
-                        <br>
-                        <img class="pad-top" src="/static/welcome/img/arrow-right.png" alt="">
-                        <h5>Collaborate in the cloud</h5>
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+
                     </div>
                 </div>
             </div> <!-- /container -->
@@ -606,204 +565,24 @@ A clean, simple interface that collect all your customer's data, can dramaticall
 
 
 
-        <!-- Divider 1 Section -->
-        <div id="divider01">
-            <div class="container">
-                <div class="row text-center">
-                    <div id="carousel-example-generic" class="carousel slide">
-                        <!-- Wrapper for slides -->
-                        <div class="carousel-inner">
-                            <div class="item active">
-                                <h3>"Working with Bootstack was amazing. Their team is incredible."</h3>
-                                <h4>John Doe, <em>A Company</em></h4>
-                            </div>
-                            <div class="item">
-                                <h3>"Bootstack has helped my team build amazing products. Amazing team."</h3>
-                                <h4>Jane Doe, <em>A Company</em></h4>
-                            </div>
-                        </div><!-- /carousel-inner -->
-                        <br>
-                        <br>
-                        <br>
-                        <!-- Indicators - Uncomment for indicators to show
-                        <ol class="carousel-indicators">
-                            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-                        </ol> -->
-                    </div><!-- /carousel-example -->
-                </div><!-- /row -->
-            </div><!-- /container -->
-        </div><!-- /divider01 -->
-
 
         <!-- Pricing Section -->
         <section id="pricing" name="pricing"></section>
         <div id="pricingwrap">
             <div class="container text-center">
-                <br>
-                <h2>Our Pricing Options</h2>
-                <hr><br><br>
                 <div class="row">
-                    <div class="col-xs-12 col-md-3">
-                        <div class="panel panel-custom">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Starter</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="the-price">
-                                    <h2>$9<span class="subscript">/mo</span></h2>
-                                    <small>1 month FREE Trial</small>
-                                </div>
-                                <table class="table">
-                                    <tr>
-                                        <td>1 Account</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1 Project</td>
-                                    </tr>
-                                    <tr>
-                                        <td>50K API Access</td>
-                                    </tr>
-                                    <tr>
-                                        <td>100MB Storage</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Custom Cloud Services</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Weekly Reports</td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div class="panel-footer">
-                                <a href="#" class="btn btn-theme" role="button">Sign Up</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xs-12 col-md-3">
-                        <div class="panel panel-custom">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Standard</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="the-price">
-                                    <h2>$19<span class="subscript">/mo</span></h2>
-                                    <small>1 month FREE Trial</small>
-                                </div>
-                                <table class="table">
-                                    <tr>
-                                        <td>2 Accounts</td>
-                                    </tr>
-                                    <tr>
-                                        <td>5 Projects</td>
-                                    </tr>
-                                    <tr>
-                                        <td>100K API Access</td>
-                                    </tr>
-                                    <tr>
-                                        <td>200MB Storage</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Custom Cloud Services</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Weekly Reports</td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div class="panel-footer">
-                                <a href="#" class="btn btn-theme" role="button">Sign Up</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xs-12 col-md-3">
-                        <div class="panel panel-custom">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Premium</h3>
-                            </div>
-                            <div class="panel-body">
-                            <div class="the-price">
-                                <h2>$39<span class="subscript">/mo</span></h2>
-                                <small>1 month FREE Trial</small>
-                            </div>
-                            <table class="table">
-                                <tr>
-                                    <td>5 Accounts</td>
-                                </tr>
-                                <tr>
-                                    <td>20 Projects</td>
-                                </tr>
-                                <tr>
-                                    <td>300K API Access</td>
-                                </tr>
-                                <tr>
-                                    <td>500MB Storage</td>
-                                </tr>
-                                <tr>
-                                    <td>Custom Cloud Services</td>
-                                </tr>
-                                <tr>
-                                    <td>Weekly Reports</td>
-                                </tr>
-                            </table>
-                            </div>
-                            <div class="panel-footer">
-                                <a href="#" class="btn btn-theme" role="button">Sign Up</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xs-12 col-md-3">
-                        <div class="panel panel-custom">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Enterprise</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="the-price">
-                                    <h2>$59<span class="subscript">/mo</span></h2>
-                                    <small>1 month FREE Trial</small>
-                                </div>
-                                <table class="table">
-                                    <tr>
-                                        <td>10 Accounts</td>
-                                    </tr>
-                                    <tr>
-                                        <td>50 Projects</td>
-                                    </tr>
-                                    <tr>
-                                        <td>500K API Access</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1GB Storage</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Custom Cloud Services</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Weekly Reports</td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div class="panel-footer">
-                                <a href="#" class="btn btn-theme" role="button">Sign Up</a>
-                            </div>
+                    <br>
+                    <br>
+                    <div class="col-xs-12">
+                        <div id="customBtn" class="customGPlusSignIn">
+                          <a href="/early-bird" >
+                          <span class="icon"></span>
+                          <span class="buttonText"><b>Start Now. It's free!</b></span></a>
                         </div>
                     </div>
                 </div><!-- /row -->
             </div><!-- /container -->
         </div><!-- /pricingwrap -->
-
-
-        <!-- Divider 2 Section -->
-        <div id="divider02">
-            <div class="container text-center">
-                <h3>Start your 30-day free trial today.</h3>
-                <a href="#" type="button" class="btn btn-lg btn-theme2">Get Started</a>
-            </div>
-        </div><!-- /divider02 -->
-
 
         <!-- Footer Wrap -->
         <section id="contact" name="contact"></section>
@@ -813,9 +592,8 @@ A clean, simple interface that collect all your customer's data, can dramaticall
                     <div class="col-lg-4">
                         <h3>Contact Us</h3>
                         <br>
-                        <p><i class="fa fa-map-marker"></i> Some Address 373, Palo Alto, CA <br/>
-                            <i class="fa fa-phone"></i> (800) 373-7733 <br/>
-                            <i class="fa fa-envelope-o"></i> <a href="mailto:support@bootstacktheme.com">support@bootstacktheme.com</a>
+                        <p>
+                            <i class="fa fa-envelope-o"></i> <a href="mailto:email@iogrow.com" class="white-link">email@iogrow.com</a>
                         </p>
                     </div>
 
@@ -834,17 +612,7 @@ A clean, simple interface that collect all your customer's data, can dramaticall
                         </div>
                     </div>
 
-                    <div class="col-lg-4">
-                        <h3>Newsletter</h3>
-                        <br>
-                        <p>Subscribe to our newsletter and be the first to know our latest updates.</p>
-                        <div class="form-inline">
-                            <input id="email" type="text" class="form-control" placeholder="Your email" style="
-    width: 260px;
-">
-                            <button id="subscribe" class="btn btn-theme" type="button">Subscribe</button>
-                        </div>
-                    </div>
+
                 </div><!-- /row -->
             </div><!-- /container -->
         </div><!-- /footerwrap -->
@@ -855,10 +623,10 @@ A clean, simple interface that collect all your customer's data, can dramaticall
             <div class="container">
                 <div class="row">
                     <div class="col-lg-10">
-                        <p>Copyright &copy;2014 Bootstack Theme. All Rights Reserved.</p>
+                        <p>Copyright &copy;2014 ioGrow. All Rights Reserved.</p>
                     </div>
                     <div class="col-lg-2">
-                        <p><a href="#">Terms</a> | <a href="#">Privacy</a> | <a href="#">Legal</a></p>
+                        <p><a href="#" class="white-link">Terms</a> | <a href="#" class="white-link">Privacy</a> | <a href="#" class="white-link">Legal</a></p>
                     </div>
                 </div><!-- /row -->
             </div><!-- /container -->
