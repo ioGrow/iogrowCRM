@@ -1902,8 +1902,9 @@ class CrmEngineApi(remote.Service):
         if invited_user is not None:
             if invited_user.organization == user_from_email.organization or invited_user.organization is None:
                 invited_user.invited_by = user_from_email.key
-                invited_user.put()
-                invited_user_id = invited_user.key.id()
+                invited_user_key = invited_user.put_async()
+                invited_user_async = invited_user_key.get_result()
+                invited_user_id = invited_user_async.id()
                 my_model.id = invited_user_id
                 Invitation.insert(my_model.email,user_from_email)
                 send_notification_mail = True
@@ -1913,8 +1914,9 @@ class CrmEngineApi(remote.Service):
         else:
             my_model.invited_by = user_from_email.key
             my_model.status = 'invited'
-            my_model.put()
-            invited_user_id = my_model.id
+            invited_user_key = my_model.put_async()
+            invited_user_async = invited_user_key.get_result()
+            invited_user_id = invited_user_async.id()
             Invitation.insert(my_model.email,user_from_email)
             send_notification_mail = True
 
