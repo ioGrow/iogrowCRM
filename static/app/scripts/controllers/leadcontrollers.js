@@ -419,7 +419,22 @@ $scope.addTags=function(){
   // HKA 12.03.2014 Pallet color on Tags
       $scope.checkColor=function(color){
         $scope.tag.color=color;
-      }
+      };
+
+   //HKA 19.06.2014 Detache tag on contact list
+     $scope.dropOutTag=function(){
+        
+        
+        var params={'entityKey':$scope.edgekeytoDelete}
+        Edge.delete($scope,params);
+        
+        $scope.edgekeytoDelete=undefined;
+        $scope.showUntag=false;
+      };
+      $scope.dragTagItem=function(edgekey){
+        $scope.showUntag=true;
+        $scope.edgekeytoDelete=edgekey;
+      };
 
    // Google+ Authentication
      Auth.init($scope);
