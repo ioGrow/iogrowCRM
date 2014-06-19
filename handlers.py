@@ -538,7 +538,9 @@ class settingsShowHandler(BaseHandler, SessionEnabledHandler):
 class SearchListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/search/list.html')
-
+class CalendarShowHandler(BaseHandler,SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/calendar/show.html')
 # Workers
 class CreateOrganizationFolders(webapp2.RequestHandler):
     @staticmethod
@@ -749,6 +751,7 @@ routes = [
     ('/views/tasks/show',TaskShowHandler),
     ('/views/tasks/list',AllTasksHandler),
     ('/views/events/show',EventShowHandler),
+     ('/views/calendar/show',CalendarShowHandler),
     # Admin Console Views
     ('/views/admin/users/list',UserListHandler),
     ('/views/admin/groups/list',GroupListHandler),
