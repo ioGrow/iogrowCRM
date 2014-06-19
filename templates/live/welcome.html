@@ -35,13 +35,7 @@
         <script src="/static/welcome/js/jquery-1.11.0.min.js"></script>
         <script src="/static/welcome/js/lightbox.min.js"></script>
 
-         <script type="text/javascript">
-      (function() {
-       var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-       po.src = 'https://apis.google.com/js/client:plusone.js';
-       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-     })();
-    </script>
+
 
     <!-- Place this asynchronous JavaScript just before your </body> tag -->
   <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
@@ -55,16 +49,22 @@
   })();
 
   function render() {
-    gapi.signin.render('customBtn', {
+    console.log(gapi);
+    console.log('***');
+    gapi.signin.render('buttonText', {
+      'approvalprompt':'force',
       'callback': 'signinCallback',
       'clientid': '987765099891.apps.googleusercontent.com',
-      'cookiepolicy': 'single_host_origin',
+      'cookiepolicy': 'none',
       'requestvisibleactions': 'http://schemas.google.com/AddActivity',
-      'scope': 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email'
+      'scope': 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar https://www.google.com/m8/feeds',
+      'accesstype':'offline'
+
     });
 
 
   }
+
 
   function signinCallback(){
 
@@ -95,6 +95,7 @@
 
                 if (email != "")
                 {
+                    console.log(email);
                     trackSubscribers();
                     console.log("added to the list");
                 }
@@ -106,18 +107,7 @@
     }
   </script>
 
-<script type="text/javascript">
-  // Specify the language code prior to loading the JavaScript API
-  window.___gcfg = {
-    lang: 'en'
-  };
 
-  (function() {
-    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-    po.src = 'https://apis.google.com/js/client:plusone.js?onload=onLoadCallback';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-  })();
-</script>
 
   <style type="text/css">
     #customBtn {
@@ -127,54 +117,14 @@
       width: 300px;
       border-radius: 5px;
       white-space: nowrap;
+      padding-top:5px;
+      padding-bottom:5px;
     }
     #customBtn:hover {
       background: #4D90FE;
       cursor: hand;
     }
-    #customBtn:active {
-      /* Pop */
-@-webkit-keyframes pop {
-  50% {
-    -webkit-transform: scale(1.2);
-    transform: scale(1.2);
-  }
 
-  100% {
-    -webkit-transform: scale(1);
-    transform: scale(1);
-  }
-}
-
-@keyframes pop {
-  50% {
-    -webkit-transform: scale(1.2);
-    transform: scale(1.2);
-  }
-
-  100% {
-    -webkit-transform: scale(1);
-    transform: scale(1);
-  }
-}
-
-.pop {
-  display: inline-block;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-}
-.pop:hover, .pop:focus, .pop:active {
-  -webkit-animation-name: pop;
-  animation-name: pop;
-  -webkit-animation-duration: 0.3s;
-  animation-duration: 0.3s;
-  -webkit-animation-timing-function: linear;
-  animation-timing-function: linear;
-  -webkit-animation-iteration-count: 1;
-  animation-iteration-count: 1;
-}
-}
     span.label {
       font-weight: bold;
     }
@@ -234,7 +184,7 @@
                         <span class="icon-bar"></span>
                     </button>
                     <a class="navbar-brand" href="/welcome/">
-                        <img src="http://storage.googleapis.com/iogrow-gs/static/img/IO_001_new.png" style="margin-top: -28px;padding-top: 10px;">
+                        <img src="http://storage.googleapis.com/iogrow-gs/static/img/ioGrow_welcome_logo.png" style="margin-top: -28px;padding-top: 10px;height:45px;">
                     </a>
                 </div>
 
@@ -252,12 +202,10 @@
                         <div class="navbar-form pull-left">
 
                            <div id="gSignInWrapper">
-    <span class="label">Sign in with:</span>
-    <div id="customBtn" class="customGPlusSignIn buzz-out customBtn">
+    <div id="customBtn" class="customGPlusSignIn">
       <span class="icon"></span>
-      <span class="buttonText">Give ioGrow a try - it's free</span>
+      <span class="buttonText">Start using ioGrow for free!</span>
     </div>
-    <!-- div#customBtn.customGPlusSignIn.buzz-out -->
   </div>
                         <!-- <span id="signinButton">
                      <span
