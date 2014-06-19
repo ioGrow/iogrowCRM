@@ -54,7 +54,9 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           //       Lead.insert($scope,params);
           //   }
         };
-
+      $scope.fromNow = function(fromDate){
+          return moment(fromDate).fromNow();
+      }
        $scope.getPosition= function(index){
         if(index<4){
 
