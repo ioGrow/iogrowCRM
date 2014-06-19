@@ -31,8 +31,7 @@ edgeservices.factory('Edge', function($http) {
     $scope.isLoading = true;
     gapi.client.crmengine.edges.delete(params).execute(function(resp){
         $scope.isLoading = false;
-        window.location.replace('#/accounts');
-        $scope.$apply();
+        $scope.runTheProcess();
       }
     )};
 

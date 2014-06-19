@@ -20,6 +20,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      $scope.user = undefined;
      $scope.slected_memeber = undefined;
      $scope.role= 'participant';
+     
     // What to do after authentication
      $scope.runTheProcess = function(){
           var taskid = {'id':$route.current.params.taskId};
@@ -267,7 +268,22 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
           Task.list($scope,params);
         }
         
-     }
+     };
+
+   //HKA 19.06.2014 Detache tag on contact list
+     $scope.dropOutTag=function(){
+        
+        
+        var params={'entityKey':$scope.edgekeytoDelete}
+        Edge.delete($scope,params);
+        
+        $scope.edgekeytoDelete=undefined;
+        $scope.showUntag=false;
+      };
+      $scope.dragTagItem=function(edgekey){
+        $scope.showUntag=true;
+        $scope.edgekeytoDelete=edgekey;
+      };
   // Google+ Authentication 
     Auth.init($scope);
 
@@ -306,6 +322,8 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
      $scope.newTask={};
      $scope.newTask.title='';
      $scope.newTask.assignees=[];
+     $scope.showUntag=false;   
+     $scope.edgekeytoDelete=undefined;
      $scope.color_pallet=[
          {'name':'red','color':'#F7846A'},
          {'name':'orange','color':'#FFBB22'},
@@ -977,6 +995,20 @@ $scope.addTags=function(){
       $('#assigneeTagsToTask').modal('hide');
 
      };
+ //HKA 19.06.2014 Detache tag on contact list
+     $scope.dropOutTag=function(){
+        
+        
+        var params={'entityKey':$scope.edgekeytoDelete}
+        Edge.delete($scope,params);
+        
+        $scope.edgekeytoDelete=undefined;
+        $scope.showUntag=false;
+      };
+      $scope.dragTagItem=function(edgekey){
+        $scope.showUntag=true;
+        $scope.edgekeytoDelete=edgekey;
+      };
      // Google+ Authentication 
      Auth.init($scope);
 
