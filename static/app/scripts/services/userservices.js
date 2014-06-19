@@ -2,18 +2,18 @@ var accountservices = angular.module('crmEngine.userservices',[]);
 // Base sercice (create, delete, get)
 
 accountservices.factory('User', function($http) {
-  
+
   var User = function(data) {
     angular.extend(this, data);
   }
 
-  
+
   User.get = function($scope,id) {
 
           gapi.client.crmengine.users.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.user = resp;
-               
+
                // Call the method $apply to make the update on the scope
                $scope.apply();
 
@@ -32,6 +32,7 @@ accountservices.factory('User', function($http) {
       gapi.client.crmengine.users.list(params).execute(function(resp) {
               if(!resp.code){
                  $scope.users = resp.items;
+                 $scope.invitees = resp.invitees;
                  if ($scope.currentPage>1){
                       $scope.pagination.prev = true;
                    }else{
@@ -42,7 +43,7 @@ accountservices.factory('User', function($http) {
                    // Store the nextPageToken
                    $scope.pages[nextPage] = resp.nextPageToken;
                    $scope.pagination.next = true;
-                   
+
                  }else{
                   $scope.pagination.next = false;
                  }
@@ -66,10 +67,10 @@ accountservices.factory('User', function($http) {
          console.log(resp);
          if(!resp.code){
           $scope.user.email = '';
-          
-          
+
+
           User.list($scope,params);
-          
+
          }else{
               console.log(resp.message);
                $('#addAccountModal').modal('hide');
@@ -91,8 +92,8 @@ accountservices.factory('User', function($http) {
             if(!resp.code){
                $scope.user = resp;
                window.location.reload();
-              
-               
+
+
                // Call the method $apply to make the update on the scope
                 $scope.$apply();
 
@@ -106,19 +107,19 @@ accountservices.factory('User', function($http) {
             console.log('User.patch gapi #end_execute');
           });
   }
-  
+
 
 return User;
 });
 
 accountservices.factory('Permission', function($http) {
-  
+
   var Permission = function(data) {
     angular.extend(this, data);
   }
 
-  
-  
+
+
   Permission.insert = function($scope,params){
       console.log(params);
       gapi.client.crmengine.permissions.insertv2(params).execute(function(resp) {
@@ -126,13 +127,13 @@ accountservices.factory('Permission', function($http) {
          console.log(resp);
          if(!resp.code){
               $scope.updateCollaborators();
-          
+
          }else{
           console.log(resp.code);
          }
       });
   };
-  
+
 
 return Permission;
 });

@@ -23,7 +23,7 @@ app.controller('AccountListCtrl', ['$scope','$filter','Auth','Account','Tag','Ed
      $scope.testtitle = "Customer Support Customer Support";
      $scope.showNewTag=false;
      $scope.showUntag=false;   
-     $scope.tagToUnattach={tags:[],index:undefined};
+     $scope.edgekeytoDelete=undefined;
      //Manage Color
      $scope.color_pallet=[
          {'name':'red','color':'#F7846A'},
@@ -393,13 +393,16 @@ $scope.addTags=function(){
         $scope.$apply()
       };
       $scope.dropOutTag=function(){
-        $scope.showUntag=false;
-        $scope.tagToUnattach.tags.splice($scope.tagToUnattach.index, 1);
+        
+        
+        var params={'entityKey':$scope.edgekeytoDelete}
+        Edge.delete($scope,params);
+        console.log($scope.edgekeytoDelete);
+        $scope.edgekeytoDelete=undefined;
       }
-      $scope.dragTagItem=function(tags,index){
+      $scope.dragTagItem=function(edgekey){
         $scope.showUntag=true;
-        $scope.tagToUnattach.tags=tags;
-        $scope.tagToUnattach.index=index;
+        $scope.edgekeytoDelete=edgekey;
       }
       $scope.tagattached=function(tag,index){
           if ($scope.accounts[index].tags == undefined){
@@ -1775,8 +1778,7 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
              $scope.contact.emails=[{'email':current.email}];
           };
           $scope.account.contacts.push($scope.contact);
-          console.log('-----------$scope.account.contacts----------');
-          console.log($scope.account.contacts);
+         
           $scope.currentContact={};
           $scope.newContactform=false;
           }else{
@@ -1874,8 +1876,7 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
                         'access': account.access,
                         'contacts':account.contacts
                       };
-          console.log('----------------params----------------');
-          console.log(params);
+          
           if ($scope.logo.logo_img_id){
               params['logo_img_id'] = $scope.logo.logo_img_id;
               params['logo_img_url'] = $scope.logo.logo_img_url;

@@ -22,8 +22,14 @@ STANDARD_TABS = [
                 {'name': 'Tasks','label': 'Tasks','url':'/#/tasks/','icon':'check'},
                 {'name': 'Calendar','label': 'Calendar','url':'/#/Calendar/','icon':'calendar'}
                 ]
+EARLY_BIRD_TABS = [
+                {'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},
+                {'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},
+                {'name': 'Tasks','label': 'Tasks','url':'/#/tasks/','icon':'check'},
+                {'name': 'Calendar','label': 'Calendar','url':'/#/calendar/','icon':'calendar'}
+                ]
 STANDARD_PROFILES = ['Super Administrator', 'Standard User']
-STANDARD_APPS = [{'name': 'sales', 'label': 'CRM', 'url':'/#/accounts/'}]
+STANDARD_APPS = [{'name': 'sales', 'label': 'Relationships', 'url':'/#/leads/'}]
 STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
 ADMIN_TABS = [
             {'name': 'Users','label': 'Users','url':'/#/admin/users','icon':'user'},
@@ -177,6 +183,67 @@ class Organization(ndb.Model):
                 created_profile.put_async()
         # init default stages,status, default values...
         cls.init_default_values(org_key)
+    @classmethod
+    def create_early_bird_instance(cls,org_name, admin):
+        # init google drive folders
+        # Add the task to the default queue.
+        organization = cls(
+                        name=org_name
+                        )
+        org_key = organization.put()
+        taskqueue.add(
+                    url='/workers/createorgfolders',
+                    params={
+                            'email': admin.email,
+                            'org_key':org_key.urlsafe()
+                            }
+                    )
+        # create standard tabs
+        created_tabs = []
+        for tab in EARLY_BIRD_TABS:
+            created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
+            tab_key = created_tab.put()
+            created_tabs.append(tab_key)
+        # create admin tabs
+        admin_tabs = []
+        for tab in ADMIN_TABS:
+            created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
+            tab_key =created_tab.put()
+            admin_tabs.append(tab_key)
+        # create standard apps
+        created_apps = []
+        sales_app = None
+        for app in STANDARD_APPS:
+            created_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=created_tabs,organization=org_key)
+            app_key = created_app.put()
+            if app['name']=='sales':
+                sales_app = app_key
+            created_apps.append(app_key)
+        # create admin app
+        app = ADMIN_APP
+        admin_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=admin_tabs,organization=org_key)
+        admin_app_key = admin_app.put()
+        # create standard profiles
+        for profile in STANDARD_PROFILES:
+            default_app = sales_app
+            if profile=='Super Administrator':
+                created_apps.append(admin_app_key)
+                created_tabs.extend(admin_tabs)
+            created_profile = Profile(
+                                      name=profile,
+                                      apps=created_apps,
+                                      default_app=default_app,
+                                      tabs=created_tabs,
+                                      organization=org_key
+                                    )
+            # init admin config
+            if profile=='Super Administrator':
+                admin_profile_key = created_profile.put()
+                admin.init_early_bird_config(org_key,admin_profile_key)
+            else:
+                created_profile.put_async()
+        # init default stages,status, default values...
+        cls.init_default_values(org_key)
 
 
 
@@ -269,6 +336,7 @@ class User(EndpointsModel):
     active_tabs = ndb.KeyProperty(repeated=True)
     app_changed = ndb.BooleanProperty(default=True)
     google_contacts_group = ndb.StringProperty()
+    invited_by = ndb.KeyProperty()
 
 
     def put(self, **kwargs):
@@ -291,6 +359,30 @@ class User(EndpointsModel):
         self.apps = apps
         self.active_app = profile.default_app
         self.type = 'business_user'
+        if memcache.get(self.email) :
+            memcache.set(self.email, self)
+        else:
+            memcache.add(self.email, self)
+        if self.google_credentials:
+            taskqueue.add(
+                        url='/workers/createcontactsgroup',
+                        params={
+                                'email': self.email
+                                }
+                        )
+        self.put()
+    def init_early_bird_config(self,org_key,profile_key):
+        profile = profile_key.get()
+        active_app_mem_key = '%s_active_app' % self.google_user_id
+        memcache.add(active_app_mem_key, profile.default_app.get())
+        # Get Apps for this profile:
+        apps = profile.apps
+        # Prepare user to be updated
+        self.organization = org_key
+        self.profile = profile.key
+        self.apps = apps
+        self.active_app = profile.default_app
+        self.type = 'early_bird'
         if memcache.get(self.email) :
             memcache.set(self.email, self)
         else:
@@ -402,7 +494,16 @@ class User(EndpointsModel):
                                             status = user.status
                                             )
             items.append(user_schema)
-        return iomessages.UserListSchema(items=items)
+        invitees_list = []
+        invitees = Invitation.list_invitees(organization)
+        for invitee in invitees:
+            invited_schema = iomessages.InvitedUserSchema(
+                                                          invited_mail=invitee['invited_mail'],
+                                                          invited_by=invitee['invited_by'],
+                                                          updated_at=invitee['updated_at'].strftime("%Y-%m-%dT%H:%M:00.000")
+                                                        )
+            invitees_list.append(invited_schema)
+        return iomessages.UserListSchema(items=items,invitees=invitees_list)
 
 class Group(EndpointsModel):
     _message_fields_schema = ('id','entityKey','name','description','status', 'organization')
@@ -436,6 +537,45 @@ class Member(EndpointsModel):
       group.put()
 
 
+class Invitation(ndb.Model) :
+    invited_mail = ndb.StringProperty()
+    invited_by = ndb.KeyProperty()
+    organization = ndb.KeyProperty()
+    updated_at = ndb.DateTimeProperty(auto_now=True)
+    @classmethod
+    def delete_by(cls,email):
+        invitations = cls.query(
+                                cls.invited_mail==email
+                              ).fetch()
+        for invitation in invitations:
+            invitation.key.delete()
+
+    @classmethod
+    def insert(cls,email,invited_by):
+        # check if the user is invited
+        invitation = cls.query(
+                                cls.invited_mail==email,
+                                cls.organization==invited_by.organization
+                              ).get()
+        if invitation is None:
+            invitation = cls(
+                            invited_mail = email,
+                            organization = invited_by.organization
+                            )
+        invitation.invited_by = invited_by.key
+        invitation.put()
+    @classmethod
+    def list_invitees(cls,organization):
+        items = []
+        invitees = cls.query(cls.organization == organization).fetch()
+        for invitee in invitees:
+            item = {
+                  'invited_mail' :invitee.invited_mail,
+                  'invited_by' :invitee.invited_by.get().google_display_name,
+                  'updated_at' : invitee.updated_at
+            }
+            items.append(item)
+        return items
 
 
 #HKA 19.11.2013 Class for Phone on all Object

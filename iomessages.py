@@ -4,7 +4,7 @@ class AccountSchema(messages.Message):
     id = messages.StringField(1)
     entityKey = messages.StringField(2)
     name = messages.StringField(3)
-    
+
 class ContactSchema(messages.Message):
     id = messages.StringField(1)
     entityKey = messages.StringField(2)
@@ -57,8 +57,14 @@ class UserSchema(messages.Message):
     is_admin = messages.StringField(8)
     status = messages.StringField(9)
 
+class InvitedUserSchema(messages.Message):
+    invited_mail = messages.StringField(1)
+    invited_by = messages.StringField(2)
+    updated_at = messages.StringField(3)
+
 class UserListSchema(messages.Message):
     items = messages.MessageField(UserSchema, 1, repeated=True)
+    invitees = messages.MessageField(InvitedUserSchema, 2, repeated=True)
 
 class AddTagSchema(messages.Message):
     parent = messages.StringField(1,required=True)

@@ -61,6 +61,7 @@ from model import Member
 from model import Permission
 from model import Contributor
 from model import Companyprofile
+from model import Invitation
 from search_helper import SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
 import iomessages
@@ -1896,41 +1897,40 @@ class CrmEngineApi(remote.Service):
             raise endpoints.UnauthorizedException('Invalid grant' )
             return
 
-        invited_user = User.query( User.email == my_model.email).get()
-
+        invited_user = User.get_by_email(my_model.email)
+        send_notification_mail = False
         if invited_user is not None:
             if invited_user.organization == user_from_email.organization or invited_user.organization is None:
-                invited_user.organization = user_from_email.organization
-                invited_user.status = 'invited'
-                profile =  Profile.query(Profile.name=='Standard User', Profile.organization==user_from_email.organization).get()
-                invited_user.init_user_config(user_from_email.organization,profile.key)
-                invited_user_id = invited_user.key.id()
+                invited_user.invited_by = user_from_email.key
+                invited_user_key = invited_user.put_async()
+                invited_user_async = invited_user_key.get_result()
+                invited_user_id = invited_user_async.id()
                 my_model.id = invited_user_id
-                invited_user.put()
+                Invitation.insert(my_model.email,user_from_email)
+                send_notification_mail = True
             elif invited_user.organization is not None:
                 raise endpoints.UnauthorizedException('User exist within another organization' )
                 return
-
-
         else:
-            my_model.organization = user_from_email.organization
+            my_model.invited_by = user_from_email.key
             my_model.status = 'invited'
-            profile = Profile.query(Profile.name=='Standard User', Profile.organization==user_from_email.organization).get()
-            my_model.init_user_config(user_from_email.organization,profile.key)
+            invited_user_key = my_model.put_async()
+            invited_user_async = invited_user_key.get_result()
+            invited_user_id = invited_user_async.id()
+            Invitation.insert(my_model.email,user_from_email)
+            send_notification_mail = True
 
-            my_model.put()
-            invited_user_id = my_model.id
+        if send_notification_mail:
+            confirmation_url = "http://gcdc2013-iogrow.appspot.com//sign-in?id=" + str(invited_user_id) + '&'
+            sender_address = "ioGrow notifications <notifications@gcdc2013-iogrow.appspotmail.com>"
+            subject = "Confirm your registration"
+            body = """
+            Thank you for creating an account! Please confirm your email address by
+            clicking on the link below:
+            %s
+            """ % confirmation_url
 
-        confirmation_url = "http://gcdc2013-iogrow.appspot.com//sign-in?id=" + str(invited_user_id) + '&'
-        sender_address = "ioGrow notifications <notifications@gcdc2013-iogrow.appspotmail.com>"
-        subject = "Confirm your registration"
-        body = """
-        Thank you for creating an account! Please confirm your email address by
-        clicking on the link below:
-        %s
-        """ % confirmation_url
-
-        mail.send_mail(sender_address, my_model.email , subject, body)
+            mail.send_mail(sender_address, my_model.email , subject, body)
         return my_model
 
 
