@@ -5,17 +5,17 @@
     </h2>
   </div>
   <div class=" subHeaderContent">
-    <div class="pull-right sharebuttonDiv"> 
+    <div class="pull-right sharebuttonDiv">
       <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
-        <i class="icon-lock"></i> 
+        <i class="icon-lock"></i>
         {{ _("Share") }}
       </a>
-    </div> 
+    </div>
     <h2 class="page-title" >
       <a href="<%=uri%>" data-toggle="tooltip" id='testEdit' data-placement="bottom" title="Back to Accounts">
         <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="/static/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
-      </a>     
-      {{_("Events")}} > 
+      </a>
+      {{_("Events")}} >
      </h2>
   </div>
 </div>
@@ -28,8 +28,8 @@
     </div>
   </div>
   <div class="container" ng-show="immediateFailed">
-    <div class="col-md-12">  
-       
+    <div class="col-md-12">
+
       <span id="signin">
         <span id="myGsignin"></span>
       </span>
@@ -40,7 +40,7 @@
         <div id="calendar" class="has-toolbar">
     </div>
   </div>
-     
+
             <!--HKA 11.10.2013 Edit Contact -->
              <div id="EditContactModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
@@ -52,46 +52,46 @@
               </div>
 
               <div class="modal-body">
-                 <form id="editAccount" name="editlead" ng-submit="updatecontact(contact)" class="form-horizontal"> 
-                
+                 <form id="editAccount" name="editlead" ng-submit="updatecontact(contact)" class="form-horizontal">
+
 
                   <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("First Name")}} </label>
-                       
+
                         <div class="col-md-9">
                           <input type="text" class="form-control" required id="id_firstname" ng-model="contact.firstname">
-                          
+
                         </div>
                     </div>
                     <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Last Name")}}</label>
-                       
+
                         <div class="col-md-9">
                           <input type="text" class="form-control"  id="id_type" ng-model="contact.lastname">
-                          
+
                         </div>
                     </div>
                     <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Tittle")}} </label>
-                       
+
                         <div class="col-md-9">
                           <input type="text" class="form-control"  required id="id_Title" ng-model="contact.title">
-                          
+
                         </div>
                     </div>
                     <!--div class="control-group">
                         <label  class="required col-md-3 control-label">{{_("Company")}} </label>
-                       
+
                         <div class="col-md-9">
                           <input type="text" class="form-control"   id="id_Company" ng-model="contact.company">
-                          
+
                         </div>
-                    </div-->                     
-                  
-                     
-                    
-                  
-                
+                    </div-->
+
+
+
+
+
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
@@ -110,15 +110,15 @@
                 <h3 id="myModalLabel" class="modal-title">Delete Contact</h3>
               </div>
               <div class="modal-body">
-                 <form id="seletesho" name="deletesho" class="form-horizontal"> 
-                
+                 <form id="seletesho" name="deletesho" class="form-horizontal">
+
 
                   <p>{{_("Are you sure you want to delete")}} :  <%=contact.firstname%> <%=contact.lastname%>  .</p>
 
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                
+
                 <input  ng-click="deletecontact()" type="submit" class="btn red" value="Delete this Contact">
                 <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
               </div>
@@ -137,18 +137,18 @@
               </div>
 
               <div class="modal-body">
-                 <form id="editTagline" name="editlead" ng-submit="updateTagline(account)" class="form-horizontal"> 
-                
+                 <form id="editTagline" name="editlead" ng-submit="updateTagline(account)" class="form-horizontal">
+
 
                   <div class="form-group">
                         <label  class="col-md-3 control-label">{{_("Tagline")}} </label>
-                       
+
                         <div class="col-md-9">
                           <!--textarea rows="2" cols="50"  id="id_tagline" ng-model="account.tagline"/-->
                            <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="account.tagline"></textarea>
 
                         </div>
-                    </div>             
+                    </div>
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
@@ -169,18 +169,18 @@
               </div>
 
               <div class="modal-body">
-                 <form id="editTagline" name="edittag" ng-submit="updateintro(account)" class="form-horizontal"> 
-                
+                 <form id="editTagline" name="edittag" ng-submit="updateintro(account)" class="form-horizontal">
+
 
                   <div class="form-group">
                         <label  class=" col-md-3 control-label">{{_("Introduction")}} </label>
-                       
+
                         <div class="col-md-9">
-                         
+
                            <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="account.introduction"></textarea>
 
                         </div>
-                    </div>             
+                    </div>
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
@@ -202,7 +202,7 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("Add Phone")}}</h3>
             </div>
             <div class="modal-body">
-                  <form id="addPhone" name="addphone" class="form-horizontal"> 
+                  <form id="addPhone" name="addphone" class="form-horizontal">
                     <div class="form-group">
                         <label  class="col-md-3 control-label">{{_("Type")}} </label>
                         <div class="col-md-9">
@@ -212,24 +212,24 @@
                             <option>{{_('work')}}</option>
                             <option>{{_('mobile')}}</option>
                             <option>{{_('other')}}</option>
-                            
+
                           </select>
                         </div>
                      </div>
                      <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Number")}}</label>
-                       
+
                         <div class="col-md-9">
                           <input type="text" class="form-control" id="id_name" ng-model="phone.number">
-                          
+
                         </div>
                      </div>
               </div>
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-              
+
                  <input ng-hide="isLoading" ng-click="addPhone(phone)" ng-disabled="!(phone.number)" type="submit" class="btn green" value="{{_('Add this phone')}}">
-                
+
                   <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
               </div>
                 </form>
@@ -248,7 +248,7 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("Add Email")}}</h3>
             </div>
             <div class="modal-body">
-                  <form id="addEmail" name="addemail"  class="form-horizontal"> 
+                  <form id="addEmail" name="addemail"  class="form-horizontal">
                     <div class="form-group">
                         <label  class="col-md-3 control-label">{{_("Email")}} </label>
                         <div class="col-md-9">
@@ -258,7 +258,7 @@
               </div>
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-              
+
                   <input ng-hide="isLoading" ng-click="addEmail(emaill)"   ng-disabled="!(emaill.email)"  type="submit" class="btn green" value="Add this email">
                   <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
               </div>
@@ -311,7 +311,7 @@
               </div>
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-              
+
                   <input ng-hide="isLoading" ng-click="addAddress(address)" ng-disabled="!(address.country || address.postal_code || address.state || address.city || address.street)" type="submit" class="btn green" value="{{_('Add this address')}}">
                   <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
               </div>
@@ -329,7 +329,7 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("Add Website")}}</h3>
             </div>
             <div class="modal-body">
-                  <form id="addWebsite" name="addwebsite"  class="form-horizontal"> 
+                  <form id="addWebsite" name="addwebsite"  class="form-horizontal">
                     <div class="form-group">
                         <label  class="col-md-3 control-label">{{_("Custom Field")}} </label>
                         <div class="col-md-9">
@@ -344,7 +344,7 @@
               </div>
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-              
+
                   <input ng-hide="isLoading" ng-click="addCustomField(customField)" ng-disabled="!(customField.field && customField.value)" type="submit" class="btn green" value="{{_('Add this custom field')}}">
                   <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
               </div>
@@ -363,7 +363,7 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("Add Website")}}</h3>
             </div>
             <div class="modal-body">
-                  <form id="addWebsite" name="addwebsite"  class="form-horizontal"> 
+                  <form id="addWebsite" name="addwebsite"  class="form-horizontal">
                     <div class="form-group">
                         <label  class="col-md-3 control-label">{{_("Website")}} </label>
                         <div class="col-md-9">
@@ -373,7 +373,7 @@
               </div>
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-              
+
                   <input ng-hide="isLoading" ng-click="addWebsite(website)" ng-disabled="!(website.website)" type="submit"  class="btn green" value="{{_('Add this Website')}}">
                   <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
               </div>
@@ -393,7 +393,7 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("Add Social link")}}</h3>
             </div>
              <div class="modal-body">
-                  <form id="addSocial" name="addsocial"  class="form-horizontal"> 
+                  <form id="addSocial" name="addsocial"  class="form-horizontal">
                     <div class="form-group">
                         <label  class="col-md-3 control-label">{{_("Social link")}} </label>
                         <div class="col-md-9">
@@ -403,7 +403,7 @@
               </div>
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-              
+
                   <input ng-hide="isLoading" ng-click="addSocial(social)" ng-disabled="!(social.sociallink)" type="submit" class="btn green" value="{{ _('Add this social link') }}">
                   <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
               </div>
@@ -425,30 +425,30 @@
                           <h3 id="myModalLabel" class="modal-title">{{_("New Contact")}}</h3>
                         </div>
                         <div class="modal-body">
-                            <form id="addContact" name="addcontact"   class="form-horizontal" role="form"> 
+                            <form id="addContact" name="addcontact"   class="form-horizontal" role="form">
                             <div class="form-group">
                               <label  class="required col-md-3 control-label">{{_("First Name")}} </label>
-                       
+
                               <div class="col-md-9">
                               <input class="form-control" type="text" required id="id_firstname" ng-model="contact.firstname">
-                          
+
                                </div>
                             </div>
                            <div class="form-group">
                               <label  class="required col-md-3 control-label">{{_("Last Name")}}</label>
                               <div class="col-md-9">
                               <input class="form-control" type="text"  id="id_lastname" ng-model="contact.lastname">
-                          
+
                               </div>
                            </div>
                            <div class="form-group">
                              <label  class="required col-md-3 control-label">{{_("Tittle")}} </label>
-                       
+
                              <div class="col-md-9">
                               <input class="form-control" type="text"  id="id_account" ng-model="contact.title">
-                          
+
                               </div>
-                           </div>                
+                           </div>
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
@@ -468,11 +468,11 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("Sharing Settings")}}</h3>
               </div>
               <div class="modal-body">
-                 <form id="addMember" name="addaccount" ng-submit="share(slected_memeber)" class="form-horizontal"> 
-                  
+                 <form id="addMember" name="addaccount" ng-submit="share(slected_memeber)" class="form-horizontal">
+
                     <p>{{ _("Who has access:") }}</p>
                     <div class="radio-list">
-                         
+
                             <label >
                             <input type="radio" name="optionRadio" value="public" ng-model="contact.access" />
                             {{ _("public: Anyone within your organization can access and find") }}
@@ -480,7 +480,7 @@
                             <label >
                             <input type="radio" name="optionRadio"  value="private" ng-model="contact.access" />
                             {{ _("private: only you and your collaborators") }}
-                            </label>                       
+                            </label>
                     </div>
                     <hr/>
                     <div class=''>
@@ -489,7 +489,7 @@
                           <img class="google-avatar" ng-src="<%=collaborator.photo%>"/>
                            <%=collaborator.display_name%> < <%=collaborator.email%> >
                         </div>
-                        
+
                     </div>
                     <hr/>
 
@@ -500,12 +500,12 @@
                         <strong> <%= invited.google_display_name %> < <%=invited.email%> ></strong>
                       <hr/>
                     </div>
-                    
+
                     <p>{{ _("Invite collaborators:") }}</p>
                     <div class="form-group">
                       <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group') }}">
                     </div>
-                    
+
                       </div>
               </div>
               <div class="modal-footer">
@@ -526,12 +526,12 @@
                 <h3 id="myModalLabel" class="modal-title">Delete Account</h3>
               </div>
               <div class="modal-body">
-                 <form id="seletesho" name="deletesho" class="form-horizontal"> 
+                 <form id="seletesho" name="deletesho" class="form-horizontal">
                   <p>{{_("Are you sure you want to delete")}} :  <%=account.name %> .</p>
               </div>
                 <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                  
+
                   <input  ng-click="deleteaccount()" type="submit" class="btn red" value="Delete this Account">
                   <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                 </div>
@@ -550,12 +550,12 @@
                 <h3 id="myModalLabel" class="modal-title">Delete Information</h3>
               </div>
               <div class="modal-body">
-                 <form id="seletesho" name="deletesho" class="form-horizontal"> 
+                 <form id="seletesho" name="deletesho" class="form-horizontal">
                   <p>{{_("Are you sure you want to delete")}} :  <%=account.name %> .</p>
               </div>
                 <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                  
+
                   <input  ng-click="deleteaccount(account)" type="submit" class="btn red" value="Delete this Information">
                   <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                 </div>
@@ -575,7 +575,7 @@
                      <div class="controls controls-row">
                                           <form id="addTask" ng-submit="addTask(task)" class="ng-pristine ng-valid">
                                                   <input class="form-control" autofocus type="text" placeholder="Add a new task" id="taskTitle" ng-model="task.title">
-                                                  
+
                                                   <p><strong>{{_("When's it due?")}}</strong></p>
                                                   <center>
                                                     <datetimepicker data-ng-model="task.due"
@@ -585,10 +585,10 @@
             </div>
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-              
+
                <input ng-hide="isLoading" type="submit" class="btn green" value="Add this task">
                 <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
-                                        
+
             </form>
             </div>
             </div>
@@ -606,16 +606,16 @@
                      <div class="controls controls-row">
                                           <form id="addTask"  class="ng-pristine ng-valid">
                                                   <input class="form-control" autofocus type="text" placeholder="Enter a new <%=mimeType%> name" id="taskTitle" ng-model="newdocument.title" required>
-                                                  
-                                                  
+
+
                      </div>
             </div>
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-              
+
                <input ng-hide="isLoading" type="submit" class="btn green" value="Create this document" ng-click="createDocument(newdocument)">
                 <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
-                                        
+
             </form>
             </div>
             </div>
@@ -633,18 +633,18 @@
                      <h3 id="myModalLabel" class="modal-title">{{_("New Opportunity")}}</h3>
                   </div>
                  <div class="modal-body">
-                     <form id="addOpportunity" name="addOpportunity" ng-submit="saveOpp(opportunity)" class="form-horizontal"> 
+                     <form id="addOpportunity" name="addOpportunity" ng-submit="saveOpp(opportunity)" class="form-horizontal">
                      <fieldset>
                       <div class="form-group">
                           <label  class="required col-md-3 control-label">{{_("Name")}} *</label>
-                       
+
                           <div class="col-md-9">
                           <input type="text" class="form-control" required id="id_name" ng-model="opportunity.name">
                           </div>
                       </div>
                       <!--div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Labels")}} </label>
-                       
+
                         <div class="col-md-9">
                           <input type="text"  class="form-control" id="id_label" ng-model="opportunity.description">
                         </div>
@@ -660,14 +660,14 @@
                         <div class="col-md-9">
                           <select ng-model="stage_selected" class="form-control" ng-options="opps.name + ' - ( ' + opps.probability + '% )' for opps in opportunitystages | orderBy: 'name':true"  >
                             <option value="">-- choose Stage --</option>
-                          
+
                           </select>
-                          
-                         
+
+
                         </div>
-                    </div>                 
+                    </div>
                     </fieldset>
-                
+
               </div>
                     <div class="modal-footer">
                      <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
@@ -688,23 +688,23 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("New Case")}}</h3>
               </div>
               <div class="modal-body">
-                 <form id="addCase" name="addCase" ng-submit="saveCase(casee)" class="form-horizontal"> 
-                
-                  
-                    
+                 <form id="addCase" name="addCase" ng-submit="saveCase(casee)" class="form-horizontal">
 
-                    
+
+
+
+
                     <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Name")}} </label>
-                       
+
                         <div class="col-md-9">
                           <input type="text" class="form-control"  id="id_name" ng-model="casee.name">
-                          
+
                         </div>
                     </div>
                     <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Priority")}} </label>
-                       
+
                         <div class="col-md-9">
                            <select class="form-control" ng-model="casee.priority">
                             <option value="1">1 - Low</option>
@@ -718,34 +718,34 @@
                             <option value="9">9</option>
                             <option value="10">10 - Critical</option>
                           </select>
-                          
+
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Status")}}</label>
-                       
+
                         <div class="col-md-9">
                             <select  class="form-control" ng-model="status_selected" ng-options="stat.status for stat in casesatuses" >
                             <option value="">Choose Status</option>
                             <!--option value=""><%=status_selected.status%></option-->
                           </select>
-                          
+
                         </div>
-                      
+
                     </div>
                     <!--div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Labels")}} </label>
-                       
+
                         <div class="col-md-9">
                           <input type="text" class="form-control"  id="id_description" ng-model="casee.type_case">
-                          
+
                         </div>
                     </div-->
-                   
 
-                  
-                
+
+
+
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
@@ -755,7 +755,7 @@
                </div>
                </div>
           </div>
-               
+
                       <!--HKA 19.11.2013  End Case Modal -->
 
 <!--Event Modal -->
@@ -789,11 +789,11 @@
             </div>
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-              
+
                <input ng-hide="isLoading" type="submit" class="btn green" value="{{_('Add this event')}}" ng-click="addEvent(ioevent)">
                 <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
-                                        
-            
+
+
             </div>
             </div>
             </div>
@@ -811,7 +811,7 @@
                      <div class="controls controls-row">
                                           <form id="addTask" ng-submit="addTask(task)" class="ng-pristine ng-valid">
                                                   <input class="form-control" autofocus type="text" placeholder="Add a new task" id="taskTitle" ng-model="task.title">
-                                                  
+
                                                   <p><strong>{{_("When's it due?")}}</strong></p>
                                                   <center>
                                                     <datetimepicker data-ng-model="task.due"
@@ -821,10 +821,10 @@
             </div>
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-              
+
                <input ng-hide="isLoading" type="submit" class="btn green" value="Add this task">
                 <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
-                                        
+
             </form>
             </div>
             </div>
@@ -841,16 +841,16 @@
                      <div class="controls controls-row">
                                           <form id="addTask" ng-submit="createDocument(newdocument)" class="ng-pristine ng-valid">
                                                   <input class="form-control" autofocus type="text" placeholder="Enter a new <%=mimeType%> name" id="taskTitle" ng-model="newdocument.title" required>
-                                                  
-                                                  
+
+
                      </div>
             </div>
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-              
+
                <input ng-hide="isLoading" type="submit" class="btn green" value="Create this document">
                 <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
-                                        
+
             </form>
             </div>
             </div>
@@ -887,10 +887,10 @@
             </div>
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-              
+
                <input ng-hide="isLoading" type="submit" class="btn green" value="{{_('Add this event')}}">
                 <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
-                                        
+
             </form>
             </div>
             </div>

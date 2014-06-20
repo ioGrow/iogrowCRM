@@ -210,6 +210,12 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
           User.list($scope,{});
 
     $('#calendar').fullCalendar({
+      header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month,agendaWeek,agendaDay'
+			},
+      defaultView:'agendaWeek',
       defaultDate: '2014-06-12',
       editable: true,
       events: [
