@@ -1,7 +1,7 @@
 var eventservices = angular.module('crmEngine.eventservices',[]);
 
 eventservices.factory('Event', function($http) {
-  
+
   var Event = function(data) {
     angular.extend(this, data);
   }
@@ -34,7 +34,7 @@ eventservices.factory('Event', function($http) {
   Event.patch = function($scope,params){
       $scope.isLoading = true;
       gapi.client.crmengine.events.patch(params).execute(function(resp) {
-          
+
           if(!resp.code){
             /*
             for (var k in params){
@@ -51,7 +51,7 @@ eventservices.factory('Event', function($http) {
            /* $scope.listTags();
             $scope.listTasks();*/
             $scope.$apply();
-          
+
          }else{
             console.log("not working");
              if(resp.message=="Invalid grant"){
@@ -66,17 +66,28 @@ eventservices.factory('Event', function($http) {
       });
   };
   Event.list = function($scope,params){
-      
+
 
       $scope.isLoading = true;
 
       gapi.client.crmengine.events.list(params).execute(function(resp) {
-           
+
               if(!resp.code){
-               
-           
+
+
 
                  $scope.events = resp.items;
+                 var calendarEventList = new Array();
+                 angular.forEach(resp.items, function(item){
+                    var eventSchema = {
+                                        'title':item.title,
+                                        'url':'/#/events/show/'+item.id.toString(),
+                                        'start':item.starts_at,
+                                        'end':item.ends_at
+                                      };
+                    calendarEventList.push(eventSchema);
+                 });
+                 $scope.renderCalendar(calendarEventList);
                  /*if ($scope.currentPage>1){
                       console.log('Should show PREV');
                       $scope.pagination.prev = true;
@@ -98,7 +109,7 @@ eventservices.factory('Event', function($http) {
 
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
-                 $scope.hilightEvent();
+                
               }else {
                  if(resp.code==401){
                 $scope.refreshToken();
@@ -110,7 +121,7 @@ eventservices.factory('Event', function($http) {
   };
    Event.insert = function($scope,params){
       $scope.isLoading = true;
-      
+
       gapi.client.crmengine.events.insertv2(params).execute(function(resp) {
           if(!resp.code){
             if ($scope.events == undefined){
@@ -120,9 +131,9 @@ eventservices.factory('Event', function($http) {
             $scope.isLoading = false;
 
             $scope.$apply();
-          
+
          }else{
-           
+
              $('#newEventModal').modal('hide');
              $('#errorModal').modal('show');
              if(resp.message=="Invalid grant"){
@@ -164,7 +175,7 @@ Event.getUrl = function(type,id){
 
  };
 
-  
+
 
 return Event;
 });
