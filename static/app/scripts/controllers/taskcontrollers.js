@@ -242,13 +242,13 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
       Task.patch($scope,params);
     };
   $scope.inlinePatch=function(kind,edge,name,entityKey,value){
-
-    
-
+  
    if (kind=='Task') {
-          params = {'id':$scope.task.id,
-             name:value}
-         Task.patch($scope,params);
+       if (name='title')
+          {params = {'id':$scope.task.id,
+             title:value}
+         Task.patch($scope,params);}         
+         
                }}
 
   $scope.listTags=function(){

@@ -20,7 +20,7 @@ STANDARD_TABS = [
                 {'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},
                 {'name': 'Cases','label': 'Cases','url':'/#/cases/','icon':'suitcase'},
                 {'name': 'Tasks','label': 'Tasks','url':'/#/tasks/','icon':'check'},
-                {'name': 'Calendar','label': 'Calendar','url':'/#/Calendar/','icon':'calendar'}
+                {'name': 'Calendar','label': 'Calendar','url':'/#/calendar/','icon':'calendar'}
                 ]
 EARLY_BIRD_TABS = [
                 {'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},
