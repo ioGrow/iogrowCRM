@@ -93,7 +93,7 @@
                        <!-- ngRepeat: tag in account.tags -->
                       <a ng-repeat="tag in account.tags" href="/#/search/type:Account tags:<%=tag.id%>">
                         <span class="pull-left task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
-                          <%= tag.name %> <%=tag.edgeKey %>
+                          <%= tag.name %> 
                         </span>
                       </a>
                     </div>

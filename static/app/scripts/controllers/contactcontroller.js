@@ -24,7 +24,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
         $scope.draggedTag=null;
         $scope.tag = {};
         $scope.showNewTag=false;
-        $scope.showUntag=false;   
+        $scope.showUntag=false;
         $scope.edgekeytoDelete=undefined;
         $scope.color_pallet=[
          {'name':'red','color':'#F7846A'},
@@ -56,6 +56,9 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
             // }
 
        };
+       $scope.fromNow = function(fromDate){
+           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
+       }
        $scope.getPosition= function(index){
         if(index<4){
 
@@ -453,11 +456,11 @@ $scope.addTags=function(){
       }
  //HKA 19.06.2014 Detache tag on contact list
      $scope.dropOutTag=function(){
-        
-        
+
+
         var params={'entityKey':$scope.edgekeytoDelete}
         Edge.delete($scope,params);
-        
+
         $scope.edgekeytoDelete=undefined;
         $scope.showUntag=false;
       };
@@ -1474,13 +1477,13 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
                 break;
                 case 'customfields' :
                    $scope.showCustomFieldForm=false;
-                break; 
+                break;
                 case 'addresses' :
                     $('#addressmodal').modal('hide');
-                
+
                 break;
               }
-         
+
           }else{
             alert("item already exit");
           }
