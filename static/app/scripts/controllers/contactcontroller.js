@@ -1043,23 +1043,11 @@ $scope.addCustomField = function(customField){
 
 };
 
-//HKA 01.12.2013 Add Tagline
-$scope.updateTagline = function(contact){
+// HKA 21.06.2014 Update introduction , Tagline
+ $scope.updateContactIntroTagline=function(params){
+      Contact.patch($scope,params);
+     };
 
-  params = {'id':$scope.contact.id,
-             'tagline':contact.tagline}
-  Contact.patch($scope,params);
-  $('#EditTagModal').modal('hide');
-};
-
-//HKA 01.12.2013 Add Introduction
-$scope.updateintro = function(contact){
-
-  params = {'id':$scope.contact.id,
-             'introduction':contact.introduction}
-  Contact.patch($scope,params);
-  $('#EditIntroModal').modal('hide');
-};
 
      $('#some-textarea').wysihtml5();
 

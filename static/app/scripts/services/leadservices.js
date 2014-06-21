@@ -141,7 +141,7 @@ leadservices.factory('Lead', function($http) {
   };
   Lead.patch = function($scope,params) {
           console.log('in leads.patch service');
-
+          $scope.isLoading=true;
           gapi.client.crmengine.leads.patch(params).execute(function(resp) {
             console.log(params);
             console.log(resp);
@@ -156,7 +156,7 @@ leadservices.factory('Lead', function($http) {
                   $scope.email.to = $scope.email.to + value.email + ',';
 
                 });
-
+               $scope.isLoading=false;
                // Call the method $apply to make the update on the scope
                 $scope.$apply();
 

@@ -849,23 +849,11 @@ $scope.editintro = function() {
        $('#EditIntroModal').modal('show');
     };
 
-//HKA 22.11.2013 Add Tagline
-$scope.updateTagline = function(lead){
+//HKA 21.06.2014 Update Intro and Tagline
+ $scope.updateContactIntroTagline=function(params){
+      Lead.patch($scope,params);
+     };
 
-  params = {'id':$scope.lead.id,
-             'tagline':lead.tagline}
-  Lead.patch($scope,params);
-  $('#EditTagModal').modal('hide');
-};
-
-//HKA 22.11.2013 Add Introduction
-$scope.updateintro = function(lead){
-
-  params = {'id':$scope.lead.id,
-             'introduction':lead.introduction}
-  Lead.patch($scope,params);
-  $('#EditIntroModal').modal('hide');
-};
 
       $scope.showConvertModal = function(){
         $('#convertLeadModal').modal('show');
