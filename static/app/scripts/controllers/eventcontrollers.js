@@ -18,7 +18,7 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
      $scope.users = [];
      $scope.user = undefined;
      $scope.slected_memeber = undefined;
-     $scope.role= 'participant';  
+     $scope.role= 'participant';
      // What to do after authentication
      $scope.runTheProcess = function(){
           var eventid = {'id':$route.current.params.eventId};
@@ -47,14 +47,14 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
         }
      }
       $scope.listNextPageItemscomment= function(){
-        
+
          console.log('i am in list next comment page')
         var nextPage = $scope.currentPagecomment + 1;
-        
+
         var params = {};
           if ($scope.pagescomment[nextPage]){
             params = {'limit':5,
-                      'discussion':$scope.eventt.entityKey,                    
+                      'discussion':$scope.eventt.entityKey,
                        'order':'-updated_at',
                       'pageToken':$scope.pagescomment[nextPage]
                      }
@@ -64,12 +64,12 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
                       'order':'-updated_at',}
           }
           console.log('in listNextPageItems');
-          $scope.currentPagecomment = $scope.currentPagecomment + 1 ; 
+          $scope.currentPagecomment = $scope.currentPagecomment + 1 ;
           Comment.list($scope,params);
      }
-     
+
      $scope.listPrevPageItemscomment = function(){
-       
+
        var prevPage = $scope.currentPagecomment - 1;
        var params = {};
           if ($scope.pagescomment[prevPage]){
@@ -86,14 +86,14 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
           $scope.currentPagecomment = $scope.currentPagecomment - 1 ;
           Comment.list($scope,params);
      };
-   
+
      $scope.renderMaps = function(){
 
           Map.searchLocation($scope,$scope.event.where);
       };
-    
 
-     
+
+
      $scope.showModal = function(){
         console.log('button clicked');
         $('#addAccountModal').modal('show');
@@ -108,8 +108,8 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
                 };
       Comment.insert($scope,params);
       $scope.comment.content='';
-     
-      
+
+
     };
     $scope.ListComments = function(){
       var params = {
@@ -117,8 +117,8 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
                     'limit':7
                    };
       Comment.list($scope,params);
-      
-      
+
+
     };
 //HKA 18.11.2013 highlight the comment
    $scope.hilightComment = function(){
@@ -132,8 +132,8 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
     $scope.addNewContributor = function(selected_user,role){
       console.log('*************** selected user ***********************');
       console.log(selected_user);
-      
-      var params = {   
+
+      var params = {
                       'discussionKey': $scope.eventt.entityKey,
 
                       'type': 'user',
@@ -146,17 +146,17 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
                       // Create Contributor Service
                       // Create contributors.list api
                       //list all contributors after getting the task.
-                     
-                      
-        }  
+
+
+        }
         console.log('selected member');
-        console.log(params); 
+        console.log(params);
         Contributor.insert($scope,params);
      $('#addContributor').modal('hide');
      };
 //HKA 02.12.2013 Select member
 $scope.selectMember = function(){
-        
+
         $scope.slected_memeber = $scope.user;
         $scope.user = $scope.slected_memeber.google_display_name;
 
@@ -167,19 +167,23 @@ $scope.listContributors = function(){
                      'order':'-created_at'};
       Contributor.list($scope,params);
       };
-//HKA 20.01.2014 Add 
+//HKA 20.01.2014 Add
  $scope.getshow = function(showId){
      var show = Show.get($scope.showId);
      return show;
 
  }
 
-  // Google+ Authentication 
+  // Google+ Authentication
   Auth.init($scope);
 }]);
 app.controller('EventListController',['$scope','$filter','$route','Auth','Note','Event','Task','Topic','Comment','User','Contributor','Show','Map',
    function($scope,$filter,$route,Auth,Note,Event,Task,Topic,Comment,User,Contributor,Show,Map) {
 //HKA 14.11.2013 Controller to show Events and add comments
+   $("ul.page-sidebar-menu li").removeClass("active");
+   $("#id_Calendar").addClass("active");
+
+   document.title = "Calendar: Home";
    $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -197,61 +201,33 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
      $scope.users = [];
      $scope.user = undefined;
      $scope.slected_memeber = undefined;
-     $scope.role= 'participant';  
+     $scope.role= 'participant';
      $scope.isContentLoaded = true;
      // What to do after authentication
      $scope.runTheProcess = function(){
           var eventid = {'id':$route.current.params.eventId};
-          Event.get($scope,eventid);
+          Event.list($scope);
           User.list($scope,{});
 
-    $('#calendar').fullCalendar({
-      defaultDate: '2014-06-12',
-      editable: true,
-      events: [
-        {
-          title: 'All Day Event',
-          start: '2014-06-01'
-        },
-        {
-          title: 'Long Event',
-          start: '2014-06-07',
-          end: '2014-06-10'
-        },
-        {
-          id: 999,
-          title: 'Repeating Event',
-          start: '2014-06-09T16:00:00'
-        },
-        {
-          id: 999,
-          title: 'Repeating Event',
-          start: '2014-06-16T16:00:00'
-        },
-        {
-          title: 'Meeting',
-          start: '2014-06-12T10:30:00',
-          end: '2014-06-12T12:30:00'
-        },
-        {
-          title: 'Lunch',
-          start: '2014-06-12T12:00:00'
-        },
-        {
-          title: 'Birthday Party',
-          start: '2014-06-13T07:00:00'
-        },
-        {
-          title: 'Click for Google',
-          url: 'http://google.com/',
-          start: '2014-06-28'
-        }
-      ]
-    });
-    
+
+
 
 
      };
+     $scope.renderCalendar = function(calendarEventList){
+
+        $('#calendar').fullCalendar({
+          header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'month,agendaWeek,agendaDay'
+          },
+          defaultView:'agendaWeek',
+          defaultDate: '2014-06-12',
+          editable: false,
+          events: calendarEventList
+        });
+     }
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
             Auth.refreshToken();
@@ -271,14 +247,14 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
         }
      }
       $scope.listNextPageItemscomment= function(){
-        
+
          console.log('i am in list next comment page')
         var nextPage = $scope.currentPagecomment + 1;
-        
+
         var params = {};
           if ($scope.pagescomment[nextPage]){
             params = {'limit':5,
-                      'discussion':$scope.eventt.entityKey,                    
+                      'discussion':$scope.eventt.entityKey,
                        'order':'-updated_at',
                       'pageToken':$scope.pagescomment[nextPage]
                      }
@@ -288,12 +264,12 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                       'order':'-updated_at',}
           }
           console.log('in listNextPageItems');
-          $scope.currentPagecomment = $scope.currentPagecomment + 1 ; 
+          $scope.currentPagecomment = $scope.currentPagecomment + 1 ;
           Comment.list($scope,params);
      }
-     
+
      $scope.listPrevPageItemscomment = function(){
-       
+
        var prevPage = $scope.currentPagecomment - 1;
        var params = {};
           if ($scope.pagescomment[prevPage]){
@@ -310,14 +286,14 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
           $scope.currentPagecomment = $scope.currentPagecomment - 1 ;
           Comment.list($scope,params);
      };
-   
+
      $scope.renderMaps = function(){
 
           Map.searchLocation($scope,$scope.event.where);
       };
-    
 
-     
+
+
      $scope.showModal = function(){
         console.log('button clicked');
         $('#addAccountModal').modal('show');
@@ -332,8 +308,8 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                 };
       Comment.insert($scope,params);
       $scope.comment.content='';
-     
-      
+
+
     };
     $scope.ListComments = function(){
       var params = {
@@ -341,8 +317,8 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                     'limit':7
                    };
       Comment.list($scope,params);
-      
-      
+
+
     };
 //HKA 18.11.2013 highlight the comment
    $scope.hilightComment = function(){
@@ -356,8 +332,8 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
     $scope.addNewContributor = function(selected_user,role){
       console.log('*************** selected user ***********************');
       console.log(selected_user);
-      
-      var params = {   
+
+      var params = {
                       'discussionKey': $scope.eventt.entityKey,
 
                       'type': 'user',
@@ -370,17 +346,17 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                       // Create Contributor Service
                       // Create contributors.list api
                       //list all contributors after getting the task.
-                     
-                      
-        }  
+
+
+        }
         console.log('selected member');
-        console.log(params); 
+        console.log(params);
         Contributor.insert($scope,params);
      $('#addContributor').modal('hide');
      };
 //HKA 02.12.2013 Select member
 $scope.selectMember = function(){
-        
+
         $scope.slected_memeber = $scope.user;
         $scope.user = $scope.slected_memeber.google_display_name;
 
@@ -391,14 +367,13 @@ $scope.listContributors = function(){
                      'order':'-created_at'};
       Contributor.list($scope,params);
       };
-//HKA 20.01.2014 Add 
+//HKA 20.01.2014 Add
  $scope.getshow = function(showId){
      var show = Show.get($scope.showId);
      return show;
 
  }
 
-  // Google+ Authentication 
+  // Google+ Authentication
   Auth.init($scope);
 }]);
-
