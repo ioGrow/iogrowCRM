@@ -180,11 +180,12 @@ $scope.listContributors = function(){
 app.controller('EventListController',['$scope','$filter','$route','Auth','Note','Event','Task','Topic','Comment','User','Contributor','Show','Map',
    function($scope,$filter,$route,Auth,Note,Event,Task,Topic,Comment,User,Contributor,Show,Map) {
 //HKA 14.11.2013 Controller to show Events and add comments
+
    $("ul.page-sidebar-menu li").removeClass("active");
    $("#id_Calendar").addClass("active");
 
    document.title = "Calendar: Home";
-   $scope.isSignedIn = false;
+     $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
