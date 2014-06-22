@@ -224,7 +224,6 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
             right: 'month,agendaWeek,agendaDay'
           },
           defaultView:'agendaWeek',
-          defaultDate: '2014-06-12',
           editable: false,
           events: calendarEventList
         });

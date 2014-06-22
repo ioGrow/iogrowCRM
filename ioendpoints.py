@@ -38,7 +38,7 @@ from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,Topic
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
 from iomodels.crmengine.opportunities import Opportunity,UpdateStageRequest,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest
-from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema,EventPatchRequest
+from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema,EventPatchRequest,EventListRequest,EventListResponse
 from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest
 from iomodels.crmengine.shows import Show
 from iomodels.crmengine.leads import Lead,LeadFromTwitterRequest,LeadInsertRequest,LeadListRequest,LeadListResponse,LeadSearchResults,LeadGetRequest,LeadSchema
@@ -1058,10 +1058,16 @@ class CrmEngineApi(remote.Service):
                             request = request
                             )
 
-    # events.list API
-    @Event.query_method(user_required=True,query_fields=('about_kind','about_item','id', 'starts_at','ends_at', 'limit', 'order', 'pageToken'),path='events', name='events.list')
-    def EventList(self, query):
-        return query
+    # events.lists api
+    @endpoints.method(EventListRequest, EventListResponse,
+                      path='events/list', http_method='POST',
+                      name='events.list')
+    def event_list_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Event.list(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
 
     # events.patch api
     @endpoints.method(EventPatchRequest, message_types.VoidMessage,
