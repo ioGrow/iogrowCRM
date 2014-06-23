@@ -1,12 +1,21 @@
 <div class="row subHeader">
-<div class="currentApp">
-  <h2 class="page-title">
-    <!-- <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
-    {{active_app.label}}
-  </h2>
-</div>
+    <div class="currentApp">
+       <div class="btn-group">
+           <a class="filterItem" href="#" data-toggle="dropdown" >
+            {{active_app.label}}
+            <i class="icon-angle-down"></i>
+           </a>
+           <ul class="dropdown-menu">
+            {%for application in apps %}
+
+                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{application.label}}</a></li>
+
+            {%endfor%}
+           </ul>
+        </div>
+    </div>
   <div class=" subHeaderContent">
-             
+
             <h2 class="page-title">
             <a href="/#/tasks/" data-toggle="tooltip" data-placement="bottom" title="Back to Tasks">
             <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Tasks")}}  </a></h2>
@@ -21,10 +30,10 @@
                       <h3 id="myModalLabel" class="modal-title">Add Tags </h3>
                     </div>
                     <div class="modal-body">
-                       <form id="seletesho" name="deletesho" class="form-horizontal"> 
+                       <form id="seletesho" name="deletesho" class="form-horizontal">
                        <div class="form-group">
                             <select id="select2_sample2" class="form-control select2" multiple>
-                              <option ng-repeat="tag in tags" 
+                              <option ng-repeat="tag in tags"
                               value='<%=tag.entityKey%>'>
                                 <%=tag.name%>
                               </option>
@@ -49,12 +58,12 @@
               </div>
 
               <div class="modal-body">
-                 <form id="editCase" name="editlead" ng-submit="updateTask(task)" class="form-horizontal"> 
-                
+                 <form id="editCase" name="editlead" ng-submit="updateTask(task)" class="form-horizontal">
+
 
                   <div class="form-group">
                         <input class="form-control" autofocus type="text" placeholder="Add a new task" id="taskTitle" ng-model="task.title">
-                                                  
+
                         <p><strong>When's it due?</strong></p>
                         <center>
                               <datetimepicker data-ng-model="task.due"
@@ -63,32 +72,32 @@
 
                          <div class="form-group">
                             <label  class="required col-md-3 control-label">{{_("Status")}} </label>
-                            
+
                             <div class="col-md-9">
                               <select class="form-control" ng-model="task.status">
-                                    
+
                                     <option value="pending">Pending</option>
                                     <option value="working">Working</option>
                                     <option value="closed">Closed</option>
-                                    
-                              </select>
-                         
-                        </div>                       
-                          
-                   </div>  
-                    </div>
-                   
-                 
 
-                    
+                              </select>
+
+                        </div>
+
+                   </div>
+                    </div>
+
+
+
+
                     <div class="form-group">
                         <input class="form-control" autofocus type="text" placeholder="Add labels to categorize your tasks" id="taskTitle" ng-model="task.tags">
-                    </div>                       
-                  
-                     
-                    
-                  
-                
+                    </div>
+
+
+
+
+
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
@@ -97,16 +106,16 @@
                </form>
                 </div>
               </div>
-  </div> 
+  </div>
 <div class="page-sidebar nav-collapse collapse">
-      <!-- BEGIN SIDEBAR MENU -->        
+      <!-- BEGIN SIDEBAR MENU -->
       <ul class="page-sidebar-menu">
-        
+
         {% for tab in tabs %}
            <li id="id_{{tab.name}}"  ><a href="{{ tab.url }}"><i class="icon-cogs"></i><span class="title">{{tab.label}}</span></a></li>
           {% endfor %}
 
-      </ul>   
+      </ul>
       <!-- END SIDEBAR MENU -->
 </div>
 <div  class="page-content">
@@ -118,7 +127,7 @@
     </div>
   </div>
 <div class="" ng-show="immediateFailed">
-         <div class="col-md-12">  
+         <div class="col-md-12">
           <h1>Sign-in Button;</h1>
               <span id="signin">
                   <span id="myGsignin"></span>
@@ -138,9 +147,9 @@
     <span editable-text="task.title"  ng-model='task.title'  onbeforesave="inlinePatch('Task','', 'title',task.entityKey,$data)">
 
 
-              <%=task.title%> 
+              <%=task.title%>
              </span>
-              
+
             </h2>
             <!--a > <%=task.status%> </a-->
             <hr class="sepLine">
@@ -152,7 +161,7 @@
                    <button   ng-show="task.status=='open'"class="btn btn-unstyled btn-sm btn-default task_action" ng-click="closeTask(task)">
                     <i class="fa fa-lock"></i>
                       <span class="btn-text">
-                        Close  
+                        Close
                       </span>
                     </button>
                      <button   ng-show="task.status=='closed'" class="btn btn-unstyled btn-sm btn-default task_action" ng-click="reopenTask(task)">
@@ -181,7 +190,7 @@
                  </li>
                </ul>
             </div>
-              
+
         </div>
       </div>
     <!--HKA 19.11.2013 END Span comments-->
@@ -190,7 +199,7 @@
         <div class="col-md-12 commentsShow">
              <div class="portlet">
                 <div class="portlet-title line">
-                  <div class="caption"><i class="icon-comments"></i>Comments</div>    
+                  <div class="caption"><i class="icon-comments"></i>Comments</div>
                 </div>
                 <div class="portlet-body">
                       <ul class="chats">
@@ -206,12 +215,12 @@
                           </div>
                         </li>
                       </ul>
-                     
+
                 </div>
-                  
+
               </div>
         </div>
-          
+
         </div>
       </div>
             <div class="showPage col-md-12">
@@ -223,21 +232,21 @@
                       <form id="addComment"  class=" ng-pristine ng-valid">
                       <div class="form-group">
                                         <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="comment.content"></textarea>
-                                      
-                       </div>                
-                                     
+
+                       </div>
+
                        <div class="pull-right">
-                      
+
                         <input  ng-click="addComment(comment)" type="submit" class="btn green" value="Add comment">
-                        
+
                         </div>
                                   <div class="clearfix"></div>
                   </form>
                 </div>
-                  
+
               </div>
         </div>
-          
+
         </div>
       </div>
 
@@ -251,9 +260,9 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("Involve new contributors")}}</h3>
               </div>
               <div class="modal-body">
-                 <form id="addAccount" name="addaccount" ng-submit="addNewContributor(slected_memeber,role)" class="form-horizontal"> 
-                
-                  
+                 <form id="addAccount" name="addaccount" ng-submit="addNewContributor(slected_memeber,role)" class="form-horizontal">
+
+
                     <p>Invite people from your team and start working together on this task. Everyone you invite will receive an email.</p>
 
                     <div class=''>
@@ -271,13 +280,13 @@
                               <option value="responsible">Responsible</option>
                               <option value="participant">Participant</option>
                               <option value="invited">Invited</option>
-                              
+
                             </select>
                           </div>
                         </div>
                       </div>
-                
-                
+
+
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
@@ -291,7 +300,7 @@
 
       </div>
   <!--HKA 19.11.2013 END Span who is involved -->
-    
+
 
 
     </div>
@@ -307,24 +316,24 @@
         </div>
                   <div class="portlet-body">
                   <ul class="chats">
-                   
-                   <li>                      
+
+                   <li>
                         <span class="arrow">Created By: <%=task.created_by.display_name%></span>
                    </li>
                   </ul>
                    <div class="caption"><i class="fa fa-group"></i>Assignees</div>
                     <ul class="chats">
-                 
+
                  <li  ng-repeat="assigned in task.assignees">
-                    
-                    
+
+
                       <span class="arrow"><%=assigned.display_name%></span>
-                     
-                   
+
+
                  </li>
                   <li><a href="#addContributor"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new assignee</a></li>
 
-                 
+
                 </ul>
                   </div>
       </div>
@@ -344,5 +353,3 @@
 
     </div>
     </div>
-
-   

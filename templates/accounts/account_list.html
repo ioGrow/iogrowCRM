@@ -1,10 +1,18 @@
 <div class="row subHeader">
     <div class="currentApp">
+       <div class="btn-group">
+           <a class="filterItem" href="#" data-toggle="dropdown" >
+            {{active_app.label}}
+            <i class="icon-angle-down"></i>
+           </a>
+           <ul class="dropdown-menu">
+            {%for application in apps %}
 
-       <h2 class="page-title">
-       {{active_app.label}}
-       <!--  <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
-      </h2>
+                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{application.label}}</a></li>
+
+            {%endfor%}
+           </ul>
+        </div>
     </div> 
     <div class=" subHeaderContent">
       <div class="col-md-9">
@@ -32,7 +40,7 @@
       </div>
       <div class="col-md-2 col-xs-2">
       <a href="/#/accounts/new" class="btn red newAccountBtnOnscroll pull-right hidden afterScrollBtn">
-           New <span class="hidden-xs hiddenOnxs">Account</span> 
+           New <span class="hidden-xs hiddenOnxs">Account</span>
          </a>
       </div>
       </div>
@@ -71,7 +79,7 @@
                         <h3 id="myModalLabel">{{_("New Account")}}</h3>
                     </div>
                     <div class="modal-body">
-                       <form id="addAccount" name="addaccount"  class=""  ng-keyup="addAccountOnKey(account)"> 
+                       <form id="addAccount" name="addaccount"  class=""  ng-keyup="addAccountOnKey(account)">
                     <div class="form-group">
                         <label  class="required">{{_("Name")}}</label>
                           <input type="text" class="form-control" required  ng-model="account.name">

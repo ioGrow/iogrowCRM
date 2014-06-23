@@ -90,9 +90,11 @@ class BaseHandler(webapp2.RequestHandler):
             self.set_user_locale(user.language)
             # Render the template
             active_app = user.get_user_active_app()
+            apps = user.get_user_apps()
             template_values={
                       'ME':user.google_user_id,
                       'active_app':active_app,
+                      'apps':apps,
                       'tabs':tabs
                       }
             template = jinja_environment.get_template(template_name)

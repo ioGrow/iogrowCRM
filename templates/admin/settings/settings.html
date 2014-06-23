@@ -1,17 +1,27 @@
 <div class="row subHeader">
-  <div class="currentApp">
-    <h2 class="page-title">
-      {{active_app.label}}
-    </h2>
-  </div>
+    <div class="currentApp">
+       <div class="btn-group">
+           <a class="filterItem" href="#" data-toggle="dropdown" >
+            {{active_app.label}}
+            <i class="icon-angle-down"></i>
+           </a>
+           <ul class="dropdown-menu">
+            {%for application in apps %}
+
+                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{application.label}}</a></li>
+
+            {%endfor%}
+           </ul>
+        </div>
+    </div>
   <div class=" subHeaderContent">
-    <div class="pull-right sharebuttonDiv"> 
-      
-    </div> 
+    <div class="pull-right sharebuttonDiv">
+
+    </div>
     <h2 class="page-title" >
-         
-      {{_("Settings")}} 
-      
+
+      {{_("Settings")}}
+
     </h2>
   </div>
 </div>
@@ -24,8 +34,8 @@
     </div>
   </div>
   <div class="container" ng-show="immediateFailed">
-    <div class="col-md-12">  
-       
+    <div class="col-md-12">
+
       <span id="signin">
         <span id="myGsignin"></span>
       </span>
@@ -36,10 +46,10 @@
       <div class="row">
         <div class="showPage custom-show margin-bottom-15  col-md-12">
           <div class="row margin-bottom-10">
-            
+
             <div class="col-md-10">
-              
-              
+
+
             </div>
           </div>
           <div class="row">
@@ -68,11 +78,11 @@
               <!-- $ tabs -->
               <div class="tab-content">
                 <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 1" style="display: none;">
-                  <div class="row cards-container">     
+                  <div class="row cards-container">
                     <div class="btn-group relbutton">
                       <button  ng-click="addOppStagetModal()" id="sample_editable_1_new" class="btn red">
                                {{_("Add a new stage")}}
-                      </button>                              
+                      </button>
                     </div>
                     <div class="col-md-12">
                             <div class="row">
@@ -81,18 +91,18 @@
                                     <div class="detailsSection">
                                       <div class="head">
                                         <div easypiechart class="chart pic" options="chartOptions" percent="stage.probability">
-                                          
+
                                         </div>
                                         <div class="text">
                                             <div class="name">
-                                              <%=stage.name%>  
+                                              <%=stage.name%>
                                             </div>
                                              <div class="pitch">
                                                 <span>
                                                   <%=stage.probability%> %
                                                 </span>
                                                 <br/>
-                                                <span class="page-meta"><i class="icon-pencil"><a ng-click="editopportunitystage(stage)" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |<i class="icon-trash"></i>  <a ng-click="deleteoppstage(stage)" class="btn-link addAnotherPhone">{{_("Delete")}}</a></span> 
+                                                <span class="page-meta"><i class="icon-pencil"><a ng-click="editopportunitystage(stage)" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |<i class="icon-trash"></i>  <a ng-click="deleteoppstage(stage)" class="btn-link addAnotherPhone">{{_("Delete")}}</a></span>
                                               </div>
                                         </div>
                                         <div class="clearfix"></div>
@@ -100,20 +110,20 @@
                                     </div>
                             </div>
                             <div class="clearfix"></div>
-                                          
+
                             </div><!--/inner-cards-container-->
                               </div><!--/inner-cards-container-->
                               </div>
                             </div>
-                            
-                       
+
+
                       </div>
                       <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2" style="display: none;">
-                  <div class="row cards-container">     
+                  <div class="row cards-container">
                     <div class="btn-group relbutton">
                       <button  ng-click="addCasestatustModal()" id="sample_editable_1_new" class="btn red">
                           {{_("Add a Case status")}}<i class="icon-plus"></i>
-                      </button>                              
+                      </button>
                     </div>
                     <div class="col-md-12">
                             <div class="row">
@@ -121,13 +131,13 @@
                                 <div droppable  ng-repeat="casestate in casesatuses" data-column="<%=getPosition($index)%>" class="cardElement" ng-drop="dropTag(contact)" ng-class="{rightcards: getPosition($index)==4}">
                                     <div class="detailsSection">
                                       <div class="head">
-                                        
+
                                         <div class="text">
                                             <div class="name">
-                                             <%=casestate.status%> 
+                                             <%=casestate.status%>
                                             </div>
                                              <div class="pitch">
-                                                <span class="page-meta"><i class="icon-pencil"><a ng-click="editcasestatus(casestate)" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |<i class="icon-trash"></i>  <a ng-click="deletecasestatus(casestate)" class="btn-link addAnotherPhone">{{_("Delete")}}</a></span> 
+                                                <span class="page-meta"><i class="icon-pencil"><a ng-click="editcasestatus(casestate)" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |<i class="icon-trash"></i>  <a ng-click="deletecasestatus(casestate)" class="btn-link addAnotherPhone">{{_("Delete")}}</a></span>
                                               </div>
                                         </div>
                                         <div class="clearfix"></div>
@@ -135,22 +145,22 @@
                                     </div>
                             </div>
                             <div class="clearfix"></div>
-                                          
+
                             </div><!--/inner-cards-container-->
                               </div><!--/inner-cards-container-->
                               </div>
                             </div>
-                            
-                       
+
+
                       </div>
 
 
                       <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3" style="display: none;">
-                  <div class="row cards-container">     
+                  <div class="row cards-container">
                     <div class="btn-group relbutton">
                       <button  ng-click="addLeadstatustModal()" id="sample_editable_1_new" class="btn red">
                                {{_("Add a Lead status")}}<i class="icon-plus"></i>
-                      </button>                              
+                      </button>
                     </div>
                     <div class="col-md-12">
                             <div class="row">
@@ -158,13 +168,13 @@
                                 <div droppable  ng-repeat="leadstat in leadstatuses" data-column="<%=getPosition($index)%>" class="cardElement" ng-drop="dropTag(contact)" ng-class="{rightcards: getPosition($index)==4}">
                                     <div class="detailsSection">
                                       <div class="head">
-                                        
+
                                         <div class="text">
                                             <div class="name">
-                                              <%=leadstat.status%> 
+                                              <%=leadstat.status%>
                                             </div>
                                              <div class="pitch">
-                                                <span class="page-meta"><i class="icon-pencil"><a ng-click="editleadstatus(leadstat)" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |<i class="icon-trash"></i>  <a ng-click="deletleadstatus(leadstat)" class="btn-link addAnotherPhone">{{_("Delete")}}</a></span> 
+                                                <span class="page-meta"><i class="icon-pencil"><a ng-click="editleadstatus(leadstat)" class="btn-link addAnotherPhone" data-toggle="modal" > {{_("Edit")}} </a></i> |<i class="icon-trash"></i>  <a ng-click="deletleadstatus(leadstat)" class="btn-link addAnotherPhone">{{_("Delete")}}</a></span>
                                               </div>
                                         </div>
                                         <div class="clearfix"></div>
@@ -172,24 +182,24 @@
                                     </div>
                             </div>
                             <div class="clearfix"></div>
-                                          
+
                             </div><!--/inner-cards-container-->
                               </div><!--/inner-cards-container-->
                               </div>
                             </div>
-                            
-                       
+
+
                       </div>
-               
-                      
-                      
-                      
+
+
+
+
                     </div>
                   </div>
                   <!--END TABS-->
                 </div>
               </div>
-    
+
   </div>
 </div>
 
@@ -203,26 +213,26 @@
                           <h3 id="myModalLabel">{{_("New Opportunity Stage")}}</h3>
                         </div>
                 <div class="modal-body">
-                            <form id="addOppStage" name="addOppStage"   class="form-horizontal"> 
+                            <form id="addOppStage" name="addOppStage"   class="form-horizontal">
                             <fieldset>
                             <div class="form-group">
                               <label  class="required control-label">{{_("Name")}} *</label>
-                       
-                              
+
+
                               <input type="text" class="form-control" required id="id_firstname" ng-model="oppstage.name">
-                          
-                              
+
+
                             </div>
                            <div class="form-group">
                               <label  class=" control-label">{{_("Probability")}}</label>
-                             
+
                               <input type="text" class="form-control"  id="id_lastname" ng-model="oppstage.probability">
-                          
-                              
+
+
                            </div>
-                          
+
                           </fieldset>
-                
+
                   </div>
                   <div class="modal-footer">
                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
@@ -241,32 +251,32 @@
                           <h3 id="myModalLabel">{{_("Edit Opportunity Stage")}}</h3>
                         </div>
                 <div class="modal-body">
-                            <form id="addOppStage" name="addOppStage"   class="form-horizontal"> 
+                            <form id="addOppStage" name="addOppStage"   class="form-horizontal">
                             <fieldset>
                             <div class="form-group">
                               <label  class="required control-label">{{_("Name")}} *</label>
-                       
-                              
+
+
                               <input type="text"  class="form-control" required id="id_firstname" ng-model="oppstageedit.name">
-                          
-                              
+
+
                             </div>
                            <div class="form-group">
                               <label  class=" control-label">{{_("Probability")}}</label>
-                              
+
                               <input type="text" class="form-control" id="id_lastname" ng-model="oppstageedit.probability">
-                          
-                              
+
+
                            </div>
-                           
-                          
+
+
                           </fieldset>
-                
+
                   </div>
                   <div class="modal-footer">
                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
                      <button  type="submit" class="btn green" ng-click="updateOppStage(oppstageedit)">{{_("save")}}</button>
-                     
+
                    </div>
                    </form>
        </div>
@@ -281,19 +291,19 @@
                           <h3 id="myModalLabel">{{_("New Case Status")}}</h3>
                         </div>
                         <div class="modal-body">
-                            <form id="addcasestatus" name="addcasestatus"   class="form-horizontal"> 
+                            <form id="addcasestatus" name="addcasestatus"   class="form-horizontal">
                             <fieldset>
                             <div class="form-group">
                               <label  class="required control-label">{{_("Case Status")}} *</label>
-                       
-                              
+
+
                               <input type="text" class="form-control" required id="id_firstname" ng-model="casestatus.status">
-                          
-                               
+
+
                             </div>
-                          
+
                     </fieldset>
-                
+
                     </div>
                          <div class="modal-footer">
                            <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
@@ -302,7 +312,7 @@
                           </form>
                     </div>
                      </div>
-                     </div>   
+                     </div>
                       </div>
                        <!--HKA 19.12.2013 Edit Case status -->
                 <div id="EditCaseStatus" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
@@ -313,19 +323,19 @@
                           <h3 id="myModalLabel">{{_("Edit Case Status")}}</h3>
                         </div>
                         <div class="modal-body">
-                            <form id="addcasestatus" name="addcasestatus"   class="form-horizontal"> 
+                            <form id="addcasestatus" name="addcasestatus"   class="form-horizontal">
                    <fieldset>
                             <div class="form-group">
                               <label  class="required control-label">{{_("Case Status")}} *</label>
-                       
-                              
+
+
                               <input type="text" class="form-control" required id="id_firstname" ng-model="casestatusedit.status">
-                          
-                               
+
+
                             </div>
-                          
+
                     </fieldset>
-                
+
                     </div>
                          <div class="modal-footer">
                            <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
@@ -335,7 +345,7 @@
                     </div>
                     </div>
                     </div>
-                        
+
                       </div>
 
 <div id="addLeadstatustModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -346,20 +356,20 @@
                           <h3 id="myModalLabel">{{_("New Lead status")}}</h3>
                         </div>
                         <div class="modal-body">
-                            <form id="saveLeadtatus" name="addleadstatus"   class="form-horizontal"> 
+                            <form id="saveLeadtatus" name="addleadstatus"   class="form-horizontal">
                             <fieldset>
                             <div class="form-group">
                               <label  class="required control-label">{{_("Lead Status")}} *</label>
-                       
-                              
+
+
                               <input type="text" class="form-control" required id="id_firstname" ng-model="lead.status">
-                          
-                               
+
+
                             </div>
-                           
-                           
+
+
                     </fieldset>
-                
+
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
@@ -381,45 +391,45 @@
                           <h3 id="myModalLabel">{{_("Edit Lead status")}}</h3>
                         </div>
                         <div class="modal-body">
-                            <form id="saveLeadtatus" name="addleadstatus"   class="form-horizontal"> 
+                            <form id="saveLeadtatus" name="addleadstatus"   class="form-horizontal">
                             <fieldset>
                             <div class="form-group">
                               <label  class="required control-label">{{_("Lead Status")}} *</label>
-                       
+
                               <input type="text" class="form-control" required id="id_firstname" ng-model="leadstat.status">
-                          
-                              
+
+
                             </div>
-                           
-                           
+
+
                     </fieldset>
-                
+
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
                 <button  type="submit" class="btn green" ng-click="updateLeadstatus(leadstat)">{{_("Save")}}</button>
               </div>
                </form>
-       </div>        
+       </div>
        </div>
        </div>
 <script type="text/javascript">
 
-  $('.waterfall').waterfall({ 
-              colMinWidth: 210, 
+  $('.waterfall').waterfall({
+              colMinWidth: 210,
               defaultContainerWidth: 840,
               autoresize: true
           });
-  $('.waterfall-case').waterfall({ 
-              colMinWidth: 210, 
+  $('.waterfall-case').waterfall({
+              colMinWidth: 210,
               defaultContainerWidth: 840,
               autoresize: true
           });
-  $('.waterfall-lead').waterfall({ 
-              colMinWidth: 210, 
+  $('.waterfall-lead').waterfall({
+              colMinWidth: 210,
               defaultContainerWidth: 840,
               autoresize: true
           });
 
-       
+
 </script>

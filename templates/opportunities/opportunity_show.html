@@ -1,9 +1,19 @@
 <div class="row subHeader">
-  <div class="currentApp">
-    <h2 class="page-title">
-      {{active_app.label}}
-    </h2>
-  </div>
+    <div class="currentApp">
+       <div class="btn-group">
+           <a class="filterItem" href="#" data-toggle="dropdown" >
+            {{active_app.label}}
+            <i class="icon-angle-down"></i>
+           </a>
+           <ul class="dropdown-menu">
+            {%for application in apps %}
+
+                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{application.label}}</a></li>
+
+            {%endfor%}
+           </ul>
+        </div>
+    </div>
   <div class=" subHeaderContent">
     <div class="pull-right sharebuttonDiv">
       <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
@@ -347,12 +357,12 @@
                           </li>
                           <li ng-repeat="custom in infonodes.customfields">
                             <span editoptions editdataattr="deleteInfonode('<%=custom.entityKey%>','customfields')"   >
-                                    <%= custom.fields[0].field%>  : 
+                                    <%= custom.fields[0].field%>  :
                               </span>
 
-                              <span editable-text="custom.fields[0].value" onbeforesave="inlinePatch('Infonode','customfields', '<%= custom.fields[0].field%>',custom.entityKey,$data)" >   <%= custom.fields[0].value%> 
+                              <span editable-text="custom.fields[0].value" onbeforesave="inlinePatch('Infonode','customfields', '<%= custom.fields[0].field%>',custom.entityKey,$data)" >   <%= custom.fields[0].value%>
                               </span>
-                                    
+
                           </li>
                           <li>
                             <a ng-click="showCustomFieldForm=true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal">
