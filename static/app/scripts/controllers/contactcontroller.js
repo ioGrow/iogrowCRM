@@ -480,8 +480,8 @@ $scope.addTags=function(){
 }]);
 
 
-app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User','Attachement','Map','Opportunitystage','Casestatus','InfoNode',
-    function($scope,$filter,$route,Auth,Email,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User,Attachement,Map,Opportunitystage,Casestatus,InfoNode) {
+app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User','Attachement','Map','Opportunitystage','Casestatus','InfoNode','Tag',
+    function($scope,$filter,$route,Auth,Email,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User,Attachement,Map,Opportunitystage,Casestatus,InfoNode,Tag) {
  console.log('I am in ContactShowCtrl');
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Contacts").addClass("active");
@@ -668,7 +668,10 @@ $scope.CaselistNextPageItems = function(){
      }
 
 
-
+$scope.listTags=function(){
+      var paramsTag = {'about_kind':'Contact'}
+      Tag.list($scope,paramsTag);
+     };
 
 
      $scope.selectMember = function(){
@@ -798,9 +801,9 @@ $scope.CaselistNextPageItems = function(){
                      'parent': $scope.contact.entityKey
                    }
         };
-        $scope.task.title='';
-        $scope.task.dueDate='0000-00-00T00:00:00-00:00';
+        
         Task.insert($scope,params);
+        $scope.task={};
      }
 
      $scope.hilightTask = function(){
@@ -842,9 +845,8 @@ $scope.CaselistNextPageItems = function(){
             }
 
             Event.insert($scope,params);
-            $scope.ioevent.title='';
-            $scope.ioevent.where='';
-            $scope.ioevent.starts_at='T00:00:00.000000';
+            $scope.ioevent={};
+            
           };
      }
      $scope.hilightEvent = function(){
