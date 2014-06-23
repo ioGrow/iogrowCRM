@@ -44,7 +44,7 @@ eventservices.factory('Event', function($http) {
             }
             */
             $scope.runTheProcess();
-            console.log("working");
+            //console.log("working");
             /*$scope.ListComments();
             $scope.listContributors();*/
             $scope.isLoading = false;

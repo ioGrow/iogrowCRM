@@ -190,6 +190,14 @@ $scope.deleteEvent = function(){
         window.location.replace('/#/calendar');
 
      };
+// HKA 23.06.2014 update description
+  $scope.updateEvent = function(description){
+    var params = {'id':$scope.event.entityKey,
+                   'description':description}
+            Event.patch($scope,params)
+    
+        };
+  
   // Google+ Authentication
   Auth.init($scope);
 }]);

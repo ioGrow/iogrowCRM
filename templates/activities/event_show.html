@@ -83,7 +83,7 @@
               </div>
               <div class="form-group row">
                     <div class="col-md-12">
-                      <textarea id="noteBody" ng-blur="updateEvent({'id':event.id,'description':event.description})" class="form-control ng-pristine ng-valid" rows="3" ng-model="event.description"></textarea>
+                      <textarea id="noteBody" ng-blur="updateEvent(<%=event.description%>)" class="form-control ng-pristine ng-valid" rows="3" ng-model="event.description"></textarea>
                     </div>
               </div>
               <div class="news-block-tags event-block-title">
@@ -582,11 +582,11 @@
                     <div class="radio-list">
                          
                             <label >
-                            <input type="radio" name="optionRadio" value="public" ng-model="contact.access" />
+                            <input type="radio" name="optionRadio" value="public" ng-model="event.access" />
                             {{ _("public: Anyone within your organization can access and find") }}
                             </label>
                             <label >
-                            <input type="radio" name="optionRadio"  value="private" ng-model="contact.access" />
+                            <input type="radio" name="optionRadio"  value="private" ng-model="event.access" />
                             {{ _("private: only you and your collaborators") }}
                             </label>                       
                     </div>
