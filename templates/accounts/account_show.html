@@ -1,9 +1,19 @@
 <div class="row subHeader">
-  <div class="currentApp">
-    <h2 class="page-title">
-      {{active_app.label}}
-    </h2>
-  </div>
+    <div class="currentApp">
+       <div class="btn-group">
+           <a class="filterItem" href="#" data-toggle="dropdown" >
+            {{active_app.label}}
+            <i class="icon-angle-down"></i>
+           </a>
+           <ul class="dropdown-menu">
+            {%for application in apps %}
+
+                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{application.label}}</a></li>
+
+            {%endfor%}
+           </ul>
+        </div>
+    </div>
   <div class=" subHeaderContent">
     <div class="pull-right sharebuttonDiv">
       <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
@@ -93,7 +103,7 @@
                        <!-- ngRepeat: tag in account.tags -->
                       <a ng-repeat="tag in account.tags" href="/#/search/type:Account tags:<%=tag.id%>">
                         <span class="pull-left task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
-                          <%= tag.name %> 
+                          <%= tag.name %>
                         </span>
                       </a>
                     </div>
@@ -784,32 +794,32 @@
                                       </div>
                                   </div>
                                   </div>
-                              </div>   
+                              </div>
                               <div class="row">
                                   <div class="col-md-12">
                                       <div class="conta">
                                               <datetimepick ng-model='newTask.due' class="new-task-date pull-right" label-format='MMM d, h:mm a'></datetimepick>
                                              <datetimepick icon-class='fa fa-bell-o' label-format='MMM d, h:mm a' ng-model='newTask.reminder' class="new-task-reminder pull-right" placeholder=""></datetimepick>
-                                      </div>     
+                                      </div>
                                   </div>
                               </div>
                               <div class="row">
                                   <div class="col-md-12 margin-top-10">
                                         <select id="select2_sample2" class="form-control select2" multiple>
-                                          <option ng-repeat="tag in tags" 
+                                          <option ng-repeat="tag in tags"
                                           value='<%=tag.entityKey%>'>
                                             <%=tag.name%>
                                           </option>
                                         </select>
                                   </div>
-                              </div>  
-                    </div>   
+                              </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-12 margin-top-10">
                             <p><span ng-hide="newContactform">Add New Task</span><button type="button" ng-click="addTask(currentContact)" class="btn blue btn-sm pull-right btn-inline"><i class="fa fa-check"></i>&nbsp;Add</button></p>
-                             
+
                         </div>
-                    </div> 
+                    </div>
         </form>
                   <ul id="tasks" class="list-unstyled">
                     <li ng-repeat="task in tasks" id="task_<%=$index%>">
