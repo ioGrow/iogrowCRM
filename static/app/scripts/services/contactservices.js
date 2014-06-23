@@ -205,7 +205,7 @@ accountservices.factory('Contact', function($http) {
           });
   };
   Contact.patch = function($scope,params) {
-
+           $scope.isLoading=true;
           gapi.client.crmengine.contacts.patch(params).execute(function(resp) {
 
             if(!resp.code){
@@ -220,7 +220,7 @@ accountservices.factory('Contact', function($http) {
 
                 });
 
-
+                $scope.isLoading=false;
                // Call the method $apply to make the update on the scope
                 $scope.$apply();
 

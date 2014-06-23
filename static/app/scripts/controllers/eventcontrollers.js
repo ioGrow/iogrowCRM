@@ -150,8 +150,7 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
 
         }
         console.log('selected member');
-        console.log(params);
-        Contributor.insert($scope,params);
+      
      $('#addContributor').modal('hide');
      };
 //HKA 02.12.2013 Select member
@@ -173,7 +172,32 @@ $scope.listContributors = function(){
      return show;
 
  }
+ // HKA 22.06.2014 Delete Event
 
+ $scope.editbeforedelete = function(){
+     $('#BeforedeleteEvent').modal('show');
+   };
+$scope.deleteEvent = function(){
+
+     var params = {'entityKey':$scope.event.entityKey};
+     
+     Event.delete($scope, params);
+      $('#BeforedeleteEvent').modal('hide');
+
+     };
+  $scope.eventDeleted = function(resp){
+
+        window.location.replace('/#/calendar');
+
+     };
+// HKA 23.06.2014 update description
+  $scope.updateEvent = function(description){
+    var params = {'id':$scope.event.entityKey,
+                   'description':description}
+            Event.patch($scope,params)
+    
+        };
+  
   // Google+ Authentication
   Auth.init($scope);
 }]);

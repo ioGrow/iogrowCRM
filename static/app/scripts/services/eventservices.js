@@ -44,7 +44,7 @@ eventservices.factory('Event', function($http) {
             }
             */
             $scope.runTheProcess();
-            console.log("working");
+            //console.log("working");
             /*$scope.ListComments();
             $scope.listContributors();*/
             $scope.isLoading = false;
@@ -174,6 +174,18 @@ Event.getUrl = function(type,id){
     return base_url+id;
 
  };
+
+ Event.delete = function($scope,params){
+    
+    $scope.isLoading=true;
+    gapi.client.crmengine.events.delete(params).execute(function(resp){
+      $scope.eventDeleted();
+      $scope.isLoading=true;
+      $scope.$apply();
+    });
+    
+
+  };
 
 
 
