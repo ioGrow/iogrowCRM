@@ -154,7 +154,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             try:
                 user = self.get_user_from_session()
-                logout_url = 'https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://app.iogrow.com/sign-in'
+                logout_url = 'https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://www.iogrow.com/'
                 if user is None or user.type=='public_user':
                     self.redirect('/welcome/')
                     return

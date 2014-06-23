@@ -370,23 +370,25 @@
                         <div class="news-blocks blank-card blank-card-red newsCard">
                           <h3>Story</h3>
                           <div class="news-block-tags">
-                            <strong>Tagline </strong>
-
-                            <span class="page-meta">
-                              <i class="icon-pencil"><a ng-click="edittagline()" class="btn-link addAnotherPhone" data-toggle="modal"> Edit </a></i>
-                            </span>
-                            <p><%=contact.tagline %></p>
+                
+                         <div class="form-group row">
+                            <label class="control-label col-md-4">Tagline</label>
+                             <div class="col-md-8">
+                                 <input ng-blur="updateContactIntroTagline({'id':contact.id,'tagline':contact.tagline})" type="text" required id="id_tagline" class="form-control" ng-model="contact.tagline">
+                             </div>
                           </div>
-                          <p class="ng-binding"> </p>
+                           </div>
+
                           <div class="news-block-tags">
-                            <strong>Introduction</strong>
+                 
+                            <div class="form-group row">
+                               <label class="control-label col-md-4">Introduction</label>
+                             <div class="col-md-8">
+                               <textarea id="noteBody" ng-blur="updateContactIntroTagline({'id':contact.id,'introduction':contact.introduction})" class="form-control ng-pristine ng-valid" rows="3" ng-model="contact.introduction"></textarea>
+                              </div>
+                              </div>
+                           </div>
 
-                            <span class="page-meta"><i class="icon-pencil">
-                              <a ng-click="editintro()" class="btn-link addAnotherPhone" data-toggle="modal"> Edit </a></i>
-                            </span>
-                              <p><%=contact.introduction %></p>
-                          </div>
-                          <p class="ng-binding"></p>
                         </div>
                         <div class="news-blocks blank-card blank-card-yellow newsCard">
                           <div id="gmap_canvas" style="width:100%;height:300px;"></div>
