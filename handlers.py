@@ -91,7 +91,9 @@ class BaseHandler(webapp2.RequestHandler):
             # Render the template
             active_app = user.get_user_active_app()
             apps = user.get_user_apps()
+            is_business_user = bool(user.type=='business_user')
             template_values={
+                      'is_business_user':is_business_user,
                       'ME':user.google_user_id,
                       'active_app':active_app,
                       'apps':apps,
