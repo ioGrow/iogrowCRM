@@ -165,13 +165,7 @@
   </style>
   <!-- In the callback, you would hide the gSignInWrapper element on a
   successful sign in -->
-  <div id="gSignInWrapper">
-    <span class="label">Sign in with:</span>
-    <div id="customBtn" class="customGPlusSignIn">
-      <span class="icon .buzz-out"></span>
-      <span class="buttonText">Give ioGrow a try - it's free</span>
-    </div>
-  </div>
+
 
         <script type="text/javascript">
             var Keen=Keen||{configure:function(e){this._cf=e},addEvent:function(e,t,n,i){this._eq=this._eq||[],this._eq.push([e,t,n,i])},setGlobalProperties:function(e){this._gp=e},onChartsReady:function(e){this._ocrq=this._ocrq||[],this._ocrq.push(e)}};(function(){var e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src=("https:"==document.location.protocol?"https://":"http://")+"dc8na2hxrj29i.cloudfront.net/code/keen-2.1.0-min.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})();
@@ -201,25 +195,26 @@
                     </a>
                 </div>
 
-                <div class="navbar-collapse collapse">
+                <div class="navbar-collapse collapse custom-nav">
                     <ul class="nav navbar-nav cl-effect-13">
-                        <li class="active"><a href="#home" class="smoothScroll" <a href="#home" class="smoothScroll">Home</a></li>
-                        <li><a href="#features" class="smoothScroll">Features</a></li>
-                        <li><a href="#contact" class="smoothScroll">Contact</a></li>
+                        <li class="active" align="center"><a href="#home" class="smoothScroll" <a href="#home" class="smoothScroll">Home</a></li>
+                        <li><a href="#features" align="center" class="smoothScroll">Features</a></li>
+                        <li><a href="#pricing" align="center" class="smoothScroll">Pricing</a></li>
+                        <li><a href="#contact" align="center" class="smoothScroll">Contact</a></li>
                     </ul>
 
                     <!-- Sign In / Sign Up -->
-                    <ul class="nav navbar-nav navbar-right">
+                    <ul class="nav navbar-nav navbar-right cl-effect-13 visible-md visible-lg">
                         <!-- <li class="dropdown"><a href="#signin" data-toggle="modal" data-target=".bs-modal-sm"><i class="fa fa-lock"></i> Sign In</a></li> -->
-                        <div class="navbar-form pull-left">
+                        <div class="navbar-form">
 
-                           <div id="gSignInWrapper">
-    <div id="customBtn" class="customGPlusSignIn">
-      <a href="/early-bird" >
-      <span class="icon"></span>
-      <span class="buttonText">Start using ioGrow for free!</span></a>
-    </div>
-  </div>
+                           <div id="gSignInWrapper" align="center">
+                              <div id="customBtn" class="customGPlusSignIn">
+                                <a href="/early-bird" >
+                                <span class="icon"></span>
+                                <span class="buttonText">Start using ioGrow for free!</span></a>
+                              </div>
+                            </div>
                         <!-- <span id="signinButton">
                      <span
                             class="g-signin"
@@ -361,9 +356,15 @@
         <div id="headerwrap">
             <div class="container">
                 <div class="row text-center">
-                    <div class="col-lg-12">
-                        <h1><b>The next generation of Google Contacts</b></h1>
-                       
+                    <div class="sm-padding col-lg-12">
+                        <div id="gSignInWrapper" align="center" class="visible-xs visible-sm ">
+                            <div id="customBtn" class="customGPlusSignIn">
+                              <a href="/early-bird">
+                              <span class="icon"></span>
+                              <span class="buttonText">Start using ioGrow for free!</span></a>
+                            </div>
+                          </div>
+                        <h1>The next generation of Google Contacts</b></h1>
                         <br>
                     </div>
 
@@ -420,7 +421,7 @@
         </div><!-- /introwrap -->
 
 
-        <!-- Features Wrap -->
+         <!-- Features Wrap -->
         <section id="features" name="features"></section>
         <div id="featureswrap">
             <div class="container">
@@ -429,7 +430,7 @@
                     <hr>
                     <br>
                     <br>
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 features-description">
 
 
 <a href="/static/welcome/img/mark_as_lead.gif" data-lightbox="image-1" data-title="My caption"><img class="img-responsive" src="/static/welcome/img/mark_as_lead.png" alt="" style="
@@ -441,7 +442,7 @@
 "> </a>
                     </div>
 
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 features-description">
                         <br>
                         <!-- Accordion -->
                         <div class="accordion ac" id="accordion2">
@@ -466,7 +467,7 @@
                 <div class="row">
                     <h2 class="text-center">Instant Access</h2>
                     <hr><br><br>
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 features-description">
                         <br><br>
                         <h4><i class=" "></i>  </h4>
                         <p style="width: 422px;margin-left: 120px;">When you're calling someone on your contact list, you can instantly access his profile for a detailed look at his information and your common interactions such as notes and tasks.
@@ -492,7 +493,7 @@
                     <hr>
                     <br>
                     <br>
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 features-description">
 
 
 <a href="/static/welcome/img/clear_concise.gif" data-lightbox="image-1" data-title="My caption"><img class="img-responsive" src="/static/welcome/img/clear_concise.png" alt="" style="
@@ -504,7 +505,7 @@
 "> </a>
                     </div>
 
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 features-description">
                         <br>
                         <!-- Accordion -->
                         <div class="accordion ac" id="accordion2">
@@ -529,7 +530,7 @@
                 <div class="row">
                     <h2 class="text-center">Everything neatly in one place</h2>
                     <hr><br><br>
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 features-description">
                         <br><br>
                         <p style="width: 422px;margin-left: 120px;">Stop wasting time struggling with spreadsheets, forms, or emails and start focusing on growing your network.
                         A clean, simple interface that collects all your contacts' data, can dramatically saves you time and increase your productivity
@@ -558,12 +559,10 @@
 
 
         <!-- Pricing Section -->
-        <section id="signup" name="signup"></section>
+        <section id="pricing" name="pricing"></section>
         <div id="pricingwrap">
             <div class="container text-center">
                 <div class="row">
-                    <br>
-                    <br>
                     <div class="col-xs-12">
                         <div id="customBtn" class="customGPlusSignIn">
                           <a href="/early-bird" >
@@ -589,17 +588,10 @@
                     </div>
 
                     <div class="col-lg-4">
-                        <h3>We Are Social</h3>
-                        <br>
+
                         <div id="social">
-                            <a href="#" rel="tooltip" title="Facebook" class="facebook">Facebook</a>
-                            <a href="#" rel="tooltip" title="Twitter" class="twitter">Twitter</a>
-                            <a href="#" rel="tooltip" title="RSS" class="rss">RSS</a>
-                            <a href="#" rel="tooltip" title="Github" class="github">Github</a>
-                            <a href="#" rel="tooltip" title="LinkedIn" class="linkedin">LinkedIn</a>
-                            <a href="#" rel="tooltip" title="Pintrest" class="pintrest">Pintrest</a>
-                            <a href="#" rel="tooltip" title="Vimeo" class="vimeo">Vimeo</a>
-                            <a href="#" rel="tooltip" title="YouTube" class="youtube">YouTube</a>
+                            <a href="https://www.facebook.com/iogrow" rel="tooltip" title="Facebook" class="facebook">Facebook</a>
+                            <a href="https://twitter.com/iogrow" rel="tooltip" title="Twitter" class="twitter">Twitter</a>
                         </div>
                     </div>
 
@@ -635,8 +627,7 @@
                 pause: "none"
             })
         </script>
-
-        <script>
+         <script>
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
           (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
           m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
