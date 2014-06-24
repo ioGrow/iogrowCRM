@@ -64,11 +64,9 @@ class EventListRequest(messages.Message):
     limit = messages.IntegerField(1)
     pageToken = messages.StringField(2)
     order = messages.StringField(3)
-    tags = messages.StringField(5,repeated = True)
-    owner = messages.StringField(6)
-    assignee = messages.BooleanField(7)
-    about = messages.StringField(8)
-    urgent = messages.BooleanField(9)
+    tags = messages.StringField(4,repeated = True)
+    owner = messages.StringField(5)
+    about = messages.StringField(6)
 
 class EventListResponse(messages.Message):
     items = messages.MessageField(EventSchema, 1, repeated=True)
@@ -214,6 +212,103 @@ class Event(EndpointsModel):
                                     updated_at = event.updated_at.isoformat()
                                 )
         return event_schema
+    @classmethod
+    def list(cls,user_from_email,request):
+        curs = Cursor(urlsafe=request.pageToken)
+        filtered_events = []
+        if request.limit:
+            limit = int(request.limit)
+        else:
+            limit = 10
+        items = []
+        date_to_string = lambda x: x.strftime("%Y-%m-%d") if x else ""
+        date_time_to_string = lambda x: x.strftime("%Y-%m-%dT%H:%M:00.000") if x else ""
+        you_can_loop = True
+        count = 0
+        while you_can_loop:
+            if request.order:
+                ascending = True
+                if request.order.startswith('-'):
+                    order_by = request.order[1:]
+                    ascending = False
+                else:
+                    order_by = request.order
+                attr = cls._properties.get(order_by)
+                if attr is None:
+                    raise AttributeError('Order attribute %s not defined.' % (order_by,))
+                if ascending:
+                    events, next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).order(+attr).fetch_page(limit, start_cursor=curs)
+                else:
+                    events, next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).order(-attr).fetch_page(limit, start_cursor=curs)
+            else:
+                events, next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).fetch_page(limit, start_cursor=curs)
+            for event in events:
+                if count<= limit:
+                    is_filtered = True
+                    if event.access == 'private' and event.owner!=user_from_email.google_user_id:
+                        end_node_set = [user_from_email.key]
+                        if not Edge.find(start_node=event.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
+                            is_filtered = False
+                    if request.tags and is_filtered:
+                        end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
+                        if not Edge.find(start_node=event.key,kind='tags',end_node_set=end_node_set,operation='AND'):
+                            is_filtered = False
+                    if request.owner and event.owner!=request.owner and is_filtered:
+                        is_filtered = False
+                    if request.about and is_filtered:
+                        end_node_set = [ndb.Key(urlsafe=request.about)]
+                        if not Edge.find(start_node=event.key,kind='related_to',end_node_set=end_node_set,operation='AND'):
+                            is_filtered = False
+                    if is_filtered:
+                        count = count + 1
+                        #list of tags related to this event
+                        tag_list = Tag.list_by_parent(parent_key = event.key)
+                        about = None
+                        edge_list = Edge.list(start_node=event.key,kind='related_to')
+                        for edge in edge_list['items']:
+                            about_kind = edge.end_node.kind()
+                            parent = edge.end_node.get()
+                            if parent:
+                                if about_kind == 'Contact' or about_kind == 'Lead':
+                                    about_name = parent.firstname + ' ' + parent.lastname
+                                else:
+                                    about_name = parent.name
+                                about = DiscussionAboutSchema(kind=about_kind,
+                                                                   id=str(parent.key.id()),
+                                                                   name=about_name)
+                        author_schema = None
+                        if event.author:
+                            author_schema = AuthorSchema(google_user_id = event.author.google_user_id,
+                                                          display_name = event.author.display_name,
+                                                          google_public_profile_url = event.author.google_public_profile_url,
+                                                          photo = event.author.photo)
+                        event_schema = EventSchema(
+                                                    id = str( event.key.id() ),
+                                                    entityKey = event.key.urlsafe(),
+                                                    title = event.title,
+                                                    starts_at = event.starts_at.isoformat(),
+                                                    ends_at = event.ends_at.isoformat(),
+                                                    where = event.where,
+                                                    description = event.description,
+                                                    about = about,
+                                                    created_by = author_schema,
+                                                    tags = tag_list,
+                                                    created_at = event.created_at.isoformat(),
+                                                    updated_at = event.updated_at.isoformat()
+                                                )
+                        items.append(event_schema)
+            if (count == limit):
+                you_can_loop = False
+            if more and next_curs:
+                curs = next_curs
+            else:
+              you_can_loop = False
+        if next_curs and more:
+            next_curs_url_safe = next_curs.urlsafe()
+        else:
+            next_curs_url_safe = None
+        return  EventListResponse(items = items, nextPageToken = next_curs_url_safe)
+
     @classmethod
     def list_by_parent(cls,parent_key,request):
         date_time_to_string = lambda x: x.strftime("%Y-%m-%dT%H:%M:00.000") if x else ""

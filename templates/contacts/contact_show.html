@@ -1,9 +1,19 @@
 <div class="row subHeader">
-  <div class="currentApp">
-    <h2 class="page-title">
-      {{active_app.label}}
-    </h2>
-  </div>
+    <div class="currentApp">
+       <div class="btn-group">
+           <a class="filterItem" href="#" data-toggle="dropdown" >
+            {{active_app.label}}
+            <i class="icon-angle-down"></i>
+           </a>
+           <ul class="dropdown-menu">
+            {%for application in apps %}
+
+                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{application.label}}</a></li>
+
+            {%endfor%}
+           </ul>
+        </div>
+    </div>
   <div class=" subHeaderContent">
     <div class="pull-right sharebuttonDiv">
       <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
@@ -342,10 +352,10 @@
                             </li>
                           <li ng-repeat="custom in infonodes.customfields">
                               <span editoptions editdataattr="deleteInfonode('<%=custom.entityKey%>','customfields')"   >
-                                    <%= custom.fields[0].field%>  : 
+                                    <%= custom.fields[0].field%>  :
                               </span>
 
-                              <span editable-text="custom.fields[0].value" onbeforesave="inlinePatch('Infonode','customfields', '<%= custom.fields[0].field%>',custom.entityKey,$data)" >   <%= custom.fields[0].value%> 
+                              <span editable-text="custom.fields[0].value" onbeforesave="inlinePatch('Infonode','customfields', '<%= custom.fields[0].field%>',custom.entityKey,$data)" >   <%= custom.fields[0].value%>
                               </span>
 
                           </li>
@@ -360,23 +370,25 @@
                         <div class="news-blocks blank-card blank-card-red newsCard">
                           <h3>Story</h3>
                           <div class="news-block-tags">
-                            <strong>Tagline </strong>
-
-                            <span class="page-meta">
-                              <i class="icon-pencil"><a ng-click="edittagline()" class="btn-link addAnotherPhone" data-toggle="modal"> Edit </a></i>
-                            </span>
-                            <p><%=contact.tagline %></p>
+                
+                         <div class="form-group row">
+                            <label class="control-label col-md-4">Tagline</label>
+                             <div class="col-md-8">
+                                 <input ng-blur="updateContactIntroTagline({'id':contact.id,'tagline':contact.tagline})" type="text" required id="id_tagline" class="form-control" ng-model="contact.tagline">
+                             </div>
                           </div>
-                          <p class="ng-binding"> </p>
+                           </div>
+
                           <div class="news-block-tags">
-                            <strong>Introduction</strong>
+                 
+                            <div class="form-group row">
+                               <label class="control-label col-md-4">Introduction</label>
+                             <div class="col-md-8">
+                               <textarea id="noteBody" ng-blur="updateContactIntroTagline({'id':contact.id,'introduction':contact.introduction})" class="form-control ng-pristine ng-valid" rows="3" ng-model="contact.introduction"></textarea>
+                              </div>
+                              </div>
+                           </div>
 
-                            <span class="page-meta"><i class="icon-pencil">
-                              <a ng-click="editintro()" class="btn-link addAnotherPhone" data-toggle="modal"> Edit </a></i>
-                            </span>
-                              <p><%=contact.introduction %></p>
-                          </div>
-                          <p class="ng-binding"></p>
                         </div>
                         <div class="news-blocks blank-card blank-card-yellow newsCard">
                           <div id="gmap_canvas" style="width:100%;height:300px;"></div>

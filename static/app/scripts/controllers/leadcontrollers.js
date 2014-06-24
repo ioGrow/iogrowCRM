@@ -450,8 +450,8 @@ $scope.addTags=function(){
 
 }]);
 
-app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Topic','Note','Lead','Permission','User','Leadstatus','Attachement','Map','InfoNode',
-    function($scope,$filter,$route,Auth,Email,Task,Event,Topic,Note,Lead,Permission,User,Leadstatus,Attachement,Map,InfoNode) {
+app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Topic','Note','Lead','Permission','User','Leadstatus','Attachement','Map','InfoNode','Tag',
+    function($scope,$filter,$route,Auth,Email,Task,Event,Topic,Note,Lead,Permission,User,Leadstatus,Attachement,Map,InfoNode,Tag) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Leads").addClass("active");
 
@@ -650,9 +650,9 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                      'parent': $scope.lead.entityKey
                    }
         };
-        $scope.task.title='';
-        $scope.task.dueDate='0000-00-00T00:00:00-00:00';
+        
         Task.insert($scope,params);
+        $scope.task={};
      }
 
      $scope.hilightTask = function(){
@@ -694,9 +694,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
             }
 
             Event.insert($scope,params);
-            $scope.ioevent.title='';
-            $scope.ioevent.where='';
-            $scope.ioevent.starts_at='T00:00:00.000000';
+            $scope.ioevent={};
           };
      }
      $scope.hilightEvent = function(){
@@ -849,23 +847,11 @@ $scope.editintro = function() {
        $('#EditIntroModal').modal('show');
     };
 
-//HKA 22.11.2013 Add Tagline
-$scope.updateTagline = function(lead){
+//HKA 21.06.2014 Update Intro and Tagline
+ $scope.updateContactIntroTagline=function(params){
+      Lead.patch($scope,params);
+     };
 
-  params = {'id':$scope.lead.id,
-             'tagline':lead.tagline}
-  Lead.patch($scope,params);
-  $('#EditTagModal').modal('hide');
-};
-
-//HKA 22.11.2013 Add Introduction
-$scope.updateintro = function(lead){
-
-  params = {'id':$scope.lead.id,
-             'introduction':lead.introduction}
-  Lead.patch($scope,params);
-  $('#EditIntroModal').modal('hide');
-};
 
       $scope.showConvertModal = function(){
         $('#convertLeadModal').modal('show');
@@ -1148,6 +1134,8 @@ $scope.deletelead = function(){
 
   };
 
+
+
     $scope.waterfallTrigger= function(){
 
 
@@ -1179,6 +1167,12 @@ $scope.deletelead = function(){
 
           }
     };
+
+   $scope.listTags=function(){
+      var paramsTag = {'about_kind':'Lead'}
+      Tag.list($scope,paramsTag);
+     };
+
    // Google+ Authentication
    Auth.init($scope);
    $(window).scroll(function() {

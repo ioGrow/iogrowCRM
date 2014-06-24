@@ -1,9 +1,19 @@
 <div class="row subHeader">
-  <div class="currentApp">
-    <h2 class="page-title">
-      {{active_app.label}}
-    </h2>
-  </div>
+    <div class="currentApp">
+       <div class="btn-group">
+           <a class="filterItem" href="#" data-toggle="dropdown" >
+            {{active_app.label}}
+            <i class="icon-angle-down"></i>
+           </a>
+           <ul class="dropdown-menu">
+            {%for application in apps %}
+
+                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{application.label}}</a></li>
+
+            {%endfor%}
+           </ul>
+        </div>
+    </div>
    <div class=" subHeaderContent">
              <div class="pull-right sharebuttonDiv">
 
@@ -68,12 +78,12 @@
 
           <span ng-show="lead.updated_at" class="contact-title" >Updated at:  <%=lead.updated_at | date:'yyyy-MM-dd - HH:mm:ss ' %> </span><br>
               <span ng-show="lead.title">{{_("Title")}} : <a   href="/#/search/type:Lead <%=lead.title%>" class="tag" ng-show="lead.title"> #<%= lead.title %> </a></span><span ng-show="lead.company">{{_("Company")}} : <a   href="/#/search/type:Lead <%=lead.company%>" class="tag" ng-show="lead.company"> #<%= lead.company %></a></span> <br>
-              <span>{{_("Industry")}} : </span>
+              <span ng-show="lead.industry">{{_("Industry")}} : </span>
               <a   href="/#/search/type:Lead <%=lead.industry%>" class="tag" ng-show="lead.industry"> #<%= lead.industry %></a> <br>
-              <span>{{_("Source")}} : </span>
+              <span ng-show="lead.source">{{_("Source")}} : </span>
               <a   href="/#/search/type:Lead <%=lead.source%>" class="tag" ng-show="lead.source"> #<%= lead.source %></a> <br>
-              <span>{{_("Status")}} : </span>
-              <a   href="/#/search/type:Lead <%=lead.status%>" class="tag" ng-show="lead.company"> #<%= lead.status %></a> <br>
+              <span ng-show="lead.status">{{_("Status")}} : </span>
+              <a   href="/#/search/type:Lead <%=lead.status%>" class="tag" ng-show="lead.status"> #<%= lead.status %></a> <br>
                   <br>
                   <hr>
                 </div>
@@ -333,12 +343,12 @@
                           </li>
                           <li ng-repeat="custom in infonodes.customfields">
                               <span editoptions editdataattr="deleteInfonode('<%=custom.entityKey%>','customfields')"   >
-                                    <%= custom.fields[0].field%>  : 
+                                    <%= custom.fields[0].field%>  :
                               </span>
 
-                              <span editable-text="custom.fields[0].value" onbeforesave="inlinePatch('Infonode','customfields', '<%= custom.fields[0].field%>',custom.entityKey,$data)" >   <%= custom.fields[0].value%> 
+                              <span editable-text="custom.fields[0].value" onbeforesave="inlinePatch('Infonode','customfields', '<%= custom.fields[0].field%>',custom.entityKey,$data)" >   <%= custom.fields[0].value%>
                               </span>
-                                   
+
                           </li>
                           <li>
                             <a ng-click="showCustomFieldForm=true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new custom field </a>
@@ -351,23 +361,25 @@
                         <div class="news-blocks blank-card blank-card-red newsCard">
                           <h3>Story</h3>
                           <div class="news-block-tags">
-                            <strong>Tagline </strong>
-
-                            <span class="page-meta">
-                              <i class="icon-pencil"><a ng-click="edittagline()" class="btn-link addAnotherPhone" data-toggle="modal"> Edit </a></i>
-                            </span>
-                            <p><%=lead.tagline %></p>
+                
+                         <div class="form-group row">
+                            <label class="control-label col-md-4">Tagline</label>
+                             <div class="col-md-8">
+                                 <input ng-blur="updateContactIntroTagline({'id':lead.id,'tagline':lead.tagline})" type="text" required id="id_tagline" class="form-control" ng-model="lead.tagline">
+                             </div>
                           </div>
-                          <p class="ng-binding"> </p>
+                           </div>
+
                           <div class="news-block-tags">
-                            <strong>Introduction</strong>
+                 
+                            <div class="form-group row">
+                               <label class="control-label col-md-4">Introduction</label>
+                             <div class="col-md-8">
+                               <textarea id="noteBody" ng-blur="updateContactIntroTagline({'id':lead.id,'introduction':lead.introduction})" class="form-control ng-pristine ng-valid" rows="3" ng-model="lead.introduction"></textarea>
+                              </div>
+                              </div>
+                           </div>
 
-                            <span class="page-meta"><i class="icon-pencil">
-                              <a ng-click="editintro()" class="btn-link addAnotherPhone" data-toggle="modal"> Edit </a></i>
-                            </span>
-                              <p><%=lead.introduction %></p>
-                          </div>
-                          <p class="ng-binding"></p>
                         </div>
                         <div class="news-blocks blank-card blank-card-yellow newsCard">
                           <div id="gmap_canvas" style="width:100%;height:300px;"></div>

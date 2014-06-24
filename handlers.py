@@ -90,9 +90,11 @@ class BaseHandler(webapp2.RequestHandler):
             self.set_user_locale(user.language)
             # Render the template
             active_app = user.get_user_active_app()
+            apps = user.get_user_apps()
             template_values={
                       'ME':user.google_user_id,
                       'active_app':active_app,
+                      'apps':apps,
                       'tabs':tabs
                       }
             template = jinja_environment.get_template(template_name)
@@ -152,7 +154,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             try:
                 user = self.get_user_from_session()
-                logout_url = 'https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://app.iogrow.com/sign-in'
+                logout_url = 'https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://www.iogrow.com/'
                 if user is None or user.type=='public_user':
                     self.redirect('/welcome/')
                     return
