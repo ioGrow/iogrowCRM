@@ -83,3 +83,20 @@
 @media (min-width: 1200px) {
 
 }
+/***cusutom ***/
+/*------------------------------------*\
+    $WELCOME PAGE       
+\*------------------------------------*/
+  .sm_padding{
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+@media (min-width: 356px) {
+  .sm_padding{
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+}
+
+/************************************/
