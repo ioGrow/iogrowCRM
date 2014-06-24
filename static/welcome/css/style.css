@@ -572,3 +572,36 @@ a:after {
  #headerwrap h1 b{
     color: #fff;
  }
+/***********************custom****/
+  .sm-padding{
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+  .margin-bottom-30{
+  	margin-bottom: 30px;
+  }
+  .features-description p{
+  	font-size: 18px;
+  }
+@media (min-width: 356px) {
+  .sm-padding{
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+}
+@media (min-width: 768px) {
+  .custom-nav{
+    display: table !important;
+    margin: auto;
+  }
+
+}
+@media (min-width: 768px) {
+  .custom-nav{
+    display: block;
+  }
+
+}
+
+/***********************custom****/
