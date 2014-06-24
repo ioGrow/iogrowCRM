@@ -473,8 +473,8 @@
   text-align: center;
   }
   .google-sign{
-margin-top: 07px;
-  margin-left: 15px;
+    margin-top: 07px;
+    margin-left: 6px;
 }
 </style>
 <style media="screen and (max-width: 800px), screen and (max-height: 800px)">
@@ -499,8 +499,8 @@ margin-top: 07px;
   margin: 20px auto 15px;
   }
   .content {
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 1px;
+  padding-right: 1px;
   }
   .hidden-small {
   display: none;
@@ -572,7 +572,7 @@ margin-top: 07px;
   margin-bottom: 20px;
   }
   .signin-card {
-  width: 274px;
+  width: 300px;
   padding: 40px 40px;
   }
   .signin-card .profile-img {
@@ -684,8 +684,8 @@ margin-top: 07px;
   margin-bottom: 15px;
   }
   .signin-card {
-  width: 260px;
-  padding: 20px 20px;
+  width: 300px;
+  padding: 25px 15px;
   margin: 0 auto 20px;
   }
   .signin-card .profile-img {
@@ -816,6 +816,13 @@ margin-top: 07px;
 <style media="screen and (max-width: 580px)">
   .jfk-tooltip {
   display: none;
+  }
+</style>
+<style media="screen and (max-width: 342px)">
+  .signin-card {
+      width: 300px;
+      padding: 15px 0px;
+      margin: 0 auto 20px;
   }
 </style>
 <style>
@@ -1071,75 +1078,77 @@ function onSignInCallback(authResult) {
   </head>
   <body>
   <div class="wrapper">
-  <div class="google-header-bar  centered">
-  <div class="header content clearfix">
-  <img alt="Google" class="logo" src="http://storage.googleapis.com/iogrow-gs/static/img/ioGrow_welcome_logo.png">
-  </div>
-  </div>
-  <div class="main content clearfix">
-<div class="banner">
-<h1>
-  It's on Google and it just works!
-</h1>
-  <h2 class="hidden-small">
-  One Google Account for everything Google
-  </h2>
-</div>
-<div class="card signin-card clearfix">
-  <div id="cc_iframe_parent"><iframe src="./Sign in - Google Accounts_files/CheckConnection.html" id="youtube" style="visibility: hidden; width: 1px; height: 1px; position: absolute; top: -100px;"></iframe></div>
-<img class="profile-img" src="/static/img/avatar_2x.png" alt="">
-<p class="profile-name"></p>
-<div class="google-sign">
-  <button class="g-signin"
-                              data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/prediction https://www.google.com/m8/feeds"
-                              data-requestvisibleactions="http://schemas.google.com/AddActivity"
-                              data-clientId="{{ CLIENT_ID }}"
-                              data-accesstype="offline"
-                              data-approvalprompt="force"
-                              data-callback="onSignInCallback"
-                              data-theme="dark"
-                              data-cookiepolicy="single_host_origin"
-                              data-width="wide"
-                              data-height="tall">
-                          </button>
-</div>
-</div>
-<div class="one-google">
-  <p class="create-account">
+      <div class="google-header-bar  centered">
+        <div class="header content clearfix">
+           <img alt="Google" class="logo" src="http://storage.googleapis.com/iogrow-gs/static/img/ioGrow_welcome_logo.png">
+        </div>
+      </div>
+      <div class="main content clearfix">
+              <div class="banner">
+              <h1>
+                It's on Google and it just works!
+              </h1>
+                <h2 class="hidden-small">
+                One Google Account for everything Google
+                </h2>
+              </div>
+              <div class="card signin-card clearfix">
+                <div id="cc_iframe_parent">
+                    <iframe src="./Sign in - Google Accounts_files/CheckConnection.html" id="youtube" style="visibility: hidden; width: 1px; height: 1px; position: absolute; top: -100px;"></iframe>
+                </div>
+                <img class="profile-img" src="/static/img/avatar_2x.png" alt="">
+                <p class="profile-name"></p>
+                <div class="google-sign">
+                  <button class="g-signin"
+                      data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/prediction https://www.google.com/m8/feeds"
+                      data-requestvisibleactions="http://schemas.google.com/AddActivity"
+                      data-clientId="{{ CLIENT_ID }}"
+                      data-accesstype="offline"
+                      data-approvalprompt="force"
+                      data-callback="onSignInCallback"
+                      data-theme="dark"
+                      data-cookiepolicy="single_host_origin"
+                      data-width="wide"
+                      data-height="tall">
+                  </button>
+                </div>
+              </div>
+              <div class="one-google">
+                <p class="create-account">
 
-  <a href="http://www.google.com/support/accounts?hl=en" target="_blank">
-  Need help?
-  </a>
-  </p>
+                <a href="http://www.google.com/support/accounts?hl=en" target="_blank">
+                Need help?
+                </a>
+                </p>
 
-</div>
-<div id="loading" style="display:none;" >
-                          <center><img src="/static/img/google_loading.gif"  style="height:30px; width:30px;">
-                          </center>
-                      </div>
-  </div>
-  <div class="google-footer-bar">
-  <div class="footer content clearfix">
-  <ul id="footer-list">
-  <li>
- &copy; i/oGrow  2013 - 2014
-  </li>
-  <li>
-  <a href="https://accounts.google.com/TOS?loc=DZ&hl=en" target="_blank">
-  Privacy &amp; Terms
-  </a>
-  </li>
-  <li>
-  <a href="http://www.google.com/support/accounts?hl=en" target="_blank">
-  Help
-  </a>
-  </li>
-  </ul>
-  <div id="lang-vis-control" style="display: inline;">
+              </div>
+              <div id="loading" style="display:none;" >
+                      <center><img src="/static/img/google_loading.gif"  style="height:30px; width:30px;">
+                      </center>
+              </div>
+      </div>
+      <div class="google-footer-bar">
+        <div class="footer content clearfix">
+            <ul id="footer-list">
+            <li>
+           &copy; i/oGrow  2013 - 2014
+            </li>
+            <li>
+            <a href="https://accounts.google.com/TOS?loc=DZ&hl=en" target="_blank">
+            Privacy &amp; Terms
+            </a>
+            </li>
+            <li>
+            <a href="http://www.google.com/support/accounts?hl=en" target="_blank">
+            Help
+            </a>
+            </li>
+            </ul>
+            <div id="lang-vis-control" style="display: inline;">
 
-  </div>
-  </div>
-</div>
+            </div>
+        </div>
+    </div>
   </div>
 
 
