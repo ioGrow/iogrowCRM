@@ -136,12 +136,14 @@
                   <!-- <li class="ng-tab md-menu" ng-class="{active: selectedTab == 4}">
                     <a ng-click="selectedTab = 4;">Needs</a>
                   </li> -->
+                  {% if is_business_user %}
                   <li class="ng-tab md-menu" ng-class="{active: selectedTab == 5}">
                     <a ng-click="waterfallTrigger();selectedTab = 5;">Opportunities</a>
                   </li>
                   <li class="ng-tab md-menu" ng-class="{active: selectedTab == 6}">
                     <a ng-click="waterfallTrigger();selectedTab = 6;">Cases</a>
                   </li>
+                  {%endif%}
                   <li class="dropdown md-menu-inv">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                       More <i class="fa fa-angle-down"></i>
@@ -151,8 +153,10 @@
                       <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">Contacts</a></li>
                       <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 7}"><a ng-click="selectedTab = 7;">Attach Documents</a>
                       <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">Needs</a></li>
+                      {% if is_business_user %}
                       <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">Opportunities</a></li>
                       <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 6}"><a ng-click="selectedTab = 6;">Cases</a></li>
+                      {%endif%}
                     </ul>
                   </li>
                 </ul>
@@ -370,7 +374,7 @@
                         <div class="news-blocks blank-card blank-card-red newsCard">
                           <h3>Story</h3>
                           <div class="news-block-tags">
-                
+
                          <div class="form-group row">
                             <label class="control-label col-md-4">Tagline</label>
                              <div class="col-md-8">
@@ -380,7 +384,7 @@
                            </div>
 
                           <div class="news-block-tags">
-                 
+
                             <div class="form-group row">
                                <label class="control-label col-md-4">Introduction</label>
                              <div class="col-md-8">
