@@ -28,10 +28,13 @@ from iomodels.crmengine.shows import Show
 from endpoints_helper import EndpointsHelper
 import model
 from iomodels.crmengine.contacts import Contact
+from iomodels.crmengine.leads import LeadInsertRequest,Lead
+import iomessages
 
 jinja_environment = jinja2.Environment(
   loader=jinja2.FileSystemLoader(os.getcwd()),
   extensions=['jinja2.ext.i18n'],cache_size=0)
+
 
 jinja_environment.install_gettext_translations(i18n)
 
@@ -92,11 +95,15 @@ class BaseHandler(webapp2.RequestHandler):
             active_app = user.get_user_active_app()
             apps = user.get_user_apps()
             is_business_user = bool(user.type=='business_user')
+            applications = []
+            for app in apps:
+                if app is not None:
+                    applications.append(app)
             template_values={
                       'is_business_user':is_business_user,
                       'ME':user.google_user_id,
                       'active_app':active_app,
-                      'apps':apps,
+                      'apps':applications,
                       'tabs':tabs
                       }
             template = jinja_environment.get_template(template_name)
@@ -156,7 +163,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             try:
                 user = self.get_user_from_session()
-                logout_url = 'https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://www.iogrow.com/'
+                logout_url = 'https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://www.iogrow.com/welcome/'
                 if user is None or user.type=='public_user':
                     self.redirect('/welcome/')
                     return
@@ -168,9 +175,12 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                 admin_app = None
                 active_app = user.get_user_active_app()
                 tabs = user.get_user_active_tabs()
+                applications = []
                 for app in apps:
-                    if app.name=='admin':
-                        admin_app = app
+                    if app is not None:
+                        applications.append(app)
+                        if app.name=='admin':
+                            admin_app = app
 
                 template_values = {
                                   'tabs':tabs,
@@ -178,7 +188,7 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                                   'logout_url' : logout_url,
                                   'CLIENT_ID': CLIENT_ID,
                                   'active_app':active_app,
-                                  'apps': apps,
+                                  'apps': applications,
                                   'uSerid':uSerid,
                                   'uSerlanguage':uSerlanguage
                                 }
@@ -277,6 +287,13 @@ class StartEarlyBird(BaseHandler, SessionEnabledHandler):
             user = self.get_user_from_session()
             org_name = self.request.get('org_name')
             model.Organization.create_early_bird_instance(org_name,user)
+            taskqueue.add(
+                            url='/workers/add_to_iogrow_leads',
+                            params={
+                                    'email': user.email,
+                                    'organization': org_name
+                                    }
+                        )
             self.redirect('/')
         else:
             self.redirect('/early-bird')
@@ -705,6 +722,25 @@ class SyncCalendarEvent(webapp2.RequestHandler):
         except:
             raise endpoints.UnauthorizedException('Invalid grant' )
 
+class AddToIoGrowLeads(webapp2.RequestHandler):
+    def post(self):
+        user_from_email = model.User.get_by_email('tedj.meabiou@gmail.com')
+        lead = model.User.get_by_email(self.request.get('email'))
+        company = self.request.get('organization')
+        email = iomessages.EmailSchema(email=lead.email)
+        emails = []
+        emails.append(email)
+        request = LeadInsertRequest(
+                                    firstname = lead.google_display_name.split()[0],
+                                    lastname = " ".join(lead.google_display_name.split()[1:]),
+                                    emails = emails,
+                                    profile_img_url = lead.google_public_profile_photo_url,
+                                    company = company,
+                                    access = 'public'
+        )
+        Lead.insert(user_from_email,request)
+
+
 
 
 routes = [
@@ -714,6 +750,7 @@ routes = [
     ('/workers/syncevent',SyncCalendarEvent),
     ('/workers/createcontactsgroup',CreateContactsGroup),
     ('/workers/sync_contacts',SyncContact),
+    ('/workers/add_to_iogrow_leads',AddToIoGrowLeads),
 
     ('/',IndexHandler),
 
@@ -767,10 +804,10 @@ routes = [
     ('/welcome/',WelcomeHandler),
     # Authentication Handlers
     ('/early-bird',EarlyBirdHandler),
+    ('/start-early-bird-account',StartEarlyBird),
     ('/sign-in',SignInHandler),
     ('/sign-up',SignUpHandler),
-    ('/gconnect',GooglePlusConnect),
-    ('/start-early-bird-account',StartEarlyBird)
+    ('/gconnect',GooglePlusConnect)
     ]
 config = {}
 config['webapp2_extras.sessions'] = {
