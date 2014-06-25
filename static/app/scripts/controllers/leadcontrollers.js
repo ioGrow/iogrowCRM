@@ -895,9 +895,8 @@ $scope.editintro = function() {
                   'bcc': email.bcc,
                   'subject': email.subject,
                   'body': email.body,
-
-                  'about_item':$scope.lead.id,
-                  'about_kind':'Lead' };
+                  'about':$scope.lead.entityKey
+                  };
         Email.send($scope,params);
       };
 //HKA

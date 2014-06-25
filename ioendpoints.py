@@ -211,8 +211,7 @@ class EmailRequest(messages.Message):
     bcc = messages.StringField(4)
     subject = messages.StringField(5)
     body = messages.StringField(6)
-    about_kind = messages.StringField(7)
-    about_item = messages.StringField(8)
+    about = messages.StringField(7)
 
 # The message class that defines the Search Request attributes
 class SearchRequest(messages.Message):
@@ -1010,18 +1009,30 @@ class CrmEngineApi(remote.Service):
         message.subject = request.subject
         message.html = request.body
         message.send()
-        note = Note()
+        parent_key = ndb.Key(urlsafe=request.about)
         note_author = Userinfo()
         note_author.display_name = user.google_display_name
         note_author.photo = user.google_public_profile_photo_url
-        note.author = note_author
-        note.owner = user.google_user_id
-        note.organization =  user.organization
-        note.title = 'Email: '+ request.subject
-        note.content = request.body
-        note.about_kind = request.about_kind
-        note.about_item = request.about_item
-        note.put()
+        note = Note(
+                    owner = user.google_user_id,
+                    organization = user.organization,
+                    author = note_author,
+                    title = 'Email: '+ request.subject,
+                    content = request.body
+                )
+        entityKey_async = note.put_async()
+        entityKey = entityKey_async.get_result()
+        Edge.insert(
+                    start_node = parent_key,
+                    end_node = entityKey,
+                    kind = 'topics',
+                    inverse_edge = 'parents'
+                )
+        EndpointsHelper.update_edge_indexes(
+                                            parent_key = parent_key,
+                                            kind = 'topics',
+                                            indexed_edge = str(entityKey.id())
+                                            )
         return message_types.VoidMessage()
 
     # Events APIs
