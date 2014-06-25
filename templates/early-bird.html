@@ -1089,7 +1089,7 @@ function onSignInCallback(authResult) {
                 It's on Google and it just works!
               </h1>
                 <h2 class="hidden-small">
-                One Google Account for everything Google
+                  Sign in to continue to ioGrow
                 </h2>
               </div>
               <div class="card signin-card clearfix">
@@ -1115,12 +1115,14 @@ function onSignInCallback(authResult) {
               </div>
               <div class="one-google">
                 <p class="create-account">
-
-                <a href="http://www.google.com/support/accounts?hl=en" target="_blank">
-                Need help?
+                <a id="link-signup" href="https://accounts.google.com/SignUp?service=wise&amp;continue=https%3A%2F%2Fdrive.google.com%2F%23&amp;ltmpl=drive">
+                Create Google account
                 </a>
                 </p>
-
+              <p class="tagline">
+                One Google Account for everything Google
+              </p>
+              <img src="//ssl.gstatic.com/accounts/ui/logo_strip_2x.png" width="210" height="17" alt="">
               </div>
               <div id="loading" style="display:none;" >
                       <center><img src="/static/img/google_loading.gif"  style="height:30px; width:30px;">
@@ -1150,6 +1152,16 @@ function onSignInCallback(authResult) {
         </div>
     </div>
   </div>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+   ga('create', 'UA-52188380-1', 'iogrow.com');
+   ga('send', 'pageview');
+
+ </script>
 
 
 
