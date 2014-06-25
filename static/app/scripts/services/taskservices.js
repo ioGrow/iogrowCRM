@@ -50,6 +50,8 @@ topicservices.factory('Task', function($http) {
             $scope.isLoading = false;
             /*$scope.listTags();
             $scope.listTasks();*/
+             $scope.listTags();
+             $scope.listTasks();
             $scope.$apply();
 
             $('#EditTaskModal').modal('hide');

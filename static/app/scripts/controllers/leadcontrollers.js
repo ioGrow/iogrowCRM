@@ -435,6 +435,7 @@ $scope.addTags=function(){
         $scope.showUntag=false;
       };
       $scope.dragTagItem=function(edgekey){
+        console.log("true truetrue truetrue ");
         $scope.showUntag=true;
         $scope.edgekeytoDelete=edgekey;
       };
@@ -1671,6 +1672,7 @@ $scope.addTags=function(){
           };
       }
       $scope.dragTag=function(tag){
+        console.log("smdjsqmldjsqmldmlsqjdmlsqd");
         $scope.draggedTag=tag;
         $scope.$apply();
       };
