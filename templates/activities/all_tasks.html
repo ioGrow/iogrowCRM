@@ -567,12 +567,13 @@
                       <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
                     </form>
                     <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
+                    </div>
                   </li>
                   <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
                        <a ng-click="" class="btn-link addAnotherPhone">
                         <i class="fa fa-tags"></i>  Add a new tag</a>
                   </li>
-                  </div>
+                  
                 </ul>
 
                 <form class="well newTagForm" role="form" ng-show="showNewTag">

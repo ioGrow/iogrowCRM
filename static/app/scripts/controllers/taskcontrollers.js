@@ -340,6 +340,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
      $scope.task_checked = false;
      $scope.isSelectedAll = false;
      $scope.showNewTag=false;
+     $scope.taskpagination={};
      $scope.taggableOptions=[];
      $scope.taggableOptions.push(
       {'tag':'@','data':{
@@ -361,6 +362,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
               format: 'hex'
           });
       }
+
       $('.typeahead').css("width", $('.typeahead').prev().width()+'px !important');
       $('.typeahead').width(433);
       handleColorPicker();
@@ -863,6 +865,21 @@ $scope.selectTag= function(tag,index,$event){
       }
 
     };
+   $scope.listMoreItems = function(){
+        var nextPage = $scope.currentPage + 1;
+        var params = {};
+        console.log($scope.pages)
+        if ($scope.pages[nextPage]){
+          console.log('wooooooooooooork2');
+            params = {
+                      'limit':20,
+                      'order' : $scope.order,
+                      'pageToken':$scope.pages[nextPage]
+                    }
+            $scope.currentPage = $scope.currentPage + 1 ;
+            Task.listMore($scope,params);
+        }
+      };
   $scope.filterByTags = function(selected_tags){
          var tags = [];
          angular.forEach(selected_tags, function(tag){
@@ -974,6 +991,7 @@ $scope.doneEditTag=function(tag){
         $scope.edited_tag=null;
         $scope.updateTag(tag);
      }
+
 $scope.addTags=function(){
       var tags=[];
       var items = [];
@@ -1016,5 +1034,11 @@ $scope.addTags=function(){
       };
      // Google+ Authentication 
      Auth.init($scope);
+     $(window).scroll(function() {
+          if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
+              console.log("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwork");
+              $scope.listMoreItems();
+          }
+      });
 
 }]);
