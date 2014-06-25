@@ -707,6 +707,8 @@ class SyncCalendarEvent(webapp2.RequestHandler):
 
 
 
+
+
 routes = [
     # Task Queues Handlers
     ('/workers/createorgfolders',CreateOrganizationFolders),
@@ -769,8 +771,7 @@ routes = [
     ('/early-bird',EarlyBirdHandler),
     ('/sign-in',SignInHandler),
     ('/sign-up',SignUpHandler),
-    ('/gconnect',GooglePlusConnect),
-    ('/start-early-bird-account',StartEarlyBird)
+    ('/gconnect',GooglePlusConnect)
     ]
 config = {}
 config['webapp2_extras.sessions'] = {
