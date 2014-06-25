@@ -1,10 +1,19 @@
 <div class="row subHeader">
     <div class="currentApp">
-       <h2 class="page-title">
-       {{active_app.label}}
-       <!--  <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
-      </h2>
-    </div> 
+       <div class="btn-group">
+           <a class="filterItem" href="#" data-toggle="dropdown" >
+            {{active_app.label}}
+            <i class="icon-angle-down"></i>
+           </a>
+           <ul class="dropdown-menu">
+            {%for application in apps %}
+
+                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{application.label}}</a></li>
+
+            {%endfor%}
+           </ul>
+        </div>
+    </div>
     <div class=" subHeaderContent">
       <div class="col-md-9">
       <div class="row">
@@ -30,7 +39,7 @@
       </div>
       <div class="col-md-2 col-xs-2">
       <a href="/#/cases/new" class="btn red newAccountBtnOnscroll pull-right hidden afterScrollBtn">
-           New <span class="hidden-xs hiddenOnxs">Case</span> 
+           New <span class="hidden-xs hiddenOnxs">Case</span>
          </a>
       </div>
       </div>
@@ -53,7 +62,7 @@
       <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
       <!-- BEGIN PAGE CONTAINER-->
   <div class="container-fluid"ng-show="immediateFailed">
-    <div class="col-md-12">  
+    <div class="col-md-12">
       <h1>Sign-in Button;</h1>
       <span id="signin">
         <span id="myGsignin"></span>
@@ -61,10 +70,10 @@
     </div>
   </div>
   <div class="row" ng-show="isSignedIn">
-        
+
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-   
+
     <div class="col-md-9">
      <div class="row subHeaderContainer">
         <div class=" col-md-9 col-sm-9 col-xs-9 subHeaderContent">
@@ -74,15 +83,15 @@
         </div>
       <div class="col-md-3 col-sm-3 col-xs-3">
         <div class="row">
-         <div class="pull-right" > 
+         <div class="pull-right" >
            <a href="/#/cases/new" class="btn red newBtn">
-                       {{ _(" New Case") }} 
+                       {{ _(" New Case") }}
           </a>
         </div>
          </div>
        </div>
     </div>
-  <div class="row">      
+  <div class="row">
   <div class="col-md-12">
      <div class="row">
       <div class="tab-pane">
@@ -117,9 +126,9 @@
                       <p class="status  ng-binding">
                       <span  class="contact-title" style="font-size: 12px;
                         ">
-                            <span class="">Date:</span> <span class=""> <%=casee.updated_at | date:'MMMM dd, yyyy- HH:mm:ss'%> </span>   
+                            <span class="">Date:</span> <span class=""> <%=casee.updated_at | date:'MMMM dd, yyyy- HH:mm:ss'%> </span>
                             </span>
-                      <span class="pull-right" style="color:<%=getStatusColor(casee.current_status.name)%>"><%= casee.current_status.name %></span>  
+                      <span class="pull-right" style="color:<%=getStatusColor(casee.current_status.name)%>"><%= casee.current_status.name %></span>
                         </p>
                   </div>
                 <div class="tagsSection " ng-class="{hidden: casee.tags==null}">
@@ -187,7 +196,7 @@
                       <%= tag_item.name %>
                   </span>
                   <span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
-                      <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>  
+                      <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>
                   </span>
                   <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
                     <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
@@ -197,7 +206,7 @@
               </li>
               <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
                 <a ng-click="" class="btn-link addAnotherPhone">
-                  <i class="fa fa-tags"></i>  Add a new label 
+                  <i class="fa fa-tags"></i>  Add a new label
                 </a>
               </li>
             </ul>
@@ -229,10 +238,10 @@
       </div>
       </div>
     </div>
-      <!-- END PAGE CONTAINER--> 
+      <!-- END PAGE CONTAINER-->
 </div>
 
-    
+
 <div id="addCaseModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-dialog">
                   <div class="modal-content">
@@ -241,37 +250,37 @@
                 <h3 id="myModalLabel" class="modal-title">{{_("New Case")}}</h3>
               </div>
               <div class="modal-body">
-                 <form id="addCase" name="addCase" ng-keyup="addCaseOnKey(casee)" class="form-horizontal"> 
-                 
+                 <form id="addCase" name="addCase" ng-keyup="addCaseOnKey(casee)" class="form-horizontal">
+
                     <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Contact")}}</label>
-                       
+
                          <div class="col-md-9">
                           <input type="text" required ng-model="searchContactQuery" typeahead="contactResult as contactResult.firstname + ' '+  contactResult.lastname for contactResult in contactsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectContact()" class="form-control" placeholder="Search">
-                          
+
                         </div>
                     </div>
                     <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Account")}} </label>
-                       
+
                         <div class="col-md-9">
                           <input type="text" required  ng-model="searchAccountQuery" typeahead="accountResult as accountResult.name  for accountResult in accountsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectcasee()" class="form-control" placeholder="Search">
-                          
+
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Subject")}} </label>
-                       
+
                         <div class="col-md-9">
                           <input type="text"  id="id_name" required class="form-control" ng-model="casee.name">
-                          
+
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Priority")}} </label>
-                       
+
                         <div class="col-md-9">
                           <select class="form-control" ng-model="casee.priority">
                             <option value="1">1 - Low</option>
@@ -285,38 +294,38 @@
                             <option value="9">9</option>
                             <option value="10">10 - Critical</option>
                           </select>
-                          
+
                         </div>
-                        
+
                     </div>
                     <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Status")}} </label>
-                       
+
                         <div class="col-md-9">
                            <select class="form-control" ng-model="status_selected" ng-options="stat.status for stat in casesatuses" >
                             <option value="">-- choose a status --</option>
                           </select>
-                          
+
                         </div>
-                        
+
                     </div>
-                    
-                    
+
+
                     <!--div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Labels")}} </label>
-                       
+
                         <div class="col-md-9">
                           <input type="text"  id="id_description" placeholder="Add #hashtags to categorize your cases" class="form-control" ng-model="casee.type_case">
-                          
+
                         </div>
                     </div-->
-                    
+
                     <hr/>
                     <p>Who can access?</p>
                      <div class="radio-list">
 
-                     
-                          
+
+
                             <label >
                             <input type="radio" name="optionsRadios" value="public" ng-model="casee.access" checked />
                             public: Anyone within your organization
@@ -324,19 +333,19 @@
                             <label >
                             <input type="radio" name="optionsRadios"  value="private" ng-model="casee.access" />
                             private: only you and your collaborators
-                            </label>  
-                           
-                       
-                      
-                    </div>
-                   
+                            </label>
 
-                    
-                
+
+
+                    </div>
+
+
+
+
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                
+
                 <input  ng-click="save(casee)" type="submit" class="btn green" value="Add this case">
                 <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
               </div>
@@ -371,6 +380,5 @@
         }
     }
     handleUniform();
-$('.textfill').textfill({debug: true, maxFontPixels: 16});               
+$('.textfill').textfill({debug: true, maxFontPixels: 16});
 </script>
-
