@@ -12,6 +12,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
      $scope.leadpagination = {};
      $scope.currentPage = 01;
      $scope.pages = [];
+     $scope.selectedOption='all';
      $scope.stage_selected={};
 
       $scope.leads = [];
