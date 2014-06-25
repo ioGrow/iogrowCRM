@@ -198,7 +198,7 @@
                           </span>
                           <span class="body">
                             <a href="<%=getTopicUrl(topic.topic_kind,topic.id)%>" class="discussion-content"><strong class="ng-binding">
-                              <%= topic.title%></strong> - <span class="excerpt ng-binding" ng-bind-html-unsafe="topic.excerpt"></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <%= topic.comments%> comments</span>
+                              <a href="#/notes/show/<%= topic.id%>"><%= topic.title%></a> </strong> - <span class="excerpt ng-binding" ng-bind-html-unsafe="topic.excerpt"></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <a href="#/notes/show/<%= topic.id%>"> <%= topic.comments%> </a> comments</span>
                             </a>
                           </span>
                         </div>
