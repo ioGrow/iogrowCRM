@@ -19,7 +19,7 @@
       <div class="row">
       <div class="col-md-10 col-xs-10">
       <div class="filterOptions">
-          <span role="button" class="filterItem activeFilter" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">All <span class="hidden-xs hiddenOnxs">Leads</span> </span>
+          <span role="button" class="filterItem" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">All <span class="hidden-xs hiddenOnxs">Leads</span> </span>
           <span role="button" class="filterItem" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">My <span class="hidden-xs hiddenOnxs">Leads</span></span>
           <div class="btn-group">
               <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" >
@@ -194,14 +194,12 @@
       </div>
       <div class="portlet-body">
         <ul class="list-group tags-list">
-          <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item" ng-click="selectTag(tag_item,$index,$event)" ng-drag="dragTag(tag_item)" >
+          <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
             <div class="row">
-              <span draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
+              <span  ng-drag="dragTag(tag_item)" draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
                   <%= tag_item.name %>
               </span>
-              <span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
-                  <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>
-              </span>
+               <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
               <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
                 <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
               </form>
@@ -250,7 +248,7 @@
   <div class="col-md-12">
     <div class="portlet showCard fixedCard">
       <div class="portlet-body">
-        <input  ng-click="installChromeExtension()" class="btn blue btn-block pull-right" value="Install chrome extension">
+        <input  type="submit" ng-click="installChromeExtension()" class="btn blue btn-block pull-right" value="Install chrome extension">
       </div>
     </div>
   </div>
@@ -265,14 +263,15 @@
       </div>
       <div class="portlet-body">
         <ul class="list-group tags-list">
-          <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item" ng-click="selectTag(tag_item,$index,$event)" ng-drag="dragTag(tag_item)" >
+          <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
             <div class="row">
-              <span draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
+              <span ng-drag="dragTag(tag_item)"  draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
                   <%= tag_item.name %>
               </span>
-              <span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
+              <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
+              <!--<span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
                   <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>
-              </span>
+              </span>-->
               <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
                 <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
               </form>

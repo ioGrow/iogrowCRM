@@ -50,6 +50,8 @@ topicservices.factory('Task', function($http) {
             $scope.isLoading = false;
             /*$scope.listTags();
             $scope.listTasks();*/
+             $scope.listTags();
+             $scope.listTasks();
             $scope.$apply();
 
             $('#EditTaskModal').modal('hide');
@@ -76,7 +78,30 @@ topicservices.factory('Task', function($http) {
       gapi.client.crmengine.tasks.listv2(params).execute(function(resp) {
               
               if(!resp.code){
-                $scope.tasks = resp.items;
+                if (!resp.items){
+                    if(!$scope.isFiltering){
+                        $scope.blankStatelead = true;
+                    }
+                  }
+                 $scope.tasks = resp.items;
+                  if ($scope.currentPage>1){
+                      $scope.taskpagination.prev = true;
+                   }else{
+                       $scope.taskpagination.prev = false;
+                   }
+                 if (resp.nextPageToken){
+                   var nextPage = $scope.currentPage + 1;
+                   // Store the nextPageToken
+                   $scope.pages[nextPage] = resp.nextPageToken;
+                   $scope.taskpagination.next = true;
+
+                 }else{
+                  $scope.taskpagination.next = false;
+                 }
+                 // Call the method $apply to make the update on the scope
+                 $scope.isLoading = false;
+                 $scope.$apply();
+               /* $scope.tasks = resp.items;
                 
                 // Loaded succefully
 
@@ -86,7 +111,7 @@ topicservices.factory('Task', function($http) {
                  $scope.$apply();
                  if (effects){
                      $scope.hilightTask();
-                 }
+                 }*/
               }else {
                  if(resp.code==401){
                 $scope.refreshToken();
@@ -152,6 +177,48 @@ topicservices.factory('Task', function($http) {
     return base_url+id;
 
  }
+   Task.listMore = function($scope,params){
+   $scope.isLoading = true;
+   $scope.$apply();
+    gapi.client.crmengine.tasks.listv2(params).execute(function(resp) {
+
+            if(!resp.code){
+
+                angular.forEach(resp.items, function(item){
+                    $scope.tasks.push(item);
+                });
+                if ($scope.currentPage>1){
+                    $scope.taskpagination.prev = true;
+                 }else{
+                     $scope.taskpagination.prev = false;
+                 }
+               if (resp.nextPageToken){
+                 var nextPage = $scope.currentPage + 1;
+                 // Store the nextPageToken
+                 $scope.pages[nextPage] = resp.nextPageToken;
+                 $scope.taskpagination.next = true;
+
+               }else{
+                $scope.taskpagination.next = false;
+               }
+               // Call the method $apply to make the update on the scope
+               $scope.isLoading = false;
+               $scope.$apply();
+
+
+            }else {
+              if(resp.code==401){
+              $scope.refreshToken();
+              $scope.isLoading = false;
+              $scope.$apply();
+             };
+            }
+            console.log('gapi #end_execute');
+      });
+
+
+
+};
 
   
 

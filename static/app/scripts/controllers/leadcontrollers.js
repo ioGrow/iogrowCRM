@@ -12,6 +12,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
      $scope.leadpagination = {};
      $scope.currentPage = 01;
      $scope.pages = [];
+     $scope.selectedOption='all';
      $scope.stage_selected={};
 
       $scope.leads = [];
@@ -38,18 +39,8 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
          ];
          $scope.tag.color= {'name':'green','color':'#BBE535'};
 
-
       // What to do after authentication
         $scope.runTheProcess = function(){
-            if (chrome.app.isInstalled) {
-                console.log('*************** YES *************');
-                $scope.extensionInstalled = true;
-                $scope.$apply();
-            }else{
-                console.log('NOOOOO');
-                console.log(chrome.app);
-                $scope.extensionInstalled = false;
-            }
             var params = {'order' : $scope.order,'limit':20};
             Lead.list($scope,params);
             Leadstatus.list($scope,{});
@@ -65,9 +56,6 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           //       Lead.insert($scope,params);
           //   }
         };
-      $scope.installChromeExtension = function(){
-          chrome.webstore.install();
-      }
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
@@ -448,6 +436,7 @@ $scope.addTags=function(){
         $scope.showUntag=false;
       };
       $scope.dragTagItem=function(edgekey){
+        console.log("true truetrue truetrue ");
         $scope.showUntag=true;
         $scope.edgekeytoDelete=edgekey;
       };
@@ -663,7 +652,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                      'parent': $scope.lead.entityKey
                    }
         };
-
+        
         Task.insert($scope,params);
         $scope.task={};
      }

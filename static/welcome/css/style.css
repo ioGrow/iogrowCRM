@@ -603,5 +603,10 @@ a:after {
   }
 
 }
-
+.playImg{
+  width: 64px;
+  position: absolute;
+  top: calc(50% - 23px);
+  left: calc(50% - 36px);
+}
 /***********************custom****/

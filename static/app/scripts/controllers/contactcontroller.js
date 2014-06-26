@@ -10,6 +10,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
         $scope.prevPageToken = undefined;
         $scope.isLoading = false;
         $scope.contactpagination = {};
+        $scope.selectedOption='all';
         $scope.currentPage = 01;
         //HKA 10.12.2013 Var Contact to manage Next & Prev
         $scope.contactpagination={};
