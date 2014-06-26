@@ -54,11 +54,12 @@
       </span>
     </div>
   </div>
-  <div ng-show="isSignedIn" class="row">
+  <div ng-show="isSignedIn" class="listContainer">
 
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-    <div class="col-md-9">
+    <div class="row">
+    <div class="col-md-12">
       <div class="row">
         <div class="showPage custom-show margin-bottom-15  col-md-12">
           <div class="row">
@@ -123,13 +124,13 @@
                                            <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
                                        </label>
                                        <div class="col-xs-7  col-md-7">
-                                        <button  ng-show="status=='pending'" class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
+                                        <button  class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-lock"></i>
                                           <span class="btn-text">
                                             Close
                                           </span>
                                         </button>
-                                         <button  ng-show="status=='closed'" class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
+                                         <button  class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-unlock"></i>
                                         <span class="btn-text">
                                         Reopen
@@ -208,13 +209,13 @@
                                            <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
                                        </label>
                                        <div class="col-xs-7  col-md-7">
-                                        <button  ng-show="status=='pending'" class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
+                                        <button  class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-lock"></i>
                                           <span class="btn-text">
                                             Close
                                           </span>
                                         </button>
-                                         <button  ng-show="status=='closed'" class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
+                                         <button   class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-unlock"></i>
                                         <span class="btn-text">
                                         Reopen
@@ -293,13 +294,13 @@
                                            <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
                                        </label>
                                        <div class="col-xs-7  col-md-7">
-                                        <button  ng-show="status=='pending'" class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
+                                        <button  class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-lock"></i>
                                           <span class="btn-text">
                                             Close
                                           </span>
                                         </button>
-                                         <button  ng-show="status=='closed'" class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
+                                         <button  class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-unlock"></i>
                                         <span class="btn-text">
                                         Reopen
@@ -378,13 +379,13 @@
                                            <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
                                        </label>
                                        <div class="col-xs-7  col-md-7">
-                                        <button  ng-show="status=='pending'" class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
+                                        <button   class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-lock"></i>
                                           <span class="btn-text">
                                             Close
                                           </span>
                                         </button>
-                                         <button  ng-show="status=='closed'" class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
+                                         <button  class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-unlock"></i>
                                         <span class="btn-text">
                                         Reopen
@@ -463,13 +464,13 @@
                                            <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
                                        </label>
                                        <div class="col-xs-7  col-md-7">
-                                        <button  ng-show="status=='pending'" class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
+                                        <button   class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-lock"></i>
                                           <span class="btn-text">
                                             Close
                                           </span>
                                         </button>
-                                         <button  ng-show="status=='closed'" class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
+                                         <button   class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-unlock"></i>
                                         <span class="btn-text">
                                         Reopen
@@ -533,7 +534,7 @@
         </div>
           </div>
           </div>
-            <div class="col-md-3">
+            <div class="col-xs-12 col-sm-12 visible-xs visible-sm">
            <div class="row">
             <div class="col-md-12">
               <div class="portlet showCard">
@@ -566,12 +567,13 @@
                       <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
                     </form>
                     <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
+                    </div>
                   </li>
                   <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
                        <a ng-click="" class="btn-link addAnotherPhone">
                         <i class="fa fa-tags"></i>  Add a new tag</a>
                   </li>
-                  </div>
+                  
                 </ul>
 
                 <form class="well newTagForm" role="form" ng-show="showNewTag">
@@ -704,8 +706,89 @@
                </div>
                 </div>
                </div>
+               </div>
 
        </div>
+             <div class="fixed-labelsCard visible-md visible-lg">
+           <div class="row">
+            <div class="col-md-12">
+              <div class="portlet showCard">
+                <div class="portlet-title">
+                  <div class="caption">
+                    <i class="fa fa-reorder"></i>Tags
+                  </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="row">
+                    <ul class="list-group tags-list">
+                      <li  ng-repeat="tag_item in tags" class="list-group-item tags-list-item">
+                        <span  draggable ng-drag="dragTag(tag_item)" style="background-color:<%=tag_item.color%>;color:idealTextColor(<%=tag_item.color%>);" class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"><%= tag_item.name %> </span>
+                        <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
+                       <!-- <span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
+                          <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>
+                        </span>-->
+
+                        <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
+                          <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
+                        </form>
+                        <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
+                      </li>
+                      <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
+                           <a ng-click="" class="btn-link addAnotherPhone">
+                            <i class="fa fa-tags"></i>  Add a new tag</a>
+                      </li>
+                      
+                    </ul>
+                    </div>  
+                    <form class="well newTagForm" role="form" ng-show="showNewTag">
+                     <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
+                    <div class="row">
+                      <div class="col-md-12 form-group">
+                        <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New tag name">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-8">
+                          <!-- <input id="tag-col-pick" type="text" class="colorpicker-default form-control" value="#8fff00">-->
+                          <ul class="color_pallet_menu">
+                            <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
+                            </li>
+                          </ul>
+
+                      </div>
+                      <div class="col-md-4">
+                        <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
+                        <!--input type="submit" ng-show="isLoading" class="btn green pull-right" value="{{ _('Loading...') }}"-->
+                      </div>
+                      </div>
+                    </form>
+                    <div class="form-group" ng-show="tags">
+                      <button class="btn btn-default btn-block" ng-click="manage_tags=!manage_tags;manage()"> Manage Tags
+                      </button>
+                    </div>
+                    </div>
+                  </div>
+              </div>
+              </div>
+              <div class="row">
+                <div class="pagination pull-right" ng-hide="isLoading">
+
+                      <ul>
+                        <li ng-show="pagination.prev"><button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
+                        {{_("Prev")}}
+                        </button></li>
+                        <li ng-repeat="page in pagination.pages" ng-class='{active: page.isCurrent}'><a  href="#/accounts/"><%= page.id %></a></li>
+                        <li  ng-show="pagination.next"><button ng-click="listNextPageItems()"  class="btn">
+                        {{_("Next")}}
+                        </button></li>
+                      </ul>
+                </div>
+                    <!--h3 class="pagination pull-right" ng-show="isLoading">{{ _('Loading') }}...</h3-->
+              </div>
+            <!-- END PAGE CONTENT-->
+          
+      <!-- END PAGE CONTAINER-->
+</div>
        <script type="text/javascript">
           $('#assigeeList').slimScroll({
               height: '200px'
