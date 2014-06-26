@@ -11,8 +11,7 @@
   <meta content="" name="description"/>
   <meta content="" name="author"/>
   <meta name="MobileOptimized" content="320">
-  <link rel="chrome-webstore-item"
-    href="https://chrome.google.com/webstore/detail/eafcehcahfabjibkmffekmcnlnnopkni">
+  <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/eafcehcahfabjibkmffekmcnlnnopkni">
   <!-- BEGIN GLOBAL MANDATORY STYLES -->
   <link href="static/bootstrap3/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
  <link href='http://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
@@ -101,6 +100,9 @@
         <!-- BEGIN TOP NAVIGATION MENU -->
 
         <ul class="nav navbar-nav pull-right">
+              <li class="dropdown user">
+                  <input type="submit" onclick="$('#InstallChromeExtension').modal() " class="btn blue btn-block pull-right" value="Install chrome extension" style="padding-left:5px;padding-right:5px;">
+              </li>
               <li class="dropdown user">
                 <a href="/#/admin/users" class="dropdown-tog" target="new">
                   <span class="username">
@@ -233,7 +235,42 @@
                </div>
             </div>
 </div>
+<div id="InstallChromeExtension" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+ <div class="modal-dialog">
+ <div class="modal-content">
+ <div class="modal-header">
+   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+   <h3 id="myModalLabel" class="modal-title">{{_("Capture leads from your Social networks")}}</h3>
+ </div>
 
+ <div class="modal-body">
+    <form id="editSetting" name="edittag" class="form-horizontal">
+
+
+     <div class="form-group">
+           <p>If you are looking to build a potential network of contacts,
+             it's not just a matter of adding them manually,
+             you can do better! Use the free Google Chrome extension that allows you to add people right from Linkedin, Twitter and Gmail in one click.
+             Keep the experience you know and connect with the people you need
+           </p>
+
+           <div class="col-md-12">
+
+             <center>
+                 <img src="http://www.iogrow.com/static/welcome/img/mark_as_lead.ooold.gif" style="width:100%;">
+              </center>
+
+           </div>
+       </div>
+ </div>
+ <div class="modal-footer">
+
+   <button  type="submit"  onclick="chrome.webstore.install()" class="btn blue btn-block pull-right">{{_("Install Chrome Extension")}} </button>
+ </div>
+  </form>
+  </div>
+  </div>
+</div>
   <div class="modal fade"  id="errorModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -354,12 +391,12 @@
 
 
 
-         //var ROOT = '/_ah/api';
+        var ROOT = '/_ah/api';
 
 
 
 
-       var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+     //   var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 
 
         var callback = function() {

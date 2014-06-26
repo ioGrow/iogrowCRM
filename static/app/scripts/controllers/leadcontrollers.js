@@ -3,6 +3,11 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Leads").addClass("active");
 
+
+      $scope.showConvertModal = function(){
+        $('#LeadsShow').modal('show');
+
+      };
       document.title = "Leads: Home";
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
