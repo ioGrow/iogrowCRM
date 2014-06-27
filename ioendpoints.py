@@ -50,6 +50,7 @@ from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.casestatuses import Casestatus
 from iomodels.crmengine.feedbacks import Feedback
 from iomodels.crmengine.needs import Need,NeedInsertRequest,NeedListResponse,NeedSchema
+from blog import Article,ArticleInsertRequest,ArticleSchema,ArticleListResponse
 #from iomodels.crmengine.emails import Email
 from iomodels.crmengine.tags import Tag,TagSchema,TagListRequest,TagListResponse
 from model import User
@@ -138,6 +139,8 @@ class EntityKeyRequest(messages.Message):
 class ListRequest(messages.Message):
     limit = messages.IntegerField(1)
     pageToken = messages.StringField(2)
+    tags = messages.StringField(3,repeated = True)
+    order = messages.StringField(4)
 
 class NoteInsertRequest(messages.Message):
     about = messages.StringField(1,required=True)
@@ -342,6 +345,101 @@ class PermissionInsertRequest(messages.Message):
     about = messages.StringField(1,required=True)
     items = messages.MessageField(PermissionRequest, 2, repeated=True)
 
+
+
+@endpoints.api(
+               name='blogengine',
+               version='v1',
+               description='ioGrow Blog APIs',
+               allowed_client_ids=[
+                                   CLIENT_ID,
+                                   endpoints.API_EXPLORER_CLIENT_ID
+                                   ]
+               )
+class BlogEngineApi(remote.Service):
+
+    ID_RESOURCE = endpoints.ResourceContainer(
+            message_types.VoidMessage,
+            id=messages.StringField(1))
+
+    # Search API
+    @endpoints.method(SearchRequest, SearchResults,
+                        path='search', http_method='POST',
+                        name='search')
+    def blog_search_method(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        organization = str(user_from_email.organization.id())
+        index = search.Index(name="GlobalIndex")
+        #Show only objects where you have permissions
+        query_string = request.q + ' AND (organization:' +organization+ ' AND (access:public OR (owner:'+ user_from_email.google_user_id +' OR collaborators:'+ user_from_email.google_user_id+')))'
+        print query_string
+        search_results = []
+        count = 1
+        if request.limit:
+            limit = int(request.limit)
+        else:
+            limit = 10
+        next_cursor = None
+        if request.pageToken:
+            cursor = search.Cursor(web_safe_string=request.pageToken)
+        else:
+            cursor = search.Cursor(per_result=True)
+        if limit:
+            options = search.QueryOptions(limit=limit,cursor=cursor)
+        else:
+            options = search.QueryOptions(cursor=cursor)
+        query = search.Query(query_string=query_string,options=options)
+        try:
+            if query:
+                result = index.search(query)
+                #total_matches = results.number_found
+                # Iterate over the documents in the results
+                if len(result.results) == limit + 1:
+                    next_cursor = result.results[-1].cursor.web_safe_string
+                else:
+                    next_cursor = None
+                results = result.results[:limit]
+                for scored_document in results:
+                    kwargs = {
+                        "id" : scored_document.doc_id,
+                        "rank" : scored_document.rank
+                    }
+                    for e in scored_document.fields:
+                        if e.name in ["title","type"]:
+                            kwargs[e.name]=e.value
+                    search_results.append(SearchResult(**kwargs))
+        except search.Error:
+            logging.exception('Search failed')
+        return SearchResults(items = search_results,nextPageToken=next_cursor)
+    # articles.insert api
+    @endpoints.method(ArticleInsertRequest, ArticleSchema,
+                      path='articles/insert', http_method='POST',
+                      name='articles.insert')
+    def article_insert_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Article.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+    # articles.insert api
+    @endpoints.method(ListRequest, ArticleListResponse,
+                      path='articles/list', http_method='POST',
+                      name='articles.list')
+    def article_list_beta(self, request):
+        return Article.list(
+                            request = request
+                            )
+
+    # tags.list api v2
+    @endpoints.method(TagListRequest, TagListResponse,
+                      path='tags/list', http_method='POST',
+                      name='tags.list')
+    def blog_tag_list(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Tag.list_by_kind(
+                            user_from_email = user_from_email,
+                            kind = request.about_kind
+                            )
 
 @endpoints.api(
                name='crmengine',
