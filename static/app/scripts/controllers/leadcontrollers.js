@@ -58,7 +58,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           //   }
 
         };
-      
+
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
@@ -176,7 +176,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
      // Sorting
      $scope.orderBy = function(order){
         var params = { 'order': order,
-                        'limit':6};
+                        'limit':20};
         $scope.order = order;
         Lead.list($scope,params);
      };
@@ -184,13 +184,13 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
         if (filter){
           var params = { 'owner': filter,
                          'order': $scope.order,
-                         'limit':6}
+                         'limit':20}
         }
         else{
           var params = {
               'order': $scope.order,
 
-              'limit':6}
+              'limit':20}
         };
         $scope.isFiltering = true;
         Lead.list($scope,params);
@@ -199,13 +199,13 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
         if (filter){
           var params = { 'status': filter,
                          'order': $scope.order,
-                         'limit':6}
+                         'limit':20}
         }
         else{
           var params = {
               'order': $scope.order,
 
-              'limit':6}
+              'limit':20}
         };
         $scope.isFiltering = true;
         Lead.list($scope,params);
