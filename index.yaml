@@ -381,6 +381,12 @@ indexes:
   - name: updated_at
     direction: desc
 
+- kind: Node
+  properties:
+  - name: kind
+  - name: updated_at
+    direction: desc
+
 - kind: Opportunity
   properties:
   - name: access
