@@ -125,8 +125,21 @@ Note.insert = function($scope,params){
     return base_url+id;
 
  }
+ Note.patch=function($scope,params){
+    $scope.isLoading = true;
+      gapi.client.crmengine.notes.patch(params).execute(function(resp) {
+        
+         if(!resp.code){
+          $scope.isLoading = false;
+          $scope.$apply();
+                   
+         }else{
+          console.log(resp.code);
+         }
+      }); 
+ }
 
-  
+   
 
 return Note;
 });

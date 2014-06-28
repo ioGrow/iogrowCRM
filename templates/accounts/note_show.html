@@ -52,7 +52,11 @@
             </a>
           </i>
         </span>
-        <h2 class="note-title"><%= note.title%></h2>
+        <h2 class="note-title">
+          <a  editable-text=" note.title" onbeforesave="inlinePatch('Note','', 'title',note.id,$data)">
+            <%= note.title%>
+          </a>
+        </h2>
         <p>Posted by <%=note.created_by.display_name%></p>
 
         <div class="row margin-bottom-10">

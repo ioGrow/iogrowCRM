@@ -144,6 +144,15 @@ app.controller('NoteShowController',['$scope','$filter','$route','Auth','Note','
                    };
       Contributor.list($scope,params);
       };
+  // lebdiri arezki 28-06-21-014  inline edite note.title
+  $scope.inlinePatch=function(kind,edge,name,id,value){
+    var params={
+      'id':id,
+      'title':value
+    };
+    Note.patch($scope,params);
+
+  };
 
     // Google+ Authentication
     Auth.init($scope);
