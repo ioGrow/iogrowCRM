@@ -200,6 +200,11 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                 self.redirect('/welcome/')
         else:
             self.redirect('/welcome/')
+class BlogHandler(BaseHandler,SessionEnabledHandler):
+    def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('templates/blog/blog_base.html')
+        self.response.out.write(template.render(template_values))
 
 # Change the current app for example from sales to customer support
 class ChangeActiveAppHandler(SessionEnabledHandler):
@@ -447,6 +452,10 @@ class GooglePlusConnect(SessionEnabledHandler):
         self.session[self.CURRENT_USER_SESSION_KEY] = user.email
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(isNewUser))
+
+class ArticleListHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/articles/article_list.html')
 
 class AccountListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -753,6 +762,8 @@ routes = [
     ('/workers/add_to_iogrow_leads',AddToIoGrowLeads),
 
     ('/',IndexHandler),
+    ('/blog',BlogHandler),
+    ('/views/articles/list',ArticleListHandler),
 
     # Templates Views Routes
     # Accounts Views

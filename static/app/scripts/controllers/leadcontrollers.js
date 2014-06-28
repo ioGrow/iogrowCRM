@@ -38,15 +38,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
          {'name':'purple','color':'#E874D6'},
          ];
          $scope.tag.color= {'name':'green','color':'#BBE535'};
-         if (chrome.app.isInstalled) {
-                console.log('*************** YES *************');
-                $scope.extensionInstalled = true;
-                $scope.$apply();
-          }else{
-                console.log('NOOOOO');
-                console.log(chrome.app);
-                $scope.extensionInstalled = false;
-          }
+
 
       // What to do after authentication
         $scope.runTheProcess = function(){
@@ -66,9 +58,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           //   }
 
         };
-      $scope.installChromeExtension = function(){
-          chrome.webstore.install();
-      }
+
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
@@ -186,7 +176,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
      // Sorting
      $scope.orderBy = function(order){
         var params = { 'order': order,
-                        'limit':6};
+                        'limit':20};
         $scope.order = order;
         Lead.list($scope,params);
      };
@@ -194,13 +184,13 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
         if (filter){
           var params = { 'owner': filter,
                          'order': $scope.order,
-                         'limit':6}
+                         'limit':20}
         }
         else{
           var params = {
               'order': $scope.order,
 
-              'limit':6}
+              'limit':20}
         };
         $scope.isFiltering = true;
         Lead.list($scope,params);
@@ -209,13 +199,13 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
         if (filter){
           var params = { 'status': filter,
                          'order': $scope.order,
-                         'limit':6}
+                         'limit':20}
         }
         else{
           var params = {
               'order': $scope.order,
 
-              'limit':6}
+              'limit':20}
         };
         $scope.isFiltering = true;
         Lead.list($scope,params);
