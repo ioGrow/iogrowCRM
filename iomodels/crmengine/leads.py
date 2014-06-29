@@ -344,7 +344,6 @@ class Lead(EndpointsModel):
                                   updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
                         items.append(lead_schema)
-            print count,limit
             if (count == limit):
                 you_can_loop = False
             if more and next_curs:

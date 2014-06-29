@@ -308,6 +308,25 @@
       </div>
     </div>
     </div>
+<div class="modal fade"  id="importModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+              <h3 id="myModalLabel">{{_("Import contacts")}}</h3>
+            </div>
+            <div class="modal-body">
+                <p>{{_("We support importing CSV files from Google Contacts, Outlook, Outlook Expressand some other apps. Please select a CSV file to upload:")}}</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn default" data-dismiss="modal">{{_("Close")}}</button>
+              <button ng-click="createPickerUploader()"  type="submit" class="btn green btn-primary addContactNow">{{_("Import")}} </button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
 <script type="text/javascript">
  $('#slimtest1').slimScroll({
                     height: '20px'
