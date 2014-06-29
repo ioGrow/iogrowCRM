@@ -137,6 +137,21 @@ Note.insert = function($scope,params){
           console.log(resp.code);
          }
       }); 
+ } 
+ Note.delete=function($scope,params){
+    $scope.isLoading = true;
+      gapi.client.crmengine.notes.delete(params).execute(function(resp) {
+        
+         if(!resp.code){
+          $scope.isLoading = false;
+
+          $scope.$apply();
+          window.location.replace($scope.uri)
+                   
+         }else{
+          console.log(resp.code);
+         }
+      }); 
  }
 
    
