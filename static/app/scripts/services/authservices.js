@@ -94,8 +94,10 @@ accountservices.factory('Auth', function($http) {
     });
   }
   Auth.refreshToken = function(){
+
      
      window.location.reload(true);
+
   };
 
   return Auth;
