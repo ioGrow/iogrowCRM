@@ -3,7 +3,7 @@ app.controller('ArticleListCtrl', ['$scope','$filter','Auth','Article','Lead','L
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Articles").addClass("active");
 
-      document.title = "Leads: Home";
+      document.title = "ioGrow Blog";
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -54,8 +54,8 @@ app.controller('ArticleListCtrl', ['$scope','$filter','Auth','Article','Lead','L
             var params = {'order' : $scope.order,'limit':20};
             Article.list($scope,params);
 
-            var paramsTag = {'about_kind':'Lead'};
-          Tag.list($scope,paramsTag);
+            var paramsTag = {'about_kind':'Blog'};
+            Tag.list($scope,paramsTag);
 
 
         };
@@ -448,12 +448,7 @@ $scope.addTags=function(){
       };
 
    // Google+ Authentication
-     Auth.init($scope);
-     $(window).scroll(function() {
-          if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
-              $scope.listMoreItems();
-          }
-      });
+     $scope.runTheProcess();
 
 
 }]);
