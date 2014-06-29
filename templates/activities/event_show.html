@@ -171,8 +171,8 @@
 
                        <div class="pull-right">
 
-                        <input ng-hide="isLoading" ng-click="addComment(comment)" type="submit" class="btn green" value="Add comment">
-                        <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                        <input ng-disabled="isLoading || !comment.content" ng-click="addComment(comment)" type="submit" class="btn green" value="Add comment">
+                       
                         </div>
                                   <div class="clearfix"></div>
                   </form>
