@@ -150,69 +150,38 @@ class Article():
         my_index.put(my_document)
 
     @classmethod
-    def get_schema(cls,user_from_email,request):
-        lead = Lead.get_by_id(int(request.id))
-        if lead is None:
-            raise endpoints.NotFoundException('Lead not found.')
-        if not Node.check_permission( user_from_email, lead ):
-            raise endpoints.UnauthorizedException('You don\'t have permissions.')
+    def get_schema(cls,request):
+        article = Node.get_by_id(int(request.id))
+        if article is None:
+            raise endpoints.NotFoundException('Article not found.')
         #list of tags related to this account
-        tag_list = Tag.list_by_parent(lead.key)
-        # list of infonodes
-        infonodes = Node.list_info_nodes(
-                                        parent_key = lead.key,
-                                        request = request
-                                        )
-        #list of topics related to this account
-        topics = None
-        if request.topics:
-            topics = Note.list_by_parent(
-                                        parent_key = lead.key,
-                                        request = request
-                                        )
-        tasks = None
-        if request.tasks:
-            tasks = Task.list_by_parent(
-                                        parent_key = lead.key,
-                                        request = request
-                                        )
-        events = None
-        if request.events:
-            events = Event.list_by_parent(
-                                        parent_key = lead.key,
-                                        request = request
-                                        )
-        documents = None
-        if request.documents:
-            documents = Document.list_by_parent(
-                                        parent_key = lead.key,
-                                        request = request
-                                        )
-        lead_schema = LeadSchema(
-                                  id = str( lead.key.id() ),
-                                  entityKey = lead.key.urlsafe(),
-                                  access = lead.access,
-                                  firstname = lead.firstname,
-                                  lastname = lead.lastname,
-                                  title = lead.title,
-                                  company = lead.company,
-                                  source = lead.source,
-                                  status = lead.status,
-                                  tagline = lead.tagline,
-                                  introduction = lead.introduction,
-                                  tags = tag_list,
-                                  topics = topics,
-                                  tasks = tasks,
-                                  events = events,
-                                  documents = documents,
-                                  infonodes = infonodes,
-                                  profile_img_id = lead.profile_img_id,
-                                  profile_img_url = lead.profile_img_url,
-                                  created_at = lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  industry = lead.industry
+        tag_list = Tag.list_by_parent(article.key)
+        author_edge = Edge.list(
+                                  start_node = article.key,
+                                  kind = 'authored_by',
+                                  limit = 1
                                 )
-        return  lead_schema
+        author_schema = None
+        if len(author_edge['items'])>0:
+            author = author_edge['items'][0].end_node.get()
+            author_schema = AuthorSchema(
+                                        google_user_id=author.google_user_id,
+                                        display_name=author.google_display_name,
+                                        google_public_profile_url=author.google_public_profile_url,
+                                        photo=author.google_public_profile_photo_url
+                                        )
+        article_schema = ArticleSchema(
+                  id = str( article.key.id() ),
+                  entityKey = article.key.urlsafe(),
+                  title = article.title,
+                  intro_text = article.intro_text,
+                  full_text = article.full_text,
+                  tags = tag_list,
+                  created_by = author_schema,
+                  created_at = article.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                  updated_at = article.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                )
+        return  article_schema
     @classmethod
     def list(cls,request):
         curs = Cursor(urlsafe=request.pageToken)
