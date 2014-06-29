@@ -37,7 +37,7 @@ jinja_environment = jinja2.Environment(
 
 
 jinja_environment.install_gettext_translations(i18n)
-
+ADMIN_EMAILS = ['tedj.meabiou@gmail.com','hakim@iogrow.com']
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 
@@ -83,31 +83,39 @@ class BaseHandler(webapp2.RequestHandler):
             i18n.get_i18n().set_locale('en')
 
     def prepare_template(self,template_name):
+        is_admin = False
+        template_values={
+                  'is_admin':is_admin
+                  }
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
-            # Set the user locale from user's settings
-            self.set_user_locale(user.language)
-            tabs = user.get_user_active_tabs()
+            if user is not None:
+                if user.email in ADMIN_EMAILS:
+                    is_admin = True
+                # Set the user locale from user's settings
+                self.set_user_locale(user.language)
+                tabs = user.get_user_active_tabs()
 
-            # Set the user locale from user's settings
-            self.set_user_locale(user.language)
-            # Render the template
-            active_app = user.get_user_active_app()
-            apps = user.get_user_apps()
-            is_business_user = bool(user.type=='business_user')
-            applications = []
-            for app in apps:
-                if app is not None:
-                    applications.append(app)
-            template_values={
-                      'is_business_user':is_business_user,
-                      'ME':user.google_user_id,
-                      'active_app':active_app,
-                      'apps':applications,
-                      'tabs':tabs
-                      }
-            template = jinja_environment.get_template(template_name)
-            self.response.out.write(template.render(template_values))
+                # Set the user locale from user's settings
+                self.set_user_locale(user.language)
+                # Render the template
+                active_app = user.get_user_active_app()
+                apps = user.get_user_apps()
+                is_business_user = bool(user.type=='business_user')
+                applications = []
+                for app in apps:
+                    if app is not None:
+                        applications.append(app)
+                template_values={
+                          'is_admin':is_admin,
+                          'is_business_user':is_business_user,
+                          'ME':user.google_user_id,
+                          'active_app':active_app,
+                          'apps':applications,
+                          'tabs':tabs
+                          }
+        template = jinja_environment.get_template(template_name)
+        self.response.out.write(template.render(template_values))
 
 class SessionEnabledHandler(webapp2.RequestHandler):
     """Base type which ensures that derived types always have an HTTP session."""
@@ -200,6 +208,11 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
                 self.redirect('/welcome/')
         else:
             self.redirect('/welcome/')
+class BlogHandler(BaseHandler,SessionEnabledHandler):
+    def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('templates/blog/blog_base.html')
+        self.response.out.write(template.render(template_values))
 
 # Change the current app for example from sales to customer support
 class ChangeActiveAppHandler(SessionEnabledHandler):
@@ -447,6 +460,14 @@ class GooglePlusConnect(SessionEnabledHandler):
         self.session[self.CURRENT_USER_SESSION_KEY] = user.email
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(isNewUser))
+
+class ArticleListHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/articles/article_list.html')
+
+class ArticleShowHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/articles/article_show.html')
 
 class AccountListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -753,6 +774,9 @@ routes = [
     ('/workers/add_to_iogrow_leads',AddToIoGrowLeads),
 
     ('/',IndexHandler),
+    ('/blog',BlogHandler),
+    ('/views/articles/list',ArticleListHandler),
+    ('/views/articles/show',ArticleShowHandler),
 
     # Templates Views Routes
     # Accounts Views

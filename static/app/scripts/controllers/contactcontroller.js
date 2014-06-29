@@ -1056,6 +1056,7 @@ $scope.addCustomField = function(customField){
 
       $scope.sendEmail = function(email){
         email.body = $('#some-textarea').val();
+        console.log('---------------I am here--------------');
         console.log(email);
         /*
         to = messages.StringField(2)

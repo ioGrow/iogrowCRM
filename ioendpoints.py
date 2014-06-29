@@ -50,6 +50,7 @@ from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.casestatuses import Casestatus
 from iomodels.crmengine.feedbacks import Feedback
 from iomodels.crmengine.needs import Need,NeedInsertRequest,NeedListResponse,NeedSchema
+from blog import Article,ArticleInsertRequest,ArticleSchema,ArticleListResponse
 #from iomodels.crmengine.emails import Email
 from iomodels.crmengine.tags import Tag,TagSchema,TagListRequest,TagListResponse
 from model import User
@@ -113,7 +114,7 @@ INVERSED_EDGES = {
             'tagged_on': 'tags'
 
          }
-
+ADMIN_EMAILS = ['tedj.meabiou@gmail.com','hakim@iogrow.com']
 
 
 def LISTING_QUERY(query, access, organization, owner, collaborators, order):
@@ -138,6 +139,8 @@ class EntityKeyRequest(messages.Message):
 class ListRequest(messages.Message):
     limit = messages.IntegerField(1)
     pageToken = messages.StringField(2)
+    tags = messages.StringField(3,repeated = True)
+    order = messages.StringField(4)
 
 class NoteInsertRequest(messages.Message):
     about = messages.StringField(1,required=True)
@@ -211,8 +214,7 @@ class EmailRequest(messages.Message):
     bcc = messages.StringField(4)
     subject = messages.StringField(5)
     body = messages.StringField(6)
-    about_kind = messages.StringField(7)
-    about_item = messages.StringField(8)
+    about = messages.StringField(7)
 
 # The message class that defines the Search Request attributes
 class SearchRequest(messages.Message):
@@ -343,6 +345,113 @@ class PermissionInsertRequest(messages.Message):
     about = messages.StringField(1,required=True)
     items = messages.MessageField(PermissionRequest, 2, repeated=True)
 
+
+
+@endpoints.api(
+               name='blogengine',
+               version='v1',
+               description='ioGrow Blog APIs',
+               allowed_client_ids=[
+                                   CLIENT_ID,
+                                   endpoints.API_EXPLORER_CLIENT_ID
+                                   ]
+               )
+class BlogEngineApi(remote.Service):
+
+    ID_RESOURCE = endpoints.ResourceContainer(
+            message_types.VoidMessage,
+            id=messages.StringField(1))
+
+    # Search API
+    @endpoints.method(SearchRequest, SearchResults,
+                        path='search', http_method='POST',
+                        name='search')
+    def blog_search_method(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        organization = str(user_from_email.organization.id())
+        index = search.Index(name="GlobalIndex")
+        #Show only objects where you have permissions
+        query_string = request.q + ' AND (organization:' +organization+ ' AND (access:public OR (owner:'+ user_from_email.google_user_id +' OR collaborators:'+ user_from_email.google_user_id+')))'
+        print query_string
+        search_results = []
+        count = 1
+        if request.limit:
+            limit = int(request.limit)
+        else:
+            limit = 10
+        next_cursor = None
+        if request.pageToken:
+            cursor = search.Cursor(web_safe_string=request.pageToken)
+        else:
+            cursor = search.Cursor(per_result=True)
+        if limit:
+            options = search.QueryOptions(limit=limit,cursor=cursor)
+        else:
+            options = search.QueryOptions(cursor=cursor)
+        query = search.Query(query_string=query_string,options=options)
+        try:
+            if query:
+                result = index.search(query)
+                #total_matches = results.number_found
+                # Iterate over the documents in the results
+                if len(result.results) == limit + 1:
+                    next_cursor = result.results[-1].cursor.web_safe_string
+                else:
+                    next_cursor = None
+                results = result.results[:limit]
+                for scored_document in results:
+                    kwargs = {
+                        "id" : scored_document.doc_id,
+                        "rank" : scored_document.rank
+                    }
+                    for e in scored_document.fields:
+                        if e.name in ["title","type"]:
+                            kwargs[e.name]=e.value
+                    search_results.append(SearchResult(**kwargs))
+        except search.Error:
+            logging.exception('Search failed')
+        return SearchResults(items = search_results,nextPageToken=next_cursor)
+    # articles.insert api
+    @endpoints.method(ArticleInsertRequest, ArticleSchema,
+                      path='articles/insert', http_method='POST',
+                      name='articles.insert')
+    def article_insert_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        if user_from_email.email in ADMIN_EMAILS:
+            return Article.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+        else:
+            raise endpoints.UnauthorizedException('You don\'t have permissions.')
+
+    # articles.list api
+    @endpoints.method(ListRequest, ArticleListResponse,
+                      path='articles/list', http_method='POST',
+                      name='articles.list')
+    def article_list_beta(self, request):
+        return Article.list(
+                            request = request
+                            )
+    # articles.list api
+    @endpoints.method(ID_RESOURCE, ArticleSchema,
+                      path='articles/get', http_method='POST',
+                      name='articles.get')
+    def article_get_beta(self, request):
+        return Article.get_schema(
+                            request = request
+                            )
+
+    # tags.list api v2
+    @endpoints.method(TagListRequest, TagListResponse,
+                      path='tags/list', http_method='POST',
+                      name='tags.list')
+    def blog_tag_list(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Tag.list_by_kind(
+                            user_from_email = user_from_email,
+                            kind = request.about_kind
+                            )
 
 @endpoints.api(
                name='crmengine',
@@ -1010,18 +1119,30 @@ class CrmEngineApi(remote.Service):
         message.subject = request.subject
         message.html = request.body
         message.send()
-        note = Note()
+        parent_key = ndb.Key(urlsafe=request.about)
         note_author = Userinfo()
         note_author.display_name = user.google_display_name
         note_author.photo = user.google_public_profile_photo_url
-        note.author = note_author
-        note.owner = user.google_user_id
-        note.organization =  user.organization
-        note.title = 'Email: '+ request.subject
-        note.content = request.body
-        note.about_kind = request.about_kind
-        note.about_item = request.about_item
-        note.put()
+        note = Note(
+                    owner = user.google_user_id,
+                    organization = user.organization,
+                    author = note_author,
+                    title = 'Email: '+ request.subject,
+                    content = request.body
+                )
+        entityKey_async = note.put_async()
+        entityKey = entityKey_async.get_result()
+        Edge.insert(
+                    start_node = parent_key,
+                    end_node = entityKey,
+                    kind = 'topics',
+                    inverse_edge = 'parents'
+                )
+        EndpointsHelper.update_edge_indexes(
+                                            parent_key = parent_key,
+                                            kind = 'topics',
+                                            indexed_edge = str(entityKey.id())
+                                            )
         return message_types.VoidMessage()
 
     # Events APIs

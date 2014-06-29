@@ -32,7 +32,7 @@ leadservices.factory('Lead', function($http) {
                                   }
                               }
                         }
-                       
+
                     }
                 }
                 if (resp.topics){
@@ -112,10 +112,14 @@ leadservices.factory('Lead', function($http) {
                 }
 
                 document.title = "Lead: " + $scope.lead.firstname +' '+ $scope.lead.lastname ;
-                angular.forEach($scope.lead.emails, function(value, key){
+                console.log('***** i will show emails here ***');
+                console.log($scope.infonodes.emails);
+                angular.forEach($scope.infonodes.emails, function(value, key){
+
                   $scope.email.to = $scope.email.to + value.email + ',';
 
                 });
+                console.log($scope.email.to);
                 $scope.isLoading = false;
                 $scope.renderMaps();
                // Call the method $apply to make the update on the scope
@@ -131,7 +135,8 @@ leadservices.factory('Lead', function($http) {
                 // }
             }else {
                if(resp.code==401){
-                $scope.refreshToken();
+                // $scope.refreshToken();
+                console.log(resp);
                 $scope.isLoading = false;
                 $scope.$apply();
                };
@@ -291,7 +296,7 @@ leadservices.factory('Lead', function($http) {
              $('#addLeadModal').modal('hide');
              $('#errorModal').modal('show');
              if(resp.message=="Invalid grant"){
-                $scope.refreshToken();
+                console.log(resp);
                 $scope.isLoading = false;
                 $scope.$apply();
              };
