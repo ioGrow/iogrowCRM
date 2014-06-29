@@ -2,7 +2,7 @@
  # -*- coding: utf-8 -*-
 from google.appengine.api import search
 from google.appengine.api import memcache
-from apiclient.discovery import build 
+from apiclient.discovery import build
 from apiclient import errors
 import httplib2
 import endpoints
@@ -29,7 +29,7 @@ class OAuth2TokenFromCredentials(OAuth2Token):
         self.credentials = credentials
         super(OAuth2TokenFromCredentials, self).__init__(None, None, None, None)
         self.UpdateFromCredentials()
- 
+
     def UpdateFromCredentials(self):
         self.client_id = self.credentials.client_id
         self.client_secret = self.credentials.client_secret
@@ -39,7 +39,7 @@ class OAuth2TokenFromCredentials(OAuth2Token):
         self.refresh_token = self.credentials.refresh_token
         self.token_expiry = self.credentials.token_expiry
         self._invalid = self.credentials.invalid
- 
+
     def generate_authorize_url(self, *args, **kwargs): raise NotImplementedError
     def get_access_token(self, *args, **kwargs): raise NotImplementedError
     def revoke(self, *args, **kwargs): raise NotImplementedError
@@ -181,7 +181,7 @@ class EndpointsHelper():
         auth_token.authorize(gd_client)
         contact_entry = gd_client.CreateContact(google_contact_schema)
         return contact_entry.id.text
-class scor_new_lead(): 
+class scor_new_lead():
     def predict(predd,tedd) :
         user = User.get_by_email('hakim@iogrow.com')
         credentials=user.google_credentials
@@ -189,6 +189,3 @@ class scor_new_lead():
         service=build('prediction','v1.6',http=http)
         result=service.trainedmodels().predict(project='987765099891',id='7',body={'input':{'csvInstance':['Sofware Engineer','Purchase List']}}).execute()
         return result
-
-
-            

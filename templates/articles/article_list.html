@@ -76,7 +76,7 @@
     <div class="row ">
     <div class="tab-pane">
     <div class="row ">
-      <div class="col-md-12 waterfall" ng-hide="blankStateArticle">
+      <div class="col-md-12" ng-hide="blankStateArticle">
         <div ng-repeat="article in articles" droppable  id="card_<%=$index%>"class="cardElement" ng-drop="dropTag(lead,$index)">
           <div class="detailsSection">
             <div class="head">
@@ -88,7 +88,7 @@
               </div>
               <div class="text">
                 <div class="name">
-                  <a href="/#/articles/show/<%= article.id %>" class="profile-link">
+                  <a href="/blog#/articles/<%= article.id %>" class="profile-link">
                     <%= article.title %>
                   </a>
                 </div>
@@ -292,10 +292,10 @@
     }
     handleUniform();
 
-    $('.waterfall').waterfall({
-        colMinWidth: 300,
-        defaultContainerWidth: 800,
-        autoresize: true
-      });
+    // $('.waterfall').waterfall({
+    //     colMinWidth: 300,
+    //     defaultContainerWidth: 800,
+    //     autoresize: true
+    //   });
 $('.textfill').textfill({debug: true, maxFontPixels: 16});
 </script>

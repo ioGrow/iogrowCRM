@@ -114,7 +114,7 @@ INVERSED_EDGES = {
             'tagged_on': 'tags'
 
          }
-
+ADMIN_EMAILS = ['tedj.meabiou@gmail.com','hakim@iogrow.com']
 
 
 def LISTING_QUERY(query, access, organization, owner, collaborators, order):
@@ -417,16 +417,28 @@ class BlogEngineApi(remote.Service):
                       name='articles.insert')
     def article_insert_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        return Article.insert(
+        if user_from_email.email in ADMIN_EMAILS:
+            return Article.insert(
                             user_from_email = user_from_email,
                             request = request
                             )
-    # articles.insert api
+        else:
+            raise endpoints.UnauthorizedException('You don\'t have permissions.')
+
+    # articles.list api
     @endpoints.method(ListRequest, ArticleListResponse,
                       path='articles/list', http_method='POST',
                       name='articles.list')
     def article_list_beta(self, request):
         return Article.list(
+                            request = request
+                            )
+    # articles.list api
+    @endpoints.method(ID_RESOURCE, ArticleSchema,
+                      path='articles/get', http_method='POST',
+                      name='articles.get')
+    def article_get_beta(self, request):
+        return Article.get_schema(
                             request = request
                             )
 

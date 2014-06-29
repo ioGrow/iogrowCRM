@@ -16,9 +16,9 @@ app.config(['$routeProvider', function($routeProvider) {
       when('/articles/', {
         controller: 'ArticleListCtrl',
         templateUrl:'/views/articles/list'
-      }).when('/accounts/show/:accountId', {
-        controller: 'AccountShowCtrl',
-        templateUrl:'/views/accounts/show'
+      }).when('/articles/:articleId', {
+        controller: 'ArticleShowCtrl',
+        templateUrl:'/views/articles/show'
       }).when('/accounts/new', {
         controller: 'AccountNewCtrl',
         templateUrl:'/views/accounts/new'
