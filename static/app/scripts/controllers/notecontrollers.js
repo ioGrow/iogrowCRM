@@ -144,6 +144,50 @@ app.controller('NoteShowController',['$scope','$filter','$route','Auth','Note','
                    };
       Contributor.list($scope,params);
       };
+  // lebdiri arezki 28-06-21-014  inline edite note.title
+  $scope.inlinePatch=function(kind,edge,name,id,value){
+    var params={
+      'id':id,
+      'title':value
+    };
+    Note.patch($scope,params);
+   
+
+  };
+
+  // lebdiri arezki 28-06-21-014 add modale
+  $scope.editNote = function(){
+      $scope.NewTitle=$scope.note.title;
+      $('#EditNoteModal').modal('show');
+
+     };
+  $scope.NoteUpdatedFromModal=function(kind,edge,name,id,value){
+    console.log(value);
+    var params={
+      'id':id,
+      'title':value
+    };
+    Note.patch($scope,params);
+    $scope.note.title=$scope.NewTitle;
+
+  };
+  $scope.editbeforedelete = function(){
+    
+      $('#BeforedeleteNote').modal('show');
+
+     };  
+
+  $scope.deletenote = function(){
+
+    var params={'entityKey':$scope.note.entityKey};
+    Note.delete($scope,params);
+    $('#BeforedeleteNote').modal('hide');
+     
+  
+ 
+
+
+     };
 
     // Google+ Authentication
     Auth.init($scope);

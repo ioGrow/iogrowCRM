@@ -42,7 +42,7 @@
       <div class="showPage custom-show margin-bottom-15  col-md-12">
         <span class="page-meta pull-right">
           <i class="icon-pencil">
-            <a ng-click="editaccount()" class="btn-link addAnotherPhone" data-toggle="modal">
+            <a ng-click="editNote()" class="btn-link addAnotherPhone" data-toggle="modal">
               Edit
             </a>
           </i>
@@ -52,7 +52,11 @@
             </a>
           </i>
         </span>
-        <h2 class="note-title"><%= note.title%></h2>
+        <h2 class="note-title">
+          <a  editable-text=" note.title" onbeforesave="inlinePatch('Note','', 'title',note.id,$data)">
+            <%= note.title%>
+          </a>
+        </h2>
         <p>Posted by <%=note.created_by.display_name%></p>
 
         <div class="row margin-bottom-10">
@@ -94,8 +98,8 @@
                       <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="comment.content"></textarea>
                     </div>
                     <div class="pull-right">
-                      <input ng-hide="isLoading" ng-click="addComment(comment)"  type="submit" class="btn green" value="Add comment">
-                      <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                      <input  ng-click="addComment(comment)" ng-disabled="!comment.content"  type="submit" class="btn green" value="Add comment">
+                     
                     </div>
                   </form>
               </div>
@@ -209,6 +213,57 @@
 </div>
 <!--HKA 19.11.2013 END Span who is involved -->
 
+<!-- lebdiri arezki 28-06-2013 add edit modale added -->
+<div id="EditNoteModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{_("Edit Note")}}</h3>
+            </div>
+            <div class="modal-body">
+                <form id="editNote" name="editnote"  class="form-horizontal">
+                    <div class="form-group">
+                        <label  class="required col-md-3 control-label">{{_("Title")}} *</label>
 
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" required id="id_note.title"  ng-model="NewTitle">
+
+                        </div>
+                    </div>
+                   
+                </form>
+            </div>
+            <div class="modal-footer">
+                    <button class="btn" ng-click="NoteNotUpdated()" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
+                    <button  type="submit" ng-click="NoteUpdatedFromModal('Note','', 'title',note.id,NewTitle)" class="btn btn-primary addContactNow" data-dismiss="modal" aria-hidden="true">{{_("Save")}} </button>
+            </div>
+        </div>
+    </div>
 </div>
+<!-- arezki lebdiri 29-06-2014  delete note-->
+<div id="BeforedeleteNote" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+  <div class="modal-content">
+      <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h3 id="myModalLabel" class="modal-title">Delete Note</h3>
+            </div>
+            <div class="modal-body">
+               <form id="seletesho" name="deletesho" class="form-horizontal">
+
+
+                <p>{{_("Are you sure you want to delete")}} :  <%=note.title%>  .</p>
+               </form>
+            </div>
+            <div class="modal-footer">
+              <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+
+              <input  ng-click="deletenote()" type="submit" class="btn red" value="Delete this note" data-dismiss="modal" aria-hidden="true">
+              <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
+            </div>
+            
+             </div>
+             </div>
+     </div>
