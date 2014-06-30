@@ -490,9 +490,9 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.documentpagination = {};
      $scope.documentCurrentPage=01;
      $scope.documentpages=[];
-    $scope.selectedTab = 2;
-    $scope.sharing_with = [];
-    $scope.statuses = [
+     $scope.selectedTab = 2;
+     $scope.sharing_with = [];
+     $scope.statuses = [
       {value: 'Home', text: 'Home'},
       {value: 'Work', text: 'Work'},
       {value: 'Mob', text: 'Mob'},
@@ -537,10 +537,14 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
 
       // HKA 08.05.2014 Delete infonode
 
-  $scope.deleteInfonode = function(entityKey,kind){
+  $scope.deleteInfonode = function(entityKey,kind,val){
     var params = {'entityKey':entityKey,'kind':kind};
-
     InfoNode.delete($scope,params);
+    var str=$scope.email.to
+    var newstr=str.replace(val+",","");
+    $scope.email.to=newstr;
+    console.log(val+",")
+    console.log($scope.email.to);
 
   };
 
@@ -578,7 +582,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.hilightTopic = function(){
         console.log('Should higll');
        $('#topic_0').effect( "bounce", "slow" );
-       $('#topic_0 .message').effect("highlight","slow");
+       $('#topic_0.message').effect("highlight","slow");
      }
 
 
@@ -619,14 +623,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
               }
               Permission.insert($scope,params);
           }
-
-
           $scope.sharing_with = [];
-
-
         }
-
-
      };
 
 
@@ -782,12 +780,17 @@ $scope.addEmail = function(email){
             'fields':[
                 {
                   "field": "email",
-                  "value": email.email
+                  "value": email
                 }
             ]
   };
-  InfoNode.insert($scope,params);
-  $scope.email={};
+  console.log(email)
+  // lebdiri arezki 29-06-2014 control add email 
+  if(email){
+    InfoNode.insert($scope,params);
+    $scope.email.to = $scope.email.to + email + ',';
+  }
+  $scope.newEmail=null;
   $scope.showEmailForm = false;
   };
 
@@ -892,6 +895,7 @@ $scope.editintro = function() {
         Email.send($scope,params);
       };
 //HKA
+$scope.$watch("email.to",function(){console.log($scope.email.to)});
   $scope.editbeforedelete = function(){
      $('#BeforedeleteLead').modal('show');
    };
