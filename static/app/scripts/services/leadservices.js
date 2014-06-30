@@ -135,7 +135,8 @@ leadservices.factory('Lead', function($http) {
                 // }
             }else {
                if(resp.code==401){
-                $scope.refreshToken();
+                // $scope.refreshToken();
+                console.log(resp);
                 $scope.isLoading = false;
                 $scope.$apply();
                };
@@ -221,7 +222,6 @@ leadservices.factory('Lead', function($http) {
      $scope.isLoading = true;
      $scope.$apply();
       gapi.client.crmengine.leads.listv2(params).execute(function(resp) {
-
               if(!resp.code){
 
                   angular.forEach(resp.items, function(item){
@@ -253,7 +253,7 @@ leadservices.factory('Lead', function($http) {
                 $scope.$apply();
                };
               }
-              console.log('gapi #end_execute');
+
         });
 
 
@@ -295,7 +295,7 @@ leadservices.factory('Lead', function($http) {
              $('#addLeadModal').modal('hide');
              $('#errorModal').modal('show');
              if(resp.message=="Invalid grant"){
-                $scope.refreshToken();
+                console.log(resp);
                 $scope.isLoading = false;
                 $scope.$apply();
              };

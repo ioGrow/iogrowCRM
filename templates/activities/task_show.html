@@ -237,7 +237,7 @@
 
                        <div class="pull-right">
 
-                        <input  ng-click="addComment(comment)" type="submit" class="btn green" value="Add comment">
+                        <input  ng-disabled="isLoading || !comment.content" ng-click="addComment(comment)" type="submit" class="btn green" value="Add comment">
 
                         </div>
                                   <div class="clearfix"></div>
