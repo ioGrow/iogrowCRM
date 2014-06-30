@@ -964,7 +964,7 @@
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-                  <input ng-hide="isLoading" ng-click="addAddress(address)" ng-disabled="!(address.country || address.postal_code || address.state || address.city || address.street)" type="submit" class="btn green" value="{{_('Add this address')}}">
+                  <input ng-hide="isLoading" ng-click="addAddress(address)" ng-disabled="(!address.country || !address.state || !address.city || !address.street)" type="submit" class="btn green" value="{{_('Add this address')}}">
                   <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
               </div>
                 </form>

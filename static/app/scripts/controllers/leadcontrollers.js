@@ -543,8 +543,6 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
     var str=$scope.email.to
     var newstr=str.replace(val+",","");
     $scope.email.to=newstr;
-    console.log(val+",")
-    console.log($scope.email.to);
 
   };
 
@@ -895,7 +893,6 @@ $scope.editintro = function() {
         Email.send($scope,params);
       };
 //HKA
-$scope.$watch("email.to",function(){console.log($scope.email.to)});
   $scope.editbeforedelete = function(){
      $('#BeforedeleteLead').modal('show');
    };
