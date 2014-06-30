@@ -1563,6 +1563,7 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
       // new Contact
      $scope.save = function(contact){
           var delayInsert = false;
+          if(contact.firstname && contact.lastname){
           var params ={
                         'firstname':contact.firstname,
                         'lastname':contact.lastname,
@@ -1596,6 +1597,7 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
             }
             Contact.insert($scope,params);
           }
+        }
 
       };
       $scope.contactInserted = function(resp){
