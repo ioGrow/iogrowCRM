@@ -103,7 +103,7 @@ class BaseHandler(webapp2.RequestHandler):
                       'is_business_user':is_business_user,
                       'ME':user.google_user_id,
                       'active_app':active_app,
-                      'appsstart-early-bird-account':applications,
+                      'apps':applications,
                       'tabs':tabs
                       }
             template = jinja_environment.get_template(template_name)
