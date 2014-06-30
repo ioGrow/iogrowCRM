@@ -30,6 +30,7 @@ import model
 from iomodels.crmengine.contacts import Contact
 from iomodels.crmengine.leads import LeadInsertRequest,Lead
 import iomessages
+from blog import Article
 
 jinja_environment = jinja2.Environment(
   loader=jinja2.FileSystemLoader(os.getcwd()),
@@ -212,6 +213,12 @@ class BlogHandler(BaseHandler,SessionEnabledHandler):
     def get(self):
         template_values = {}
         template = jinja_environment.get_template('templates/blog/blog_base.html')
+        self.response.out.write(template.render(template_values))
+class PublicArticlePageHandler(BaseHandler,SessionEnabledHandler):
+    def get(self,id):
+        article = Article.get_schema(id=id)
+        template_values = {'article':article}
+        template = jinja_environment.get_template('templates/blog/public_article_show.html')
         self.response.out.write(template.render(template_values))
 
 # Change the current app for example from sales to customer support
@@ -775,6 +782,7 @@ routes = [
 
     ('/',IndexHandler),
     ('/blog',BlogHandler),
+    (r'/blog/articles/(\d+)', PublicArticlePageHandler),
     ('/views/articles/list',ArticleListHandler),
     ('/views/articles/show',ArticleShowHandler),
 

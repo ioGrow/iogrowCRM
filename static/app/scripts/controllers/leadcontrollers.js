@@ -233,13 +233,13 @@ $scope.listleads = function(){
 $scope.addNewtag = function(tag){
        var params = {
                           'name': tag.name,
-                          'about_kind':'Lead',
+                          'about_kind':'Blog',
                           'color':tag.color.color
                       }  ;
        Tag.insert($scope,params);
         $scope.tag.name='';
         $scope.tag.color= {'name':'green','color':'#BBE535'};
-        var paramsTag = {'about_kind':'Lead'};
+        var paramsTag = {'about_kind':'Blog'};
         Tag.list($scope,paramsTag);
 
      }
@@ -1173,7 +1173,7 @@ $scope.deletelead = function(){
     };
 
    $scope.listTags=function(){
-      var paramsTag = {'about_kind':'Lead'}
+      var paramsTag = {'about_kind':'Blog'}
       Tag.list($scope,paramsTag);
      };
 

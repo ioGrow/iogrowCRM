@@ -1,5 +1,5 @@
 from google.appengine.ext import ndb
-from google.appengine.api import search 
+from google.appengine.api import search
 from endpoints_proto_datastore.ndb import EndpointsModel
 from protorpc import messages
 from iograph import Edge
@@ -17,7 +17,7 @@ class TagListRequest(messages.Message):
 
 class TagListResponse(messages.Message):
     items = messages.MessageField(TagSchema, 1, repeated=True)
-        
+
 
 class Tag(EndpointsModel):
 
@@ -40,11 +40,12 @@ class Tag(EndpointsModel):
                             inverse_edge = 'tagged_on'
                         )
         edge = edge_key.get()
-        EndpointsHelper.update_edge_indexes(
-                                            parent_key = start_node,
-                                            kind = 'tags',
-                                            indexed_edge = str(end_node.id())
-                                        )
+        if end_node.get().about_kind != 'Blog':
+            EndpointsHelper.update_edge_indexes(
+                                                parent_key = start_node,
+                                                kind = 'tags',
+                                                indexed_edge = str(end_node.id())
+                                            )
 
         return TagSchema(
                         edgeKey = edge.key.urlsafe(),
@@ -89,4 +90,3 @@ class Tag(EndpointsModel):
                                         )
                             )
         return TagListResponse(items = tag_list)
-
