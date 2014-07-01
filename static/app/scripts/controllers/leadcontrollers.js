@@ -507,6 +507,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                         };
 
       // What to do after authentication
+      console.log("check navigator infos");
+      console.log(navigator.appVersion);
       $scope.runTheProcess = function(){
             var params = {
                           'id':$route.current.params.leadId,
