@@ -614,7 +614,7 @@
         <div class="col-md-12">
           <div class="portlet showPage rightCardContent">
                 <div class="portlet-title line">
-                  <div class="caption"> <i class="fa fa-check"></i>Related Tasks </div>
+                  <div class="caption"> <i class="fa fa-check"></i>Tasks </div>
 
                 </div>
                 <div class="newContactform portlet-body" id="chats">
@@ -680,12 +680,12 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12 margin-bottom-10">
-                                          <datetimepick ng-model='ioevent.starts_at' placeholder="From" class="new-task-date" label-format='MMM d, h:mm a'></datetimepick>
+                                          <datetimepick icon-class='fa fa-calendar'  ng-model='ioevent.starts_at' placeholder="From" class="new-task-date" label-format='MMM d, h:mm a'></datetimepick>
                                     </div>
                                 </div>   
                                 <div class="row">
                                     <div class="col-md-12 margin-bottom-10">
-                                          <datetimepick ng-model='ioevent.ends_at' placeholder="To" class="new-task-date" label-format='MMM d, h:mm a'></datetimepick>
+                                          <datetimepick  icon-class='fa fa-calendar' ng-model='ioevent.ends_at' placeholder="To" class="new-task-date" label-format='MMM d, h:mm a'></datetimepick>
                                     </div>
                                 </div>  
                                 <div class="row">
@@ -702,7 +702,7 @@
                           </div>
                       </div>      
                   </form>
-                   <ul id="tasks" class="list-unstyled lead_related_events">
+                   <ul id="tasks" class="list-unstyled lead_related_events" ng-hide="newEventform">
                       <li ng-repeat="event in events" id="event_<%=$index%>">
                         <input value="check1" type="checkbox">
                         <span>
