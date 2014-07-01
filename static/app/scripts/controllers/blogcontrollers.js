@@ -38,19 +38,9 @@ app.controller('ArticleListCtrl', ['$scope','$filter','Auth','Article','Lead','L
          {'name':'purple','color':'#E874D6'},
          ];
          $scope.tag.color= {'name':'green','color':'#BBE535'};
-         if (chrome.app.isInstalled) {
-                console.log('*************** YES *************');
-                $scope.extensionInstalled = true;
-                $scope.$apply();
-          }else{
-                console.log('NOOOOO');
-                console.log(chrome.app);
-                $scope.extensionInstalled = false;
-          }
 
       // What to do after authentication
         $scope.runTheProcess = function(){
-            console.log('in run the process');
             var params = {'order' : $scope.order,'limit':20};
             Article.list($scope,params);
 
@@ -59,9 +49,7 @@ app.controller('ArticleListCtrl', ['$scope','$filter','Auth','Article','Lead','L
 
 
         };
-      $scope.installChromeExtension = function(){
-          chrome.webstore.install();
-      }
+
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
@@ -219,30 +207,30 @@ app.controller('ArticleListCtrl', ['$scope','$filter','Auth','Article','Lead','L
       HKA 19.02.2014  tags
 ***************************************************************************************/
 $scope.listTags=function(){
-      var paramsTag = {'about_kind':'Lead'}
+      var paramsTag = {'about_kind':'Blog'}
       Tag.list($scope,paramsTag);
      };
 
 $scope.edgeInserted = function () {
-       $scope.listleads();
+       $scope.listArticles();
      };
-$scope.listleads = function(){
+$scope.listArticles = function(){
   var params = { 'order': $scope.order,
-                        'limit':6}
-          Lead.list($scope,params);
+                        'limit':20}
+          Article.list($scope,params);
 };
 
 
 $scope.addNewtag = function(tag){
        var params = {
                           'name': tag.name,
-                          'about_kind':'Lead',
+                          'about_kind':'Blog',
                           'color':tag.color.color
                       }  ;
        Tag.insert($scope,params);
         $scope.tag.name='';
         $scope.tag.color= {'name':'green','color':'#BBE535'};
-        var paramsTag = {'about_kind':'Lead'};
+        var paramsTag = {'about_kind':'Blog'};
         Tag.list($scope,paramsTag);
 
      }
@@ -297,7 +285,7 @@ $scope.selectTag= function(tag,index,$event){
                         'limit':20
          };
          $scope.isFiltering = true;
-         Lead.list($scope,params);
+         Article.list($scope,params);
 
   };
 
@@ -311,7 +299,7 @@ $scope.unselectAllTags= function(){
      };
 //HKA 19.02.2014 When delete tag render account list
  $scope.tagDeleted = function(){
-    $scope.listleads();
+    $scope.listArticles();
 
  };
 
@@ -396,11 +384,11 @@ $scope.addTags=function(){
         $scope.draggedTag=tag;
         // $scope.$apply();
       };
-      $scope.dropTag=function(lead,index){
+      $scope.dropTag=function(article,index){
         var items = [];
 
         var params = {
-              'parent': lead.entityKey,
+              'parent': article.entityKey,
               'tag_key': $scope.draggedTag.entityKey
         };
         $scope.draggedTag=null;
@@ -410,12 +398,12 @@ $scope.addTags=function(){
 
       };
       $scope.tagattached=function(tag,index){
-          if ($scope.leads[index].tags == undefined){
-            $scope.leads[index].tags = [];
+          if ($scope.articles[index].tags == undefined){
+            $scope.articles[index].tags = [];
           }
-          var ind = $filter('exists')(tag, $scope.leads[index].tags);
+          var ind = $filter('exists')(tag, $scope.articles[index].tags);
            if (ind == -1) {
-                $scope.leads[index].tags.push(tag);
+                $scope.articles[index].tags.push(tag);
                 var card_index = '#card_'+index;
                 $(card_index).removeClass('over');
             }else{
@@ -557,7 +545,11 @@ app.controller('ArticleShowCtrl', ['$scope','$filter', '$route','Auth','Article'
           Article.get($scope,params);
        };
 
-       $scope.runTheProcess();
+        $scope.articleLoaded = function(){
+            
+        }
+        $scope.runTheProcess();
+
 
 
 }]);
