@@ -492,6 +492,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.documentpages=[];
     $scope.selectedTab = 2;
     $scope.sharing_with = [];
+     $scope.newTaskform=false;
+     $scope.newTask={};
     $scope.statuses = [
       {value: 'Home', text: 'Home'},
       {value: 'Work', text: 'Work'},
@@ -638,27 +640,36 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      //$('#addLeadModal').modal('show');
   //HKA 09.11.2013 Add a new Task
    $scope.addTask = function(task){
+        if ($scope.newTaskform==false) {
+          $scope.newTaskform=true;
+           }else{
+            if (task.title!=null) {
+                    //  $('#myModal').modal('hide');
+            if (task.due){
 
-        $('#myModal').modal('hide');
-        if (task.due){
+                var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
 
-            var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
-
-            params ={'title': task.title,
-                      'due': dueDate,
-                      'parent': $scope.lead.entityKey
-            }
+                params ={'title': task.title,
+                          'due': dueDate,
+                          'parent': $scope.lead.entityKey
+                }
 
 
+            }else{
+                params ={'title': task.title,
+                         'parent': $scope.lead.entityKey
+                       }
+            };
+
+            Task.insert($scope,params);
+            $scope.newTask={};
+            $scope.newTaskform=false;
         }else{
-            params ={'title': task.title,
-                     'parent': $scope.lead.entityKey
-                   }
-        };
-
-        Task.insert($scope,params);
-        $scope.task={};
+            $scope.newTask={};
+            $scope.newTaskform=false;
+      }
      }
+   }
 
      $scope.hilightTask = function(){
         console.log('Should higll');
