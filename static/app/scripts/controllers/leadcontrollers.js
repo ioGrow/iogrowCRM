@@ -490,9 +490,12 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.documentpagination = {};
      $scope.documentCurrentPage=01;
      $scope.documentpages=[];
-    $scope.selectedTab = 2;
-    $scope.sharing_with = [];
-    $scope.statuses = [
+     $scope.selectedTab = 2;
+     $scope.sharing_with = [];
+     $scope.newTaskform=false;
+     $scope.newEventform=false;
+     $scope.newTask={};
+     $scope.statuses = [
       {value: 'Home', text: 'Home'},
       {value: 'Work', text: 'Work'},
       {value: 'Mob', text: 'Mob'},
@@ -504,6 +507,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                         };
 
       // What to do after authentication
+      console.log("check navigator infos");
+      console.log(navigator.appVersion);
       $scope.runTheProcess = function(){
             var params = {
                           'id':$route.current.params.leadId,
@@ -638,27 +643,36 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      //$('#addLeadModal').modal('show');
   //HKA 09.11.2013 Add a new Task
    $scope.addTask = function(task){
+        if ($scope.newTaskform==false) {
+          $scope.newTaskform=true;
+           }else{
+            if (task.title!=null) {
+                    //  $('#myModal').modal('hide');
+            if (task.due){
 
-        $('#myModal').modal('hide');
-        if (task.due){
+                var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
 
-            var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
-
-            params ={'title': task.title,
-                      'due': dueDate,
-                      'parent': $scope.lead.entityKey
-            }
+                params ={'title': task.title,
+                          'due': dueDate,
+                          'parent': $scope.lead.entityKey
+                }
 
 
+            }else{
+                params ={'title': task.title,
+                         'parent': $scope.lead.entityKey
+                       }
+            };
+
+            Task.insert($scope,params);
+            $scope.newTask={};
+            $scope.newTaskform=false;
         }else{
-            params ={'title': task.title,
-                     'parent': $scope.lead.entityKey
-                   }
-        };
-
-        Task.insert($scope,params);
-        $scope.task={};
+            $scope.newTask={};
+            $scope.newTaskform=false;
+      }
      }
+   }
 
      $scope.hilightTask = function(){
         console.log('Should higll');
@@ -676,32 +690,40 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      }
  //HKA 10.11.2013 Add event
  $scope.addEvent = function(ioevent){
+           if ($scope.newEventform==false) {
+                $scope.newEventform=true;
+           }else{
+            if (ioevent.title!=null) {
+                    var params ={}
 
-        $('#newEventModal').modal('hide');
-        var params ={}
+                if (ioevent.starts_at){
+                    if (ioevent.ends_at){
+                      params ={'title': ioevent.title,
+                              'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                              'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                              'where': ioevent.where,
+                              'parent':$scope.lead.entityKey
+                      }
 
-        if (ioevent.starts_at){
-            if (ioevent.ends_at){
-              params ={'title': ioevent.title,
-                      'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'where': ioevent.where,
-                      'parent':$scope.lead.entityKey
-              }
+                    }else{
+                      params ={
+                        'title': ioevent.title,
+                              'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                              'where': ioevent.where,
+                              'parent':$scope.lead.entityKey
+                      }
+                    }
 
-            }else{
-              params ={
-                'title': ioevent.title,
-                      'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'where': ioevent.where,
-                      'parent':$scope.lead.entityKey
-              }
-            }
-
-            Event.insert($scope,params);
+                    Event.insert($scope,params);
+                    $scope.ioevent={};
+                    $scope.newEventform=false;
+                  }
+        }else{
             $scope.ioevent={};
-          };
+            $scope.newEventform=false;
+      }
      }
+    }
      $scope.hilightEvent = function(){
         console.log('Should higll');
         $('#event_0').effect("highlight","slow");
