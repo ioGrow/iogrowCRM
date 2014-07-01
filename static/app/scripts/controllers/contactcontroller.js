@@ -689,6 +689,8 @@ $scope.listTags=function(){
       $scope.share = function(slected_memeber){
         console.log('permissions.insert share');
         console.log(slected_memeber);
+        console.log("ssssssssss");
+        console.log($scope.contact.id);
         $scope.$watch($scope.contact.access, function() {
          var body = {'access':$scope.contact.access};
          var id = $scope.contact.id;

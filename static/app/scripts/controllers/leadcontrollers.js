@@ -591,9 +591,11 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.share = function(slected_memeber){
         console.log('permissions.insert share');
         console.log(slected_memeber);
+        console.log("ssssssssss");
+        console.log($scope.lead.id);
         $scope.$watch($scope.lead.access, function() {
          var body = {'access':$scope.lead.access};
-         var id = $scope.account.id;
+         var id = $scope.lead.id;
          var params ={'id':id,
                       'access':$scope.lead.access}
          Lead.patch($scope,params);
