@@ -114,7 +114,7 @@ INVERSED_EDGES = {
             'tagged_on': 'tags'
 
          }
-ADMIN_EMAILS = ['tedj.meabiou@gmail.com','hakim@iogrow.com']
+ADMIN_EMAILS = ['tedj.meabiou@gmail.com','hakim@iogrow.com','mezianeh3@gmail.com']
 
 
 def LISTING_QUERY(query, access, organization, owner, collaborators, order):
