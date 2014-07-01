@@ -490,11 +490,12 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.documentpagination = {};
      $scope.documentCurrentPage=01;
      $scope.documentpages=[];
-    $scope.selectedTab = 2;
-    $scope.sharing_with = [];
+     $scope.selectedTab = 2;
+     $scope.sharing_with = [];
      $scope.newTaskform=false;
+     $scope.newEventform=false;
      $scope.newTask={};
-    $scope.statuses = [
+     $scope.statuses = [
       {value: 'Home', text: 'Home'},
       {value: 'Work', text: 'Work'},
       {value: 'Mob', text: 'Mob'},
@@ -687,32 +688,40 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      }
  //HKA 10.11.2013 Add event
  $scope.addEvent = function(ioevent){
+           if ($scope.newEventform==false) {
+                $scope.newEventform=true;
+           }else{
+            if (ioevent.title!=null) {
+                    var params ={}
 
-        $('#newEventModal').modal('hide');
-        var params ={}
+                if (ioevent.starts_at){
+                    if (ioevent.ends_at){
+                      params ={'title': ioevent.title,
+                              'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                              'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                              'where': ioevent.where,
+                              'parent':$scope.lead.entityKey
+                      }
 
-        if (ioevent.starts_at){
-            if (ioevent.ends_at){
-              params ={'title': ioevent.title,
-                      'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'where': ioevent.where,
-                      'parent':$scope.lead.entityKey
-              }
+                    }else{
+                      params ={
+                        'title': ioevent.title,
+                              'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                              'where': ioevent.where,
+                              'parent':$scope.lead.entityKey
+                      }
+                    }
 
-            }else{
-              params ={
-                'title': ioevent.title,
-                      'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'where': ioevent.where,
-                      'parent':$scope.lead.entityKey
-              }
-            }
-
-            Event.insert($scope,params);
+                    Event.insert($scope,params);
+                    $scope.ioevent={};
+                    $scope.newEventform=false;
+                  }
+        }else{
             $scope.ioevent={};
-          };
+            $scope.newEventform=false;
+      }
      }
+    }
      $scope.hilightEvent = function(){
         console.log('Should higll');
         $('#event_0').effect("highlight","slow");
