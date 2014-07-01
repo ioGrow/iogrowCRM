@@ -13,6 +13,10 @@ app.run(function(editableOptions) {
 app.config(['$routeProvider', function($routeProvider) {
      $routeProvider.
      // Accounts
+      when('/blog', {
+        controller: 'ArticleListCtrl',
+        templateUrl:'/views/articles/list'
+      }).
       when('/articles/', {
         controller: 'ArticleListCtrl',
         templateUrl:'/views/articles/list'

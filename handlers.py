@@ -221,6 +221,11 @@ class PublicArticlePageHandler(BaseHandler,SessionEnabledHandler):
         template = jinja_environment.get_template('templates/blog/public_article_show.html')
         self.response.out.write(template.render(template_values))
 
+class PublicSupport(BaseHandler,SessionEnabledHandler):
+    def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('templates/blog/public_support.html')
+        self.response.out.write(template.render(template_values))
 # Change the current app for example from sales to customer support
 class ChangeActiveAppHandler(SessionEnabledHandler):
     def get(self,appid):
@@ -782,6 +787,7 @@ routes = [
 
     ('/',IndexHandler),
     ('/blog',BlogHandler),
+    ('/support',PublicSupport),
     (r'/blog/articles/(\d+)', PublicArticlePageHandler),
     ('/views/articles/list',ArticleListHandler),
     ('/views/articles/show',ArticleShowHandler),
