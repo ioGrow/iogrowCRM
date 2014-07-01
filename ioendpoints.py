@@ -114,7 +114,7 @@ INVERSED_EDGES = {
             'tagged_on': 'tags'
 
          }
-ADMIN_EMAILS = ['tedj.meabiou@gmail.com','hakim@iogrow.com']
+ADMIN_EMAILS = ['tedj.meabiou@gmail.com','hakim@iogrow.com','mezianeh3@gmail.com']
 
 
 def LISTING_QUERY(query, access, organization, owner, collaborators, order):
@@ -439,15 +439,44 @@ class BlogEngineApi(remote.Service):
                       name='articles.get')
     def article_get_beta(self, request):
         return Article.get_schema(
-                            request = request
+                            id = request.id
                             )
 
+    # tags.attachtag api v2
+    @endpoints.method(iomessages.AddTagSchema, TagSchema,
+                      path='tags/attach', http_method='POST',
+                      name='tags.attach')
+    def attach_tag(self, request):
+        user_from_email = User.get_by_email('tedj.meabiou@gmail.com')
+        return Tag.attach_tag(
+                                user_from_email = user_from_email,
+                                request = request
+                            )
+    # tags.delete api
+    @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
+                      path='tags', http_method='DELETE',
+                      name='tags.delete')
+    def delete_tag(self, request):
+        user_from_email = User.get_by_email('tedj.meabiou@gmail.com')
+        tag_key = ndb.Key(urlsafe=request.entityKey)
+        Edge.delete_all(start_node=tag_key)
+        tag_key.delete()
+        return message_types.VoidMessage()
+
+    # tags.insert api
+    @Tag.method(path='tags', http_method='POST', name='tags.insert')
+    def TagInsert(self, my_model):
+        user_from_email = User.get_by_email('tedj.meabiou@gmail.com')
+        my_model.organization = user_from_email.organization
+        my_model.owner = user_from_email.google_user_id
+        my_model.put()
+        return my_model
     # tags.list api v2
     @endpoints.method(TagListRequest, TagListResponse,
                       path='tags/list', http_method='POST',
                       name='tags.list')
     def blog_tag_list(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
+        user_from_email = User.get_by_email('tedj.meabiou@gmail.com')
         return Tag.list_by_kind(
                             user_from_email = user_from_email,
                             kind = request.about_kind

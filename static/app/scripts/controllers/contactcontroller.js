@@ -1067,14 +1067,15 @@ $scope.addCustomField = function(customField){
         about_kind = messages.StringField(7)
         about_item = messages.StringField(8)
         */
+
         var params = {
                   'to': email.to,
                   'cc': email.cc,
                   'bcc': email.bcc,
                   'subject': email.subject,
                   'body': email.body,
-                  'about_item':$scope.contact.id,
-                  'about_kind':'Contact' };
+                  'about':$scope.contact.entityKey
+                   };
 
         Email.send($scope,params);
       };

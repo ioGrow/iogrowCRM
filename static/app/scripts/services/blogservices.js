@@ -14,6 +14,7 @@ blogservices.factory('Article', function($http) {
                 $scope.article = resp;
                 $scope.isContentLoaded = true;
                 $scope.isLoading = false;
+                $scope.articleLoaded();
                 $scope.$apply();
             }else {
               alert(resp.message);
@@ -173,7 +174,7 @@ blogservices.factory('Tag', function($http) {
   Tag.attach = function($scope,params,index){
 
       $scope.isLoading = true;
-      gapi.client.crmengine.tags.attach(params).execute(function(resp) {
+      gapi.client.blogengine.tags.attach(params).execute(function(resp) {
 
          if(!resp.code){
             $scope.isLoading = false;
@@ -184,7 +185,7 @@ blogservices.factory('Tag', function($http) {
          // window.location.replace('#/accounts/show/'+resp.id);
 
          }else{
-          console.log(resp.code);
+          console.log(resp);
          }
       });
   };
@@ -216,7 +217,7 @@ blogservices.factory('Tag', function($http) {
    Tag.insert = function($scope,params){
 
       $scope.isLoading = true;
-      gapi.client.crmengine.tags.insert(params).execute(function(resp) {
+      gapi.client.blogengine.tags.insert(params).execute(function(resp) {
 
          if(!resp.code){
 
@@ -236,7 +237,7 @@ blogservices.factory('Tag', function($http) {
     Tag.patch = function($scope,params){
       $scope.isLoading = true;
               console.log('task service');
-      gapi.client.crmengine.tags.patch(params).execute(function(resp) {
+      gapi.client.blogengine.tags.patch(params).execute(function(resp) {
         console.log(params);
         console.log(resp);
           if(!resp.code){
@@ -260,7 +261,7 @@ blogservices.factory('Tag', function($http) {
   Tag.delete = function($scope,params){
 
 
-    gapi.client.crmengine.tags.delete(params).execute(function(resp){
+    gapi.client.blogengine.tags.delete(params).execute(function(resp){
       $scope.listTags();
       $scope.tagDeleted();
     $scope.$apply();

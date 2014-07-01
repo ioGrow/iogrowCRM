@@ -23,7 +23,6 @@ class AuthorSchema(messages.Message):
     display_name = messages.StringField(2)
     google_public_profile_url = messages.StringField(3)
     photo = messages.StringField(4)
-    edgeKey = messages.StringField(5)
 
 class ArticleInsertRequest(messages.Message):
     title = messages.StringField(1)
@@ -150,8 +149,8 @@ class Article():
         my_index.put(my_document)
 
     @classmethod
-    def get_schema(cls,request):
-        article = Node.get_by_id(int(request.id))
+    def get_schema(cls,id):
+        article = Node.get_by_id(int(id))
         if article is None:
             raise endpoints.NotFoundException('Article not found.')
         #list of tags related to this account

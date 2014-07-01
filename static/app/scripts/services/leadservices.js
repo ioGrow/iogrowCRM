@@ -222,7 +222,6 @@ leadservices.factory('Lead', function($http) {
      $scope.isLoading = true;
      $scope.$apply();
       gapi.client.crmengine.leads.listv2(params).execute(function(resp) {
-
               if(!resp.code){
 
                   angular.forEach(resp.items, function(item){
@@ -254,7 +253,7 @@ leadservices.factory('Lead', function($http) {
                 $scope.$apply();
                };
               }
-              console.log('gapi #end_execute');
+
         });
 
 
