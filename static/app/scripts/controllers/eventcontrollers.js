@@ -34,12 +34,10 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
      };
      $scope.$watch('event.starts_at', function(newValue, oldValue) {
         
-        console.log("cccccccccccccccc"+newValue);
               $scope.patchDate($scope.event.starts_at,"Start");
      });
      $scope.$watch('event.ends_at', function(newValue, oldValue) {
-        
-        console.log("cccccccccccccccc"+newValue);
+
               $scope.patchDate($scope.event.ends_at,"End");
      });
      $scope.patchDate = function(newValue,when){
@@ -52,7 +50,6 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
         };
       }
       if (when=="End"){
-        console.log("eeeeeenddddd");
         var ends_at = $filter('date')(newValue,['yyyy-MM-ddTHH:mm:00.000000']);
 
         var params = {

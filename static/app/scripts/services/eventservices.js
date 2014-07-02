@@ -12,8 +12,8 @@ eventservices.factory('Event', function($http) {
                $scope.event = resp;
                /*var url = Event.getUrl($scope.eventt.about.kind,$scope.eventt.about.id);
                $scope.uri =url;*/
-              /* $scope.listContributors();
-               $scope.ListComments();*/
+              /* $scope.listContributors();*/
+               $scope.ListComments();
                console.log($scope.event);
                $scope.isContentLoaded=true;
                // Call the method $apply to make the update on the scope
