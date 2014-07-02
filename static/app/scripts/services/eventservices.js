@@ -13,13 +13,14 @@ eventservices.factory('Event', function($http) {
                /*var url = Event.getUrl($scope.eventt.about.kind,$scope.eventt.about.id);
                $scope.uri =url;*/
               /* $scope.listContributors();*/
-               $scope.ListComments();
+               //$scope.ListComments();
                console.log($scope.event);
                $scope.isContentLoaded=true;
+               $scope.renderMaps();
                // Call the method $apply to make the update on the scope
                 $scope.$apply();
                 console.log($scope.event.where);
-                $scope.renderMaps();
+                
 
             }else {
                if(resp.code==401){
@@ -44,6 +45,8 @@ eventservices.factory('Event', function($http) {
             }
             */
             $scope.runTheProcess();
+            //$scope.renderMaps();
+
             //console.log("working");
             /*$scope.ListComments();
             $scope.listContributors();*/
@@ -51,6 +54,7 @@ eventservices.factory('Event', function($http) {
            /* $scope.listTags();
             $scope.listTasks();*/
             $scope.$apply();
+
 
          }else{
             console.log("not working");

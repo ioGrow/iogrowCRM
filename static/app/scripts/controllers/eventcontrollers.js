@@ -103,7 +103,8 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
      };
 
      $scope.renderMaps = function(){
-
+         // Map.render($scope);
+          Map.destroy();
           Map.searchLocation($scope,$scope.event.where);
       };
 
@@ -212,6 +213,8 @@ $scope.deleteEvent = function(){
       console.log("wheeeeeeeeeeeeeeee");
       var params = {'entityKey':$scope.event.entityKey,
                    'where':description['where']};
+
+
     }
      if (description['description']){
       console.log("descrripppppp");
@@ -221,6 +224,7 @@ $scope.deleteEvent = function(){
     }
    
  Event.patch($scope,params);
+
         };
 
   
@@ -338,7 +342,8 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
 
      $scope.renderMaps = function(){
 
-          Map.searchLocation($scope,$scope.event.where);
+          Map.render($scope);
+          //Map.searchLocation($scope,$scope.event.where);
       };
 
 
