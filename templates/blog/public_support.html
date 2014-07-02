@@ -1,32 +1,19 @@
+{% extends "/templates/blog/public_blog_base.html" %}
+{% block content %}
 <div class="row subHeader">
   <div class="currentApp">
     <h2 class="page-title">
-      {{ _("ioGrow Blog") }}
+      {{ _("ioGrow Support") }}
     </h2>
   </div>
   <div class=" subHeaderContent">
     <div class="pull-right sharebuttonDiv">
-      <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
-        <i class="fa-share-alt"></i>
-        {{ _("Share") }}
-      </a>
+
     </div>
-    <h2 class="page-title" >
-      <a href="/blog#/articles" data-toggle="tooltip" id='testEdit' data-placement="bottom" title="Back to Articles">
-        <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="/static/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
-      </a>
-      {{ _("Articles") }}
-    </h2>
+
   </div>
 </div>
 <div  class="page-content">
-  <div class="loader-container row" ng-show="isLoading">
-    <div class="loader-dialog col-md-4 col-md-offset-4 ">
-      <div class="loader-content">
-        Loading...
-      </div>
-    </div>
-  </div>
   <div class="container" ng-show="immediateFailed">
     <div class="col-md-12">
 
@@ -40,49 +27,7 @@
     <div class="row">
 
       <div class="showPage custom-show margin-bottom-15  col-md-12">
-        {% if is_admin %}
-        <span class="page-meta pull-right">
-          <i class="icon-pencil">
-            <a ng-click="editaccount()" class="btn-link addAnotherPhone" data-toggle="modal">
-              Edit
-            </a>
-          </i>
-           |
-          <i class="icon-trash">
-            <a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  Delete
-            </a>
-          </i>
-        </span>
-        {% endif %}
-        <h2 class="note-title"><%= article.title%></h2>
-        <p>Posted by <%=article.created_by.display_name%></p>
-
-        <div class="row margin-bottom-10">
-          <div class="col-md-2">
-            <div class="pic">
-                <img alt="<%=article.created_by.display_name%>" class="note-photo-creator" ng-src="<%=article.created_by.photo%>">
-             </div>
-             <a ng-show="showUpload" ng-click="createPickerUploader()" href="" class="btn btn-default btn-upload" data-toggle="modal" style="display: none;">
-               <img src="/static/img/upload_logo.png">
-             </a>
-          </div>
-          <div class="col-md-10">
-            <div class="row">
-              <div class="col-md-12">
-                <span class="topic-content" ng-bind-html-unsafe="article.full_text">
-
-                </span>
-
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-
-
-              </div>
-            </div>
-          </div>
-        </div>
+        <iframe src="https://docs.google.com/forms/d/1kj_5QgfNnsyAdIC2TOGbHImF5BiZwxKNBi7FaTbxOlE/viewform?embedded=true" width="760" height="500" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
 
       </div>
       <!-- END PAGE HEADER-->
@@ -179,3 +124,11 @@
 
 
 </div>
+
+{% endblock %}
+{% block script %}
+<script>
+  $("ul.page-sidebar-menu li").removeClass("active");
+  $("#id_Support").addClass("active");
+</script>
+{% endblock %}

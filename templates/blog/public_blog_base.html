@@ -52,7 +52,60 @@
 
   <!-- END THEME STYLES -->
 
+<style type="text/css">
+  .white-link{
+    color:white;
+    font-weight:bold;
+    font-size:14px;
+  }
+  #customBtn {
+    display: inline-block;
+    background: #dd4b39;
+    color: white;
+    width: 300px;
+    border-radius: 5px !important;
+    white-space: nowrap;
+  }
+  #customBtn a{
+    display: inline-block;
+    background: #dd4b39;
+    color: white;
+    width: 300px;
+    border-radius: 5px;
+    white-space: nowrap;
+    padding-top:5px;
+    padding-bottom:5px;
+  }
+  #customBtn:hover {
+    background: #dd4b39;
+    cursor: hand;
+  }
 
+  span.label {
+    font-weight: bold;
+  }
+  span.icon {
+    background: url('/static/welcome/img/btn_red_32.png') transparent 5px 50% no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+    width: 35px;
+    height: 35px;
+    border-right: #dd4b39 1px solid;
+  }
+  span.buttonText {
+    display: inline-block;
+    vertical-align: middle;
+    padding-left:15px;
+    padding-right: 35px;
+    font-size: 16px;
+    font-weight:bold;
+    letter-spacing: normal !important;
+    text-transform: none !important;
+    font-weight: bolder;
+    /* Use the Roboto font that is loaded in the <head> */
+    font-family: 'Roboto',arial,sans-serif;
+  }
+</style>
   <script type="text/javascript">
   window.___gcfg = {
   // lang: 'en',
@@ -102,98 +155,15 @@
         <ul class="nav navbar-nav pull-right">
 
               <li class="dropdown user">
-
-                  <input type="submit" onclick="$('#InstallChromeExtension').modal() " class="btn blue btn-block pull-right" value="Install chrome extension" style="padding-left:5px;padding-right:5px;">
-
-              </li>
-
-              <li class="dropdown user">
-                <a href="/#/admin/users" class="dropdown-tog" target="new">
-                  <span class="username">
-                    Invite Users
-                  </span>
-                </a>
-              </li>
-              <li class="dropdown user" id="header_task_bar">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" >
-                <img alt="" src="/static/bootstrap3/img/glyphicons_156_show_thumbnails.png" width="18">
-                  <span class="username">
-
-                  </span>
-                  <i class="fa "></i>
-                </a>
-                <ul id="dropdown-menu-list" class="dropdown-menu extended">
-                  <li>
-                    <ul class="dropdown-menu-list scroller">
-                       {%for application in apps %}
-                       {%if application.key !=active_app.key %}
-                        <li class="gb_a">
-                          <a href="/apps/{{ application.key.id() }}">
-                          <span class="task">
-                            <span class="desc">
-                               <img class="platform_icons" height="50" width="50" src="/static/img/admin_console.png">
-                              {{application.label}}
-                            </span>
-                          </span>
-                          </a>
-                        </li>
-                         {%endif%}
-                       {%endfor%}
-                         <li class="gb_a">
-                          <a href="https://drive.google.com/?tab=mo&authuser=0" target="new">
-                          <span class="task">
-                            <span class="desc">
-                              <img class="platform_icons" src="/static/img/google_drive.png">
-                             Drive
-                            </span>
-                          </span>
-                          </a>
-                        </li>
-                        <li class="gb_a">
-                          <a href="https://www.google.com/calendar?tab=oc" target="new">
-                          <span class="task">
-                            <span class="desc">
-                            <img class="platform_icons" src="/static/img/google_calendar.png">
-                           Calendar
-                            </span>
-                          </span>
-                          </a>
-                        </li>
-                        <li class="gb_a">
-                          <a href="https://mail.google.com/mail/?tab=om" target="new">
-                          <span class="task">
-                            <span class="desc">
-                            <img class="platform_icons" src="/static/img/google_gmail.png">
-                           Gmail
-                            </span>
-                          </span>
-                          </a>
-                        </li>
-                    </ul>
-                  </li>
-                </ul>
+                  <div id="customBtn" class="customGPlusSignIn">
+                                <a href="/early-bird">
+                                <span class="icon"></span>
+                                <span class="buttonText">Start using ioGrow for free!</span></a>
+                  </div>
               </li>
               <!-- END TODO DROPDOWN -->
               <!-- BEGIN USER LOGIN DROPDOWN -->
-              <li class="dropdown user">
-                <a href="{{user.google_public_profile_url}}" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                  <img alt="" src="{{user.google_public_profile_photo_url }}" class="user-photo" />
-                  <span class="username">
-                    {{user.google_display_name}}
-                  </span>
-                </a>
-                <ul class="dropdown-menu" >
-                  <li>
-                    <a href="{{logout_url}}">
-                      Sign Out
-                    </a>
-                  </li>
-                  <li >
-                <a href="#EditSetting"  class="btn-link addAnotherPhone" data-toggle="modal">My Setting </a>
 
-                  </li>
-                </ul>
-              </li>
               <!-- END USER LOGIN DROPDOWN -->
         </ul>
         <!-- END TOP NAVIGATION MENU -->
@@ -232,7 +202,7 @@
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
-                <button  type="submit"  ng-click="updatelanguage(user,{{uSerid}})" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+                <button  type="submit"  ng-click="updatelanguage(user,'me')" class="btn btn-primary addContactNow">{{_("Save")}} </button>
               </div>
                </form>
                </div>
@@ -324,7 +294,7 @@
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
-                <button  type="submit"  ng-click="updatelanguage(user,{{uSerid}})" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+                <button  type="submit"  ng-click="updatelanguage(user,'me')" class="btn btn-primary addContactNow">{{_("Save")}} </button>
               </div>
                </form>
                </div>
@@ -338,23 +308,30 @@
     <div class="page-sidebar navbar-collapse collapse">
         <!-- BEGIN SIDEBAR MENU -->
         <ul class="page-sidebar-menu">
-          {% for tab in tabs %}
-              <li id="id_{{tab.name}}" class="start">
-                <a href="{{ tab.url }}" data-toggle="collapse" data-target=".navbar-collapse">
-                <i class="fa fa-{{tab.icon}}"></i>
+
+              <li id="id_Articles" class="start">
+                <a href="/blog#/articles" data-toggle="collapse" data-target=".navbar-collapse">
+
                 <span class="title">
-                  {{tab.label}}
+                  Articles
                 </span>
                 </a>
               </li>
-           {% endfor %}
+              <li id="id_Support" class="start">
+                <a href="/support" data-toggle="collapse" data-target=".navbar-collapse">
+
+                <span class="title">
+                  Support
+                </span>
+                </a>
+              </li>
+
         </ul>
         <!-- END SIDEBAR MENU -->
     </div>
   </div>
-  <div class="ng-view-container page-content-wrapper" ng-view>
-      <center><img src="/static/img/google_loading.gif" ng-show="isLoading" style="height:30px; width:30px; margin-top:200px;">
-      </center>
+  <div class="ng-view-container page-content-wrapper">
+    {% block content %}{% endblock %}
   </div><!--/ng-view-container-->
   <div class="clearfix"></div>
 </div>
@@ -395,13 +372,12 @@
 
 
 
-
        var ROOT = '/_ah/api';
 
 
 
-        //var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 
+        // var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 
 
         var callback = function() {
@@ -409,17 +385,14 @@
                 apiLoaded();
             }
         }
-        apisToLoad = 2; // must match number of calls to gapi.client.load()
+        apisToLoad = 1; // must match number of calls to gapi.client.load()
         console.log('before loading');
-        gapi.client.load('crmengine', 'v1', callback, ROOT);
-        gapi.load('picker', {'callback': callback});
+        gapi.client.load('blogengine', 'v1', callback, ROOT);
     }
     function apiLoaded(){
       // When the API is loaded start angularJS app
-      var $injector = angular.bootstrap(document, ['crmEngine']);
-      if (!window.location.hash){
-          window.location.replace('{{active_app.url}}');
-      };
+      //var $injector = angular.bootstrap(document, ['blogEngine']);
+
     }
   </script>
 
@@ -462,14 +435,16 @@
   <script src="/static/app/scripts/services/noteservices.js" ></script>
   <script src="/static/app/scripts/services/commentservices.js" ></script>
    <script src="/static/app/scripts/services/settingservices.js" ></script>
+   <script src="/static/app/scripts/services/blogservices.js" ></script>
 
 
 
-  <script src="/static/app/scripts/app.js" ></script>
+  <script src="/static/app/scripts/blog_app.js" ></script>
    <script src="/static/app/scripts/controllers/productcontrollers.js" ></script>
    <script src="/static/app/scripts/controllers/mysettingcontrollers.js" ></script>
    <script src="/static/app/scripts/controllers/searchcontrollers.js" ></script>
   <script src="/static/app/scripts/controllers/accountcontrollers.js" ></script>
+
   <script src="/static/app/scripts/controllers/contactcontroller.js"></script>
   <script src="/static/app/scripts/controllers/opportunitycontroller.js" ></script>
   <script src="/static/app/scripts/controllers/livecontrollers/showcontrollers.js" ></script>
@@ -488,6 +463,7 @@
 
   <script src="/static/app/scripts/controllers/livecontrollers/comp_profilecontrollers.js"></script>
   <script src="/static/app/scripts/controllers/leadcontrollers.js" ></script>
+  <script src="/static/app/scripts/controllers/blogcontrollers.js" ></script>
 
   <script src="/static/app/scripts/services/leadservices.js" ></script>
   <script src="/static/app/scripts/controllers/casecontrollers.js" ></script>
@@ -495,6 +471,8 @@
   <script src="/static/app/scripts/controllers/needcontrollers.js" ></script>
   <script src="/static/app/scripts/directives/directives.js" ></script>
   <script src="/static/app/scripts/services/helpers.js" ></script>
+
+
 
 
 
@@ -546,6 +524,8 @@
  ga('send', 'pageview');
 
 </script>
+{% block script %}
+{% endblock %}
   <!-- END JAVASCRIPTS -->
 </body>
 
