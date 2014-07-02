@@ -465,8 +465,11 @@ accountservices.factory('Search', function($http) {
         case 'Document' :
           base_url = '#/documents/show/';
           break;
-          case 'Task' :
+        case 'Task' :
           base_url = '#/tasks/show/';
+          break;
+        case 'Event' :
+          base_url = '#/events/show/';
           break;
 
         }
