@@ -950,22 +950,24 @@ $scope.updatContactHeader = function(contact){
 
   //HKA 01.12.2013 Add Phone
  $scope.addPhone = function(phone){
-
-  params = {'parent':$scope.contact.entityKey,
-            'kind':'phones',
-            'fields':[
-                {
-                  "field": "type",
-                  "value": phone.type
-                },
-                {
-                  "field": "number",
-                  "value": phone.number
-                }
-            ]
-  };
-  InfoNode.insert($scope,params);
+  if (phone.number){
+    params = {'parent':$scope.contact.entityKey,
+              'kind':'phones',
+              'fields':[
+                  {
+                    "field": "type",
+                    "value": phone.type
+                  },
+                  {
+                    "field": "number",
+                    "value": phone.number
+                  }
+              ]
+    };
+    InfoNode.insert($scope,params);
+  }
     $scope.phone={};
+    $scope.phone.number='';
     $scope.phone.type= 'work';
     $scope.showPhoneForm=false;
   };
@@ -980,7 +982,7 @@ $scope.listInfonodes = function(kind) {
 //HKA 20.11.2013 Add Email
 $scope.addEmail = function(email){
 
-
+if (email.email){
    params = {'parent':$scope.contact.entityKey,
             'kind':'emails',
             'fields':[
@@ -991,7 +993,11 @@ $scope.addEmail = function(email){
             ]
   };
   InfoNode.insert($scope,params);
+}  
   $scope.email={};
+  $scope.email.email=''
+  console.log($scope.email)
+ 
   $scope.showEmailForm = false;
   };
 
@@ -1030,6 +1036,9 @@ $scope.addSocial = function(social){
 
 };
 $scope.addCustomField = function(customField){
+   
+  if (customField){
+   if(customField.field && customField.value){
   params = {'parent':$scope.contact.entityKey,
             'kind':'customfields',
             'fields':[
@@ -1040,11 +1049,14 @@ $scope.addCustomField = function(customField){
             ]
   };
   InfoNode.insert($scope,params);
-
-    $scope.customfield={};
-    $scope.showCustomFieldForm = false;
+}
+}
+  $('#customfields').modal('hide');
+  $scope.customfield={};
+  $scope.showCustomFieldForm = false;
 
 };
+
 
 // HKA 21.06.2014 Update introduction , Tagline
  $scope.updateContactIntroTagline=function(params){
@@ -1243,21 +1255,12 @@ $scope.addCustomField = function(customField){
                  }
            }
        }
-     $scope.renderMaps = function(){
-
+    $scope.renderMaps = function(){
           $scope.addresses = $scope.contact.addresses;
           Map.render($scope);
       };
       $scope.addAddress = function(address){
-        var addressArray = undefined;
-        if ($scope.contact.addresses){
-          addressArray = new Array();
-          addressArray = $scope.contact.addresses;
-          addressArray.push(address);
 
-        }else{
-          addressArray = address;
-        }
         Map.searchLocation($scope,address);
 
         $('#addressmodal').modal('hide');
@@ -1267,9 +1270,9 @@ $scope.addCustomField = function(customField){
 
           var params = {'id':$scope.contact.id,
                          'addresses':addressArray};
-          Contact.patch($scope,params);
+          contact.patch($scope,params);
       };
-       $scope.addGeo = function(address){
+        $scope.addGeo = function(address){
           params = {'parent':$scope.contact.entityKey,
             'kind':'addresses',
             'fields':[
@@ -1332,6 +1335,7 @@ $scope.addCustomField = function(customField){
           }
           InfoNode.insert($scope,params);
       };
+
   // HKA 13.05.2014 Delete infonode
 
   $scope.deleteInfonode = function(entityKey,kind){
