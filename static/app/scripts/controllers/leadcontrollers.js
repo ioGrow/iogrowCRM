@@ -3,6 +3,8 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Leads").addClass("active");
 
+
+     
       document.title = "Leads: Home";
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
@@ -443,7 +445,10 @@ $scope.addTags=function(){
         $scope.showUntag=true;
         $scope.edgekeytoDelete=edgekey;
       };
+ $scope.showConvertModal = function(){
+        $('#LeadsShow').modal('show');
 
+      };
    // Google+ Authentication
      Auth.init($scope);
      $(window).scroll(function() {
