@@ -289,8 +289,8 @@ $scope.updateTag = function(tag){
 
 
 
-$scope.selectTag= function(tag,index,$event){
-			if(!$scope.manage_tags){
+$scope.selectTag= function(tag,index,$event){			
+	        if(!$scope.manage_tags){
 				 var element=$($event.target);
 				 if(element.prop("tagName")!='LI'){
 							element=element.parent();
