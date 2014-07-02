@@ -125,7 +125,7 @@
                     <a ng-click="selectedTab = 1;">Notes</a>
                   </li>
                   <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==8}">
-                    <a ng-click="selectedTab = 8;">Send an Email</a>
+                    <a ng-click="selectedTab = 8;sendEmailSelected();">Send an Email</a>
                   </li>
                   <!--li class="ng-tab sm-menu" ng-class="{active: selectedTab == 3}">
                     <a ng-click="waterfall(); selectedTab = 3;">Contacts</a>
@@ -836,9 +836,7 @@
                                             <div class="form-group">
                                             <textarea id="some-textarea" placeholder="Enter text ..." id="noteBody" class="form-control ng-pristine ng-valid" rows="7" ng-model="email.body"></textarea>
                                              </div>
-                                          <div class="form-group">
-                                            <textarea id="some-textarea" placeholder="Enter text ..." id="noteBody" class="form-control ng-pristine ng-valid" rows="7" ng-model="email.body"></textarea>
-                                             </div>
+                                      
                                          <div class="pull-right">
 
                                             <input   ng-click="sendEmail(email)" ng-disabled="isLoading" type="submit" class="btn green" value="Send">
