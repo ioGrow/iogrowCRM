@@ -1308,7 +1308,8 @@ $scope.CaselistNextPageItems = function(){
  }
 //HKA 19.11.2013 Add Phone
  $scope.addPhone = function(phone){
-
+   console.log(phone)
+  if (phone.number){
     params = {'parent':$scope.account.entityKey,
               'kind':'phones',
               'fields':[
@@ -1323,7 +1324,7 @@ $scope.CaselistNextPageItems = function(){
               ]
     };
     InfoNode.insert($scope,params);
-
+  }
       $scope.phone={};
        $scope.phone.type= 'work';
 
@@ -1606,13 +1607,15 @@ $scope.doneEditTag=function(tag){
         $scope.updateTag(tag);
      };
 
-     $scope.initObject=function(obj){
+$scope.initObject=function(obj){
           for (var key in obj) {
                 obj[key]=null;
               }
       }
 
-          $scope.pushElement=function(elem,arr){
+$scope.pushElement=function(elem,arr){
+  console.log(elem);
+  console.log(arr)
           if (arr.indexOf(elem) == -1) {
               var copyOfElement = angular.copy(elem);
               arr.push(copyOfElement);
@@ -1707,30 +1710,69 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
               }
       }
       $scope.pushElement=function(elem,arr,infos){
-
+          console.log(elem)
+          console.log(arr)
+          console.log(infos)
           if (arr.indexOf(elem) == -1) {
-              var copyOfElement = angular.copy(elem);
-              arr.push(copyOfElement);
-              $scope.initObject(elem);
+              // var copyOfElement = angular.copy(elem);
+              // arr.push(copyOfElement);
+              // $scope.initObject(elem);
 
               switch(infos){
                 case 'phones' :
+                   if(elem.number){
+                     var copyOfElement = angular.copy(elem);
+                     arr.push(copyOfElement);
+                     $scope.initObject(elem);
+                   }
                    $scope.showPhoneForm=false;
                    $scope.phone.type= 'work';
+                   $scope.phone.number='';
                 break;
                 case 'emails' :
+                  if(elem.email){
+                     var copyOfElement = angular.copy(elem);
+                     arr.push(copyOfElement);
+                     $scope.initObject(elem);
+                  }
                    $scope.showEmailForm=false;
+                   $scope.email.email=''
                 break;
                 case 'websites' :
+                     if(elem){
+                     var copyOfElement = angular.copy(elem);
+                     arr.push(copyOfElement);
+                     $scope.initObject(elem);
+                    }
+                    $scope.website.url='';
                     $scope.showWebsiteForm=false;
                 break;
                 case 'sociallinks' :
+                     if(elem){
+                     var copyOfElement = angular.copy(elem);
+                     arr.push(copyOfElement);
+                     $scope.initObject(elem);
+                    }
+                   $scope.sociallink.url='';
                    $scope.showSociallinkForm=false;
                 break;
                 case 'customfields' :
+                    if(elem.field && elem.value){
+                     var copyOfElement = angular.copy(elem);
+                     arr.push(copyOfElement);
+                     $scope.initObject(elem);
+                    }
+                    $scope.customfield.field='';
+                    $scope.customfield.value='';
                    $scope.showCustomFieldForm=false;
                 break;
                 case 'addresses' :
+                    if(elem.country){
+                     var copyOfElement = angular.copy(elem);
+                     arr.push(copyOfElement);
+                     $scope.initObject(elem);
+                    }
+
                     $('#addressmodal').modal('hide');
 
                 break;
