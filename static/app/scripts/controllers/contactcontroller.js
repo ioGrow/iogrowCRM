@@ -1061,7 +1061,7 @@ $scope.sendEmailSelected=function(){
 	$scope.email.to = '';
 	angular.forEach($scope.infonodes.emails, function(value, key){
 		console.log(value)
-		if (value) $scope.email.to = $scope.email.to + value.email + ',';
+		if (value.email) $scope.email.to = $scope.email.to + value.email + ',';
     });
 
 };
