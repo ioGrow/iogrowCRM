@@ -125,7 +125,7 @@
                     <a ng-click="selectedTab = 1;">Notes</a>
                   </li>
                   <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==8}">
-                    <a ng-click="selectedTab = 8;">Send an Email</a>
+                    <a ng-click="selectedTab = 8;sendEmailSelected();">Send an Email</a>
                   </li>
                   <!--li class="ng-tab sm-menu" ng-class="{active: selectedTab == 3}">
                     <a ng-click="waterfall(); selectedTab = 3;">Contacts</a>
@@ -233,7 +233,7 @@
                         <ul class="list-unstyled contact-infos">
                           <li ng-show="showPhoneForm">
                                       <div class="row">
-                                        <form class="form-inline newLeadForm" role="form">
+                                         <form name="phoneform" class="form-inline newLeadForm" role="form">
                                           <div class="form-group sm-group" style="">
                                             <label class="sr-only" for="exampleInputPassword2">Type</label>
                                             <select ng-model="phone.type" class="form-control">
@@ -245,7 +245,22 @@
                                           </div>
                                           <div class="form-group sm-group" style="">
                                             <label class="sr-only" for="exampleInputEmail2">Number</label>
-                                            <input type="text" class="form-control" id="exampleInputEmail2" ng-model="phone.number" placeholder="Enter a number">
+                                            <input 
+                                                name="phonenumber" 
+                                                type="text"  
+                                                class="form-control" 
+                                                id="exampleInputEmail2" 
+                                                ng-model="phone.number" 
+                                                placeholder="Enter a number" 
+                                                required 
+                                                ng-pattern="/^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/i"
+                                                ng-focus="isFocused=true">
+                                               <!--  <span class="error" ng-show="phoneform.phonenumber.$error.required">
+                                                    Required!
+                                                </span>
+                                                    <span class="error" ng-show="phoneform.phonenumber.$error.pattern">
+                                                  Not valid!
+                                                </span> -->
                                           </div>
                                            <button type="submit" ng-click="addPhone(phone)" class="btn blue jfk-button jfk-button-action">Add</button>
                                             <button type="submit" class="btn btn-default" ng-click="showPhoneForm=false">X</button>
@@ -301,7 +316,13 @@
                                         <form class="form-inline newLeadForm" role="form">
                                           <div class="form-group lg-group" style="">
                                             <label class="sr-only" for="exampleInputEmail2">Website</label>
-                                            <input type="text" ng-model="website.url" class="form-control" id="exampleInputEmail2" placeholder="Enter a Website">
+                                            <input 
+                                              type="url" 
+                                              ng-model="website.url" 
+                                              class="form-control" 
+                                              id="exampleInputEmail2" 
+                                              placeholder="Enter a Website"
+                                              required>
                                           </div>
                                       <button type="submit" ng-click="addWebsite(website)" class="btn blue jfk-button jfk-button-action">Add</button>
                                       <button type="submit" ng-click="showWebsiteForm=false" class="btn btn-default">X</button>
@@ -322,9 +343,17 @@
                                             <form class="form-inline newLeadForm" role="form">
                                               <div class="form-group lg-group" style="">
                                                 <label class="sr-only" for="exampleInputEmail2">Social link</label>
-                                                <input type="text" class="form-control" id="exampleInputEmail2" ng-model='sociallink.url' placeholder="Enter a social link">
+                                                <input 
+                                                  name="social"
+                                                  type="url" 
+                                                  class="form-control" 
+                                                  id="exampleInputEmail2" 
+                                                  ng-model='sociallink.url' 
+                                                  placeholder="Enter a social link"
+                                                  required>
                                               </div>
-                                               <button ng-click="addSocial(sociallink)" type="submit" class="btn blue jfk-button jfk-button-action">Add</button>
+                                               <button 
+                                                  ng-click="addSocial(sociallink)" type="submit" class="btn blue jfk-button jfk-button-action">Add</button>
                                                 <button type="submit" ng-click="showSociallinkForm=false" class="btn btn-default">X</button>
                                             </form>
                                           </div>
@@ -343,11 +372,21 @@
                                             <form class="form-inline newLeadForm" role="form">
                                               <div class="form-group sm-group" style="">
                                                 <label class="sr-only" for="exampleInputEmail2">Field</label>
-                                                <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="Enter field name">
+                                                <input 
+                                                  type="text" 
+                                                  class="form-control" 
+                                                  id="exampleInputEmail2" 
+                                                  ng-model="customfield.field" placeholder="Enter field name"
+                                                  required>
                                               </div>
                                               <div class="form-group sm-group" style="">
                                                 <label class="sr-only" for="exampleInputEmail2">Value</label>
-                                                <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="Enter a value">
+                                                <input 
+                                                  type="text" 
+                                                  class="form-control" 
+                                                  id="exampleInputEmail2" 
+                                                  ng-model="customfield.value" placeholder="Enter a value"
+                                                  required>
                                               </div>
                                                <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="addCustomField(customfield)">Add</button>
                                                 <button type="submit" class="btn btn-default" ng-click="showCustomFieldForm=false">X</button>
@@ -797,9 +836,7 @@
                                             <div class="form-group">
                                             <textarea id="some-textarea" placeholder="Enter text ..." id="noteBody" class="form-control ng-pristine ng-valid" rows="7" ng-model="email.body"></textarea>
                                              </div>
-                                          <div class="form-group">
-                                            <textarea id="some-textarea" placeholder="Enter text ..." id="noteBody" class="form-control ng-pristine ng-valid" rows="7" ng-model="email.body"></textarea>
-                                             </div>
+                                      
                                          <div class="pull-right">
 
                                             <input   ng-click="sendEmail(email)" ng-disabled="isLoading" type="submit" class="btn green" value="Send">
@@ -1181,7 +1218,7 @@
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-                  <input ng-hide="isLoading" ng-click="addAddress(address)" ng-disabled="!(address.country || address.postal_code || address.state || address.city || address.street)" type="submit" class="btn green" value="{{_('Add this address')}}">
+                  <input ng-hide="isLoading" ng-click="addAddress(address)" ng-disabled="(!address.country || !address.state || !address.city || !address.street)" type="submit" class="btn green" value="{{_('Add this address')}}">
                   <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
               </div>
                 </form>

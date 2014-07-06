@@ -3,6 +3,8 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Leads").addClass("active");
 
+
+     
       document.title = "Leads: Home";
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
@@ -443,7 +445,10 @@ $scope.addTags=function(){
         $scope.showUntag=true;
         $scope.edgekeytoDelete=edgekey;
       };
+ $scope.showConvertModal = function(){
+        $('#LeadsShow').modal('show');
 
+      };
    // Google+ Authentication
      Auth.init($scope);
      $(window).scroll(function() {
@@ -490,9 +495,9 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.documentpagination = {};
      $scope.documentCurrentPage=01;
      $scope.documentpages=[];
-    $scope.selectedTab = 2;
-    $scope.sharing_with = [];
-    $scope.statuses = [
+     $scope.selectedTab = 2;
+     $scope.sharing_with = [];
+     $scope.statuses = [
       {value: 'Home', text: 'Home'},
       {value: 'Work', text: 'Work'},
       {value: 'Mob', text: 'Mob'},
@@ -537,10 +542,16 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
 
       // HKA 08.05.2014 Delete infonode
 
-  $scope.deleteInfonode = function(entityKey,kind){
+  $scope.deleteInfonode = function(entityKey,kind,val){
     var params = {'entityKey':entityKey,'kind':kind};
+<<<<<<< HEAD
     console.log("innnnnnnnnnn");
+=======
+>>>>>>> 67ddee1b3f339fbe1d19fadf163f28cc25fcc8c3
     InfoNode.delete($scope,params);
+    var str=$scope.email.to
+    var newstr=str.replace(val+",","");
+    $scope.email.to=newstr;
 
   };
 
@@ -578,7 +589,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.hilightTopic = function(){
         console.log('Should higll');
        $('#topic_0').effect( "bounce", "slow" );
-       $('#topic_0 .message').effect("highlight","slow");
+       $('#topic_0.message').effect("highlight","slow");
      }
 
 
@@ -621,14 +632,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
               }
               Permission.insert($scope,params);
           }
-
-
           $scope.sharing_with = [];
-
-
         }
-
-
      };
 
 
@@ -755,7 +760,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
  }
 //HKA 19.11.2013 Add Phone
  $scope.addPhone = function(phone){
-
+ if (phone.number){
   params = {'parent':$scope.lead.entityKey,
             'kind':'phones',
             'fields':[
@@ -769,7 +774,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                 }
             ]
   };
-  InfoNode.insert($scope,params);
+  InfoNode.insert($scope,params);}
   $scope.phone={};
   $scope.phone.type= 'work';
   $scope.showPhoneForm=false;
@@ -784,12 +789,17 @@ $scope.addEmail = function(email){
             'fields':[
                 {
                   "field": "email",
-                  "value": email.email
+                  "value": email
                 }
             ]
   };
-  InfoNode.insert($scope,params);
-  $scope.email={};
+  console.log(email)
+  // lebdiri arezki 29-06-2014 control add email 
+  if(email){
+    InfoNode.insert($scope,params);
+    $scope.email.to = $scope.email.to + email + ',';
+  }
+  $scope.newEmail=null;
   $scope.showEmailForm = false;
   };
 
@@ -797,6 +807,8 @@ $scope.addEmail = function(email){
 
 //HKA 22.11.2013 Add Website
 $scope.addWebsite = function(website){
+  console.log(website)
+if(website){
   params = {'parent':$scope.lead.entityKey,
             'kind':'websites',
             'fields':[
@@ -807,12 +819,14 @@ $scope.addWebsite = function(website){
             ]
   };
   InfoNode.insert($scope,params);
+}
   $scope.website={};
   $scope.showWebsiteForm=false;
 };
 
 //HKA 22.11.2013 Add Social
 $scope.addSocial = function(social){
+  if(social){
   params = {'parent':$scope.lead.entityKey,
             'kind':'sociallinks',
             'fields':[
@@ -823,12 +837,16 @@ $scope.addSocial = function(social){
             ]
   };
   InfoNode.insert($scope,params);
+}
   $scope.sociallink={};
       $scope.showSociallinkForm=false;
 
 
 };
 $scope.addCustomField = function(customField){
+   
+  if (customField){
+   if(customField.field && customField.value){
   params = {'parent':$scope.lead.entityKey,
             'kind':'customfields',
             'fields':[
@@ -839,7 +857,8 @@ $scope.addCustomField = function(customField){
             ]
   };
   InfoNode.insert($scope,params);
-
+}
+}
   $('#customfields').modal('hide');
   $scope.customfield={};
   $scope.showCustomFieldForm = false;
