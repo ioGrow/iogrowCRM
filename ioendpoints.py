@@ -1148,6 +1148,7 @@ class CrmEngineApi(remote.Service):
         message.subject = request.subject
         message.html = request.body
         message.send()
+        print "########################################",request.about
         parent_key = ndb.Key(urlsafe=request.about)
         note_author = Userinfo()
         note_author.display_name = user.google_display_name
