@@ -123,7 +123,7 @@
                     <a ng-click="selectedTab = 1;">Notes</a>
                   </li>
                   <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==8}">
-                    <a ng-click="selectedTab = 8;">Send an Email</a>
+                    <a ng-click="selectedTab = 8;sendEmailSelected();">Send an Email</a>
                   </li>
                   <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 3}">
                     <a ng-click="waterfallTrigger(); selectedTab = 3;">Contacts</a>
@@ -237,7 +237,14 @@
                                           </div>
                                           <div class="form-group sm-group" style="">
                                             <label class="sr-only" for="exampleInputEmail2">Number</label>
-                                            <input type="text" class="form-control" id="exampleInputEmail2" ng-model="phone.number" placeholder="Enter a number">
+                                            <input 
+                                              type="text" 
+                                              class="form-control" 
+                                              id="exampleInputEmail2" 
+                                              ng-model="phone.number" 
+                                              placeholder="Enter a number"
+                                              ng-pattern="/^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/i"
+                                              required>
                                           </div>
                                            <button type="submit" ng-click="addPhone(phone)" class="btn blue jfk-button jfk-button-action">Add</button>
                                             <button type="submit" class="btn btn-default" ng-click="showPhoneForm=false">X</button>
@@ -261,7 +268,14 @@
                                           <form class="form-inline newLeadForm" role="form">
                                             <div class="form-group lg-group" style="">
                                               <label class="sr-only" for="exampleInputEmail2">Email</label>
-                                              <input type="email" class="form-control" id="exampleInputEmail2" ng-model="email.email" placeholder="Enter an email">
+                                              <input 
+                                              type="email" 
+                                              class="form-control" 
+                                              id="exampleInputEmail2" 
+                                              ng-model="email.email"
+                                              placeholder="Enter an email"
+                                              required
+                                              >
                                             </div>
                                              <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="addEmail(email)" >Add</button>
                                               <button type="submit" ng-click="showEmailForm=false" class="btn btn-default">X</button>
@@ -294,7 +308,7 @@
                                         <form class="form-inline newLeadForm" role="form">
                                           <div class="form-group lg-group" style="">
                                             <label class="sr-only" for="exampleInputEmail2">Website</label>
-                                            <input type="text" ng-model="website.url" class="form-control" id="exampleInputEmail2" placeholder="Enter a Website">
+                                            <input type="url" ng-model="website.url" class="form-control" id="exampleInputEmail2" placeholder="Enter a Website">
                                           </div>
                                       <button type="submit" ng-click="addWebsite(website)" class="btn blue jfk-button jfk-button-action">Add</button>
                                       <button type="submit" ng-click="showWebsiteForm=false" class="btn btn-default">X</button>
@@ -315,7 +329,7 @@
                                             <form class="form-inline newLeadForm" role="form">
                                               <div class="form-group lg-group" style="">
                                                 <label class="sr-only" for="exampleInputEmail2">Social link</label>
-                                                <input type="text" class="form-control" id="exampleInputEmail2" ng-model='sociallink.url' placeholder="Enter a social link">
+                                                <input type="url" class="form-control" id="exampleInputEmail2" ng-model='sociallink.url' placeholder="Enter a social link">
                                               </div>
                                                <button ng-click="addSocial(sociallink)" type="submit" class="btn blue jfk-button jfk-button-action">Add</button>
                                                 <button type="submit" ng-click="showSociallinkForm=false" class="btn btn-default">X</button>
@@ -730,25 +744,48 @@
                           <p class⁼"lead"=""><strong>Send an Email to :</strong> </p>
                           <form  class="ng-pristine ng-invalid ng-invalid-required">
                                             <div class="form-group">
-                                            <input required="" class="form-control ng-pristine ng-invalid ng-invalid-required" autofocus="" type="text" placeholder="To" id="messageSubject" ng-model="email.to">
+                                              <input 
+                                                required="" 
+                                                class="form-control ng-pristine 
+                                                ng-invalid ng-invalid-required" autofocus="" 
+                                                type="text" 
+                                                placeholder="To" 
+                                                id="messageSubject" 
+                                                ng-model="email.to">
                                             </div>
                                             <div class="form-group">
-                                            <input class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="CC" id="messageSubject" ng-model="email.cc">
+                                              <input 
+                                                class="form-control ng-pristine ng-valid" 
+                                                autofocus="" 
+                                                type="text" 
+                                                placeholder="CC" 
+                                                id="messageSubject" 
+                                                ng-model="email.cc">
                                             </div>
                                             <div class="form-group">
-                                            <input class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="BCC" id="messageSubject" ng-model="email.bcc">
+                                              <input 
+                                                class="form-control ng-pristine ng-valid"
+                                                autofocus="" 
+                                                type="text"
+                                                placeholder="BCC" 
+                                                id="messageSubject" 
+                                                ng-model="email.bcc">
                                             </div>
                                             <div class="form-group">
-                                             <input required="" class="form-control ng-pristine ng-invalid ng-invalid-required" autofocus="" type="text" placeholder="Add a subject" id="messageSubject" ng-model="email.subject">
+                                             <input   
+                                              required="" 
+                                              class="form-control ng-pristine ng-invalid ng-invalid-required" 
+                                              autofocus="" 
+                                              type="text" 
+                                              placeholder="Add a subject" 
+                                              id="messageSubject" 
+                                              ng-model="email.subject">
                                              </div>
-                                            <div class="form-group">
-                                            <ul class="wysihtml5-toolbar ng-pristine ng-valid" style=""><li class="dropdown"><a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-font"></i>&nbsp;<span class="current-font">Normal text</span>&nbsp;<b class="caret"></b></a><ul class="dropdown-menu"><li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="div" tabindex="-1" href="javascript:;" unselectable="on">Normal text</a></li><li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1" tabindex="-1" href="javascript:;" unselectable="on">Heading 1</a></li><li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h2" tabindex="-1" href="javascript:;" unselectable="on">Heading 2</a></li><li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h3" tabindex="-1" href="javascript:;" unselectable="on">Heading 3</a></li><li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h4" href="javascript:;" unselectable="on">Heading 4</a></li><li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h5" href="javascript:;" unselectable="on">Heading 5</a></li><li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h6" href="javascript:;" unselectable="on">Heading 6</a></li></ul></li><li><div class="btn-group"><a class="btn" data-wysihtml5-command="bold" title="CTRL+B" tabindex="-1" href="javascript:;" unselectable="on">Bold</a><a class="btn" data-wysihtml5-command="italic" title="CTRL+I" tabindex="-1" href="javascript:;" unselectable="on">Italic</a><a class="btn" data-wysihtml5-command="underline" title="CTRL+U" tabindex="-1" href="javascript:;" unselectable="on">Underline</a></div></li><li><div class="btn-group"><a class="btn" data-wysihtml5-command="insertUnorderedList" title="Unordered list" tabindex="-1" href="javascript:;" unselectable="on"><i class="icon-list"></i></a><a class="btn" data-wysihtml5-command="insertOrderedList" title="Ordered list" tabindex="-1" href="javascript:;" unselectable="on"><i class="icon-th-list"></i></a><a class="btn" data-wysihtml5-command="Outdent" title="Outdent" tabindex="-1" href="javascript:;" unselectable="on"><i class="icon-indent-right"></i></a><a class="btn" data-wysihtml5-command="Indent" title="Indent" tabindex="-1" href="javascript:;" unselectable="on"><i class="icon-indent-left"></i></a></div></li><li><div class="bootstrap-wysihtml5-insert-link-modal modal fade"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><a class="close" data-dismiss="modal">×</a><h3>Insert link</h3></div><div class="modal-body"><input value="http://" class="bootstrap-wysihtml5-insert-link-url form-control"><label class="checkbox"> <input type="checkbox" class="bootstrap-wysihtml5-insert-link-target" checked="">Open link in new window</label></div><div class="modal-footer"><a href="#" class="btn" data-dismiss="modal">Cancel</a><a href="#" class="btn btn-primary" data-dismiss="modal">Insert link</a></div></div></div></div><a class="btn" data-wysihtml5-command="createLink" title="Insert link" tabindex="-1" href="javascript:;" unselectable="on"><i class="icon-share"></i></a></li><li><div class="bootstrap-wysihtml5-insert-image-modal modal fade"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><a class="close" data-dismiss="modal">×</a><h3>Insert image</h3></div><div class="modal-body"><input value="http://" class="bootstrap-wysihtml5-insert-image-url form-control"></div><div class="modal-footer"><a href="#" class="btn" data-dismiss="modal">Cancel</a><a href="#" class="btn btn-primary" data-dismiss="modal">Insert image</a></div></div></div></div><a class="btn" data-wysihtml5-command="insertImage" title="Insert image" tabindex="-1" href="javascript:;" unselectable="on"><i class="icon-picture"></i></a></li></ul><textarea id="some-textarea" class="form-control ng-pristine ng-valid" rows="7" ng-model="email.body" placeholder="Enter text ..." style="display: none;"></textarea><input type="hidden" name="_wysihtml5_mode" value="1">
+                                             <div class="form-group">
+                                                 <textarea id="some-textarea" placeholder="Enter text ..." id="noteBody" class="form-control ng-pristine ng-valid" rows="7" ng-model="email.body"></textarea>
                                              </div>
                                          <div class="pull-right">
-
-                                            <input ng-click="sendEmail(email)" ng-disabled="isLoading" type="submit" class="btn green" value="Send">
-
-
+                                             <input ng-click="sendEmail(email)" ng-disabled="isLoading || !email.to" type="submit" class="btn green" value="Send">
                                           </div>
                                         </form>
                                        </div>
@@ -1188,14 +1225,14 @@
                      <div class="form-group">
                         <label  class="col-md-3 control-label">{{_("Country")}} </label>
                         <div class="col-md-9">
-                          <input type="text"  class="form-control" id="id_country" ng-model="address.country">
+                          <input type="text"  class="form-control" id="id_country" ng-model="address.country" placeholder="Required">
                         </div>
                      </div>
               </div>
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-                  <input ng-hide="isLoading" ng-click="addAddress(address)" ng-disabled="!(address.country || address.postal_code || address.state || address.city || address.street)" type="submit" class="btn green" value="{{_('Add this address')}}">
+                  <input ng-hide="isLoading" ng-click="addAddress(address)" ng-disabled="!address.country" type="submit" class="btn green" value="{{_('Add this address')}}">
                   <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
               </div>
                 </form>

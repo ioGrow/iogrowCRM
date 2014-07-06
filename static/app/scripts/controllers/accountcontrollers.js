@@ -583,9 +583,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
 
 
        };
-       $scope.test=function(email){
       
-       };
     $scope.selectMemberToTask = function(){
         console.log($scope.selected_members);
         if ($scope.selected_members.indexOf($scope.user) == -1) {
@@ -1308,7 +1306,8 @@ $scope.CaselistNextPageItems = function(){
  }
 //HKA 19.11.2013 Add Phone
  $scope.addPhone = function(phone){
-
+   console.log(phone)
+  if (phone.number){
     params = {'parent':$scope.account.entityKey,
               'kind':'phones',
               'fields':[
@@ -1316,16 +1315,17 @@ $scope.CaselistNextPageItems = function(){
                     "field": "type",
                     "value": phone.type
                   },
-                  {
+                  { 
                     "field": "number",
                     "value": phone.number
                   }
               ]
     };
     InfoNode.insert($scope,params);
-
+  }
       $scope.phone={};
        $scope.phone.type= 'work';
+       $scope.phone.number='';
 
       $scope.showPhoneForm=false;
 
@@ -1353,7 +1353,7 @@ $scope.CaselistNextPageItems = function(){
 
 //HKA 20.11.2013 Add Email
 $scope.addEmail = function(email){
-
+  if(email.email){
   params = {'parent':$scope.account.entityKey,
             'kind':'emails',
             'fields':[
@@ -1364,6 +1364,7 @@ $scope.addEmail = function(email){
             ]
   };
   InfoNode.insert($scope,params);
+}
   $scope.email={};
   $scope.showEmailForm = false;
   };
@@ -1404,6 +1405,7 @@ $scope.addSocial = function(social){
 
 };
 $scope.addCustomField = function(customField){
+  if (customField.field && customField.value){
   params = {'parent':$scope.account.entityKey,
             'kind':'customfields',
             'fields':[
@@ -1414,7 +1416,11 @@ $scope.addCustomField = function(customField){
             ]
   };
   InfoNode.insert($scope,params);
+    }
+
     $scope.customfield={};
+    $scope.customfield.field='';
+    $scope.customfield.value='';
     $scope.showCustomFieldForm = false;
 
 };
@@ -1447,7 +1453,15 @@ $scope.updatAccountHeader = function(account){
 };
 
     $('#some-textarea').wysihtml5();
+    // arezki lebdiri 03/07/2014 send email
+$scope.sendEmailSelected=function(){
+  $scope.email.to = '';
+  angular.forEach($scope.infonodes.emails, function(value, key){
+    console.log(value)
+    if (value.email) $scope.email.to = $scope.email.to + value.email + ',';
+    });
 
+};
       $scope.sendEmail = function(email){
         email.body = $('#some-textarea').val();
 
@@ -1606,13 +1620,15 @@ $scope.doneEditTag=function(tag){
         $scope.updateTag(tag);
      };
 
-     $scope.initObject=function(obj){
+$scope.initObject=function(obj){
           for (var key in obj) {
                 obj[key]=null;
               }
       }
 
-          $scope.pushElement=function(elem,arr){
+$scope.pushElement=function(elem,arr){
+  console.log(elem);
+  console.log(arr)
           if (arr.indexOf(elem) == -1) {
               var copyOfElement = angular.copy(elem);
               arr.push(copyOfElement);
@@ -1707,30 +1723,69 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
               }
       }
       $scope.pushElement=function(elem,arr,infos){
-
+          console.log(elem)
+          console.log(arr)
+          console.log(infos)
           if (arr.indexOf(elem) == -1) {
-              var copyOfElement = angular.copy(elem);
-              arr.push(copyOfElement);
-              $scope.initObject(elem);
+              // var copyOfElement = angular.copy(elem);
+              // arr.push(copyOfElement);
+              // $scope.initObject(elem);
 
               switch(infos){
                 case 'phones' :
+                   if(elem.number){
+                     var copyOfElement = angular.copy(elem);
+                     arr.push(copyOfElement);
+                     $scope.initObject(elem);
+                   }
                    $scope.showPhoneForm=false;
                    $scope.phone.type= 'work';
+                   $scope.phone.number='';
                 break;
                 case 'emails' :
+                  if(elem.email){
+                     var copyOfElement = angular.copy(elem);
+                     arr.push(copyOfElement);
+                     $scope.initObject(elem);
+                  }
                    $scope.showEmailForm=false;
+                   $scope.email.email=''
                 break;
                 case 'websites' :
+                     if(elem){
+                     var copyOfElement = angular.copy(elem);
+                     arr.push(copyOfElement);
+                     $scope.initObject(elem);
+                    }
+                    $scope.website.url='';
                     $scope.showWebsiteForm=false;
                 break;
                 case 'sociallinks' :
+                     if(elem){
+                     var copyOfElement = angular.copy(elem);
+                     arr.push(copyOfElement);
+                     $scope.initObject(elem);
+                    }
+                   $scope.sociallink.url='';
                    $scope.showSociallinkForm=false;
                 break;
                 case 'customfields' :
+                    if(elem.field && elem.value){
+                     var copyOfElement = angular.copy(elem);
+                     arr.push(copyOfElement);
+                     $scope.initObject(elem);
+                    }
+                    $scope.customfield.field='';
+                    $scope.customfield.value='';
                    $scope.showCustomFieldForm=false;
                 break;
                 case 'addresses' :
+                    if(elem.country){
+                     var copyOfElement = angular.copy(elem);
+                     arr.push(copyOfElement);
+                     $scope.initObject(elem);
+                    }
+
                     $('#addressmodal').modal('hide');
 
                 break;

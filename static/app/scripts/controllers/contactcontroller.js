@@ -289,8 +289,8 @@ $scope.updateTag = function(tag){
 
 
 
-$scope.selectTag= function(tag,index,$event){
-			if(!$scope.manage_tags){
+$scope.selectTag= function(tag,index,$event){			
+	        if(!$scope.manage_tags){
 				 var element=$($event.target);
 				 if(element.prop("tagName")!='LI'){
 							element=element.parent();
@@ -670,6 +670,88 @@ $scope.CaselistNextPageItems = function(){
 
 
 $scope.listTags=function(){
+
+      var paramsTag = {'about_kind':'Contact'}
+      Tag.list($scope,paramsTag);
+     };
+
+
+     $scope.selectMember = function(){
+        $scope.slected_memeber = $scope.user;
+        $scope.user = '';
+        $scope.sharing_with.push($scope.slected_memeber);
+
+     };
+     $scope.updateCollaborators = function(){
+          var contactid = {'id':$route.current.params.contactId};
+          Contact.get($scope,contactid);
+
+     };
+      $scope.share = function(slected_memeber){
+        console.log('permissions.insert share');
+        console.log(slected_memeber);
+        console.log("ssssssssss");
+        console.log($scope.contact.id);
+        $scope.$watch($scope.contact.access, function() {
+         var body = {'access':$scope.contact.access};
+         var id = $scope.contact.id;
+         var params ={'id':id,
+                      'access':$scope.contact.access}
+         Contact.patch($scope,params);
+        });
+        $('#sharingSettingsModal').modal('hide');
+
+        if ($scope.sharing_with.length>0){
+
+          var items = [];
+
+          angular.forEach($scope.sharing_with, function(user){
+                      var item = {
+                                  'type':"user",
+                                  'value':user.entityKey
+                                };
+                      items.push(item);
+          });
+
+          if(items.length>0){
+              var params = {
+                            'about': $scope.contact.entityKey,
+                            'items': items
+              }
+              Permission.insert($scope,params);
+          }
+
+
+          $scope.sharing_with = [];
+
+
+        }
+
+
+     };
+
+  $scope.editacontact = function(){
+    $('#EditContactModal').modal('show');
+  }
+  //HKA 27.11.2013 Update Contact updatecontact
+  $scope.updatecontact = function(contact){
+    var params={'id':$scope.contact.id,
+                'firstname':contact.firstname,
+                'lastname':contact.lastname,
+                'title':contact.title};
+        Contact.patch($scope,params);
+        $('#EditContactModal').modal('hide')
+
+  };
+  //HKA 01.12.2013 Edit tagline of Account
+    $scope.edittagline = function() {
+       $('#EditTagModal').modal('show');
+    };
+    //HKA 01.12.2013 Edit Introduction on Account
+    $scope.editintro = function() {
+       $('#EditIntroModal').modal('show');
+    };
+=======
 			var paramsTag = {'about_kind':'Contact'}
 			Tag.list($scope,paramsTag);
 		 };
@@ -1061,7 +1143,7 @@ $scope.sendEmailSelected=function(){
 	$scope.email.to = '';
 	angular.forEach($scope.infonodes.emails, function(value, key){
 		console.log(value)
-		if (value) $scope.email.to = $scope.email.to + value.email + ',';
+		if (value.email) $scope.email.to = $scope.email.to + value.email + ',';
     });
 
 };

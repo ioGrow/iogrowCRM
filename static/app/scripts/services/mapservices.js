@@ -5,7 +5,7 @@ mapservices.factory('Map', function($http) {
   };
 
   Map.render = function($scope){
-     
+    console.log("scdsdddddddddddddddddd");
       var mapOptions = {
                   center: new google.maps.LatLng(0, 0),
                   zoom: 01
@@ -81,7 +81,7 @@ mapservices.factory('Map', function($http) {
   Map.updateLocation = function($scope,location,marker){
               marker.address.lat = location.lat();
               marker.address.lon = location.lng();
-              
+              console.log("markerrrrrrrrrrrrrrrrrr")
               $scope.locationUpdated(marker.address);
   };
   Map.emptyString = function(entry,isLast){
@@ -92,6 +92,10 @@ mapservices.factory('Map', function($http) {
       entry = entry + ',';
     }
     return entry
+  }
+  Map.destroy = function(){
+    console.log("mappppppppppppp");
+    $('#gmap_canvas').gmap('destroy');
   }
   Map.searchLocation = function($scope,address){
               
@@ -105,12 +109,13 @@ mapservices.factory('Map', function($http) {
                 
               if ( status == 'OK' ) {
                   
-             
+                  console.log("okkkkkkkkkkkkkkkkkss");
                   address.lat = results[0].geometry.location.lat();
                   address.lon = results[0].geometry.location.lng();
                   var position = results[0].geometry.location.lat() + ',' + results[0].geometry.location.lng();
+                
                   $('#gmap_canvas').gmap('addMarker', {'position': position, 'bounds': true, 'draggable':true,'address':address}).dragend( function(event) {
-                          
+                          console.log("uppppppppppppp");
                           Map.updateLocation($scope,event.latLng, this);
                   });
                   $scope.addGeo(address);
