@@ -5,6 +5,7 @@ mapservices.factory('Map', function($http) {
   };
 
   Map.render = function($scope){
+    console.log("scdsdddddddddddddddddd");
       var mapOptions = {
                   center: new google.maps.LatLng(0, 0),
                   zoom: 01
@@ -93,6 +94,7 @@ mapservices.factory('Map', function($http) {
     return entry
   }
   Map.destroy = function(){
+    console.log("mappppppppppppp");
     $('#gmap_canvas').gmap('destroy');
   }
   Map.searchLocation = function($scope,address){
@@ -113,7 +115,7 @@ mapservices.factory('Map', function($http) {
                   var position = results[0].geometry.location.lat() + ',' + results[0].geometry.location.lng();
                 
                   $('#gmap_canvas').gmap('addMarker', {'position': position, 'bounds': true, 'draggable':true,'address':address}).dragend( function(event) {
-                          
+                          console.log("uppppppppppppp");
                           Map.updateLocation($scope,event.latLng, this);
                   });
                   $scope.addGeo(address);

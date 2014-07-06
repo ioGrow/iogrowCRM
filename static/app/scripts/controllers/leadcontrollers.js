@@ -539,7 +539,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
 
   $scope.deleteInfonode = function(entityKey,kind){
     var params = {'entityKey':entityKey,'kind':kind};
-
+    console.log("innnnnnnnnnn");
     InfoNode.delete($scope,params);
 
   };
@@ -1028,8 +1028,10 @@ $scope.deletelead = function(){
           Map.render($scope);
       };
       $scope.addAddress = function(address){
-
-        Map.searchLocation($scope,address);
+           //Map.render($scope);
+           //renderMaps();
+           Map.searchLocation($scope,address);
+        //Map.searchLocation($scope,address);
 
         $('#addressmodal').modal('hide');
         $scope.address={};
@@ -1106,7 +1108,13 @@ $scope.deletelead = function(){
 
   // HKA 19.03.2014 inline update infonode
      $scope.inlinePatch=function(kind,edge,name,entityKey,value){
-
+      console.log("ezzzzzzzzzzzzz");
+      console.log(value);
+       Map.destroy();
+      console.log("ezzzzzzzzzzzzz2");
+      console.log($scope);
+       //Map.searchLocation($scope,value);
+       //Map.searchLocation($scope,address);
    if (kind=='Lead') {
       if (name=='firstname')
         {params = {'id':$scope.lead.id,

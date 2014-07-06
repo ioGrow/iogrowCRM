@@ -105,6 +105,8 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
      $scope.renderMaps = function(){
          // Map.render($scope);
           Map.destroy();
+          console.log("oooooooooo");
+          console.log($scope);
           Map.searchLocation($scope,$scope.event.where);
       };
 
@@ -341,7 +343,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
      };
 
      $scope.renderMaps = function(){
-
+          console.log("hhhhhhhhhhhhh");
           Map.render($scope);
           //Map.searchLocation($scope,$scope.event.where);
       };
