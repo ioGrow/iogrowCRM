@@ -583,9 +583,7 @@ app.controller('AccountShowCtrl', ['$scope','$filter', '$route','Auth','Account'
 
 
        };
-       $scope.test=function(email){
       
-       };
     $scope.selectMemberToTask = function(){
         console.log($scope.selected_members);
         if ($scope.selected_members.indexOf($scope.user) == -1) {
@@ -1317,7 +1315,7 @@ $scope.CaselistNextPageItems = function(){
                     "field": "type",
                     "value": phone.type
                   },
-                  {
+                  { 
                     "field": "number",
                     "value": phone.number
                   }
@@ -1327,6 +1325,7 @@ $scope.CaselistNextPageItems = function(){
   }
       $scope.phone={};
        $scope.phone.type= 'work';
+       $scope.phone.number='';
 
       $scope.showPhoneForm=false;
 
@@ -1354,7 +1353,7 @@ $scope.CaselistNextPageItems = function(){
 
 //HKA 20.11.2013 Add Email
 $scope.addEmail = function(email){
-
+  if(email.email){
   params = {'parent':$scope.account.entityKey,
             'kind':'emails',
             'fields':[
@@ -1365,6 +1364,7 @@ $scope.addEmail = function(email){
             ]
   };
   InfoNode.insert($scope,params);
+}
   $scope.email={};
   $scope.showEmailForm = false;
   };
@@ -1405,6 +1405,7 @@ $scope.addSocial = function(social){
 
 };
 $scope.addCustomField = function(customField){
+  if (customField.field && customField.value){
   params = {'parent':$scope.account.entityKey,
             'kind':'customfields',
             'fields':[
@@ -1415,7 +1416,11 @@ $scope.addCustomField = function(customField){
             ]
   };
   InfoNode.insert($scope,params);
+    }
+
     $scope.customfield={};
+    $scope.customfield.field='';
+    $scope.customfield.value='';
     $scope.showCustomFieldForm = false;
 
 };
@@ -1448,7 +1453,15 @@ $scope.updatAccountHeader = function(account){
 };
 
     $('#some-textarea').wysihtml5();
+    // arezki lebdiri 03/07/2014 send email
+$scope.sendEmailSelected=function(){
+  $scope.email.to = '';
+  angular.forEach($scope.infonodes.emails, function(value, key){
+    console.log(value)
+    if (value.email) $scope.email.to = $scope.email.to + value.email + ',';
+    });
 
+};
       $scope.sendEmail = function(email){
         email.body = $('#some-textarea').val();
 
