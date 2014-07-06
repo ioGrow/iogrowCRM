@@ -286,6 +286,7 @@ Opportunity.insert = function($scope,params){
              };
          }
       });
+      $scope.isLoading=false;
 };
 Opportunity.delete = function($scope,params){
     console.log(params);
