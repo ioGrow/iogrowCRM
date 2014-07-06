@@ -544,10 +544,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
 
   $scope.deleteInfonode = function(entityKey,kind,val){
     var params = {'entityKey':entityKey,'kind':kind};
-<<<<<<< HEAD
-    console.log("innnnnnnnnnn");
-=======
->>>>>>> 67ddee1b3f339fbe1d19fadf163f28cc25fcc8c3
+
     InfoNode.delete($scope,params);
     var str=$scope.email.to
     var newstr=str.replace(val+",","");

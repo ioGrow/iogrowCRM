@@ -751,10 +751,7 @@ $scope.listTags=function(){
     $scope.editintro = function() {
        $('#EditIntroModal').modal('show');
     };
-=======
-			var paramsTag = {'about_kind':'Contact'}
-			Tag.list($scope,paramsTag);
-		 };
+
 
 
 		 $scope.selectMember = function(){
