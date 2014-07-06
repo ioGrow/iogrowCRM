@@ -1227,6 +1227,7 @@ class CrmEngineApi(remote.Service):
     def events_patch(self, request):
         event_key = ndb.Key(urlsafe = request.entityKey)
         event = event_key.get()
+
         if event is None:
             raise endpoints.NotFoundException('Event not found')
         event_patch_keys = ['title','starts_at','ends_at','description','where']

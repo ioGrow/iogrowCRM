@@ -14,6 +14,7 @@ leadservices.factory('Lead', function($http) {
             if(!resp.code){
                $scope.lead = resp;
                $scope.isContentLoaded = true;
+               $scope.renderMaps();
                var renderMap = false;
                 if (resp.infonodes){
                     if (resp.infonodes.items){
