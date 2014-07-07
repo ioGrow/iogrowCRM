@@ -360,7 +360,7 @@ accountservices.factory('Email', function() {
 
             $('#sendingEmail').modal('show');
             if(!resp.code){
-             console.log('email sent thank youlead');
+             console.log('email sent thank youleaddd');
              $scope.emailSent= true;
              $scope.sending = false;
              $scope.selectedTab = 1;
