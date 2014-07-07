@@ -80,21 +80,25 @@
                       </a>
                     </i>
                   </span>
-                  <span ng-show=" contact.firstname" style="">
-                    Title:
-                    <a class="tag ng-binding" href="/#/search/type:Contact #<%= contact.title %>">
-                      #<%= contact.title %>
-                    </a>
-                  </span>
-                  <br>
-                  <span ng-show="contact.lastname" style="">
-                    Company:
-                    <a class="tag ng-binding" href="/#/search/type:Contact  #<%= contact.account.name %>">
-                      #<%= contact.account.name %>
-                    </a>
-                  </span>
-                  <br>
-                  <hr>
+                  <ul class="list-unstyled contactInfos">
+                    <li ng-show=" contact.title" >
+                      <span>
+                        Title:
+                        <a class="tag ng-binding" href="/#/search/type:Contact #<%= contact.title %>">
+                          #<%= contact.title %>
+                        </a>
+                      </span>
+                    </li>
+                    <li ng-show="contact.account.name">
+                      <span>
+                        Company:
+                        <a class="tag ng-binding" href="/#/search/type:Contact  #<%= contact.account.name %>">
+                          #<%= contact.account.name %>
+                        </a>
+                      </span>
+                    </li>
+                  </ul>
+                  <hr class="sm-hr">
                 </div>
               </div>
               <div class="row">
