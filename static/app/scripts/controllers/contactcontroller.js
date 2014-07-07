@@ -483,167 +483,168 @@ $scope.addTags=function(){
 
 app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User','Attachement','Map','Opportunitystage','Casestatus','InfoNode','Tag',
 		function($scope,$filter,$route,Auth,Email,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User,Attachement,Map,Opportunitystage,Casestatus,InfoNode,Tag) {
-      $("ul.page-sidebar-menu li").removeClass("active");
-      $("#id_Contacts").addClass("active");
+ console.log('I am in ContactShowCtrl');
+			$("ul.page-sidebar-menu li").removeClass("active");
+			$("#id_Contacts").addClass("active");
 
-     $scope.selectedTab = 2;
-     $scope.isSignedIn = false;
-     $scope.immediateFailed = false;
-     $scope.isContentLoaded = false;
-     $scope.pagination = {};
-     $scope.nextPageToken = undefined;
-     $scope.prevPageToken = undefined;
-     $scope.currentPage = 01;
-     $scope.pages = [];
-     //HKA 10.12.2013 Var topic to manage Next & Prev
-     $scope.topicCurrentPage=01;
-     $scope.topicpagination={};
-     $scope.topicpages = [];
-    //HKA 11.12.2013 var Opportunity to manage Next & Prev
-     $scope.opppagination = {};
-     $scope.oppCurrentPage=01;
-     $scope.opppages=[];
-     //HKA 11.12.2013 var Case to manage Next & Prev
-     $scope.casepagination = {};
-     $scope.caseCurrentPage=01;
-     $scope.casepages=[];
-     $scope.documentpagination = {};
-     $scope.documentCurrentPage=01;
-     $scope.documentpages=[];
-     $scope.showPhoneForm=false;
+		 $scope.selectedTab = 2;
+		 $scope.isSignedIn = false;
+		 $scope.immediateFailed = false;
+		 $scope.isContentLoaded = false;
+		 $scope.pagination = {};
+		 $scope.nextPageToken = undefined;
+		 $scope.prevPageToken = undefined;
+		 $scope.currentPage = 01;
+		 $scope.pages = [];
+		 //HKA 10.12.2013 Var topic to manage Next & Prev
+		 $scope.topicCurrentPage=01;
+		 $scope.topicpagination={};
+		 $scope.topicpages = [];
+		//HKA 11.12.2013 var Opportunity to manage Next & Prev
+		 $scope.opppagination = {};
+		 $scope.oppCurrentPage=01;
+		 $scope.opppages=[];
+		 //HKA 11.12.2013 var Case to manage Next & Prev
+		 $scope.casepagination = {};
+		 $scope.caseCurrentPage=01;
+		 $scope.casepages=[];
+		 $scope.documentpagination = {};
+		 $scope.documentCurrentPage=01;
+		 $scope.documentpages=[];
+		 $scope.showPhoneForm=false;
 
-      $scope.accounts = [];
-      $scope.opportunities = [];
-      $scope.Opportunities = {};
-      $scope.email = {};
-      $scope.stage_selected={};
-      $scope.status_selected={};
-      $scope.infonodes = {};
-      $scope.phone={};
-      $scope.phone.type= 'work';
-      $scope.casee = {};
-      $scope.casee.priority = 4;
-      $scope.sharing_with = [];
-      $scope.newTaskform=false;
+			$scope.accounts = [];
+			$scope.opportunities = [];
+			$scope.Opportunities = {};
+			$scope.email = {};
+			$scope.stage_selected={};
+			$scope.status_selected={};
+			$scope.infonodes = {};
+			$scope.phone={};
+			$scope.phone.type= 'work';
+			$scope.casee = {};
+			$scope.casee.priority = 4;
+			$scope.sharing_with = [];
+			$scope.statuses = [
+			{value: 'Home', text: 'Home'},
+			{value: 'Work', text: 'Work'},
+			{value: 'Mob', text: 'Mob'},
+			{value: 'Other', text: 'Other'}
+			];
+			$scope.showUpload=false;
+			$scope.profile_img = {
+														'profile_img_id':null,
+														'profile_img_url':null
+													};
+			$scope.newTaskform=false;
       $scope.newEventform=false;
       $scope.newTask={};
-      $scope.statuses = [
-      {value: 'Home', text: 'Home'},
-      {value: 'Work', text: 'Work'},
-      {value: 'Mob', text: 'Mob'},
-      {value: 'Other', text: 'Other'}
-      ];
-      $scope.showUpload=false;
-      $scope.profile_img = {
-                            'profile_img_id':null,
-                            'profile_img_url':null
-                          };
 
 
-      $scope.waterfallTrigger= function(){
+			$scope.waterfallTrigger= function(){
 
 
-            /* $('.waterfall').hide();
-           $('.waterfall').show();*/
-           $( window ).trigger( "resize" );
-      };
-      // What to do after authentication
-      $scope.runTheProcess = function(){
+						/* $('.waterfall').hide();
+					 $('.waterfall').show();*/
+					 $( window ).trigger( "resize" );
+			};
+			// What to do after authentication
+			$scope.runTheProcess = function(){
 
-          var params = {
-                          'id':$route.current.params.contactId,
+					var params = {
+													'id':$route.current.params.contactId,
 
-                          'topics':{
-                            'limit': '7'
-                          },
+													'topics':{
+														'limit': '7'
+													},
 
-                          'opportunities':{
-                            'limit': '15'
-                          },
+													'opportunities':{
+														'limit': '15'
+													},
 
-                          'cases':{
-                            'limit': '15'
-                          },
+													'cases':{
+														'limit': '15'
+													},
 
-                          'documents':{
-                            'limit': '15'
-                          },
+													'documents':{
+														'limit': '15'
+													},
 
-                          'tasks':{
+													'tasks':{
 
-                          },
+													},
 
-                          'events':{
+													'events':{
 
-                          }
-                      };
-          Contact.get($scope,params);
-          User.list($scope,{});
-          Opportunitystage.list($scope,{});
-          Casestatus.list($scope,{});
+													}
+											};
+					Contact.get($scope,params);
+					User.list($scope,{});
+					Opportunitystage.list($scope,{});
+					Casestatus.list($scope,{});
 
-      };
-        // We need to call this to refresh token when user credentials are invalid
-      $scope.refreshToken = function() {
-            Auth.refreshToken();
-      };
-      $scope.getTopicUrl = function(type,id){
-      return Topic.getUrl(type,id);
-    };
-     //HKA 11.11.2013
-    $scope.TopiclistNextPageItems = function(){
-
-
-        var nextPage = $scope.topicCurrentPage + 1;
-        var params = {};
-          if ($scope.topicpages[nextPage]){
-            params = {
-                      'id':$scope.contact.id,
-                        'topics':{
-                          'limit': '7',
-                          'pageToken':$scope.topicpages[nextPage]
-                        }
-                     }
-              $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ;
-              Contact.get($scope,params);
-            }
+			};
+				// We need to call this to refresh token when user credentials are invalid
+			$scope.refreshToken = function() {
+						Auth.refreshToken();
+			};
+			$scope.getTopicUrl = function(type,id){
+			return Topic.getUrl(type,id);
+		};
+		 //HKA 11.11.2013
+		$scope.TopiclistNextPageItems = function(){
 
 
-     }
+				var nextPage = $scope.topicCurrentPage + 1;
+				var params = {};
+					if ($scope.topicpages[nextPage]){
+						params = {
+											'id':$scope.contact.id,
+												'topics':{
+													'limit': '7',
+													'pageToken':$scope.topicpages[nextPage]
+												}
+										 }
+							$scope.topicCurrentPage = $scope.topicCurrentPage + 1 ;
+							Contact.get($scope,params);
+						}
 
 
-     $scope.listTopics = function(contact){
-        var params = {
-                      'id':$scope.contact.id,
-                      'topics':{
-                             'limit': '7'
-                       }
-                    };
-          Contact.get($scope,params);
-
-     };
-     //HKA 10.12.2013 Page Prev & Next on List Opportunities
-  $scope.OpplistNextPageItems = function(){
+		 }
 
 
-        var nextPage = $scope.oppCurrentPage + 1;
-        var params = {};
-          if ($scope.opppages[nextPage]){
-            params = {
-                      'id':$scope.contact.id,
-                        'opportunities':{
-                          'limit': '6',
-                          'pageToken':$scope.opppages[nextPage]
-                        }
-                     }
-            $scope.oppCurrentPage = $scope.oppCurrentPage + 1 ;
-            Contact.get($scope,params);
-            }
+		 $scope.listTopics = function(contact){
+				var params = {
+											'id':$scope.contact.id,
+											'topics':{
+														 'limit': '7'
+											 }
+										};
+					Contact.get($scope,params);
 
-     };
+		 };
+		 //HKA 10.12.2013 Page Prev & Next on List Opportunities
+	$scope.OpplistNextPageItems = function(){
 
-    //HKA 07.12.2013 Manage Prev & Next Page on Related List Cases
-		$scope.CaselistNextPageItems = function(){
+
+				var nextPage = $scope.oppCurrentPage + 1;
+				var params = {};
+					if ($scope.opppages[nextPage]){
+						params = {
+											'id':$scope.contact.id,
+												'opportunities':{
+													'limit': '6',
+													'pageToken':$scope.opppages[nextPage]
+												}
+										 }
+						$scope.oppCurrentPage = $scope.oppCurrentPage + 1 ;
+						Contact.get($scope,params);
+						}
+
+		 };
+
+		//HKA 07.12.2013 Manage Prev & Next Page on Related List Cases
+$scope.CaselistNextPageItems = function(){
 
 
 				var nextPage = $scope.caseCurrentPage + 1;
@@ -865,7 +866,7 @@ $scope.listTags=function(){
 
 	};
  //HKA 09.11.2013 Add a new Task
-   $scope.addTask = function(task){
+	 $scope.addTask = function(task){
       if ($scope.newTaskform==false) {
                 $scope.newTaskform=true;
                  }else{
@@ -897,21 +898,20 @@ $scope.listTags=function(){
            }
      }
 
-     $scope.hilightTask = function(){
-        console.log('Should higll');
-        $('#task_0').effect("highlight","slow");
-        $('#task_0').effect( "bounce", "slow" );
+		 $scope.hilightTask = function(){
+				console.log('Should higll');
+				$('#task_0').effect("highlight","slow");
+				$('#task_0').effect( "bounce", "slow" );
 
-     }
-     $scope.listTasks = function(){
-        var params = {
-                        'id':$scope.contact.id,
-                        'tasks':{}
-                      };
-        Contact.get($scope,params);
+		 }
+		 $scope.listTasks = function(){
+				var params = {
+												'id':$scope.contact.id,
+												'tasks':{}
+											};
+				Contact.get($scope,params);
 
-     }
-
+		 }
  //HKA 10.11.2013 Add event
  $scope.addEvent = function(ioevent){
         if ($scope.newEventform==false) {
@@ -948,50 +948,50 @@ $scope.listTags=function(){
       }
      }
      }
-     $scope.hilightEvent = function(){
-        console.log('Should higll');
-        $('#event_0').effect("highlight","slow");
-        $('#event_0').effect( "bounce", "slow" );
+		 $scope.hilightEvent = function(){
+				console.log('Should higll');
+				$('#event_0').effect("highlight","slow");
+				$('#event_0').effect( "bounce", "slow" );
 
-     }
-     $scope.listEvents = function(){
-        var params = {
-                        'id':$scope.contact.id,
-                        'events':{
+		 }
+		 $scope.listEvents = function(){
+				var params = {
+												'id':$scope.contact.id,
+												'events':{
 
-                        }
-                      };
-        Contact.get($scope,params);
+												}
+											};
+				Contact.get($scope,params);
 
-     };
-  //HKA 02.12.2013 List Opportunities related to Contact
-     $scope.listOpportunities = function(){
-        var params = {'contact':$scope.contact.entityKey,
-                      //'order': '-updated_at',
-                      'limit': 6
-                      };
-        Opportunity.list($scope,params);
+		 };
+	//HKA 02.12.2013 List Opportunities related to Contact
+		 $scope.listOpportunities = function(){
+				var params = {'contact':$scope.contact.entityKey,
+											//'order': '-updated_at',
+											'limit': 6
+											};
+				Opportunity.list($scope,params);
 
-     };
+		 };
 
-  //HKA 02.12.2013 List Cases related to Contact
-  $scope.listCases = function(){
-    var params ={'contact':$scope.contact.entityKey,
-                  //'order':'-creationTime',
-                  'limit':6};
+	//HKA 02.12.2013 List Cases related to Contact
+	$scope.listCases = function(){
+		var params ={'contact':$scope.contact.entityKey,
+									//'order':'-creationTime',
+									'limit':6};
 
-    Case.list($scope,params)
-  };
-     //HKA 11.11.2013 Add Note
-  $scope.addNote = function(note){
-    var params ={
-                  'about': $scope.contact.entityKey,
-                  'title': note.title,
-                  'content': note.content
-      };
-    Note.insert($scope,params);
-    $scope.note.title='';
-    $scope.note.content='';
+		Case.list($scope,params)
+	};
+		 //HKA 11.11.2013 Add Note
+	$scope.addNote = function(note){
+		var params ={
+									'about': $scope.contact.entityKey,
+									'title': note.title,
+									'content': note.content
+			};
+		Note.insert($scope,params);
+		$scope.note.title='';
+		$scope.note.content='';
 
 };
 //HKA 26.11.2013 Update Case
