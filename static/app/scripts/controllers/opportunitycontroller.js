@@ -947,9 +947,8 @@ $scope.createNote = function(){
                   'bcc': email.bcc,
                   'subject': email.subject,
                   'body': email.body,
-
-                  'about_item':$scope.opportunity.id,
-                  'about_kind':'Opportunity' };
+                   'about':$scope.opportunity.entityKey
+                   };
 
         Email.send($scope,params);
       };
