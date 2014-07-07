@@ -309,6 +309,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                                            title:$scope.events_cal_list[i].title,
                                                            start:moment($scope.events_cal_list[i].starts_at),
                                                            end: moment($scope.events_cal_list[i].ends_at),
+                                                           entityKey:$scope.events_cal_list[i].entityKey,
                                                            url:'/#/events/show/'+$scope.events_cal_list[i].id.toString(),
                                                            backgroundColor:$scope.events_cal_list[i].prestationColor,
                                                            borderColor:$scope.events_cal_list[i].prestationColor,
@@ -365,11 +366,12 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
 
                     var params={
                                  'id':event.id,
+                                 'entityKey':event.entityKey,
                                  'starts_at':moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000'),
                                  'ends_at':moment(event.end).format('YYYY-MM-DDTHH:mm:00.000000')
                     }
-                 
-                console.log(params);
+                
+                    
                    Event.patch($scope,params);
                
                 
@@ -383,10 +385,11 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
        eventResize:function( event, jsEvent, ui, view ) { 
        var params={
                                 'id':event.id,
+                                'entityKey':event.entityKey,
                                 'starts_at':moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000'),
                                  'ends_at':moment(event.end).format('YYYY-MM-DDTHH:mm:00.000000')
                     }
-                    console.log(params);
+                  
                     Event.patch($scope,params);
         }
          // the end of initialisation         

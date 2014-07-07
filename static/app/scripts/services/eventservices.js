@@ -58,6 +58,7 @@ eventservices.factory('Event', function($http) {
 
          }else{
             console.log("not working");
+            console.log(resp.message);
              if(resp.message=="Invalid grant"){
               console.log("Invalid grant");
                 $scope.refreshToken();
