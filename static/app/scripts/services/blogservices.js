@@ -86,6 +86,38 @@ blogservices.factory('Article', function($http) {
               }
       });
   };
+  Article.search = function($scope,params){
+      $scope.isLoading = true;
+      gapi.client.blogengine.search(params).execute(function(resp) {
+              if(!resp.code){
+
+                  if (!resp.items){
+                    if(!$scope.isFiltering){
+                        $scope.blankStateaccount = true;
+                    }
+                  }
+                 $scope.articles = resp.items;
+                 if (resp.nextPageToken){
+                   var nextPage = $scope.currentPage + 1;
+                   // Store the nextPageToken
+                   $scope.pages[nextPage] = resp.nextPageToken;
+
+
+                 }
+                 // Loaded succefully
+                 $scope.isLoading = false;
+                 // Call the method $apply to make the update on the scope
+                 $scope.$apply();
+              }else {
+
+               if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+              }
+      });
+  };
   Article.listMore = function($scope,params){
       $scope.isLoading = true;
       $scope.$apply();

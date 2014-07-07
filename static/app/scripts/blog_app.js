@@ -1,6 +1,5 @@
 var app = angular.module('blogEngine',['blogEngine.blogservices', 'ui.bootstrap.datetimepicker','easypiechart','xeditable','ngQuickDate','ui.bootstrap','ui.select2','angularMoment','crmEngine.authservices', 'crmEngine.showservices', 'crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.eventservices', 'crmEngine.leadservices','crmEngine.opportunityservices','crmEngine.caseservices','crmEngine.userservices','crmEngine.groupservices','crmEngine.noteservices','crmEngine.commentservices','crmEngine.settingservices','crmEngine.feedbackservices','crmEngine.companyprofileservices','mapServices','crmEngine.needservices','crmEngine.infonodeservices','crmEngine.edgeservices']);
-
-
+var public_blog_app = angular.module('publicBlogEngine',['blogEngine.blogservices','ui.bootstrap','ui.select2']);
 
 app.config(function($interpolateProvider){
   $interpolateProvider.startSymbol('<%=');
