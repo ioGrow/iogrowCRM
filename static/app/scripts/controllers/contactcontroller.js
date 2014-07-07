@@ -1175,7 +1175,7 @@ $scope.sendEmailSelected=function(){
 									'body': email.body,
 									'about':$scope.contact.entityKey
 									 };
-
+                console.log($scope.contact.entityKey)
 				Email.send($scope,params);
 			};
 			$scope.editbeforedelete = function(){
