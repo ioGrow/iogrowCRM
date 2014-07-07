@@ -1437,6 +1437,135 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             $('#EditIntroModal').modal('hide');
         };
 //HKA 22.11.2013 Add Account
+
+$scope.updatAccountHeader = function(account){
+
+  params = {'id':$scope.account.id,
+             'name':account.name,
+           'account_type':account.account_type,
+           'industry':account.industry}
+  Account.patch($scope,params);
+  $('#EditAccountModal').modal('hide');
+};
+
+    $('#some-textarea').wysihtml5();
+    // arezki lebdiri 03/07/2014 send email
+$scope.sendEmailSelected=function(){
+  $scope.email.to = '';
+  angular.forEach($scope.infonodes.emails, function(value, key){
+    console.log(value)
+    if (value.email) $scope.email.to = $scope.email.to + value.email + ',';
+    });
+
+};
+      $scope.sendEmail = function(email){
+        email.body = $('#some-textarea').val();
+
+        var params = {
+                  'to': email.to,
+                  'cc': email.cc,
+                  'bcc': email.bcc,
+                  'subject': email.subject,
+                  'body': email.body,
+                  'about':$scope.account.entityKey
+                  };
+
+        Email.send($scope,params);
+      };
+
+
+$scope.editbeforedelete = function(){
+     $('#BeforedeleteAccount').modal('show');
+   };
+$scope.beforedeleteInfonde = function(){
+    $('#BeforedeleteInfonode').modal('show');
+}
+$scope.deleteaccount = function(){
+     var accountKey = {'entityKey':$scope.account.entityKey};
+     Account.delete($scope,accountKey);
+
+     $('#BeforedeleteAccount').modal('hide');
+};
+
+      $scope.renderMaps = function(){
+
+          $scope.addresses = $scope.account.addresses;
+          Map.render($scope);
+      };
+      $scope.addAddress = function(address){
+
+        Map.searchLocation($scope,address);
+
+        $('#addressmodal').modal('hide');
+        $scope.address={};
+      };
+      $scope.locationUpdated = function(addressArray){
+
+          var params = {'id':$scope.account.id,
+                         'addresses':addressArray};
+  
+          Account.patch($scope,params);
+      };
+      $scope.addGeo = function(address){
+          params = {'parent':$scope.account.entityKey,
+            'kind':'addresses',
+            'fields':[
+                {
+                  "field": "street",
+                  "value": address.street
+                },
+                {
+                  "field": "city",
+                  "value": address.city
+                },
+                {
+                  "field": "state",
+                  "value": address.state
+                },
+                {
+                  "field": "postal_code",
+                  "value": address.postal_code
+                },
+                {
+                  "field": "country",
+                  "value": address.country
+                }
+            ]
+          };
+          if (address.lat){
+            params = {'parent':$scope.account.entityKey,
+            'kind':'addresses',
+            'fields':[
+                {
+                  "field": "street",
+                  "value": address.street
+                },
+                {
+                  "field": "city",
+                  "value": address.city
+                },
+                {
+                  "field": "state",
+                  "value": address.state
+                },
+                {
+                  "field": "postal_code",
+                  "value": address.postal_code
+                },
+                {
+                  "field": "country",
+                  "value": address.country
+                },
+                {
+                  "field": "lat",
+                  "value": address.lat.toString()
+                },
+                {
+                  "field": "lon",
+                  "value": address.lon.toString()
+                }
+              ]
+
         $scope.updatAccountHeader = function(account) {
 
             params = {'id': $scope.account.id,
@@ -1595,6 +1724,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                 R: parseInt(r, 16),
                 G: parseInt(g, 16),
                 B: parseInt(b, 16)
+
             };
         }
 
