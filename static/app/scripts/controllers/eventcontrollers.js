@@ -261,7 +261,9 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
      $scope.role= 'participant';
      $scope.isContentLoaded = true;
      $scope.title_event="New Event" ;
+     $scope.permet_clicking=true ;
      // What to do after authentication
+
      $scope.runTheProcess = function(){
           var eventid = {'id':$route.current.params.eventId};
           Event.list($scope);
@@ -294,7 +296,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                $scope.$apply();
                
     
-           
+            if( $scope.permet_clicking){
               // $scope.end_event=date.add('hours',1).format('YYYY-MM-DDTHH:mm:00.000000');
             var eventObject = {
                     title: $scope.title_event 
@@ -307,7 +309,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
     
               $('#calendar').fullCalendar('renderEvent', eventObject, false);     
                    $scope.showEventModal();
-  
+               }
                              }, 
       // Triggered when event dragging begins.
        eventDragStart: function( event, jsEvent, ui, view ) { },
@@ -386,10 +388,13 @@ $scope.cancelAddOperation= function(){
 
 
  $scope.addEvent = function(ioevent){
+          $scope.permet_clicking=false ;
 
           var params ={};
 
-       // $('#newEventModal').modal('hide');
+
+        $scope.updateEventRender(ioevent) ;
+        $('#newEventModal').modal('hide');
 
 
             if(ioevent.title!=""){
@@ -410,15 +415,26 @@ $scope.cancelAddOperation= function(){
 
  
 
+
            console.log(params);
           Event.insert($scope,params);
             $scope.ioevent={};
+
+            $scope.start_event="";
+            $scope.end_event="";
             
        
      }
 
 
 // *******************
+
+// update event
+$scope.updateEventRender= function(ioevent){
+    var events =$('#calendar').fullCalendar( 'clientEvents' ,["new"] );
+         events[0].title=ioevent.title;
+  $('#calendar').fullCalendar('updateEvent', events[0]);
+};
 //
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {

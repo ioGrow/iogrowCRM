@@ -133,8 +133,9 @@ eventservices.factory('Event', function($http) {
             $scope.events = [];
           }
             $scope.events.push(resp);
+            console.log(resp);
             $scope.isLoading = false;
-
+             
             $scope.$apply();
 
          }else{
