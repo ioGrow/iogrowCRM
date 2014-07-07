@@ -86,6 +86,41 @@ blogservices.factory('Article', function($http) {
               }
       });
   };
+  Article.search = function($scope,params){
+      $scope.isLoading = true;
+      console.log('$$$$$$');
+      console.log(params);
+      console.log(gapi.client);
+      gapi.client.blogengine.search(params).execute(function(resp) {
+              if(!resp.code){
+
+                  if (!resp.items){
+                    if(!$scope.isFiltering){
+                        $scope.blankStateaccount = true;
+                    }
+                  }
+                 $scope.articles = resp.items;
+                 if (resp.nextPageToken){
+                   var nextPage = $scope.currentPage + 1;
+                   // Store the nextPageToken
+                   $scope.pages[nextPage] = resp.nextPageToken;
+
+
+                 }
+                 // Loaded succefully
+                 $scope.isLoading = false;
+                 // Call the method $apply to make the update on the scope
+                 $scope.$apply();
+              }else {
+
+               if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+              }
+      });
+  };
   Article.listMore = function($scope,params){
       $scope.isLoading = true;
       $scope.$apply();
@@ -124,23 +159,12 @@ blogservices.factory('Article', function($http) {
               }
       });
   };
-  Article.search = function($scope,params){
-      console.log(params);
-      gapi.client.crmengine.accounts.search(params).execute(function(resp) {
 
-           if (resp.items){
-              $scope.accountsResults = resp.items;
-
-              $scope.$apply();
-            };
-
-      });
-  };
   Article.insert = function($scope,params){
       $scope.isLoading = true;
-      gapi.client.crmengine.accounts.insert(params).execute(function(resp) {
+      gapi.client.blogengine.articles.insert(params).execute(function(resp) {
          if(!resp.code){
-            $scope.accountInserted(resp);
+            $scope.articleInserted(resp);
             $scope.isLoading = false;
              $scope.$apply();
 

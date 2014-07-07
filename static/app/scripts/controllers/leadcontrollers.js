@@ -4,7 +4,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $("#id_Leads").addClass("active");
 
 
-     
+
       document.title = "Leads: Home";
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
@@ -19,13 +19,15 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
       $scope.leads = [];
       $scope.lead = {};
-
+      $scope.selectedLead={};
+      $scope.showClose=false;
       $scope.lead.access ='public';
       $scope.order = '-updated_at';
       $scope.status = 'New';
       $scope.selected_tags = [];
       $scope.draggedTag=null;
       $scope.tag = {};
+
       $scope.showNewTag=false;
       $scope.showUntag=false;
      $scope.edgekeytoDelete=undefined;
@@ -314,7 +316,16 @@ $scope.unselectAllTags= function(){
 
  };
 
-
+$scope.editbeforedelete = function(lead){
+  console.log('test');
+   $scope.selectedLead=lead;
+   $('#BeforedeleteLead').modal('show');
+ };
+ $scope.deletelead = function(){
+     var params = {'entityKey':$scope.selectedLead.entityKey};
+     Lead.delete($scope,params);
+     $('#BeforedeleteLead').modal('hide');
+     };
 $scope.manage=function(){
         $scope.unselectAllTags();
       };
@@ -491,12 +502,16 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.email = {};
      $scope.infonodes = {};
      $scope.phone={};
+     $scope.ioevent={};
      $scope.phone.type= 'work';
      $scope.documentpagination = {};
      $scope.documentCurrentPage=01;
      $scope.documentpages=[];
      $scope.selectedTab = 2;
      $scope.sharing_with = [];
+     $scope.newTaskform=false;
+     $scope.newEventform=false;
+     $scope.newTask={};
      $scope.statuses = [
       {value: 'Home', text: 'Home'},
       {value: 'Work', text: 'Work'},
@@ -509,6 +524,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                         };
 
       // What to do after authentication
+      console.log("check navigator infos");
+      console.log(navigator.appVersion);
       $scope.runTheProcess = function(){
             var params = {
                           'id':$route.current.params.leadId,
@@ -642,27 +659,36 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      //$('#addLeadModal').modal('show');
   //HKA 09.11.2013 Add a new Task
    $scope.addTask = function(task){
+        if ($scope.newTaskform==false) {
+          $scope.newTaskform=true;
+           }else{
+            if (task.title!=null) {
+                    //  $('#myModal').modal('hide');
+            if (task.due){
 
-        $('#myModal').modal('hide');
-        if (task.due){
+                var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
 
-            var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
-
-            params ={'title': task.title,
-                      'due': dueDate,
-                      'parent': $scope.lead.entityKey
-            }
+                params ={'title': task.title,
+                          'due': dueDate,
+                          'parent': $scope.lead.entityKey
+                }
 
 
+            }else{
+                params ={'title': task.title,
+                         'parent': $scope.lead.entityKey
+                       }
+            };
+
+            Task.insert($scope,params);
+            $scope.newTask={};
+            $scope.newTaskform=false;
         }else{
-            params ={'title': task.title,
-                     'parent': $scope.lead.entityKey
-                   }
-        };
-
-        Task.insert($scope,params);
-        $scope.task={};
+            $scope.newTask={};
+            $scope.newTaskform=false;
+      }
      }
+   }
 
      $scope.hilightTask = function(){
         console.log('Should higll');
@@ -680,32 +706,42 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      }
  //HKA 10.11.2013 Add event
  $scope.addEvent = function(ioevent){
+           console.log(ioevent);
+           ioevent.starts_at=$('#leadEventStartsAt').handleDtpicker('getDate');
+           ioevent.ends_at=$('#leadEventEndsAt').handleDtpicker('getDate');
+           if ($scope.newEventform==false) {
+                $scope.newEventform=true;
+           }else{
+            if (ioevent.title!=null) {
+                    var params ={}
+                if (ioevent.starts_at){
+                    if (ioevent.ends_at){
+                      params ={'title': ioevent.title,
+                              'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                              'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                              'where': ioevent.where,
+                              'parent':$scope.lead.entityKey
+                      }
 
-        $('#newEventModal').modal('hide');
-        var params ={}
+                    }else{
+                      params ={
+                        'title': ioevent.title,
+                              'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                              'where': ioevent.where,
+                              'parent':$scope.lead.entityKey
+                      }
+                    }
 
-        if (ioevent.starts_at){
-            if (ioevent.ends_at){
-              params ={'title': ioevent.title,
-                      'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'where': ioevent.where,
-                      'parent':$scope.lead.entityKey
-              }
-
-            }else{
-              params ={
-                'title': ioevent.title,
-                      'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'where': ioevent.where,
-                      'parent':$scope.lead.entityKey
-              }
-            }
-
-            Event.insert($scope,params);
+                    Event.insert($scope,params);
+                    $scope.ioevent={};
+                    $scope.newEventform=false;
+                  }
+        }else{
             $scope.ioevent={};
-          };
+            $scope.newEventform=false;
+      }
      }
+    }
      $scope.hilightEvent = function(){
         console.log('Should higll');
         $('#event_0').effect("highlight","slow");
@@ -791,7 +827,7 @@ $scope.addEmail = function(email){
             ]
   };
   console.log(email)
-  // lebdiri arezki 29-06-2014 control add email 
+  // lebdiri arezki 29-06-2014 control add email
   if(email){
     InfoNode.insert($scope,params);
     $scope.email.to = $scope.email.to + email + ',';
@@ -841,7 +877,7 @@ $scope.addSocial = function(social){
 
 };
 $scope.addCustomField = function(customField){
-   
+
   if (customField){
    if(customField.field && customField.value){
   params = {'parent':$scope.lead.entityKey,
