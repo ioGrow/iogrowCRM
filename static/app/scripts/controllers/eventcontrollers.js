@@ -260,6 +260,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
      $scope.slected_memeber = undefined;
      $scope.role= 'participant';
      $scope.isContentLoaded = true;
+     $scope.title_event="New Event" ;
      // What to do after authentication
      $scope.runTheProcess = function(){
           var eventid = {'id':$route.current.params.eventId};
@@ -280,10 +281,145 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
             right: 'month,agendaWeek,agendaDay'
           },
           defaultView:'agendaWeek',
-          editable: false,
-          events: calendarEventList
+          editable: true,
+          events: calendarEventList,
+          dayClick: function(date,  jsEvent, view) {
+
+
+               $scope.start_event= moment(date).format('YYYY-MM-DDTHH:mm:00.000000')
+               $scope.start_event_draw=date.format();
+               $scope.end_event_draw= date.add('hours',1).format();
+
+               $scope.end_event= moment(date.add('hours',1)).format('YYYY-MM-DDTHH:mm:00.000000');
+               $scope.$apply();
+               
+    
+           
+              // $scope.end_event=date.add('hours',1).format('YYYY-MM-DDTHH:mm:00.000000');
+            var eventObject = {
+                    title: $scope.title_event 
+                };
+                    eventObject.id ="new";
+                    eventObject.start = moment($scope.start_event_draw);
+               
+                   // eventObject.allDay = allDay;
+              eventObject.className = $(this).attr("data-class");
+    
+              $('#calendar').fullCalendar('renderEvent', eventObject, false);     
+                   $scope.showEventModal();
+  
+                             }, 
+      // Triggered when event dragging begins.
+       eventDragStart: function( event, jsEvent, ui, view ) { },
+       // Triggered when event dragging stops. 
+       eventDragStop:function( event, jsEvent, ui, view ) {
+
+           
+        },
+       // Triggered when dragging stops and the event has moved to a different day/time.
+       eventDrop:function( event, revertFunc, jsEvent, ui, view ) { 
+
+                    var params={
+                                 'id':event.id,
+                                 'starts_at':moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000'),
+                                 'ends_at':moment(event.end).format('YYYY-MM-DDTHH:mm:00.000000')
+                    }
+                 
+                console.log(params);
+                   Event.patch($scope,params);
+               
+                
+           },
+
+     //Triggered when event resizing begins.
+       eventResizeStart:function( event, jsEvent, ui, view ) { },
+       //Triggered when event resizing stops.
+       eventResizeStop:function( event, jsEvent, ui, view ) { },
+       //Triggered when resizing stops and the event has changed in duration.
+       eventResize:function( event, jsEvent, ui, view ) { 
+       var params={
+                                'id':event.id,
+                                'starts_at':moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000'),
+                                 'ends_at':moment(event.end).format('YYYY-MM-DDTHH:mm:00.000000')
+                    }
+                    console.log(params);
+                    Event.patch($scope,params);
+        }
+         // the end of initialisation         
+
+
         });
      }
+
+
+
+     // show event modal 
+
+     $scope.showEventModal= function(){  
+     $('#newEventModal').modal('show');
+};
+
+// cancel add event operation 
+
+$scope.cancelAddOperation= function(){
+  var events =$('#calendar').fullCalendar( 'clientEvents' ,["new"] );
+   var event= events[events.length-1];
+   
+    $('#calendar').fullCalendar( 'removeEvents' ,
+
+ function(event){
+
+    if(event.title == "New Event"){
+
+   return true;
+   }
+   return false;
+  }
+      );
+    $scope.start_event="" ;
+    $scope.end_event="";
+     $scope.permet_clicking=true ;
+}
+
+
+// add event operation 
+
+
+ $scope.addEvent = function(ioevent){
+
+          var params ={};
+
+       // $('#newEventModal').modal('hide');
+
+
+            if(ioevent.title!=""){
+
+              params ={'title': ioevent.title,
+                      'starts_at':  $scope.start_event,
+                      'ends_at': $scope.end_event,
+                      'where': ioevent.where,
+                        }
+              
+            }else{
+                 params ={
+                      'starts_at':$scope.start_event,
+                      'ends_at': $scope.end_event,
+                      'where': ioevent.where,
+                        }
+            };
+
+ 
+
+           console.log(params);
+          Event.insert($scope,params);
+            $scope.ioevent={};
+            
+       
+     }
+
+
+// *******************
+//
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
             Auth.refreshToken();

@@ -124,6 +124,7 @@ eventservices.factory('Event', function($http) {
       });
   };
    Event.insert = function($scope,params){
+
       $scope.isLoading = true;
 
       gapi.client.crmengine.events.insertv2(params).execute(function(resp) {
