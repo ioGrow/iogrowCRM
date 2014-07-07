@@ -341,6 +341,11 @@ indexes:
   - name: about_kind
   - name: starts_at
 
+- kind: Event
+  properties:
+  - name: organization
+  - name: starts_at
+
 - kind: Lead
   properties:
   - name: access
