@@ -779,7 +779,7 @@ accountservices.factory('Email', function() {
                 $scope.isLoading = false;
                 $scope.$apply();
                 if (resp.code == 401) {
-                    $scope.refreshToken();
+                    // $scope.refreshToken();
                     $scope.isLoading = false;
                     $scope.$apply();
                 }
