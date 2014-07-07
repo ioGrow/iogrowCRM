@@ -266,7 +266,8 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
 
      $scope.runTheProcess = function(){
           var eventid = {'id':$route.current.params.eventId};
-          Event.list($scope);
+          $scope.renderCalendar();
+         // Event.list($scope);
           User.list($scope,{});
 
 
@@ -274,7 +275,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
 
 
      };
-     $scope.renderCalendar = function(calendarEventList){
+     $scope.renderCalendar = function(){
 
         $('#calendar').fullCalendar({
           header: {
@@ -284,7 +285,48 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
           },
           defaultView:'agendaWeek',
           editable: true,
-          events: calendarEventList,
+          eventSources: [{
+            events: function(start, end, timezone, callback) {
+
+              var events=[];
+              var params = {
+                            'events_list_start':moment(start).format('YYYY-MM-DDTH:mm:00.000000'),
+                            'events_list_end':moment(end).format('YYYY-MM-DDTH:mm:00.000000')
+                            };
+                       console.log(moment(start).format('YYYY-MM-DDTH:mm:00.000000'))
+                        console.log(moment(end).format('YYYY-MM-DDTH:mm:00.000000'))  
+                    $scope.isLoading = true;
+
+              gapi.client.crmengine.events.list_fetch(params).execute(function(resp) { 
+                                if(!resp.code){
+                                  $scope.events_cal_list= resp.items;
+
+                                     try {
+
+                                             for(var i=0;i<$scope.events_cal_list.length;i++ ){
+                                                events.push({ 
+                                                            id: $scope.events_cal_list[i].id ,
+                                                           title:$scope.events_cal_list[i].title,
+                                                           start:moment($scope.events_cal_list[i].starts_at),
+                                                           end: moment($scope.events_cal_list[i].ends_at),
+                                                           url:'/#/events/show/'+$scope.events_cal_list[i].id.toString(),
+                                                           backgroundColor:$scope.events_cal_list[i].prestationColor,
+                                                           borderColor:$scope.events_cal_list[i].prestationColor,
+                                                         
+                                                       })
+                                                
+                                                                                              };  
+                                                                                              
+                                                                                              callback(events); 
+                                          }catch (e){
+                                               console.log(e);
+                                          }
+                                }
+               });   
+                                      
+            }
+          }
+          ],
           dayClick: function(date,  jsEvent, view) {
 
 
@@ -421,20 +463,21 @@ $scope.cancelAddOperation= function(){
             $scope.ioevent={};
 
             $scope.start_event="";
-            $scope.end_event="";
-            
+            $scope.end_event="";       
        
      }
 
-
-// *******************
-
-// update event
-$scope.updateEventRender= function(ioevent){
+$scope.updateEventRender=function(ioevent){
+ 
+     
     var events =$('#calendar').fullCalendar( 'clientEvents' ,["new"] );
-         events[0].title=ioevent.title;
-  $('#calendar').fullCalendar('updateEvent', events[0]);
+    events[0].title=ioevent.title ;
+    $('#calendar').fullCalendar('updateEvent', events[0]);
+   
+   
+    ///  $('#calendar').fullCalendar( 'refetchEvents' );
 };
+
 //
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {

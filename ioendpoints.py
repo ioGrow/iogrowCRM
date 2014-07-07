@@ -38,7 +38,7 @@ from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,Topic
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
 from iomodels.crmengine.opportunities import Opportunity,UpdateStageRequest,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest
-from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema,EventPatchRequest,EventListRequest,EventListResponse
+from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema,EventPatchRequest,EventListRequest,EventListResponse,EventFetchListRequest,EventFetchResults
 from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest
 from iomodels.crmengine.shows import Show
 from iomodels.crmengine.leads import Lead,LeadFromTwitterRequest,LeadInsertRequest,LeadListRequest,LeadListResponse,LeadSearchResults,LeadGetRequest,LeadSchema
@@ -66,7 +66,6 @@ from model import Invitation
 from search_helper import SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
 import iomessages
-
 
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
@@ -1219,6 +1218,16 @@ class CrmEngineApi(remote.Service):
                             request = request
                             )
 
+    # fetch events by start date end end date
+    @endpoints.method(EventFetchListRequest,EventFetchResults,
+                      path='events/list_fetch', http_method='POST',
+                      name='events.list_fetch')
+    def event_list_beta_fetch(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Event.listFetch(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
     # events.patch api
     @endpoints.method(EventPatchRequest, message_types.VoidMessage,
                         path='events/patch', http_method='POST',

@@ -91,7 +91,7 @@ eventservices.factory('Event', function($http) {
                                       };
                     calendarEventList.push(eventSchema);
                  });
-                 $scope.renderCalendar(calendarEventList);
+                 //$scope.renderCalendar(calendarEventList);
                  /*if ($scope.currentPage>1){
                       console.log('Should show PREV');
                       $scope.pagination.prev = true;
@@ -129,13 +129,14 @@ eventservices.factory('Event', function($http) {
 
       gapi.client.crmengine.events.insertv2(params).execute(function(resp) {
           if(!resp.code){
+            $('#calendar').fullCalendar( 'refetchEvents' );
             if ($scope.events == undefined){
             $scope.events = [];
           }
             $scope.events.push(resp);
             console.log(resp);
             $scope.isLoading = false;
-             
+             $scope.permet_clicking=true ;
             $scope.$apply();
 
          }else{

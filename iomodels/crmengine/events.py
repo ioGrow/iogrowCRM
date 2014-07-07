@@ -72,6 +72,21 @@ class EventListResponse(messages.Message):
     items = messages.MessageField(EventSchema, 1, repeated=True)
     nextPageToken = messages.StringField(2)
 
+class EventFetchListRequest(messages.Message):
+    events_list_start=messages.StringField(1)
+    events_list_end=messages.StringField(2)
+
+class EventFetchResult(messages.Message):
+      id=messages.StringField(1)
+      title=messages.StringField(2)
+      where=messages.StringField(3)
+      starts_at=messages.StringField(4)
+      ends_at=messages.StringField(5)
+      entityKey=messages.StringField(6)
+
+class EventFetchResults(messages.Message):
+      items=messages.MessageField(EventFetchResult,1,repeated=True)
+
 class Event(EndpointsModel):
 
     _message_fields_schema = ('id','entityKey','owner','author','collaborators_ids','collaborators_list','created_at','updated_at', 'starts_at','ends_at','title','where','about_kind','about_item')
@@ -395,3 +410,27 @@ class Event(EndpointsModel):
                                     updated_at = event.updated_at.isoformat()
                                 )
         return event_schema
+
+    @classmethod
+    def listFetch(cls,user_from_email,request):
+        start_list=datetime.datetime.strptime(request.events_list_start,"%Y-%m-%dT%H:%M:00.000000")
+        print "****************************"
+        print request.events_list_start 
+        print "*************************"
+        print start_list
+        end_list= datetime.datetime.strptime(request.events_list_end,"%Y-%m-%dT%H:%M:00.000000")
+        events=Event.query().filter(cls.organization==user_from_email.organization,Event.starts_at>=start_list,Event.starts_at<=end_list)
+        event_results= []
+        for event in events:
+            kwargs = {
+                    'id' : str(event.id),
+                      'entityKey':event.entityKey,
+                      'title':event.title,
+                      'starts_at':event.starts_at.isoformat(),
+                      'ends_at':event.ends_at.isoformat(),
+                      'where':event.where,
+            }
+            event_results.append(EventFetchResult(**kwargs))
+        return EventFetchResults(items=event_results)
+
+
