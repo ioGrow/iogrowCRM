@@ -686,35 +686,36 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12 margin-bottom-10">
-                                          <div class="dropdown">
-                                            <a class="dropdown-toggle" id="EventStartsAtSelector" role="button" data-toggle="dropdown" data-target="#" href="#">
-                                              <div class="input-group">
-                                                  <span class="input-group-addon">
-                                                    <i class="glyphicon glyphicon-calendar"></i>
-                                                  </span>
-                                                  <input type="text" placeholder="From" class="form-control" data-ng-model="ioevent.starts_at">
-                                              </div>
-                                            </a>
-                                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                                              <datetimepicker data-ng-model="ioevent.starts_at" data-datetimepicker-config="{ dropdownSelector: '#EventStartsAtSelector' }"/>
-                                            </ul>
+                                          <div class="input-icon margin-top-10">
+                                            <i class="fa fa-calendar"></i>
+                                            <input type="text" class="form-control" placeholder="From" value="" id="leadEventStartsAt">
+                                            <script type="text/javascript">
+                                              $(function(){
+                                                $('#leadEventStartsAt').appendDtpicker({
+                                                  "closeOnSelected": true,
+                                                  "dateFormat": "YYYY-MM-DD h:m",
+                                                  "autodateOnStart": false
+                                                });
+                                              });
+                                            </script>
                                           </div>
+                                          
                                     </div>
                                 </div>   
                                 <div class="row">
                                     <div class="col-md-12 margin-bottom-10">
-                                          <div class="dropdown">
-                                            <a class="dropdown-toggle" id="EventEndsAtSelector" role="button" data-toggle="dropdown" data-target="#" href="#">
-                                              <div class="input-group">
-                                                  <span class="input-group-addon">
-                                                    <i class="glyphicon glyphicon-calendar"></i>
-                                                  </span>
-                                                  <input type="text" placeholder="To" class="form-control" data-ng-model="ioevent.ends_at">
-                                              </div>
-                                            </a>
-                                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                                              <datetimepicker data-ng-model="ioevent.ends_at" data-datetimepicker-config="{ dropdownSelector: '#EventEndsAtSelector' }"/>
-                                            </ul>
+                                           <div class="input-icon margin-top-10">
+                                            <i class="fa fa-calendar"></i>
+                                            <input type="text" class="form-control"  placeholder="To" name="date9" value="" id="leadEventEndsAt">
+                                            <script type="text/javascript">
+                                              $(function(){
+                                                $('#leadEventEndsAt').appendDtpicker({
+                                                  "closeOnSelected": true,
+                                                  "dateFormat": "YYYY-MM-DD h:m",
+                                                  "autodateOnStart": false
+                                                });
+                                              });
+                                            </script>
                                           </div>
                                     </div>
                                 </div>  

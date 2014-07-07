@@ -702,6 +702,9 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      }
  //HKA 10.11.2013 Add event
  $scope.addEvent = function(ioevent){
+           console.log(ioevent);
+           ioevent.starts_at=$('#leadEventStartsAt').handleDtpicker('getDate');
+           ioevent.ends_at=$('#leadEventEndsAt').handleDtpicker('getDate');
            if ($scope.newEventform==false) {
                 $scope.newEventform=true;
            }else{
