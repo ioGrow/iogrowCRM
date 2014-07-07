@@ -20,15 +20,16 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'ArticleSearchCtrl',
         templateUrl:'/views/articles/search'
       }).
+      when('/articles/new', {
+        controller: 'ArticleNewCtrl',
+        templateUrl:'/views/articles/new'
+      }).
       when('/articles/', {
         controller: 'ArticleListCtrl',
         templateUrl:'/views/articles/list'
       }).when('/articles/:articleId', {
         controller: 'ArticleShowCtrl',
         templateUrl:'/views/articles/show'
-      }).when('/accounts/new', {
-        controller: 'AccountNewCtrl',
-        templateUrl:'/views/accounts/new'
       });
 
 }]);

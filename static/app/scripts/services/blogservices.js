@@ -162,9 +162,9 @@ blogservices.factory('Article', function($http) {
 
   Article.insert = function($scope,params){
       $scope.isLoading = true;
-      gapi.client.crmengine.accounts.insert(params).execute(function(resp) {
+      gapi.client.blogengine.articles.insert(params).execute(function(resp) {
          if(!resp.code){
-            $scope.accountInserted(resp);
+            $scope.articleInserted(resp);
             $scope.isLoading = false;
              $scope.$apply();
 

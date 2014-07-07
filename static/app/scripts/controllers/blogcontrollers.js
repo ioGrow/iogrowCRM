@@ -997,12 +997,12 @@ app.controller('ArticleShowCtrl', ['$scope','$filter', '$route','Auth','Article'
 }]);
 
 
-app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
-    function($scope,Auth,Account,Tag,Edge) {
+app.controller('ArticleNewCtrl', ['$scope','Auth','Article','Account','Tag','Edge',
+    function($scope,Auth,Article,Account,Tag,Edge) {
       $("ul.page-sidebar-menu li").removeClass("active");
-      $("#id_Accounts").addClass("active");
+      $("#id_Articles").addClass("active");
 
-      document.title = "Accounts: New";
+      document.title = "Articles: New";
       $scope.isSignedIn = false;
       $scope.immediateFailed = false;
       $scope.nextPageToken = undefined;
@@ -1013,40 +1013,15 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
       $scope.pages = [];
       $scope.stage_selected={};
       $scope.accounts = [];
-      $scope.account = {};
-      $scope.account.access ='public';
-      $scope.order = '-updated_at';
-      $scope.status = 'New';
-      $scope.showPhoneForm=false;
-      $scope.showEmailForm=false;
-      $scope.showWebsiteForm=false;
-      $scope.showSociallinkForm=false;
-      $scope.showCustomFieldForm =false;
-      $scope.phones=[];
-      $scope.addresses=[];
-      $scope.emails=[];
-      $scope.websites=[];
-      $scope.sociallinks=[];
-      $scope.customfields=[];
-      $scope.newContactform=false;
-      $scope.account.account_type = 'Customer';
-      $scope.account.industry = 'Technology';
-      $scope.phone = {};
-      $scope.contact = {};
-      $scope.currentContact = {};
-      $scope.account.contacts = [];
-      $scope.phone.type= 'work';
+      $scope.article = {};
 
-            $scope.logo = {
-                    'logo_img_id':null,
-                    'logo_img_url':null
-                  };
-      $scope.imageSrc = '/static/img/default_company.png';
       $scope.initObject=function(obj){
           for (var key in obj) {
                 obj[key]=null;
               }
       }
+      $('#intro-card').wysihtml5();
+      $('#full-article').wysihtml5();
       $scope.pushElement=function(elem,arr,infos){
 
           if (arr.indexOf(elem) == -1) {
@@ -1093,12 +1068,7 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
             Auth.refreshToken();
        };
       // new Lead
-     $scope.save = function(account){
-          if (account.name) {
 
-           Account.insert($scope,account);
-         };
-      };
       $scope.addContact=function(current){
 
        if($scope.newContactform==false){
@@ -1201,31 +1171,18 @@ app.controller('AccountNewCtrl', ['$scope','Auth','Account','Tag','Edge',
           }
       }
 
-      $scope.accountInserted = function(resp){
-          window.location.replace('/#/accounts');
+      $scope.articleInserted = function(resp){
+          window.location.replace('/blog#/articles/');
       };
-      $scope.save = function(account){
-        if(account.name){
-          var params ={
-                        'name':account.name,
-                        'account_type':account.account_type,
-                        'industry':account.industry,
-                        'tagline':account.tagline,
-                        'introduction':account.introduction,
-                        'phones':$scope.phones,
-                        'emails':$scope.emails,
-                        'infonodes':$scope.prepareInfonodes(),
-                        'access': account.access,
-                        'contacts':account.contacts
-                      };
+      $scope.save = function(article){
+        console.log(article);
 
-          if ($scope.logo.logo_img_id){
-              params['logo_img_id'] = $scope.logo.logo_img_id;
-              params['logo_img_url'] = $scope.logo.logo_img_url;
-          }
-          Account.insert($scope,params);
+        article.intro_text = $('#intro-card').val();
+        article.full_text =  $('#full-article').val();
+        if (article.title && article.intro_text) {
 
-        }
+         Article.insert($scope,article);
+       };
       };
 
 
