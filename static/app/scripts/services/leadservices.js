@@ -343,3 +343,50 @@ contactservices.factory('LeadLoader', ['Lead', '$route', '$q',
     return Lead.get($route.current.params.leadId);
   };
 }]);
+
+
+accountservices.factory('Email', function() {
+
+  var Email = function(data) {
+    angular.extend(this, data);
+  };
+
+  Email.send = function($scope,params){
+      $scope.isLoading = true;
+      $scope.sending = true;
+      console.log("spasssssssssssssss");
+      console.log(params);
+      gapi.client.crmengine.emails.send(params).execute(function(resp) {
+
+            $('#sendingEmail').modal('show');
+            if(!resp.code){
+             console.log('email sent thank youlead');
+             $scope.emailSent= true;
+             $scope.sending = false;
+             $scope.selectedTab = 1;
+             $scope.listTopics();
+             $scope.email = {};
+             $scope.$apply();
+
+             $('#sendingEmail').modal('hide');
+
+
+            }else{
+               console.log(resp.message);
+
+
+               $('#errorModal').modal('show');
+               if(resp.code==401){
+                  $scope.refreshToken();
+                  $scope.isLoading = false;
+                  $scope.$apply();
+               };
+         }
+     });
+
+  };
+
+
+
+return Email;
+});
