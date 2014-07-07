@@ -1506,7 +1506,7 @@ $scope.deleteaccount = function(){
   
           Account.patch($scope,params);
       };
-      $scope.addGeo = function(address){
+       $scope.addGeo = function(address){
           params = {'parent':$scope.account.entityKey,
             'kind':'addresses',
             'fields':[
@@ -1565,6 +1565,10 @@ $scope.deleteaccount = function(){
                   "value": address.lon.toString()
                 }
               ]
+            };
+          }
+          InfoNode.insert($scope,params);
+      };
 
         $scope.updatAccountHeader = function(account) {
 
