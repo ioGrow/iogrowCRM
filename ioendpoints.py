@@ -497,6 +497,14 @@ class CrmEngineApi(remote.Service):
             message_types.VoidMessage,
             id=messages.StringField(1))
 
+    # org.update_tabs api v2
+    @endpoints.method(message_types.VoidMessage, message_types.VoidMessage,
+                      path='org/update_tabs', http_method='POST',
+                      name='org.update_tabs')
+    def update_tabs(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        Organization.update_current_apps_and_tabs(user_from_email.organization)
+        return message_types.VoidMessage()
     # Search API
     @endpoints.method(SearchRequest, SearchResults,
                         path='search', http_method='POST',

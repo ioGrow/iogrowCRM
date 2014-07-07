@@ -245,6 +245,25 @@ class Organization(ndb.Model):
         # init default stages,status, default values...
         cls.init_default_values(org_key)
 
+    @classmethod
+    def update_current_apps_and_tabs(cls,org_key):
+        current_org_apps = Application.query(Application.organization==org_key).fetch()
+        # delete existing apps
+        for app in current_org_apps:
+            app.key.delete()
+        current_org_tabs = Tab.query(Tab.organization==org_key).fetch()
+        # delete existing tabs
+        for tab in current_org_tabs:
+            tab.key.delete()
+
+
+
+
+
+
+
+
+
 
 
 
