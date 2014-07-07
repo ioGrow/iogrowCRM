@@ -89,7 +89,7 @@
                         </a>
                       </span>
                     </li>
-                    <li ng-show="contact.account.name">
+                    <li ng-show="contact.Paccount.name">
                       <span>
                         Company:
                         <a class="tag ng-binding" href="/#/search/type:Contact  #<%= contact.account.name %>">
@@ -894,12 +894,37 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12 margin-bottom-10">
-                                          <datetimepick ng-model='ioevent.starts_at' placeholder="From" class="new-task-date" label-format='MMM d, h:mm a'></datetimepick>
+                                          <div class="input-icon margin-top-10">
+                                            <i class="fa fa-calendar"></i>
+                                            <input type="text" class="form-control" placeholder="From" value="" id="leadEventStartsAt">
+                                            <script type="text/javascript">
+                                              $(function(){
+                                                $('#leadEventStartsAt').appendDtpicker({
+                                                  "closeOnSelected": true,
+                                                  "dateFormat": "YYYY-MM-DD h:m",
+                                                  "autodateOnStart": false
+                                                });
+                                              });
+                                            </script>
+                                          </div>
+                                          
                                     </div>
                                 </div>   
                                 <div class="row">
                                     <div class="col-md-12 margin-bottom-10">
-                                          <datetimepick ng-model='ioevent.ends_at' placeholder="To" class="new-task-date" label-format='MMM d, h:mm a'></datetimepick>
+                                           <div class="input-icon margin-top-10">
+                                            <i class="fa fa-calendar"></i>
+                                            <input type="text" class="form-control"  placeholder="To" name="date9" value="" id="leadEventEndsAt">
+                                            <script type="text/javascript">
+                                              $(function(){
+                                                $('#leadEventEndsAt').appendDtpicker({
+                                                  "closeOnSelected": true,
+                                                  "dateFormat": "YYYY-MM-DD h:m",
+                                                  "autodateOnStart": false
+                                                });
+                                              });
+                                            </script>
+                                          </div>
                                     </div>
                                 </div>  
                                 <div class="row">

@@ -838,6 +838,7 @@ $scope.listTags=function(){
         if ($scope.newEventform==false) {
                 $scope.newEventform=true;
            }else{
+            console.log('woooooooooooooork');
             if (ioevent.title!=null) {
                     var params ={}
 
