@@ -905,6 +905,7 @@ $scope.listTags=function(){
 
 				$('#newEventModal').modal('hide');
 				var params ={}
+             
 
 				if (ioevent.starts_at){
 						if (ioevent.ends_at){

@@ -257,7 +257,7 @@
         <ul class="list-group tags-list">
           <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
             <div class="row">
-              <span ng-drag="dragTag(tag_item)"  draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
+              <span ng-drag="dragTag(tag_item)" id="iii"  draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
                   <%= tag_item.name %>
               </span>
               <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
