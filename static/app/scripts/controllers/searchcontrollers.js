@@ -1,6 +1,5 @@
 public_blog_app.controller('BlogSearchFormController', ['$scope','Article',
     function($scope,Article) {
-     console.log(' I will execute the search ');
      var params ={};
      $scope.results =[];
      $scope.result = undefined;

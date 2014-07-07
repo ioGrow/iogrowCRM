@@ -19,13 +19,15 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
       $scope.leads = [];
       $scope.lead = {};
-
+      $scope.selectedLead={};
+      $scope.showClose=false;
       $scope.lead.access ='public';
       $scope.order = '-updated_at';
       $scope.status = 'New';
       $scope.selected_tags = [];
       $scope.draggedTag=null;
       $scope.tag = {};
+
       $scope.showNewTag=false;
       $scope.showUntag=false;
      $scope.edgekeytoDelete=undefined;
@@ -314,7 +316,16 @@ $scope.unselectAllTags= function(){
 
  };
 
-
+$scope.editbeforedelete = function(lead){
+  console.log('test');
+   $scope.selectedLead=lead;
+   $('#BeforedeleteLead').modal('show');
+ };
+ $scope.deletelead = function(){
+     var params = {'entityKey':$scope.selectedLead.entityKey};
+     Lead.delete($scope,params);
+     $('#BeforedeleteLead').modal('hide');
+     };
 $scope.manage=function(){
         $scope.unselectAllTags();
       };
@@ -491,6 +502,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.email = {};
      $scope.infonodes = {};
      $scope.phone={};
+     $scope.ioevent={};
      $scope.phone.type= 'work';
      $scope.documentpagination = {};
      $scope.documentCurrentPage=01;
@@ -699,7 +711,6 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
            }else{
             if (ioevent.title!=null) {
                     var params ={}
-
                 if (ioevent.starts_at){
                     if (ioevent.ends_at){
                       params ={'title': ioevent.title,

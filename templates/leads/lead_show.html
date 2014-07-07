@@ -62,31 +62,43 @@
             </div>
             <div class="col-md-10">
               <div class="row">
-                <div class="col-md-12">
-                  <span class="page-meta pull-right">
-                    <i class="icon-pencil">
-                      <a ng-click="editLead()" class="btn-link addAnotherPhone" data-toggle="modal">
-                        Edit
-                      </a>
-                    </i>
-                     |
-                    <i class="icon-trash">
-                      <a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  Delete
-                      </a>
-                    </i>
-                  </span>
-
-          <span ng-show="lead.updated_at" class="contact-title" >Updated at:  <%=lead.updated_at | date:'yyyy-MM-dd - HH:mm:ss ' %> </span><br>
-              <span ng-show="lead.title">{{_("Title")}} : <a   href="/#/search/type:Lead <%=lead.title%>" class="tag" ng-show="lead.title"> #<%= lead.title %> </a></span><span ng-show="lead.company">{{_("Company")}} : <a   href="/#/search/type:Lead <%=lead.company%>" class="tag" ng-show="lead.company"> #<%= lead.company %></a></span> <br>
-              <span ng-show="lead.industry">{{_("Industry")}} : </span>
-              <a   href="/#/search/type:Lead <%=lead.industry%>" class="tag" ng-show="lead.industry"> #<%= lead.industry %></a> <br>
-              <span ng-show="lead.source">{{_("Source")}} : </span>
-              <a   href="/#/search/type:Lead <%=lead.source%>" class="tag" ng-show="lead.source"> #<%= lead.source %></a> <br>
-              <span ng-show="lead.status">{{_("Status")}} : </span>
-              <a   href="/#/search/type:Lead <%=lead.status%>" class="tag" ng-show="lead.status"> #<%= lead.status %></a> <br>
-                  <br>
-                  <hr>
-                </div>
+                    <div class="col-md-12">
+                      <span class="page-meta pull-right">
+                        <i class="icon-pencil">
+                          <a ng-click="editLead()" class="btn-link addAnotherPhone" data-toggle="modal">
+                            Edit
+                          </a>
+                        </i>
+                         |
+                        <i class="icon-trash">
+                          <a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  Delete
+                          </a>
+                        </i>
+                      </span>
+                      <ul class="list-unstyled leadInfos">
+                          <li>
+                            <span ng-show="lead.title">{{_("Title")}} : <a   href="/#/search/type:Lead <%=lead.title%>" class="tag" ng-show="lead.title"> #<%= lead.title %> </a></span><span ng-show="lead.company">{{_("Company")}} : <a   href="/#/search/type:Lead <%=lead.company%>" class="tag" ng-show="lead.company"> #<%= lead.company %></a></span>
+                          </li>
+                          <li ng-show="lead.industry">
+                             <span>{{_("Industry")}} : </span>
+                              <a   href="/#/search/type:Lead <%=lead.industry%>" class="tag" > #<%= lead.industry %></a>
+                          </li>
+                          <li ng-show="lead.source">
+                            <span >{{_("Source")}} : </span>
+                            <a href="/#/search/type:Lead <%=lead.source%>" class="tag">
+                             #<%= lead.source %></a>
+                          </li>
+                          <li ng-show="lead.status">
+                            <span >{{_("Status")}} : </span>
+                            <a href="/#/search/type:Lead <%=lead.status%>" class="tag">
+                             #<%= lead.status %></a>
+                          </li>
+                          <li ng-show="lead.updated_at" >
+                            <span class="contact-title" >Updated at:  <%=lead.updated_at | date:'yyyy-MM-dd - HH:mm:ss ' %> </span>
+                          </li>
+                      </ul>
+                       <hr class="sm-hr">
+                    </div>
               </div>
               <div class="row">
                 <div class="col-md-12">
@@ -486,23 +498,17 @@
 
                       </div>
                   <!--HKA 24.12.2013 Modal before Deleting Lead-->
-         <div id="BeforedeleteLead" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">Delete Lead</h3>
+         <div id="BeforedeleteLead" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" 
+              aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3 id="myModalLabel" class="modal-title">Delete Lead</h3>
               </div>
               <div class="modal-body">
                  <form id="seletesho" name="deletesho" class="form-horizontal">
-
-
                   <p>{{_("Are you sure you want to delete")}} :  <%= lead.firstname %> <%= lead.lastname %> .</p>
-
-
-
-
-
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
@@ -706,12 +712,36 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12 margin-bottom-10">
-                                          <datetimepick icon-class='fa fa-calendar'  ng-model='ioevent.starts_at' placeholder="From" class="new-task-date" label-format='MMM d, h:mm a'></datetimepick>
+                                          <div class="dropdown">
+                                            <a class="dropdown-toggle" id="EventStartsAtSelector" role="button" data-toggle="dropdown" data-target="#" href="#">
+                                              <div class="input-group">
+                                                  <span class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-calendar"></i>
+                                                  </span>
+                                                  <input type="text" placeholder="From" class="form-control" data-ng-model="ioevent.starts_at">
+                                              </div>
+                                            </a>
+                                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                              <datetimepicker data-ng-model="ioevent.starts_at" data-datetimepicker-config="{ dropdownSelector: '#EventStartsAtSelector' }"/>
+                                            </ul>
+                                          </div>
                                     </div>
                                 </div>   
                                 <div class="row">
                                     <div class="col-md-12 margin-bottom-10">
-                                          <datetimepick  icon-class='fa fa-calendar' ng-model='ioevent.ends_at' placeholder="To" class="new-task-date" label-format='MMM d, h:mm a'></datetimepick>
+                                          <div class="dropdown">
+                                            <a class="dropdown-toggle" id="EventEndsAtSelector" role="button" data-toggle="dropdown" data-target="#" href="#">
+                                              <div class="input-group">
+                                                  <span class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-calendar"></i>
+                                                  </span>
+                                                  <input type="text" placeholder="To" class="form-control" data-ng-model="ioevent.ends_at">
+                                              </div>
+                                            </a>
+                                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                              <datetimepicker data-ng-model="ioevent.ends_at" data-datetimepicker-config="{ dropdownSelector: '#EventEndsAtSelector' }"/>
+                                            </ul>
+                                          </div>
                                     </div>
                                 </div>  
                                 <div class="row">

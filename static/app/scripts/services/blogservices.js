@@ -88,6 +88,9 @@ blogservices.factory('Article', function($http) {
   };
   Article.search = function($scope,params){
       $scope.isLoading = true;
+      console.log('$$$$$$');
+      console.log(params);
+      console.log(gapi.client);
       gapi.client.blogengine.search(params).execute(function(resp) {
               if(!resp.code){
 
@@ -156,18 +159,7 @@ blogservices.factory('Article', function($http) {
               }
       });
   };
-  Article.search = function($scope,params){
-      console.log(params);
-      gapi.client.crmengine.accounts.search(params).execute(function(resp) {
 
-           if (resp.items){
-              $scope.accountsResults = resp.items;
-
-              $scope.$apply();
-            };
-
-      });
-  };
   Article.insert = function($scope,params){
       $scope.isLoading = true;
       gapi.client.crmengine.accounts.insert(params).execute(function(resp) {
