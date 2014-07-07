@@ -33,15 +33,30 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
             Auth.refreshToken();
      };
      $scope.$watch('event.starts_at', function(newValue, oldValue) {
-              $scope.patchDate($scope.event.starts_at);
+        
+              $scope.patchDate($scope.event.starts_at,"Start");
      });
-     $scope.patchDate = function(newValue){
+     $scope.$watch('event.ends_at', function(newValue, oldValue) {
+
+              $scope.patchDate($scope.event.ends_at,"End");
+     });
+     $scope.patchDate = function(newValue,when){
+      if (when=="Start"){
         var starts_at = $filter('date')(newValue,['yyyy-MM-ddTHH:mm:00.000000']);
 
         var params = {
                     'entityKey':$scope.event.entityKey,
                     'starts_at':starts_at
         };
+      }
+      if (when=="End"){
+        var ends_at = $filter('date')(newValue,['yyyy-MM-ddTHH:mm:00.000000']);
+
+        var params = {
+                    'entityKey':$scope.event.entityKey,
+                    'ends_at':ends_at
+        };
+      }
         if ((!$scope.isLoading) && (params.entityKey != undefined )){
             Event.patch($scope,params);
         }
@@ -88,7 +103,10 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
      };
 
      $scope.renderMaps = function(){
-
+         // Map.render($scope);
+          Map.destroy();
+          console.log("oooooooooo");
+          console.log($scope);
           Map.searchLocation($scope,$scope.event.where);
       };
 
@@ -192,11 +210,25 @@ $scope.deleteEvent = function(){
      };
 // HKA 23.06.2014 update description
   $scope.updateEvent = function(description){
-    var params = {'id':$scope.event.entityKey,
-                   'description':description}
-            Event.patch($scope,params)
-    
+    console.log(description);
+    if (description['where']){
+      console.log("wheeeeeeeeeeeeeeee");
+      var params = {'entityKey':$scope.event.entityKey,
+                   'where':description['where']};
+
+
+    }
+     if (description['description']){
+      console.log("descrripppppp");
+      var params = {'entityKey':$scope.event.entityKey,
+                   'description':description['description']};
+            
+    }
+   
+ Event.patch($scope,params);
+
         };
+
   
   // Google+ Authentication
   Auth.init($scope);
@@ -261,7 +293,6 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
      });
      $scope.patchDate = function(newValue){
         var starts_at = $filter('date')(newValue,['yyyy-MM-ddTHH:mm:00.000000']);
-
         var params = {
                     'entityKey':$scope.event.entityKey,
                     'starts_at':starts_at
@@ -312,8 +343,9 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
      };
 
      $scope.renderMaps = function(){
-
-          Map.searchLocation($scope,$scope.event.where);
+          console.log("hhhhhhhhhhhhh");
+          Map.render($scope);
+          //Map.searchLocation($scope,$scope.event.where);
       };
 
 

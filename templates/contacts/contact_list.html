@@ -266,7 +266,13 @@
                   <span ng-drag="dragTag(tag_item)" draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
                       <%= tag_item.name %>
                   </span>
-                 <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
+                 <input 
+                 type="checkbox" 
+                 ng-show="!manage_tags" 
+                 ng-click="selectTag(tag_item,$index,$event)" 
+                 style="margin-right: 10px;" 
+                 class="pull-right customCheck" 
+                 ng-checked="isSelected()">
 
                   <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
                     <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
