@@ -144,6 +144,7 @@ class Opportunity(EndpointsModel):
 
     def put(self, **kwargs):
         ndb.Model.put(self, **kwargs)
+        print kwargs
         self.put_index()
         self.set_perm()
 
@@ -579,7 +580,7 @@ class Opportunity(EndpointsModel):
                     access = request.access,
                     name = request.name,
                     opportunity_type = request.opportunity_type,
-                    amount_total = amount_total,
+                    amount_total = request.amount_total,
                     amount_per_unit = request.amount_per_unit,
                     duration = request.duration,
                     duration_unit = request.duration_unit,

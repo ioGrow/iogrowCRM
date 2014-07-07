@@ -874,9 +874,7 @@ $scope.updatCasetHeader = function(casee){
                   'bcc': email.bcc,
                   'subject': email.subject,
                   'body': email.body,
-
-                  'about_item':$scope.casee.id,
-                  'about_kind':'Case' };
+                   'about':$scope.casee.entityKey };
 
         Email.send($scope,params);
       };
