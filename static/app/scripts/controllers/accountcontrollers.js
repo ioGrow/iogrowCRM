@@ -538,6 +538,9 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             lineCap: 'circle'
         };
         $scope.closed_date = new Date();
+        $scope.newTaskform=false;
+        $scope.newEventform=false;
+        $scope.newTask={};
         // What to do after authentication
         $scope.endError = function() {
             alert("okkkkkkkkkkkkkkk");
@@ -1116,36 +1119,42 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             Account.get($scope, params);
         };
 //HKA 11.11.2013 Add new Event
-        $scope.addEvent = function(ioevent) {
+ $scope.addEvent = function(ioevent){           
+           if ($scope.newEventform==false) {
+                $scope.newEventform=true;
+           }else{
+            ioevent.starts_at=$('#accountEventStartsAt').handleDtpicker('getDate');
+            ioevent.ends_at=$('#accountEventEndsAt').handleDtpicker('getDate');
+            if (ioevent.title!=null) {
+                    var params ={}
+                if (ioevent.starts_at){
+                    if (ioevent.ends_at){
+                      params ={'title': ioevent.title,
+                              'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                              'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                              'where': ioevent.where,
+                              'parent':$scope.account.entityKey
+                      }
 
-            $('#newEventModal').modal('hide');
-            var params = {}
-
-            if (ioevent.starts_at) {
-                if (ioevent.ends_at) {
-                    params = {'title': ioevent.title,
-                        'starts_at': $filter('date')(ioevent.starts_at, ['yyyy-MM-ddTHH:mm:00.000000']),
-                        'ends_at': $filter('date')(ioevent.ends_at, ['yyyy-MM-ddTHH:mm:00.000000']),
-                        'where': ioevent.where,
-                        'parent': $scope.account.entityKey
-                    }
-
-                } else {
-                    params = {
+                    }else{
+                      params ={
                         'title': ioevent.title,
-                        'starts_at': $filter('date')(ioevent.starts_at, ['yyyy-MM-ddTHH:mm:00.000000']),
-                        'where': ioevent.where,
-                        'parent': $scope.account.entityKey
+                              'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                              'where': ioevent.where,
+                              'parent':$scope.account.entityKey
+                      }
                     }
-                }
 
-                Event.insert($scope, params);
-                $scope.ioevent.title = '';
-                $scope.ioevent.where = '';
-                $scope.ioevent.starts_at = 'T00:00:00.000000';
-            }
-            ;
-        };
+                    Event.insert($scope,params);
+                    $scope.ioevent={};
+                    $scope.newEventform=false;
+                  }
+        }else{
+            $scope.ioevent={};
+            $scope.newEventform=false;
+      }
+     }
+    }
         $scope.hilightEvent = function() {
 
             $('#event_0').effect("highlight", "slow");

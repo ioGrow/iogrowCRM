@@ -550,6 +550,9 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
          lineCap:'circle'
      };
      $scope.showeditdate=false;
+     $scope.newTaskform=false;
+     $scope.newEventform=false;
+     $scope.newTask={};
       $scope.allcurrency=[
         { value:"USD", text:"$ - USD"},
         { value:"EUR", text:"€ - EUR"},
@@ -834,35 +837,42 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
      };
 
 //HKA 11.11.2013 Add new Event
- $scope.addEvent = function(ioevent){
+ $scope.addEvent = function(ioevent){           
+           if ($scope.newEventform==false) {
+                $scope.newEventform=true;
+           }else{
+            ioevent.starts_at=$('#opportunityEventStartsAt').handleDtpicker('getDate');
+            ioevent.ends_at=$('#opportunityEventEndsAt').handleDtpicker('getDate');
+            if (ioevent.title!=null) {
+                    var params ={}
+                if (ioevent.starts_at){
+                    if (ioevent.ends_at){
+                      params ={'title': ioevent.title,
+                              'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                              'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                              'where': ioevent.where,
+                              'parent':$scope.opportunity.entityKey
+                      }
 
-         $('#newEventModal').modal('hide');
-        var params ={}
+                    }else{
+                      params ={
+                        'title': ioevent.title,
+                              'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                              'where': ioevent.where,
+                              'parent':$scope.opportunity.entityKey
+                      }
+                    }
 
-        if (ioevent.starts_at){
-            if (ioevent.ends_at){
-              params ={'title': ioevent.title,
-                      'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'where': ioevent.where,
-                      'parent':$scope.opportunity.entityKey
-              }
-
-            }else{
-              params ={
-                'title': ioevent.title,
-                      'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'where': ioevent.where,
-                      'parent':$scope.opportunity.entityKey
-              }
-            }
-
-            Event.insert($scope,params);
-            $scope.ioevent.title='';
-            $scope.ioevent.where='';
-            $scope.ioevent.starts_at='T00:00:00.000000';
-          };
-     };
+                    Event.insert($scope,params);
+                    $scope.ioevent={};
+                    $scope.newEventform=false;
+                  }
+        }else{
+            $scope.ioevent={};
+            $scope.newEventform=false;
+      }
+     }
+    };
      $scope.hilightEvent = function(){
 
         $('#event_0').effect("highlight","slow");

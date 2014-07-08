@@ -604,7 +604,9 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
      $scope.infonodes = {};
      $scope.sharing_with = [];
      $scope.customfield={};
-
+     $scope.newTaskform=false;
+     $scope.newEventform=false;
+     $scope.newTask={};
 
      // What to do after authentication
        $scope.runTheProcess = function(){
@@ -792,35 +794,42 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
 
      }
  //HKA 10.11.2013 Add event
- $scope.addEvent = function(ioevent){
+ $scope.addEvent = function(ioevent){           
+           if ($scope.newEventform==false) {
+                $scope.newEventform=true;
+           }else{
+            ioevent.starts_at=$('#caseEventStartsAt').handleDtpicker('getDate');
+            ioevent.ends_at=$('#caseEventEndsAt').handleDtpicker('getDate');
+            if (ioevent.title!=null) {
+                    var params ={}
+                if (ioevent.starts_at){
+                    if (ioevent.ends_at){
+                      params ={'title': ioevent.title,
+                              'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                              'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                              'where': ioevent.where,
+                              'parent':$scope.casee.entityKey
+                      }
 
-         $('#newEventModal').modal('hide');
-        var params ={}
+                    }else{
+                      params ={
+                        'title': ioevent.title,
+                              'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                              'where': ioevent.where,
+                              'parent':$scope.casee.entityKey
+                      }
+                    }
 
-        if (ioevent.starts_at){
-            if (ioevent.ends_at){
-              params ={'title': ioevent.title,
-                      'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'where': ioevent.where,
-                      'parent':$scope.casee.entityKey
-              }
-
-            }else{
-              params ={
-                'title': ioevent.title,
-                      'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'where': ioevent.where,
-                      'parent':$scope.casee.entityKey
-              }
-            }
-
-            Event.insert($scope,params);
-            $scope.ioevent.title='';
-            $scope.ioevent.where='';
-            $scope.ioevent.starts_at='T00:00:00.000000';
-          };
-     };
+                    Event.insert($scope,params);
+                    $scope.ioevent={};
+                    $scope.newEventform=false;
+                  }
+        }else{
+            $scope.ioevent={};
+            $scope.newEventform=false;
+      }
+     }
+    };
      $scope.hilightEvent = function(){
         console.log('Should higll');
         $('#event_0').effect("highlight","slow");
