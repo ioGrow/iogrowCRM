@@ -1243,9 +1243,6 @@ class CrmEngineApi(remote.Service):
         patched = False
         for prop in event_patch_keys:
             new_value = getattr(request,prop)
-            print "******************"
-            print new_value
-            print "**********************"
             if new_value:
                 if prop in date_props:
                     new_value = datetime.datetime.strptime(new_value,"%Y-%m-%dT%H:%M:00.000000")

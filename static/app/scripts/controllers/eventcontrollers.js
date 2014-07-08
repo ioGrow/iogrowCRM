@@ -321,7 +321,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                   $scope.$apply();
 
                                    try {
-                                      // feed events client table with tasks .
+                                      // feed events client table with events .hadji hicham  08-07-2014 10:40
                                        for(var i=0;i<$scope.events_cal_list.length;i++ ){
 
                                               var allday= ($scope.events_cal_list[i].allday=="false") ? false :true ;
@@ -334,12 +334,13 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                                            end: moment($scope.events_cal_list[i].ends_at),
                                                            entityKey:$scope.events_cal_list[i].entityKey,
                                                            url:'/#/events/show/'+$scope.events_cal_list[i].id.toString(),
-                                                           allDay:allday
+                                                           allDay:allday,
+                                                           my_type:"event"
                                                        })
 
                                                 
                                       };
-                                  // feed events client table with events 
+                                  // feed events client table with tasks  hadji hicham  08-07-2014 10:40
                                     for(var i=0;i<$scope.tasks_list.length;i++ ){
                                         
 
@@ -351,15 +352,17 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                                            url:'/#/tasks/show/'+$scope.tasks_list[i].id.toString(),
                                                            backgroundColor:$scope.tasks_list[i].status_color,
                                                            color:$scope.tasks_list[i].status_color,
-                                                           allDay:true
+                                                           allDay:true,
+                                                           due:moment($scope.tasks_list[i].due),
+                                                           my_type:"task"
                                                        })
                                                 
                                       }  
-                                       // feed the calendar client table with events and tasks .
+                                       // feed the calendar client table with events and tasks . hadji hicham  08-07-2014 10:40
                                        callback(events); 
                             
                                        }catch (e){
-                                               console.log(e);
+                                               console.log(e.message);
                                           }
                                           $scope.$apply();
 
@@ -418,16 +421,23 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                    $scope.showEventModal();
                }
                              }, 
-      // Triggered when event dragging begins.
+      // Triggered when event dragging begins. hadji hicham  08-07-2014 10:40
        eventDragStart: function( event, jsEvent, ui, view ) { },
        // Triggered when event dragging stops. 
        eventDragStop:function( event, jsEvent, ui, view ) {
 
            
         },
-       // Triggered when dragging stops and the event has moved to a different day/time.
+       // Triggered when dragging stops and the event has moved to a different day/time. hadji hicham  08-07-2014 10:40
        eventDrop:function( event, revertFunc, jsEvent, ui, view ) { 
-                   if(event.allDay){
+
+
+                   // drag the events is allow in all cases !  hadji hicham  08-07-2014 10:40
+                   if(event.my_type=="event"){
+                    
+
+
+                      if(event.allDay){
 
                     var params={
                                  'id':event.id,
@@ -462,6 +472,37 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                  
                    
                    Event.patch($scope,params);
+                   }
+                   // drag tasks is allow only in the case all day  hadji hicham  08-07-2014 10:40
+                   else if(event.my_type=="task"){
+                       if(event.allDay){
+                        // this function make the task change their color of status . hadji hicham  08-07-2014 10:40
+                           $scope.changeColorState(event); 
+
+                             var params={
+                                 'id':event.id,
+                                 'entityKey':event.entityKey,
+                                 'due':moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000')             
+                                  }
+                              
+
+
+                              
+
+                            Task.patch($scope,params);
+
+                       }else{
+                        $('#calendar').fullCalendar( 'refetchEvents' );
+
+                    
+                       }
+
+
+                   } 
+                   
+                 
+
+                 
                
                 
            },
@@ -494,7 +535,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                   
                     Event.patch($scope,params);
         }
-         // the end of initialisation         
+         // the end of initialisation   . hadji hicham  08-07-2014       
 
 
         });
@@ -508,6 +549,35 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
      $('#newEventModal').modal('show');
 };
 
+
+
+// change color status of the tasks when we drag them . hadji hicham 08-07-2014.
+
+$scope.changeColorState= function(event){
+
+
+   var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
+   DueDate=new Date(event.start);
+   NowDate=new Date(Date.now());
+
+
+   var diffDays = Math.round((DueDate.getTime() - NowDate.getTime())/(oneDay));
+
+
+
+   if(diffDays >=0 && diffDays <= 2){
+      event.color="orange"
+      event.backgroundColor="orange"
+   }else if(diffDays<0){
+        event.color="red"
+      event.backgroundColor="red"
+   }else {
+      event.color="green"
+      event.backgroundColor="green"
+   }
+  
+ 
+}
 // cancel add event operation 
 
 $scope.cancelAddOperation= function(){
