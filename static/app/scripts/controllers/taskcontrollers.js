@@ -146,6 +146,30 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
 
          return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";
       }
+
+
+      // ask before delete task hadji hicham . 08-07-2014 .
+       $scope.editbeforedelete = function(){
+     $('#BeforedeleteTask').modal('show');
+   };
+
+   // delete task  hadji hicham  08-07-2014 .
+   $scope.deleteTask = function(){
+      
+     var params = {'entityKey':$scope.task.entityKey};
+     
+     Task.delete($scope, params);
+      $('#BeforedeleteTask').modal('hide');
+
+     };
+
+     // rederection after delete task . hadji hicham 08--07-2014
+      $scope.taskDeleted = function(resp){
+
+        window.location.replace('/#/calendar');
+
+     }; 
+
       function getRGBComponents(color) {
 
           var r = color.substring(1, 3);
