@@ -14,7 +14,7 @@ import gdata.contacts.data
 from gdata.gauth import OAuth2Token
 from gdata.contacts.client import ContactsClient
 from model import User
-from highrise.pyrise import *
+#from highrise.pyrise import *
 FOLDERS = {
             'Account': 'accounts_folder',
             'Contact': 'contacts_folder',
