@@ -917,7 +917,8 @@ $scope.listTags=function(){
         if ($scope.newEventform==false) {
                 $scope.newEventform=true;
            }else{
-            console.log('woooooooooooooork');
+                ioevent.starts_at=$('#leadEventStartsAt').handleDtpicker('getDate');
+                ioevent.ends_at=$('#leadEventEndsAt').handleDtpicker('getDate');            
             if (ioevent.title!=null) {
                     var params ={}
 
