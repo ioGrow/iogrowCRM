@@ -1252,7 +1252,7 @@ class CrmEngineApi(remote.Service):
 
         if event is None:
             raise endpoints.NotFoundException('Event not found')
-        event_patch_keys = ['title','starts_at','ends_at','description','where']
+        event_patch_keys = ['title','starts_at','ends_at','description','where','allday']
         date_props = ['starts_at','ends_at']
         patched = False
         for prop in event_patch_keys:
