@@ -276,6 +276,8 @@ class Node(ndb.Expando):
         if 'phones' in structured_data.keys():
             phones = iomessages.PhoneListSchema()
             for phone in structured_data['phones']:
+                if not 'type' in phone.keys():
+                    phone['type'] = 'work'
                 phone_schema = iomessages.PhoneSchema(
                                                     type=phone['type'],
                                                     number=phone['number']
@@ -300,7 +302,11 @@ class Node(ndb.Expando):
         addresses = None
         if 'addresses' in structured_data.keys():
             addresses = iomessages.AddressListSchema()
+            ADDRESS_KEYS = ['street','city','state','postal_code','country']
             for address in structured_data['addresses']:
+                for key in ADDRESS_KEYS:
+                    if not hasattr(address,key):
+                        address[key] = None
                 formatted_address = None
                 if hasattr(address,'formatted'):
                     formatted_address = address['formatted']
