@@ -391,6 +391,7 @@ accountservices.factory('Contact', function($http) {
              };
          }
       });
+      $scope.isLoading=false;
   };
 Contact.delete = function($scope,params){
     $scope.isLoading = true;

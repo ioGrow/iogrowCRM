@@ -15,9 +15,9 @@
         </div>
     </div>
     <div class=" subHeaderContent">
-      <div class="col-md-9">
+      <div class="col-md-12">
       <div class="row">
-      <div class="col-md-10 col-xs-10">
+      <div class="col-md-10 col-xs-12 filter-content">
       <div class="filterOptions">
           <span role="button" class="filterItem" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">All <span class="hidden-xs hiddenOnxs">Leads</span> </span>
           <span role="button" class="filterItem" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">My <span class="hidden-xs hiddenOnxs">Leads</span></span>
@@ -99,7 +99,7 @@
     <div class="tab-pane">
     <div class="row ">
       <div class="col-md-12 waterfall" ng-hide="blankStatelead">
-        <div ng-repeat="lead in leads" droppable  id="card_<%=$index%>"class="cardElement" ng-drop="dropTag(lead,$index)">
+        <div ng-repeat="lead in leads" droppable  id="card_<%=$index%>"class="cardElement" ng-drop="dropTag(lead,$index)" ng-mouseenter="showClose= true" ng-mouseleave="showClose = false">
           <div class="detailsSection">
             <div class="head">
               <div class="pic">
@@ -109,6 +109,7 @@
                 </a>
               </div>
               <div class="text">
+                <button type="button" class="close deleteLeadBtn" ng-show="showClose" ng-click="editbeforedelete(lead)"></button>
                 <div class="name">
                   <a href="/#/leads/show/<%= lead.id %>" class="profile-link">
                     <%= lead.firstname %> <%= lead.lastname %>
@@ -257,7 +258,7 @@
         <ul class="list-group tags-list">
           <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
             <div class="row">
-              <span ng-drag="dragTag(tag_item)"  draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
+              <span ng-drag="dragTag(tag_item)" id="iii"  draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
                   <%= tag_item.name %>
               </span>
               <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
@@ -304,6 +305,28 @@
   </div>
   </div>
 </div>
+<div id="BeforedeleteLead" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" 
+              aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3 id="myModalLabel" class="modal-title">Delete Lead</h3>
+              </div>
+              <div class="modal-body">
+                 <form id="seletesho" name="deletesho" class="form-horizontal">
+                  <p>{{_("Are you sure you want to delete")}} :  <%= selectedLead.firstname %> <%= selectedLead.lastname %> .</p>
+              </div>
+              <div class="modal-footer">
+                <button class="btn" ng-click="selectedLead={}" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+
+                <input ng-click="deletelead()" type="submit" class="btn red" value="Delete this Lead">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
+              </div>
+               </form>
+               </div>
+          </div>
+       </div>
 <script type="text/javascript">
   $("#select2_sample2").select2({
         placeholder: "Click to Select a label",

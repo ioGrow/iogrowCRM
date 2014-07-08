@@ -14,6 +14,7 @@ import gdata.contacts.data
 from gdata.gauth import OAuth2Token
 from gdata.contacts.client import ContactsClient
 from model import User
+#from highrise.pyrise import *
 FOLDERS = {
             'Account': 'accounts_folder',
             'Contact': 'contacts_folder',
@@ -182,6 +183,16 @@ class EndpointsHelper():
         auth_token.authorize(gd_client)
         contact_entry = gd_client.CreateContact(google_contact_schema)
         return contact_entry.id.text
+
+    @classmethod
+    def highrise_import(cls,request):
+        Highrise.set_server('iogrow3')
+        Highrise.auth('eee33d458c7982242b99d4b7f6b1d94d')
+        people = Person.all()
+        return people
+
+
+
 class scor_new_lead():
     def predict(predd,tedd) :
         user = User.get_by_email('hakim@iogrow.com')

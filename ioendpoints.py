@@ -33,7 +33,7 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 # Our libraries
 from iograph import Node,Edge,RecordSchema,InfoNodeResponse,InfoNodeConnectionSchema,InfoNodeListResponse
 from iomodels.crmengine.accounts import Account,AccountGetRequest,AccountSchema,AccountListRequest,AccountListResponse,AccountSearchResult,AccountSearchResults,AccountInsertRequest
-from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertRequest,ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults,ContactImportRequest
+from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertRequest,ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults,ContactImportRequest,ContactImportHighriseRequest,ContactHighriseResponse, ContactHighriseSchema
 from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema,NoteSchema
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
@@ -942,6 +942,19 @@ class CrmEngineApi(remote.Service):
                             )
         return message_types.VoidMessage()
 
+    # highrise.import api
+    @endpoints.method(ContactImportHighriseRequest, message_types.VoidMessage,
+                      path='highrise/import', http_method='POST',
+                      name='highrise.import')
+    def highrise_import_beta(self, request):
+        #user_from_email = EndpointsHelper.require_iogrow_user()
+        print request
+        people=EndpointsHelper.highrise_import(request)
+
+        return message_types.VoidMessage()
+
+        
+
     # contacts.get api v2
     @endpoints.method(ContactGetRequest, ContactSchema,
                       path='contacts/getv2', http_method='POST',
@@ -1131,6 +1144,7 @@ class CrmEngineApi(remote.Service):
                         path='emails/send', http_method='POST',
                         name='emails.send')
     def send_email(self, request):
+        print request, "rrrrrrrrrrrrrrss";
         user = EndpointsHelper.require_iogrow_user()
         if user is None:
             raise endpoints.UnauthorizedException('Invalid token.')

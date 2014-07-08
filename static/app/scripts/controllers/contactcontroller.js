@@ -120,6 +120,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 					$('#importModal').modal('show');
 				}
 				$scope.createPickerUploader = function() {
+					
 					$('#importModal').modal('hide');
 					var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
 					var projectfolder = $scope.contact.folder;
@@ -289,7 +290,7 @@ $scope.updateTag = function(tag){
 
 
 
-$scope.selectTag= function(tag,index,$event){			
+$scope.selectTag= function(tag,index,$event){
 	        if(!$scope.manage_tags){
 				 var element=$($event.target);
 				 if(element.prop("tagName")!='LI'){
@@ -536,6 +537,9 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 														'profile_img_id':null,
 														'profile_img_url':null
 													};
+			$scope.newTaskform=false;
+      $scope.newEventform=false;
+      $scope.newTask={};
 
 
 			$scope.waterfallTrigger= function(){
@@ -864,27 +868,36 @@ $scope.listTags=function(){
 	};
  //HKA 09.11.2013 Add a new Task
 	 $scope.addTask = function(task){
+      if ($scope.newTaskform==false) {
+                $scope.newTaskform=true;
+                 }else{
+                  if (task.title!=null) {
+                          //  $('#myModal').modal('hide');
+                  if (task.due){
 
-				$('#myModal').modal('hide');
-				if (task.due){
+                      var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
 
-						var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
-
-						params ={'title': task.title,
-											'due': dueDate,
-											'parent': $scope.contact.entityKey
-						}
+                      params ={'title': task.title,
+                                'due': dueDate,
+                                'parent': $scope.contact.entityKey
+                      }
 
 
-				}else{
-						params ={'title': task.title,
-										 'parent': $scope.contact.entityKey
-									 }
-				};
-				
-				Task.insert($scope,params);
-				$scope.task={};
-		 }
+                  }else{
+                      params ={'title': task.title,
+                               'parent': $scope.contact.entityKey
+                             }
+                  };
+
+                  Task.insert($scope,params);
+                  $scope.newTask={};
+                  $scope.newTaskform=false;
+              }else{
+                  $scope.newTask={};
+                  $scope.newTaskform=false;
+            }
+           }
+     }
 
 		 $scope.hilightTask = function(){
 				console.log('Should higll');
@@ -902,34 +915,40 @@ $scope.listTags=function(){
 		 }
  //HKA 10.11.2013 Add event
  $scope.addEvent = function(ioevent){
+        if ($scope.newEventform==false) {
+                $scope.newEventform=true;
+           }else{
+            if (ioevent.title!=null) {
+                    var params ={}
 
-				$('#newEventModal').modal('hide');
-				var params ={}
-             
+                if (ioevent.starts_at){
+                    if (ioevent.ends_at){
+                      params ={'title': ioevent.title,
+                              'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                              'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                              'where': ioevent.where,
+                              'parent':$scope.contact.entityKey
+                      }
 
-				if (ioevent.starts_at){
-						if (ioevent.ends_at){
-							params ={'title': ioevent.title,
-											'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-											'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
-											'where': ioevent.where,
-											'parent':$scope.contact.entityKey
-							}
+                    }else{
+                      params ={
+                        'title': ioevent.title,
+                              'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                              'where': ioevent.where,
+                              'parent':$scope.contact.entityKey
+                      }
+                    }
 
-						}else{
-							params ={
-								'title': ioevent.title,
-											'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-											'where': ioevent.where,
-											'parent':$scope.contact.entityKey
-							}
-						}
-
-						Event.insert($scope,params);
-						$scope.ioevent={};
-						
-					};
-		 }
+                    Event.insert($scope,params);
+                    $scope.ioevent={};
+                    $scope.newEventform=false;
+                  }
+        }else{
+            $scope.ioevent={};
+            $scope.newEventform=false;
+      }
+     }
+     }
 		 $scope.hilightEvent = function(){
 				console.log('Should higll');
 				$('#event_0').effect("highlight","slow");
@@ -1073,11 +1092,11 @@ if (email.email){
 						]
 	};
 	InfoNode.insert($scope,params);
-}  
+}
 	$scope.email={};
 	$scope.email.email=''
 	console.log($scope.email)
- 
+
 	$scope.showEmailForm = false;
 	};
 
@@ -1116,7 +1135,7 @@ $scope.addSocial = function(social){
 
 };
 $scope.addCustomField = function(customField){
-	 
+
 	if (customField){
 	 if(customField.field && customField.value){
 	params = {'parent':$scope.contact.entityKey,
