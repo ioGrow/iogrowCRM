@@ -809,6 +809,7 @@ class Contact(EndpointsModel):
     @classmethod
     def import_from_csv(cls,user_from_email,request):
         # read the csv file from Google Drive
+        print (request)
         csv_file = EndpointsHelper.import_file(user_from_email,request.file_id)
         csvreader = csv.reader(csv_file.splitlines())
         headings = csvreader.next()
@@ -901,6 +902,9 @@ class Contact(EndpointsModel):
                             for key in matched_columns:
                                 if matched_columns[key] not in contact.keys():
                                     contact[matched_columns[key]] = None
+
+                            if (hasattr(contact,'title'))==False:
+                                contact['title']=""
                             imported_contact  = cls(
                                                 firstname = contact['firstname'],
                                                 lastname = contact['lastname'],
