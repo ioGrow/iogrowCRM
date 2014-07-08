@@ -522,7 +522,8 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 			$scope.infonodes = {};
 			$scope.phone={};
 			$scope.phone.type= 'work';
-			$scope.casee = {};
+      $scope.casee = {};
+			$scope.ioevent = {};
 			$scope.casee.priority = 4;
 			$scope.sharing_with = [];
 			$scope.statuses = [
@@ -916,12 +917,11 @@ $scope.listTags=function(){
  $scope.addEvent = function(ioevent){
         if ($scope.newEventform==false) {
                 $scope.newEventform=true;
-           }else{
-                ioevent.starts_at=$('#leadEventStartsAt').handleDtpicker('getDate');
-                ioevent.ends_at=$('#leadEventEndsAt').handleDtpicker('getDate');            
-            if (ioevent.title!=null) {
-                    var params ={}
-
+           }else{        
+            if (ioevent.title!=null&&ioevent.title!="") {
+                  var params ={}
+                  ioevent.starts_at=$('#leadEventStartsAt').handleDtpicker('getDate');
+                  ioevent.ends_at=$('#leadEventEndsAt').handleDtpicker('getDate');    
                 if (ioevent.starts_at){
                     if (ioevent.ends_at){
                       params ={'title': ioevent.title,

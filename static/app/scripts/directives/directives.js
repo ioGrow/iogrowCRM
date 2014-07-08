@@ -280,6 +280,30 @@ app.directive('editoptions', function($compile) {
     }
   }
 });
+app.directive('cusdatetimepicker', function($parse) {
+      return {
+      restrict: 'A',
+      require:'?ngModel',
+       link: function($scope, element, attrs,ngModel) {
+        console.log('wooooooooooooorkkkkkkk');
+        console.log(ngModel);
+        var dp = $(element);
+        var model = $parse(attrs.model);
+        console.log(model($scope));  // logs "test"
+        dp.appendDtpicker({
+
+                      "dateFormat": "YYYY-MM-DD h:m",
+                      "autodateOnStart": false,
+                       "onHide": function(handler){
+                        console.log(model($scope));
+                         model.assign($scope, dp.handleDtpicker('getDate'));
+                         $scope.$apply();
+                        },
+                         "closeOnSelected": true
+                    });
+    }
+  }
+});
 app.directive('taggable', ['$parse',function($parse) {
     return {
       restrict: 'A',

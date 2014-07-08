@@ -553,6 +553,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
      $scope.newTaskform=false;
      $scope.newEventform=false;
      $scope.newTask={};
+     $scope.ioevent = {};
       $scope.allcurrency=[
         { value:"USD", text:"$ - USD"},
         { value:"EUR", text:"€ - EUR"},
@@ -841,10 +842,11 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
            if ($scope.newEventform==false) {
                 $scope.newEventform=true;
            }else{
-            ioevent.starts_at=$('#opportunityEventStartsAt').handleDtpicker('getDate');
-            ioevent.ends_at=$('#opportunityEventEndsAt').handleDtpicker('getDate');
-            if (ioevent.title!=null) {
+            
+            if (ioevent.title!=null&&ioevent.title!="") {
                     var params ={}
+                ioevent.starts_at=$('#opportunityEventStartsAt').handleDtpicker('getDate');
+                ioevent.ends_at=$('#opportunityEventEndsAt').handleDtpicker('getDate');
                 if (ioevent.starts_at){
                     if (ioevent.ends_at){
                       params ={'title': ioevent.title,

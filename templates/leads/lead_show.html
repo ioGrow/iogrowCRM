@@ -718,7 +718,7 @@
                                 <div class="col-md-12 margin-bottom-10">
                                        <div class="input-icon margin-top-10">
                                         <i class="fa fa-calendar"></i>
-                                        <input type="text" class="form-control"  placeholder="To" name="date9" value="" id="leadEventEndsAt">
+                                       <input cusdatetimepicker data-model="ioevent.ends_at" type="text" class="form-control" placeholder="From" value="" id="leadEventStartsAt">
                                       </div>
                                 </div>
                             </div>  
@@ -1599,24 +1599,24 @@
                         </div>
                     </div>
                 </div>
-<script type="text/javascript">
-  $(function(){
-    $('#leadEventStartsAt').appendDtpicker({
-      "closeOnSelected": true,
-      "dateFormat": "YYYY-MM-DD h:m",
-      "autodateOnStart": false
-    });
-  });
-</script>
-<script type="text/javascript">
-  $(function(){
-    $('#leadEventEndsAt').appendDtpicker({
-      "closeOnSelected": true,
-      "dateFormat": "YYYY-MM-DD h:m",
-      "autodateOnStart": false
-    });
-  });
-</script>
+                <script type="text/javascript">
+                  $(function(){
+                    $('#leadEventStartsAt').appendDtpicker({
+                      "closeOnSelected": true,
+                      "dateFormat": "YYYY-MM-DD h:m",
+                      "autodateOnStart": false
+                    });
+                  });
+                </script>
+                <script type="text/javascript">
+                  $(function(){
+                    $('#leadEventEndsAt').appendDtpicker({
+                      "closeOnSelected": true,
+                      "dateFormat": "YYYY-MM-DD h:m",
+                      "autodateOnStart": false
+                    });
+                  });
+                </script>
                 <script type="text/javascript">
                             $(function() {
                             $('#datetimepicker2').datetimepicker({

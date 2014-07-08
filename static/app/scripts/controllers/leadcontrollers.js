@@ -512,6 +512,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.newTaskform=false;
      $scope.newEventform=false;
      $scope.newTask={};
+     $scope.ioevent = {};
      $scope.statuses = [
       {value: 'Home', text: 'Home'},
       {value: 'Work', text: 'Work'},
@@ -709,10 +710,12 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
            if ($scope.newEventform==false) {
                 $scope.newEventform=true;
            }else{
-            ioevent.starts_at=$('#leadEventStartsAt').handleDtpicker('getDate');
-            ioevent.ends_at=$('#leadEventEndsAt').handleDtpicker('getDate');
-            if (ioevent.title!=null) {
+            
+            if (ioevent.title!=null&&ioevent.title!="") {
                     var params ={}
+                ioevent.starts_at=$('#leadEventStartsAt').handleDtpicker('getDate');
+                /*ioevent.ends_at=$('#leadEventEndsAt').handleDtpicker('getDate');*/
+                console.log(ioevent);
                 if (ioevent.starts_at){
                     if (ioevent.ends_at){
                       params ={'title': ioevent.title,
