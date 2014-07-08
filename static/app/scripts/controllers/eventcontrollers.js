@@ -287,23 +287,42 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
           editable: true,
           eventSources: [{
             events: function(start, end, timezone, callback) {
-
+              // events client table to feed the calendar .  // hadji hicham  08-07-2014 10:40
               var events=[];
+
               var params = {
                             'events_list_start':moment(start).format('YYYY-MM-DDTH:mm:00.000000'),
                             'events_list_end':moment(end).format('YYYY-MM-DDTH:mm:00.000000')
                             };
-                       console.log(moment(start).format('YYYY-MM-DDTH:mm:00.000000'))
-                        console.log(moment(end).format('YYYY-MM-DDTH:mm:00.000000'))  
-                    $scope.isLoading = true;
-
+              var params1={}  
+              $scope.isLoading = true;
+ 
+                 // load events 
               gapi.client.crmengine.events.list_fetch(params).execute(function(resp) { 
                                 if(!resp.code){
                                   $scope.events_cal_list= resp.items;
+                                  $scope.$apply();  
+                                }
+                                else{
+                                    if(resp.code==401){
+                                            $scope.refreshToken();
+                                            $scope.isLoading = false;
+                                            $scope.$apply();
+                                    };
+                                }
+               });  
 
-                                     try {
 
-                                             for(var i=0;i<$scope.events_cal_list.length;i++ ){
+               // load tasks 
+                      gapi.client.crmengine.tasks.listv2(params1).execute(function(resp) {
+                                if(!resp.code){
+
+                                  $scope.tasks_list=resp.items;
+                                  $scope.$apply();
+
+                                   try {
+                                      // feed events client table with tasks .
+                                       for(var i=0;i<$scope.events_cal_list.length;i++ ){
 
                                               var allday= ($scope.events_cal_list[i].allday=="false") ? false :true ;
                                         
@@ -317,24 +336,47 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                                            url:'/#/events/show/'+$scope.events_cal_list[i].id.toString(),
                                                            allDay:allday
                                                        })
+
                                                 
-                                                                                              };  
-                                                                                              
-                                                                                              callback(events); 
-                                          }catch (e){
+                                      };
+                                  // feed events client table with events 
+                                    for(var i=0;i<$scope.tasks_list.length;i++ ){
+                                        
+
+                                            events.push({ 
+                                                           id: $scope.tasks_list[i].id ,
+                                                           title:$scope.tasks_list[i].title,
+                                                           start:moment($scope.tasks_list[i].due),
+                                                           entityKey:$scope.tasks_list[i].entityKey,
+                                                           url:'/#/tasks/show/'+$scope.tasks_list[i].id.toString(),
+                                                           backgroundColor:$scope.tasks_list[i].status_color,
+                                                           color:$scope.tasks_list[i].status_color,
+                                                           allDay:true
+                                                       })
+                                                
+                                      }  
+                                       // feed the calendar client table with events and tasks .
+                                       callback(events); 
+                            
+                                       }catch (e){
                                                console.log(e);
                                           }
-                                           $scope.$apply();  
+                                          $scope.$apply();
+
                                 }
-                                else{
+                                 else{
                                     if(resp.code==401){
                                             $scope.refreshToken();
                                             $scope.isLoading = false;
                                             $scope.$apply();
                                     };
                                 }
-               });   
-                  $scope.isLoading = false;                     
+
+                 });  
+               // end  
+
+                  $scope.isLoading = false;  
+                                
             }
           }
           ],
@@ -416,9 +458,6 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                     }
                   }
                    
-                    
-                    
-
                    }
                  
                    
