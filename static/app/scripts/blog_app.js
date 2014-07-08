@@ -1,6 +1,5 @@
 var app = angular.module('blogEngine',['blogEngine.blogservices', 'ui.bootstrap.datetimepicker','easypiechart','xeditable','ngQuickDate','ui.bootstrap','ui.select2','angularMoment','crmEngine.authservices', 'crmEngine.showservices', 'crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.eventservices', 'crmEngine.leadservices','crmEngine.opportunityservices','crmEngine.caseservices','crmEngine.userservices','crmEngine.groupservices','crmEngine.noteservices','crmEngine.commentservices','crmEngine.settingservices','crmEngine.feedbackservices','crmEngine.companyprofileservices','mapServices','crmEngine.needservices','crmEngine.infonodeservices','crmEngine.edgeservices']);
-
-
+var public_blog_app = angular.module('publicBlogEngine',['blogEngine.blogservices','ui.bootstrap','ui.select2']);
 
 app.config(function($interpolateProvider){
   $interpolateProvider.startSymbol('<%=');
@@ -13,152 +12,24 @@ app.run(function(editableOptions) {
 app.config(['$routeProvider', function($routeProvider) {
      $routeProvider.
      // Accounts
+      when('/blog', {
+        controller: 'ArticleListCtrl',
+        templateUrl:'/views/articles/list'
+      }).
+      when('/search/:q', {
+        controller: 'ArticleSearchCtrl',
+        templateUrl:'/views/articles/search'
+      }).
+      when('/articles/new', {
+        controller: 'ArticleNewCtrl',
+        templateUrl:'/views/articles/new'
+      }).
       when('/articles/', {
         controller: 'ArticleListCtrl',
         templateUrl:'/views/articles/list'
       }).when('/articles/:articleId', {
         controller: 'ArticleShowCtrl',
         templateUrl:'/views/articles/show'
-      }).when('/accounts/new', {
-        controller: 'AccountNewCtrl',
-        templateUrl:'/views/accounts/new'
-      }).
-      // Contacts
-      when('/contacts/new', {
-        controller: 'ContactNewCtrl',
-        templateUrl:'/views/contacts/new'
-      }).when('/contacts/', {
-        controller: 'ContactListCtrl',
-        templateUrl:'/views/contacts/list'
-
-      }).when('/contacts/show/:contactId', {
-        controller: 'ContactShowCtrl',
-        templateUrl:'/views/contacts/show'
-      }).
-      // Opportunities
-      when('/opportunities/', {
-        controller: 'OpportunityListCtrl',
-        templateUrl:'/views/opportunities/list'
-      }).when('/opportunities/show/:opportunityId', {
-        controller: 'OpportunityShowCtrl',
-        templateUrl:'/views/opportunities/show'
-      }).when('/opportunities/new', {
-        controller: 'OpportunityNewCtrl',
-        templateUrl:'/views/opportunities/new'
-      }).
-      // Leads
-      when('/leads/', {
-        controller: 'LeadListCtrl',
-        templateUrl:'/views/leads/list'
-      }).when('/leads/show/:leadId', {
-        controller: 'LeadShowCtrl',
-        templateUrl:'/views/leads/show'
-      }).
-      when('/leads/new', {
-        controller: 'LeadNewCtrl',
-        templateUrl:'/views/leads/new'
-      }).
-      // Cases
-      when('/cases/', {
-        controller: 'CaseListCtrl',
-        templateUrl:'/views/cases/list'
-      }).when('/cases/show/:caseId', {
-        controller: 'CaseShowCtrl',
-        templateUrl:'/views/cases/show'
-      }).when('/cases/new', {
-        controller: 'CaseNewCtrl',
-        templateUrl:'/views/cases/new'
-      }).
-      // Needs
-      when('/needs/show/:needId', {
-        controller: 'NeedShowCtrl',
-        templateUrl:'/views/needs/show'
-      }).
-      // Notes
-      when('/notes/show/:noteId',{
-      controller : 'NoteShowController',
-      templateUrl:'/views/notes/show'
-      }).
-      // Events
-      when('/events/show/:eventId',{
-      controller : 'EventShowController',
-      templateUrl:'/views/events/show'
-      }).
-      // Tasks
-      when('/tasks/show/:taskId',{
-      controller : 'TaskShowController',
-      templateUrl:'/views/tasks/show'
-      }).
-
-      // All Tasks
-      when('/tasks/',{
-      controller : 'AllTasksController',
-      templateUrl:'/views/tasks/list'
-      }).
-      // Documents
-      when('/documents/show/:documentId',{
-      controller : 'DocumentShowController',
-      templateUrl:'/views/documents/show'
-      }).
-      // Search
-      when('/search/:q', {
-        controller: 'SearchShowController',
-        templateUrl:'/views/search/list'
-      }).
-      // Admin Console
-      when('/admin/users', {
-        controller: 'UserListCtrl',
-        templateUrl:'/views/admin/users/list'
-      }).when('/admin/groups', {
-        controller: 'GroupListCtrl',
-        templateUrl:'/views/admin/groups/list'
-      }).when('/admin/groups/show/:groupId', {
-        controller: 'GroupShowCtrl',
-        templateUrl:'/views/admin/groups/show'
-      }).when('/admin/settings',{
-        controller:'SettingsShowCtrl',
-        templateUrl:'/views/admin/settings'
-
-      }).
-      //Shows
-      when('/live/shows', {
-        controller: 'ShowListCtrl',
-        templateUrl:'/views/shows/list'
-      }).when('/live/shows/show/:showId', {
-        controller: 'ShowShowCtrl',
-        templateUrl:'/views/shows/show'
-
-      }).when('/live/company_profile/:organizationId',{
-        controller:'CompanyProfileShowCtrl',
-        templateUrl:'/views/live/company_profile'
-
-      }).when('/live/product_videos',{
-        controller:'ProductVideoListCtrl',
-        templateUrl:'/views/live/product_videos'
-
-      }).when('/live/product_videos/product_video/:productId',{
-        controller:'ProductVideoShowCtrl',
-        templateUrl:'/views/live/product_videos/show'
-
-      }).when('/live/customer_stories',{
-        controller:'CustomerStoriesListCtrl',
-        templateUrl:'/views/live/customer_stories'
-
-      }).when('/live/customer_stories/customer_story/:customerstoryId',{
-        controller:'CustomerStoriesShowCtrl',
-        templateUrl:'/views/live/customer_stories/show'
-
-      }).when('/live/feedbacks',{
-        controller:'FeedBacksListCtrl',
-        templateUrl:'/views/live/feedbacks'
-      }).when('/live/feedbacks/feedback/:feedbackId',{
-        controller:'FeedBacksShowCtrl',
-        templateUrl:'/views/live/feedbacks/show'
-      }).
-       //Calendar
-       when('/calendar/', {
-        controller: 'EventListController',
-        templateUrl:'/views/calendar/show'
       });
 
 }]);

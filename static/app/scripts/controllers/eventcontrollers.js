@@ -33,15 +33,30 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
             Auth.refreshToken();
      };
      $scope.$watch('event.starts_at', function(newValue, oldValue) {
-              $scope.patchDate($scope.event.starts_at);
+        
+              $scope.patchDate($scope.event.starts_at,"Start");
      });
-     $scope.patchDate = function(newValue){
+     $scope.$watch('event.ends_at', function(newValue, oldValue) {
+
+              $scope.patchDate($scope.event.ends_at,"End");
+     });
+     $scope.patchDate = function(newValue,when){
+      if (when=="Start"){
         var starts_at = $filter('date')(newValue,['yyyy-MM-ddTHH:mm:00.000000']);
 
         var params = {
                     'entityKey':$scope.event.entityKey,
                     'starts_at':starts_at
         };
+      }
+      if (when=="End"){
+        var ends_at = $filter('date')(newValue,['yyyy-MM-ddTHH:mm:00.000000']);
+
+        var params = {
+                    'entityKey':$scope.event.entityKey,
+                    'ends_at':ends_at
+        };
+      }
         if ((!$scope.isLoading) && (params.entityKey != undefined )){
             Event.patch($scope,params);
         }
@@ -88,7 +103,10 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
      };
 
      $scope.renderMaps = function(){
-
+         // Map.render($scope);
+          Map.destroy();
+          console.log("oooooooooo");
+          console.log($scope);
           Map.searchLocation($scope,$scope.event.where);
       };
 
@@ -192,11 +210,25 @@ $scope.deleteEvent = function(){
      };
 // HKA 23.06.2014 update description
   $scope.updateEvent = function(description){
-    var params = {'id':$scope.event.entityKey,
-                   'description':description}
-            Event.patch($scope,params)
-    
+    console.log(description);
+    if (description['where']){
+      console.log("wheeeeeeeeeeeeeeee");
+      var params = {'entityKey':$scope.event.entityKey,
+                   'where':description['where']};
+
+
+    }
+     if (description['description']){
+      console.log("descrripppppp");
+      var params = {'entityKey':$scope.event.entityKey,
+                   'description':description['description']};
+            
+    }
+   
+ Event.patch($scope,params);
+
         };
+
   
   // Google+ Authentication
   Auth.init($scope);
@@ -228,10 +260,14 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
      $scope.slected_memeber = undefined;
      $scope.role= 'participant';
      $scope.isContentLoaded = true;
+     $scope.title_event="New Event" ;
+     $scope.permet_clicking=true ;
      // What to do after authentication
+
      $scope.runTheProcess = function(){
           var eventid = {'id':$route.current.params.eventId};
-          Event.list($scope);
+          $scope.renderCalendar();
+         // Event.list($scope);
           User.list($scope,{});
 
 
@@ -239,7 +275,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
 
 
      };
-     $scope.renderCalendar = function(calendarEventList){
+     $scope.renderCalendar = function(){
 
         $('#calendar').fullCalendar({
           header: {
@@ -248,10 +284,204 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
             right: 'month,agendaWeek,agendaDay'
           },
           defaultView:'agendaWeek',
-          editable: false,
-          events: calendarEventList
+          editable: true,
+          eventSources: [{
+            events: function(start, end, timezone, callback) {
+
+              var events=[];
+              var params = {
+                            'events_list_start':moment(start).format('YYYY-MM-DDTH:mm:00.000000'),
+                            'events_list_end':moment(end).format('YYYY-MM-DDTH:mm:00.000000')
+                            };
+                       console.log(moment(start).format('YYYY-MM-DDTH:mm:00.000000'))
+                        console.log(moment(end).format('YYYY-MM-DDTH:mm:00.000000'))  
+                    $scope.isLoading = true;
+
+              gapi.client.crmengine.events.list_fetch(params).execute(function(resp) { 
+                                if(!resp.code){
+                                  $scope.events_cal_list= resp.items;
+
+                                     try {
+
+                                             for(var i=0;i<$scope.events_cal_list.length;i++ ){
+                                                events.push({ 
+                                                            id: $scope.events_cal_list[i].id ,
+                                                           title:$scope.events_cal_list[i].title,
+                                                           start:moment($scope.events_cal_list[i].starts_at),
+                                                           end: moment($scope.events_cal_list[i].ends_at),
+                                                           entityKey:$scope.events_cal_list[i].entityKey,
+                                                           url:'/#/events/show/'+$scope.events_cal_list[i].id.toString(),
+                                                           backgroundColor:$scope.events_cal_list[i].prestationColor,
+                                                           borderColor:$scope.events_cal_list[i].prestationColor,
+                                                         
+                                                       })
+                                                
+                                                                                              };  
+                                                                                              
+                                                                                              callback(events); 
+                                          }catch (e){
+                                               console.log(e);
+                                          }
+                                }
+               });   
+                                      
+            }
+          }
+          ],
+          dayClick: function(date,  jsEvent, view) {
+
+
+               $scope.start_event= moment(date).format('YYYY-MM-DDTHH:mm:00.000000')
+               $scope.start_event_draw=date.format();
+               $scope.end_event_draw= date.add('hours',1).format();
+
+               $scope.end_event= moment(date.add('hours',1)).format('YYYY-MM-DDTHH:mm:00.000000');
+               $scope.$apply();
+               
+    
+            if( $scope.permet_clicking){
+              // $scope.end_event=date.add('hours',1).format('YYYY-MM-DDTHH:mm:00.000000');
+            var eventObject = {
+                    title: $scope.title_event 
+                };
+                    eventObject.id ="new";
+                    eventObject.start = moment($scope.start_event_draw);
+               
+                   // eventObject.allDay = allDay;
+              eventObject.className = $(this).attr("data-class");
+    
+              $('#calendar').fullCalendar('renderEvent', eventObject, false);     
+                   $scope.showEventModal();
+               }
+                             }, 
+      // Triggered when event dragging begins.
+       eventDragStart: function( event, jsEvent, ui, view ) { },
+       // Triggered when event dragging stops. 
+       eventDragStop:function( event, jsEvent, ui, view ) {
+
+           
+        },
+       // Triggered when dragging stops and the event has moved to a different day/time.
+       eventDrop:function( event, revertFunc, jsEvent, ui, view ) { 
+
+                    var params={
+                                 'id':event.id,
+                                 'entityKey':event.entityKey,
+                                 'starts_at':moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000'),
+                                 'ends_at':moment(event.end).format('YYYY-MM-DDTHH:mm:00.000000')
+                    }
+                
+                    
+                   Event.patch($scope,params);
+               
+                
+           },
+
+     //Triggered when event resizing begins.
+       eventResizeStart:function( event, jsEvent, ui, view ) { },
+       //Triggered when event resizing stops.
+       eventResizeStop:function( event, jsEvent, ui, view ) { },
+       //Triggered when resizing stops and the event has changed in duration.
+       eventResize:function( event, jsEvent, ui, view ) { 
+       var params={
+                                'id':event.id,
+                                'entityKey':event.entityKey,
+                                'starts_at':moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000'),
+                                 'ends_at':moment(event.end).format('YYYY-MM-DDTHH:mm:00.000000')
+                    }
+                  
+                    Event.patch($scope,params);
+        }
+         // the end of initialisation         
+
+
         });
      }
+
+
+
+     // show event modal 
+
+     $scope.showEventModal= function(){  
+     $('#newEventModal').modal('show');
+};
+
+// cancel add event operation 
+
+$scope.cancelAddOperation= function(){
+  var events =$('#calendar').fullCalendar( 'clientEvents' ,["new"] );
+   var event= events[events.length-1];
+   
+    $('#calendar').fullCalendar( 'removeEvents' ,
+
+ function(event){
+
+    if(event.title == "New Event"){
+
+   return true;
+   }
+   return false;
+  }
+      );
+    $scope.start_event="" ;
+    $scope.end_event="";
+     $scope.permet_clicking=true ;
+}
+
+
+// add event operation 
+
+
+ $scope.addEvent = function(ioevent){
+          $scope.permet_clicking=false ;
+
+          var params ={};
+
+
+        $scope.updateEventRender(ioevent) ;
+        $('#newEventModal').modal('hide');
+
+
+            if(ioevent.title!=""){
+
+              params ={'title': ioevent.title,
+                      'starts_at':  $scope.start_event,
+                      'ends_at': $scope.end_event,
+                      'where': ioevent.where,
+                        }
+              
+            }else{
+                 params ={
+                      'starts_at':$scope.start_event,
+                      'ends_at': $scope.end_event,
+                      'where': ioevent.where,
+                        }
+            };
+
+ 
+
+
+           console.log(params);
+          Event.insert($scope,params);
+            $scope.ioevent={};
+
+            $scope.start_event="";
+            $scope.end_event="";       
+       
+     }
+
+$scope.updateEventRender=function(ioevent){
+ 
+     
+    var events =$('#calendar').fullCalendar( 'clientEvents' ,["new"] );
+    events[0].title=ioevent.title ;
+    $('#calendar').fullCalendar('updateEvent', events[0]);
+   
+   
+    ///  $('#calendar').fullCalendar( 'refetchEvents' );
+};
+
+//
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
             Auth.refreshToken();
@@ -261,7 +491,6 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
      });
      $scope.patchDate = function(newValue){
         var starts_at = $filter('date')(newValue,['yyyy-MM-ddTHH:mm:00.000000']);
-
         var params = {
                     'entityKey':$scope.event.entityKey,
                     'starts_at':starts_at
@@ -312,8 +541,9 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
      };
 
      $scope.renderMaps = function(){
-
-          Map.searchLocation($scope,$scope.event.where);
+          console.log("hhhhhhhhhhhhh");
+          Map.render($scope);
+          //Map.searchLocation($scope,$scope.event.where);
       };
 
 

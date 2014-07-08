@@ -315,7 +315,7 @@ class Lead(EndpointsModel):
             else:
                 leads, next_curs, more = cls.query().filter(cls.organization==user_from_email.organization).fetch_page(limit, start_cursor=curs)
             for lead in leads:
-                if count<= limit:
+                if count<limit:
                     is_filtered = True
                     if request.tags and is_filtered:
                         end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]

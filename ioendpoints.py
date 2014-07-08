@@ -38,7 +38,7 @@ from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,Topic
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
 from iomodels.crmengine.opportunities import Opportunity,UpdateStageRequest,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest
-from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema,EventPatchRequest,EventListRequest,EventListResponse
+from iomodels.crmengine.events import Event,EventInsertRequest,EventSchema,EventPatchRequest,EventListRequest,EventListResponse,EventFetchListRequest,EventFetchResults
 from iomodels.crmengine.documents import Document,DocumentInsertRequest,DocumentSchema,MultipleAttachmentRequest
 from iomodels.crmengine.shows import Show
 from iomodels.crmengine.leads import Lead,LeadFromTwitterRequest,LeadInsertRequest,LeadListRequest,LeadListResponse,LeadSearchResults,LeadGetRequest,LeadSchema
@@ -66,7 +66,6 @@ from model import Invitation
 from search_helper import SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
 import iomessages
-
 
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
@@ -114,9 +113,14 @@ INVERSED_EDGES = {
             'tagged_on': 'tags'
 
          }
-ADMIN_EMAILS = ['tedj.meabiou@gmail.com','hakim@iogrow.com']
-
-
+ADMIN_EMAILS = ['tedj.meabiou@gmail.com','hakim@iogrow.com','mezianeh3@gmail.com']
+BLOG_INDEX_ATTRS = [
+              "title",
+              "intro_text",
+              "author",
+              "author_photo",
+              "author_gid"
+              ]
 def LISTING_QUERY(query, access, organization, owner, collaborators, order):
     return query.filter(
                             ndb.OR(
@@ -228,6 +232,20 @@ class SearchResult(messages.Message):
     title = messages.StringField(2)
     type = messages.StringField(3)
     rank = messages.IntegerField(4)
+
+class BlogSearchResult(messages.Message):
+    id = messages.StringField(1)
+    title = messages.StringField(2)
+    intro_text = messages.StringField(3)
+    author = messages.StringField(4)
+    author_photo = messages.StringField(5)
+    author_gid = messages.StringField(6)
+    rank = messages.IntegerField(7)
+
+# The message class that defines a set of search results
+class BlogSearchResults(messages.Message):
+    items = messages.MessageField(BlogSearchResult, 1, repeated=True)
+    nextPageToken = messages.StringField(2)
 
 # The message class that defines a set of search results
 class SearchResults(messages.Message):
@@ -363,16 +381,13 @@ class BlogEngineApi(remote.Service):
             id=messages.StringField(1))
 
     # Search API
-    @endpoints.method(SearchRequest, SearchResults,
+    @endpoints.method(SearchRequest, BlogSearchResults,
                         path='search', http_method='POST',
                         name='search')
     def blog_search_method(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        organization = str(user_from_email.organization.id())
-        index = search.Index(name="GlobalIndex")
+        index = search.Index(name="BlogIndex")
         #Show only objects where you have permissions
-        query_string = request.q + ' AND (organization:' +organization+ ' AND (access:public OR (owner:'+ user_from_email.google_user_id +' OR collaborators:'+ user_from_email.google_user_id+')))'
-        print query_string
+        query_string = request.q
         search_results = []
         count = 1
         if request.limit:
@@ -405,12 +420,12 @@ class BlogEngineApi(remote.Service):
                         "rank" : scored_document.rank
                     }
                     for e in scored_document.fields:
-                        if e.name in ["title","type"]:
+                        if e.name in BLOG_INDEX_ATTRS:
                             kwargs[e.name]=e.value
-                    search_results.append(SearchResult(**kwargs))
+                    search_results.append(BlogSearchResult(**kwargs))
         except search.Error:
             logging.exception('Search failed')
-        return SearchResults(items = search_results,nextPageToken=next_cursor)
+        return BlogSearchResults(items = search_results,nextPageToken=next_cursor)
     # articles.insert api
     @endpoints.method(ArticleInsertRequest, ArticleSchema,
                       path='articles/insert', http_method='POST',
@@ -439,15 +454,44 @@ class BlogEngineApi(remote.Service):
                       name='articles.get')
     def article_get_beta(self, request):
         return Article.get_schema(
-                            request = request
+                            id = request.id
                             )
 
+    # tags.attachtag api v2
+    @endpoints.method(iomessages.AddTagSchema, TagSchema,
+                      path='tags/attach', http_method='POST',
+                      name='tags.attach')
+    def attach_tag(self, request):
+        user_from_email = User.get_by_email('tedj.meabiou@gmail.com')
+        return Tag.attach_tag(
+                                user_from_email = user_from_email,
+                                request = request
+                            )
+    # tags.delete api
+    @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
+                      path='tags', http_method='DELETE',
+                      name='tags.delete')
+    def delete_tag(self, request):
+        user_from_email = User.get_by_email('tedj.meabiou@gmail.com')
+        tag_key = ndb.Key(urlsafe=request.entityKey)
+        Edge.delete_all(start_node=tag_key)
+        tag_key.delete()
+        return message_types.VoidMessage()
+
+    # tags.insert api
+    @Tag.method(path='tags', http_method='POST', name='tags.insert')
+    def TagInsert(self, my_model):
+        user_from_email = User.get_by_email('tedj.meabiou@gmail.com')
+        my_model.organization = user_from_email.organization
+        my_model.owner = user_from_email.google_user_id
+        my_model.put()
+        return my_model
     # tags.list api v2
     @endpoints.method(TagListRequest, TagListResponse,
                       path='tags/list', http_method='POST',
                       name='tags.list')
     def blog_tag_list(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
+        user_from_email = User.get_by_email('tedj.meabiou@gmail.com')
         return Tag.list_by_kind(
                             user_from_email = user_from_email,
                             kind = request.about_kind
@@ -468,6 +512,14 @@ class CrmEngineApi(remote.Service):
             message_types.VoidMessage,
             id=messages.StringField(1))
 
+    # org.update_tabs api v2
+    @endpoints.method(message_types.VoidMessage, message_types.VoidMessage,
+                      path='org/update_tabs', http_method='POST',
+                      name='org.update_tabs')
+    def update_tabs(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        Organization.update_current_apps_and_tabs(user_from_email.organization)
+        return message_types.VoidMessage()
     # Search API
     @endpoints.method(SearchRequest, SearchResults,
                         path='search', http_method='POST',
@@ -1103,6 +1155,7 @@ class CrmEngineApi(remote.Service):
                         path='emails/send', http_method='POST',
                         name='emails.send')
     def send_email(self, request):
+        print request, "rrrrrrrrrrrrrrss";
         user = EndpointsHelper.require_iogrow_user()
         if user is None:
             raise endpoints.UnauthorizedException('Invalid token.')
@@ -1190,6 +1243,16 @@ class CrmEngineApi(remote.Service):
                             request = request
                             )
 
+    # fetch events by start date end end date
+    @endpoints.method(EventFetchListRequest,EventFetchResults,
+                      path='events/list_fetch', http_method='POST',
+                      name='events.list_fetch')
+    def event_list_beta_fetch(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Event.listFetch(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
     # events.patch api
     @endpoints.method(EventPatchRequest, message_types.VoidMessage,
                         path='events/patch', http_method='POST',
@@ -1197,6 +1260,7 @@ class CrmEngineApi(remote.Service):
     def events_patch(self, request):
         event_key = ndb.Key(urlsafe = request.entityKey)
         event = event_key.get()
+
         if event is None:
             raise endpoints.NotFoundException('Event not found')
         event_patch_keys = ['title','starts_at','ends_at','description','where']

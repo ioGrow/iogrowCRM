@@ -14,7 +14,7 @@
 <div class="row subHeader">
 <div class="currentApp">
   <h2 class="page-title">
-    <!-- <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
+    <!-- <img class="platform_icons" height="25" width="25" src="/static/img/admin_console.png"> -->
     {{active_app.label}}
   </h2>
 </div>
@@ -53,7 +53,7 @@
   <div class="col-md-9">
     <div class="row">
         <div class="showPage col-md-12 newActionsBtn">
-          <span>Creating now Account </span>
+          <span>Create Account </span>
           <button class="btn red newAccountBtn pull-right" ng-click="save(account)">Create</button>
           <div class="clearfix"></div>
         </div>
@@ -140,7 +140,14 @@
                                           </div>
                                           <div class="form-group sm-group" style="">
                                             <label class="sr-only" for="exampleInputEmail2">Number</label>
-                                            <input type="text" class="form-control" id="exampleInputEmail2" ng-model="phone.number" placeholder="Enter a number">
+                                            <input 
+                                              type="text" 
+                                              class="form-control" 
+                                              id="exampleInputEmail2" 
+                                              ng-model="phone.number" 
+                                              placeholder="Enter a number"
+                                              ng-pattern="/^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/i"
+                                              required>
                                           </div>
                                            <button type="submit" ng-click="pushElement(phone,phones,'phones')" class="btn blue jfk-button jfk-button-action">Add</button>
                                             <button type="submit" class="btn btn-default" ng-click="showPhoneForm=false">X</button>
@@ -178,7 +185,13 @@
 
                                 </div>
                                  <ul class="list-unstyled contact-infos">
-                                    <li ng-repeat="address in addresses">- <span editoptions editdataattr="deleteInfos(addresses,$index)" editable-text="address.country" onbeforesave="inlinePatch('Infonode','addresses', 'street',address.entityKey,$data)" ng-show="address.street"><%=address.street%>, </span> <span editable-text="address.city" onbeforesave="inlinePatch('Infonode','addresses', 'city',address.entityKey,$data)" ng-show="address.city"><%=address.city%>, </span> <span editable-text="address.country" onbeforesave="inlinePatch('Infonode','addresses', 'country',address.entityKey,$data)" ng-show="address.country"><%=address.country%></span></li><a href="#addressmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new address </a></li>
+                                    <li ng-repeat="address in addresses">- <span editoptions editdataattr="deleteInfos(addresses,$index)" editable-text="address.country" onbeforesave="inlinePatch('Infonode','addresses', 'street',address.entityKey,$data)" ng-show="address.street"><%=address.street%>, </span> <span editable-text="address.city" onbeforesave="inlinePatch('Infonode','addresses', 'city',address.entityKey,$data)" ng-show="address.city"><%=address.city%>, </span> <span editable-text="address.country" onbeforesave="inlinePatch('Infonode','addresses', 'country',address.entityKey,$data)" ng-show="address.country"><%=address.country%></span></li>
+                                    <a href="#addressmodal" 
+                                      class="btn-link addAnotherPhone" 
+                                      data-toggle="modal">
+                                      <i class="icon-plus"></i> Add a new address 
+                                    </a>
+                                    </li>
                                   </ul>
 
 
@@ -195,7 +208,7 @@
                                         <form class="form-inline newLeadForm" role="form">
                                           <div class="form-group lg-group" style="">
                                             <label class="sr-only" for="exampleInputEmail2">Website</label>
-                                            <input type="text" ng-model="website.url" class="form-control" id="exampleInputEmail2" placeholder="Enter a Website">
+                                            <input type="url" ng-model="website.url" class="form-control" id="exampleInputEmail2" placeholder="Enter a Website" required>
                                           </div>
                                       <button type="submit" ng-click="pushElement(website,websites,'websites')" class="btn blue jfk-button jfk-button-action">Add</button>
                                       <button type="submit" ng-click="showWebsiteForm=false" class="btn btn-default">X</button>
@@ -215,7 +228,7 @@
                                             <form class="form-inline newLeadForm" role="form">
                                               <div class="form-group lg-group" style="">
                                                 <label class="sr-only" for="exampleInputEmail2">Social link</label>
-                                                <input type="text" class="form-control" id="exampleInputEmail2" ng-model='sociallink.url' placeholder="Enter a social link">
+                                                <input type="url" class="form-control" id="exampleInputEmail2" ng-model='sociallink.url' placeholder="Enter a social link" required>
                                               </div>
                                                <button ng-click="pushElement(sociallink,sociallinks,'sociallinks')" type="submit" class="btn blue jfk-button jfk-button-action">Add</button>
                                                 <button type="submit" ng-click="showSociallinkForm=false" class="btn btn-default">X</button>
@@ -450,7 +463,7 @@
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
 
-                  <input  type="submit" ng-click="pushElement(address,addresses,'addresses')" class="btn green" value="Add this address">
+                  <input  type="submit" ng-click="pushElement(address,addresses,'addresses')" class="btn green" ng-disabled="!address.country" value="Add this address">
                   <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
               </div>
                 </form>

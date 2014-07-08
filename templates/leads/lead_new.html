@@ -36,7 +36,7 @@
   <div class="col-md-9">
       <div class="row">
           <div class="showPage col-md-12 newActionsBtn">
-          <span>Creating now Lead </span>
+          <span>Create Lead </span>
           <button class="btn red newAccountBtn pull-right" ng-click="save(lead)">Create</button>
           <div class="clearfix"></div>
         </div>
@@ -336,9 +336,10 @@
                     </div>
                   </li>
                   <li ng-repeat="custom in customfields">
-                    <span editoptions editdataattr="deleteInfos(customfields,$index)">
-                      <%= custom.field%>  : <%= custom.value%>
-                    </span>
+                      <a editoptions editdataattr="deleteInfos(customfields,$index)" editable-text="custom.field" onbeforesave="inlinePatch('Infonode','customfields', 'field',custom.entityKey,$data)" href="<%=custom.field%>" target="_blank"> <%=custom.field%>
+                    </a>
+                     <a editoptions editdataattr="deleteInfos(customfields,$index)" editable-text="custom.value" onbeforesave="inlinePatch('Infonode','customfields', 'value',custom.entityKey,$data)" href="<%=custom.value%>" target="_blank"> <%=custom.value%>
+                    </a>
                   </li>
                   <li>
                     <a ng-click="showCustomFieldForm=true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal">

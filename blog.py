@@ -23,7 +23,6 @@ class AuthorSchema(messages.Message):
     display_name = messages.StringField(2)
     google_public_profile_url = messages.StringField(3)
     photo = messages.StringField(4)
-    edgeKey = messages.StringField(5)
 
 class ArticleInsertRequest(messages.Message):
     title = messages.StringField(1)
@@ -81,77 +80,30 @@ class LeadSearchResults(messages.Message):
     nextPageToken = messages.StringField(2)
 
 class Article():
-    def put_index(self,data=None):
+    @classmethod
+    def put_index(cls,article,author):
         """ index the element at each"""
         empty_string = lambda x: x if x else ""
-        collaborators = " ".join(self.collaborators_ids)
-        organization = str(self.organization.id())
-        title_autocomplete = ','.join(tokenize_autocomplete(self.firstname + ' ' + self.lastname +' '+ empty_string(self.title)+ ' ' +empty_string(self.company) + ' ' + empty_string(self.status)))
-        #addresses = " \n".join(map(lambda x: " ".join([x.street,x.city,x.state, x.postal_code, x.country]), self.addresses))
-        if data:
-            search_key = ['infos','contacts','tags','collaborators']
-            for key in search_key:
-                if key not in data.keys():
-                    data[key] = ""
-            my_document = search.Document(
-            doc_id = str(data['id']),
+        title_autocomplete = ','.join(tokenize_autocomplete(article.title))
+        my_document = search.Document(
+            doc_id = str(article.key.id()),
             fields=[
-            search.TextField(name=u'type', value=u'Lead'),
-            search.TextField(name='title', value = empty_string(self.firstname) + " " + empty_string(self.lastname)),
-            search.TextField(name='organization', value = empty_string(organization) ),
-            search.TextField(name='access', value = empty_string(self.access) ),
-            search.TextField(name='owner', value = empty_string(self.owner) ),
-            search.TextField(name='collaborators', value = data['collaborators']  ),
-            search.TextField(name='firstname', value = empty_string(self.firstname) ),
-            search.TextField(name='lastname', value = empty_string(self.lastname)),
-            search.TextField(name='company', value = empty_string(self.company)),
-            search.TextField(name='industry', value = empty_string(self.industry)),
-            search.TextField(name='position', value = empty_string(self.title)),
-            search.TextField(name='department', value = empty_string(self.department)),
-            search.TextField(name='description', value = empty_string(self.description)),
-            search.TextField(name='source', value = empty_string(self.source)),
-            search.TextField(name='status', value = empty_string(self.status)),
-            search.DateField(name='created_at', value = self.created_at),
-            search.DateField(name='updated_at', value = self.updated_at),
-            search.TextField(name='show_name', value = empty_string(self.show_name)),
-            search.TextField(name='tagline', value = empty_string(self.tagline)),
-            search.TextField(name='introduction', value = empty_string(self.introduction)),
-            search.TextField(name='infos', value= data['infos']),
-            search.TextField(name='tags', value= data['tags']),
-            search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
-           ])
-        else:
-            my_document = search.Document(
-            doc_id = str(self.key.id()),
-            fields=[
-                search.TextField(name=u'type', value=u'Lead'),
-                search.TextField(name='title', value = empty_string(self.firstname) + " " + empty_string(self.lastname)),
-                search.TextField(name='organization', value = empty_string(organization) ),
-                search.TextField(name='access', value = empty_string(self.access) ),
-                search.TextField(name='owner', value = empty_string(self.owner) ),
-                search.TextField(name='collaborators', value = collaborators ),
-                search.TextField(name='firstname', value = empty_string(self.firstname) ),
-                search.TextField(name='lastname', value = empty_string(self.lastname)),
-                search.TextField(name='company', value = empty_string(self.company)),
-                search.TextField(name='industry', value = empty_string(self.industry)),
-                search.TextField(name='position', value = empty_string(self.title)),
-                search.TextField(name='department', value = empty_string(self.department)),
-                search.TextField(name='description', value = empty_string(self.description)),
-                search.TextField(name='source', value = empty_string(self.source)),
-                search.TextField(name='status', value = empty_string(self.status)),
-                search.DateField(name='created_at', value = self.created_at),
-                search.DateField(name='updated_at', value = self.updated_at),
-                search.TextField(name='show_name', value = empty_string(self.show_name)),
-                search.TextField(name='tagline', value = empty_string(self.tagline)),
-                search.TextField(name='introduction', value = empty_string(self.introduction)),
-                search.TextField(name='title_autocomplete', value = empty_string(title_autocomplete)),
+                search.TextField(name='title', value = empty_string(article.title) ),
+                search.TextField(name='title_autocomplete', value = title_autocomplete),
+                search.TextField(name='intro_text', value = empty_string(article.intro_text) ),
+                search.TextField(name='full_text', value = empty_string(article.full_text) ),
+                search.DateField(name='created_at', value = article.created_at),
+                search.DateField(name='updated_at', value = article.updated_at),
+                search.TextField(name='author', value = empty_string(author.display_name) ),
+                search.TextField(name='author_photo', value = empty_string(author.photo) ),
+                search.TextField(name='author_gid', value = empty_string(author.google_user_id) ),
                ])
-        my_index = search.Index(name="GlobalIndex")
+        my_index = search.Index(name="BlogIndex")
         my_index.put(my_document)
 
     @classmethod
-    def get_schema(cls,request):
-        article = Node.get_by_id(int(request.id))
+    def get_schema(cls,id):
+        article = Node.get_by_id(int(id))
         if article is None:
             raise endpoints.NotFoundException('Article not found.')
         #list of tags related to this account
@@ -340,6 +292,12 @@ class Article():
                     kind = 'articles',
                     inverse_edge = 'authored_by'
                   )
+        author_schema = AuthorSchema(
+                                    google_user_id=user_from_email.google_user_id,
+                                    display_name=user_from_email.google_display_name,
+                                    photo=user_from_email.google_public_profile_photo_url
+                                    )
+        cls.put_index(node,author_schema)
         article_schema = ArticleSchema(
                                   id = str( node_key.id() )
                                 )

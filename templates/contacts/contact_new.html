@@ -1,7 +1,7 @@
 <div class="row subHeader">
   <div class="currentApp">
     <h2 class="page-title">
-      <!-- <img class="platform_icons" height="25" width="25" src="static/img/admin_console.png"> -->
+      <!-- <img class="platform_icons" height="25" width="25" src="/static/img/admin_console.png"> -->
       {{active_app.label}}
     </h2>
   </div>
@@ -43,7 +43,7 @@
   <div class="col-md-9">
     <div class="row">
     <div class="showPage col-md-12 newActionsBtn">
-          <span>Creating now Contact </span>
+          <span>Create Contact </span>
           <button class="btn red newAccountBtn pull-right" ng-click="save(contact)">Create</button>
           <div class="clearfix"></div>
         </div>
@@ -310,9 +310,12 @@
                     </div>
                   </li>
                   <li ng-repeat="custom in customfields">
-                    <span editoptions editdataattr="deleteInfos(customfields,$index)">
-                      <%= custom.field%>  : <%= custom.value%>
-                    </span>
+                    
+                    <a editoptions editdataattr="deleteInfos(customfields,$index)" editable-text="custom.field" onbeforesave="inlinePatch('Infonode','customfields', 'field',custom.entityKey,$data)" href="<%=custom.field%>" target="_blank"> <%=custom.field%>
+                    </a>
+                     <a editoptions editdataattr="deleteInfos(customfields,$index)" editable-text="custom.value" onbeforesave="inlinePatch('Infonode','customfields', 'value',custom.entityKey,$data)" href="<%=custom.value%>" target="_blank"> <%=custom.value%>
+                    </a>
+
                   </li>
                   <li>
                     <a ng-click="showCustomFieldForm=true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal">

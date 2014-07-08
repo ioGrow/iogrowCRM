@@ -129,7 +129,7 @@
                     <a ng-click="selectedTab = 1;">Notes</a>
                   </li>
                   <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==8}">
-                    <a ng-click="selectedTab = 8;">Send an Email</a>
+                    <a ng-click="selectedTab = 8;sendEmailSelected();">Send an Email</a>
                   </li>
                   <!--li class="ng-tab sm-menu" ng-class="{active: selectedTab == 3}">
                     <a ng-click="waterfall(); selectedTab = 3;">Contacts</a>
@@ -199,7 +199,7 @@
                             <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="note.content"></textarea>
                           </div>
                           <div class="pull-right">
-                            <input ng-disabled="isLoading" ng-click="addNote(note)" type="submit" class="btn green" value="Add this note">
+                            <input ng-disabled="isLoading || !note.title" ng-click="addNote(note)" type="submit" class="btn green" value="Add this note">
                           </div>
                         </form>
                       </div>
@@ -237,7 +237,7 @@
                         <ul class="list-unstyled contact-infos">
                           <li ng-show="showPhoneForm">
                                       <div class="row">
-                                        <form class="form-inline newLeadForm" role="form">
+                                         <form name="phoneform" class="form-inline newLeadForm" role="form">
                                           <div class="form-group sm-group" style="">
                                             <label class="sr-only" for="exampleInputPassword2">Type</label>
                                             <select ng-model="phone.type" class="form-control">
@@ -249,7 +249,22 @@
                                           </div>
                                           <div class="form-group sm-group" style="">
                                             <label class="sr-only" for="exampleInputEmail2">Number</label>
-                                            <input type="text" class="form-control" id="exampleInputEmail2" ng-model="phone.number" placeholder="Enter a number">
+                                            <input
+                                                name="phonenumber"
+                                                type="text"
+                                                class="form-control"
+                                                id="exampleInputEmail2"
+                                                ng-model="phone.number"
+                                                placeholder="Enter a number"
+                                                required
+                                                ng-pattern="/^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/i"
+                                                ng-focus="isFocused=true">
+                                               <!--  <span class="error" ng-show="phoneform.phonenumber.$error.required">
+                                                    Required!
+                                                </span>
+                                                    <span class="error" ng-show="phoneform.phonenumber.$error.pattern">
+                                                  Not valid!
+                                                </span> -->
                                           </div>
                                            <button type="submit" ng-click="addPhone(phone)" class="btn blue jfk-button jfk-button-action">Add</button>
                                             <button type="submit" class="btn btn-default" ng-click="showPhoneForm=false">X</button>
@@ -305,7 +320,13 @@
                                         <form class="form-inline newLeadForm" role="form">
                                           <div class="form-group lg-group" style="">
                                             <label class="sr-only" for="exampleInputEmail2">Website</label>
-                                            <input type="text" ng-model="website.url" class="form-control" id="exampleInputEmail2" placeholder="Enter a Website">
+                                            <input
+                                              type="url"
+                                              ng-model="website.url"
+                                              class="form-control"
+                                              id="exampleInputEmail2"
+                                              placeholder="Enter a Website"
+                                              required>
                                           </div>
                                       <button type="submit" ng-click="addWebsite(website)" class="btn blue jfk-button jfk-button-action">Add</button>
                                       <button type="submit" ng-click="showWebsiteForm=false" class="btn btn-default">X</button>
@@ -326,9 +347,17 @@
                                             <form class="form-inline newLeadForm" role="form">
                                               <div class="form-group lg-group" style="">
                                                 <label class="sr-only" for="exampleInputEmail2">Social link</label>
-                                                <input type="text" class="form-control" id="exampleInputEmail2" ng-model='sociallink.url' placeholder="Enter a social link">
+                                                <input
+                                                  name="social"
+                                                  type="url"
+                                                  class="form-control"
+                                                  id="exampleInputEmail2"
+                                                  ng-model='sociallink.url'
+                                                  placeholder="Enter a social link"
+                                                  required>
                                               </div>
-                                               <button ng-click="addSocial(sociallink)" type="submit" class="btn blue jfk-button jfk-button-action">Add</button>
+                                               <button
+                                                  ng-click="addSocial(sociallink)" type="submit" class="btn blue jfk-button jfk-button-action">Add</button>
                                                 <button type="submit" ng-click="showSociallinkForm=false" class="btn btn-default">X</button>
                                             </form>
                                           </div>
@@ -347,11 +376,21 @@
                                             <form class="form-inline newLeadForm" role="form">
                                               <div class="form-group sm-group" style="">
                                                 <label class="sr-only" for="exampleInputEmail2">Field</label>
-                                                <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="Enter field name">
+                                                <input
+                                                  type="text"
+                                                  class="form-control"
+                                                  id="exampleInputEmail2"
+                                                  ng-model="customfield.field" placeholder="Enter field name"
+                                                  required>
                                               </div>
                                               <div class="form-group sm-group" style="">
                                                 <label class="sr-only" for="exampleInputEmail2">Value</label>
-                                                <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="Enter a value">
+                                                <input
+                                                  type="text"
+                                                  class="form-control"
+                                                  id="exampleInputEmail2"
+                                                  ng-model="customfield.value" placeholder="Enter a value"
+                                                  required>
                                               </div>
                                                <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="addCustomField(customfield)">Add</button>
                                                 <button type="submit" class="btn btn-default" ng-click="showCustomFieldForm=false">X</button>
@@ -779,43 +818,40 @@
 
                       </div>
                 <!-- $ send email tab -->
-                <div class="tab-pane active" id="tab_1_8" ng-show="selectedTab == 8" style="display: none;">
-                        <div class="showPage">
-                         <div class="row">
-                           <div class="col-md-12 margin-bottom-10">
+               <div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 8">
+
+                         <div class="showPage">
+                           <div class="row">
+                             <div class="col-md-12  margin-bottom-10">
                           <p class⁼"lead"=""><strong>Send an Email to :</strong> </p>
-                          <form  class="ng-pristine ng-invalid ng-invalid-required">
+                          <form  class="ng-pristine ng-valid">
                                             <div class="form-group">
-                                            <input required="" class="form-control ng-pristine ng-invalid ng-invalid-required" autofocus="" type="text" placeholder="To" id="messageSubject" ng-model="email.to">
+                                            <input required class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="To" id="messageSubject" ng-model="email.to">
                                             </div>
                                             <div class="form-group">
-                                            <input class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="CC" id="messageSubject" ng-model="email.cc">
+                                            <input class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="CC" id="messageSubject" ng-model="email.cc">
                                             </div>
                                             <div class="form-group">
-                                            <input class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="BCC" id="messageSubject" ng-model="email.bcc">
+                                            <input class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="BCC" id="messageSubject" ng-model="email.bcc">
                                             </div>
                                             <div class="form-group">
-                                             <input required="" class="form-control ng-pristine ng-invalid ng-invalid-required" autofocus="" type="text" placeholder="Add a subject" id="messageSubject" ng-model="email.subject">
+                                             <input  required class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="Add a subject" id="messageSubject" ng-model="email.subject">
                                              </div>
                                             <div class="form-group">
-                                            <ul class="wysihtml5-toolbar ng-pristine ng-valid" style=""><li class="dropdown"><a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-font"></i>&nbsp;<span class="current-font">Normal text</span>&nbsp;<b class="caret"></b></a><ul class="dropdown-menu"><li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="div" tabindex="-1" href="javascript:;" unselectable="on">Normal text</a></li><li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1" tabindex="-1" href="javascript:;" unselectable="on">Heading 1</a></li><li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h2" tabindex="-1" href="javascript:;" unselectable="on">Heading 2</a></li><li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h3" tabindex="-1" href="javascript:;" unselectable="on">Heading 3</a></li><li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h4" href="javascript:;" unselectable="on">Heading 4</a></li><li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h5" href="javascript:;" unselectable="on">Heading 5</a></li><li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h6" href="javascript:;" unselectable="on">Heading 6</a></li></ul></li><li><div class="btn-group"><a class="btn" data-wysihtml5-command="bold" title="CTRL+B" tabindex="-1" href="javascript:;" unselectable="on">Bold</a><a class="btn" data-wysihtml5-command="italic" title="CTRL+I" tabindex="-1" href="javascript:;" unselectable="on">Italic</a><a class="btn" data-wysihtml5-command="underline" title="CTRL+U" tabindex="-1" href="javascript:;" unselectable="on">Underline</a></div></li><li><div class="btn-group"><a class="btn" data-wysihtml5-command="insertUnorderedList" title="Unordered list" tabindex="-1" href="javascript:;" unselectable="on"><i class="icon-list"></i></a><a class="btn" data-wysihtml5-command="insertOrderedList" title="Ordered list" tabindex="-1" href="javascript:;" unselectable="on"><i class="icon-th-list"></i></a><a class="btn" data-wysihtml5-command="Outdent" title="Outdent" tabindex="-1" href="javascript:;" unselectable="on"><i class="icon-indent-right"></i></a><a class="btn" data-wysihtml5-command="Indent" title="Indent" tabindex="-1" href="javascript:;" unselectable="on"><i class="icon-indent-left"></i></a></div></li><li><div class="bootstrap-wysihtml5-insert-link-modal modal fade"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><a class="close" data-dismiss="modal">×</a><h3>Insert link</h3></div><div class="modal-body"><input value="http://" class="bootstrap-wysihtml5-insert-link-url form-control"><label class="checkbox"> <input type="checkbox" class="bootstrap-wysihtml5-insert-link-target" checked="">Open link in new window</label></div><div class="modal-footer"><a href="#" class="btn" data-dismiss="modal">Cancel</a><a href="#" class="btn btn-primary" data-dismiss="modal">Insert link</a></div></div></div></div><a class="btn" data-wysihtml5-command="createLink" title="Insert link" tabindex="-1" href="javascript:;" unselectable="on"><i class="icon-share"></i></a></li><li><div class="bootstrap-wysihtml5-insert-image-modal modal fade"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><a class="close" data-dismiss="modal">×</a><h3>Insert image</h3></div><div class="modal-body"><input value="http://" class="bootstrap-wysihtml5-insert-image-url form-control"></div><div class="modal-footer"><a href="#" class="btn" data-dismiss="modal">Cancel</a><a href="#" class="btn btn-primary" data-dismiss="modal">Insert image</a></div></div></div></div><a class="btn" data-wysihtml5-command="insertImage" title="Insert image" tabindex="-1" href="javascript:;" unselectable="on"><i class="icon-picture"></i></a></li></ul><textarea id="some-textarea" class="form-control ng-pristine ng-valid" rows="7" ng-model="email.body" placeholder="Enter text ..." style="display: none;"></textarea><input type="hidden" name="_wysihtml5_mode" value="1">
-                                             </div>
-                                           <div class="form-group">
                                             <textarea id="some-textarea" placeholder="Enter text ..." id="noteBody" class="form-control ng-pristine ng-valid" rows="7" ng-model="email.body"></textarea>
                                              </div>
+
                                          <div class="pull-right">
 
-
-                                            <input ng-click="sendEmail(email)" ng-disabled="isLoading" type="submit" class="btn green" value="Send">
-
+                                            <input   ng-click="sendEmail(email)" ng-disabled="isLoading" type="submit" class="btn green" value="Send">
 
 
                                           </div>
-                                        </form>
-                                       </div>
-                                      </div>
-                                    </div>
-                </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
               </div>
             </div>
           </div>
@@ -823,143 +859,134 @@
       </div>
     </div>
     <!-- tasks cards -->
-    <div class="col-md-3 tasks-col">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="portlet showPage rightCardContent">
-                <div class="portlet-title line">
-                  <div class="caption"> <i class="fa fa-check"></i>Related Tasks </div>
+    <!-- tasks cards -->
+<div class="col-md-3 tasks-col">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="portlet showPage rightCardContent">
+            <div class="portlet-title line">
+              <div class="caption"> <i class="fa fa-check"></i>Tasks </div>
 
-                </div>
-                <div class="newContactform portlet-body" id="chats">
-                  <form class=" slimForm ng-pristine ng-invalid ng-invalid-required">
-                      <div class="formElements newTaskToLead" ng-show="newTaskform">
-                                <div class="row">
-                                  <div class="col-md-12 margin-bottom-10">
-                                      <input ng-model="newTask.title" type="text" id="taskName" class="form-control" placeholder="Tilte">
-                                  </div>
-                                  <!--/span-->
+            </div>
+            <div class="newContactform portlet-body" id="chats">
+              <form class=" slimForm ng-pristine ng-invalid ng-invalid-required">
+                  <div class="formElements newTaskToLead" ng-show="newTaskform">
+                            <div class="row">
+                              <div class="col-md-12 margin-bottom-10">
+                                  <input ng-model="newTask.title" type="text" id="taskName" class="form-control" placeholder="Tilte">
+                              </div>
+                              <!--/span-->
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 margin-bottom-10">
+                                      <datetimepick ng-model='newTask.due' placeholder="Add a due date" class="new-task-date" label-format='MMM d, h:mm a'></datetimepick>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-12 margin-bottom-10">
-                                          <datetimepick ng-model='newTask.due' placeholder="Add a due date" class="new-task-date" label-format='MMM d, h:mm a'></datetimepick>
-                                    </div>
-                                </div>   
-                                <div class="row">
-                                    <div class="col-md-12 margin-bottom-10">
-                                          <datetimepick icon-class='fa fa-bell-o' ng-model='newTask.reminder' placeholder="Add a reminder" class="new-task-date" label-format='MMM d, h:mm a'></datetimepick>
-                                    </div>
-                                </div>   
-                      </div>
-                      <div class="row">
-                          <div class="col-md-12 margin-top-10">
-                              <p><span ng-hide="newTaskform">Add New Task</span><button type="button" ng-click="addTask(newTask)" class="btn blue btn-sm pull-right btn-inline">Add</button></p>
-                               
-                          </div>
-                      </div>      
-                  </form>
-                   <ul id="tasks" class="list-unstyled lead_related_tasks" ng-hide="newTaskform">
-                      <li ng-repeat="task in tasks" id="task_<%=$index%>">
-                        <input value="check1" type="checkbox">
-                        <span>
-                          <a href="/#/tasks/show/<%=task.id%>" class="discussion-content">
-                            <%= task.title%>
-                          </a>
-                          <span ng-show="task.due">
-                            [before: <%= task.due | date:'yyyy-MM-dd '%>]
-                          </span>
-                        </span>
-                      </li>
-                  </ul>
-                </div>
-              </div>
-        </div>
-      </div>
-      <!-- $ Events -->
-      <div class="row">
-        <div class="col-md-12">
-          <div class="portlet showPage rightCardContent">
-                <div class="portlet-title line">
-                  <div class="caption"> <i class="fa fa-calendar"></i>Events </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 margin-bottom-10">
+                                      <datetimepick icon-class='fa fa-bell-o' ng-model='newTask.reminder' placeholder="Add a reminder" class="new-task-date" label-format='MMM d, h:mm a'></datetimepick>
+                                </div>
+                            </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-12 margin-top-10">
+                          <p><span ng-hide="newTaskform">Add New Task</span><button type="button" ng-click="addTask(newTask)" class="btn blue btn-sm pull-right btn-inline">Add</button></p>
 
-                </div>
-                <div class="newContactform portlet-body" id="chats">
-                  <form class=" slimForm ng-pristine ng-invalid ng-invalid-required">
-                      <div class="formElements newEventToLead" ng-show="newEventform">
-                                <div class="row">
-                                  <div class="col-md-12 margin-bottom-10">
-                                      <input ng-model="ioevent.title" type="text" id="taskName" class="form-control" placeholder="Event tilte">
-                                  </div>
-                                  <!--/span-->
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12 margin-bottom-10">
-                                          <div class="input-icon margin-top-10">
-                                            <i class="fa fa-calendar"></i>
-                                            <input type="text" class="form-control" placeholder="From" value="" id="leadEventStartsAt">
-                                            <script type="text/javascript">
-                                              $(function(){
-                                                $('#leadEventStartsAt').appendDtpicker({
-                                                  "closeOnSelected": true,
-                                                  "dateFormat": "YYYY-MM-DD h:m",
-                                                  "autodateOnStart": false
-                                                });
-                                              });
-                                            </script>
-                                          </div>
-                                          
-                                    </div>
-                                </div>   
-                                <div class="row">
-                                    <div class="col-md-12 margin-bottom-10">
-                                           <div class="input-icon margin-top-10">
-                                            <i class="fa fa-calendar"></i>
-                                            <input type="text" class="form-control"  placeholder="To" name="date9" value="" id="leadEventEndsAt">
-                                            <script type="text/javascript">
-                                              $(function(){
-                                                $('#leadEventEndsAt').appendDtpicker({
-                                                  "closeOnSelected": true,
-                                                  "dateFormat": "YYYY-MM-DD h:m",
-                                                  "autodateOnStart": false
-                                                });
-                                              });
-                                            </script>
-                                          </div>
-                                    </div>
-                                </div>  
-                                <div class="row">
-                                  <div class="col-md-12 margin-bottom-10">
-                                      <input ng-model="ioevent.where" type="text" id="taskName" class="form-control" placeholder="Where ?">
-                                  </div>
-                                  <!--/span-->
-                                </div> 
                       </div>
-                      <div class="row">
-                          <div class="col-md-12 margin-top-10">
-                              <p><span ng-hide="newEventform">Add New Event</span><button type="button" ng-click="addEvent(ioevent)" class="btn red btn-sm pull-right btn-inline">Add</button></p>
-                               
-                          </div>
-                      </div>      
-                  </form>
-                   <ul id="tasks" class="list-unstyled lead_related_events" ng-hide="newEventform">
-                      <li ng-repeat="event in events" id="event_<%=$index%>">
-                        <input value="check1" type="checkbox">
-                        <span>
-                          <a href="/#/events/show/<%=event.id%>" class="discussion-content">
-                            <%= event.title%>
-                            <span ng-show="event.starts_at">
-                              [<%= event.starts_at | date:'yyyy-MM-dd '%>]
-                            </span>
-                          </a>
-                        </span>
-                      </li>
-                  </ul>
-                </div>
-              </div>
-        </div>
-      </div>
+                  </div>
+              </form>
+               <ul id="tasks" class="list-unstyled lead_related_tasks" ng-hide="newTaskform">
+                  <li ng-repeat="task in tasks" id="task_<%=$index%>">
+                    <input value="check1" type="checkbox">
+                    <span>
+                      <a href="/#/tasks/show/<%=task.id%>" class="discussion-content">
+                        <%= task.title%>
+                      </a>
+                      <span ng-show="task.due">
+                        [before: <%= task.due | date:'yyyy-MM-dd '%>]
+                      </span>
+                    </span>
+                  </li>
+              </ul>
+            </div>
+          </div>
     </div>
   </div>
+  <!-- $ Events -->
+  <div class="row">
+  <div class="col-md-12">
+      <div class="portlet showPage rightCardContent">
+            <div class="portlet-title line">
+              <div class="caption"> <i class="fa fa-calendar"></i>Events </div>
+
+            </div>
+            <div class="newContactform portlet-body" id="chats">
+              <form class=" slimForm ng-pristine ng-invalid ng-invalid-required">
+                  <div class="formElements newEventToLead" ng-show="newEventform">
+                            <div class="row">
+                              <div class="col-md-12 margin-bottom-10">
+                                  <input ng-model="ioevent.title" type="text" id="taskName" class="form-control" placeholder="Event tilte">
+                              </div>
+                              <!--/span-->
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 margin-bottom-10">
+                                      <div class="input-icon margin-top-10">
+                                        <i class="fa fa-calendar"></i>
+                                        <input type="text" class="form-control" placeholder="From" value="" id="leadEventStartsAt">
+                                      </div>
+                                      
+                                </div>
+                            </div>   
+                            <div class="row">
+                                <div class="col-md-12 margin-bottom-10">
+                                       <div class="input-icon margin-top-10">
+                                        <i class="fa fa-calendar"></i>
+                                        <input type="text" class="form-control"  placeholder="To" name="date9" value="" id="leadEventEndsAt">
+                                      </div>
+                                </div>
+                            </div>  
+                            <div class="row">
+                              <div class="col-md-12 margin-bottom-10">
+                                  <input ng-model="ioevent.where" type="text" id="taskName" class="form-control" placeholder="Where ?">
+                              </div>
+                              <!--/span-->
+                            </div> 
+                            <div class="row">
+                              <div class="col-md-12 margin-bottom-10">
+                                  <input ng-model="ioevent.where" type="text" id="taskName" class="form-control" placeholder="Where ?">
+                              </div>
+                              <!--/span-->
+                            </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-12 margin-top-10">
+                          <p><span ng-hide="newEventform">Add New Event</span><button type="button" ng-click="addEvent(ioevent)" class="btn red btn-sm pull-right btn-inline">Add</button></p>
+                      </div>
+                  </div>
+              </form>
+               <ul id="tasks" class="list-unstyled lead_related_events" ng-hide="newEventform">
+                  <li ng-repeat="event in events" id="event_<%=$index%>">
+                    <input value="check1" type="checkbox">
+                    <span>
+                      <a href="/#/events/show/<%=event.id%>" class="discussion-content">
+                        <%= event.title%>
+                        <span ng-show="event.starts_at">
+                          [<%= event.starts_at | date:'yyyy-MM-dd '%>]
+                        </span>
+                      </a>
+                    </span>
+                  </li>
+              </ul>
+            </div>
+          </div>
+    </div>
+    <div class="col-md-12">
+
+    </div>
+  </div>
+</div>
+</div>
 
             <!--HKA 11.10.2013 Edit Contact -->
              <div id="EditContactModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -1036,7 +1063,7 @@
 
 
                   <p>{{_("Are you sure you want to delete")}} :  <%=contact.firstname%> <%=contact.lastname%>  .</p>
-
+                 </form>
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
@@ -1044,7 +1071,7 @@
                 <input  ng-click="deletecontact()" type="submit" class="btn red" value="Delete this Contact">
                 <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
               </div>
-               </form>
+
                </div>
                </div>
        </div>
@@ -1234,7 +1261,7 @@
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-                  <input ng-hide="isLoading" ng-click="addAddress(address)" ng-disabled="!(address.country || address.postal_code || address.state || address.city || address.street)" type="submit" class="btn green" value="{{_('Add this address')}}">
+                  <input ng-hide="isLoading" ng-click="addAddress(address)" ng-disabled="(!address.country || !address.state || !address.city || !address.street)" type="submit" class="btn green" value="{{_('Add this address')}}">
                   <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
               </div>
                 </form>
@@ -1825,7 +1852,24 @@
             </div>
             </div>
           </div>
-
+<script type="text/javascript">
+  $(function(){
+    $('#leadEventStartsAt').appendDtpicker({
+      "closeOnSelected": true,
+      "dateFormat": "YYYY-MM-DD h:m",
+      "autodateOnStart": false
+    });
+  });
+</script>
+<script type="text/javascript">
+  $(function(){
+    $('#leadEventEndsAt').appendDtpicker({
+      "closeOnSelected": true,
+      "dateFormat": "YYYY-MM-DD h:m",
+      "autodateOnStart": false
+    });
+  });
+</script>
 <script type="text/javascript">
   $(function() {
     $('#datetimepicker2').datetimepicker({

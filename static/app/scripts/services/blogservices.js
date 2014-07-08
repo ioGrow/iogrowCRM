@@ -14,6 +14,7 @@ blogservices.factory('Article', function($http) {
                 $scope.article = resp;
                 $scope.isContentLoaded = true;
                 $scope.isLoading = false;
+                $scope.articleLoaded();
                 $scope.$apply();
             }else {
               alert(resp.message);
@@ -85,6 +86,41 @@ blogservices.factory('Article', function($http) {
               }
       });
   };
+  Article.search = function($scope,params){
+      $scope.isLoading = true;
+      console.log('$$$$$$');
+      console.log(params);
+      console.log(gapi.client);
+      gapi.client.blogengine.search(params).execute(function(resp) {
+              if(!resp.code){
+
+                  if (!resp.items){
+                    if(!$scope.isFiltering){
+                        $scope.blankStateaccount = true;
+                    }
+                  }
+                 $scope.articles = resp.items;
+                 if (resp.nextPageToken){
+                   var nextPage = $scope.currentPage + 1;
+                   // Store the nextPageToken
+                   $scope.pages[nextPage] = resp.nextPageToken;
+
+
+                 }
+                 // Loaded succefully
+                 $scope.isLoading = false;
+                 // Call the method $apply to make the update on the scope
+                 $scope.$apply();
+              }else {
+
+               if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+              }
+      });
+  };
   Article.listMore = function($scope,params){
       $scope.isLoading = true;
       $scope.$apply();
@@ -123,23 +159,12 @@ blogservices.factory('Article', function($http) {
               }
       });
   };
-  Article.search = function($scope,params){
-      console.log(params);
-      gapi.client.crmengine.accounts.search(params).execute(function(resp) {
 
-           if (resp.items){
-              $scope.accountsResults = resp.items;
-
-              $scope.$apply();
-            };
-
-      });
-  };
   Article.insert = function($scope,params){
       $scope.isLoading = true;
-      gapi.client.crmengine.accounts.insert(params).execute(function(resp) {
+      gapi.client.blogengine.articles.insert(params).execute(function(resp) {
          if(!resp.code){
-            $scope.accountInserted(resp);
+            $scope.articleInserted(resp);
             $scope.isLoading = false;
              $scope.$apply();
 
@@ -173,7 +198,7 @@ blogservices.factory('Tag', function($http) {
   Tag.attach = function($scope,params,index){
 
       $scope.isLoading = true;
-      gapi.client.crmengine.tags.attach(params).execute(function(resp) {
+      gapi.client.blogengine.tags.attach(params).execute(function(resp) {
 
          if(!resp.code){
             $scope.isLoading = false;
@@ -184,7 +209,7 @@ blogservices.factory('Tag', function($http) {
          // window.location.replace('#/accounts/show/'+resp.id);
 
          }else{
-          console.log(resp.code);
+          console.log(resp);
          }
       });
   };
@@ -216,7 +241,7 @@ blogservices.factory('Tag', function($http) {
    Tag.insert = function($scope,params){
 
       $scope.isLoading = true;
-      gapi.client.crmengine.tags.insert(params).execute(function(resp) {
+      gapi.client.blogengine.tags.insert(params).execute(function(resp) {
 
          if(!resp.code){
 
@@ -236,7 +261,7 @@ blogservices.factory('Tag', function($http) {
     Tag.patch = function($scope,params){
       $scope.isLoading = true;
               console.log('task service');
-      gapi.client.crmengine.tags.patch(params).execute(function(resp) {
+      gapi.client.blogengine.tags.patch(params).execute(function(resp) {
         console.log(params);
         console.log(resp);
           if(!resp.code){
@@ -260,7 +285,7 @@ blogservices.factory('Tag', function($http) {
   Tag.delete = function($scope,params){
 
 
-    gapi.client.crmengine.tags.delete(params).execute(function(resp){
+    gapi.client.blogengine.tags.delete(params).execute(function(resp){
       $scope.listTags();
       $scope.tagDeleted();
     $scope.$apply();

@@ -357,9 +357,8 @@ $scope.updateTag = function(tag){
       };
 
 
-
-$scope.selectTag= function(tag,index,$event){
-      if(!$scope.manage_tags){
+$scope.selectTag= function(tag,index,$event){     
+          if(!$scope.manage_tags){
          var element=$($event.target);
          if(element.prop("tagName")!='LI'){
               element=element.parent();
@@ -382,6 +381,30 @@ $scope.selectTag= function(tag,index,$event){
       }
 
     };
+// $scope.selectTag= function(tag,index,$event){
+//       if(!$scope.manage_tags){
+//          var element=$($event.target);
+//          if(element.prop("tagName")!='LI'){
+//               element=element.parent();
+//               element=element.parent();
+//          }
+//          var text=element.find(".with-color");
+//          if($scope.selected_tags.indexOf(tag) == -1){
+//             $scope.selected_tags.push(tag);
+//             element.css('background-color', tag.color+'!important');
+//             text.css('color',$scope.idealTextColor(tag.color));
+
+//          }else{
+//             element.css('background-color','#ffffff !important');
+//             $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
+//              text.css('color','#000000');
+//          }
+//          ;
+//          $scope.filterByTags($scope.selected_tags);
+
+//       }
+
+//     };
   $scope.filterByTags = function(selected_tags){
          var tags = [];
          angular.forEach(selected_tags, function(tag){
@@ -851,9 +874,7 @@ $scope.updatCasetHeader = function(casee){
                   'bcc': email.bcc,
                   'subject': email.subject,
                   'body': email.body,
-
-                  'about_item':$scope.casee.id,
-                  'about_kind':'Case' };
+                   'about':$scope.casee.entityKey };
 
         Email.send($scope,params);
       };

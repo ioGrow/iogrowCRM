@@ -12,14 +12,15 @@ eventservices.factory('Event', function($http) {
                $scope.event = resp;
                /*var url = Event.getUrl($scope.eventt.about.kind,$scope.eventt.about.id);
                $scope.uri =url;*/
-              /* $scope.listContributors();
-               $scope.ListComments();*/
+              /* $scope.listContributors();*/
+               //$scope.ListComments();
                console.log($scope.event);
                $scope.isContentLoaded=true;
+               $scope.renderMaps();
                // Call the method $apply to make the update on the scope
                 $scope.$apply();
                 console.log($scope.event.where);
-                $scope.renderMaps();
+                
 
             }else {
                if(resp.code==401){
@@ -44,6 +45,8 @@ eventservices.factory('Event', function($http) {
             }
             */
             $scope.runTheProcess();
+            //$scope.renderMaps();
+
             //console.log("working");
             /*$scope.ListComments();
             $scope.listContributors();*/
@@ -52,8 +55,10 @@ eventservices.factory('Event', function($http) {
             $scope.listTasks();*/
             $scope.$apply();
 
+
          }else{
             console.log("not working");
+            console.log(resp.message);
              if(resp.message=="Invalid grant"){
               console.log("Invalid grant");
                 $scope.refreshToken();
@@ -87,7 +92,7 @@ eventservices.factory('Event', function($http) {
                                       };
                     calendarEventList.push(eventSchema);
                  });
-                 $scope.renderCalendar(calendarEventList);
+                 //$scope.renderCalendar(calendarEventList);
                  /*if ($scope.currentPage>1){
                       console.log('Should show PREV');
                       $scope.pagination.prev = true;
@@ -120,16 +125,19 @@ eventservices.factory('Event', function($http) {
       });
   };
    Event.insert = function($scope,params){
+
       $scope.isLoading = true;
 
       gapi.client.crmengine.events.insertv2(params).execute(function(resp) {
           if(!resp.code){
+            $('#calendar').fullCalendar( 'refetchEvents' );
             if ($scope.events == undefined){
             $scope.events = [];
           }
             $scope.events.push(resp);
+            console.log(resp);
             $scope.isLoading = false;
-
+             $scope.permet_clicking=true ;
             $scope.$apply();
 
          }else{

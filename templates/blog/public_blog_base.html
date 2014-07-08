@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8" > <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9" > <![endif]-->
-<!--[if !IE]><!--> <html xmlns:ng="http://angularjs.org"> <!--<![endif]-->
+<!--[if !IE]><!--> <html xmlns:ng="http://angularjs.org" ng-app="publicBlogEngine"> <!--<![endif]-->
 <!-- BEGIN HEAD -->
 <head>
   <meta charset="utf-8" />
@@ -171,7 +171,7 @@
     </div><!--navbar inner-->
     <!-- END TOP NAVIGATION BAR ng-controller="SearchFormController"  -->
 </div>
-<div ng-controller="MysettingShowController" >
+<div>
      <!--HKA 11.10.2013 Edit Introduction  -->
              <div id="EditSetting" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-dialog">
@@ -309,7 +309,7 @@
         <!-- BEGIN SIDEBAR MENU -->
         <ul class="page-sidebar-menu">
 
-              <li id="id_Articles" class="start active">
+              <li id="id_Articles" class="start">
                 <a href="/blog#/articles" data-toggle="collapse" data-target=".navbar-collapse">
 
                 <span class="title">
@@ -330,9 +330,8 @@
         <!-- END SIDEBAR MENU -->
     </div>
   </div>
-  <div class="ng-view-container page-content-wrapper" ng-view>
-      <center><img src="/static/img/google_loading.gif" ng-show="isLoading" style="height:30px; width:30px; margin-top:200px;">
-      </center>
+  <div class="ng-view-container page-content-wrapper">
+    {% block content %}{% endblock %}
   </div><!--/ng-view-container-->
   <div class="clearfix"></div>
 </div>
@@ -392,7 +391,7 @@
     }
     function apiLoaded(){
       // When the API is loaded start angularJS app
-      var $injector = angular.bootstrap(document, ['blogEngine']);
+      // var $injector = angular.bootstrap(document, ['blogEngine']);
 
     }
   </script>
@@ -525,6 +524,8 @@
  ga('send', 'pageview');
 
 </script>
+{% block script %}
+{% endblock %}
   <!-- END JAVASCRIPTS -->
 </body>
 

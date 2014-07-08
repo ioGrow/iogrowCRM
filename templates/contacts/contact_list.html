@@ -266,7 +266,13 @@
                   <span ng-drag="dragTag(tag_item)" draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
                       <%= tag_item.name %>
                   </span>
-                 <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
+                 <input 
+                 type="checkbox" 
+                 ng-show="!manage_tags" 
+                 ng-click="selectTag(tag_item,$index,$event)" 
+                 style="margin-right: 10px;" 
+                 class="pull-right customCheck" 
+                 ng-checked="isSelected()">
 
                   <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
                     <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
@@ -309,6 +315,25 @@
       </div>
     </div>
     </div>
+<div class="modal fade"  id="importModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+              <h3 id="myModalLabel">{{_("Import contacts")}}</h3>
+            </div>
+            <div class="modal-body">
+                <p>{{_("We support importing CSV files from Google Contacts, Outlook, Outlook Expressand some other apps. Please select a CSV file to upload:")}}</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn default" data-dismiss="modal">{{_("Close")}}</button>
+              <button ng-click="createPickerUploader()"  type="submit" class="btn green btn-primary addContactNow">{{_("Import")}} </button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
 <script type="text/javascript">
  $('#slimtest1').slimScroll({
                     height: '20px'
