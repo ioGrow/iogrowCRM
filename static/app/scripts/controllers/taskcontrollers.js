@@ -169,6 +169,10 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
         window.location.replace('/#/calendar');
 
      }; 
+  
+
+
+
 
       function getRGBComponents(color) {
 
@@ -430,6 +434,22 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
 
          return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";  
       }
+
+   // delete task from list hadji hicham 08-07-2014 
+   $scope.deleteThisTask= function(entityKey){
+
+    var params = {'entityKey':entityKey};
+     Task.delete($scope, params);
+   };
+// rederection after delete from list of tasks. hadji hicham  08-07-2014 
+   $scope.taskDeleted = function(resp){
+   var params = { 'order': $scope.order,
+                         
+                        'limit':20}
+          Task.list($scope,params,true);
+     }; 
+
+
       function getRGBComponents(color) {       
 
           var r = color.substring(1, 3);
