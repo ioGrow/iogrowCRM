@@ -304,16 +304,18 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                      try {
 
                                              for(var i=0;i<$scope.events_cal_list.length;i++ ){
+
+                                              var allday= ($scope.events_cal_list[i].allday=="false") ? false :true ;
+                                        
+                                                
                                                 events.push({ 
-                                                            id: $scope.events_cal_list[i].id ,
+                                                           id: $scope.events_cal_list[i].id ,
                                                            title:$scope.events_cal_list[i].title,
                                                            start:moment($scope.events_cal_list[i].starts_at),
                                                            end: moment($scope.events_cal_list[i].ends_at),
                                                            entityKey:$scope.events_cal_list[i].entityKey,
                                                            url:'/#/events/show/'+$scope.events_cal_list[i].id.toString(),
-                                                           backgroundColor:$scope.events_cal_list[i].prestationColor,
-                                                           borderColor:$scope.events_cal_list[i].prestationColor,
-                                                         
+                                                           allDay:allday
                                                        })
                                                 
                                                                                               };  
@@ -322,21 +324,39 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                           }catch (e){
                                                console.log(e);
                                           }
+                                           $scope.$apply();  
+                                }
+                                else{
+                                    if(resp.code==401){
+                                            $scope.refreshToken();
+                                            $scope.isLoading = false;
+                                            $scope.$apply();
+                                    };
                                 }
                });   
-                                      
+                  $scope.isLoading = false;                     
             }
           }
           ],
           dayClick: function(date,  jsEvent, view) {
 
+              if(view.name=="month"){
+                $scope.allday=true ;
+                $scope.start_event= moment(date).format('YYYY-MM-DDTHH:mm:00.000000')
+                $scope.start_event_draw=date.format();
+                $scope.end_event_draw= date.add('days',1).format();
+                $scope.end_event= moment(date.add('hours',23).add('minute',59).add('second',59)).format('YYYY-MM-DDTHH:mm:00.000000');
+                console.log($scope.end_event)
+                $scope.$apply();
 
+                }else{
+               $scope.allday=false ;
                $scope.start_event= moment(date).format('YYYY-MM-DDTHH:mm:00.000000')
                $scope.start_event_draw=date.format();
                $scope.end_event_draw= date.add('hours',1).format();
-
                $scope.end_event= moment(date.add('hours',1)).format('YYYY-MM-DDTHH:mm:00.000000');
                $scope.$apply();
+              }
                
     
             if( $scope.permet_clicking){
@@ -346,8 +366,10 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                 };
                     eventObject.id ="new";
                     eventObject.start = moment($scope.start_event_draw);
-               
-                   // eventObject.allDay = allDay;
+                 
+
+                    eventObject.allDay = $scope.allday;
+                 
               eventObject.className = $(this).attr("data-class");
     
               $('#calendar').fullCalendar('renderEvent', eventObject, false);     
@@ -363,15 +385,43 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
         },
        // Triggered when dragging stops and the event has moved to a different day/time.
        eventDrop:function( event, revertFunc, jsEvent, ui, view ) { 
+                   if(event.allDay){
 
                     var params={
                                  'id':event.id,
                                  'entityKey':event.entityKey,
                                  'starts_at':moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000'),
-                                 'ends_at':moment(event.end).format('YYYY-MM-DDTHH:mm:00.000000')
+                                 'ends_at':moment(event.start.add('hours',23).add('minute',59).add('second',59)).format('YYYY-MM-DDTHH:mm:00.000000'),
+                                 'allday':event.allDay.toString()
                     }
-                
+                   
+                   }else{
+                       
+                    if(event.end){
+                        var params={
+                                 'id':event.id,
+                                 'entityKey':event.entityKey,
+                                 'starts_at':moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000'),
+                                 'ends_at':moment(event.end).format('YYYY-MM-DDTHH:mm:00.000000'),
+                                 'allday':event.allDay.toString()
+                    }
+                  }else{
+                   
+                      var params={
+                                 'id':event.id,
+                                 'entityKey':event.entityKey,
+                                 'starts_at':moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000'),
+                                 'ends_at':moment(event.start.add('hours',2)).format('YYYY-MM-DDTHH:mm:00.000000'),
+                                 'allday':event.allDay.toString()
+                    }
+                  }
+                   
                     
+                    
+
+                   }
+                 
+                   
                    Event.patch($scope,params);
                
                 
@@ -382,13 +432,26 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
        //Triggered when event resizing stops.
        eventResizeStop:function( event, jsEvent, ui, view ) { },
        //Triggered when resizing stops and the event has changed in duration.
-       eventResize:function( event, jsEvent, ui, view ) { 
-       var params={
+       eventResize:function( event, jsEvent, ui, view ) {
+       var params={}; 
+        if(event.allDay){
+              params={
                                 'id':event.id,
                                 'entityKey':event.entityKey,
                                 'starts_at':moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000'),
-                                 'ends_at':moment(event.end).format('YYYY-MM-DDTHH:mm:00.000000')
+                                'ends_at':moment(event.end).format('YYYY-MM-DDTHH:mm:00.000000'),
+                                'allday':'false'
                     }
+            }else{
+              params={
+                                'id':event.id,
+                                'entityKey':event.entityKey,
+                                'starts_at':moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000'),
+                                 'ends_at':moment(event.end).format('YYYY-MM-DDTHH:mm:00.000000'),
+                                 'allday':'false'
+                    }
+
+            }
                   
                     Event.patch($scope,params);
         }
@@ -433,6 +496,7 @@ $scope.cancelAddOperation= function(){
 
 
  $scope.addEvent = function(ioevent){
+
           $scope.permet_clicking=false ;
 
           var params ={};
@@ -448,6 +512,7 @@ $scope.cancelAddOperation= function(){
                       'starts_at':  $scope.start_event,
                       'ends_at': $scope.end_event,
                       'where': ioevent.where,
+                      'allday':$scope.allday.toString()
                         }
               
             }else{
@@ -455,11 +520,11 @@ $scope.cancelAddOperation= function(){
                       'starts_at':$scope.start_event,
                       'ends_at': $scope.end_event,
                       'where': ioevent.where,
+                      'allday':$scope.allday.toString()
                         }
             };
 
  
-
 
            console.log(params);
           Event.insert($scope,params);

@@ -1238,11 +1238,14 @@ class CrmEngineApi(remote.Service):
 
         if event is None:
             raise endpoints.NotFoundException('Event not found')
-        event_patch_keys = ['title','starts_at','ends_at','description','where']
+        event_patch_keys = ['title','starts_at','ends_at','description','where','allday']
         date_props = ['starts_at','ends_at']
         patched = False
         for prop in event_patch_keys:
             new_value = getattr(request,prop)
+            print "******************"
+            print new_value
+            print "**********************"
             if new_value:
                 if prop in date_props:
                     new_value = datetime.datetime.strptime(new_value,"%Y-%m-%dT%H:%M:00.000000")
