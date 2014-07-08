@@ -51,6 +51,31 @@ INFO_NODES = {
     'addresses' : {'default_field' : 'formatted'}
 }
 
+
+class ContactImportHighriseRequest(messages.Message):
+    key=messages.StringField(1, required=True)
+    server_name=messages.StringField(2, required=True)
+
+class ContactHighriseSchema(messages.Message):
+    id=messages.IntegerField(1)
+    first_name=messages.StringField(2)
+    last_name=messages.StringField(3)
+    title=messages.StringField(4)
+    created_at=messages.StringField(5)
+    visible_to=messages.StringField(6)
+    updated_at=messages.StringField(7)
+    company_id=messages.IntegerField(8)
+    avatar_url=messages.StringField(9)
+    company_name=messages.StringField(10)
+    _server=messages.StringField(11)
+    twitter_accounts=messages.StringField(12)
+    instant_messengers=messages.StringField(13)
+    phone_numbers=messages.StringField(14)
+    email_addresses=messages.StringField(15)
+
+class ContactHighriseResponse(messages.Message):
+    items = messages.MessageField(ContactHighriseSchema, 1, repeated=True)
+
 class ContactImportRequest(messages.Message):
     file_id = messages.StringField(1,required=True)
 # The message class that defines the EntityKey schema
