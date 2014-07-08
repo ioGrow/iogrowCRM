@@ -473,6 +473,10 @@ class GooglePlusConnect(SessionEnabledHandler):
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(isNewUser))
 
+class ArticleSearchHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/articles/article_search.html')
+
 class ArticleListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/articles/article_list.html')
@@ -480,6 +484,9 @@ class ArticleListHandler(BaseHandler, SessionEnabledHandler):
 class ArticleShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/articles/article_show.html')
+class ArticleNewHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/articles/article_new.html')
 
 class AccountListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -791,6 +798,8 @@ routes = [
     (r'/blog/articles/(\d+)', PublicArticlePageHandler),
     ('/views/articles/list',ArticleListHandler),
     ('/views/articles/show',ArticleShowHandler),
+    ('/views/articles/new',ArticleNewHandler),
+    ('/views/articles/search',ArticleSearchHandler),
 
     # Templates Views Routes
     # Accounts Views

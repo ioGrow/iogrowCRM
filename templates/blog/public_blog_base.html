@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8" > <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9" > <![endif]-->
-<!--[if !IE]><!--> <html xmlns:ng="http://angularjs.org"> <!--<![endif]-->
+<!--[if !IE]><!--> <html xmlns:ng="http://angularjs.org" ng-app="publicBlogEngine"> <!--<![endif]-->
 <!-- BEGIN HEAD -->
 <head>
   <meta charset="utf-8" />
@@ -138,9 +138,9 @@
       <!-- END RESPONSIVE MENU TOGGLER -->
       <!-- BEGIN TOP NAVIGATION MENU -->
       <div id="navbarSearch">
-        <form id="navbarSearchForm"  ng-controller="SearchFormController" class="navbar-form ng-pristine ng-valid " ng-submit="executeSearch(searchQuery)" role="search">
+        <form id="navbarSearchForm"  ng-controller="BlogSearchFormController" class="navbar-form ng-pristine ng-valid " ng-submit="executeSearch(searchQuery)" role="search">
               <div class="form-group">
-                <input type="text" ng-model="searchQuery" typeahead="result as result.title + ' (' + result.type + ')' for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="form-control" placeholder="Search">
+                <input type="text" ng-model="searchQuery" typeahead="result as result.title for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="form-control" placeholder="Search">
               </div>
                <button class="gbqfb gbqfb-hvr"><span class="gbqfi"></span></button>
         </form>
@@ -171,7 +171,7 @@
     </div><!--navbar inner-->
     <!-- END TOP NAVIGATION BAR ng-controller="SearchFormController"  -->
 </div>
-<div ng-controller="MysettingShowController" >
+<div>
      <!--HKA 11.10.2013 Edit Introduction  -->
              <div id="EditSetting" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-dialog">
@@ -391,7 +391,7 @@
     }
     function apiLoaded(){
       // When the API is loaded start angularJS app
-      //var $injector = angular.bootstrap(document, ['blogEngine']);
+      // var $injector = angular.bootstrap(document, ['blogEngine']);
 
     }
   </script>

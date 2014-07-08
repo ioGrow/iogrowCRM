@@ -27,19 +27,29 @@ import model
 import iomessages
 
 ATTRIBUTES_MATCHING = {
-    'firstname' : ['First Name','Given Name'],
-    'lastname':['Last Name','Family Name'],
-    'title': ['Job Title',r'Organization\s*\d\s*-\s*Title'],
-    'account' : ['Company',r'Organization\s*\d\s*-\s*Name'],
-    'phones':['Primary Phone','Home Phone', 'Mobile Phone' ,r'Phone\s*\d\s*-\s*Value'],
-    'emails':['E-mail Address',r'E-mail\s*\d\s*Address', r'E-mail\s*\d\s*-\s*Value'],
-    'addresses':['Business Address',r'Address\s*\d\s*-\s*Formatted']
+    'firstname' : ['First Name', 'Given Name', 'First name'],
+    'lastname':['Last Name', 'Family Name', 'Last name'],
+    'title': ['Job Title', r'Organization\s*\d\s*-\s*Title', 'Title'],
+    'account' : ['Company', r'Organization\s*\d\s*-\s*Name'],
+    'phones': [
+                'Primary Phone','Home Phone', 'Mobile Phone', r'Phone\s*\d\s*-\s*Value', 
+                'Phone number - Work', 'Phone number - Mobile', 'Phone number - Home', 'Phone number - Other'
+            ],
+    'emails': [
+                'E-mail Address', r'E-mail\s*\d\s*Address', r'E-mail\s*\d\s*-\s*Value',
+                'Email address - Work', 'Email address - Home', 'Email address - Other'
+            ],
+    'addresses' : [
+                'Business Address', r'Address\s*\d\s*-\s*Formatted', 
+                'Address - Work Street', 'Address - Work City', 'Address - Home Street', 'Address - Home City' 
+            ]  
 }
+
 INFO_NODES = {
-            'phones':{'default_field':"number"},
-            'emails':{'default_field':"email"},
-            'addresses':{'default_field':"formatted"}
-            }
+    'phones' : {'default_field' : 'number'},
+    'emails' : {'default_field' : 'email'},
+    'addresses' : {'default_field' : 'formatted'}
+}
 
 class ContactImportRequest(messages.Message):
     file_id = messages.StringField(1,required=True)

@@ -138,9 +138,9 @@
       <!-- END RESPONSIVE MENU TOGGLER -->
       <!-- BEGIN TOP NAVIGATION MENU -->
       <div id="navbarSearch">
-        <form id="navbarSearchForm"  ng-controller="SearchFormController" class="navbar-form ng-pristine ng-valid " ng-submit="executeSearch(searchQuery)" role="search">
+        <form id="navbarSearchForm"  ng-controller="BlogSearchFormController" class="navbar-form ng-pristine ng-valid " ng-submit="executeSearch(searchQuery)" role="search">
               <div class="form-group">
-                <input type="text" ng-model="searchQuery" typeahead="result as result.title + ' (' + result.type + ')' for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="form-control" placeholder="Search">
+                <input type="text" ng-model="searchQuery" typeahead="result as result.title for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="form-control" placeholder="Search">
               </div>
                <button class="gbqfb gbqfb-hvr"><span class="gbqfi"></span></button>
         </form>

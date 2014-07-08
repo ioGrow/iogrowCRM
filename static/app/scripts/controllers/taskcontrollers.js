@@ -606,6 +606,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           }
 
         });
+        console.log('font of google');  
         console.log(params);  
         Task.insert($scope,params);
         $scope.tagInfo.selected = [];
@@ -654,6 +655,19 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           $('#beforecloseTask').modal('show');
          };
       $scope.closeTask = function(){
+        console.log($scope.selected_tasks);
+        angular.forEach($scope.selected_tasks, function(selected_task){
+           if (selected_task.status=='open'||selected_task.status=='pending') {
+            console.log("woooork");
+              params = {'id':selected_task.id,
+            'status':'closed'
+            };
+            Task.patch($scope,params);  
+           }
+        });
+             $('#beforecloseTask').modal('hide');
+      };
+       $scope.deleteTask = function(){
         console.log($scope.selected_tasks);
         angular.forEach($scope.selected_tasks, function(selected_task){
            if (selected_task.status=='open'||selected_task.status=='pending') {

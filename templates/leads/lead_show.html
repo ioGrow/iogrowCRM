@@ -231,14 +231,14 @@
                                                                 </div>
                                                                 <div class="form-group sm-group" style="">
                                                                     <label class="sr-only" for="exampleInputEmail2">Number</label>
-                                                                    <input 
-                                                                        name="phonenumber" 
-                                                                        type="text"  
-                                                                        class="form-control" 
-                                                                        id="exampleInputEmail2" 
-                                                                        ng-model="phone.number" 
-                                                                        placeholder="Enter a number" 
-                                                                        required 
+                                                                    <input
+                                                                        name="phonenumber"
+                                                                        type="text"
+                                                                        class="form-control"
+                                                                        id="exampleInputEmail2"
+                                                                        ng-model="phone.number"
+                                                                        placeholder="Enter a number"
+                                                                        required
                                                                         ng-pattern="/^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/i"
                                                                         ng-focus="isFocused = true">
                                                                     <!--  <span class="error" ng-show="phoneform.phonenumber.$error.required">
@@ -304,12 +304,12 @@
                                                             <form name="websiteform" class="form-inline newLeadForm" role="form">
                                                                 <div class="form-group lg-group" style="">
                                                                     <label class="sr-only" for="exampleInputEmail2">Website</label>
-                                                                    <input 
+                                                                    <input
                                                                         name="website"
-                                                                        type="url" 
-                                                                        ng-model="website.url" 
-                                                                        class="form-control" 
-                                                                        id="exampleInputEmail2" 
+                                                                        type="url"
+                                                                        ng-model="website.url"
+                                                                        class="form-control"
+                                                                        id="exampleInputEmail2"
                                                                         placeholder="Enter a Website"
                                                                         required
 
@@ -355,18 +355,18 @@
                                                             <form class="form-inline newLeadForm" role="form">
                                                                 <div class="form-group sm-group" style="">
                                                                     <label class="sr-only" for="exampleInputEmail2">Field</label>
-                                                                    <input 
-                                                                        type="text" 
-                                                                        class="form-control" 
-                                                                        id="exampleInputEmail2" 
+                                                                    <input
+                                                                        type="text"
+                                                                        class="form-control"
+                                                                        id="exampleInputEmail2"
                                                                         ng-model="customfield.field" placeholder="Enter field name" required>
                                                                 </div>
                                                                 <div class="form-group sm-group" style="">
                                                                     <label class="sr-only" for="exampleInputEmail2">Value</label>
-                                                                    <input 
-                                                                        type="text" 
-                                                                        class="form-control" 
-                                                                        id="exampleInputEmail2" 
+                                                                    <input
+                                                                        type="text"
+                                                                        class="form-control"
+                                                                        id="exampleInputEmail2"
                                                                         ng-model="customfield.value" placeholder="Enter a value" required>
                                                                 </div>
                                                                 <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="addCustomField(customfield)">Add</button>
@@ -636,95 +636,142 @@
             </div>
         </div>
         <!-- tasks cards -->
-        <div class="col-md-3 tasks-col">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="portlet showCard">
-                        <div class="portlet-title line">
-                            <div class="caption">
-                                <i class="fa fa-check"></i>Tasks
-                            </div>
-                        </div>
-                        <div class="portlet-body" id="chats">
-                            <div class="scroller" style="height:200x" data-always-visible="1" data-rail-visible="0">
-                                <div id="newTask">
-                                    <p><strong>Tasks:</strong></p>
-                                    <ul id="tasks" class="list-unstyled">
-                                        <li ng-repeat="task in tasks" id="task_<%=$index%>">
-                                            <input value="check1" type="checkbox">
-                                            <span>
-                                                <a href="/#/tasks/show/<%=task.id%>" class="discussion-content">
-                                                    <%= task.title%>
-                                                </a>
-                                                <span ng-show="task.due">
-                                                    [before: <%= task.due | date:'yyyy-MM-dd '%>]
-                                                </span>
-                                            </span>
-                                        </li>
-                                        <li>
-                                            <a href="#myModal" class="btn-link addAnotherPhone" data-toggle="modal">Add a new task</a>
-                                        </li>
-                                    </ul>
-                                    <div class="newTask" ng-show="addingTask">
-                                        <form ng-submit="addNewTask()" class="newTaskForm">
-                                            <div class="form-group">
-                                                <div class="input-icon right">
-                                                    <input taggable taggabledata="taggableOptions" ng-model="newTask.title" id="new_task_text" class="form-control"  placeholder="Add new task ..." autofocus/>
-                                                </div>
-                                            </div>
-                                        </form>
-                                        <div>
-                                            <div class="newTask-meta pull-right">
-                                                <datetimepick icon-class='fa fa-bell-o' label-format='MMM d, h:mm a' ng-model='newTask.reminder' class="new-task-reminder pull-right"></datetimepick>
-                                                <datetimepick ng-model='newTask.due' class="new-task-date pull-right" label-format='MMM d, h:mm a'></datetimepick>
-                                            </div>
-                                        </div>
+    <div class="col-md-3 tasks-col">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="portlet showPage rightCardContent">
+                <div class="portlet-title line">
+                  <div class="caption"> <i class="fa fa-check"></i>Tasks </div>
+
+                </div>
+                <div class="newContactform portlet-body" id="chats">
+                  <form class=" slimForm ng-pristine ng-invalid ng-invalid-required">
+                      <div class="formElements newTaskToLead" ng-show="newTaskform">
+                                <div class="row">
+                                  <div class="col-md-12 margin-bottom-10">
+                                      <input ng-model="newTask.title" type="text" id="taskName" class="form-control" placeholder="Tilte">
+                                  </div>
+                                  <!--/span-->
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 margin-bottom-10">
+                                          <datetimepick ng-model='newTask.due' placeholder="Add a due date" class="new-task-date" label-format='MMM d, h:mm a'></datetimepick>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- $ Events -->
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="portlet showCard">
-                        <div class="portlet-title line">
-                            <div class="caption">
-                                <i class="fa fa-calendar"></i>Events
-                            </div>
-                        </div>
-                        <div class="portlet-body" id="chats">
-                            <div class="scroller" style="height:200x" data-always-visible="1" data-rail-visible="0">
-                                <div id="newTask">
-                                    <p><strong>Events:</strong></p>
-                                    <ul id="tasks" class="list-unstyled">
-                                        <li ng-repeat="event in events" id="event_<%=$index%>">
-                                            <input value="check1" type="checkbox">
-                                            <span>
-                                                <a href="/#/events/show/<%=event.id%>" class="discussion-content">
-                                                    <%= event.title%>
-                                                    <span ng-show="event.starts_at">
-                                                        [<%= event.starts_at | date:'yyyy-MM-dd '%>]
-                                                    </span>
-                                                </a>
-                                            </span>
-                                        </li>
-                                        <li>
-                                            <a href="#newEventModal" class="btn-link addAnotherPhone" data-toggle="modal">
-                                                {{_("Add a new event")}}
-                                            </a>
-                                        </li>
-                                    </ul>
+                                <div class="row">
+                                    <div class="col-md-12 margin-bottom-10">
+                                          <datetimepick icon-class='fa fa-bell-o' ng-model='newTask.reminder' placeholder="Add a reminder" class="new-task-date" label-format='MMM d, h:mm a'></datetimepick>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-12 margin-top-10">
+                              <p><span ng-hide="newTaskform">Add New Task</span><button type="button" ng-click="addTask(newTask)" class="btn blue btn-sm pull-right btn-inline">Add</button></p>
+
+                          </div>
+                      </div>
+                  </form>
+                   <ul id="tasks" class="list-unstyled lead_related_tasks" ng-hide="newTaskform">
+                      <li ng-repeat="task in tasks" id="task_<%=$index%>">
+                        <input value="check1" type="checkbox">
+                        <span>
+                          <a href="/#/tasks/show/<%=task.id%>" class="discussion-content">
+                            <%= task.title%>
+                          </a>
+                          <span ng-show="task.due">
+                            [before: <%= task.due | date:'yyyy-MM-dd '%>]
+                          </span>
+                        </span>
+                      </li>
+                  </ul>
                 </div>
-            </div>
+              </div>
         </div>
+      </div>
+      <!-- $ Events -->
+      <div class="row">
+      <div class="col-md-12">
+          <div class="portlet showPage rightCardContent">
+                <div class="portlet-title line">
+                  <div class="caption"> <i class="fa fa-calendar"></i>Events </div>
+
+                </div>
+                <div class="newContactform portlet-body" id="chats">
+                  <form class=" slimForm ng-pristine ng-invalid ng-invalid-required">
+                      <div class="formElements newEventToLead" ng-show="newEventform">
+                                <div class="row">
+                                  <div class="col-md-12 margin-bottom-10">
+                                      <input ng-model="ioevent.title" type="text" id="taskName" class="form-control" placeholder="Event tilte">
+                                  </div>
+                                  <!--/span-->
+                                </div>
+                                <div class="row">
+                                    <div class="input-icon margin-top-10">
+                                             <i class="fa fa-calendar"></i>
+                                             <input type="text" class="form-control" placeholder="From" value="" id="leadEventStartsAt">
+                                             <script type="text/javascript">
+                                               $(function(){
+                                                 $('#leadEventStartsAt').appendDtpicker({
+                                                   "closeOnSelected": true,
+                                                   "dateFormat": "YYYY-MM-DD h:m",
+                                                   "autodateOnStart": false
+                                                 });
+                                               });
+                                             </script>
+                                            </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-icon margin-top-10">
+                                             <i class="fa fa-calendar"></i>
+                                             <input type="text" class="form-control"  placeholder="To" name="date9" value="" id="leadEventEndsAt">
+                                             <script type="text/javascript">
+                                               $(function(){
+                                                 $('#leadEventEndsAt').appendDtpicker({
+                                                   "closeOnSelected": true,
+                                                   "dateFormat": "YYYY-MM-DD h:m",
+                                                   "autodateOnStart": false
+                                                 });
+                                               });
+                                             </script>
+                                            </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-md-12 margin-bottom-10">
+                                      <input ng-model="ioevent.where" type="text" id="taskName" class="form-control" placeholder="Where ?">
+                                  </div>
+                                  <!--/span-->
+                                </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-12 margin-top-10">
+                              <p><span ng-hide="newEventform">Add New Event</span><button type="button" ng-click="addEvent(ioevent)" class="btn red btn-sm pull-right btn-inline">Add</button></p>
+
+                          </div>
+                      </div>
+                  </form>
+                   <ul id="tasks" class="list-unstyled lead_related_events" ng-hide="newEventform">
+                      <li ng-repeat="event in events" id="event_<%=$index%>">
+                        <input value="check1" type="checkbox">
+                        <span>
+                          <a href="/#/events/show/<%=event.id%>" class="discussion-content">
+                            <%= event.title%>
+                            <span ng-show="event.starts_at">
+                              [<%= event.starts_at | date:'yyyy-MM-dd '%>]
+                            </span>
+                          </a>
+                        </span>
+                      </li>
+                  </ul>
+                </div>
+              </div>
+        </div>
+        <div class="col-md-12">
+
+        </div>
+      </div>
     </div>
+  </div>
+
 
     <!--HKA 11.10.2013 Edit Contact -->
     <div id="EditContactModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -766,10 +813,10 @@
                         </div>
                         <!--div class="control-group">
                             <label  class="required col-md-3 control-label">{{_("Company")}} </label>
-    
+
                             <div class="col-md-9">
                               <input type="text" class="form-control"   id="id_Company" ng-model="contact.company">
-    
+
                             </div>
                         </div-->
 
