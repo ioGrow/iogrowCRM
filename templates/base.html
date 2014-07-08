@@ -3,6 +3,7 @@
 <!--[if IE 9]> <html lang="en" class="ie9" > <![endif]-->
 <!--[if !IE]><!--> <html xmlns:ng="http://angularjs.org"> <!--<![endif]-->
 <!-- BEGIN HEAD -->
+<link rel="icon" href="http://storage.googleapis.com/iogrow-gs/static/img/iogrow_logo_144_32.png"/>
 <head>
   <meta charset="utf-8" />
   <title>i/oGrow Engine Platform</title>
@@ -34,7 +35,7 @@
   <link href='static/plugins/fullcalendar/fullcalendar.print.css' rel='stylesheet' media='print' />
 
 
-    <link href="/static/bootstrap3/plugins/select2/select2_metro.css" rel="stylesheet" type="text/css"/>
+  <link href="/static/bootstrap3/plugins/select2/select2_metro.css" rel="stylesheet" type="text/css"/>
   <!-- END PAGE LEVEL PLUGIN STYLES -->
   <!-- BEGIN THEME STYLES -->
   <link href="static/bootstrap3/css/style-metronic.css" rel="stylesheet" type="text/css"/>
@@ -43,9 +44,9 @@
   <link href="static/bootstrap3/css/plugins.css" rel="stylesheet" type="text/css"/>
   <link href="static/bootstrap3/css/pages/tasks.css" rel="stylesheet" type="text/css"/>
   <link href="static/bootstrap3/css/themes/light.css" rel="stylesheet" type="text/css" id="style_color"/>
-   <link rel="stylesheet" href="static/plugins/ngQuickDate/ng-quick-date.css"/>
-   <link rel="stylesheet" href="static/plugins/ngQuickDate/ng-quick-date-default-theme.css"/>
-   <link rel="stylesheet" href="static/css/datetimepicker.css"/>
+  <link rel="stylesheet" href="static/plugins/ngQuickDate/ng-quick-date.css"/>
+  <link rel="stylesheet" href="static/plugins/ngQuickDate/ng-quick-date-default-theme.css"/>
+  <link rel="stylesheet" href="static/css/datetimepicker.css"/>
 
    <link href="/static/plugins/date-time-picker/jquery.simple-dtpicker.css" rel="stylesheet" type="text/css"/>
    <link href="/static/plugins/jquery-easy-pie-chart/jquery.easy-pie-chart.css" rel="stylesheet" type="text/css"/>
@@ -402,17 +403,9 @@
         var apisToLoad;
 
 
-
-
-
-       var ROOT = '/_ah/api';
-
-
+        var Root='/_api/api';
 
         //var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
-
-
-
 
         var callback = function() {
             if (--apisToLoad == 0) {
