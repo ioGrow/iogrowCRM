@@ -962,6 +962,14 @@ class CrmEngineApi(remote.Service):
         companys=EndpointsHelper.highrise_import_companys(request)
         return message_types.VoidMessage()
 
+    # highrise.import_opportunities api
+    @endpoints.method(ContactImportHighriseRequest, message_types.VoidMessage,
+                      path='highrise/import_opportunities', http_method='POST',
+                      name='highrise.import_opportunities')
+    def highrise_import_opportunities(self, request):
+        opportunities=EndpointsHelper.highrise_import_opportunities(request)
+        return message_types.VoidMessage()
+
 
 
     # contacts.get api v2

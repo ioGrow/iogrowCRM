@@ -14,7 +14,7 @@ import gdata.contacts.data
 from gdata.gauth import OAuth2Token
 from gdata.contacts.client import ContactsClient
 from model import User
-from highrise.pyrise import Highrise, Person, Company
+from highrise.pyrise import Highrise, Person, Company, Deal
 
 FOLDERS = {
             'Account': 'accounts_folder',
@@ -195,7 +195,10 @@ class EndpointsHelper():
     def highrise_import_companys(cls, request):
         companys=Company.all()
         return companys
-
+    @classmethod
+    def highrise_import_opportunities(cls, request):
+        Deals=Deal.all()
+        return Deals
 
 class scor_new_lead():
     def predict(predd,tedd) :
