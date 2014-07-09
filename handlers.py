@@ -783,10 +783,6 @@ class SyncPatchCalendarEvent(webapp2.RequestHandler):
                                               "%Y-%m-%dT%H:%M:00.000000"
                                               )
         event_google_id= self.request.get('event_google_id')
-        print "*************************"
-        print "i'm going to make it"
-        print summary
-        print "*************************"
         try:
             credentials = user_from_email.google_credentials
             http = credentials.authorize(httplib2.Http(memcache))
@@ -808,6 +804,24 @@ class SyncPatchCalendarEvent(webapp2.RequestHandler):
             patched_event = service.events().patch(calendarId='primary',eventId=event_google_id,body=params).execute()
         except:
             raise endpoints.UnauthorizedException('Invalid grant' )
+# sync delete events with google calendar . hadjo hicham 09-08-2014
+class SyncDeleteCalendarEvent(webapp2.RequestHandler):
+    def post(self):
+        user_from_email = model.User.get_by_email(self.request.get('email'))
+        event_google_id= self.request.get('event_google_id')
+        print "<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+        print "its me"
+        print event_google_id
+        print "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+        try:
+            credentials = user_from_email.google_credentials
+            http = credentials.authorize(httplib2.Http(memcache))
+            service = build('calendar', 'v3', http=http)
+            # prepare params to insert
+            patched_event = service.events().delete(calendarId='primary',eventId=event_google_id).execute()
+        except:
+            raise endpoints.UnauthorizedException('Invalid grant' )
+
 class AddToIoGrowLeads(webapp2.RequestHandler):
     def post(self):
         user_from_email = model.User.get_by_email('tedj.meabiou@gmail.com')
@@ -835,6 +849,7 @@ routes = [
     ('/workers/createobjectfolder',CreateObjectFolder),
     ('/workers/syncevent',SyncCalendarEvent),
     ('/workers/syncpatchevent',SyncPatchCalendarEvent),
+    ('/workers/syncdeleteevent',SyncDeleteCalendarEvent),
     ('/workers/createcontactsgroup',CreateContactsGroup),
     ('/workers/sync_contacts',SyncContact),
     ('/workers/add_to_iogrow_leads',AddToIoGrowLeads),

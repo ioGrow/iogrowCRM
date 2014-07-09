@@ -1194,6 +1194,15 @@ class CrmEngineApi(remote.Service):
                       name='events.delete')
     def event_delete(self, request):
         entityKey = ndb.Key(urlsafe=request.entityKey)
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        event = entityKey.get()
+        taskqueue.add(
+                    url='/workers/syncdeleteevent',
+                    params={
+                            'email': user_from_email.email,
+                            'event_google_id':event.event_google_id
+                            }
+                    )
         Edge.delete_all_cascade(start_node = entityKey)
         return message_types.VoidMessage()
 
