@@ -526,51 +526,86 @@
 <div class="col-md-3 tasks-col">
   <div class="row">
     <div class="col-md-12">
-      <div class="portlet showCard">
-        <div class="portlet-title line">
-          <div class="caption">
-            <i class="fa fa-check"></i>Tasks
-          </div>
-        </div>
-        <div class="portlet-body" id="chats">
-          <div class="scroller" style="height:200x" data-always-visible="1" data-rail-visible="0">
-            <div id="newTask">
-              <p><strong>Tasks:</strong></p>
-              <ul id="tasks" class="list-unstyled">
-                <li ng-repeat="task in tasks" id="task_<%=$index%>">
-                  <input value="check1" type="checkbox">
-                  <span>
-                    <a href="/#/tasks/show/<%=task.id%>" class="discussion-content">
-                      <%= task.title%>
-                    </a>
-                    <span ng-show="task.due">
-                      [before: <%= task.due | date:'yyyy-MM-dd '%>]
-                    </span>
-                  </span>
-                </li>
-                <li>
-                  <a href="#myModal" class="btn-link addAnotherPhone" data-toggle="modal">Add a new task</a>
-                </li>
-              </ul>
-              <div class="newTask" ng-show="addingTask">
-                <form ng-submit="addNewTask()" class="newTaskForm">
-                  <div class="form-group">
-                    <div class="input-icon right">
-                      <input taggable taggabledata="taggableOptions" ng-model="newTask.title" id="new_task_text" class="form-control"  placeholder="Add new task ..." autofocus/>
-                    </div>
-                  </div>
-                </form>
-                <div>
-                  <div class="newTask-meta pull-right">
-                    <datetimepick icon-class='fa fa-bell-o' label-format='MMM d, h:mm a' ng-model='newTask.reminder' class="new-task-reminder pull-right"></datetimepick>
-                    <datetimepick ng-model='newTask.due' class="new-task-date pull-right" label-format='MMM d, h:mm a'></datetimepick>
-                  </div>
+     <div class="portlet showPage rightCardContent">
+                <div class="portlet-title line">
+                  <div class="caption"> <i class="fa fa-check"></i>Tasks </div>
+
+                </div>
+                <div class="newContactform portlet-body" id="chats">
+                  <form class=" slimForm ng-pristine ng-invalid ng-invalid-required">
+                      <div class="formElements newTaskToLead" ng-show="newTaskform">
+                                <div class="row">
+                                  <div class="col-md-12 margin-bottom-10">
+                                      <input ng-model="newTask.title" type="text" id="taskName" class="form-control" placeholder="Tilte">
+                                  </div>
+                                  <!--/span-->
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 margin-bottom-10">
+                                      <div class="input-icon ">
+                                        <i class="fa fa-calendar"></i>
+                                          <input cusdatetimepicker data-model="newTask.due" type="text" class="form-control" placeholder="Add a due date" value="" id="leadEventStartsAt">
+                                      </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 margin-bottom-10">
+                                        <div class="input-icon ">
+                                            <i class="fa fa-bell-o"></i>
+                                              <input cusdatetimepicker data-model="newTask.reminder" type="text" class="form-control" placeholder="Add a reminder" value="" id="leadEventStartsAt">
+                                          </div>                                         
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class='assigneeMemberToTask' >
+                                            <div class="input-icon ">
+                                              <i class="fa fa-user"></i>
+                                              <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMemberToTask()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group')}}">
+                                            </div>
+                                            <div id="assigeeList" class="list-group" ng-hide="selected_members == []">
+                                                <div ng-show="true" class="invitation list-group-item" ng-repeat="selected_us in selected_members">
+                                                    <button type="button" class="close" ng-click="unselectMember($index)" data-dismiss="alert"></button>
+                                                    <img class="google-avatar" src="<%= selected_us.google_public_profile_photo_url%>"/>
+                                                    <strong> <%= selected_us.google_display_name %></strong>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                      <div class="col-md-12 margin-top-10">
+                                          <select id="select2_sample2" class="form-control select2" multiple>
+                                              <option ng-repeat="tag in tags"
+                                                      value='<%=tag.entityKey%>'>
+                                                  <%=tag.name%>
+                                              </option>
+                                          </select>
+                                      </div>
+                                 </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-12 margin-top-10">
+                              <p><span ng-hide="newTaskform">Add New Task</span><button type="button" ng-click="addTask(newTask)" class="btn blue btn-sm pull-right btn-inline">Add</button></p>
+
+                          </div>
+                      </div>
+                  </form>
+                   <ul id="tasks" class="list-unstyled lead_related_tasks" ng-hide="newTaskform">
+                      <li ng-repeat="task in tasks" id="task_<%=$index%>">
+                        <input value="check1" type="checkbox">
+                        <span>
+                          <a href="/#/tasks/show/<%=task.id%>" class="discussion-content">
+                            <%= task.title%>
+                          </a>
+                          <span ng-show="task.due">
+                            [before: <%= task.due | date:'yyyy-MM-dd '%>]
+                          </span>
+                        </span>
+                      </li>
+                  </ul>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
   <!-- $ Events -->
@@ -1227,5 +1262,9 @@
       "dateFormat": "YYYY-MM-DD h:m",
       "autodateOnStart": false
     });
+  });
+  $("#select2_sample2").select2({
+      placeholder: "Click to Select a label",
+      allowClear: false
   });
 </script>

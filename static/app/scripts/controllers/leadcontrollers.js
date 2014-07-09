@@ -711,6 +711,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
             $scope.newTask={};
             $scope.newTaskform=false;
             $scope.selected_members=[];
+            $("#select2_sample2").select2("val", "");
         }else{
             $scope.newTask={};
             $scope.newTaskform=false;
