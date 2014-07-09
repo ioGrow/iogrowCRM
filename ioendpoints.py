@@ -946,17 +946,23 @@ class CrmEngineApi(remote.Service):
                             )
         return message_types.VoidMessage()
 
-    # highrise.import api
+    # highrise.import_peoples api
     @endpoints.method(ContactImportHighriseRequest, message_types.VoidMessage,
-                      path='highrise/import', http_method='POST',
-                      name='highrise.import')
-    def highrise_import_beta(self, request):
-        #user_from_email = EndpointsHelper.require_iogrow_user()
-        print request
-        people=EndpointsHelper.highrise_import(request)
+                      path='highrise/import_peoples', http_method='POST',
+                      name='highrise.import_peoples')
+    def highrise_import_peoples(self, request):
+        people=EndpointsHelper.highrise_import_peoples(request)
         return message_types.VoidMessage()
 
-        
+    # highrise.import_companys api
+    @endpoints.method(ContactImportHighriseRequest, message_types.VoidMessage,
+                      path='highrise/import_companys', http_method='POST',
+                      name='highrise.import_companys')
+    def highrise_import_companys(self, request):
+        companys=EndpointsHelper.highrise_import_companys(request)
+        return message_types.VoidMessage()
+
+
 
     # contacts.get api v2
     @endpoints.method(ContactGetRequest, ContactSchema,

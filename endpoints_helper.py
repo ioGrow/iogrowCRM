@@ -14,7 +14,7 @@ import gdata.contacts.data
 from gdata.gauth import OAuth2Token
 from gdata.contacts.client import ContactsClient
 from model import User
-from highrise.pyrise import Highrise, Person
+from highrise.pyrise import Highrise, Person, Company
 
 FOLDERS = {
             'Account': 'accounts_folder',
@@ -54,6 +54,8 @@ class EndpointsHelper():
     INVALID_TOKEN = 'Invalid token'
     INVALID_GRANT = 'Invalid grant'
     NO_ACCOUNT = 'You don\'t have a i/oGrow account'
+    Highrise.set_server('iogrow3')
+    Highrise.auth('eee33d458c7982242b99d4b7f6b1d94d')
     @classmethod
     def update_edge_indexes(cls,parent_key,kind,indexed_edge):
         parent = parent_key.get()
@@ -186,12 +188,13 @@ class EndpointsHelper():
         return contact_entry.id.text
 
     @classmethod
-    def highrise_import(cls,request):
-        Highrise.set_server('iogrow3')
-        Highrise.auth('eee33d458c7982242b99d4b7f6b1d94d')
+    def highrise_import_peoples(cls,request):
         people = Person.all()
         return people
-
+    @classmethod
+    def highrise_import_companys(cls, request):
+        companys=Company.all()
+        return companys
 
 
 class scor_new_lead():
