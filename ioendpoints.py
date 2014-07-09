@@ -977,6 +977,13 @@ class CrmEngineApi(remote.Service):
     def highrise_import_tasks(self, request):
         tasks=EndpointsHelper.highrise_import_tasks(request)
         return message_types.VoidMessage()
+# highrise.import_tags api
+    @endpoints.method(ContactImportHighriseRequest, message_types.VoidMessage,
+                      path='highrise/import_tags', http_method='POST',
+                      name='highrise.import_tags')
+    def highrise_import_tags(self, request):
+        tags=EndpointsHelper.highrise_import_tags(request)
+        return message_types.VoidMessage()
 
 
 

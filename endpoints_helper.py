@@ -14,7 +14,7 @@ import gdata.contacts.data
 from gdata.gauth import OAuth2Token
 from gdata.contacts.client import ContactsClient
 from model import User
-from highrise.pyrise import Highrise, Person, Company, Deal, Task
+from highrise.pyrise import Highrise, Person, Company, Deal, Task, Tag
 
 FOLDERS = {
             'Account': 'accounts_folder',
@@ -203,6 +203,10 @@ class EndpointsHelper():
     def highrise_import_tasks(cls, request):
         Tasks=Task.all()
         return Tasks
+    @classmethod
+    def highrise_import_tags(cls, request):
+        Tags=Tag.all()
+        return Tags
 
 class scor_new_lead():
     def predict(predd,tedd) :
