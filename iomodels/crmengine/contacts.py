@@ -922,15 +922,15 @@ class Contact(EndpointsModel):
                             contact_key = imported_contact.put_async()
                             contact_key_async = contact_key.get_result()
                             folder_name = contact['firstname'] + contact['lastname']
-                            taskqueue.add(
-                                            url='/workers/createobjectfolder',
-                                            params={
-                                                    'kind': "Contact",
-                                                    'folder_name': folder_name,
-                                                    'email': user_from_email.email,
-                                                    'obj_key':contact_key_async.urlsafe()
-                                                    }
-                                            )
+                            # taskqueue.add(
+                            #                 url='/workers/createobjectfolder',
+                            #                 params={
+                            #                         'kind': "Contact",
+                            #                         'folder_name': folder_name,
+                            #                         'email': user_from_email.email,
+                            #                         'obj_key':contact_key_async.urlsafe()
+                            #                         }
+                            #                 )
                         # insert the edge between the contact and related account
                         if 'account' in contact.keys():
                             if contact['account']:

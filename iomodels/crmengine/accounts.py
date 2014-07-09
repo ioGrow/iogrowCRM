@@ -332,16 +332,16 @@ class Account(EndpointsModel):
                         )
             account_key = account.put_async()
             account_key_async = account_key.get_result()
-            taskqueue.add(
-                            url='/workers/createobjectfolder',
-                            params={
-                                    'kind': "Account",
-                                    'folder_name': request.name,
-                                    'email': user_from_email.email,
-                                    'obj_key':account_key_async.urlsafe(),
-                                    'logo_img_id':request.logo_img_id
-                                    }
-                            )
+            # taskqueue.add(
+            #                 url='/workers/createobjectfolder',
+            #                 params={
+            #                         'kind': "Account",
+            #                         'folder_name': request.name,
+            #                         'email': user_from_email.email,
+            #                         'obj_key':account_key_async.urlsafe(),
+            #                         'logo_img_id':request.logo_img_id
+            #                         }
+            #                 )
         if request.contacts:
             account_key_str = account_key_async.urlsafe()
             for contact in request.contacts:
