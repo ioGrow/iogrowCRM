@@ -192,6 +192,7 @@ $scope.listContributors = function(){
  }
  // HKA 22.06.2014 Delete Event
 
+
  $scope.editbeforedelete = function(){
      $('#BeforedeleteEvent').modal('show');
    };
@@ -301,6 +302,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
               gapi.client.crmengine.events.list_fetch(params).execute(function(resp) { 
                                 if(!resp.code){
                                   $scope.events_cal_list= resp.items;
+
                                   $scope.$apply();  
                                 }
                                 else{
@@ -322,7 +324,8 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
 
                                    try {
                                       // feed events client table with events .hadji hicham  08-07-2014 10:40
-                                       for(var i=0;i<$scope.events_cal_list.length;i++ ){
+                                     if($scope.events_cal_list){
+                                      for(var i=0;i<$scope.events_cal_list.length;i++ ){
 
                                               var allday= ($scope.events_cal_list[i].allday=="false") ? false :true ;
                                         
@@ -340,8 +343,13 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
 
                                                 
                                       };
-                                  // feed events client table with tasks  hadji hicham  08-07-2014 10:40
-                                    for(var i=0;i<$scope.tasks_list.length;i++ ){
+                                     }else{
+                                       console.log("events list is empty");
+                                     }
+                                     // feed events client table with tasks  hadji hicham  08-07-2014 10:40
+                                     
+                                     if($scope.tasks_list){
+                                            for(var i=0;i<$scope.tasks_list.length;i++ ){
                                         
 
                                             events.push({ 
@@ -357,12 +365,27 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                                            my_type:"task"
                                                        })
                                                 
-                                      }  
+                                      }
+                                     }else{
+                                      console.log("tasks list is empty");
+                                     }
+
+                                        
+                                    
+                                      
+                                      
+                                     
+                                         
+                                      
+                                       
+                                  
+                                    
                                        // feed the calendar client table with events and tasks . hadji hicham  08-07-2014 10:40
                                        callback(events); 
                             
                                        }catch (e){
                                                console.log(e.message);
+                                               callback(events);
                                           }
                                           $scope.$apply();
 
