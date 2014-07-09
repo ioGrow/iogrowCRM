@@ -120,6 +120,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 					$('#importModal').modal('show');
 				}
 				$scope.createPickerUploader = function() {
+					
 					$('#importModal').modal('hide');
 					var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
 					var projectfolder = $scope.contact.folder;
@@ -1588,38 +1589,78 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
 								obj[key]=null;
 							}
 			}
-			$scope.pushElement=function(elem,arr,infos){
-					if (arr.indexOf(elem) == -1) {
-							var copyOfElement = angular.copy(elem);
-							arr.push(copyOfElement);
-							$scope.initObject(elem);
-							 switch(infos){
-								case 'phones' :
-									 $scope.showPhoneForm=false;
-									 $scope.phone.type= 'work';
-								break;
-								case 'emails' :
-									 $scope.showEmailForm=false;
-								break;
-								case 'websites' :
-										$scope.showWebsiteForm=false;
-								break;
-								case 'sociallinks' :
-									 $scope.showSociallinkForm=false;
-								break;
-								case 'customfields' :
-									 $scope.showCustomFieldForm=false;
-								break;
-								case 'addresses' :
-										$('#addressmodal').modal('hide');
+			$scope.pushElement = function(elem, arr, infos) {
+            console.log(elem)
+            console.log(arr)
+            console.log(infos)
+            if (arr.indexOf(elem) == -1) {
+                // var copyOfElement = angular.copy(elem);
+                // arr.push(copyOfElement);
+                // $scope.initObject(elem);
 
-								break;
-							}
+                switch (infos) {
+                    case 'phones' :
+                        if (elem.number) {
+                            var copyOfElement = angular.copy(elem);
+                            arr.push(copyOfElement);
+                            $scope.initObject(elem);
+                        }
+                        $scope.showPhoneForm = false;
+                        $scope.phone.type = 'work';
+                        $scope.phone.number = '';
+                        break;
+                    case 'emails' :
+                        if (elem.email) {
+                            var copyOfElement = angular.copy(elem);
+                            arr.push(copyOfElement);
+                            $scope.initObject(elem);
+                        }
+                        $scope.showEmailForm = false;
+                        $scope.email.email = ''
+                        break;
+                    case 'websites' :
+                        if (elem) {
+                            var copyOfElement = angular.copy(elem);
+                            arr.push(copyOfElement);
+                            $scope.initObject(elem);
+                        }
+                        $scope.website.url = '';
+                        $scope.showWebsiteForm = false;
+                        break;
+                    case 'sociallinks' :
+                        if (elem) {
+                            var copyOfElement = angular.copy(elem);
+                            arr.push(copyOfElement);
+                            $scope.initObject(elem);
+                        }
+                        $scope.sociallink.url = '';
+                        $scope.showSociallinkForm = false;
+                        break;
+                    case 'customfields' :
+                        if (elem.field && elem.value) {
+                            var copyOfElement = angular.copy(elem);
+                            arr.push(copyOfElement);
+                            $scope.initObject(elem);
+                        }
+                        $scope.customfield.field = '';
+                        $scope.customfield.value = '';
+                        $scope.showCustomFieldForm = false;
+                        break;
+                    case 'addresses' :
+                        if (elem.country) {
+                            var copyOfElement = angular.copy(elem);
+                            arr.push(copyOfElement);
+                            $scope.initObject(elem);
+                        }
 
-					}else{
-						alert("item already exit");
-					}
-			};
+                        $('#addressmodal').modal('hide');
+
+                        break;
+                }
+            } else {
+                alert("item already exit");
+            }
+        };
 	//HKA 01.06.2014 Delete the infonode on DOM
 			$scope.deleteInfos = function(arr,index){
 					arr.splice(index, 1);

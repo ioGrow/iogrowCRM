@@ -27,6 +27,7 @@ blogservices.factory('Article', function($http) {
             }
 
           });
+     $scope.isLoading=false;
   };
   Article.patch = function($scope,params) {
           gapi.client.crmengine.accounts.patch(params).execute(function(resp) {
@@ -85,6 +86,8 @@ blogservices.factory('Article', function($http) {
                };
               }
       });
+     $scope.isLoading=false;
+
   };
   Article.search = function($scope,params){
       $scope.isLoading = true;
@@ -120,6 +123,8 @@ blogservices.factory('Article', function($http) {
                };
               }
       });
+     $scope.isLoading=false;
+
   };
   Article.listMore = function($scope,params){
       $scope.isLoading = true;
@@ -158,6 +163,8 @@ blogservices.factory('Article', function($http) {
                };
               }
       });
+     $scope.isLoading=false;
+      
   };
 
   Article.insert = function($scope,params){
@@ -179,6 +186,8 @@ blogservices.factory('Article', function($http) {
              };
          }
       });
+     $scope.isLoading=false;
+
   };
   Article.delete = function($scope,id){
     gapi.client.crmengine.accounts.delete(id).execute(function(resp){
@@ -212,6 +221,8 @@ blogservices.factory('Tag', function($http) {
           console.log(resp);
          }
       });
+     $scope.isLoading=false;
+
   };
   Tag.list = function($scope,params){
 
@@ -237,6 +248,8 @@ blogservices.factory('Tag', function($http) {
                   };
               }
       });
+     $scope.isLoading=false;
+
   };
    Tag.insert = function($scope,params){
 
@@ -257,6 +270,8 @@ blogservices.factory('Tag', function($http) {
           console.log(resp.code);
          }
       });
+     $scope.isLoading=false;
+
   };
     Tag.patch = function($scope,params){
       $scope.isLoading = true;
@@ -281,6 +296,8 @@ blogservices.factory('Tag', function($http) {
              };
          }
       });
+     $scope.isLoading=false;
+      
   };
   Tag.delete = function($scope,params){
 

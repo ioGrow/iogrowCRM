@@ -33,7 +33,7 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 # Our libraries
 from iograph import Node,Edge,RecordSchema,InfoNodeResponse,InfoNodeConnectionSchema,InfoNodeListResponse
 from iomodels.crmengine.accounts import Account,AccountGetRequest,AccountSchema,AccountListRequest,AccountListResponse,AccountSearchResult,AccountSearchResults,AccountInsertRequest
-from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertRequest,ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults,ContactImportRequest
+from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertRequest,ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults,ContactImportRequest,ContactImportHighriseRequest,ContactHighriseResponse, ContactHighriseSchema
 from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema,NoteSchema
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
@@ -114,13 +114,8 @@ INVERSED_EDGES = {
 
          }
 ADMIN_EMAILS = ['tedj.meabiou@gmail.com','hakim@iogrow.com','mezianeh3@gmail.com']
-BLOG_INDEX_ATTRS = [
-              "title",
-              "intro_text",
-              "author",
-              "author_photo",
-              "author_gid"
-              ]
+
+
 def LISTING_QUERY(query, access, organization, owner, collaborators, order):
     return query.filter(
                             ndb.OR(
@@ -232,20 +227,6 @@ class SearchResult(messages.Message):
     title = messages.StringField(2)
     type = messages.StringField(3)
     rank = messages.IntegerField(4)
-
-class BlogSearchResult(messages.Message):
-    id = messages.StringField(1)
-    title = messages.StringField(2)
-    intro_text = messages.StringField(3)
-    author = messages.StringField(4)
-    author_photo = messages.StringField(5)
-    author_gid = messages.StringField(6)
-    rank = messages.IntegerField(7)
-
-# The message class that defines a set of search results
-class BlogSearchResults(messages.Message):
-    items = messages.MessageField(BlogSearchResult, 1, repeated=True)
-    nextPageToken = messages.StringField(2)
 
 # The message class that defines a set of search results
 class SearchResults(messages.Message):
@@ -381,13 +362,16 @@ class BlogEngineApi(remote.Service):
             id=messages.StringField(1))
 
     # Search API
-    @endpoints.method(SearchRequest, BlogSearchResults,
+    @endpoints.method(SearchRequest, SearchResults,
                         path='search', http_method='POST',
                         name='search')
     def blog_search_method(self, request):
-        index = search.Index(name="BlogIndex")
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        organization = str(user_from_email.organization.id())
+        index = search.Index(name="GlobalIndex")
         #Show only objects where you have permissions
-        query_string = request.q
+        query_string = request.q + ' AND (organization:' +organization+ ' AND (access:public OR (owner:'+ user_from_email.google_user_id +' OR collaborators:'+ user_from_email.google_user_id+')))'
+        print query_string
         search_results = []
         count = 1
         if request.limit:
@@ -420,12 +404,12 @@ class BlogEngineApi(remote.Service):
                         "rank" : scored_document.rank
                     }
                     for e in scored_document.fields:
-                        if e.name in BLOG_INDEX_ATTRS:
+                        if e.name in ["title","type"]:
                             kwargs[e.name]=e.value
-                    search_results.append(BlogSearchResult(**kwargs))
+                    search_results.append(SearchResult(**kwargs))
         except search.Error:
             logging.exception('Search failed')
-        return BlogSearchResults(items = search_results,nextPageToken=next_cursor)
+        return SearchResults(items = search_results,nextPageToken=next_cursor)
     # articles.insert api
     @endpoints.method(ArticleInsertRequest, ArticleSchema,
                       path='articles/insert', http_method='POST',
@@ -512,14 +496,6 @@ class CrmEngineApi(remote.Service):
             message_types.VoidMessage,
             id=messages.StringField(1))
 
-    # org.update_tabs api v2
-    @endpoints.method(message_types.VoidMessage, message_types.VoidMessage,
-                      path='org/update_tabs', http_method='POST',
-                      name='org.update_tabs')
-    def update_tabs(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        Organization.update_current_apps_and_tabs(user_from_email.organization)
-        return message_types.VoidMessage()
     # Search API
     @endpoints.method(SearchRequest, SearchResults,
                         path='search', http_method='POST',
@@ -825,6 +801,8 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         parent_key = ndb.Key(urlsafe=request.about)
         parent = parent_key.get()
+        print parent
+        print parent.comments
         # insert topics edge if this is the first comment
         if parent_key.kind() != 'Note' and parent.comments == 0:
             edge_list = Edge.list(
@@ -839,7 +817,9 @@ class CrmEngineApi(remote.Service):
                     kind = 'topics',
                     inverse_edge = 'parents'
                 )
-        parent.comments = parent.comments + 1
+        if not parent.comments : parent.comments=1
+        else: parent.comments = parent.comments + 1
+
         parent.put()
         comment_author = Userinfo()
         comment_author.display_name = user_from_email.google_display_name
@@ -965,6 +945,18 @@ class CrmEngineApi(remote.Service):
                             request = request
                             )
         return message_types.VoidMessage()
+
+    # highrise.import api
+    @endpoints.method(ContactImportHighriseRequest, message_types.VoidMessage,
+                      path='highrise/import', http_method='POST',
+                      name='highrise.import')
+    def highrise_import_beta(self, request):
+        #user_from_email = EndpointsHelper.require_iogrow_user()
+        print request
+        people=EndpointsHelper.highrise_import(request)
+        return message_types.VoidMessage()
+
+        
 
     # contacts.get api v2
     @endpoints.method(ContactGetRequest, ContactSchema,
@@ -1263,7 +1255,7 @@ class CrmEngineApi(remote.Service):
 
         if event is None:
             raise endpoints.NotFoundException('Event not found')
-        event_patch_keys = ['title','starts_at','ends_at','description','where']
+        event_patch_keys = ['title','starts_at','ends_at','description','where','allday']
         date_props = ['starts_at','ends_at']
         patched = False
         for prop in event_patch_keys:
