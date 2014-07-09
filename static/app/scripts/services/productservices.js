@@ -9,6 +9,8 @@ accountservices.factory('Product', function($http) {
 
   
   Product.get = function($scope,id) {
+     $scope.isLoading=true;
+
           gapi.client.crmengine.accounts.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.account = resp;
@@ -24,10 +26,14 @@ accountservices.factory('Product', function($http) {
             }
             console.log('gapi #end_execute');
           });
+     $scope.isLoading=false;
+
   };
   Product.patch = function($scope,params) {
           console.log('in accounts.patch service');
           console.log(params);
+          $scope.isLoading=true;
+
           gapi.client.crmengine.accounts.patch(params).execute(function(resp) {
             if(!resp.code){
                $scope.account = resp;
@@ -40,6 +46,8 @@ accountservices.factory('Product', function($http) {
             }
             console.log('accounts.patch gapi #end_execute');
           });
+     $scope.isLoading=false;
+
   };
   Product.list = function($scope,params){
       $scope.isLoading = true;
@@ -69,8 +77,12 @@ accountservices.factory('Product', function($http) {
                  alert("Error, response is: " + angular.toJson(resp));
               }
       });
+     $scope.isLoading=false;
+
   };
   Product.insert = function($scope,params){
+     $scope.isLoading=true;
+
       gapi.client.crmengine.products.insert(params).execute(function(resp) {
         console.log('in insert resp');
          console.log(resp);
@@ -82,6 +94,8 @@ accountservices.factory('Product', function($http) {
           console.log(resp.code);
          }
       });
+     $scope.isLoading=false;
+      
   };
   
 

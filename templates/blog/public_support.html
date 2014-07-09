@@ -49,14 +49,14 @@
         <div class="portlet showCard">
           <div class="portlet-title line">
             <div class="caption">
-              Community
+              Share
             </div>
           </div>
           <div class="portlet-body" id="chats">
             <div class="scroller" style="height:200x" data-always-visible="1" data-rail-visible="0">
               <div id="newTask">
 
-                  [TODO: put here social media connections ]
+                   <div class="addthis_sharing_toolbox"></div>
 
               </div>
             </div>
@@ -127,6 +127,7 @@
 
 {% endblock %}
 {% block script %}
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-53aef4a2107c3e52"></script>
 <script>
   $("ul.page-sidebar-menu li").removeClass("active");
   $("#id_Support").addClass("active");

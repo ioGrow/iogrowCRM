@@ -52,6 +52,8 @@ Opportunitystage.list = function($scope,params){
 		};
 
 	})
+  $scope.isLoading=false;
+
 	};
 
   Opportunitystage.get = function($scope,id){
@@ -79,7 +81,10 @@ Opportunitystage.list = function($scope,params){
 
     }
 
-      )
+      );
+     $scope.isLoading=false;
+
+
 
   };
 
@@ -93,9 +98,10 @@ Opportunitystage.list = function($scope,params){
       $scope.$apply();
 
 
-    }
+    });
+    $scope.isLoading=false;
 
-  )};
+  };
   Opportunitystage.delete = function($scope,params){
       $scope.isLoading = true;
       gapi.client.crmengine.opportunitystages.delete(params).execute(function(resp) {
@@ -113,6 +119,8 @@ Opportunitystage.list = function($scope,params){
                   $scope.$apply();
               }
       });
+     $scope.isLoading=false;
+
   };
 return Opportunitystage;
 });
@@ -129,11 +137,14 @@ settingservices.factory('Casestatus',function($http){
        $scope.isLoading = false;
        $scope.$apply();
 
-    }
-     )};
+    });
+    $scope.isLoading=false;
+
+  };
   //HKA 14.12.2013 Case status list
   Casestatus.list = function($scope,params){
-
+     $scope.isLoading=true;
+    
     gapi.client.crmengine.casestatuses.list(params).execute(function(resp){
       if(!resp.code){
         $scope.casesatuses = resp.items;
@@ -150,8 +161,10 @@ settingservices.factory('Casestatus',function($http){
             };
         }
 
-    }
-    )};
+    });
+     $scope.isLoading=false;
+
+  };
    Casestatus.update= function($scope,params){
      $scope.isLoading = true;
      gapi.client.crmengine.casestatuses.patch(params).execute(function(resp){
@@ -167,17 +180,21 @@ settingservices.factory('Casestatus',function($http){
 
         }
 
-    })};
+    });
+     $scope.isLoading=false;
+   };
 
   Casestatus.delete = function($scope,id){
-     $scope.isLoading = true;
+    $scope.isLoading = true;
     gapi.client.crmengine.casestatuses.delete(id).execute(function(resp){
 
 
        $scope.casestatuslist();
        $scope.isLoading = false;
        $scope.$apply();
-    })
+    });
+    $scope.isLoading=false;
+
   };
 
 
@@ -205,11 +222,13 @@ settingservices.factory('Leadstatus',function($http){
           alert("Error, response is:"+angular.toJson(resp));
         }
 
-    }
-     )};
+    });
+     $scope.isLoading=false;
+  };
   //HKA 14.12.2013 Case status list
   Leadstatus.list = function($scope,params){
-
+     $scope.isLoading=true;
+    
     gapi.client.crmengine.leadstatuses.list(params).execute(function(resp){
       if(!resp.code){
         $scope.leadstatuses = resp.items;
@@ -226,8 +245,9 @@ settingservices.factory('Leadstatus',function($http){
               };
         }
 
-    }
-    )};
+    });
+     $scope.isLoading=false;
+  };
 
     Leadstatus.update = function($scope,params) {
       $scope.isLoading = true;
@@ -240,11 +260,9 @@ settingservices.factory('Leadstatus',function($http){
           else{
             alert("Error, response is"+angular.toJson(resp));
           }
-
-
-      }
-
-        )};
+      });
+     $scope.isLoading=false;
+    };
 
 
   Leadstatus.delete = function($scope,id){
@@ -255,7 +273,9 @@ settingservices.factory('Leadstatus',function($http){
         $scope.listleadstatus();
        $scope.isLoading = false;
        $scope.$apply();
-    })
+    });
+     $scope.isLoading=false;
+    
   };
 
 

@@ -9,7 +9,8 @@ accountservices.factory('User', function($http) {
 
 
   User.get = function($scope,id) {
-
+     $scope.isLoading=true;
+      
           gapi.client.crmengine.users.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.user = resp;
@@ -26,6 +27,8 @@ accountservices.factory('User', function($http) {
             }
             console.log('gapi #end_execute');
           });
+     $scope.isLoading=false;
+
   };
   User.list = function($scope,params){
       $scope.isLoading = true;
@@ -59,6 +62,8 @@ accountservices.factory('User', function($http) {
                };
               }
       });
+     $scope.isLoading=false;
+      
   };
   User.insert = function($scope,params){
       $scope.isLoading = true;
@@ -85,9 +90,13 @@ accountservices.factory('User', function($http) {
 
          }
       });
+     $scope.isLoading=false;
+
   };
 
   User.patch = function($scope,params){
+     $scope.isLoading=true;
+
       gapi.client.crmengine.users.patch(params).execute(function(resp) {
             if(!resp.code){
                $scope.user = resp;
@@ -105,7 +114,9 @@ accountservices.factory('User', function($http) {
                };
             }
             console.log('User.patch gapi #end_execute');
-          });
+      });
+     $scope.isLoading=false;
+
   }
 
 
@@ -122,6 +133,8 @@ accountservices.factory('Permission', function($http) {
 
   Permission.insert = function($scope,params){
       console.log(params);
+     $scope.isLoading=true;
+
       gapi.client.crmengine.permissions.insertv2(params).execute(function(resp) {
          console.log('in insert resp');
          console.log(resp);
@@ -132,6 +145,8 @@ accountservices.factory('Permission', function($http) {
           console.log(resp.code);
          }
       });
+     $scope.isLoading=false;
+      
   };
 
 

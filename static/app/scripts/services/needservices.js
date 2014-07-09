@@ -6,6 +6,8 @@ needservices.factory('Need', function() {
   };
 
   Need.get = function($scope,id) {
+     $scope.isLoading=true;
+
           gapi.client.crmengine.needs.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.need = resp;
@@ -30,6 +32,8 @@ needservices.factory('Need', function() {
             }
             console.log('gapi #end_execute');
           });
+     $scope.isLoading=false;
+
   };  
   
   Need.list = function($scope,params){
@@ -67,6 +71,8 @@ needservices.factory('Need', function() {
                };
               }
       });
+     $scope.isLoading=false;
+      
   };
   Need.insert = function($scope,params){
      $scope.isLoading = true;
@@ -89,8 +95,12 @@ needservices.factory('Need', function() {
              };
          }
       });
+     $scope.isLoading=false;
+
   };
 Need.patch  = function($scope,params){
+  $scope.isLoading=true;
+
    gapi.client.crmengine.needs.patch(params).execute(function(resp) {
      if(!resp.code){
        $scope.need = resp;
@@ -104,6 +114,8 @@ Need.patch  = function($scope,params){
             }
 
    });
+     $scope.isLoading=false;
+  
 };
 
 

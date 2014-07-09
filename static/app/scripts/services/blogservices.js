@@ -27,6 +27,7 @@ blogservices.factory('Article', function($http) {
             }
 
           });
+     $scope.isLoading=false;
   };
   Article.patch = function($scope,params) {
           gapi.client.crmengine.accounts.patch(params).execute(function(resp) {
@@ -85,6 +86,45 @@ blogservices.factory('Article', function($http) {
                };
               }
       });
+     $scope.isLoading=false;
+
+  };
+  Article.search = function($scope,params){
+      $scope.isLoading = true;
+      console.log('$$$$$$');
+      console.log(params);
+      console.log(gapi.client);
+      gapi.client.blogengine.search(params).execute(function(resp) {
+              if(!resp.code){
+
+                  if (!resp.items){
+                    if(!$scope.isFiltering){
+                        $scope.blankStateaccount = true;
+                    }
+                  }
+                 $scope.articles = resp.items;
+                 if (resp.nextPageToken){
+                   var nextPage = $scope.currentPage + 1;
+                   // Store the nextPageToken
+                   $scope.pages[nextPage] = resp.nextPageToken;
+
+
+                 }
+                 // Loaded succefully
+                 $scope.isLoading = false;
+                 // Call the method $apply to make the update on the scope
+                 $scope.$apply();
+              }else {
+
+               if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+              }
+      });
+     $scope.isLoading=false;
+
   };
   Article.listMore = function($scope,params){
       $scope.isLoading = true;
@@ -123,24 +163,15 @@ blogservices.factory('Article', function($http) {
                };
               }
       });
+     $scope.isLoading=false;
+      
   };
-  Article.search = function($scope,params){
-      console.log(params);
-      gapi.client.crmengine.accounts.search(params).execute(function(resp) {
 
-           if (resp.items){
-              $scope.accountsResults = resp.items;
-
-              $scope.$apply();
-            };
-
-      });
-  };
   Article.insert = function($scope,params){
       $scope.isLoading = true;
-      gapi.client.crmengine.accounts.insert(params).execute(function(resp) {
+      gapi.client.blogengine.articles.insert(params).execute(function(resp) {
          if(!resp.code){
-            $scope.accountInserted(resp);
+            $scope.articleInserted(resp);
             $scope.isLoading = false;
              $scope.$apply();
 
@@ -155,6 +186,8 @@ blogservices.factory('Article', function($http) {
              };
          }
       });
+     $scope.isLoading=false;
+
   };
   Article.delete = function($scope,id){
     gapi.client.crmengine.accounts.delete(id).execute(function(resp){
@@ -188,6 +221,8 @@ blogservices.factory('Tag', function($http) {
           console.log(resp);
          }
       });
+     $scope.isLoading=false;
+
   };
   Tag.list = function($scope,params){
 
@@ -213,6 +248,8 @@ blogservices.factory('Tag', function($http) {
                   };
               }
       });
+     $scope.isLoading=false;
+
   };
    Tag.insert = function($scope,params){
 
@@ -233,6 +270,8 @@ blogservices.factory('Tag', function($http) {
           console.log(resp.code);
          }
       });
+     $scope.isLoading=false;
+
   };
     Tag.patch = function($scope,params){
       $scope.isLoading = true;
@@ -257,6 +296,8 @@ blogservices.factory('Tag', function($http) {
              };
          }
       });
+     $scope.isLoading=false;
+      
   };
   Tag.delete = function($scope,params){
 

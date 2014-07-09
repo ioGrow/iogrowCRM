@@ -58,6 +58,7 @@ eventservices.factory('Event', function($http) {
 
          }else{
             console.log("not working");
+            console.log(resp.message);
              if(resp.message=="Invalid grant"){
               console.log("Invalid grant");
                 $scope.refreshToken();
@@ -68,6 +69,8 @@ eventservices.factory('Event', function($http) {
              };
          }
       });
+     $scope.isLoading=false;
+
   };
   Event.list = function($scope,params){
 
@@ -91,7 +94,7 @@ eventservices.factory('Event', function($http) {
                                       };
                     calendarEventList.push(eventSchema);
                  });
-                 $scope.renderCalendar(calendarEventList);
+                 //$scope.renderCalendar(calendarEventList);
                  /*if ($scope.currentPage>1){
                       console.log('Should show PREV');
                       $scope.pagination.prev = true;
@@ -122,18 +125,23 @@ eventservices.factory('Event', function($http) {
                };
               }
       });
+     $scope.isLoading=false;
+      
   };
    Event.insert = function($scope,params){
+
       $scope.isLoading = true;
 
       gapi.client.crmengine.events.insertv2(params).execute(function(resp) {
           if(!resp.code){
+            $('#calendar').fullCalendar( 'refetchEvents' );
             if ($scope.events == undefined){
             $scope.events = [];
           }
             $scope.events.push(resp);
+            console.log(resp);
             $scope.isLoading = false;
-
+             $scope.permet_clicking=true ;
             $scope.$apply();
 
          }else{
@@ -147,6 +155,8 @@ eventservices.factory('Event', function($http) {
              };
          }
       });
+     $scope.isLoading=false;
+
   };
 Event.getUrl = function(type,id){
   var base_url = undefined;
@@ -187,6 +197,8 @@ Event.getUrl = function(type,id){
       $scope.isLoading=true;
       $scope.$apply();
     });
+     $scope.isLoading=false;
+    
     
 
   };

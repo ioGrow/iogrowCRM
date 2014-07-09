@@ -144,6 +144,8 @@ leadservices.factory('Lead', function($http) {
             }
             console.log('gapi #end_execute');
           });
+          $scope.isLoading=false;
+           
   };
   Lead.patch = function($scope,params) {
           console.log('in leads.patch service');
@@ -175,6 +177,8 @@ leadservices.factory('Lead', function($http) {
             }
             console.log('leads.patch gapi #end_execute');
           });
+          $scope.isLoading=false;
+
   };
   Lead.list = function($scope,params){
      $scope.isLoading = true;
@@ -215,6 +219,8 @@ leadservices.factory('Lead', function($http) {
               }
               console.log('gapi #end_execute');
         });
+     $scope.isLoading=false;
+       
 
 
 
@@ -256,6 +262,8 @@ leadservices.factory('Lead', function($http) {
               }
 
         });
+     $scope.isLoading=false;
+     
 
 
 
@@ -281,6 +289,8 @@ leadservices.factory('Lead', function($http) {
              };
          }
       });
+     $scope.isLoading=false;
+
   };
   Lead.convert = function($scope,id){
       $scope.isLoading = true;
@@ -302,6 +312,8 @@ leadservices.factory('Lead', function($http) {
              };
          }
       });
+     $scope.isLoading=false;
+
   };
 
 
@@ -383,6 +395,8 @@ accountservices.factory('Email', function() {
                };
          }
      });
+     $scope.isLoading=false;
+      
 
   };
 

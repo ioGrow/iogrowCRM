@@ -148,6 +148,12 @@
                                             Assignee
                                            </span>
                                         </button>
+                                        <button ng-click="deleteTask()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
+                                          <i class="icon-trash"></i>
+                                           <span class="btn-text">
+                                            Delete
+                                           </span>
+                                        </button>
                                         </div>
                                       </form>
                                         </div>
