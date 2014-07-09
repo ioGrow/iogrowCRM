@@ -285,22 +285,20 @@ app.directive('cusdatetimepicker', function($parse) {
       restrict: 'A',
       require:'?ngModel',
        link: function($scope, element, attrs,ngModel) {
-        console.log('wooooooooooooorkkkkkkk');
-        console.log(ngModel);
         var dp = $(element);
-        var model = $parse(attrs.model);
-        console.log(model($scope));  // logs "test"
-        dp.appendDtpicker({
-
-                      "dateFormat": "YYYY-MM-DD h:m",
-                      "autodateOnStart": false,
-                       "onHide": function(handler){
-                        console.log(model($scope));
+        var params={
+          "dateFormat": (attrs.dateFormat) ? attrs.dateFormat : "YY/MM/DD h:m",
+          "closeOnSelected": (attrs.closeOnSelected=="false") ? false: true,
+          "autodateOnStart": (attrs.autodateOnStart=="true") ? true: false,
+          "onHide": function(handler){
                          model.assign($scope, dp.handleDtpicker('getDate'));
                          $scope.$apply();
-                        },
-                         "closeOnSelected": true
-                    });
+          }
+
+        }
+        var model = $parse(attrs.model);
+        console.log(model($scope));  // logs "test"
+        dp.appendDtpicker(params);
     }
   }
 });

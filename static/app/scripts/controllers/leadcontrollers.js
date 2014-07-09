@@ -495,6 +495,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.pages = [];
      $scope.lead = {};
      $scope.status_selected={};
+     $scope.selected_members=[];
+     $scope.selected_member={};
      $scope.users = [];
      $scope.user = undefined;
      $scope.slected_memeber = undefined;
@@ -550,6 +552,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
           Lead.get($scope,params);
           User.list($scope,{});
           Leadstatus.list($scope,{});
+          var paramsTag = {'about_kind': 'Lead'};
+          Tag.list($scope, paramsTag);
 
       };
       // We need to call this to refresh token when user credentials are invalid
@@ -657,6 +661,19 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
           Lead.get($scope,$scope.lead.id);
 
      };
+      $scope.selectMemberToTask = function() {
+            console.log($scope.selected_members);
+            if ($scope.selected_members.indexOf($scope.user) == -1) {
+                $scope.selected_members.push($scope.user);
+                $scope.selected_member = $scope.user;
+                $scope.user = $scope.selected_member.google_display_name;
+            }
+            $scope.user = '';
+        };
+        $scope.unselectMember = function(index) {
+            $scope.selected_members.splice(index, 1);
+            console.log($scope.selected_members);
+        };
      //$('#addLeadModal').modal('show');
   //HKA 09.11.2013 Add a new Task
    $scope.addTask = function(task){
@@ -666,24 +683,34 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
             if (task.title!=null) {
                     //  $('#myModal').modal('hide');
             if (task.due){
-
                 var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
-
                 params ={'title': task.title,
                           'due': dueDate,
                           'parent': $scope.lead.entityKey
                 }
-
 
             }else{
                 params ={'title': task.title,
                          'parent': $scope.lead.entityKey
                        }
             };
-
+            if ($scope.selected_members!=[]) {
+                  params.assignees=$scope.selected_members;
+                };
+                var tags=[];                
+                tags=$('#select2_sample2').select2("val");
+                if (tags!=[]) {
+                  var tagitems = [];
+                  angular.forEach(tags, function(tag){
+                  var item = {'entityKey': tag };
+                  tagitems.push(item);
+                });
+                  params.tags=tagitems;
+                };
             Task.insert($scope,params);
             $scope.newTask={};
             $scope.newTaskform=false;
+            $scope.selected_members=[];
         }else{
             $scope.newTask={};
             $scope.newTaskform=false;
@@ -713,9 +740,6 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
             
             if (ioevent.title!=null&&ioevent.title!="") {
                     var params ={}
-                ioevent.starts_at=$('#leadEventStartsAt').handleDtpicker('getDate');
-                /*ioevent.ends_at=$('#leadEventEndsAt').handleDtpicker('getDate');*/
-                console.log(ioevent);
                 if (ioevent.starts_at){
                     if (ioevent.ends_at){
                       params ={'title': ioevent.title,
