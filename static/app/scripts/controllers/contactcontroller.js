@@ -523,7 +523,8 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 			$scope.infonodes = {};
 			$scope.phone={};
 			$scope.phone.type= 'work';
-			$scope.casee = {};
+      $scope.casee = {};
+			$scope.ioevent = {};
 			$scope.casee.priority = 4;
 			$scope.sharing_with = [];
 			$scope.statuses = [
@@ -540,6 +541,8 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 			$scope.newTaskform=false;
       $scope.newEventform=false;
       $scope.newTask={};
+      $scope.selected_members = [];
+      $scope.selected_member = {};
 
 
 			$scope.waterfallTrigger= function(){
@@ -583,6 +586,8 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 					User.list($scope,{});
 					Opportunitystage.list($scope,{});
 					Casestatus.list($scope,{});
+           var paramsTag = {'about_kind': 'Contact'};
+          Tag.list($scope, paramsTag);
 
 			};
 				// We need to call this to refresh token when user credentials are invalid
@@ -866,37 +871,60 @@ $scope.listTags=function(){
 
 
 	};
+ $scope.selectMemberToTask = function() {
+        console.log($scope.selected_members);
+        if ($scope.selected_members.indexOf($scope.user) == -1) {
+            $scope.selected_members.push($scope.user);
+            $scope.selected_member = $scope.user;
+            $scope.user = $scope.selected_member.google_display_name;
+        }
+        $scope.user = '';
+    };
+    $scope.unselectMember = function(index) {
+        $scope.selected_members.splice(index, 1);
+        console.log($scope.selected_members);
+    };
  //HKA 09.11.2013 Add a new Task
 	 $scope.addTask = function(task){
-      if ($scope.newTaskform==false) {
-                $scope.newTaskform=true;
-                 }else{
-                  if (task.title!=null) {
-                          //  $('#myModal').modal('hide');
-                  if (task.due){
+       if ($scope.newTaskform==false) {
+                      $scope.newTaskform=true;
+               }else{
+                if (task.title!=null) {
+                        //  $('#myModal').modal('hide');
+                if (task.due){
+                    var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
+                    params ={'title': task.title,
+                              'due': dueDate,
+                              'parent': $scope.contact.entityKey
+                    }
 
-                      var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
-
-                      params ={'title': task.title,
-                                'due': dueDate,
-                                'parent': $scope.contact.entityKey
-                      }
-
-
-                  }else{
-                      params ={'title': task.title,
-                               'parent': $scope.contact.entityKey
-                             }
-                  };
-
-                  Task.insert($scope,params);
-                  $scope.newTask={};
-                  $scope.newTaskform=false;
-              }else{
-                  $scope.newTask={};
-                  $scope.newTaskform=false;
-            }
-           }
+                }else{
+                    params ={'title': task.title,
+                             'parent': $scope.contact.entityKey
+                           }
+                };
+                if ($scope.selected_members!=[]) {
+                      params.assignees=$scope.selected_members;
+                    };
+                    var tags=[];                
+                    tags=$('#select2_sample2').select2("val");
+                    if (tags!=[]) {
+                      var tagitems = [];
+                      angular.forEach(tags, function(tag){
+                      var item = {'entityKey': tag };
+                      tagitems.push(item);
+                    });
+                      params.tags=tagitems;
+                    };
+                Task.insert($scope,params);
+                $scope.newTask={};
+                $scope.newTaskform=false;
+                $scope.selected_members=[];
+            }else{
+                $scope.newTask={};
+                $scope.newTaskform=false;
+          }
+         }
      }
 
 		 $scope.hilightTask = function(){
@@ -917,10 +945,11 @@ $scope.listTags=function(){
  $scope.addEvent = function(ioevent){
         if ($scope.newEventform==false) {
                 $scope.newEventform=true;
-           }else{
-            if (ioevent.title!=null) {
-                    var params ={}
-
+           }else{        
+            if (ioevent.title!=null&&ioevent.title!="") {
+                  var params ={}
+                  ioevent.starts_at=$('#leadEventStartsAt').handleDtpicker('getDate');
+                  ioevent.ends_at=$('#leadEventEndsAt').handleDtpicker('getDate');    
                 if (ioevent.starts_at){
                     if (ioevent.ends_at){
                       params ={'title': ioevent.title,
