@@ -120,6 +120,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 					$('#importModal').modal('show');
 				}
 				$scope.createPickerUploader = function() {
+					
 					$('#importModal').modal('hide');
 					var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
 					var projectfolder = $scope.contact.folder;

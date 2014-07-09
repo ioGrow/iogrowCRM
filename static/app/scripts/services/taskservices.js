@@ -48,6 +48,8 @@ topicservices.factory('Task', function($http) {
        
           if(!resp.code){
             $scope.task = resp;
+            console.log("here we go i'm angry")
+           //   $('#calendar').fullCalendar( 'refetchEvents' )
             console.log(" working");
             /*$scope.ListComments();
             $scope.listContributors();*/
@@ -187,6 +189,17 @@ topicservices.factory('Task', function($http) {
     return base_url+id;
 
  }
+
+Task.delete=function($scope,params){
+       $scope.isLoading= true ;
+       $scope.$apply();
+       gapi.client. crmengine.tasks.delete(params).execute(function(resp) {
+       $scope.taskDeleted();
+       $scope.isLoading=true;
+       $scope.$apply();
+       });
+
+}; 
    Task.listMore = function($scope,params){
    $scope.isLoading = true;
    $scope.$apply();
@@ -236,6 +249,9 @@ topicservices.factory('Task', function($http) {
 
 return Task;
 });
+
+
+
 topicservices.factory('Tag', function($http) {
   
   var Tag = function(data) {
