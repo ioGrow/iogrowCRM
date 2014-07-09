@@ -801,6 +801,8 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         parent_key = ndb.Key(urlsafe=request.about)
         parent = parent_key.get()
+        print parent
+        print parent.comments
         # insert topics edge if this is the first comment
         if parent_key.kind() != 'Note' and parent.comments == 0:
             edge_list = Edge.list(
@@ -815,7 +817,9 @@ class CrmEngineApi(remote.Service):
                     kind = 'topics',
                     inverse_edge = 'parents'
                 )
-        parent.comments = parent.comments + 1
+        if not parent.comments : parent.comments=1
+        else: parent.comments = parent.comments + 1
+
         parent.put()
         comment_author = Userinfo()
         comment_author.display_name = user_from_email.google_display_name

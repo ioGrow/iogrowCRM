@@ -23,6 +23,8 @@ edgeservices.factory('Edge', function($http) {
           console.log(resp.code);
          }
       });
+     $scope.isLoading=false;
+
   };
 
   
@@ -32,8 +34,10 @@ edgeservices.factory('Edge', function($http) {
     gapi.client.crmengine.edges.delete(params).execute(function(resp){
         $scope.isLoading = false;
         $scope.runTheProcess();
-      }
-    )};
+      })
+     $scope.isLoading=false;
+    
+  };
 
 
   

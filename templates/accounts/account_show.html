@@ -300,7 +300,7 @@
                                                     <strong>Address</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
-                                                    <li ng-repeat="address in infonodes.addresses">- <span editoptions editdataattr="deleteInfonode('<%=address.entityKey%>','addresses')" editable-text="address.country" onbeforesave="inlinePatch('Infonode','addresses', 'street',address.entityKey,$data)" ng-show="address.street"><%=address.street%>, </span> <span editable-text="address.city" onbeforesave="inlinePatch('Infonode','addresses', 'city',address.entityKey,$data)" ng-show="address.city"><%=address.city%>, </span> <span editable-text="address.country" onbeforesave="inlinePatch('Infonode','addresses', 'country',address.entityKey,$data)" ng-show="address.country"><%=address.country%></span></li>
+                                                    <li ng-repeat="address in infonodes.addresses">- <span editoptions editdataattr="deleteInfonode('<%=address.entityKey%>','addresses')" editable-text="address.street" onbeforesave="inlinePatch('Infonode','addresses', 'street',address.entityKey,$data)" ng-show="address.street"><%=address.street%>, </span> <span editable-text="address.city" onbeforesave="inlinePatch('Infonode','addresses', 'city',address.entityKey,$data)" ng-show="address.city"><%=address.city%>, </span> <span editable-text="address.state" onbeforesave="inlinePatch('Infonode','addresses', 'state',address.entityKey,$data)" ng-show="address.state"><%=address.state%>, </span> <span editable-text="address.country" onbeforesave="inlinePatch('Infonode','addresses', 'country',address.entityKey,$data)" ng-show="address.country"><%=address.country%></span></li>
                                                     <li>
                                                         <a href="#addressmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new address </a>
                                                     </li>
@@ -1082,7 +1082,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
-                    <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
+                    <button  type="submit" class="btn btn-primary addContactNow" data-dismiss="modal" aria-hidden="true">{{_("Save")}} </button>
                 </div>
                 </form>
             </div>
