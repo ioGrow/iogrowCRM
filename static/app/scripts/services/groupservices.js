@@ -32,6 +32,8 @@ accountservices.factory('Group', function($http) {
             }
             console.log('gapi #end_execute');
           });
+          $scope.isLoading=false;
+
   };
   Group.list = function($scope,params){
       $scope.isLoading = true;
@@ -69,6 +71,8 @@ accountservices.factory('Group', function($http) {
                };
               }
       });
+     $scope.isLoading=false;
+     
   };
   Group.insert = function($scope,params){
       gapi.client.crmengine.groups.insert(params).execute(function(resp) {
@@ -145,6 +149,8 @@ accountservices.factory('Member', function($http) {
                };
               }
       });
+     $scope.isLoading=false;
+       
   };
   Member.insert = function($scope,params){
       gapi.client.crmengine.members.insert(params).execute(function(resp) {
