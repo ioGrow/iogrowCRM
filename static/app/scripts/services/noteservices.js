@@ -48,13 +48,9 @@ noteservices.factory('Note', function($http) {
                };
               }
       });
-     $scope.isLoading=false;
-      
   };
 
   Note.get = function($scope,id) {
-     $scope.isLoading=true;
-
           gapi.client.crmengine.notes.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.note = resp;
@@ -74,8 +70,6 @@ noteservices.factory('Note', function($http) {
             }
             console.log('gapi #end_execute');
           });
-     $scope.isLoading=false;
-
   };
 
 Note.insert = function($scope,params){
@@ -96,8 +90,6 @@ Note.insert = function($scope,params){
           console.log(resp.code);
          }
       });
-     $scope.isLoading=false;
-
   };
  Note.getUrl = function(type,id){
   var base_url = undefined;
@@ -145,8 +137,6 @@ Note.insert = function($scope,params){
           console.log(resp.code);
          }
       }); 
-     $scope.isLoading=false;
-
  } 
  Note.delete=function($scope,params){
     $scope.isLoading = true;
@@ -161,9 +151,7 @@ Note.insert = function($scope,params){
          }else{
           console.log(resp.code);
          }
-      });
-     $scope.isLoading=false;
-     
+      }); 
  }
 
    

@@ -203,8 +203,6 @@ accountservices.factory('Contact', function($http) {
             }
             console.log('gapi #end_execute');
           });
-          $scope.isLoading=false;
-          
   };
   Contact.patch = function($scope,params) {
            $scope.isLoading=true;
@@ -235,8 +233,6 @@ accountservices.factory('Contact', function($http) {
             }
             console.log('Contact.patch gapi #end_execute');
           });
-          $scope.isLoading=false;
-
   };
   Contact.import = function($scope,params) {
           $scope.isLoading = true;
@@ -257,8 +253,6 @@ accountservices.factory('Contact', function($http) {
             }
             console.log('Contact.patch gapi #end_execute');
           });
-          $scope.isLoading=false;
-
   };
   Contact.list = function($scope,params){
         $scope.isLoading = true;
@@ -302,8 +296,6 @@ accountservices.factory('Contact', function($http) {
               }
               console.log('gapi #end_execute');
         });
-     $scope.isLoading=false;
-      
 
 
 
@@ -354,8 +346,6 @@ accountservices.factory('Contact', function($http) {
               }
 
         });
-     $scope.isLoading=false;
-
 
 
 
@@ -414,9 +404,7 @@ Contact.delete = function($scope,params){
         }
     }
 
-    );
-     $scope.isLoading=false;
-  };
+    )};
 
 
 return Contact;

@@ -136,8 +136,6 @@ opportunityservices.factory('Opportunity', function($http) {
 
       }
     });
-     $scope.isLoading=false;
-  
 
   };
 
@@ -179,8 +177,6 @@ opportunityservices.factory('Opportunity', function($http) {
 
               }
       });
-     $scope.isLoading=false;
-       
   };
   Opportunity.listMore = function($scope,params){
       $scope.isLoading = true;
@@ -216,8 +212,6 @@ opportunityservices.factory('Opportunity', function($http) {
 
               }
       });
-     $scope.isLoading=false;
-      
   };
   Opportunity.search = function($scope,params){
       gapi.client.crmengine.opportunities.search(params).execute(function(resp) {
@@ -255,8 +249,6 @@ Opportunity.patch = function($scope,params) {
             }
             console.log('opportunities.patch gapi #end_execute');
           });
-     $scope.isLoading=false;
-
 };
 Opportunity.update_stage = function($scope,params){
     gapi.client.crmengine.opportunities.update_stage(params).execute(function(resp){
@@ -354,8 +346,6 @@ opportunityservices.factory('Email', function() {
                };
          }
      });
-     $scope.isLoading=false;
-      
 
   };
 

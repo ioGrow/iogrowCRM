@@ -69,8 +69,6 @@ eventservices.factory('Event', function($http) {
              };
          }
       });
-     $scope.isLoading=false;
-
   };
   Event.list = function($scope,params){
 
@@ -125,8 +123,6 @@ eventservices.factory('Event', function($http) {
                };
               }
       });
-     $scope.isLoading=false;
-      
   };
    Event.insert = function($scope,params){
 
@@ -155,8 +151,6 @@ eventservices.factory('Event', function($http) {
              };
          }
       });
-     $scope.isLoading=false;
-
   };
 Event.getUrl = function(type,id){
   var base_url = undefined;
@@ -197,8 +191,6 @@ Event.getUrl = function(type,id){
       $scope.isLoading=true;
       $scope.$apply();
     });
-     $scope.isLoading=false;
-    
     
 
   };

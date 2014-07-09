@@ -10,8 +10,6 @@ accountservices.factory('InfoNode', function($http) {
 
 
   InfoNode.list = function($scope,params){
-     $scope.isLoading=true;
-
       gapi.client.crmengine.infonode.list(params).execute(function(resp) {
             
             if(!resp.code){
@@ -55,8 +53,6 @@ accountservices.factory('InfoNode', function($http) {
               }
 
       });
-     $scope.isLoading=false;
-     
 
 
 
@@ -79,8 +75,6 @@ accountservices.factory('InfoNode', function($http) {
              };
          }
       });
-     $scope.isLoading=false;
-
   };
   InfoNode.patch = function($scope,params){
       $scope.isLoading = true;
@@ -99,8 +93,6 @@ accountservices.factory('InfoNode', function($http) {
              };
          }
       });
-     $scope.isLoading=false;
-
   };
 
   InfoNode.delete = function($scope,params){
@@ -117,8 +109,6 @@ accountservices.factory('InfoNode', function($http) {
              };
          }
       });
-     $scope.isLoading=false;
-      
   };
 
 return InfoNode;
