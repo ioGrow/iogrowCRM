@@ -209,6 +209,21 @@ $scope.deleteEvent = function(){
         window.location.replace('/#/calendar');
 
      };
+
+
+// hadji hicham 09-08-2014 . inline update events 
+$scope.inlineUpdateEvent= function(event,value){   
+       var params={
+                                 'id':event.id,
+                                 'entityKey':event.entityKey,
+                                 'starts_at':moment(event.starts_at).format('YYYY-MM-DDTHH:mm:00.000000'),
+                                 'ends_at':moment(event.ends_at).format('YYYY-MM-DDTHH:mm:00.000000'),
+                                 'title':value,                                 
+                    };
+       
+       
+        Event.patch($scope,params);
+}
 // HKA 23.06.2014 update description
   $scope.updateEvent = function(description){
     console.log(description);
@@ -225,7 +240,9 @@ $scope.deleteEvent = function(){
                    'description':description['description']};
             
     }
-   
+
+
+
  Event.patch($scope,params);
 
         };
@@ -467,6 +484,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                  'entityKey':event.entityKey,
                                  'starts_at':moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000'),
                                  'ends_at':moment(event.start.add('hours',23).add('minute',59).add('second',59)).format('YYYY-MM-DDTHH:mm:00.000000'),
+                                 'title':event.title,
                                  'allday':event.allDay.toString()
                     }
                    
@@ -478,6 +496,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                  'entityKey':event.entityKey,
                                  'starts_at':moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000'),
                                  'ends_at':moment(event.end).format('YYYY-MM-DDTHH:mm:00.000000'),
+                                 'title':event.title,
                                  'allday':event.allDay.toString()
                     }
                   }else{
@@ -487,6 +506,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                  'entityKey':event.entityKey,
                                  'starts_at':moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000'),
                                  'ends_at':moment(event.start.add('hours',2)).format('YYYY-MM-DDTHH:mm:00.000000'),
+                                 'title':event.title,
                                  'allday':event.allDay.toString()
                     }
                   }
@@ -505,6 +525,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                              var params={
                                  'id':event.id,
                                  'entityKey':event.entityKey,
+                                 'title':event.title,
                                  'due':moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000')             
                                   }
                               
@@ -658,7 +679,6 @@ $scope.cancelAddOperation= function(){
 
  
 
-           console.log(params);
           Event.insert($scope,params);
             $scope.ioevent={};
 

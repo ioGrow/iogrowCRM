@@ -1246,6 +1246,7 @@ class CrmEngineApi(remote.Service):
                         path='events/patch', http_method='POST',
                         name='events.patch')
     def events_patch(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
         event_key = ndb.Key(urlsafe = request.entityKey)
         event = event_key.get()
 
@@ -1262,6 +1263,16 @@ class CrmEngineApi(remote.Service):
                 setattr(event,prop,new_value)
                 patched = True
         if patched:
+            taskqueue.add(
+                    url='/workers/syncpatchevent',
+                    params={
+                            'email': user_from_email.email,
+                            'starts_at': request.starts_at,
+                            'ends_at': request.ends_at,
+                            'summary': request.title,
+                            'event_google_id':event.event_google_id
+                            }
+                    )
             event.put()
         return message_types.VoidMessage()
     # Groups API

@@ -51,7 +51,7 @@
       <div class="col-md-12 showPage taskShowHead margin-bottom-15">
           <div class="row">
             <div class="col-md-12">
-                    <span editable-text="event.title" ng-model="event.title" onbeforesave="inlineUpdateEvent()" class="documentTitle" >
+                    <span editable-text="event.title" ng-model="event.title" onbeforesave="inlineUpdateEvent(event,$data)" class="documentTitle" >
                         <%= event.title%>
                     </span>
                     <span class="page-meta pull-right">
