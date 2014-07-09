@@ -197,13 +197,19 @@ class Document(EndpointsModel):
                                     )
         return document_schema
     @classmethod
-    def list_by_parent(cls,parent_key,request):
+    def list_by_parent(cls,parent_key,request=None):
         document_list = []
-        document_edge_list = Edge.list(
+        if request:
+            document_edge_list = Edge.list(
                                 start_node = parent_key,
                                 kind='documents',
                                 limit=request.documents.limit,
                                 pageToken=request.documents.pageToken
+                                )
+        else:
+            document_edge_list = Edge.list(
+                                start_node = parent_key,
+                                kind='documents'
                                 )
         for edge in document_edge_list['items']:
             document = edge.end_node.get()
@@ -245,14 +251,6 @@ class Document(EndpointsModel):
                     'title': request.title,
                     'mimeType': request.mimeType
         }
-        #get the accounts_folder or contacts_folder or ..
-        parent_key = ndb.Key(urlsafe=request.parent)
-        parent = parent_key.get()
-        if parent:
-            parent_folder = parent.folder
-            if parent:
-                params['parents'] = [{'id': parent_folder}]
-
         # execute files.insert and get resource_id
         created_document = service.files().insert(body=params).execute()
         author = Userinfo()

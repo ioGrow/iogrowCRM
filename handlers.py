@@ -29,8 +29,10 @@ from endpoints_helper import EndpointsHelper
 import model
 from iomodels.crmengine.contacts import Contact
 from iomodels.crmengine.leads import LeadInsertRequest,Lead
+from iomodels.crmengine.documents import Document
 import iomessages
 from blog import Article
+import iograph
 
 jinja_environment = jinja2.Environment(
   loader=jinja2.FileSystemLoader(os.getcwd()),
@@ -172,6 +174,11 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             try:
                 user = self.get_user_from_session()
+                print '***'
+                print user.email
+                print user.google_credentials
+                if user.google_credentials is None:
+                    self.redirect('/sign-in')
                 logout_url = 'https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://www.iogrow.com/welcome/'
                 if user is None or user.type=='public_user':
                     self.redirect('/welcome/')
@@ -408,7 +415,8 @@ class GooglePlusConnect(SessionEnabledHandler):
             user.email = userinfo.get('email')
             user.google_public_profile_photo_url = userinfo.get('picture')
         user.google_credentials = credentials
-        user.put()
+        user_key = user.put_async()
+        user_key_async = user_key.get_result()
         if memcache.get(user.email) :
             memcache.set(user.email, user)
         else:
@@ -780,11 +788,70 @@ class AddToIoGrowLeads(webapp2.RequestHandler):
         )
         Lead.insert(user_from_email,request)
 
+class ShareDocument(webapp2.RequestHandler):
+    def post(self):
+        email = self.request.get('email')
+        doc_id = self.request.get('doc_id')
+        document = Document.get_by_id(int(doc_id))
+        if document:
+            owner = model.User.get_by_gid(document.owner)
+            credentials = owner.google_credentials
+            http = credentials.authorize(httplib2.Http(memcache))
+            service = build('drive', 'v2', http=http)
+            # prepare params to insert
+            params = {
+                          'role': 'writer',
+                          'type': 'user',
+                          'value':email
+                        }
+            service.permissions().insert(
+                                            fileId=document.resource_id,
+                                            body=params,
+                                            sendNotificationEmails=False,
+                                            fields='id').execute()
+
+
+class InitPeerToPeerDrive(webapp2.RequestHandler):
+    def post(self):
+        invited_by_email = self.request.get('invited_by_email')
+        email = self.request.get('email')
+        user = model.User.get_by_email(email)
+        invited_by = model.User.get_by_email(invited_by_email)
+        documents = Document.query(
+                                  Document.organization == invited_by.organization,
+                                  Document.access=='public'
+                                  ).fetch()
+        for document in documents:
+            taskqueue.add(
+                            url='/workers/sharedocument',
+                            params={
+                                    'email': email,
+                                    'doc_id': str(document.key.id())
+                                    }
+                        )
+class ShareObjectDocuments(webapp2.RequestHandler):
+    def post(self):
+        obj_key_str = self.request.get('obj_key_str')
+        parent_key = ndb.Key(urlsafe=obj_key_str)
+        email = self.request.get('email')
+        documents = Document.list_by_parent(parent_key)
+        for document in documents.items:
+            taskqueue.add(
+                            url='/workers/sharedocument',
+                            params={
+                                    'email': email,
+                                    'doc_id': document.id
+                                    }
+                        )
+
 
 
 
 routes = [
     # Task Queues Handlers
+    ('/workers/initpeertopeerdrive',InitPeerToPeerDrive),
+    ('/workers/sharedocument',ShareDocument),
+    ('/workers/shareobjectdocument',ShareObjectDocuments),
     ('/workers/createorgfolders',CreateOrganizationFolders),
     ('/workers/createobjectfolder',CreateObjectFolder),
     ('/workers/syncevent',SyncCalendarEvent),

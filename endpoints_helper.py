@@ -3,6 +3,7 @@
 from google.appengine.api import search
 from google.appengine.api import memcache
 from apiclient.discovery import build
+from google.appengine.api import taskqueue
 from apiclient import errors
 import httplib2
 import endpoints
@@ -182,6 +183,27 @@ class EndpointsHelper():
         auth_token.authorize(gd_client)
         contact_entry = gd_client.CreateContact(google_contact_schema)
         return contact_entry.id.text
+    @classmethod
+    def share_related_documents_after_patch(cls,user,old_obj,new_obj):
+        # from private to access
+        print '****'
+        print old_obj.access
+        print new_obj.access
+        if old_obj.access=='private' and new_obj.access=='public':
+            users = User.query(User.organization==user.organization)
+            for collaborator in users:
+                if collaborator.email != user.email:
+                    taskqueue.add(
+                                    url='/workers/shareobjectdocument',
+                                    params={
+                                            'email': collaborator.email,
+                                            'obj_key_str': old_obj.key.urlsafe()
+                                            }
+                                )
+
+
+
+
 class scor_new_lead():
     def predict(predd,tedd) :
         user = User.get_by_email('hakim@iogrow.com')

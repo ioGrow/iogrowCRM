@@ -705,7 +705,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
 
      }
  //HKA 10.11.2013 Add event
- $scope.addEvent = function(ioevent){           
+ $scope.addEvent = function(ioevent){
            if ($scope.newEventform==false) {
                 $scope.newEventform=true;
            }else{
@@ -1476,7 +1476,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
                         'industry':lead.industry,
                         'source':lead.source,
                         'infonodes':$scope.prepareInfonodes(),
-                        'access': 'public'
+                        'access': lead.access
                       };
           if ($scope.profile_img.profile_img_id){
               params['profile_img_id'] = $scope.profile_img.profile_img_id;

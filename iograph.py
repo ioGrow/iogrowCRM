@@ -102,6 +102,20 @@ class Edge(ndb.Expando):
                         )
             edge_key = edge.put()
             return edge_key
+    @classmethod
+    def move(cls, edge, new_start_node):
+        kind = edge.kind
+        if kind in INVERSED_EDGES.keys():
+                inversed_edge = cls.query(
+                                        cls.start_node==edge.end_node,
+                                        cls.end_node == edge.start_node,
+                                        cls.kind.IN(INVERSED_EDGES[kind])).get()
+                if inversed_edge:
+                    inversed_edge.end_node = new_start_node
+                    inversed_edge.put()
+        edge.start_node = new_start_node
+        edge.put()
+
 
     @classmethod
     def list(cls,start_node,kind,limit=1000,pageToken=None,order='DESC'):

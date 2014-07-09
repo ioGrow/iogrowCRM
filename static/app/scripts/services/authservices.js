@@ -20,14 +20,14 @@ accountservices.factory('Auth', function($http) {
       Auth.$scope = $scope;
 
       if (window.is_signed_in){
-          
+
 
           var diff = window.authResultexpiration - timeNow;
           if (diff>0){
              Auth.processAuth(window.authResult);
           }
           else{
-              
+
               // refresh token
               Auth.refreshToken();
 
@@ -95,7 +95,7 @@ accountservices.factory('Auth', function($http) {
   }
   Auth.refreshToken = function(){
 
-     
+
      window.location.reload(true);
 
   };
