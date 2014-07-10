@@ -1012,6 +1012,13 @@ class CrmEngineApi(remote.Service):
     def highrise_import_tasks_of_person(self, request):
         tasks=EndpointsHelper.highrise_import_tasks_of_person(request)
         return message_types.VoidMessage()
+# highrise.import_notes_of_company api
+    @endpoints.method(DetailImportHighriseRequest, message_types.VoidMessage,
+                      path='highrise/import_notes_company', http_method='POST',
+                      name='highrise.import_notes_company')
+    def highrise_import_notes_of_company(self, request):
+        notes=EndpointsHelper.highrise_import_notes_of_company(request)
+        return message_types.VoidMessage()
 
 
 

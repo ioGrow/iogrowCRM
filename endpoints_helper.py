@@ -226,6 +226,11 @@ class EndpointsHelper():
         person=Person.get(request.id)
         tasks=person.tasks
         return tasks
+    @classmethod
+    def highrise_import_notes_of_company(cls, request):
+        company=Company.get(request.id)
+        notes=company.notes
+        return notes
 
 
 class scor_new_lead():
