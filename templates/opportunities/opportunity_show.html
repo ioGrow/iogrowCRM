@@ -608,70 +608,113 @@
               </div>
     </div>
   </div>
-  <!-- $ Events -->
-  <div class="row">
-    <div class="col-md-12">
-        <div class="portlet showPage rightCardContent">
-                    <div class="portlet-title line">
-                      <div class="caption"> <i class="fa fa-calendar"></i>Events </div>
+      <!-- $ Events -->
+      <div class="row">
+      <div class="col-md-12">
+          <div class="portlet showPage rightCardContent">
+                <div class="portlet-title line">
+                  <div class="caption"> <i class="fa fa-calendar"></i>Events </div>
 
-                    </div>
-                    <div class="newContactform portlet-body" id="chats">
-                      <form class=" slimForm ng-pristine ng-invalid ng-invalid-required">
-                          <div class="formElements newEventToLead" ng-show="newEventform">
-                                    <div class="row">
-                                      <div class="col-md-12 margin-bottom-10">
-                                          <input ng-model="ioevent.title" type="text" id="taskName" class="form-control" placeholder="Event tilte">
-                                      </div>
-                                      <!--/span-->
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12 margin-bottom-10">
-                                              <div class="input-icon margin-top-10">
-                                                <i class="fa fa-calendar"></i>
-                                                <input type="text" class="form-control" placeholder="From" value="" id="opportunityEventStartsAt">
-                                              </div>
-                                              
-                                        </div>
-                                    </div>   
-                                    <div class="row">
-                                        <div class="col-md-12 margin-bottom-10">
-                                               <div class="input-icon margin-top-10">
-                                                <i class="fa fa-calendar"></i>
-                                                <input type="text" class="form-control"  placeholder="To" name="date9" value="" id="opportunityEventEndsAt">
-                                              </div>
-                                        </div>
-                                    </div>  
-                                    <div class="row">
-                                      <div class="col-md-12 margin-bottom-10">
-                                          <input ng-model="ioevent.where" type="text" id="taskName" class="form-control" placeholder="Where ?">
-                                      </div>
-                                      <!--/span-->
-                                    </div> 
-                          </div>
-                          <div class="row">
-                              <div class="col-md-12 margin-top-10">
-                                  <p><span ng-hide="newEventform">Add New Event</span><button type="button" ng-click="addEvent(ioevent)" class="btn red btn-sm pull-right btn-inline">Add</button></p>
-                              </div>
-                          </div>
-                      </form>
-                       <ul id="tasks" class="list-unstyled lead_related_events" ng-hide="newEventform">
-                          <li ng-repeat="event in events" id="event_<%=$index%>">
-                            <input value="check1" type="checkbox">
-                            <span>
-                              <a href="/#/events/show/<%=event.id%>" class="discussion-content">
+                </div>
+                <div class="newContactform portlet-body" id="chats">                  
+                   <ul id="tasks" class="list-unstyled lead_related_events" ng-hide="newEventform">
+                      <li ng-repeat="event in events" id="event_<%=$index%>" class="relatedEventItem" ng-mouseenter="showDeleteBtn = true" ng-mouseleave="showDeleteBtn = false">
+                        <div class="event-container">
+                          <div class="showDescription">
+                            <span class="relatedEventTitle">
+                              <a href="/#/events/show/<%=event.id%>" class="">
                                 <%= event.title%>
-                                <span ng-show="event.starts_at">
-                                  [<%= event.starts_at | date:'yyyy-MM-dd '%>]
-                                </span>
                               </a>
                             </span>
-                          </li>
-                      </ul>
-                    </div>
+                            <a class="pull-right relatedEventMoreBtn">
+                              <i class="fa fa-chevron-right" ng-hide="showDetails" ng-click="showDetails=true"></i>
+                              <i class="fa fa-chevron-down" ng-show="showDetails" ng-click="showDetails=false"></i>
+                            </a>
+                            <a class="pull-left relatedEventDeleteBtn" ng-show="showDeleteBtn" ng-click="deleteEvent(event)">
+                              <i class="fa fa fa-times-circle"></i>
+                            </a>
+                            <span class="relatedEventStartsAt pull-right" ng-hide="showDetails" ng-show="event.starts_at" title="<%= event.starts_at | date:'yyyy-MM-dd '%>">
+                                  <%= event.starts_at | date:'dd MMM'%>
+                            </span>
+                          </div>  
+                          <div class="moreDetails row" ng-show="showDetails">
+                            <div class="col-md-5 col-xs-5 event-schedule">
+                                <span class=""><i class="fa fa-calendar"></i>
+                                <%= event.starts_at | date:'dd MMM'%> </span>
+                            </div>
+                            <div class="col-md-2 col-xs-2 event-schedule">
+                                <i class="fa fa-chevron-right"></i>
+                            </div>
+                            <div class="col-md-5 col-xs-5 event-schedule">
+                               <span class="">
+                                  <i class="fa fa-calendar"></i> 
+                                  <%= event.ends_at | date:'dd MMM'%>
+                                </span>
+                            </div>
+                            <div class="col-md-12">
+                               <span class="">
+                                  <i class="fa fa-map-marker"></i> 
+                                  <%= event.where %>
+                                </span>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                  </ul>
+                  <form class=" slimForm ng-pristine ng-invalid ng-invalid-required">
+                  <div class="formElements newEventToLead" ng-show="newEventform">
+                            <div class="row">
+                              <div class="col-md-12 margin-bottom-10">
+                                  <input ng-model="ioevent.title" type="text" id="taskName" class="form-control" placeholder="Event tilte">
+                              </div>
+                              <!--/span-->
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 margin-bottom-10">
+                                      <div class="input-icon">
+                                        <i class="fa fa-calendar"></i>
+                                        <input cusdatetimepicker data-model="ioevent.starts_at" type="text" class="form-control" placeholder="From" value="" id="leadEventStartsAt">
+                                      </div>
+                                      
+                                </div>
+                            </div>   
+                            <div class="row">
+                                <div class="col-md-12 margin-bottom-10">
+                                       <div class="input-icon ">
+                                        <i class="fa fa-calendar"></i>
+                                       <input cusdatetimepicker data-model="ioevent.ends_at" type="text" class="form-control" placeholder="From" value="" id="leadEventStartsAt">
+                                      </div>
+                                </div>
+                            </div>  
+                            <div class="row">
+                              <div class="col-md-12 margin-bottom-10">
+                                  <input ng-model="ioevent.where" type="text" id="taskName" class="form-control" placeholder="Where ?">
+                              </div>
+                              <!--/span-->
+                            </div> 
                   </div>
-    </div>
-  </div>
+                  <div class="row">
+                      <div class="col-md-12 margin-top-10">
+                          <p class="newEventText"><span ng-hide="newEventform">Add New Event</span>
+                          <button type="button" ng-click="addEvent(ioevent)" class="btn red btn-sm pull-right btn-inline">Add</button>
+                          <button type="button" ng-click="closeEventForm(ioevent)" ng-show="newEventform" class="cancelEventBtn btn btn-default btn-sm pull-right btn-inline">Cancel</button>
+                          </p>
+                      </div>
+                  </div>
+              </form>
+                </div>
+              </div>
+        </div>
+        <div class="col-md-12">
+
+        </div>
+      </div>
+      <script type="text/javascript">
+          $('.lead_related_events').slimScroll({
+                                    height: '160px'
+                                });
+
+      </script>
 </div>
 </div>
              <div id="EditCaseModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -1248,20 +1291,6 @@
         colMinWidth: 210,
         defaultContainerWidth: 800,
         autoresize: true
-  });
-  $(function(){
-    $('#opportunityEventStartsAt').appendDtpicker({
-      "closeOnSelected": true,
-      "dateFormat": "YYYY-MM-DD h:m",
-      "autodateOnStart": false
-    });
-  });
-  $(function(){
-    $('#opportunityEventEndsAt').appendDtpicker({
-      "closeOnSelected": true,
-      "dateFormat": "YYYY-MM-DD h:m",
-      "autodateOnStart": false
-    });
   });
   $("#select2_sample2").select2({
       placeholder: "Click to Select a label",
