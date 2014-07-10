@@ -499,15 +499,15 @@ class Case(EndpointsModel):
                     )
         case_key = case.put_async()
         case_key_async = case_key.get_result()
-        taskqueue.add(
-                    url='/workers/createobjectfolder',
-                    params={
-                            'kind': "Case",
-                            'folder_name': request.name,
-                            'email': user_from_email.email,
-                            'obj_key':case_key_async.urlsafe()
-                            }
-                    )
+        # taskqueue.add(
+        #             url='/workers/createobjectfolder',
+        #             params={
+        #                     'kind': "Case",
+        #                     'folder_name': request.name,
+        #                     'email': user_from_email.email,
+        #                     'obj_key':case_key_async.urlsafe()
+        #                     }
+        #             )
         indexed = False
         if request.status:
             status_key = ndb.Key(urlsafe=request.status)

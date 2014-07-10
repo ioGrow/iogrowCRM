@@ -32,7 +32,7 @@ ATTRIBUTES_MATCHING = {
     'title': ['Job Title', r'Organization\s*\d\s*-\s*Title', 'Title'],
     'account' : ['Company', r'Organization\s*\d\s*-\s*Name'],
     'phones': [
-                'Primary Phone','Home Phone', 'Mobile Phone', r'Phone\s*\d\s*-\s*Value', 
+                'Primary Phone','Home Phone', 'Mobile Phone', r'Phone\s*\d\s*-\s*Value',
                 'Phone number - Work', 'Phone number - Mobile', 'Phone number - Home', 'Phone number - Other'
             ],
     'emails': [
@@ -40,9 +40,9 @@ ATTRIBUTES_MATCHING = {
                 'Email address - Work', 'Email address - Home', 'Email address - Other'
             ],
     'addresses' : [
-                'Business Address', r'Address\s*\d\s*-\s*Formatted', 
-                'Address - Work Street', 'Address - Work City', 'Address - Home Street', 'Address - Home City' 
-            ]  
+                'Business Address', r'Address\s*\d\s*-\s*Formatted',
+                'Address - Work Street', 'Address - Work City', 'Address - Home Street', 'Address - Home City'
+            ]
 }
 
 INFO_NODES = {
@@ -665,16 +665,16 @@ class Contact(EndpointsModel):
                                                         fields = infonode.fields
                                                     )
                                                 )
-        taskqueue.add(
-                    url='/workers/createobjectfolder',
-                    params={
-                            'kind': "Contact",
-                            'folder_name': folder_name,
-                            'email': user_from_email.email,
-                            'obj_key':contact_key_async.urlsafe(),
-                            'logo_img_id':request.profile_img_id
-                            }
-                    )
+        # taskqueue.add(
+        #             url='/workers/createobjectfolder',
+        #             params={
+        #                     'kind': "Contact",
+        #                     'folder_name': folder_name,
+        #                     'email': user_from_email.email,
+        #                     'obj_key':contact_key_async.urlsafe(),
+        #                     'logo_img_id':request.profile_img_id
+        #                     }
+        #             )
         account_schema = None
         if request.account:
             account_key = ndb.Key(urlsafe=request.account)
@@ -699,6 +699,15 @@ class Contact(EndpointsModel):
             data = {}
             data['id'] = contact_key_async.id()
             contact.put_index(data)
+        if request.profile_img_id:
+            taskqueue.add(
+                            url='/workers/sharedocument',
+                            params={
+                                    'user_email':user_from_email.email,
+                                    'access': 'anyone',
+                                    'resource_id': request.profile_img_id
+                                    }
+                        )
         contact_schema = ContactSchema(
                                   id = str( contact_key_async.id() ),
                                   entityKey = contact_key_async.urlsafe(),
@@ -895,15 +904,15 @@ class Contact(EndpointsModel):
                                                         )
                                         account_key = account.put_async()
                                         account_key_async = account_key.get_result()
-                                        taskqueue.add(
-                                                    url='/workers/createobjectfolder',
-                                                    params={
-                                                        'kind': "Account",
-                                                        'folder_name': account.name,
-                                                        'email': user_from_email.email,
-                                                        'obj_key':account_key_async.urlsafe()
-                                                        }
-                                                    )
+                                        # taskqueue.add(
+                                        #             url='/workers/createobjectfolder',
+                                        #             params={
+                                        #                 'kind': "Account",
+                                        #                 'folder_name': account.name,
+                                        #                 'email': user_from_email.email,
+                                        #                 'obj_key':account_key_async.urlsafe()
+                                        #                 }
+                                        #             )
                                         data = {}
                                         data['id'] = account_key_async.id()
                                         account.put_index(data)
@@ -951,15 +960,15 @@ class Contact(EndpointsModel):
                             contact_key = imported_contact.put_async()
                             contact_key_async = contact_key.get_result()
                             folder_name = contact['firstname'] + contact['lastname']
-                            taskqueue.add(
-                                            url='/workers/createobjectfolder',
-                                            params={
-                                                    'kind': "Contact",
-                                                    'folder_name': folder_name,
-                                                    'email': user_from_email.email,
-                                                    'obj_key':contact_key_async.urlsafe()
-                                                    }
-                                            )
+                            # taskqueue.add(
+                            #                 url='/workers/createobjectfolder',
+                            #                 params={
+                            #                         'kind': "Contact",
+                            #                         'folder_name': folder_name,
+                            #                         'email': user_from_email.email,
+                            #                         'obj_key':contact_key_async.urlsafe()
+                            #                         }
+                            #                 )
                         # insert the edge between the contact and related account
                         if 'account' in contact.keys():
                             if contact['account']:

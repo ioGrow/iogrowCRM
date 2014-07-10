@@ -29,7 +29,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
      $scope.draggedTag=null;
      $scope.showNewTag=false;
      $scope.tag = {};
-     $scope.showUntag=false;   
+     $scope.showUntag=false;
      $scope.edgekeytoDelete=undefined;
      $scope.color_pallet=[
          {'name':'red','color':'#F7846A'},
@@ -251,15 +251,15 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
      };
      $scope.filterByStage = function(filter){
       console.log('----------hello--------');
-     
-       
+
+
           console.log(filter);
           var params = {
                          'stage': filter,
                          'order': $scope.order,
                          'limit':20
                        }
-       
+
         $scope.isFiltering = true;
         Opportunity.list($scope,params);
      };
@@ -484,11 +484,11 @@ $scope.addTags=function(){
       }
  //HKA 19.06.2014 Detache tag on contact list
      $scope.dropOutTag=function(){
-        
-        
+
+
         var params={'entityKey':$scope.edgekeytoDelete}
         Edge.delete($scope,params);
-        
+
         $scope.edgekeytoDelete=undefined;
         $scope.showUntag=false;
       };
@@ -881,7 +881,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
      };
 
 //HKA 11.11.2013 Add new Event
- $scope.addEvent = function(ioevent){           
+ $scope.addEvent = function(ioevent){
            if ($scope.newEventform==false) {
                 $scope.newEventform=true;
            }else{
@@ -1303,7 +1303,7 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
       $scope.account.industry = 'Technology';
       $scope.stage_selected={};
       $scope.opportunitystages=[];
-      $scope.opportunity={currency:'USD',duration_unit:'fixed',closed_date:new Date()};
+      $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
 
       $scope.users=[];
       $scope.opportunity.estimated=null;
