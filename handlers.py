@@ -36,6 +36,10 @@ from blog import Article
 from iomodels.crmengine.events import Event
 # under the test .beata !
 
+# import task . hadji hicham 09-07-2014
+from iomodels.crmengine.tasks import Task
+# under the test .beata !
+
 jinja_environment = jinja2.Environment(
   loader=jinja2.FileSystemLoader(os.getcwd()),
   extensions=['jinja2.ext.i18n'],cache_size=0)
@@ -769,6 +773,45 @@ class SyncCalendarEvent(webapp2.RequestHandler):
         except:
             raise endpoints.UnauthorizedException('Invalid grant' )
 
+# syncronize tasks with google calendar . hadji hicham 10-07-2014.
+class SyncCalendarTask(webapp2.RequestHandler):
+    def post(self):
+        user_from_email = model.User.get_by_email(self.request.get('email'))
+        starts_at = datetime.datetime.strptime(
+                                              self.request.get('starts_at'),
+                                              "%Y-%m-%dT%H:%M:00.000000"
+                                              )
+        summary = self.request.get('summary')
+        location = self.request.get('location')
+        ends_at = datetime.datetime.strptime(
+                                              self.request.get('ends_at'),
+                                              "%Y-%m-%dT%H:%M:00.000000"
+                                              )
+        task=Task.getTaskById(self.request.get('task_id'))
+
+        try:
+            credentials = user_from_email.google_credentials
+            http = credentials.authorize(httplib2.Http(memcache))
+            service = build('calendar', 'v3', http=http)
+            # prepare params to insert
+            params = {
+                 "start":
+                  {
+                    "date": starts_at.strftime("%Y-%m-%d")
+                  },
+                 "end":
+                  {
+                    "date": ends_at.strftime("%Y-%m-%d")
+                  },
+                  "summary": summary
+            }
+        
+            created_task = service.events().insert(calendarId='primary',body=params).execute()
+            task.task_google_id=created_task['id']
+            task.put()
+        except:
+            raise endpoints.UnauthorizedException('Invalid grant' )
+
 class SyncPatchCalendarEvent(webapp2.RequestHandler):
     def post(self):
         user_from_email = model.User.get_by_email(self.request.get('email'))
@@ -809,10 +852,6 @@ class SyncDeleteCalendarEvent(webapp2.RequestHandler):
     def post(self):
         user_from_email = model.User.get_by_email(self.request.get('email'))
         event_google_id= self.request.get('event_google_id')
-        print "<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
-        print "its me"
-        print event_google_id
-        print "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
         try:
             credentials = user_from_email.google_credentials
             http = credentials.authorize(httplib2.Http(memcache))
@@ -847,9 +886,15 @@ routes = [
     # Task Queues Handlers
     ('/workers/createorgfolders',CreateOrganizationFolders),
     ('/workers/createobjectfolder',CreateObjectFolder),
+    # syncronize the events with google calendar. hdji hicham 09-08-2014 .
     ('/workers/syncevent',SyncCalendarEvent),
     ('/workers/syncpatchevent',SyncPatchCalendarEvent),
     ('/workers/syncdeleteevent',SyncDeleteCalendarEvent),
+    #syncronize tasks with google calendar. hdji hicham 09-08-2014.
+    ('/workers/synctask',SyncCalendarTask),
+    # ('/workers/syncpatchtask',SyncPatchCalendarTask),
+    # ('/workers/syncdeletetask',SyncDeleteCalendarTask),
+    #
     ('/workers/createcontactsgroup',CreateContactsGroup),
     ('/workers/sync_contacts',SyncContact),
     ('/workers/add_to_iogrow_leads',AddToIoGrowLeads),

@@ -95,6 +95,8 @@ class Task(EndpointsModel):
     organization = ndb.KeyProperty()
     # public or private
     access = ndb.StringProperty()
+    # to syncronize tasks with google calendar.
+    task_google_id=ndb.StringProperty()
 
     def put(self, **kwargs):
         ndb.Model.put(self, **kwargs)
@@ -161,7 +163,11 @@ class Task(EndpointsModel):
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)
     
-    
+    # get event by id  hadji hicham 09-08-2014    
+    @classmethod
+    def getTaskById(cls,id):
+        return cls.get_by_id(int(id))
+    # under the test
     @classmethod
     def get_schema(cls,user_from_email,request):
         task = cls.get_by_id( int(request.id) )
@@ -462,21 +468,21 @@ class Task(EndpointsModel):
                     owner = user_from_email.google_user_id,
                     organization = user_from_email.organization,
                     author = author)
+        task_key = task.put_async()
         if request.due:
             taskqueue.add(
-                    url='/workers/syncevent', 
+                    url='/workers/synctask', 
                     params={
                             'email': user_from_email.email,
                             'starts_at': request.due,
                             'ends_at': request.due,
-                            'summary': request.title
+                            'summary': request.title,
+                            'task_id':task_key.get_result().id()
                             }
                     )
 
         if request.reminder:
             pass
-
-        task_key = task.put_async()
         task_key_async = task_key.get_result()
         if request.parent:
             # insert edges

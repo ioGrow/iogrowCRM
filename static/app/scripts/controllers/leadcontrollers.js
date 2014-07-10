@@ -681,6 +681,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
             };
 
             Task.insert($scope,params);
+            
             $scope.newTask={};
             $scope.newTaskform=false;
         }else{
