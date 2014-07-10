@@ -213,9 +213,14 @@ class EndpointsHelper():
         return Cases
     @classmethod
     def highrise_import_notes_of_person(cls, request):
-        person=Person.get('211406492')
+        person=Person.get(request.id)
         notes=person.notes
         return notes
+    @classmethod
+    def highrise_import_tags_of_person(cls, request):
+        person=Person.get(request.id)
+        tags=person.tags
+        return tags
 
 class scor_new_lead():
     def predict(predd,tedd) :

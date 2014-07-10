@@ -995,8 +995,15 @@ class CrmEngineApi(remote.Service):
     @endpoints.method(DetailImportHighriseRequest, message_types.VoidMessage,
                       path='highrise/import_notes_person', http_method='POST',
                       name='highrise.import_notes_person')
-    def highrise_import_cases(self, request):
+    def highrise_import_notes_of_person(self, request):
         notes=EndpointsHelper.highrise_import_notes_of_person(request)
+        return message_types.VoidMessage()
+# highrise.import_tags_of_person api
+    @endpoints.method(DetailImportHighriseRequest, message_types.VoidMessage,
+                      path='highrise/import_tags_person', http_method='POST',
+                      name='highrise.import_tags_person')
+    def highrise_import_tags_of_person(self, request):
+        tags=EndpointsHelper.highrise_import_tags_of_person(request)
         return message_types.VoidMessage()
 
 
