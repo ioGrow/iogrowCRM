@@ -572,8 +572,8 @@ $scope.addTags=function(){
 
 }]);
 
-app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Topic','Note','Task','Event','Permission','User','Casestatus','Email','Attachement','InfoNode',
-    function($scope,$filter,$route,Auth,Case,Topic,Note,Task,Event,Permission,User,Casestatus,Email,Attachement,InfoNode) {
+app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Topic','Note','Task','Event','Permission','User','Casestatus','Email','Attachement','InfoNode','Tag',
+    function($scope,$filter,$route,Auth,Case,Topic,Note,Task,Event,Permission,User,Casestatus,Email,Attachement,InfoNode,Tag) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Cases").addClass("active");
 
@@ -604,7 +604,12 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
      $scope.infonodes = {};
      $scope.sharing_with = [];
      $scope.customfield={};
-
+     $scope.newTaskform=false;
+     $scope.newEventform=false;
+     $scope.newTask={};
+     $scope.ioevent = {};
+     $scope.selected_members=[];
+     $scope.selected_member={};
 
      // What to do after authentication
        $scope.runTheProcess = function(){
@@ -630,6 +635,8 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
           Case.get($scope,params);
           User.list($scope,{});
           Casestatus.list($scope,{});
+          var paramsTag = {'about_kind': 'Case'};
+          Tag.list($scope, paramsTag);
           $( window ).trigger( "resize" );
        };
         // We need to call this to refresh token when user credentials are invalid
@@ -673,6 +680,10 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
           Case.get($scope,params);
 
      }
+     $scope.listTags=function(){
+      var paramsTag = {'about_kind':'Case'}
+      Tag.list($scope,paramsTag);
+     };
      $scope.hilightTopic = function(){
 
        $('#topic_0').effect( "bounce", "slow" );
@@ -753,28 +764,61 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
     $scope.editcase = function() {
        $('#EditCaseModal').modal('show');
     }
+    $scope.selectMemberToTask = function() {
+      console.log($scope.selected_members);
+      if ($scope.selected_members.indexOf($scope.user) == -1) {
+          $scope.selected_members.push($scope.user);
+          $scope.selected_member = $scope.user;
+          $scope.user = $scope.selected_member.google_display_name;
+      }
+      $scope.user = '';
+  };
+  $scope.unselectMember = function(index) {
+      $scope.selected_members.splice(index, 1);
+      console.log($scope.selected_members);
+  };
 //HKA 09.11.2013 Add a new Task
    $scope.addTask = function(task){
+if ($scope.newTaskform==false) {
+          $scope.newTaskform=true;
+           }else{
+            if (task.title!=null) {
+                    //  $('#myModal').modal('hide');
+            if (task.due){
+                var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
+                params ={'title': task.title,
+                          'due': dueDate,
+                          'parent': $scope.casee.entityKey
+                }
 
-          $('#myModal').modal('hide');
-        if (task.due){
-
-            var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
-
-            params ={'title': task.title,
-                      'due': dueDate,
-                      'parent': $scope.casee.entityKey
-            }
-
-
+            }else{
+                params ={'title': task.title,
+                         'parent': $scope.casee.entityKey
+                       }
+            };
+            if ($scope.selected_members!=[]) {
+                  params.assignees=$scope.selected_members;
+                };
+                var tags=[];                
+                tags=$('#select2_sample2').select2("val");
+                if (tags!=[]) {
+                  var tagitems = [];
+                  angular.forEach(tags, function(tag){
+                  var item = {'entityKey': tag };
+                  tagitems.push(item);
+                });
+                  params.tags=tagitems;
+                };
+            Task.insert($scope,params);
+            $scope.newTask={};
+            $scope.newTaskform=false;
+            $scope.selected_members=[];
+            $("#select2_sample2").select2("val", "");
         }else{
-            params ={'title': task.title,
-                     'parent': $scope.casee.entityKey
-                   }
-        };
-        $scope.task.title='';
-        $scope.task.dueDate='0000-00-00T00:00:00-00:00';
-        Task.insert($scope,params);
+            $scope.newTask={};
+            $scope.newTaskform=false;
+      }
+     }
      }
 
      $scope.hilightTask = function(){
@@ -792,35 +836,48 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
 
      }
  //HKA 10.11.2013 Add event
- $scope.addEvent = function(ioevent){
+ $scope.addEvent = function(ioevent){           
+           if ($scope.newEventform==false) {
+                $scope.newEventform=true;
+           }else{
+            if (ioevent.title!=null&&ioevent.title!="") {
+                    var params ={}
+                if (ioevent.starts_at){
+                    if (ioevent.ends_at){
+                      params ={'title': ioevent.title,
+                              'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                              'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                              'where': ioevent.where,
+                              'parent':$scope.casee.entityKey
+                      }
 
-         $('#newEventModal').modal('hide');
-        var params ={}
+                    }else{
+                      params ={
+                        'title': ioevent.title,
+                              'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
+                              'where': ioevent.where,
+                              'parent':$scope.casee.entityKey
+                      }
+                    }
 
-        if (ioevent.starts_at){
-            if (ioevent.ends_at){
-              params ={'title': ioevent.title,
-                      'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'where': ioevent.where,
-                      'parent':$scope.casee.entityKey
-              }
-
-            }else{
-              params ={
-                'title': ioevent.title,
-                      'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      'where': ioevent.where,
-                      'parent':$scope.casee.entityKey
-              }
-            }
-
-            Event.insert($scope,params);
-            $scope.ioevent.title='';
-            $scope.ioevent.where='';
-            $scope.ioevent.starts_at='T00:00:00.000000';
-          };
-     };
+                    Event.insert($scope,params);
+                    $scope.ioevent={};
+                    $scope.newEventform=false;
+                  }
+        }
+     }
+    };
+         $scope.deleteEvent =function(eventt){
+    var params = {'entityKey':eventt.entityKey};
+     Event.delete($scope,params);
+     //$('#addLeadModal').modal('show');
+   }
+      $scope.eventDeleted = function(resp){
+   };
+    $scope.closeEventForm=function(ioevent){
+      $scope.ioevent={};
+      $scope.newEventform=false;
+    }
      $scope.hilightEvent = function(){
         console.log('Should higll');
         $('#event_0').effect("highlight","slow");
