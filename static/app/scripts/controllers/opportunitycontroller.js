@@ -622,7 +622,9 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
         { value:"VND", text:"₫ - VND"},
         { value:"XCD", text:"$ - XCD"},
         { value:"ZAR", text:"R - ZAR"}];
-
+  $scope.$watch('isLoading',function(){
+    console.log($scope.isLoading)
+  })
       // What to do after authentication
        $scope.runTheProcess = function(){
           var params = {
@@ -691,12 +693,12 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
         $scope.task.dueDate='0000-00-00T00:00:00-00:00';
         Task.insert($scope,params);
      }
-     $scope.$watch('opportunity.closed_date', function(newValue, oldValue) {
-            if (newValue!=oldValue){
-                $scope.patchDate(newValue);
-            }
+     // $scope.$watch('opportunity.closed_date', function(newValue, oldValue) {
+     //        if (newValue!=oldValue){
+     //            $scope.patchDate(newValue);
+     //        }
 
-     });
+     // });
      $scope.patchDate = function(newValue){
         var closed_at = $filter('date')(newValue,['yyyy-MM-ddTHH:mm:00.000000']);
         var params = {

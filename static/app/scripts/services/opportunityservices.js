@@ -11,7 +11,8 @@ opportunityservices.factory('Opportunity', function($http) {
   //HKA .5.112013 Add function get Opportunity
   Opportunity.get = function($scope,params){
     $scope.isLoading = true;
-    $scope.$apply();
+    console.log("is kkkkkkkkkkkkkkkkkkkkkkk")
+    
     gapi.client.crmengine.opportunities.getv2(params).execute(function(resp){
       if(!resp.code){
         $scope.opportunity = resp;
@@ -136,6 +137,7 @@ opportunityservices.factory('Opportunity', function($http) {
 
       }
     });
+    $scope.isLoading=false;
 
   };
 
@@ -177,7 +179,8 @@ opportunityservices.factory('Opportunity', function($http) {
 
               }
       });
-  };
+      $scope.isLoading=false;
+      };
   Opportunity.listMore = function($scope,params){
       $scope.isLoading = true;
       $scope.$apply();
@@ -227,6 +230,7 @@ opportunityservices.factory('Opportunity', function($http) {
 Opportunity.patch = function($scope,params) {
         console.log('*****************JJjjjj');
         $scope.isLoading = true;
+         console.log(params);
           gapi.client.crmengine.opportunities.patch(params).execute(function(resp) {
             if(!resp.code){
 
@@ -249,6 +253,7 @@ Opportunity.patch = function($scope,params) {
             }
             console.log('opportunities.patch gapi #end_execute');
           });
+          $scope.isLoading=false;
 };
 Opportunity.update_stage = function($scope,params){
     gapi.client.crmengine.opportunities.update_stage(params).execute(function(resp){
