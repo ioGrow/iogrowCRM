@@ -231,6 +231,11 @@ class EndpointsHelper():
         company=Company.get(request.id)
         notes=company.notes
         return notes
+    @classmethod
+    def highrise_import_tags_of_company(cls, request):
+        company=Company.get(request.id)
+        tags=company.tags
+        return tags
 
 
 class scor_new_lead():
