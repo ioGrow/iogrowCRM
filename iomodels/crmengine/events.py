@@ -49,6 +49,7 @@ class EventInsertRequest(messages.Message):
     where = messages.StringField(5)
     access = messages.StringField(6)
     description = messages.StringField(7)
+    allday=messages.StringField(8)
 
 
 class EventPatchRequest(messages.Message):
@@ -59,6 +60,7 @@ class EventPatchRequest(messages.Message):
     where = messages.StringField(5)
     access = messages.StringField(6)
     description = messages.StringField(7)
+    allday=messages.StringField(8)
 
 class EventListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -83,6 +85,7 @@ class EventFetchResult(messages.Message):
       starts_at=messages.StringField(4)
       ends_at=messages.StringField(5)
       entityKey=messages.StringField(6)
+      allday=messages.StringField(7)
 
 class EventFetchResults(messages.Message):
       items=messages.MessageField(EventFetchResult,1,repeated=True)
@@ -113,6 +116,8 @@ class Event(EndpointsModel):
     organization = ndb.KeyProperty()
     # public or private
     access = ndb.StringProperty()
+    allday=ndb.StringProperty()
+    event_google_id=ndb.StringProperty()
 
     def put(self, **kwargs):
         ndb.Model.put(self, **kwargs)
@@ -183,7 +188,11 @@ class Event(EndpointsModel):
                ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)
-
+    # get event by id  hadji hicham 09-08-2014    
+    @classmethod
+    def getEventById(cls,id):
+        return cls.get_by_id(int(id))
+    # under the test 
     @classmethod
     def get_schema(cls,user_from_email,request):
         event = cls.get_by_id( int(request.id) )
@@ -370,18 +379,21 @@ class Event(EndpointsModel):
                     ends_at = datetime.datetime.strptime(request.ends_at,"%Y-%m-%dT%H:%M:00.000000"),
                     where = request.where,
                     description = request.description,
-                    author = author
+                    author = author,
+                    allday=request.allday
                     )
+        event_key = event.put_async()
         taskqueue.add(
                     url='/workers/syncevent',
                     params={
                             'email': user_from_email.email,
                             'starts_at': request.starts_at,
                             'ends_at': request.ends_at,
-                            'summary': request.title
+                            'summary': request.title,
+                            'event_id':event_key.get_result().id()
                             }
                     )
-        event_key = event.put_async()
+        
         event_key_async = event_key.get_result()
         if request.parent:
             parent_key = ndb.Key(urlsafe=request.parent)
@@ -414,10 +426,6 @@ class Event(EndpointsModel):
     @classmethod
     def listFetch(cls,user_from_email,request):
         start_list=datetime.datetime.strptime(request.events_list_start,"%Y-%m-%dT%H:%M:00.000000")
-        print "****************************"
-        print request.events_list_start 
-        print "*************************"
-        print start_list
         end_list= datetime.datetime.strptime(request.events_list_end,"%Y-%m-%dT%H:%M:00.000000")
         events=Event.query().filter(cls.organization==user_from_email.organization,Event.starts_at>=start_list,Event.starts_at<=end_list)
         event_results= []
@@ -429,6 +437,7 @@ class Event(EndpointsModel):
                       'starts_at':event.starts_at.isoformat(),
                       'ends_at':event.ends_at.isoformat(),
                       'where':event.where,
+                      'allday':event.allday
             }
             event_results.append(EventFetchResult(**kwargs))
         return EventFetchResults(items=event_results)

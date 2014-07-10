@@ -16,6 +16,8 @@ from gdata.gauth import OAuth2Token
 from gdata.contacts.client import ContactsClient
 from model import User
 import iograph
+from highrise.pyrise import Highrise, Person
+
 FOLDERS = {
             'Account': 'accounts_folder',
             'Contact': 'contacts_folder',
@@ -212,7 +214,12 @@ class EndpointsHelper():
         acl['collaborators'] = collaborators
         return acl
 
-
+    @classmethod
+    def highrise_import(cls,request):
+        Highrise.set_server('iogrow3')
+        Highrise.auth('eee33d458c7982242b99d4b7f6b1d94d')
+        people = Person.all()
+        return people
 
 
 

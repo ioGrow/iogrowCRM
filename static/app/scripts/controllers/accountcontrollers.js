@@ -541,6 +541,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.newTaskform=false;
         $scope.newEventform=false;
         $scope.newTask={};
+        $scope.ioevent = {};
         // What to do after authentication
         $scope.endError = function() {
             alert("okkkkkkkkkkkkkkk");
@@ -676,7 +677,10 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             Account.get($scope, params);
 
         }
-
+        $scope.listTags=function(){
+              var paramsTag = {'about_kind':'Account'}
+              Tag.list($scope,paramsTag);
+             };
 //HKA 06.12.2013 Manage Prev & Next Page on Related List Contact
         $scope.ContactlistNextPageItems = function() {
 
@@ -1082,26 +1086,45 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         //HKA 09.11.2013 Add a new Tasks
         $scope.addTask = function(task) {
 
-            $('#myModal').modal('hide');
-            if (task.due) {
+                if ($scope.newTaskform==false) {
+                      $scope.newTaskform=true;
+               }else{
+                if (task.title!=null) {
+                        //  $('#myModal').modal('hide');
+                if (task.due){
+                    var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
+                    params ={'title': task.title,
+                              'due': dueDate,
+                              'parent': $scope.account.entityKey
+                    }
 
-                var dueDate = $filter('date')(task.due, ['yyyy-MM-ddT00:00:00.000000']);
-
-                params = {'title': task.title,
-                    'due': dueDate,
-                    'parent': $scope.account.entityKey
-                }
-
-
-            } else {
-                params = {'title': task.title,
-                    'parent': $scope.account.entityKey
-                }
-            }
-            ;
-            $scope.task.title = '';
-            $scope.task.dueDate = '0000-00-00T00:00:00-00:00';
-            Task.insert($scope, params);
+                }else{
+                    params ={'title': task.title,
+                             'parent': $scope.account.entityKey
+                           }
+                };
+                if ($scope.selected_members!=[]) {
+                      params.assignees=$scope.selected_members;
+                    };
+                    var tags=[];                
+                    tags=$('#select2_sample2').select2("val");
+                    if (tags!=[]) {
+                      var tagitems = [];
+                      angular.forEach(tags, function(tag){
+                      var item = {'entityKey': tag };
+                      tagitems.push(item);
+                    });
+                      params.tags=tagitems;
+                    };
+                Task.insert($scope,params);
+                $scope.newTask={};
+                $scope.newTaskform=false;
+                $scope.selected_members=[];
+            }else{
+                $scope.newTask={};
+                $scope.newTaskform=false;
+          }
+         }
 
         };
 
@@ -1123,9 +1146,8 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
            if ($scope.newEventform==false) {
                 $scope.newEventform=true;
            }else{
-            ioevent.starts_at=$('#accountEventStartsAt').handleDtpicker('getDate');
-            ioevent.ends_at=$('#accountEventEndsAt').handleDtpicker('getDate');
-            if (ioevent.title!=null) {
+            
+            if (ioevent.title!=null&&ioevent.title!="") {
                     var params ={}
                 if (ioevent.starts_at){
                     if (ioevent.ends_at){
@@ -1149,11 +1171,19 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                     $scope.ioevent={};
                     $scope.newEventform=false;
                   }
-        }else{
-            $scope.ioevent={};
-            $scope.newEventform=false;
-      }
+        }
      }
+    }
+       $scope.deleteEvent =function(eventt){
+    var params = {'entityKey':eventt.entityKey};
+     Event.delete($scope,params);
+     //$('#addLeadModal').modal('show');
+   }
+      $scope.eventDeleted = function(resp){
+   };
+        $scope.closeEventForm=function(ioevent){
+      $scope.ioevent={};
+      $scope.newEventform=false;
     }
         $scope.hilightEvent = function() {
 

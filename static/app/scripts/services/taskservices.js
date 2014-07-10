@@ -8,6 +8,8 @@ topicservices.factory('Task', function($http) {
 
   
  Task.get = function($scope,id) {
+     $scope.isLoading=true;
+
           gapi.client.crmengine.tasks.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.task = resp;
@@ -36,6 +38,8 @@ topicservices.factory('Task', function($http) {
             }
             console.log('gapi #end_execute');
           });
+     $scope.isLoading=false;
+
   };
   Task.patch = function($scope,params){
       $scope.isLoading = true;
@@ -44,6 +48,8 @@ topicservices.factory('Task', function($http) {
        
           if(!resp.code){
             $scope.task = resp;
+            console.log("here we go i'm angry")
+           //   $('#calendar').fullCalendar( 'refetchEvents' )
             console.log(" working");
             /*$scope.ListComments();
             $scope.listContributors();*/
@@ -70,6 +76,8 @@ topicservices.factory('Task', function($http) {
              };
          }
       });
+     $scope.isLoading=false;
+
   };
 
   Task.list = function($scope,params,effects){
@@ -120,6 +128,8 @@ topicservices.factory('Task', function($http) {
                };
               }
       });
+     $scope.isLoading=false;
+
   };
    Task.insert = function($scope,params){
       $scope.isLoading = true;
@@ -144,6 +154,8 @@ topicservices.factory('Task', function($http) {
           console.log(resp.code);
          }
       });
+     $scope.isLoading=false;
+
   };
 
  Task.getUrl = function(type,id){
@@ -177,6 +189,17 @@ topicservices.factory('Task', function($http) {
     return base_url+id;
 
  }
+
+Task.delete=function($scope,params){
+       $scope.isLoading= true ;
+       $scope.$apply();
+       gapi.client. crmengine.tasks.delete(params).execute(function(resp) {
+       $scope.taskDeleted();
+       $scope.isLoading=true;
+       $scope.$apply();
+       });
+
+}; 
    Task.listMore = function($scope,params){
    $scope.isLoading = true;
    $scope.$apply();
@@ -215,6 +238,8 @@ topicservices.factory('Task', function($http) {
             }
             console.log('gapi #end_execute');
       });
+     $scope.isLoading=false;
+
 
 
 
@@ -224,6 +249,9 @@ topicservices.factory('Task', function($http) {
 
 return Task;
 });
+
+
+
 topicservices.factory('Tag', function($http) {
   
   var Tag = function(data) {
@@ -247,6 +275,8 @@ topicservices.factory('Tag', function($http) {
           console.log(resp.code);
          }
       });
+     $scope.isLoading=false;
+
   };
   Tag.list = function($scope,params){
      
@@ -272,6 +302,8 @@ topicservices.factory('Tag', function($http) {
                   };
               }
       });
+     $scope.isLoading=false;
+
   };
    Tag.insert = function($scope,params){
     
@@ -292,6 +324,8 @@ topicservices.factory('Tag', function($http) {
           console.log(resp.code);
          }
       });
+      $scope.isLoading=false;
+
   };
     Tag.patch = function($scope,params){
       $scope.isLoading = true;
@@ -316,6 +350,8 @@ topicservices.factory('Tag', function($http) {
              };
          }
       });
+     $scope.isLoading=false;
+
   };
   Tag.delete = function($scope,params){
 
@@ -362,6 +398,8 @@ topicservices.factory('Contributor', function($http) {
                };
               }
       });
+     $scope.isLoading=false;
+
   };
    Contributor.insert = function($scope,params){
       $scope.isLoading = true;
@@ -382,6 +420,8 @@ topicservices.factory('Contributor', function($http) {
           console.log(resp.code);
          }
       });
+     $scope.isLoading=false;
+      
   };
 
 

@@ -48,6 +48,7 @@ commentservices.factory('Comment', function($http) {
                  alert("Error, response is: " + angular.toJson(resp));
               }
       });
+  $scope.isLoading=false;
   };
 
   Comment.get = function($scope,id) {
@@ -91,6 +92,7 @@ Comment.insert = function($scope,params){
           console.log(resp.code);
          }
       });
+      $scope.isLoading=false;
   };
 
 

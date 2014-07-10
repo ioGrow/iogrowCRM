@@ -188,7 +188,8 @@ Event.getUrl = function(type,id){
     $scope.isLoading=true;
     gapi.client.crmengine.events.delete(params).execute(function(resp){
       $scope.eventDeleted();
-      $scope.isLoading=true;
+      $scope.isLoading=false;
+      $scope.listEvents();
       $scope.$apply();
     });
     

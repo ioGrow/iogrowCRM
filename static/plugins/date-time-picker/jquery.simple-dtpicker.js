@@ -789,6 +789,11 @@
 							// Close a picker
 							ActivePickerId = -1;
 							$picker.hide();
+							var func = $picker.data('onHide');
+							if (func != null) {
+								console.log("dtpicker- Call the onHide handler");
+								func($picker);
+							}
 						}					
 				});
 
@@ -869,6 +874,11 @@
 							// Close a picker
 							ActivePickerId = -1;
 							$picker.hide();
+							var func = $picker.data('onHide');
+							if (func != null) {
+								console.log("dtpicker- Call the onHide handler");
+								func($picker);
+							}
 						}
 					});
 
