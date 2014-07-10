@@ -364,7 +364,7 @@ class Opportunity(EndpointsModel):
                         if len(opportunity_stage_edges['items'])>0:
                             current_stage_key = opportunity_stage_edges['items'][0].end_node
                             if current_stage_key.urlsafe() == request.stage:
-                                is_filtered = True 
+                                is_filtered = True
                     if is_filtered and Node.check_permission( user_from_email, opportunity ):
                         count = count + 1
                         #list of tags related to this opportunity
@@ -591,15 +591,15 @@ class Opportunity(EndpointsModel):
                     )
         opportunity_key = opportunity.put_async()
         opportunity_key_async = opportunity_key.get_result()
-        taskqueue.add(
-                    url='/workers/createobjectfolder',
-                    params={
-                            'kind': "Opportunity",
-                            'folder_name': request.name,
-                            'email': user_from_email.email,
-                            'obj_key':opportunity_key_async.urlsafe()
-                            }
-                    )
+        # taskqueue.add(
+        #             url='/workers/createobjectfolder',
+        #             params={
+        #                     'kind': "Opportunity",
+        #                     'folder_name': request.name,
+        #                     'email': user_from_email.email,
+        #                     'obj_key':opportunity_key_async.urlsafe()
+        #                     }
+        #             )
         indexed = False
         if request.stage:
             stage_key = ndb.Key(urlsafe=request.stage)

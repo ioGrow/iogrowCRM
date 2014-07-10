@@ -130,13 +130,14 @@ class Organization(ndb.Model):
                         name=org_name
                         )
         org_key = organization.put()
-        taskqueue.add(
-                    url='/workers/createorgfolders',
-                    params={
-                            'email': admin.email,
-                            'org_key':org_key.urlsafe()
-                            }
-                    )
+        # taskqueue.add(
+        #             url='/workers/createorgfolders',
+        #             params={
+        #                     'email': admin.email,
+        #                     'org_key':org_key.urlsafe()
+        #                     }
+        #             )
+
         # create standard tabs
         created_tabs = []
         for tab in STANDARD_TABS:
@@ -191,13 +192,14 @@ class Organization(ndb.Model):
                         name=org_name
                         )
         org_key = organization.put()
-        taskqueue.add(
-                    url='/workers/createorgfolders',
-                    params={
-                            'email': admin.email,
-                            'org_key':org_key.urlsafe()
-                            }
-                    )
+        # taskqueue.add(
+        #             url='/workers/createorgfolders',
+        #             params={
+        #                     'email': admin.email,
+        #                     'org_key':org_key.urlsafe()
+        #                     }
+        #             )
+
         # create standard tabs
         created_tabs = []
         for tab in EARLY_BIRD_TABS:
