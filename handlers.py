@@ -174,9 +174,6 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             try:
                 user = self.get_user_from_session()
-                print '***'
-                print user.email
-                print user.google_credentials
                 if user.google_credentials is None:
                     self.redirect('/sign-in')
                 logout_url = 'https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://www.iogrow.com/welcome/'
@@ -795,20 +792,21 @@ class ShareDocument(webapp2.RequestHandler):
         document = Document.get_by_id(int(doc_id))
         if document:
             owner = model.User.get_by_gid(document.owner)
-            credentials = owner.google_credentials
-            http = credentials.authorize(httplib2.Http(memcache))
-            service = build('drive', 'v2', http=http)
-            # prepare params to insert
-            params = {
-                          'role': 'writer',
-                          'type': 'user',
-                          'value':email
-                        }
-            service.permissions().insert(
-                                            fileId=document.resource_id,
-                                            body=params,
-                                            sendNotificationEmails=False,
-                                            fields='id').execute()
+            if owner.email != email:
+                credentials = owner.google_credentials
+                http = credentials.authorize(httplib2.Http(memcache))
+                service = build('drive', 'v2', http=http)
+                # prepare params to insert
+                params = {
+                              'role': 'writer',
+                              'type': 'user',
+                              'value':email
+                            }
+                service.permissions().insert(
+                                                fileId=document.resource_id,
+                                                body=params,
+                                                sendNotificationEmails=False,
+                                                fields='id').execute()
 
 
 class InitPeerToPeerDrive(webapp2.RequestHandler):
@@ -843,6 +841,35 @@ class ShareObjectDocuments(webapp2.RequestHandler):
                                     'doc_id': document.id
                                     }
                         )
+class SyncDocumentWithTeam(webapp2.RequestHandler):
+    def post(self):
+        user_email = self.request.get('user_email')
+        doc_id = self.request.get('doc_id')
+        parent_key_str = self.request.get('parent_key_str')
+        parent_key = ndb.Key(urlsafe=parent_key_str)
+        parent = parent_key.get()
+        collaborators = []
+        if parent.access == 'public':
+            collaborators = model.User.query(model.User.organization==parent.organization)
+        elif parent.access == 'private':
+            # list collborators who have access
+            acl = EndpointsHelper.who_has_access(parent_key)
+            collaborators = acl['collaborators']
+            if acl['owner'] is not None:
+                collaborators.append(acl['owner'])
+        for collaborator in collaborators:
+            if collaborator.email != user_email :
+                taskqueue.add(
+                                url='/workers/sharedocument',
+                                params={
+                                        'email': collaborator.email,
+                                        'doc_id': doc_id
+                                        }
+                            )
+
+
+
+
 
 
 
@@ -852,6 +879,7 @@ routes = [
     ('/workers/initpeertopeerdrive',InitPeerToPeerDrive),
     ('/workers/sharedocument',ShareDocument),
     ('/workers/shareobjectdocument',ShareObjectDocuments),
+    ('/workers/syncdocumentwithteam',SyncDocumentWithTeam),
     ('/workers/createorgfolders',CreateOrganizationFolders),
     ('/workers/createobjectfolder',CreateObjectFolder),
     ('/workers/syncevent',SyncCalendarEvent),

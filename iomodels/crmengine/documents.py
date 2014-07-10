@@ -1,4 +1,5 @@
 from google.appengine.ext import ndb
+from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.api import search
 from apiclient.discovery import build
@@ -271,6 +272,14 @@ class Document(EndpointsModel):
         document_key_async = document_key.get_result()
         if request.parent:
             parent_key = ndb.Key(urlsafe=request.parent)
+            taskqueue.add(
+                        url='/workers/syncdocumentwithteam',
+                        params={
+                                'user_email': user_from_email.email,
+                                'doc_id': str(document_key_async.id()),
+                                'parent_key_str': request.parent
+                                }
+                        )
             # insert edges
             Edge.insert(start_node = parent_key,
                       end_node = document_key_async,
@@ -314,6 +323,14 @@ class Document(EndpointsModel):
             document_key_async = document_key.get_result()
             if request.parent:
                 parent_key = ndb.Key(urlsafe=request.parent)
+                taskqueue.add(
+                            url='/workers/syncdocumentwithteam',
+                            params={
+                                    'user_email': user_from_email.email,
+                                    'doc_id': str(document_key_async.id()),
+                                    'parent_key_str': request.parent
+                                    }
+                            )
                 # insert edges
                 Edge.insert(start_node = parent_key,
                           end_node = document_key_async,

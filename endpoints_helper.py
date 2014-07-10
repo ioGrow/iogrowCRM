@@ -15,6 +15,7 @@ import gdata.contacts.data
 from gdata.gauth import OAuth2Token
 from gdata.contacts.client import ContactsClient
 from model import User
+import iograph
 FOLDERS = {
             'Account': 'accounts_folder',
             'Contact': 'contacts_folder',
@@ -64,9 +65,7 @@ class EndpointsHelper():
         if search_document:
             for e in search_document.fields:
                 if e.name == kind:
-                    print 'something before'
                     indexed_edge = empty_string(e.value) + ' ' + str(indexed_edge)
-                    print 'something after'
                 data[e.name] = e.value
         data[kind] = indexed_edge
         parent.put_index(data)
@@ -186,9 +185,6 @@ class EndpointsHelper():
     @classmethod
     def share_related_documents_after_patch(cls,user,old_obj,new_obj):
         # from private to access
-        print '****'
-        print old_obj.access
-        print new_obj.access
         if old_obj.access=='private' and new_obj.access=='public':
             users = User.query(User.organization==user.organization)
             for collaborator in users:
@@ -200,6 +196,22 @@ class EndpointsHelper():
                                             'obj_key_str': old_obj.key.urlsafe()
                                             }
                                 )
+    @classmethod
+    def who_has_access(cls,obj_key):
+        acl = {}
+        obj = obj_key.get()
+        owner_gid = obj.owner
+        owner = User.get_by_gid(owner_gid)
+        collaborators = []
+        edge_list = iograph.Edge.list(start_node=obj_key,kind='permissions')
+        for edge in edge_list['items']:
+            collaborator = edge.end_node.get()
+            if collaborator:
+                collaborators.append(collaborator)
+        acl['owner'] = owner
+        acl['collaborators'] = collaborators
+        return acl
+
 
 
 
