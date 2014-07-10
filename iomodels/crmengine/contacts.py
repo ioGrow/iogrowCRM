@@ -55,6 +55,12 @@ INFO_NODES = {
 class ContactImportHighriseRequest(messages.Message):
     key=messages.StringField(1, required=True)
     server_name=messages.StringField(2, required=True)
+class DetailImportHighriseRequest(messages.Message):
+    key=messages.StringField(1, required=True)
+    server_name=messages.StringField(2, required=True)
+    id=messages.StringField(3, required=True)
+
+
 
 class ContactHighriseSchema(messages.Message):
     id=messages.IntegerField(1)

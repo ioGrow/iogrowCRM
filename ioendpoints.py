@@ -33,7 +33,7 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 # Our libraries
 from iograph import Node,Edge,RecordSchema,InfoNodeResponse,InfoNodeConnectionSchema,InfoNodeListResponse
 from iomodels.crmengine.accounts import Account,AccountGetRequest,AccountSchema,AccountListRequest,AccountListResponse,AccountSearchResult,AccountSearchResults,AccountInsertRequest
-from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertRequest,ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults,ContactImportRequest,ContactImportHighriseRequest,ContactHighriseResponse, ContactHighriseSchema
+from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertRequest,ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults,ContactImportRequest,ContactImportHighriseRequest,ContactHighriseResponse, ContactHighriseSchema, DetailImportHighriseRequest
 from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema,NoteSchema
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
@@ -990,6 +990,13 @@ class CrmEngineApi(remote.Service):
                       name='highrise.import_cases')
     def highrise_import_cases(self, request):
         cases=EndpointsHelper.highrise_import_cases(request)
+        return message_types.VoidMessage()
+# highrise.import_notes_of_person api
+    @endpoints.method(DetailImportHighriseRequest, message_types.VoidMessage,
+                      path='highrise/import_notes_person', http_method='POST',
+                      name='highrise.import_notes_person')
+    def highrise_import_cases(self, request):
+        notes=EndpointsHelper.highrise_import_notes_of_person(request)
         return message_types.VoidMessage()
 
 
