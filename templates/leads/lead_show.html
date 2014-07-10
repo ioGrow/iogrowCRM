@@ -62,31 +62,43 @@
                         </div>
                         <div class="col-md-10">
                             <div class="row">
-                                <div class="col-md-12">
-                                    <span class="page-meta pull-right">
-                                        <i class="icon-pencil">
-                                            <a ng-click="editLead()" class="btn-link addAnotherPhone" data-toggle="modal">
-                                                Edit
-                                            </a>
-                                        </i>
+                                 <div class="col-md-12">
+                                     <span class="page-meta pull-right">
+                                       <i class="icon-pencil">
+                                         <a ng-click="editLead()" class="btn-link addAnotherPhone" data-toggle="modal">
+                                           Edit
+                                         </a>
+                                       </i>
                                         |
-                                        <i class="icon-trash">
-                                            <a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  Delete
-                                            </a>
-                                        </i>
-                                    </span>
-
-                                    <span ng-show="lead.updated_at" class="contact-title" >Updated at:  <%=lead.updated_at | date:'yyyy-MM-dd - HH:mm:ss ' %> </span><br>
-                                    <span ng-show="lead.title">{{_("Title")}} : <a   href="/#/search/type:Lead <%=lead.title%>" class="tag" ng-show="lead.title"> #<%= lead.title %> </a></span><span ng-show="lead.company">{{_("Company")}} : <a   href="/#/search/type:Lead <%=lead.company%>" class="tag" ng-show="lead.company"> #<%= lead.company %></a></span> <br>
-                                    <span ng-show="lead.industry">{{_("Industry")}} : </span>
-                                    <a   href="/#/search/type:Lead <%=lead.industry%>" class="tag" ng-show="lead.industry"> #<%= lead.industry %></a> <br>
-                                    <span ng-show="lead.source">{{_("Source")}} : </span>
-                                    <a   href="/#/search/type:Lead <%=lead.source%>" class="tag" ng-show="lead.source"> #<%= lead.source %></a> <br>
-                                    <span ng-show="lead.status">{{_("Status")}} : </span>
-                                    <a   href="/#/search/type:Lead <%=lead.status%>" class="tag" ng-show="lead.status"> #<%= lead.status %></a> <br>
-                                    <br>
-                                    <hr>
-                                </div>
+                                       <i class="icon-trash">
+                                         <a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  Delete
+                                         </a>
+                                       </i>
+                                     </span>
+                                     <ul class="list-unstyled leadInfos">
+                                         <li>
+                                           <span ng-show="lead.title">{{_("Title")}} : <a   href="/#/search/type:Lead <%=lead.title%>" class="tag" ng-show="lead.title"> #<%= lead.title %> </a></span><span ng-show="lead.company">{{_("Company")}} : <a   href="/#/search/type:Lead <%=lead.company%>" class="tag" ng-show="lead.company"> #<%= lead.company %></a></span>
+                                         </li>
+                                         <li ng-show="lead.industry">
+                                            <span>{{_("Industry")}} : </span>
+                                             <a   href="/#/search/type:Lead <%=lead.industry%>" class="tag" > #<%= lead.industry %></a>
+                                         </li>
+                                         <li ng-show="lead.source">
+                                           <span >{{_("Source")}} : </span>
+                                           <a href="/#/search/type:Lead <%=lead.source%>" class="tag">
+                                            #<%= lead.source %></a>
+                                         </li>
+                                         <li ng-show="lead.status">
+                                           <span >{{_("Status")}} : </span>
+                                           <a href="/#/search/type:Lead <%=lead.status%>" class="tag">
+                                            #<%= lead.status %></a>
+                                         </li>
+                                         <li ng-show="lead.updated_at" >
+                                           <span class="contact-title" >Updated at:  <%=lead.updated_at | date:'yyyy-MM-dd - HH:mm:ss ' %> </span>
+                                         </li>
+                                     </ul>
+                                      <hr class="sm-hr">
+                                   </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
@@ -655,14 +667,47 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12 margin-bottom-10">
-                                          <datetimepick ng-model='newTask.due' placeholder="Add a due date" class="new-task-date" label-format='MMM d, h:mm a'></datetimepick>
+                                      <div class="input-icon ">
+                                        <i class="fa fa-calendar"></i>
+                                          <input cusdatetimepicker data-model="newTask.due" type="text" class="form-control" placeholder="Add a due date" value="" id="leadEventStartsAt">
+                                      </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12 margin-bottom-10">
-                                          <datetimepick icon-class='fa fa-bell-o' ng-model='newTask.reminder' placeholder="Add a reminder" class="new-task-date" label-format='MMM d, h:mm a'></datetimepick>
+                                        <div class="input-icon ">
+                                            <i class="fa fa-bell-o"></i>
+                                              <input cusdatetimepicker data-model="newTask.reminder" type="text" class="form-control" placeholder="Add a reminder" value="" id="leadEventStartsAt">
+                                          </div>                                         
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class='assigneeMemberToTask' >
+                                            <div class="input-icon ">
+                                              <i class="fa fa-user"></i>
+                                              <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMemberToTask()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group')}}">
+                                            </div>
+                                            <div id="assigeeList" class="list-group" ng-hide="selected_members == []">
+                                                <div ng-show="true" class="invitation list-group-item" ng-repeat="selected_us in selected_members">
+                                                    <button type="button" class="close" ng-click="unselectMember($index)" data-dismiss="alert"></button>
+                                                    <img class="google-avatar" src="<%= selected_us.google_public_profile_photo_url%>"/>
+                                                    <strong> <%= selected_us.google_display_name %></strong>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                      <div class="col-md-12">
+                                          <select id="select2_sample2" class="form-control select2" multiple>
+                                              <option ng-repeat="tag in tags"
+                                                      value='<%=tag.entityKey%>'>
+                                                  <%=tag.name%>
+                                              </option>
+                                          </select>
+                                      </div>
+                                 </div>
                       </div>
                       <div class="row">
                           <div class="col-md-12 margin-top-10">
@@ -696,72 +741,92 @@
                   <div class="caption"> <i class="fa fa-calendar"></i>Events </div>
 
                 </div>
-                <div class="newContactform portlet-body" id="chats">
-                  <form class=" slimForm ng-pristine ng-invalid ng-invalid-required">
-                      <div class="formElements newEventToLead" ng-show="newEventform">
-                                <div class="row">
-                                  <div class="col-md-12 margin-bottom-10">
-                                      <input ng-model="ioevent.title" type="text" id="taskName" class="form-control" placeholder="Event tilte">
-                                  </div>
-                                  <!--/span-->
-                                </div>
-                                <div class="row">
-                                    <div class="input-icon margin-top-10">
-                                             <i class="fa fa-calendar"></i>
-                                             <input type="text" class="form-control" placeholder="From" value="" id="leadEventStartsAt">
-                                             <script type="text/javascript">
-                                               $(function(){
-                                                 $('#leadEventStartsAt').appendDtpicker({
-                                                   "closeOnSelected": true,
-                                                   "dateFormat": "YYYY-MM-DD h:m",
-                                                   "autodateOnStart": false
-                                                 });
-                                               });
-                                             </script>
-                                            </div>
-                                </div>
-                                <div class="row">
-                                    <div class="input-icon margin-top-10">
-                                             <i class="fa fa-calendar"></i>
-                                             <input type="text" class="form-control"  placeholder="To" name="date9" value="" id="leadEventEndsAt">
-                                             <script type="text/javascript">
-                                               $(function(){
-                                                 $('#leadEventEndsAt').appendDtpicker({
-                                                   "closeOnSelected": true,
-                                                   "dateFormat": "YYYY-MM-DD h:m",
-                                                   "autodateOnStart": false
-                                                 });
-                                               });
-                                             </script>
-                                            </div>
-                                </div>
-                                <div class="row">
-                                  <div class="col-md-12 margin-bottom-10">
-                                      <input ng-model="ioevent.where" type="text" id="taskName" class="form-control" placeholder="Where ?">
-                                  </div>
-                                  <!--/span-->
-                                </div>
-                      </div>
-                      <div class="row">
-                          <div class="col-md-12 margin-top-10">
-                              <p><span ng-hide="newEventform">Add New Event</span><button type="button" ng-click="addEvent(ioevent)" class="btn red btn-sm pull-right btn-inline">Add</button></p>
-
-                          </div>
-                      </div>
-                  </form>
+                <div class="newContactform portlet-body" id="chats">                  
                    <ul id="tasks" class="list-unstyled lead_related_events" ng-hide="newEventform">
-                      <li ng-repeat="event in events" id="event_<%=$index%>">
-                        <input value="check1" type="checkbox">
-                        <span>
-                          <a href="/#/events/show/<%=event.id%>" class="discussion-content">
-                            <%= event.title%>
-                            <span ng-show="event.starts_at">
-                              [<%= event.starts_at | date:'yyyy-MM-dd '%>]
+                      <li ng-repeat="event in events" id="event_<%=$index%>" class="relatedEventItem" ng-mouseenter="showDeleteBtn = true" ng-mouseleave="showDeleteBtn = false">
+                        <div class="event-container">
+                          <div class="showDescription">
+                            <span class="relatedEventTitle">
+                              <a href="/#/events/show/<%=event.id%>" class="">
+                                <%= event.title%>
+                              </a>
                             </span>
-                          </a>
-                        </span>
+                            <a class="pull-right relatedEventMoreBtn">
+                              <i class="fa fa-chevron-right" ng-hide="showDetails" ng-click="showDetails=true"></i>
+                              <i class="fa fa-chevron-down" ng-show="showDetails" ng-click="showDetails=false"></i>
+                            </a>
+                            <a class="pull-left relatedEventDeleteBtn" ng-show="showDeleteBtn" ng-click="deleteEvent(event)">
+                              <i class="fa fa fa-times-circle"></i>
+                            </a>
+                            <span class="relatedEventStartsAt pull-right" ng-hide="showDetails" ng-show="event.starts_at" title="<%= event.starts_at | date:'yyyy-MM-dd '%>">
+                                  <%= event.starts_at | date:'dd MMM'%>
+                            </span>
+                          </div>  
+                          <div class="moreDetails row" ng-show="showDetails">
+                            <div class="col-md-5 col-xs-5 event-schedule">
+                                <span class=""><i class="fa fa-calendar"></i>
+                                <%= event.starts_at | date:'dd MMM'%> </span>
+                            </div>
+                            <div class="col-md-2 col-xs-2 event-schedule">
+                                <i class="fa fa-chevron-right"></i>
+                            </div>
+                            <div class="col-md-5 col-xs-5 event-schedule">
+                               <span class="">
+                                  <i class="fa fa-calendar"></i> 
+                                  <%= event.ends_at | date:'dd MMM'%>
+                                </span>
+                            </div>
+                            <div class="col-md-12">
+                               <span class="">
+                                  <i class="fa fa-map-marker"></i> 
+                                  <%= event.where %>
+                                </span>
+                            </div>
+                          </div>
+                        </div>
                       </li>
                   </ul>
+                  <form class=" slimForm ng-pristine ng-invalid ng-invalid-required">
+                  <div class="formElements newEventToLead" ng-show="newEventform">
+                            <div class="row">
+                              <div class="col-md-12 margin-bottom-10">
+                                  <input ng-model="ioevent.title" type="text" id="taskName" class="form-control" placeholder="Event tilte">
+                              </div>
+                              <!--/span-->
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 margin-bottom-10">
+                                      <div class="input-icon">
+                                        <i class="fa fa-calendar"></i>
+                                        <input cusdatetimepicker data-model="ioevent.starts_at" type="text" class="form-control" placeholder="From" value="" id="leadEventStartsAt">
+                                      </div>
+                                      
+                                </div>
+                            </div>   
+                            <div class="row">
+                                <div class="col-md-12 margin-bottom-10">
+                                       <div class="input-icon ">
+                                        <i class="fa fa-calendar"></i>
+                                       <input cusdatetimepicker data-model="ioevent.ends_at" type="text" class="form-control" placeholder="To" value="" id="leadEventStartsAt">
+                                      </div>
+                                </div>
+                            </div>  
+                            <div class="row">
+                              <div class="col-md-12 margin-bottom-10">
+                                  <input ng-model="ioevent.where" type="text" id="taskName" class="form-control" placeholder="Where ?">
+                              </div>
+                              <!--/span-->
+                            </div> 
+                  </div>
+                  <div class="row">
+                      <div class="col-md-12 margin-top-10">
+                          <p class="newEventText"><span ng-hide="newEventform">Add New Event</span>
+                          <button type="button" ng-click="addEvent(ioevent)" class="btn red btn-sm pull-right btn-inline">Add</button>
+                          <button type="button" ng-click="closeEventForm(ioevent)" ng-show="newEventform" class="cancelEventBtn btn btn-default btn-sm pull-right btn-inline">Cancel</button>
+                          </p>
+                      </div>
+                  </div>
+              </form>
                 </div>
               </div>
         </div>
@@ -1613,7 +1678,6 @@
                         </div>
                     </div>
                 </div>
-
                 <script type="text/javascript">
                             $(function() {
                             $('#datetimepicker2').datetimepicker({
@@ -1654,5 +1718,12 @@
                             defaultContainerWidth: 840,
                             autoresize: true
                     });
+                    $("#select2_sample2").select2({
+                          placeholder: "Click to Select a label",
+                          allowClear: false
+                      });
+                    $('.lead_related_events').slimScroll({
+                                    height: '160px'
+                                });
 
                 </script>
