@@ -221,6 +221,12 @@ class EndpointsHelper():
         person=Person.get(request.id)
         tags=person.tags
         return tags
+    @classmethod
+    def highrise_import_tasks_of_person(cls, request):
+        person=Person.get(request.id)
+        tasks=person.tasks
+        return tasks
+
 
 class scor_new_lead():
     def predict(predd,tedd) :
