@@ -610,6 +610,8 @@ class Opportunity(EndpointsModel):
                       inverse_edge = 'related_opportunities')
         if request.contact:
             contact_key = ndb.Key(urlsafe=request.contact)
+            print '#########contact_key'
+            print(contact_key)
             # insert edges
             Edge.insert(start_node = contact_key,
                       end_node = opportunity_key_async,
@@ -641,6 +643,8 @@ class Opportunity(EndpointsModel):
                                             indexed_edge = str(account_key.id())
                                             )
             indexed = True
+        if not request.contact :
+            print '#####################We arehere'
 
         for infonode in request.infonodes:
             Node.insert_info_node(

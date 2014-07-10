@@ -842,8 +842,6 @@ if ($scope.newTaskform==false) {
            }else{
             if (ioevent.title!=null&&ioevent.title!="") {
                     var params ={}
-                    ioevent.starts_at=$('#caseEventStartsAt').handleDtpicker('getDate');
-                    ioevent.ends_at=$('#caseEventEndsAt').handleDtpicker('getDate');
                 if (ioevent.starts_at){
                     if (ioevent.ends_at){
                       params ={'title': ioevent.title,
@@ -866,12 +864,20 @@ if ($scope.newTaskform==false) {
                     $scope.ioevent={};
                     $scope.newEventform=false;
                   }
-        }else{
-            $scope.ioevent={};
-            $scope.newEventform=false;
-      }
+        }
      }
     };
+         $scope.deleteEvent =function(eventt){
+    var params = {'entityKey':eventt.entityKey};
+     Event.delete($scope,params);
+     //$('#addLeadModal').modal('show');
+   }
+      $scope.eventDeleted = function(resp){
+   };
+    $scope.closeEventForm=function(ioevent){
+      $scope.ioevent={};
+      $scope.newEventform=false;
+    }
      $scope.hilightEvent = function(){
         console.log('Should higll');
         $('#event_0').effect("highlight","slow");

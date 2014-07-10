@@ -674,7 +674,13 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
             $scope.selected_members.splice(index, 1);
             console.log($scope.selected_members);
         };
+   $scope.deleteEvent =function(eventt){
+    var params = {'entityKey':eventt.entityKey};
+     Event.delete($scope,params);
      //$('#addLeadModal').modal('show');
+   }
+   $scope.eventDeleted = function(resp){
+   };
   //HKA 09.11.2013 Add a new Task
    $scope.addTask = function(task){
         if ($scope.newTaskform==false) {
@@ -763,19 +769,14 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                     $scope.ioevent={};
                     $scope.newEventform=false;
                   }
-        }else{
-            $scope.ioevent={};
-            $scope.newEventform=false;
-      }
+        }
      }
     }
-     $scope.hilightEvent = function(){
-        console.log('Should higll');
-        $('#event_0').effect("highlight","slow");
-        $('#event_0').effect( "bounce", "slow" );
-
-     }
-     $scope.listEvents = function(){
+    $scope.closeEventForm=function(ioevent){
+      $scope.ioevent={};
+      $scope.newEventform=false;
+    }
+    $scope.listEvents = function(){
         var params = {
                         'id':$scope.lead.id,
                         'events':{
@@ -783,6 +784,12 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                         }
                       };
         Lead.get($scope,params);
+
+     }
+     $scope.hilightEvent = function(){
+        console.log('Should higll');
+        $('#event_0').effect("highlight","slow");
+        $('#event_0').effect( "bounce", "slow" );
 
      }
   //HKA 11.11.2013 Add Note

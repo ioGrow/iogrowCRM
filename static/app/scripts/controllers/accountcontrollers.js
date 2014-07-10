@@ -1149,8 +1149,6 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             
             if (ioevent.title!=null&&ioevent.title!="") {
                     var params ={}
-                    ioevent.starts_at=$('#accountEventStartsAt').handleDtpicker('getDate');
-                    ioevent.ends_at=$('#accountEventEndsAt').handleDtpicker('getDate');
                 if (ioevent.starts_at){
                     if (ioevent.ends_at){
                       params ={'title': ioevent.title,
@@ -1173,11 +1171,19 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                     $scope.ioevent={};
                     $scope.newEventform=false;
                   }
-        }else{
-            $scope.ioevent={};
-            $scope.newEventform=false;
-      }
+        }
      }
+    }
+       $scope.deleteEvent =function(eventt){
+    var params = {'entityKey':eventt.entityKey};
+     Event.delete($scope,params);
+     //$('#addLeadModal').modal('show');
+   }
+      $scope.eventDeleted = function(resp){
+   };
+        $scope.closeEventForm=function(ioevent){
+      $scope.ioevent={};
+      $scope.newEventform=false;
     }
         $scope.hilightEvent = function() {
 
