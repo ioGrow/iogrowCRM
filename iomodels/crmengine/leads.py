@@ -432,11 +432,6 @@ class Lead(EndpointsModel):
                     profile_img_url = request.profile_img_url,
                     industry = request.industry,
                     )
-        #sl = scor_new_lead()
-        #print('----------idrisssssss----------')
-        #at =  request.title
-        #ssl = sl.predict(at)
-        #print ssl
         lead_key = lead.put_async()
         lead_key_async = lead_key.get_result()
         for email in request.emails:
@@ -511,16 +506,15 @@ class Lead(EndpointsModel):
                                                     )
                                                 )
 
-        # taskqueue.add(
-        #             url='/workers/createobjectfolder',
-        #             params={
-        #                     'kind': "Lead",
-        #                     'folder_name': folder_name,
-        #                     'email': user_from_email.email,
-        #                     'obj_key':lead_key_async.urlsafe(),
-        #                     'logo_img_id':request.profile_img_id
-        #                     }
-        #             )
+        if request.profile_img_id:
+            taskqueue.add(
+                            url='/workers/sharedocument',
+                            params={
+                                    'user_email':user_from_email.email,
+                                    'access': 'anyone',
+                                    'resource_id': request.profile_img_id
+                                    }
+                        )
         data = {}
         data['id'] = lead_key_async.id()
         lead.put_index(data)

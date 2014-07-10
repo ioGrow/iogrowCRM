@@ -186,6 +186,7 @@ class EndpointsHelper():
         return contact_entry.id.text
     @classmethod
     def share_related_documents_after_patch(cls,user,old_obj,new_obj):
+
         # from private to access
         if old_obj.access=='private' and new_obj.access=='public':
             users = User.query(User.organization==user.organization)
@@ -198,6 +199,26 @@ class EndpointsHelper():
                                             'obj_key_str': old_obj.key.urlsafe()
                                             }
                                 )
+        if hasattr(old_obj,'profile_img_id'):
+            if old_obj.profile_img_id != new_obj.profile_img_id and new_obj.profile_img_id !="":
+                taskqueue.add(
+                                url='/workers/sharedocument',
+                                params={
+                                        'user_email':user.email,
+                                        'access': 'anyone',
+                                        'resource_id': new_obj.profile_img_id
+                                        }
+                            )
+        if hasattr(old_obj,'logo_img_id'):
+            if old_obj.logo_img_id != new_obj.logo_img_id and new_obj.logo_img_id !="":
+                taskqueue.add(
+                                url='/workers/sharedocument',
+                                params={
+                                        'user_email':user.email,
+                                        'access': 'anyone',
+                                        'resource_id': new_obj.logo_img_id
+                                        }
+                            )
     @classmethod
     def who_has_access(cls,obj_key):
         acl = {}

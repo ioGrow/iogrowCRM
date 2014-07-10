@@ -960,7 +960,7 @@ class CrmEngineApi(remote.Service):
         people=EndpointsHelper.highrise_import(request)
         return message_types.VoidMessage()
 
-        
+
 
     # contacts.get api v2
     @endpoints.method(ContactGetRequest, ContactSchema,
@@ -991,12 +991,18 @@ class CrmEngineApi(remote.Service):
                     name='contacts.patch'
                     )
     def ContactPatch(self, my_model):
+        user_from_email = EndpointsHelper.require_iogrow_user()
         #user_from_email = EndpointsHelper.require_iogrow_user()
         # TODO: Check permissions
         if not my_model.from_datastore:
             raise endpoints.NotFoundException('Contact not found.')
         patched_model_key = my_model.entityKey
         patched_model = ndb.Key(urlsafe=patched_model_key).get()
+        EndpointsHelper.share_related_documents_after_patch(
+                                                            user_from_email,
+                                                            patched_model,
+                                                            my_model
+                                                          )
         properties = Contact().__class__.__dict__
         for p in properties.keys():
             if (eval('patched_model.' + p) != eval('my_model.' + p)) \

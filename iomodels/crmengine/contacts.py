@@ -699,6 +699,15 @@ class Contact(EndpointsModel):
             data = {}
             data['id'] = contact_key_async.id()
             contact.put_index(data)
+        if request.profile_img_id:
+            taskqueue.add(
+                            url='/workers/sharedocument',
+                            params={
+                                    'user_email':user_from_email.email,
+                                    'access': 'anyone',
+                                    'resource_id': request.profile_img_id
+                                    }
+                        )
         contact_schema = ContactSchema(
                                   id = str( contact_key_async.id() ),
                                   entityKey = contact_key_async.urlsafe(),

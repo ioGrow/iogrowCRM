@@ -426,6 +426,15 @@ class Account(EndpointsModel):
             data = {}
             data['id'] = account_key_async.id()
             account.put_index(data)
+        if request.logo_img_id:
+            taskqueue.add(
+                            url='/workers/sharedocument',
+                            params={
+                                    'user_email':user_from_email.email,
+                                    'access': 'anyone',
+                                    'resource_id': request.logo_img_id
+                                    }
+                        )
         account_schema = AccountSchema(
                                   id = str( account_key_async.id() ),
                                   entityKey = account_key_async.urlsafe()

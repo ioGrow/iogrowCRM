@@ -802,9 +802,9 @@ class SyncPatchCalendarEvent(webapp2.RequestHandler):
                   {
                     "dateTime": ends_at.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
                   },
-                  "summary": summary    
+                  "summary": summary
                   }
-          
+
 
             patched_event = service.events().patch(calendarId='primary',eventId=event_google_id,body=params).execute()
         except:
@@ -849,24 +849,45 @@ class ShareDocument(webapp2.RequestHandler):
     def post(self):
         email = self.request.get('email')
         doc_id = self.request.get('doc_id')
-        document = Document.get_by_id(int(doc_id))
-        if document:
-            owner = model.User.get_by_gid(document.owner)
-            if owner.email != email:
-                credentials = owner.google_credentials
-                http = credentials.authorize(httplib2.Http(memcache))
-                service = build('drive', 'v2', http=http)
-                # prepare params to insert
-                params = {
-                              'role': 'writer',
-                              'type': 'user',
-                              'value':email
-                            }
-                service.permissions().insert(
-                                                fileId=document.resource_id,
-                                                body=params,
-                                                sendNotificationEmails=False,
-                                                fields='id').execute()
+        resource_id = self.request.get('resource_id')
+        user_email = self.request.get('user_email')
+        access = self.request.get('access')
+        if access=='anyone':
+            # public
+            owner = model.User.get_by_email(user_email)
+            credentials = owner.google_credentials
+            http = credentials.authorize(httplib2.Http(memcache))
+            service = build('drive', 'v2', http=http)
+            # prepare params to insert
+            params = {
+                      'role': 'reader',
+                      'type': 'anyone'
+                      }
+            service.permissions().insert(
+                                        fileId=resource_id,
+                                        body=params,
+                                        sendNotificationEmails=False,
+                                        fields='id').execute()
+        else:
+            document = Document.get_by_id(int(doc_id))
+            if document:
+
+                    owner = model.User.get_by_gid(document.owner)
+                    if owner.email != email:
+                        credentials = owner.google_credentials
+                        http = credentials.authorize(httplib2.Http(memcache))
+                        service = build('drive', 'v2', http=http)
+                        # prepare params to insert
+                        params = {
+                                      'role': 'writer',
+                                      'type': 'user',
+                                      'value':email
+                                    }
+                        service.permissions().insert(
+                                                        fileId=document.resource_id,
+                                                        body=params,
+                                                        sendNotificationEmails=False,
+                                                        fields='id').execute()
 
 
 class InitPeerToPeerDrive(webapp2.RequestHandler):
