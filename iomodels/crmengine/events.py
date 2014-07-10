@@ -117,6 +117,7 @@ class Event(EndpointsModel):
     # public or private
     access = ndb.StringProperty()
     allday=ndb.StringProperty()
+    event_google_id=ndb.StringProperty()
 
     def put(self, **kwargs):
         ndb.Model.put(self, **kwargs)
@@ -187,7 +188,11 @@ class Event(EndpointsModel):
                ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)
-
+    # get event by id  hadji hicham 09-08-2014    
+    @classmethod
+    def getEventById(cls,id):
+        return cls.get_by_id(int(id))
+    # under the test 
     @classmethod
     def get_schema(cls,user_from_email,request):
         event = cls.get_by_id( int(request.id) )
@@ -377,16 +382,18 @@ class Event(EndpointsModel):
                     author = author,
                     allday=request.allday
                     )
+        event_key = event.put_async()
         taskqueue.add(
                     url='/workers/syncevent',
                     params={
                             'email': user_from_email.email,
                             'starts_at': request.starts_at,
                             'ends_at': request.ends_at,
-                            'summary': request.title
+                            'summary': request.title,
+                            'event_id':event_key.get_result().id()
                             }
                     )
-        event_key = event.put_async()
+        
         event_key_async = event_key.get_result()
         if request.parent:
             parent_key = ndb.Key(urlsafe=request.parent)
