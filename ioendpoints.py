@@ -1026,6 +1026,13 @@ class CrmEngineApi(remote.Service):
     def highrise_import_tags_of_company(self, request):
         tags=EndpointsHelper.highrise_import_tags_of_company(request)
         return message_types.VoidMessage()
+# highrise.import_tasks_of_company api
+    @endpoints.method(DetailImportHighriseRequest, message_types.VoidMessage,
+                      path='highrise/import_tasks_company', http_method='POST',
+                      name='highrise.import_tasks_company')
+    def highrise_import_tasks_of_company(self, request):
+        tasks=EndpointsHelper.highrise_import_tasks_of_company(request)
+        return message_types.VoidMessage()
 
 
 
