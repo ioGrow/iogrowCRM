@@ -1,4 +1,5 @@
 from google.appengine.ext import ndb
+from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.api import search
 from apiclient.discovery import build
@@ -197,13 +198,19 @@ class Document(EndpointsModel):
                                     )
         return document_schema
     @classmethod
-    def list_by_parent(cls,parent_key,request):
+    def list_by_parent(cls,parent_key,request=None):
         document_list = []
-        document_edge_list = Edge.list(
+        if request:
+            document_edge_list = Edge.list(
                                 start_node = parent_key,
                                 kind='documents',
                                 limit=request.documents.limit,
                                 pageToken=request.documents.pageToken
+                                )
+        else:
+            document_edge_list = Edge.list(
+                                start_node = parent_key,
+                                kind='documents'
                                 )
         for edge in document_edge_list['items']:
             document = edge.end_node.get()
@@ -245,14 +252,6 @@ class Document(EndpointsModel):
                     'title': request.title,
                     'mimeType': request.mimeType
         }
-        #get the accounts_folder or contacts_folder or ..
-        parent_key = ndb.Key(urlsafe=request.parent)
-        parent = parent_key.get()
-        if parent:
-            parent_folder = parent.folder
-            if parent:
-                params['parents'] = [{'id': parent_folder}]
-
         # execute files.insert and get resource_id
         created_document = service.files().insert(body=params).execute()
         author = Userinfo()
@@ -273,6 +272,14 @@ class Document(EndpointsModel):
         document_key_async = document_key.get_result()
         if request.parent:
             parent_key = ndb.Key(urlsafe=request.parent)
+            taskqueue.add(
+                        url='/workers/syncdocumentwithteam',
+                        params={
+                                'user_email': user_from_email.email,
+                                'doc_id': str(document_key_async.id()),
+                                'parent_key_str': request.parent
+                                }
+                        )
             # insert edges
             Edge.insert(start_node = parent_key,
                       end_node = document_key_async,
@@ -316,6 +323,14 @@ class Document(EndpointsModel):
             document_key_async = document_key.get_result()
             if request.parent:
                 parent_key = ndb.Key(urlsafe=request.parent)
+                taskqueue.add(
+                            url='/workers/syncdocumentwithteam',
+                            params={
+                                    'user_email': user_from_email.email,
+                                    'doc_id': str(document_key_async.id()),
+                                    'parent_key_str': request.parent
+                                    }
+                            )
                 # insert edges
                 Edge.insert(start_node = parent_key,
                           end_node = document_key_async,

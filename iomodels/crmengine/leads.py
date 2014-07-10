@@ -432,11 +432,6 @@ class Lead(EndpointsModel):
                     profile_img_url = request.profile_img_url,
                     industry = request.industry,
                     )
-        #sl = scor_new_lead()
-        #print('----------idrisssssss----------')
-        #at =  request.title
-        #ssl = sl.predict(at)
-        #print ssl
         lead_key = lead.put_async()
         lead_key_async = lead_key.get_result()
         for email in request.emails:
@@ -511,16 +506,15 @@ class Lead(EndpointsModel):
                                                     )
                                                 )
 
-        taskqueue.add(
-                    url='/workers/createobjectfolder',
-                    params={
-                            'kind': "Lead",
-                            'folder_name': folder_name,
-                            'email': user_from_email.email,
-                            'obj_key':lead_key_async.urlsafe(),
-                            'logo_img_id':request.profile_img_id
-                            }
-                    )
+        if request.profile_img_id:
+            taskqueue.add(
+                            url='/workers/sharedocument',
+                            params={
+                                    'user_email':user_from_email.email,
+                                    'access': 'anyone',
+                                    'resource_id': request.profile_img_id
+                                    }
+                        )
         data = {}
         data['id'] = lead_key_async.id()
         lead.put_index(data)
@@ -569,30 +563,28 @@ class Lead(EndpointsModel):
         except (IndexError, TypeError):
             raise endpoints.NotFoundException('Lead %s not found.' %
                                                   (request.id,))
-        moved_folder = EndpointsHelper.move_folder(user_from_email,lead.folder,'Contact')
         contact = Contact(
                             owner = lead.owner,
                             organization = lead.organization,
                             access = lead.access,
-                            folder = moved_folder['id'],
                             firstname = lead.firstname,
                             lastname = lead.lastname,
                             title = lead.title,
                             tagline = lead.tagline,
-                            introduction = lead.introduction
+                            introduction = lead.introduction,
+                            profile_img_id = lead.profile_img_id,
+                            profile_img_url = lead.profile_img_url
                         )
 
         contact_key = contact.put_async()
         contact_key_async = contact_key.get_result()
         if lead.company:
-            created_folder = EndpointsHelper.insert_folder(user_from_email,lead.company,'Account')
             account = Account(
                                 owner = lead.owner,
                                 organization = lead.organization,
                                 access = lead.access,
                                 account_type = 'prospect',
-                                name=lead.company,
-                                folder = created_folder['id']
+                                name=lead.company
                             )
             account_key = account.put_async()
             account_key_async = account_key.get_result()
@@ -609,8 +601,7 @@ class Lead(EndpointsModel):
                                             )
         edge_list = Edge.query(Edge.start_node == lead.key).fetch()
         for edge in edge_list:
-            edge.start_node = contact_key_async
-            edge.put()
+            Edge.move(edge,contact_key_async)
 
         lead.key.delete()
         EndpointsHelper.delete_document_from_index( id = request.id )
