@@ -19,26 +19,30 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
      $scope.user = undefined;
      $scope.slected_memeber = undefined;
      $scope.role= 'participant';
+     $scope.showEndsCalendar=false;
+     $scope.showStartsCalendar=false;
+     $scope.ends_at=null;
      // What to do after authentication
      $scope.runTheProcess = function(){
           var eventid = {'id':$route.current.params.eventId};
           Event.get($scope,eventid);
           User.list($scope,{});
-     };
-
-
-
+     };   
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
             Auth.refreshToken();
      };
      $scope.$watch('event.starts_at', function(newValue, oldValue) {
-        
+              console.log('changed');
               $scope.patchDate($scope.event.starts_at,"Start");
+              $scope.showStartsCalendar=false;
+
      });
      $scope.$watch('event.ends_at', function(newValue, oldValue) {
-
+              console.log('changed');
               $scope.patchDate($scope.event.ends_at,"End");
+              $scope.showEndsCalendar=false;
+              
      });
      $scope.patchDate = function(newValue,when){
       if (when=="Start"){

@@ -165,6 +165,8 @@ accountservices.factory('Case', function() {
             }
             console.log('gapi #end_execute');
           });
+          $scope.isLoading=false;
+          
   };
   Case.search = function($scope,params){
       gapi.client.crmengine.cases.search(params).execute(function(resp) {
@@ -217,6 +219,8 @@ accountservices.factory('Case', function() {
                };
               }
       });
+     $scope.isLoading=false;
+      
   };
   Case.listMore = function($scope,params){
       $scope.isLoading = true;
@@ -254,6 +258,8 @@ accountservices.factory('Case', function() {
                };
               }
       });
+     $scope.isLoading=false;
+ 
   };
   Case.insert = function($scope,casee){
      $scope.isLoading = true;
@@ -285,6 +291,8 @@ accountservices.factory('Case', function() {
              };
          }
       });
+     $scope.isLoading=false;
+
   };
   Case.patch = function($scope,params) {
 
@@ -308,6 +316,8 @@ accountservices.factory('Case', function() {
             }
             console.log('cases.patch gapi #end_execute');
           });
+     $scope.isLoading=false;
+          
   };
 
   Case.delete = function($scope,id){
