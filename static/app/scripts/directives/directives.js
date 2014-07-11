@@ -299,6 +299,12 @@ app.directive('cusdatetimepicker', function($parse) {
         var model = $parse(attrs.model);
         console.log(model($scope));  // logs "test"
         dp.appendDtpicker(params);
+        dp.val(null);
+        $scope.$watch(attrs.model, function(newValue, oldValue) {
+              if (newValue==null) {
+                dp.val(null);
+              };
+        });
     }
   }
 });
