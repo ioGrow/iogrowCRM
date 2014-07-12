@@ -101,9 +101,9 @@
         <!-- END RESPONSIVE MENU TOGGLER -->
         <!-- BEGIN TOP NAVIGATION MENU -->
 
-        <ul class="nav navbar-nav pull-right">
+        <ul class="nav navbar-nav pull-right" ng-controller="NavBarController">
 
-              <li class="dropdown user chrome-ext hidden-xs">
+              <li id="chromeExtension" class="dropdown user chrome-ext hidden-xs"  >
 	                <input type="submit" onclick="$('#InstallChromeExtension').modal() " class="btn blue btn-block pull-right" value="Install chrome extension" style="padding-left:5px;padding-right:5px;">
               </li>
 
@@ -431,6 +431,7 @@
           window.location.replace('{{active_app.url}}');
       };
     }
+
   </script>
 
   <script src="https://apis.google.com/js/client.js?onload=loadGapi">

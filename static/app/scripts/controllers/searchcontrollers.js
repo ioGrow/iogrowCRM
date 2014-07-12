@@ -180,6 +180,14 @@ $scope.updatelanguage = function(user){
 }
 
 }]);
+app.controller('NavBarController', ['$scope',
+    function($scope) {
+    $scope.isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+    if (!$scope.isChrome){
+       $( "#chromeExtension" ).addClass("hidden");
+    }
+
+}]);
 
 app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User',
     function($scope,$route,Auth,Search,User) {
