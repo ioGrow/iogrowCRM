@@ -129,7 +129,7 @@ accountservices.factory('Auth', function($http) {
         }
         else{
           // Auth.renderForcedSignIn();
-          window.location.reload(true);
+          window.location.replace('/sign-in');
         }
 
       } else {
