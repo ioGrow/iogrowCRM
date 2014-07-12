@@ -119,6 +119,8 @@ accountservices.factory('Auth', function($http) {
   };
   Auth.processAuth = function(authResult) {
       //Auth.$scope.immediateFailed = true;
+      console.log(authResult);
+      Auth.$scope.isRefreshing = false;
       if (authResult) {
         if (authResult['access_token']){
           Auth.$scope.immediateFailed = false;
