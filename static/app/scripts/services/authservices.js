@@ -126,7 +126,8 @@ accountservices.factory('Auth', function($http) {
           Auth.goAhead(authResult);
         }
         else{
-          Auth.renderForcedSignIn();
+          // Auth.renderForcedSignIn();
+          window.location.reload(true);
         }
 
       } else {
@@ -137,7 +138,6 @@ accountservices.factory('Auth', function($http) {
   Auth.renderForcedSignIn = function(){
     window.authResult = null;
     Auth.$scope.immediateFailed = true;
-
     gapi.signin.render('myGsignin', {
       'callback': Auth.signIn,
       'clientid': '987765099891.apps.googleusercontent.com',
@@ -149,8 +149,15 @@ accountservices.factory('Auth', function($http) {
     });
   }
   Auth.refreshToken = function(){
+    if (!Auth.$scope.isRefreshing){
+        if (typeof(Storage) != "undefined") {
+            localStorage['access_token']="null";
+        }
+        Auth.$scope.isRefreshing = true;
+        Auth.renderForcedSignIn();
+    }
 
-    Auth.renderForcedSignIn();
+
 
     //window.location.reload(true);
 
