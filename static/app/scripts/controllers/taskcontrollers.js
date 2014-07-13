@@ -157,8 +157,9 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
    $scope.deleteTask = function(){
       
      var params = {'entityKey':$scope.task.entityKey};
-     
-     Task.delete($scope, params);
+
+      
+       Task.delete($scope, params);
       $('#BeforedeleteTask').modal('hide');
 
      };
@@ -277,8 +278,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
                       'entityKey':task.entityKey,
                       'due':moment(task.due).format('YYYY-MM-DDTHH:mm:00.000000'),
                       title:value}
-          
-                      
+                 
          Task.patch($scope,params);
 
        }         

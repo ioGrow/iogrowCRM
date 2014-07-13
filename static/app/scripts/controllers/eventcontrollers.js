@@ -533,11 +533,11 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                  'due':moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000')             
                                   }
                               
-
+                          
 
                               
 
-                            Task.patch($scope,params);
+                         Task.patch($scope,params);
 
                        }else{
                         $('#calendar').fullCalendar( 'refetchEvents' );

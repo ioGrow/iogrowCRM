@@ -903,6 +903,19 @@ class SyncDeleteCalendarEvent(webapp2.RequestHandler):
             patched_event = service.events().delete(calendarId='primary',eventId=event_google_id).execute()
         except:
             raise endpoints.UnauthorizedException('Invalid grant' )
+# delete tasks from google calendar. hadji hicham 13-07-2014.
+class SyncDeleteCalendarTask(webapp2.RequestHandler):
+    def post(self):
+        user_from_email = model.User.get_by_email(self.request.get('email'))
+        event_google_id= self.request.get('event_google_id')
+        try:
+            credentials = user_from_email.google_credentials
+            http = credentials.authorize(httplib2.Http(memcache))
+            service = build('calendar', 'v3', http=http)
+            # prepare params to insert
+            patched_event = service.events().delete(calendarId='primary',eventId=event_google_id).execute()
+        except:
+            raise endpoints.UnauthorizedException('Invalid grant' )
 
 class AddToIoGrowLeads(webapp2.RequestHandler):
     def post(self):
@@ -1047,7 +1060,7 @@ routes = [
     #syncronize tasks with google calendar. hdji hicham 09-08-2014.
     ('/workers/synctask',SyncCalendarTask),
     ('/workers/syncpatchtask',SyncPatchCalendarTask),
-    # ('/workers/syncdeletetask',SyncDeleteCalendarTask),
+    ('/workers/syncdeletetask',SyncDeleteCalendarTask),
     #
     ('/workers/createcontactsgroup',CreateContactsGroup),
     ('/workers/sync_contacts',SyncContact),

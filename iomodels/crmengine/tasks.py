@@ -526,6 +526,7 @@ class Task(EndpointsModel):
 
     @classmethod
     def patch(cls,user_from_email,request):
+
         task = cls.get_by_id( int(request.id) )
         task_id=int(request.id)
         if task is None:
@@ -535,11 +536,6 @@ class Task(EndpointsModel):
         if request.status:
             task.status = request.status
         if request.due and task.due == None :
-            print "*************************"
-            print "i'm in none case"
-            print request.title
-            print "*************************"
-            
             task.due = datetime.datetime.strptime(request.due,"%Y-%m-%dT%H:%M:00.000000")
             taskqueue.add(
                     url='/workers/synctask', 
