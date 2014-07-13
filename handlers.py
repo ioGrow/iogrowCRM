@@ -803,7 +803,7 @@ class SyncCalendarTask(webapp2.RequestHandler):
                   {
                     "date": ends_at.strftime("%Y-%m-%d")
                   },
-                  "summary": summary
+                  "summary": summary,
             }
         
             created_task = service.events().insert(calendarId='primary',body=params).execute()
@@ -811,6 +811,7 @@ class SyncCalendarTask(webapp2.RequestHandler):
             task.put()
         except:
             raise endpoints.UnauthorizedException('Invalid grant' )
+
 
 class SyncPatchCalendarEvent(webapp2.RequestHandler):
     def post(self):
@@ -845,6 +846,43 @@ class SyncPatchCalendarEvent(webapp2.RequestHandler):
           
 
             patched_event = service.events().patch(calendarId='primary',eventId=event_google_id,body=params).execute()
+        except:
+            raise endpoints.UnauthorizedException('Invalid grant' )
+
+# syncronize tasks with google calendar . hadji hicham 10-07-2014.
+class SyncPatchCalendarTask(webapp2.RequestHandler):
+    def post(self):
+        user_from_email = model.User.get_by_email(self.request.get('email'))
+        starts_at = datetime.datetime.strptime(
+                                              self.request.get('starts_at'),
+                                              "%Y-%m-%dT%H:%M:00.000000"
+                                              )
+        summary = self.request.get('summary')
+        location = self.request.get('location')
+        ends_at = datetime.datetime.strptime(
+                                              self.request.get('ends_at'),
+                                              "%Y-%m-%dT%H:%M:00.000000"
+                                              )
+        task_google_id= self.request.get('task_google_id')
+        try:
+            credentials = user_from_email.google_credentials
+            http = credentials.authorize(httplib2.Http(memcache))
+            service = build('calendar', 'v3', http=http)
+            # prepare params to insert
+            params = {
+                 "start":
+                  {
+                    "date": starts_at.strftime("%Y-%m-%d")
+                  },
+                 "end":
+                  {
+                    "date": ends_at.strftime("%Y-%m-%d")
+                  },
+                  "summary": summary    
+                  }
+          
+
+            patched_event = service.events().patch(calendarId='primary',eventId=task_google_id,body=params).execute()
         except:
             raise endpoints.UnauthorizedException('Invalid grant' )
 # sync delete events with google calendar . hadjo hicham 09-08-2014
@@ -892,7 +930,7 @@ routes = [
     ('/workers/syncdeleteevent',SyncDeleteCalendarEvent),
     #syncronize tasks with google calendar. hdji hicham 09-08-2014.
     ('/workers/synctask',SyncCalendarTask),
-    # ('/workers/syncpatchtask',SyncPatchCalendarTask),
+    ('/workers/syncpatchtask',SyncPatchCalendarTask),
     # ('/workers/syncdeletetask',SyncDeleteCalendarTask),
     #
     ('/workers/createcontactsgroup',CreateContactsGroup),
