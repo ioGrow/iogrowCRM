@@ -703,7 +703,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
             if ($scope.selected_members!=[]) {
                   params.assignees=$scope.selected_members;
                 };
-                var tags=[];                
+                var tags=[];
                 tags=$('#select2_sample2').select2("val");
                 if (tags!=[]) {
                   var tagitems = [];
@@ -744,7 +744,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
            if ($scope.newEventform==false) {
                 $scope.newEventform=true;
            }else{
-            
+
             if (ioevent.title!=null&&ioevent.title!="") {
                     var params ={}
                 if (ioevent.starts_at){
