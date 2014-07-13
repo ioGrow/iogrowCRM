@@ -181,6 +181,7 @@ $scope.updatelanguage = function(user){
 
 }]);
 
+
 app.controller('SearchShowController', ['$scope','$route', 'Auth','Search','User',
     function($scope,$route,Auth,Search,User) {
      $scope.isSignedIn = false;

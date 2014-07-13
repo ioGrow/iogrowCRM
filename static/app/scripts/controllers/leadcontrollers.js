@@ -703,7 +703,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
             if ($scope.selected_members!=[]) {
                   params.assignees=$scope.selected_members;
                 };
-                var tags=[];                
+                var tags=[];
                 tags=$('#select2_sample2').select2("val");
                 if (tags!=[]) {
                   var tagitems = [];
@@ -741,11 +741,11 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
 
      }
  //HKA 10.11.2013 Add event
- $scope.addEvent = function(ioevent){           
+ $scope.addEvent = function(ioevent){
            if ($scope.newEventform==false) {
                 $scope.newEventform=true;
            }else{
-            
+
             if (ioevent.title!=null&&ioevent.title!="") {
                     var params ={}
                 if (ioevent.starts_at){
@@ -1512,7 +1512,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
                         'industry':lead.industry,
                         'source':lead.source,
                         'infonodes':$scope.prepareInfonodes(),
-                        'access': 'public'
+                        'access': lead.access
                       };
           if ($scope.profile_img.profile_img_id){
               params['profile_img_id'] = $scope.profile_img.profile_img_id;

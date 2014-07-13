@@ -29,8 +29,10 @@ from endpoints_helper import EndpointsHelper
 import model
 from iomodels.crmengine.contacts import Contact
 from iomodels.crmengine.leads import LeadInsertRequest,Lead
+from iomodels.crmengine.documents import Document
 import iomessages
 from blog import Article
+import iograph
 
 # import event . hadji hicham 09-07-2014
 from iomodels.crmengine.events import Event
@@ -180,6 +182,8 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             try:
                 user = self.get_user_from_session()
+                if user.google_credentials is None:
+                    self.redirect('/sign-in')
                 logout_url = 'https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://www.iogrow.com/welcome/'
                 if user is None or user.type=='public_user':
                     self.redirect('/welcome/')
@@ -416,7 +420,8 @@ class GooglePlusConnect(SessionEnabledHandler):
             user.email = userinfo.get('email')
             user.google_public_profile_photo_url = userinfo.get('picture')
         user.google_credentials = credentials
-        user.put()
+        user_key = user.put_async()
+        user_key_async = user_key.get_result()
         if memcache.get(user.email) :
             memcache.set(user.email, user)
         else:
@@ -841,9 +846,9 @@ class SyncPatchCalendarEvent(webapp2.RequestHandler):
                   {
                     "dateTime": ends_at.strftime("%Y-%m-%dT%H:%M:00.000+01:00")
                   },
-                  "summary": summary    
+                  "summary": summary
                   }
-          
+
 
             patched_event = service.events().patch(calendarId='primary',eventId=event_google_id,body=params).execute()
         except:
@@ -917,11 +922,122 @@ class AddToIoGrowLeads(webapp2.RequestHandler):
         )
         Lead.insert(user_from_email,request)
 
+class ShareDocument(webapp2.RequestHandler):
+    def post(self):
+        email = self.request.get('email')
+        doc_id = self.request.get('doc_id')
+        resource_id = self.request.get('resource_id')
+        user_email = self.request.get('user_email')
+        access = self.request.get('access')
+        if access=='anyone':
+            # public
+            owner = model.User.get_by_email(user_email)
+            credentials = owner.google_credentials
+            http = credentials.authorize(httplib2.Http(memcache))
+            service = build('drive', 'v2', http=http)
+            # prepare params to insert
+            params = {
+                      'role': 'reader',
+                      'type': 'anyone'
+                      }
+            service.permissions().insert(
+                                        fileId=resource_id,
+                                        body=params,
+                                        sendNotificationEmails=False,
+                                        fields='id').execute()
+        else:
+            document = Document.get_by_id(int(doc_id))
+            if document:
+
+                    owner = model.User.get_by_gid(document.owner)
+                    if owner.email != email:
+                        credentials = owner.google_credentials
+                        http = credentials.authorize(httplib2.Http(memcache))
+                        service = build('drive', 'v2', http=http)
+                        # prepare params to insert
+                        params = {
+                                      'role': 'writer',
+                                      'type': 'user',
+                                      'value':email
+                                    }
+                        service.permissions().insert(
+                                                        fileId=document.resource_id,
+                                                        body=params,
+                                                        sendNotificationEmails=False,
+                                                        fields='id').execute()
+
+
+class InitPeerToPeerDrive(webapp2.RequestHandler):
+    def post(self):
+        invited_by_email = self.request.get('invited_by_email')
+        email = self.request.get('email')
+        user = model.User.get_by_email(email)
+        invited_by = model.User.get_by_email(invited_by_email)
+        documents = Document.query(
+                                  Document.organization == invited_by.organization,
+                                  Document.access=='public'
+                                  ).fetch()
+        for document in documents:
+            taskqueue.add(
+                            url='/workers/sharedocument',
+                            params={
+                                    'email': email,
+                                    'doc_id': str(document.key.id())
+                                    }
+                        )
+class ShareObjectDocuments(webapp2.RequestHandler):
+    def post(self):
+        obj_key_str = self.request.get('obj_key_str')
+        parent_key = ndb.Key(urlsafe=obj_key_str)
+        email = self.request.get('email')
+        documents = Document.list_by_parent(parent_key)
+        for document in documents.items:
+            taskqueue.add(
+                            url='/workers/sharedocument',
+                            params={
+                                    'email': email,
+                                    'doc_id': document.id
+                                    }
+                        )
+class SyncDocumentWithTeam(webapp2.RequestHandler):
+    def post(self):
+        user_email = self.request.get('user_email')
+        doc_id = self.request.get('doc_id')
+        parent_key_str = self.request.get('parent_key_str')
+        parent_key = ndb.Key(urlsafe=parent_key_str)
+        parent = parent_key.get()
+        collaborators = []
+        if parent.access == 'public':
+            collaborators = model.User.query(model.User.organization==parent.organization)
+        elif parent.access == 'private':
+            # list collborators who have access
+            acl = EndpointsHelper.who_has_access(parent_key)
+            collaborators = acl['collaborators']
+            if acl['owner'] is not None:
+                collaborators.append(acl['owner'])
+        for collaborator in collaborators:
+            if collaborator.email != user_email :
+                taskqueue.add(
+                                url='/workers/sharedocument',
+                                params={
+                                        'email': collaborator.email,
+                                        'doc_id': doc_id
+                                        }
+                            )
+
+
+
+
+
 
 
 
 routes = [
     # Task Queues Handlers
+    ('/workers/initpeertopeerdrive',InitPeerToPeerDrive),
+    ('/workers/sharedocument',ShareDocument),
+    ('/workers/shareobjectdocument',ShareObjectDocuments),
+    ('/workers/syncdocumentwithteam',SyncDocumentWithTeam),
     ('/workers/createorgfolders',CreateOrganizationFolders),
     ('/workers/createobjectfolder',CreateObjectFolder),
     # syncronize the events with google calendar. hdji hicham 09-08-2014 .
