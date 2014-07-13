@@ -195,6 +195,7 @@ Task.delete=function($scope,params){
        $scope.$apply();
        gapi.client. crmengine.tasks.delete(params).execute(function(resp) {
        $scope.taskDeleted();
+       $scope.listTasks();
        $scope.isLoading=true;
        $scope.$apply();
        });
