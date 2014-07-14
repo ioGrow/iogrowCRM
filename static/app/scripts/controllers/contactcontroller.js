@@ -972,6 +972,8 @@ $scope.listTags=function(){
                   }
         }
      }
+
+     
      }
     $scope.deleteEvent =function(eventt){
     var params = {'entityKey':eventt.entityKey};

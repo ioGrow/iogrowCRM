@@ -1,5 +1,8 @@
  #!/usr/bin/python
  # -*- coding: utf-8 -*-
+import mechanize
+from bs4 import BeautifulSoup
+import cookielib
 from google.appengine.api import search
 from google.appengine.api import memcache
 from apiclient.discovery import build
@@ -15,7 +18,7 @@ import gdata.contacts.data
 from gdata.gauth import OAuth2Token
 from gdata.contacts.client import ContactsClient
 from model import User
-import iograph
+# import iograph
 from highrise.pyrise import Highrise, Person
 
 FOLDERS = {
@@ -252,7 +255,7 @@ class scor_new_lead():
         service=build('prediction','v1.6',http=http)
         result=service.trainedmodels().predict(project='987765099891',id='7',body={'input':{'csvInstance':['Sofware Engineer','Purchase List']}}).execute()
         return result
-class scrapy_linkedin:
+class linked_in():
     def __init__(self):
         # Browser
         print "init broweser"
@@ -289,25 +292,140 @@ class scrapy_linkedin:
         self.browser.response().read()
         link= self.browser.links(url_regex="linkedin")
         links=[l for l in link]
-        return self.browser.follow_link(links[0]).read()
-    def scrape_linkedin(self,url,name):
-        person={}
-        html= self.open_url(url, name)
-        soup=BeautifulSoup(html)
-        # ******************************************************
-        full_name=soup.find('span',{'class':'full-name'})
+        if links : return self.browser.follow_link(links[0]).read()
+    def get_profile_header(self,soup,person):
+        # ***************************head***************************
+        member_head=soup.find('div',{'id':'member-1'})
+        full_name=member_head.find('span',{'class':'full-name'})
         given_name=full_name.find('span',{'class':'given-name'})
         family_name=full_name.find('span',{'class':'family-name'})
         person["given_name"]=given_name.text
         person["family_name"]=family_name.text
         # *******************************************************
-        industry=soup.find('dd',{'class':'industry'}).text
-        person["industry"]=industry
+        industry=member_head.find('dd',{'class':'industry'})
+        if industry: person["industry"]=industry.text
+        else : person["industry"]=''
         # ******************************************************
-        locality=soup.find('span',{'class':'locality'})
+        locality=member_head.find('span',{'class':'locality'})
         person['locality']=locality.text
         # ----------------------------------------------------
+        headline=member_head.find('p',{'class':'headline-title title'})
+        person['headline']=headline.text
+        #**********************************************************
 
         overview=soup.find('dl',{'id':'overview'})
-        print overview
+        current_post=overview.find('dd',{'class':'summary-current'})
+        # ---------------------------------------------------------
+        tab=[]
+        if current_post:
+            for post in current_post.findAll('li'):
+                tab.append(post.text.replace('\n',' '))
+        person['current_post']=tab
+        # ------------------------------------------------------------
+        tab=[]
+        past_post=overview.find('dd',{'class':'summary-past'})
+        if past_post:
+            for post in past_post.findAll('li'):
+                tab.append(post.text.replace('\n',' '))
+        person['past_post']=tab
+        # ------------------------------------------------------------
+        tab=[]
+        formation=overview.find('dd',{'class':'summary-education'})
+        if formation:
+            for post in formation.findAll('li'):
+                tab.append(post.text.replace('\n',' '))
+        person['formation']=tab
+        # -------------------------------------------------------------
+        tab=[]
+        formation=overview.find('dd',{'class':'websites'})
+        if formation:
+            for post in formation.findAll('li'):
+                tab.append('www.linkedin.com'+post.a.get('href'))
+        person['websites']=tab
+        # -------------------------------------------------------------
+        relation=overview.find('dd',{'class':'overview-connections'})
+        r=None
+        if relation:
+            r=relation.p.strong.text
+        person['relation']=r
+    def get_exprience(self,soup):
+        expriences={}
+        exp={}
+        profile_experience=soup.find('div',{'id':'profile-experience'})
+        current_exprience=profile_experience.findAll('div',{'class':'position  first experience vevent vcard summary-current'})
+        tab=[]
+        if current_exprience:
+            for ce in current_exprience:
+                a=ce.find('span',{'class':'title'})
+                if a: exp['title']=a.text
+                a=ce.find('p',{'class':'period'})
+                if a: exp['period']=a.text
+                a=ce.find('span',{'class':'org summary'})
+                if a: exp['organisation']=a.text
+                a=ce.find('p',{'class':' description current-position'})
+                if a: exp['description']=a.text
+                tab.append(exp)
+        expriences['current_exprience']=tab
+        tab=[]
+        exp={}
+        past_exprience=profile_experience.findAll('div',{'class':'position   experience vevent vcard summary-past'})
+        if past_exprience:
+            for pe in past_exprience:
+                a=pe.find('span',{'class':'title'})
+                if a : exp['title']=a.text
+                a=pe.find('p',{'class':'period'})
+                if a : exp['period']=a.text
+                a=pe.find('span',{'class':'org summary'})
+                if a : exp['organisation']=a.text
+                a=pe.find('p',{'class':' description past-position'})
+                if a : exp['description']=a.text
+                if a : tab.append(exp)
+        expriences['past_exprience']=tab
+        return expriences
+    def get_resume(self,soup):
+        resume_soup=soup.find('div',{'id':"profile-summary"})
+        if resume_soup :
+            resume=resume_soup.find('div',{'class':"content"})
+            if  resume:return resume.text
+    def get_certification(self,soup):
+        certifications=[]
+        certification={}
+        certification_soup=soup.find('div',{'id':"profile-certifications"})
+        if certification_soup :
+            certif_soup=certification_soup.findAll('li',{'class':'certification'})
+            if certif_soup:
+                for c in certif_soup :
+                    certification={}
+                    certification['name']=c.h3.text
+                    specific_soup=c.findAll('li')
+                    tab=[]
+                    if specific_soup: 
+                        for sp in specific_soup:
+                            tab.append(sp.text)
+                        certification['specifics']=tab
+                    certifications.append(certification)
+        return certifications
+    def get_skills (self,soup):
+        tab=[]
+        skills_soup=soup.find('div',{'id':"profile-skills"})
+        if skills_soup:
+            list_soup=skills_soup.findAll('li',{'class':'competency show-bean  '})
+            if list_soup :
+                for s in list_soup:
+                    tab.append(s.text.replace('\n',''))
+        return tab
+        # print skills_soup
+        # print current_exprience
+    def scrape_linkedin(self,url,name):
+        person={}
+        html= self.open_url(url, name)
+        if html:
+            soup=BeautifulSoup(html)
+            self.get_profile_header(soup,person)
+            person['experiences']=self.get_exprience(soup)
+            self.get_resume(soup)
+            person['resume']=self.get_resume(soup)
+            person['certifications']=self.get_certification(soup)
+            person['skills']=self.get_skills(soup)
         print person
+        return person
