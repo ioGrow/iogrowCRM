@@ -532,6 +532,47 @@
 
                 </div>
                 <div class="newContactform portlet-body" id="chats">
+                   <ul id="tasks" class="list-unstyled lead_related_events" ng-hide="newEventform">
+                      <li ng-repeat="task in tasks" id="event_<%=$index%>" class="relatedEventItem" ng-mouseenter="showDeleteBtn = true" ng-mouseleave="showDeleteBtn = false">
+                        <div class="event-container">
+                          <div class="showDescription">
+                            <span class="relatedEventTitle">
+                               <a href="/#/tasks/show/<%=task.id%>" class="discussion-content">
+                                 <%= task.title%>
+                               </a>
+                            </span>
+                            <a class="pull-right relatedEventMoreBtn">
+                              <i class="fa fa-chevron-right" ng-hide="showDetails" ng-click="showDetails=true"></i>
+                              <i class="fa fa-chevron-down" ng-show="showDetails" ng-click="showDetails=false"></i>
+                            </a>
+                            <a class="pull-left relatedEventDeleteBtn" ng-show="showDeleteBtn" ng-click="deleteTask(task)">
+                              <i class="fa fa fa-times-circle"></i>
+                            </a>
+                            <span class="relatedEventStartsAt pull-right" ng-hide="showDetails" ng-show="task.due" title="<%= task.due| date:'yyyy-MM-dd '%>">
+                                  <%= task.due | date:'dd MMM'%>
+                            </span>
+                          </div>  
+                          <div class="moreDetails row" ng-show="showDetails">
+                          <!--  <div class="col-md-6 col-xs-6 event-schedule">
+                                <span class=""><i class="fa fa-calendar"></i>
+                                 <%= task.due | date:'dd MMM'%> </span>
+                            </div>
+                            <div class="col-md-6 col-xs-6 event-schedule">
+                               <span class="">
+                                  <i class="fa fa-bell-o"></i> 
+                                  <%= task.reminder | date:'dd MMM'%>
+                                </span>
+                            </div>
+                            <div class="col-md-12">
+                               <span class="">
+                                  <i class="fa fa-map-marker"></i> 
+                                  <%= event.where %>-->
+                                <!--</span>
+                            </div>-->
+                          </div>
+                        </div>
+                      </li>
+                  </ul>
                   <form class=" slimForm ng-pristine ng-invalid ng-invalid-required">
                       <div class="formElements newTaskToLead" ng-show="newTaskform">
                                 <div class="row">
@@ -574,7 +615,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                      <div class="col-md-12 margin-top-10">
+                                      <div class="col-md-12">
                                           <select id="select2_sample2" class="form-control select2" multiple>
                                               <option ng-repeat="tag in tags"
                                                       value='<%=tag.entityKey%>'>
@@ -591,19 +632,6 @@
                           </div>
                       </div>
                   </form>
-                   <ul id="tasks" class="list-unstyled lead_related_tasks" ng-hide="newTaskform">
-                      <li ng-repeat="task in tasks" id="task_<%=$index%>">
-                        <input value="check1" type="checkbox">
-                        <span>
-                          <a href="/#/tasks/show/<%=task.id%>" class="discussion-content">
-                            <%= task.title%>
-                          </a>
-                          <span ng-show="task.due">
-                            [before: <%= task.due | date:'yyyy-MM-dd '%>]
-                          </span>
-                        </span>
-                      </li>
-                  </ul>
                 </div>
               </div>
     </div>
