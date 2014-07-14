@@ -144,6 +144,7 @@ eventservices.factory('Event', function($http) {
 
              $('#newEventModal').modal('hide');
              $('#errorModal').modal('show');
+             console.log(resp.message)
              if(resp.message=="Invalid grant"){
                 $scope.refreshToken();
                 $scope.isLoading = false;

@@ -2064,9 +2064,6 @@ class CrmEngineApi(remote.Service):
                       path='tasks/delete', http_method='DELETE',
                       name='tasks.delete')
     def delete_task(self, request):
-        print "------------------"
-        print "i'm here okay deleting tasks!!!!!!"
-        print "-----------------"
         user_from_email = EndpointsHelper.require_iogrow_user()
         entityKey = ndb.Key(urlsafe=request.entityKey)
         task=entityKey.get()
