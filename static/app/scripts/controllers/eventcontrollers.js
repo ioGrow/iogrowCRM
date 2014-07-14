@@ -386,7 +386,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                                 
                                       }
                                      }else{
-                                       console.log("the list of tasks is empty!")
+                                       console.log("the list of tasks is empty !")
                                       
                                      }
 
