@@ -130,8 +130,13 @@ accountservices.factory('Auth', function($http) {
       // console.log('now signedin i will show you th new authResult');
       // console.log(authResult);
       localStorage.removeItem('access_token');
-      gapi.auth.setToken({'access_token':authResult.access_token});
-      Auth.processAuth(authResult);
+      if (authResult.status.google_logged_in){
+        gapi.auth.setToken(authResult);
+        Auth.processAuth(authResult);
+      }else{
+        window.location.replace('/sign-in');
+      }
+
   };
   Auth.processAuth = function(authResult) {
       //Auth.$scope.immediateFailed = true;
