@@ -184,7 +184,7 @@
                 </a>
                 <ul class="dropdown-menu" >
                   <li>
-                    <a href="{{logout_url}}">
+                    <a href="#" onclick="SignOut();return false;">
                       Sign Out
                     </a>
                   </li>
@@ -430,6 +430,12 @@
     if (isMobile){
 
        $(".app-menu").remove();
+    }
+    function SignOut(){
+      if (typeof(Storage) != "undefined") {
+          localStorage.removeItem('access_token');
+      }
+      window.location.replace('{{logout_url}}');
     }
 
   </script>
