@@ -33,7 +33,7 @@ accountservices.factory('Contact', function($http) {
                                   }
                               }
                         }
-                       
+
                     }
                 }
                 if (resp.topics){
@@ -163,7 +163,7 @@ accountservices.factory('Contact', function($http) {
                     $scope.imageSrc='/static/img/avatar_contact.jpg';
                   }
                $scope.isContentLoaded = true;
-              
+
                //$scope.listInfonodes();
                // $scope.listTopics(resp);
                // $scope.listTasks();
@@ -176,10 +176,20 @@ accountservices.factory('Contact', function($http) {
 
               document.title = "Contact: " + $scope.contact.firstname +' ' +$scope.contact.lastname ;
               $scope.email.to = '';
-                angular.forEach($scope.contact.emails, function(value, key){
+              var invites = new Array();
+                angular.forEach($scope.infonodes.emails, function(value, key){
+                  var inviteOnHangoutByEmail = { 'id' : value.email, 'invite_type' : 'EMAIL' };
+                  invites.push(inviteOnHangoutByEmail);
                   $scope.email.to = $scope.email.to + value.email + ',';
-
                 });
+
+                gapi.hangout.render('placeholder-div1', {
+                  'render': 'createhangout',
+                  'initial_apps': [{'app_id' : '184219133185', 'start_data' : 'dQw4w9WgXcQ', 'app_type' : 'ROOM_APP' }],
+                  'invites':invites
+                });
+
+
                     $scope.renderMaps();
                // Call the method $apply to make the update on the scope
                 $scope.isLoading = false;

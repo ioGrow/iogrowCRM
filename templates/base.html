@@ -103,7 +103,7 @@
 
         <ul class="nav navbar-nav pull-right">
 
-              <li class="dropdown user chrome-ext hidden-xs">
+              <li id="chromeExtension" class="dropdown user chrome-ext hidden-xs"  >
                   <input type="submit" onclick="$('#InstallChromeExtension').modal() " class="btn blue btn-block pull-right" value="Install chrome extension" style="padding-left:5px;padding-right:5px;">
               </li>
 
@@ -377,16 +377,6 @@
    <link href="/static/angular-xeditable-0.1.8/css/xeditable.css" rel="stylesheet">
   <script src="/static/angular-xeditable-0.1.8/js/xeditable.js"></script>
    <script src="/static/app/scripts/vendor/ui-select2.js" ></script>
-   <script type="text/javascript">
-      function isMobile() {
-          var index = navigator.appVersion.indexOf("Mobile");
-          return (index > -1);
-        }
-        if (isMobile()) {
-          $(".chrome-ext").addClass("hidden");
-          $(".app-menu").addClass("hidden");
-        }
-   </script>
   <script type="text/javascript">
     var apisToLoad;
     var callback = function() {
@@ -405,11 +395,11 @@
 
 
 
-       var ROOT = '/_ah/api';
+      //  var ROOT = '/_ah/api';
 
 
 
-        // var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+        var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 
 
 
@@ -431,6 +421,17 @@
           window.location.replace('{{active_app.url}}');
       };
     }
+
+    var isMobile = navigator.appVersion.indexOf("Mobile") > -1;
+    var isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+    if (isMobile || !isChrome) {
+        $( "#chromeExtension" ).remove();
+    }
+    if (isMobile){
+
+       $(".app-menu").remove();
+    }
+
   </script>
 
   <script src="https://apis.google.com/js/client.js?onload=loadGapi">
