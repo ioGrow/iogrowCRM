@@ -607,10 +607,11 @@ class CrmEngineApi(remote.Service):
             raise endpoints.NotFoundException('Account not found.')
         patched_model_key = my_model.entityKey
         patched_model = ndb.Key(urlsafe=patched_model_key).get()
-        print 'current model ***************'
-        pprint.pprint(patched_model)
-        print 'to be updated ******************'
-        pprint.pprint(my_model)
+        EndpointsHelper.share_related_documents_after_patch(
+                                                            user,
+                                                            patched_model,
+                                                            my_model
+                                                          )
         properties = Account().__class__.__dict__
         for p in properties.keys():
             patched_p = eval('patched_model.' + p)
@@ -619,18 +620,18 @@ class CrmEngineApi(remote.Service):
             and (my_p and not(p in ['put', 'set_perm', 'put_index'])):
                 exec('patched_model.' + p + '= my_model.' + p)
         patched_model.put()
-        if my_model.logo_img_id:
-            if patched_model.folder:
-                credentials = user.google_credentials
-                http = credentials.authorize(httplib2.Http(memcache))
-                service = build('drive', 'v2', http=http)
-                params = {
-                          'parents': [{'id': patched_model.folder}]
-                        }
-                service.files().patch(
-                                    fileId=my_model.logo_img_id,
-                                    body=params,
-                                    fields='id').execute()
+        # if my_model.logo_img_id:
+        #     if patched_model.folder:
+        #         credentials = user.google_credentials
+        #         http = credentials.authorize(httplib2.Http(memcache))
+        #         service = build('drive', 'v2', http=http)
+        #         params = {
+        #                   'parents': [{'id': patched_model.folder}]
+        #                 }
+        #         service.files().patch(
+        #                             fileId=my_model.logo_img_id,
+        #                             body=params,
+        #                             fields='id').execute()
         return patched_model
 
     # accounts.search API
@@ -698,8 +699,11 @@ class CrmEngineApi(remote.Service):
             raise endpoints.NotFoundException('Case not found.')
         patched_model_key = my_model.entityKey
         patched_model = ndb.Key(urlsafe=patched_model_key).get()
-        print patched_model
-        print my_model
+        EndpointsHelper.share_related_documents_after_patch(
+                                                            user_from_email,
+                                                            patched_model,
+                                                            my_model
+                                                          )
         properties = Case().__class__.__dict__
         for p in properties.keys():
               if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p)):
@@ -1253,12 +1257,18 @@ class CrmEngineApi(remote.Service):
                     name='contacts.patch'
                     )
     def ContactPatch(self, my_model):
+        user_from_email = EndpointsHelper.require_iogrow_user()
         #user_from_email = EndpointsHelper.require_iogrow_user()
         # TODO: Check permissions
         if not my_model.from_datastore:
             raise endpoints.NotFoundException('Contact not found.')
         patched_model_key = my_model.entityKey
         patched_model = ndb.Key(urlsafe=patched_model_key).get()
+        EndpointsHelper.share_related_documents_after_patch(
+                                                            user_from_email,
+                                                            patched_model,
+                                                            my_model
+                                                          )
         properties = Contact().__class__.__dict__
         for p in properties.keys():
             if (eval('patched_model.' + p) != eval('my_model.' + p)) \
@@ -1722,6 +1732,11 @@ class CrmEngineApi(remote.Service):
             raise endpoints.NotFoundException('Lead not found.')
         patched_model_key = my_model.entityKey
         patched_model = ndb.Key(urlsafe=patched_model_key).get()
+        EndpointsHelper.share_related_documents_after_patch(
+                                                            user_from_email,
+                                                            patched_model,
+                                                            my_model
+                                                          )
         properties = Lead().__class__.__dict__
         for p in properties.keys():
             if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p) and not(p in ['put','set_perm','put_index']) ):
@@ -2104,10 +2119,26 @@ class CrmEngineApi(remote.Service):
                         name='opportunities.patch'
                         )
     def OpportunityPatch(self, my_model):
-        #user_from_email = EndpointsHelper.require_iogrow_user()
-        # Todo: Check permissions
-        my_model.put()
-        return my_model
+        user = EndpointsHelper.require_iogrow_user()
+        if not my_model.from_datastore:
+            raise endpoints.NotFoundException('Opportunity not found.')
+        patched_model_key = my_model.entityKey
+        patched_model = ndb.Key(urlsafe=patched_model_key).get()
+        EndpointsHelper.share_related_documents_after_patch(
+                                                            user,
+                                                            patched_model,
+                                                            my_model
+                                                          )
+        properties = Opportunity().__class__.__dict__
+        for p in properties.keys():
+            patched_p = eval('patched_model.' + p)
+            my_p = eval('my_model.' + p)
+            if (patched_p != my_p) \
+            and (my_p and not(p in ['put', 'set_perm', 'put_index'])):
+                exec('patched_model.' + p + '= my_model.' + p)
+        patched_model.put()
+        return patched_model
+
 
     # opportunities.search api
     @endpoints.method(
@@ -2223,6 +2254,13 @@ class CrmEngineApi(remote.Service):
                     # check if user is in the same organization
                     if shared_with_user.organization == about.organization:
                         # insert the edge
+                        taskqueue.add(
+                                        url='/workers/shareobjectdocument',
+                                        params={
+                                                'email': shared_with_user.email,
+                                                'obj_key_str': about_key.urlsafe()
+                                                }
+                                    )
                         Edge.insert(
                                     start_node = about_key,
                                     end_node = shared_with_user_key,
@@ -2344,28 +2382,13 @@ class CrmEngineApi(remote.Service):
     def UserInsert(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
         # OAuth flow
-        try:
-            oauth_flow = flow_from_clientsecrets('client_secrets.json',
-                scope=SCOPES)
-            credentials = user_from_email.google_credentials
-            if credentials is None or credentials.invalid:
-                new_credentials = run( oauth_flow, credentials)
-            else:
-                new_credentials = credentials
-            http = new_credentials.authorize(httplib2.Http(memcache))
-            organization = user_from_email.organization.get()
-            folderid = organization.org_folder
-            new_permission = {
-                             'value': my_model.email,
-                             'type': 'user',
-                             'role': 'writer'
-            }
-            service = build('drive', 'v2', http=http)
-            service.permissions().insert(fileId=folderid, sendNotificationEmails= False, body=new_permission).execute()
-        except:
-            raise endpoints.UnauthorizedException('Invalid grant' )
-            return
-
+        taskqueue.add(
+                        url='/workers/initpeertopeerdrive',
+                        params={
+                                'invited_by_email':user_from_email.email,
+                                'email': my_model.email,
+                                }
+                    )
         invited_user = User.get_by_email(my_model.email)
         send_notification_mail = False
         if invited_user is not None:

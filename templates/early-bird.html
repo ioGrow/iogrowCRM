@@ -935,6 +935,11 @@ var helper = (function() {
       if (authResult['access_token']) {
         // The user is signed in
         this.authResult = authResult;
+        if (typeof(Storage) != "undefined") {
+            localStorage['is_signed_in'] = true;
+            localStorage['access_token']=authResult.access_token;
+            localStorage['authResultexpiration'] = authResult.expires_at;
+        }
         helper.connectServer();
         // After we load the Google+ API, render the profile data from Google+.
         //gapi.client.load('plus','v1',this.renderProfile);

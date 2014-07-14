@@ -3,6 +3,7 @@
 from google.appengine.api import search
 from google.appengine.api import memcache
 from apiclient.discovery import build
+from google.appengine.api import taskqueue
 from apiclient import errors
 import httplib2
 import endpoints
@@ -14,7 +15,9 @@ import gdata.contacts.data
 from gdata.gauth import OAuth2Token
 from gdata.contacts.client import ContactsClient
 from model import User
+
 from highrise.pyrise import Highrise, Person, Company, Deal, Task, Tag, Case
+
 
 FOLDERS = {
             'Account': 'accounts_folder',
@@ -67,9 +70,7 @@ class EndpointsHelper():
         if search_document:
             for e in search_document.fields:
                 if e.name == kind:
-                    print 'something before'
                     indexed_edge = empty_string(e.value) + ' ' + str(indexed_edge)
-                    print 'something after'
                 data[e.name] = e.value
         data[kind] = indexed_edge
         parent.put_index(data)
@@ -186,6 +187,56 @@ class EndpointsHelper():
         auth_token.authorize(gd_client)
         contact_entry = gd_client.CreateContact(google_contact_schema)
         return contact_entry.id.text
+    @classmethod
+    def share_related_documents_after_patch(cls,user,old_obj,new_obj):
+
+        # from private to access
+        if old_obj.access=='private' and new_obj.access=='public':
+            users = User.query(User.organization==user.organization)
+            for collaborator in users:
+                if collaborator.email != user.email:
+                    taskqueue.add(
+                                    url='/workers/shareobjectdocument',
+                                    params={
+                                            'email': collaborator.email,
+                                            'obj_key_str': old_obj.key.urlsafe()
+                                            }
+                                )
+        if hasattr(old_obj,'profile_img_id'):
+            if old_obj.profile_img_id != new_obj.profile_img_id and new_obj.profile_img_id !="":
+                taskqueue.add(
+                                url='/workers/sharedocument',
+                                params={
+                                        'user_email':user.email,
+                                        'access': 'anyone',
+                                        'resource_id': new_obj.profile_img_id
+                                        }
+                            )
+        if hasattr(old_obj,'logo_img_id'):
+            if old_obj.logo_img_id != new_obj.logo_img_id and new_obj.logo_img_id !="":
+                taskqueue.add(
+                                url='/workers/sharedocument',
+                                params={
+                                        'user_email':user.email,
+                                        'access': 'anyone',
+                                        'resource_id': new_obj.logo_img_id
+                                        }
+                            )
+    @classmethod
+    def who_has_access(cls,obj_key):
+        acl = {}
+        obj = obj_key.get()
+        owner_gid = obj.owner
+        owner = User.get_by_gid(owner_gid)
+        collaborators = []
+        edge_list = iograph.Edge.list(start_node=obj_key,kind='permissions')
+        for edge in edge_list['items']:
+            collaborator = edge.end_node.get()
+            if collaborator:
+                collaborators.append(collaborator)
+        acl['owner'] = owner
+        acl['collaborators'] = collaborators
+        return acl
 
     @classmethod
     def highrise_import_peoples(cls,request):
