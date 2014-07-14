@@ -83,8 +83,8 @@ class EndpointsHelper():
                      .execute())
             print 'Message Id: %s' % message['id']
             return message
-        except errors.HttpError, error:
-            print 'An error occurred: %s' % error
+        except:
+            raise endpoints.UnauthorizedException(cls.INVALID_GRANT)
     @classmethod
     def create_message(cls,sender, to,cc,bcc, subject, message_html):
         """Create a message for an email.
