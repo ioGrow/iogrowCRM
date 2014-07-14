@@ -157,8 +157,9 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
    $scope.deleteTask = function(){
       
      var params = {'entityKey':$scope.task.entityKey};
-     
-     Task.delete($scope, params);
+
+      
+       Task.delete($scope, params);
       $('#BeforedeleteTask').modal('hide');
 
      };
@@ -269,13 +270,18 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
             console.log(params);
       Task.patch($scope,params);
     };
-  $scope.inlinePatch=function(kind,edge,name,entityKey,value){
+  $scope.inlinePatch=function(kind,edge,name,task,value){
   
    if (kind=='Task') {
        if (name='title')
           {params = {'id':$scope.task.id,
-             title:value}
-         Task.patch($scope,params);}         
+                      'entityKey':task.entityKey,
+                      'due':moment(task.due).format('YYYY-MM-DDTHH:mm:00.000000'),
+                      title:value}
+                 
+         Task.patch($scope,params);
+
+       }         
          
                }}
 
