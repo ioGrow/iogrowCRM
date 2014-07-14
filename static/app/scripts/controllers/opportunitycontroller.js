@@ -952,36 +952,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
 /*******************/
 
 
-     //       if ($scope.newEventform==false) {
-     //            $scope.newEventform=true;
-     //       }else{
-            
-     //        if (ioevent.title!=null&&ioevent.title!="") {
-     //                var params ={}
-     //            if (ioevent.starts_at){
-     //                if (ioevent.ends_at){
-     //                  params ={'title': ioevent.title,
-     //                          'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-     //                          'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
-     //                          'where': ioevent.where,
-     //                          'parent':$scope.opportunity.entityKey
-     //                  }
-
-     //                }else{
-     //                  params ={
-     //                    'title': ioevent.title,
-     //                          'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-     //                          'where': ioevent.where,
-     //                          'parent':$scope.opportunity.entityKey
-     //                  }
-     //                }
-
-     //                Event.insert($scope,params);
-     //                $scope.ioevent={};
-     //                $scope.newEventform=false;
-     //              }
-     //    }
-     // }
+     
     };
      $scope.deleteEvent =function(eventt){
     var params = {'entityKey':eventt.entityKey};
