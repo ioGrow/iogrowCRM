@@ -17,22 +17,36 @@ accountservices.factory('Auth', function($http) {
   }
   Auth.initWithLocalStorage = function(){
       var timeNow = new Date().getTime()/1000;
+      // console.log('init with localStorage');
       if (localStorage.getItem("access_token")){
+          // console.log('access token retreived from localStorage');
+          // console.log(localStorage.getItem("access_token"));
           var access_token = localStorage.getItem("access_token");
           var authResultexpiration = localStorage.getItem("authResultexpiration");
           var diff = authResultexpiration - timeNow;
           if (diff>0 && access_token!="null"){
+            //  console.log('the token is still valid it will expire in');
+            //  console.log(diff);
              Auth.$scope.immediateFailed = false;
              Auth.$scope.isSignedIn = true;
-             gapi.auth.setToken({'access_token':access_token});
+             if (access_token!="null"){
+                 gapi.auth.setToken({'access_token':access_token});
+             }
+            //  console.log('after setting gapi token');
+            //  console.log(gapi.auth.getToken());
              Auth.$scope.runTheProcess();
           }
           else{
+              // console.log('the token is expired');
+              // console.log(diff);
               // refresh token
               Auth.refreshToken();
           }
       // render Google+ sign-in
       }else{
+              // console.log('there is no access token on localStorage i will render signin');
+              Auth.$scope.immediateFailed = true;
+              Auth.$scope.$apply();
               gapi.signin.render('myGsignin', {
                 'callback': Auth.signIn,
                 'clientid': '987765099891.apps.googleusercontent.com',
@@ -56,8 +70,6 @@ accountservices.factory('Auth', function($http) {
               window.access_token = authResult.access_token;
               window.authResultexpiration =  authResult.expires_at;
       }
-      var access_token = authResult.access_token;
-      gapi.auth.setToken({'access_token':access_token});
       Auth.$scope.runTheProcess();
   }
   Auth.initSimple = function(){
@@ -115,12 +127,21 @@ accountservices.factory('Auth', function($http) {
       }
   };
   Auth.signIn = function(authResult){
-      Auth.processAuth(authResult);
+      // console.log('now signedin i will show you th new authResult');
+      // console.log(authResult);
+      localStorage.removeItem('access_token');
+      if (authResult.status.google_logged_in){
+        gapi.auth.setToken(authResult);
+        Auth.processAuth(authResult);
+      }else{
+        window.location.replace('/sign-in');
+      }
+
   };
   Auth.processAuth = function(authResult) {
       //Auth.$scope.immediateFailed = true;
-      console.log(authResult);
-      Auth.$scope.isRefreshing = false;
+      // console.log(authResult);
+      window.isRefreshing = false;
       if (authResult) {
         if (authResult['access_token']){
           Auth.$scope.immediateFailed = false;
@@ -151,16 +172,11 @@ accountservices.factory('Auth', function($http) {
     });
   }
   Auth.refreshToken = function(){
-    if (!Auth.$scope.isRefreshing){
-        if (typeof(Storage) != "undefined") {
-            localStorage['access_token']="null";
-        }
-        Auth.$scope.isRefreshing = true;
+    if (!window.isRefreshing){
+        window.isRefreshing = true;
+        Auth.$scope.$apply();
         Auth.renderForcedSignIn();
     }
-
-
-
     //window.location.reload(true);
 
   };
