@@ -248,7 +248,7 @@ class Organization(ndb.Model):
         cls.init_default_values(org_key)
 
     @classmethod
-    def update_current_apps_and_tabs(cls,org_key):
+    def upgrade_to_business_version(cls,org_key):
         current_org_apps = Application.query(Application.organization==org_key).fetch()
         # delete existing apps
         for app in current_org_apps:
@@ -258,18 +258,48 @@ class Organization(ndb.Model):
         for tab in current_org_tabs:
             tab.key.delete()
 
+        created_tabs = []
+        for tab in STANDARD_TABS:
+            created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
+            tab_key = created_tab.put()
+            created_tabs.append(tab_key)
+        # create admin tabs
+        admin_tabs = []
+        for tab in ADMIN_TABS:
+            created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
+            tab_key =created_tab.put()
+            admin_tabs.append(tab_key)
+        # create standard apps
+        created_apps = []
+        sales_app = None
+        for app in STANDARD_APPS:
+            created_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=created_tabs,organization=org_key)
+            app_key = created_app.put()
+            if app['name']=='sales':
+                sales_app = app_key
+            created_apps.append(app_key)
+        # create admin app
+        app = ADMIN_APP
+        admin_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=admin_tabs,organization=org_key)
+        admin_app_key = admin_app.put()
+        profiles = Profile.query(Profile.organization==org_key).fetch()
+        for profile in profiles:
+            default_app = sales_app
+            if profile.name=='Super Administrator':
+                created_apps.append(admin_app_key)
+                created_tabs.extend(admin_tabs)
+            profile.apps=created_apps
+            profile.default_app=default_app
+            profile.tabs=created_tabs
+            profile.put()
 
-
-
-
-
-
-
-
-
-
-
-
+        users = User.query(User.organization==org_key).fetch()
+        for user in users:
+            tabs_mem_key = '%s_tabs' % user.google_user_id
+            memcache.delete(tabs_mem_key)
+            active_app_mem_key = '%s_active_app' % user.google_user_id
+            memcache.delete(active_app_mem_key)
+            user.init_user_config(org_key,user.profile)
 
 class Permission(ndb.Model):
     about_kind = ndb.StringProperty(required=True)

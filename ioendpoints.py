@@ -2191,3 +2191,12 @@ class CrmEngineApi(remote.Service):
                 exec('patched_model.' + p + '= my_model.' + p)
         patched_model.put()
         return patched_model
+
+    # users.upgrade api v2
+    @endpoints.method(message_types.VoidMessage, message_types.VoidMessage,
+                      path='users/upgrade', http_method='POST',
+                      name='users.upgrade')
+    def upgrade_to_business(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        Organization.upgrade_to_business_version(user_from_email.organization)
+        return message_types.VoidMessage()
