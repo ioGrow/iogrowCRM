@@ -951,7 +951,80 @@ class CrmEngineApi(remote.Service):
                       path='highrise/import_peoples', http_method='POST',
                       name='highrise.import_peoples')
     def highrise_import_peoples(self, request):
+        user= EndpointsHelper.require_iogrow_user()
         people=EndpointsHelper.highrise_import_peoples(request)
+        for person in people:
+            print person.__dict__, "dddddddddddddddd"
+            ############
+            # Store company if persone
+            ################
+            company_details=EndpointsHelper.highrise_import_company_details(person.company_id)
+            print company_details.__dict__," cooooooooooooooooo"
+            phones=list()
+            phone=iomessages.PhoneSchema(
+                                            number=company_details.contact_data.phone_numbers[0].number,
+                                            type=str(company_details.contact_data.phone_numbers[0].location)
+                                            )
+            phones.append(phone)
+            email=iomessages.EmailSchema(
+                                        email=company_details.contact_data.email_addresses[0].address
+                                        )
+            emails=list()
+            emails.append(email)
+            infonode=iomessages.InfoNodeRequestSchema(
+                                kind='company',
+                                            fields=[
+                                                iomessages.RecordSchema(
+                                                field = 'url',
+                                                value = company_details.contact_data.web_addresses[0].url
+                                                ),
+                                                iomessages.RecordSchema(
+                                                field = 'twitter_account',
+                                                value = company_details.contact_data.twitter_accounts[0].username
+                                                ),
+                                                iomessages.RecordSchema(
+                                                field = 'country',
+                                                value = company_details.contact_data.addresses[0].country
+                                                ),
+                                                iomessages.RecordSchema(
+                                                field = 'street',
+                                                value = company_details.contact_data.addresses[0].street
+                                                )
+
+                                            ]
+                                )
+            infonodes=list()
+            infonodes.append(infonode)
+            account_request=AccountInsertRequest(
+                                                name=person.company_name,
+                                                emails=emails,
+                                                logo_img_url=company_details.avatar_url,
+                                                infonodes=infonodes,
+                                                phones=phones
+                                                )
+            account_schema = Account.insert(user,account_request)
+            #Store Persone
+            key=account_schema.entityKey
+            infonodes=list()
+            infonodes.append(infonode)
+            phone=iomessages.PhoneSchema(
+                                            number=person.contact_data.phone_numbers[0].number,
+                                            type=str(person.contact_data.phone_numbers[0].location)                                            )
+            phones=list()
+            phones.append(phone)
+            contact_request = ContactInsertRequest(
+                                        account=key,
+                                        firstname=person.first_name,
+                                        lastname=person.last_name,
+                                        title=person.title,
+                                        profile_img_url=person.avatar_url,
+                                        infonodes=infonodes,
+                                        phones=phones
+                                         )
+            
+            Contact.insert(user,contact_request)
+            ############
+           
         return message_types.VoidMessage()
 
     # highrise.import_companys api
@@ -959,7 +1032,52 @@ class CrmEngineApi(remote.Service):
                       path='highrise/import_companys', http_method='POST',
                       name='highrise.import_companys')
     def highrise_import_companys(self, request):
+        user= EndpointsHelper.require_iogrow_user()
         companys=EndpointsHelper.highrise_import_companys(request)
+        for company in companys:
+            company_details=EndpointsHelper.highrise_import_company_details(company.id)
+            print company_details.contact_data.instant_messengers[0].__dict__
+            phones=list()
+            phone=iomessages.PhoneSchema(
+                                            number=company_details.contact_data.phone_numbers[0].number
+                                            )
+            phones.append(phone)
+            email=iomessages.EmailSchema(
+                                        email=company_details.contact_data.email_addresses[0].address
+                                        )
+            emails=list()
+            emails.append(email)
+            infonode=iomessages.InfoNodeRequestSchema(
+                                kind='company',
+                                            fields=[
+                                                iomessages.RecordSchema(
+                                                field = 'url',
+                                                value = company_details.contact_data.web_addresses[0].url
+                                                ),
+                                                iomessages.RecordSchema(
+                                                field = 'twitter_account',
+                                                value = company_details.contact_data.twitter_accounts[0].username
+                                                ),
+                                                iomessages.RecordSchema(
+                                                field = 'country',
+                                                value = company_details.contact_data.addresses[0].country
+                                                ),
+                                                iomessages.RecordSchema(
+                                                field = 'street',
+                                                value = company_details.contact_data.addresses[0].street
+                                                )
+
+                                            ]
+                                )
+            infonodes=list()
+            infonodes.append(infonode)
+            account_request=AccountInsertRequest(
+                                                name=company.name,
+                                                emails=emails,
+                                                infonodes=infonodes,
+                                                phones=phones
+                                                )
+            Account.insert(user,account_request)
         return message_types.VoidMessage()
 
     # highrise.import_opportunities api
@@ -1010,7 +1128,7 @@ class CrmEngineApi(remote.Service):
                       path='highrise/import_tasks_person', http_method='POST',
                       name='highrise.import_tasks_person')
     def highrise_import_tasks_of_person(self, request):
-        tasks=EndpointsHelper.highrise_import_tasks_of_person(request)
+        user= EndpointsHelper.require_iogrow_user()
         return message_types.VoidMessage()
 # highrise.import_notes_of_company api
     @endpoints.method(DetailImportHighriseRequest, message_types.VoidMessage,

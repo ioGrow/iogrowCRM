@@ -780,6 +780,7 @@ class Contact(EndpointsModel):
                                             )
         phone_types = {
                         'work':gdata.data.WORK_REL,
+                        'Work':gdata.data.WORK_REL,
                         'home':gdata.data.HOME_REL,
                         'mobile':gdata.data.MOBILE_REL,
                         'other':gdata.data.OTHER_REL

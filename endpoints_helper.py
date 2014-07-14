@@ -72,6 +72,7 @@ class EndpointsHelper():
                     print 'something after'
                 data[e.name] = e.value
         data[kind] = indexed_edge
+        print parent ,"pppppppppppp"
         parent.put_index(data)
 
     @classmethod
@@ -196,6 +197,11 @@ class EndpointsHelper():
         companys=Company.all()
         return companys
     @classmethod
+    def highrise_import_company_details(cls, company_id):
+        companie=Company.get(company_id)
+        return companie
+
+    @classmethod
     def highrise_import_opportunities(cls, request):
         Deals=Deal.all()
         return Deals
@@ -223,7 +229,7 @@ class EndpointsHelper():
         return tags
     @classmethod
     def highrise_import_tasks_of_person(cls, request):
-        person=Person.get(request.id)
+        person=Person.get(request)
         tasks=person.tasks
         return tasks
     @classmethod
