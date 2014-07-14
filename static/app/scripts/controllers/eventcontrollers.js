@@ -308,10 +308,9 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
           defaultView:'agendaWeek',
           editable: true,
           eventSources: [{
-            events: function(start, end, timezone, callback) {
+          events: function(start, end, timezone, callback) {
               // events client table to feed the calendar .  // hadji hicham  08-07-2014 10:40
               var events=[];
-
               var params = {
                             'events_list_start':moment(start).format('YYYY-MM-DDTH:mm:00.000000'),
                             'events_list_end':moment(end).format('YYYY-MM-DDTH:mm:00.000000')
@@ -327,6 +326,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                   $scope.$apply();  
                                 }
                                 else{
+                              
                                     if(resp.code==401){
                                             $scope.refreshToken();
                                             $scope.isLoading = false;
@@ -334,8 +334,6 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                     };
                                 }
                });  
-
-
                // load tasks 
                       gapi.client.crmengine.tasks.listv2(params1).execute(function(resp) {
                                 if(!resp.code){
@@ -365,7 +363,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                                 
                                       };
                                      }else{
-                                       console.log("events list is empty");
+                                             console.log("the list is empty");
                                      }
                                      // feed events client table with tasks  hadji hicham  08-07-2014 10:40
                                      
@@ -388,18 +386,11 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                                 
                                       }
                                      }else{
-                                      console.log("tasks list is empty");
+                                       console.log("the list of tasks is empty!")
+                                      
                                      }
 
-                                        
-                                    
-                                      
-                                      
-                                     
-                                         
-                                      
-                                       
-                                  
+
                                     
                                        // feed the calendar client table with events and tasks . hadji hicham  08-07-2014 10:40
                                        callback(events); 
@@ -556,10 +547,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
            },
       //Triggered when the user mouses over an event. hadji hicham 14-07-2014.
        eventMouseover:function( event, jsEvent, view ) { 
-                  console.log("**********here **********");
-                  console.log(event);
-                  console.log(event.id)
-                  console.log("**********end **********");
+               
        },
      //Triggered when event resizing begins.
        eventResizeStart:function( event, jsEvent, ui, view ) { },
@@ -713,16 +701,6 @@ $scope.updateEventRenderAfterAdd= function(){
 
      var events =$('#calendar').fullCalendar( 'clientEvents' ,["new"] );
        $('#calendar').fullCalendar( 'removeEvents' ,["new"])
-         // events[0].id=$scope.justadded.id;
-         // events[0].entityKey=$scope.justadded.entityKey;
-         // events[0].start=moment($scope.justadded.starts_at);
-         // events[0].end=moment($scope.justadded.ends_at);
-         // events[0].my_type="event";
-         // events[0].url='/#/events/show/'+events[0].id.toString(),
-         // console.log("***************************");
-         // console.log(events);
-         // console.log("----------------------------");
-       // $('#calendar').fullCalendar('updateEvent', events[0]);
        var eventObject = {
                     id:$scope.justadded.id,
                     entityKey:$scope.justadded.entityKey,
