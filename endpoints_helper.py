@@ -202,3 +202,62 @@ class scor_new_lead():
         service=build('prediction','v1.6',http=http)
         result=service.trainedmodels().predict(project='987765099891',id='7',body={'input':{'csvInstance':['Sofware Engineer','Purchase List']}}).execute()
         return result
+class scrapy_linkedin:
+    def __init__(self):
+        # Browser
+        print "init broweser"
+        br = mechanize.Browser()
+
+        # Cookie Jar
+        cj = cookielib.LWPCookieJar()
+        br.set_cookiejar(cj)
+
+        # Browser options
+        br.set_handle_equiv(True)
+        br.set_handle_gzip(True)
+        br.set_handle_redirect(True)
+        br.set_handle_referer(True)
+        br.set_handle_robots(False)
+
+        # Follows refresh 0 but not hangs on refresh > 0
+        br.set_handle_refresh(mechanize._http.HTTPRefreshProcessor(), max_time=1)
+
+        # Want debugging messages?
+        #br.set_debug_http(True)
+        #br.set_debug_redirects(True)
+        #br.set_debug_responses(True)
+
+        # User-Agent (this is cheating, ok?)
+        br.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
+        self.browser=br
+    def open_url(self,url,name):
+        r=self.browser.open(url)
+        self.browser.response().read()
+        self.browser.select_form(nr=1)
+        self.browser.form['q']=name
+        self.browser.submit()
+        self.browser.response().read()
+        link= self.browser.links(url_regex="linkedin")
+        links=[l for l in link]
+        return self.browser.follow_link(links[0]).read()
+    def scrape_linkedin(self,url,name):
+        person={}
+        html= self.open_url(url, name)
+        soup=BeautifulSoup(html)
+        # ******************************************************
+        full_name=soup.find('span',{'class':'full-name'})
+        given_name=full_name.find('span',{'class':'given-name'})
+        family_name=full_name.find('span',{'class':'family-name'})
+        person["given_name"]=given_name.text
+        person["family_name"]=family_name.text
+        # *******************************************************
+        industry=soup.find('dd',{'class':'industry'}).text
+        person["industry"]=industry
+        # ******************************************************
+        locality=soup.find('span',{'class':'locality'})
+        person['locality']=locality.text
+        # ----------------------------------------------------
+
+        overview=soup.find('dl',{'id':'overview'})
+        print overview
+        print person

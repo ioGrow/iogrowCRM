@@ -75,6 +75,7 @@ accountservices.factory('InfoNode', function($http) {
              };
          }
       });
+      $scope.isLoading=false;
   };
   InfoNode.patch = function($scope,params){
       $scope.isLoading = true;
@@ -93,6 +94,7 @@ accountservices.factory('InfoNode', function($http) {
              };
          }
       });
+      $scope.isLoading=false;
   };
 
   InfoNode.delete = function($scope,params){

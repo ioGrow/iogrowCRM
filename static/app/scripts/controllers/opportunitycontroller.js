@@ -1132,22 +1132,26 @@ $scope.deleteopportunity= function(){
 
     //HKA 07.03.2014 Add Custom field
 
-    $scope.addCustomField = function(customField){
-      params = {'parent':$scope.opportunity.entityKey,
-            'kind':'customfields',
-            'fields':[
-                {
-                  "field": customField.field,
-                  "value": customField.value
-                }
-            ]
-  };
-  InfoNode.insert($scope,params);
+   $scope.addCustomField = function(customField) {
+            if (customField.field && customField.value) {
+                params = {'parent': $scope.opportunity.entityKey,
+                    'kind': 'customfields',
+                    'fields': [
+                        {
+                            "field": customField.field,
+                            "value": customField.value
+                        }
+                    ]
+                };
+                InfoNode.insert($scope, params);
+            }
 
-    $scope.customfield={};
-    $scope.showCustomFieldForm = false;
+            $scope.customfield = {};
+            $scope.customfield.field = '';
+            $scope.customfield.value = '';
+            $scope.showCustomFieldForm = false;
 
-};
+        };
 
 $scope.listInfonodes = function(kind) {
      params = {'parent':$scope.opportunity.entityKey,
