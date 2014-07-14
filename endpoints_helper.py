@@ -1,5 +1,14 @@
  #!/usr/bin/python
  # -*- coding: utf-8 -*-
+import base64
+from email.mime.audio import MIMEAudio
+from email.mime.base import MIMEBase
+from email.mime.image import MIMEImage
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import mimetypes
+import os
+from django.utils.encoding import smart_str
 from google.appengine.api import search
 from google.appengine.api import memcache
 from apiclient.discovery import build
@@ -56,6 +65,47 @@ class EndpointsHelper():
     INVALID_TOKEN = 'Invalid token'
     INVALID_GRANT = 'Invalid grant'
     NO_ACCOUNT = 'You don\'t have a i/oGrow account'
+    @classmethod
+    def send_message(cls,service, user_id, message):
+        """Send an email message.
+
+        Args:
+          service: Authorized Gmail API service instance.
+          user_id: User's email address. The special value "me"
+          can be used to indicate the authenticated user.
+          message: Message to be sent.
+
+        Returns:
+          Sent Message.
+        """
+        try:
+            message = (service.users().messages().send(userId=user_id, body=message)
+                     .execute())
+            print 'Message Id: %s' % message['id']
+            return message
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+    @classmethod
+    def create_message(cls,sender, to,cc,bcc, subject, message_html):
+        """Create a message for an email.
+
+        Args:
+          sender: Email address of the sender.
+          to: Email address of the receiver.
+          subject: The subject of the email message.
+          message_text: The text of the email message.
+
+        Returns:
+          An object containing a base64 encoded email object.
+        """
+        message = MIMEText(smart_str(message_html),'html')
+        message['to'] = to
+        message['cc'] = cc
+        message['bcc'] = bcc
+        message['from'] = sender
+        message['subject'] = subject
+        return {'raw': base64.urlsafe_b64encode(message.as_string())}
+
     @classmethod
     def update_edge_indexes(cls,parent_key,kind,indexed_edge):
         parent = parent_key.get()

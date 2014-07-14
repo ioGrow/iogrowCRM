@@ -1157,23 +1157,19 @@ class CrmEngineApi(remote.Service):
                         path='emails/send', http_method='POST',
                         name='emails.send')
     def send_email(self, request):
-        print request, "rrrrrrrrrrrrrrss";
         user = EndpointsHelper.require_iogrow_user()
-        if user is None:
-            raise endpoints.UnauthorizedException('Invalid token.')
-        message = mail.EmailMessage()
-        message.sender = user.google_display_name + " < io-"+ user.google_user_id+"@gcdc2013-iogrow.appspotmail.com>"
-        message.reply_to = user.email
-        if not mail.is_email_valid(request.to):
-            raise endpoints.UnauthorizedException('Invalid email.')
-        message.to = request.to
-        if request.cc:
-            message.cc = request.cc
-        if request.bcc:
-            message.bcc = request.bcc
-        message.subject = request.subject
-        message.html = request.body
-        message.send()
+        credentials = user.google_credentials
+        http = credentials.authorize(httplib2.Http(memcache))
+        service = build('gmail', 'v1', http=http)
+        message = EndpointsHelper.create_message(
+                                                  user.email,
+                                                  request.to,
+                                                  request.cc,
+                                                  request.bcc,
+                                                  request.subject,
+                                                  request.body
+                                                )
+        EndpointsHelper.send_message(service,'me',message)
         parent_key = ndb.Key(urlsafe=request.about)
         note_author = Userinfo()
         note_author.display_name = user.google_display_name
