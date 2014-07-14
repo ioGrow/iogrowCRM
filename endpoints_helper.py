@@ -72,7 +72,6 @@ class EndpointsHelper():
                     print 'something after'
                 data[e.name] = e.value
         data[kind] = indexed_edge
-        print parent ,"pppppppppppp"
         parent.put_index(data)
 
     @classmethod
@@ -228,8 +227,8 @@ class EndpointsHelper():
         tags=person.tags
         return tags
     @classmethod
-    def highrise_import_tasks_of_person(cls, request):
-        person=Person.get(request)
+    def highrise_import_tasks_of_person(cls, id):
+        person=Person.get(id)
         tasks=person.tasks
         return tasks
     @classmethod

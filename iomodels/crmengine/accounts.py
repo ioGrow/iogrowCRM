@@ -311,13 +311,11 @@ class Account(EndpointsModel):
     @classmethod
     def insert(cls,user_from_email,request):
         account=None
-        print "llllllllllllllll",request, "eeeeeeeeeeerrrrrrrrrrrr"
         account_key = cls.get_key_by_name(
                                         user_from_email= user_from_email,
                                         name = request.name
                                         )
         if account_key:
-            print "kkkkkkkkkkkkkkkkk", account_key
             account_key_async = account_key
         else:
             account = cls(
@@ -428,7 +426,6 @@ class Account(EndpointsModel):
             data = {}
             data['id'] = account_key_async.id()
             account.put_index(data)
-        print "innnnnnnnnnnnnnn", account_key_async.urlsafe()
         account_schema = AccountSchema(
                                   id = str( account_key_async.id() ),
                                   entityKey = account_key_async.urlsafe()
