@@ -554,7 +554,13 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                
                 
            },
-
+      //Triggered when the user mouses over an event. hadji hicham 14-07-2014.
+       eventMouseover:function( event, jsEvent, view ) { 
+                  console.log("**********here **********");
+                  console.log(event);
+                  console.log(event.id)
+                  console.log("**********end **********");
+       },
      //Triggered when event resizing begins.
        eventResizeStart:function( event, jsEvent, ui, view ) { },
        //Triggered when event resizing stops.
@@ -701,6 +707,37 @@ $scope.updateEventRender=function(ioevent){
    
     ///  $('#calendar').fullCalendar( 'refetchEvents' );
 };
+
+// hadji hicham 14-07-2014 . update the event after we add .
+$scope.updateEventRenderAfterAdd= function(){
+
+     var events =$('#calendar').fullCalendar( 'clientEvents' ,["new"] );
+       $('#calendar').fullCalendar( 'removeEvents' ,["new"])
+         // events[0].id=$scope.justadded.id;
+         // events[0].entityKey=$scope.justadded.entityKey;
+         // events[0].start=moment($scope.justadded.starts_at);
+         // events[0].end=moment($scope.justadded.ends_at);
+         // events[0].my_type="event";
+         // events[0].url='/#/events/show/'+events[0].id.toString(),
+         // console.log("***************************");
+         // console.log(events);
+         // console.log("----------------------------");
+       // $('#calendar').fullCalendar('updateEvent', events[0]);
+       var eventObject = {
+                    id:$scope.justadded.id,
+                    entityKey:$scope.justadded.entityKey,
+                    title: $scope.justadded.title,
+                    start:moment($scope.justadded.starts_at),
+                    end:moment($scope.justadded.ends_at),
+                    url:'/#/events/show/'+$scope.justadded.id.toString(),
+                    my_type:"event",
+                    allDay:false
+                };      
+              eventObject.className = $(this).attr("data-class");
+    
+              $('#calendar').fullCalendar('renderEvent', eventObject, false); 
+
+}
 
 //
      // We need to call this to refresh token when user credentials are invalid
