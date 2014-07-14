@@ -954,6 +954,10 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
 
      
     };
+
+// hadji hicham 14-07-2014 . update the event after we add .
+$scope.updateEventRenderAfterAdd= function(){};
+
      $scope.deleteEvent =function(eventt){
     var params = {'entityKey':eventt.entityKey};
      Event.delete($scope,params);

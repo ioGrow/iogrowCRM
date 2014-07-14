@@ -695,7 +695,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
         $scope.sharing_with.push($scope.slected_memeber);
 
      };
-     $scope.share = function(slected_memeber){
+  $scope.share = function(slected_memeber){
 
         $scope.$watch($scope.casee.access, function() {
            var id = $scope.casee.id;
@@ -836,19 +836,42 @@ if ($scope.newTaskform==false) {
 
      }
  //HKA 10.11.2013 Add event
- $scope.addEvent = function(ioevent){           
-           if ($scope.newEventform==false) {
+ $scope.addEvent = function(ioevent){   
+
+        if ($scope.newEventform==false) {
                 $scope.newEventform=true;
            }else{
+
+
             if (ioevent.title!=null&&ioevent.title!="") {
+
                     var params ={}
-                if (ioevent.starts_at){
+
+
+                  // hadji hicham 13-08-2014.
+                  if($scope.allday){
+                         var ends_at=moment(moment(ioevent.starts_at_allday).format('YYYY-MM-DDT00:00:00.000000'))
+
+                   params ={'title': ioevent.title,
+                            'starts_at': $filter('date')(ioevent.starts_at_allday,['yyyy-MM-ddT00:00:00.000000']),
+                            'ends_at':ends_at.add('hours',23).add('minute',59).add('second',59).format('YYYY-MM-DDTHH:mm:00.000000'),
+                            'where': ioevent.where,
+                            'parent':$scope.casee.entityKey,
+                            'allday':"true"
+                      }
+
+
+                 
+                  }else{
+             
+                  if (ioevent.starts_at){
                     if (ioevent.ends_at){
                       params ={'title': ioevent.title,
                               'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
                               'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
                               'where': ioevent.where,
-                              'parent':$scope.casee.entityKey
+                              'parent':$scope.casee.entityKey,
+                              'allday':"false"
                       }
 
                     }else{
@@ -856,17 +879,35 @@ if ($scope.newTaskform==false) {
                         'title': ioevent.title,
                               'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
                               'where': ioevent.where,
-                              'parent':$scope.casee.entityKey
+                              'parent':$scope.lead.entityKey,
+                              'ends_at':moment(ioevent.ends_at).add('hours',2).format('YYYY-MM-DDTHH:mm:00.000000'),
+                              'allday':"false"
                       }
                     }
 
-                    Event.insert($scope,params);
-                    $scope.ioevent={};
-                    $scope.newEventform=false;
+
+                    
+                   
                   }
+
+
+                  }
+                  
+                   Event.insert($scope,params);
+                  $scope.ioevent={};
+                  $scope.newEventform=false;
+
+
+
         }
-     }
+     }        
+
     };
+
+
+// hadji hicham 14-07-2014 . update the event after we add .
+$scope.updateEventRenderAfterAdd= function(){};
+
          $scope.deleteEvent =function(eventt){
     var params = {'entityKey':eventt.entityKey};
      Event.delete($scope,params);
