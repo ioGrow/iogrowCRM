@@ -810,6 +810,10 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
         }
      }
     }
+
+// hadji hicham 14-07-2014 . update the event after we add .
+$scope.updateEventRenderAfterAdd= function(){};
+
     $scope.closeEventForm=function(ioevent){
       $scope.ioevent={};
       $scope.newEventform=false;
