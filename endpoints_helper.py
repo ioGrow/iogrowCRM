@@ -244,6 +244,9 @@ class EndpointsHelper():
         Highrise.auth('eee33d458c7982242b99d4b7f6b1d94d')
         people = Person.all()
         return people
+    @classmethod
+    def get_people_linkedin(cls,entityKey):
+        pass
 
 
 
@@ -307,10 +310,12 @@ class linked_in():
         else : person["industry"]=''
         # ******************************************************
         locality=member_head.find('span',{'class':'locality'})
-        person['locality']=locality.text
+        if locality: person['locality']=locality.text
+        else : person['locality']=''
         # ----------------------------------------------------
         headline=member_head.find('p',{'class':'headline-title title'})
-        person['headline']=headline.text
+        if headline:person['headline']=headline.text
+        else : person['headline']=''
         #**********************************************************
 
         overview=soup.find('dl',{'id':'overview'})
@@ -423,9 +428,9 @@ class linked_in():
             soup=BeautifulSoup(html)
             self.get_profile_header(soup,person)
             person['experiences']=self.get_exprience(soup)
-            self.get_resume(soup)
             person['resume']=self.get_resume(soup)
             person['certifications']=self.get_certification(soup)
             person['skills']=self.get_skills(soup)
+
         print person
         return person

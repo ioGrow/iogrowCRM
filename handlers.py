@@ -10,7 +10,7 @@ import datetime
 import time
 import re
 import jinja2
-
+from google.appengine._internal.django.utils.encoding import smart_str
 # Google libs
 import endpoints
 from google.appengine.ext import ndb
@@ -26,14 +26,14 @@ from oauth2client.client import FlowExchangeError
 # Our libraries
 from iomodels.crmengine.shows import Show
 from endpoints_helper import EndpointsHelper
+from endpoints_helper import linked_in
 import model
 from iomodels.crmengine.contacts import Contact
 from iomodels.crmengine.leads import LeadInsertRequest,Lead
 from iomodels.crmengine.documents import Document
 import iomessages
 from blog import Article
-import iograph
-
+from iograph import Node , Edge
 # import event . hadji hicham 09-07-2014
 from iomodels.crmengine.events import Event
 # under the test .beata !
@@ -846,11 +846,39 @@ class AddToIoGrowLeads(webapp2.RequestHandler):
         Lead.insert(user_from_email,request)
 class GetFromLinkedinToIoGrow(webapp2.RequestHandler):
     def post(self):
-        print "#################################laba lll#################"
         entityKey= self.request.get('entityKey')
-        key=ndb.Key(urlsafe=entityKey)
-        lead=key.get()
-        print lead
+        linkedin=linked_in()
+        key1=ndb.Key(urlsafe=entityKey)
+        lead=key1.get()
+        print "######################################################################################"
+        fullname= lead.firstname+" "+lead.lastname
+        print fullname
+        profil=linkedin.scrape_linkedin('http://www.google.com', fullname)
+        if profil:
+            node=Node(kind='linkedin_profile')
+            node.websites=profil["websites"]
+            node.formations=profil["formation"]
+            node._properties["experiences"]=ndb.TextProperty("experiences")
+            node._values["experiences"]=str(json.dumps(profil["experiences"]))
+            node._properties["resume"]=ndb.TextProperty("resume")
+            node._values["resume"]=profil["resume"] or ''
+            node._properties["certifications"]=ndb.TextProperty("certifications")
+            node._values["certifications"]=str(json.dumps(profil["certifications"]))
+            # node.certifications=json.dumps(profil["certifications"])
+            node.firstname=profil["family_name"]
+            node.lastname=profil["given_name"]
+            node.industry=profil["industry"]
+            node.locality=profil["locality"]
+            node.headline=profil["headline"]
+            key2=node.put()
+            print key2.get()
+            Edge.insert(start_node=key1,end_node=key2,kind='linkedin',inverse_edge=True)
+        print '--------------------------------------------------------------------------------'
+          
+                  
+               
+        # print profil
+       
 
 class ShareDocument(webapp2.RequestHandler):
     def post(self):
