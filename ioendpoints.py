@@ -963,34 +963,48 @@ class CrmEngineApi(remote.Service):
             ################
             company_details=EndpointsHelper.highrise_import_company_details(person.company_id)
             phones=list()
-            phone=iomessages.PhoneSchema(
-                                            number=company_details.contact_data.phone_numbers[0].number,
-                                            type=str(company_details.contact_data.phone_numbers[0].location)
-                                            )
+            phone=iomessages.PhoneSchema(   )
+            if len(company_details.contact_data.phone_numbers)!=0:
+                print "eeeeeeeeeeeeee"
+                phone.number=company_details.contact_data.phone_numbers[0].number
+                phone.type=str(company_details.contact_data.phone_numbers[0].location)
             phones.append(phone)
-            email=iomessages.EmailSchema(
-                                        email=company_details.contact_data.email_addresses[0].address
-                                        )
+            email=iomessages.EmailSchema()
+                                        
+            if len(company_details.contact_data.email_addresses)!=0:
+                email.email=company_details.contact_data.email_addresses[0].address
             emails=list()
             emails.append(email)
+            url=""
+            if len(company_details.contact_data.web_addresses)!=0:
+                url=company_details.contact_data.web_addresses[0].url
+            twitter_account=""
+            if len(company_details.contact_data.twitter_accounts)!=0:
+                twitter_account=company_details.contact_data.twitter_accounts[0].username
+            country=""
+            if len(company_details.contact_data.addresses)!=0:
+                country=company_details.contact_data.addresses[0].country
+            street=""
+            if len(company_details.contact_data.addresses)!=0:
+                street=company_details.contact_data.addresses[0].street
             infonode=iomessages.InfoNodeRequestSchema(
                                 kind='company',
                                             fields=[
                                                 iomessages.RecordSchema(
                                                 field = 'url',
-                                                value = company_details.contact_data.web_addresses[0].url
+                                                value = url
                                                 ),
                                                 iomessages.RecordSchema(
                                                 field = 'twitter_account',
-                                                value = company_details.contact_data.twitter_accounts[0].username
+                                                value = twitter_account
                                                 ),
                                                 iomessages.RecordSchema(
                                                 field = 'country',
-                                                value = company_details.contact_data.addresses[0].country
+                                                value = country
                                                 ),
                                                 iomessages.RecordSchema(
                                                 field = 'street',
-                                                value = company_details.contact_data.addresses[0].street
+                                                value = street
                                                 )
 
                                             ]
@@ -998,7 +1012,7 @@ class CrmEngineApi(remote.Service):
             infonodes=list()
             infonodes.append(infonode)
             account_request=AccountInsertRequest(
-                                                name=person.company_name,
+                                                name="person.company_name",
                                                 emails=emails,
                                                 logo_img_url=company_details.avatar_url,
                                                 infonodes=infonodes,
@@ -1009,9 +1023,11 @@ class CrmEngineApi(remote.Service):
             key=account_schema.entityKey
             infonodes=list()
             infonodes.append(infonode)
-            phone=iomessages.PhoneSchema(
-                                            number=person.contact_data.phone_numbers[0].number,
-                                            type=str(person.contact_data.phone_numbers[0].location)                                            )
+            phone=iomessages.PhoneSchema()
+            if len(person.contact_data.phone_numbers)!=0:
+                phone.number=person.contact_data.phone_numbers[0].number
+            if len(person.contact_data.phone_numbers)!=0:
+                phone.type=str(person.contact_data.phone_numbers[0].location)
             phones=list()
             phones.append(phone)
             contact_request = ContactInsertRequest(
@@ -1027,7 +1043,7 @@ class CrmEngineApi(remote.Service):
             contact_schema=Contact.insert(user,contact_request)
 
                         #########
-            #store tasks of persons
+            #store tasks of person
             tasks=EndpointsHelper.highrise_import_tasks_of_person(person.id)
             for task in tasks:
                 from iomodels.crmengine.tasks import EntityKeyRequest
@@ -1044,42 +1060,54 @@ class CrmEngineApi(remote.Service):
                                                 )
                 task_schema=Task.insert(user, task_request)
 
-                print task.__dict__," ttttttttttttttt"
-
+           
+            
             ############
             #store other company == company.all()
             #############
             companys=EndpointsHelper.highrise_import_companys(request)
             for company_details in companys:
                 phones=list()
-                phone=iomessages.PhoneSchema(
-                                                number=company_details.contact_data.phone_numbers[0].number,
-                                                type=str(company_details.contact_data.phone_numbers[0].location)
-                                                )
+                phone=iomessages.PhoneSchema()
+                if len(company_details.contact_data.phone_numbers)!=0:
+                    phone.number=company_details.contact_data.phone_numbers[0].number
+                    phone.type=str(company_details.contact_data.phone_numbers[0].location)
                 phones.append(phone)
-                email=iomessages.EmailSchema(
-                                            email=company_details.contact_data.email_addresses[0].address
-                                            )
+                email=iomessages.EmailSchema(  )
+                if len(company_details.contact_data.email_addresses)!=0:
+                    email.email=company_details.contact_data.email_addresses[0].address
                 emails=list()
                 emails.append(email)
+                url=""
+                if len(company_details.contact_data.web_addresses)!=0:
+                    url=company_details.contact_data.web_addresses[0].url
+                twitter_account=""
+                if len(company_details.contact_data.twitter_accounts)!=0:
+                    twitter_account=company_details.contact_data.twitter_accounts[0].username
+                country=""
+                if len(company_details.contact_data.addresses)!=0:
+                    country=company_details.contact_data.addresses[0].country
+                street=""
+                if len(company_details.contact_data.addresses)!=0:
+                    street=company_details.contact_data.addresses[0].street
                 infonode=iomessages.InfoNodeRequestSchema(
                                     kind='company',
                                                 fields=[
                                                     iomessages.RecordSchema(
                                                     field = 'url',
-                                                    value = company_details.contact_data.web_addresses[0].url
+                                                    value = url
                                                     ),
                                                     iomessages.RecordSchema(
                                                     field = 'twitter_account',
-                                                    value = company_details.contact_data.twitter_accounts[0].username
+                                                    value = twitter_account
                                                     ),
                                                     iomessages.RecordSchema(
                                                     field = 'country',
-                                                    value = company_details.contact_data.addresses[0].country
+                                                    value = country
                                                     ),
                                                     iomessages.RecordSchema(
                                                     field = 'street',
-                                                    value = company_details.contact_data.addresses[0].street
+                                                    value = street
                                                     )
 
                                                 ]
@@ -1095,9 +1123,23 @@ class CrmEngineApi(remote.Service):
                                                     )
 
                 account_schema = Account.insert(user,account_request)
-            ########
-            #get tasks of user
-
+                 
+            #########
+            # store opporutnities of person
+            deals=EndpointsHelper.highrise_import_opportunities()
+            print deals[0].__dict__, "ddddddddddddddaaaaaa"
+            for deal in deals:
+                company_details=EndpointsHelper.highrise_import_company_details(deal.party_id)
+                key=Account.get_key_by_name(user,company_details.name)
+                opportunity_request=OpportunityInsertRequest(
+                                                            name=deal.name,
+                                                            description=deal.background,
+                                                            account=key,
+                                                            duration=deal.duration,
+                                                            currency=deal.currency,
+                                                            amount_total=deal.price
+                                                            )
+                opportunity_schema=Opportunity.insert(user,opportunity_request)
 
         return message_types.VoidMessage()
 

@@ -252,7 +252,7 @@ class EndpointsHelper():
         return companie
 
     @classmethod
-    def highrise_import_opportunities(cls, request):
+    def highrise_import_opportunities(cls):
         Deals=Deal.all()
         return Deals
     @classmethod
@@ -264,7 +264,7 @@ class EndpointsHelper():
         Tags=Tag.all()
         return Tags
     @classmethod
-    def highrise_import_cases(cls, request):
+    def highrise_import_cases(cls):
         Cases=Case.all()
         return Cases
     @classmethod
