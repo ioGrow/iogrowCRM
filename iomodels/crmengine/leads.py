@@ -328,7 +328,6 @@ class Lead(EndpointsModel):
                     if is_filtered and Node.check_permission( user_from_email, lead ):
                         count = count + 1
                         #list of tags related to this lead
-                        edge_list = Edge.list(start_node=lead.key,kind='tags')
                         tag_list = Tag.list_by_parent(parent_key = lead.key)
                         lead_schema = LeadSchema(
                                   id = str( lead.key.id() ),
@@ -355,6 +354,7 @@ class Lead(EndpointsModel):
         else:
             next_curs_url_safe = None
         return  LeadListResponse(items = items, nextPageToken = next_curs_url_safe)
+    
 
     @classmethod
     def search(cls,user_from_email,request):
