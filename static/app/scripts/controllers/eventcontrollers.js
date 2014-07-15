@@ -308,119 +308,66 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
           defaultView:'agendaWeek',
           editable: true,
           eventSources: [{
-            events: function(start, end, timezone, callback) {
+          events: function(start, end, timezone, callback) {
               // events client table to feed the calendar .  // hadji hicham  08-07-2014 10:40
               var events=[];
-
               var params = {
-                            'events_list_start':moment(start).format('YYYY-MM-DDTH:mm:00.000000'),
-                            'events_list_end':moment(end).format('YYYY-MM-DDTH:mm:00.000000')
+                            'calendar_feeds_start':moment(start).format('YYYY-MM-DDTH:mm:00.000000'),
+                            'calendar_feeds_end':moment(end).format('YYYY-MM-DDTH:mm:00.000000')
                             };
               var params1={}  
               $scope.isLoading = true;
- 
-                 // load events 
-              gapi.client.crmengine.events.list_fetch(params).execute(function(resp) { 
-                                if(!resp.code){
-                                  $scope.events_cal_list= resp.items;
+           
+                gapi.client.crmengine.calendar.feeds(params).execute(function(resp) { 
 
-                                  $scope.$apply();  
-                                }
-                                else{
-                                    if(resp.code==401){
-                                            $scope.refreshToken();
-                                            $scope.isLoading = false;
-                                            $scope.$apply();
-                                    };
-                                }
-               });  
-
-
-               // load tasks 
-                      gapi.client.crmengine.tasks.listv2(params1).execute(function(resp) {
                                 if(!resp.code){
 
-                                  $scope.tasks_list=resp.items;
-                                  $scope.$apply();
+                                  $scope.calendarFeeds= resp.items;
+                                  console.log(resp.items);
 
-                                   try {
-                                      // feed events client table with events .hadji hicham  08-07-2014 10:40
-                                     if($scope.events_cal_list){
-                                      for(var i=0;i<$scope.events_cal_list.length;i++ ){
+                                 if($scope.calendarFeeds){
 
-                                              var allday= ($scope.events_cal_list[i].allday=="false") ? false :true ;
-                                        
-                                                
+                                    for(var i=0;i<$scope.calendarFeeds.length;i++){
+
+                                        var allday= ($scope.calendarFeeds[i].allday=="false") ? false :true ;
+
+                                        var url=($scope.calendarFeeds[i].my_type=="event") ? '/#/events/show/' : '/#/tasks/show/' ;
+                                                  
                                                 events.push({ 
-                                                           id: $scope.events_cal_list[i].id ,
-                                                           title:$scope.events_cal_list[i].title,
-                                                           start:moment($scope.events_cal_list[i].starts_at),
-                                                           end: moment($scope.events_cal_list[i].ends_at),
-                                                           entityKey:$scope.events_cal_list[i].entityKey,
-                                                           url:'/#/events/show/'+$scope.events_cal_list[i].id.toString(),
+                                                           id: $scope.calendarFeeds[i].id ,
+                                                           title:$scope.calendarFeeds[i].title,
+                                                           start:moment($scope.calendarFeeds[i].starts_at),
+                                                           end: moment($scope.calendarFeeds[i].ends_at),
+                                                           entityKey:$scope.calendarFeeds[i].entityKey,
+                                                           backgroundColor: $scope.calendarFeeds[i].backgroundColor,
+                                                           color:$scope.calendarFeeds[i].backgroundColor,
+                                                           url:url+$scope.calendarFeeds[i].id.toString(),
                                                            allDay:allday,
-                                                           my_type:"event"
+                                                           my_type:$scope.calendarFeeds[i].my_type
                                                        })
 
                                                 
                                       };
-                                     }else{
-                                       console.log("events list is empty");
-                                     }
-                                     // feed events client table with tasks  hadji hicham  08-07-2014 10:40
-                                     
-                                     if($scope.tasks_list){
-                                            for(var i=0;i<$scope.tasks_list.length;i++ ){
-                                        
 
-                                            events.push({ 
-                                                           id: $scope.tasks_list[i].id ,
-                                                           title:$scope.tasks_list[i].title,
-                                                           start:moment($scope.tasks_list[i].due),
-                                                           entityKey:$scope.tasks_list[i].entityKey,
-                                                           url:'/#/tasks/show/'+$scope.tasks_list[i].id.toString(),
-                                                           backgroundColor:$scope.tasks_list[i].status_color,
-                                                           color:$scope.tasks_list[i].status_color,
-                                                           allDay:true,
-                                                           due:moment($scope.tasks_list[i].due),
-                                                           my_type:"task"
-                                                       })
-                                                
-                                      }
-                                     }else{
-                                      console.log("tasks list is empty");
-                                     }
+                                 }else{
+                                  console.log("the list is empty");
+                                 } 
+                                  callback(events); 
 
-                                        
-                                    
-                                      
-                                      
-                                     
-                                         
-                                      
-                                       
-                                  
-                                    
-                                       // feed the calendar client table with events and tasks . hadji hicham  08-07-2014 10:40
-                                       callback(events); 
-                            
-                                       }catch (e){
-                                               console.log(e.message);
-                                               callback(events);
-                                          }
-                                          $scope.$apply();
-
+                                  $scope.$apply();  
                                 }
-                                 else{
+                                else{
+                                      console.log(resp.message);
+                                     console.log("Ooops!");
                                     if(resp.code==401){
                                             $scope.refreshToken();
                                             $scope.isLoading = false;
                                             $scope.$apply();
                                     };
                                 }
+               }); 
+ 
 
-                 });  
-               // end  
 
                   $scope.isLoading = false;  
                                 
@@ -556,10 +503,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
            },
       //Triggered when the user mouses over an event. hadji hicham 14-07-2014.
        eventMouseover:function( event, jsEvent, view ) { 
-                  console.log("**********here **********");
-                  console.log(event);
-                  console.log(event.id)
-                  console.log("**********end **********");
+               
        },
      //Triggered when event resizing begins.
        eventResizeStart:function( event, jsEvent, ui, view ) { },
@@ -713,16 +657,6 @@ $scope.updateEventRenderAfterAdd= function(){
 
      var events =$('#calendar').fullCalendar( 'clientEvents' ,["new"] );
        $('#calendar').fullCalendar( 'removeEvents' ,["new"])
-         // events[0].id=$scope.justadded.id;
-         // events[0].entityKey=$scope.justadded.entityKey;
-         // events[0].start=moment($scope.justadded.starts_at);
-         // events[0].end=moment($scope.justadded.ends_at);
-         // events[0].my_type="event";
-         // events[0].url='/#/events/show/'+events[0].id.toString(),
-         // console.log("***************************");
-         // console.log(events);
-         // console.log("----------------------------");
-       // $('#calendar').fullCalendar('updateEvent', events[0]);
        var eventObject = {
                     id:$scope.justadded.id,
                     entityKey:$scope.justadded.entityKey,

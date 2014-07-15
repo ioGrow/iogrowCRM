@@ -188,13 +188,14 @@
                                      <div class="row">
                                       <p class="col-md-11 col-md-offset-1 list-group-item-text">
                                          <span ng-show="task.created_by">Opened by:<a href="#"> <%= task.created_by.display_name %></a></span>
+                                          
+                                          <span ng-show="task.about">{{ _('related to') }}<a href="<%= getUrl(task.about.kind,task.about.id); %>"> <%= task.about.name %></a> </span>
                                           <span ng-show="deletetask">
                                              <!-- to delete task -->
                                         <a  ng-click="deleteThisTask(task.entityKey)" class="btn-link addAnotherPhone"><i class="icon-trash"></i>  
                                      </a>
                                      <!-- end  -->
                                           </span>
-                                          <span ng-show="task.about">{{ _('related to') }}<a href="<%= getUrl(task.about.kind,task.about.id); %>"> <%= task.about.name %></a> </span>
 
                                       </p>
                                       </div>

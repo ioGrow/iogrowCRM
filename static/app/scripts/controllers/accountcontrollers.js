@@ -1095,12 +1095,14 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                     var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
                     params ={'title': task.title,
                               'due': dueDate,
-                              'parent': $scope.account.entityKey
+                              'parent': $scope.account.entityKey,
+                              'access':$scope.account.access
                     }
 
                 }else{
                     params ={'title': task.title,
-                             'parent': $scope.account.entityKey
+                             'parent': $scope.account.entityKey,
+                             'access':$scope.account.access
                            }
                 };
                 if ($scope.selected_members!=[]) {
@@ -1116,7 +1118,8 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                     });
                       params.tags=tagitems;
                     };
-                Task.insert($scope,params);
+
+               Task.insert($scope,params);
                 $scope.newTask={};
                 $scope.newTaskform=false;
                 $scope.selected_members=[];
@@ -1164,6 +1167,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                             'ends_at':ends_at.add('hours',23).add('minute',59).add('second',59).format('YYYY-MM-DDTHH:mm:00.000000'),
                             'where': ioevent.where,
                             'parent':$scope.account.entityKey,
+                            'access':$scope.account.access,
                             'allday':"true"
                       }
 
@@ -1178,6 +1182,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                               'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
                               'where': ioevent.where,
                               'parent':$scope.account.entityKey,
+                              'access':$scope.account.access,
                               'allday':"false"
                       }
 
@@ -1188,6 +1193,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                               'where': ioevent.where,
                               'parent':$scope.account.entityKey,
                               'ends_at':moment(ioevent.ends_at).add('hours',2).format('YYYY-MM-DDTHH:mm:00.000000'),
+                              'access':$scope.account.access,
                               'allday':"false"
                       }
                     }
@@ -1212,6 +1218,9 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
 /*******************/
 
     }
+// hadji hicham 14-07-2014 . update the event after we add .
+$scope.updateEventRenderAfterAdd= function(){};
+
        $scope.deleteEvent =function(eventt){
     var params = {'entityKey':eventt.entityKey};
      Event.delete($scope,params);

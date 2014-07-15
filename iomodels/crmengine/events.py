@@ -366,9 +366,7 @@ class Event(EndpointsModel):
                                 )
     @classmethod
     def insert(cls,user_from_email,request):
-        print "-----------yeah i'm inserting -------------"
-        print request
-        print "-------------------------------------------"
+
         author = Userinfo()
         author.google_user_id = user_from_email.google_user_id
         author.display_name = user_from_email.google_display_name

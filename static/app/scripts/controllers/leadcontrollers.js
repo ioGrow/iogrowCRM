@@ -692,12 +692,14 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                 var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
                 params ={'title': task.title,
                           'due': dueDate,
-                          'parent': $scope.lead.entityKey
+                          'parent': $scope.lead.entityKey,
+                          'access':$scope.lead.access
                 }
 
             }else{
                 params ={'title': task.title,
-                         'parent': $scope.lead.entityKey
+                         'parent': $scope.lead.entityKey,
+                         'access':$scope.lead.access
                        }
             };
             if ($scope.selected_members!=[]) {
@@ -714,7 +716,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                   params.tags=tagitems;
                 };
             Task.insert($scope,params);
-            
+
             $scope.newTask={};
             $scope.newTaskform=false;
             $scope.selected_members=[];
@@ -743,7 +745,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
  //HKA 10.11.2013 Add event
  $scope.addEvent = function(ioevent){
 
-           
+
 
 
            if ($scope.newEventform==false) {
@@ -765,13 +767,14 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                             'ends_at':ends_at.add('hours',23).add('minute',59).add('second',59).format('YYYY-MM-DDTHH:mm:00.000000'),
                             'where': ioevent.where,
                             'parent':$scope.lead.entityKey,
-                            'allday':"true"
+                            'allday':"true",
+                            'access':$scope.lead.access
                       }
 
 
-                 
+
                   }else{
-             
+
                   if (ioevent.starts_at){
                     if (ioevent.ends_at){
                       params ={'title': ioevent.title,
@@ -779,7 +782,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                               'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
                               'where': ioevent.where,
                               'parent':$scope.lead.entityKey,
-                              'allday':"false"
+                              'allday':"false",
+                              'access':$scope.lead.access
                       }
 
                     }else{
@@ -789,18 +793,19 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                               'where': ioevent.where,
                               'parent':$scope.lead.entityKey,
                               'ends_at':moment(ioevent.ends_at).add('hours',2).format('YYYY-MM-DDTHH:mm:00.000000'),
-                              'allday':"false"
+                              'allday':"false",
+                              'access':$scope.lead.access
                       }
                     }
 
 
-                    
-                   
+
+
                   }
 
 
                   }
-                  
+
                    Event.insert($scope,params);
                   $scope.ioevent={};
                   $scope.newEventform=false;
@@ -810,6 +815,10 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
         }
      }
     }
+
+// hadji hicham 14-07-2014 . update the event after we add .
+$scope.updateEventRenderAfterAdd= function(){};
+
     $scope.closeEventForm=function(ioevent){
       $scope.ioevent={};
       $scope.newEventform=false;

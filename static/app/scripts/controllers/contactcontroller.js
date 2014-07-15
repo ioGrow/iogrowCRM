@@ -895,12 +895,14 @@ $scope.listTags=function(){
                     var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
                     params ={'title': task.title,
                               'due': dueDate,
-                              'parent': $scope.contact.entityKey
+                              'parent': $scope.contact.entityKey, 
+                              'access': $scope.contact.access
                     }
 
                 }else{
                     params ={'title': task.title,
-                             'parent': $scope.contact.entityKey
+                             'parent': $scope.contact.entityKey,
+                             'access': $scope.contact.access
                            }
                 };
                 if ($scope.selected_members!=[]) {
@@ -964,6 +966,7 @@ $scope.listTags=function(){
                             'ends_at':ends_at.add('hours',23).add('minute',59).add('second',59).format('YYYY-MM-DDTHH:mm:00.000000'),
                             'where': ioevent.where,
                             'parent':$scope.contact.entityKey,
+                            'access': $scope.contact.access,
                             'allday':"true"
                       }
 
@@ -978,6 +981,7 @@ $scope.listTags=function(){
                               'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
                               'where': ioevent.where,
                               'parent':$scope.contact.entityKey,
+                              'access': $scope.contact.access,
                               'allday':"false"
                       }
 
@@ -988,6 +992,7 @@ $scope.listTags=function(){
                               'where': ioevent.where,
                               'parent':$scope.contact.entityKey,
                               'ends_at':moment(ioevent.ends_at).add('hours',2).format('YYYY-MM-DDTHH:mm:00.000000'),
+                              'access': $scope.contact.access,
                               'allday':"false"
                       }
                     }
@@ -999,7 +1004,7 @@ $scope.listTags=function(){
 
 
                   }
-                  
+
                    Event.insert($scope,params);
                   $scope.ioevent={};
                   $scope.newEventform=false;
@@ -1010,6 +1015,10 @@ $scope.listTags=function(){
      }
      //************************************//
      }
+
+//hadji hicham 14-07-2014 . update the event after we add .
+$scope.updateEventRenderAfterAdd= function(){};
+
     $scope.deleteEvent =function(eventt){
     var params = {'entityKey':eventt.entityKey};
      Event.delete($scope,params);
