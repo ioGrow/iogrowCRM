@@ -235,10 +235,11 @@ class Node(ndb.Expando):
 
     @classmethod
     def check_permission(cls, user, node):
-        if node.access != 'public' and node.owner!=user.google_user_id:
-            end_node_set = [user.key]
-            if not Edge.find(start_node=node.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
-                return False
+        if node is not None:
+            if node.access != 'public' and node.owner!=user.google_user_id:
+                end_node_set = [user.key]
+                if not Edge.find(start_node=node.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
+                    return False
         return True
     @classmethod
     def list_permissions(cls,node):
