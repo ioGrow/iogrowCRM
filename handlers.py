@@ -38,6 +38,10 @@ import iograph
 from iomodels.crmengine.events import Event
 # under the test .beata !
 
+# import task . hadji hicham 09-07-2014
+from iomodels.crmengine.tasks import Task
+# under the test .beata !
+
 jinja_environment = jinja2.Environment(
   loader=jinja2.FileSystemLoader(os.getcwd()),
   extensions=['jinja2.ext.i18n'],cache_size=0)
@@ -49,7 +53,7 @@ CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 
 SCOPES = [
-    'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/prediction https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar'
+    'https://mail.google.com/ https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/prediction https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar'
 ]
 
 VISIBLE_ACTIONS = [
@@ -774,6 +778,46 @@ class SyncCalendarEvent(webapp2.RequestHandler):
         except:
             raise endpoints.UnauthorizedException('Invalid grant' )
 
+# syncronize tasks with google calendar . hadji hicham 10-07-2014.
+class SyncCalendarTask(webapp2.RequestHandler):
+    def post(self):
+        user_from_email = model.User.get_by_email(self.request.get('email'))
+        starts_at = datetime.datetime.strptime(
+                                              self.request.get('starts_at'),
+                                              "%Y-%m-%dT%H:%M:00.000000"
+                                              )
+        summary = self.request.get('summary')
+        location = self.request.get('location')
+        ends_at = datetime.datetime.strptime(
+                                              self.request.get('ends_at'),
+                                              "%Y-%m-%dT%H:%M:00.000000"
+                                              )
+        task=Task.getTaskById(self.request.get('task_id'))
+
+        try:
+            credentials = user_from_email.google_credentials
+            http = credentials.authorize(httplib2.Http(memcache))
+            service = build('calendar', 'v3', http=http)
+            # prepare params to insert
+            params = {
+                 "start":
+                  {
+                    "date": starts_at.strftime("%Y-%m-%d")
+                  },
+                 "end":
+                  {
+                    "date": ends_at.strftime("%Y-%m-%d")
+                  },
+                  "summary": summary,
+            }
+        
+            created_task = service.events().insert(calendarId='primary',body=params).execute()
+            task.task_google_id=created_task['id']
+            task.put()
+        except:
+            raise endpoints.UnauthorizedException('Invalid grant' )
+
+
 class SyncPatchCalendarEvent(webapp2.RequestHandler):
     def post(self):
         user_from_email = model.User.get_by_email(self.request.get('email'))
@@ -809,15 +853,61 @@ class SyncPatchCalendarEvent(webapp2.RequestHandler):
             patched_event = service.events().patch(calendarId='primary',eventId=event_google_id,body=params).execute()
         except:
             raise endpoints.UnauthorizedException('Invalid grant' )
+
+# syncronize tasks with google calendar . hadji hicham 10-07-2014.
+class SyncPatchCalendarTask(webapp2.RequestHandler):
+    def post(self):
+        user_from_email = model.User.get_by_email(self.request.get('email'))
+        starts_at = datetime.datetime.strptime(
+                                              self.request.get('starts_at'),
+                                              "%Y-%m-%dT%H:%M:00.000000"
+                                              )
+        summary = self.request.get('summary')
+        location = self.request.get('location')
+        ends_at = datetime.datetime.strptime(
+                                              self.request.get('ends_at'),
+                                              "%Y-%m-%dT%H:%M:00.000000"
+                                              )
+        task_google_id= self.request.get('task_google_id')
+        try:
+            credentials = user_from_email.google_credentials
+            http = credentials.authorize(httplib2.Http(memcache))
+            service = build('calendar', 'v3', http=http)
+            # prepare params to insert
+            params = {
+                 "start":
+                  {
+                    "date": starts_at.strftime("%Y-%m-%d")
+                  },
+                 "end":
+                  {
+                    "date": ends_at.strftime("%Y-%m-%d")
+                  },
+                  "summary": summary    
+                  }
+          
+
+            patched_event = service.events().patch(calendarId='primary',eventId=task_google_id,body=params).execute()
+        except:
+            raise endpoints.UnauthorizedException('Invalid grant' )
 # sync delete events with google calendar . hadjo hicham 09-08-2014
 class SyncDeleteCalendarEvent(webapp2.RequestHandler):
     def post(self):
         user_from_email = model.User.get_by_email(self.request.get('email'))
         event_google_id= self.request.get('event_google_id')
-        print "<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
-        print "its me"
-        print event_google_id
-        print "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+        try:
+            credentials = user_from_email.google_credentials
+            http = credentials.authorize(httplib2.Http(memcache))
+            service = build('calendar', 'v3', http=http)
+            # prepare params to insert
+            patched_event = service.events().delete(calendarId='primary',eventId=event_google_id).execute()
+        except:
+            raise endpoints.UnauthorizedException('Invalid grant' )
+# delete tasks from google calendar. hadji hicham 13-07-2014.
+class SyncDeleteCalendarTask(webapp2.RequestHandler):
+    def post(self):
+        user_from_email = model.User.get_by_email(self.request.get('email'))
+        event_google_id= self.request.get('event_google_id')
         try:
             credentials = user_from_email.google_credentials
             http = credentials.authorize(httplib2.Http(memcache))
@@ -963,9 +1053,15 @@ routes = [
     ('/workers/syncdocumentwithteam',SyncDocumentWithTeam),
     ('/workers/createorgfolders',CreateOrganizationFolders),
     ('/workers/createobjectfolder',CreateObjectFolder),
+    # syncronize the events with google calendar. hdji hicham 09-08-2014 .
     ('/workers/syncevent',SyncCalendarEvent),
     ('/workers/syncpatchevent',SyncPatchCalendarEvent),
     ('/workers/syncdeleteevent',SyncDeleteCalendarEvent),
+    #syncronize tasks with google calendar. hdji hicham 09-08-2014.
+    ('/workers/synctask',SyncCalendarTask),
+    ('/workers/syncpatchtask',SyncPatchCalendarTask),
+    ('/workers/syncdeletetask',SyncDeleteCalendarTask),
+    #
     ('/workers/createcontactsgroup',CreateContactsGroup),
     ('/workers/sync_contacts',SyncContact),
     ('/workers/add_to_iogrow_leads',AddToIoGrowLeads),

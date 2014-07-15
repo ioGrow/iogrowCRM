@@ -308,10 +308,9 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
           defaultView:'agendaWeek',
           editable: true,
           eventSources: [{
-            events: function(start, end, timezone, callback) {
+          events: function(start, end, timezone, callback) {
               // events client table to feed the calendar .  // hadji hicham  08-07-2014 10:40
               var events=[];
-
               var params = {
                             'events_list_start':moment(start).format('YYYY-MM-DDTH:mm:00.000000'),
                             'events_list_end':moment(end).format('YYYY-MM-DDTH:mm:00.000000')
@@ -327,6 +326,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                   $scope.$apply();  
                                 }
                                 else{
+                              
                                     if(resp.code==401){
                                             $scope.refreshToken();
                                             $scope.isLoading = false;
@@ -334,8 +334,6 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                     };
                                 }
                });  
-
-
                // load tasks 
                       gapi.client.crmengine.tasks.listv2(params1).execute(function(resp) {
                                 if(!resp.code){
@@ -365,7 +363,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                                 
                                       };
                                      }else{
-                                       console.log("events list is empty");
+                                             console.log("the list is empty");
                                      }
                                      // feed events client table with tasks  hadji hicham  08-07-2014 10:40
                                      
@@ -388,18 +386,11 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                                 
                                       }
                                      }else{
-                                      console.log("tasks list is empty");
+                                       console.log("the list of tasks is empty !")
+                                      
                                      }
 
-                                        
-                                    
-                                      
-                                      
-                                     
-                                         
-                                      
-                                       
-                                  
+
                                     
                                        // feed the calendar client table with events and tasks . hadji hicham  08-07-2014 10:40
                                        callback(events); 
@@ -533,11 +524,11 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                  'due':moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000')             
                                   }
                               
-
+                          
 
                               
 
-                            Task.patch($scope,params);
+                         Task.patch($scope,params);
 
                        }else{
                         $('#calendar').fullCalendar( 'refetchEvents' );
@@ -554,7 +545,10 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                
                 
            },
-
+      //Triggered when the user mouses over an event. hadji hicham 14-07-2014.
+       eventMouseover:function( event, jsEvent, view ) { 
+               
+       },
      //Triggered when event resizing begins.
        eventResizeStart:function( event, jsEvent, ui, view ) { },
        //Triggered when event resizing stops.
@@ -701,6 +695,27 @@ $scope.updateEventRender=function(ioevent){
    
     ///  $('#calendar').fullCalendar( 'refetchEvents' );
 };
+
+// hadji hicham 14-07-2014 . update the event after we add .
+$scope.updateEventRenderAfterAdd= function(){
+
+     var events =$('#calendar').fullCalendar( 'clientEvents' ,["new"] );
+       $('#calendar').fullCalendar( 'removeEvents' ,["new"])
+       var eventObject = {
+                    id:$scope.justadded.id,
+                    entityKey:$scope.justadded.entityKey,
+                    title: $scope.justadded.title,
+                    start:moment($scope.justadded.starts_at),
+                    end:moment($scope.justadded.ends_at),
+                    url:'/#/events/show/'+$scope.justadded.id.toString(),
+                    my_type:"event",
+                    allDay:false
+                };      
+              eventObject.className = $(this).attr("data-class");
+    
+              $('#calendar').fullCalendar('renderEvent', eventObject, false); 
+
+}
 
 //
      // We need to call this to refresh token when user credentials are invalid
