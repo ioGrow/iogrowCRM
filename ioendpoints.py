@@ -2231,49 +2231,59 @@ class CrmEngineApi(remote.Service):
         #,calendar_feeds_start<=Task.due<=calendar_feeds_end
         feeds_results=[]
         for event in events:
-            # is_filtered = True
-            # if event.access == 'private' and task.owner!=user_from_email.google_user_id:
-            kwargs1 = {
-                    'id' : str(event.id),
-                      'entityKey':event.entityKey,
-                      'title':event.title,
-                      'starts_at':event.starts_at.isoformat(),
-                      'ends_at':event.ends_at.isoformat(),
-                      'where':event.where,
-                      'my_type':"event",
-                      'allday':event.allday
-            }
+            event_is_filtered = True
+            if event.access == 'private' and event.owner!=user_from_email.google_user_id:
+               end_node_set = [user_from_email.key]
+               if not Edge.find(start_node=event.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
+                   event_is_filtered= False
+            if event_is_filtered:
+                    kwargs1 = {
+                            'id' : str(event.id),
+                              'entityKey':event.entityKey,
+                              'title':event.title,
+                              'starts_at':event.starts_at.isoformat(),
+                              'ends_at':event.ends_at.isoformat(),
+                              'where':event.where,
+                              'my_type':"event",
+                              'allday':event.allday
+                    }
             feeds_results.append(CalendarFeedsResult(**kwargs1))
         for task in tasks:
-            status_color = 'green'
-            status_label = ''
-            if task.due:
-                now = datetime.datetime.now()
-                diff = task.due - now
-                if diff.days>=0 and diff.days<=2:
-                    status_color = 'orange'
-                    status_label = 'soon: due in '+ str(diff.days) + ' days'
-                elif diff.days<0:
-                    status_color = 'red'
-                    status_label = 'overdue'
-                else:
-                    status_label = 'due in '+ str(diff.days) + ' days'
-                if task.status == 'closed':
-                    status_color = 'white'
-                    status_label = 'closed'
-            if task.due != None:
-               taskdue=task.due.isoformat()
-            else :
-               taskdue= task.due 
-            kwargs2 = {
-                      'id' : str(task.id),
-                      'entityKey':task.entityKey,
-                      'title':task.title,
-                      'starts_at':taskdue,
-                      'my_type':"task",
-                      'backgroundColor':status_color
-            }
-            feeds_results.append(CalendarFeedsResult(**kwargs2))
+            task_is_filtered=True
+            if task.access == 'private' and task.owner!=user_from_email.google_user_id:
+               end_node_set = [user_from_email.key]
+               if not Edge.find(start_node=task.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
+                   task_is_filtered=False
+            if task_is_filtered:
+                status_color = 'green'
+                status_label = ''
+                if task.due:
+                    now = datetime.datetime.now()
+                    diff = task.due - now
+                    if diff.days>=0 and diff.days<=2:
+                        status_color = 'orange'
+                        status_label = 'soon: due in '+ str(diff.days) + ' days'
+                    elif diff.days<0:
+                        status_color = 'red'
+                        status_label = 'overdue'
+                    else:
+                        status_label = 'due in '+ str(diff.days) + ' days'
+                    if task.status == 'closed':
+                        status_color = 'white'
+                        status_label = 'closed'
+                if task.due != None:
+                   taskdue=task.due.isoformat()
+                else :
+                   taskdue= task.due 
+                kwargs2 = {
+                          'id' : str(task.id),
+                          'entityKey':task.entityKey,
+                          'title':task.title,
+                          'starts_at':taskdue,
+                          'my_type':"task",
+                          'backgroundColor':status_color
+                }
+                feeds_results.append(CalendarFeedsResult(**kwargs2))
 
         return CalendarFeedsResults(items=feeds_results)
 
