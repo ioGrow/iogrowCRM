@@ -312,106 +312,174 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
               // events client table to feed the calendar .  // hadji hicham  08-07-2014 10:40
               var events=[];
               var params = {
-                            'events_list_start':moment(start).format('YYYY-MM-DDTH:mm:00.000000'),
-                            'events_list_end':moment(end).format('YYYY-MM-DDTH:mm:00.000000')
+                            'calendar_feeds_start':moment(start).format('YYYY-MM-DDTH:mm:00.000000'),
+                            'calendar_feeds_end':moment(end).format('YYYY-MM-DDTH:mm:00.000000')
                             };
               var params1={}  
               $scope.isLoading = true;
- 
-                 // load events 
-              gapi.client.crmengine.events.list_fetch(params).execute(function(resp) { 
-                                if(!resp.code){
-                                  $scope.events_cal_list= resp.items;
+           
+                gapi.client.crmengine.calendar.feeds(params).execute(function(resp) { 
 
-                                  $scope.$apply();  
-                                }
-                                else{
-                              
-                                    if(resp.code==401){
-                                            $scope.refreshToken();
-                                            $scope.isLoading = false;
-                                            $scope.$apply();
-                                    };
-                                }
-               });  
-               // load tasks 
-                      gapi.client.crmengine.tasks.listv2(params1).execute(function(resp) {
                                 if(!resp.code){
 
-                                  $scope.tasks_list=resp.items;
-                                  $scope.$apply();
+                                  $scope.calendarFeeds= resp.items;
+                                  console.log(resp.items);
 
-                                   try {
-                                      // feed events client table with events .hadji hicham  08-07-2014 10:40
-                                     if($scope.events_cal_list){
-                                      for(var i=0;i<$scope.events_cal_list.length;i++ ){
+                                 if($scope.calendarFeeds){
 
-                                              var allday= ($scope.events_cal_list[i].allday=="false") ? false :true ;
-                                        
-                                                
+                                    for(var i=0;i<$scope.calendarFeeds.length;i++){
+
+                                        var allday= ($scope.calendarFeeds[i].allday=="false") ? false :true ;
+
+                                        var url=($scope.calendarFeeds[i].my_type=="event") ? '/#/events/show/' : '/#/tasks/show/' ;
+                                                  
                                                 events.push({ 
-                                                           id: $scope.events_cal_list[i].id ,
-                                                           title:$scope.events_cal_list[i].title,
-                                                           start:moment($scope.events_cal_list[i].starts_at),
-                                                           end: moment($scope.events_cal_list[i].ends_at),
-                                                           entityKey:$scope.events_cal_list[i].entityKey,
-                                                           url:'/#/events/show/'+$scope.events_cal_list[i].id.toString(),
+                                                           id: $scope.calendarFeeds[i].id ,
+                                                           title:$scope.calendarFeeds[i].title,
+                                                           start:moment($scope.calendarFeeds[i].starts_at),
+                                                           end: moment($scope.calendarFeeds[i].ends_at),
+                                                           entityKey:$scope.calendarFeeds[i].entityKey,
+                                                           backgroundColor: $scope.calendarFeeds[i].backgroundColor,
+                                                           color:$scope.calendarFeeds[i].backgroundColor,
+                                                           url:url+$scope.calendarFeeds[i].id.toString(),
                                                            allDay:allday,
-                                                           my_type:"event"
+                                                           my_type:$scope.calendarFeeds[i].my_type
                                                        })
 
                                                 
                                       };
-                                     }else{
-                                             console.log("the list is empty");
-                                     }
-                                     // feed events client table with tasks  hadji hicham  08-07-2014 10:40
-                                     
-                                     if($scope.tasks_list){
-                                            for(var i=0;i<$scope.tasks_list.length;i++ ){
-                                        
 
-                                            events.push({ 
-                                                           id: $scope.tasks_list[i].id ,
-                                                           title:$scope.tasks_list[i].title,
-                                                           start:moment($scope.tasks_list[i].due),
-                                                           entityKey:$scope.tasks_list[i].entityKey,
-                                                           url:'/#/tasks/show/'+$scope.tasks_list[i].id.toString(),
-                                                           backgroundColor:$scope.tasks_list[i].status_color,
-                                                           color:$scope.tasks_list[i].status_color,
-                                                           allDay:true,
-                                                           due:moment($scope.tasks_list[i].due),
-                                                           my_type:"task"
-                                                       })
-                                                
-                                      }
-                                     }else{
-                                       console.log("the list of tasks is empty !")
-                                      
-                                     }
+                                 }else{
+                                  console.log("the list is empty");
+                                 } 
+                                  callback(events); 
 
-
-                                    
-                                       // feed the calendar client table with events and tasks . hadji hicham  08-07-2014 10:40
-                                       callback(events); 
-                            
-                                       }catch (e){
-                                               console.log(e.message);
-                                               callback(events);
-                                          }
-                                          $scope.$apply();
-
+                                  $scope.$apply();  
                                 }
-                                 else{
+                                else{
+                                      console.log(resp.message);
+                                     console.log("Ooops!");
                                     if(resp.code==401){
                                             $scope.refreshToken();
                                             $scope.isLoading = false;
                                             $scope.$apply();
                                     };
                                 }
+               }); 
+ 
+                //    // load events 
+              // gapi.client.crmengine.events.list_fetch(params).execute(function(resp) { 
+              //                   if(!resp.code){
+              //                     $scope.events_cal_list= resp.items;
 
-                 });  
-               // end  
+              //                     $scope.$apply();  
+              //                   }
+              //                   else{
+                              
+              //                       if(resp.code==401){
+              //                               $scope.refreshToken();
+              //                               $scope.isLoading = false;
+              //                               $scope.$apply();
+              //                       };
+              //                   }
+              //  }); 
+ 
+              //    // load events 
+              // gapi.client.crmengine.events.list_fetch(params).execute(function(resp) { 
+              //                   if(!resp.code){
+              //                     $scope.events_cal_list= resp.items;
+
+              //                     $scope.$apply();  
+              //                   }
+              //                   else{
+                              
+              //                       if(resp.code==401){
+              //                               $scope.refreshToken();
+              //                               $scope.isLoading = false;
+              //                               $scope.$apply();
+              //                       };
+              //                   }
+              //  });  
+              //     console.log("......loading!");
+                  
+              //  // load tasks 
+              //         gapi.client.crmengine.tasks.listv2(params1).execute(function(resp) {
+              //                   if(!resp.code){
+
+              //                     $scope.tasks_list=resp.items;
+              //                     $scope.$apply();
+
+              //                      try {
+              //                         // feed events client table with events .hadji hicham  08-07-2014 10:40
+              //                        if($scope.events_cal_list){
+              //                         for(var i=0;i<$scope.events_cal_list.length;i++ ){
+
+              //                                 var allday= ($scope.events_cal_list[i].allday=="false") ? false :true ;
+                                        
+                                                
+              //                                   events.push({ 
+              //                                              id: $scope.events_cal_list[i].id ,
+              //                                              title:$scope.events_cal_list[i].title,
+              //                                              start:moment($scope.events_cal_list[i].starts_at),
+              //                                              end: moment($scope.events_cal_list[i].ends_at),
+              //                                              entityKey:$scope.events_cal_list[i].entityKey,
+              //                                              url:'/#/events/show/'+$scope.events_cal_list[i].id.toString(),
+              //                                              allDay:allday,
+              //                                              my_type:"event"
+              //                                          })
+
+                                                
+              //                         };
+              //                        }else{
+              //                                console.log("the list is empty");
+              //                        }
+              //                        // feed events client table with tasks  hadji hicham  08-07-2014 10:40
+                                     
+              //                        if($scope.tasks_list){
+              //                               for(var i=0;i<$scope.tasks_list.length;i++ ){
+                                        
+
+              //                               events.push({ 
+              //                                              id: $scope.tasks_list[i].id ,
+              //                                              title:$scope.tasks_list[i].title,
+              //                                              start:moment($scope.tasks_list[i].due),
+              //                                              entityKey:$scope.tasks_list[i].entityKey,
+              //                                              url:'/#/tasks/show/'+$scope.tasks_list[i].id.toString(),
+              //                                              backgroundColor:$scope.tasks_list[i].status_color,
+              //                                              color:$scope.tasks_list[i].status_color,
+              //                                              allDay:true,
+              //                                              due:moment($scope.tasks_list[i].due),
+              //                                              my_type:"task"
+              //                                          })
+                                                
+              //                         }
+              //                        }else{
+              //                          console.log("the list of tasks is empty !")
+                                      
+              //                        }
+
+
+                                    
+              //                          // feed the calendar client table with events and tasks . hadji hicham  08-07-2014 10:40
+              //                          callback(events); 
+                            
+              //                          }catch (e){
+              //                                  console.log(e.message);
+              //                                  callback(events);
+              //                             }
+              //                             $scope.$apply();
+
+              //                   }
+              //                    else{
+              //                       if(resp.code==401){
+              //                               $scope.refreshToken();
+              //                               $scope.isLoading = false;
+              //                               $scope.$apply();
+              //                       };
+              //                   }
+
+              //    });  
+              //  // end  
 
                   $scope.isLoading = false;  
                                 

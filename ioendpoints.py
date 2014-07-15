@@ -344,7 +344,25 @@ class PermissionInsertRequest(messages.Message):
     about = messages.StringField(1,required=True)
     items = messages.MessageField(PermissionRequest, 2, repeated=True)
 
+# request message to got the feeds for the calendar . hadji hicham 14-07-2014.
+class CalendarFeedsRequest(messages.Message):
+    calendar_feeds_start=messages.StringField(1)
+    calendar_feeds_end=messages.StringField(2)
+# result to feed the calendar 
+class CalendarFeedsResult(messages.Message):
+      id=messages.StringField(1)
+      title=messages.StringField(2)
+      where=messages.StringField(3)
+      starts_at=messages.StringField(4)
+      ends_at=messages.StringField(5)
+      entityKey=messages.StringField(6)
+      allday=messages.StringField(7)
+      my_type=messages.StringField(8)
+      backgroundColor=messages.StringField(9)
 
+# results 
+class CalendarFeedsResults(messages.Message):
+      items=messages.MessageField(CalendarFeedsResult,1,repeated=True)
 
 @endpoints.api(
                name='blogengine',
@@ -2195,3 +2213,69 @@ class CrmEngineApi(remote.Service):
                 exec('patched_model.' + p + '= my_model.' + p)
         patched_model.put()
         return patched_model
+
+
+     # this api to fetch tasks and events to feed the calendar . hadji hicham.14-07-2014
+    @endpoints.method(CalendarFeedsRequest,CalendarFeedsResults,
+        path='calendar/feeds',http_method='POST',name='calendar.feeds') 
+    def get_feeds(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        calendar_feeds_start=datetime.datetime.strptime(request.calendar_feeds_start,"%Y-%m-%dT%H:%M:00.000000")
+        calendar_feeds_end=datetime.datetime.strptime(request.calendar_feeds_end,"%Y-%m-%dT%H:%M:00.000000")
+
+        # filter this table 
+        events=Event.query().filter(Event.organization==user_from_email.organization,Event.starts_at>=calendar_feeds_start,Event.starts_at<=calendar_feeds_end)
+        # filter this table .
+        tasks=Task.query().filter(Task.organization==user_from_email.organization)
+
+        #,calendar_feeds_start<=Task.due<=calendar_feeds_end
+        feeds_results=[]
+        for event in events:
+            # is_filtered = True
+            # if event.access == 'private' and task.owner!=user_from_email.google_user_id:
+            kwargs1 = {
+                    'id' : str(event.id),
+                      'entityKey':event.entityKey,
+                      'title':event.title,
+                      'starts_at':event.starts_at.isoformat(),
+                      'ends_at':event.ends_at.isoformat(),
+                      'where':event.where,
+                      'my_type':"event",
+                      'allday':event.allday
+            }
+            feeds_results.append(CalendarFeedsResult(**kwargs1))
+        for task in tasks:
+            status_color = 'green'
+            status_label = ''
+            if task.due:
+                now = datetime.datetime.now()
+                diff = task.due - now
+                if diff.days>=0 and diff.days<=2:
+                    status_color = 'orange'
+                    status_label = 'soon: due in '+ str(diff.days) + ' days'
+                elif diff.days<0:
+                    status_color = 'red'
+                    status_label = 'overdue'
+                else:
+                    status_label = 'due in '+ str(diff.days) + ' days'
+                if task.status == 'closed':
+                    status_color = 'white'
+                    status_label = 'closed'
+            if task.due != None:
+               taskdue=task.due.isoformat()
+            else :
+               taskdue= task.due 
+            kwargs2 = {
+                      'id' : str(task.id),
+                      'entityKey':task.entityKey,
+                      'title':task.title,
+                      'starts_at':taskdue,
+                      'my_type':"task",
+                      'backgroundColor':status_color
+            }
+            feeds_results.append(CalendarFeedsResult(**kwargs2))
+
+        return CalendarFeedsResults(items=feeds_results)
+
+
+
