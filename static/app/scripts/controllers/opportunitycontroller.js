@@ -506,8 +506,8 @@ $scope.addTags=function(){
       });
 
 }]);
-app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage','Email','Attachement','InfoNode',
-    function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email,Attachement,InfoNode) {
+app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage','Email','Attachement','InfoNode','Tag',
+    function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email,Attachement,InfoNode,Tag) {
       $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Opportunities").addClass("active");
      $scope.selectedTab = 2;
@@ -550,6 +550,12 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
          lineCap:'circle'
      };
      $scope.showeditdate=false;
+     $scope.newTaskform=false;
+     $scope.newEventform=false;
+     $scope.newTask={};
+     $scope.selected_members=[];
+     $scope.selected_member={};
+     $scope.ioevent = {};
       $scope.allcurrency=[
         { value:"USD", text:"$ - USD"},
         { value:"EUR", text:"€ - EUR"},
@@ -648,10 +654,16 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
           User.list($scope,{});
           //HKA 13.12.2013 to retrieve the opportunities's stages
           Opportunitystage.list($scope,{'order':'probability'});
+           var paramsTag = {'about_kind': 'Opportunity'};
+          Tag.list($scope, paramsTag);
        };
         // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
           Auth.refreshToken();
+     };
+     $scope.listTags=function(){
+      var paramsTag = {'about_kind':'Opportunity'}
+      Tag.list($scope,paramsTag);
      };
       $scope.beforedeleteOpportunity = function(){
           $('#BeforedeleteOpportunity').modal('show');
@@ -669,28 +681,65 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
      $scope.$watch($scope.opportunity.closed_date, function() {
         console.log("work");
      });
-     $scope.addTask = function(task){
-
-          $('#myModal').modal('hide');
-        if (task.due){
-
-            var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
-
-            params ={'title': task.title,
-                      'due': dueDate,
-                      'parent': $scope.opportunity.entityKey
+      $scope.selectMemberToTask = function() {
+            console.log($scope.selected_members);
+            if ($scope.selected_members.indexOf($scope.user) == -1) {
+                $scope.selected_members.push($scope.user);
+                $scope.selected_member = $scope.user;
+                $scope.user = $scope.selected_member.google_display_name;
             }
-
-
-        }else{
-            params ={'title': task.title,
-                     'parent': $scope.opportunity.entityKey
-                   }
+            $scope.user = '';
         };
-        $scope.task.title='';
-        $scope.task.dueDate='0000-00-00T00:00:00-00:00';
-        Task.insert($scope,params);
+        $scope.unselectMember = function(index) {
+            $scope.selected_members.splice(index, 1);
+            console.log($scope.selected_members);
+        };
+     //$('#addLeadModal').modal('show');
+  //HKA 09.11.2013 Add a new Task
+   $scope.addTask = function(task){
+        if ($scope.newTaskform==false) {
+          $scope.newTaskform=true;
+           }else{
+            if (task.title!=null) {
+                    //  $('#myModal').modal('hide');
+            if (task.due){
+                var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
+                params ={'title': task.title,
+                          'due': dueDate,
+                          'parent': $scope.opportunity.entityKey,
+                          'access': $scope.opportunity.access
+                }
+
+            }else{
+                params ={'title': task.title,
+                         'parent': $scope.opportunity.entityKey,
+                         'access': $scope.opportunity.access
+                       }
+            };
+            if ($scope.selected_members!=[]) {
+                  params.assignees=$scope.selected_members;
+                };
+                var tags=[];                
+                tags=$('#select2_sample2').select2("val");
+                if (tags!=[]) {
+                  var tagitems = [];
+                  angular.forEach(tags, function(tag){
+                  var item = {'entityKey': tag };
+                  tagitems.push(item);
+                });
+                  params.tags=tagitems;
+                };
+            Task.insert($scope,params);
+            $scope.newTask={};
+            $scope.newTaskform=false;
+            $scope.selected_members=[];
+            $("#select2_sample2").select2("val", "");
+        }else{
+            $scope.newTask={};
+            $scope.newTaskform=false;
+      }
      }
+   }
      $scope.$watch('opportunity.closed_date', function(newValue, oldValue) {
             if (newValue!=oldValue){
                 $scope.patchDate(newValue);
@@ -835,19 +884,45 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
 
 //HKA 11.11.2013 Add new Event
  $scope.addEvent = function(ioevent){
-  //$scope.opportunity.entityKey
-   if ($scope.newEventform==false) {
+
+   /*****************************/
+
+             if ($scope.newEventform==false) {
                 $scope.newEventform=true;
-           }else{        
+           }else{
+
+
             if (ioevent.title!=null&&ioevent.title!="") {
-                  var params ={};
-                if (ioevent.starts_at){
+
+                    var params ={}
+
+
+                  // hadji hicham 13-08-2014.
+                  if($scope.allday){
+                         var ends_at=moment(moment(ioevent.starts_at_allday).format('YYYY-MM-DDT00:00:00.000000'))
+
+                   params ={'title': ioevent.title,
+                            'starts_at': $filter('date')(ioevent.starts_at_allday,['yyyy-MM-ddT00:00:00.000000']),
+                            'ends_at':ends_at.add('hours',23).add('minute',59).add('second',59).format('YYYY-MM-DDTHH:mm:00.000000'),
+                            'where': ioevent.where,
+                            'parent':$scope.opportunity.entityKey,
+                            'allday':"true",
+                            'access': $scope.opportunity.access
+                      }
+
+
+                 
+                  }else{
+             
+                  if (ioevent.starts_at){
                     if (ioevent.ends_at){
                       params ={'title': ioevent.title,
                               'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
                               'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
                               'where': ioevent.where,
-                              'parent':$scope.opportunity.entityKey
+                              'parent':$scope.opportunity.entityKey,
+                              'allday':"false",
+                              'access': $scope.opportunity.access
                       }
 
                     }else{
@@ -855,18 +930,50 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
                         'title': ioevent.title,
                               'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
                               'where': ioevent.where,
-                              'parent':$scope.opportunity.entityKey
+                              'parent':$scope.account.entityKey,
+                              'ends_at':moment(ioevent.ends_at).add('hours',2).format('YYYY-MM-DDTHH:mm:00.000000'),
+                              'allday':"false",
+                              'access':$scope.opportunity.access
                       }
                     }
 
-                    Event.insert($scope,params);
-                    $scope.ioevent={};
-                    $scope.newEventform=false;
+
+                    
+                   
                   }
+
+
+                  }
+                  
+                   Event.insert($scope,params);
+                  $scope.ioevent={};
+                  $scope.newEventform=false;
+
+
+
         }
      }
 
-     };
+/*******************/
+
+
+     
+    };
+
+// hadji hicham 14-07-2014 . update the event after we add .
+$scope.updateEventRenderAfterAdd= function(){};
+
+     $scope.deleteEvent =function(eventt){
+    var params = {'entityKey':eventt.entityKey};
+     Event.delete($scope,params);
+     //$('#addLeadModal').modal('show');
+   }
+      $scope.eventDeleted = function(resp){
+   };
+    $scope.closeEventForm=function(ioevent){
+      $scope.ioevent={};
+      $scope.newEventform=false;
+    }
      $scope.hilightEvent = function(){
 
         $('#event_0').effect("highlight","slow");
@@ -1136,26 +1243,22 @@ $scope.deleteopportunity= function(){
 
     //HKA 07.03.2014 Add Custom field
 
-   $scope.addCustomField = function(customField) {
-            if (customField.field && customField.value) {
-                params = {'parent': $scope.opportunity.entityKey,
-                    'kind': 'customfields',
-                    'fields': [
-                        {
-                            "field": customField.field,
-                            "value": customField.value
-                        }
-                    ]
-                };
-                InfoNode.insert($scope, params);
-            }
+    $scope.addCustomField = function(customField){
+      params = {'parent':$scope.opportunity.entityKey,
+            'kind':'customfields',
+            'fields':[
+                {
+                  "field": customField.field,
+                  "value": customField.value
+                }
+            ]
+  };
+  InfoNode.insert($scope,params);
 
-            $scope.customfield = {};
-            $scope.customfield.field = '';
-            $scope.customfield.value = '';
-            $scope.showCustomFieldForm = false;
+    $scope.customfield={};
+    $scope.showCustomFieldForm = false;
 
-        };
+};
 
 $scope.listInfonodes = function(kind) {
      params = {'parent':$scope.opportunity.entityKey,

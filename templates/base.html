@@ -104,7 +104,7 @@
         <ul class="nav navbar-nav pull-right">
 
               <li id="chromeExtension" class="dropdown user chrome-ext hidden-xs"  >
-	                <input type="submit" onclick="$('#InstallChromeExtension').modal() " class="btn blue btn-block pull-right" value="Install chrome extension" style="padding-left:5px;padding-right:5px;">
+                  <input type="submit" onclick="$('#InstallChromeExtension').modal() " class="btn blue btn-block pull-right" value="Install chrome extension" style="padding-left:5px;padding-right:5px;">
               </li>
 
               <li class="dropdown user">
@@ -365,19 +365,21 @@
   <div class="footer-inner">
          &copy; i/oGrow  2013 - 2014
   </div>
-
+<input type="hidden" id="userEmail" value="{{user.email}}">
 </div>
 <div class="clearfix"></div>
 <!-- END FOOTER -->
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 <!-- BEGIN CORE PLUGINS -->
   <script src="/static/plugins/jquery.min.js"  type="text/javascript"></script>
+
   <script src="/static/app/scripts/vendor/select2.min.js" ></script>
    <script src="/static/app/scripts/vendor/angular.js" ></script>
    <link href="/static/angular-xeditable-0.1.8/css/xeditable.css" rel="stylesheet">
   <script src="/static/angular-xeditable-0.1.8/js/xeditable.js"></script>
    <script src="/static/app/scripts/vendor/ui-select2.js" ></script>
   <script type="text/javascript">
+
     var apisToLoad;
     var callback = function() {
         console.log('callback');
@@ -395,7 +397,9 @@
 
 
 
+
        var ROOT = '/_ah/api';
+
 
 
 

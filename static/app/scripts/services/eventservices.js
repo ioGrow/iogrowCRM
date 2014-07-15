@@ -130,20 +130,25 @@ eventservices.factory('Event', function($http) {
 
       gapi.client.crmengine.events.insertv2(params).execute(function(resp) {
           if(!resp.code){
-            $('#calendar').fullCalendar( 'refetchEvents' );
+            //$('#calendar').fullCalendar( 'refetchEvents' );
             if ($scope.events == undefined){
             $scope.events = [];
           }
+
+            $scope.justadded=resp ;
             $scope.events.push(resp);
-            console.log(resp);
+          
             $scope.isLoading = false;
              $scope.permet_clicking=true ;
+             // hadji hicham 14-07-2014 . update the event in the calendar after we add it .
+         $scope.updateEventRenderAfterAdd();
             $scope.$apply();
 
          }else{
 
              $('#newEventModal').modal('hide');
              $('#errorModal').modal('show');
+             console.log(resp.message)
              if(resp.message=="Invalid grant"){
                 $scope.refreshToken();
                 $scope.isLoading = false;

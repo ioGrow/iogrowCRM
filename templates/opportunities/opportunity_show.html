@@ -590,6 +590,7 @@
                             <div class="caption">
                                 <i class="fa fa-calendar"></i>Events
                             </div>
+<<<<<<< HEAD
                         </div>
                         <div class="portlet-body" id="chats">
                             <div class="scroller" style="height:200x" data-always-visible="1" data-rail-visible="0">
@@ -617,6 +618,55 @@
                             </div>
                         </div>
                     </div>
+=======
+                                 All day <input type="checkbox" ng-model="allday"/>
+                              <!-- pick only date (the case of all day) -->
+                              <div class="row" ng-show="allday">
+                                <div class="col-md-12 margin-bottom-10">
+                                       <div class="input-icon ">
+                                        <i class="fa fa-calendar"></i>
+                                       <input cusdatetimepicker data-model="ioevent.starts_at_allday" type="text" class="form-control" placeholder="When" value="" id="leadEventStartsAt">
+                                      </div>
+                                </div>
+                            </div>
+                              <!-- the and of the time picker-->
+
+                            <!-- pick date and time    . hadji hicham 14-07-2014-->
+                            <div class="row" ng-hide="allday">
+                                <div class="col-md-12 margin-bottom-10">
+                                      <div class="input-icon">
+                                        <i class="fa fa-calendar"></i>
+                                        <input cusdatetimepicker data-model="ioevent.starts_at" type="text" class="form-control" placeholder="From" value="" id="leadEventStartsAt">
+                                      </div>
+
+                                </div>
+                            </div>
+                            <div class="row" ng-hide="allday">
+                                <div class="col-md-12 margin-bottom-10">
+                                       <div class="input-icon ">
+                                        <i class="fa fa-calendar"></i>
+                                       <input cusdatetimepicker data-model="ioevent.ends_at" type="text" class="form-control" placeholder="To" value="" id="leadEventStartsAt">
+                                      </div>
+                                </div>
+                            </div>
+                            <!-- end date time picker -->   
+                            <div class="row">
+                              <div class="col-md-12 margin-bottom-10">
+                                  <input ng-model="ioevent.where" type="text" id="taskName" class="form-control" placeholder="Where ?">
+                              </div>
+                              <!--/span-->
+                            </div> 
+                  </div>
+                  <div class="row">
+                      <div class="col-md-12 margin-top-10">
+                          <p class="newEventText"><span ng-hide="newEventform">Add New Event</span>
+                          <button type="button" ng-click="addEvent(ioevent)" class="btn red btn-sm pull-right btn-inline">Add</button>
+                          <button type="button" ng-click="closeEventForm(ioevent)" ng-show="newEventform" class="cancelEventBtn btn btn-default btn-sm pull-right btn-inline">Cancel</button>
+                          </p>
+                      </div>
+                  </div>
+              </form>
+>>>>>>> fa8d36990374608570d416dcc5099ac5905bc8da
                 </div>
             </div>
         </div>
