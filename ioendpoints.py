@@ -1134,7 +1134,7 @@ class CrmEngineApi(remote.Service):
                 opportunity_request=OpportunityInsertRequest(
                                                             name=deal.name,
                                                             description=deal.background,
-                                                            account=key,
+                                                            account=key.urlsafe(),
                                                             duration=deal.duration,
                                                             currency=deal.currency,
                                                             amount_total=deal.price
