@@ -61,7 +61,7 @@
     <div class="row">
     <div class="col-md-12">
       <div class="row">
-        <div class="showPage custom-show margin-bottom-15  col-md-12">
+        <div class="showPage newTaskShow custom-show margin-bottom-15  col-md-12">
           <div class="row">
                <div class="col-md-12">
                 <form ng-submit="addNewTask()" class="newTaskForm">
@@ -91,7 +91,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                       More <i class="fa fa-angle-down"></i>
                     </a>
-                    <ul class="dropdown-menu" role="menu">
+                    <ul class="dropdown-menu drp-dwn-xs-right" role="menu">
                       <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;createdByMe('{{ME}}');">{{ _("Created by Me") }}</a></li>
                       <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;assignedToMe('{{ME}}');">{{ _("Assigned to Me") }}</a></li>
                     </ul>
@@ -123,7 +123,7 @@
                                        <label class="col-xs-1  col-md-1">
                                            <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
                                        </label>
-                                       <div class="col-xs-7  col-md-7">
+                                       <div class="col-xs-10  col-md-10">
                                         <button  class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-lock"></i>
                                           <span class="btn-text">
@@ -189,7 +189,7 @@
                                       <p class="col-md-11 col-md-offset-1 list-group-item-text">
                                          <span ng-show="task.created_by">Opened by:<a href="#"> <%= task.created_by.display_name %></a></span>
                                           <span ng-show="task.about">{{ _('related to') }}<a href="<%= getUrl(task.about.kind,task.about.id); %>"> <%= task.about.name %></a> </span>
-                                          <span ng-show="deletetask" class="pull-right">
+                                          <span ng-show="deletetask" class="deletetaskBtn pull-right">
                                              <!-- to delete task -->
                                                 <a  ng-click="deleteThisTask(task.entityKey)" class="btn-link addAnotherPhone"><i class="icon-trash"></i>  
                                              </a>
@@ -222,7 +222,7 @@
                                        <label class="col-xs-1  col-md-1">
                                            <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
                                        </label>
-                                       <div class="col-xs-7  col-md-7">
+                                     <div class="col-xs-10  col-md-10">
                                         <button  class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-lock"></i>
                                           <span class="btn-text">
@@ -307,7 +307,7 @@
                                        <label class="col-xs-1  col-md-1">
                                            <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
                                        </label>
-                                       <div class="col-xs-7  col-md-7">
+                                        <div class="col-xs-10  col-md-10">
                                         <button  class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-lock"></i>
                                           <span class="btn-text">
@@ -392,7 +392,7 @@
                                        <label class="col-xs-1  col-md-1">
                                            <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
                                        </label>
-                                       <div class="col-xs-7  col-md-7">
+                                        <div class="col-xs-10  col-md-10">
                                         <button   class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-lock"></i>
                                           <span class="btn-text">
@@ -477,7 +477,7 @@
                                        <label class="col-xs-1  col-md-1">
                                            <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
                                        </label>
-                                       <div class="col-xs-7  col-md-7">
+                                        <div class="col-xs-10  col-md-10">
                                         <button   class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-lock"></i>
                                           <span class="btn-text">

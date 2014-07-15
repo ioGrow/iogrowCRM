@@ -714,15 +714,10 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
        $scope.deleteTask = function(){
         console.log($scope.selected_tasks);
         angular.forEach($scope.selected_tasks, function(selected_task){
-           if (selected_task.status=='open'||selected_task.status=='pending') {
-            console.log("woooork");
-              params = {'id':selected_task.id,
-            'status':'closed'
-            };
-            Task.patch($scope,params);  
-           }
+            var params = {'entityKey':selected_task.entityKey};
+            Task.delete($scope, params); 
         });
-             $('#beforecloseTask').modal('hide');
+        $scope.selected_tasks=[];
       };
       $scope.reopenTask = function(){
         angular.forEach($scope.selected_tasks, function(selected_task){
