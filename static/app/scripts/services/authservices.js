@@ -3,6 +3,7 @@ accountservices.factory('Auth', function($http) {
   var Auth = function(data) {
      angular.extend(this, data);
   };
+  Auth.email = document.getElementById("userEmail").value;
   Auth.checkGapiToken = function(){
       var timeNow = new Date().getTime()/1000;
       var gapiToken = gapi.auth.getToken();
@@ -16,6 +17,7 @@ accountservices.factory('Auth', function($http) {
       return false;
   }
   Auth.initWithLocalStorage = function(){
+      console.log(Auth.email);
       var timeNow = new Date().getTime()/1000;
       // console.log('init with localStorage');
       if (localStorage.getItem("access_token")){

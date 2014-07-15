@@ -716,7 +716,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                   params.tags=tagitems;
                 };
             Task.insert($scope,params);
-            
+
             $scope.newTask={};
             $scope.newTaskform=false;
             $scope.selected_members=[];
@@ -745,7 +745,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
  //HKA 10.11.2013 Add event
  $scope.addEvent = function(ioevent){
 
-           
+
 
 
            if ($scope.newEventform==false) {
@@ -772,9 +772,9 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                       }
 
 
-                 
+
                   }else{
-             
+
                   if (ioevent.starts_at){
                     if (ioevent.ends_at){
                       params ={'title': ioevent.title,
@@ -799,13 +799,13 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                     }
 
 
-                    
-                   
+
+
                   }
 
 
                   }
-                  
+
                    Event.insert($scope,params);
                   $scope.ioevent={};
                   $scope.newEventform=false;

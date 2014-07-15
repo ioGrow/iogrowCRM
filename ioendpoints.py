@@ -1175,23 +1175,19 @@ class CrmEngineApi(remote.Service):
                         path='emails/send', http_method='POST',
                         name='emails.send')
     def send_email(self, request):
-        print request, "rrrrrrrrrrrrrrss";
         user = EndpointsHelper.require_iogrow_user()
-        if user is None:
-            raise endpoints.UnauthorizedException('Invalid token.')
-        message = mail.EmailMessage()
-        message.sender = user.google_display_name + " < io-"+ user.google_user_id+"@gcdc2013-iogrow.appspotmail.com>"
-        message.reply_to = user.email
-        if not mail.is_email_valid(request.to):
-            raise endpoints.UnauthorizedException('Invalid email.')
-        message.to = request.to
-        if request.cc:
-            message.cc = request.cc
-        if request.bcc:
-            message.bcc = request.bcc
-        message.subject = request.subject
-        message.html = request.body
-        message.send()
+        credentials = user.google_credentials
+        http = credentials.authorize(httplib2.Http(memcache))
+        service = build('gmail', 'v1', http=http)
+        message = EndpointsHelper.create_message(
+                                                  user.email,
+                                                  request.to,
+                                                  request.cc,
+                                                  request.bcc,
+                                                  request.subject,
+                                                  request.body
+                                                )
+        EndpointsHelper.send_message(service,'me',message)
         parent_key = ndb.Key(urlsafe=request.about)
         note_author = Userinfo()
         note_author.display_name = user.google_display_name
@@ -2213,8 +2209,6 @@ class CrmEngineApi(remote.Service):
                 exec('patched_model.' + p + '= my_model.' + p)
         patched_model.put()
         return patched_model
-
-
      # this api to fetch tasks and events to feed the calendar . hadji hicham.14-07-2014
     @endpoints.method(CalendarFeedsRequest,CalendarFeedsResults,
         path='calendar/feeds',http_method='POST',name='calendar.feeds') 
@@ -2287,5 +2281,12 @@ class CrmEngineApi(remote.Service):
 
         return CalendarFeedsResults(items=feeds_results)
 
-
+    # users.upgrade api v2
+    @endpoints.method(message_types.VoidMessage, message_types.VoidMessage,
+                      path='users/upgrade', http_method='POST',
+                      name='users.upgrade')
+    def upgrade_to_business(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        Organization.upgrade_to_business_version(user_from_email.organization)
+        return message_types.VoidMessage()
 
