@@ -844,6 +844,13 @@ class AddToIoGrowLeads(webapp2.RequestHandler):
                                     access = 'public'
         )
         Lead.insert(user_from_email,request)
+class GetFromLinkedinToIoGrow(webapp2.RequestHandler):
+    def post(self):
+        print "#################################laba lll#################"
+        entityKey= self.request.get('entityKey')
+        key=ndb.Key(urlsafe=entityKey)
+        lead=key.get()
+        print lead
 
 class ShareDocument(webapp2.RequestHandler):
     def post(self):
@@ -969,6 +976,7 @@ routes = [
     ('/workers/createcontactsgroup',CreateContactsGroup),
     ('/workers/sync_contacts',SyncContact),
     ('/workers/add_to_iogrow_leads',AddToIoGrowLeads),
+    ('/workers/get_from_linkedin',GetFromLinkedinToIoGrow),
 
     ('/',IndexHandler),
     ('/blog',BlogHandler),
