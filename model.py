@@ -283,11 +283,10 @@ class Organization(ndb.Model):
         admin_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=admin_tabs,organization=org_key)
         admin_app_key = admin_app.put()
         profiles = Profile.query(Profile.organization==org_key).fetch()
+        created_apps.append(admin_app_key)
+        created_tabs.extend(admin_tabs)
         for profile in profiles:
             default_app = sales_app
-            if profile.name=='Super Administrator':
-                created_apps.append(admin_app_key)
-                created_tabs.extend(admin_tabs)
             profile.apps=created_apps
             profile.default_app=default_app
             profile.tabs=created_tabs
@@ -295,11 +294,9 @@ class Organization(ndb.Model):
 
         users = User.query(User.organization==org_key).fetch()
         for user in users:
-            tabs_mem_key = '%s_tabs' % user.google_user_id
-            memcache.delete(tabs_mem_key)
-            active_app_mem_key = '%s_active_app' % user.google_user_id
-            memcache.delete(active_app_mem_key)
+            user_profile = user.profile.get()
             user.init_user_config(org_key,user.profile)
+            user.set_user_active_app(user_profile.default_app)
 
 class Permission(ndb.Model):
     about_kind = ndb.StringProperty(required=True)
@@ -415,12 +412,13 @@ class User(EndpointsModel):
         else:
             memcache.add(self.email, self)
         if self.google_credentials:
-            taskqueue.add(
-                        url='/workers/createcontactsgroup',
-                        params={
-                                'email': self.email
-                                }
-                        )
+            if self.google_contacts_group is None:
+                taskqueue.add(
+                            url='/workers/createcontactsgroup',
+                            params={
+                                    'email': self.email
+                                    }
+                            )
         self.put()
     def init_early_bird_config(self,org_key,profile_key):
         profile = profile_key.get()
