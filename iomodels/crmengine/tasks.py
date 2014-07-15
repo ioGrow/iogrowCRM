@@ -467,6 +467,7 @@ class Task(EndpointsModel):
                     status = status,
                     owner = user_from_email.google_user_id,
                     organization = user_from_email.organization,
+                    access= access,
                     author = author)
         task_key = task.put_async()
         if request.due:
