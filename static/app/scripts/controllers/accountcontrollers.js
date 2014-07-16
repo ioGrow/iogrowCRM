@@ -1095,12 +1095,14 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                     var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
                     params ={'title': task.title,
                               'due': dueDate,
-                              'parent': $scope.account.entityKey
+                              'parent': $scope.account.entityKey,
+                              'access':$scope.account.access
                     }
 
                 }else{
                     params ={'title': task.title,
-                             'parent': $scope.account.entityKey
+                             'parent': $scope.account.entityKey,
+                             'access':$scope.account.access
                            }
                 };
                 if ($scope.selected_members!=[]) {
@@ -1116,7 +1118,8 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                     });
                       params.tags=tagitems;
                     };
-                Task.insert($scope,params);
+
+               Task.insert($scope,params);
                 $scope.newTask={};
                 $scope.newTaskform=false;
                 $scope.selected_members=[];
@@ -1142,20 +1145,45 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             Account.get($scope, params);
         };
 //HKA 11.11.2013 Add new Event
- $scope.addEvent = function(ioevent){           
-           if ($scope.newEventform==false) {
+ $scope.addEvent = function(ioevent){ 
+            /*****************************/
+
+             if ($scope.newEventform==false) {
                 $scope.newEventform=true;
            }else{
-            
+
+
             if (ioevent.title!=null&&ioevent.title!="") {
+
                     var params ={}
-                if (ioevent.starts_at){
+
+
+                  // hadji hicham 13-08-2014.
+                  if($scope.allday){
+                         var ends_at=moment(moment(ioevent.starts_at_allday).format('YYYY-MM-DDT00:00:00.000000'))
+
+                   params ={'title': ioevent.title,
+                            'starts_at': $filter('date')(ioevent.starts_at_allday,['yyyy-MM-ddT00:00:00.000000']),
+                            'ends_at':ends_at.add('hours',23).add('minute',59).add('second',59).format('YYYY-MM-DDTHH:mm:00.000000'),
+                            'where': ioevent.where,
+                            'parent':$scope.account.entityKey,
+                            'access':$scope.account.access,
+                            'allday':"true"
+                      }
+
+
+                 
+                  }else{
+             
+                  if (ioevent.starts_at){
                     if (ioevent.ends_at){
                       params ={'title': ioevent.title,
                               'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
                               'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
                               'where': ioevent.where,
-                              'parent':$scope.account.entityKey
+                              'parent':$scope.account.entityKey,
+                              'access':$scope.account.access,
+                              'allday':"false"
                       }
 
                     }else{
@@ -1163,17 +1191,36 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                         'title': ioevent.title,
                               'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
                               'where': ioevent.where,
-                              'parent':$scope.account.entityKey
+                              'parent':$scope.account.entityKey,
+                              'ends_at':moment(ioevent.ends_at).add('hours',2).format('YYYY-MM-DDTHH:mm:00.000000'),
+                              'access':$scope.account.access,
+                              'allday':"false"
                       }
                     }
 
-                    Event.insert($scope,params);
-                    $scope.ioevent={};
-                    $scope.newEventform=false;
+
+                    
+                   
                   }
+
+
+                  }
+                  
+                   Event.insert($scope,params);
+                  $scope.ioevent={};
+                  $scope.newEventform=false;
+
+
+
         }
      }
+
+/*******************/
+
     }
+// hadji hicham 14-07-2014 . update the event after we add .
+$scope.updateEventRenderAfterAdd= function(){};
+
        $scope.deleteEvent =function(eventt){
     var params = {'entityKey':eventt.entityKey};
      Event.delete($scope,params);

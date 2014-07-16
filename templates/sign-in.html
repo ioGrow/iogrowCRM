@@ -925,6 +925,11 @@ var helper = (function() {
       $('#authResult').html('Auth Result:<br/>');
       console.log('*******************');
       console.log(authResult);
+      if (typeof(Storage) != "undefined") {
+          localStorage['is_signed_in'] = true;
+          localStorage['access_token']=authResult.access_token;
+          localStorage['authResultexpiration'] = authResult.expires_at;
+      }
       if (authResult['access_token']) {
         // The user is signed in
         this.authResult = authResult;
@@ -1091,7 +1096,7 @@ function onSignInCallback(authResult) {
 <p class="profile-name"></p>
 <div class="google-sign">
   <button class="g-signin"
-                              data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds"
+                              data-scope="https://mail.google.com/ https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds"
                               data-requestvisibleactions="http://schemas.google.com/AddActivity"
                               data-clientId="{{ CLIENT_ID }}"
                               data-accesstype="offline"

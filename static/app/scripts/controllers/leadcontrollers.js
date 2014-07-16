@@ -694,18 +694,20 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                 var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
                 params ={'title': task.title,
                           'due': dueDate,
-                          'parent': $scope.lead.entityKey
+                          'parent': $scope.lead.entityKey,
+                          'access':$scope.lead.access
                 }
 
             }else{
                 params ={'title': task.title,
-                         'parent': $scope.lead.entityKey
+                         'parent': $scope.lead.entityKey,
+                         'access':$scope.lead.access
                        }
             };
             if ($scope.selected_members!=[]) {
                   params.assignees=$scope.selected_members;
                 };
-                var tags=[];                
+                var tags=[];
                 tags=$('#select2_sample2').select2("val");
                 if (tags!=[]) {
                   var tagitems = [];
@@ -716,6 +718,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                   params.tags=tagitems;
                 };
             Task.insert($scope,params);
+
             $scope.newTask={};
             $scope.newTaskform=false;
             $scope.selected_members=[];
@@ -756,20 +759,47 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
 
      }
  //HKA 10.11.2013 Add event
- $scope.addEvent = function(ioevent){           
+ $scope.addEvent = function(ioevent){
+
+
+
+
            if ($scope.newEventform==false) {
                 $scope.newEventform=true;
            }else{
-            
+
+
             if (ioevent.title!=null&&ioevent.title!="") {
+
                     var params ={}
-                if (ioevent.starts_at){
+
+
+                  // hadji hicham 13-08-2014.
+                  if($scope.allday){
+                         var ends_at=moment(moment(ioevent.starts_at_allday).format('YYYY-MM-DDT00:00:00.000000'))
+
+                   params ={'title': ioevent.title,
+                            'starts_at': $filter('date')(ioevent.starts_at_allday,['yyyy-MM-ddT00:00:00.000000']),
+                            'ends_at':ends_at.add('hours',23).add('minute',59).add('second',59).format('YYYY-MM-DDTHH:mm:00.000000'),
+                            'where': ioevent.where,
+                            'parent':$scope.lead.entityKey,
+                            'allday':"true",
+                            'access':$scope.lead.access
+                      }
+
+
+
+                  }else{
+
+                  if (ioevent.starts_at){
                     if (ioevent.ends_at){
                       params ={'title': ioevent.title,
                               'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
                               'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
                               'where': ioevent.where,
-                              'parent':$scope.lead.entityKey
+                              'parent':$scope.lead.entityKey,
+                              'allday':"false",
+                              'access':$scope.lead.access
                       }
 
                     }else{
@@ -777,17 +807,34 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                         'title': ioevent.title,
                               'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
                               'where': ioevent.where,
-                              'parent':$scope.lead.entityKey
+                              'parent':$scope.lead.entityKey,
+                              'ends_at':moment(ioevent.ends_at).add('hours',2).format('YYYY-MM-DDTHH:mm:00.000000'),
+                              'allday':"false",
+                              'access':$scope.lead.access
                       }
                     }
 
-                    Event.insert($scope,params);
-                    $scope.ioevent={};
-                    $scope.newEventform=false;
+
+
+
                   }
+
+
+                  }
+
+                   Event.insert($scope,params);
+                  $scope.ioevent={};
+                  $scope.newEventform=false;
+
+
+
         }
      }
     }
+
+// hadji hicham 14-07-2014 . update the event after we add .
+$scope.updateEventRenderAfterAdd= function(){};
+
     $scope.closeEventForm=function(ioevent){
       $scope.ioevent={};
       $scope.newEventform=false;
@@ -1527,7 +1574,7 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
                         'industry':lead.industry,
                         'source':lead.source,
                         'infonodes':$scope.prepareInfonodes(),
-                        'access': 'public'
+                        'access': lead.access
                       };
           if ($scope.profile_img.profile_img_id){
               params['profile_img_id'] = $scope.profile_img.profile_img_id;

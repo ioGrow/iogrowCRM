@@ -102,6 +102,20 @@ class Edge(ndb.Expando):
                         )
             edge_key = edge.put()
             return edge_key
+    @classmethod
+    def move(cls, edge, new_start_node):
+        kind = edge.kind
+        if kind in INVERSED_EDGES.keys():
+                inversed_edge = cls.query(
+                                        cls.start_node==edge.end_node,
+                                        cls.end_node == edge.start_node,
+                                        cls.kind.IN(INVERSED_EDGES[kind])).get()
+                if inversed_edge:
+                    inversed_edge.end_node = new_start_node
+                    inversed_edge.put()
+        edge.start_node = new_start_node
+        edge.put()
+
 
     @classmethod
     def list(cls,start_node,kind,limit=1000,pageToken=None,order='DESC'):
@@ -192,6 +206,25 @@ class Edge(ndb.Expando):
             return len( set(end_node_found).intersection(end_node_set) ) == len( set(end_node_set) )
         elif operation == 'OR':
             return len( set(end_node_found).intersection(end_node_set) ) > 0
+    @classmethod
+    def filter_by_set(cls,start_node_set,kind,operation='AND'):
+        end_node_sets = []
+        for start_node in start_node_set:
+            edge_list = cls.list(start_node,kind)
+            end_nodes = []
+            if operation=="AND":
+                for edge in edge_list['items']:
+                    end_nodes.append(edge.end_node)
+                if len(end_node_sets)>0:
+                    end_node_sets = list(set(end_node_sets).intersection(set(end_nodes)))
+                else:
+                    end_node_sets=end_nodes
+            else:
+                for edge in edge_list['items']:
+                    end_node_sets.append(edge.end_node)
+            end_node_sets = list(set(end_node_sets))
+        return end_node_sets
+
 
 
 class Node(ndb.Expando):
@@ -202,10 +235,11 @@ class Node(ndb.Expando):
 
     @classmethod
     def check_permission(cls, user, node):
-        if node.access != 'public' and node.owner!=user.google_user_id:
-            end_node_set = [user.key]
-            if not Edge.find(start_node=node.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
-                return False
+        if node is not None:
+            if node.access != 'public' and node.owner!=user.google_user_id:
+                end_node_set = [user.key]
+                if not Edge.find(start_node=node.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
+                    return False
         return True
     @classmethod
     def list_permissions(cls,node):
@@ -276,6 +310,8 @@ class Node(ndb.Expando):
         if 'phones' in structured_data.keys():
             phones = iomessages.PhoneListSchema()
             for phone in structured_data['phones']:
+                if not 'type' in phone.keys():
+                    phone['type'] = 'work'
                 phone_schema = iomessages.PhoneSchema(
                                                     type=phone['type'],
                                                     number=phone['number']
@@ -300,7 +336,11 @@ class Node(ndb.Expando):
         addresses = None
         if 'addresses' in structured_data.keys():
             addresses = iomessages.AddressListSchema()
+            ADDRESS_KEYS = ['street','city','state','postal_code','country']
             for address in structured_data['addresses']:
+                for key in ADDRESS_KEYS:
+                    if not hasattr(address,key):
+                        address[key] = None
                 formatted_address = None
                 if hasattr(address,'formatted'):
                     formatted_address = address['formatted']

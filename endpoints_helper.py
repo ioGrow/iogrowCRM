@@ -1,8 +1,18 @@
  #!/usr/bin/python
  # -*- coding: utf-8 -*-
+import base64
+from email.mime.audio import MIMEAudio
+from email.mime.base import MIMEBase
+from email.mime.image import MIMEImage
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import mimetypes
+import os
+from django.utils.encoding import smart_str
 from google.appengine.api import search
 from google.appengine.api import memcache
 from apiclient.discovery import build
+from google.appengine.api import taskqueue
 from apiclient import errors
 import httplib2
 import endpoints
@@ -14,6 +24,7 @@ import gdata.contacts.data
 from gdata.gauth import OAuth2Token
 from gdata.contacts.client import ContactsClient
 from model import User
+import iograph
 from highrise.pyrise import Highrise, Person
 
 FOLDERS = {
@@ -55,6 +66,47 @@ class EndpointsHelper():
     INVALID_GRANT = 'Invalid grant'
     NO_ACCOUNT = 'You don\'t have a i/oGrow account'
     @classmethod
+    def send_message(cls,service, user_id, message):
+        """Send an email message.
+
+        Args:
+          service: Authorized Gmail API service instance.
+          user_id: User's email address. The special value "me"
+          can be used to indicate the authenticated user.
+          message: Message to be sent.
+
+        Returns:
+          Sent Message.
+        """
+        try:
+            message = (service.users().messages().send(userId=user_id, body=message)
+                     .execute())
+            print 'Message Id: %s' % message['id']
+            return message
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+    @classmethod
+    def create_message(cls,sender, to,cc,bcc, subject, message_html):
+        """Create a message for an email.
+
+        Args:
+          sender: Email address of the sender.
+          to: Email address of the receiver.
+          subject: The subject of the email message.
+          message_text: The text of the email message.
+
+        Returns:
+          An object containing a base64 encoded email object.
+        """
+        message = MIMEText(smart_str(message_html),'html')
+        message['to'] = to
+        message['cc'] = cc
+        message['bcc'] = bcc
+        message['from'] = sender
+        message['subject'] = subject
+        return {'raw': base64.urlsafe_b64encode(message.as_string())}
+
+    @classmethod
     def update_edge_indexes(cls,parent_key,kind,indexed_edge):
         parent = parent_key.get()
         empty_string = lambda x: x if x else ""
@@ -65,9 +117,7 @@ class EndpointsHelper():
         if search_document:
             for e in search_document.fields:
                 if e.name == kind:
-                    print 'something before'
                     indexed_edge = empty_string(e.value) + ' ' + str(indexed_edge)
-                    print 'something after'
                 data[e.name] = e.value
         data[kind] = indexed_edge
         parent.put_index(data)
@@ -184,6 +234,56 @@ class EndpointsHelper():
         auth_token.authorize(gd_client)
         contact_entry = gd_client.CreateContact(google_contact_schema)
         return contact_entry.id.text
+    @classmethod
+    def share_related_documents_after_patch(cls,user,old_obj,new_obj):
+
+        # from private to access
+        if old_obj.access=='private' and new_obj.access=='public':
+            users = User.query(User.organization==user.organization)
+            for collaborator in users:
+                if collaborator.email != user.email:
+                    taskqueue.add(
+                                    url='/workers/shareobjectdocument',
+                                    params={
+                                            'email': collaborator.email,
+                                            'obj_key_str': old_obj.key.urlsafe()
+                                            }
+                                )
+        if hasattr(old_obj,'profile_img_id'):
+            if old_obj.profile_img_id != new_obj.profile_img_id and new_obj.profile_img_id !="":
+                taskqueue.add(
+                                url='/workers/sharedocument',
+                                params={
+                                        'user_email':user.email,
+                                        'access': 'anyone',
+                                        'resource_id': new_obj.profile_img_id
+                                        }
+                            )
+        if hasattr(old_obj,'logo_img_id'):
+            if old_obj.logo_img_id != new_obj.logo_img_id and new_obj.logo_img_id !="":
+                taskqueue.add(
+                                url='/workers/sharedocument',
+                                params={
+                                        'user_email':user.email,
+                                        'access': 'anyone',
+                                        'resource_id': new_obj.logo_img_id
+                                        }
+                            )
+    @classmethod
+    def who_has_access(cls,obj_key):
+        acl = {}
+        obj = obj_key.get()
+        owner_gid = obj.owner
+        owner = User.get_by_gid(owner_gid)
+        collaborators = []
+        edge_list = iograph.Edge.list(start_node=obj_key,kind='permissions')
+        for edge in edge_list['items']:
+            collaborator = edge.end_node.get()
+            if collaborator:
+                collaborators.append(collaborator)
+        acl['owner'] = owner
+        acl['collaborators'] = collaborators
+        return acl
 
     @classmethod
     def highrise_import(cls,request):

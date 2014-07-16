@@ -289,6 +289,8 @@ class Lead(EndpointsModel):
         return  lead_schema
     @classmethod
     def list(cls,user_from_email,request):
+        if request.tags:
+            return cls.filter_by_tag(user_from_email,request)
         curs = Cursor(urlsafe=request.pageToken)
         if request.limit:
             limit = int(request.limit)
@@ -328,7 +330,6 @@ class Lead(EndpointsModel):
                     if is_filtered and Node.check_permission( user_from_email, lead ):
                         count = count + 1
                         #list of tags related to this lead
-                        edge_list = Edge.list(start_node=lead.key,kind='tags')
                         tag_list = Tag.list_by_parent(parent_key = lead.key)
                         lead_schema = LeadSchema(
                                   id = str( lead.key.id() ),
@@ -355,6 +356,38 @@ class Lead(EndpointsModel):
         else:
             next_curs_url_safe = None
         return  LeadListResponse(items = items, nextPageToken = next_curs_url_safe)
+    @classmethod
+    def filter_by_tag(cls,user_from_email,request):
+        items = []
+        tag_keys = []
+        for tag_key_str in request.tags:
+            tag_keys.append(ndb.Key(urlsafe=tag_key_str))
+        lead_keys = Edge.filter_by_set(tag_keys,'tagged_on')
+        leads = ndb.get_multi(lead_keys)
+        for lead in leads:
+            if lead is not None:
+                is_filtered = True
+                if request.owner and lead.owner!=request.owner and is_filtered:
+                    is_filtered = False
+                if request.status and lead.status!=request.status and is_filtered:
+                    is_filtered = False
+                if is_filtered and Node.check_permission( user_from_email, lead ):
+                    tag_list = Tag.list_by_parent(parent_key = lead.key)
+                    lead_schema = LeadSchema(
+                                      id = str( lead.key.id() ),
+                                      entityKey = lead.key.urlsafe(),
+                                      firstname = lead.firstname,
+                                      lastname = lead.lastname,
+                                      title = lead.title,
+                                      company = lead.company,
+                                      tags = tag_list,
+                                      profile_img_id = lead.profile_img_id,
+                                      profile_img_url = lead.profile_img_url,
+                                      created_at = lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                      updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                    )
+                    items.append(lead_schema)
+        return  LeadListResponse(items = items)
 
     @classmethod
     def search(cls,user_from_email,request):
@@ -432,11 +465,6 @@ class Lead(EndpointsModel):
                     profile_img_url = request.profile_img_url,
                     industry = request.industry,
                     )
-        #sl = scor_new_lead()
-        #print('----------idrisssssss----------')
-        #at =  request.title
-        #ssl = sl.predict(at)
-        #print ssl
         lead_key = lead.put_async()
         lead_key_async = lead_key.get_result()
         for email in request.emails:
@@ -511,16 +539,15 @@ class Lead(EndpointsModel):
                                                     )
                                                 )
 
-        taskqueue.add(
-                    url='/workers/createobjectfolder',
-                    params={
-                            'kind': "Lead",
-                            'folder_name': folder_name,
-                            'email': user_from_email.email,
-                            'obj_key':lead_key_async.urlsafe(),
-                            'logo_img_id':request.profile_img_id
-                            }
-                    )
+        if request.profile_img_id:
+            taskqueue.add(
+                            url='/workers/sharedocument',
+                            params={
+                                    'user_email':user_from_email.email,
+                                    'access': 'anyone',
+                                    'resource_id': request.profile_img_id
+                                    }
+                        )
         data = {}
         data['id'] = lead_key_async.id()
         lead.put_index(data)
@@ -569,30 +596,28 @@ class Lead(EndpointsModel):
         except (IndexError, TypeError):
             raise endpoints.NotFoundException('Lead %s not found.' %
                                                   (request.id,))
-        moved_folder = EndpointsHelper.move_folder(user_from_email,lead.folder,'Contact')
         contact = Contact(
                             owner = lead.owner,
                             organization = lead.organization,
                             access = lead.access,
-                            folder = moved_folder['id'],
                             firstname = lead.firstname,
                             lastname = lead.lastname,
                             title = lead.title,
                             tagline = lead.tagline,
-                            introduction = lead.introduction
+                            introduction = lead.introduction,
+                            profile_img_id = lead.profile_img_id,
+                            profile_img_url = lead.profile_img_url
                         )
 
         contact_key = contact.put_async()
         contact_key_async = contact_key.get_result()
         if lead.company:
-            created_folder = EndpointsHelper.insert_folder(user_from_email,lead.company,'Account')
             account = Account(
                                 owner = lead.owner,
                                 organization = lead.organization,
                                 access = lead.access,
                                 account_type = 'prospect',
-                                name=lead.company,
-                                folder = created_folder['id']
+                                name=lead.company
                             )
             account_key = account.put_async()
             account_key_async = account_key.get_result()
@@ -609,8 +634,7 @@ class Lead(EndpointsModel):
                                             )
         edge_list = Edge.query(Edge.start_node == lead.key).fetch()
         for edge in edge_list:
-            edge.start_node = contact_key_async
-            edge.put()
+            Edge.move(edge,contact_key_async)
 
         lead.key.delete()
         EndpointsHelper.delete_document_from_index( id = request.id )

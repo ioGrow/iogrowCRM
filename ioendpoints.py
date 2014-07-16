@@ -344,7 +344,25 @@ class PermissionInsertRequest(messages.Message):
     about = messages.StringField(1,required=True)
     items = messages.MessageField(PermissionRequest, 2, repeated=True)
 
+# request message to got the feeds for the calendar . hadji hicham 14-07-2014.
+class CalendarFeedsRequest(messages.Message):
+    calendar_feeds_start=messages.StringField(1)
+    calendar_feeds_end=messages.StringField(2)
+# result to feed the calendar 
+class CalendarFeedsResult(messages.Message):
+      id=messages.StringField(1)
+      title=messages.StringField(2)
+      where=messages.StringField(3)
+      starts_at=messages.StringField(4)
+      ends_at=messages.StringField(5)
+      entityKey=messages.StringField(6)
+      allday=messages.StringField(7)
+      my_type=messages.StringField(8)
+      backgroundColor=messages.StringField(9)
 
+# results 
+class CalendarFeedsResults(messages.Message):
+      items=messages.MessageField(CalendarFeedsResult,1,repeated=True)
 
 @endpoints.api(
                name='blogengine',
@@ -607,10 +625,11 @@ class CrmEngineApi(remote.Service):
             raise endpoints.NotFoundException('Account not found.')
         patched_model_key = my_model.entityKey
         patched_model = ndb.Key(urlsafe=patched_model_key).get()
-        print 'current model ***************'
-        pprint.pprint(patched_model)
-        print 'to be updated ******************'
-        pprint.pprint(my_model)
+        EndpointsHelper.share_related_documents_after_patch(
+                                                            user,
+                                                            patched_model,
+                                                            my_model
+                                                          )
         properties = Account().__class__.__dict__
         for p in properties.keys():
             patched_p = eval('patched_model.' + p)
@@ -619,18 +638,18 @@ class CrmEngineApi(remote.Service):
             and (my_p and not(p in ['put', 'set_perm', 'put_index'])):
                 exec('patched_model.' + p + '= my_model.' + p)
         patched_model.put()
-        if my_model.logo_img_id:
-            if patched_model.folder:
-                credentials = user.google_credentials
-                http = credentials.authorize(httplib2.Http(memcache))
-                service = build('drive', 'v2', http=http)
-                params = {
-                          'parents': [{'id': patched_model.folder}]
-                        }
-                service.files().patch(
-                                    fileId=my_model.logo_img_id,
-                                    body=params,
-                                    fields='id').execute()
+        # if my_model.logo_img_id:
+        #     if patched_model.folder:
+        #         credentials = user.google_credentials
+        #         http = credentials.authorize(httplib2.Http(memcache))
+        #         service = build('drive', 'v2', http=http)
+        #         params = {
+        #                   'parents': [{'id': patched_model.folder}]
+        #                 }
+        #         service.files().patch(
+        #                             fileId=my_model.logo_img_id,
+        #                             body=params,
+        #                             fields='id').execute()
         return patched_model
 
     # accounts.search API
@@ -698,8 +717,11 @@ class CrmEngineApi(remote.Service):
             raise endpoints.NotFoundException('Case not found.')
         patched_model_key = my_model.entityKey
         patched_model = ndb.Key(urlsafe=patched_model_key).get()
-        print patched_model
-        print my_model
+        EndpointsHelper.share_related_documents_after_patch(
+                                                            user_from_email,
+                                                            patched_model,
+                                                            my_model
+                                                          )
         properties = Case().__class__.__dict__
         for p in properties.keys():
               if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p)):
@@ -956,7 +978,7 @@ class CrmEngineApi(remote.Service):
         people=EndpointsHelper.highrise_import(request)
         return message_types.VoidMessage()
 
-        
+
 
     # contacts.get api v2
     @endpoints.method(ContactGetRequest, ContactSchema,
@@ -987,12 +1009,18 @@ class CrmEngineApi(remote.Service):
                     name='contacts.patch'
                     )
     def ContactPatch(self, my_model):
+        user_from_email = EndpointsHelper.require_iogrow_user()
         #user_from_email = EndpointsHelper.require_iogrow_user()
         # TODO: Check permissions
         if not my_model.from_datastore:
             raise endpoints.NotFoundException('Contact not found.')
         patched_model_key = my_model.entityKey
         patched_model = ndb.Key(urlsafe=patched_model_key).get()
+        EndpointsHelper.share_related_documents_after_patch(
+                                                            user_from_email,
+                                                            patched_model,
+                                                            my_model
+                                                          )
         properties = Contact().__class__.__dict__
         for p in properties.keys():
             if (eval('patched_model.' + p) != eval('my_model.' + p)) \
@@ -1147,23 +1175,19 @@ class CrmEngineApi(remote.Service):
                         path='emails/send', http_method='POST',
                         name='emails.send')
     def send_email(self, request):
-        print request, "rrrrrrrrrrrrrrss";
         user = EndpointsHelper.require_iogrow_user()
-        if user is None:
-            raise endpoints.UnauthorizedException('Invalid token.')
-        message = mail.EmailMessage()
-        message.sender = user.google_display_name + " < io-"+ user.google_user_id+"@gcdc2013-iogrow.appspotmail.com>"
-        message.reply_to = user.email
-        if not mail.is_email_valid(request.to):
-            raise endpoints.UnauthorizedException('Invalid email.')
-        message.to = request.to
-        if request.cc:
-            message.cc = request.cc
-        if request.bcc:
-            message.bcc = request.bcc
-        message.subject = request.subject
-        message.html = request.body
-        message.send()
+        credentials = user.google_credentials
+        http = credentials.authorize(httplib2.Http(memcache))
+        service = build('gmail', 'v1', http=http)
+        message = EndpointsHelper.create_message(
+                                                  user.email,
+                                                  request.to,
+                                                  request.cc,
+                                                  request.bcc,
+                                                  request.subject,
+                                                  request.body
+                                                )
+        EndpointsHelper.send_message(service,'me',message)
         parent_key = ndb.Key(urlsafe=request.about)
         note_author = Userinfo()
         note_author.display_name = user.google_display_name
@@ -1198,6 +1222,15 @@ class CrmEngineApi(remote.Service):
                       name='events.delete')
     def event_delete(self, request):
         entityKey = ndb.Key(urlsafe=request.entityKey)
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        event = entityKey.get()
+        taskqueue.add(
+                    url='/workers/syncdeleteevent',
+                    params={
+                            'email': user_from_email.email,
+                            'event_google_id':event.event_google_id
+                            }
+                    )
         Edge.delete_all_cascade(start_node = entityKey)
         return message_types.VoidMessage()
 
@@ -1250,6 +1283,7 @@ class CrmEngineApi(remote.Service):
                         path='events/patch', http_method='POST',
                         name='events.patch')
     def events_patch(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
         event_key = ndb.Key(urlsafe = request.entityKey)
         event = event_key.get()
 
@@ -1266,6 +1300,16 @@ class CrmEngineApi(remote.Service):
                 setattr(event,prop,new_value)
                 patched = True
         if patched:
+            taskqueue.add(
+                    url='/workers/syncpatchevent',
+                    params={
+                            'email': user_from_email.email,
+                            'starts_at': request.starts_at,
+                            'ends_at': request.ends_at,
+                            'summary': request.title,
+                            'event_google_id':event.event_google_id
+                            }
+                    )
             event.put()
         return message_types.VoidMessage()
     # Groups API
@@ -1436,6 +1480,11 @@ class CrmEngineApi(remote.Service):
             raise endpoints.NotFoundException('Lead not found.')
         patched_model_key = my_model.entityKey
         patched_model = ndb.Key(urlsafe=patched_model_key).get()
+        EndpointsHelper.share_related_documents_after_patch(
+                                                            user_from_email,
+                                                            patched_model,
+                                                            my_model
+                                                          )
         properties = Lead().__class__.__dict__
         for p in properties.keys():
             if (eval('patched_model.'+p) != eval('my_model.'+p))and(eval('my_model.'+p) and not(p in ['put','set_perm','put_index']) ):
@@ -1818,10 +1867,26 @@ class CrmEngineApi(remote.Service):
                         name='opportunities.patch'
                         )
     def OpportunityPatch(self, my_model):
-        #user_from_email = EndpointsHelper.require_iogrow_user()
-        # Todo: Check permissions
-        my_model.put()
-        return my_model
+        user = EndpointsHelper.require_iogrow_user()
+        if not my_model.from_datastore:
+            raise endpoints.NotFoundException('Opportunity not found.')
+        patched_model_key = my_model.entityKey
+        patched_model = ndb.Key(urlsafe=patched_model_key).get()
+        EndpointsHelper.share_related_documents_after_patch(
+                                                            user,
+                                                            patched_model,
+                                                            my_model
+                                                          )
+        properties = Opportunity().__class__.__dict__
+        for p in properties.keys():
+            patched_p = eval('patched_model.' + p)
+            my_p = eval('my_model.' + p)
+            if (patched_p != my_p) \
+            and (my_p and not(p in ['put', 'set_perm', 'put_index'])):
+                exec('patched_model.' + p + '= my_model.' + p)
+        patched_model.put()
+        return patched_model
+
 
     # opportunities.search api
     @endpoints.method(
@@ -1937,6 +2002,13 @@ class CrmEngineApi(remote.Service):
                     # check if user is in the same organization
                     if shared_with_user.organization == about.organization:
                         # insert the edge
+                        taskqueue.add(
+                                        url='/workers/shareobjectdocument',
+                                        params={
+                                                'email': shared_with_user.email,
+                                                'obj_key_str': about_key.urlsafe()
+                                                }
+                                    )
                         Edge.insert(
                                     start_node = about_key,
                                     end_node = shared_with_user_key,
@@ -2008,6 +2080,14 @@ class CrmEngineApi(remote.Service):
     def delete_task(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         entityKey = ndb.Key(urlsafe=request.entityKey)
+        task=entityKey.get()
+        taskqueue.add(
+                    url='/workers/syncdeletetask',
+                    params={
+                            'email': user_from_email.email,
+                            'event_google_id':task.task_google_id
+                            }
+                    )
         Edge.delete_all_cascade(start_node = entityKey)
         return message_types.VoidMessage()
     # tasks.get api
@@ -2058,28 +2138,13 @@ class CrmEngineApi(remote.Service):
     def UserInsert(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
         # OAuth flow
-        try:
-            oauth_flow = flow_from_clientsecrets('client_secrets.json',
-                scope=SCOPES)
-            credentials = user_from_email.google_credentials
-            if credentials is None or credentials.invalid:
-                new_credentials = run( oauth_flow, credentials)
-            else:
-                new_credentials = credentials
-            http = new_credentials.authorize(httplib2.Http(memcache))
-            organization = user_from_email.organization.get()
-            folderid = organization.org_folder
-            new_permission = {
-                             'value': my_model.email,
-                             'type': 'user',
-                             'role': 'writer'
-            }
-            service = build('drive', 'v2', http=http)
-            service.permissions().insert(fileId=folderid, sendNotificationEmails= False, body=new_permission).execute()
-        except:
-            raise endpoints.UnauthorizedException('Invalid grant' )
-            return
-
+        taskqueue.add(
+                        url='/workers/initpeertopeerdrive',
+                        params={
+                                'invited_by_email':user_from_email.email,
+                                'email': my_model.email,
+                                }
+                    )
         invited_user = User.get_by_email(my_model.email)
         send_notification_mail = False
         if invited_user is not None:
@@ -2144,3 +2209,84 @@ class CrmEngineApi(remote.Service):
                 exec('patched_model.' + p + '= my_model.' + p)
         patched_model.put()
         return patched_model
+     # this api to fetch tasks and events to feed the calendar . hadji hicham.14-07-2014
+    @endpoints.method(CalendarFeedsRequest,CalendarFeedsResults,
+        path='calendar/feeds',http_method='POST',name='calendar.feeds') 
+    def get_feeds(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        calendar_feeds_start=datetime.datetime.strptime(request.calendar_feeds_start,"%Y-%m-%dT%H:%M:00.000000")
+        calendar_feeds_end=datetime.datetime.strptime(request.calendar_feeds_end,"%Y-%m-%dT%H:%M:00.000000")
+
+        # filter this table 
+        events=Event.query().filter(Event.organization==user_from_email.organization,Event.starts_at>=calendar_feeds_start,Event.starts_at<=calendar_feeds_end)
+        # filter this table .
+        tasks=Task.query().filter(Task.organization==user_from_email.organization)
+
+        #,calendar_feeds_start<=Task.due<=calendar_feeds_end
+        feeds_results=[]
+        for event in events:
+            event_is_filtered = True
+            if event.access == 'private' and event.owner!=user_from_email.google_user_id:
+               end_node_set = [user_from_email.key]
+               if not Edge.find(start_node=event.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
+                   event_is_filtered= False
+            if event_is_filtered:
+                    kwargs1 = {
+                            'id' : str(event.id),
+                              'entityKey':event.entityKey,
+                              'title':event.title,
+                              'starts_at':event.starts_at.isoformat(),
+                              'ends_at':event.ends_at.isoformat(),
+                              'where':event.where,
+                              'my_type':"event",
+                              'allday':event.allday
+                    }
+            feeds_results.append(CalendarFeedsResult(**kwargs1))
+        for task in tasks:
+            task_is_filtered=True
+            if task.access == 'private' and task.owner!=user_from_email.google_user_id:
+               end_node_set = [user_from_email.key]
+               if not Edge.find(start_node=task.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
+                   task_is_filtered=False
+            if task_is_filtered:
+                status_color = 'green'
+                status_label = ''
+                if task.due:
+                    now = datetime.datetime.now()
+                    diff = task.due - now
+                    if diff.days>=0 and diff.days<=2:
+                        status_color = 'orange'
+                        status_label = 'soon: due in '+ str(diff.days) + ' days'
+                    elif diff.days<0:
+                        status_color = 'red'
+                        status_label = 'overdue'
+                    else:
+                        status_label = 'due in '+ str(diff.days) + ' days'
+                    if task.status == 'closed':
+                        status_color = 'white'
+                        status_label = 'closed'
+                if task.due != None:
+                   taskdue=task.due.isoformat()
+                else :
+                   taskdue= task.due 
+                kwargs2 = {
+                          'id' : str(task.id),
+                          'entityKey':task.entityKey,
+                          'title':task.title,
+                          'starts_at':taskdue,
+                          'my_type':"task",
+                          'backgroundColor':status_color
+                }
+                feeds_results.append(CalendarFeedsResult(**kwargs2))
+
+        return CalendarFeedsResults(items=feeds_results)
+
+    # users.upgrade api v2
+    @endpoints.method(message_types.VoidMessage, message_types.VoidMessage,
+                      path='users/upgrade', http_method='POST',
+                      name='users.upgrade')
+    def upgrade_to_business(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        Organization.upgrade_to_business_version(user_from_email.organization)
+        return message_types.VoidMessage()
+

@@ -96,12 +96,17 @@
                                          <li ng-show="lead.updated_at" >
                                            <span class="contact-title" >Updated at:  <%=lead.updated_at | date:'yyyy-MM-dd - HH:mm:ss ' %> </span>
                                          </li>
+                                         <li>
+                                             <div id="placeholder-div1" class="pull-right hangout-btn"></div>
+                                             <br>
+                                         </li>
+
                                      </ul>
-                                      <hr class="sm-hr">
                                    </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
+                                    <hr class="sm-hr">
                                     <div class="tags-section hidden" ng-class="{hidden: contact.tags == null}">
                                         <div class="section-content">
                                             <span class="pull-left">Tags: </span>
@@ -719,7 +724,7 @@
                                         <div class="input-icon ">
                                             <i class="fa fa-bell-o"></i>
                                               <input cusdatetimepicker data-model="newTask.reminder" type="text" class="form-control" placeholder="Add a reminder" value="" id="leadEventStartsAt">
-                                          </div>                                         
+                                          </div>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -769,7 +774,7 @@
                   <div class="caption"> <i class="fa fa-calendar"></i>Events </div>
 
                 </div>
-                <div class="newContactform portlet-body" id="chats">                  
+                <div class="newContactform portlet-body" id="chats">
                    <ul id="tasks" class="list-unstyled lead_related_events" ng-hide="newEventform">
                       <li ng-repeat="event in events" id="event_<%=$index%>" class="relatedEventItem" ng-mouseenter="showDeleteBtn = true" ng-mouseleave="showDeleteBtn = false">
                         <div class="event-container">
@@ -789,7 +794,7 @@
                             <span class="relatedEventStartsAt pull-right" ng-hide="showDetails" ng-show="event.starts_at" title="<%= event.starts_at | date:'yyyy-MM-dd '%>">
                                   <%= event.starts_at | date:'dd MMM'%>
                             </span>
-                          </div>  
+                          </div>
                           <div class="moreDetails row" ng-show="showDetails">
                             <div class="col-md-5 col-xs-5 event-schedule">
                                 <span class=""><i class="fa fa-calendar"></i>
@@ -800,13 +805,13 @@
                             </div>
                             <div class="col-md-5 col-xs-5 event-schedule">
                                <span class="">
-                                  <i class="fa fa-calendar"></i> 
+                                  <i class="fa fa-calendar"></i>
                                   <%= event.ends_at | date:'dd MMM'%>
                                 </span>
                             </div>
                             <div class="col-md-12">
                                <span class="">
-                                  <i class="fa fa-map-marker"></i> 
+                                  <i class="fa fa-map-marker"></i>
                                   <%= event.where %>
                                 </span>
                             </div>
@@ -822,29 +827,44 @@
                               </div>
                               <!--/span-->
                             </div>
-                            <div class="row">
+                              All day <input type="checkbox" ng-model="allday"/>
+                              <!-- pick only date (the case of all day) -->
+                              <div class="row" ng-show="allday">
+                                <div class="col-md-12 margin-bottom-10">
+                                       <div class="input-icon ">
+                                        <i class="fa fa-calendar"></i>
+                                       <input cusdatetimepicker data-model="ioevent.starts_at_allday" type="text" class="form-control" placeholder="When" value="" id="leadEventStartsAt">
+                                      </div>
+                                </div>
+                            </div>
+                              <!-- the and of the time picker-->
+
+                            <!-- pick date and time    . hadji hicham 13-07-2014-->
+                            <div class="row" ng-hide="allday">
                                 <div class="col-md-12 margin-bottom-10">
                                       <div class="input-icon">
                                         <i class="fa fa-calendar"></i>
                                         <input cusdatetimepicker data-model="ioevent.starts_at" type="text" class="form-control" placeholder="From" value="" id="leadEventStartsAt">
                                       </div>
-                                      
+
                                 </div>
-                            </div>   
-                            <div class="row">
+                            </div>
+                            <div class="row" ng-hide="allday">
                                 <div class="col-md-12 margin-bottom-10">
                                        <div class="input-icon ">
                                         <i class="fa fa-calendar"></i>
                                        <input cusdatetimepicker data-model="ioevent.ends_at" type="text" class="form-control" placeholder="To" value="" id="leadEventStartsAt">
                                       </div>
                                 </div>
-                            </div>  
+                            </div>
+                            <!-- end date time picker -->
+
                             <div class="row">
                               <div class="col-md-12 margin-bottom-10">
                                   <input ng-model="ioevent.where" type="text" id="taskName" class="form-control" placeholder="Where ?">
                               </div>
                               <!--/span-->
-                            </div> 
+                            </div>
                   </div>
                   <div class="row">
                       <div class="col-md-12 margin-top-10">

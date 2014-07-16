@@ -982,23 +982,37 @@
                               </div>
                               <!--/span-->
                             </div>
-                            <div class="row">
+                            All day <input type="checkbox" ng-model="allday"/>
+                              <!-- pick only date (the case of all day) -->
+                              <div class="row" ng-show="allday">
+                                <div class="col-md-12 margin-bottom-10">
+                                       <div class="input-icon ">
+                                        <i class="fa fa-calendar"></i>
+                                       <input cusdatetimepicker data-model="ioevent.starts_at_allday" type="text" class="form-control" placeholder="When" value="" id="leadEventStartsAt">
+                                      </div>
+                                </div>
+                            </div>
+                              <!-- the and of the time picker-->
+
+                            <!-- pick date and time    . hadji hicham 14-07-2014-->
+                            <div class="row" ng-hide="allday">
                                 <div class="col-md-12 margin-bottom-10">
                                       <div class="input-icon">
                                         <i class="fa fa-calendar"></i>
                                         <input cusdatetimepicker data-model="ioevent.starts_at" type="text" class="form-control" placeholder="From" value="" id="leadEventStartsAt">
                                       </div>
-                                      
+
                                 </div>
-                            </div>   
-                            <div class="row">
+                            </div>
+                            <div class="row" ng-hide="allday">
                                 <div class="col-md-12 margin-bottom-10">
                                        <div class="input-icon ">
                                         <i class="fa fa-calendar"></i>
-                                       <input cusdatetimepicker data-model="ioevent.ends_at" type="text" class="form-control" placeholder="From" value="" id="leadEventStartsAt">
+                                       <input cusdatetimepicker data-model="ioevent.ends_at" type="text" class="form-control" placeholder="To" value="" id="leadEventStartsAt">
                                       </div>
                                 </div>
-                            </div>  
+                            </div>
+                            <!-- end date time picker --> 
                             <div class="row">
                               <div class="col-md-12 margin-bottom-10">
                                   <input ng-model="ioevent.where" type="text" id="taskName" class="form-control" placeholder="Where ?">

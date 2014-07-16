@@ -29,7 +29,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
      $scope.draggedTag=null;
      $scope.showNewTag=false;
      $scope.tag = {};
-     $scope.showUntag=false;   
+     $scope.showUntag=false;
      $scope.edgekeytoDelete=undefined;
      $scope.color_pallet=[
          {'name':'red','color':'#F7846A'},
@@ -251,15 +251,15 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
      };
      $scope.filterByStage = function(filter){
       console.log('----------hello--------');
-     
-       
+
+
           console.log(filter);
           var params = {
                          'stage': filter,
                          'order': $scope.order,
                          'limit':20
                        }
-       
+
         $scope.isFiltering = true;
         Opportunity.list($scope,params);
      };
@@ -484,11 +484,11 @@ $scope.addTags=function(){
       }
  //HKA 19.06.2014 Detache tag on contact list
      $scope.dropOutTag=function(){
-        
-        
+
+
         var params={'entityKey':$scope.edgekeytoDelete}
         Edge.delete($scope,params);
-        
+
         $scope.edgekeytoDelete=undefined;
         $scope.showUntag=false;
       };
@@ -706,12 +706,14 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
                 var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
                 params ={'title': task.title,
                           'due': dueDate,
-                          'parent': $scope.opportunity.entityKey
+                          'parent': $scope.opportunity.entityKey,
+                          'access': $scope.opportunity.access
                 }
 
             }else{
                 params ={'title': task.title,
-                         'parent': $scope.opportunity.entityKey
+                         'parent': $scope.opportunity.entityKey,
+                         'access': $scope.opportunity.access
                        }
             };
             if ($scope.selected_members!=[]) {
@@ -881,20 +883,46 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
      };
 
 //HKA 11.11.2013 Add new Event
- $scope.addEvent = function(ioevent){           
-           if ($scope.newEventform==false) {
+ $scope.addEvent = function(ioevent){
+
+   /*****************************/
+
+             if ($scope.newEventform==false) {
                 $scope.newEventform=true;
            }else{
-            
+
+
             if (ioevent.title!=null&&ioevent.title!="") {
+
                     var params ={}
-                if (ioevent.starts_at){
+
+
+                  // hadji hicham 13-08-2014.
+                  if($scope.allday){
+                         var ends_at=moment(moment(ioevent.starts_at_allday).format('YYYY-MM-DDT00:00:00.000000'))
+
+                   params ={'title': ioevent.title,
+                            'starts_at': $filter('date')(ioevent.starts_at_allday,['yyyy-MM-ddT00:00:00.000000']),
+                            'ends_at':ends_at.add('hours',23).add('minute',59).add('second',59).format('YYYY-MM-DDTHH:mm:00.000000'),
+                            'where': ioevent.where,
+                            'parent':$scope.opportunity.entityKey,
+                            'allday':"true",
+                            'access': $scope.opportunity.access
+                      }
+
+
+                 
+                  }else{
+             
+                  if (ioevent.starts_at){
                     if (ioevent.ends_at){
                       params ={'title': ioevent.title,
                               'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
                               'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
                               'where': ioevent.where,
-                              'parent':$scope.opportunity.entityKey
+                              'parent':$scope.opportunity.entityKey,
+                              'allday':"false",
+                              'access': $scope.opportunity.access
                       }
 
                     }else{
@@ -902,17 +930,39 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
                         'title': ioevent.title,
                               'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
                               'where': ioevent.where,
-                              'parent':$scope.opportunity.entityKey
+                              'parent':$scope.account.entityKey,
+                              'ends_at':moment(ioevent.ends_at).add('hours',2).format('YYYY-MM-DDTHH:mm:00.000000'),
+                              'allday':"false",
+                              'access':$scope.opportunity.access
                       }
                     }
 
-                    Event.insert($scope,params);
-                    $scope.ioevent={};
-                    $scope.newEventform=false;
+
+                    
+                   
                   }
+
+
+                  }
+                  
+                   Event.insert($scope,params);
+                  $scope.ioevent={};
+                  $scope.newEventform=false;
+
+
+
         }
      }
+
+/*******************/
+
+
+     
     };
+
+// hadji hicham 14-07-2014 . update the event after we add .
+$scope.updateEventRenderAfterAdd= function(){};
+
      $scope.deleteEvent =function(eventt){
     var params = {'entityKey':eventt.entityKey};
      Event.delete($scope,params);
@@ -1303,7 +1353,7 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
       $scope.account.industry = 'Technology';
       $scope.stage_selected={};
       $scope.opportunitystages=[];
-      $scope.opportunity={currency:'USD',duration_unit:'fixed',closed_date:new Date()};
+      $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
 
       $scope.users=[];
       $scope.opportunity.estimated=null;

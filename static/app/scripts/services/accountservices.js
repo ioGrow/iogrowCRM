@@ -565,12 +565,12 @@ accountservices.factory('Attachement', function($http) {
      if (!resp.items){
      $scope.blankStatdocuments = true;
      };
-     
+
      $scope.documents = resp.items;
-     
+
      console.log('-----------Documents--------');
      console.log($scope.documents);
-     
+
      if ($scope.documentCurrentPage > 1){
      $scope.documentpagination.prev = true;
      }else{
@@ -581,7 +581,7 @@ accountservices.factory('Attachement', function($http) {
      // Store the nextPageToken
      $scope.documentpages[nextPage] = resp.nextPageToken;
      $scope.documentpagination.next = true;
-     
+
      }else{
      $scope.documentpagination.next = false;
      }
@@ -597,7 +597,7 @@ accountservices.factory('Attachement', function($http) {
      };
      }
      });
-     
+
      };*/
     Attachement.list = function($scope, params) {
         $scope.isLoading = true;
@@ -779,9 +779,9 @@ accountservices.factory('Email', function() {
                 $scope.isLoading = false;
                 $scope.$apply();
                 if (resp.code == 401) {
-                    // $scope.refreshToken();
                     $scope.isLoading = false;
                     $scope.$apply();
+                    window.location.replace('/sign-in')
                 }
                 ;
             }

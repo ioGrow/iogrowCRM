@@ -113,14 +113,17 @@ leadservices.factory('Lead', function($http) {
                 }
 
                 document.title = "Lead: " + $scope.lead.firstname +' '+ $scope.lead.lastname ;
-                console.log('***** i will show emails here ***');
-                console.log($scope.infonodes.emails);
+                var invites = new Array();
                 angular.forEach($scope.infonodes.emails, function(value, key){
-
+                  var inviteOnHangoutByEmail = { 'id' : value.email, 'invite_type' : 'EMAIL' };
+                  invites.push(inviteOnHangoutByEmail);
                   $scope.email.to = $scope.email.to + value.email + ',';
-
                 });
-                console.log($scope.email.to);
+
+                gapi.hangout.render('placeholder-div1', {
+                  'render': 'createhangout',
+                  'invites':invites
+                });
                 $scope.isLoading = false;
                 $scope.renderMaps();
                // Call the method $apply to make the update on the scope
