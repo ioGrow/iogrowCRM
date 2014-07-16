@@ -65,6 +65,7 @@ from model import Companyprofile
 from model import Invitation
 from search_helper import SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
+from people import linked_in
 import iomessages
 
 # The ID of javascript client authorized to access to our api
@@ -2289,4 +2290,10 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         Organization.upgrade_to_business_version(user_from_email.organization)
         return message_types.VoidMessage()
-
+    # arezki lebdiri 15/07/2014
+    @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
+                      path='people', http_method='DELETE',
+                      name='people.getLinkedin')
+    def get_people_linkedin(self, request):
+        linked_in.get_people(request.entityKey)
+        return message_types.VoidMessage()

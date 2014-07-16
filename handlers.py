@@ -26,7 +26,7 @@ from oauth2client.client import FlowExchangeError
 # Our libraries
 from iomodels.crmengine.shows import Show
 from endpoints_helper import EndpointsHelper
-from endpoints_helper import linked_in
+from people import linked_in
 import model
 from iomodels.crmengine.contacts import Contact
 from iomodels.crmengine.leads import LeadInsertRequest,Lead
@@ -961,15 +961,8 @@ class GetFromLinkedinToIoGrow(webapp2.RequestHandler):
             node.locality=profil["locality"]
             node.headline=profil["headline"]
             key2=node.put()
-            print key2.get()
-            Edge.insert(start_node=key1,end_node=key2,kind='linkedin',inverse_edge=True)
-        print '--------------------------------------------------------------------------------'
-          
-                  
-               
-        # print profil
-       
-
+            Edge.insert(start_node=key1,end_node=key2,kind='linkedin',inverse_edge='parents')
+            # print profil
 class ShareDocument(webapp2.RequestHandler):
     def post(self):
         email = self.request.get('email')

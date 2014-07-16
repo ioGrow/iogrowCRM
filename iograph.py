@@ -5,6 +5,7 @@ from endpoints_helper import EndpointsHelper
 import iomessages
 from model import User
 INVERSED_EDGES = {
+            'linkedin':['parents'],
             'articles':['authored_by'],
             'assignees' : ['assigned_to'],
             'authored_by':['articles'],
