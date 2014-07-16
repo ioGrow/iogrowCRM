@@ -73,8 +73,15 @@
                 </form>
                 <div>
                   <div class="newTask-meta pull-right">
-                    <datetimepick icon-class='fa fa-bell-o' label-format='MMM d, h:mm a' ng-model='newTask.reminder' class="new-task-reminder pull-right" placeholder=""></datetimepick>
-                     <datetimepick ng-model='newTask.due' class="new-task-date pull-right" label-format='MMM d, h:mm a'></datetimepick>
+                    <div class=" event-schedule">
+                    <p class="dueDatep"ng-hide="showStartsCalendar" ng-click="showStartsCalendar=true"><i class="fa fa-calendar"></i>
+                    <%=newTask.due | date:'yy-MM-dd HH:mm'%>
+                    <span ng-hide="newTask.due" class="placeHolderSmScreen">Due date</span></p>
+                    <div ng-show="showStartsCalendar" class="input-icon">
+                         <i class="fa fa-calendar"></i>
+                         <input cusdatetimepicker data-model="newTask.due" type="text" class="form-control dueDateInput" placeholder="Due date" value="" id="leadEventStartsAt">
+                   </div>
+                  </div>
                   </div>
                 </div>
               </div>
@@ -829,12 +836,6 @@
         }
     }
     handleUniform();
-      $('#dat1').datetimepicker({
-        language: 'fr',
-        pickTime: false
-      }).on('show', function(ev) {
-           console.log("change date from datepicker");
-          }).data('datepicker');
       $('.scroller').each(function () {
             var height;
             if ($(this).attr("data-height")) {

@@ -219,7 +219,14 @@
 				$picker.parent().css('top', ($input.offset().top + input_outer_height) + 'px');
 			}
 			// Move position of a picker - horizontal
-			$picker.parent().css('left', $input.offset().left + 'px');
+			var screensize=$( window ).width();
+			if (($picker.width()+ $input.offset().left) > screensize ) {
+				var calcLeft=screensize - $picker.width() -3; 
+				$picker.parent().css('left', calcLeft + 'px');
+			}else{
+				$picker.parent().css('left', $input.offset().left + 'px');	
+			};
+			
 			// Display on most top of the z-index
 			$picker.parent().css('z-index', 100000);
 		}

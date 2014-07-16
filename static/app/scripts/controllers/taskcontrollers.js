@@ -394,32 +394,6 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
       $('.typeahead').css("width", $('.typeahead').prev().width()+'px !important');
       $('.typeahead').width(433);
       handleColorPicker();
-      console.log($('#addMemberToTask').children());
-     
-     $scope.$watch('newTask.reminder', function() {
-         if($scope.newTask.due==null&&$scope.newTask.reminder==null){
-                $("#new_task_text").attr('style', 'padding-right: 60px !important');
-            }else{
-                if($scope.newTask.due==null||$scope.newTask.reminder==null){
-             
-                     $("#new_task_text").attr('style', 'padding-right: 150px !important');
-                }else{
-                    $("#new_task_text").attr('style', 'padding-right: 260px !important');
-                } 
-           }
-     });
-      $scope.$watch('newTask.due', function() {
-         if($scope.newTask.due==null&&$scope.newTask.reminder==null){
-                $("#new_task_text").attr('style', 'padding-right: 30px !important');
-            }else{
-                if($scope.newTask.due==null||$scope.newTask.reminder==null){
-             
-                     $("#new_task_text").attr('style', 'padding-right: 150px !important');
-                }else{
-                    $("#new_task_text").attr('style', 'padding-right: 260px !important');
-                } 
-           }
-     });
         $scope.isBlankState=function(tasks){
       if (typeof tasks !== 'undefined' && tasks.length > 0) {
         return false;
@@ -433,8 +407,11 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
          var bgDelta = (components.R * 0.299) + (components.G * 0.587) + (components.B * 0.114);
 
          return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";  
-      }
-
+      };
+     
+     $scope.$watch('newTask.due', function(newValue, oldValue) {
+              $scope.showStartsCalendar=false;
+     });
    // delete task from list hadji hicham 08-07-2014 
    $scope.deleteThisTask= function(entityKey){
 
