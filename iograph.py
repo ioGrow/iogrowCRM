@@ -1,4 +1,5 @@
 from google.appengine.ext import ndb
+from google.appengine.api import memcache
 from google.appengine.datastore.datastore_query import Cursor
 from protorpc import messages
 from endpoints_helper import EndpointsHelper
@@ -94,13 +95,17 @@ class Edge(ndb.Expando):
                            start_node = end_node,
                            end_node = start_node
                                     )
-                inversed_edge.put_async()
+                inversed_edge.put()
+                mem_key = end_node.urlsafe()+'_'+kind
+                memcache.delete(mem_key)
             edge = Edge(
                         kind = kind,
                         start_node = start_node,
                         end_node = end_node
                         )
             edge_key = edge.put()
+            mem_key = start_node.urlsafe()+'_'+kind
+            memcache.delete(mem_key)
             return edge_key
     @classmethod
     def move(cls, edge, new_start_node):
@@ -111,14 +116,29 @@ class Edge(ndb.Expando):
                                         cls.end_node == edge.start_node,
                                         cls.kind.IN(INVERSED_EDGES[kind])).get()
                 if inversed_edge:
+                    mem_key = inversed_edge.start_node.urlsafe()+'_'+inversed_edge.kind
+                    memcache.delete(mem_key)
                     inversed_edge.end_node = new_start_node
                     inversed_edge.put()
         edge.start_node = new_start_node
         edge.put()
+        mem_key = edge.start_node.urlsafe()+'_'+edge.kind
+        memcache.delete(mem_key)
+
 
 
     @classmethod
     def list(cls,start_node,kind,limit=1000,pageToken=None,order='DESC'):
+        mem_key = start_node.urlsafe()+'_'+kind
+        if memcache.get(mem_key) is not None:
+            print 'from memcache'
+            print mem_key
+            return memcache.get(mem_key)
+        else:
+            return cls.list_from_datastore(start_node,kind,limit,pageToken,order)
+    @classmethod
+    def list_from_datastore(cls,start_node,kind,limit=1000,pageToken=None,order='DESC'):
+        print 'list from datastore'
         curs = Cursor(urlsafe=pageToken)
         if limit:
             limit = int(limit)
@@ -147,7 +167,10 @@ class Edge(ndb.Expando):
         results['items'] = edges
         results['next_curs'] = next_curs
         results['more'] = more
+        mem_key = start_node.urlsafe()+'_'+kind
+        memcache.set(mem_key, results)
         return results
+
     @classmethod
     def delete(cls, edge_key):
         existing_edge = edge_key.get()
@@ -155,6 +178,8 @@ class Edge(ndb.Expando):
             start_node = existing_edge.start_node
             end_node = existing_edge.end_node
             kind = existing_edge.kind
+            mem_key = existing_edge.start_node.urlsafe()+'_'+existing_edge.kind
+            memcache.delete(mem_key)
             existing_edge.key.delete()
             if kind in INVERSED_EDGES.keys():
                 inversed_edge = cls.query(
@@ -162,6 +187,8 @@ class Edge(ndb.Expando):
                                         cls.end_node == start_node,
                                         cls.kind.IN(INVERSED_EDGES[kind])).get()
                 if inversed_edge:
+                    mem_key = inversed_edge.start_node.urlsafe()+'_'+inversed_edge.kind
+                    memcache.delete(mem_key)
                     inversed_edge.key.delete()
     @classmethod
     def delete_all(cls, start_node):
