@@ -350,7 +350,7 @@ accountservices.factory('Account', function($http) {
         $scope.isLoading = false;
     };
     Account.listMore = function($scope, params) {
-        $scope.isLoading = true;
+        $scope.isMoreItemLoading = true;
         $scope.$apply();
         gapi.client.crmengine.accounts.listv2(params).execute(function(resp) {
             if (!resp.code) {
@@ -374,20 +374,20 @@ accountservices.factory('Account', function($http) {
                     $scope.pagination.next = false;
                 }
                 // Loaded succefully
-                $scope.isLoading = false;
+                $scope.isMoreItemLoading = false;
                 // Call the method $apply to make the update on the scope
                 $scope.$apply();
             } else {
 
                 if (resp.code == 401) {
                     $scope.refreshToken();
-                    $scope.isLoading = false;
+                    $scope.isMoreItemLoading = false;
                     $scope.$apply();
                 }
                 ;
             }
         });
-        $scope.isLoading = false;
+        $scope.isMoreItemLoading = false;
     };
     Account.search = function($scope, params) {
         console.log(params);

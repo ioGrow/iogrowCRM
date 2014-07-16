@@ -9,6 +9,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         $scope.nextPageToken = undefined;
         $scope.prevPageToken = undefined;
         $scope.isLoading = false;
+        $scope.isMoreItemLoading = false;
         $scope.pagination = {};
         $scope.currentPage = 01;
         $scope.pages = [];

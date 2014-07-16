@@ -320,7 +320,7 @@ accountservices.factory('Contact', function($http) {
       });
   };
   Contact.listMore = function($scope,params){
-      $scope.isLoading = true;
+      $scope.isMoreItemLoading = true;
       $scope.$apply();
       gapi.client.crmengine.contacts.listv2(params).execute(function(resp) {
           if(!resp.code){
@@ -342,14 +342,14 @@ accountservices.factory('Contact', function($http) {
                   $scope.contactpagination.next = false;
                  }
                  // Loaded succefully
-                 $scope.isLoading = false;
+                 $scope.isMoreItemLoading = false;
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
 
               } else {
                  if(resp.code==401){
                 $scope.refreshToken();
-                $scope.isLoading = false;
+                $scope.isMoreItemLoading = false;
                 $scope.$apply();
                };
               }

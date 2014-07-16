@@ -205,7 +205,7 @@ Task.delete=function($scope,params){
 
 }; 
    Task.listMore = function($scope,params){
-   $scope.isLoading = true;
+   $scope.isMoreItemLoading = true;
    $scope.$apply();
     gapi.client.crmengine.tasks.listv2(params).execute(function(resp) {
 
@@ -229,20 +229,20 @@ Task.delete=function($scope,params){
                 $scope.taskpagination.next = false;
                }
                // Call the method $apply to make the update on the scope
-               $scope.isLoading = false;
+               $scope.isMoreItemLoading = false;
                $scope.$apply();
 
 
             }else {
               if(resp.code==401){
               $scope.refreshToken();
-              $scope.isLoading = false;
+              $scope.isMoreItemLoading = false;
               $scope.$apply();
              };
             }
             console.log('gapi #end_execute');
       });
-     $scope.isLoading=false;
+     $scope.isMoreItemLoading=false;
 
 
 
