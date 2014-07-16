@@ -689,6 +689,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
             if (task.title!=null) {
                     //  $('#myModal').modal('hide');
             if (task.due){
+                console.log('enterrrrr');
+                console.log(task);
                 var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
                 params ={'title': task.title,
                           'due': dueDate,
@@ -727,7 +729,18 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
       }
      }
    }
+    $scope.deleteTask = function(task){
+      
+       var params = {'entityKey':task.entityKey};
+       
+       Task.delete($scope, params);
 
+     };
+
+     // rederection after delete task . hadji hicham 08--07-2014
+      $scope.taskDeleted = function(resp){
+
+     }; 
      $scope.hilightTask = function(){
         console.log('Should higll');
         $('#task_0').effect("highlight","slow");
@@ -739,7 +752,10 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                         'id':$scope.lead.id,
                         'tasks':{}
                       };
+                      console.log('params');
+                      console.log(params);
         Lead.get($scope,params);
+        console.log($scope.tasks);
 
      }
  //HKA 10.11.2013 Add event
