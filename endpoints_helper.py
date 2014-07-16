@@ -318,8 +318,8 @@ class EndpointsHelper():
         Cases=Case.all()
         return Cases
     @classmethod
-    def highrise_import_notes_of_person(cls, request):
-        person=Person.get(request.id)
+    def highrise_import_notes_of_person(cls, id):
+        person=Person.get(id)
         notes=person.notes
         return notes
     @classmethod
