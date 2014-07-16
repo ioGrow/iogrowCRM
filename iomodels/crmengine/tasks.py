@@ -3,7 +3,7 @@ from google.appengine.api import taskqueue
 import datetime
 import endpoints
 from google.appengine.datastore.datastore_query import Cursor
-from google.appengine.api import search 
+from google.appengine.api import search
 from apiclient.discovery import build
 from google.appengine.api import memcache
 import httplib2
@@ -162,8 +162,8 @@ class Task(EndpointsModel):
                ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)
-    
-    # get event by id  hadji hicham 09-08-2014    
+
+    # get event by id  hadji hicham 09-08-2014
     @classmethod
     def getTaskById(cls,id):
         return cls.get_by_id(int(id))
@@ -184,7 +184,7 @@ class Task(EndpointsModel):
                     about_name = parent.firstname + ' ' + parent.lastname
                 else:
                     about_name = parent.name
-                about = DiscussionAboutSchema(  
+                about = DiscussionAboutSchema(
                                                 kind=about_kind,
                                                 id=str(parent.key.id()),
                                                 name=about_name
@@ -242,7 +242,7 @@ class Task(EndpointsModel):
                                   created_at = task.created_at.isoformat(),
                                   updated_at = task.updated_at.isoformat()
                                 )
-        
+
         return task_schema
 
     @classmethod
@@ -402,45 +402,46 @@ class Task(EndpointsModel):
                                 )
         for edge in task_edge_list['items']:
             task = edge.end_node.get()
-            status_color = 'green'
-            status_label = ''
-            if task.due:
-                now = datetime.datetime.now()
-                diff = task.due - now
-                if diff.days>=0 and diff.days<=2:
-                    status_color = 'orange'
-                    status_label = 'soon: due in '+ str(diff.days) + ' days'
-                elif diff.days<0:
-                    status_color = 'red'
-                    status_label = 'overdue'
-                else:
-                    status_label = 'due in '+ str(diff.days) + ' days'
-            if task.status == 'closed':
-                status_color = 'white'
-                status_label = 'closed'
-            author_schema = None
-            if task.author:
-                author_schema = AuthorSchema(
-                                            google_user_id = task.author.google_user_id,
-                                            display_name = task.author.display_name,
-                                            google_public_profile_url = task.author.google_public_profile_url,
-                                            photo = task.author.photo
-                                            )
-            task_schema = TaskSchema(
-                                  id = str( task.key.id() ),
-                                  entityKey = task.key.urlsafe(),
-                                  title = task.title,
-                                  status = task.status,
-                                  status_color = status_color,
-                                  status_label = status_label,
-                                  created_by = author_schema,
-                                  completed_by = AuthorSchema(),
-                                  created_at = date_time_to_string(task.created_at),
-                                  updated_at = date_time_to_string(task.updated_at)
-                                )
-            if task.due:
-                task_schema.due =  date_time_to_string(task.due)
-            task_list.append(task_schema)
+            if task is not None:
+                status_color = 'green'
+                status_label = ''
+                if task.due:
+                    now = datetime.datetime.now()
+                    diff = task.due - now
+                    if diff.days>=0 and diff.days<=2:
+                        status_color = 'orange'
+                        status_label = 'soon: due in '+ str(diff.days) + ' days'
+                    elif diff.days<0:
+                        status_color = 'red'
+                        status_label = 'overdue'
+                    else:
+                        status_label = 'due in '+ str(diff.days) + ' days'
+                if task.status == 'closed':
+                    status_color = 'white'
+                    status_label = 'closed'
+                author_schema = None
+                if task.author:
+                    author_schema = AuthorSchema(
+                                                google_user_id = task.author.google_user_id,
+                                                display_name = task.author.display_name,
+                                                google_public_profile_url = task.author.google_public_profile_url,
+                                                photo = task.author.photo
+                                                )
+                task_schema = TaskSchema(
+                                      id = str( task.key.id() ),
+                                      entityKey = task.key.urlsafe(),
+                                      title = task.title,
+                                      status = task.status,
+                                      status_color = status_color,
+                                      status_label = status_label,
+                                      created_by = author_schema,
+                                      completed_by = AuthorSchema(),
+                                      created_at = date_time_to_string(task.created_at),
+                                      updated_at = date_time_to_string(task.updated_at)
+                                    )
+                if task.due:
+                    task_schema.due =  date_time_to_string(task.due)
+                task_list.append(task_schema)
         if task_edge_list['next_curs'] and task_edge_list['more']:
             task_next_curs = task_edge_list['next_curs'].urlsafe()
         else:
@@ -472,7 +473,7 @@ class Task(EndpointsModel):
         task_key = task.put_async()
         if request.due:
             taskqueue.add(
-                    url='/workers/synctask', 
+                    url='/workers/synctask',
                     params={
                             'email': user_from_email.email,
                             'starts_at': request.due,
@@ -539,7 +540,7 @@ class Task(EndpointsModel):
         if request.due and task.due == None :
             task.due = datetime.datetime.strptime(request.due,"%Y-%m-%dT%H:%M:00.000000")
             taskqueue.add(
-                    url='/workers/synctask', 
+                    url='/workers/synctask',
                     params={
                             'email': user_from_email.email,
                             'starts_at': request.due,
@@ -551,7 +552,7 @@ class Task(EndpointsModel):
 
         elif request.due and task.due != None:
             taskqueue.add(
-                    url='/workers/syncpatchtask', 
+                    url='/workers/syncpatchtask',
                     params={
                             'email': user_from_email.email,
                             'starts_at': request.due,
@@ -576,9 +577,3 @@ class Task(EndpointsModel):
     @classmethod
     def cascade_delete(cls,entityKey):
         Edge.delete_all_cascade(start_node = entityKey)
-
-
-
-
-
-  
