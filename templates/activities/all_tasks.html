@@ -63,7 +63,7 @@
       <div class="row">
         <div class="showPage newTaskShow custom-show margin-bottom-15  col-md-12">
           <div class="row">
-               <div class="col-md-12">
+               <div class="col-md-11">
                 <form ng-submit="addNewTask()" class="newTaskForm">
                     <div class="form-group">
                       <div class="input-icon right">
@@ -82,9 +82,25 @@
                          <input cusdatetimepicker data-model="newTask.due" type="text" class="form-control dueDateInput" placeholder="Due date" value="" id="leadEventStartsAt">
                    </div>
                   </div>
+                  <div class="btn-group">
+                    <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
+                     <i class="fa fa-exclamation-circle"></i>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li>
+                        <p class="indication-item">Use <span>#</span> to add labels</p>
+                      </li>
+                      <li>
+                        <p class="indication-item">Use<span>@</span> to assign the task</p>
+                      </li>
+                    </ul>
+                  </div>
                   </div>
                 </div>
               </div>
+              <div class="col-md-1">
+                <button type="button" ng-click="addNewTask()" class="btn red  pull-right btn-inline">Add</button>
+                </div>
           </div>
           <div class="row">
             <div class="col-md-12">
