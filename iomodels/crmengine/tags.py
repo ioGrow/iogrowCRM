@@ -57,11 +57,11 @@ class Tag(EndpointsModel):
 
     @classmethod
     def list_by_parent(cls,parent_key):
-    	"""return the list of tags related to an object"""
-    	edge_list = Edge.list(
-    						start_node = parent_key,
-    						kind = 'tags'
-    						)
+      	"""return the list of tags related to an object"""
+      	edge_list = Edge.list(
+      						start_node = parent_key,
+      						kind = 'tags'
+      						)
         tag_list = []
         for edge in edge_list['items']:
             tag_list.append(
