@@ -58,7 +58,8 @@
   <script type="text/javascript">
   window.___gcfg = {
   // lang: 'en',
-    parsetags: 'explicit'
+    parsetags: 'explicit',
+    lang: 'en-US'
   };
   (function() {
     var po = document.createElement('script');
@@ -68,7 +69,6 @@
     s.parentNode.insertBefore(po, s);
   })();
   </script>
-
 </head>
 <body class="page-header-fixed gray-body">
   <!-- BEGIN HEADER -->
@@ -380,6 +380,7 @@
    <script src="/static/app/scripts/vendor/ui-select2.js" ></script>
   <script type="text/javascript">
     var apisToLoad;
+
     var callback = function() {
         console.log('callback');
         if (--apisToLoad == 0) {
@@ -395,10 +396,10 @@
 
 
 
-      var ROOT = '/_ah/api';
 
-        //var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+     //var ROOT = '/_ah/api';
 
+ var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 
 
         var callback = function() {

@@ -92,6 +92,10 @@ topicservices.factory('Task', function($http) {
                     }
                   }
                  $scope.tasks = resp.items;
+
+                 console.log("you have to know within your self");
+                 console.log(resp.items);
+                 console.log("------------------------------------");
                   if ($scope.currentPage>1){
                       $scope.taskpagination.prev = true;
                    }else{
@@ -192,9 +196,9 @@ topicservices.factory('Task', function($http) {
 
 Task.delete=function($scope,params){
        $scope.isLoading= true ;
-       $scope.$apply();
        gapi.client. crmengine.tasks.delete(params).execute(function(resp) {
        $scope.taskDeleted();
+       $scope.listTasks();
        $scope.isLoading=true;
        $scope.$apply();
        });
