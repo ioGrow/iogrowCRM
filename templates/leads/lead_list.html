@@ -99,7 +99,22 @@
     <div class="tab-pane">
     <div class="row ">
       <div class="col-md-12 waterfall" ng-hide="blankStatelead">
-        <div ng-repeat="lead in leads" droppable  id="card_<%=$index%>"class="cardElement" ng-drop="dropTag(lead,$index)" ng-mouseenter="showClose= true" ng-mouseleave="showClose = false">
+        <div ng-repeat="lead in leads" droppable  id="card_<%=$index%>"class="cardElement" ng-drop="dropTag(lead,$index)" ng-mouseenter="showClose= true" ng-mouseleave="showClose = false" style="z-index:109;overflow: visible;">
+        <div class="btn-group inCardOptionsBtn">
+            <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
+             <i class="fa fa-ellipsis-vertical"></i>
+            </button>
+            <ul class="dropdown-menu drp-dwn-right " role="menu">
+              <li>
+               <a href="" ng-click="editbeforedelete(lead)">
+                   <i class='fa fa-trash-o'></i> Delete </a>
+              </li>
+              <li>
+               <a href="" ng-click="showAssigneeTags(lead)">
+                   <i class='fa fa-tags'></i> Add tags </a>
+              </li>
+            </ul>
+          </div>
           <div class="detailsSection">
             <div class="head">
               <div class="pic">
@@ -109,7 +124,7 @@
                 </a>
               </div>
               <div class="text">
-                <button type="button" class="close deleteLeadBtn" ng-show="showClose" ng-click="editbeforedelete(lead)"></button>
+               <!-- <button type="button" class="close deleteLeadBtn" ng-show="showClose" ng-click="editbeforedelete(lead)"></button>-->
                 <div class="name">
                   <a href="/#/leads/show/<%= lead.id %>" class="profile-link">
                     <%= lead.firstname %> <%= lead.lastname %>
@@ -332,6 +347,34 @@
                </div>
           </div>
        </div>
+      <!--assign tags model-->
+   <div id="assigneeTagsToTask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h3 id="myModalLabel" class="modal-title">Add Tags </h3>
+            </div>
+            <div class="modal-body">
+               <form id="seletesho" name="deletesho" class="form-horizontal">
+               <div class="form-group">
+                    <select id="select2_sample2" class="form-control select2" multiple>
+                      <option ng-repeat="tag in tags"
+                      value='<%=tag.entityKey%>'>
+                        <%=tag.name%>
+                      </option>
+                    </select>
+                </div>
+            </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <input ng-hide="isLoadingTask" ng-click="addTagsTothis()" type="submit" class="btn green" value="Add">
+                <input ng-show="isLoadingTask" type="submit" class="btn green" value="Loading..." disabled>
+              </div>
+          </form>
+        </div>
+      </div>
+  </div>
 <script type="text/javascript">
   $("#select2_sample2").select2({
         placeholder: "Click to Select a label",

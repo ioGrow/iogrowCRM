@@ -224,6 +224,7 @@ accountservices.factory('Case', function() {
   };
   Case.listMore = function($scope,params){
       $scope.isMoreItemLoading = true;
+      $( window ).trigger( "resize" );
       $scope.$apply();
       gapi.client.crmengine.cases.listv2(params).execute(function(resp) {
               if(!resp.code){

@@ -180,6 +180,7 @@ opportunityservices.factory('Opportunity', function($http) {
   };
   Opportunity.listMore = function($scope,params){
       $scope.isMoreItemLoading = true;
+      $( window ).trigger( "resize" );
       $scope.$apply();
       gapi.client.crmengine.opportunities.listv2(params).execute(function(resp) {
               if(!resp.code){

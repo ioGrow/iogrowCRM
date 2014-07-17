@@ -28,7 +28,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.selected_tags = [];
       $scope.draggedTag=null;
       $scope.tag = {};
-
+      $scope.currentLead=null;
       $scope.showNewTag=false;
       $scope.showUntag=false;
      $scope.edgekeytoDelete=undefined;
@@ -123,6 +123,31 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           $scope.currentPage = $scope.currentPage - 1 ;
           Lead.list($scope,params);
      }
+     $scope.showAssigneeTags=function(lead){
+        $('#assigneeTagsToTask').modal('show');
+        $scope.currentLead=lead;
+     };
+     $scope.addTagsTothis=function(){
+      var tags=[];
+      var items = [];
+      tags=$('#select2_sample2').select2("val");
+          angular.forEach(tags, function(tag){
+            var edge = {
+              'start_node': $scope.currentLead.entityKey,
+              'end_node': tag,
+              'kind':'tags',
+              'inverse_edge': 'tagged_on'
+            };
+            items.push(edge);
+          });
+      params = {
+        'items': items
+      }
+      console.log(params);
+      Edge.insert($scope,params);
+      $scope.currentLead=null;
+      $('#assigneeTagsToTask').modal('hide');
+     };
 
       // new Lead
       $scope.showModal = function(){
@@ -230,7 +255,7 @@ $scope.edgeInserted = function () {
      };
 $scope.listleads = function(){
   var params = { 'order': $scope.order,
-                        'limit':6}
+                        'limit':20}
           Lead.list($scope,params);
 };
 

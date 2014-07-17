@@ -224,6 +224,7 @@ leadservices.factory('Lead', function($http) {
   };
     Lead.listMore = function($scope,params){
      $scope.isMoreItemLoading = true;
+     $( window ).trigger( "resize" );
      $scope.$apply();
       gapi.client.crmengine.leads.listv2(params).execute(function(resp) {
               if(!resp.code){
@@ -248,6 +249,7 @@ leadservices.factory('Lead', function($http) {
                  // Call the method $apply to make the update on the scope
                  $scope.isMoreItemLoading = false;
                  $scope.$apply();
+
 
 
               }else {

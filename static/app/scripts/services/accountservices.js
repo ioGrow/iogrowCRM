@@ -351,6 +351,7 @@ accountservices.factory('Account', function($http) {
     };
     Account.listMore = function($scope, params) {
         $scope.isMoreItemLoading = true;
+        $( window ).trigger( "resize" );
         $scope.$apply();
         gapi.client.crmengine.accounts.listv2(params).execute(function(resp) {
             if (!resp.code) {

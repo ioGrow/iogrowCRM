@@ -206,6 +206,7 @@ Task.delete=function($scope,params){
 }; 
    Task.listMore = function($scope,params){
    $scope.isMoreItemLoading = true;
+   $( window ).trigger( "resize" );
    $scope.$apply();
     gapi.client.crmengine.tasks.listv2(params).execute(function(resp) {
 

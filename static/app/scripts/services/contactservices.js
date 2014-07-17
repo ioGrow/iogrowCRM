@@ -321,6 +321,7 @@ accountservices.factory('Contact', function($http) {
   };
   Contact.listMore = function($scope,params){
       $scope.isMoreItemLoading = true;
+      $( window ).trigger( "resize" );
       $scope.$apply();
       gapi.client.crmengine.contacts.listv2(params).execute(function(resp) {
           if(!resp.code){
