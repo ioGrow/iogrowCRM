@@ -9,6 +9,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
+     $scope.isMoreItemLoading = false;
      $scope.pagination = {};
      $scope.casepagination={};
      $scope.currentPage = 01;

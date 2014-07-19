@@ -11,11 +11,13 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
+     $scope.isMoreItemLoading = false;
      $scope.leadpagination = {};
      $scope.currentPage = 01;
      $scope.pages = [];
      $scope.selectedOption='all';
      $scope.stage_selected={};
+     $scope.showTagsFilter=false;
 
       $scope.leads = [];
       $scope.lead = {};
@@ -27,7 +29,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.selected_tags = [];
       $scope.draggedTag=null;
       $scope.tag = {};
-
+      $scope.currentLead=null;
       $scope.showNewTag=false;
       $scope.showUntag=false;
      $scope.edgekeytoDelete=undefined;
@@ -122,6 +124,31 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           $scope.currentPage = $scope.currentPage - 1 ;
           Lead.list($scope,params);
      }
+     $scope.showAssigneeTags=function(lead){
+        $('#assigneeTagsToTask').modal('show');
+        $scope.currentLead=lead;
+     };
+     $scope.addTagsTothis=function(){
+      var tags=[];
+      var items = [];
+      tags=$('#select2_sample2').select2("val");
+          angular.forEach(tags, function(tag){
+            var edge = {
+              'start_node': $scope.currentLead.entityKey,
+              'end_node': tag,
+              'kind':'tags',
+              'inverse_edge': 'tagged_on'
+            };
+            items.push(edge);
+          });
+      params = {
+        'items': items
+      }
+      console.log(params);
+      Edge.insert($scope,params);
+      $scope.currentLead=null;
+      $('#assigneeTagsToTask').modal('hide');
+     };
 
       // new Lead
       $scope.showModal = function(){
@@ -129,8 +156,23 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
       };
 
-
-
+        $scope.showNewTagForm=function(){
+          $scope.showNewTag=true;
+          $( window ).trigger( 'resize' );  
+        }
+        $scope.hideNewTagForm=function(){
+          $scope.showNewTag=false;
+          $( window ).trigger( 'resize' ); 
+        }
+        $scope.hideTagFilterCard=function(){
+          $scope.showTagsFilter=false;
+          $( window ).trigger( 'resize' ); 
+        }
+        $scope.showTagFilterCard=function(){
+          $scope.showTagsFilter=true;
+          $( window ).trigger( 'resize' ); 
+        }
+        
       $scope.save = function(lead){
         var params ={
                       'firstname':lead.firstname,
@@ -229,7 +271,7 @@ $scope.edgeInserted = function () {
      };
 $scope.listleads = function(){
   var params = { 'order': $scope.order,
-                        'limit':6}
+                        'limit':20}
           Lead.list($scope,params);
 };
 
@@ -273,13 +315,13 @@ $scope.selectTag= function(tag,index,$event){
          var text=element.find(".with-color");
          if($scope.selected_tags.indexOf(tag) == -1){
             $scope.selected_tags.push(tag);
-            element.css('background-color', tag.color+'!important');
-            text.css('color',$scope.idealTextColor(tag.color));
+            /*element.css('background-color', tag.color+'!important');
+            text.css('color',$scope.idealTextColor(tag.color));*/
 
          }else{
-            element.css('background-color','#ffffff !important');
+            /*element.css('background-color','#ffffff !important');*/
             $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
-             text.css('color','#000000');
+             /*text.css('color','#000000');*/
          }
          ;
          $scope.filterByTags($scope.selected_tags);
@@ -1713,15 +1755,14 @@ $scope.selectTag= function(tag,index,$event){
          var text=element.find(".with-color");
          if($scope.selected_tags.indexOf(tag) == -1){
             $scope.selected_tags.push(tag);
-            element.css('background-color', tag.color+'!important');
-            text.css('color',$scope.idealTextColor(tag.color));
+            /*element.css('background-color', tag.color+'!important');
+            text.css('color',$scope.idealTextColor(tag.color));*/
 
          }else{
-            element.css('background-color','#ffffff !important');
+           /* element.css('background-color','#ffffff !important');*/
             $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
-             text.css('color','#000000');
-         }
-         ;
+            /* text.css('color','#000000');*/
+         };
          $scope.filterByTags($scope.selected_tags);
 
       }
