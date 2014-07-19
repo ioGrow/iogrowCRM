@@ -17,6 +17,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
      $scope.pages = [];
      $scope.selectedOption='all';
      $scope.stage_selected={};
+     $scope.showTagsFilter=false;
 
       $scope.leads = [];
       $scope.lead = {};
@@ -155,8 +156,23 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
       };
 
-
-
+        $scope.showNewTagForm=function(){
+          $scope.showNewTag=true;
+          $( window ).trigger( 'resize' );  
+        }
+        $scope.hideNewTagForm=function(){
+          $scope.showNewTag=false;
+          $( window ).trigger( 'resize' ); 
+        }
+        $scope.hideTagFilterCard=function(){
+          $scope.showTagsFilter=false;
+          $( window ).trigger( 'resize' ); 
+        }
+        $scope.showTagFilterCard=function(){
+          $scope.showTagsFilter=true;
+          $( window ).trigger( 'resize' ); 
+        }
+        
       $scope.save = function(lead){
         var params ={
                       'firstname':lead.firstname,
@@ -299,13 +315,13 @@ $scope.selectTag= function(tag,index,$event){
          var text=element.find(".with-color");
          if($scope.selected_tags.indexOf(tag) == -1){
             $scope.selected_tags.push(tag);
-            element.css('background-color', tag.color+'!important');
-            text.css('color',$scope.idealTextColor(tag.color));
+            /*element.css('background-color', tag.color+'!important');
+            text.css('color',$scope.idealTextColor(tag.color));*/
 
          }else{
-            element.css('background-color','#ffffff !important');
+            /*element.css('background-color','#ffffff !important');*/
             $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
-             text.css('color','#000000');
+             /*text.css('color','#000000');*/
          }
          ;
          $scope.filterByTags($scope.selected_tags);
@@ -1739,15 +1755,14 @@ $scope.selectTag= function(tag,index,$event){
          var text=element.find(".with-color");
          if($scope.selected_tags.indexOf(tag) == -1){
             $scope.selected_tags.push(tag);
-            element.css('background-color', tag.color+'!important');
-            text.css('color',$scope.idealTextColor(tag.color));
+            /*element.css('background-color', tag.color+'!important');
+            text.css('color',$scope.idealTextColor(tag.color));*/
 
          }else{
-            element.css('background-color','#ffffff !important');
+           /* element.css('background-color','#ffffff !important');*/
             $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
-             text.css('color','#000000');
-         }
-         ;
+            /* text.css('color','#000000');*/
+         };
          $scope.filterByTags($scope.selected_tags);
 
       }
