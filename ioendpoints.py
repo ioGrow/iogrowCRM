@@ -67,6 +67,7 @@ from search_helper import SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
 from people import linked_in
 import iomessages
+from iomessages import profileSchema
 
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
@@ -2291,9 +2292,9 @@ class CrmEngineApi(remote.Service):
         Organization.upgrade_to_business_version(user_from_email.organization)
         return message_types.VoidMessage()
     # arezki lebdiri 15/07/2014
-    @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
-                      path='people', http_method='DELETE',
+    @endpoints.method(EntityKeyRequest, profileSchema,
+                      path='people', http_method='POST',
                       name='people.getLinkedin')
     def get_people_linkedin(self, request):
-        linked_in.get_people(request.entityKey)
-        return message_types.VoidMessage()
+        response=linked_in.get_people(request.entityKey)
+        return response

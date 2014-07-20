@@ -946,8 +946,9 @@ class GetFromLinkedinToIoGrow(webapp2.RequestHandler):
         profil=linkedin.scrape_linkedin('http://www.google.com', fullname)
         if profil:
             node=Node(kind='linkedin_profile')
-            node.websites=profil["websites"]
-            node.formations=profil["formation"]
+            node.websites=profil["websites"] or None
+            print profil["websites"],"((((((((((((((((((((((((((((((((((((((((((((((((((((((((((("
+            node.formations=profil["formations"]
             node._properties["experiences"]=ndb.TextProperty("experiences")
             node._values["experiences"]=str(json.dumps(profil["experiences"]))
             node._properties["resume"]=ndb.TextProperty("resume")
@@ -955,11 +956,14 @@ class GetFromLinkedinToIoGrow(webapp2.RequestHandler):
             node._properties["certifications"]=ndb.TextProperty("certifications")
             node._values["certifications"]=str(json.dumps(profil["certifications"]))
             # node.certifications=json.dumps(profil["certifications"])
-            node.firstname=profil["family_name"]
-            node.lastname=profil["given_name"]
+            node.firstname=profil["firstname"]
+            node.lastname=profil["lastname"]
             node.industry=profil["industry"]
             node.locality=profil["locality"]
             node.headline=profil["headline"]
+            node.current_post=profil["current_post"]
+            node.past_post=profil["past_post"]
+            node.relation=profil["relation"]
             key2=node.put()
             Edge.insert(start_node=key1,end_node=key2,kind='linkedin',inverse_edge='parents')
             # print profil

@@ -5,6 +5,7 @@ import mechanize
 from bs4 import BeautifulSoup
 import cookielib
 from iograph import Node , Edge
+from iomessages import profileSchema
 from google.appengine.ext import ndb
 class linked_in():
     def __init__(self):
@@ -50,8 +51,8 @@ class linked_in():
         full_name=member_head.find('span',{'class':'full-name'})
         given_name=full_name.find('span',{'class':'given-name'})
         family_name=full_name.find('span',{'class':'family-name'})
-        person["given_name"]=given_name.text
-        person["family_name"]=family_name.text
+        person["firstname"]=given_name.text
+        person["lastname"]=family_name.text
         # *******************************************************
         industry=member_head.find('dd',{'class':'industry'})
         if industry: person["industry"]=industry.text
@@ -87,7 +88,7 @@ class linked_in():
         if formation:
             for post in formation.findAll('li'):
                 tab.append(post.text.replace('\n',' '))
-        person['formation']=tab
+        person['formations']=tab
         # -------------------------------------------------------------
         tab=[]
         formation=overview.find('dd',{'class':'websites'})
@@ -187,8 +188,34 @@ class linked_in():
     def get_people(cls,entityKey):
         print entityKey,"#######################################################################"
         key=ndb.Key(urlsafe=entityKey)
+        print key
+        print "********************************************************"
         result=Edge.list(start_node=key,kind='linkedin')
-        profile_key=result['items'][0].end_node
-        print profile_key.get()
-        print '***********************************************************************'
+        print result
+        if result['items']:
+            profile_key=result['items'][0].end_node
+            pro= profile_key.get()
+            print pro
+            print "+++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+            # print pro.relation
+            if not pro.websites: pro.websites=[]  
+            response=profileSchema(
+                                    lastname = pro.lastname,
+                                    firstname = pro.firstname,
+                                    industry = pro.industry,
+                                    locality = pro.locality,
+                                    headline = pro.headline,
+                                    current_post = pro.current_post,
+                                    past_post=pro.past_post,
+                                    formations=pro.formations,
+                                    websites=pro.websites,
+                                    relation=pro.relation,
+                                    experiences=pro.experiences,
+                                    resume=pro.resume,
+                                    certifications=pro.certifications,
+                                    # skills=pro.skills
+                                    )
+            print "****************/////////////////////////////////////////"
+            return response
+
         # print result
