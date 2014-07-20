@@ -37,6 +37,10 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             {'name': 'purple', 'color': '#E874D6'},
         ];
         $scope.tag.color = {'name': 'green', 'color': '#BBE535'};
+        $scope.selectedAccount=null;
+         $scope.currentAccount=null;
+         $scope.showTagsFilter=false;
+         $scope.showNewTag=false;
         $scope.runTheProcess = function() {
             var params = {'order': $scope.order,
                 'limit': 20}
@@ -70,6 +74,56 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         $scope.refreshToken = function() {
             Auth.refreshToken();
         };
+            $scope.editbeforedelete = function(account){
+                 $scope.selectedAccount=account;
+                 $('#BeforedeleteAccount').modal('show');
+             };
+            $scope.deleteaccount = function(){
+                 var params = {'entityKey':$scope.selectedAccount.entityKey};
+                 Account.delete($scope, params);
+                 $('#BeforedeleteAccount').modal('hide');
+                 $scope.selectedAccount=null;
+             };
+            $scope.showAssigneeTags=function(account){
+                $('#assigneeTagsToTask').modal('show');
+                $scope.currentAccount=account;
+             };
+            $scope.addTagsTothis=function(){
+              var tags=[];
+              var items = [];
+              tags=$('#select2_sample2').select2("val");
+                  angular.forEach(tags, function(tag){
+                    var edge = {
+                      'start_node': $scope.currentAccount.entityKey,
+                      'end_node': tag,
+                      'kind':'tags',
+                      'inverse_edge': 'tagged_on'
+                    };
+                    items.push(edge);
+                  });
+              params = {
+                'items': items
+              }
+              Edge.insert($scope,params);
+              $scope.currentAccount=null;
+              $('#assigneeTagsToTask').modal('hide');
+             };
+            $scope.showNewTagForm=function(){
+              $scope.showNewTag=true;
+              $( window ).trigger( 'resize' );  
+            }
+            $scope.hideNewTagForm=function(){
+              $scope.showNewTag=false;
+              $( window ).trigger( 'resize' ); 
+            }
+            $scope.hideTagFilterCard=function(){
+              $scope.showTagsFilter=false;
+              $( window ).trigger( 'resize' ); 
+            }
+            $scope.showTagFilterCard=function(){
+              $scope.showTagsFilter=true;
+              $( window ).trigger( 'resize' ); 
+            }
         // Next and Prev pagination
         $scope.listNextPageItems = function() {
             var nextPage = $scope.currentPage + 1;
@@ -249,13 +303,13 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
                 var text = element.find(".with-color");
                 if ($scope.selected_tags.indexOf(tag) == -1) {
                     $scope.selected_tags.push(tag);
-                    element.css('background-color', tag.color + '!important');
-                    text.css('color', $scope.idealTextColor(tag.color));
+                   /* element.css('background-color', tag.color + '!important');
+                    text.css('color', $scope.idealTextColor(tag.color));*/
 
                 } else {
-                    element.css('background-color', '#ffffff !important');
+                   /* element.css('background-color', '#ffffff !important');*/
                     $scope.selected_tags.splice($scope.selected_tags.indexOf(tag), 1);
-                    text.css('color', $scope.idealTextColor(tag.color));
+                   /* text.css('color', $scope.idealTextColor(tag.color));*/
                 }
 
                 $scope.filterByTags($scope.selected_tags);
