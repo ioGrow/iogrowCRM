@@ -470,6 +470,11 @@ class Task(EndpointsModel):
                     organization = user_from_email.organization,
                     access= access,
                     author = author)
+        if request.due:
+            task.due = datetime.datetime.strptime(
+                                                  request.due,
+                                                  "%Y-%m-%dT%H:%M:00.000000"
+                                                  )
         task_key = task.put_async()
         if request.due:
             taskqueue.add(

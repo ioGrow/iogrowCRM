@@ -1,12 +1,12 @@
 var topicservices = angular.module('crmEngine.taskservices',[]);
 
 topicservices.factory('Task', function($http) {
-  
+
   var Task = function(data) {
     angular.extend(this, data);
   }
 
-  
+
  Task.get = function($scope,id) {
      $scope.isLoading=true;
 
@@ -18,7 +18,7 @@ topicservices.factory('Task', function($http) {
                $scope.uri =url;
                }
                $scope.isContentLoaded = true;
-               
+
                $scope.ListComments();
                $scope.listContributors();
                document.title = "Task: " + $scope.task.title ;
@@ -45,7 +45,7 @@ topicservices.factory('Task', function($http) {
       $scope.isLoading = true;
       console.log(params);
       gapi.client.crmengine.tasks.patch(params).execute(function(resp) {
-       
+
           if(!resp.code){
             $scope.task = resp;
             console.log("here we go i'm angry")
@@ -61,7 +61,7 @@ topicservices.factory('Task', function($http) {
             $scope.$apply();
 
             $('#EditTaskModal').modal('hide');
-          
+
          }else{
             console.log("not working");
              $('#EditTaskModal').modal('hide');
@@ -82,9 +82,9 @@ topicservices.factory('Task', function($http) {
 
   Task.list = function($scope,params,effects){
       $scope.isLoading = true;
-     
+
       gapi.client.crmengine.tasks.listv2(params).execute(function(resp) {
-              
+
               if(!resp.code){
                 if (!resp.items){
                     if(!$scope.isFiltering){
@@ -114,7 +114,7 @@ topicservices.factory('Task', function($http) {
                  $scope.isLoading = false;
                  $scope.$apply();
                /* $scope.tasks = resp.items;
-                
+
                 // Loaded succefully
 
                  $scope.isLoading = false;
@@ -137,12 +137,14 @@ topicservices.factory('Task', function($http) {
   };
    Task.insert = function($scope,params){
       $scope.isLoading = true;
+      console.log('***************************task params');
+      console.log(params);
 
       gapi.client.crmengine.tasks.insertv2(params).execute(function(resp) {
-   
+
 
          if(!resp.code){
-        
+
           if ($scope.tasks == undefined){
             $scope.tasks = [];
           }
@@ -152,8 +154,8 @@ topicservices.factory('Task', function($http) {
             $scope.listTasks();
 
           $scope.$apply();
-       
-          
+
+
          }else{
           console.log(resp.code);
          }
@@ -164,7 +166,7 @@ topicservices.factory('Task', function($http) {
 
  Task.getUrl = function(type,id){
   var base_url = undefined;
-    
+
     switch (type)
         {
         case 'Account':
@@ -203,7 +205,7 @@ Task.delete=function($scope,params){
        $scope.$apply();
        });
 
-}; 
+};
    Task.listMore = function($scope,params){
    $scope.isMoreItemLoading = true;
    $( window ).trigger( "resize" );
@@ -250,7 +252,7 @@ Task.delete=function($scope,params){
 
 };
 
-  
+
 
 return Task;
 });
@@ -258,16 +260,16 @@ return Task;
 
 
 topicservices.factory('Tag', function($http) {
-  
+
   var Tag = function(data) {
     angular.extend(this, data);
   }
 
   Tag.attach = function($scope,params,index){
-    
+
       $scope.isLoading = true;
       gapi.client.crmengine.tags.attach(params).execute(function(resp) {
-        
+
          if(!resp.code){
             $scope.isLoading = false;
             $scope.tagattached(resp,index);
@@ -275,7 +277,7 @@ topicservices.factory('Tag', function($http) {
             $( window ).trigger( "resize" );
          // $('#addAccountModal').modal('hide');
          // window.location.replace('#/accounts/show/'+resp.id);
-          
+
          }else{
           console.log(resp.code);
          }
@@ -284,7 +286,7 @@ topicservices.factory('Tag', function($http) {
 
   };
   Tag.list = function($scope,params){
-     
+
       $scope.isLoading = true;
 
       gapi.client.crmengine.tags.list(params).execute(function(resp) {
@@ -293,12 +295,12 @@ topicservices.factory('Tag', function($http) {
                  $scope.tags = resp.items;
                  $scope.tagInfoData=resp.items;
 
-                
+
                  $scope.isLoading = false;
 
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
-                 
+
               }else {
                  if(resp.code==401){
                     $scope.refreshToken();
@@ -311,10 +313,10 @@ topicservices.factory('Tag', function($http) {
 
   };
    Tag.insert = function($scope,params){
-    
+
       $scope.isLoading = true;
       gapi.client.crmengine.tags.insert(params).execute(function(resp) {
-        
+
          if(!resp.code){
 
           // TME_02_11_13 when a note gis inserted reload topics
@@ -324,7 +326,7 @@ topicservices.factory('Tag', function($http) {
           $scope.$apply();
          // $('#addAccountModal').modal('hide');
          // window.location.replace('#/accounts/show/'+resp.id);
-          
+
          }else{
           console.log(resp.code);
          }
@@ -360,41 +362,41 @@ topicservices.factory('Tag', function($http) {
   };
   Tag.delete = function($scope,params){
 
-  
+
     gapi.client.crmengine.tags.delete(params).execute(function(resp){
       $scope.listTags();
-      $scope.tagDeleted();   
+      $scope.tagDeleted();
     $scope.$apply();
     });
-    
+
 
   };
 
 return Tag;
 });
 topicservices.factory('Contributor', function($http) {
-  
+
   var Contributor = function(data) {
     angular.extend(this, data);
   }
 
 
   Contributor.list = function($scope,params){
-     
+
 
       $scope.isLoading = true;
       gapi.client.crmengine.contributors.list(params).execute(function(resp) {
               if(!resp.code){
-                
+
                 console.log($scope.currentPage);
 
                  $scope.contributors = resp.items;
-                
+
                  $scope.isLoading = false;
 
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
-                 
+
               }else {
                  if(resp.code==401){
                 $scope.refreshToken();
@@ -420,17 +422,17 @@ topicservices.factory('Contributor', function($http) {
           $scope.$apply();
          // $('#addAccountModal').modal('hide');
          // window.location.replace('#/accounts/show/'+resp.id);
-          
+
          }else{
           console.log(resp.code);
          }
       });
      $scope.isLoading=false;
-      
+
   };
 
 
-  
+
 
 return Contributor;
 });

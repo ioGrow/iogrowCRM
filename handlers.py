@@ -793,13 +793,11 @@ class SyncCalendarTask(webapp2.RequestHandler):
                                               "%Y-%m-%dT%H:%M:00.000000"
                                               )
         task=Task.getTaskById(self.request.get('task_id'))
-
-        try:
-            credentials = user_from_email.google_credentials
-            http = credentials.authorize(httplib2.Http(memcache))
-            service = build('calendar', 'v3', http=http)
+        credentials = user_from_email.google_credentials
+        http = credentials.authorize(httplib2.Http(memcache))
+        service = build('calendar', 'v3', http=http)
             # prepare params to insert
-            params = {
+        params = {
                  "start":
                   {
                     "date": starts_at.strftime("%Y-%m-%d")
@@ -810,12 +808,10 @@ class SyncCalendarTask(webapp2.RequestHandler):
                   },
                   "summary": summary,
             }
-        
-            created_task = service.events().insert(calendarId='primary',body=params).execute()
-            task.task_google_id=created_task['id']
-            task.put()
-        except:
-            raise endpoints.UnauthorizedException('Invalid grant' )
+
+        created_task = service.events().insert(calendarId='primary',body=params).execute()
+        task.task_google_id=created_task['id']
+        task.put()
 
 
 class SyncPatchCalendarEvent(webapp2.RequestHandler):
@@ -883,9 +879,9 @@ class SyncPatchCalendarTask(webapp2.RequestHandler):
                   {
                     "date": ends_at.strftime("%Y-%m-%d")
                   },
-                  "summary": summary    
+                  "summary": summary
                   }
-          
+
 
             patched_event = service.events().patch(calendarId='primary',eventId=task_google_id,body=params).execute()
         except:
