@@ -29,7 +29,7 @@ EARLY_BIRD_TABS = [
                 {'name': 'Calendar','label': 'Calendar','url':'/#/calendar/','icon':'calendar'}
                 ]
 STANDARD_PROFILES = ['Super Administrator', 'Standard User']
-STANDARD_APPS = [{'name': 'sales', 'label': 'Relationships', 'url':'/#/leads/'}]
+STANDARD_APPS = [{'name': 'sales', 'label': 'Relationships', 'url':'/#/tasks/'}]
 STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
 ADMIN_TABS = [
             {'name': 'Users','label': 'Users','url':'/#/admin/users','icon':'user'},
