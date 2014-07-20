@@ -86,7 +86,7 @@
                     <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
                      <i class="fa fa-exclamation-circle"></i>
                     </button>
-                    <ul class="dropdown-menu" role="menu">
+                    <ul class="dropdown-menu " role="menu">
                       <li>
                         <p class="indication-item">Use <span>#</span> to add labels</p>
                       </li>
@@ -685,32 +685,32 @@
               </div>
              </div>
 <div id="assigneeTagsToTask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                      <h3 id="myModalLabel" class="modal-title">Add Tags </h3>
-                    </div>
-                    <div class="modal-body">
-                       <form id="seletesho" name="deletesho" class="form-horizontal">
-                       <div class="form-group">
-                            <select id="select2_sample2" class="form-control select2" multiple>
-                              <option ng-repeat="tag in tags"
-                              value='<%=tag.entityKey%>'>
-                                <%=tag.name%>
-                              </option>
-                            </select>
-                        </div>
-                    </div>
-                      <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                        <input ng-hide="isLoadingTask" ng-click="addTags()" type="submit" class="btn green" value="Add">
-                        <input ng-show="isLoadingTask" type="submit" class="btn green" value="Loading..." disabled>
-                      </div>
-                  </form>
-                </div>
+        <div class="modal-dialog">
+          <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel" class="modal-title">Add Tags </h3>
+          </div>
+          <div class="modal-body">
+             <form id="seletesho" name="deletesho" class="form-horizontal">
+             <div class="form-group">
+                  <select id="select2_sample2" class="form-control select2" multiple>
+                    <option ng-repeat="tag in tags"
+                    value='<%=tag.entityKey%>'>
+                      <%=tag.name%>
+                    </option>
+                  </select>
               </div>
-             </div>
+          </div>
+            <div class="modal-footer">
+              <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+              <input ng-hide="isLoadingTask" ng-click="addTags()" type="submit" class="btn green" value="Add">
+              <input ng-show="isLoadingTask" type="submit" class="btn green" value="Loading..." disabled>
+            </div>
+        </form>
+      </div>
+    </div>
+</div>
 <div id="assigneeModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
            <div class="modal-dialog">
               <div class="modal-content">
