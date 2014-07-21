@@ -301,7 +301,14 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             org_name = self.request.get('org_name')
-            mob_phone = self.request.get('mob_phone')
+            taskqueue.add(
+                            url='/workers/add_to_iogrow_leads',
+                            queue_name='iogrow-admin',
+                            params={
+                                    'email': user.email,
+                                    'organization': org_name
+                                    }
+                        )
             model.Organization.create_instance(org_name,user)
             self.redirect('/')
         else:

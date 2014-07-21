@@ -113,7 +113,7 @@ INVERSED_EDGES = {
             'tagged_on': 'tags'
 
          }
-ADMIN_EMAILS = ['tedj.meabiou@gmail.com','hakim@iogrow.com','mezianeh3@gmail.com']
+ADMIN_EMAILS = ['tedj.meabiou@gmail.com','hakim@iogrow.com','mezianeh3@gmail.com','ilyes@iogrow.com','osidsoft@gmail.com']
 
 
 def LISTING_QUERY(query, access, organization, owner, collaborators, order):
@@ -993,7 +993,7 @@ class CrmEngineApi(remote.Service):
                     phone.type=str(company_details.contact_data.phone_numbers[0].location)
                 phones.append(phone)
                 email=iomessages.EmailSchema()
-                                            
+
                 if len(company_details.contact_data.email_addresses)!=0:
                     email.email=company_details.contact_data.email_addresses[0].address
                 emails=list()
@@ -1067,7 +1067,7 @@ class CrmEngineApi(remote.Service):
                                         infonodes=infonodes,
                                         phones=phones
                                          )
-            
+
             contact_schema=Contact.insert(user,contact_request)
             print "taskkkkkkkkkkkkkkkkkk"
             #########
@@ -1120,7 +1120,7 @@ class CrmEngineApi(remote.Service):
                                                     kind = 'note',
                                                     indexed_edge = str(entityKey.id())
                                                     )
-             
+
             #########
             # store opporutnities of person
             deals=EndpointsHelper.highrise_import_opportunities()
