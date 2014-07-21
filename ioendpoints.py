@@ -2651,7 +2651,8 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         Organization.upgrade_to_business_version(user_from_email.organization)
         return message_types.VoidMessage()# users.upgrade api v2
-    
+     
+
     # lead reporting api
     @endpoints.method(ReportingRequest, ReportingListResponse,
                       path='reporting/leads', http_method='POST',
@@ -2666,6 +2667,7 @@ class CrmEngineApi(remote.Service):
             list_of_reports.append(report_schema)
         return ReportingListResponse(items=list_of_reports)
     
+     # lead contact api
     @endpoints.method(ReportingRequest, ReportingListResponse,
                       path='reporting/contacts', http_method='POST',
                       name='reporting.contacts')
@@ -2679,6 +2681,7 @@ class CrmEngineApi(remote.Service):
             list_of_reports.append(report_schema)
         return ReportingListResponse(items=list_of_reports)    
     
+     # account reporting api
     @endpoints.method(ReportingRequest, ReportingListResponse,
                       path='reporting/Accounts', http_method='POST',
                       name='reporting.accounts')
@@ -2692,6 +2695,7 @@ class CrmEngineApi(remote.Service):
             list_of_reports.append(report_schema)
         return ReportingListResponse(items=list_of_reports)
     
+     # task reporting api
     @endpoints.method(ReportingRequest,ReportingListResponse,
                        path='reporting/tasks',http_method='POST',
                        name='reporting.tasks' )          
@@ -2701,7 +2705,7 @@ class CrmEngineApi(remote.Service):
         for user in users:
             gid=user.google_user_id
             tasks=Task.query(Task.owner==gid).fetch()
-            report_schema=ReportingResponseSchma(user_google_id=gid,count=len(tasks))
+            report_schema=ReportingResponseSchema(user_google_id=gid,count=len(tasks))
             list_of_reports.append(report_schema)
         return ReportingListResponse(items=list_of_reports)    
 
