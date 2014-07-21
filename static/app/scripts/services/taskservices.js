@@ -253,7 +253,10 @@ Task.delete=function($scope,params){
       $scope.isLoading = true;
 
       gapi.client.crmengine.tasks.permission(params).execute(function(resp) {
-
+          if(!resp.code){
+              $scope.isLoading = false;
+            }
+            
       });
 
   };

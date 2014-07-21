@@ -77,6 +77,9 @@ eventservices.factory('Event', function($http) {
       $scope.isLoading = true;
 
       gapi.client.crmengine.events.permission(params).execute(function(resp) {
+            if(!resp.code){
+              $scope.isLoading = false;
+            }
 
       });
 
