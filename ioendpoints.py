@@ -2315,4 +2315,46 @@ class CrmEngineApi(remote.Service):
             report_schema = ReportingResponseSchema(user_google_id=gid,count=len(leads))
             list_of_reports.append(report_schema)
         return ReportingListResponse(items=list_of_reports)
+    
+    @endpoints.method(ReportingRequest, ReportingListResponse,
+                      path='reporting/contacts', http_method='POST',
+                      name='reporting.contacts')
+    def contact_reporting(self, request):
+        users=User.query().fetch()
+        list_of_reports = []
+        for user in users:
+            gid=user.google_user_id
+            contacts=Contact.query(Contact.owner==gid).fetch()
+            report_schema = ReportingResponseSchema(user_google_id=gid,count=len(contacts))
+            list_of_reports.append(report_schema)
+        return ReportingListResponse(items=list_of_reports)    
+    
+    @endpoints.method(ReportingRequest, ReportingListResponse,
+                      path='reporting/Accounts', http_method='POST',
+                      name='reporting.accounts')
+    def account_reporting(self, request):
+        users=User.query().fetch()
+        list_of_reports = []
+        for user in users:
+            gid=user.google_user_id
+            accounts=Account.query(Account.owner==gid).fetch()
+            report_schema = ReportingResponseSchema(user_google_id=gid,count=len(accounts))
+            list_of_reports.append(report_schema)
+        return ReportingListResponse(items=list_of_reports)
+    
+    @endpoints.method(ReportingRequest,ReportingListResponse,
+                       path='reporting/tasks',http_method='POST',
+                       name='reporting.tasks' )          
+    def task_reporting(self,request):
+        users=User.query().fetch()
+        list_of_reports=[]
+        for user in users:
+            gid=user.google_user_id
+            tasks=Task.query(Task.owner==gid).fetch()
+            report_schema=ReportingResponseSchma(user_google_id=gid,count=len(tasks))
+            list_of_reports.append(report_schema)
+        return ReportingListResponse(items=list_of_reports)    
+
+
+
 
