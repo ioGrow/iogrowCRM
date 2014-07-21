@@ -103,7 +103,7 @@ DISCUSSIONS = {
                             'title': 'event',
                             'url': '/#/events/show/'
                         },
-                 'Note': {
+                'Note': {
                             'title': 'discussion',
                             'url':  '/#/notes/show/'
                         }
@@ -363,6 +363,18 @@ class CalendarFeedsResult(messages.Message):
 # results 
 class CalendarFeedsResults(messages.Message):
       items=messages.MessageField(CalendarFeedsResult,1,repeated=True)
+
+
+class ReportingRequest(messages.Message):
+    user_google_id = messages.StringField(1)
+
+class ReportingResponseSchema(messages.Message):
+    user_google_id = messages.StringField(1)
+    count = messages.IntegerField(2)
+
+class ReportingListResponse(messages.Message):
+    items = messages.MessageField(ReportingResponseSchema, 1, repeated=True)
+
 
 @endpoints.api(
                name='blogengine',
@@ -2638,5 +2650,78 @@ class CrmEngineApi(remote.Service):
     def upgrade_to_business(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         Organization.upgrade_to_business_version(user_from_email.organization)
-        return message_types.VoidMessage()
+        return message_types.VoidMessage()# users.upgrade api v2
+     
+
+    # lead reporting api
+    @endpoints.method(ReportingRequest, ReportingListResponse,
+                      path='reporting/leads', http_method='POST',
+                      name='reporting.leads')
+    def lead_reporting(self, request):
+        users=User.query().fetch()
+        list_of_reports = []
+        for user in users:
+            gid=user.google_user_id
+            leads=Lead.query(Lead.owner==gid).fetch()
+            report_schema = ReportingResponseSchema(user_google_id=gid,count=len(leads))
+            list_of_reports.append(report_schema)
+        return ReportingListResponse(items=list_of_reports)
+    
+     # lead contact api
+    @endpoints.method(ReportingRequest, ReportingListResponse,
+                      path='reporting/contacts', http_method='POST',
+                      name='reporting.contacts')
+    def contact_reporting(self, request):
+        users=User.query().fetch()
+        list_of_reports = []
+        for user in users:
+            gid=user.google_user_id
+            contacts=Contact.query(Contact.owner==gid).fetch()
+            report_schema = ReportingResponseSchema(user_google_id=gid,count=len(contacts))
+            list_of_reports.append(report_schema)
+        return ReportingListResponse(items=list_of_reports)    
+    
+     # account reporting api
+    @endpoints.method(ReportingRequest, ReportingListResponse,
+                      path='reporting/Accounts', http_method='POST',
+                      name='reporting.accounts')
+    def account_reporting(self, request):
+        users=User.query().fetch()
+        list_of_reports = []
+        for user in users:
+            gid=user.google_user_id
+            accounts=Account.query(Account.owner==gid).fetch()
+            report_schema = ReportingResponseSchema(user_google_id=gid,count=len(accounts))
+            list_of_reports.append(report_schema)
+        return ReportingListResponse(items=list_of_reports)
+    
+     # task reporting api
+    @endpoints.method(ReportingRequest,ReportingListResponse,
+                       path='reporting/tasks',http_method='POST',
+                       name='reporting.tasks' )          
+    def task_reporting(self,request):
+        users=User.query().fetch()
+        list_of_reports=[]
+        for user in users:
+            gid=user.google_user_id
+            tasks=Task.query(Task.owner==gid).fetch()
+            report_schema=ReportingResponseSchema(user_google_id=gid,count=len(tasks))
+            list_of_reports.append(report_schema)
+        return ReportingListResponse(items=list_of_reports)    
+
+    # organization reporting api
+    @endpoints.method(ReportingRequest,ReportingListResponse,
+                       path='reporting/organiszations',http_method='POST',
+                       name='reporting.organizations' )          
+    def organization_reporting(self,request):
+        users=User.query().fetch()
+        list_of_reports=[]
+        for user in users:
+            gid=user.google_user_id
+            organizarions=Organization.query(Task.owner==gid).fetch()
+            report_schema=ReportingResponseSchema(user_google_id=gid,count=len(organizations))
+            list_of_reports.append(report_schema)
+        return ReportingListResponse(items=list_of_reports)      
+
+
 
