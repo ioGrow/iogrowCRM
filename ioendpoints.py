@@ -348,7 +348,7 @@ class PermissionInsertRequest(messages.Message):
 class CalendarFeedsRequest(messages.Message):
     calendar_feeds_start=messages.StringField(1)
     calendar_feeds_end=messages.StringField(2)
-# result to feed the calendar 
+# result to feed the calendar
 class CalendarFeedsResult(messages.Message):
       id=messages.StringField(1)
       title=messages.StringField(2)
@@ -360,7 +360,7 @@ class CalendarFeedsResult(messages.Message):
       my_type=messages.StringField(8)
       backgroundColor=messages.StringField(9)
 
-# results 
+# results
 class CalendarFeedsResults(messages.Message):
       items=messages.MessageField(CalendarFeedsResult,1,repeated=True)
 
@@ -2211,13 +2211,13 @@ class CrmEngineApi(remote.Service):
         return patched_model
      # this api to fetch tasks and events to feed the calendar . hadji hicham.14-07-2014
     @endpoints.method(CalendarFeedsRequest,CalendarFeedsResults,
-        path='calendar/feeds',http_method='POST',name='calendar.feeds') 
+        path='calendar/feeds',http_method='POST',name='calendar.feeds')
     def get_feeds(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         calendar_feeds_start=datetime.datetime.strptime(request.calendar_feeds_start,"%Y-%m-%dT%H:%M:00.000000")
         calendar_feeds_end=datetime.datetime.strptime(request.calendar_feeds_end,"%Y-%m-%dT%H:%M:00.000000")
 
-        # filter this table 
+        # filter this table
         events=Event.query().filter(Event.organization==user_from_email.organization,Event.starts_at>=calendar_feeds_start,Event.starts_at<=calendar_feeds_end)
         # filter this table .
         tasks=Task.query().filter(Task.organization==user_from_email.organization)
@@ -2268,7 +2268,7 @@ class CrmEngineApi(remote.Service):
                 if task.due != None:
                    taskdue=task.due.isoformat()
                 else :
-                   taskdue= task.due 
+                   taskdue= task.due
                 kwargs2 = {
                           'id' : str(task.id),
                           'entityKey':task.entityKey,
@@ -2290,3 +2290,12 @@ class CrmEngineApi(remote.Service):
         Organization.upgrade_to_business_version(user_from_email.organization)
         return message_types.VoidMessage()
 
+    # users.upgrade api v2
+    @endpoints.method(message_types.VoidMessage, message_types.VoidMessage,
+                      path='users/upgrade_early_birds', http_method='POST',
+                      name='users.upgrade_early_birds')
+    def upgrade_early_birds_to_business(self, request):
+        users = User.query(User.type=='early_bird').fetch(20)
+        for user in users:
+            Organization.upgrade_to_business_version(user.organization)
+        return message_types.VoidMessage()
