@@ -5,5 +5,4 @@ for user in users:
 	gid=user.google_user_id
 	leads=Lead.query(Lead.owner==gid).fetch()
 	res=[gid,len(leads)]
-
-	
+print res

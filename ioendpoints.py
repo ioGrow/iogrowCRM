@@ -103,7 +103,7 @@ DISCUSSIONS = {
                             'title': 'event',
                             'url': '/#/events/show/'
                         },
-                 'Note': {
+                'Note': {
                             'title': 'discussion',
                             'url':  '/#/notes/show/'
                         }
@@ -363,6 +363,18 @@ class CalendarFeedsResult(messages.Message):
 # results 
 class CalendarFeedsResults(messages.Message):
       items=messages.MessageField(CalendarFeedsResult,1,repeated=True)
+
+
+class ReportingRequest(messages.Message):
+    user_google_id = messages.StringField(1)
+
+class ReportingResponseSchema(messages.Message):
+    user_google_id = messages.StringField(1)
+    count = messages.IntegerField(2)
+
+class ReportingListResponse(messages.Message):
+    items = messages.MessageField(ReportingResponseSchema, 1, repeated=True)
+
 
 @endpoints.api(
                name='blogengine',
@@ -2288,5 +2300,19 @@ class CrmEngineApi(remote.Service):
     def upgrade_to_business(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         Organization.upgrade_to_business_version(user_from_email.organization)
-        return message_types.VoidMessage()
+        return message_types.VoidMessage()# users.upgrade api v2
+    
+    # lead reporting api
+    @endpoints.method(ReportingRequest, ReportingListResponse,
+                      path='reporting/leads', http_method='POST',
+                      name='reporting.leads')
+    def lead_reporting(self, request):
+        users=User.query().fetch()
+        list_of_reports = []
+        for user in users:
+            gid=user.google_user_id
+            leads=Lead.query(Lead.owner==gid).fetch()
+            report_schema = ReportingResponseSchema(user_google_id=gid,count=len(leads))
+            list_of_reports.append(report_schema)
+        return ReportingListResponse(items=list_of_reports)
 

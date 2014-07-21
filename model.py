@@ -3,7 +3,7 @@ from google.appengine.ext import ndb
 from google.appengine.api import memcache
 from google.appengine.api import taskqueue
 from google.appengine.api import search
-from oauth2client.appengine import CredentialsNDBPropertyu
+from oauth2client.appengine import CredentialsNDBProperty
 # Third parties
 from endpoints_proto_datastore.ndb import EndpointsModel
 # Our libraries
@@ -248,7 +248,7 @@ class Organization(ndb.Model):
         cls.init_default_values(org_key)
 
     @classmethod
-    def update_current_apps_and_tabs(cls,org_key):
+    def upgrade_to_business_version(cls,org_key):
         current_org_apps = Application.query(Application.organization==org_key).fetch()
         # delete existing apps
         for app in current_org_apps:
@@ -258,6 +258,45 @@ class Organization(ndb.Model):
         for tab in current_org_tabs:
             tab.key.delete()
 
+        created_tabs = []
+        for tab in STANDARD_TABS:
+            created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
+            tab_key = created_tab.put()
+            created_tabs.append(tab_key)
+        # create admin tabs
+        admin_tabs = []
+        for tab in ADMIN_TABS:
+            created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
+            tab_key =created_tab.put()
+            admin_tabs.append(tab_key)
+        # create standard apps
+        created_apps = []
+        sales_app = None
+        for app in STANDARD_APPS:
+            created_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=created_tabs,organization=org_key)
+            app_key = created_app.put()
+            if app['name']=='sales':
+                sales_app = app_key
+            created_apps.append(app_key)
+        # create admin app
+        app = ADMIN_APP
+        admin_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=admin_tabs,organization=org_key)
+        admin_app_key = admin_app.put()
+        profiles = Profile.query(Profile.organization==org_key).fetch()
+        created_apps.append(admin_app_key)
+        created_tabs.extend(admin_tabs)
+        for profile in profiles:
+            default_app = sales_app
+            profile.apps=created_apps
+            profile.default_app=default_app
+            profile.tabs=created_tabs
+            profile.put()
+
+        users = User.query(User.organization==org_key).fetch()
+        for user in users:
+            user_profile = user.profile.get()
+            user.init_user_config(org_key,user.profile)
+            user.set_user_active_app(user_profile.default_app)
 
 class Permission(ndb.Model):
     about_kind = ndb.StringProperty(required=True)
@@ -346,6 +385,8 @@ class User(EndpointsModel):
     app_changed = ndb.BooleanProperty(default=True)
     google_contacts_group = ndb.StringProperty()
     invited_by = ndb.KeyProperty()
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
+    updated_at = ndb.DateTimeProperty(auto_now=True)
 
 
     def put(self, **kwargs):
@@ -373,12 +414,13 @@ class User(EndpointsModel):
         else:
             memcache.add(self.email, self)
         if self.google_credentials:
-            taskqueue.add(
-                        url='/workers/createcontactsgroup',
-                        params={
-                                'email': self.email
-                                }
-                        )
+            if self.google_contacts_group is None:
+                taskqueue.add(
+                            url='/workers/createcontactsgroup',
+                            params={
+                                    'email': self.email
+                                    }
+                            )
         self.put()
     def init_early_bird_config(self,org_key,profile_key):
         profile = profile_key.get()
@@ -538,7 +580,7 @@ class Member(EndpointsModel):
       group = self.groupKey.get()
       member_info = Userinfo()
       member_info.email = member.email
-       member_info.google_user_id = member.google_user_id
+      member_info.google_user_id = member.google_user_id
       member_info.display_name = member.google_display_name
       member_info.google_public_profile_url = member.google_public_profile_url
       member_info.photo = member.google_public_profile_photo_url
@@ -634,7 +676,7 @@ class Companyprofile(EndpointsModel):
         ndb.Model.put(self, **kwargs)
         self.put_index()
 
-   def put_index(self):
+  def put_index(self):
         empty_string = lambda x: x if x else ""
         empty_date = lambda x: x if x else date(2999, 12, 31)
         title_autocomplete = ','.join(tokenize_autocomplete( self.name))
