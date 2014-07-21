@@ -1,0 +1,99 @@
+<div class="row subHeader">
+    <div class="currentApp">
+        <h2 class="page-title">
+            <!-- <img class="platform_icons" height="25" width="25" src="/static/img/admin_console.png"> -->
+            {{active_app.label}}
+        </h2>
+    </div>
+    <div class=" subHeaderContent">
+        <div class="col-md-9">
+            <h2 class="page-title">
+                <a href="/#/contacts" data-toggle="tooltip" data-placement="bottom" title="Back to contacts">
+                    <img onload="this.__gwtLastUnhandledEvent = & quot;
+                            load & quot;
+                            ;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
+                </a>
+                {{_("Contacts")}} >
+                <a editable-text="contact.firstname" onbeforesave="inlinePatch('Contact','', 'firstname',contact.entityKey,$data)">
+                    <%= contact.firstname %>
+                </a>
+                <a editable-text="contact.lastname" onbeforesave="inlinePatch('Contact','', 'lastname',contact.entityKey,$data)" >
+                    <%= contact.lastname %>
+                </a>
+            </h2>
+            <button class="btn red newAccountBtnOnscroll pull-right hidden" ng-click="save(contact)">Create</button>
+        </div>
+    </div>
+
+</div>
+<div  class="page-content">
+    <div class="loader-container row" ng-show="isLoading">
+        <div class="loader-dialog col-md-4 col-md-offset-4 ">
+            <div class="loader-content">
+                Loading...
+            </div>
+        </div>
+    </div>
+    <div class="" ng-show="immediateFailed">
+        <div class="col-md-12">
+            <h1>Sign-in Button;</h1>
+            <span id="signin">
+                <span id="myGsignin"></span>
+            </span>
+        </div>
+    </div>
+    <div class="row" >
+        <div class="col-md-9">
+            <div class="row">
+                <div class="showPage col-md-12 newActionsBtn">
+                    <span>Import from Highrise </span>
+                    <button class="btn red newAccountBtn pull-right" ng-click="import(highrise)">Import</button>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="showPage slimForm col-md-12">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                
+                                <div class="col-md-9">
+                                    <form class="form-horizontal ">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <div class="col-md-12">
+                                                        <input type="text" required id="id_key" class="form-control" ng-model="highrise.key" placeholder="Key">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <div class="col-md-12">
+                                                        <input type="text"  required id="id_server_name" class="form-control" ng-model="highrise.server_name" placeholder="Server Name">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                       
+                                    </form>
+                                </div>
+                            </div>
+                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+   
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    $(function() {
+        $('#datetimepicker2').datetimepicker({
+            language: 'fr',
+            pickTime: false
+        });
+    });
+</script>

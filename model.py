@@ -34,7 +34,8 @@ STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
 ADMIN_TABS = [
             {'name': 'Users','label': 'Users','url':'/#/admin/users','icon':'user'},
             {'name': 'Groups','label': 'Groups','url':'/#/admin/groups','icon':'group'},
-            {'name': 'Settings','label': 'Settings','url':'/#/admin/settings','icon':'cogs'}
+            {'name': 'Settings','label': 'Settings','url':'/#/admin/settings','icon':'cogs'},
+            {'name': 'Import','label': 'Import','url':'/#/admin/import','icon':'cogs'}
             ]
 ADMIN_APP = {'name': 'admin', 'label': 'Admin Console', 'url':'/#/admin/users'}
 """Iogrowlive_APP = {'name':'iogrowLive','label': 'i/oGrow Live','url':'/#/live/shows'}

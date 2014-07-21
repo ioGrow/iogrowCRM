@@ -973,6 +973,7 @@ class CrmEngineApi(remote.Service):
                       path='highrise/import_peoples', http_method='POST',
                       name='highrise.import_peoples')
     def highrise_import_peoples(self, request):
+        print "begggggggggggggggggggggggg"
         user= EndpointsHelper.require_iogrow_user()
         people=EndpointsHelper.highrise_import_peoples(request)
         for person in people:
@@ -984,11 +985,9 @@ class CrmEngineApi(remote.Service):
             #print person.__dict__, "diiiiiiiiiiiiiiiiiiiiiiii"
             if person.company_id!=0:
                 company_details=EndpointsHelper.highrise_import_company_details(person.company_id)
-                print "coooooooooooooooooo"
                 phones=list()
                 phone=iomessages.PhoneSchema(   )
                 if len(company_details.contact_data.phone_numbers)!=0:
-                    print "eeeeeeeeeeeeee"
                     phone.number=company_details.contact_data.phone_numbers[0].number
                     phone.type=str(company_details.contact_data.phone_numbers[0].location)
                 phones.append(phone)
@@ -1043,7 +1042,6 @@ class CrmEngineApi(remote.Service):
                                                     )
                 account_schema = Account.insert(user,account_request)
             #Store Persone
-            print account_schema, "ssssssssssss"
             if account_schema!="":
                 key=account_schema.entityKey
             else:
@@ -1069,7 +1067,6 @@ class CrmEngineApi(remote.Service):
                                          )
             
             contact_schema=Contact.insert(user,contact_request)
-            print "taskkkkkkkkkkkkkkkkkk"
             #########
             #store tasks of person
             tasks=EndpointsHelper.highrise_import_tasks_of_person(person.id)
@@ -1124,7 +1121,6 @@ class CrmEngineApi(remote.Service):
             #########
             # store opporutnities of person
             deals=EndpointsHelper.highrise_import_opportunities()
-            print deals[0].__dict__, "ddddddddddddddaaaaaa"
             for deal in deals:
                 company_details=EndpointsHelper.highrise_import_company_details(deal.party_id)
                 key=Account.get_key_by_name(user,company_details.name)
@@ -1143,7 +1139,6 @@ class CrmEngineApi(remote.Service):
         #############
         companys=EndpointsHelper.highrise_import_companys(request)
         for company_details in companys:
-            print company_details.__dict__, "ccccccccccccccccccz"
             phones=list()
             phone=iomessages.PhoneSchema()
             if len(company_details.contact_data.phone_numbers)!=0:
