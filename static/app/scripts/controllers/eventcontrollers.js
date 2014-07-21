@@ -323,7 +323,9 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                 if(!resp.code){
 
                                   $scope.calendarFeeds= resp.items;
+                                  console.log("i'm the one sir ") 
                                   console.log(resp.items);
+                                  console.log("i'm gonna make it ");
 
                                  if($scope.calendarFeeds){
 
@@ -332,18 +334,20 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                         var allday= ($scope.calendarFeeds[i].allday=="false") ? false :true ;
 
                                         var url=($scope.calendarFeeds[i].my_type=="event") ? '/#/events/show/' : '/#/tasks/show/' ;
-                                                  
+                                        var backgroundColor=($scope.calendarFeeds[i].status_label=="closed") ? "":$scope.calendarFeeds[i].backgroundColor;
+                                        var className=($scope.calendarFeeds[i].status_label=="closed")? "closedTask":""          
                                                 events.push({ 
                                                            id: $scope.calendarFeeds[i].id ,
                                                            title:$scope.calendarFeeds[i].title,
                                                            start:moment($scope.calendarFeeds[i].starts_at),
                                                            end: moment($scope.calendarFeeds[i].ends_at),
                                                            entityKey:$scope.calendarFeeds[i].entityKey,
-                                                           backgroundColor: $scope.calendarFeeds[i].backgroundColor,
-                                                           color:$scope.calendarFeeds[i].backgroundColor,
+                                                           backgroundColor: backgroundColor,
+                                                           color:backgroundColor,
                                                            url:url+$scope.calendarFeeds[i].id.toString(),
                                                            allDay:allday,
-                                                           my_type:$scope.calendarFeeds[i].my_type
+                                                           my_type:$scope.calendarFeeds[i].my_type,
+                                                           className:className
                                                        })
 
                                                 
@@ -480,10 +484,6 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
                                  'due':moment(event.start).format('YYYY-MM-DDTHH:mm:00.000000')             
                                   }
                               
-                          
-
-                              
-
                          Task.patch($scope,params);
 
                        }else{
@@ -503,7 +503,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
            },
       //Triggered when the user mouses over an event. hadji hicham 14-07-2014.
        eventMouseover:function( event, jsEvent, view ) { 
-               
+               console.log(jsEvent);
        },
      //Triggered when event resizing begins.
        eventResizeStart:function( event, jsEvent, ui, view ) { },

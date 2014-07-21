@@ -359,6 +359,7 @@ class CalendarFeedsResult(messages.Message):
       allday=messages.StringField(7)
       my_type=messages.StringField(8)
       backgroundColor=messages.StringField(9)
+      status_label=messages.StringField(10)
 
 # results 
 class CalendarFeedsResults(messages.Message):
@@ -2222,7 +2223,7 @@ class CrmEngineApi(remote.Service):
         # filter this table .
         tasks=Task.query().filter(Task.organization==user_from_email.organization)
 
-        #,calendar_feeds_start<=Task.due<=calendar_feeds_end
+        #, ,Task.due>=calendar_feeds_start,Task.due<=calendar_feeds_end
         feeds_results=[]
         for event in events:
             event_is_filtered = True
@@ -2263,7 +2264,7 @@ class CrmEngineApi(remote.Service):
                     else:
                         status_label = 'due in '+ str(diff.days) + ' days'
                     if task.status == 'closed':
-                        status_color = 'white'
+                        status_color = 'blue'
                         status_label = 'closed'
                 if task.due != None:
                    taskdue=task.due.isoformat()
@@ -2275,7 +2276,8 @@ class CrmEngineApi(remote.Service):
                           'title':task.title,
                           'starts_at':taskdue,
                           'my_type':"task",
-                          'backgroundColor':status_color
+                          'backgroundColor':status_color,
+                          'status_label':status_label
                 }
                 feeds_results.append(CalendarFeedsResult(**kwargs2))
 
