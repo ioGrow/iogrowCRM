@@ -219,7 +219,11 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
             self.redirect('/welcome/')
 class BlogHandler(BaseHandler,SessionEnabledHandler):
     def get(self):
-        template_values = {}
+        if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            template_values = {'user':user}
+        else:
+            template_values = {}
         template = jinja_environment.get_template('templates/blog/blog_base.html')
         self.response.out.write(template.render(template_values))
 class PublicArticlePageHandler(BaseHandler,SessionEnabledHandler):
