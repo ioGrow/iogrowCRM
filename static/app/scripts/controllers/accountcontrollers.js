@@ -1687,8 +1687,7 @@ $scope.deleteaccount = function(){
                 'bcc': email.bcc,
                 'subject': email.subject,
                 'body': email.body,
-                'about_item': $scope.account.id,
-                'about_kind': 'Account'};
+                'about':$scope.account.entityKey};
 
             Email.send($scope, params);
         };
