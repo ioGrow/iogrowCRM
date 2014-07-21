@@ -33,7 +33,6 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
             Auth.refreshToken();
      };
      $scope.$watch('event.starts_at', function(newValue, oldValue) {
-              console.log('changed');
               $scope.patchDate($scope.event.starts_at,"Start");
               $scope.showStartsCalendar=false;
 

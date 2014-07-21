@@ -289,6 +289,8 @@ class Lead(EndpointsModel):
         return  lead_schema
     @classmethod
     def list(cls,user_from_email,request):
+        if request.tags:
+            return cls.filter_by_tag(user_from_email,request)
         curs = Cursor(urlsafe=request.pageToken)
         if request.limit:
             limit = int(request.limit)
@@ -328,7 +330,6 @@ class Lead(EndpointsModel):
                     if is_filtered and Node.check_permission( user_from_email, lead ):
                         count = count + 1
                         #list of tags related to this lead
-                        edge_list = Edge.list(start_node=lead.key,kind='tags')
                         tag_list = Tag.list_by_parent(parent_key = lead.key)
                         lead_schema = LeadSchema(
                                   id = str( lead.key.id() ),
@@ -355,6 +356,38 @@ class Lead(EndpointsModel):
         else:
             next_curs_url_safe = None
         return  LeadListResponse(items = items, nextPageToken = next_curs_url_safe)
+    @classmethod
+    def filter_by_tag(cls,user_from_email,request):
+        items = []
+        tag_keys = []
+        for tag_key_str in request.tags:
+            tag_keys.append(ndb.Key(urlsafe=tag_key_str))
+        lead_keys = Edge.filter_by_set(tag_keys,'tagged_on')
+        leads = ndb.get_multi(lead_keys)
+        for lead in leads:
+            if lead is not None:
+                is_filtered = True
+                if request.owner and lead.owner!=request.owner and is_filtered:
+                    is_filtered = False
+                if request.status and lead.status!=request.status and is_filtered:
+                    is_filtered = False
+                if is_filtered and Node.check_permission( user_from_email, lead ):
+                    tag_list = Tag.list_by_parent(parent_key = lead.key)
+                    lead_schema = LeadSchema(
+                                      id = str( lead.key.id() ),
+                                      entityKey = lead.key.urlsafe(),
+                                      firstname = lead.firstname,
+                                      lastname = lead.lastname,
+                                      title = lead.title,
+                                      company = lead.company,
+                                      tags = tag_list,
+                                      profile_img_id = lead.profile_img_id,
+                                      profile_img_url = lead.profile_img_url,
+                                      created_at = lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                      updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                    )
+                    items.append(lead_schema)
+        return  LeadListResponse(items = items)
 
     @classmethod
     def search(cls,user_from_email,request):
@@ -588,6 +621,10 @@ class Lead(EndpointsModel):
                             )
             account_key = account.put_async()
             account_key_async = account_key.get_result()
+            account_id = str(account_key_async.id())
+            data = {}
+            data['id'] = account_key_async.id()
+            account.put_index(data)
             Edge.insert(
                         start_node = account_key_async,
                         end_node = contact_key_async,
@@ -597,7 +634,7 @@ class Lead(EndpointsModel):
             EndpointsHelper.update_edge_indexes(
                                             parent_key = contact_key_async,
                                             kind = 'contacts',
-                                            indexed_edge = str(account_key_async.id())
+                                            indexed_edge = account_id
                                             )
         edge_list = Edge.query(Edge.start_node == lead.key).fetch()
         for edge in edge_list:

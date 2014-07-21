@@ -55,6 +55,12 @@ INFO_NODES = {
 class ContactImportHighriseRequest(messages.Message):
     key=messages.StringField(1, required=True)
     server_name=messages.StringField(2, required=True)
+class DetailImportHighriseRequest(messages.Message):
+    key=messages.StringField(1, required=True)
+    server_name=messages.StringField(2, required=True)
+    id=messages.StringField(3, required=True)
+
+
 
 class ContactHighriseSchema(messages.Message):
     id=messages.IntegerField(1)
@@ -783,6 +789,7 @@ class Contact(EndpointsModel):
                                             )
         phone_types = {
                         'work':gdata.data.WORK_REL,
+                        'Work':gdata.data.WORK_REL,
                         'home':gdata.data.HOME_REL,
                         'mobile':gdata.data.MOBILE_REL,
                         'other':gdata.data.OTHER_REL

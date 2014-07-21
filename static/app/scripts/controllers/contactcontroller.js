@@ -949,7 +949,18 @@ $scope.listTags=function(){
           }
          }
      }
+    $scope.deleteTask = function(task){
+      
+       var params = {'entityKey':task.entityKey};
+       
+       Task.delete($scope, params);
 
+     };
+
+     // rederection after delete task . hadji hicham 08--07-2014
+      $scope.taskDeleted = function(resp){
+
+     }; 
 		 $scope.hilightTask = function(){
 				console.log('Should higll');
 				$('#task_0').effect("highlight","slow");
