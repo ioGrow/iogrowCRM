@@ -2709,6 +2709,19 @@ class CrmEngineApi(remote.Service):
             list_of_reports.append(report_schema)
         return ReportingListResponse(items=list_of_reports)    
 
+    # organization reporting api
+    @endpoints.method(ReportingRequest,ReportingListResponse,
+                       path='reporting/organiszations',http_method='POST',
+                       name='reporting.organizations' )          
+    def organization_reporting(self,request):
+        users=User.query().fetch()
+        list_of_reports=[]
+        for user in users:
+            gid=user.google_user_id
+            organizarions=Organization.query(Task.owner==gid).fetch()
+            report_schema=ReportingResponseSchema(user_google_id=gid,count=len(organizations))
+            list_of_reports.append(report_schema)
+        return ReportingListResponse(items=list_of_reports)      
 
 
 
