@@ -32,7 +32,9 @@ eventservices.factory('Event', function($http) {
             console.log('gapi #end_execute');
           });
   };
+
   Event.patch = function($scope,params){
+
       $scope.isLoading = true;
       gapi.client.crmengine.events.patch(params).execute(function(resp) {
 
@@ -70,6 +72,16 @@ eventservices.factory('Event', function($http) {
          }
       });
   };
+
+  Event.permission=function($scope,params){
+      $scope.isLoading = true;
+
+      gapi.client.crmengine.events.permission(params).execute(function(resp) {
+
+      });
+
+  };
+
   Event.list = function($scope,params){
 
 

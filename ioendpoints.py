@@ -365,6 +365,12 @@ class CalendarFeedsResult(messages.Message):
 class CalendarFeedsResults(messages.Message):
       items=messages.MessageField(CalendarFeedsResult,1,repeated=True)
 
+# hadji hicham - 21-07-2014 . permission request 
+class EventPermissionRequest(messages.Message):
+      id=messages.StringField(1)
+      access= messages.StringField(2)
+      parent=messages.StringField(3)
+
 @endpoints.api(
                name='blogengine',
                version='v1',
@@ -1290,7 +1296,7 @@ class CrmEngineApi(remote.Service):
 
         if event is None:
             raise endpoints.NotFoundException('Event not found')
-        event_patch_keys = ['title','starts_at','ends_at','description','where','allday']
+        event_patch_keys = ['title','starts_at','ends_at','description','where','allday','access']
         date_props = ['starts_at','ends_at']
         patched = False
         for prop in event_patch_keys:
@@ -2291,4 +2297,58 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         Organization.upgrade_to_business_version(user_from_email.organization)
         return message_types.VoidMessage()
+
+    # event permission
+    @endpoints.method(EventPermissionRequest, message_types.VoidMessage,
+                      path='events/permission', http_method='POST',
+                      name='events.permission')
+    def event_permission(self,request):
+         if request.parent=="contact":
+            contact_key=ndb.Key(Contact, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="events",Edge.start_node==contact_key)
+         elif request.parent=="account":
+            account_key=ndb.Key(Account, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="events",Edge.start_node==account_key)
+         elif request.parent=="case":
+            case_key=ndb.Key(Case, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="events",Edge.start_node==case_key)
+         elif request.parent=="opportunity":
+            opportunity_key=ndb.Key(Opportunity, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="events",Edge.start_node==opportunity_key)
+         elif request.parent=="lead":
+            lead_key=ndb.Key(Lead, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="events",Edge.start_node==lead_key)        
+         if edges:
+            for edge in edges :
+                event=edge.end_node.get()
+                event.access=request.access
+                event.put()
+         return message_types.VoidMessage()
+
+    # task permission
+    @endpoints.method(EventPermissionRequest, message_types.VoidMessage,
+                      path='tasks/permission', http_method='POST',
+                      name='tasks.permission')
+    def task_permission(self,request):
+         if request.parent=="contact":
+            contact_key=ndb.Key(Contact, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="tasks",Edge.start_node==contact_key)
+         elif request.parent=="account":
+            account_key=ndb.Key(Account, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="tasks",Edge.start_node==account_key)
+         elif request.parent=="case":
+            case_key=ndb.Key(Case, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="tasks",Edge.start_node==case_key)
+         elif request.parent=="opportunity":
+            opportunity_key=ndb.Key(Opportunity, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="tasks",Edge.start_node==opportunity_key)
+         elif request.parent=="lead":
+            lead_key=ndb.Key(Lead, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="tasks",Edge.start_node==lead_key)        
+         if edges:
+            for edge in edges :
+                task=edge.end_node.get()
+                task.access=request.access
+                task.put()
+         return message_types.VoidMessage()
 
