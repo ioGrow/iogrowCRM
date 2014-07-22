@@ -510,8 +510,24 @@ class Task(EndpointsModel):
         if request.assignees:
             # insert edges
             for assignee in request.assignees:
+                assignee_key = ndb.Key(urlsafe=assignee.entityKey)
+                assignee_user = assignee_key.get()
+                assignee_email = assignee_user.email
+                # add a task queue to send notification email to assignee
+                body = '<p>view details on ioGrow: <a href="http://www.iogrow.com/#/tasks/show/'+str(task_key_async.id())+'">'
+                body += request.title
+                body += '</a></p>'
+                taskqueue.add(
+                        url='/workers/send_email_notification',
+                        params={
+                                'user_email': user_from_email.email,
+                                'to': assignee_email,
+                                'subject': '[task]: '+ request.title,
+                                'body': body
+                                }
+                        )
                 Edge.insert(start_node = task_key_async,
-                      end_node = ndb.Key(urlsafe=assignee.entityKey),
+                      end_node = assignee_key,
                       kind = 'assignees',
                       inverse_edge = 'assigned_to')
         if request.tags:

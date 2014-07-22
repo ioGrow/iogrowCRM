@@ -17,6 +17,7 @@ from google.appengine.ext import ndb
 from google.appengine.api import memcache
 from google.appengine.api import taskqueue
 from google.appengine.api import urlfetch
+from google.appengine.api import mail
 from apiclient import errors
 from apiclient.discovery import build
 from apiclient.http import BatchHttpRequest
@@ -1029,6 +1030,14 @@ class SyncDocumentWithTeam(webapp2.RequestHandler):
                                         'doc_id': doc_id
                                         }
                             )
+class SendEmailNotification(webapp2.RequestHandler):
+    def post(self):
+        user_email = self.request.get('user_email')
+        to = self.request.get('to')
+        subject = self.request.get('subject')
+        body = self.request.get('body')
+        sender_address = "ioGrow notifications <notifications@gcdc2013-iogrow.appspotmail.com>"
+        mail.send_mail(sender_address, to , subject, body,reply_to=user_email)
 
 
 
@@ -1050,6 +1059,7 @@ routes = [
     ('/workers/syncdeleteevent',SyncDeleteCalendarEvent),
     ('/workers/createcontactsgroup',CreateContactsGroup),
     ('/workers/sync_contacts',SyncContact),
+    ('/workers/send_email_notification',SendEmailNotification),
     ('/workers/add_to_iogrow_leads',AddToIoGrowLeads),
 
     ('/',IndexHandler),
