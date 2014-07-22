@@ -359,10 +359,18 @@ class CalendarFeedsResult(messages.Message):
       allday=messages.StringField(7)
       my_type=messages.StringField(8)
       backgroundColor=messages.StringField(9)
+      status_label=messages.StringField(10)
 
 # results 
 class CalendarFeedsResults(messages.Message):
       items=messages.MessageField(CalendarFeedsResult,1,repeated=True)
+
+
+# hadji hicham - 21-07-2014 . permission request 
+class EventPermissionRequest(messages.Message):
+      id=messages.StringField(1)
+      access= messages.StringField(2)
+      parent=messages.StringField(3)
 
 
 class ReportingRequest(messages.Message):
@@ -374,6 +382,7 @@ class ReportingResponseSchema(messages.Message):
 
 class ReportingListResponse(messages.Message):
     items = messages.MessageField(ReportingResponseSchema, 1, repeated=True)
+
 
 
 @endpoints.api(
@@ -1651,7 +1660,7 @@ class CrmEngineApi(remote.Service):
 
         if event is None:
             raise endpoints.NotFoundException('Event not found')
-        event_patch_keys = ['title','starts_at','ends_at','description','where','allday']
+        event_patch_keys = ['title','starts_at','ends_at','description','where','allday','access']
         date_props = ['starts_at','ends_at']
         patched = False
         for prop in event_patch_keys:
@@ -2584,7 +2593,7 @@ class CrmEngineApi(remote.Service):
         # filter this table .
         tasks=Task.query().filter(Task.organization==user_from_email.organization)
 
-        #,calendar_feeds_start<=Task.due<=calendar_feeds_end
+        #, ,Task.due>=calendar_feeds_start,Task.due<=calendar_feeds_end
         feeds_results=[]
         for event in events:
             event_is_filtered = True
@@ -2625,7 +2634,7 @@ class CrmEngineApi(remote.Service):
                     else:
                         status_label = 'due in '+ str(diff.days) + ' days'
                     if task.status == 'closed':
-                        status_color = 'white'
+                        status_color = 'blue'
                         status_label = 'closed'
                 if task.due != None:
                    taskdue=task.due.isoformat()
@@ -2637,7 +2646,8 @@ class CrmEngineApi(remote.Service):
                           'title':task.title,
                           'starts_at':taskdue,
                           'my_type':"task",
-                          'backgroundColor':status_color
+                          'backgroundColor':status_color,
+                          'status_label':status_label
                 }
                 feeds_results.append(CalendarFeedsResult(**kwargs2))
 
@@ -2724,4 +2734,58 @@ class CrmEngineApi(remote.Service):
         return ReportingListResponse(items=list_of_reports)      
 
 
+
+    # event permission
+    @endpoints.method(EventPermissionRequest, message_types.VoidMessage,
+                      path='events/permission', http_method='POST',
+                      name='events.permission')
+    def event_permission(self,request):
+         if request.parent=="contact":
+            contact_key=ndb.Key(Contact, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="events",Edge.start_node==contact_key)
+         elif request.parent=="account":
+            account_key=ndb.Key(Account, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="events",Edge.start_node==account_key)
+         elif request.parent=="case":
+            case_key=ndb.Key(Case, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="events",Edge.start_node==case_key)
+         elif request.parent=="opportunity":
+            opportunity_key=ndb.Key(Opportunity, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="events",Edge.start_node==opportunity_key)
+         elif request.parent=="lead":
+            lead_key=ndb.Key(Lead, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="events",Edge.start_node==lead_key)        
+         if edges:
+            for edge in edges :
+                event=edge.end_node.get()
+                event.access=request.access
+                event.put()
+         return message_types.VoidMessage()
+
+    # task permission
+    @endpoints.method(EventPermissionRequest, message_types.VoidMessage,
+                      path='tasks/permission', http_method='POST',
+                      name='tasks.permission')
+    def task_permission(self,request):
+         if request.parent=="contact":
+            contact_key=ndb.Key(Contact, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="tasks",Edge.start_node==contact_key)
+         elif request.parent=="account":
+            account_key=ndb.Key(Account, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="tasks",Edge.start_node==account_key)
+         elif request.parent=="case":
+            case_key=ndb.Key(Case, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="tasks",Edge.start_node==case_key)
+         elif request.parent=="opportunity":
+            opportunity_key=ndb.Key(Opportunity, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="tasks",Edge.start_node==opportunity_key)
+         elif request.parent=="lead":
+            lead_key=ndb.Key(Lead, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="tasks",Edge.start_node==lead_key)        
+         if edges:
+            for edge in edges :
+                task=edge.end_node.get()
+                task.access=request.access
+                task.put()
+         return message_types.VoidMessage()
 

@@ -15,7 +15,7 @@ from model import Userinfo
 from iograph import Edge
 from iomodels.crmengine.tags import Tag,TagSchema
 import pprint
-
+from protorpc import message_types
 import model
 
 # The message class that defines the EntityKey schema
@@ -89,6 +89,7 @@ class EventFetchResult(messages.Message):
 
 class EventFetchResults(messages.Message):
       items=messages.MessageField(EventFetchResult,1,repeated=True)
+
 
 class Event(EndpointsModel):
 
@@ -442,5 +443,19 @@ class Event(EndpointsModel):
             }
             event_results.append(EventFetchResult(**kwargs))
         return EventFetchResults(items=event_results)
+
+    # @classmethod
+    # def permission(cls,request):
+    #      if request.parent=="contact":
+    #         contact_key=ndb.Key(Contact, int(request.id))
+    #         edges=Edge.query().filter(Edge.kind=="events",Edge.start_node==request.id)
+    #      if edges:
+    #         for edge in edges :
+    #             print "-**-*-*-*-*-*over here -*-*-*-*-*-*-*-*-*"
+    #             print edge
+    #             print "*-*-*-*-*-*-*done *-*-*-*-*-*-*-*-*-*-*-*"
+
+    #      return message_types.VoidMessage()       
+
 
 

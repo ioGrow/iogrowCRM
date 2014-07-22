@@ -551,6 +551,9 @@ class Task(EndpointsModel):
                     )
 
         elif request.due and task.due != None:
+            print "----------------------"
+            print "i'm the one ! "
+            print "-----------------------"
             taskqueue.add(
                     url='/workers/syncpatchtask',
                     params={
