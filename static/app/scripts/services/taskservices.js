@@ -137,8 +137,6 @@ topicservices.factory('Task', function($http) {
   };
    Task.insert = function($scope,params){
       $scope.isLoading = true;
-      console.log('***************************task params');
-      console.log(params);
 
       gapi.client.crmengine.tasks.insertv2(params).execute(function(resp) {
 
@@ -207,8 +205,7 @@ Task.delete=function($scope,params){
 
 };
    Task.listMore = function($scope,params){
-   $scope.isMoreItemLoading = true;
-   $( window ).trigger( "resize" );
+   $scope.isLoading = true;
    $scope.$apply();
     gapi.client.crmengine.tasks.listv2(params).execute(function(resp) {
 
@@ -232,25 +229,37 @@ Task.delete=function($scope,params){
                 $scope.taskpagination.next = false;
                }
                // Call the method $apply to make the update on the scope
-               $scope.isMoreItemLoading = false;
+               $scope.isLoading = false;
                $scope.$apply();
 
 
             }else {
               if(resp.code==401){
               $scope.refreshToken();
-              $scope.isMoreItemLoading = false;
+              $scope.isLoading = false;
               $scope.$apply();
              };
             }
             console.log('gapi #end_execute');
       });
-     $scope.isMoreItemLoading=false;
+     $scope.isLoading=false;
 
 
 
 
 };
+
+  Task.permission=function($scope,params){
+      $scope.isLoading = true;
+
+      gapi.client.crmengine.tasks.permission(params).execute(function(resp) {
+          if(!resp.code){
+              $scope.isLoading = false;
+            }
+
+      });
+
+  };
 
 
 
@@ -430,8 +439,6 @@ topicservices.factory('Contributor', function($http) {
      $scope.isLoading=false;
 
   };
-
-
 
 
 return Contributor;

@@ -705,6 +705,11 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
                         'access':$scope.casee.access
                       };
            Case.patch($scope,params);
+               // who is the parent of this event .hadji hicham 21-07-2014.
+                  
+                params["parent"]="case";
+                Event.permission($scope,params);
+                Task.permission($scope,params);
         });
 
         $('#sharingSettingsModal').modal('hide');

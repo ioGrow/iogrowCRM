@@ -1,3 +1,4 @@
+
 app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact','Tag','Edge',
 		function($scope,$filter,Auth,Account,Contact,Tag,Edge) {
 				$("ul.page-sidebar-menu li").removeClass("active");
@@ -698,17 +699,24 @@ $scope.listTags=function(){
 
      };
       $scope.share = function(slected_memeber){
+
+
+
         console.log('permissions.insert share');
         console.log(slected_memeber);
         console.log("ssssssssss");
         console.log($scope.contact.id);
+      
+
+
         $scope.$watch($scope.contact.access, function() {
          var body = {'access':$scope.contact.access};
          var id = $scope.contact.id;
          var params ={'id':id,
                       'access':$scope.contact.access}
-         Contact.patch($scope,params);
+            Contact.patch($scope,params);
         });
+
         $('#sharingSettingsModal').modal('hide');
 
         if ($scope.sharing_with.length>0){
@@ -775,15 +783,28 @@ $scope.listTags=function(){
 					Contact.get($scope,contactid);
 
 		 };
-			$scope.share = function(slected_memeber){
+
+	$scope.share = function(slected_memeber){
+
+
+				 
+
 				console.log('permissions.insert share');
 				console.log(slected_memeber);
+
 				$scope.$watch($scope.contact.access, function() {
+
 				 var body = {'access':$scope.contact.access};
 				 var id = $scope.contact.id;
 				 var params ={'id':id,
 											'access':$scope.contact.access}
-				 Contact.patch($scope,params);
+				  Contact.patch($scope,params);
+                  // who is the parent of this event .hadji hicham 21-07-2014.
+
+				  params["parent"]="contact";
+				  Event.permission($scope,params);
+				  Task.permission($scope,params);
+
 				});
 				$('#sharingSettingsModal').modal('hide');
 
@@ -804,7 +825,7 @@ $scope.listTags=function(){
 														'about': $scope.contact.entityKey,
 														'items': items
 							}
-							Permission.insert($scope,params);
+							 Permission.insert($scope,params);
 					}
 
 

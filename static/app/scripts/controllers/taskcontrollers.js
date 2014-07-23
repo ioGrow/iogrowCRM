@@ -684,7 +684,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           $('#beforecloseTask').modal('show');
          };
       $scope.closeTask = function(){
-        console.log($scope.selected_tasks);
+       
         angular.forEach($scope.selected_tasks, function(selected_task){
            if (selected_task.status=='open'||selected_task.status=='pending') {
             console.log("woooork");
@@ -1056,6 +1056,32 @@ $scope.addTags=function(){
       $('#assigneeTagsToTask').modal('hide');
 
      };
+ // ask before delete task hadji hicham . 08-07-2014 .
+       $scope.editbeforedelete = function(){
+     $('#BeforedeleteTask').modal('show');
+   };
+
+   $scope.deleteTaskonList= function(){
+      
+     var params = {'entityKey':$scope.selected_tasks.entityKey};
+
+       angular.forEach($scope.selected_tasks, function(selected_task){
+           
+           
+              params = {'entityKey':selected_task.entityKey,
+            
+            };
+             Task.delete($scope, params); 
+          
+        });
+     
+    
+      $('#BeforedeleteTask').modal('hide');
+
+
+
+     };
+
  //HKA 19.06.2014 Detache tag on contact list
      $scope.dropOutTag=function(){
 
