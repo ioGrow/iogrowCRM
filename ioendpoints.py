@@ -2413,6 +2413,30 @@ class CrmEngineApi(remote.Service):
                                 user_from_email = user_from_email,
                                 request = request
                             )
+    # tags patch api . hadji hicham 22-07-2014.
+    @endpoints.method(iomessages.PatchTagSchema,message_types.VoidMessage,
+                      path='tags/patch', http_method='POST',
+                      name='tags.patch')
+    def patch_tag(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        tag_key = ndb.Key(urlsafe = request.entityKey)
+        tag = tag_key.get()
+
+        if tag is None:
+            raise endpoints.NotFoundException('Tag not found')
+        tag_patch_keys = ['name']
+        patched = False
+        for prop in tag_patch_keys:
+            new_value = getattr(request,prop)
+            if new_value:
+                setattr(tag,prop,new_value)
+                patched = True
+            tag.put()
+        print "*****************************"
+        print tag
+        print  "****************************"
+        return message_types.VoidMessage()
+
     # tags.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
                       path='tags', http_method='DELETE',
