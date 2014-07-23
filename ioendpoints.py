@@ -65,6 +65,7 @@ from model import Companyprofile
 from model import Invitation
 from search_helper import SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
+from operator import itemgetter, attrgetter
 import iomessages
 
 # The ID of javascript client authorized to access to our api
@@ -103,7 +104,7 @@ DISCUSSIONS = {
                             'title': 'event',
                             'url': '/#/events/show/'
                         },
-                 'Note': {
+                'Note': {
                             'title': 'discussion',
                             'url':  '/#/notes/show/'
                         }
@@ -359,10 +360,33 @@ class CalendarFeedsResult(messages.Message):
       allday=messages.StringField(7)
       my_type=messages.StringField(8)
       backgroundColor=messages.StringField(9)
+      status_label=messages.StringField(10)
 
 # results 
 class CalendarFeedsResults(messages.Message):
       items=messages.MessageField(CalendarFeedsResult,1,repeated=True)
+
+
+# hadji hicham - 21-07-2014 . permission request 
+class EventPermissionRequest(messages.Message):
+      id=messages.StringField(1)
+      access= messages.StringField(2)
+      parent=messages.StringField(3)
+
+
+class ReportingRequest(messages.Message):
+    user_google_id = messages.StringField(1)
+
+
+
+class ReportingResponseSchema(messages.Message):
+    user_google_id = messages.StringField(1)
+    count = messages.IntegerField(2)
+
+class ReportingListResponse(messages.Message):
+    items = messages.MessageField(ReportingResponseSchema, 1, repeated=True)
+
+
 
 @endpoints.api(
                name='blogengine',
@@ -1641,7 +1665,7 @@ class CrmEngineApi(remote.Service):
 
         if event is None:
             raise endpoints.NotFoundException('Event not found')
-        event_patch_keys = ['title','starts_at','ends_at','description','where','allday']
+        event_patch_keys = ['title','starts_at','ends_at','description','where','allday','access']
         date_props = ['starts_at','ends_at']
         patched = False
         for prop in event_patch_keys:
@@ -2574,7 +2598,7 @@ class CrmEngineApi(remote.Service):
         # filter this table .
         tasks=Task.query().filter(Task.organization==user_from_email.organization)
 
-        #,calendar_feeds_start<=Task.due<=calendar_feeds_end
+        #, ,Task.due>=calendar_feeds_start,Task.due<=calendar_feeds_end
         feeds_results=[]
         for event in events:
             event_is_filtered = True
@@ -2615,7 +2639,7 @@ class CrmEngineApi(remote.Service):
                     else:
                         status_label = 'due in '+ str(diff.days) + ' days'
                     if task.status == 'closed':
-                        status_color = 'white'
+                        status_color = 'blue'
                         status_label = 'closed'
                 if task.due != None:
                    taskdue=task.due.isoformat()
@@ -2627,7 +2651,8 @@ class CrmEngineApi(remote.Service):
                           'title':task.title,
                           'starts_at':taskdue,
                           'my_type':"task",
-                          'backgroundColor':status_color
+                          'backgroundColor':status_color,
+                          'status_label':status_label
                 }
                 feeds_results.append(CalendarFeedsResult(**kwargs2))
 
@@ -2640,5 +2665,143 @@ class CrmEngineApi(remote.Service):
     def upgrade_to_business(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         Organization.upgrade_to_business_version(user_from_email.organization)
-        return message_types.VoidMessage()
+        return message_types.VoidMessage()# users.upgrade api v2
+     
+
+    # lead reporting api
+    @endpoints.method(ReportingRequest, ReportingListResponse,
+                      path='reporting/leads', http_method='POST',
+                      name='reporting.leads')
+    def lead_reporting(self, request):
+        users=User.query().fetch()
+        list_of_reports = []
+        for user in users:
+            gid=user.google_user_id
+            leads=Lead.query(Lead.owner==gid).fetch()
+            list_of_reports.append((gid,len(leads)))
+        
+        list_of_reports.sort(key=itemgetter(1),reverse=True)
+        reporting = []
+        for item in list_of_reports:
+            item_schema = ReportingResponseSchema(user_google_id=item[0],count=item[1])
+            reporting.append(item_schema)
+        return ReportingListResponse(items=reporting)
+    
+    
+     # lead contact api
+    @endpoints.method(ReportingRequest, ReportingListResponse,
+                      path='reporting/contacts', http_method='POST',
+                      name='reporting.contacts')
+    def contact_reporting(self, request):
+        users=User.query().fetch()
+        list_of_reports=[]
+        for user in users:
+            gid=user.google_user_id
+            contacts=Contact.query(Contact.owner==gid).fetch()
+            list_of_reports.append((gid,len(contacts)))
+        
+           
+        list_of_reports.sort(key=itemgetter(1),reverse=True)
+        reporting = []
+        for item in list_of_reports:
+            item_schema = ReportingResponseSchema(user_google_id=item[0],count=item[1])
+            reporting.append(item_schema)
+        return ReportingListResponse(items=reporting)
+    
+
+     # account reporting api
+    @endpoints.method(ReportingRequest, ReportingListResponse,
+                      path='reporting/Accounts', http_method='POST',
+                      name='reporting.accounts')
+    def account_reporting(self, request):
+        users=User.query().fetch()
+        list_of_reports = []
+        for user in users:
+            gid=user.google_user_id
+            accounts=Account.query(Account.owner==gid).fetch()
+            list_of_reports.append((gid,len(accounts)))
+
+        list_of_reports.sort(key=itemgetter(1),reverse=True)
+        reporting = []
+        for item in list_of_reports:
+            item_schema = ReportingResponseSchema(user_google_id=item[0],count=item[1])
+            reporting.append(item_schema)
+        return ReportingListResponse(items=reporting)
+    
+     # task reporting api
+    @endpoints.method(ReportingRequest,ReportingListResponse,
+                       path='reporting/tasks',http_method='POST',
+                       name='reporting.tasks' )          
+    def task_reporting(self,request):
+        users=User.query().fetch()
+        list_of_reports=[]
+        for user in users:
+            gid=user.google_user_id
+            tasks=Task.query(Task.owner==gid).fetch()
+            list_of_reports.append((gid,len(tasks)))
+            
+        list_of_reports.sort(key=itemgetter(1),reverse=True)    
+        reporting = []
+        for item in list_of_reports:
+            item_schema = ReportingResponseSchema(user_google_id=item[0],count=item[1])
+            reporting.append(item_schema)
+        return ReportingListResponse(items=reporting)   
+
+      
+
+
+
+    # event permission
+    @endpoints.method(EventPermissionRequest, message_types.VoidMessage,
+                      path='events/permission', http_method='POST',
+                      name='events.permission')
+    def event_permission(self,request):
+         if request.parent=="contact":
+            contact_key=ndb.Key(Contact, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="events",Edge.start_node==contact_key)
+         elif request.parent=="account":
+            account_key=ndb.Key(Account, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="events",Edge.start_node==account_key)
+         elif request.parent=="case":
+            case_key=ndb.Key(Case, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="events",Edge.start_node==case_key)
+         elif request.parent=="opportunity":
+            opportunity_key=ndb.Key(Opportunity, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="events",Edge.start_node==opportunity_key)
+         elif request.parent=="lead":
+            lead_key=ndb.Key(Lead, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="events",Edge.start_node==lead_key)        
+         if edges:
+            for edge in edges :
+                event=edge.end_node.get()
+                event.access=request.access
+                event.put()
+         return message_types.VoidMessage()
+
+    # task permission
+    @endpoints.method(EventPermissionRequest, message_types.VoidMessage,
+                      path='tasks/permission', http_method='POST',
+                      name='tasks.permission')
+    def task_permission(self,request):
+         if request.parent=="contact":
+            contact_key=ndb.Key(Contact, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="tasks",Edge.start_node==contact_key)
+         elif request.parent=="account":
+            account_key=ndb.Key(Account, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="tasks",Edge.start_node==account_key)
+         elif request.parent=="case":
+            case_key=ndb.Key(Case, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="tasks",Edge.start_node==case_key)
+         elif request.parent=="opportunity":
+            opportunity_key=ndb.Key(Opportunity, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="tasks",Edge.start_node==opportunity_key)
+         elif request.parent=="lead":
+            lead_key=ndb.Key(Lead, int(request.id))
+            edges=Edge.query().filter(Edge.kind=="tasks",Edge.start_node==lead_key)        
+         if edges:
+            for edge in edges :
+                task=edge.end_node.get()
+                task.access=request.access
+                task.put()
+         return message_types.VoidMessage()
 
