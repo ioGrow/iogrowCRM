@@ -6,7 +6,7 @@ from google.appengine.api import search
 from endpoints_proto_datastore.ndb import EndpointsModel
 from protorpc import messages
 from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
-from endpoints_helper import EndpointsHelper,scor_new_lead
+from endpoints_helper import EndpointsHelper
 from iomodels.crmengine.tags import Tag,TagSchema
 from iomodels.crmengine.tasks import Task,TaskRequest,TaskListResponse
 from iomodels.crmengine.events import Event,EventListResponse
