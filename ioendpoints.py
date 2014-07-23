@@ -1173,15 +1173,14 @@ class CrmEngineApi(remote.Service):
                 entityKey_async = note.put_async()
                 entityKey = entityKey_async.get_result()
                 Edge.insert(
-                            start_node = contact_schema.entityKey,
+                            start_node = ndb.Key(urlsafe=contact_schema.entityKey),
                             end_node = entityKey,
-                            kind = 'note',
+                            kind = 'topics',
                             inverse_edge = 'parents'
                         )
-                print contact_schema, "essss"
                 EndpointsHelper.update_edge_indexes(
                                                     parent_key = ndb.Key(urlsafe=contact_schema.entityKey),
-                                                    kind = 'note',
+                                                    kind = 'topics',
                                                     indexed_edge = str(entityKey.id())
                                                     )
              

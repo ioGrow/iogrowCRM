@@ -85,7 +85,6 @@ class Edge(ndb.Expando):
     @classmethod
     def insert(cls, start_node,end_node,kind,inverse_edge=None):
         # check if the edge is in the available edge list
-        print start_node, end_node, kind, inverse_edge, "prooooooooooooooooooppe"
         if kind in INVERSED_EDGES.keys():
             existing_edge = cls.query(cls.start_node==start_node, cls.end_node == end_node, cls.kind==kind).get()
             if existing_edge:
@@ -105,7 +104,6 @@ class Edge(ndb.Expando):
                         end_node = end_node
                         )
             edge_key = edge.put()
-            print edge_key, "edddddddddddddddddddddddddddddge"
             mem_key = start_node.urlsafe()+'_'+kind
             memcache.delete(mem_key)
             return edge_key
