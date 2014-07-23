@@ -35,11 +35,11 @@ class linked_in():
         # User-Agent (this is cheating, ok?)
         br.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
         self.browser=br
-    def open_url(self,url,name):
-        r=self.browser.open(url)
+    def open_url(self,firstname,lastname):
+        r=self.browser.open('http://www.google.com')
         self.browser.response().read()
         self.browser.select_form(nr=1)
-        self.browser.form['q']=name
+        self.browser.form['q']=firstname +' '+lastname
         self.browser.submit()
         self.browser.response().read()
         link= self.browser.links(url_regex="linkedin")
@@ -48,47 +48,48 @@ class linked_in():
     def get_profile_header(self,soup,person):
         # ***************************head***************************
         member_head=soup.find('div',{'id':'member-1'})
-        full_name=member_head.find('span',{'class':'full-name'})
-        given_name=full_name.find('span',{'class':'given-name'})
-        family_name=full_name.find('span',{'class':'family-name'})
-        person["firstname"]=given_name.text
-        person["lastname"]=family_name.text
-        # *******************************************************
-        industry=member_head.find('dd',{'class':'industry'})
-        if industry: person["industry"]=industry.text
-        else : person["industry"]=''
-        # ******************************************************
-        locality=member_head.find('span',{'class':'locality'})
-        if locality: person['locality']=locality.text
-        else : person['locality']=''
-        # ----------------------------------------------------
-        headline=member_head.find('p',{'class':'headline-title title'})
-        if headline:person['headline']=headline.text
-        else : person['headline']=''
-        #**********************************************************
+        if member_head:
+            full_name=member_head.find('span',{'class':'full-name'})
+            given_name=full_name.find('span',{'class':'given-name'})
+            family_name=full_name.find('span',{'class':'family-name'})
+            person["firstname"]=given_name.text
+            person["lastname"]=family_name.text
+            # *******************************************************
+            industry=member_head.find('dd',{'class':'industry'})
+            if industry: person["industry"]=industry.text
+            else : person["industry"]=''
+            # ******************************************************
+            locality=member_head.find('span',{'class':'locality'})
+            if locality: person['locality']=locality.text
+            else : person['locality']=''
+            # ----------------------------------------------------
+            headline=member_head.find('p',{'class':'headline-title title'})
+            if headline:person['headline']=headline.text
+            else : person['headline']=''
+            #**********************************************************
 
-        overview=soup.find('dl',{'id':'overview'})
-        current_post=overview.find('dd',{'class':'summary-current'})
-        # ---------------------------------------------------------
-        tab=[]
-        if current_post:
-            for post in current_post.findAll('li'):
-                tab.append(post.text.replace('\n',' '))
-        person['current_post']=tab
-        # ------------------------------------------------------------
-        tab=[]
-        past_post=overview.find('dd',{'class':'summary-past'})
-        if past_post:
-            for post in past_post.findAll('li'):
-                tab.append(post.text.replace('\n',' '))
-        person['past_post']=tab
-        # ------------------------------------------------------------
-        tab=[]
-        formation=overview.find('dd',{'class':'summary-education'})
-        if formation:
-            for post in formation.findAll('li'):
-                tab.append(post.text.replace('\n',' '))
-        person['formations']=tab
+            overview=soup.find('dl',{'id':'overview'})
+            current_post=overview.find('dd',{'class':'summary-current'})
+            # ---------------------------------------------------------
+            tab=[]
+            if current_post:
+                for post in current_post.findAll('li'):
+                    tab.append(post.text.replace('\n',' '))
+            person['current_post']=tab
+            # ------------------------------------------------------------
+            tab=[]
+            past_post=overview.find('dd',{'class':'summary-past'})
+            if past_post:
+                for post in past_post.findAll('li'):
+                    tab.append(post.text.replace('\n',' '))
+            person['past_post']=tab
+            # ------------------------------------------------------------
+            tab=[]
+            formation=overview.find('dd',{'class':'summary-education'})
+            if formation:
+                for post in formation.findAll('li'):
+                    tab.append(post.text.replace('\n',' '))
+            person['formations']=tab
         # -------------------------------------------------------------
         tab=[]
         formation=overview.find('dd',{'class':'websites'})
@@ -207,8 +208,8 @@ class linked_in():
                                     headline = pro.headline,
                                     current_post = pro.current_post,
                                     past_post=pro.past_post,
-                                    formations=pro.formations,
-                                    websites=pro.websites,
+                                    # formations=pro.formations,
+                                    # websites=pro.websites,
                                     relation=pro.relation,
                                     experiences=pro.experiences,
                                     resume=pro.resume,

@@ -147,6 +147,25 @@ leadservices.factory('Lead', function($http) {
             }
             console.log('gapi #end_execute');
           });
+  }; 
+  Lead.get_linkedin= function($scope,params) {
+          $scope.isLoading = true;
+          $scope.$apply();
+          gapi.client.crmengine.people.getLinkedin(params).execute(function(resp) {
+            if(!resp.code){
+             $scope.linkedinProfile=resp
+              console.log(resp);
+            }else {
+               if(resp.code==401){
+                // $scope.refreshToken();
+               
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
+          $scope.isLoading = false;
   };
   Lead.patch = function($scope,params) {
           console.log('in leads.patch service');

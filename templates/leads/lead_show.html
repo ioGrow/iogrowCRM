@@ -141,6 +141,9 @@
                                     <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 7}">
                                         <a ng-click="waterfallTrigger(); selectedTab = 7;">Attach Documents</a>
                                     </li>
+                                    <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 9}">
+                                        <a ng-click="waterfallTrigger(); selectedTab = 9;getLinkedinProfile();">LinkedIn</a>
+                                    </li>
                                     <!-- <li class="ng-tab md-menu" ng-class="{active: selectedTab == 4}">
                                       <a ng-click="selectedTab = 4;">Needs</a>
                                     </li> -->
@@ -157,10 +160,11 @@
                                         <ul class="dropdown-menu" role="menu">
                                             <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 8}"><a ng-click="selectedTab = 8;">Send an Email</a></li>
                                             <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">Contacts</a></li>
-                                            <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 7}"><a ng-click="selectedTab = 7;">Attach Documents</a>
-                                            <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">Needs</a></li>
+                                            <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 7}"><a ng-click="selectedTab = 7;">Attach Documents</a></li>
+                                            <!-- <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">Needs</a></li>
                                             <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">Opportunities</a></li>
-                                            <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 6}"><a ng-click="selectedTab = 6;">Cases</a></li>
+                                            <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 6}"><a ng-click="selectedTab = 6;">Cases</a></li> -->
+                                            <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 7}"><a ng-click="selectedTab = 9;">LinkedIn</a></li>
                                         </ul>
                                     </li>
                                 </ul>
@@ -642,6 +646,158 @@
                                                         <input   ng-click="sendEmail(email)" ng-disabled="isLoading || !email.to" type="submit" class="btn green" value="Send">
                                                     </div>
                                                 </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- $ linkedin profile -->
+                                <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 9">
+                                    <div class="row slimform">
+                                        <div class="col-md-6">
+                                            <div class="news-blocks blank-card blank-card-yellow newsCard">
+                                                <h3>Lead Informations</h3>
+                                                <div class="news-block-tags">
+                                                    <strong>First name</strong>
+                                                </div>
+                                                <ul class="list-unstyled contact-infos">
+                                                
+                                                    <li>
+                                                        <%=linkedinProfile.firstname%>
+                                                    </li>
+                                    
+
+                                                </ul>
+                                                <div class="news-block-tags">
+                                                    <strong>Last Name</strong>
+                                                </div>
+                                                <ul class="list-unstyled contact-infos">
+                                                    <li>
+                                                        <%=linkedinProfile.lastname%>
+                                                    </li>
+                                                </ul>
+                                                <div class="news-block-tags">
+                                                    <strong>profission</strong>
+                                                </div>
+                                                <ul class="list-unstyled contact-infos">
+                                                    <li>
+                                                        <%=linkedinProfile.headline%>
+                                                    </li>
+                                                </ul> 
+                                                <div class="news-block-tags">
+                                                    <strong>Locality</strong>
+                                                </div>
+                                                <ul class="list-unstyled contact-infos">
+                                                    <li>
+                                                        <%=linkedinProfile.locality%>
+                                                    </li>
+                                                </ul>
+                                                <div class="news-block-tags">
+                                                    <strong>industry</strong>
+                                                </div>
+                                                  <ul class="list-unstyled contact-infos">
+                                                    <li>
+                                                        <%=linkedinProfile.industry%>
+                                                    </li>
+                                                </ul>
+                    
+                                            </div>
+                                            <div class="news-blocks blank-card blank-card-bluep newsCard">
+                                                <h3>Overview</h3>
+                                                <div class="news-block-tags">
+                                                    <strong>Current position</strong>
+                                                </div>
+                                                <ul class="list-unstyled contact-infos">
+                                                    <li ng-repeat="post in linkedinProfile.current_post">
+                                                      - <%=post%>   
+                                                    </li>
+                                                </ul> 
+                                                <div class="news-block-tags">
+                                                    <strong>Past position</strong>
+                                                </div>
+                                                <ul class="list-unstyled contact-infos">
+                                                    <li ng-repeat="post in linkedinProfile.past_post">
+                                                      - <%=post%>   
+                                                    </li>
+                                                </ul>
+                                                <div class="news-block-tags">
+                                                    <strong>Social Links</strong>
+                                                </div>
+                                                <ul class="list-unstyled contact-infos">
+                                                    <li ng-show="showSociallinkForm">
+                                                        <div class="row">
+                                                            <form class="form-inline newLeadForm" role="form">
+                                                                <div class="form-group lg-group" style="">
+                                                                    <label class="sr-only" for="exampleInputEmail2">Social link</label>
+                                                                    <input type="url" class="form-control" id="exampleInputEmail2" ng-model='sociallink.url' placeholder="Enter a social link">
+                                                                </div>
+                                                                <button ng-click="addSocial(sociallink)" type="submit" class="btn blue jfk-button jfk-button-action">Add</button>
+                                                                <button type="submit" ng-click="showSociallinkForm = false" class="btn btn-default">X</button>
+                                                            </form>
+                                                        </div>
+                                                    </li>
+                                                    <li ng-repeat="sociallink in infonodes.sociallinks"><a editable-text="sociallink.url" onbeforesave="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,$data)" href="<%=sociallink.url%>" target="_blank" editoptions editdataattr="deleteInfonode('<%=sociallink.entityKey%>','sociallinks')"> <%=sociallink.url%> </a></li>
+                                                    <li>
+                                                        <a class="btn-link addAnotherPhone" ng-hide="showSociallinkForm" ng-click="showSociallinkForm = true"><i class="icon-plus"></i> Add a new social links </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="news-blocks blank-card blank-card-yellow newsCard">
+                                                <h3>Custom Fields</h3>
+                                                <ul class="list-unstyled contact-infos">
+                                                    <li ng-show="showCustomFieldForm">
+                                                        <div class="row">
+                                                            <form class="form-inline newLeadForm" role="form">
+                                                                <div class="form-group sm-group" style="">
+                                                                    <label class="sr-only" for="exampleInputEmail2">Field</label>
+                                                                    <input
+                                                                        type="text"
+                                                                        class="form-control"
+                                                                        id="exampleInputEmail2"
+                                                                        ng-model="customfield.field" placeholder="Enter field name" required>
+                                                                </div>
+                                                                <div class="form-group sm-group" style="">
+                                                                    <label class="sr-only" for="exampleInputEmail2">Value</label>
+                                                                    <input
+                                                                        type="text"
+                                                                        class="form-control"
+                                                                        id="exampleInputEmail2"
+                                                                        ng-model="customfield.value" placeholder="Enter a value" required>
+                                                                </div>
+                                                                <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="addCustomField(customfield)">Add</button>
+                                                                <button type="submit" class="btn btn-default" ng-click="showCustomFieldForm = false">X</button>
+                                                            </form>
+                                                        </div>
+                                                    </li>
+                                                    <li ng-repeat="custom in infonodes.customfields">
+                                                        <span editoptions editdataattr="deleteInfonode('<%=custom.entityKey%>','customfields')"   >
+                                                            <%= custom.fields[0].field%>  :
+                                                        </span>
+
+                                                        <span editable-text="custom.fields[0].value" onbeforesave="inlinePatch('Infonode','customfields', '<%= custom.fields[0].field%>',custom.entityKey,$data)" >   <%= custom.fields[0].value%>
+                                                        </span>
+
+                                                    </li>
+                                                    <li>
+                                                        <a ng-click="showCustomFieldForm = true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new custom field </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="right-col">
+                                                <div class="news-blocks blank-card blank-card-red newsCard">
+                                                    <h3>Summary</h3>
+                                                    <div class="news-block-tags">
+
+                                                        <div class="form-group row">
+                                                            <label style="margin:10px;"><%=linkedinProfile.resume%></label>
+                                                          
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="news-blocks blank-card blank-card-yellow newsCard">
+                                                    <div id="gmap_canvas" style="width:100%;height:300px;"></div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

@@ -943,7 +943,7 @@ class GetFromLinkedinToIoGrow(webapp2.RequestHandler):
         print "######################################################################################"
         fullname= lead.firstname+" "+lead.lastname
         print fullname
-        profil=linkedin.scrape_linkedin('http://www.google.com', fullname)
+        profil=linkedin.scrape_linkedin(lead.firstname,lead.lastname)
         if profil:
             node=Node(kind='linkedin_profile')
             node.websites=profil["websites"] or None

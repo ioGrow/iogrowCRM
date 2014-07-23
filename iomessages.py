@@ -77,7 +77,7 @@ class profileSchema(messages.Message):
     headline = messages.StringField(5)
     current_post = messages.StringField(6,repeated=True)
     past_post=messages.StringField(7,repeated=True)
-    formation=messages.StringField(8,repeated=True)
+    formations=messages.StringField(8,repeated=True)
     websites=messages.StringField(9,repeated=True)
     relation=messages.StringField(10)
     experiences=messages.StringField(11)
