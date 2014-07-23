@@ -11,12 +11,14 @@ accountservices.factory('Import', function($http) {
   
   Import.highrise = function($scope,params){
       console.log(params);
-      console.log("ppppppppppparr");
+      $scope.isLoading=true;
+
       gapi.client.crmengine.highrise.import_peoples(params).execute(function(resp) {
          console.log('in insert resp');
-         console.log(resp);
+         console.log($scope.isLoading);
          if(!resp.code){
           //$scope.groups.push(resp);
+          $scope.isLoading=false;
           $scope.$apply();
           
          }else{

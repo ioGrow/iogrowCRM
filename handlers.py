@@ -606,10 +606,10 @@ class settingsShowHandler(BaseHandler, SessionEnabledHandler):
         self.prepare_template('templates/admin/settings/settings.html')
 class ImportListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
-        self.prepare_template('templates/admin/import/imports_list.html')
+        self.prepare_template('templates/admin/imports/imports_list.html')
 class ImportNewHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
-        self.prepare_template('templates/admin/import/import_new.html')
+        self.prepare_template('templates/admin/imports/import_new.html')
 
 class SearchListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -1029,8 +1029,8 @@ routes = [
     ('/views/admin/groups/list',GroupListHandler),
     ('/views/admin/groups/show',GroupShowHandler),
     ('/views/admin/settings',settingsShowHandler),
-    ('/views/admin/import/list',ImportListHandler),
-    ('/views/admin/import/new',ImportNewHandler),
+    ('/views/admin/imports/list',ImportListHandler),
+    ('/views/admin/imports/new',ImportNewHandler),
 
     # Applications settings
     (r'/apps/(\d+)', ChangeActiveAppHandler),

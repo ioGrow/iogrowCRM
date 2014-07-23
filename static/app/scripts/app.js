@@ -121,10 +121,10 @@ app.config(['$routeProvider', function($routeProvider) {
 
       }).when('/admin/import', {
         controller: 'ImportListCtrl',
-        templateUrl:'/views/admin/import/list'
+        templateUrl:'/views/admin/imports/list'
       }).when('/admin/import/new', {
         controller: 'ImportNewCtrl',
-        templateUrl:'/views/admin/import/new'
+        templateUrl:'/views/admin/imports/new'
       }).
       //Shows
       when('/live/shows', {
