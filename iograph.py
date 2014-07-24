@@ -1,7 +1,8 @@
 from google.appengine.ext import ndb
+from google.appengine.api import memcache
 from google.appengine.datastore.datastore_query import Cursor
 from protorpc import messages
-from endpoints_helper import EndpointsHelper
+#from endpoints_helper import EndpointsHelper
 import iomessages
 from model import User
 INVERSED_EDGES = {
@@ -95,13 +96,17 @@ class Edge(ndb.Expando):
                            start_node = end_node,
                            end_node = start_node
                                     )
-                inversed_edge.put_async()
+                inversed_edge.put()
+                mem_key = end_node.urlsafe()+'_'+kind
+                memcache.delete(mem_key)
             edge = Edge(
                         kind = kind,
                         start_node = start_node,
                         end_node = end_node
                         )
             edge_key = edge.put()
+            mem_key = start_node.urlsafe()+'_'+kind
+            memcache.delete(mem_key)
             return edge_key
     @classmethod
     def move(cls, edge, new_start_node):
@@ -112,14 +117,29 @@ class Edge(ndb.Expando):
                                         cls.end_node == edge.start_node,
                                         cls.kind.IN(INVERSED_EDGES[kind])).get()
                 if inversed_edge:
+                    mem_key = inversed_edge.start_node.urlsafe()+'_'+inversed_edge.kind
+                    memcache.delete(mem_key)
                     inversed_edge.end_node = new_start_node
                     inversed_edge.put()
         edge.start_node = new_start_node
         edge.put()
+        mem_key = edge.start_node.urlsafe()+'_'+edge.kind
+        memcache.delete(mem_key)
+
 
 
     @classmethod
     def list(cls,start_node,kind,limit=1000,pageToken=None,order='DESC'):
+        mem_key = start_node.urlsafe()+'_'+kind
+        if memcache.get(mem_key) is not None:
+            print 'from memcache'
+            print mem_key
+            return memcache.get(mem_key)
+        else:
+            return cls.list_from_datastore(start_node,kind,limit,pageToken,order)
+    @classmethod
+    def list_from_datastore(cls,start_node,kind,limit=1000,pageToken=None,order='DESC'):
+        print 'list from datastore'
         curs = Cursor(urlsafe=pageToken)
         if limit:
             limit = int(limit)
@@ -148,7 +168,10 @@ class Edge(ndb.Expando):
         results['items'] = edges
         results['next_curs'] = next_curs
         results['more'] = more
+        mem_key = start_node.urlsafe()+'_'+kind
+        memcache.set(mem_key, results)
         return results
+
     @classmethod
     def delete(cls, edge_key):
         existing_edge = edge_key.get()
@@ -156,6 +179,8 @@ class Edge(ndb.Expando):
             start_node = existing_edge.start_node
             end_node = existing_edge.end_node
             kind = existing_edge.kind
+            mem_key = existing_edge.start_node.urlsafe()+'_'+existing_edge.kind
+            memcache.delete(mem_key)
             existing_edge.key.delete()
             if kind in INVERSED_EDGES.keys():
                 inversed_edge = cls.query(
@@ -163,6 +188,8 @@ class Edge(ndb.Expando):
                                         cls.end_node == start_node,
                                         cls.kind.IN(INVERSED_EDGES[kind])).get()
                 if inversed_edge:
+                    mem_key = inversed_edge.start_node.urlsafe()+'_'+inversed_edge.kind
+                    memcache.delete(mem_key)
                     inversed_edge.key.delete()
     @classmethod
     def delete_all(cls, start_node):
@@ -172,7 +199,7 @@ class Edge(ndb.Expando):
 
     @classmethod
     def delete_all_cascade(cls, start_node):
-        EndpointsHelper.delete_document_from_index(start_node.id())
+        #EndpointsHelper.delete_document_from_index(start_node.id())
         start_node_kind = start_node.kind()
         edges = cls.query( cls.start_node==start_node ).fetch()
         for edge in edges:
@@ -207,6 +234,25 @@ class Edge(ndb.Expando):
             return len( set(end_node_found).intersection(end_node_set) ) == len( set(end_node_set) )
         elif operation == 'OR':
             return len( set(end_node_found).intersection(end_node_set) ) > 0
+    @classmethod
+    def filter_by_set(cls,start_node_set,kind,operation='AND'):
+        end_node_sets = []
+        for start_node in start_node_set:
+            edge_list = cls.list(start_node,kind)
+            end_nodes = []
+            if operation=="AND":
+                for edge in edge_list['items']:
+                    end_nodes.append(edge.end_node)
+                if len(end_node_sets)>0:
+                    end_node_sets = list(set(end_node_sets).intersection(set(end_nodes)))
+                else:
+                    end_node_sets=end_nodes
+            else:
+                for edge in edge_list['items']:
+                    end_node_sets.append(edge.end_node)
+            end_node_sets = list(set(end_node_sets))
+        return end_node_sets
+
 
 
 class Node(ndb.Expando):
@@ -217,10 +263,11 @@ class Node(ndb.Expando):
 
     @classmethod
     def check_permission(cls, user, node):
-        if node.access != 'public' and node.owner!=user.google_user_id:
-            end_node_set = [user.key]
-            if not Edge.find(start_node=node.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
-                return False
+        if node is not None:
+            if node.access != 'public' and node.owner!=user.google_user_id:
+                end_node_set = [user.key]
+                if not Edge.find(start_node=node.key,kind='permissions',end_node_set=end_node_set,operation='AND'):
+                    return False
         return True
     @classmethod
     def list_permissions(cls,node):
@@ -356,11 +403,11 @@ class Node(ndb.Expando):
                     inverse_edge = 'parents'
                 )
         indexed_edge = '_' + request.kind + ' ' + " ".join(node_values)
-        EndpointsHelper.update_edge_indexes(
-                                            parent_key = parent_key,
-                                            kind = 'infos',
-                                            indexed_edge = indexed_edge
-                                            )
+        #EndpointsHelper.update_edge_indexes(
+        #                                    parent_key = parent_key,
+        #                                    kind = 'infos',
+        #                                    indexed_edge = indexed_edge
+        #                                    )
 
 
 class InfoNode(ndb.Expando):

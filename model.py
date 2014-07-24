@@ -385,6 +385,8 @@ class User(EndpointsModel):
     app_changed = ndb.BooleanProperty(default=True)
     google_contacts_group = ndb.StringProperty()
     invited_by = ndb.KeyProperty()
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
+    updated_at = ndb.DateTimeProperty(auto_now=True)
 
 
     def put(self, **kwargs):
