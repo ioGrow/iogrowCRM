@@ -796,7 +796,13 @@
                                                     </div>
                                                 </div>
                                                 <div class="news-blocks blank-card blank-card-yellow newsCard">
-                                                    <div id="gmap_canvas" style="width:100%;height:300px;"></div>
+                                                    <h3>Skills</h3>
+                                                   
+                                                    <ul class="list-unstyled contact-infos">
+                                                    <li ng-repeat="skill in linkedinProfile.skills">
+                                                      - <%=skill%>   
+                                                    </li>
+                                                    </ul>
                                                 </div>
                                             </div>
                                         </div>

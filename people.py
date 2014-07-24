@@ -36,9 +36,9 @@ class linked_in():
         br.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
         self.browser=br
     def open_url(self,firstname,lastname):
-        r=self.browser.open('http://www.google.com')
+        r=self.browser.open('https://www.google.com')
         self.browser.response().read()
-        self.browser.select_form(nr=1)
+        self.browser.select_form(nr=0)
         self.browser.form['q']=firstname +' '+lastname
         self.browser.submit()
         self.browser.response().read()
@@ -200,6 +200,11 @@ class linked_in():
             print "+++++++++++++++++++++++++++++++++++++++++++++++++++++++"
             # print pro.relation
             if not pro.websites: pro.websites=[]  
+            dic={}
+            #for key in pro.__dict__
+            # pro.keys()
+            print pro._properties
+            # print pro.
             response=profileSchema(
                                     lastname = pro.lastname,
                                     firstname = pro.firstname,
@@ -208,13 +213,13 @@ class linked_in():
                                     headline = pro.headline,
                                     current_post = pro.current_post,
                                     past_post=pro.past_post,
-                                    # formations=pro.formations,
-                                    # websites=pro.websites,
+                                    formations=pro.formations,
+                                    websites=pro.websites,
                                     relation=pro.relation,
                                     experiences=pro.experiences,
                                     resume=pro.resume,
                                     certifications=pro.certifications,
-                                    # skills=pro.skills
+                                    skills=pro.skills
                                     )
             print "****************/////////////////////////////////////////"
             return response

@@ -83,5 +83,5 @@ class profileSchema(messages.Message):
     experiences=messages.StringField(11)
     resume=messages.StringField(12)
     certifications=messages.StringField(13)
-    skills=messages.StringField(14)
+    skills=messages.StringField(14,repeated=True)
 

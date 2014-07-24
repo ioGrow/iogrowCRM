@@ -964,6 +964,7 @@ class GetFromLinkedinToIoGrow(webapp2.RequestHandler):
             node.current_post=profil["current_post"]
             node.past_post=profil["past_post"]
             node.relation=profil["relation"]
+            node.skills=profil["skills"]
             key2=node.put()
             Edge.insert(start_node=key1,end_node=key2,kind='linkedin',inverse_edge='parents')
             # print profil
