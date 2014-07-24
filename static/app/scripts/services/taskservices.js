@@ -249,6 +249,18 @@ Task.delete=function($scope,params){
 
 };
 
+  Task.permission=function($scope,params){
+      $scope.isLoading = true;
+
+      gapi.client.crmengine.tasks.permission(params).execute(function(resp) {
+          if(!resp.code){
+              $scope.isLoading = false;
+            }
+            
+      });
+
+  };
+  
   
 
 return Task;
@@ -428,8 +440,6 @@ topicservices.factory('Contributor', function($http) {
       
   };
 
-
-  
 
 return Contributor;
 });
