@@ -45,6 +45,10 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
          {'name':'purple','color':'#E874D6'},
          ];
       $scope.tag.color= {'name':'green','color':'#BBE535'};
+      $scope.selectedCasee=null;
+      $scope.currentCasee=null;
+      $scope.showTagsFilter=false;
+      $scope.showNewTag=false;
 
       // What to do after authentication
        $scope.runTheProcess = function(){
@@ -77,7 +81,56 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
        $scope.refreshToken = function() {
             Auth.refreshToken();
        };
-
+      $scope.editbeforedelete = function(casee){
+         $scope.selectedCasee=casee;
+         $('#BeforedeleteCase').modal('show');
+       };
+      $scope.deletecase = function(){
+         var params = {'entityKey':$scope.selectedCasee.entityKey};
+         Case.delete($scope, params);
+         $('#BeforedeleteCase').modal('hide');
+         $scope.selectedCasee=null;
+       };
+      $scope.showAssigneeTags=function(casee){
+            $('#assigneeTagsToTask').modal('show');
+            $scope.currentCasee=casee;
+         };
+        $scope.addTagsTothis=function(){
+          var tags=[];
+          var items = [];
+          tags=$('#select2_sample2').select2("val");
+              angular.forEach(tags, function(tag){
+                var edge = {
+                  'start_node': $scope.currentCasee.entityKey,
+                  'end_node': tag,
+                  'kind':'tags',
+                  'inverse_edge': 'tagged_on'
+                };
+                items.push(edge);
+              });
+          params = {
+            'items': items
+          }
+          Edge.insert($scope,params);
+          $scope.currentCasee=null;
+          $('#assigneeTagsToTask').modal('hide');
+         };
+        $scope.showNewTagForm=function(){
+            $scope.showNewTag=true;
+            $( window ).trigger( 'resize' );  
+          }
+          $scope.hideNewTagForm=function(){
+            $scope.showNewTag=false;
+            $( window ).trigger( 'resize' ); 
+          }
+          $scope.hideTagFilterCard=function(){
+            $scope.showTagsFilter=false;
+            $( window ).trigger( 'resize' ); 
+          }
+          $scope.showTagFilterCard=function(){
+            $scope.showTagsFilter=true;
+            $( window ).trigger( 'resize' ); 
+          }
      $scope.listNextPageItems = function(){
 
         var nextPage = $scope.caseCurrentPage + 1;

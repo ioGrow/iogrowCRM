@@ -86,7 +86,7 @@
                     <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
                      <i class="fa fa-exclamation-circle"></i>
                     </button>
-                    <ul class="dropdown-menu " role="menu">
+                    <ul class="dropdown-menu" role="menu">
                       <li>
                         <p class="indication-item">Use <span>#</span> to add labels</p>
                       </li>
@@ -110,6 +110,7 @@
                   <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;urgentTasks();" >{{ _("Urgent Tasks") }}</a></li>
                   <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;createdByMe('{{ME}}');">{{ _("Created by Me") }}</a></li>
                   <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;assignedToMe('{{ME}}');">{{ _("Assigned to Me") }}</a></li>
+                  <li class="ng-tab sm-menu hidden-lg hidden-md"><a ng-click="showTagFilterCard();">{{ _("Filter by Tags") }}</a></li>                   
                   <li class="dropdown sm-menu-inv">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                       More <i class="fa fa-angle-down"></i>
@@ -117,6 +118,7 @@
                     <ul class="dropdown-menu drp-dwn-xs-right" role="menu">
                       <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;createdByMe('{{ME}}');">{{ _("Created by Me") }}</a></li>
                       <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;assignedToMe('{{ME}}');">{{ _("Assigned to Me") }}</a></li>
+                      <li class="ng-tab sm-menu-inv"><a ng-click="showTagFilterCard();">{{ _("Filter by Tags") }}</a></li>
                     </ul>
                   </li>
                 </ul>
@@ -182,7 +184,68 @@
                                         </div>
                                     </div>
                                   </li>
+                                  <li class="labelsCardElement taskCard list-group-item" ng-show="showTagsFilter">
+                                      <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
+                                      <ul class="list-group tags-list">
+                                      <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
+                                        <div class="row">
+                                          <span  ng-drag="dragTag(tag_item)" draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
+                                              <%= tag_item.name %>
+                                          </span>
+                                           <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
+                                          <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
+                                            <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
+                                          </form>
+                                          <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
+                                        </div>
+                                      </li>
+                                      <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTagForm()">
+                                        <a ng-click="" class="btn-link addAnotherPhone">
+                                          <i class="fa fa-tags"></i>  Add a new label
+                                        </a>
+                                      </li>
+                                    </ul>
+                                    <form class="well newTagForm" role="form" ng-show="showNewTag">
+                                      <button type="button" class="close"  aria-hidden="true" ng-click="hideNewTagForm()"></button>
+                                      <div class="row">
+                                        <div class="col-md-12 form-group">
+                                          <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New label">
+                                        </div>
+                                      </div>
+                                      <div class="row">
+                                        <div class="col-md-8">
+                                          <ul class="color_pallet_menu">
+                                            <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
+                                            </li>
+                                          </ul>
+                                        </div>
+                                        <div class="col-md-4">
+                                          <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
+                                        </div>
+                                      </div>
+                                    </form>
+                                    <div class="form-group btn-manage-tags" ng-show="tags">
+                                      <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
+                                      </button>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </li>
                                    <li  ng-repeat="task in tasks" class="taskCard list-group-item" droppable ng-drop="dropTag(task)" id="task_<%=$index%>" title="<%= task.status_label %>" style="border-left: 3px solid <%= task.status_color%>;"  ng-mouseover="deletetask=true" ng-init="deletetask=false" ng-mouseleave="deletetask=false">
+                                    <div class="btn-group inCardOptionsBtn">
+                                      <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
+                                       <i class="fa fa-ellipsis-vertical"></i>
+                                      </button>
+                                      <ul class="dropdown-menu drp-dwn-right " role="menu">
+                                       <li>
+                                         <a href="" ng-click="showAssigneeTags(task)">
+                                             <i class='fa fa-tags'></i> Add tags </a>
+                                        </li>
+                                        <li>
+                                         <a href="" ng-click="deleteThisTask(task.entityKey)">
+                                             <i class='fa fa-trash-o'></i> Delete </a>
+                                        </li>
+                                      </ul>
+                                    </div>
                                      <div class="row">
                                         <label class="col-md-1 col-xs-1">
                                             <input type="checkbox" ng-click="select_task(task,$index,$event)" ng-checked="isSelected()">
@@ -213,12 +276,6 @@
                                       <p class="col-md-11 col-md-offset-1 list-group-item-text">
                                          <span ng-show="task.created_by">Opened by:<a href="#"> <%= task.created_by.display_name %></a></span>
                                           <span ng-show="task.about">{{ _('related to') }}<a href="<%= getUrl(task.about.kind,task.about.id); %>"> <%= task.about.name %></a> </span>
-                                          <span ng-show="deletetask">
-                                             <!-- to delete task -->
-                                                <a  ng-click="deleteThisTask(task.entityKey)" class="btn-link addAnotherPhone"><i class="icon-trash"></i>  
-                                             </a>
-                                           <!-- end  -->
-                                          </span>
 
                                       </p>
                                       </div>
@@ -276,14 +333,74 @@
                                         </div>
                                     </div>
                                   </li>
+                                  <li class="labelsCardElement taskCard list-group-item" ng-show="showTagsFilter">
+                                      <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
+                                      <ul class="list-group tags-list">
+                                      <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
+                                        <div class="row">
+                                          <span  ng-drag="dragTag(tag_item)" draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
+                                              <%= tag_item.name %>
+                                          </span>
+                                           <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
+                                          <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
+                                            <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
+                                          </form>
+                                          <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
+                                        </div>
+                                      </li>
+                                      <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTagForm()">
+                                        <a ng-click="" class="btn-link addAnotherPhone">
+                                          <i class="fa fa-tags"></i>  Add a new label
+                                        </a>
+                                      </li>
+                                    </ul>
+                                    <form class="well newTagForm" role="form" ng-show="showNewTag">
+                                      <button type="button" class="close"  aria-hidden="true" ng-click="hideNewTagForm()"></button>
+                                      <div class="row">
+                                        <div class="col-md-12 form-group">
+                                          <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New label">
+                                        </div>
+                                      </div>
+                                      <div class="row">
+                                        <div class="col-md-8">
+                                          <ul class="color_pallet_menu">
+                                            <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
+                                            </li>
+                                          </ul>
+                                        </div>
+                                        <div class="col-md-4">
+                                          <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
+                                        </div>
+                                      </div>
+                                    </form>
+                                    <div class="form-group btn-manage-tags" ng-show="tags">
+                                      <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
+                                      </button>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </li>
                                    <li  ng-repeat="task in tasks" class="taskCard list-group-item" droppable ng-drop="dropTag(task)" id="task_<%=$index%>" title="<%= task.status_label %>" style="border-left: 3px solid <%= task.status_color%>;">
+                                    <div class="btn-group inCardOptionsBtn">
+                                      <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
+                                       <i class="fa fa-ellipsis-vertical"></i>
+                                      </button>
+                                      <ul class="dropdown-menu drp-dwn-right " role="menu">
+                                         <li>
+                                         <a href="" ng-click="showAssigneeTags(task)">
+                                             <i class='fa fa-tags'></i> Add tags </a>
+                                        </li>
+                                        <li>
+                                         <a href="" ng-click="deleteThisTask(task.entityKey)">
+                                             <i class='fa fa-trash-o'></i> Delete </a>
+                                        </li>
+                                      </ul>
+                                    </div>
                                      <div class="row">
                                         <label class="col-md-1 col-xs-1">
                                             <input type="checkbox" ng-click="select_task(task,$index,$event)" ng-checked="isSelected()">
                                         </label>
                                        <h4 ng-dblclick="edit_task(task)" ng-show="edited_task!=task" class="col-md-6 col-xs-10 list-group-item-heading"
                                        ng-class= "{task_closed: task.status=='closed'}">
-                                       <i class="fa fa-dot-circle-o status_color" style="color:<%= task.status_color%>;" data-toggle="tooltip" data-placement="top" title="<%= task.status_label %>"></i>
                                         <%= task.title %>
                                        </h4>
                                        <div ng-show="edited_task==task" class="col-md-6 col-xs-7">
@@ -361,14 +478,74 @@
                                         </div>
                                     </div>
                                   </li>
+                                  <li class="labelsCardElement taskCard list-group-item" ng-show="showTagsFilter">
+                                      <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
+                                      <ul class="list-group tags-list">
+                                      <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
+                                        <div class="row">
+                                          <span  ng-drag="dragTag(tag_item)" draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
+                                              <%= tag_item.name %>
+                                          </span>
+                                           <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
+                                          <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
+                                            <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
+                                          </form>
+                                          <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
+                                        </div>
+                                      </li>
+                                      <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTagForm()">
+                                        <a ng-click="" class="btn-link addAnotherPhone">
+                                          <i class="fa fa-tags"></i>  Add a new label
+                                        </a>
+                                      </li>
+                                    </ul>
+                                    <form class="well newTagForm" role="form" ng-show="showNewTag">
+                                      <button type="button" class="close"  aria-hidden="true" ng-click="hideNewTagForm()"></button>
+                                      <div class="row">
+                                        <div class="col-md-12 form-group">
+                                          <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New label">
+                                        </div>
+                                      </div>
+                                      <div class="row">
+                                        <div class="col-md-8">
+                                          <ul class="color_pallet_menu">
+                                            <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
+                                            </li>
+                                          </ul>
+                                        </div>
+                                        <div class="col-md-4">
+                                          <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
+                                        </div>
+                                      </div>
+                                    </form>
+                                    <div class="form-group btn-manage-tags" ng-show="tags">
+                                      <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
+                                      </button>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </li>
                                    <li  ng-repeat="task in tasks" class=" taskCard list-group-item" droppable ng-drop="dropTag(task)" id="task_<%=$index%>" title="<%= task.status_label %>" style="border-left: 3px solid <%= task.status_color%>;">
+                                    <div class="btn-group inCardOptionsBtn">
+                                      <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
+                                       <i class="fa fa-ellipsis-vertical"></i>
+                                      </button>
+                                      <ul class="dropdown-menu drp-dwn-right " role="menu">
+                                         <li>
+                                         <a href="" ng-click="showAssigneeTags(task)">
+                                             <i class='fa fa-tags'></i> Add tags </a>
+                                        </li>
+                                        <li>
+                                         <a href="" ng-click="deleteThisTask(task.entityKey)">
+                                             <i class='fa fa-trash-o'></i> Delete </a>
+                                        </li>
+                                      </ul>
+                                    </div>
                                      <div class="row">
                                         <label class="col-md-1 col-xs-1">
                                             <input type="checkbox" ng-click="select_task(task,$index,$event)" ng-checked="isSelected()">
                                         </label>
                                        <h4 ng-dblclick="edit_task(task)" ng-show="edited_task!=task" class="col-md-6 col-xs-10 list-group-item-heading"
                                        ng-class= "{task_closed: task.status=='closed'}">
-                                       <i class="fa fa-dot-circle-o status_color" style="color:<%= task.status_color%>;" data-toggle="tooltip" data-placement="top" title="<%= task.status_label %>"></i>
                                         <%= task.title %>
                                        </h4>
                                        <div ng-show="edited_task==task" class="col-md-6 col-xs-7">
@@ -446,14 +623,74 @@
                                         </div>
                                     </div>
                                   </li>
+                                  <li class="labelsCardElement taskCard list-group-item" ng-show="showTagsFilter">
+                                      <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
+                                      <ul class="list-group tags-list">
+                                      <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
+                                        <div class="row">
+                                          <span  ng-drag="dragTag(tag_item)" draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
+                                              <%= tag_item.name %>
+                                          </span>
+                                           <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
+                                          <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
+                                            <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
+                                          </form>
+                                          <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
+                                        </div>
+                                      </li>
+                                      <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTagForm()">
+                                        <a ng-click="" class="btn-link addAnotherPhone">
+                                          <i class="fa fa-tags"></i>  Add a new label
+                                        </a>
+                                      </li>
+                                    </ul>
+                                    <form class="well newTagForm" role="form" ng-show="showNewTag">
+                                      <button type="button" class="close"  aria-hidden="true" ng-click="hideNewTagForm()"></button>
+                                      <div class="row">
+                                        <div class="col-md-12 form-group">
+                                          <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New label">
+                                        </div>
+                                      </div>
+                                      <div class="row">
+                                        <div class="col-md-8">
+                                          <ul class="color_pallet_menu">
+                                            <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
+                                            </li>
+                                          </ul>
+                                        </div>
+                                        <div class="col-md-4">
+                                          <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
+                                        </div>
+                                      </div>
+                                    </form>
+                                    <div class="form-group btn-manage-tags" ng-show="tags">
+                                      <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
+                                      </button>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </li>
                                    <li  ng-repeat="task in tasks" class="taskCard list-group-item" droppable ng-drop="dropTag(task)" id="task_<%=$index%>" title="<%= task.status_label %>" style="border-left: 3px solid <%= task.status_color%>;">
+                                    <div class="btn-group inCardOptionsBtn">
+                                      <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
+                                       <i class="fa fa-ellipsis-vertical"></i>
+                                      </button>
+                                      <ul class="dropdown-menu drp-dwn-right " role="menu">
+                                       <li>
+                                         <a href="" ng-click="showAssigneeTags(task)">
+                                             <i class='fa fa-tags'></i> Add tags </a>
+                                        </li>
+                                        <li>
+                                         <a href="" ng-click="deleteThisTask(task.entityKey)">
+                                             <i class='fa fa-trash-o'></i> Delete </a>
+                                        </li>
+                                      </ul>
+                                    </div>
                                      <div class="row">
                                         <label class="col-md-1 col-xs-1">
                                             <input type="checkbox" ng-click="select_task(task,$index,$event)" ng-checked="isSelected()">
                                         </label>
                                        <h4 ng-dblclick="edit_task(task)" ng-show="edited_task!=task" class="col-md-6 col-xs-10 list-group-item-heading"
                                        ng-class= "{task_closed: task.status=='closed'}">
-                                       <i class="fa fa-dot-circle-o status_color" style="color:<%= task.status_color%>;" data-toggle="tooltip" data-placement="top" title="<%= task.status_label %>"></i>
                                         <%= task.title %>
                                        </h4>
                                        <div ng-show="edited_task==task" class="col-md-6 col-xs-7">
@@ -531,14 +768,74 @@
                                         </div>
                                     </div>
                                   </li>
+                                  <li class="labelsCardElement taskCard list-group-item" ng-show="showTagsFilter">
+                                      <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
+                                      <ul class="list-group tags-list">
+                                      <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
+                                        <div class="row">
+                                          <span  ng-drag="dragTag(tag_item)" draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
+                                              <%= tag_item.name %>
+                                          </span>
+                                           <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
+                                          <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
+                                            <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
+                                          </form>
+                                          <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
+                                        </div>
+                                      </li>
+                                      <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTagForm()">
+                                        <a ng-click="" class="btn-link addAnotherPhone">
+                                          <i class="fa fa-tags"></i>  Add a new label
+                                        </a>
+                                      </li>
+                                    </ul>
+                                    <form class="well newTagForm" role="form" ng-show="showNewTag">
+                                      <button type="button" class="close"  aria-hidden="true" ng-click="hideNewTagForm()"></button>
+                                      <div class="row">
+                                        <div class="col-md-12 form-group">
+                                          <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New label">
+                                        </div>
+                                      </div>
+                                      <div class="row">
+                                        <div class="col-md-8">
+                                          <ul class="color_pallet_menu">
+                                            <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
+                                            </li>
+                                          </ul>
+                                        </div>
+                                        <div class="col-md-4">
+                                          <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
+                                        </div>
+                                      </div>
+                                    </form>
+                                    <div class="form-group btn-manage-tags" ng-show="tags">
+                                      <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
+                                      </button>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </lif>
                                    <li  ng-repeat="task in tasks" class="taskCard list-group-item" droppable ng-drop="dropTag(task)" id="task_<%=$index%>" title="<%= task.status_label %>" style="border-left: 3px solid <%= task.status_color%>;">
+                                    <div class="btn-group inCardOptionsBtn">
+                                      <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
+                                       <i class="fa fa-ellipsis-vertical"></i>
+                                      </button>
+                                      <ul class="dropdown-menu drp-dwn-right " role="menu">
+                                       <li>
+                                         <a href="" ng-click="showAssigneeTags(task)">
+                                             <i class='fa fa-tags'></i> Add tags </a>
+                                        </li>
+                                        <li>
+                                         <a href="" ng-click="deleteThisTask(task.entityKey)">
+                                             <i class='fa fa-trash-o'></i> Delete </a>
+                                        </li>
+                                      </ul>
+                                    </div>
                                      <div class="row">
                                         <label class="col-md-1 col-xs-1">
                                             <input type="checkbox" ng-click="select_task(task,$index,$event)" ng-checked="isSelected()">
                                         </label>
                                        <h4 ng-dblclick="edit_task(task)" ng-show="edited_task!=task" class="col-md-6 col-xs-10 list-group-item-heading"
                                        ng-class= "{task_closed: task.status=='closed'}">
-                                       <i class="fa fa-dot-circle-o status_color" style="color:<%= task.status_color%>;" data-toggle="tooltip" data-placement="top" title="<%= task.status_label %>"></i>
                                         <%= task.title %>
                                        </h4>
                                        <div ng-show="edited_task==task" class="col-md-6 col-xs-7">
@@ -572,97 +869,6 @@
         </div>
           </div>
           </div>
-            <div class="col-xs-12 col-sm-12 visible-xs visible-sm">
-           <div class="row">
-            <div class="col-md-12">
-              <div class="portlet showCard">
-                <div class="portlet-title">
-                  <div class="caption">
-                    <i class="fa fa-reorder"></i>Tags
-                  </div>
-                  <!--div class="tools">
-                      <a href="javascript:;" class="collapse">
-                      </a>
-                      <a href="#portlet-config" data-toggle="modal" class="config">
-                      </a>
-                      <a href="javascript:;" class="reload">
-                      </a>
-                      <a href="javascript:;" class="remove">
-                    </a>
-                  </div-->
-                </div>
-                <div class="portlet-body">
-                <ul class="list-group tags-list">
-                  <li  ng-repeat="tag_item in tags" class="list-group-item tags-list-item">
-                  <div class="row">
-                    <span  draggable ng-drag="dragTag(tag_item)" style="background-color:<%=tag_item.color%>;color:idealTextColor(<%=tag_item.color%>);" class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"><%= tag_item.name %> </span>
-                    <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
-                   <!-- <span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
-                      <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>
-                    </span>-->
-
-                    <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
-                      <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
-                    </form>
-                    <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
-                    </div>
-                  </li>
-                  <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
-                       <a ng-click="" class="btn-link addAnotherPhone">
-                        <i class="fa fa-tags"></i>  Add a new tag</a>
-                  </li>
-                  
-                </ul>
-
-                <form class="well newTagForm" role="form" ng-show="showNewTag">
-                 <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
-                <div class="row">
-                  <div class="col-md-12 form-group">
-                    <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New tag name">
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-8">
-                      <!-- <input id="tag-col-pick" type="text" class="colorpicker-default form-control" value="#8fff00">-->
-                      <ul class="color_pallet_menu">
-                        <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
-                        </li>
-                      </ul>
-
-                  </div>
-                  <div class="col-md-4">
-                    <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
-                    <!--input type="submit" ng-show="isLoading" class="btn green pull-right" value="{{ _('Loading...') }}"-->
-                  </div>
-                  </div>
-                </form>
-                <div class="form-group" ng-show="tags">
-                  <button class="btn btn-default btn-block" ng-click="manage_tags=!manage_tags;manage()"> Manage Tags
-                  </button>
-                </div>
-                </div>
-              </div>
-          </div>
-
-          <div class="row">
-            <div class="pagination pull-right" ng-hide="isLoading">
-
-                  <ul>
-                    <li ng-show="pagination.prev"><button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
-                    {{_("Prev")}}
-                    </button></li>
-                    <li ng-repeat="page in pagination.pages" ng-class='{active: page.isCurrent}'><a  href="#/accounts/"><%= page.id %></a></li>
-                    <li  ng-show="pagination.next"><button ng-click="listNextPageItems()"  class="btn">
-                    {{_("Next")}}
-                    </button></li>
-                  </ul>
-                </div>
-                <!--h3 class="pagination pull-right" ng-show="isLoading">{{ _('Loading') }}...</h3-->
-          </div>
-        <!-- END PAGE CONTENT-->
-      </div>
-      <!-- END PAGE CONTAINER-->
-</div>
 <div id="beforecloseTask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                   <div class="modal-dialog">
                     <div class="modal-content">
