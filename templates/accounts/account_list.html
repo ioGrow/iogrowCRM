@@ -21,7 +21,7 @@
 
       <div class="filterOptions">
         <span role="button" class="filterItem activeFilter" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">All <span class="hidden-xs hiddenOnxs">Accounts</span> </span>
-        <span role="button" class="filterItem" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">My <span class="hidden-xs hiddenOnxs">Accounts</span></span>
+        <span role="button" class="filterItem" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">My <span class="hidden-xs hiddenOnxs">{{ _('Accounts') }}</span></span>
         <div class="btn-group">
             <a class="filterItem" href="#" data-toggle="dropdown" ng-class="{activeFilter: selectedOption =='sort'}">
               Sort by
@@ -39,7 +39,7 @@
       </div>
       </div>
       <div class="col-md-2 col-xs-2">
-      <a href="/#/accounts/new" class="hidden-sm btn red newAccountBtnOnscroll pull-right hidden afterScrollBtn">
+      <a href="/#/accounts/new" class="hidden-sm hidden-xs btn red newAccountBtnOnscroll pull-right hidden afterScrollBtn">
            New <span class="hidden-xs hiddenOnxs">Account</span>
          </a>
       </div>
