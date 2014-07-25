@@ -102,7 +102,7 @@ app.controller('UserNewCtrl', ['$scope','Auth','User',
      $scope.emails=[];
      $scope.users = [];
      $scope.message="";
-
+     
 
       $scope.status = 'New';
 
