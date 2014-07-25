@@ -144,6 +144,26 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
         $('#addOpportunityModal').modal('show');
 
       };
+// hadji hicham 23-07-2014 . inlinepatch for labels .
+  $scope.inlinePatch=function(kind,edge,name,tag,value){
+      
+        if(kind=="tag"){
+
+        params={'id':tag.id,
+                'entityKey':tag.entityKey,
+                'about_kind':'Lead',
+                'name':value
+                  };
+
+
+           Tag.patch($scope,params);
+      };
+
+
+
+             }
+
+
 
     $scope.save = function(opportunity){
       var params = {};
