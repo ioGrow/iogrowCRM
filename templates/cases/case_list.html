@@ -192,9 +192,12 @@
           <ul class="list-group tags-list">
             <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
               <div class="row">
-                <span  ng-drag="dragTag(tag_item)" draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
+                <span editable-text="tag_item.name" ng-drag="dragTag(tag_item)" draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;"
+                ng-model='tag_item.name'  onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
+
                     <%= tag_item.name %>
                 </span>
+
                  <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
                 <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
                   <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
@@ -204,7 +207,7 @@
             </li>
             <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
               <a ng-click="" class="btn-link addAnotherPhone">
-                <i class="fa fa-tags"></i>  Add a new label
+                <i class="fa fa-tags"></i>  Add a new label 
               </a>
             </li>
           </ul>
@@ -228,7 +231,7 @@
             </div>
           </form>
           <div class="form-group btn-manage-tags" ng-show="tags">
-            <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
+            <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">        Manage Tags 
             </button>
           </div>
         </div>
@@ -253,7 +256,8 @@
         <ul class="list-group tags-list">
           <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
             <div class="row">
-              <span ng-drag="dragTag(tag_item)" id="iii"  draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
+              <span editable-text="tag_item.name"  ng-drag="dragTag(tag_item)" id="iii"  draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;"
+               ng-model='tag_item.name'  onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
                   <%= tag_item.name %>
               </span>
               <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
