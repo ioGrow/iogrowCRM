@@ -696,7 +696,7 @@ class SyncContact(webapp2.RequestHandler):
         user = model.User.get_by_email(email)
 
         # sync contact
-        Contact.sync_with_google_contacts(user,id)
+        #Contact.sync_with_google_contacts(user,id)
 
 class CreateObjectFolder(webapp2.RequestHandler):
     @staticmethod

@@ -1224,6 +1224,15 @@ class CrmEngineApi(remote.Service):
                                                                 amount_total=deal.price
                                                                 )
                     opportunity_schema=Opportunity.insert(user,opportunity_request)
+                    Edge.insert(start_node = ndb.Key(urlsafe=contact_schema.entityKey),
+                      end_node =ndb.Key(urlsafe=opportunity_schema.entityKey),
+                      kind = 'opportunities',
+                      inverse_edge = 'parents')
+                    EndpointsHelper.update_edge_indexes(
+                                            parent_key =ndb.Key(urlsafe=opportunity_schema.entityKey),
+                                            kind = 'opportunities',
+                                            indexed_edge = str(contact_schema.id())
+                                            )
 
         
 
@@ -2575,9 +2584,9 @@ class CrmEngineApi(remote.Service):
                 send_notification_mail = True
 
             if send_notification_mail:
-                confirmation_url = "http://gcdc2013-iogrow.appspot.com//sign-in?id=" + str(invited_user_id) + '&'
-                sender_address = "ioGrow notifications <notifications@gcdc2013-iogrow.appspotmail.com>"
-                subject = "Confirm your registration"
+                confirmation_url = "http://www.iogrow.com//sign-in?id=" + str(invited_user_id) + '&'
+                sender_address = user_from_email.google_display_name+" <notifications@gcdc2013-iogrow.appspotmail.com>"
+                subject = "Invitation from " + user_from_email.google_display_name
                 # body = """
                 # Thank you for creating an account! Please confirm your email address by
                 # clicking on the link below:
