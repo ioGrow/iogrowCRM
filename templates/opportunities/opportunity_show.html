@@ -86,6 +86,19 @@
                       </a>
                     </i>
                   </span>
+                  <ul class="list-unstyled leadInfos">
+                      <li>
+                        <span>
+                           Owner:
+                          <a class="tag ng-binding" href="/#/search/type:Opportunity owner:<%= opportunity.owner.google_user_id %>">
+                            #<%= opportunity.owner.google_display_name %>
+                          </a>
+                        </span>
+                      </li>
+                      <li>
+                        <span class="contact-title" >Last updated:  <%=fromNow(opportunity.updated_at)%> </span>
+                      </li>
+                  </ul>
 
                 </div>
               </div>
@@ -551,7 +564,7 @@
                             <span class="relatedEventStartsAt pull-right" ng-hide="showDetails" ng-show="task.due" title="<%= task.due| date:'yyyy-MM-dd '%>">
                                   <%= task.due | date:'dd MMM'%>
                             </span>
-                          </div>  
+                          </div>
                           <div class="moreDetails row" ng-show="showDetails">
                           <!--  <div class="col-md-6 col-xs-6 event-schedule">
                                 <span class=""><i class="fa fa-calendar"></i>
@@ -559,13 +572,13 @@
                             </div>
                             <div class="col-md-6 col-xs-6 event-schedule">
                                <span class="">
-                                  <i class="fa fa-bell-o"></i> 
+                                  <i class="fa fa-bell-o"></i>
                                   <%= task.reminder | date:'dd MMM'%>
                                 </span>
                             </div>
                             <div class="col-md-12">
                                <span class="">
-                                  <i class="fa fa-map-marker"></i> 
+                                  <i class="fa fa-map-marker"></i>
                                   <%= event.where %>-->
                                 <!--</span>
                             </div>-->
@@ -594,7 +607,7 @@
                                         <div class="input-icon ">
                                             <i class="fa fa-bell-o"></i>
                                               <input cusdatetimepicker data-model="newTask.reminder" type="text" class="form-control" placeholder="Add a reminder" value="" id="leadEventStartsAt">
-                                          </div>                                         
+                                          </div>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -644,7 +657,7 @@
                   <div class="caption"> <i class="fa fa-calendar"></i>Events </div>
 
                 </div>
-                <div class="newContactform portlet-body" id="chats">                  
+                <div class="newContactform portlet-body" id="chats">
                    <ul id="tasks" class="list-unstyled lead_related_events" ng-hide="newEventform">
                       <li ng-repeat="event in events" id="event_<%=$index%>" class="relatedEventItem" ng-mouseenter="showDeleteBtn = true" ng-mouseleave="showDeleteBtn = false">
                         <div class="event-container">
@@ -664,7 +677,7 @@
                             <span class="relatedEventStartsAt pull-right" ng-hide="showDetails" ng-show="event.starts_at" title="<%= event.starts_at | date:'yyyy-MM-dd '%>">
                                   <%= event.starts_at | date:'dd MMM'%>
                             </span>
-                          </div>  
+                          </div>
                           <div class="moreDetails row" ng-show="showDetails">
                             <div class="col-md-5 col-xs-5 event-schedule">
                                 <span class=""><i class="fa fa-calendar"></i>
@@ -675,13 +688,13 @@
                             </div>
                             <div class="col-md-5 col-xs-5 event-schedule">
                                <span class="">
-                                  <i class="fa fa-calendar"></i> 
+                                  <i class="fa fa-calendar"></i>
                                   <%= event.ends_at | date:'dd MMM'%>
                                 </span>
                             </div>
                             <div class="col-md-12">
                                <span class="">
-                                  <i class="fa fa-map-marker"></i> 
+                                  <i class="fa fa-map-marker"></i>
                                   <%= event.where %>
                                 </span>
                             </div>
@@ -727,13 +740,13 @@
                                       </div>
                                 </div>
                             </div>
-                            <!-- end date time picker -->   
+                            <!-- end date time picker -->
                             <div class="row">
                               <div class="col-md-12 margin-bottom-10">
                                   <input ng-model="ioevent.where" type="text" id="taskName" class="form-control" placeholder="Where ?">
                               </div>
                               <!--/span-->
-                            </div> 
+                            </div>
                   </div>
                   <div class="row">
                       <div class="col-md-12 margin-top-10">
