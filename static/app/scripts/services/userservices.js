@@ -63,7 +63,6 @@ accountservices.factory('User', function($http) {
   User.insert = function($scope,params){
       $scope.isLoading = true;
       //console.log(params.emails);
-      console.log("pappppppppppppppppp");
       gapi.client.crmengine.users.insert(params).execute(function(resp) {
          console.log('in insert resp');
          console.log(resp);

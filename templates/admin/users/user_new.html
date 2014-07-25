@@ -45,11 +45,7 @@
     <div class="row" >
         <div class="col-md-9">
             <div class="row">
-                <div class="showPage col-md-12 newActionsBtn">
-                    
-                    <button class="btn red newAccountBtn pull-right" ng-click="addNewUser(contact)">Add</button>
-                    <div class="clearfix"></div>
-                </div>
+                
                 <div class="showPage slimForm col-md-12">
                     <div class="row">
                         <div class="col-md-12">
@@ -58,7 +54,7 @@
                                 <div class="col-md-9">
                                     <form class="form-horizontal ">
                                         <div class="row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-9">
                                                 <div class="form-group">
                                                     <span>Invite people from your team and start working together in seconds. Everyone you invite will receive a welcome email.</span>
                                                     <br>
@@ -88,7 +84,7 @@
                                                     <i class="icon-plus"></i> Add a new email address </a>
                                             </li>
                                         </ul>
-
+                                            <br>
                                                 <label class="control-label col-md-4">Introduction</label>
                                                 <div class="col-md-8">
                                                     <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" placeholder="Hi i want to add you to this project" ng-model="message"></textarea>
@@ -97,18 +93,27 @@
                                                     </div>
                                                 </div>
                                             </div>
+
                                  
                                         </div>
                                        
                                     </form>
                                 </div>
                             </div>
+                            <div class="col-md-12">
+                                 <a class="btn red newBtn pull-right" ng-click="addNewUser(contact)"  >
+                                              Invite    
+                                            </a>
+                            </div>
                         
                         </div>
                     </div>
                 </div>
             </div>
+
+           
         </div>
+        
    
     </div>
 </div>
