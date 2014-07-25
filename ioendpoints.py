@@ -33,7 +33,7 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 # Our libraries
 from iograph import Node,Edge,RecordSchema,InfoNodeResponse,InfoNodeConnectionSchema,InfoNodeListResponse
 from iomodels.crmengine.accounts import Account,AccountGetRequest,AccountSchema,AccountListRequest,AccountListResponse,AccountSearchResult,AccountSearchResults,AccountInsertRequest
-from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertRequest,ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults,ContactImportRequest,ContactImportHighriseRequest,ContactHighriseResponse, ContactHighriseSchema, DetailImportHighriseRequest
+from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertRequest,ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults,ContactImportRequest,ContactImportHighriseRequest,ContactHighriseResponse, ContactHighriseSchema, DetailImportHighriseRequest, InvitationRequest
 from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema,NoteSchema
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
@@ -998,176 +998,11 @@ class CrmEngineApi(remote.Service):
                       name='highrise.import_peoples')
     def highrise_import_peoples(self, request):
         user= EndpointsHelper.require_iogrow_user()
-        people=EndpointsHelper.highrise_import_peoples(request)
-        for person in people:
-            print len(people),"llllll"
-            ############
-            # Store company if persone
-            ################
-            account_schema=""
-            #print person.__dict__, "diiiiiiiiiiiiiiiiiiiiiiii"
-            if person.company_id!=0:
-                company_details=EndpointsHelper.highrise_import_company_details(person.company_id)
-                print "coooooooooooooooooo"
-                phones=list()
-                phone=iomessages.PhoneSchema(   )
-                if len(company_details.contact_data.phone_numbers)!=0:
-                    print "eeeeeeeeeeeeee"
-                    phone.number=company_details.contact_data.phone_numbers[0].number
-                    phone.type=str(company_details.contact_data.phone_numbers[0].location)
-                phones.append(phone)
-                email=iomessages.EmailSchema()
-                                            
-                if len(company_details.contact_data.email_addresses)!=0:
-                    email.email=company_details.contact_data.email_addresses[0].address
-                emails=list()
-                emails.append(email)
-                url=""
-                if len(company_details.contact_data.web_addresses)!=0:
-                    url=company_details.contact_data.web_addresses[0].url
-                twitter_account=""
-                if len(company_details.contact_data.twitter_accounts)!=0:
-                    twitter_account=company_details.contact_data.twitter_accounts[0].username
-                country=""
-                if len(company_details.contact_data.addresses)!=0:
-                    country=company_details.contact_data.addresses[0].country
-                street=""
-                if len(company_details.contact_data.addresses)!=0:
-                    street=company_details.contact_data.addresses[0].street
-                infonode=iomessages.InfoNodeRequestSchema(
-                                    kind='company',
-                                                fields=[
-                                                    iomessages.RecordSchema(
-                                                    field = 'url',
-                                                    value = url
-                                                    ),
-                                                    iomessages.RecordSchema(
-                                                    field = 'twitter_account',
-                                                    value = twitter_account
-                                                    ),
-                                                    iomessages.RecordSchema(
-                                                    field = 'country',
-                                                    value = country
-                                                    ),
-                                                    iomessages.RecordSchema(
-                                                    field = 'street',
-                                                    value = street
-                                                    )
-
-                                                ]
-                                    )
-                infonodes=list()
-                infonodes.append(infonode)
-                account_request=AccountInsertRequest(
-                                                    name="person.company_name",
-                                                    emails=emails,
-                                                    logo_img_url=company_details.avatar_url,
-                                                    infonodes=infonodes,
-                                                    phones=phones
-                                                    )
-                account_schema = Account.insert(user,account_request)
-            #Store Persone
-            print account_schema, "ssssssssssss"
-            if account_schema!="":
-                key=account_schema.entityKey
-            else:
-                key=""
-
-            infonodes=list()
-            infonodes.append(infonode)
-            phone=iomessages.PhoneSchema()
-            if len(person.contact_data.phone_numbers)!=0:
-                phone.number=person.contact_data.phone_numbers[0].number
-            if len(person.contact_data.phone_numbers)!=0:
-                phone.type=str(person.contact_data.phone_numbers[0].location)
-            phones=list()
-            phones.append(phone)
-            contact_request = ContactInsertRequest(
-                                        account=key,
-                                        firstname=person.first_name,
-                                        lastname=person.last_name,
-                                        title=person.title,
-                                        profile_img_url=person.avatar_url,
-                                        infonodes=infonodes,
-                                        phones=phones
-                                         )
-            
-            contact_schema=Contact.insert(user,contact_request)
-            print "taskkkkkkkkkkkkkkkkkk"
-            #########
-            #store tasks of person
-            tasks=EndpointsHelper.highrise_import_tasks_of_person(person.id)
-            for task in tasks:
-                from iomodels.crmengine.tasks import EntityKeyRequest
-                assigne=EntityKeyRequest(
-                                        entityKey=contact_schema.entityKey
-                                        )
-                assignes=list()
-                assignes.append(assigne)
-                task_request=TaskInsertRequest(
-                                                parent=contact_schema.entityKey,
-                                                title=task.body,
-                                                status=task.frame,
-                                                due=task.due_at.strftime("%d/%m/%Y")
-                                                )
-            #     task_schema=Task.insert(user, task_request)
-            ###########
-            #store notes of persons
-            notes=list()
-            try:
-                notes=EndpointsHelper.highrise_import_notes_of_person(person.id)
-            except Exception:
-                print Exception
-            for note in notes:
-                print note.__dict__
-                note_author = Userinfo()
-                note_author.display_name = user.google_display_name
-                note_author.photo = user.google_public_profile_photo_url
-                note = Note(
-                            owner = user.google_user_id,
-                            organization = user.organization,
-                            author = note_author,
-                            title = "",
-                            content = note.body
-                        )
-                entityKey_async = note.put_async()
-                entityKey = entityKey_async.get_result()
-                Edge.insert(
-                            start_node = contact_schema.entityKey,
-                            end_node = entityKey,
-                            kind = 'note',
-                            inverse_edge = 'parents'
-                        )
-                print contact_schema, "essss"
-                EndpointsHelper.update_edge_indexes(
-                                                    parent_key = ndb.Key(urlsafe=contact_schema.entityKey),
-                                                    kind = 'note',
-                                                    indexed_edge = str(entityKey.id())
-                                                    )
-             
-            #########
-            # store opporutnities of person
-            deals=EndpointsHelper.highrise_import_opportunities()
-            print deals[0].__dict__, "ddddddddddddddaaaaaa"
-            for deal in deals:
-                company_details=EndpointsHelper.highrise_import_company_details(deal.party_id)
-                key=Account.get_key_by_name(user,company_details.name)
-                opportunity_request=OpportunityInsertRequest(
-                                                            name=deal.name,
-                                                            description=deal.background,
-                                                            account=key.urlsafe(),
-                                                            duration=deal.duration,
-                                                            currency=deal.currency,
-                                                            amount_total=deal.price
-                                                            )
-                opportunity_schema=Opportunity.insert(user,opportunity_request)
-
         ############
         #store other company == company.all()
         #############
-        companys=EndpointsHelper.highrise_import_companys(request)
-        for company_details in companys:
-            print company_details.__dict__, "ccccccccccccccccccz"
+        companies=EndpointsHelper.highrise_import_companies(request)
+        for company_details in companies:
             phones=list()
             phone=iomessages.PhoneSchema()
             if len(company_details.contact_data.phone_numbers)!=0:
@@ -1225,16 +1060,192 @@ class CrmEngineApi(remote.Service):
 
             account_schema = Account.insert(user,account_request)
 
+        people=EndpointsHelper.highrise_import_peoples(request)
+        for person in people:
+            ############
+            # Store company if persone
+            ################
+            account_schema=""
+            if person.company_id!=0:
+                company_details=EndpointsHelper.highrise_import_company_details(person.company_id)
+                phones=list()
+                phone=iomessages.PhoneSchema(   )
+                if len(company_details.contact_data.phone_numbers)!=0:
+                    phone.number=company_details.contact_data.phone_numbers[0].number
+                    phone.type=str(company_details.contact_data.phone_numbers[0].location)
+                phones.append(phone)
+                email=iomessages.EmailSchema()
+                                            
+                if len(company_details.contact_data.email_addresses)!=0:
+                    email.email=company_details.contact_data.email_addresses[0].address
+                emails=list()
+                emails.append(email)
+                url=""
+                if len(company_details.contact_data.web_addresses)!=0:
+                    url=company_details.contact_data.web_addresses[0].url
+                twitter_account=""
+                if len(company_details.contact_data.twitter_accounts)!=0:
+                    twitter_account=company_details.contact_data.twitter_accounts[0].username
+                country=""
+                if len(company_details.contact_data.addresses)!=0:
+                    country=company_details.contact_data.addresses[0].country
+                street=""
+                if len(company_details.contact_data.addresses)!=0:
+                    street=company_details.contact_data.addresses[0].street
+                infonode=iomessages.InfoNodeRequestSchema(
+                                    kind='company',
+                                                fields=[
+                                                    iomessages.RecordSchema(
+                                                    field = 'url',
+                                                    value = url
+                                                    ),
+                                                    iomessages.RecordSchema(
+                                                    field = 'twitter_account',
+                                                    value = twitter_account
+                                                    ),
+                                                    iomessages.RecordSchema(
+                                                    field = 'country',
+                                                    value = country
+                                                    ),
+                                                    iomessages.RecordSchema(
+                                                    field = 'street',
+                                                    value = street
+                                                    )
+
+                                                ]
+                                    )
+                infonodes=list()
+                infonodes.append(infonode)
+                account_request=AccountInsertRequest(
+                                                    name=person.company_name,
+                                                    emails=emails,
+                                                    logo_img_url=company_details.avatar_url,
+                                                    infonodes=infonodes,
+                                                    phones=phones
+                                                    )
+                account_schema = Account.insert(user,account_request)
+                
+            #Store Persone
+            if account_schema!="":
+                key=account_schema.entityKey
+            else:
+                key=""
+
+            infonodes=list()
+            infonodes.append(infonode)
+            phone=iomessages.PhoneSchema()
+            if len(person.contact_data.phone_numbers)!=0:
+                phone.number=person.contact_data.phone_numbers[0].number
+            if len(person.contact_data.phone_numbers)!=0:
+                phone.type=str(person.contact_data.phone_numbers[0].location)
+            phones=list()
+            phones.append(phone)
+            contact_request = ContactInsertRequest(
+                                        account=key,
+                                        firstname=person.first_name,
+                                        lastname=person.last_name,
+                                        title=person.title,
+                                        profile_img_url=person.avatar_url,
+                                        infonodes=infonodes,
+                                        phones=phones
+                                         )
+            
+            contact_schema=Contact.insert(user,contact_request)
+            #create edge between account and persone
+            if account_schema!="":
+                Edge.insert(start_node =ndb.Key(urlsafe=account_schema.entityKey) ,
+                          end_node = ndb.Key(urlsafe=contact_schema.entityKey),
+                          kind = 'contacts',
+                          inverse_edge = 'parents')
+            
+            #########
+            #store tasks of person
+            tasks=EndpointsHelper.highrise_import_tasks_of_person(person.id)
+            for task in tasks:
+                from iomodels.crmengine.tasks import EntityKeyRequest
+                assigne=EntityKeyRequest(
+                                        entityKey=contact_schema.entityKey
+                                        )
+                assignes=list()
+                assignes.append(assigne)
+                task_request=TaskInsertRequest(
+                                                parent=contact_schema.entityKey,
+                                                title=task.body,
+                                                status=task.frame,
+                                                due=task.due_at.strftime("%d/%m/%Y")
+                                                )
+            #     task_schema=Task.insert(user, task_request)
+            ###########
+            #store notes of persons
+            notes=list()
+            try:
+                notes=EndpointsHelper.highrise_import_notes_of_person(person.id)
+            except Exception:
+                print Exception
+            for note in notes:
+                print note.__dict__
+                note_author = Userinfo()
+                note_author.display_name = user.google_display_name
+                note_author.photo = user.google_public_profile_photo_url
+                note = Note(
+                            owner = user.google_user_id,
+                            organization = user.organization,
+                            author = note_author,
+                            title = "",
+                            content = note.body
+                        )
+                entityKey_async = note.put_async()
+                entityKey = entityKey_async.get_result()
+                Edge.insert(
+                            start_node = ndb.Key(urlsafe=contact_schema.entityKey),
+                            end_node = entityKey,
+                            kind = 'topics',
+                            inverse_edge = 'parents'
+                        )
+                EndpointsHelper.update_edge_indexes(
+                                                    parent_key = ndb.Key(urlsafe=contact_schema.entityKey),
+                                                    kind = 'topics',
+                                                    indexed_edge = str(entityKey.id())
+                                                    )
+             
+            #########
+            # store opporutnities of person
+            deals=EndpointsHelper.highrise_import_opportunities()
+            for deal in deals:
+                company_details=EndpointsHelper.highrise_import_company_details(deal.party_id)
+                key=Account.get_key_by_name(user,company_details.name)
+                if key:    
+                    opportunity_request=OpportunityInsertRequest(
+                                                                name=deal.name,
+                                                                description=deal.background,
+                                                                account=key.urlsafe(),
+                                                                duration=deal.duration,
+                                                                currency=deal.currency,
+                                                                amount_total=deal.price
+                                                                )
+                    opportunity_schema=Opportunity.insert(user,opportunity_request)
+                    Edge.insert(start_node = ndb.Key(urlsafe=contact_schema.entityKey),
+                      end_node =ndb.Key(urlsafe=opportunity_schema.entityKey),
+                      kind = 'opportunities',
+                      inverse_edge = 'parents')
+                    EndpointsHelper.update_edge_indexes(
+                                            parent_key =ndb.Key(urlsafe=opportunity_schema.entityKey),
+                                            kind = 'opportunities',
+                                            indexed_edge = (ndb.Key(urlsafe=contact_schema.entityKey)).id()
+                                            )
+
+        
+
         return message_types.VoidMessage()
 
-    # highrise.import_companys api
+    # highrise.import_companies apis
     @endpoints.method(ContactImportHighriseRequest, message_types.VoidMessage,
-                      path='highrise/import_companys', http_method='POST',
-                      name='highrise.import_companys')
-    def highrise_import_companys(self, request):
+                      path='highrise/import_companies', http_method='POST',
+                      name='highrise.import_companies')
+    def highrise_import_companies(self, request):
         user= EndpointsHelper.require_iogrow_user()
-        companys=EndpointsHelper.highrise_import_companys(request)
-        for company in companys:
+        companies=EndpointsHelper.highrise_import_companies(request)
+        for company in companies:
             company_details=EndpointsHelper.highrise_import_company_details(company.id)
             print company_details.contact_data.instant_messengers[0].__dict__
             phones=list()
@@ -2532,52 +2543,60 @@ class CrmEngineApi(remote.Service):
                     )
 
     # users.insert api
-    @User.method(path='users', http_method='POST', name='users.insert')
-    def UserInsert(self, my_model):
+    @endpoints.method(InvitationRequest, message_types.VoidMessage,
+                      path='users/insert', http_method='POST',
+                      name='users.insert')
+    #@User.method(path='users', http_method='POST', name='users.insert')
+    def UserInsert(self,request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         # OAuth flow
-        taskqueue.add(
-                        url='/workers/initpeertopeerdrive',
-                        params={
-                                'invited_by_email':user_from_email.email,
-                                'email': my_model.email,
-                                }
-                    )
-        invited_user = User.get_by_email(my_model.email)
-        send_notification_mail = False
-        if invited_user is not None:
-            if invited_user.organization == user_from_email.organization or invited_user.organization is None:
-                invited_user.invited_by = user_from_email.key
-                invited_user_key = invited_user.put_async()
+
+        for email in request.emails:
+            my_model=User()
+            taskqueue.add(
+                            url='/workers/initpeertopeerdrive',
+                            params={
+                                    'invited_by_email':user_from_email.email,
+                                    'email': email,
+                                    }
+                        )
+            invited_user = User.get_by_email(email)
+            send_notification_mail = False
+            if invited_user is not None:
+                if invited_user.organization == user_from_email.organization or invited_user.organization is None:
+                    invited_user.invited_by = user_from_email.key
+                    invited_user_key = invited_user.put_async()
+                    invited_user_async = invited_user_key.get_result()
+                    invited_user_id = invited_user_async.id()
+                    my_model.id = invited_user_id
+                    Invitation.insert(email,user_from_email)
+                    send_notification_mail = True
+                elif invited_user.organization is not None:
+                    raise endpoints.UnauthorizedException('User exist within another organization' )
+                    return
+            else:
+                my_model.invited_by = user_from_email.key
+                my_model.status = 'invited'
+                invited_user_key = my_model.put_async()
                 invited_user_async = invited_user_key.get_result()
                 invited_user_id = invited_user_async.id()
-                my_model.id = invited_user_id
-                Invitation.insert(my_model.email,user_from_email)
+                Invitation.insert(email,user_from_email)
                 send_notification_mail = True
-            elif invited_user.organization is not None:
-                raise endpoints.UnauthorizedException('User exist within another organization' )
-                return
-        else:
-            my_model.invited_by = user_from_email.key
-            my_model.status = 'invited'
-            invited_user_key = my_model.put_async()
-            invited_user_async = invited_user_key.get_result()
-            invited_user_id = invited_user_async.id()
-            Invitation.insert(my_model.email,user_from_email)
-            send_notification_mail = True
 
-        if send_notification_mail:
-            confirmation_url = "http://gcdc2013-iogrow.appspot.com//sign-in?id=" + str(invited_user_id) + '&'
-            sender_address = "ioGrow notifications <notifications@gcdc2013-iogrow.appspotmail.com>"
-            subject = "Confirm your registration"
-            body = """
-            Thank you for creating an account! Please confirm your email address by
-            clicking on the link below:
-            %s
-            """ % confirmation_url
+            if send_notification_mail:
+                confirmation_url = "http://www.iogrow.com//sign-in?id=" + str(invited_user_id) + '&'
+                sender_address = user_from_email.google_display_name+" <notifications@gcdc2013-iogrow.appspotmail.com>"
+                subject = "Invitation from " + user_from_email.google_display_name
+                # body = """
+                # Thank you for creating an account! Please confirm your email address by
+                # clicking on the link below:
+                # %s
+                # """ % confirmation_url
+                body=request.message
+                print body
 
-            mail.send_mail(sender_address, my_model.email , subject, body)
-        return my_model
+                mail.send_mail(sender_address, email , subject, body)
+        return message_types.VoidMessage()
 
 
     # users.list api v2
