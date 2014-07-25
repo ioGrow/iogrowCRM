@@ -66,8 +66,7 @@ class EndpointsHelper():
     INVALID_TOKEN = 'Invalid token'
     INVALID_GRANT = 'Invalid grant'
     NO_ACCOUNT = 'You don\'t have a i/oGrow account'
-    Highrise.set_server('iogrow3')
-    Highrise.auth('eee33d458c7982242b99d4b7f6b1d94d')
+    
     @classmethod
     def send_message(cls,service, user_id, message):
         """Send an email message.
@@ -293,9 +292,12 @@ class EndpointsHelper():
         people = Person.all()
         return people
     @classmethod
-    def highrise_import_companys(cls, request):
-        companys=Company.all()
-        return companys
+    def highrise_import_companies(cls, request):
+        
+        Highrise.set_server(request.server_name)
+        Highrise.auth(request.key)
+        companies=Company.all()
+        return companies
     @classmethod
     def highrise_import_company_details(cls, company_id):
         companie=Company.get(company_id)

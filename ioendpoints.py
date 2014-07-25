@@ -1001,8 +1001,8 @@ class CrmEngineApi(remote.Service):
         ############
         #store other company == company.all()
         #############
-        companys=EndpointsHelper.highrise_import_companys(request)
-        for company_details in companys:
+        companies=EndpointsHelper.highrise_import_companies(request)
+        for company_details in companies:
             phones=list()
             phone=iomessages.PhoneSchema()
             if len(company_details.contact_data.phone_numbers)!=0:
@@ -1231,21 +1231,21 @@ class CrmEngineApi(remote.Service):
                     EndpointsHelper.update_edge_indexes(
                                             parent_key =ndb.Key(urlsafe=opportunity_schema.entityKey),
                                             kind = 'opportunities',
-                                            indexed_edge = str(contact_schema.id())
+                                            indexed_edge = (ndb.Key(urlsafe=contact_schema.entityKey)).id()
                                             )
 
         
 
         return message_types.VoidMessage()
 
-    # highrise.import_companys api
+    # highrise.import_companies apis
     @endpoints.method(ContactImportHighriseRequest, message_types.VoidMessage,
-                      path='highrise/import_companys', http_method='POST',
-                      name='highrise.import_companys')
-    def highrise_import_companys(self, request):
+                      path='highrise/import_companies', http_method='POST',
+                      name='highrise.import_companies')
+    def highrise_import_companies(self, request):
         user= EndpointsHelper.require_iogrow_user()
-        companys=EndpointsHelper.highrise_import_companys(request)
-        for company in companys:
+        companies=EndpointsHelper.highrise_import_companies(request)
+        for company in companies:
             company_details=EndpointsHelper.highrise_import_company_details(company.id)
             print company_details.contact_data.instant_messengers[0].__dict__
             phones=list()

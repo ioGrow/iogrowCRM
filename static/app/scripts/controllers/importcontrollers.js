@@ -1,7 +1,7 @@
 app.controller('ImportListCtrl', ['$scope','Auth','Import',
     function($scope,Auth,Import) {
      $("ul.page-sidebar-menu li").removeClass("active");
-     $("#id_Import").addClass("active");
+     $("#id_Imports").addClass("active");
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
@@ -44,7 +44,7 @@ app.controller('ImportListCtrl', ['$scope','Auth','Import',
 app.controller('ImportNewCtrl', ['$scope','Auth','Import',
     function($scope,Auth,Import) {
      $("ul.page-sidebar-menu li").removeClass("active");
-     $("#id_Import").addClass("active");
+     $("#id_Imports").addClass("active");
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      $scope.nextPageToken = undefined;
