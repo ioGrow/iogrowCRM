@@ -592,9 +592,10 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                           'profile_img_url':null
                         };
 
-      // What to do after authentication
-      console.log("check navigator infos");
-      console.log(navigator.appVersion);
+      $scope.fromNow = function(fromDate){
+          return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
+      }
+      
       $scope.runTheProcess = function(){
             var params = {
                           'id':$route.current.params.leadId,

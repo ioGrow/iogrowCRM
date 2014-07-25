@@ -89,7 +89,7 @@
                         </a>
                       </span>
                     </li>
-                    <li ng-show="contact.account.name">
+                    <li ng-show="contact.account">
                       <span>
                         Company:
                         <a class="tag ng-binding" href="/#/search/type:Contact  contacts:<%= contact.account.id %>">
@@ -99,7 +99,7 @@
                     </li>
                     <li>
                       <span>
-                        created by:
+                         Owner:
                         <a class="tag ng-binding" href="/#/search/type:Contact owner:<%= contact.owner.google_user_id %>">
                           #<%= contact.owner.google_display_name %>
                         </a>
