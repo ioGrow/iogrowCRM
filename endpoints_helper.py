@@ -294,11 +294,12 @@ class EndpointsHelper():
 
 
 
-class scor_new_lead():
-    def predict(predd,tedd) :
-        user = User.get_by_email('hakim@iogrow.com')
+'''class scor_n= User.get_by_email('hakim@iogrow.com')"
         credentials=user.google_credentials
-        http = credentials.authorize(httplib2.Http())
+        httpew_lead():
+    def predict(predd,tedd) :
+        user  = credentials.authorize(httplib2.Http())
         service=build('prediction','v1.6',http=http)
         result=service.trainedmodels().predict(project='987765099891',id='7',body={'input':{'csvInstance':['Sofware Engineer','Purchase List']}}).execute()
         return result
+        '''
