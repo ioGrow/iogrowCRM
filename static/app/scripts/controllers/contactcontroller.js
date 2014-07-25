@@ -122,7 +122,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 					$('#importModal').modal('show');
 				}
 				$scope.createPickerUploader = function() {
-					
+
 					$('#importModal').modal('hide');
 					var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
 					var projectfolder = $scope.contact.folder;
@@ -163,7 +163,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 
 // hadji hicham 23-07-2014 . inlinepatch for labels .
   $scope.inlinePatch=function(kind,edge,name,tag,value){
-      
+
         if(kind=="tag"){
 
         params={'id':tag.id,
@@ -568,7 +568,10 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
       $scope.selected_members = [];
       $scope.selected_member = {};
 
-
+			$scope.fromNow = function(fromDate){
+					return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
+			}
+			
 			$scope.waterfallTrigger= function(){
 
 
@@ -728,7 +731,7 @@ $scope.listTags=function(){
         console.log(slected_memeber);
         console.log("ssssssssss");
         console.log($scope.contact.id);
-      
+
 
 
         $scope.$watch($scope.contact.access, function() {
@@ -809,7 +812,7 @@ $scope.listTags=function(){
 	$scope.share = function(slected_memeber){
 
 
-				 
+
 
 				console.log('permissions.insert share');
 				console.log(slected_memeber);
@@ -939,7 +942,7 @@ $scope.listTags=function(){
                     var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
                     params ={'title': task.title,
                               'due': dueDate,
-                              'parent': $scope.contact.entityKey, 
+                              'parent': $scope.contact.entityKey,
                               'access': $scope.contact.access
                     }
 
@@ -952,7 +955,7 @@ $scope.listTags=function(){
                 if ($scope.selected_members!=[]) {
                       params.assignees=$scope.selected_members;
                     };
-                    var tags=[];                
+                    var tags=[];
                     tags=$('#select2_sample2').select2("val");
                     if (tags!=[]) {
                       var tagitems = [];
@@ -973,9 +976,9 @@ $scope.listTags=function(){
          }
      }
     $scope.deleteTask = function(task){
-      
+
        var params = {'entityKey':task.entityKey};
-       
+
        Task.delete($scope, params);
 
      };
@@ -983,7 +986,7 @@ $scope.listTags=function(){
      // rederection after delete task . hadji hicham 08--07-2014
       $scope.taskDeleted = function(resp){
 
-     }; 
+     };
 		 $scope.hilightTask = function(){
 				console.log('Should higll');
 				$('#task_0').effect("highlight","slow");
@@ -1026,9 +1029,9 @@ $scope.listTags=function(){
                       }
 
 
-                 
+
                   }else{
-             
+
                   if (ioevent.starts_at){
                     if (ioevent.ends_at){
                       params ={'title': ioevent.title,
@@ -1053,8 +1056,8 @@ $scope.listTags=function(){
                     }
 
 
-                    
-                   
+
+
                   }
 
 

@@ -89,13 +89,24 @@
                         </a>
                       </span>
                     </li>
-                    <li ng-show="contact.Paccount.name">
+                    <li ng-show="contact.account.name">
                       <span>
                         Company:
-                        <a class="tag ng-binding" href="/#/search/type:Contact  #<%= contact.account.name %>">
+                        <a class="tag ng-binding" href="/#/search/type:Contact  contacts:<%= contact.account.id %>">
                           #<%= contact.account.name %>
                         </a>
                       </span>
+                    </li>
+                    <li>
+                      <span>
+                        created by:
+                        <a class="tag ng-binding" href="/#/search/type:Contact owner:<%= contact.owner.google_user_id %>">
+                          #<%= contact.owner.google_display_name %>
+                        </a>
+                      </span>
+                    </li>
+                    <li>
+                      <span class="contact-title" >Last updated:  <%=fromNow(contact.updated_at)%> </span>
                     </li>
                     <li>
                         <br>
@@ -893,7 +904,7 @@
                             <span class="relatedEventStartsAt pull-right" ng-hide="showDetails" ng-show="task.due" title="<%= task.due| date:'yyyy-MM-dd '%>">
                                   <%= task.due | date:'dd MMM'%>
                             </span>
-                          </div>  
+                          </div>
                           <div class="moreDetails row" ng-show="showDetails">
                           <!--  <div class="col-md-6 col-xs-6 event-schedule">
                                 <span class=""><i class="fa fa-calendar"></i>
@@ -901,13 +912,13 @@
                             </div>
                             <div class="col-md-6 col-xs-6 event-schedule">
                                <span class="">
-                                  <i class="fa fa-bell-o"></i> 
+                                  <i class="fa fa-bell-o"></i>
                                   <%= task.reminder | date:'dd MMM'%>
                                 </span>
                             </div>
                             <div class="col-md-12">
                                <span class="">
-                                  <i class="fa fa-map-marker"></i> 
+                                  <i class="fa fa-map-marker"></i>
                                   <%= event.where %>-->
                                 <!--</span>
                             </div>-->
