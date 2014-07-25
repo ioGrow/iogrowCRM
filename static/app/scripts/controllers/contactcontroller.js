@@ -136,7 +136,6 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 							setOAuthToken(window.authResult.access_token).
 							setDeveloperKey(developerKey).
 							setAppId(987765099891).
-								enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
 							build();
 					picker.setVisible(true);
 			};
@@ -571,7 +570,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 			$scope.fromNow = function(fromDate){
 					return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
 			}
-			
+
 			$scope.waterfallTrigger= function(){
 
 
