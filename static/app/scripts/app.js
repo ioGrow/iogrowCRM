@@ -109,6 +109,9 @@ app.config(['$routeProvider', function($routeProvider) {
       when('/admin/users', {
         controller: 'UserListCtrl',
         templateUrl:'/views/admin/users/list'
+      }).when('/admin/users/new', {
+        controller: 'UserNewCtrl',
+        templateUrl:'/views/admin/users/new'
       }).when('/admin/groups', {
         controller: 'GroupListCtrl',
         templateUrl:'/views/admin/groups/list'
@@ -119,10 +122,10 @@ app.config(['$routeProvider', function($routeProvider) {
         controller:'SettingsShowCtrl',
         templateUrl:'/views/admin/settings'
 
-      }).when('/admin/import', {
+      }).when('/admin/imports', {
         controller: 'ImportListCtrl',
         templateUrl:'/views/admin/imports/list'
-      }).when('/admin/import/new', {
+      }).when('/admin/imports/new', {
         controller: 'ImportNewCtrl',
         templateUrl:'/views/admin/imports/new'
       }).

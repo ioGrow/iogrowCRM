@@ -591,8 +591,10 @@ class ShowShowHandler(BaseHandler, SessionEnabledHandler):
 
 class UserListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
-        self.prepare_template('templates/admin/users/list.html')
-
+        self.prepare_template('templates/admin/users/user_list.html')
+class UserNewHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/admin/users/user_new.html')
 class GroupListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/admin/groups/list.html')
@@ -606,7 +608,7 @@ class settingsShowHandler(BaseHandler, SessionEnabledHandler):
         self.prepare_template('templates/admin/settings/settings.html')
 class ImportListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
-        self.prepare_template('templates/admin/imports/imports_list.html')
+        self.prepare_template('templates/admin/imports/import_list.html')
 class ImportNewHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/admin/imports/import_new.html')
@@ -1026,6 +1028,7 @@ routes = [
      ('/views/calendar/show',CalendarShowHandler),
     # Admin Console Views
     ('/views/admin/users/list',UserListHandler),
+    ('/views/admin/users/new',UserNewHandler),
     ('/views/admin/groups/list',GroupListHandler),
     ('/views/admin/groups/show',GroupShowHandler),
     ('/views/admin/settings',settingsShowHandler),

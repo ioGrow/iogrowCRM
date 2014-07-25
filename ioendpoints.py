@@ -33,7 +33,7 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 # Our libraries
 from iograph import Node,Edge,RecordSchema,InfoNodeResponse,InfoNodeConnectionSchema,InfoNodeListResponse
 from iomodels.crmengine.accounts import Account,AccountGetRequest,AccountSchema,AccountListRequest,AccountListResponse,AccountSearchResult,AccountSearchResults,AccountInsertRequest
-from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertRequest,ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults,ContactImportRequest,ContactImportHighriseRequest,ContactHighriseResponse, ContactHighriseSchema, DetailImportHighriseRequest
+from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertRequest,ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults,ContactImportRequest,ContactImportHighriseRequest,ContactHighriseResponse, ContactHighriseSchema, DetailImportHighriseRequest, InvitationRequest
 from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema,NoteSchema
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
@@ -2510,52 +2510,60 @@ class CrmEngineApi(remote.Service):
                     )
 
     # users.insert api
-    @User.method(path='users', http_method='POST', name='users.insert')
-    def UserInsert(self, my_model):
+    @endpoints.method(InvitationRequest, message_types.VoidMessage,
+                      path='users/insert', http_method='POST',
+                      name='users.insert')
+    #@User.method(path='users', http_method='POST', name='users.insert')
+    def UserInsert(self,request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         # OAuth flow
-        taskqueue.add(
-                        url='/workers/initpeertopeerdrive',
-                        params={
-                                'invited_by_email':user_from_email.email,
-                                'email': my_model.email,
-                                }
-                    )
-        invited_user = User.get_by_email(my_model.email)
-        send_notification_mail = False
-        if invited_user is not None:
-            if invited_user.organization == user_from_email.organization or invited_user.organization is None:
-                invited_user.invited_by = user_from_email.key
-                invited_user_key = invited_user.put_async()
+
+        for email in request.emails:
+            my_model=User()
+            taskqueue.add(
+                            url='/workers/initpeertopeerdrive',
+                            params={
+                                    'invited_by_email':user_from_email.email,
+                                    'email': email,
+                                    }
+                        )
+            invited_user = User.get_by_email(email)
+            send_notification_mail = False
+            if invited_user is not None:
+                if invited_user.organization == user_from_email.organization or invited_user.organization is None:
+                    invited_user.invited_by = user_from_email.key
+                    invited_user_key = invited_user.put_async()
+                    invited_user_async = invited_user_key.get_result()
+                    invited_user_id = invited_user_async.id()
+                    my_model.id = invited_user_id
+                    Invitation.insert(email,user_from_email)
+                    send_notification_mail = True
+                elif invited_user.organization is not None:
+                    raise endpoints.UnauthorizedException('User exist within another organization' )
+                    return
+            else:
+                my_model.invited_by = user_from_email.key
+                my_model.status = 'invited'
+                invited_user_key = my_model.put_async()
                 invited_user_async = invited_user_key.get_result()
                 invited_user_id = invited_user_async.id()
-                my_model.id = invited_user_id
-                Invitation.insert(my_model.email,user_from_email)
+                Invitation.insert(email,user_from_email)
                 send_notification_mail = True
-            elif invited_user.organization is not None:
-                raise endpoints.UnauthorizedException('User exist within another organization' )
-                return
-        else:
-            my_model.invited_by = user_from_email.key
-            my_model.status = 'invited'
-            invited_user_key = my_model.put_async()
-            invited_user_async = invited_user_key.get_result()
-            invited_user_id = invited_user_async.id()
-            Invitation.insert(my_model.email,user_from_email)
-            send_notification_mail = True
 
-        if send_notification_mail:
-            confirmation_url = "http://gcdc2013-iogrow.appspot.com//sign-in?id=" + str(invited_user_id) + '&'
-            sender_address = "ioGrow notifications <notifications@gcdc2013-iogrow.appspotmail.com>"
-            subject = "Confirm your registration"
-            body = """
-            Thank you for creating an account! Please confirm your email address by
-            clicking on the link below:
-            %s
-            """ % confirmation_url
+            if send_notification_mail:
+                confirmation_url = "http://gcdc2013-iogrow.appspot.com//sign-in?id=" + str(invited_user_id) + '&'
+                sender_address = "ioGrow notifications <notifications@gcdc2013-iogrow.appspotmail.com>"
+                subject = "Confirm your registration"
+                # body = """
+                # Thank you for creating an account! Please confirm your email address by
+                # clicking on the link below:
+                # %s
+                # """ % confirmation_url
+                body=request.message
+                print body
 
-            mail.send_mail(sender_address, my_model.email , subject, body)
-        return my_model
+                mail.send_mail(sender_address, email , subject, body)
+        return message_types.VoidMessage()
 
 
     # users.list api v2
