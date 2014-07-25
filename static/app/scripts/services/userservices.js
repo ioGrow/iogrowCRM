@@ -67,9 +67,8 @@ accountservices.factory('User', function($http) {
          console.log('in insert resp');
          console.log(resp);
          if(!resp.code){
-          console.log("there  are a response");
-         
-
+          console.log("there  are a response");       
+          $scope.isLoading = false;
          }else{
               console.log(resp.message);
                $('#addAccountModal').modal('hide');
