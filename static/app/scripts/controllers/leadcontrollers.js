@@ -130,6 +130,26 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       };
 
 
+// hadji hicham 22-07-2014 . inlinepatch for labels .
+  $scope.inlinePatch=function(kind,edge,name,tag,value){
+      
+        if(kind=="tag"){
+
+        params={'id':tag.id,
+                'entityKey':tag.entityKey,
+                'about_kind':'Lead',
+                'name':value
+                  };
+
+
+           Tag.patch($scope,params);
+      };
+
+
+
+             }
+ 
+
 
       $scope.save = function(lead){
         var params ={

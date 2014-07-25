@@ -343,30 +343,32 @@ topicservices.factory('Tag', function($http) {
       $scope.isLoading=false;
 
   };
+
     Tag.patch = function($scope,params){
       $scope.isLoading = true;
               console.log('task service');
+
       gapi.client.crmengine.tags.patch(params).execute(function(resp) {
-        console.log(params);
-        console.log(resp);
+      
           if(!resp.code){
-            $scope.tag = resp;
+            //$scope.tag = resp;
             $scope.isLoading = false;
-            $scope.listTags();
-            $scope.listTasks();
+            $scope.runTheProcess() ;
+             //$scope.listTags();
+            // $scope.listTasks();
             $scope.$apply();
          }else{
              console.log(resp.message);
              if(resp.message=="Invalid grant"){
                 $scope.refreshToken();
                 $scope.isLoading = false;
-                $scope.listTags();
-                $scope.listTasks();
+                // $scope.listTags();
+                // $scope.listTasks();
                 $scope.$apply();
              };
          }
       });
-     $scope.isLoading=false;
+ 
 
   };
   Tag.delete = function($scope,params){
