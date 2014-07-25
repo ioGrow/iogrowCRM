@@ -131,6 +131,25 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
       };
 
 
+// hadji hicham 23-07-2014 . inlinepatch for labels .
+  $scope.inlinePatch=function(kind,edge,name,tag,value){
+      
+        if(kind=="tag"){
+
+        params={'id':tag.id,
+                'entityKey':tag.entityKey,
+                'about_kind':'Lead',
+                'name':value
+                  };
+
+
+           Tag.patch($scope,params);
+      };
+
+
+
+             }
+
     $scope.save = function(casee){
 
         casee.status = $scope.status_selected.entityKey;

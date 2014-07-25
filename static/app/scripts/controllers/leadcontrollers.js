@@ -156,23 +156,47 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
 
       };
 
+
         $scope.showNewTagForm=function(){
           $scope.showNewTag=true;
-          $( window ).trigger( 'resize' );  
+          $( window ).trigger( 'resize' );
         }
         $scope.hideNewTagForm=function(){
           $scope.showNewTag=false;
-          $( window ).trigger( 'resize' ); 
+          $( window ).trigger( 'resize' );
         }
         $scope.hideTagFilterCard=function(){
           $scope.showTagsFilter=false;
-          $( window ).trigger( 'resize' ); 
+          $( window ).trigger( 'resize' );
         }
         $scope.showTagFilterCard=function(){
           $scope.showTagsFilter=true;
-          $( window ).trigger( 'resize' ); 
+          $( window ).trigger( 'resize' );
         }
-        
+
+
+
+// hadji hicham 22-07-2014 . inlinepatch for labels .
+  $scope.inlinePatch=function(kind,edge,name,tag,value){
+
+        if(kind=="tag"){
+
+        params={'id':tag.id,
+                'entityKey':tag.entityKey,
+                'about_kind':'Lead',
+                'name':value
+                  };
+
+
+           Tag.patch($scope,params);
+      };
+
+
+
+             }
+
+
+
       $scope.save = function(lead){
         var params ={
                       'firstname':lead.firstname,
@@ -672,7 +696,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                       'access':$scope.lead.access}
          Lead.patch($scope,params);
              // who is the parent of this event .hadji hicham 21-07-2014.
-                  
+
                 params["parent"]="lead";
                 Event.permission($scope,params);
                 Task.permission($scope,params);
@@ -777,9 +801,9 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      }
    }
     $scope.deleteTask = function(task){
-      
+
        var params = {'entityKey':task.entityKey};
-       
+
        Task.delete($scope, params);
 
      };
@@ -787,7 +811,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      // rederection after delete task . hadji hicham 08--07-2014
       $scope.taskDeleted = function(resp){
 
-     }; 
+     };
      $scope.hilightTask = function(){
         console.log('Should higll');
         $('#task_0').effect("highlight","slow");

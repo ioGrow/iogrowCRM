@@ -854,7 +854,9 @@ class SyncPatchCalendarEvent(webapp2.RequestHandler):
                   "summary": summary
                   }
 
-
+            print "-*-*-*-*-*-*here we go i'm the one -*-*-*-*-*-*-*-*"
+            print "yeah men"
+            print "*-*-*-*-*-*-*-*---------*-*-*-*-*-*-*-*-*-*-*-*-*-*-*"
             patched_event = service.events().patch(calendarId='primary',eventId=event_google_id,body=params).execute()
         except:
             raise endpoints.UnauthorizedException('Invalid grant' )
