@@ -37,6 +37,11 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             {'name': 'purple', 'color': '#E874D6'},
         ];
         $scope.tag.color = {'name': 'green', 'color': '#BBE535'};
+
+        $scope.fromNow = function(fromDate){
+            return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
+        }
+
         $scope.runTheProcess = function() {
             var params = {'order': $scope.order,
                 'limit': 20}
@@ -153,7 +158,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
 
 // hadji hicham 23-07-2014 . inlinepatch for labels .
   $scope.inlinePatch=function(kind,edge,name,tag,value){
-      
+
         if(kind=="tag"){
 
         params={'id':tag.id,
@@ -567,6 +572,11 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.endError = function() {
             alert("okkkkkkkkkkkkkkk");
         }
+
+        $scope.fromNow = function(fromDate){
+            return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
+        }
+        
         $scope.runTheProcess = function() {
 
             var params = {
@@ -1036,7 +1046,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                     'access': $scope.account.access}
                 Account.patch($scope, params);
                   // who is the parent of this event .hadji hicham 21-07-2014.
-                  
+
                 params["parent"]="account";
                 Event.permission($scope,params);
                 Task.permission($scope,params);
@@ -1134,7 +1144,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                 if ($scope.selected_members!=[]) {
                       params.assignees=$scope.selected_members;
                     };
-                    var tags=[];                
+                    var tags=[];
                     tags=$('#select2_sample2').select2("val");
                     if (tags!=[]) {
                       var tagitems = [];
@@ -1171,7 +1181,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             Account.get($scope, params);
         };
 //HKA 11.11.2013 Add new Event
- $scope.addEvent = function(ioevent){ 
+ $scope.addEvent = function(ioevent){
             /*****************************/
 
              if ($scope.newEventform==false) {
@@ -1198,9 +1208,9 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                       }
 
 
-                 
+
                   }else{
-             
+
                   if (ioevent.starts_at){
                     if (ioevent.ends_at){
                       params ={'title': ioevent.title,
@@ -1225,13 +1235,13 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                     }
 
 
-                    
-                   
+
+
                   }
 
 
                   }
-                  
+
                    Event.insert($scope,params);
                   $scope.ioevent={};
                   $scope.newEventform=false;
@@ -1615,7 +1625,7 @@ $scope.deleteaccount = function(){
 
           var params = {'id':$scope.account.id,
                          'addresses':addressArray};
-  
+
           Account.patch($scope,params);
       };
        $scope.addGeo = function(address){

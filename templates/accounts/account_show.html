@@ -79,20 +79,37 @@
                                             </a>
                                         </i>
                                     </span>
-                                    <span ng-show="account.account_type" style="">
-                                        Type:
-                                        <a class="tag ng-binding" href="/#/search/type:Account #<%= account.account_type %>">
-                                            #<%= account.account_type %>
-                                        </a>
-                                    </span>
-                                    <br>
-                                    <span ng-show="account.industry" style="">
-                                        Industry:
-                                        <a class="tag ng-binding" href="/#/search/type:Account  #<%= account.industry %>">
-                                            #<%= account.industry %>
-                                        </a>
-                                    </span>
-                                    <br>
+                                    <ul class="list-unstyled contactInfos">
+                                      <li ng-show="account.account_type" >
+                                        <span>
+                                            Type:
+                                            <a class="tag ng-binding" href="/#/search/type:Account #<%= account.account_type %>">
+                                                #<%= account.account_type %>
+                                            </a>
+                                        </span>
+                                      </li>
+                                      <li ng-show="account.industry">
+                                        <span>
+                                            Industry:
+                                            <a class="tag ng-binding" href="/#/search/type:Account  #<%= account.industry %>">
+                                                #<%= account.industry %>
+                                            </a>
+                                        </span>
+                                      </li>
+                                      <li>
+                                        <span>
+                                           Owner:
+                                          <a class="tag ng-binding" href="/#/search/type:Account owner:<%= account.owner.google_user_id %>">
+                                            #<%= account.owner.google_display_name %>
+                                          </a>
+                                        </span>
+                                      </li>
+                                      <li>
+                                        <span class="contact-title" >Last updated:  <%=fromNow(account.updated_at)%> </span>
+                                      </li>
+                                    </ul>
+
+
                                     <hr>
                                 </div>
                             </div>
@@ -243,11 +260,11 @@
                                                                 </div>
                                                                 <div class="form-group sm-group" style="">
                                                                     <label class="sr-only" for="exampleInputEmail2">Number</label>
-                                                                    <input 
-                                                                        type="text" 
-                                                                        class="form-control" 
-                                                                        id="exampleInputEmail2" 
-                                                                        ng-model="phone.number" 
+                                                                    <input
+                                                                        type="text"
+                                                                        class="form-control"
+                                                                        id="exampleInputEmail2"
+                                                                        ng-model="phone.number"
                                                                         placeholder="Enter a number"
                                                                         ng-pattern="/^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/i"
                                                                         required>
@@ -274,10 +291,10 @@
                                                             <form class="form-inline newLeadForm" role="form">
                                                                 <div class="form-group lg-group" style="">
                                                                     <label class="sr-only" for="exampleInputEmail2">Email</label>
-                                                                    <input 
-                                                                        type="email" 
-                                                                        class="form-control" 
-                                                                        id="exampleInputEmail2" 
+                                                                    <input
+                                                                        type="email"
+                                                                        class="form-control"
+                                                                        id="exampleInputEmail2"
                                                                         ng-model="email.email"
                                                                         placeholder="Enter an email"
                                                                         required
@@ -753,41 +770,41 @@
                                                 <p class⁼"lead"=""><strong>Send an Email to :</strong> </p>
                                                 <form  class="ng-pristine ng-invalid ng-invalid-required">
                                                     <div class="form-group">
-                                                        <input 
-                                                            required="" 
-                                                            class="form-control ng-pristine 
-                                                            ng-invalid ng-invalid-required" autofocus="" 
-                                                            type="text" 
-                                                            placeholder="To" 
-                                                            id="messageSubject" 
+                                                        <input
+                                                            required=""
+                                                            class="form-control ng-pristine
+                                                            ng-invalid ng-invalid-required" autofocus=""
+                                                            type="text"
+                                                            placeholder="To"
+                                                            id="messageSubject"
                                                             ng-model="email.to">
                                                     </div>
                                                     <div class="form-group">
-                                                        <input 
-                                                            class="form-control ng-pristine ng-valid" 
-                                                            autofocus="" 
-                                                            type="text" 
-                                                            placeholder="CC" 
-                                                            id="messageSubject" 
+                                                        <input
+                                                            class="form-control ng-pristine ng-valid"
+                                                            autofocus=""
+                                                            type="text"
+                                                            placeholder="CC"
+                                                            id="messageSubject"
                                                             ng-model="email.cc">
                                                     </div>
                                                     <div class="form-group">
-                                                        <input 
+                                                        <input
                                                             class="form-control ng-pristine ng-valid"
-                                                            autofocus="" 
+                                                            autofocus=""
                                                             type="text"
-                                                            placeholder="BCC" 
-                                                            id="messageSubject" 
+                                                            placeholder="BCC"
+                                                            id="messageSubject"
                                                             ng-model="email.bcc">
                                                     </div>
                                                     <div class="form-group">
-                                                        <input   
-                                                            required="" 
-                                                            class="form-control ng-pristine ng-invalid ng-invalid-required" 
-                                                            autofocus="" 
-                                                            type="text" 
-                                                            placeholder="Add a subject" 
-                                                            id="messageSubject" 
+                                                        <input
+                                                            required=""
+                                                            class="form-control ng-pristine ng-invalid ng-invalid-required"
+                                                            autofocus=""
+                                                            type="text"
+                                                            placeholder="Add a subject"
+                                                            id="messageSubject"
                                                             ng-model="email.subject">
                                                     </div>
                                                     <div class="form-group">
@@ -836,7 +853,7 @@
                             <span class="relatedEventStartsAt pull-right" ng-hide="showDetails" ng-show="task.due" title="<%= task.due| date:'yyyy-MM-dd '%>">
                                   <%= task.due | date:'dd MMM'%>
                             </span>
-                          </div>  
+                          </div>
                           <div class="moreDetails row" ng-show="showDetails">
                           <!--  <div class="col-md-6 col-xs-6 event-schedule">
                                 <span class=""><i class="fa fa-calendar"></i>
@@ -844,13 +861,13 @@
                             </div>
                             <div class="col-md-6 col-xs-6 event-schedule">
                                <span class="">
-                                  <i class="fa fa-bell-o"></i> 
+                                  <i class="fa fa-bell-o"></i>
                                   <%= task.reminder | date:'dd MMM'%>
                                 </span>
                             </div>
                             <div class="col-md-12">
                                <span class="">
-                                  <i class="fa fa-map-marker"></i> 
+                                  <i class="fa fa-map-marker"></i>
                                   <%= event.where %>-->
                                 <!--</span>
                             </div>-->
@@ -879,7 +896,7 @@
                                         <div class="input-icon ">
                                             <i class="fa fa-bell-o"></i>
                                               <input cusdatetimepicker data-model="newTask.reminder" type="text" class="form-control" placeholder="Add a reminder" value="" id="leadEventStartsAt">
-                                          </div>                                         
+                                          </div>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -929,7 +946,7 @@
                   <div class="caption"> <i class="fa fa-calendar"></i>Events </div>
 
                 </div>
-                <div class="newContactform portlet-body" id="chats">                  
+                <div class="newContactform portlet-body" id="chats">
                    <ul id="tasks" class="list-unstyled lead_related_events" ng-hide="newEventform">
                       <li ng-repeat="event in events" id="event_<%=$index%>" class="relatedEventItem" ng-mouseenter="showDeleteBtn = true" ng-mouseleave="showDeleteBtn = false">
                         <div class="event-container">
@@ -949,7 +966,7 @@
                             <span class="relatedEventStartsAt pull-right" ng-hide="showDetails" ng-show="event.starts_at" title="<%= event.starts_at | date:'yyyy-MM-dd '%>">
                                   <%= event.starts_at | date:'dd MMM'%>
                             </span>
-                          </div>  
+                          </div>
                           <div class="moreDetails row" ng-show="showDetails">
                             <div class="col-md-5 col-xs-5 event-schedule">
                                 <span class=""><i class="fa fa-calendar"></i>
@@ -960,13 +977,13 @@
                             </div>
                             <div class="col-md-5 col-xs-5 event-schedule">
                                <span class="">
-                                  <i class="fa fa-calendar"></i> 
+                                  <i class="fa fa-calendar"></i>
                                   <%= event.ends_at | date:'dd MMM'%>
                                 </span>
                             </div>
                             <div class="col-md-12">
                                <span class="">
-                                  <i class="fa fa-map-marker"></i> 
+                                  <i class="fa fa-map-marker"></i>
                                   <%= event.where %>
                                 </span>
                             </div>
@@ -1012,13 +1029,13 @@
                                       </div>
                                 </div>
                             </div>
-                            <!-- end date time picker --> 
+                            <!-- end date time picker -->
                             <div class="row">
                               <div class="col-md-12 margin-bottom-10">
                                   <input ng-model="ioevent.where" type="text" id="taskName" class="form-control" placeholder="Where ?">
                               </div>
                               <!--/span-->
-                            </div> 
+                            </div>
                   </div>
                   <div class="row">
                       <div class="col-md-12 margin-top-10">
@@ -1154,10 +1171,10 @@
                         </div>
                         <!--div class="form-group">
                             <label  class="required col-md-3 control-label">{{_("Labels")}} </label>
-    
+
                             <div class="col-md-9">
                               <input type="text" class="form-control"  id="id_description" ng-model="casee.type_case">
-    
+
                             </div>
                         </div-->
 
@@ -1693,7 +1710,7 @@
                                 </div>
                                 <!--div class="form-group">
                                   <label  class="required col-md-3 control-label">{{_("Labels")}} </label>
-          
+
                                   <div class="col-md-9">
                                     <input type="text"  class="form-control" id="id_label" ng-model="opportunity.description">
                                   </div>
