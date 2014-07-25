@@ -51,7 +51,9 @@ INFO_NODES = {
     'addresses' : {'default_field' : 'formatted'}
 }
 
-
+class InvitationRequest(messages.Message):
+    emails=messages.StringField(1, repeated=True)
+    message=messages.StringField(2, required=True)
 class ContactImportHighriseRequest(messages.Message):
     key=messages.StringField(1, required=True)
     server_name=messages.StringField(2, required=True)
