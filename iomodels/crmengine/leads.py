@@ -6,7 +6,7 @@ from google.appengine.api import search
 from endpoints_proto_datastore.ndb import EndpointsModel
 from protorpc import messages
 from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
-from endpoints_helper import EndpointsHelper,scor_new_lead
+from endpoints_helper import EndpointsHelper 
 from iomodels.crmengine.tags import Tag,TagSchema
 from iomodels.crmengine.tasks import Task,TaskRequest,TaskListResponse
 from iomodels.crmengine.events import Event,EventListResponse
@@ -621,6 +621,10 @@ class Lead(EndpointsModel):
                             )
             account_key = account.put_async()
             account_key_async = account_key.get_result()
+            account_id = str(account_key_async.id())
+            data = {}
+            data['id'] = account_key_async.id()
+            account.put_index(data)
             Edge.insert(
                         start_node = account_key_async,
                         end_node = contact_key_async,
@@ -630,7 +634,7 @@ class Lead(EndpointsModel):
             EndpointsHelper.update_edge_indexes(
                                             parent_key = contact_key_async,
                                             kind = 'contacts',
-                                            indexed_edge = str(account_key_async.id())
+                                            indexed_edge = account_id
                                             )
         edge_list = Edge.query(Edge.start_node == lead.key).fetch()
         for edge in edge_list:

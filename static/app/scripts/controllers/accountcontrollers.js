@@ -1069,6 +1069,11 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                 var params = {'id': id,
                     'access': $scope.account.access}
                 Account.patch($scope, params);
+                  // who is the parent of this event .hadji hicham 21-07-2014.
+                  
+                params["parent"]="account";
+                Event.permission($scope,params);
+                Task.permission($scope,params);
             });
             $('#sharingSettingsModal').modal('hide');
 
@@ -1741,8 +1746,7 @@ $scope.deleteaccount = function(){
                 'bcc': email.bcc,
                 'subject': email.subject,
                 'body': email.body,
-                'about_item': $scope.account.id,
-                'about_kind': 'Account'};
+                'about':$scope.account.entityKey};
 
             Email.send($scope, params);
         };

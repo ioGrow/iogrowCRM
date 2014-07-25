@@ -670,6 +670,11 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
          var params ={'id':id,
                       'access':$scope.lead.access}
          Lead.patch($scope,params);
+             // who is the parent of this event .hadji hicham 21-07-2014.
+                  
+                params["parent"]="lead";
+                Event.permission($scope,params);
+                Task.permission($scope,params);
         });
         $('#sharingSettingsModal').modal('hide');
 
