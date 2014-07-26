@@ -855,27 +855,22 @@ class GetFromLinkedinToIoGrow(webapp2.RequestHandler):
         print fullname
         profil=linkedin.scrape_linkedin(lead.firstname,lead.lastname)
         if profil:
-            node=Node(kind='linkedin_profile')
-            node.websites=profil["websites"] or None
-            print profil["websites"],"((((((((((((((((((((((((((((((((((((((((((((((((((((((((((("
-            node.formations=profil["formations"]
-            node._properties["experiences"]=ndb.TextProperty("experiences")
-            node._values["experiences"]=str(json.dumps(profil["experiences"]))
-            node._properties["resume"]=ndb.TextProperty("resume")
-            node._values["resume"]=profil["resume"] or ''
-            node._properties["certifications"]=ndb.TextProperty("certifications")
-            node._values["certifications"]=str(json.dumps(profil["certifications"]))
-            # node.certifications=json.dumps(profil["certifications"])
-            node.firstname=profil["firstname"]
-            node.lastname=profil["lastname"]
-            node.industry=profil["industry"]
-            node.locality=profil["locality"]
-            node.headline=profil["headline"]
-            node.current_post=profil["current_post"]
-            node.past_post=profil["past_post"]
-            node.relation=profil["relation"]
-            node.skills=profil["skills"]
-            key2=node.put()
+            pli=model.LinkedinProfile()
+            pli.formations=profil["formations"]
+            pli.firstname=profil["firstname"]
+            pli.lastname=profil["lastname"]
+            pli.industry=profil["industry"]
+            pli.locality=profil["locality"]
+            pli.headline=profil["headline"]
+            pli.relation=profil["relation"]
+            pli.resume=profil["resume"]
+            pli.current_post=profil["current_post"]
+            pli.past_post=profil["past_post"]
+            pli.certifications=json.dumps(profil["certifications"])
+            pli.experiences=json.dumps(profil["experiences"])
+            pli.skills=profil["skills"]
+            print pli
+            key2=pli.put()
             Edge.insert(start_node=key1,end_node=key2,kind='linkedin',inverse_edge='parents')
             # print profil
 class ShareDocument(webapp2.RequestHandler):

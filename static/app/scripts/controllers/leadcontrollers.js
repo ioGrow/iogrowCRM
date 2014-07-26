@@ -551,6 +551,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                           }
                       };
           Lead.get($scope,params);
+
           User.list($scope,{});
           Leadstatus.list($scope,{});
           var paramsTag = {'about_kind': 'Lead'};
@@ -561,6 +562,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
       $scope.refreshToken = function() {
               Auth.refreshToken();
       };
+
 
 
       // HKA 08.05.2014 Delete infonode
@@ -1342,9 +1344,12 @@ $scope.deletelead = function(){
       Tag.list($scope,paramsTag);
      };
   $scope.getLinkedinProfile=function(){
-    Lead.get_linkedin($scope,{'entityKey':$scope.lead.entityKey})
+    
+    Lead.get_linkedin($scope,{'entityKey':$scope.lead.entityKey});
   }
-
+  $scope.convertToJson=function(string){
+    return  JSON.parse(string);
+  }
    // Google+ Authentication
    Auth.init($scope);
    $(window).scroll(function() {

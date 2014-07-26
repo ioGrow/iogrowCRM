@@ -7,6 +7,7 @@ import cookielib
 from iograph import Node , Edge
 from iomessages import profileSchema
 from google.appengine.ext import ndb
+from model import LinkedinProfile
 class linked_in():
     def __init__(self):
         # Browser
@@ -107,35 +108,38 @@ class linked_in():
         expriences={}
         exp={}
         profile_experience=soup.find('div',{'id':'profile-experience'})
-        current_exprience=profile_experience.findAll('div',{'class':'position  first experience vevent vcard summary-current'})
-        tab=[]
-        if current_exprience:
-            for ce in current_exprience:
-                a=ce.find('span',{'class':'title'})
-                if a: exp['title']=a.text
-                a=ce.find('p',{'class':'period'})
-                if a: exp['period']=a.text
-                a=ce.find('span',{'class':'org summary'})
-                if a: exp['organisation']=a.text
-                a=ce.find('p',{'class':' description current-position'})
-                if a: exp['description']=a.text
-                tab.append(exp)
-        expriences['current_exprience']=tab
-        tab=[]
-        exp={}
-        past_exprience=profile_experience.findAll('div',{'class':'position   experience vevent vcard summary-past'})
-        if past_exprience:
-            for pe in past_exprience:
-                a=pe.find('span',{'class':'title'})
-                if a : exp['title']=a.text
-                a=pe.find('p',{'class':'period'})
-                if a : exp['period']=a.text
-                a=pe.find('span',{'class':'org summary'})
-                if a : exp['organisation']=a.text
-                a=pe.find('p',{'class':' description past-position'})
-                if a : exp['description']=a.text
-                if a : tab.append(exp)
-        expriences['past_exprience']=tab
+        if profile_experience:
+            current_exprience=profile_experience.findAll('div',{'class':'position  first experience vevent vcard summary-current'})
+            tab=[]
+            if current_exprience:
+                for ce in current_exprience:
+                    a=ce.find('span',{'class':'title'})
+                    if a: exp['title']=a.text
+                    a=ce.find('p',{'class':'period'})
+                    if a: exp['period']=a.text
+                    a=ce.find('span',{'class':'org summary'})
+                    if a: exp['organisation']=a.text
+                    a=ce.find('p',{'class':' description current-position'})
+                    if a: exp['description']=a.text
+                    tab.append(exp)
+            expriences['current_exprience']=tab
+            tab=[]
+            exp={}
+            past_exprience=profile_experience.find("div",{"class":"position   experience vevent vcard summary-past"})
+            print profile_experience,'###############kdkjfdkjfkjbsqdkjqbsdkbhqskdhbqfkhdfqkhdsbkhqbdskhqsdkh############################################'
+            if past_exprience:
+
+                for pe in past_exprience:
+                    a=pe.find('span',{'class':'title'})
+                    if a : exp['title']=a.text
+                    a=pe.find('p',{'class':'period'})
+                    if a : exp['period']=a.text
+                    a=pe.find('span',{'class':'org summary'})
+                    if a : exp['organisation']=a.text
+                    a=pe.find('p',{'class':' description past-position'})
+                    if a : exp['description']=a.text
+                    if a : tab.append(exp)
+            expriences['past_exprience']=tab
         return expriences
     def get_resume(self,soup):
         resume_soup=soup.find('div',{'id':"profile-summary"})
@@ -187,7 +191,7 @@ class linked_in():
     @classmethod
     # arezki lebdiri 15/07/2014
     def get_people(cls,entityKey):
-        print entityKey,"#######################################################################"
+
         key=ndb.Key(urlsafe=entityKey)
         print key
         print "********************************************************"
@@ -196,15 +200,6 @@ class linked_in():
         if result['items']:
             profile_key=result['items'][0].end_node
             pro= profile_key.get()
-            print pro
-            print "+++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-            # print pro.relation
-            if not pro.websites: pro.websites=[]  
-            dic={}
-            #for key in pro.__dict__
-            # pro.keys()
-            print pro._properties
-            # print pro.
             response=profileSchema(
                                     lastname = pro.lastname,
                                     firstname = pro.firstname,
@@ -221,7 +216,6 @@ class linked_in():
                                     certifications=pro.certifications,
                                     skills=pro.skills
                                     )
-            print "****************/////////////////////////////////////////"
             return response
 
         # print result
