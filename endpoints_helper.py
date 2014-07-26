@@ -24,7 +24,7 @@ import gdata.contacts.data
 from gdata.gauth import OAuth2Token
 from gdata.contacts.client import ContactsClient
 from model import User
-
+import iograph
 from highrise.pyrise import Highrise, Person, Company, Deal, Task, Tag, Case
 
 
