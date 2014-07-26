@@ -101,14 +101,14 @@
                     </li>
                     <li>
                       <span>
-                         Owner:
+                         {{ _('Owner:')}}
                         <a class="tag ng-binding" href="/#/search/type:Contact owner:<%= contact.owner.google_user_id %>">
                           #<%= contact.owner.google_display_name %>
                         </a>
                       </span>
                     </li>
                     <li>
-                      <span class="contact-title" >Last updated:  <%=fromNow(contact.updated_at)%> </span>
+                      <span class="contact-title" >{{ _('Last updated:')}}  <%=fromNow(contact.updated_at)%> </span>
                     </li>
                     <li>
                         <br>

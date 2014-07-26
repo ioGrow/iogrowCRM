@@ -89,7 +89,7 @@
                   <ul class="list-unstyled leadInfos">
                       <li>
                         <span>
-                           Owner:
+                           {{ _('Owner:')}}
                           <a class="tag ng-binding" href="/#/search/type:Case owner:<%= casee.owner.google_user_id %>">
                             #<%= casee.owner.google_display_name %>
                           </a>
@@ -592,11 +592,9 @@
                               </div>
                               <!--/span-->
                             </div>
-<<<<<<< HEAD
+
                                    {{ _('allday')}} <input type="checkbox" ng-model="allday"/>
-=======
-                                   All day <input type="checkbox" ng-model="allday"/>
->>>>>>> 8b22cb29e7cee7cc324175b36018ef7755f23c89
+
                               <!-- pick only date (the case of all day) -->
                               <div class="row" ng-show="allday">
                                 <div class="col-md-12 margin-bottom-10">

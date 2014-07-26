@@ -21,15 +21,14 @@
       <div class="row">
       <div class="col-md-10 col-xs-12 filter-content">
       <div class="filterOptions">
-<<<<<<< HEAD
+
           <span role="button" class="filterItem" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">{{ _('All')}} <span class="hidden-xs hiddenOnxs">{{ _('Leads')}}</span> </span>
           <span role="button" class="filterItem" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">{{ _('My')}} <span class="hidden-xs hiddenOnxs">{{ _('Leads')}}</span></span>
-=======
-          <span role="button" class="filterItem hiddenOnPhone" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">All <span class="hidden-xs hiddenOnxs">Leads</span> </span>
-          <span role="button" class="filterItem hiddenOnPhone" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">My <span class="hidden-xs hiddenOnxs">Leads</span></span>
+
+          
             <div class="btn-group visibleOnPhone">
                 <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='filter'}" >
-                  Filter by
+                  {{ _('Filter by')}}
                   <i class="icon-angle-down"></i>
                 </a>
                 <ul class="dropdown-menu drp-dwn-xs-right">
@@ -38,7 +37,7 @@
                   <li><a ng-click="showTagFilterCard();selectedOption ='tags'" href="#" data-toggle="modal">{{ _('Tags') }}</a></li>
                 </ul>
           </div>
->>>>>>> 8b22cb29e7cee7cc324175b36018ef7755f23c89
+
           <div class="btn-group">
               <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" >
                 {{ _('Sort by')}}
@@ -273,66 +272,7 @@
   </div>
   </div>
   </div>
-<<<<<<< HEAD
-  <div class="col-xs-12 col-sm-12 visible-xs visible-sm ">
-  <div class="row">
-  <div class="col-md-12">
-    <div class="portlet showCard fixedCard">
-      <div class="portlet-title">
-        <div class="caption">
-                <!-- class="fa fa-reorder"--><i></i>{{ _('Labels')}}
-        </div>
-      </div>
-      <div class="portlet-body">
-        <ul class="list-group tags-list">
-          <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
-            <div class="row">
-              <span  ng-drag="dragTag(tag_item)" draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
-                  <%= tag_item.name %>
-              </span>
-               <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
-              <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
-                <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
-              </form>
-              <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
-            </div>
-          </li>
-          <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
-            <a ng-click="" class="btn-link addAnotherPhone">
-              <i class="fa fa-tags"></i>  {{ _('Add a new label')}}
-            </a>
-          </li>
-        </ul>
-        <form class="well newTagForm" role="form" ng-show="showNewTag">
-          <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
-          <div class="row">
-            <div class="col-md-12 form-group">
-              <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('New label')}}">
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-8">
-              <ul class="color_pallet_menu">
-                <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
-                </li>
-              </ul>
-            </div>
-            <div class="col-md-4">
-              <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
-            </div>
-          </div>
-        </form>
-        <div class="form-group btn-manage-tags" ng-show="tags">
-          <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">{{ _('Manage Tags')}}
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-  </div>
-</div>
-=======
->>>>>>> 8b22cb29e7cee7cc324175b36018ef7755f23c89
+
       <!-- END PAGE CONTAINER-->
 </div>
 </div>
