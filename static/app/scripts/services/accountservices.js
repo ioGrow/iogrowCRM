@@ -235,12 +235,16 @@ accountservices.factory('Account', function($http) {
                     }
                 }
 
-                if (resp.tasks) {
-                    $scope.tasks = resp.tasks.items;
+                if (resp.tasks){
+                   $scope.tasks = resp.tasks.items;
+                }else{
+                  $scope.tasks = [];
                 }
 
-                if (resp.events) {
-                    $scope.events = resp.events.items;
+                if (resp.events){
+                   $scope.events = resp.events.items;
+                }else{
+                  $scope.events = [];
                 }
 
                 $scope.isContentLoaded = true;

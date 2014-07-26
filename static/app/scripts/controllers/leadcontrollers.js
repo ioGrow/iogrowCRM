@@ -824,10 +824,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                         'id':$scope.lead.id,
                         'tasks':{}
                       };
-                      console.log('params');
-                      console.log(params);
+                    
         Lead.get($scope,params);
-        console.log($scope.tasks);
 
      }
  //HKA 10.11.2013 Add event

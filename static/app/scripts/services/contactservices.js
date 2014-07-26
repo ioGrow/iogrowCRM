@@ -152,10 +152,14 @@ accountservices.factory('Contact', function($http) {
 
                   if (resp.tasks){
                      $scope.tasks = resp.tasks.items;
+                  }else{
+                    $scope.tasks = [];
                   }
 
                   if (resp.events){
                      $scope.events = resp.events.items;
+                  }else{
+                    $scope.events = [];
                   }
                   if (resp.profile_img_url){
                     $scope.imageSrc=resp.profile_img_url;
