@@ -20,17 +20,17 @@
       <div id="portlet-config" class="modal hide">
         <div class="modal-header">
           <button data-dismiss="modal" class="close" type="button"></button>
-          <h3>portlet Settings</h3>
+          <h3>{{ _('portlet Settings')}}</h3>
         </div>
         <div class="modal-body">
-          <p>Here will be a configuration form</p>
+          <p>{{ _('Here will be a configuration form')}}</p>
         </div>
       </div>
       <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
       <!-- BEGIN PAGE CONTAINER-->
       <div class="container-fluid"ng-show="immediateFailed">
          <div class="span12">  
-          <h1>Sign-in Button;</h1>
+          <h1>{{ _('Sign-in Button;')}}</h1>
               <span id="signin">
                   <span id="myGsignin"></span>
               </span>
@@ -111,7 +111,7 @@
                     </div>
                   </div>
                   <a class="more" href="/#/accounts/show/<%= account.id %>">
-                  View more <i class="m-icon-swapright m-icon-white"></i>
+                  {{ _('View more')}} <i class="m-icon-swapright m-icon-white"></i>
                   </a>                 
                 </div>
               </div>
@@ -130,7 +130,7 @@
                     </button></li>
                   </ul>
                 </div>
-                <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                <h3 class="pagination pull-right" ng-show="isLoading">{{ _('Loading...')}}</h3>
           </div>
             
           
