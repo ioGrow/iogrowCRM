@@ -33,7 +33,7 @@
   <div class="loader-container row" ng-show="isLoading">
     <div class="loader-dialog col-md-4 col-md-offset-4 ">
       <div class="loader-content">
-        Loading...
+        {{ _('Loading...')}}
       </div>
     </div>
   </div>
@@ -56,7 +56,7 @@
                     </span>
                     <span class="page-meta pull-right">
                       <i class="icon-trash">
-                        <a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  Delete
+                        <a ng-click="editbeforedelete()" class="btn-link addAnotherPhone"> {{ _('Delete')}}
                         </a>
                       </i>
                     </span>
@@ -87,9 +87,9 @@
       <div class="row slimForm">
           <div class="col-md-6">
             <div class="news-blocks blank-card blank-card-yellow newsCard">
-              <h3>Event Informations</h3>
+              <h3>{{ _('Event Informations')}}</h3>
               <div class="news-block-tags event-block-title">
-                <strong>Description</strong>
+                <strong>{{ _('Description')}}</strong>
               </div>
               <div class="form-group row">
                    <div class="col-md-12">
@@ -97,7 +97,7 @@
                     </div>
               </div>
               <div class="news-block-tags event-block-title">
-                <strong>Location</strong>
+                <strong>{{ _('Location')}}</strong>
               </div>
               <div class="form-group row">
                     <div class="col-md-12">
@@ -105,14 +105,14 @@
                     </div>
               </div>
               <div class="news-block-tags  event-block-title">
-                <strong>Schedule</strong>
+                <strong>{{ _('Schedule')}}</strong>
               </div>
               <div class="col-md-5 event-schedule">
                 <span ng-hide="showStartsCalendar" ng-click="showStartsCalendar=true"><i class="fa fa-calendar"></i>
                 <%=event.starts_at | date:'yyyy-MM-dd - HH:mm:ss '%></span>
                 <div ng-show="showStartsCalendar" class="input-icon">
                      <i class="fa fa-calendar"></i>
-                     <input cusdatetimepicker data-model="event.starts_at" type="text" class="form-control" placeholder="From" value="" id="leadEventStartsAt">
+                     <input cusdatetimepicker data-model="event.starts_at" type="text" class="form-control" placeholder="{{ _('From')}}" value="" id="leadEventStartsAt">
                </div>
               </div>
               <div class="col-md-2 event-schedule">
@@ -123,7 +123,9 @@
                <i class="fa fa-calendar"></i>  <%=event.ends_at | date:'yyyy-MM-dd - HH:mm:ss '%></span>
                <div ng-show="showEndsCalendar" class="input-icon">
                      <i class="fa fa-calendar"></i>
-                     <input cusdatetimepicker  data-model="event.ends_at" type="text" class="form-control" placeholder="From" value="" id="leadEventStartsAt">
+
+                     <input cusdatetimepicker close-on-selected=false data-model="event.ends_at" type="text" class="form-control" placeholder="{{ _('From')}}" value="" id="leadEventStartsAt">
+
                </div>
               </div>
               <div class="clearfix margin-bottom-15"></div>
@@ -143,7 +145,7 @@
         <div class="col-md-12 commentsShow">
              <div class="portlet">
                 <div class="portlet-title line">
-                  <div class="caption"><i class="icon-comments"></i>Comments</div>
+                  <div class="caption"><i class="icon-comments"></i>{{ _('Comments')}}</div>
                 </div>
                 <div claccoass="portlet-body">
                       <ul class="chats">
@@ -172,7 +174,7 @@
         <div class="col-md-12">
                <div class="portlet">
                 <div class="portlet-body">
-                     <p class⁼"lead"=""><strong>Add New Comment :</strong> </p>
+                     <p class⁼"lead"=""><strong>{{ _('Add New Comment :')}}</strong> </p>
                       <form id="addComment"  class=" ng-pristine ng-valid">
                       <div class="form-group">
                                         <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="comment.content"></textarea>
@@ -204,20 +206,20 @@
           <div class="portlet showCard">
             <div class="portlet-title line">
               <div class="caption">
-                <i class="icon-user"></i>Who's involved
+                <i class="icon-user"></i>{{ _('Who's involved')}}
               </div>
             </div>
             <div class="portlet-body">
                 <ul class="chats">
                 </ul>
-                 <div class="caption" ng-class="{hidden: attachment.assignees==null}"><i class="fa fa-group"></i>Assignees</div>
+                 <div class="caption" ng-class="{hidden: attachment.assignees==null}"><i class="fa fa-group"></i>{{ _('Assignees')}}</div>
                   <ul class="chats">
 
                        <li  ng-repeat="assigned in event.assignees">
                             <span class="arrow"><%=assigned.display_name%></span>
                        </li>
                        <li><a href="#addContributor"  class="btn-link addAnotherPhone" data-toggle="modal">
-                          <i class="icon-plus"></i>Add a new assignee</a>
+                          <i class="icon-plus"></i>{{ _('Add a new assignee')}}</a>
                        </li>
                   </ul>
             </div>
@@ -235,7 +237,7 @@
     <div class="modal-content">
         <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">Delete Event</h3>
+                <h3 id="myModalLabel" class="modal-title">{{ _('Delete Event')}}</h3>
               </div>
               <div class="modal-body">
                  <form id="seletesho" name="deletesho" class="form-horizontal">
@@ -464,10 +466,10 @@
                         <label  class="col-md-3 control-label">{{_("Custom Field")}} </label>
                         <div class="col-md-9">
                           <div class="form-group">
-                               <input type="text" class="form-control" placeholder="Field"  ng-model="customField.field">
+                               <input type="text" class="form-control" placeholder="{{ _('Field')}}"  ng-model="customField.field">
                           </div>
                           <div class="form-group">
-                               <input type="text" class="form-control" placeholder="Value"  ng-model="customField.value">
+                               <input type="text" class="form-control" placeholder="{{ _('Value')}}"  ng-model="customField.value">
                           </div>
                         </div>
                      </div>
@@ -497,7 +499,7 @@
                     <div class="form-group">
                         <label  class="col-md-3 control-label">{{_("Website")}} </label>
                         <div class="col-md-9">
-                          <input type="text" class="form-control" placeholder="Website" required id="id_website" ng-model="website.website" >
+                          <input type="text" class="form-control" placeholder="{{ _('Website')}}" required id="id_website" ng-model="website.website" >
                         </div>
                      </div>
               </div>
@@ -653,7 +655,7 @@
               <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">Delete Account</h3>
+                <h3 id="myModalLabel" class="modal-title">{{ _('Delete Account')}}</h3>
               </div>
               <div class="modal-body">
                  <form id="seletesho" name="deletesho" class="form-horizontal">
@@ -677,7 +679,7 @@
               <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">Delete Information</h3>
+                <h3 id="myModalLabel" class="modal-title">{{ _('Delete Information')}}</h3>
               </div>
               <div class="modal-body">
                  <form id="seletesho" name="deletesho" class="form-horizontal">
@@ -704,7 +706,7 @@
             <div class="modal-body pickerin">
                      <div class="controls controls-row">
                                           <form id="addTask" ng-submit="addTask(task)" class="ng-pristine ng-valid">
-                                                  <input class="form-control" autofocus type="text" placeholder="Add a new task" id="taskTitle" ng-model="task.title">
+                                                  <input class="form-control" autofocus type="text" placeholder="{{ _('Add a new task')}}" id="taskTitle" ng-model="task.title">
 
                                                   <p><strong>{{_("When's it due?")}}</strong></p>
                                                   <center>
@@ -735,16 +737,16 @@
             <div class="modal-body">
                      <div class="controls controls-row">
                                           <form id="addTask"  class="ng-pristine ng-valid">
-                                                  <input class="form-control" autofocus type="text" placeholder="Enter a new <%=mimeType%> name" id="taskTitle" ng-model="newdocument.title" required>
+                                                  <input class="form-control" autofocus type="text" placeholder="{{ _('Enter a new')}} <%=mimeType%> {{ _('name')}}" id="taskTitle" ng-model="newdocument.title" required>
 
 
                      </div>
             </div>
             <div class="modal-footer">
-              <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _('Cancel')}}</button>
 
                <input ng-hide="isLoading" type="submit" class="btn green" value="Create this document" ng-click="createDocument(newdocument)">
-                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...')}}" disabled>
 
             </form>
             </div>
@@ -789,7 +791,7 @@
                         <label  class="required col-md-3 control-label">{{_("Stage")}} </label>
                         <div class="col-md-9">
                           <select ng-model="stage_selected" class="form-control" ng-options="opps.name + ' - ( ' + opps.probability + '% )' for opps in opportunitystages | orderBy: 'name':true"  >
-                            <option value="">-- choose Stage --</option>
+                            <option value="">-- {{ _('choose Stage')}} --</option>
 
                           </select>
 
@@ -837,7 +839,7 @@
 
                         <div class="col-md-9">
                            <select class="form-control" ng-model="casee.priority">
-                            <option value="1">1 - Low</option>
+                            <option value="1">1 - {{ _('Low')}}</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
                             <option value="4">4</option>
@@ -846,7 +848,7 @@
                             <option value="7">7</option>
                             <option value="8">8</option>
                             <option value="9">9</option>
-                            <option value="10">10 - Critical</option>
+                            <option value="10">10 - {{ _('Critical')}}</option>
                           </select>
 
                         </div>
@@ -857,7 +859,7 @@
 
                         <div class="col-md-9">
                             <select  class="form-control" ng-model="status_selected" ng-options="stat.status for stat in casesatuses" >
-                            <option value="">Choose Status</option>
+                            <option value="">{{ _('Choose Status')}}</option>
                             <!--option value=""><%=status_selected.status%></option-->
                           </select>
 
@@ -940,7 +942,7 @@
             <div class="modal-body pickerin">
                      <div class="controls controls-row">
                                           <form id="addTask" ng-submit="addTask(task)" class="ng-pristine ng-valid">
-                                                  <input class="form-control" autofocus type="text" placeholder="Add a new task" id="taskTitle" ng-model="task.title">
+                                                  <input class="form-control" autofocus type="text" placeholder="{{ _('Add a new task')}}" id="taskTitle" ng-model="task.title">
 
                                                   <p><strong>{{_("When's it due?")}}</strong></p>
                                                   <center>
@@ -970,16 +972,16 @@
             <div class="modal-body">
                      <div class="controls controls-row">
                                           <form id="addTask" ng-submit="createDocument(newdocument)" class="ng-pristine ng-valid">
-                                                  <input class="form-control" autofocus type="text" placeholder="Enter a new <%=mimeType%> name" id="taskTitle" ng-model="newdocument.title" required>
+                                                  <input class="form-control" autofocus type="text" placeholder="{{ _('Enter a new')}} <%=mimeType%> {{ _('name')}}" id="taskTitle" ng-model="newdocument.title" required>
 
 
                      </div>
             </div>
             <div class="modal-footer">
-              <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _('Cancel')}}</button>
 
                <input ng-hide="isLoading" type="submit" class="btn green" value="Create this document">
-                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...')}}" disabled>
 
             </form>
             </div>

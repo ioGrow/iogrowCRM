@@ -25,7 +25,8 @@ app.controller('MysettingShowController', ['$scope','$route', 'Auth','Search','U
 $scope.updatelanguage = function(user,idUser){ 
 
   var params = {'id':idUser,
-     'language':user.language};
+     'language':user.language
+    };
 
     User.patch($scope,params);
    $('#EditSetting').modal('hide'); 

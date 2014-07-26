@@ -86,9 +86,15 @@ accountservices.factory('User', function($http) {
   };
 
   User.patch = function($scope,params){
+
+
       gapi.client.crmengine.users.patch(params).execute(function(resp) {
             if(!resp.code){
                $scope.user = resp;
+
+          
+
+                   // be careful , right it back !
                window.location.reload();
 
 

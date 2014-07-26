@@ -2,7 +2,7 @@
     <div class="currentApp">
        <div class="btn-group">
            <a class="filterItem" href="#" data-toggle="dropdown" >
-            ioGrow Blog
+            {{ _('ioGrow Blog')}}
             <i class="icon-angle-down"></i>
            </a>
         </div>
@@ -22,7 +22,7 @@
   <div class="loader-container row" ng-show="isLoading">
     <div class="loader-dialog col-md-4 col-md-offset-4 ">
       <div class="loader-content">
-          Loading...
+          {{ _('Loading...')}}
       </div>
     </div>
   </div>
@@ -74,7 +74,7 @@
                 </div>
                 <div class="pitch">
                   <span ng-show="article.intro_text" class="contact-title" >
-                    posted by <%=article.author%>
+                    {{ _('posted by')}} <%=article.author%>
                     <%=fromNow(article.created_at)%>
 
                   </span>
@@ -137,7 +137,7 @@
     <div class="portlet showCard fixedCard">
       <div class="portlet-title">
         <div class="caption">
-                <!-- class="fa fa-reorder"--><i></i>Labels
+                <!-- class="fa fa-reorder"--><i></i>{{ _('Labels')}}
         </div>
       </div>
       <div class="portlet-body">
@@ -157,7 +157,7 @@
           {% if is_admin %}
           <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
             <a ng-click="" class="btn-link addAnotherPhone">
-              <i class="fa fa-tags"></i>  Add a new label
+              <i class="fa fa-tags"></i>  {{ _('Add a new label')}}
             </a>
           </li>
           {% endif %}
@@ -167,7 +167,7 @@
           <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
           <div class="row">
             <div class="col-md-12 form-group">
-              <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New label">
+              <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('New label')}}">
             </div>
           </div>
           <div class="row">
@@ -183,7 +183,8 @@
           </div>
         </form>
         <div class="form-group btn-manage-tags" ng-show="tags">
-          <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
+          <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">
+          {{ _('Manage Tags')}}
           </button>
         </div>
         {% endif %}
@@ -201,7 +202,7 @@
     <div class="portlet showCard fixedCard">
       <div class="portlet-title">
         <div class="caption">
-                <!-- class="fa fa-reorder"--><i></i>Labels
+                <!-- class="fa fa-reorder"--><i></i>{{ _('Labels')}}
         </div>
       </div>
       <div class="portlet-body">
@@ -224,7 +225,7 @@
           {% if is_admin %}
           <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
             <a ng-click="" class="btn-link addAnotherPhone">
-              <i class="fa fa-tags"></i>  Add a new label
+              <i class="fa fa-tags"></i>  {{ _('Add a new label')}}
             </a>
           </li>
           {% endif %}
@@ -234,7 +235,7 @@
           <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
           <div class="row">
             <div class="col-md-12 form-group">
-              <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New label">
+              <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('New label')}}">
             </div>
           </div>
           <div class="row">
@@ -245,12 +246,12 @@
               </ul>
             </div>
             <div class="col-md-4">
-              <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
+              <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="{{ _('Add')}}">
             </div>
           </div>
         </form>
         <div class="form-group btn-manage-tags" ng-show="tags">
-          <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
+          <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">  {{ _('Manage Tags')}}
           </button>
         </div>
         {% endif %}
@@ -261,7 +262,7 @@
 </div>
 <script type="text/javascript">
   $("#select2_sample2").select2({
-        placeholder: "Click to Select a label",
+        placeholder: "{{ _('Click to Select a label')}}",
         allowClear: false
     });
   var handleUniform = function () {

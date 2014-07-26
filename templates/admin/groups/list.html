@@ -26,7 +26,7 @@
   <div class="loader-container row" ng-show="isLoading">
         <div class="loader-dialog col-md-4 col-md-offset-4 ">
           <div class="loader-content">
-            Loading...
+            {{ _('Loading...')}}
           </div>
         </div>
 
@@ -118,7 +118,7 @@
                     height: '20px'
   });
   $("#select2_sample2").select2({
-        placeholder: "Click to Select a label",
+        placeholder: "{{ _('Click to Select a label')}}",
         allowClear: false
   });
   var handleUniform = function () {
