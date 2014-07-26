@@ -19,11 +19,11 @@
       <div class="row">
       <div class="col-md-10 col-xs-10">
       <div class="filterOptions">
-          <span role="button" class="filterItem activeFilter" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">All <span class="hidden-xs hiddenOnxs">Cases</span> </span>
-          <span role="button" class="filterItem" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">My <span class="hidden-xs hiddenOnxs">Cases</span></span>
+          <span role="button" class="filterItem activeFilter" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">{{ _('All')}} <span class="hidden-xs hiddenOnxs">{{ _('Cases')}}</span> </span>
+          <span role="button" class="filterItem" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">{{ _('My')}} <span class="hidden-xs hiddenOnxs">{{ _('Cases')}}</span></span>
           <div class="btn-group">
               <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" >
-                Sort by
+                {{ _('Sort by')}}
                 <i class="icon-angle-down"></i>
               </a>
               <ul class="dropdown-menu">
@@ -39,7 +39,7 @@
       </div>
       <div class="col-md-2 col-xs-2">
       <a href="/#/cases/new" class="hidden-xs hidden-sm  btn red newAccountBtnOnscroll pull-right hidden afterScrollBtn">
-           New <span class="hidden-xs hiddenOnxs">Case</span>
+           {{ _('New')}} <span class="hidden-xs hiddenOnxs">{{ _('Case')}}</span>
          </a>
       </div>
       </div>
@@ -50,7 +50,7 @@
   <div class="loader-container row" ng-show="isLoading">
       <div class="loader-dialog col-md-4 col-md-offset-4 ">
         <div class="loader-content">
-          Loading...
+          {{ _('Loading...')}}
         </div>
       </div>
   </div>
@@ -63,7 +63,7 @@
       <!-- BEGIN PAGE CONTAINER-->
   <div class="container-fluid"ng-show="immediateFailed">
     <div class="col-md-12">
-      <h1>Sign-in Button;</h1>
+      <h1>{{ _('Sign-in Button;')}}</h1>
       <span id="signin">
         <span id="myGsignin"></span>
       </span>
@@ -124,10 +124,17 @@
                   </div>
                   <div class="pitch">
                       <p class="status  ng-binding">
+
+                      <span  class="contact-title" style="font-size: 12px;
+                        ">
+                            <span class="">{{ _('Date:')}}</span> <span class=""> <%=casee.updated_at | date:'MMMM dd, yyyy- HH:mm:ss'%> </span>
+                            </span>
+
                       
                       <span  class="contact-title" style="font-size: 12px;">
                             <span class="">{{ _("Last updated") }}: <%=fromNow(casee.updated_at)%></span>
                       </span>
+
                       <span class="pull-right" style="color:<%=getStatusColor(casee.current_status.name)%>"><%= casee.current_status.name %></span>
                         </p>
                   </div>
@@ -185,7 +192,7 @@
       <div class="portlet showCard fixedCard">
         <div class="portlet-title">
           <div class="caption">
-                  <!-- class="fa fa-reorder"--><i></i>Labels
+                  <!-- class="fa fa-reorder"--><i></i>{{ _('Labels')}}
           </div>
         </div>
         <div class="portlet-body">
@@ -207,7 +214,9 @@
             </li>
             <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
               <a ng-click="" class="btn-link addAnotherPhone">
-                <i class="fa fa-tags"></i>  Add a new label
+
+                <i class="fa fa-tags"></i>  {{ _('Add a new label')}} 
+
               </a>
             </li>
           </ul>
@@ -215,7 +224,7 @@
             <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
             <div class="row">
               <div class="col-md-12 form-group">
-                <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New label">
+                <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('New label')}}">
               </div>
             </div>
             <div class="row">
@@ -231,7 +240,9 @@
             </div>
           </form>
           <div class="form-group btn-manage-tags" ng-show="tags">
-            <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
+
+            <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">        {{ _('Manage Tags')}} 
+
             </button>
           </div>
         </div>
@@ -249,7 +260,7 @@
     <div class="portlet showCard fixedCard">
       <div class="portlet-title">
         <div class="caption">
-                <!-- class="fa fa-reorder"--><i></i>Labels
+                <!-- class="fa fa-reorder"--><i></i>{{ _('Labels')}}
         </div>
       </div>
       <div class="portlet-body">
@@ -272,7 +283,7 @@
           </li>
           <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
             <a ng-click="" class="btn-link addAnotherPhone">
-              <i class="fa fa-tags"></i>  Add a new label
+              <i class="fa fa-tags"></i>  {{ _('Add a new label')}}
             </a>
           </li>
         </ul>
@@ -280,7 +291,7 @@
           <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
           <div class="row">
             <div class="col-md-12 form-group">
-              <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New label">
+              <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('New label')}}">
             </div>
           </div>
           <div class="row">
@@ -296,7 +307,7 @@
           </div>
         </form>
         <div class="form-group btn-manage-tags" ng-show="tags">
-          <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
+          <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">        {{ _('Manage Tags')}}
           </button>
         </div>
       </div>
@@ -319,7 +330,7 @@
                         <label  class="required col-md-3 control-label">{{_("Contact")}}</label>
 
                          <div class="col-md-9">
-                          <input type="text" required ng-model="searchContactQuery" typeahead="contactResult as contactResult.firstname + ' '+  contactResult.lastname for contactResult in contactsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectContact()" class="form-control" placeholder="Search">
+                          <input type="text" required ng-model="searchContactQuery" typeahead="contactResult as contactResult.firstname + ' '+  contactResult.lastname for contactResult in contactsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectContact()" class="form-control" placeholder="{{ _('Search')}}">
 
                         </div>
                     </div>
@@ -327,7 +338,7 @@
                         <label  class="required col-md-3 control-label">{{_("Account")}} </label>
 
                         <div class="col-md-9">
-                          <input type="text" required  ng-model="searchAccountQuery" typeahead="accountResult as accountResult.name  for accountResult in accountsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectcasee()" class="form-control" placeholder="Search">
+                          <input type="text" required  ng-model="searchAccountQuery" typeahead="accountResult as accountResult.name  for accountResult in accountsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectcasee()" class="form-control" placeholder="{{ _('Search')}}">
 
                         </div>
                     </div>
@@ -346,7 +357,7 @@
 
                         <div class="col-md-9">
                           <select class="form-control" ng-model="casee.priority">
-                            <option value="1">1 - Low</option>
+                            <option value="1">1 - {{ _('Low')}}</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
                             <option value="4">4</option>
@@ -355,7 +366,7 @@
                             <option value="7">7</option>
                             <option value="8">8</option>
                             <option value="9">9</option>
-                            <option value="10">10 - Critical</option>
+                            <option value="10">10 - {{ _('Critical')}}</option>
                           </select>
 
                         </div>
@@ -366,7 +377,7 @@
 
                         <div class="col-md-9">
                            <select class="form-control" ng-model="status_selected" ng-options="stat.status for stat in casesatuses" >
-                            <option value="">-- choose a status --</option>
+                            <option value="">-- {{ _('choose a status')}} --</option>
                           </select>
 
                         </div>
@@ -384,18 +395,18 @@
                     </div-->
 
                     <hr/>
-                    <p>Who can access?</p>
+                    <p>{{ _('Who can access?')}}</p>
                      <div class="radio-list">
 
 
 
                             <label >
                             <input type="radio" name="optionsRadios" value="public" ng-model="casee.access" checked />
-                            public: Anyone within your organization
+                            {{ _('public: Anyone within your organization')}}
                             </label>
                             <label >
                             <input type="radio" name="optionsRadios"  value="private" ng-model="casee.access" />
-                            private: only you and your collaborators
+                            {{ _('private: only you and your collaborators')}}
                             </label>
 
 
@@ -420,7 +431,7 @@
      </div>
 <script type="text/javascript">
   $("#select2_sample2").select2({
-        placeholder: "Click to Select a label",
+        placeholder: "{{ _('Click to Select a label')}}",
         allowClear: false
     });
   $('.waterfall').waterfall({

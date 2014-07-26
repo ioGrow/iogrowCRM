@@ -19,11 +19,11 @@
       <div class="row">
       <div class="col-md-10 col-xs-12 filter-content">
         <div class="filterOptions">
-            <span role="button" class="filterItem activeFilter" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">All <span class="hidden-xs hiddenOnxs">Contacts</span> </span>
-            <span role="button" class="filterItem" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">My <span class="hidden-xs hiddenOnxs">Contacts</span></span>
+            <span role="button" class="filterItem activeFilter" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">{{ _('All')}} <span class="hidden-xs hiddenOnxs">{{ _('Contacts')}}</span> </span>
+            <span role="button" class="filterItem" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">{{ _('My')}} <span class="hidden-xs hiddenOnxs">{{ _('Contacts')}}</span></span>
             <div class="btn-group">
                 <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" >
-                  Sort by
+                  {{ _('Sort by')}}
                   <i class="icon-angle-down"></i>
                 </a>
                 <ul class="dropdown-menu">
@@ -42,7 +42,7 @@
       </div>
       <div class="col-md-2 col-xs-2">
       <a href="/#/contacts/new" class="hidden-sm hidden-xs btn red newAccountBtnOnscroll pull-right hidden afterScrollBtn">
-           New <span class="hidden-xs hiddenOnxs">Contact</span>
+           {{ _('New')}} <span class="hidden-xs hiddenOnxs">{{ _('Contact')}}</span>
          </a>
       </div>
       </div>
@@ -53,7 +53,7 @@
   <div class="loader-container row" ng-show="isLoading">
     <div class="loader-dialog col-md-4 col-md-offset-4 ">
       <div class="loader-content">
-            Loading...
+            {{ _('Loading...')}}
       </div>
     </div>
   </div>
@@ -66,7 +66,7 @@
   <!-- BEGIN PAGE CONTAINER-->
   <div ng-show="immediateFailed">
     <div class="col-md-12">
-      <h1>Sign-in Button;</h1>
+      <h1>{{ _('Sign-in Button;')}}</h1>
         <span id="signin">
           <span id="myGsignin"></span>
         </span>
@@ -87,7 +87,7 @@
         <div class="row">
          <div class="pull-right" >
            <a href="/#/contacts/new" class="btn red newBtn">
-                        New Contact
+                        {{ _('New Contact')}}
           </a>
             <div class="btn-group newBtn">
           <button  ng-click="showImportModal()" id="sample_editable_1_new" class="btn red">
@@ -155,7 +155,7 @@
           <div class="cardElement loaderCard" ng-show="isMoreItemLoading" data-span="all">
             <div class="loaderCardContent">
                <img class="img-responsive " src="/static/img/gloader.gif">
-               <span>  Loading...</span>
+               <span>  {{ _('Loading...')}}</span>
             </div>
         </div>
         </div><!--innercardcontaine-->
@@ -197,7 +197,7 @@
         <div class="portlet showCard">
           <div class="portlet-title">
             <div class="caption">
-                    <!-- class="fa fa-reorder"--><i></i>Labels
+                    <!-- class="fa fa-reorder"--><i></i>{{ _('Labels')}}
             </div>
           </div>
           <div class="portlet-body">
@@ -221,7 +221,7 @@
               </li>
               <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
                 <a ng-click="" class="btn-link addAnotherPhone">
-                  <i class="fa fa-tags"></i>  Add a new label
+                  <i class="fa fa-tags"></i>  {{ _('Add a new label')}}
                 </a>
               </li>
             </ul>
@@ -229,7 +229,7 @@
               <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
               <div class="row">
                 <div class="col-md-12 form-group">
-                  <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New label">
+                  <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="_('New label')">
                 </div>
               </div>
               <div class="row">
@@ -245,7 +245,7 @@
               </div>
             </form>
             <div class="form-group btn-manage-tags" ng-show="tags">
-              <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
+              <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">{{ _('Manage Tags')}}
               </button>
             </div>
           </div>
@@ -262,7 +262,7 @@
         <div class="portlet showCard">
           <div class="portlet-title">
             <div class="caption">
-                    <!-- class="fa fa-reorder"--><i></i>Labels
+                    <!-- class="fa fa-reorder"--><i></i>{{ _('Labels')}}
             </div>
           </div>
           <div class="portlet-body">
@@ -289,7 +289,7 @@
               </li>
               <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
                 <a ng-click="" class="btn-link addAnotherPhone">
-                  <i class="fa fa-tags"></i>  Add a new label
+                  <i class="fa fa-tags"></i>  {{ _('Add a new label')}}
                 </a>
               </li>
             </ul>
@@ -297,7 +297,7 @@
               <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
               <div class="row">
                 <div class="col-md-12 form-group">
-                  <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New label">
+                  <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('New label')}}">
                 </div>
               </div>
               <div class="row">
@@ -313,7 +313,7 @@
               </div>
             </form>
             <div class="form-group btn-manage-tags" ng-show="tags">
-              <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
+              <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">{{ _('Manage Tags')}}
               </button>
             </div>
           </div>
@@ -346,7 +346,7 @@
                     height: '20px'
   });
   $("#select2_sample2").select2({
-        placeholder: "Click to Select a label",
+        placeholder: "{{ _('Click to Select a label')}",
         allowClear: false
   });
   var handleUniform = function () {

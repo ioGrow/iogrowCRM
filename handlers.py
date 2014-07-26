@@ -42,9 +42,11 @@ from iomodels.crmengine.events import Event
 jinja_environment = jinja2.Environment(
   loader=jinja2.FileSystemLoader(os.getcwd()),
   extensions=['jinja2.ext.i18n'],cache_size=0)
-
-
 jinja_environment.install_gettext_translations(i18n)
+
+
+
+
 ADMIN_EMAILS = ['tedj.meabiou@gmail.com','hakim@iogrow.com']
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
@@ -83,12 +85,13 @@ folders = {}
 class BaseHandler(webapp2.RequestHandler):
     def set_user_locale(self,language=None):
         if language:
-            locale = self.request.GET.get('locale', 'ar_DZ')
+            locale = self.request.GET.get('locale', 'en-US')
             i18n.get_i18n().set_locale(language)
 
         else:
-            locale = self.request.GET.get('locale', 'ar_DZ')
-            i18n.get_i18n().set_locale('ar')
+            locale = self.request.GET.get('locale', 'en-US')
+            i18n.get_i18n().set_locale('en')
+
 
     def prepare_template(self,template_name):
         is_admin = False
@@ -114,13 +117,14 @@ class BaseHandler(webapp2.RequestHandler):
                 for app in apps:
                     if app is not None:
                         applications.append(app)
+                #text=i18n.gettext('Hello, world!')
                 template_values={
                           'is_admin':is_admin,
                           'is_business_user':is_business_user,
                           'ME':user.google_user_id,
                           'active_app':active_app,
                           'apps':applications,
-                          'tabs':tabs
+                          'tabs':tabs,
                           }
         template = jinja_environment.get_template(template_name)
         self.response.out.write(template.render(template_values))
@@ -862,9 +866,6 @@ class SyncPatchCalendarEvent(webapp2.RequestHandler):
                   "summary": summary
                   }
 
-            print "-*-*-*-*-*-*here we go i'm the one -*-*-*-*-*-*-*-*"
-            print "yeah men"
-            print "*-*-*-*-*-*-*-*---------*-*-*-*-*-*-*-*-*-*-*-*-*-*-*"
             patched_event = service.events().patch(calendarId='primary',eventId=event_google_id,body=params).execute()
         except:
             raise endpoints.UnauthorizedException('Invalid grant' )
@@ -1144,4 +1145,8 @@ config = {}
 config['webapp2_extras.sessions'] = {
     'secret_key': 'YOUR_SESSION_SECRET'
 }
+# to config the local directory the way we want .
+# config['webapp2_extras.i18n'] = {
+#     'translations_path': 'path/to/my/locale/directory',
+# }
 app = webapp2.WSGIApplication(routes, config=config, debug=True)

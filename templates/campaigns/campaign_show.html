@@ -19,7 +19,7 @@
 
       <div class="container-fluid" ng-show="immediateFailed">
          <div class="span12">  
-          <h1>Sign-in Button;</h1>
+          <h1>{{ _('Sign-in Button;')}}</h1>
               <span id="signin">
                   <span id="myGsignin"></span>
               </span>
@@ -72,10 +72,11 @@
                   <!--BEGIN TABS-->
                   <div class="tabbable tabbable-custom">
                     <ul class="nav nav-tabs">
-                      <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;" >Notes</a></li>
-                      <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;">About</a></li>
-                      <li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">Contacts</a></li>
-                      <li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">Opportunities</a></li>
+                      <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;" >{{ _('Notes')}}</a></li>
+                      <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;">{{ _('About')}}</a></li>
+                      <li class="ng-tab" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">{{ _('Contacts')}}</a></li>
+                      <li class="ng-tab" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">
+                      {{ _('Opportunities')}}</a></li>
                       <li class="ng-tab"  ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">Cases</a></li>
                     </ul>
                     <div class="tab-content">
@@ -83,10 +84,10 @@
                         
                          <div class="row-fluid">
                            <div class="span12 margin-bottom-10"> 
-                          <p class⁼"lead"=""><strong>Just add notes to remember what's important :</strong> </p>
+                          <p class⁼"lead"=""><strong>{{ _('Just add notes to remember what's important :')}}</strong> </p>
                           <form id="addNote" ng-submit="addNote(note)" class="ng-pristine ng-valid">
                                             
-                                            <input class="input-block-level ng-pristine ng-valid" autofocus type="text" placeholder="Add a new subject" id="messageSubject" ng-model="note.title">
+                                            <input class="input-block-level ng-pristine ng-valid" autofocus type="text" placeholder="{{ _('Add a new subject')}}" id="messageSubject" ng-model="note.title">
 
                                          
                                             
@@ -98,8 +99,8 @@
                                          
                                          <div class="pull-right">
                                          <!-- <input type="submit" class="btn btn-primary" value="Attach file">-->
-                                          <input ng-hide="isLoading" type="submit" class="btn green" value="Add this note">
-                                          <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                                          <input ng-hide="isLoading" type="submit" class="btn green" value="{{ _('Add this note')}}">
+                                          <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...')}}" disabled>
                                           </div>
                                         </form>
                                        </div>
@@ -114,7 +115,7 @@
                                   <a href="#" class="name"><%= topic.last_updater.google_display_name%></a>
                                   <span class="datetime">at Jul 25, 2012 11:09</span>
                                   <span class="body">
-                                  <a href="/#/notes/show/<%=topic.discussionId%>" class="discussion-content"><strong class="ng-binding"><%= topic.title%></strong><span class="excerpt ng-binding"> - <%= topic.excerpt%></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <%= topic.comments%> comments</span></a>
+                                  <a href="/#/notes/show/<%=topic.discussionId%>" class="discussion-content"><strong class="ng-binding"><%= topic.title%></strong><span class="excerpt ng-binding"> - <%= topic.excerpt%></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <%= topic.comments%> {{ _('comments')}}</span></a>
                                   </span>
                                 </div>
                               </li>
@@ -133,7 +134,7 @@
                                         </button></li>
                                       </ul>
                                     </div>
-                                    <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                                    <h3 class="pagination pull-right" ng-show="isLoading">{{ _('Loading...')}}</h3>
                               </div>
                             </div>
                       <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
@@ -142,37 +143,37 @@
                           <div class="span6">
                             
                                 <div class="news-blocks blank-card blank-card-yellow">
-                                <h3>Account Informations</h3>
+                                <h3>{{ _('Account Informations')}}</h3>
                                 <div class="news-block-tags">
-                                  <strong>Phone</strong>
+                                  <strong>{{ _('Phone')}}</strong>
                                  
                                 </div>
                                   <ul class="unstyled contact-infos">
                                     <li>(415) 663-4433  <a href="#"><img class="ctodeal" src="/static/img/phone-icon.png" /></a></li>
                                     <li>(415) 663-4433 <a href="#"><img class="ctodeal" src="/static/img/phone-icon.png" /></a></li>
                                     <li>(415) 663-4433 <a href="#"><img class="ctodeal" src="/static/img/phone-icon.png"/></a></li>
-                                    <li><a href="#"><i class="icon-plus"></i> Add a new phone number </a></li>
+                                    <li><a href="#"><i class="icon-plus"></i> {{ _('Add a new phone number')}} </a></li>
 
                                   </ul>
                                 <div class="news-block-tags">
-                                  <strong>Email</strong>
+                                  <strong>{{ _('Email')}}</strong>
                                  
                                 </div>
                                   <ul class="unstyled contact-infos">
                                     <li>contact@clicandcal.com  </li>
                                     <li>sales@clicandcal.com </li>
                                     <li>support@clicandcal.com </li>
-                                    <li><a href="#"><i class="icon-plus"></i> Add a new email address </a></li>
+                                    <li><a href="#"><i class="icon-plus"></i>{{ _('Add a new email address')}} </a></li>
 
                                   </ul>
                                 <div class="news-block-tags">
-                                  <strong>Address</strong>
+                                  <strong>{{ _('Address')}}</strong>
                                  
                                 </div>
                                  <ul class="unstyled contact-infos">
                                     <li>760 Market Street, 11th Floor San Francisco, CA 94102  </li>
                                     
-                                    <li><a href="#"><i class="icon-plus"></i> Add a new address </a></li>
+                                    <li><a href="#"><i class="icon-plus"></i> {{ _('Add a new address')}} </a></li>
 
                                   </ul>
 
@@ -180,16 +181,16 @@
                                                           
                               </div>
                               <div class="news-blocks blank-card blank-card-bluep">
-                                <h3>Links</h3>
+                                <h3>{{ _('Links')}}</h3>
                                 <div class="news-block-tags">
-                                  <strong>Website</strong>
+                                  <strong>{{ _('Website')}}</strong>
                                   
                                 </div>
                                 <ul class="unstyled contact-infos">
                                     <li><a href="#">www.clicandcal.com</a> </li>
                                 </ul> 
                                 <div class="news-block-tags">
-                                  <strong>Social Links</strong>
+                                  <strong>{{ _('Social Links')}}</strong>
                                   
                                 </div>
                                 <ul class="unstyled contact-infos">
@@ -200,17 +201,17 @@
                           <div class="span6">
                           
                             <div class="news-blocks blank-card blank-card-red">
-                                <h3>Story</h3>
+                                <h3>{{ _('Story')}}</h3>
                                 <div class="news-block-tags">
-                                  <strong>Tagline</strong>
+                                  <strong>{{ _('Tagline')}}</strong>
                                   
                                 </div>
-                                <p>Accelerating the Cloud Powered Business</p>
+                                <p>{{ _('Accelerating the Cloud Powered Business')}}</p>
                                 <div class="news-block-tags">
-                                  <strong>Introduction</strong>
+                                  <strong>{{ _('Introduction')}}</strong>
                                   
                                 </div>
-                                <p>Appirio is a global technology-enabled services provider, helping companies power their business with cloud, social and mobile technologies from leaders like salesforce.com, Google and Workday. Appirio has worked with more than 400 enterprise customers including organizations like the City of Los Angeles, Facebook, Flextronics, International Hotels Group, Japan Post Network, Ltd., L'Oreal, NetApp, NYU, Starbucks, Thomson Reuters and VMware. Appirio's technology-enabled professional services are supported by a team of 600 cloud experts and CloudSpokes, a more than 70,000 person-strong global cloud developer community. The company's expertise and innovation have been recognized by organizations such as the World Economic Forum, Bloomberg BusinessWeek, The Wall Street Journal, InformationWeek and IDC. Appirio has offices that span the U.S., Europe and Asia Pacific, and is backed by Sequoia Capital, GGV Capital and General Atlantic.</p>                         
+                                <p>{{ _('Appirio is a global technology-enabled services provider, helping companies power their business with cloud, social and mobile technologies from leaders like salesforce.com, Google and Workday. Appirio has worked with more than 400 enterprise customers including organizations like the City of Los Angeles, Facebook, Flextronics, International Hotels Group, Japan Post Network, Ltd., L'Oreal, NetApp, NYU, Starbucks, Thomson Reuters and VMware. Appirio's technology-enabled professional services are supported by a team of 600 cloud experts and CloudSpokes, a more than 70,000 person-strong global cloud developer community. The company's expertise and innovation have been recognized by organizations such as the World Economic Forum, Bloomberg BusinessWeek, The Wall Street Journal, InformationWeek and IDC. Appirio has offices that span the U.S., Europe and Asia Pacific, and is backed by Sequoia Capital, GGV Capital and General Atlantic.')}}</p>                         
                               </div>
                             
                           </div>
@@ -235,15 +236,15 @@
                                   
                                   <div class="details">
                                     <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardTitle">
-                                     Ben Belfodhil
+                                     {{ _('Ben Belfodhil')}}
                                     </h3></a>
                                     <div class="desc">                           
-                                    <span class="contact-title">CEO</span>  
+                                    <span class="contact-title">{{ _('CEO')}}</span>  
                                     
                                     </div>
                                   </div>
                                   <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
+                                  {{ _('View more')}} <i class="m-icon-swapright m-icon-white"></i>
                                   </a>                 
                                 </div>
                               </div>
@@ -252,15 +253,15 @@
                                   
                                   <div class="details">
                                     <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardTitle">
-                                     Hakim Karriche
+                                     {{ _('Hakim Karriche')}}
                                     </h3></a>
                                     <div class="desc">                           
-                                    <span class="contact-title">CTO</span>  
+                                    <span class="contact-title">{{ _('CTO')}}</span>  
                                     
                                     </div>
                                   </div>
                                   <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
+                                  {{ _('View more')}} <i class="m-icon-swapright m-icon-white"></i>
                                   </a>                 
                                 </div>
                               </div>
@@ -269,7 +270,7 @@
                                   
                                   <div class="details">
                                     <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardTitle">
-                                     Eric Joe
+                                     {{ _('Eric Joe')}}
                                     </h3></a>
                                     <div class="desc">                           
                                     <span class="contact-title">CCO</span>  
@@ -277,7 +278,7 @@
                                     </div>
                                   </div>
                                   <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
+                                  {{ _('View more')}} <i class="m-icon-swapright m-icon-white"></i>
                                   </a>                 
                                 </div>
                               </div>
@@ -286,7 +287,7 @@
                                   
                                   <div class="details">
                                     <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardTitle">
-                                     Ben Belfodhil
+                                     {{ _('Ben Belfodhil')}}
                                     </h3></a>
                                     <div class="desc">    
                                                              
@@ -295,7 +296,7 @@
                                     </div>
                                   </div>
                                   <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
+                                  {{ _('View more')}} <i class="m-icon-swapright m-icon-white"></i>
                                   </a>                 
                                 </div>
                               </div>
@@ -318,16 +319,16 @@
                                   
                                   <div class="details">
                                     <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Migration vers Google App Engine
+                                     {{ _('Migration vers Google App Engine')}}
                                     </h3></a>
                                     <div class="desc">                           
-                                    <span class="contact-title">$20.000 - Needs Analysis</span>
+                                    <span class="contact-title">$20.000 - {{ _('Needs Analysis')}}</span>
                                     <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#<%=account.industry%></a>  
                                     
                                     </div>
                                   </div>
                                   <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
+                                  {{ _('View more')}} <i class="m-icon-swapright m-icon-white"></i>
                                   </a>                 
                                 </div>
                               </div>
@@ -337,16 +338,16 @@
                                   
                                   <div class="details">
                                     <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Migration vers Google App Engine
+                                     {{ _('Migration vers Google App Engine')}}
                                     </h3></a>
                                     <div class="desc">                           
-                                    <span class="contact-title">$20.000 - Needs Analysis</span>
+                                    <span class="contact-title">$20.000 - {{ _('Needs Analysis')}}</span>
                                     <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#<%=account.industry%></a>  
                                     
                                     </div>
                                   </div>
                                   <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
+                                  {{ _('View more')}} <i class="m-icon-swapright m-icon-white"></i>
                                   </a>                 
                                 </div>
                               </div>
@@ -355,7 +356,7 @@
                                   
                                   <div class="details">
                                     <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                    Google App Engine
+                                    {{ _('Google App Engine')}}
                                     </h3></a>
                                     <div class="desc">                           
                                     <span class="contact-title">$20.000 - Needs Analysis</span>
@@ -364,7 +365,7 @@
                                     </div>
                                   </div>
                                   <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
+                                  {{ _('View more')}} <i class="m-icon-swapright m-icon-white"></i>
                                   </a>                 
                                 </div>
                               </div>
@@ -373,16 +374,16 @@
                                   
                                   <div class="details">
                                     <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Migration 
+                                     {{ _('Migration')}} 
                                     </h3></a>
                                     <div class="desc">                           
-                                    <span class="contact-title">$20.000 - Needs Analysis</span>
+                                    <span class="contact-title">$20.000 - {{ _('Needs Analysis')}}</span>
                                     <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#<%=account.industry%></a>  
                                     
                                     </div>
                                   </div>
                                   <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
+                                  {{ _('View more')}} <i class="m-icon-swapright m-icon-white"></i>
                                   </a>                 
                                 </div>
                               </div>
@@ -405,16 +406,16 @@
                                   
                                   <div class="details">
                                     <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Database Isue on Website
+                                     {{ _('Database Isue on Website')}}
                                     </h3></a>
                                     <div class="desc">                           
-                                    <span class="contact-title">status: open</span> <span class="updated-on">Updated on Oct 05 at 2:33 pm</span>
+                                    <span class="contact-title">status: open</span> <span class="updated-on">{{ _('Updated on')}} Oct 05 at 2:33 pm</span>
                                     <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#database</a>  
                                     
                                     </div>
                                   </div>
                                   <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
+                                  {{ _('View more')}} <i class="m-icon-swapright m-icon-white"></i>
                                   </a>                 
                                 </div>
                               </div>
@@ -425,16 +426,16 @@
                                   
                                   <div class="details">
                                     <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Database Isue on Website
+                                     {{ _('Database Isue on Website')}}
                                     </h3></a>
                                     <div class="desc">                           
-                                    <span class="contact-title">status: open</span> <span class="updated-on">Updated on Oct 05 at 2:33 pm</span>
+                                    <span class="contact-title">status: open</span> <span class="updated-on">{{ _('Updated on')}} Oct 05 at 2:33 pm</span>
                                     <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#database</a>  
                                     
                                     </div>
                                   </div>
                                   <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
+                                  {{ _('View more')}} <i class="m-icon-swapright m-icon-white"></i>
                                   </a>                 
                                 </div>
                               </div>
@@ -443,16 +444,16 @@
                                   
                                   <div class="details">
                                     <a href="/#/accounts/show/<%= account.id %>"><h3 class="relatedcardOppTitle">
-                                     Database Isue on Website
+                                     {{ _('Database Isue on Website')}}
                                     </h3></a>
                                     <div class="desc">                           
-                                    <span class="contact-title">status: open</span> <span class="updated-on">Updated on Oct 05 at 2:33 pm</span>
+                                    <span class="contact-title">{{ _('status: open')}}</span> <span class="updated-on">{{ _('Updated on')}} Oct 05 at 2:33 pm</span>
                                     <a ng-show="account.industry" class="desc" href="/#/accounts/industry/<%=account.industry%>">#database</a>  
                                     
                                     </div>
                                   </div>
                                   <a class="more" href="/#/accounts/show/<%= account.id %>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
+                                  {{ _('View more')}} <i class="m-icon-swapright m-icon-white"></i>
                                   </a>                 
                                 </div>
                               </div>
@@ -471,13 +472,13 @@
               <!-- BEGIN PORTLET-->
               <div class="portlet">
                 <div class="portlet-title line">
-                  <div class="caption"><i class="icon-tasks"></i>Tasks & Events</div>
+                  <div class="caption"><i class="icon-tasks"></i>{{ _('Tasks & Events')}}</div>
                   
                 </div>
                 <div class="portlet-body" id="chats">
                   <div class="scroller" style="height:200x" data-always-visible="1" data-rail-visible="0">
                     <div id="newTask">
-                                <p><strong>Tasks:</strong><a href="#"> [View all(25)]</a></p>
+                                <p><strong>{{ _('Tasks:')}}</strong><a href="#"> {{ _('[View all(25)]')}}</a></p>
 
                                  
                                   <ul id="tasks" class="unstyled">
@@ -487,11 +488,11 @@
                                     <span><a href="/tasks/1" class="discussion-content"><%= task.title%> <span ng-show="task.due"> [before: <%= task.due | date:'yyyy-MM-dd '%>]</span></a></span>
                                     </li>
                                     
-                                    <li><a href="#myModal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new task</a></li>
+                                    <li><a href="#myModal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>{{ _('Add a new task')}}</a></li>
 
                                   </ul>
                                  
-                                  <p><strong>Events:</strong></p>
+                                  <p><strong>{{ _('Events:')}}</strong></p>
 
                                  
                                   <ul id="tasks" class="unstyled">
@@ -504,7 +505,7 @@
                                     
 
                                     
-                                    <li><a href="#newEventModal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new event</a></li>
+                                    <li><a href="#newEventModal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>{{ _('Add a new event')}}</a></li>
 
 
                                   </ul>
@@ -513,14 +514,14 @@
           <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 id="myModalLabel">Add a new Task</h3>
+              <h3 id="myModalLabel">{{ _('Add a new Task')}}</h3>
             </div>
             <div class="modal-body pickerin">
                      <div class="controls controls-row">
                                           <form id="addTask" ng-submit="addTask(task)" class="ng-pristine ng-valid">
                                                   <input class="input-block-level" autofocus type="text" placeholder="Add a new task" id="taskTitle" ng-model="task.title">
                                                   
-                                                  <p><strong>When's it due?</strong></p>
+                                                  <p><strong>{{ _('When's it due?')}}</strong></p>
                                                   <center>
                                                     <datetimepicker data-ng-model="task.due"
                                                     data-datetimepicker-config="{ startView:'day', minView:'day' }" />
@@ -528,10 +529,10 @@
                      </div>
             </div>
             <div class="modal-footer">
-              <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _('Cancel')}}</button>
               
-               <input ng-hide="isLoading" type="submit" class="btn green" value="Add this task">
-                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+               <input ng-hide="isLoading" type="submit" class="btn green" value="{{ _('Add this task')}}">
+                <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...')}}" disabled>
                                         
             </form>
             </div>
@@ -541,26 +542,26 @@
           <div id="newEventModal" class="modal  hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 id="myModalLabel">New Event</h3>
+              <h3 id="myModalLabel">{{ _('New Event')}}</h3>
             </div>
             <div class="modal-body">
                      <div class="controls controls-row">
                             <form id="addTask" ng-submit="addEvent(ioevent)" class="ng-pristine ng-valid">
                                                   <input class="input-block-level" autofocus type="text" placeholder="Add a new event" id="taskTitle" ng-model="ioevent.title">
-                                                  <p><strong>When?</strong></p>
+                                                  <p><strong>{{ _('When?')}}</strong></p>
                                                 <div class="row-fluid">
                                                   <div class="span6">
-                                                    <p> <strong>Starts</strong>: <%=ioevent.starts_at | date:'MMMM dd, yyyy, HH:mm'%></p>
+                                                    <p> <strong>{{ _('Starts')}}</strong>: <%=ioevent.starts_at | date:'MMMM dd, yyyy, HH:mm'%></p>
                                                         <datetimepicker data-ng-model="ioevent.starts_at"
                                                     data-datetimepicker-config="{ startView:'day', minView:'minute' }" />
                                                   </div>
                                                   <div class="span6">
-                                                  <p><strong>Ends</strong>: <%=ioevent.ends_at | date:'MMMM dd, yyyy, HH:mm'%></p>
+                                                  <p><strong>{{ _('Ends')}}</strong>: <%=ioevent.ends_at | date:'MMMM dd, yyyy, HH:mm'%></p>
                                                         <datetimepicker data-ng-model="ioevent.ends_at"
                                                     data-datetimepicker-config="{ startView:'day', minView:'minute' }" />
                                                   </div>
                                                 </div>
-                                                    <input class="input-block-level" autofocus="" type="text" placeholder="Where?" id="taskTitle" ng-model="ioevent.where">
+                                                    <input class="input-block-level" autofocus="" type="text" placeholder="{{ _('Where?')}}" id="taskTitle" ng-model="ioevent.where">
                                                     
                                                     
                                                     
@@ -570,10 +571,10 @@
                   </div>
             </div>
             <div class="modal-footer">
-              <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _('Cancel')}}</button>
               
-               <input ng-hide="isLoading" type="submit" class="btn green" value="Add this event">
-                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+               <input ng-hide="isLoading" type="submit" class="btn green" value="{{ _('Add this event')}}">
+                <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...')}}" disabled>
                                         
             </form>
             </div>
