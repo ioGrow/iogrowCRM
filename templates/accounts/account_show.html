@@ -80,22 +80,6 @@
                                             </a>
                                         </i>
                                     </span>
-
-                                    <span ng-show="account.account_type" style="">
-                                        {{_('Type')}}:
-                                        <a class="tag ng-binding" href="/#/search/type:Account #<%= account.account_type %>">
-                                            #<%= account.account_type %>
-                                        </a>
-                                    </span>
-                                    <br>
-                                    <span ng-show="account.industry" style="">
-                                        {{_('Industry')}}:
-                                        <a class="tag ng-binding" href="/#/search/type:Account  #<%= account.industry %>">
-                                            #<%= account.industry %>
-                                        </a>
-                                    </span>
-                                    <br>
-
                                     <ul class="list-unstyled contactInfos">
                                       <li ng-show="account.account_type" >
                                         <span>
@@ -217,7 +201,7 @@
                                                         111054727630979006769@gcdc2013-iogrow.appspotmail.com
                                                     </a>
                                                     <br>
-                                                    {{_('Or just add notes to remember what's important.')}}'
+                                                    {{_('Or just add notes to remember what\'s important.')}}'
                                                     <br>
                                                 </p>
                                                 <form id="addNote" class="ng-pristine ng-valid">
@@ -279,11 +263,11 @@
                                                                 <div class="form-group sm-group" style="">
 
                                                                     <label class="sr-only" for="exampleInputEmail2">{{_('Number')}}</label>
-                                                                    <input 
-                                                                        type="text" 
-                                                                        class="form-control" 
-                                                                        id="exampleInputEmail2" 
-                                                                        ng-model="phone.number" 
+                                                                    <input
+                                                                        type="text"
+                                                                        class="form-control"
+                                                                        id="exampleInputEmail2"
+                                                                        ng-model="phone.number"
                                                                         placeholder="{{_('Enter a number')}}"
                                                                         ng-pattern="/^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/i"
                                                                         required>
@@ -311,10 +295,10 @@
                                                                 <div class="form-group lg-group" style="">
 
                                                                     <label class="sr-only" for="exampleInputEmail2">{{_('Email')}}</label>
-                                                                    <input 
-                                                                        type="email" 
-                                                                        class="form-control" 
-                                                                        id="exampleInputEmail2" 
+                                                                    <input
+                                                                        type="email"
+                                                                        class="form-control"
+                                                                        id="exampleInputEmail2"
                                                                         ng-model="email.email"
                                                                         placeholder="{{_('Enter an email')}}"
                                                                         required
@@ -791,22 +775,22 @@
                                                 <form  class="ng-pristine ng-invalid ng-invalid-required">
                                                     <div class="form-group">
 
-                                                        <input 
-                                                            required="" 
-                                                            class="form-control ng-pristine 
-                                                            ng-invalid ng-invalid-required" autofocus="" 
-                                                            type="text" 
-                                                            placeholder="{{_('To')}}" 
-                                                            id="messageSubject" 
+                                                        <input
+                                                            required=""
+                                                            class="form-control ng-pristine
+                                                            ng-invalid ng-invalid-required" autofocus=""
+                                                            type="text"
+                                                            placeholder="{{_('To')}}"
+                                                            id="messageSubject"
                                                             ng-model="email.to">
                                                     </div>
                                                     <div class="form-group">
-                                                        <input 
-                                                            class="form-control ng-pristine ng-valid" 
-                                                            autofocus="" 
-                                                            type="text" 
-                                                            placeholder="{{_('CC')}}" 
-                                                            id="messageSubject" 
+                                                        <input
+                                                            class="form-control ng-pristine ng-valid"
+                                                            autofocus=""
+                                                            type="text"
+                                                            placeholder="{{_('CC')}}"
+                                                            id="messageSubject"
 
                                                             ng-model="email.cc">
                                                     </div>
@@ -816,18 +800,18 @@
                                                             autofocus=""
                                                             type="text"
 
-                                                            placeholder="{{_('BCC')}}" 
-                                                            id="messageSubject" 
+                                                            placeholder="{{_('BCC')}}"
+                                                            id="messageSubject"
                                                             ng-model="email.bcc">
                                                     </div>
                                                     <div class="form-group">
-                                                        <input   
-                                                            required="" 
-                                                            class="form-control ng-pristine ng-invalid ng-invalid-required" 
-                                                            autofocus="" 
-                                                            type="text" 
-                                                            placeholder="{{_('Add a subject')}}" 
-                                                            id="messageSubject" 
+                                                        <input
+                                                            required=""
+                                                            class="form-control ng-pristine ng-invalid ng-invalid-required"
+                                                            autofocus=""
+                                                            type="text"
+                                                            placeholder="{{_('Add a subject')}}"
+                                                            id="messageSubject"
                                                             ng-model="email.subject">
                                                     </div>
                                                     <div class="form-group">
@@ -920,7 +904,7 @@
                                             <i class="fa fa-bell-o"></i>
 
                                               <input cusdatetimepicker data-model="newTask.reminder" type="text" class="form-control" placeholder="{{_('Add a reminder')}}" value="" id="leadEventStartsAt">
-                                          </div>                                         
+                                          </div>
 
                                     </div>
                                 </div>

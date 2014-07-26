@@ -25,7 +25,7 @@
             <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Accounts")}} > <%= account.name %>  </h2>
             <button class="btn red newAccountBtnOnscroll pull-right hidden" ng-click="save(account)">{{_('Create')}}</button>
   </div>
-   
+
   </div>
 </div>
 <div  class="page-content">
@@ -40,7 +40,7 @@
 
   <div class="" ng-show="immediateFailed">
      <div class="col-md-12">
-      
+
           <span id="signin">
               <span id="myGsignin"></span>
           </span>
@@ -57,7 +57,7 @@
           <button class="btn red newAccountBtn pull-right" ng-click="save(account)">{{_('Create')}}</button>
           <div class="clearfix"></div>
         </div>
-       <div class="showPage slimForm col-md-12 margin-bottom-15">             
+       <div class="showPage slimForm col-md-12 margin-bottom-15">
                      <div class="row">
               <div class="col-md-12">
               <!-- BEGIN PORTLET-->
@@ -139,11 +139,11 @@
                                           </div>
                                           <div class="form-group sm-group" style="">
                                             <label class="sr-only" for="exampleInputEmail2">{{_('Number')}}</label>
-                                            <input 
-                                              type="text" 
-                                              class="form-control" 
-                                              id="exampleInputEmail2" 
-                                              ng-model="phone.number" 
+                                            <input
+                                              type="text"
+                                              class="form-control"
+                                              id="exampleInputEmail2"
+                                              ng-model="phone.number"
                                               placeholder="{{_('Enter a number')}}"
                                               ng-pattern="/^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/i"
                                               required>
@@ -185,10 +185,10 @@
                                 </div>
                                  <ul class="list-unstyled contact-infos">
                                     <li ng-repeat="address in addresses">- <span editoptions editdataattr="deleteInfos(addresses,$index)" editable-text="address.country" onbeforesave="inlinePatch('Infonode','addresses', 'street',address.entityKey,$data)" ng-show="address.street"><%=address.street%>, </span> <span editable-text="address.city" onbeforesave="inlinePatch('Infonode','addresses', 'city',address.entityKey,$data)" ng-show="address.city"><%=address.city%>, </span><span editable-text="address.state" onbeforesave="inlinePatch('Infonode','addresses', 'state',address.entityKey,$data)" ng-show="address.state"><%=address.state%>, </span> <span editable-text="address.country" onbeforesave="inlinePatch('Infonode','addresses', 'country',address.entityKey,$data)" ng-show="address.country"><%=address.country%></span></li>
-                                    <a href="#addressmodal" 
-                                      class="btn-link addAnotherPhone" 
+                                    <a href="#addressmodal"
+                                      class="btn-link addAnotherPhone"
                                       data-toggle="modal">
-                                      <i class="icon-plus"></i>{{_('Add a new address')}} 
+                                      <i class="icon-plus"></i>{{_('Add a new address')}}
                                     </a>
                                     </li>
                                   </ul>
@@ -229,7 +229,7 @@
                                                 <label class="sr-only" for="exampleInputEmail2">{{_('Social link')}}</label>
                                                 <input type="url" class="form-control" id="exampleInputEmail2" ng-model='sociallink.url' placeholder="{{_('Enter a social link')}}" required>
                                               </div>
-                                               <button ng-click="pushElement(sociallink,sociallinks,'sociallinks')" type="submit" class="btn blue jfk-button jfk-button-action">{{_('Add')}</button>
+                                               <button ng-click="pushElement(sociallink,sociallinks,'sociallinks')" type="submit" class="btn blue jfk-button jfk-button-action">{{_('Add')}}</button>
                                                 <button type="submit" ng-click="showSociallinkForm=false" class="btn btn-default">X</button>
                                             </form>
                                           </div>
@@ -310,9 +310,9 @@
 
                         </div>
             </div>
-       </div> 
+       </div>
            </div>
-      
+
        </div>
             </div>
               <div class="col-md-3 ">
@@ -344,7 +344,7 @@
                                                   <input ng-model="currentContact.title" type="text" class="form-control" placeholder="{{_('Title')}}">
                                                 </div>
                                             </div>
-                                        </div>   
+                                        </div>
                                         <div class="row">
                                             <div class="col-md-12">
                                                   <div class="input-icon  margin-top-10">
@@ -352,7 +352,7 @@
                                         <input ng-model="currentContact.email" type="text" class="form-control" placeholder="{{_('Email')}}">
                                       </div>
                                             </div>
-                                        </div>   
+                                        </div>
                                         <div class="row">
                                             <div class="col-md-12">
                                                   <div class="input-icon  margin-top-10">
@@ -365,15 +365,15 @@
                               <div class="row">
                                   <div class="col-md-12 margin-top-10">
                                       <p><span ng-hide="newTaskform">{{_('Add New Contact')}}</span><button type="button" ng-click="addContact(currentContact)" class="btn blue btn-sm pull-right btn-inline"><i class="fa fa-user"></i>&nbsp;{{_('Add')}}</button></p>
-                                       
+
                                   </div>
-                              </div>      
+                              </div>
                           </form>
                           <ul id="slimList" ng-hide="newContactform" class="chats accountContactList">
-                            <li class="in" ng-repeat="contact in account.contacts" id="topic_<%=$index%>"> 
+                            <li class="in" ng-repeat="contact in account.contacts" id="topic_<%=$index%>">
                             <div class="row">
                               <div class="col-md-2 col-xs-2">
-                                <img class="contact-photo" src="/static/img/avatar_contact.jpg">  
+                                <img class="contact-photo" src="/static/img/avatar_contact.jpg">
                               </div>
                               <div class="col-md-8 col-xs-8">
                                 <span class="name">
@@ -385,7 +385,7 @@
                               <div class="col-md-1 col-xs-1">
                                 <button type="button" class="close closeContactForm" ng-click="unselectContact($index)" data-dismiss="alert"></button>
                               </div>
-                            </div>           
+                            </div>
                             </li>
                           </ul>
 
