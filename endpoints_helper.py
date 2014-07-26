@@ -308,7 +308,8 @@ class EndpointsHelper():
         Deals=Deal.all()
         return Deals
     @classmethod
-    def highrise_import_tasks(cls, request):
+    def highrise_import_tasks(cls):
+        print "seeee"
         Tasks=Task.all()
         return Tasks
     @classmethod
