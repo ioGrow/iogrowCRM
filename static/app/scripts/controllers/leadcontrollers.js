@@ -529,7 +529,7 @@ $scope.addTags=function(){
    // Google+ Authentication
      Auth.init($scope);
      $(window).scroll(function() {
-          if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
+          if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
               $scope.listMoreItems();
           }
       });
@@ -595,7 +595,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
-      
+
       $scope.runTheProcess = function(){
             var params = {
                           'id':$route.current.params.leadId,
@@ -824,10 +824,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                         'id':$scope.lead.id,
                         'tasks':{}
                       };
-                      console.log('params');
-                      console.log(params);
+                    
         Lead.get($scope,params);
-        console.log($scope.tasks);
 
      }
  //HKA 10.11.2013 Add event
