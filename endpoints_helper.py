@@ -24,8 +24,9 @@ import gdata.contacts.data
 from gdata.gauth import OAuth2Token
 from gdata.contacts.client import ContactsClient
 from model import User
-import iograph
-from highrise.pyrise import Highrise, Person
+
+from highrise.pyrise import Highrise, Person, Company, Deal, Task, Tag, Case
+
 
 FOLDERS = {
             'Account': 'accounts_folder',
@@ -65,6 +66,7 @@ class EndpointsHelper():
     INVALID_TOKEN = 'Invalid token'
     INVALID_GRANT = 'Invalid grant'
     NO_ACCOUNT = 'You don\'t have a i/oGrow account'
+    
     @classmethod
     def send_message(cls,service, user_id, message):
         """Send an email message.
@@ -286,20 +288,74 @@ class EndpointsHelper():
         return acl
 
     @classmethod
-    def highrise_import(cls,request):
-        Highrise.set_server('iogrow3')
-        Highrise.auth('eee33d458c7982242b99d4b7f6b1d94d')
+    def highrise_import_peoples(cls,request):
         people = Person.all()
         return people
+    @classmethod
+    def highrise_import_companies(cls, request):
+        
+        Highrise.set_server(request.server_name)
+        Highrise.auth(request.key)
+        companies=Company.all()
+        return companies
+    @classmethod
+    def highrise_import_company_details(cls, company_id):
+        companie=Company.get(company_id)
+        return companie
+
+    @classmethod
+    def highrise_import_opportunities(cls):
+        Deals=Deal.all()
+        return Deals
+    @classmethod
+    def highrise_import_tasks(cls, request):
+        Tasks=Task.all()
+        return Tasks
+    @classmethod
+    def highrise_import_tags(cls, request):
+        Tags=Tag.all()
+        return Tags
+    @classmethod
+    def highrise_import_cases(cls):
+        Cases=Case.all()
+        return Cases
+    @classmethod
+    def highrise_import_notes_of_person(cls, id):
+        person=Person.get(id)
+        notes=person.notes
+        return notes
+    @classmethod
+    def highrise_import_tags_of_person(cls, request):
+        person=Person.get(request.id)
+        tags=person.tags
+        return tags
+    @classmethod
+    def highrise_import_tasks_of_person(cls, id):
+        person=Person.get(id)
+        tasks=person.tasks
+        return tasks
+    @classmethod
+    def highrise_import_notes_of_company(cls, request):
+        company=Company.get(request.id)
+        notes=company.notes
+        return notes
+    @classmethod
+    def highrise_import_tags_of_company(cls, request):
+        company=Company.get(request.id)
+        tags=company.tags
+        return tags
+    @classmethod
+    def highrise_import_tasks_of_company(cls, request):
+        company=Company.get(request.id)
+        tasks=company.tasks
+        return tasks
 
 
-
-'''class scor_n= User.get_by_email('hakim@iogrow.com')"
-        credentials=user.google_credentials
-        httpew_lead():
+class scor_new_lead():
     def predict(predd,tedd) :
-        user  = credentials.authorize(httplib2.Http())
+        user = User.get_by_email('hakim@iogrow.com')
+        credentials=user.google_credentials
+        http = credentials.authorize(httplib2.Http())
         service=build('prediction','v1.6',http=http)
         result=service.trainedmodels().predict(project='987765099891',id='7',body={'input':{'csvInstance':['Sofware Engineer','Purchase List']}}).execute()
         return result
-        '''

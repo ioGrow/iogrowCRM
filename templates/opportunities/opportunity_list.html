@@ -141,6 +141,9 @@
                                     <div class="oppEstDate">
                                       {{_('Estimated close date:')}} <%=opportunity.closed_date | date:'MMMM dd, yyyy'%>
                                     </div>
+                                    <div class="oppEstDate">
+                                      Last updated: <%=fromNow(opportunity.updated_at)%>
+                                    </div>
                             </div>
                           </div>
 

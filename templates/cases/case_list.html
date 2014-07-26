@@ -124,10 +124,17 @@
                   </div>
                   <div class="pitch">
                       <p class="status  ng-binding">
+
                       <span  class="contact-title" style="font-size: 12px;
                         ">
                             <span class="">{{ _('Date:')}}</span> <span class=""> <%=casee.updated_at | date:'MMMM dd, yyyy- HH:mm:ss'%> </span>
                             </span>
+
+                      
+                      <span  class="contact-title" style="font-size: 12px;">
+                            <span class="">{{ _("Last updated") }}: <%=fromNow(casee.updated_at)%></span>
+                      </span>
+
                       <span class="pull-right" style="color:<%=getStatusColor(casee.current_status.name)%>"><%= casee.current_status.name %></span>
                         </p>
                   </div>
@@ -207,7 +214,9 @@
             </li>
             <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
               <a ng-click="" class="btn-link addAnotherPhone">
+
                 <i class="fa fa-tags"></i>  {{ _('Add a new label')}} 
+
               </a>
             </li>
           </ul>
@@ -231,7 +240,9 @@
             </div>
           </form>
           <div class="form-group btn-manage-tags" ng-show="tags">
+
             <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">        {{ _('Manage Tags')}} 
+
             </button>
           </div>
         </div>
@@ -243,7 +254,7 @@
       <!-- END PAGE CONTAINER-->
 </div>
 <div class="fixed-labelsCard visible-md visible-lg">
-  
+
   <div class="row">
   <div class="col-md-12">
     <div class="portlet showCard fixedCard">

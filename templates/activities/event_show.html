@@ -45,7 +45,7 @@
       </span>
     </div>
   </div>
-  <div ng-show="isContentLoaded" class="row">
+  <div class="row">
     <div class="col-md-9">
       <div class="row">
       <div class="col-md-12 showPage taskShowHead margin-bottom-15">
@@ -123,7 +123,9 @@
                <i class="fa fa-calendar"></i>  <%=event.ends_at | date:'yyyy-MM-dd - HH:mm:ss '%></span>
                <div ng-show="showEndsCalendar" class="input-icon">
                      <i class="fa fa-calendar"></i>
+
                      <input cusdatetimepicker close-on-selected=false data-model="event.ends_at" type="text" class="form-control" placeholder="{{ _('From')}}" value="" id="leadEventStartsAt">
+
                </div>
               </div>
               <div class="clearfix margin-bottom-15"></div>
@@ -182,7 +184,7 @@
                        <div class="pull-right">
 
                         <input ng-disabled="isLoading || !comment.content" ng-click="addComment(comment)" type="submit" class="btn green" value="Add comment">
-                       
+
                         </div>
                                   <div class="clearfix"></div>
                   </form>

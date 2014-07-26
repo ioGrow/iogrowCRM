@@ -6,7 +6,7 @@ from google.appengine.api import search
 from endpoints_proto_datastore.ndb import EndpointsModel
 from protorpc import messages
 from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
-from endpoints_helper import EndpointsHelper 
+from endpoints_helper import EndpointsHelper
 from iomodels.crmengine.tags import Tag,TagSchema
 from iomodels.crmengine.tasks import Task,TaskRequest,TaskListResponse
 from iomodels.crmengine.events import Event,EventListResponse
@@ -79,6 +79,7 @@ class LeadSchema(messages.Message):
     profile_img_id = messages.StringField(21)
     profile_img_url = messages.StringField(22)
     industry = messages.StringField(23)
+    owner = messages.MessageField(iomessages.UserSchema,24)
 
 class LeadListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -262,6 +263,15 @@ class Lead(EndpointsModel):
                                         parent_key = lead.key,
                                         request = request
                                         )
+        owner = model.User.get_by_gid(lead.owner)
+        owner_schema = iomessages.UserSchema(
+                                            id = str(owner.id),
+                                            email = owner.email,
+                                            google_display_name = owner.google_display_name,
+                                            google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                            google_public_profile_url=owner.google_public_profile_url,
+                                            google_user_id = owner.google_user_id
+                                            )
         lead_schema = LeadSchema(
                                   id = str( lead.key.id() ),
                                   entityKey = lead.key.urlsafe(),
@@ -284,7 +294,8 @@ class Lead(EndpointsModel):
                                   profile_img_url = lead.profile_img_url,
                                   created_at = lead.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  industry = lead.industry
+                                  industry = lead.industry,
+                                  owner = owner_schema
                                 )
         return  lead_schema
     @classmethod
