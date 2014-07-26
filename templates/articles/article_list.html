@@ -2,7 +2,7 @@
     <div class="currentApp">
        <div class="btn-group">
            <a class="filterItem" href="#" data-toggle="dropdown" >
-            ioGrow Blog
+            {{ _('ioGrow Blog')}}
             <i class="icon-angle-down"></i>
            </a>
         </div>
@@ -22,7 +22,7 @@
   <div class="loader-container row" ng-show="isLoading">
     <div class="loader-dialog col-md-4 col-md-offset-4 ">
       <div class="loader-content">
-          Loading...
+          {{ _('Loading...')}}
       </div>
     </div>
   </div>
@@ -74,7 +74,7 @@
                 </div>
                 <div class="pitch">
                   <span ng-show="article.intro_text" class="contact-title" >
-                    posted by <%=article.created_by.display_name%>
+                    {{ _('posted by')}} <%=article.created_by.display_name%>
                     <%=fromNow(article.created_at)%>
 
                   </span>
@@ -137,7 +137,7 @@
         <div class="portlet showCard">
           <div class="portlet-title line">
             <div class="caption">
-              Share:
+              {{ _('Share:')}}
             </div>
           </div>
           <div class="portlet-body" id="chats">
@@ -156,7 +156,7 @@
     <div class="portlet showCard fixedCard">
       <div class="portlet-title">
         <div class="caption">
-                <!-- class="fa fa-reorder"--><i></i>Labels
+                <!-- class="fa fa-reorder"--><i></i>{{ _('Labels')}}
         </div>
       </div>
       <div class="portlet-body">
@@ -176,7 +176,7 @@
           {% if is_admin %}
           <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
             <a ng-click="" class="btn-link addAnotherPhone">
-              <i class="fa fa-tags"></i>  Add a new label
+              <i class="fa fa-tags"></i>  {{ _('Add a new label')}}
             </a>
           </li>
           {% endif %}
@@ -202,7 +202,8 @@
           </div>
         </form>
         <div class="form-group btn-manage-tags" ng-show="tags">
-          <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
+          <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">           
+           {{ _('Manage Tags')}}
           </button>
         </div>
         {% endif %}
@@ -222,7 +223,7 @@
         <div class="portlet showCard">
           <div class="portlet-title line">
             <div class="caption">
-              Share:
+              {{ _('Share:')}}
             </div>
           </div>
           <div class="portlet-body" id="chats">
@@ -242,7 +243,7 @@
     <div class="portlet showCard fixedCard">
       <div class="portlet-title">
         <div class="caption">
-                <!-- class="fa fa-reorder"--><i></i>Labels
+                <!-- class="fa fa-reorder"--><i></i>{{ _('Labels')}}
         </div>
       </div>
       <div class="portlet-body">
@@ -265,7 +266,7 @@
           {% if is_admin %}
           <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
             <a ng-click="" class="btn-link addAnotherPhone">
-              <i class="fa fa-tags"></i>  Add a new label
+              <i class="fa fa-tags"></i>  {{ _('Add a new label')}}
             </a>
           </li>
           {% endif %}
@@ -291,7 +292,8 @@
           </div>
         </form>
         <div class="form-group btn-manage-tags" ng-show="tags">
-          <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
+          <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">        
+          {{ _('Manage Tags')}}
           </button>
         </div>
         {% endif %}
@@ -302,7 +304,7 @@
 </div>
 <script type="text/javascript">
   $("#select2_sample2").select2({
-        placeholder: "Click to Select a label",
+        placeholder: "{{ _('Click to Select a label')}}",
         allowClear: false
     });
   var handleUniform = function () {

@@ -39,7 +39,7 @@
   <div class="loader-container row" ng-show="isLoading">
     <div class="loader-dialog col-md-4 col-md-offset-4 ">
       <div class="loader-content">
-        Loading...
+        {{ _('Loading...')}}
       </div>
     </div>
   </div>
@@ -71,19 +71,19 @@
                   <span class="page-meta pull-right">
                     <i class="icon-pencil">
                       <a ng-click="editacontact()" class="btn-link addAnotherPhone" data-toggle="modal">
-                        Edit
+                        {{ _('Edit')}}
                       </a>
                     </i>
                      |
                     <i class="icon-trash">
-                      <a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  Delete
+                      <a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  {{ _('Delete')}}
                       </a>
                     </i>
                   </span>
                   <ul class="list-unstyled contactInfos">
                     <li ng-show=" contact.title" >
                       <span>
-                        Title:
+                        {{ _('Title:')}}
                         <a class="tag ng-binding" href="/#/search/type:Contact #<%= contact.title %>">
                           #<%= contact.title %>
                         </a>
@@ -91,7 +91,7 @@
                     </li>
                     <li ng-show="contact.Paccount.name">
                       <span>
-                        Company:
+                        {{ _('Company:')}}
                         <a class="tag ng-binding" href="/#/search/type:Contact  #<%= contact.account.name %>">
                           #<%= contact.account.name %>
                         </a>
@@ -110,7 +110,7 @@
                   <hr class="sm-hr">
                   <div class="tags-section hidden" ng-class="{hidden: contact.tags==null}">
                     <div class="section-content">
-                      <span class="pull-left">Tags: </span>
+                      <span class="pull-left">{{ _('Tags:')}} </span>
                        <!-- ngRepeat: tag in account.tags -->
                       <a ng-repeat="tag in contact.tags" href="/#/search/type:Contact tags:<%=tag.id%>">
                         <span class="pull-left task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
@@ -128,29 +128,29 @@
               <div class="tabbable tabbable-custom">
                 <ul class="nav nav-tabs">
                   <li class="ng-tab" ng-class="{active: selectedTab == 2}">
-                    <a ng-click="selectedTab = 2;renderMaps();">About</a>
+                    <a ng-click="selectedTab = 2;renderMaps();">{{ _('About')}}</a>
                   </li>
                   <li class="ng-tab" ng-class="{active: selectedTab == 1}">
-                    <a ng-click="selectedTab = 1;">Notes</a>
+                    <a ng-click="selectedTab = 1;">{{ _('Notes')}}</a>
                   </li>
                   <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==8}">
-                    <a ng-click="selectedTab = 8;sendEmailSelected();">Send an Email</a>
+                    <a ng-click="selectedTab = 8;sendEmailSelected();">{{ _('Send an Email')}}</a>
                   </li>
                   <!--li class="ng-tab sm-menu" ng-class="{active: selectedTab == 3}">
                     <a ng-click="waterfall(); selectedTab = 3;">Contacts</a>
                   </li-->
                   <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 7}">
-                    <a ng-click="waterfallTrigger();selectedTab = 7;">Attach Documents</a>
+                    <a ng-click="waterfallTrigger();selectedTab = 7;">{{ _('Attach Documents</a>
                   </li>
                   <!-- <li class="ng-tab md-menu" ng-class="{active: selectedTab == 4}">
                     <a ng-click="selectedTab = 4;">Needs</a>
                   </li> -->
                   {% if is_business_user %}
                   <li class="ng-tab md-menu" ng-class="{active: selectedTab == 5}">
-                    <a ng-click="waterfallTrigger();selectedTab = 5;">Opportunities</a>
+                    <a ng-click="waterfallTrigger();selectedTab = 5;">{{ _('Opportunities')}}</a>
                   </li>
                   <li class="ng-tab md-menu" ng-class="{active: selectedTab == 6}">
-                    <a ng-click="waterfallTrigger();selectedTab = 6;">Cases</a>
+                    <a ng-click="waterfallTrigger();selectedTab = 6;">{{ _('Cases')}}</a>
                   </li>
                   {%endif%}
                   <li class="dropdown md-menu-inv">
@@ -158,13 +158,13 @@
                       More <i class="fa fa-angle-down"></i>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                      <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab ==8}"><a ng-click="selectedTab = 8;">Send an Email</a></li>
-                      <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">Contacts</a></li>
-                      <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 7}"><a ng-click="selectedTab = 7;">Attach Documents</a>
-                      <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">Needs</a></li>
+                      <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab ==8}"><a ng-click="selectedTab = 8;">{{ _('Send an Email')}}</a></li>
+                      <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">{{ _('Contacts')}}</a></li>
+                      <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 7}"><a ng-click="selectedTab = 7;">{{ _('Attach Documents')}}</a>
+                      <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">{{ _('Needs')}}</a></li>
                       {% if is_business_user %}
-                      <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">Opportunities</a></li>
-                      <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 6}"><a ng-click="selectedTab = 6;">Cases</a></li>
+                      <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">{{ _('Opportunities')}}</a></li>
+                      <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 6}"><a ng-click="selectedTab = 6;">{{ _('Cases')}}</a></li>
                       {%endif%}
                     </ul>
                   </li>
@@ -186,19 +186,19 @@
                     <div class="row">
                       <div class="col-md-12  margin-bottom-10">
                         <p class⁼"lead"="">
-                          To add an outside email to this account, forward or BCC to:
+                          {{ _('To add an outside email to this account, forward or BCC to:')}}
                           <a href="mailto:111054727630979006769@gcdc2013-iogrow.appspotmail.com">
                             111054727630979006769@gcdc2013-iogrow.appspotmail.com
                           </a>
                           <br>
-                          Or just add notes to remember what's important.
+                          {{ _('Or just add notes to remember what's important.')}}
                           <br>
                         </p>
 
                         <form id="addNote"  class="ng-pristine ng-valid">
                           <div class="form-group">
 
-                            <input class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="Add a new subject" id="messageSubject" ng-model="note.title">
+                            <input class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="{{ _('Add a new subject')}}" id="messageSubject" ng-model="note.title">
                           </div>
                           <div class="form-group">
                             <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="note.content"></textarea>
@@ -235,16 +235,16 @@
                   <div class="row slimForm">
                     <div class="col-md-6">
                       <div class="news-blocks blank-card blank-card-yellow newsCard">
-                        <h3>Contact Informations</h3>
+                        <h3>{{ _('Contact Informations')}}</h3>
                         <div class="news-block-tags">
-                          <strong>Phone</strong>
+                          <strong>{{ _('Phone')}}</strong>
                         </div>
                         <ul class="list-unstyled contact-infos">
                           <li ng-show="showPhoneForm">
                                       <div class="row">
                                          <form name="phoneform" class="form-inline newLeadForm" role="form">
                                           <div class="form-group sm-group" style="">
-                                            <label class="sr-only" for="exampleInputPassword2">Type</label>
+                                            <label class="sr-only" for="exampleInputPassword2">{{ _('Type')}}</label>
                                             <select ng-model="phone.type" class="form-control">
                                               <option value="home" selected="selected" >{{_('home')}}</option>
                                               <option>{{_('work')}}</option>
@@ -253,14 +253,14 @@
                                             </select>
                                           </div>
                                           <div class="form-group sm-group" style="">
-                                            <label class="sr-only" for="exampleInputEmail2">Number</label>
+                                            <label class="sr-only" for="exampleInputEmail2">{{ _('Number')}}</label>
                                             <input
                                                 name="phonenumber"
                                                 type="text"
                                                 class="form-control"
                                                 id="exampleInputEmail2"
                                                 ng-model="phone.number"
-                                                placeholder="Enter a number"
+                                                placeholder="{{ _('Enter a number')}}"
                                                 required
                                                 ng-pattern="/^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/i"
                                                 ng-focus="isFocused=true">
@@ -271,133 +271,133 @@
                                                   Not valid!
                                                 </span> -->
                                           </div>
-                                           <button type="submit" ng-click="addPhone(phone)" class="btn blue jfk-button jfk-button-action">Add</button>
+                                           <button type="submit" ng-click="addPhone(phone)" class="btn blue jfk-button jfk-button-action">{{ _('Add')}}</button>
                                             <button type="submit" class="btn btn-default" ng-click="showPhoneForm=false">X</button>
                                         </form>
                                       </div>
                             </li>
                           <li ng-repeat="phone in infonodes.phones"> <a editable-text="phone.number"  editable-text="phone.number" editoptions editdataattr="deleteInfonode('<%=phone.entityKey%>','phones')" onbeforesave="inlinePatch('Infonode','phones', 'number',phone.entityKey,$data)"> <%=phone.number%> </a> - <a editable-select="phone.type" e-ng-options="s.value as s.text for s in statuses" onbeforesave="inlinePatch('Infonode','phones', 'type',phone.entityKey,$data)"> <%=phone.type%> </a> <a ><img class="ctodeal"  /></a></li>
                            <li>
-                           <a ng-hide="showPhoneForm" ng-click="showPhoneForm=true" class="btn-link addAnotherPhone" ><i class="icon-plus"></i>Add a new Phone</a>
+                           <a ng-hide="showPhoneForm" ng-click="showPhoneForm=true" class="btn-link addAnotherPhone" ><i class="icon-plus"></i>{{ _('Add a new Phone')}}</a>
                            </li>
 
                         </ul>
                         <div class="news-block-tags">
-                          <strong>Email</strong>
+                          <strong>{{ _('Email')}}</strong>
                         </div>
                         <ul class="list-unstyled contact-infos">
                           <li ng-show="showEmailForm">
                                         <div class="row">
                                           <form class="form-inline newLeadForm" role="form">
                                             <div class="form-group lg-group" style="">
-                                              <label class="sr-only" for="exampleInputEmail2">Email</label>
-                                              <input type="email" class="form-control" id="exampleInputEmail2" ng-model="email.email" placeholder="Enter an email">
+                                              <label class="sr-only" for="exampleInputEmail2">{{ _('Email')}}</label>
+                                              <input type="email" class="form-control" id="exampleInputEmail2" ng-model="email.email" placeholder="{{ _('Enter an email')}}">
                                             </div>
-                                             <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="addEmail(email)" >Add</button>
+                                             <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="addEmail(email)" >{{ _('Add')}}</button>
                                               <button type="submit" ng-click="showEmailForm=false" class="btn btn-default">X</button>
                                           </form>
                                         </div>
                           </li>
                         <li ng-repeat="email in infonodes.emails"> <a editable-text="email.email" editoptions editdataattr="deleteInfonode('<%=email.entityKey%>','emails')" onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)"> <%=email.email %>  </a> </li>
-                          <li><a class="btn-link addAnotherPhone" ng-hide="showEmailForm" ng-click="showEmailForm=true"><i class="icon-plus"></i> Add a new email address </a>
+                          <li><a class="btn-link addAnotherPhone" ng-hide="showEmailForm" ng-click="showEmailForm=true"><i class="icon-plus"></i> {{ _('Add a new email address')}} </a>
                           </li>
 
                         </ul>
                         <div class="news-block-tags">
-                          <strong>Address</strong>
+                          <strong>{{ _('Address')}}</strong>
                         </div>
                         <ul class="list-unstyled contact-infos">
                            <li ng-repeat="address in infonodes.addresses">- <span editoptions editdataattr="deleteInfonode('<%=address.entityKey%>','addresses')" editable-text="address.street" onbeforesave="inlinePatch('Infonode','addresses', 'street',address.entityKey,$data)" ng-show="address.street"><%=address.street%>, </span> <span editable-text="address.city" onbeforesave="inlinePatch('Infonode','addresses', 'city',address.entityKey,$data)" ng-show="address.city"><%=address.city%>, </span><span editable-text="address.state" onbeforesave="inlinePatch('Infonode','addresses', 'state',address.entityKey,$data)" ng-show="address.state"><%=address.state%>, </span> <span editable-text="address.country" onbeforesave="inlinePatch('Infonode','addresses', 'country',address.entityKey,$data)" ng-show="address.country"><%=address.country%></span></li>
                           <li>
-                            <a href="#addressmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new address </a>
+                            <a href="#addressmodal" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> {{ _('Add a new address')}} </a>
                           </li>
 
                         </ul>
                       </div>
                       <div class="news-blocks blank-card blank-card-bluep newsCard">
-                        <h3>Links</h3>
+                        <h3>{{ _('Links')}}</h3>
                         <div class="news-block-tags">
-                          <strong>Website</strong>
+                          <strong>{{ _('Website')}}</strong>
                         </div>
                         <ul class="list-unstyled contact-infos">
                           <li ng-show="showWebsiteForm">
                                       <div class="row">
                                         <form class="form-inline newLeadForm" role="form">
                                           <div class="form-group lg-group" style="">
-                                            <label class="sr-only" for="exampleInputEmail2">Website</label>
+                                            <label class="sr-only" for="exampleInputEmail2">{{ _('Website')}}</label>
                                             <input
                                               type="url"
                                               ng-model="website.url"
                                               class="form-control"
                                               id="exampleInputEmail2"
-                                              placeholder="Enter a Website"
+                                              placeholder="{{ _('Enter a Website')}}"
                                               required>
                                           </div>
-                                      <button type="submit" ng-click="addWebsite(website)" class="btn blue jfk-button jfk-button-action">Add</button>
+                                      <button type="submit" ng-click="addWebsite(website)" class="btn blue jfk-button jfk-button-action">{{ _('Add')}}</button>
                                       <button type="submit" ng-click="showWebsiteForm=false" class="btn btn-default">X</button>
                                         </form>
                                       </div>
                             </li>
                           <li ng-repeat="website in infonodes.websites"><a editable-text="website.url" onbeforesave="inlinePatch('Infonode','websites', 'url',website.entityKey,$data)" href="http://<%=website.url%>"  target="_blank" editoptions editdataattr="deleteInfonode('<%=website.entityKey%>','websites')"><%=website.url%></a> </li>
                           <li>
-                            <a  ng-hide="showWebsiteForm" ng-click="showWebsiteForm=true" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new Website </a>
+                            <a  ng-hide="showWebsiteForm" ng-click="showWebsiteForm=true" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> {{ _('Add a new Website')}} </a>
                           </li>
                         </ul>
                         <div class="news-block-tags">
-                          <strong>Social Links</strong>
+                          <strong>{{ _('Social Links')}}</strong>
                         </div>
                         <ul class="list-unstyled contact-infos">
                           <li ng-show="showSociallinkForm">
                                           <div class="row">
                                             <form class="form-inline newLeadForm" role="form">
                                               <div class="form-group lg-group" style="">
-                                                <label class="sr-only" for="exampleInputEmail2">Social link</label>
+                                                <label class="sr-only" for="exampleInputEmail2">{{ _('Social link')}}</label>
                                                 <input
                                                   name="social"
                                                   type="url"
                                                   class="form-control"
                                                   id="exampleInputEmail2"
                                                   ng-model='sociallink.url'
-                                                  placeholder="Enter a social link"
+                                                  placeholder="{{ _('Enter a social link')}}"
                                                   required>
                                               </div>
                                                <button
-                                                  ng-click="addSocial(sociallink)" type="submit" class="btn blue jfk-button jfk-button-action">Add</button>
+                                                  ng-click="addSocial(sociallink)" type="submit" class="btn blue jfk-button jfk-button-action">{{ _('Add')}}</button>
                                                 <button type="submit" ng-click="showSociallinkForm=false" class="btn btn-default">X</button>
                                             </form>
                                           </div>
                             </li>
                           <li ng-repeat="sociallink in infonodes.sociallinks"><a editable-text="sociallink.url" onbeforesave="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,$data)" href="<%=sociallink.url%>" editoptions editdataattr="deleteInfonode('<%=sociallink.entityKey%>','sociallinks')"  target="_blank"> <%=sociallink.url%> </a></li>
                           <li>
-                             <a class="btn-link addAnotherPhone" ng-hide="showSociallinkForm" ng-click="showSociallinkForm=true"><i class="icon-plus"></i> Add a new social links </a>
+                             <a class="btn-link addAnotherPhone" ng-hide="showSociallinkForm" ng-click="showSociallinkForm=true"><i class="icon-plus"></i> {{ _('Add a new social links')}} </a>
                           </li>
                         </ul>
                       </div>
                       <div class="news-blocks blank-card blank-card-yellow newsCard">
-                        <h3>Custom Fields</h3>
+                        <h3>{{ _('Custom Fields')}}</h3>
                         <ul class="list-unstyled contact-infos">
                           <li ng-show="showCustomFieldForm">
                                           <div class="row">
                                             <form class="form-inline newLeadForm" role="form">
                                               <div class="form-group sm-group" style="">
-                                                <label class="sr-only" for="exampleInputEmail2">Field</label>
+                                                <label class="sr-only" for="exampleInputEmail2">{{ _('Field')}}</label>
                                                 <input
                                                   type="text"
                                                   class="form-control"
                                                   id="exampleInputEmail2"
-                                                  ng-model="customfield.field" placeholder="Enter field name"
+                                                  ng-model="customfield.field" placeholder="{{ _('Enter field name')}}"
                                                   required>
                                               </div>
                                               <div class="form-group sm-group" style="">
-                                                <label class="sr-only" for="exampleInputEmail2">Value</label>
+                                                <label class="sr-only" for="exampleInputEmail2">{{ _('Value')}}</label>
                                                 <input
                                                   type="text"
                                                   class="form-control"
                                                   id="exampleInputEmail2"
-                                                  ng-model="customfield.value" placeholder="Enter a value"
+                                                  ng-model="customfield.value" placeholder="{{ _('Enter a value')}}"
                                                   required>
                                               </div>
-                                               <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="addCustomField(customfield)">Add</button>
+                                               <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="addCustomField(customfield)">{{ _('Add')}}</button>
                                                 <button type="submit" class="btn btn-default" ng-click="showCustomFieldForm=false">X</button>
                                             </form>
                                           </div>
@@ -412,7 +412,7 @@
 
                           </li>
                           <li>
-                            <a ng-click="showCustomFieldForm=true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> Add a new custom field </a>
+                            <a ng-click="showCustomFieldForm=true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> {{ _('Add a new custom field')}} </a>
                           </li>
                         </ul>
                       </div>
@@ -420,11 +420,11 @@
                     <div class="col-md-6">
                       <div class="right-col">
                         <div class="news-blocks blank-card blank-card-red newsCard">
-                          <h3>Story</h3>
+                          <h3>{{ _('Story')}}</h3>
                           <div class="news-block-tags">
 
                          <div class="form-group row">
-                            <label class="control-label col-md-4">Tagline</label>
+                            <label class="control-label col-md-4">{{ _('Tagline')}}</label>
                              <div class="col-md-8">
                                  <input ng-blur="updateContactIntroTagline({'id':contact.id,'tagline':contact.tagline})" type="text" required id="id_tagline" class="form-control" ng-model="contact.tagline">
                              </div>
@@ -434,7 +434,7 @@
                           <div class="news-block-tags">
 
                             <div class="form-group row">
-                               <label class="control-label col-md-4">Introduction</label>
+                               <label class="control-label col-md-4">{{ _('Introduction')}}</label>
                              <div class="col-md-8">
                                <textarea id="noteBody" ng-blur="updateContactIntroTagline({'id':contact.id,'introduction':contact.introduction})" class="form-control ng-pristine ng-valid" rows="3" ng-model="contact.introduction"></textarea>
                               </div>
@@ -454,7 +454,7 @@
                   <div class="row cards-container">
                     <div class="btn-group relbutton">
                       <button ng-click="addContactModal()" id="sample_editable_1_new" class="btn red">
-                        Add person
+                        {{ _('Add person')}}
                       </button>
                     </div>
                     <div class="col-md-12">
@@ -519,7 +519,7 @@
                   <div class="row cards-container">
                     <div class="btn-group relbutton">
                                 <button ng-click="addNeedModal()" id="sample_editable_1_new" class="btn red">
-                               Add Need
+                               {{ _('Add Need')}}
                                 </button>
                     </div>
                     <div class="col-md-12">
@@ -529,7 +529,7 @@
                             <div class="blank_slate_arrow"></div>
                             <div class=" thumbnail blank_slate_body">
                               <img class="img-responsive" src="/static/img/cases_blank.png">
-                              <p class="lead">Let your customers explain their needs, and after you can validate or reject those needs (Lean Development).</p>
+                              <p class="lead">{{ _('Let your customers explain their needs, and after you can validate or reject those needs (Lean Development).')}}</p>
                             </div>
                           </div>
                         </div>
@@ -542,10 +542,10 @@
                     <div class="col-md-12">
                       <div class="pagination pull-right" ng-hide="isLoading">
                         <button ng-click="NeedPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="needspagination.prev" style="display: none;">
-                          Prev
+                          {{ _('Prev')}}
                         </button>
                         <button ng-click="NeedlistNextPageItems()" class="btn" ng-show="needspagination.next" style="display: none;">
-                          Next
+                          {{ _('Next')}}
                         </button>
                       </div>
                     </div>
@@ -559,7 +559,7 @@
                          <div class="btn-group relbutton">
 
                                 <button ng-click="addOppModal()" id="sample_editable_1_new" class="btn red">
-                                Add opportunity
+                                {{ _('Add opportunity')}}
                                 </button>
                           </div>
                           <div class="col-md-12">
@@ -644,7 +644,7 @@
                                     <div class="blank_slate_arrow"></div>
                                   <div class="thumbnail blank_slate_body">
                                         <img src="/static/img/opportunities_blank.png" class="img-responsive">
-                                          <p class="lead">Know which proposals/bids are pending, which you’ve won, and which you’ve lost. Enter notes about the opportunities, attach proposals or contracts to the opportunities, and keep a log of any changes.</p>
+                                          <p class="lead">{{ _('Know which proposals/bids are pending, which you’ve won, and which you’ve lost. Enter notes about the opportunities, attach proposals or contracts to the opportunities, and keep a log of any changes.')}}</p>
                                    </div>
                                  </div>
                                </div>
@@ -658,11 +658,11 @@
 
 
                                         <button ng-click="OppPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="opppagination.prev" style="display: none;">
-                                        Prev
+                                        {{ _('Prev')}}
                                         </button>
 
                                         <button ng-click="OpplistNextPageItems()" class="btn" ng-show="opppagination.next" style="display: none;">
-                                        Next
+                                        {{ _('Next')}}
                                         </button>
 
                                     </div>
@@ -679,7 +679,7 @@
                          <div class="btn-group relbutton">
 
                                 <button ng-click="addCaseModal()" id="sample_editable_1_new" class="btn red">
-                                Add case
+                                {{ _('Add case')}}
                                 </button>
                           </div>
                           <div class="col-md-12">
@@ -694,14 +694,14 @@
                                      <%=casee.name%>
                                     </h3></a>
                                     <div class="desc">
-                                    <span class="contact-title" ng-show="casee.status">Status:<a  class="desc" href="/#/search/type:Case <%=casee.status%>"># <%=casee.status%></a></span> <br>
-                                    <span ng-show="casee.priority" class="contact-title" >Priority:<a class="desc" href="/#/search/type:Case <%=casee.priority%>">#<%=casee.priority%> </a></span><br>
-                                      <span ng-show="casee.type_case" class="contact-title" >Labels :<a class="desc" href="/#/search/type:Case <%=casee.type_case%>">#<%=casee.type_case%></a>  </span>
+                                    <span class="contact-title" ng-show="casee.status">{{ _('Status:')}}<a  class="desc" href="/#/search/type:Case <%=casee.status%>"># <%=casee.status%></a></span> <br>
+                                    <span ng-show="casee.priority" class="contact-title" >{{ _('Priority:')}}<a class="desc" href="/#/search/type:Case <%=casee.priority%>">#<%=casee.priority%> </a></span><br>
+                                      <span ng-show="casee.type_case" class="contact-title" >{{ _('Labels :')}}<a class="desc" href="/#/search/type:Case <%=casee.type_case%>">#<%=casee.type_case%></a>  </span>
 
                                     </div>
                                   </div>
                                   <a class="more" href="/#/cases/show/<%=casee.id%>">
-                                  View more <i class="m-icon-swapright m-icon-white"></i>
+                                  {{ _('View more')}} <i class="m-icon-swapright m-icon-white"></i>
                                   </a>
                                 </div>
                               </div>
@@ -712,7 +712,7 @@
                                 <div class="blank_slate_arrow"></div>
                               <div class="thumbnail blank_slate_body">
                                   <img src="/static/img/cases_blank.png" class="img-responsive">
-                                <p class="lead">The main goal of cases is to assist collaboration and focus of teams on delivering amazing customer experience.</p>
+                                <p class="lead">{{ _('The main goal of cases is to assist collaboration and focus of teams on delivering amazing customer experience.')}}</p>
                                    </div>
 
 
@@ -728,11 +728,11 @@
 
 
                                         <button ng-click="CasePrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="casepagination.prev" style="display: none;">
-                                        Prev
+                                        {{ _('Prev')}}
                                         </button>
 
                                         <button ng-click="CaselistNextPageItems()" class="btn" ng-show="casepagination.next" style="display: none;">
-                                        Next
+                                        {{ _('Next')}}
                                         </button>
 
                                     </div>
@@ -750,23 +750,23 @@
 
                                 <div class="btn-group">
                                     <a class="btn red" href="#" data-toggle="dropdown">
-                                     Create
+                                     {{ _('Create')}}
                                     <i class="icon-angle-down"></i>
                                     </a>
                                     <ul class="dropdown-menu">
                                       <li><a ng-click="showCreateDocument('document')" href="#" data-toggle="modal">
                                            <img src="/static/img/google_drive/text/plain.png" class="">
-                                          Document
+                                          {{ _('Document')}}
                                           </a>
                                       </li>
                                       <li><a ng-click="showCreateDocument('presentation')" href="#" data-toggle="modal">
                                            <img src="/static/img/google_drive/presentation.png" class="">
-                                          Presentation
+                                          {{ _('Presentation')}}
                                           </a>
                                       </li>
                                       <li><a ng-click="showCreateDocument('spreadsheet')" href="#" data-toggle="modal">
                                            <img src="/static/img/google_drive/spreadsheet.png" class="">
-                                          Spreadsheet
+                                          {{ _('Spreadsheet')}}
                                           </a>
                                       </li>
 
@@ -811,7 +811,7 @@
                                            <div class="blank_slate_arrow"></div>
                                            <div class=" thumbnail blank_slate_body">
                                               <img src="/static/img/documents_blanks.png" class="img-responsive">
-                                                <p class="lead">Manage easily your documments using Google drive</p>
+                                                <p class="lead">{{ _('Manage easily your documments using Google drive')}}</p>
                                            </div>
                                        </div>
                                    </div>
@@ -828,22 +828,22 @@
                          <div class="showPage">
                            <div class="row">
                              <div class="col-md-12  margin-bottom-10">
-                          <p class⁼"lead"=""><strong>Send an Email to :</strong> </p>
+                          <p class⁼"lead"=""><strong>{{ _('Send an Email to :')}}</strong> </p>
                           <form  class="ng-pristine ng-valid">
                                             <div class="form-group">
-                                            <input required class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="To" id="messageSubject" ng-model="email.to">
+                                            <input required class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="{{ _('To')}}" id="messageSubject" ng-model="email.to">
                                             </div>
                                             <div class="form-group">
-                                            <input class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="CC" id="messageSubject" ng-model="email.cc">
+                                            <input class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="{{ _('CC')}}" id="messageSubject" ng-model="email.cc">
                                             </div>
                                             <div class="form-group">
-                                            <input class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="BCC" id="messageSubject" ng-model="email.bcc">
+                                            <input class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="{{ _('BCC')}}" id="messageSubject" ng-model="email.bcc">
                                             </div>
                                             <div class="form-group">
-                                             <input  required class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="Add a subject" id="messageSubject" ng-model="email.subject">
+                                             <input  required class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="{{ _('Add a subject')}}" id="messageSubject" ng-model="email.subject">
                                              </div>
                                             <div class="form-group">
-                                            <textarea id="some-textarea" placeholder="Enter text ..." id="noteBody" class="form-control ng-pristine ng-valid" rows="7" ng-model="email.body"></textarea>
+                                            <textarea id="some-textarea" placeholder="{{ _('Enter text ...')}}" id="noteBody" class="form-control ng-pristine ng-valid" rows="7" ng-model="email.body"></textarea>
                                              </div>
 
                                          <div class="pull-right">
@@ -870,7 +870,7 @@
     <div class="col-md-12">
          <div class="portlet showPage rightCardContent">
                 <div class="portlet-title line">
-                  <div class="caption"> <i class="fa fa-check"></i>Tasks </div>
+                  <div class="caption"> <i class="fa fa-check"></i>{{ _('Tasks')}} </div>
 
                 </div>
                 <div class="newContactform portlet-body" id="chats">
@@ -919,7 +919,7 @@
                       <div class="formElements newTaskToLead" ng-show="newTaskform">
                                 <div class="row">
                                   <div class="col-md-12 margin-bottom-10">
-                                      <input ng-model="newTask.title" type="text" id="taskName" class="form-control" placeholder="Tilte">
+                                      <input ng-model="newTask.title" type="text" id="taskName" class="form-control" placeholder="{{ _('Tilte')}}">
                                   </div>
                                   <!--/span-->
                                 </div>
@@ -927,7 +927,7 @@
                                     <div class="col-md-12 margin-bottom-10">
                                       <div class="input-icon ">
                                         <i class="fa fa-calendar"></i>
-                                          <input cusdatetimepicker data-model="newTask.due" type="text" class="form-control" placeholder="Add a due date" value="" id="leadEventStartsAt">
+                                          <input cusdatetimepicker data-model="newTask.due" type="text" class="form-control" placeholder="{{ _('Add a due date')}}" value="" id="leadEventStartsAt">
                                       </div>
                                     </div>
                                 </div>
@@ -935,7 +935,7 @@
                                     <div class="col-md-12 margin-bottom-10">
                                         <div class="input-icon ">
                                             <i class="fa fa-bell-o"></i>
-                                              <input cusdatetimepicker data-model="newTask.reminder" type="text" class="form-control" placeholder="Add a reminder" value="" id="leadEventStartsAt">
+                                              <input cusdatetimepicker data-model="newTask.reminder" type="text" class="form-control" placeholder="{{ _('Add a reminder')}}" value="" id="leadEventStartsAt">
                                           </div>
                                     </div>
                                 </div>
@@ -969,7 +969,7 @@
                       </div>
                       <div class="row">
                           <div class="col-md-12 margin-top-10">
-                              <p><span ng-hide="newTaskform">Add New Task</span><button type="button" ng-click="addTask(newTask)" class="btn blue btn-sm pull-right btn-inline">Add</button></p>
+                              <p><span ng-hide="newTaskform">{{ _('Add New Task')}}</span><button type="button" ng-click="addTask(newTask)" class="btn blue btn-sm pull-right btn-inline">{{ _('Add')}}</button></p>
 
                           </div>
                       </div>
@@ -983,7 +983,7 @@
       <div class="col-md-12">
           <div class="portlet showPage rightCardContent">
                 <div class="portlet-title line">
-                  <div class="caption"> <i class="fa fa-calendar"></i>Events </div>
+                  <div class="caption"> <i class="fa fa-calendar"></i>{{ _('Events')}} </div>
 
                 </div>
                 <div class="newContactform portlet-body" id="chats">
@@ -1035,17 +1035,17 @@
                   <div class="formElements newEventToLead" ng-show="newEventform">
                             <div class="row">
                               <div class="col-md-12 margin-bottom-10">
-                                  <input ng-model="ioevent.title" type="text" id="taskName" class="form-control" placeholder="Event tilte">
+                                  <input ng-model="ioevent.title" type="text" id="taskName" class="form-control" placeholder="{{ _('Event tilte')}}">
                               </div>
                               <!--/span-->
                             </div>
-                            All day <input type="checkbox" ng-model="allday"/>
+                            {{ _('All day')}} <input type="checkbox" ng-model="allday"/>
                               <!-- pick only date (the case of all day) -->
                               <div class="row" ng-show="allday">
                                 <div class="col-md-12 margin-bottom-10">
                                        <div class="input-icon ">
                                         <i class="fa fa-calendar"></i>
-                                       <input cusdatetimepicker data-model="ioevent.starts_at_allday" type="text" class="form-control" placeholder="When" value="" id="leadEventStartsAt">
+                                       <input cusdatetimepicker data-model="ioevent.starts_at_allday" type="text" class="form-control" placeholder="{{ _('When?')}}" value="" id="leadEventStartsAt">
                                       </div>
                                 </div>
                             </div>
@@ -1056,7 +1056,7 @@
                                 <div class="col-md-12 margin-bottom-10">
                                       <div class="input-icon">
                                         <i class="fa fa-calendar"></i>
-                                        <input cusdatetimepicker data-model="ioevent.starts_at" type="text" class="form-control" placeholder="From" value="" id="leadEventStartsAt">
+                                        <input cusdatetimepicker data-model="ioevent.starts_at" type="text" class="form-control" placeholder="{{ _('From')}}" value="" id="leadEventStartsAt">
                                       </div>
 
                                 </div>
@@ -1065,7 +1065,7 @@
                                 <div class="col-md-12 margin-bottom-10">
                                        <div class="input-icon ">
                                         <i class="fa fa-calendar"></i>
-                                       <input cusdatetimepicker data-model="ioevent.ends_at" type="text" class="form-control" placeholder="To" value="" id="leadEventStartsAt">
+                                       <input cusdatetimepicker data-model="ioevent.ends_at" type="text" class="form-control" placeholder="{{ _('To')}}" value="" id="leadEventStartsAt">
                                       </div>
                                 </div>
                             </div>
@@ -1073,16 +1073,16 @@
 
                             <div class="row">
                               <div class="col-md-12 margin-bottom-10">
-                                  <input ng-model="ioevent.where" type="text" id="taskName" class="form-control" placeholder="Where ?">
+                                  <input ng-model="ioevent.where" type="text" id="taskName" class="form-control" placeholder="{{ _('Where ?')}}">
                               </div>
                               <!--/span-->
                             </div>
                   </div>
                   <div class="row">
                       <div class="col-md-12 margin-top-10">
-                          <p class="newEventText"><span ng-hide="newEventform">Add New Event</span>
-                          <button type="button" ng-click="addEvent(ioevent)" class="btn red btn-sm pull-right btn-inline">Add</button>
-                          <button type="button" ng-click="closeEventForm(ioevent)" ng-show="newEventform" class="cancelEventBtn btn btn-default btn-sm pull-right btn-inline">Cancel</button>
+                          <p class="newEventText"><span ng-hide="newEventform">{{ _('Add New Event')}}</span>
+                          <button type="button" ng-click="addEvent(ioevent)" class="btn red btn-sm pull-right btn-inline">{{ _('Add')}}</button>
+                          <button type="button" ng-click="closeEventForm(ioevent)" ng-show="newEventform" class="cancelEventBtn btn btn-default btn-sm pull-right btn-inline">{{ _('Cancel')}}</button>
                           </p>
                       </div>
                   </div>
@@ -1171,7 +1171,7 @@
     <div class="modal-content">
         <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">Delete Contact</h3>
+                <h3 id="myModalLabel" class="modal-title">{{ _('Delete Contact')}}</h3>
               </div>
               <div class="modal-body">
                  <form id="seletesho" name="deletesho" class="form-horizontal">
@@ -1398,10 +1398,10 @@
                         <label  class="col-md-3 control-label">{{_("Custom Field")}} </label>
                         <div class="col-md-9">
                           <div class="form-group">
-                               <input type="text" class="form-control" placeholder="Field"  ng-model="customField.field">
+                               <input type="text" class="form-control" placeholder="{{ _('Field')}}"  ng-model="customField.field">
                           </div>
                           <div class="form-group">
-                               <input type="text" class="form-control" placeholder="Value"  ng-model="customField.value">
+                               <input type="text" class="form-control" placeholder="{{ _('Value')}}"  ng-model="customField.value">
                           </div>
                         </div>
                      </div>
@@ -1431,7 +1431,7 @@
                     <div class="form-group">
                         <label  class="col-md-3 control-label">{{_("Website")}} </label>
                         <div class="col-md-9">
-                          <input type="text" class="form-control" placeholder="Website" required id="id_website" ng-model="website.website" >
+                          <input type="text" class="form-control" placeholder="{{ _('Website')}}" required id="id_website" ng-model="website.website" >
                         </div>
                      </div>
               </div>
@@ -1614,7 +1614,7 @@
               <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">Delete Information</h3>
+                <h3 id="myModalLabel" class="modal-title">{{ _('Delete Information')}}</h3>
               </div>
               <div class="modal-body">
                  <form id="seletesho" name="deletesho" class="form-horizontal">
@@ -1641,7 +1641,7 @@
             <div class="modal-body pickerin">
                      <div class="controls controls-row">
                                           <form id="addTask"  class="ng-pristine ng-valid">
-                                                  <input class="form-control" autofocus type="text" placeholder="Add a new task" id="taskTitle" ng-model="task.title">
+                                                  <input class="form-control" autofocus type="text" placeholder="{{ _('Add a new task')}}" id="taskTitle" ng-model="task.title">
 
                                                   <p><strong>{{_("When's it due?")}}</strong></p>
                                                   <center>
@@ -1674,13 +1674,13 @@
             <div class="modal-body">
                      <div class="controls controls-row">
                                           <form id="addTask"  class="ng-pristine ng-valid">
-                                                  <input class="form-control" autofocus type="text" placeholder="Enter a new <%=mimeType%> name" id="taskTitle" ng-model="newdocument.title" required>
+                                                  <input class="form-control" autofocus type="text" placeholder="{{ _('Enter a new')}} <%=mimeType%> {{ _('name')}}" id="taskTitle" ng-model="newdocument.title" required>
 
 
                      </div>
             </div>
             <div class="modal-footer">
-              <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _('Cancel')}}</button>
 
                <input ng-hide="isLoading" type="submit" class="btn green" value="Create this document" ng-click="createDocument(newdocument)">
                 <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
@@ -1730,7 +1730,7 @@
                         <label  class="required col-md-3 control-label">{{_("Stage")}} </label>
                         <div class="col-md-9">
                           <select ng-model="stage_selected" class="form-control" ng-options="opps.name + ' - ( ' + opps.probability + '% )' for opps in opportunitystages | orderBy: 'name':true"  >
-                            <option value="">-- choose Stage --</option>
+                            <option value="">-- {{ _('choose Stage')}} --</option>
 
                           </select>
 
@@ -1778,7 +1778,7 @@
 
                         <div class="col-md-9">
                            <select class="form-control" ng-model="casee.priority">
-                            <option value="1">1 - Low</option>
+                            <option value="1">1 - {{ _('Low')}}</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
                             <option value="4">4</option>
@@ -1787,7 +1787,7 @@
                             <option value="7">7</option>
                             <option value="8">8</option>
                             <option value="9">9</option>
-                            <option value="10">10 - Critical</option>
+                            <option value="10">10 - {{ _('Critical')}}</option>
                           </select>
 
                         </div>
@@ -1798,7 +1798,7 @@
 
                         <div class="col-md-9">
                             <select  class="form-control" ng-model="status_selected" ng-options="stat.status for stat in casesatuses" >
-                            <option value="">Choose Status</option>
+                            <option value="">{{ _('Choose Status')}}</option>
                             <!--option value=""><%=status_selected.status%></option-->
                           </select>
 
@@ -1881,7 +1881,7 @@
             <div class="modal-body pickerin">
                      <div class="controls controls-row">
                                           <form id="addTask"  class="ng-pristine ng-valid">
-                                                  <input class="form-control" autofocus type="text" placeholder="Add a new task" id="taskTitle" ng-model="task.title">
+                                                  <input class="form-control" autofocus type="text" placeholder="{{ _('Add a new task')}}" id="taskTitle" ng-model="task.title">
 
                                                   <p><strong>{{_("When's it due?")}}</strong></p>
                                                   <center>
@@ -1910,7 +1910,7 @@
             <div class="modal-body">
                      <div class="controls controls-row">
                                           <form id="addTask" class="ng-pristine ng-valid">
-                                                  <input class="form-control" autofocus type="text" placeholder="Enter a new <%=mimeType%> name" id="taskTitle" ng-model="newdocument.title" required>
+                                                  <input class="form-control" autofocus type="text" placeholder="{{ _('Enter a new')}} <%=mimeType%> {{ _('name')}}" id="taskTitle" ng-model="newdocument.title" required>
 
 
                      </div>
@@ -2011,7 +2011,7 @@
               autoresize: true
           });
   $("#select2_sample2").select2({
-                          placeholder: "Click to Select a label",
+                          placeholder: "{{ _('Click to Select a label')}}",
                           allowClear: false
                       });
 

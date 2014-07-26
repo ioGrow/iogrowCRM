@@ -27,7 +27,7 @@
                     <div class="modal-content">
                     <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                      <h3 id="myModalLabel" class="modal-title">Add Tags </h3>
+                      <h3 id="myModalLabel" class="modal-title">{{ _('Add Tags')}} </h3>
                     </div>
                     <div class="modal-body">
                        <form id="seletesho" name="deletesho" class="form-horizontal">
@@ -64,7 +64,7 @@
                   <div class="form-group">
                         <input class="form-control" autofocus type="text" placeholder="Add a new task" id="taskTitle" ng-model="task.title">
 
-                        <p><strong>When's it due?</strong></p>
+                        <p><strong>{{ _('When's it due?')}}</strong></p>
                         <center>
                               <datetimepicker data-ng-model="task.due"
                                                     data-datetimepicker-config="{ startView:'day', minView:'day' }" />
@@ -76,9 +76,9 @@
                             <div class="col-md-9">
                               <select class="form-control" ng-model="task.status">
 
-                                    <option value="pending">Pending</option>
-                                    <option value="working">Working</option>
-                                    <option value="closed">Closed</option>
+                                    <option value="pending">{{ _('Pending')}}</option>
+                                    <option value="working">{{ _('Working')}}</option>
+                                    <option value="closed">{{ _('Closed')}}</option>
 
                               </select>
 
@@ -91,7 +91,7 @@
 
 
                     <div class="form-group">
-                        <input class="form-control" autofocus type="text" placeholder="Add labels to categorize your tasks" id="taskTitle" ng-model="task.tags">
+                        <input class="form-control" autofocus type="text" placeholder="{{ _('Add labels to categorize your tasks')}}" id="taskTitle" ng-model="task.tags">
                     </div>
 
 
@@ -122,13 +122,13 @@
   <div class="loader-container row" ng-show="isLoading">
     <div class="loader-dialog col-md-4 col-md-offset-4 ">
       <div class="loader-content">
-        Loading...
+        {{ _('Loading...')}}
       </div>
     </div>
   </div>
 <div class="" ng-show="immediateFailed">
          <div class="col-md-12">
-          <h1>Sign-in Button;</h1>
+          <h1>{{ _('Sign-in Button;')}}</h1>
               <span id="signin">
                   <span id="myGsignin"></span>
               </span>
@@ -162,25 +162,25 @@
                    <button   ng-show="task.status=='open'"class="btn btn-unstyled btn-sm btn-default task_action" ng-click="closeTask(task)">
                     <i class="fa fa-lock"></i>
                       <span class="btn-text">
-                        Close
+                        {{ _('Close')}}
                       </span>
                     </button>
                      <button   ng-show="task.status=='closed'" class="btn btn-unstyled btn-sm btn-default task_action" ng-click="reopenTask(task)">
                     <i class="fa fa-unlock"></i>
                     <span class="btn-text">
-                    Reopen
+                    {{ _('Reopen')}}
                     </span>
                     </button>
                     <button ng-click="showAssigneeTags()" class="btn btn-sm  btn-unstyled btn-default task_action">
                     <i class="fa fa-tags"></i>
                      <span class="btn-text">
-                        Tags
+                        {{ _('Tags')}}
                      </span>
                     </button>
                     <button ng-click="editbeforedelete()" class="btn btn-sm  btn-unstyled btn-default task_action">
                     <span class="page-meta pull-right">
                       <i class="icon-trash">
-                        <span class="btn-text">  Delete
+                        <span class="btn-text">  {{ _('Delete')}}
                         </span>
                       </i>
                     </span>
@@ -190,7 +190,7 @@
                     <datetimepick ng-model='newTask.due' class="new-task-date btn-unstyled" label-format='MMM d, h:mm a'></datetimepick>
                </form>
                <ul class="list-unstyled ">
-                 <li ng-show="task.tags" class="inline-tags">Tags:</li>
+                 <li ng-show="task.tags" class="inline-tags">{{ _('Tags:')}}</li>
                  <li ng-repeat="tag in task.tags" class="inline-tags">
                    <a  href="/#/search/type:Task tags:<%=tag.id%>">
                         <span class="pull-left task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
@@ -209,7 +209,7 @@
         <div class="col-md-12 commentsShow">
              <div class="portlet">
                 <div class="portlet-title line">
-                  <div class="caption"><i class="icon-comments"></i>Comments</div>
+                  <div class="caption"><i class="icon-comments"></i>{{ _('Comments')}}</div>
                 </div>
                 <div class="portlet-body">
                       <ul class="chats">
@@ -238,7 +238,7 @@
         <div class="col-md-12">
              <div class="portlet">
                 <div class="portlet-body">
-                     <p class⁼"lead"=""><strong>Add New Comment :</strong> </p>
+                     <p class⁼"lead"=""><strong>{{ _('Add New Comment :')}}</strong> </p>
                       <form id="addComment"  class=" ng-pristine ng-valid">
                       <div class="form-group">
                                         <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="comment.content"></textarea>
@@ -273,7 +273,7 @@
                  <form id="addAccount" name="addaccount" ng-submit="addNewContributor(slected_memeber,role)" class="form-horizontal">
 
 
-                    <p>Invite people from your team and start working together on this task. Everyone you invite will receive an email.</p>
+                    <p>{{ _('Invite people from your team and start working together on this task. Everyone you invite will receive an email.')}}</p>
 
                     <div class=''>
                     <div class="invitation" ng-show="slected_memeber">
@@ -281,15 +281,15 @@
                         <strong> <%= slected_memeber.google_display_name %> < <%=slected_memeber.email%> ></strong>
                     </div>
                     <div class="form-group">
-                      <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="Enter name or email addresse to involve people in this discussion">
+                      <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to involve people in this discussion')}}">
                     </div>
                     <div class="form-group">
-                          <label class="col-md-3 control-label">Add as:</label>
+                          <label class="col-md-3 control-label">{{ _('Add as:')}}</label>
                           <div class="col-md-9">
                             <select class="form-control medium m-wrap" tabindex="1" ng-model="role">
-                              <option value="responsible">Responsible</option>
-                              <option value="participant">Participant</option>
-                              <option value="invited">Invited</option>
+                              <option value="responsible">{{ _('Responsible')}}</option>
+                              <option value="participant">{{ _('Participant')}}</option>
+                              <option value="invited">{{ _('Invited')}}</option>
 
                             </select>
                           </div>
@@ -321,17 +321,17 @@
       <div class="portlet showCard">
         <div class="portlet-title line">
           <div class="caption">
-            <i class="icon-user"></i>Who's involved
+            <i class="icon-user"></i>{{ _('Who's involved')}}
           </div>
         </div>
                   <div class="portlet-body">
                   <ul class="chats">
 
                    <li>
-                        <span class="arrow">Created By: <%=task.created_by.display_name%></span>
+                        <span class="arrow">{{ _('Created By:')}} <%=task.created_by.display_name%></span>
                    </li>
                   </ul>
-                   <div class="caption"><i class="fa fa-group"></i>Assignees</div>
+                   <div class="caption"><i class="fa fa-group"></i>{{ _('Assignees')}}</div>
                     <ul class="chats">
 
                  <li  ng-repeat="assigned in task.assignees">
@@ -341,7 +341,7 @@
 
 
                  </li>
-                  <li><a href="#addContributor"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>Add a new assignee</a></li>
+                  <li><a href="#addContributor"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>{{ _('Add a new assignee')}}</a></li>
 
 
                 </ul>
@@ -359,7 +359,7 @@
     <div class="modal-content">
         <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">Delete Task</h3>
+                <h3 id="myModalLabel" class="modal-title">{{ _('Delete Task')}}</h3>
               </div>
               <div class="modal-body">
                  <form id="seletesho" name="deletesho" class="form-horizontal">
@@ -372,7 +372,7 @@
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
 
-                <input  ng-click="deleteTask()" type="submit" class="btn red" value="Delete this Task">
+                <input  ng-click="deleteTask()" type="submit" class="btn red" value="{{ _('Delete this Task')}}">
 
                 <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
               </div>
@@ -385,7 +385,7 @@
     <script type="text/javascript">
     $('#checkTaskInShow').uniform();
       $("#select2_sample2").select2({
-        placeholder: "Click to Select a label",
+        placeholder: "{{ _('Click to Select a label')}}",
         allowClear: false
     });
     </script>

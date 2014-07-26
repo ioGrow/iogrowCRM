@@ -19,12 +19,12 @@
       <div class="row">
       <div class="col-md-10 col-xs-10">
       <div class="filterOptions">
-        <span role="button" class="filterItem activeFilter hidden-xs hiddenOnxs" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">All <span class="hidden-xs hiddenOnxs">Opportunities</span> </span>
-        <span role="button" class="filterItem hidden-xs hiddenOnxs" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">My <span class="hidden-xs hiddenOnxs">Opportunities</span></span>
+        <span role="button" class="filterItem activeFilter hidden-xs hiddenOnxs" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">{{_('All')}} <span class="hidden-xs hiddenOnxs">{{_('Opportunities')}}</span> </span>
+        <span role="button" class="filterItem hidden-xs hiddenOnxs" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">My <span class="hidden-xs hiddenOnxs">{{_('Opportunities')}}</span></span>
         <div class="btn-group">
             <a class="filterItem" href="#" data-toggle="dropdown">
-              <span class="showOnxs">Filter</span>
-              <span class="hidden-xs hiddenOnxs">Stages</span>
+              <span class="showOnxs">{{_('Filter')}}</span>
+              <span class="hidden-xs hiddenOnxs">{{_('Stages')}}</span>
               <i class="icon-angle-down"></i>
             </a>
              <ul class="dropdown-menu">
@@ -35,7 +35,7 @@
         </div>
         <div class="btn-group">
             <a class="filterItem" href="#" data-toggle="dropdown">
-              Sort
+              {{ _('Sort')}}
               <i class="icon-angle-down"></i>
             </a>
             <ul class="dropdown-menu">
@@ -51,7 +51,7 @@
       </div>
       <div class="col-md-2 col-xs-2">
       <a href="/#/opportunities/new" class="hidden-xs hidden-sm btn red newAccountBtnOnscroll pull-right hidden afterScrollBtn">
-           New <span class="hidden-xs hiddenOnxs">Opportunity</span>
+           {{_('New')}} <span class="hidden-xs hiddenOnxs">{{_('Opportunity')}}</span>
          </a>
       </div>
       </div>
@@ -62,7 +62,7 @@
   <div class="loader-container row" ng-show="isLoading">
     <div class="loader-dialog col-md-4 col-md-offset-4 ">
       <div class="loader-content">
-        Loading...
+        {{_('Loading...')}}
       </div>
     </div>
   </div>
@@ -73,7 +73,7 @@
 </div>
   <div class="container-fluid"ng-show="immediateFailed">
     <div class="col-md-12">
-      <h1>Sign-in Button;</h1>
+      <h1>{{_('Sign-in Button;')}}</h1>
       <span id="signin">
         <span id="myGsignin"></span>
       </span>
@@ -127,7 +127,7 @@
                                       <span><%= opportunity.currency %> <%= opportunity.amount_total | customCurrency:"":",":".":0 %></span>
                                       <div>
                                         <span ng-show="opportunity.account.name" class="withAmount">
-                                        with <a href="/#/accounts/show/<%= opportunity.account.id %>">
+                                        {{_('with')}} <a href="/#/accounts/show/<%= opportunity.account.id %>">
                                            <%= opportunity.account.name %>
                                         </a>
                                       </span>
@@ -139,7 +139,7 @@
                                     </div>
 
                                     <div class="oppEstDate">
-                                      Estimated close date: <%=opportunity.closed_date | date:'MMMM dd, yyyy'%>
+                                      {{_('Estimated close date:')}} <%=opportunity.closed_date | date:'MMMM dd, yyyy'%>
                                     </div>
                             </div>
                           </div>
@@ -200,7 +200,7 @@
         <div class="portlet showCard">
           <div class="portlet-title">
             <div class="caption">
-                    <!-- class="fa fa-reorder"--><i></i>Labels
+                    <!-- class="fa fa-reorder"--><i></i>{{_('Labels')}}
             </div>
           </div>
           <div class="portlet-body">
@@ -221,7 +221,7 @@
               </li>
               <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
                 <a ng-click="" class="btn-link addAnotherPhone">
-                  <i class="fa fa-tags"></i>  Add a new label
+                  <i class="fa fa-tags"></i>  {{_('Add a new label')}}
                 </a>
               </li>
             </ul>
@@ -229,7 +229,7 @@
               <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
               <div class="row">
                 <div class="col-md-12 form-group">
-                  <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New label">
+                  <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{_('New label')}}">
                 </div>
               </div>
               <div class="row">
@@ -245,7 +245,7 @@
               </div>
             </form>
             <div class="form-group btn-manage-tags" ng-show="tags">
-              <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
+              <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">{{_('Manage Tags')}}
               </button>
             </div>
           </div>
@@ -281,7 +281,7 @@
                         <label  class="required col-md-3 control-label">{{_("Account")}} *</label>
 
                         <div class="col-md-9">
-                          <input type="text"  ng-model="searchAccountQuery" typeahead="result as result.name  for result in results | filter:$viewValue | limitTo:10" typeahead-on-select="selectAccount()" class="form-control"placeholder="Search">
+                          <input type="text"  ng-model="searchAccountQuery" typeahead="result as result.name  for result in results | filter:$viewValue | limitTo:10" typeahead-on-select="selectAccount()" class="form-control"placeholder="{{_('Search')}}">
                         </div>
 
 
@@ -383,10 +383,10 @@
                           </div>
                           <div class="col-md-3 inline-div">
                             <select   class="form-control" ng-model="opportunity.price_type">
-                                <option value="fixed">Fixed bid</option>
-                                <option value="hour">Per hour</option>
-                                <option value="month">Per month</option>
-                                <option value="year">Per year</option>
+                                <option value="fixed">{{_('Fixed bid')}}</option>
+                                <option value="hour">{{_('Per hour')}}</option>
+                                <option value="month">{{_('Per month')}}</option>
+                                <option value="year">{{_('Per year')}}</option>
                             </select>
                           </div>
                           <div class="col-md-2 inline-div">
@@ -403,7 +403,7 @@
 
                        <div class="col-md-9">
                           <select ng-model="stage_selected" ng-options="opps.name + ' - ( ' + opps.probability + '% )' for opps in opportunitystages | orderBy: 'name':true" class="form-control" >
-                            <option value="">-- choose Stage --</option>
+                            <option value="">-- {{_('choose Stage')}} --</option>
 
                           </select>
 
@@ -413,18 +413,18 @@
 
                     </div>
                     <hr/>
-                    <p>Who can access?</p>
+                    <p>{{_('Who can access?')}}</p>
 
 
                      <div class='radio-list'>
 
                             <label >
                             <input type="radio" name="optionsRadios"  value="public" ng-model="opportunity.access" checked />
-                            public: Anyone within your organization
+                            {{_('public: Anyone within your organization')}}
                             </label>
                             <label >
                             <input type="radio"  name="optionsRadios" value="private" ng-model="opportunity.access" />
-                            private: only you and your collaborators
+                            {{_('private: only you and your collaborators')}}
                             </label>
 
 
@@ -447,7 +447,7 @@
      </div>
 <script type="text/javascript">
   $("#select2_sample2").select2({
-        placeholder: "Click to Select a label",
+        placeholder: "{{_('Click to Select a label')}}",
         allowClear: false
     });
   var handleUniform = function () {

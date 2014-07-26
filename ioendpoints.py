@@ -2435,9 +2435,6 @@ class CrmEngineApi(remote.Service):
                 setattr(tag,prop,new_value)
                 patched = True
             tag.put()
-        print "*****************************"
-        print tag
-        print  "****************************"
         return message_types.VoidMessage()
 
     # tags.delete api
