@@ -4,7 +4,6 @@
 <!--[if !IE]><!--> <html xmlns:ng="http://angularjs.org"> <!--<![endif]-->
 <!-- BEGIN HEAD -->
 <head>
-
   <meta charset="utf-8" />
   <title>i/oGrow Engine Platform</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -104,9 +103,11 @@
 
         <ul class="nav navbar-nav pull-right">
 
-              <li id="chromeExtension" class="dropdown user chrome-ext hidden-xs"  >
+
+              <!-- <li id="chromeExtension" class="dropdown user chrome-ext hidden-xs"  >
                   <input type="submit" onclick="$('#InstallChromeExtension').modal() " class="btn blue btn-block pull-right" value="Install chrome extension" style="padding-left:5px;padding-right:5px;">
-              </li>
+              </li> -->
+
 
               <li class="dropdown user">
                 <a href="/#/admin/users" class="dropdown-tog">
@@ -240,6 +241,7 @@
                </div>
             </div>
 </div>
+
 <div id="InstallChromeExtension" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
  <div class="modal-dialog">
  <div class="modal-content">
@@ -331,7 +333,26 @@
                </div>
                </div>
             </div>
+<div id="SendFeedbackModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+ <div class="modal-dialog">
+ <div class="modal-content">
+ <div class="modal-header">
+   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+   <h3 id="myModalLabel" class="modal-title">{{_("ioGrow Feedback")}}</h3>
+ </div>
 
+ <div class="modal-body">
+    ioGrow Feedback lets you send ioGrow suggestions about our product. We welcome problem reports, feature ideas and general comments.
+
+   Start by writing a brief description:
+    <iframe src="https://docs.google.com/forms/d/1kj_5QgfNnsyAdIC2TOGbHImF5BiZwxKNBi7FaTbxOlE/viewform?embedded=true" width="100%" height="500" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+
+ </div>
+
+  </form>
+  </div>
+  </div>
+</div>
 <div class="page-container">
 
   <!-- BEGIN SIDEBAR -->
@@ -362,9 +383,17 @@
 <!-- END CONTAINER -->
 
 <!-- BEGIN FOOTER -->
+
 <div class="footer">
-  <div class="footer-inner">
-         &copy; i/oGrow  2013 - 2014
+  <div class="footer-inner" style="
+    bottom: 0px;
+">
+<a href="#SendFeedbackModal"  class="btn-link addAnotherPhone" >
+  <a href="#SendFeedbackModal" data-toggle="modal" class="btn pull-right" style="
+    right: 0px;
+">Send feedback</a>
+<br>
+         © i/oGrow  2013 - 2014
   </div>
 <input type="hidden" id="userEmail" value="{{user.email}}">
 </div>
@@ -401,10 +430,11 @@
 
 
 
-     var ROOT = '/_ah/api';
+    //  var ROOT = '/_ah/api';
 
 
-       // var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+     var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+
 
 
 
@@ -486,7 +516,8 @@
   <script src="/static/app/scripts/services/liveservices/companyprofileservices.js" ></script>
   <script src="/static/app/scripts/services/noteservices.js" ></script>
   <script src="/static/app/scripts/services/commentservices.js" ></script>
-   <script src="/static/app/scripts/services/settingservices.js" ></script>
+  <script src="/static/app/scripts/services/settingservices.js" ></script>
+  <script src="/static/app/scripts/services/importservices.js" ></script>
 
 
 
@@ -510,6 +541,7 @@
   <script src="/static/app/scripts/controllers/usercontrollers.js" ></script>
   <script src="/static/app/scripts/controllers/groupcontrollers.js" ></script>
   <script src="/static/app/scripts/controllers/settingscontrollers.js" ></script>
+  <script src="/static/app/scripts/controllers/importcontrollers.js" ></script>
 
   <script src="/static/app/scripts/controllers/livecontrollers/comp_profilecontrollers.js"></script>
   <script src="/static/app/scripts/controllers/leadcontrollers.js" ></script>

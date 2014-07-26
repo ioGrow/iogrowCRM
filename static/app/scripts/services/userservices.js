@@ -62,15 +62,13 @@ accountservices.factory('User', function($http) {
   };
   User.insert = function($scope,params){
       $scope.isLoading = true;
+      //console.log(params.emails);
       gapi.client.crmengine.users.insert(params).execute(function(resp) {
          console.log('in insert resp');
          console.log(resp);
          if(!resp.code){
-          $scope.user.email = '';
-
-
-          User.list($scope,params);
-
+          console.log("there  are a response");       
+          $scope.isLoading = false;
          }else{
               console.log(resp.message);
                $('#addAccountModal').modal('hide');

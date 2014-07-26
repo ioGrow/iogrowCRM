@@ -124,10 +124,10 @@
                   </div>
                   <div class="pitch">
                       <p class="status  ng-binding">
-                      <span  class="contact-title" style="font-size: 12px;
-                        ">
-                            <span class="">Date:</span> <span class=""> <%=casee.updated_at | date:'MMMM dd, yyyy- HH:mm:ss'%> </span>
-                            </span>
+                      
+                      <span  class="contact-title" style="font-size: 12px;">
+                            <span class="">{{ _("Last updated") }}: <%=fromNow(casee.updated_at)%></span>
+                      </span>
                       <span class="pull-right" style="color:<%=getStatusColor(casee.current_status.name)%>"><%= casee.current_status.name %></span>
                         </p>
                   </div>
@@ -192,9 +192,12 @@
           <ul class="list-group tags-list">
             <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
               <div class="row">
-                <span  ng-drag="dragTag(tag_item)" draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
+                <span editable-text="tag_item.name" ng-drag="dragTag(tag_item)" draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;"
+                ng-model='tag_item.name'  onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
+
                     <%= tag_item.name %>
                 </span>
+
                  <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
                 <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
                   <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
@@ -240,7 +243,7 @@
       <!-- END PAGE CONTAINER-->
 </div>
 <div class="fixed-labelsCard visible-md visible-lg">
-  
+
   <div class="row">
   <div class="col-md-12">
     <div class="portlet showCard fixedCard">
@@ -253,7 +256,8 @@
         <ul class="list-group tags-list">
           <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
             <div class="row">
-              <span ng-drag="dragTag(tag_item)" id="iii"  draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
+              <span editable-text="tag_item.name"  ng-drag="dragTag(tag_item)" id="iii"  draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;"
+               ng-model='tag_item.name'  onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
                   <%= tag_item.name %>
               </span>
               <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">

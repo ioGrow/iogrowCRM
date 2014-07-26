@@ -14,13 +14,13 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      $scope.currentPage = 01;
      $scope.pagescomment = [];
      $scope.taskSelected=false;
-     $scope.notes = [];  
+     $scope.notes = [];
      $scope.users = [];
      $scope.task={};
      $scope.user = undefined;
      $scope.slected_memeber = undefined;
      $scope.role= 'participant';
-     
+
     // What to do after authentication
      $scope.runTheProcess = function(){
           var taskid = {'id':$route.current.params.taskId};
@@ -38,14 +38,14 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
         $scope.taskSelected=!$scope.taskSelected;
      }
    $scope.listNextPageItemscomment= function(){
-        
-        
+
+
         var nextPage = $scope.currentPagecomment + 1;
-        
+
         var params = {};
           if ($scope.pagescomment[nextPage]){
             params = {'limit':5,
-                      'discussion':$scope.task.entityKey,                    
+                      'discussion':$scope.task.entityKey,
                        'order':'-updated_at',
                       'pageToken':$scope.pagescomment[nextPage]
                      }
@@ -55,11 +55,11 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
                       'order':'-updated_at',}
           }
           console.log('in listNextPageItems');
-          $scope.currentPagecomment = $scope.currentPagecomment + 1 ; 
+          $scope.currentPagecomment = $scope.currentPagecomment + 1 ;
           Comment.list($scope,params);
      }
      $scope.listPrevPageItemscomment = function(){
-       
+
        var prevPage = $scope.currentPagecomment - 1;
        var params = {};
           if ($scope.pagescomment[prevPage]){
@@ -76,10 +76,10 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
           $scope.currentPagecomment = $scope.currentPagecomment - 1 ;
           Comment.list($scope,params);
      }
-   
-    
 
-     
+
+
+
      $scope.showModal = function(){
         console.log('button clicked');
         $('#addAccountModal').modal('show');
@@ -87,7 +87,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
       };
 
       $scope.selectMember = function(){
-        
+
         $scope.slected_memeber = $scope.user;
         $scope.user = $scope.slected_memeber.google_display_name;
 
@@ -100,8 +100,8 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      $scope.addNewContributor = function(selected_user,role){
       console.log('*************** selected user ***********************');
       console.log(selected_user);
-      
-      var params = {   
+
+      var params = {
                       'discussionKey': $scope.task.entityKey,
 
                       'type': 'user',
@@ -114,11 +114,11 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
                       // Create Contributor Service
                       // Create contributors.list api
                       //list all contributors after getting the task.
-                     
-                      
-        }  
+
+
+        }
         console.log('selected member');
-        console.log(params); 
+        console.log(params);
         Contributor.insert($scope,params);
      $('#addContributor').modal('hide');
      };
@@ -155,10 +155,10 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
 
    // delete task  hadji hicham  08-07-2014 .
    $scope.deleteTask = function(){
-      
+
      var params = {'entityKey':$scope.task.entityKey};
 
-      
+
        Task.delete($scope, params);
       $('#BeforedeleteTask').modal('hide');
 
@@ -169,8 +169,8 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
 
         window.location.replace('/#/calendar');
 
-     }; 
-  
+     };
+
 
 
 
@@ -191,7 +191,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
         var tags=[];
         var items = [];
         tags=$('#select2_sample2').select2("val");
-        
+
             angular.forEach(tags, function(tag){
               var edge = {
                 'start_node': task.entityKey,
@@ -218,8 +218,8 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
                 };
       Comment.insert($scope,params);
       $scope.comment.content='';
-     
-      
+
+
     };
     $scope.ListComments = function(){
       var params = {
@@ -227,8 +227,8 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
                     'limit':7
                    };
       Comment.list($scope,params);
-      
-      
+
+
     };
 //HKA 18.11.2013 highlight the comment
    $scope.hilightComment = function(){
@@ -238,7 +238,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      };
     $scope.showEditTaskModal =function(){
       $('#EditTaskModal').modal('show');
-      
+
     };
          $scope.showAssigneeTags=function(){
         $('#assigneeTagsToTask').modal('show');
@@ -263,7 +263,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
       Task.patch($scope,params);
     };
 
-   $scope.inlineUpdateTask = function(task){  
+   $scope.inlineUpdateTask = function(task){
            var params ={ 'id':task.id,
                       'title': task.status
             };
@@ -271,18 +271,18 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
       Task.patch($scope,params);
     };
   $scope.inlinePatch=function(kind,edge,name,task,value){
-  
+
    if (kind=='Task') {
        if (name='title')
           {params = {'id':$scope.task.id,
                       'entityKey':task.entityKey,
                       'due':moment(task.due).format('YYYY-MM-DDTHH:mm:00.000000'),
                       title:value}
-                 
+
          Task.patch($scope,params);
 
-       }         
-         
+       }
+
                }}
 
   $scope.listTags=function(){
@@ -290,7 +290,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
       Tag.list($scope,varTagname);
      };
 
-      
+
      $scope.listTasks=function(effects){
       $scope.selected_tasks=[];/*we have to change it */
       var params = { 'order': $scope.order,
@@ -301,16 +301,16 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
         else{
           Task.list($scope,params);
         }
-        
+
      };
 
    //HKA 19.06.2014 Detache tag on contact list
      $scope.dropOutTag=function(){
-        
-        
+
+
         var params={'entityKey':$scope.edgekeytoDelete}
         Edge.delete($scope,params);
-        
+
         $scope.edgekeytoDelete=undefined;
         $scope.showUntag=false;
       };
@@ -318,7 +318,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
         $scope.showUntag=true;
         $scope.edgekeytoDelete=edgekey;
       };
-  // Google+ Authentication 
+  // Google+ Authentication
     Auth.init($scope);
 
   }]);
@@ -334,6 +334,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
+     $scope.isMoreItemLoading = false;
      $scope.pagination = {};
      $scope.currentPage = 01;
      $scope.pages = [];
@@ -356,7 +357,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
      $scope.newTask={};
      $scope.newTask.title='';
      $scope.newTask.assignees=[];
-     $scope.showUntag=false;   
+     $scope.showUntag=false;
      $scope.edgekeytoDelete=undefined;
      $scope.color_pallet=[
          {'name':'red','color':'#F7846A'},
@@ -412,28 +413,28 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
          var components = getRGBComponents(bgColor);
          var bgDelta = (components.R * 0.299) + (components.G * 0.587) + (components.B * 0.114);
 
-         return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";  
+         return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";
       };
-     
+
      $scope.$watch('newTask.due', function(newValue, oldValue) {
               $scope.showStartsCalendar=false;
      });
-   // delete task from list hadji hicham 08-07-2014 
+   // delete task from list hadji hicham 08-07-2014
    $scope.deleteThisTask= function(entityKey){
 
     var params = {'entityKey':entityKey};
      Task.delete($scope, params);
    };
-// rederection after delete from list of tasks. hadji hicham  08-07-2014 
+// rederection after delete from list of tasks. hadji hicham  08-07-2014
    $scope.taskDeleted = function(resp){
    var params = { 'order': $scope.order,
-                         
+
                         'limit':20}
           Task.list($scope,params,true);
-     }; 
+     };
 
 
-      function getRGBComponents(color) {       
+      function getRGBComponents(color) {
 
           var r = color.substring(1, 3);
           var g = color.substring(3, 5);
@@ -453,11 +454,11 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
                 return 30;
            }else{
                 if($scope.newTask.due==null||$scope.newTask.reminder==null){
-             
+
                       return 150;
                 }else{
                    return 260;
-                } 
+                }
            }*/
            console.log(width);
            console.log(due);
@@ -484,7 +485,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
      // What to do after authentication
      $scope.runTheProcess = function(){
           var params = { 'order': $scope.order,
-                         
+
                         'limit':20}
           Task.list($scope,params,true);
           User.list($scope,{});
@@ -519,6 +520,25 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
               }
             return base_url+id;
         }
+
+        // hadji hicham 23-07-2014 . inlinepatch for labels .
+  $scope.inlinePatch=function(kind,edge,name,tag,value){
+      
+        if(kind=="tag"){
+
+        params={'id':tag.id,
+                'entityKey':tag.entityKey,
+                'about_kind':'Lead',
+                'name':value
+                  };
+
+
+           Tag.patch($scope,params);
+      };
+
+
+
+             }
      $scope.assigneeModal = function(){
         $('#assigneeModal').modal('show');
       };
@@ -534,7 +554,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           }else{
             params = {'order' : $scope.order,'limit':7}
           }
-          $scope.currentPage = $scope.currentPage + 1 ; 
+          $scope.currentPage = $scope.currentPage + 1 ;
           Account.list($scope,params);
      };
      $scope.listPrevPageItems = function(){
@@ -552,7 +572,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           Account.list($scope,params);
      };
      // Add a new account methods
-     // Show the modal 
+     // Show the modal
      $scope.showModal = function(){
         $('#addAccountModal').modal('show');
      };
@@ -575,7 +595,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
             $scope.save(account);
         };
      };
-     // inserting the account  
+     // inserting the account
      $scope.save = function(account){
           if (account.name) {
              Account.insert($scope,account);
@@ -586,8 +606,8 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
       if(event.keyCode == 13 && account){
           $scope.save(account);
       }
-      
-      
+
+
     };
     $scope.select_all_tasks = function($event){
         var checkbox = $event.target;
@@ -606,6 +626,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
               console.log("here work!");
               console.log($scope.newTask.title);
               console.log($scope.newTask.due);
+
             var dueDate= $filter('date')($scope.newTask.due,['yyyy-MM-ddTHH:mm:00.000000']);
            /* dueDate = dueDate +'T00:00:00.000000'*/
             params ={'title': $scope.newTask.title,
@@ -613,7 +634,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
                       'about': $scope.account.entityKey
             }
             console.log(dueDate);
-            
+
         }else{
             console.log("here not work!");
             console.log($scope.newTask.title);
@@ -633,8 +654,8 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           }
 
         });
-        console.log('font of google');  
-        console.log(params);  
+        console.log('font of google');
+        console.log(params);
         Task.insert($scope,params);
         $scope.tagInfo.selected = [];
 
@@ -666,13 +687,13 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
             $scope.selected_tasks.splice(index, 1);
              console.log("unchecked");
              console.log($scope.selected_tasks);
-         } 
+         }
     };
 /**********************************************************
-      adding Tag member to new task 
+      adding Tag member to new task
 ***********************************************************/
-    
-   
+
+
 /************************************/
       $scope.isSelected = function(index) {
         return ($scope.selected_tasks.indexOf(index) >= 0||$scope.isSelectedAll);
@@ -689,7 +710,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
               params = {'id':selected_task.id,
             'status':'closed'
             };
-            Task.patch($scope,params);  
+            Task.patch($scope,params);
            }
         });
              $('#beforecloseTask').modal('hide');
@@ -698,7 +719,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
         console.log($scope.selected_tasks);
         angular.forEach($scope.selected_tasks, function(selected_task){
             var params = {'entityKey':selected_task.entityKey};
-            Task.delete($scope, params); 
+            Task.delete($scope, params);
         });
         $scope.selected_tasks=[];
       };
@@ -708,7 +729,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
             params = {'id':selected_task.id,
             'status':'pending'
             };
-            Task.patch($scope,params);            
+            Task.patch($scope,params);
           };
 
         });
@@ -730,7 +751,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
       items = [];
       angular.forEach($scope.slected_members, function(selected_user){
          angular.forEach($scope.selected_tasks, function(selected_task){
-            
+
             var edge = {
               'start_node': selected_task.entityKey,
               'end_node': selected_user.entityKey,
@@ -738,8 +759,8 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
               'inverse_edge': 'assigned_to'
             };
             items.push(edge);
-            
-            
+
+
          });
       });
       if (items){
@@ -760,8 +781,8 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           window.location.replace('#/accounts/show/'+resp.id);
      };
      //tags
-     
-     
+
+
      $scope.listTasks=function(effects){
       $scope.selected_tasks=[];/*we have to change it */
       var params = { 'order': $scope.order,
@@ -772,10 +793,10 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
         else{
           Task.list($scope,params);
         }
-        
+
      }
      $scope.hilightTask = function(){
-        
+
        $('#task_0').effect( "bounce", "slow" );
        $('#task_0 .list-group-item-heading').effect("highlight","slow");
      }
@@ -786,7 +807,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
      var searchParams ={};
      $scope.result = undefined;
      $scope.q = undefined;
-     
+
      /*$scope.$watch('searchQuery', function() {
          searchParams['q'] = $scope.searchQuery;
          Account.search($scope,searchParams);
@@ -814,20 +835,20 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           var params = { 'order': order,
                         'limit':7};
       }
-        
+
         $scope.order = order;
         Task.list($scope,params);
      };
      $scope.filterByOwner = function(filter){
         if (filter){
           var params = { 'owner': filter,
-                         'order': $scope.order, 
+                         'order': $scope.order,
                          'limit':7}
         }
         else{
           var params = {
-              'order': $scope.order, 
-              
+              'order': $scope.order,
+
               'limit':7}
         };
         console.log('Filtering by');
@@ -838,13 +859,13 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
      $scope.filterByStatus = function(){
         if ($scope.status){
           var params = { 'status': $scope.status,
-                         'order': $scope.order, 
+                         'order': $scope.order,
                          'limit':7}
         }
         else{
           var params = {
-              'order': $scope.order, 
-              
+              'order': $scope.order,
+
               'limit':7}
         };
         $scope.filter=$scope.status;
@@ -860,7 +881,7 @@ $scope.listTags=function(){
       Tag.list($scope,varTagname);
 }
 $scope.addNewtag = function(tag){
-       var params = {   
+       var params = {
                           'name': tag.name,
                           'about_kind':'Task',
                           'color':tag.color.color
@@ -895,7 +916,7 @@ $scope.selectTag= function(tag,index,$event){
             $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
              text.css('color','#000000');
          }
-        
+
          $scope.filterByTags($scope.selected_tags);
 
       }
@@ -936,7 +957,7 @@ $scope.selectTag= function(tag,index,$event){
 
  $scope.listasks = function(){
    var params = { 'order': $scope.order,
-                         
+
                         'limit':7}
           Task.list($scope,params,true);
  }
@@ -957,20 +978,20 @@ $scope.selectTag= function(tag,index,$event){
          $scope.isLoading = true;
          var params = { 'order': 'due',
                         'urgent': true,
-                        
+
                         'limit':7}
           Task.list($scope,params,true);
 
   }
  $scope.allTasks=function(){
    var params = { 'order': $scope.order,
-                         
+
                         'limit':7}
           Task.list($scope,params,true);
 
  }
  $scope.createdByMe=function(owner){
-    var params = { 
+    var params = {
                 'order': $scope.order,
                 'owner': owner,
                 'limit':7
@@ -981,7 +1002,7 @@ $scope.selectTag= function(tag,index,$event){
  $scope.assignedToMe=function(){
    var params = { 'order': $scope.order,
                   'assignee' : true,
-                  
+
                   'limit':7
                 }
     Task.list($scope,params,true);
@@ -989,7 +1010,7 @@ $scope.selectTag= function(tag,index,$event){
  }
  $scope.privateTasks=function(){
    var params = { 'order': $scope.order,
-                         
+
                         'limit':7}
           Task.list($scope,params,true);
 
@@ -1018,7 +1039,7 @@ $scope.deleteTag=function(tag){
             'entityKey': tag.entityKey
           }
           Tag.delete($scope,params);
-          
+
       };
 $scope.editTag=function(tag){
         $scope.edited_tag=tag;
@@ -1032,7 +1053,7 @@ $scope.addTags=function(){
       var tags=[];
       var items = [];
       tags=$('#select2_sample2').select2("val");
-      
+
       angular.forEach($scope.selected_tasks, function(selected_task){
           angular.forEach(tags, function(tag){
             var edge = {
@@ -1082,11 +1103,11 @@ $scope.addTags=function(){
 
  //HKA 19.06.2014 Detache tag on contact list
      $scope.dropOutTag=function(){
-        
-        
+
+
         var params={'entityKey':$scope.edgekeytoDelete}
         Edge.delete($scope,params);
-        
+
         $scope.edgekeytoDelete=undefined;
         $scope.showUntag=false;
       };
@@ -1094,7 +1115,7 @@ $scope.addTags=function(){
         $scope.showUntag=true;
         $scope.edgekeytoDelete=edgekey;
       };
-     // Google+ Authentication 
+     // Google+ Authentication
      Auth.init($scope);
      $(window).scroll(function() {
           if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {

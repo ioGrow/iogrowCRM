@@ -69,3 +69,9 @@ class UserListSchema(messages.Message):
 class AddTagSchema(messages.Message):
     parent = messages.StringField(1,required=True)
     tag_key = messages.StringField(2,required=True)
+
+class PatchTagSchema(messages.Message):
+     id=messages.StringField(1)
+     entityKey= messages.StringField(2)
+     about_kind=messages.StringField(3)
+     name=messages.StringField(4)

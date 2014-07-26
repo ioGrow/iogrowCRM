@@ -9,6 +9,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
+     $scope.isMoreItemLoading = false;
      $scope.pagination = {};
      $scope.casepagination={};
      $scope.currentPage = 01;
@@ -30,7 +31,7 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
      $scope.selected_tags = [];
      $scope.draggedTag=null;
      $scope.tag = {};
-     $scope.showUntag=false;   
+     $scope.showUntag=false;
      $scope.edgekeytoDelete=undefined;
         $scope.showNewTag=false;
         $scope.color_pallet=[
@@ -44,6 +45,9 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
          {'name':'purple','color':'#E874D6'},
          ];
       $scope.tag.color= {'name':'green','color':'#BBE535'};
+      $scope.fromNow = function(fromDate){
+          return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
+      }
 
       // What to do after authentication
        $scope.runTheProcess = function(){
@@ -130,6 +134,25 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
       };
 
 
+// hadji hicham 23-07-2014 . inlinepatch for labels .
+  $scope.inlinePatch=function(kind,edge,name,tag,value){
+
+        if(kind=="tag"){
+
+        params={'id':tag.id,
+                'entityKey':tag.entityKey,
+                'about_kind':'Lead',
+                'name':value
+                  };
+
+
+           Tag.patch($scope,params);
+      };
+
+
+
+             }
+
     $scope.save = function(casee){
 
         casee.status = $scope.status_selected.entityKey;
@@ -171,8 +194,8 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
                return '#FFBB22';
            }else{
                return '#F7846A';
-           }    
-        }  
+           }
+        }
       }
      }
      $scope.getStatusColor=function(status){
@@ -357,7 +380,7 @@ $scope.updateTag = function(tag){
       };
 
 
-$scope.selectTag= function(tag,index,$event){     
+$scope.selectTag= function(tag,index,$event){
           if(!$scope.manage_tags){
          var element=$($event.target);
          if(element.prop("tagName")!='LI'){
@@ -549,11 +572,11 @@ $scope.addTags=function(){
       };
  //HKA 19.06.2014 Detache tag on contact list
      $scope.dropOutTag=function(){
-        
-        
+
+
         var params={'entityKey':$scope.edgekeytoDelete}
         Edge.delete($scope,params);
-        
+
         $scope.edgekeytoDelete=undefined;
         $scope.showUntag=false;
       };
@@ -611,6 +634,9 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
      $scope.selected_members=[];
      $scope.selected_member={};
 
+    $scope.fromNow = function(fromDate){
+        return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
+    }
      // What to do after authentication
        $scope.runTheProcess = function(){
           var params = {
@@ -705,7 +731,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
                       };
            Case.patch($scope,params);
                // who is the parent of this event .hadji hicham 21-07-2014.
-                  
+
                 params["parent"]="case";
                 Event.permission($scope,params);
                 Task.permission($scope,params);
@@ -806,7 +832,7 @@ if ($scope.newTaskform==false) {
             if ($scope.selected_members!=[]) {
                   params.assignees=$scope.selected_members;
                 };
-                var tags=[];                
+                var tags=[];
                 tags=$('#select2_sample2').select2("val");
                 if (tags!=[]) {
                   var tagitems = [];
@@ -843,7 +869,7 @@ if ($scope.newTaskform==false) {
 
      }
  //HKA 10.11.2013 Add event
- $scope.addEvent = function(ioevent){   
+ $scope.addEvent = function(ioevent){
 
         if ($scope.newEventform==false) {
                 $scope.newEventform=true;
@@ -869,9 +895,9 @@ if ($scope.newTaskform==false) {
                       }
 
 
-                 
+
                   }else{
-             
+
                   if (ioevent.starts_at){
                     if (ioevent.ends_at){
                       params ={'title': ioevent.title,
@@ -896,13 +922,13 @@ if ($scope.newTaskform==false) {
                     }
 
 
-                    
-                   
+
+
                   }
 
 
                   }
-                  
+
                    Event.insert($scope,params);
                   $scope.ioevent={};
                   $scope.newEventform=false;
@@ -910,7 +936,7 @@ if ($scope.newTaskform==false) {
 
 
         }
-     }        
+     }
 
     };
 
