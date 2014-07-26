@@ -2714,14 +2714,10 @@ class CrmEngineApi(remote.Service):
                       path='reporting/leads', http_method='POST',
                       name='reporting.leads')
     def lead_reporting(self, request):
-        gid=''
-        list_of_reports = []
-       
+        list_of_reports = []     
         gid=request.user_google_id
-        print '*************gid************'
-        print gid
-        
-        if gid!=None:
+        # if the user input google_user_id
+        if gid!=None and gid!='':
             list_of_reports=[]
             leads=Lead.query(Lead.owner==gid).fetch()
             users=User.query(User.google_user_id==gid).fetch()
@@ -2733,8 +2729,7 @@ class CrmEngineApi(remote.Service):
             item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2])
             reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
-
-        
+        # if the user input google_user_id 
         else:
             list_of_reports=[]
             users=User.query().fetch()
@@ -2744,8 +2739,7 @@ class CrmEngineApi(remote.Service):
                 gname=user.google_display_name
                 leads=Lead.query(Lead.owner==gid).fetch()
                 list_of_reports.append((gid,gname,len(leads)))
-        
-        
+                
             list_of_reports.sort(key=itemgetter(2),reverse=True)
             reporting = []
             for item in list_of_reports:
@@ -2759,24 +2753,21 @@ class CrmEngineApi(remote.Service):
                       path='reporting/contacts', http_method='POST',
                       name='reporting.contacts')
     def contact_reporting(self, request):
-        gid=''
-        list_of_reports = []
-       
+        list_of_reports = []    
         gid=request.user_google_id
-        
-        if gid!=None:
+        # if the user input google_user_id
+        if gid!=None and gid!='':
             list_of_reports=[]
             contacts=Contact.query(Lead.owner==gid).fetch()
             users=User.query(User.google_user_id==gid).fetch()
             gname=users[0].google_display_name
             list_of_reports.append((gid,gname,len(contacts)))
             reporting = []
-            print gname 
-            print list_of_reports
             item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2])
             reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
-
+        
+        # if the user input google_user_id 
         else:
             users=User.query().fetch()
             list_of_reports=[]
@@ -2784,8 +2775,7 @@ class CrmEngineApi(remote.Service):
                 gid=user.google_user_id
                 gname=user.google_display_name
                 contacts=Contact.query(Contact.owner==gid).fetch()
-                list_of_reports.append((gid,gname,len(contacts)))
-            print list_of_reports    
+                list_of_reports.append((gid,gname,len(contacts)))   
     
             list_of_reports.sort(key=itemgetter(2),reverse=True)
             reporting = []
@@ -2800,12 +2790,10 @@ class CrmEngineApi(remote.Service):
                       path='reporting/Accounts', http_method='POST',
                       name='reporting.accounts')
     def account_reporting(self, request):
-        gid=''
-        list_of_reports = []
-       
+        list_of_reports = []     
         gid=request.user_google_id
-        
-        if gid!=None:
+        # if the user input google_user_id
+        if gid!=None and gid!='':
             list_of_reports=[]
             accounts=Account.query(Account.owner==gid).fetch()
             users=User.query(User.google_user_id==gid).fetch()
@@ -2839,13 +2827,10 @@ class CrmEngineApi(remote.Service):
                        path='reporting/tasks',http_method='POST',
                        name='reporting.tasks' )          
     def task_reporting(self,request):
-        gid=''
-        list_of_reports = []
-       
+        list_of_reports = []     
         gid=request.user_google_id
-        print '*************gid************'
-        print gid
-        if gid!=None:
+        # if the user input google_user_id
+        if gid!=None and gid!='':
             list_of_reports=[]
             tasks=Task.query(Task.owner==gid).fetch()
             users=User.query(User.google_user_id==gid).fetch()
@@ -2857,7 +2842,7 @@ class CrmEngineApi(remote.Service):
             item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2])
             reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
-
+        # if the user input google_user_id    
         else:
             users=User.query().fetch()
             list_of_reports=[]
@@ -2873,11 +2858,6 @@ class CrmEngineApi(remote.Service):
                 item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],count=item[2])
                 reporting.append(item_schema)
             return ReportingListResponse(items=reporting)   
-
-      
-
-
-
     # event permission
     @endpoints.method(EventPermissionRequest, message_types.VoidMessage,
                       path='events/permission', http_method='POST',
