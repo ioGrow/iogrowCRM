@@ -46,7 +46,7 @@
             </span>
         </div>
     </div>
-    <div ng-show="isContentLoaded" class="row">
+    <div class="row">
         <div class="col-md-9">
             <div class="row">
                 <div class="showPage custom-show margin-bottom-15  col-md-12">
@@ -93,8 +93,16 @@
                                            <a href="/#/search/type:Lead <%=lead.status%>" class="tag">
                                             #<%= lead.status %></a>
                                          </li>
-                                         <li ng-show="lead.updated_at" >
-                                           <span class="contact-title" >Updated at:  <%=lead.updated_at | date:'yyyy-MM-dd - HH:mm:ss ' %> </span>
+                                         <li>
+                                           <span>
+                                              Owner:
+                                             <a class="tag ng-binding" href="/#/search/type:Lead owner:<%= lead.owner.google_user_id %>">
+                                               #<%= lead.owner.google_display_name %>
+                                             </a>
+                                           </span>
+                                         </li>
+                                         <li>
+                                           <span class="contact-title" >Last updated:  <%=fromNow(lead.updated_at)%> </span>
                                          </li>
                                          <li>
                                              <div id="placeholder-div1" class="pull-right hangout-btn"></div>
@@ -681,7 +689,7 @@
                             <span class="relatedEventStartsAt pull-right" ng-hide="showDetails" ng-show="task.due" title="<%= task.due| date:'yyyy-MM-dd '%>">
                                   <%= task.due | date:'dd MMM'%>
                             </span>
-                          </div>  
+                          </div>
                           <div class="moreDetails row" ng-show="showDetails">
                           <!--  <div class="col-md-6 col-xs-6 event-schedule">
                                 <span class=""><i class="fa fa-calendar"></i>
@@ -689,13 +697,13 @@
                             </div>
                             <div class="col-md-6 col-xs-6 event-schedule">
                                <span class="">
-                                  <i class="fa fa-bell-o"></i> 
+                                  <i class="fa fa-bell-o"></i>
                                   <%= task.reminder | date:'dd MMM'%>
                                 </span>
                             </div>
                             <div class="col-md-12">
                                <span class="">
-                                  <i class="fa fa-map-marker"></i> 
+                                  <i class="fa fa-map-marker"></i>
                                   <%= event.where %>-->
                                 <!--</span>
                             </div>-->

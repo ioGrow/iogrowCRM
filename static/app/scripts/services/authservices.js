@@ -36,6 +36,7 @@ accountservices.factory('Auth', function($http) {
              }
             //  console.log('after setting gapi token');
             //  console.log(gapi.auth.getToken());
+             window.authResult = {'access_token':access_token};
              Auth.$scope.runTheProcess();
           }
           else{
@@ -67,11 +68,12 @@ accountservices.factory('Auth', function($http) {
           localStorage['access_token']=authResult.access_token;
           localStorage['authResultexpiration'] = authResult.expires_at;
       }
-      if (!window.access_token) {
-              window.is_signed_in = true;
-              window.access_token = authResult.access_token;
-              window.authResultexpiration =  authResult.expires_at;
-      }
+
+      window.authResult = authResult;
+      window.is_signed_in = true;
+      window.access_token = authResult.access_token;
+      window.authResultexpiration =  authResult.expires_at;
+
       Auth.$scope.runTheProcess();
   }
   Auth.initSimple = function(){

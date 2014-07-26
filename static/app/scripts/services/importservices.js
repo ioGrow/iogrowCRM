@@ -10,7 +10,7 @@ accountservices.factory('Import', function($http) {
 
   
   Import.highrise = function($scope,params){
-      console.log(params);
+  
       $scope.isLoading=true;
 
       gapi.client.crmengine.highrise.import_peoples(params).execute(function(resp) {

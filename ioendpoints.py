@@ -114,7 +114,7 @@ INVERSED_EDGES = {
             'tagged_on': 'tags'
 
          }
-ADMIN_EMAILS = ['tedj.meabiou@gmail.com','hakim@iogrow.com','mezianeh3@gmail.com']
+ADMIN_EMAILS = ['tedj.meabiou@gmail.com','hakim@iogrow.com','mezianeh3@gmail.com','ilyes@iogrow.com','osidsoft@gmail.com']
 
 
 def LISTING_QUERY(query, access, organization, owner, collaborators, order):
@@ -349,7 +349,7 @@ class PermissionInsertRequest(messages.Message):
 class CalendarFeedsRequest(messages.Message):
     calendar_feeds_start=messages.StringField(1)
     calendar_feeds_end=messages.StringField(2)
-# result to feed the calendar 
+# result to feed the calendar
 class CalendarFeedsResult(messages.Message):
       id=messages.StringField(1)
       title=messages.StringField(2)
@@ -362,7 +362,7 @@ class CalendarFeedsResult(messages.Message):
       backgroundColor=messages.StringField(9)
       status_label=messages.StringField(10)
 
-# results 
+# results
 class CalendarFeedsResults(messages.Message):
       items=messages.MessageField(CalendarFeedsResult,1,repeated=True)
 
@@ -1075,7 +1075,7 @@ class CrmEngineApi(remote.Service):
                     phone.type=str(company_details.contact_data.phone_numbers[0].location)
                 phones.append(phone)
                 email=iomessages.EmailSchema()
-                                            
+
                 if len(company_details.contact_data.email_addresses)!=0:
                     email.email=company_details.contact_data.email_addresses[0].address
                 emails=list()
@@ -1149,7 +1149,7 @@ class CrmEngineApi(remote.Service):
                                         infonodes=infonodes,
                                         phones=phones
                                          )
-            
+
             contact_schema=Contact.insert(user,contact_request)
             #create edge between account and persone
             if account_schema!="":
@@ -1207,7 +1207,7 @@ class CrmEngineApi(remote.Service):
                                                     kind = 'topics',
                                                     indexed_edge = str(entityKey.id())
                                                     )
-             
+
             #########
             # store opporutnities of person
             deals=EndpointsHelper.highrise_import_opportunities()
@@ -2628,13 +2628,13 @@ class CrmEngineApi(remote.Service):
         return patched_model
      # this api to fetch tasks and events to feed the calendar . hadji hicham.14-07-2014
     @endpoints.method(CalendarFeedsRequest,CalendarFeedsResults,
-        path='calendar/feeds',http_method='POST',name='calendar.feeds') 
+        path='calendar/feeds',http_method='POST',name='calendar.feeds')
     def get_feeds(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         calendar_feeds_start=datetime.datetime.strptime(request.calendar_feeds_start,"%Y-%m-%dT%H:%M:00.000000")
         calendar_feeds_end=datetime.datetime.strptime(request.calendar_feeds_end,"%Y-%m-%dT%H:%M:00.000000")
 
-        # filter this table 
+        # filter this table
         events=Event.query().filter(Event.organization==user_from_email.organization,Event.starts_at>=calendar_feeds_start,Event.starts_at<=calendar_feeds_end)
         # filter this table .
         tasks=Task.query().filter(Task.organization==user_from_email.organization)
@@ -2685,7 +2685,7 @@ class CrmEngineApi(remote.Service):
                 if task.due != None:
                    taskdue=task.due.isoformat()
                 else :
-                   taskdue= task.due 
+                   taskdue= task.due
                 kwargs2 = {
                           'id' : str(task.id),
                           'entityKey':task.entityKey,
@@ -2846,3 +2846,12 @@ class CrmEngineApi(remote.Service):
                 task.put()
          return message_types.VoidMessage()
 
+    # users.upgrade api v2
+    @endpoints.method(message_types.VoidMessage, message_types.VoidMessage,
+                      path='users/upgrade_early_birds', http_method='POST',
+                      name='users.upgrade_early_birds')
+    def upgrade_early_birds_to_business(self, request):
+        users = User.query(User.type=='early_bird').fetch(20)
+        for user in users:
+            Organization.upgrade_to_business_version(user.organization)
+        return message_types.VoidMessage()

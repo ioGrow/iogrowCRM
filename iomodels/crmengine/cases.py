@@ -76,6 +76,7 @@ class CaseSchema(messages.Message):
     closed_date = messages.StringField(21)
     account = messages.MessageField(iomessages.AccountSchema,22)
     contact = messages.MessageField(iomessages.ContactSchema,23)
+    owner = messages.MessageField(iomessages.UserSchema,24)
 
 class CaseListResponse(messages.Message):
     items = messages.MessageField(CaseSchema, 1, repeated=True)
@@ -269,6 +270,15 @@ class Case(EndpointsModel):
             closed_date = None
             if case.closed_date:
                 closed_date = case.closed_date.strftime("%Y-%m-%dT%H:%M:00.000")
+            owner = model.User.get_by_gid(case.owner)
+            owner_schema = iomessages.UserSchema(
+                                                id = str(owner.id),
+                                                email = owner.email,
+                                                google_display_name = owner.google_display_name,
+                                                google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                                google_public_profile_url=owner.google_public_profile_url,
+                                                google_user_id = owner.google_user_id
+                                                )
             case_schema = CaseSchema(
                                       id = str( case.key.id() ),
                                       entityKey = case.key.urlsafe(),
@@ -290,7 +300,8 @@ class Case(EndpointsModel):
                                       account = account_schema,
                                       contact = contact_schema,
                                       created_at = case.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                      updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                      updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                      owner = owner_schema
                                     )
             return case_schema
         else:
