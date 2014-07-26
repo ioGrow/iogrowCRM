@@ -470,7 +470,7 @@ msgstr "pour ajouter des étiquettes"
 
 #: templates/activities/all_tasks.html:94
 msgid "to assign the task"
-msgstr "pour assigner la tache"
+msgstr "pour assigner la tâche"
 
 #: templates/activities/all_tasks.html:102
 #: templates/articles/article_search.html:249 templates/cases/case_new.html:134
@@ -922,7 +922,7 @@ msgstr "Créer un nouvel article"
 #: templates/live/feedbacks/feedbacks_list.html:48
 #: templates/live/feedbacks/feedbacks_list.html:192
 msgid "Title"
-msgstr ""
+msgstr "Titre"
 
 #: templates/articles/article_new.html:81
 msgid "Type here the title of your post..."
@@ -930,21 +930,21 @@ msgstr "Titre"
 
 #: templates/articles/article_new.html:93
 msgid "Intro Card"
-msgstr ""
+msgstr "Introduction cate"
 
 #: templates/articles/article_new.html:99
 msgid "Full article card"
-msgstr ""
+msgstr "Article complet"
 
 #: templates/articles/article_new.html:101
 msgid "Enter text ..."
-msgstr ""
+msgstr "Entrer un texte"
 
 #: templates/articles/article_new.html:169
 #: templates/calendar/calendar_show.html:325
 #: templates/live/company_profile/comp_profile_show.html:374
 msgid "Add this address"
-msgstr ""
+msgstr "Ajouter cette adresse"
 
 #: templates/articles/article_search.html:170
 #: templates/articles/article_search.html:238
@@ -952,7 +952,7 @@ msgstr ""
 #: templates/leads/lead_list.html:225 templates/leads/lead_list.html:294
 #: templates/opportunities/opportunity_list.html:232
 msgid "New label"
-msgstr ""
+msgstr "Nouvelle étiquette"
 
 #: templates/articles/article_show.html:11
 #: templates/calendar/calendar_show.html:21
@@ -960,25 +960,25 @@ msgstr ""
 #: templates/live/company_profile/comp_profile_show.html:35
 #: templates/needs/show.html:127
 msgid "Share"
-msgstr ""
+msgstr "Partager"
 
 #: templates/articles/article_show.html:58
 msgid "Posted by"
-msgstr ""
+msgstr "Posté par"
 
 #: templates/articles/article_show.html:107
 msgid "Community"
-msgstr ""
+msgstr "Communité"
 
 #: templates/articles/article_show.html:114
 msgid "TODO: put here social media connections"
-msgstr ""
+msgstr "TODO:mettre ici des liens de médias sociaux"
 
 #: templates/articles/article_show.html:137
 #: templates/blog/public_article_show.html:138
 #: templates/blog/public_support.html:82
 msgid "Involve new contributors"
-msgstr ""
+msgstr "Impliquer de nouveaux contributeurs"
 
 #: templates/articles/article_show.html:143
 #: templates/blog/public_article_show.html:144
@@ -986,52 +986,52 @@ msgstr ""
 msgid ""
 "Invite people from your team and start working together on this task. "
 "Everyone you invite will receive an email."
-msgstr ""
+msgstr "Tout le monde vous invitez receveront un e-mail"
 
 #: templates/articles/article_show.html:151
 #: templates/blog/public_article_show.html:152
 #: templates/blog/public_support.html:96
 msgid "Enter name or email addresse to involve people in this discussion"
-msgstr ""
+msgstr "Entrez le nom ou l'adresse de courriel pour associer les utilisateurs à cette discussion"
 
 #: templates/articles/article_show.html:154
 #: templates/blog/public_article_show.html:155
 #: templates/blog/public_support.html:99
 msgid "Add as:"
-msgstr ""
+msgstr "Ajouter tanque:"
 
 #: templates/articles/article_show.html:157
 #: templates/blog/public_article_show.html:158
 #: templates/blog/public_support.html:102
 msgid "Responsible"
-msgstr ""
+msgstr "Responsable"
 
 #: templates/articles/article_show.html:158
 #: templates/blog/public_article_show.html:159
 #: templates/blog/public_support.html:103
 msgid "Participant"
-msgstr ""
+msgstr "Participant"
 
 #: templates/articles/article_show.html:159
 #: templates/blog/public_article_show.html:160
 #: templates/blog/public_support.html:104
 msgid "Invited"
-msgstr ""
+msgstr "Invité"
 
 #: templates/articles/article_show.html:170
 #: templates/blog/public_article_show.html:171
 #: templates/blog/public_support.html:115
 msgid "Involve"
-msgstr ""
+msgstr "Impliquer"
 
 #: templates/blog/public_support.html:6
 msgid "ioGrow Support"
-msgstr ""
+msgstr "Support ioGrow"
 
 #: templates/calendar/calendar_show.html:61
 #: templates/calendar/calendar_show.html:146
 msgid "Edit Contact"
-msgstr ""
+msgstr "Modifier le contact"
 
 #: templates/calendar/calendar_show.html:69
 #: templates/calendar/calendar_show.html:440
@@ -1039,7 +1039,7 @@ msgstr ""
 #: templates/contacts/list.html:147 templates/leads/lead_list.html:33
 #: templates/leads/lead_new.html:65
 msgid "First Name"
-msgstr ""
+msgstr "Prénom"
 
 #: templates/calendar/calendar_show.html:77
 #: templates/calendar/calendar_show.html:448
@@ -1047,109 +1047,109 @@ msgstr ""
 #: templates/contacts/list.html:148 templates/leads/lead_list.html:34
 #: templates/leads/lead_new.html:73
 msgid "Last Name"
-msgstr ""
+msgstr "Nom"
 
 #: templates/calendar/calendar_show.html:85
 #: templates/calendar/calendar_show.html:455
 msgid "Tittle"
-msgstr ""
+msgstr "Titre"
 
 #: templates/calendar/calendar_show.html:93 templates/cases/case_list.html:35
 #: templates/contacts/contact_new.html:99 templates/contacts/list.html:150
 #: templates/leads/lead_list.html:36 templates/leads/lead_new.html:91
 #: templates/opportunities/list.html:285
 msgid "Company"
-msgstr ""
+msgstr "Companie"
 
 #: templates/calendar/calendar_show.html:120
 msgid "Delete Contact"
-msgstr ""
+msgstr "Supprimer le contact"
 
 #: templates/calendar/calendar_show.html:126
 #: templates/calendar/calendar_show.html:540
 #: templates/calendar/calendar_show.html:564 templates/leads/lead_list.html:328
 #: templates/needs/show.html:145
 msgid "Are you sure you want to delete"
-msgstr ""
+msgstr "Etes-vous sûr que vous voulez supprimer"
 
 #: templates/calendar/calendar_show.html:178
 msgid "Edit Account"
-msgstr ""
+msgstr "Modifier le compte"
 
 #: templates/calendar/calendar_show.html:212
 #: templates/live/company_profile/comp_profile_show.html:274
 msgid "Add Phone"
-msgstr ""
+msgstr "Ajouter un téléphone"
 
 #: templates/calendar/calendar_show.html:219
 #: templates/calendar/calendar_show.html:221
 #: templates/contacts/contact_new.html:121 templates/leads/lead_new.html:148
 #: templates/live/company_profile/comp_profile_show.html:282
 msgid "home"
-msgstr ""
+msgstr "Domicile"
 
 #: templates/calendar/calendar_show.html:219
 #: templates/calendar/calendar_show.html:222
 #: templates/contacts/contact_new.html:122 templates/leads/lead_new.html:149
 #: templates/live/company_profile/comp_profile_show.html:282
 msgid "work"
-msgstr ""
+msgstr "Travail"
 
 #: templates/calendar/calendar_show.html:219
 #: templates/calendar/calendar_show.html:223
 #: templates/contacts/contact_new.html:123 templates/leads/lead_new.html:150
 #: templates/live/company_profile/comp_profile_show.html:282
 msgid "mobile"
-msgstr ""
+msgstr "mobile"
 
 #: templates/calendar/calendar_show.html:219
 #: templates/calendar/calendar_show.html:224
 #: templates/contacts/contact_new.html:124 templates/leads/lead_new.html:151
 #: templates/live/company_profile/comp_profile_show.html:282
 msgid "other"
-msgstr ""
+msgstr "autre"
 
 #: templates/calendar/calendar_show.html:230
 #: templates/contacts/contact_new.html:128 templates/leads/lead_new.html:142
 #: templates/live/company_profile/comp_profile_show.html:286
 msgid "Number"
-msgstr ""
+msgstr "Numéro"
 
 #: templates/calendar/calendar_show.html:241
 #: templates/live/company_profile/comp_profile_show.html:297
 msgid "Add this phone"
-msgstr ""
+msgstr "Ajouter ce téléphone"
 
 #: templates/calendar/calendar_show.html:258
 #: templates/live/company_profile/comp_profile_show.html:309
 msgid "Add Email"
-msgstr ""
+msgstr "Ajouter un email"
 
 #: templates/calendar/calendar_show.html:339
 #: templates/calendar/calendar_show.html:373
 #: templates/live/company_profile/comp_profile_show.html:386
 msgid "Add Website"
-msgstr ""
+msgstr "Ajouter un site web"
 
 #: templates/calendar/calendar_show.html:344
 msgid "Custom Field"
-msgstr ""
+msgstr "Champ personnalisé"
 
 #: templates/calendar/calendar_show.html:347 templates/cases/case_new.html:127
 #: templates/contacts/contact_new.html:315 templates/leads/lead_new.html:325
 #: templates/opportunities/opportunity_new.html:248
 msgid "Field"
-msgstr ""
+msgstr "Champ"
 
 #: templates/calendar/calendar_show.html:350 templates/cases/case_new.html:131
 #: templates/contacts/contact_new.html:319 templates/leads/lead_new.html:329
 #: templates/opportunities/opportunity_new.html:252
 msgid "Value"
-msgstr ""
+msgstr "Valeur"
 
 #: templates/calendar/calendar_show.html:358
 msgid "Add this custom field"
-msgstr ""
+msgstr "Ajouter ce champ personnalisé"
 
 #: templates/calendar/calendar_show.html:378
 #: templates/contacts/contact_new.html:218
@@ -1157,17 +1157,17 @@ msgstr ""
 #: templates/leads/lead_new.html:236
 #: templates/live/company_profile/comp_profile_show.html:392
 msgid "Website"
-msgstr ""
+msgstr "Site web"
 
 #: templates/calendar/calendar_show.html:387
 #: templates/live/company_profile/comp_profile_show.html:401
 msgid "Add this Website"
-msgstr ""
+msgstr "Ajouter ce site web"
 
 #: templates/calendar/calendar_show.html:403
 #: templates/live/company_profile/comp_profile_show.html:413
 msgid "Add Social link"
-msgstr ""
+msgstr "Ajouter un lien social"
 
 #: templates/calendar/calendar_show.html:408
 #: templates/calendar/calendar_show.html:410
@@ -1175,34 +1175,34 @@ msgstr ""
 #: templates/live/company_profile/comp_profile_show.html:419
 #: templates/live/company_profile/comp_profile_show.html:421
 msgid "Social link"
-msgstr ""
+msgstr "Lien social"
 
 #: templates/calendar/calendar_show.html:417
 msgid "Add this social link"
-msgstr ""
+msgstr "Ajouter ce lien social"
 
 #: templates/calendar/calendar_show.html:435 templates/contacts/list.html:36
 #: templates/contacts/list.html:113
 msgid "New Contact"
-msgstr ""
+msgstr "Nouveau Contact"
 
 #: templates/calendar/calendar_show.html:465
 msgid "Add Contact"
-msgstr ""
+msgstr "Ajouter un Contact"
 
 #: templates/calendar/calendar_show.html:478 templates/needs/show.html:73
 msgid "Sharing Settings"
-msgstr ""
+msgstr "Paramètres de partage"
 
 #: templates/calendar/calendar_show.html:483
 msgid "Who has access:"
-msgstr ""
+msgstr "Qui peut accéder:"
 
 #: templates/calendar/calendar_show.html:488 templates/cases/case_new.html:188
 #: templates/contacts/contact_new.html:361 templates/leads/lead_new.html:369
 #: templates/opportunities/opportunity_new.html:317
 msgid "public: Anyone within your organization can access and find"
-msgstr ""
+msgstr "publique: Toute personne au sein de votre organisation peut accéder"
 
 #: templates/calendar/calendar_show.html:492 templates/cases/case_list.html:398
 #: templates/cases/case_new.html:192 templates/contacts/contact_new.html:365
@@ -1211,11 +1211,11 @@ msgstr ""
 #: templates/opportunities/opportunity_list.html:427
 #: templates/opportunities/opportunity_new.html:321
 msgid "private: only you and your collaborators"
-msgstr ""
+msgstr "privé: seuls vous et vos collaborateurs"
 
 #: templates/calendar/calendar_show.html:497
 msgid "Collaborators:"
-msgstr ""
+msgstr "collaborateurs"
 
 #: templates/calendar/calendar_show.html:507
 msgid "Invited user:"
@@ -1223,35 +1223,35 @@ msgstr ""
 
 #: templates/calendar/calendar_show.html:514
 msgid "Invite collaborators:"
-msgstr ""
+msgstr "Utilisateur invité"
 
 #: templates/calendar/calendar_show.html:536
 msgid "Delete Account"
-msgstr ""
+msgstr "Supprimer le compte"
 
 #: templates/calendar/calendar_show.html:560
 msgid "Delete Information"
-msgstr ""
+msgstr "Supprimer les informations"
 
 #: templates/calendar/calendar_show.html:582
 #: templates/calendar/calendar_show.html:816
 msgid "Add a new Task"
-msgstr ""
+msgstr "Ajouter un nouvelle tâche"
 
 #: templates/calendar/calendar_show.html:589
 #: templates/calendar/calendar_show.html:823
 msgid "When's it due?"
-msgstr ""
+msgstr "Due"
 
 #: templates/calendar/calendar_show.html:613
 #: templates/calendar/calendar_show.html:846 templates/needs/show.html:21
 msgid "Create a new"
-msgstr ""
+msgstr "Créer un nouveau"
 
 #: templates/calendar/calendar_show.html:626
 #: templates/calendar/calendar_show.html:859
 msgid "Create this document"
-msgstr ""
+msgstr "Créer ce document"
 
 #: templates/calendar/calendar_show.html:643
 #: templates/opportunities/list.html:53 templates/opportunities/list.html:243
@@ -1380,21 +1380,21 @@ msgstr ""
 #: templates/cases/case_list.html:22 templates/leads/lead_list.html:24
 #: templates/opportunities/opportunity_list.html:22
 msgid "All"
-msgstr ""
+msgstr "Tout"
 
 #: templates/cases/case_list.html:22 templates/cases/case_list.html:23
 #: templates/cases/case_list.html:81 templates/cases/case_new.html:14
 msgid "Cases"
-msgstr ""
+msgstr "Réclamation"
 
 #: templates/cases/case_list.html:23 templates/leads/lead_list.html:25
 msgid "My"
-msgstr ""
+msgstr "Mes"
 
 #: templates/cases/case_list.html:26 templates/leads/lead_list.html:28
 #: templates/opportunities/list.html:278
 msgid "Sort by"
-msgstr ""
+msgstr "Trier par"
 
 #: templates/cases/case_list.html:30 templates/contacts/list.html:146
 #: templates/leads/lead_list.html:32
@@ -1405,30 +1405,30 @@ msgstr ""
 #: templates/opportunities/list.html:282
 #: templates/opportunities/opportunity_list.html:43
 msgid "Last modified"
-msgstr ""
+msgstr "Dernière mise à jour"
 
 #: templates/cases/case_list.html:34 templates/cases/case_list.html:319
 #: templates/cases/case_new.html:67
 #: templates/opportunities/opportunity_new.html:199
 msgid "Contact"
-msgstr ""
+msgstr "Contact"
 
 #: templates/cases/case_list.html:42 templates/leads/lead_list.html:44
 #: templates/opportunities/opportunity_list.html:54
 msgid "New"
-msgstr ""
+msgstr "Nouveau"
 
 #: templates/cases/case_list.html:42
 msgid "Case"
-msgstr ""
+msgstr "Réclamation"
 
 #: templates/cases/case_list.html:88
 msgid " New Case"
-msgstr ""
+msgstr "Nouvelle Réclamation"
 
 #: templates/cases/case_list.html:129
 msgid "Date:"
-msgstr ""
+msgstr "Date"
 
 #: templates/cases/case_list.html:159
 msgid ""
@@ -1442,108 +1442,108 @@ msgstr ""
 #: templates/opportunities/opportunity_list.html:281
 #: templates/opportunities/opportunity_new.html:188
 msgid "Account"
-msgstr ""
+msgstr "Compte"
 
 #: templates/cases/case_list.html:336
 msgid "Subject"
-msgstr ""
+msgstr "Sujet"
 
 #: templates/cases/case_list.html:369
 msgid "choose a status"
-msgstr ""
+msgstr "Choisir un statut"
 
 #: templates/cases/case_list.html:387
 #: templates/live/feedbacks/feedbacks_list.html:101
 #: templates/opportunities/opportunity_list.html:416
 msgid "Who can access?"
-msgstr ""
+msgstr "Qui peut accéder"
 
 #: templates/cases/case_list.html:394
 #: templates/live/feedbacks/feedbacks_list.html:108
 #: templates/opportunities/opportunity_list.html:423
 msgid "public: Anyone within your organization"
-msgstr ""
+msgstr "publique:Toute personne au sein de votre organisation "
 
 #: templates/cases/case_new.html:41
 msgid "Create Case"
-msgstr ""
+msgstr "Créer réclamation"
 
 #: templates/cases/case_new.html:58
 msgid "What’s the subject of this issue?"
-msgstr ""
+msgstr "Quel est le sujet de cette question?"
 
 #: templates/cases/case_new.html:85
 msgid "Case Informations"
-msgstr ""
+msgstr "Information sur la réclamation"
 
 #: templates/cases/case_new.html:91
 msgid "Choose a status"
-msgstr ""
+msgstr "choisir le statut"
 
 #: templates/cases/case_new.html:101
 msgid "Choose a priority"
-msgstr ""
+msgstr "Choisir la priorité"
 
 #: templates/cases/case_new.html:121 templates/contacts/contact_new.html:309
 #: templates/leads/lead_new.html:319
 #: templates/opportunities/opportunity_new.html:241
 msgid "Custom Fields"
-msgstr ""
+msgstr "Champs personnalisés"
 
 #: templates/cases/case_new.html:128 templates/contacts/contact_new.html:316
 #: templates/leads/lead_new.html:326
 #: templates/opportunities/opportunity_new.html:249
 msgid "Enter field name"
-msgstr ""
+msgstr "Entrer le nom du champ"
 
 #: templates/cases/case_new.html:132 templates/contacts/contact_new.html:320
 #: templates/leads/lead_new.html:330
 #: templates/opportunities/opportunity_new.html:253
 msgid "Enter a value"
-msgstr ""
+msgstr "Entrer une valeur"
 
 #: templates/cases/case_new.html:146 templates/contacts/contact_new.html:337
 #: templates/leads/lead_new.html:345
 #: templates/opportunities/opportunity_new.html:267
 msgid "Add a new custom field"
-msgstr ""
+msgstr "Ajouter un champ personalisé"
 
 #: templates/cases/case_new.html:155
 #: templates/opportunities/opportunity_new.html:282
 msgid "Description"
-msgstr ""
+msgstr "description"
 
 #: templates/cases/case_new.html:182 templates/contacts/contact_new.html:355
 #: templates/leads/lead_new.html:363
 #: templates/opportunities/opportunity_new.html:311
 msgid "Who can access ?"
-msgstr ""
+msgstr "Qui peut accéder"
 
 #: templates/contacts/contact_new.html:16 templates/contacts/list.html:107
 msgid "Contacts"
-msgstr ""
+msgstr "Contacts"
 
 #: templates/contacts/contact_new.html:49
 msgid "Creating now Contact"
-msgstr ""
+msgstr "Créer contact"
 
 #: templates/contacts/contact_new.html:110
 msgid "Contact Informations"
-msgstr ""
+msgstr "Informations sur le contact"
 
 #: templates/contacts/contact_new.html:112 templates/leads/lead_new.html:135
 msgid "Phone"
-msgstr ""
+msgstr "Téléphone"
 
 #: templates/contacts/contact_new.html:135
 #: templates/contacts/contact_new.html:172 templates/leads/lead_new.html:143
 #: templates/leads/lead_new.html:186
 msgid "Enter a number"
-msgstr ""
+msgstr "Entrer un numéro"
 
 #: templates/contacts/contact_new.html:159 templates/leads/lead_new.html:173
 msgid "Add a new Phone"
-msgstr ""
+msgstr "Ajouter un nouveau téléphone"
 
 #: templates/contacts/contact_new.html:186 templates/leads/lead_new.html:200
 msgid "Add a new email address"
@@ -1551,39 +1551,39 @@ msgstr ""
 
 #: templates/contacts/contact_new.html:190 templates/leads/lead_new.html:204
 msgid "Address"
-msgstr ""
+msgstr "Ajouter une nouvelle adresse e-mail"
 
 #: templates/contacts/contact_new.html:210 templates/leads/lead_new.html:221
 msgid "Add a new address"
-msgstr ""
+msgstr "Ajouter une nouvelle adresse"
 
 #: templates/contacts/contact_new.html:216 templates/leads/lead_new.html:227
 msgid "Links"
-msgstr ""
+msgstr "Liens"
 
 #: templates/contacts/contact_new.html:226 templates/leads/lead_new.html:237
 msgid "Enter a Website"
-msgstr ""
+msgstr "Ajouter un siteweb"
 
 #: templates/contacts/contact_new.html:240 templates/leads/lead_new.html:251
 msgid "Add a new Website"
-msgstr ""
+msgstr "Ajouter un nouveau siteweb"
 
 #: templates/contacts/contact_new.html:245 templates/leads/lead_new.html:256
 msgid "Social Links"
-msgstr ""
+msgstr "Liens réseaux sociaux"
 
 #: templates/contacts/contact_new.html:253 templates/leads/lead_new.html:264
 msgid "Enter a social link"
-msgstr ""
+msgstr "Entrer un lien social"
 
 #: templates/contacts/contact_new.html:266 templates/leads/lead_new.html:277
 msgid "Add a new social links"
-msgstr ""
+msgstr "Ajouter un nouveau lien social"
 
 #: templates/contacts/contact_new.html:274 templates/leads/lead_new.html:285
 msgid "Story"
-msgstr ""
+msgstr "Histoire"
 
 #: templates/contacts/list.html:119
 #: templates/live/customer_stories/customer_stories_list.html:103
@@ -1592,15 +1592,15 @@ msgstr ""
 #: templates/live/shows/list_show.html:121
 #: templates/opportunities/list.html:250
 msgid "Filter by"
-msgstr ""
+msgstr "Filtrer par"
 
 #: templates/contacts/list.html:123
 msgid "All contacts"
-msgstr ""
+msgstr "Tous les contacts"
 
 #: templates/contacts/list.html:124
 msgid "My contacts"
-msgstr ""
+msgstr "Mes contacts"
 
 #: templates/contacts/list.html:132
 #: templates/live/customer_stories/customer_stories_list.html:122
@@ -1609,96 +1609,96 @@ msgstr ""
 #: templates/live/shows/list_show.html:140
 #: templates/opportunities/list.html:266
 msgid "Quick Filtering"
-msgstr ""
+msgstr "Filtrage rapide"
 
 #: templates/leads/lead_list.html:24 templates/leads/lead_list.html:25
 #: templates/leads/lead_list.html:85 templates/leads/lead_new.html:11
 msgid "Leads"
-msgstr ""
+msgstr "Pistes"
 
 #: templates/leads/lead_list.html:44
 msgid "Lead"
-msgstr ""
+msgstr "Piste"
 
 #: templates/leads/lead_list.html:92
 msgid " New Lead"
-msgstr ""
+msgstr "Nouvelle piste"
 
 #: templates/leads/lead_list.html:324
 msgid "Delete Lead"
-msgstr ""
+msgstr "Supprimer piste"
 
 #: templates/leads/lead_new.html:39
 msgid "Create Lead"
-msgstr ""
+msgstr "Créer piste"
 
 #: templates/leads/lead_new.html:104
 msgid "Lead Informations"
-msgstr ""
+msgstr "Informations sur piste"
 
 #: templates/leads/lead_new.html:111 templates/leads/lead_new.html:120
 msgid "None"
-msgstr ""
+msgstr "Aucun"
 
 #: templates/leads/lead_new.html:111
 msgid "Agriculture"
-msgstr ""
+msgstr "Agriculture"
 
 #: templates/leads/lead_new.html:111
 msgid "Apparel"
-msgstr ""
+msgstr "Vêtements"
 
 #: templates/leads/lead_new.html:111
 msgid "Banking"
-msgstr ""
+msgstr "Bancaire"
 
 #: templates/leads/lead_new.html:111
 msgid "Biotechnology"
-msgstr ""
+msgstr "Biotechnologie"
 
 #: templates/leads/lead_new.html:111
 msgid "Chemicals"
-msgstr ""
+msgstr "Produits chimiques"
 
 #: templates/leads/lead_new.html:111
 msgid "Communications"
-msgstr ""
+msgstr "Communications"
 
 #: templates/leads/lead_new.html:111
 msgid "Construction"
-msgstr ""
+msgstr "Construction"
 
 #: templates/leads/lead_new.html:111
 msgid "Consulting"
-msgstr ""
+msgstr "Consultant"
 
 #: templates/leads/lead_new.html:111
 msgid "Education"
-msgstr ""
+msgstr "Education"
 
 #: templates/leads/lead_new.html:111
 msgid "Electronics"
-msgstr ""
+msgstr "Electroniques"
 
 #: templates/leads/lead_new.html:111
 msgid "Energy"
-msgstr ""
+msgstr "Energie"
 
 #: templates/leads/lead_new.html:111
 msgid "Engineering"
-msgstr ""
+msgstr "Ingénierie"
 
 #: templates/leads/lead_new.html:111
 msgid "Entertainment"
-msgstr ""
+msgstr "Divertissement"
 
 #: templates/leads/lead_new.html:111
 msgid "Environmental"
-msgstr ""
+msgstr "Ecologique"
 
 #: templates/leads/lead_new.html:111
 msgid "Finance"
-msgstr ""
+msgstr "Finance"
 
 #: templates/leads/lead_new.html:111
 msgid "Food"
@@ -1706,97 +1706,97 @@ msgstr ""
 
 #: templates/leads/lead_new.html:111
 msgid "Beverage"
-msgstr ""
+msgstr "Nourriture"
 
 #: templates/leads/lead_new.html:111
 msgid "Government"
-msgstr ""
+msgstr "Gouvernement"
 
 #: templates/leads/lead_new.html:111
 msgid "Healthcare"
-msgstr ""
+msgstr "Soins et santé"
 
 #: templates/leads/lead_new.html:111
 msgid "Hospitality"
-msgstr ""
+msgstr "Hospitalité"
 
 #: templates/leads/lead_new.html:111
 msgid "Insurance"
-msgstr ""
+msgstr "Assurance"
 
 #: templates/leads/lead_new.html:111
 msgid "Machinery"
-msgstr ""
+msgstr "Machinerie"
 
 #: templates/leads/lead_new.html:111
 msgid "Manufacturing"
-msgstr ""
+msgstr "Fabrication"
 
 #: templates/leads/lead_new.html:111
 msgid "Media"
-msgstr ""
+msgstr "Médias"
 
 #: templates/leads/lead_new.html:111
 msgid "Not For Profit"
-msgstr ""
+msgstr "Organisme sans but lucratif"
 
 #: templates/leads/lead_new.html:111
 msgid "Recreation"
-msgstr ""
+msgstr "Récréation"
 
 #: templates/leads/lead_new.html:111
 msgid "Retail"
-msgstr ""
+msgstr "Vente au détail"
 
 #: templates/leads/lead_new.html:111
 msgid "Shipping"
-msgstr ""
+msgstr "Livraison"
 
 #: templates/leads/lead_new.html:111
 msgid "Technology"
-msgstr ""
+msgstr "Technologie"
 
 #: templates/leads/lead_new.html:111
 msgid "Telecommunications"
-msgstr ""
+msgstr "Télécommunications"
 
 #: templates/leads/lead_new.html:111
 msgid "Transportation"
-msgstr ""
+msgstr "Transport"
 
 #: templates/leads/lead_new.html:111
 msgid "Utilities"
-msgstr ""
+msgstr "Utilitaires"
 
 #: templates/leads/lead_new.html:111 templates/leads/lead_new.html:126
 msgid "Other"
-msgstr ""
+msgstr "Autre"
 
 #: templates/leads/lead_new.html:117
 #: templates/live/feedbacks/feedbacks_list.html:76
 #: templates/live/feedbacks/feedbacks_list.html:194
 msgid "Source"
-msgstr ""
+msgstr "Source"
 
 #: templates/leads/lead_new.html:121
 msgid "Social Media"
-msgstr ""
+msgstr "Médias sociaux"
 
 #: templates/leads/lead_new.html:122
 msgid "Web Site"
-msgstr ""
+msgstr "Site Web"
 
 #: templates/leads/lead_new.html:123
 msgid "Phone Inquiry"
-msgstr ""
+msgstr "Enquête de téléphone"
 
 #: templates/leads/lead_new.html:124
 msgid "Partner Referral"
-msgstr ""
+msgstr "Renvoi partenaire"
 
 #: templates/leads/lead_new.html:125
 msgid "Purchased List"
-msgstr ""
+msgstr "Liste acheté"
 
 #: templates/live/live_all_recents_show.html:64
 #: templates/live/live_all_recents_show_company.html:64
@@ -2000,15 +2000,15 @@ msgstr ""
 
 #: templates/needs/show.html:208
 msgid "Notes"
-msgstr ""
+msgstr "Notes"
 
 #: templates/needs/show.html:209
 msgid "Attach Documents"
-msgstr ""
+msgstr "Joindre des documents"
 
 #: templates/needs/show.html:210
 msgid "Send an Email"
-msgstr ""
+msgstr "Envoyer un email"
 
 #: templates/needs/show.html:513
 msgid "Edit Need"
@@ -2016,7 +2016,7 @@ msgstr ""
 
 #: templates/needs/show.html:529
 msgid "description"
-msgstr ""
+msgstr "Description"
 
 #: templates/opportunities/list.html:237
 #: templates/opportunities/opportunity_list.html:22
@@ -2024,45 +2024,45 @@ msgstr ""
 #: templates/opportunities/opportunity_list.html:88
 #: templates/opportunities/opportunity_new.html:25
 msgid "Opportunities"
-msgstr ""
+msgstr "Opportunités"
 
 #: templates/opportunities/list.html:254
 #: templates/opportunities/opportunity_list.html:31
 msgid "All opportunities"
-msgstr ""
+msgstr "Toutes les opportunités"
 
 #: templates/opportunities/list.html:255
 #: templates/opportunities/opportunity_list.html:32
 msgid "My opportunities"
-msgstr ""
+msgstr "Mes Opportunités"
 
 #: templates/opportunities/list.html:286
 msgid "Stage probability"
-msgstr ""
+msgstr "Probabilité de l étape"
 
 #: templates/opportunities/opportunity_list.html:26
 msgid "Filter"
-msgstr ""
+msgstr "Filtrer"
 
 #: templates/opportunities/opportunity_list.html:27
 msgid "Stages"
-msgstr ""
+msgstr "Etapes"
 
 #: templates/opportunities/opportunity_list.html:38
 msgid "Sort"
-msgstr ""
+msgstr "Classement"
 
 #: templates/opportunities/opportunity_list.html:54
 msgid "Opportunity"
-msgstr ""
+msgstr "Opportunité"
 
 #: templates/opportunities/opportunity_list.html:130
 msgid "with"
-msgstr ""
+msgstr "avec"
 
 #: templates/opportunities/opportunity_list.html:142
 msgid "Estimated close date:"
-msgstr ""
+msgstr "Date de clôture prévisionnelles"
 
 #: templates/opportunities/opportunity_list.html:160
 #: templates/opportunities/opportunity_list.html:175
@@ -2075,42 +2075,42 @@ msgstr ""
 #: templates/opportunities/opportunity_list.html:386
 #: templates/opportunities/opportunity_new.html:169
 msgid "Fixed bid"
-msgstr ""
+msgstr "Offre fixe"
 
 #: templates/opportunities/opportunity_list.html:387
 #: templates/opportunities/opportunity_new.html:170
 msgid "Per hour"
-msgstr ""
+msgstr "Par Heure"
 
 #: templates/opportunities/opportunity_list.html:388
 #: templates/opportunities/opportunity_new.html:171
 msgid "Per month"
-msgstr ""
+msgstr "Par mois"
 
 #: templates/opportunities/opportunity_list.html:389
 #: templates/opportunities/opportunity_new.html:172
 msgid "Per year"
-msgstr ""
+msgstr "Par an"
 
 #: templates/opportunities/opportunity_new.html:55
 msgid "Create Opportunity"
-msgstr ""
+msgstr "Créer l'opportunité"
 
 #: templates/opportunities/opportunity_new.html:70
 msgid "Type here the opportunity name..."
-msgstr ""
+msgstr "Ecrire ici le nom de l'opportunité"
 
 #: templates/opportunities/opportunity_new.html:84
 msgid "Opportunity amount..."
-msgstr ""
+msgstr "Montant de l'opportunité"
 
 #: templates/opportunities/opportunity_new.html:214
 msgid "Opportunity Stage"
-msgstr ""
+msgstr "Etape de l'opportunité"
 
 #: templates/opportunities/opportunity_new.html:229
 msgid "Estimated closed date"
-msgstr ""
+msgstr "Date de clôture prévisionnelle"
 
 #: templates/opportunities/opportunity_new.html:278
 msgid "Opportunity Informations"
@@ -2118,11 +2118,11 @@ msgstr ""
 
 #: templates/opportunities/opportunity_new.html:290
 msgid "Competitors"
-msgstr ""
+msgstr "Compétiteurs"
 
 #: templates/products/list.html:42 templates/products/list.html:80
 msgid "New Product"
-msgstr ""
+msgstr "Nouveau produit"
 
 #: templates/products/list.html:64
 msgid "Add Product"
