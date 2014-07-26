@@ -14,8 +14,8 @@
            </ul>
         </div>
 
-    </div> 
-  
+    </div>
+
 
     <div class=" subHeaderContent">
       <div class="col-md-9">
@@ -86,13 +86,25 @@
                     <div class="modal-body">
                        <form id="addAccount" name="addaccount"  class=""  ng-keyup="addAccountOnKey(account)">
                     <div class="form-group">
-                        <label  class="required">{{_("Name")}}</label>
+                        <label  class="required">{{_('Name')}}</label>
                           <input type="text" class="form-control" required  ng-model="account.name">
                     </div>
                     <div class="form-group">
-                        <label  class="required">{{_("Type")}}</label>
+                        <label  class="required">{{_('Type')}}</label>
                           <select value="Customer" ng-model="account.account_type" class="form-control">
-                         <option value="Competitor">{{_('Competitor')}}</option><option value="Customer">{{_('Customer'))}</option><option value="Distributor">{{_('Distributor')}}</option><option value="Integrator">{{_('Integrator')}}</option><option value="Investor">{{_('Investor')}}</option><option value="Partner">{{_('Partner')}}</option><option value="Press">{{_('Press')}}</option><option value="Prospect">{{_('Prospect')}}</option><option value="Reseller">{{_('Reseller')}}</option><option value="Supplier">{{_('Supplier')}}</option><option value="Vendor">{{_('Vendor')}}</option><option value="Other">{{_('Other')}}</option></select>
+                         <option value="Competitor">{{_('Competitor')}}</option>
+                         <option value="Customer">{{_('Customer')}}</option>
+                         <option value="Distributor">{{_('Distributor')}}</option>
+                         <option value="Integrator">{{_('Integrator')}}</option>
+                         <option value="Investor">{{_('Investor')}}</option>
+                         <option value="Partner">{{_('Partner')}}</option>
+                         <option value="Press">{{_('Press')}}</option>
+                         <option value="Prospect">{{_('Prospect')}}</option>
+                         <option value="Reseller">{{_('Reseller')}}</option>
+                         <option value="Supplier">{{_('Supplier')}}</option>
+                         <option value="Vendor">{{_('Vendor')}}</option>
+                         <option value="Other">{{_('Other')}}</option>
+                         </select>
                     </div>
                     <div class="form-group">
                         <label  class="required control-label">{{_("Industry")}} </label>
@@ -289,7 +301,7 @@
               </div>
             </form>
             <div class="form-group btn-manage-tags" ng-show="tags">
-              <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">        
+              <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">
               {{_('Manage Tags')}}
               </button>
             </div>

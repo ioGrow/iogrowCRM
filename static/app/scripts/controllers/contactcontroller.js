@@ -498,7 +498,7 @@ $scope.addTags=function(){
 		 // Google+ Authentication
 		 Auth.init($scope);
 		 $(window).scroll(function() {
-					if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
+					if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
 							$scope.listMoreItems();
 					}
 			});
@@ -988,7 +988,7 @@ $scope.listTags=function(){
      // rederection after delete task . hadji hicham 08--07-2014
       $scope.taskDeleted = function(resp){
 
-    }; 
+    };
 
 		 $scope.hilightTask = function(){
 				console.log('Should higll');
