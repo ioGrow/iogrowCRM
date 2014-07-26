@@ -1258,48 +1258,48 @@ msgstr "Créer ce document"
 #: templates/opportunities/opportunity_list.html:95
 #: templates/opportunities/opportunity_list.html:264
 msgid "New Opportunity"
-msgstr ""
+msgstr "Nouvelle Opportunité"
 
 #: templates/calendar/calendar_show.html:663
 #: templates/opportunities/list.html:86 templates/opportunities/list.html:284
 #: templates/opportunities/opportunity_list.html:297
 msgid "Amount"
-msgstr ""
+msgstr "Montant"
 
 #: templates/calendar/calendar_show.html:669
 #: templates/opportunities/list.html:186
 #: templates/opportunities/opportunity_list.html:402
 msgid "Stage"
-msgstr ""
+msgstr "Etape"
 
 #: templates/calendar/calendar_show.html:672
 #: templates/opportunities/opportunity_list.html:406
 msgid "choose Stage"
-msgstr ""
+msgstr "Choisir l'étape"
 
 #: templates/calendar/calendar_show.html:684
 msgid "Add Opportunity"
-msgstr ""
+msgstr "Ajouter une opportunité"
 
 #: templates/calendar/calendar_show.html:698 templates/cases/case_list.html:313
 msgid "New Case"
-msgstr ""
+msgstr "Nouvelle réclamation"
 
 #: templates/calendar/calendar_show.html:716 templates/cases/case_list.html:32
 #: templates/cases/case_list.html:345 templates/cases/case_new.html:97
 #: templates/needs/show.html:182 templates/needs/show.html:538
 msgid "Priority"
-msgstr ""
+msgstr "Priorité"
 
 #: templates/calendar/calendar_show.html:720 templates/cases/case_list.html:349
 #: templates/cases/case_new.html:102
 msgid "Low"
-msgstr ""
+msgstr "Faible"
 
 #: templates/calendar/calendar_show.html:729 templates/cases/case_list.html:358
 #: templates/cases/case_new.html:111
 msgid "Critical"
-msgstr ""
+msgstr "Critique"
 
 #: templates/calendar/calendar_show.html:736
 #: templates/campaigns/campaign_list.html:59 templates/cases/case_list.html:33
@@ -1309,47 +1309,47 @@ msgstr ""
 #: templates/live/feedbacks/feedbacks_list.html:193
 #: templates/needs/show.html:183 templates/needs/show.html:552
 msgid "Status"
-msgstr ""
+msgstr "Statut"
 
 #: templates/calendar/calendar_show.html:740
 msgid "Choose Status"
-msgstr ""
+msgstr "Choisir un statut"
 
 #: templates/calendar/calendar_show.html:762
 msgid "Add Case"
-msgstr ""
+msgstr "Ajouter réclamation"
 
 #: templates/calendar/calendar_show.html:777
 msgid "New Event"
-msgstr ""
+msgstr "Ajouter rendez-vous"
 
 #: templates/calendar/calendar_show.html:782
 msgid "Add a new event"
-msgstr ""
+msgstr "Ajouter un nouveau rendez-vous"
 
 #: templates/calendar/calendar_show.html:783
 msgid "When?"
-msgstr ""
+msgstr "Quand?"
 
 #: templates/calendar/calendar_show.html:786
 msgid "Starts"
-msgstr ""
+msgstr "Débuts"
 
 #: templates/calendar/calendar_show.html:790
 msgid "Ends"
-msgstr ""
+msgstr "Fins"
 
 #: templates/calendar/calendar_show.html:794
 msgid "Where?"
-msgstr ""
+msgstr "Ou?"
 
 #: templates/calendar/calendar_show.html:801
 msgid "Add this event"
-msgstr ""
+msgstr "Ajouter ce rendez-vous"
 
 #: templates/calendar/calendar_show.html:833
 msgid "Add this task"
-msgstr ""
+msgstr "Ajouter cette tâche"
 
 #: templates/campaigns/campaign_list.html:33 templates/cases/case_list.html:66
 #: templates/cases/case_new.html:31 templates/contacts/contact_new.html:39
@@ -1358,12 +1358,12 @@ msgstr ""
 #: templates/opportunities/opportunity_new.html:42
 #: templates/search/list.html:39
 msgid "Sign-in Button;"
-msgstr ""
+msgstr "Bouton sign-in"
 
 #: templates/campaigns/campaign_list.html:42
 #: templates/campaigns/campaign_list.html:88
 msgid "New Campaign"
-msgstr ""
+msgstr "Nouvelle compagne"
 
 #: templates/campaigns/campaign_list.html:72
 msgid "Add Campaign"
