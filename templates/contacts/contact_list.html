@@ -111,7 +111,7 @@
                 <div class="pic">
                   <a href="/#/contacts/show/<%= contact.id %>" class="startup-link" title="<%=contact.firstname%> <%=contact.lastname%>">
                     <img ng-hide="contact.profile_img_url"  class="img-responsive profile-photo" src="/static/img/avatar_contact.jpg" >
-                    <img ng-show="contact.profile_img_url"  class="img-responsive profile-photo" ng-src="https://docs.google.com/uc?id=<%= contact.profile_img_id %>" data-hasqtip="2">
+                    <img ng-show="contact.profile_img_url"  class="img-responsive profile-photo" ng-src="<%= contact.profile_img_url %>" data-hasqtip="2">
                   </a>
                 </div>
                 <div class="text">
@@ -273,12 +273,12 @@
                   ng-model='tag_item.name'  onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
                       <%= tag_item.name %>
                   </span>
-                 <input 
-                 type="checkbox" 
-                 ng-show="!manage_tags" 
-                 ng-click="selectTag(tag_item,$index,$event)" 
-                 style="margin-right: 10px;" 
-                 class="pull-right customCheck" 
+                 <input
+                 type="checkbox"
+                 ng-show="!manage_tags"
+                 ng-click="selectTag(tag_item,$index,$event)"
+                 style="margin-right: 10px;"
+                 class="pull-right customCheck"
                  ng-checked="isSelected()">
 
                   <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
