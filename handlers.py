@@ -1047,7 +1047,13 @@ class SendEmailNotification(webapp2.RequestHandler):
         subject = self.request.get('subject')
         body = self.request.get('body')
         sender_address = "ioGrow notifications <notifications@gcdc2013-iogrow.appspotmail.com>"
-        mail.send_mail(sender_address, to , subject, body,reply_to=user_email)
+        message = mail.EmailMessage()
+        message.sender = sender_address
+        message.to = to
+        message.subject = subject
+        message.html = body
+        message.reply_to = user_email
+        message.send()
 
 
 
