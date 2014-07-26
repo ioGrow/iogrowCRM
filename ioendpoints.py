@@ -383,6 +383,7 @@ class ReportingResponseSchema(messages.Message):
     user_google_id = messages.StringField(1)
     count = messages.IntegerField(2)
     google_display_name=messages.StringField(3)
+    email=messages.StringField(4)
 
 
 class ReportingListResponse(messages.Message):
@@ -2719,20 +2720,40 @@ class CrmEngineApi(remote.Service):
     def lead_reporting(self, request):
         list_of_reports = []     
         gid=request.user_google_id
+        gname=request.google_display_name
         # if the user input google_user_id
         if gid!=None and gid!='':
             list_of_reports=[]
             leads=Lead.query(Lead.owner==gid).fetch()
             users=User.query(User.google_user_id==gid).fetch()
             gname=users[0].google_display_name
+            gmail=users[0].email
             list_of_reports.append((gid,gname,len(leads)))
             reporting = []
-            print gname 
             print list_of_reports
             item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2])
             reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
-        # if the user input google_user_id 
+
+        #if the user input name of user
+        elif gname!=None and gname!='':
+            list_of_reports=[]
+            users=User.query(User.google_display_name==gname).fetch()
+            for user in users:
+                gid=user.google_user_id
+                leads=Lead.query(Lead.owner==gid).fetch()
+                gname=user.google_display_name
+                gmail=user.email
+                list_of_reports.append((gid,gname,gmail,len(leads)))
+            
+            reporting = []
+            print list_of_reports
+            for item in list_of_reports:
+                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count=item[3])
+                reporting.append(item_schema)
+            return ReportingListResponse(items=reporting)
+
+        # if the user not input any think 
         else:
             list_of_reports=[]
             users=User.query().fetch()
@@ -2758,6 +2779,7 @@ class CrmEngineApi(remote.Service):
     def contact_reporting(self, request):
         list_of_reports = []    
         gid=request.user_google_id
+        gname=request.google_display_name
         # if the user input google_user_id
         if gid!=None and gid!='':
             list_of_reports=[]
@@ -2769,6 +2791,23 @@ class CrmEngineApi(remote.Service):
             item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2])
             reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
+        #if the user input name of user
+        elif gname!=None and gname!='':
+            list_of_reports=[]
+            users=User.query(User.google_display_name==gname).fetch()
+            for user in users:
+                gid=user.google_user_id
+                contacts=Contact.query(Contact.owner==gid).fetch()
+                gname=user.google_display_name
+                gmail=user.email
+                list_of_reports.append((gid,gname,gmail,len(contacts)))
+            
+            reporting = []
+            print list_of_reports
+            for item in list_of_reports:
+                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count=item[3])
+                reporting.append(item_schema)
+            return ReportingListResponse(items=reporting)    
         
         # if the user input google_user_id 
         else:
@@ -2795,6 +2834,7 @@ class CrmEngineApi(remote.Service):
     def account_reporting(self, request):
         list_of_reports = []     
         gid=request.user_google_id
+        gname=request.google_display_name
         # if the user input google_user_id
         if gid!=None and gid!='':
             list_of_reports=[]
@@ -2808,6 +2848,24 @@ class CrmEngineApi(remote.Service):
             item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2])
             reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
+
+        #if the user input name of user
+        elif gname!=None and gname!='':
+            list_of_reports=[]
+            users=User.query(User.google_display_name==gname).fetch()
+            for user in users:
+                gid=user.google_user_id
+                accounts=Account.query(Account.owner==gid).fetch()
+                gname=user.google_display_name
+                gmail=user.email
+                list_of_reports.append((gid,gname,gmail,len(accounts)))
+            
+            reporting = []
+            print list_of_reports
+            for item in list_of_reports:
+                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count=item[3])
+                reporting.append(item_schema)
+            return ReportingListResponse(items=reporting)   
 
         else:
             users=User.query().fetch()
@@ -2832,6 +2890,7 @@ class CrmEngineApi(remote.Service):
     def task_reporting(self,request):
         list_of_reports = []     
         gid=request.user_google_id
+        gname=request.google_display_name
         # if the user input google_user_id
         if gid!=None and gid!='':
             list_of_reports=[]
@@ -2845,6 +2904,25 @@ class CrmEngineApi(remote.Service):
             item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2])
             reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
+
+        #if the user input name of user
+        elif gname!=None and gname!='':
+            list_of_reports=[]
+            users=User.query(User.google_display_name==gname).fetch()
+            for user in users:
+                gid=user.google_user_id
+                tasks=Task.query(Task.owner==gid).fetch()
+                gname=user.google_display_name
+                gmail=user.email
+                list_of_reports.append((gid,gname,gmail,len(tasks)))
+            
+            reporting = []
+            print list_of_reports
+            for item in list_of_reports:
+                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count=item[3])
+                reporting.append(item_schema)
+            return ReportingListResponse(items=reporting)  
+                
         # if the user input google_user_id    
         else:
             users=User.query().fetch()
