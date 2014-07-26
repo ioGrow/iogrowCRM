@@ -66,7 +66,7 @@ class EndpointsHelper():
     INVALID_TOKEN = 'Invalid token'
     INVALID_GRANT = 'Invalid grant'
     NO_ACCOUNT = 'You don\'t have a i/oGrow account'
-    
+
     @classmethod
     def send_message(cls,service, user_id, message):
         """Send an email message.
@@ -80,13 +80,11 @@ class EndpointsHelper():
         Returns:
           Sent Message.
         """
-        try:
-            message = (service.users().messages().send(userId=user_id, body=message)
+        message = (service.users().messages().send(userId=user_id, body=message)
                      .execute())
-            print 'Message Id: %s' % message['id']
-            return message
-        except errors.HttpError, error:
-            print 'An error occurred: %s' % error
+        print 'Message Id: %s' % message['id']
+        return message
+
     @classmethod
     def create_message(cls,sender, to,cc,bcc, subject, message_html):
         """Create a message for an email.
@@ -293,7 +291,7 @@ class EndpointsHelper():
         return people
     @classmethod
     def highrise_import_companies(cls, request):
-        
+
         Highrise.set_server(request.server_name)
         Highrise.auth(request.key)
         companies=Company.all()

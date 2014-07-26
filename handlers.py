@@ -50,7 +50,7 @@ CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 
 SCOPES = [
-    'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/prediction https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar'
+    'https://mail.google.com/ https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds'
 ]
 
 VISIBLE_ACTIONS = [
@@ -1055,6 +1055,28 @@ class SendEmailNotification(webapp2.RequestHandler):
         message.reply_to = user_email
         message.send()
 
+class SendGmailEmail(webapp2.RequestHandler):
+    def post(self):
+        user = model.User.get_by_email(self.request.get('email'))
+        credentials = user.google_credentials
+        http = credentials.authorize(httplib2.Http(memcache))
+        service = build('gmail', 'v1', http=http)
+        cc = None
+        bcc = None
+        if self.request.get('cc') !='None':
+            cc = self.request.get('cc')
+        if self.request.get('bcc') !='None':
+            bcc = self.request.get('bcc')
+        message = EndpointsHelper.create_message(
+                                                  user.email,
+                                                  self.request.get('to'),
+                                                  cc,
+                                                  bcc,
+                                                  self.request.get('subject'),
+                                                  self.request.get('body')
+                                                )
+        EndpointsHelper.send_message(service,'me',message)
+
 
 
 
@@ -1077,6 +1099,7 @@ routes = [
     ('/workers/sync_contacts',SyncContact),
     ('/workers/send_email_notification',SendEmailNotification),
     ('/workers/add_to_iogrow_leads',AddToIoGrowLeads),
+    ('/workers/send_gmail_message',SendGmailEmail),
 
     ('/',IndexHandler),
     ('/blog',BlogHandler),
