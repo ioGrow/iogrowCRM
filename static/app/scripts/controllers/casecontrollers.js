@@ -852,7 +852,13 @@ if ($scope.newTaskform==false) {
             $scope.newTaskform=false;
       }
      }
-     }
+     };
+
+    //HKA 27.07.2014 Add button cancel on Task form
+       $scope.closeTaskForm=function(newTask){
+               $scope.newTask={};
+                $scope.newTaskform=false;
+    };
 
      $scope.hilightTask = function(){
 

@@ -764,7 +764,14 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
             $scope.newTaskform=false;
       }
      }
-   }
+   };
+
+   
+    //HKA 27.07.2014 Add button cancel on Task form
+       $scope.closeTaskForm=function(newTask){
+               $scope.newTask={};
+                $scope.newTaskform=false;
+    };
      $scope.$watch('opportunity.closed_date', function(newValue, oldValue) {
             if (newValue!=oldValue){
                 $scope.patchDate(newValue);

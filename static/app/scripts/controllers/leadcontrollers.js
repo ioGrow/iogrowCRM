@@ -800,7 +800,13 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
             $scope.newTaskform=false;
       }
      }
-   }
+   };
+  //HKA 27.07.2014 Add button cancel on Task form
+       $scope.closeTaskForm=function(newTask){
+               $scope.newTask={};
+                $scope.newTaskform=false;
+    };
+   
     $scope.deleteTask = function(task){
 
        var params = {'entityKey':task.entityKey};
