@@ -536,12 +536,12 @@
 
 
 <!-- tasks cards -->
-<div class="col-md-3 tasks-col">
-  <div class="row">
-    <div class="col-md-12">
-     <div class="portlet showPage rightCardContent">
+   <div class="col-md-3 tasks-col">
+            <div class="row">
+                <div class="col-md-12">
+                     <div class="portlet showPage rightCardContent">
                 <div class="portlet-title line">
-                  <div class="caption"> <i class="fa fa-check"></i>{{ _('Tasks')}} </div>
+                  <div class="caption"> <i class="fa fa-check"></i>{{_('Tasks')}} </div>
 
                 </div>
                 <div class="newContactform portlet-body" id="chats">
@@ -610,9 +610,6 @@
                                               <input cusdatetimepicker data-model="newTask.reminder" type="text" class="form-control" placeholder="{{_('Add a reminder')}}" value="" id="leadEventStartsAt">
                                           </div>
 
-                                              <input cusdatetimepicker data-model="newTask.reminder" type="text" class="form-control" placeholder="Add a reminder" value="" id="leadEventStartsAt">
-                                          </div>
-
                                     </div>
                                 </div>
                                 <div class="row">
@@ -645,21 +642,21 @@
                       </div>
                       <div class="row">
                           <div class="col-md-12 margin-top-10">
-                              <p><span ng-hide="newTaskform">{{ _('Add New Task')}}</span><button type="button" ng-click="addTask(newTask)" class="btn blue btn-sm pull-right btn-inline">{{ _('Add')}}</button></p>
+                              <p><span ng-hide="newTaskform">{{_('Add New Task')}}</span><button type="button" ng-click="addTask(newTask)" class="btn blue btn-sm pull-right btn-inline">{{_('Add')}}</button></p>
 
                           </div>
                       </div>
                   </form>
                 </div>
               </div>
-    </div>
-  </div>
+                </div>
+            </div>
       <!-- $ Events -->
       <div class="row">
       <div class="col-md-12">
           <div class="portlet showPage rightCardContent">
                 <div class="portlet-title line">
-                  <div class="caption"> <i class="fa fa-calendar"></i>{{ _('Events')}} </div>
+                  <div class="caption"> <i class="fa fa-calendar"></i>{{_('Events')}} </div>
 
                 </div>
                 <div class="newContactform portlet-body" id="chats">
@@ -715,7 +712,7 @@
                               </div>
                               <!--/span-->
                             </div>
-                                 {{ _('All day')}} <input type="checkbox" ng-model="allday"/>
+                            {{_('All day')}} <input type="checkbox" ng-model="allday"/>
                               <!-- pick only date (the case of all day) -->
                               <div class="row" ng-show="allday">
                                 <div class="col-md-12 margin-bottom-10">
@@ -755,9 +752,9 @@
                   </div>
                   <div class="row">
                       <div class="col-md-12 margin-top-10">
-                          <p class="newEventText"><span ng-hide="newEventform">{{ _('Add New Event')}}</span>
-                          <button type="button" ng-click="addEvent(ioevent)" class="btn red btn-sm pull-right btn-inline">{{ _('Add')}}</button>
-                          <button type="button" ng-click="closeEventForm(ioevent)" ng-show="newEventform" class="cancelEventBtn btn btn-default btn-sm pull-right btn-inline">{{ _('Cancel')}}</button>
+                          <p class="newEventText"><span ng-hide="newEventform">{{_('Add New Event')}}</span>
+                          <button type="button" ng-click="addEvent(ioevent)" class="btn red btn-sm pull-right btn-inline">{{_('Add')}}</button>
+                          <button type="button" ng-click="closeEventForm(ioevent)" ng-show="newEventform" class="cancelEventBtn btn btn-default btn-sm pull-right btn-inline">{{_('Cancel')}}</button>
                           </p>
                       </div>
                   </div>
@@ -775,8 +772,8 @@
                                 });
 
       </script>
-</div>
-</div>
+        </div>
+    </div>
              <div id="EditCaseModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
              <div class="modal-dialog">
               <div class="modal-content">

@@ -1385,7 +1385,7 @@ msgstr "Tout"
 #: templates/cases/case_list.html:22 templates/cases/case_list.html:23
 #: templates/cases/case_list.html:81 templates/cases/case_new.html:14
 msgid "Cases"
-msgstr "Réclamation"
+msgstr "Réclamations"
 
 #: templates/cases/case_list.html:23 templates/leads/lead_list.html:25
 msgid "My"
