@@ -522,7 +522,7 @@
                       </div>
                       <div class="row">
                           <div class="col-md-12 margin-top-10">
-                              <p><span ng-hide="newTaskform">{{ _('Add New Task')}}</span><button type="button" ng-click="addTask(newTask)" class="btn blue btn-sm pull-right btn-inline">{{ _('Add')}}</button></p>
+                              <p><span ng-hide="newTaskform">{{ _('Add New Task')}}</span><button type="button" ng-click="addTask(newTask)" class="btn blue btn-sm pull-right btn-inline">{{ _('Add')}}</button><button type="button" ng-click="closeTaskForm(newTask)" ng-show="newTaskform" class="cancelEventBtn btn btn-default btn-sm pull-right btn-inline">{{ _('Cancel')}}</button></p>
 
                           </div>
                       </div>

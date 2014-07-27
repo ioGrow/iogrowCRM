@@ -1167,6 +1167,12 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
 
         };
 
+    //HKA 27.07.2014 Add button cancel on Task form
+       $scope.closeTaskForm=function(newTask){
+               $scope.newTask={};
+                $scope.newTaskform=false;
+    };
+
         $scope.hilightTask = function() {
 
             $('#task_0').effect("highlight", "slow");
