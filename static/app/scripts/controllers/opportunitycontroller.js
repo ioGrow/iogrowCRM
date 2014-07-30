@@ -206,14 +206,10 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
        opportunity.stagename= $scope.stage_selected.name;
        opportunity.stage_probability= $scope.stage_selected.probability;
        opportunity.stage = $scope.stage_selected.entityKey;
-
         if (typeof(opportunity.account)=='object'){
           opportunity.account_name = opportunity.account.name;
           opportunity.account_id = opportunity.account.id;
           opportunity.account = opportunity.account.entityKey;
-
-
-
           Opportunity.insert($scope,opportunity);
             $('#addOpportunityModal').modal('hide');
 
@@ -224,8 +220,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
             };
             $scope.opportunity = opportunity;
             Account.insert($scope,params);
-
-
         };
 
 
@@ -1476,9 +1470,6 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
         });
         return infonodes;
     };
-
-
-
 
       var params_search_contact ={};
       $scope.$watch('searchContactQuery', function() {
