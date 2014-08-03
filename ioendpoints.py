@@ -1003,6 +1003,7 @@ class CrmEngineApi(remote.Service):
         ############
         #store other company == company.all()
         #############
+        accounts_keys={}
         companies=EndpointsHelper.highrise_import_companies(request)
         for company_details in companies:
             phones=list()
@@ -1061,8 +1062,11 @@ class CrmEngineApi(remote.Service):
                                                 )
 
             account_schema = Account.insert(user,account_request)
-
+            accounts_keys[company_details.id]=ndb.Key(urlsafe=account_schema.entityKey)
+        account_schema=""
         people=EndpointsHelper.highrise_import_peoples(request)
+        contacts_keys={}
+        tasks_id=[]
         for person in people:
             ############
             # Store company if persone
@@ -1130,8 +1134,9 @@ class CrmEngineApi(remote.Service):
             #Store Persone
             if account_schema!="":
                 key=account_schema.entityKey
+
             else:
-                key=""
+                key=None
 
             infonodes=list()
             infonodes.append(infonode)
@@ -1153,6 +1158,7 @@ class CrmEngineApi(remote.Service):
                                          )
 
             contact_schema=Contact.insert(user,contact_request)
+            contacts_keys[person.id]=ndb.Key(urlsafe=contact_schema.entityKey)
             #create edge between account and persone
             if account_schema!="":
                 Edge.insert(start_node =ndb.Key(urlsafe=account_schema.entityKey) ,
@@ -1163,20 +1169,27 @@ class CrmEngineApi(remote.Service):
             #########
             #store tasks of person
             tasks=EndpointsHelper.highrise_import_tasks_of_person(person.id)
+            
             for task in tasks:
+                tasks_id.append(task.id)
                 from iomodels.crmengine.tasks import EntityKeyRequest
                 assigne=EntityKeyRequest(
                                         entityKey=contact_schema.entityKey
                                         )
                 assignes=list()
                 assignes.append(assigne)
+                access="private"
+                if task.public=='true':
+                    access = "public"
                 task_request=TaskInsertRequest(
-                                                parent=contact_schema.entityKey,
                                                 title=task.body,
                                                 status=task.frame,
-                                                due=task.due_at.strftime("%d/%m/%Y")
+                                                due=task.due_at.strftime("%d/%m/%Y")    ,
+                                                access=access,
+                                                assignees=assignes
                                                 )
-            #     task_schema=Task.insert(user, task_request)
+                task_schema=Task.insert(user, task_request)
+                
             ###########
             #store notes of persons
             notes=list()
@@ -1210,31 +1223,71 @@ class CrmEngineApi(remote.Service):
                                                     indexed_edge = str(entityKey.id())
                                                     )
 
-            #########
-            # store opporutnities of person
-            deals=EndpointsHelper.highrise_import_opportunities()
-            for deal in deals:
-                company_details=EndpointsHelper.highrise_import_company_details(deal.party_id)
-                key=Account.get_key_by_name(user,company_details.name)
-                if key:
+             
+        #########
+        # store opporutnities of person
+        deals=EndpointsHelper.highrise_import_opportunities()
+        i=0
+        for deal in deals:
+            print i
+            i=i+1
+            access="private"
+            if deal.visible_to=="Everyone":
+                access="public"
+            if "name" in deal.party.__dict__.keys():
+                #company
+                if deal.party_id in accounts_keys.keys():
+                    key=accounts_keys[deal.party_id]
+
                     opportunity_request=OpportunityInsertRequest(
                                                                 name=deal.name,
                                                                 description=deal.background,
                                                                 account=key.urlsafe(),
                                                                 duration=deal.duration,
                                                                 currency=deal.currency,
-                                                                amount_total=deal.price
+                                                                amount_total=deal.price,
+                                                                access=access
+                                                                )  
+            else:
+                #contact
+                #contact=Contact.get_key_by_name(user,deal)
+                if deal.party_id in contacts_keys.keys():
+                    key=contacts_keys[deal.party_id]   
+                    opportunity_request=OpportunityInsertRequest(
+                                                                name=deal.name,
+                                                                description=deal.background,
+                                                                contact=key.urlsafe(),
+                                                                duration=deal.duration,
+                                                                currency=deal.currency,
+                                                                amount_total=deal.price,
+                                                                access=access
                                                                 )
-                    opportunity_schema=Opportunity.insert(user,opportunity_request)
-                    Edge.insert(start_node = ndb.Key(urlsafe=contact_schema.entityKey),
-                      end_node =ndb.Key(urlsafe=opportunity_schema.entityKey),
-                      kind = 'opportunities',
-                      inverse_edge = 'parents')
-                    EndpointsHelper.update_edge_indexes(
-                                            parent_key =ndb.Key(urlsafe=opportunity_schema.entityKey),
-                                            kind = 'opportunities',
-                                            indexed_edge = (ndb.Key(urlsafe=contact_schema.entityKey)).id()
-                                            )
+
+            opportunity_schema=Opportunity.insert(user,opportunity_request)
+    
+        #store tasks
+        taskss=""
+        taskss=EndpointsHelper.highrise_import_tasks()
+        for task in taskss:
+            print "tasssskk",task.__dict__
+            print tasks_id, "iiiiiiiiiiiii", task.owner_id
+            if task.id not in tasks_id:
+                print "ineeeeeeeeeeeeee"
+                print task.__dict__
+                from iomodels.crmengine.tasks import EntityKeyRequest
+                assignes=list()
+                assignes.append(assigne)
+                access="private"
+                if task.public=='true':
+                    access = "public"
+                task_request=TaskInsertRequest(
+                                                title=task.body,
+                                                status=task.frame,
+                                                due=task.due_at.strftime("%d/%m/%Y"),
+                                                access=access
+                                                )
+                task_schema=Task.insert(user, task_request)
+                print task_schema, "sehhhhhhhhhh"            
 
 
 
@@ -2591,7 +2644,7 @@ class CrmEngineApi(remote.Service):
                 # clicking on the link below:
                 # %s
                 # """ % confirmation_url
-                body=request.message
+                body=request.message+confirmation_url
                 print body
 
                 mail.send_mail(sender_address, email , subject, body)
