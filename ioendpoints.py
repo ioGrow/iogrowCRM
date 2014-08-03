@@ -2643,7 +2643,7 @@ class CrmEngineApi(remote.Service):
                 # clicking on the link below:
                 # %s
                 # """ % confirmation_url
-                body=request.message
+                body=request.message+confirmation_url
                 print body
 
                 mail.send_mail(sender_address, email , subject, body)
