@@ -385,6 +385,10 @@ class ReportingResponseSchema(messages.Message):
     google_display_name=messages.StringField(3)
     email=messages.StringField(4)
     created_at=messages.StringField(5)
+    count_account=messages.IntegerField(6)
+    count_contacts=messages.IntegerField(7)
+    count_leads=messages.IntegerField(8)
+    count_tasks=messages.IntegerField(9)
 
 class ReportingListResponse(messages.Message):
     items = messages.MessageField(ReportingResponseSchema, 1, repeated=True)
@@ -2956,6 +2960,78 @@ class CrmEngineApi(remote.Service):
                 reporting.append(item_schema)
 
             return ReportingListResponse(items=reporting) 
+    
+    # summary activity reporting api
+    @endpoints.method(ReportingRequest,ReportingListResponse,
+                       path='reporting/summary',http_method='POST',
+                       name='reporting.summary' )
+    def summary_reporting(self,request):
+        list_of_reports = []
+        gid=request.user_google_id
+        gname=request.google_display_name
+        created_at=''
+        item_schema=ReportingResponseSchema()
+        # if the user input google_user_id
+        if gid!=None and gid!='':
+            list_of_reports=[]
+            tasks=Task.query(Task.owner==gid).fetch()
+            accounts=Account.query(Account.owner==gid).fetch()
+            leads=Lead.query(Lead.owner==gid).fetch()
+            contacts=Contact.query(Contact.owner==gid).fetch()
+            users=User.query(User.google_user_id==gid).fetch()
+            if users!=[]:
+                gname=users[0].google_display_name
+                gmail=users[0].email
+                created_at=users[0].created_at
+                list_of_reports.append((gid,gname,gmail,len(accounts),len(contacts),len(leads),len(tasks),created_at))
+                item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],email=list_of_reports[0][2],count_account=list_of_reports[0][3],count_contacts=list_of_reports[0][4],count_leads=list_of_reports[0][5],count_tasks=list_of_reports[0][6])
+            reporting = []
+            reporting.append(item_schema)
+            return ReportingListResponse(items=reporting)
+
+        #if the user input name of user
+        elif gname!=None and gname!='':
+            list_of_reports=[]
+            users=User.query(User.google_display_name==gname).fetch()
+            for user in users:
+                gid=user.google_user_id
+                tasks=Task.query(Task.owner==gid).fetch()
+                accounts=Account.query(Account.owner==gid).fetch()
+                leads=Lead.query(Lead.owner==gid).fetch()
+                contacts=Contact.query(Contact.owner==gid).fetch()
+                gname=user.google_display_name
+                gmail=user.email
+                created_at=user.created_at
+                list_of_reports.append((gid,gname,gmail,len(accounts),len(contacts),len(leads),len(tasks),created_at))
+            
+            reporting = []
+            for item in list_of_reports:
+                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count_account=item[3],count_contacts=item[4],count_leads=item[5],count_tasks=item[6])
+                reporting.append(item_schema)
+            return ReportingListResponse(items=reporting)  
+                
+        # if the user input google_user_id    
+        else:
+            users=User.query().fetch()
+            list_of_reports=[]
+            for user in users:
+                gid=user.google_user_id
+                gname=user.google_display_name
+                tasks=Task.query(Task.owner==gid).fetch()
+                accounts=Account.query(Account.owner==gid).fetch()
+                leads=Lead.query(Lead.owner==gid).fetch()
+                contacts=Contact.query(Contact.owner==gid).fetch()
+                created_at=user.created_at
+                gmail=user.email
+                list_of_reports.append((gid,gname,gmail,len(accounts),len(contacts),len(leads),len(tasks),created_at))
+                
+            list_of_reports.sort(key=itemgetter(3),reverse=True)    
+            reporting = []
+            for item in list_of_reports:
+                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count_account=item[3],count_contacts=item[4],count_leads=item[5],count_tasks=item[6])
+                reporting.append(item_schema)
+
+            return ReportingListResponse(items=reporting)         
 
     # event permission
     @endpoints.method(EventPermissionRequest, message_types.VoidMessage,
