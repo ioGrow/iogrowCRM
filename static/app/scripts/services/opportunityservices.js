@@ -182,7 +182,8 @@ opportunityservices.factory('Opportunity', function($http) {
       $scope.isLoading=false;
       };
   Opportunity.listMore = function($scope,params){
-      $scope.isLoading = true;
+      $scope.isMoreItemLoading = true;
+      $( window ).trigger( "resize" );
       $scope.$apply();
       gapi.client.crmengine.opportunities.listv2(params).execute(function(resp) {
               if(!resp.code){
@@ -204,7 +205,7 @@ opportunityservices.factory('Opportunity', function($http) {
                   $scope.opppagination.next = false;
                  }
                  // Loaded succefully
-                 $scope.isLoading = false;
+                 $scope.isMoreItemLoading = false;
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
               }else {

@@ -46,7 +46,7 @@
             </span>
         </div>
     </div>
-    <div ng-show="isContentLoaded" class="row">
+    <div class="row">
         <div class="col-md-9">
             <div class="row">
                 <div class="showPage custom-show margin-bottom-15  col-md-12">
@@ -93,8 +93,16 @@
                                            <a href="/#/search/type:Lead <%=lead.status%>" class="tag">
                                             #<%= lead.status %></a>
                                          </li>
-                                         <li ng-show="lead.updated_at" >
-                                           <span class="contact-title" >Updated at:  <%=lead.updated_at | date:'yyyy-MM-dd - HH:mm:ss ' %> </span>
+                                         <li>
+                                           <span>
+                                              Owner:
+                                             <a class="tag ng-binding" href="/#/search/type:Lead owner:<%= lead.owner.google_user_id %>">
+                                               #<%= lead.owner.google_display_name %>
+                                             </a>
+                                           </span>
+                                         </li>
+                                         <li>
+                                           <span class="contact-title" >Last updated:  <%=fromNow(lead.updated_at)%> </span>
                                          </li>
                                          <li>
                                              <div id="placeholder-div1" class="pull-right hangout-btn"></div>
@@ -141,9 +149,9 @@
                                     <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 7}">
                                         <a ng-click="waterfallTrigger(); selectedTab = 7;">Attach Documents</a>
                                     </li>
-                                    <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 9}">
-                                        <a ng-click="waterfallTrigger(); selectedTab = 9;">LinkedIn</a>
-                                    </li>
+                                    <li  class="ng-tab sm-menu"  ng-class="{active: selectedTab == 9}">
+                                        <a ng-hide="checkIfEmpty(linkedProfile)" ng-click="waterfallTrigger(); selectedTab = 9;"  >LinkedIn</a>
+                                    </li>  
                                     <!-- <li class="ng-tab md-menu" ng-class="{active: selectedTab == 4}">
                                       <a ng-click="selectedTab = 4;">Needs</a>
                                     </li> -->
@@ -164,7 +172,7 @@
                                             <!-- <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">Needs</a></li>
                                             <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">Opportunities</a></li>
                                             <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 6}"><a ng-click="selectedTab = 6;">Cases</a></li> -->
-                                            <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 7}"><a ng-click="selectedTab = 9;">LinkedIn</a></li>
+                                            <li ng-hide="checkIfEmpty(linkedProfile)" class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 9}"><a ng-click="selectedTab = 9;">LinkedIn</a></li>
                                         </ul>
                                     </li>
                                 </ul>
@@ -651,7 +659,7 @@
                                     </div>
                                 </div>
                                 <!-- $ linkedin profile -->
-                                <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 9">
+                                <div class="tab-pane active" id="tab_1_2" ng-if="(selectedTab == 9)">
                                     <div class="row slimform">
                                         <div class="col-md-6">
                                             <div class="news-blocks blank-card blank-card-yellow newsCard">
@@ -711,7 +719,7 @@
                                             </div>
                                             <div class="news-blocks blank-card blank-card-bluep newsCard">
                                                 <h3>Overview</h3>
-                                                <div class="news-block-tags">
+                                                <div class="news-block-tags" ng-show="kedProfile.current_post">
                                                     <strong>Current position</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
@@ -719,7 +727,7 @@
                                                       - <%=post%>   
                                                     </li>
                                                 </ul> 
-                                                <div class="news-block-tags">
+                                                <div class="news-block-tags" ng-show="linkedProfile.past_post">
                                                     <strong>Past position</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
@@ -727,37 +735,23 @@
                                                       - <%=post%>   
                                                     </li>
                                                 </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>Social Links</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li ng-show="showSociallinkForm">
-                                                        <div class="row">
-                                                            <form class="form-inline newLeadForm" role="form">
-                                                                <div class="form-group lg-group" style="">
-                                                                    <label class="sr-only" for="exampleInputEmail2">Social link</label>
-                                                                    <input type="url" class="form-control" id="exampleInputEmail2" ng-model='sociallink.url' placeholder="Enter a social link">
-                                                                </div>
-                                                                <button ng-click="addSocial(sociallink)" type="submit" class="btn blue jfk-button jfk-button-action">Add</button>
-                                                                <button type="submit" ng-click="showSociallinkForm = false" class="btn btn-default">X</button>
-                                                            </form>
-                                                        </div>
-                                                    </li>
-                                                    <li ng-repeat="sociallink in infonodes.sociallinks"><a editable-text="sociallink.url" onbeforesave="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,$data)" href="<%=sociallink.url%>" target="_blank" editoptions editdataattr="deleteInfonode('<%=sociallink.entityKey%>','sociallinks')"> <%=sociallink.url%> </a></li>
-                                                    <li>
-                                                        <a class="btn-link addAnotherPhone" ng-hide="showSociallinkForm" ng-click="showSociallinkForm = true"><i class="icon-plus"></i> Add a new social links </a>
-                                                    </li>
-                                                </ul>
                                             </div>
                                             <div class="news-blocks blank-card blank-card-yellow newsCard">
-                                                <h3>Education</h3>
+                                                <h3>Experiences</h3>
+                                                <div class="news-block-tags" ng-show="linkedProfile.experiences.current_exprience">
+                                                    <strong>current experiences</strong>
+                                                </div>
+                                               
                                                 <ul class="list-unstyled contact-infos">
                                                     <li ng-repeat="exp in linkedProfile.experiences.current_exprience">
                                                       - <%=exp.title%>  ,  <%=exp.organisation%> 
                                                     </li>
                                                 </ul> 
+                                                <div class="news-block-tags" ng-show="linkedProfile.experiences.past_exprience">
+                                                    <strong>past experiences</strong>
+                                                </div>
                                                 <ul class="list-unstyled contact-infos">
-                                                    <li ng-repeat="exp in linkedProfile.experiences.past_exprience">
+                                                    <li ng-repeat="exp in linkedProfile.experiences.past_exprience" >
                                                       - <%=exp.title%>  ,  <%=exp.organisation%> 
                                                     </li>
                                                 </ul>
@@ -765,7 +759,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="right-col">
-                                                <div class="news-blocks blank-card blank-card-red newsCard">
+                                                <div class="news-blocks blank-card blank-card-red newsCard"  ng-show="linkedProfile.resume">
                                                     <h3>Summary</h3>
                                                     <div class="news-block-tags">
 
@@ -775,7 +769,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="news-blocks blank-card blank-card-yellow newsCard">
+                                                <div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="linkedProfile.skills">
                                                     <h3>Skills</h3>
                                                    
                                                     <ul class="list-unstyled contact-infos">
@@ -784,11 +778,10 @@
                                                     </li>
                                                     </ul>
                                                 </div> 
-                                                <div class="news-blocks blank-card blank-card-yellow newsCard">
+                                                <div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="linkedProfile.formations">
                                                     <h3>education</h3>
                                                    
                                                     <ul class="list-unstyled contact-infos">
-                                                    <li>kkk</li>
                                                     <li ng-repeat="formation in linkedProfile.formations">
                                                       - <%=formation%>   
                                                     </li>
@@ -833,7 +826,7 @@
                             <span class="relatedEventStartsAt pull-right" ng-hide="showDetails" ng-show="task.due" title="<%= task.due| date:'yyyy-MM-dd '%>">
                                   <%= task.due | date:'dd MMM'%>
                             </span>
-                          </div>  
+                          </div>
                           <div class="moreDetails row" ng-show="showDetails">
                           <!--  <div class="col-md-6 col-xs-6 event-schedule">
                                 <span class=""><i class="fa fa-calendar"></i>
@@ -841,13 +834,13 @@
                             </div>
                             <div class="col-md-6 col-xs-6 event-schedule">
                                <span class="">
-                                  <i class="fa fa-bell-o"></i> 
+                                  <i class="fa fa-bell-o"></i>
                                   <%= task.reminder | date:'dd MMM'%>
                                 </span>
                             </div>
                             <div class="col-md-12">
                                <span class="">
-                                  <i class="fa fa-map-marker"></i> 
+                                  <i class="fa fa-map-marker"></i>
                                   <%= event.where %>-->
                                 <!--</span>
                             </div>-->

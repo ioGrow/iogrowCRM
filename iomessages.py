@@ -85,3 +85,11 @@ class profileSchema(messages.Message):
     certifications=messages.StringField(13)
     skills=messages.StringField(14,repeated=True)
 
+
+
+class PatchTagSchema(messages.Message):
+     id=messages.StringField(1)
+     entityKey= messages.StringField(2)
+     about_kind=messages.StringField(3)
+     name=messages.StringField(4)
+

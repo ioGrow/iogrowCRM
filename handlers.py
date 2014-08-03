@@ -17,6 +17,7 @@ from google.appengine.ext import ndb
 from google.appengine.api import memcache
 from google.appengine.api import taskqueue
 from google.appengine.api import urlfetch
+from google.appengine.api import mail
 from apiclient import errors
 from apiclient.discovery import build
 from apiclient.http import BatchHttpRequest
@@ -219,7 +220,11 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
             self.redirect('/welcome/')
 class BlogHandler(BaseHandler,SessionEnabledHandler):
     def get(self):
-        template_values = {}
+        if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            template_values = {'user':user}
+        else:
+            template_values = {}
         template = jinja_environment.get_template('templates/blog/blog_base.html')
         self.response.out.write(template.render(template_values))
 class PublicArticlePageHandler(BaseHandler,SessionEnabledHandler):
@@ -297,7 +302,14 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             org_name = self.request.get('org_name')
-            mob_phone = self.request.get('mob_phone')
+            taskqueue.add(
+                            url='/workers/add_to_iogrow_leads',
+                            queue_name='iogrow-admin',
+                            params={
+                                    'email': user.email,
+                                    'organization': org_name
+                                    }
+                        )
             model.Organization.create_instance(org_name,user)
             self.redirect('/')
         else:
@@ -591,8 +603,10 @@ class ShowShowHandler(BaseHandler, SessionEnabledHandler):
 
 class UserListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
-        self.prepare_template('templates/admin/users/list.html')
-
+        self.prepare_template('templates/admin/users/user_list.html')
+class UserNewHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/admin/users/user_new.html')
 class GroupListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/admin/groups/list.html')
@@ -604,6 +618,12 @@ class GroupShowHandler(BaseHandler, SessionEnabledHandler):
 class settingsShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/admin/settings/settings.html')
+class ImportListHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/admin/imports/import_list.html')
+class ImportNewHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/admin/imports/import_new.html')
 
 class SearchListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -688,7 +708,7 @@ class SyncContact(webapp2.RequestHandler):
         user = model.User.get_by_email(email)
 
         # sync contact
-        Contact.sync_with_google_contacts(user,id)
+        #Contact.sync_with_google_contacts(user,id)
 
 class CreateObjectFolder(webapp2.RequestHandler):
     @staticmethod
@@ -774,6 +794,43 @@ class SyncCalendarEvent(webapp2.RequestHandler):
         except:
             raise endpoints.UnauthorizedException('Invalid grant' )
 
+
+# syncronize tasks with google calendar . hadji hicham 10-07-2014.
+class SyncCalendarTask(webapp2.RequestHandler):
+    def post(self):
+        user_from_email = model.User.get_by_email(self.request.get('email'))
+        starts_at = datetime.datetime.strptime(
+                                              self.request.get('starts_at'),
+                                              "%Y-%m-%dT%H:%M:00.000000"
+                                              )
+        summary = self.request.get('summary')
+        location = self.request.get('location')
+        ends_at = datetime.datetime.strptime(
+                                              self.request.get('ends_at'),
+                                              "%Y-%m-%dT%H:%M:00.000000"
+                                              )
+        task=Task.getTaskById(self.request.get('task_id'))
+        credentials = user_from_email.google_credentials
+        http = credentials.authorize(httplib2.Http(memcache))
+        service = build('calendar', 'v3', http=http)
+            # prepare params to insert
+        params = {
+                 "start":
+                  {
+                    "date": starts_at.strftime("%Y-%m-%d")
+                  },
+                 "end":
+                  {
+                    "date": ends_at.strftime("%Y-%m-%d")
+                  },
+                  "summary": summary,
+            }
+
+        created_task = service.events().insert(calendarId='primary',body=params).execute()
+        task.task_google_id=created_task['id']
+        task.put()
+
+
 class SyncPatchCalendarEvent(webapp2.RequestHandler):
     def post(self):
         user_from_email = model.User.get_by_email(self.request.get('email'))
@@ -805,19 +862,55 @@ class SyncPatchCalendarEvent(webapp2.RequestHandler):
                   "summary": summary
                   }
 
-
+            print "-*-*-*-*-*-*here we go i'm the one -*-*-*-*-*-*-*-*"
+            print "yeah men"
+            print "*-*-*-*-*-*-*-*---------*-*-*-*-*-*-*-*-*-*-*-*-*-*-*"
             patched_event = service.events().patch(calendarId='primary',eventId=event_google_id,body=params).execute()
         except:
             raise endpoints.UnauthorizedException('Invalid grant' )
+
+# syncronize tasks with google calendar . hadji hicham 10-07-2014.
+class SyncPatchCalendarTask(webapp2.RequestHandler):
+    def post(self):
+        user_from_email = model.User.get_by_email(self.request.get('email'))
+        starts_at = datetime.datetime.strptime(
+                                              self.request.get('starts_at'),
+                                              "%Y-%m-%dT%H:%M:00.000000"
+                                              )
+        summary = self.request.get('summary')
+        location = self.request.get('location')
+        ends_at = datetime.datetime.strptime(
+                                              self.request.get('ends_at'),
+                                              "%Y-%m-%dT%H:%M:00.000000"
+                                              )
+        task_google_id= self.request.get('task_google_id')
+        try:
+            credentials = user_from_email.google_credentials
+            http = credentials.authorize(httplib2.Http(memcache))
+            service = build('calendar', 'v3', http=http)
+            # prepare params to insert
+            params = {
+                 "start":
+                  {
+                    "date": starts_at.strftime("%Y-%m-%d")
+                  },
+                 "end":
+                  {
+                    "date": ends_at.strftime("%Y-%m-%d")
+                  },
+                  "summary": summary
+                  }
+
+
+            patched_event = service.events().patch(calendarId='primary',eventId=task_google_id,body=params).execute()
+        except:
+            raise endpoints.UnauthorizedException('Invalid grant' )
+
 # sync delete events with google calendar . hadjo hicham 09-08-2014
 class SyncDeleteCalendarEvent(webapp2.RequestHandler):
     def post(self):
         user_from_email = model.User.get_by_email(self.request.get('email'))
         event_google_id= self.request.get('event_google_id')
-        print "<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
-        print "its me"
-        print event_google_id
-        print "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
         try:
             credentials = user_from_email.google_credentials
             http = credentials.authorize(httplib2.Http(memcache))
@@ -975,6 +1068,14 @@ class SyncDocumentWithTeam(webapp2.RequestHandler):
                                         'doc_id': doc_id
                                         }
                             )
+class SendEmailNotification(webapp2.RequestHandler):
+    def post(self):
+        user_email = self.request.get('user_email')
+        to = self.request.get('to')
+        subject = self.request.get('subject')
+        body = self.request.get('body')
+        sender_address = "ioGrow notifications <notifications@gcdc2013-iogrow.appspotmail.com>"
+        mail.send_mail(sender_address, to , subject, body,reply_to=user_email)
 
 
 
@@ -996,6 +1097,7 @@ routes = [
     ('/workers/syncdeleteevent',SyncDeleteCalendarEvent),
     ('/workers/createcontactsgroup',CreateContactsGroup),
     ('/workers/sync_contacts',SyncContact),
+    ('/workers/send_email_notification',SendEmailNotification),
     ('/workers/add_to_iogrow_leads',AddToIoGrowLeads),
     ('/workers/get_from_linkedin',GetFromLinkedinToIoGrow),
 
@@ -1049,9 +1151,13 @@ routes = [
      ('/views/calendar/show',CalendarShowHandler),
     # Admin Console Views
     ('/views/admin/users/list',UserListHandler),
+    ('/views/admin/users/new',UserNewHandler),
     ('/views/admin/groups/list',GroupListHandler),
     ('/views/admin/groups/show',GroupShowHandler),
     ('/views/admin/settings',settingsShowHandler),
+    ('/views/admin/imports/list',ImportListHandler),
+    ('/views/admin/imports/new',ImportNewHandler),
+
     # Applications settings
     (r'/apps/(\d+)', ChangeActiveAppHandler),
     # ioGrow Live

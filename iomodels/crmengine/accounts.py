@@ -64,6 +64,7 @@ class AccountSchema(messages.Message):
     folder = messages.StringField(21)
     logo_img_id = messages.StringField(22)
     logo_img_url = messages.StringField(23)
+    owner = messages.MessageField(iomessages.UserSchema,24)
 
 
 class AccountListRequest(messages.Message):
@@ -277,6 +278,15 @@ class Account(EndpointsModel):
                                             parent_key = account.key,
                                             request = request
                                             )
+            owner = model.User.get_by_gid(account.owner)
+            owner_schema = iomessages.UserSchema(
+                                                id = str(owner.id),
+                                                email = owner.email,
+                                                google_display_name = owner.google_display_name,
+                                                google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                                google_public_profile_url=owner.google_public_profile_url,
+                                                google_user_id = owner.google_user_id
+                                                )
             account_schema = AccountSchema(
                                       id = str( account.key.id() ),
                                       entityKey = account.key.urlsafe(),
@@ -300,7 +310,8 @@ class Account(EndpointsModel):
                                       documents = documents,
                                       infonodes = infonodes,
                                       created_at = account.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                      updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                      updated_at = account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                      owner = owner_schema
                                     )
             return  account_schema
         else:

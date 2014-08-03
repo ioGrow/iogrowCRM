@@ -132,14 +132,11 @@ class Edge(ndb.Expando):
     def list(cls,start_node,kind,limit=1000,pageToken=None,order='DESC'):
         mem_key = start_node.urlsafe()+'_'+kind
         if memcache.get(mem_key) is not None:
-            print 'from memcache'
-            print mem_key
             return memcache.get(mem_key)
         else:
             return cls.list_from_datastore(start_node,kind,limit,pageToken,order)
     @classmethod
     def list_from_datastore(cls,start_node,kind,limit=1000,pageToken=None,order='DESC'):
-        print 'list from datastore'
         curs = Cursor(urlsafe=pageToken)
         if limit:
             limit = int(limit)
@@ -204,17 +201,10 @@ class Edge(ndb.Expando):
         edges = cls.query( cls.start_node==start_node ).fetch()
         for edge in edges:
             # check if we should delete subGraph or not
-            print '$$$$$$$$$$$$$$$$$$$$$$$@@@@@@===1======$$$$$$$$$$$$$$$$$$$$$$$$$'
-            print start_node_kind
             if start_node_kind in DELETED_ON_CASCADE.keys():
-                print '$$$$$$$$$$$$$$$$$$$$$$$@@@@@@===yes in mapping======$$$$$$$$$$$$$$$$$$$$$$$$$'
-                print edge.kind
                 if edge.kind in DELETED_ON_CASCADE[start_node_kind]:
-                    print '$$$$$$$$$$$$$$$$$$$$$$$@@@@@@===recursive======$$$$$$$$$$$$$$$$$$$$$$$$$'
                     cls.delete_all_cascade(start_node = edge.end_node)
-            print '$$$$$$$$$$$$$$$$$$$$$$$@@@@@@===delete the edge ======$$$$$$$$$$$$$$$$$$$$$$$$$'
             cls.delete(edge.key)
-        print '$$$$$$$$$$$$$$$$$$$$$$$@@@@@@===delete the node ======$$$$$$$$$$$$$$$$$$$$$$$$$'
         start_node.delete()
 
 

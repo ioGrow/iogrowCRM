@@ -8,6 +8,7 @@ from iograph import Node , Edge
 from iomessages import profileSchema
 from google.appengine.ext import ndb
 from model import LinkedinProfile
+import re
 class linked_in():
     def __init__(self):
         # Browser
@@ -124,9 +125,8 @@ class linked_in():
                     tab.append(exp)
             expriences['current_exprience']=tab
             tab=[]
-            exp={}
-            past_exprience=profile_experience.find("div",{"class":"position   experience vevent vcard summary-past"})
-            print profile_experience,'###############kdkjfdkjfkjbsqdkjqbsdkbhqskdhbqfkhdfqkhdsbkhqbdskhqsdkh############################################'
+            past_exprience=soup.findAll("div",{"class":"position   experience vevent vcard summary-past"})
+            # print past_exprience,'###############kdkjfdkjfkjbsqdkjqbsdkbhqskdhbqfkhdfqkhdsbkhqbdskhqsdkh############################################'
             if past_exprience:
 
                 for pe in past_exprience:
@@ -175,9 +175,9 @@ class linked_in():
         return tab
         # print skills_soup
         # print current_exprience
-    def scrape_linkedin(self,url,name):
+    def scrape_linkedin(self, firstname , lastname):
         person={}
-        html= self.open_url(url, name)
+        html= self.open_url(firstname,lastname)
         if html:
             soup=BeautifulSoup(html)
             self.get_profile_header(soup,person)

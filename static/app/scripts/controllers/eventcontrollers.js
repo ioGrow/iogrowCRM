@@ -33,23 +33,36 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
             Auth.refreshToken();
      };
      $scope.$watch('event.starts_at', function(newValue, oldValue) {
-              $scope.patchDate($scope.event.starts_at,"Start");
+            if($scope.event.starts_at){
+                  $scope.patchDate($scope.event.starts_at,"Start");
               $scope.showStartsCalendar=false;
+            }else{
+              console.log("start not yet mentioned ");
+            }
+          
 
      });
      $scope.$watch('event.ends_at', function(newValue, oldValue) {
-              console.log('changed');
+              if($scope.event.ends_at){
               $scope.patchDate($scope.event.ends_at,"End");
               $scope.showEndsCalendar=false;
+              }else{
+                console.log("end not yet mentioned ");
+              }
+             
               
      });
      $scope.patchDate = function(newValue,when){
+
+           
       if (when=="Start"){
         var starts_at = $filter('date')(newValue,['yyyy-MM-ddTHH:mm:00.000000']);
 
         var params = {
                     'entityKey':$scope.event.entityKey,
-                    'starts_at':starts_at
+                    'starts_at':moment(starts_at).format('YYYY-MM-DDTHH:mm:00.000000'),
+                    'ends_at':moment($scope.event.ends_at).format('YYYY-MM-DDTHH:mm:00.000000'),
+                    'title':$scope.event.title
         };
       }
       if (when=="End"){
@@ -57,11 +70,15 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
 
         var params = {
                     'entityKey':$scope.event.entityKey,
-                    'ends_at':ends_at
+                    'ends_at':moment(ends_at).format('YYYY-MM-DDTHH:mm:00.000000'),
+                    'starts_at':moment($scope.event.starts_at).format('YYYY-MM-DDTHH:mm:00.000000'),
+                    'title':$scope.event.title
         };
       }
         if ((!$scope.isLoading) && (params.entityKey != undefined )){
-            Event.patch($scope,params);
+         
+      
+           Event.patch($scope,params);
         }
      }
       $scope.listNextPageItemscomment= function(){
@@ -224,8 +241,8 @@ $scope.inlineUpdateEvent= function(event,value){
                                  'title':value,                                 
                     };
        
-       
-        Event.patch($scope,params);
+      
+         Event.patch($scope,params);
 }
 // HKA 23.06.2014 update description
   $scope.updateEvent = function(description){

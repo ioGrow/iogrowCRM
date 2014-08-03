@@ -11,12 +11,13 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
+     $scope.isMoreItemLoading = false;
      $scope.leadpagination = {};
      $scope.currentPage = 01;
      $scope.pages = [];
      $scope.selectedOption='all';
      $scope.stage_selected={};
-
+     $scope.showTagsFilter=false;
       $scope.leads = [];
       $scope.lead = {};
       $scope.selectedLead={};
@@ -27,7 +28,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.selected_tags = [];
       $scope.draggedTag=null;
       $scope.tag = {};
-
+      $scope.currentLead=null;
       $scope.showNewTag=false;
       $scope.showUntag=false;
      $scope.edgekeytoDelete=undefined;
@@ -122,12 +123,76 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           $scope.currentPage = $scope.currentPage - 1 ;
           Lead.list($scope,params);
      }
+     $scope.showAssigneeTags=function(lead){
+        $('#assigneeTagsToTask').modal('show');
+        $scope.currentLead=lead;
+     };
+     $scope.addTagsTothis=function(){
+      var tags=[];
+      var items = [];
+      tags=$('#select2_sample2').select2("val");
+          angular.forEach(tags, function(tag){
+            var edge = {
+              'start_node': $scope.currentLead.entityKey,
+              'end_node': tag,
+              'kind':'tags',
+              'inverse_edge': 'tagged_on'
+            };
+            items.push(edge);
+          });
+      params = {
+        'items': items
+      }
+      console.log(params);
+      Edge.insert($scope,params);
+      $scope.currentLead=null;
+      $('#assigneeTagsToTask').modal('hide');
+     };
 
       // new Lead
       $scope.showModal = function(){
         $('#addLeadModal').modal('show');
 
       };
+
+
+        $scope.showNewTagForm=function(){
+          $scope.showNewTag=true;
+          $( window ).trigger( 'resize' );
+        }
+        $scope.hideNewTagForm=function(){
+          $scope.showNewTag=false;
+          $( window ).trigger( 'resize' );
+        }
+        $scope.hideTagFilterCard=function(){
+          $scope.showTagsFilter=false;
+          $( window ).trigger( 'resize' );
+        }
+        $scope.showTagFilterCard=function(){
+          $scope.showTagsFilter=true;
+          $( window ).trigger( 'resize' );
+        }
+
+
+
+// hadji hicham 22-07-2014 . inlinepatch for labels .
+  $scope.inlinePatch=function(kind,edge,name,tag,value){
+
+        if(kind=="tag"){
+
+        params={'id':tag.id,
+                'entityKey':tag.entityKey,
+                'about_kind':'Lead',
+                'name':value
+                  };
+
+
+           Tag.patch($scope,params);
+      };
+
+
+
+             }
 
 
 
@@ -229,7 +294,7 @@ $scope.edgeInserted = function () {
      };
 $scope.listleads = function(){
   var params = { 'order': $scope.order,
-                        'limit':6}
+                        'limit':20}
           Lead.list($scope,params);
 };
 
@@ -273,13 +338,13 @@ $scope.selectTag= function(tag,index,$event){
          var text=element.find(".with-color");
          if($scope.selected_tags.indexOf(tag) == -1){
             $scope.selected_tags.push(tag);
-            element.css('background-color', tag.color+'!important');
-            text.css('color',$scope.idealTextColor(tag.color));
+            /*element.css('background-color', tag.color+'!important');
+            text.css('color',$scope.idealTextColor(tag.color));*/
 
          }else{
-            element.css('background-color','#ffffff !important');
+            /*element.css('background-color','#ffffff !important');*/
             $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
-             text.css('color','#000000');
+             /*text.css('color','#000000');*/
          }
          ;
          $scope.filterByTags($scope.selected_tags);
@@ -527,9 +592,10 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                           'profile_img_url':null
                         };
 
-      // What to do after authentication
-      console.log("check navigator infos");
-      console.log(navigator.appVersion);
+      $scope.fromNow = function(fromDate){
+          return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
+      }
+      
       $scope.runTheProcess = function(){
             var params = {
                           'id':$route.current.params.leadId,
@@ -551,6 +617,8 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                           }
                       };
           Lead.get($scope,params);
+          console.log("==========================================")
+          console.log($scope.linkedProfile)
 
           User.list($scope,{});
           Leadstatus.list($scope,{});
@@ -633,7 +701,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                       'access':$scope.lead.access}
          Lead.patch($scope,params);
              // who is the parent of this event .hadji hicham 21-07-2014.
-                  
+
                 params["parent"]="lead";
                 Event.permission($scope,params);
                 Task.permission($scope,params);
@@ -738,9 +806,9 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      }
    }
     $scope.deleteTask = function(task){
-      
+
        var params = {'entityKey':task.entityKey};
-       
+
        Task.delete($scope, params);
 
      };
@@ -748,7 +816,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      // rederection after delete task . hadji hicham 08--07-2014
       $scope.taskDeleted = function(resp){
 
-     }; 
+     };
      $scope.hilightTask = function(){
         console.log('Should higll');
         $('#task_0').effect("highlight","slow");
@@ -1343,6 +1411,7 @@ $scope.deletelead = function(){
       var paramsTag = {'about_kind':'Lead'}
       Tag.list($scope,paramsTag);
      };
+  // lendiri arezki 3-8-14
   $scope.getLinkedinProfile=function(){
     
     Lead.get_linkedin($scope,{'entityKey':$scope.lead.entityKey});
@@ -1350,6 +1419,16 @@ $scope.deletelead = function(){
   $scope.convertToJson=function(string){
     return  JSON.parse(string);
   }
+  $scope.checkIfEmpty=function(obj){
+    console.log("=====================================")
+  for(var prop in obj) {
+        if(obj.hasOwnProperty(prop))
+            return false;
+    }
+
+    return true;
+  }
+
    // Google+ Authentication
    Auth.init($scope);
    $(window).scroll(function() {
@@ -1727,15 +1806,14 @@ $scope.selectTag= function(tag,index,$event){
          var text=element.find(".with-color");
          if($scope.selected_tags.indexOf(tag) == -1){
             $scope.selected_tags.push(tag);
-            element.css('background-color', tag.color+'!important');
-            text.css('color',$scope.idealTextColor(tag.color));
+            /*element.css('background-color', tag.color+'!important');
+            text.css('color',$scope.idealTextColor(tag.color));*/
 
          }else{
-            element.css('background-color','#ffffff !important');
+           /* element.css('background-color','#ffffff !important');*/
             $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
-             text.css('color','#000000');
-         }
-         ;
+            /* text.css('color','#000000');*/
+         };
          $scope.filterByTags($scope.selected_tags);
 
       }

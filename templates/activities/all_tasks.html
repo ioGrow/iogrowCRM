@@ -134,7 +134,7 @@
                                   <li ng-hide="tasks" class="task-actions taskCard list-group-item task-actions">
                                        <div class="row">
                                        <div class="col-md-12">
-                                             <p class="taskNoresult">{{ _('No results found') }}</p>
+                                             <p class="taskNoresult">{{ _('No tasks found') }}</p>
                                         </div>
                                       </div>
                                     </li>
@@ -192,7 +192,7 @@
                                           <a href="/#/tasks/show/<%= task.id %>"> <%= task.title %></a>
                                           <%=task.due%>
                                        </h4>
-                                      
+
                                        <div ng-show="edited_task==task" class="col-md-6 col-xs-7">
                                        <form ng-submit="done_edit_task(task)">
                                           <input ng-type="text" class="form-control inlineEditTask" ng-blur="done_edit_task(task)" ng-model="task.title">
@@ -215,7 +215,7 @@
                                           <span ng-show="task.about">{{ _('related to') }}<a href="<%= getUrl(task.about.kind,task.about.id); %>"> <%= task.about.name %></a> </span>
                                           <span ng-show="deletetask">
                                              <!-- to delete task -->
-                                                <a  ng-click="deleteThisTask(task.entityKey)" class="btn-link addAnotherPhone"><i class="icon-trash"></i>  
+                                                <a  ng-click="deleteThisTask(task.entityKey)" class="btn-link addAnotherPhone"><i class="icon-trash"></i>
                                              </a>
                                            <!-- end  -->
                                           </span>
@@ -595,7 +595,11 @@
                 <ul class="list-group tags-list">
                   <li  ng-repeat="tag_item in tags" class="list-group-item tags-list-item">
                   <div class="row">
-                    <span  draggable ng-drag="dragTag(tag_item)" style="background-color:<%=tag_item.color%>;color:idealTextColor(<%=tag_item.color%>);" class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"><%= tag_item.name %> </span>
+                    <span editable-text="tag_item.name" draggable ng-drag="dragTag(tag_item)" style="background-color:<%=tag_item.color%>;color:idealTextColor(<%=tag_item.color%>);" class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"
+                    ng-model='tag_item.name'  onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)" >
+                    <%= tag_item.name %>
+
+                     </span>
                     <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
                    <!-- <span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
                       <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>
@@ -611,7 +615,7 @@
                        <a ng-click="" class="btn-link addAnotherPhone">
                         <i class="fa fa-tags"></i>  Add a new tag</a>
                   </li>
-                  
+
                 </ul>
 
                 <form class="well newTagForm" role="form" ng-show="showNewTag">
@@ -760,11 +764,15 @@
                     <div class="row">
                     <ul class="list-group tags-list">
                       <li  ng-repeat="tag_item in tags" class="list-group-item tags-list-item">
-                        <span  draggable ng-drag="dragTag(tag_item)" style="background-color:<%=tag_item.color%>;color:idealTextColor(<%=tag_item.color%>);" class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"><%= tag_item.name %> </span>
+                        <span  editable-text="tag_item.name" draggable ng-drag="dragTag(tag_item)" style="background-color:<%=tag_item.color%>;color:idealTextColor(<%=tag_item.color%>);" class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"
+                         ng-model='tag_item.name'  onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
+                        <%= tag_item.name %> 
+                        </span>
                         <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
                        <!-- <span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
                           <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>
                         </span>-->
+
 
                         <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
                           <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
@@ -775,9 +783,9 @@
                            <a ng-click="" class="btn-link addAnotherPhone">
                             <i class="fa fa-tags"></i>  Add a new tag</a>
                       </li>
-                      
+
                     </ul>
-                    </div>  
+                    </div>
                     <form class="well newTagForm" role="form" ng-show="showNewTag">
                      <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
                     <div class="row">
@@ -824,7 +832,7 @@
                     <!--h3 class="pagination pull-right" ng-show="isLoading">{{ _('Loading') }}...</h3-->
               </div>
             <!-- END PAGE CONTENT-->
-          
+
       <!-- END PAGE CONTAINER-->
 </div>
 
