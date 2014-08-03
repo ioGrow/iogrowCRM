@@ -25,7 +25,7 @@
 <div class="loader-container row" ng-show="isLoading">
       <div class="loader-dialog col-md-4 col-md-offset-4 ">
         <div class="loader-content">
-          Loading...
+         {{_('Loading...')}}
         </div>
       </div>
       
@@ -36,17 +36,17 @@
       <div id="portlet-config" class="modal hide">
         <div class="modal-header">
           <button data-dismiss="modal" class="close" type="button"></button>
-          <h3>portlet Settings</h3>
+          <h3>{{_('portlet Settings')}}</h3>
         </div>
         <div class="modal-body">
-          <p>Here will be a configuration form</p>
+          <p>{{_('Here will be a configuration form')}}</p>
         </div>
       </div>
       <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
       <!-- BEGIN PAGE CONTAINER-->
       <div class=""ng-show="immediateFailed">
          <div class="col-md-12">  
-          <h1>Sign-in Button;</h1>
+          <h1>{{_('Sign-in Button;')}}</h1>
               <span id="signin">
                   <span id="myGsignin"></span>
               </span>
@@ -121,7 +121,7 @@
                     </div>
                   </div>
                   <a class="more" href="<%=result.url%>">
-                  View more <i class="m-icon-swapright m-icon-white"></i>
+                  {{_('View more')}} <i class="m-icon-swapright m-icon-white"></i>
                   </a>                 
                 </div>
               </div>

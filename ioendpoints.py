@@ -367,7 +367,7 @@ class CalendarFeedsResults(messages.Message):
       items=messages.MessageField(CalendarFeedsResult,1,repeated=True)
 
 
-# hadji hicham - 21-07-2014 . permission request 
+# hadji hicham - 21-07-2014 . permission request
 class EventPermissionRequest(messages.Message):
       id=messages.StringField(1)
       access= messages.StringField(2)
@@ -388,7 +388,7 @@ class ReportingResponseSchema(messages.Message):
 
 class ReportingListResponse(messages.Message):
     items = messages.MessageField(ReportingResponseSchema, 1, repeated=True)
-   
+
 
 
 @endpoints.api(
@@ -1127,7 +1127,7 @@ class CrmEngineApi(remote.Service):
                                                     phones=phones
                                                     )
                 account_schema = Account.insert(user,account_request)
-                
+
             #Store Persone
             if account_schema!="":
                 key=account_schema.entityKey
@@ -1160,7 +1160,7 @@ class CrmEngineApi(remote.Service):
                           end_node = ndb.Key(urlsafe=contact_schema.entityKey),
                           kind = 'contacts',
                           inverse_edge = 'parents')
-            
+
             #########
             #store tasks of person
             tasks=EndpointsHelper.highrise_import_tasks_of_person(person.id)
@@ -1217,7 +1217,7 @@ class CrmEngineApi(remote.Service):
             for deal in deals:
                 company_details=EndpointsHelper.highrise_import_company_details(deal.party_id)
                 key=Account.get_key_by_name(user,company_details.name)
-                if key:    
+                if key:
                     opportunity_request=OpportunityInsertRequest(
                                                                 name=deal.name,
                                                                 description=deal.background,
@@ -1237,7 +1237,7 @@ class CrmEngineApi(remote.Service):
                                             indexed_edge = (ndb.Key(urlsafe=contact_schema.entityKey)).id()
                                             )
 
-        
+
 
         return message_types.VoidMessage()
 
@@ -1564,18 +1564,18 @@ class CrmEngineApi(remote.Service):
                         name='emails.send')
     def send_email(self, request):
         user = EndpointsHelper.require_iogrow_user()
-        credentials = user.google_credentials
-        http = credentials.authorize(httplib2.Http(memcache))
-        service = build('gmail', 'v1', http=http)
-        message = EndpointsHelper.create_message(
-                                                  user.email,
-                                                  request.to,
-                                                  request.cc,
-                                                  request.bcc,
-                                                  request.subject,
-                                                  request.body
-                                                )
-        EndpointsHelper.send_message(service,'me',message)
+        taskqueue.add(
+                        url='/workers/send_gmail_message',
+                        queue_name='gmail-queue',
+                        params={
+                                'email': user.email,
+                                'to': request.to,
+                                'cc': request.cc,
+                                'bcc': request.bcc,
+                                'subject': request.subject,
+                                'body': request.body
+                                }
+                    )
         parent_key = ndb.Key(urlsafe=request.about)
         note_author = Userinfo()
         note_author.display_name = user.google_display_name
@@ -2449,9 +2449,6 @@ class CrmEngineApi(remote.Service):
                 setattr(tag,prop,new_value)
                 patched = True
             tag.put()
-        print "*****************************"
-        print tag
-        print  "****************************"
         return message_types.VoidMessage()
 
     # tags.delete api
@@ -2629,7 +2626,7 @@ class CrmEngineApi(remote.Service):
                 exec('patched_model.' + p + '= my_model.' + p)
         patched_model.put()
         return patched_model
-    
+
     # this api to fetch tasks and events to feed the calendar . hadji hicham.14-07-2014
     @endpoints.method(CalendarFeedsRequest,CalendarFeedsResults,
         path='calendar/feeds',http_method='POST',name='calendar.feeds')
@@ -2711,30 +2708,33 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         Organization.upgrade_to_business_version(user_from_email.organization)
         return message_types.VoidMessage()# users.upgrade api v2
-     
+
 
     # lead reporting api
     @endpoints.method(ReportingRequest, ReportingListResponse,
                       path='reporting/leads', http_method='POST',
                       name='reporting.leads')
     def lead_reporting(self, request):
-        list_of_reports = []     
+        list_of_reports = []
         gid=request.user_google_id
         gname=request.google_display_name
+        created_at=''
+        item_schema=ReportingResponseSchema()
         # if the user input google_user_id
         if gid!=None and gid!='':
             list_of_reports=[]
             leads=Lead.query(Lead.owner==gid).fetch()
             users=User.query(User.google_user_id==gid).fetch()
-            gname=users[0].google_display_name
-            gmail=users[0].email
-            created_at=users[0].created_at
-            list_of_reports.append((gid,gname,len(leads),created_at))
+            if users!=[]:
+                gname=users[0].google_display_name
+                gmail=users[0].email
+                created_at=users[0].created_at
+                list_of_reports.append((gid,gname,len(leads),created_at))
+                item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2],created_at=list_of_reports[0][3].isoformat())
             reporting = []
-            print list_of_reports
-            item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2],created_at=list_of_reports[0][3].isoformat())
             reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
+
 
         #if the user input name of user
         elif gname!=None and gname!='':
@@ -2761,7 +2761,7 @@ class CrmEngineApi(remote.Service):
             users=User.query().fetch()
             print users
             for user in users:
-                gid=user.google_user_id               
+                gid=user.google_user_id
                 gname=user.google_display_name
                 leads=Lead.query(Lead.owner==gid).fetch()
                 created_at=user.created_at
@@ -2773,28 +2773,31 @@ class CrmEngineApi(remote.Service):
                 item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],count=item[2],created_at=item[3].isoformat())
                 reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
-    
-    
-     # lead contact api
+            
+    # lead contact api
     @endpoints.method(ReportingRequest, ReportingListResponse,
                       path='reporting/contacts', http_method='POST',
                       name='reporting.contacts')
     def contact_reporting(self, request):
-        list_of_reports = []    
+        list_of_reports = []
         gid=request.user_google_id
         gname=request.google_display_name
+        created_at=''
+        item_schema=ReportingResponseSchema()
         # if the user input google_user_id
         if gid!=None and gid!='':
             list_of_reports=[]
             contacts=Contact.query(Lead.owner==gid).fetch()
             users=User.query(User.google_user_id==gid).fetch()
-            gname=users[0].google_display_name
-            created_at=users[0].created_at
-            list_of_reports.append((gid,gname,len(contacts),created_at))
+            if users!=[]:
+                gname=users[0].google_display_name
+                created_at=users[0].created_at
+                list_of_reports.append((gid,gname,len(contacts),created_at))
+                item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2],created_at=list_of_reports[0][3].isoformat())
             reporting = []
-            item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2],created_at=list_of_reports[0][3].isoformat())
             reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
+        
         #if the user input name of user
         elif gname!=None and gname!='':
             list_of_reports=[]
@@ -2814,7 +2817,7 @@ class CrmEngineApi(remote.Service):
                 reporting.append(item_schema)
             return ReportingListResponse(items=reporting)    
         
-        # if the user input google_user_id 
+        # if the user input google_user_id
         else:
             users=User.query().fetch()
             list_of_reports=[]
@@ -2823,36 +2826,37 @@ class CrmEngineApi(remote.Service):
                 gname=user.google_display_name
                 created_at=user.created_at
                 contacts=Contact.query(Contact.owner==gid).fetch()
-                list_of_reports.append((gid,gname,len(contacts),created_at))   
-    
+                list_of_reports.append((gid,gname,len(contacts),created_at))      
             list_of_reports.sort(key=itemgetter(2),reverse=True)
             reporting = []
             for item in list_of_reports:
                 item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],count=item[2],created_at=item[3].isoformat())
                 reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
-    
+
 
      # account reporting api
     @endpoints.method(ReportingRequest, ReportingListResponse,
-                      path='reporting/Accounts', http_method='POST',
+                      path='reporting/accounts', http_method='POST',
                       name='reporting.accounts')
     def account_reporting(self, request):
-        list_of_reports = []     
+        list_of_reports = []
         gid=request.user_google_id
         gname=request.google_display_name
+        created_at=''
+        item_schema=ReportingResponseSchema()
         # if the user input google_user_id
         if gid!=None and gid!='':
             list_of_reports=[]
             accounts=Account.query(Account.owner==gid).fetch()
             users=User.query(User.google_user_id==gid).fetch()
-            gname=users[0].google_display_name
-            created_at=users[0].created_at
-            list_of_reports.append((gid,gname,len(accounts),created_at))
+            if users!=[]:
+                gname=users[0].google_display_name
+                created_at=users[0].created_at
+                list_of_reports.append((gid,gname,len(accounts),created_at))
+                item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2],created_at=list_of_reports[0][3].isoformat())
+            
             reporting = []
-            print gname 
-            print list_of_reports
-            item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2],created_at=list_of_reports[0][3].isoformat())
             reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
 
@@ -2891,27 +2895,28 @@ class CrmEngineApi(remote.Service):
                 item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],count=item[2],created_at=item[3].isoformat())
                 reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
-    
+
      # task reporting api
     @endpoints.method(ReportingRequest,ReportingListResponse,
                        path='reporting/tasks',http_method='POST',
-                       name='reporting.tasks' )          
+                       name='reporting.tasks' )
     def task_reporting(self,request):
-        list_of_reports = []     
+        list_of_reports = []
         gid=request.user_google_id
         gname=request.google_display_name
+        created_at=''
+        item_schema=ReportingResponseSchema()
         # if the user input google_user_id
         if gid!=None and gid!='':
             list_of_reports=[]
             tasks=Task.query(Task.owner==gid).fetch()
             users=User.query(User.google_user_id==gid).fetch()
-            gname=users[0].google_display_name
-            created_at=users[0].created_at
-            list_of_reports.append((gid,gname,len(tasks),created_at))
+            if users!=[]:
+                gname=users[0].google_display_name
+                created_at=users[0].created_at
+                list_of_reports.append((gid,gname,len(tasks),created_at))
+                item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2],created_at=list_of_reports[0][3].isoformat())
             reporting = []
-            print gname 
-            print list_of_reports
-            item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2],created_at=list_of_reports[0][3].isoformat())
             reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
 
@@ -2928,7 +2933,6 @@ class CrmEngineApi(remote.Service):
                 list_of_reports.append((gid,gname,gmail,len(tasks),created_at))
             
             reporting = []
-            print list_of_reports
             for item in list_of_reports:
                 item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count=item[3],created_at=item[4].isoformat())
                 reporting.append(item_schema)
@@ -2950,6 +2954,7 @@ class CrmEngineApi(remote.Service):
             for item in list_of_reports:
                 item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],count=item[2],created_at=item[3].isoformat())
                 reporting.append(item_schema)
+
             return ReportingListResponse(items=reporting) 
 
     # event permission
@@ -2971,7 +2976,7 @@ class CrmEngineApi(remote.Service):
             edges=Edge.query().filter(Edge.kind=="events",Edge.start_node==opportunity_key)
          elif request.parent=="lead":
             lead_key=ndb.Key(Lead, int(request.id))
-            edges=Edge.query().filter(Edge.kind=="events",Edge.start_node==lead_key)        
+            edges=Edge.query().filter(Edge.kind=="events",Edge.start_node==lead_key)
          if edges:
             for edge in edges :
                 event=edge.end_node.get()
@@ -2998,7 +3003,7 @@ class CrmEngineApi(remote.Service):
             edges=Edge.query().filter(Edge.kind=="tasks",Edge.start_node==opportunity_key)
          elif request.parent=="lead":
             lead_key=ndb.Key(Lead, int(request.id))
-            edges=Edge.query().filter(Edge.kind=="tasks",Edge.start_node==lead_key)        
+            edges=Edge.query().filter(Edge.kind=="tasks",Edge.start_node==lead_key)
          if edges:
             for edge in edges :
                 task=edge.end_node.get()

@@ -1,7 +1,7 @@
 <div class="row subHeader">
   <div class="currentApp">
     <h2 class="page-title">
-      {{active_app.label}}
+      {{_(active_app.label)}}
     </h2>
   </div>
   <div class=" subHeaderContent">
@@ -23,7 +23,7 @@
   <div class="loader-container row" ng-show="isLoading">
     <div class="loader-dialog col-md-4 col-md-offset-4 ">
       <div class="loader-content">
-        Loading...
+        {{_('Loading...')}}'
       </div>
     </div>
   </div>
@@ -43,12 +43,12 @@
         <span class="page-meta pull-right">
           <i class="icon-pencil">
             <a ng-click="editNote()" class="btn-link addAnotherPhone" data-toggle="modal">
-              Edit
+              {{_('Edit')}}
             </a>
           </i>
            |
           <i class="icon-trash">
-            <a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  Delete
+            <a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  {{_('Delete')}}
             </a>
           </i>
         </span>
@@ -57,7 +57,7 @@
             <%= note.title%>
           </a>
         </h2>
-        <p>Posted by <%=note.created_by.display_name%></p>
+        <p>{{_('Posted by')}} <%=note.created_by.display_name%></p>
 
         <div class="row margin-bottom-10">
           <div class="col-md-2">
@@ -71,11 +71,9 @@
           <div class="col-md-10">
             <div class="row">
               <div class="col-md-12">
-<<<<<<< HEAD
-                <span class="topic-content" ng-bind-html-unsafe="note.content">                  
-=======
+
                 <span class="topic-content" ng-bind-html-unsafe="note.content">
->>>>>>> 91d765d675a86b709693972938c7ef9eb4e128ce
+
                 </span>
                 <ul class="chats">
                   <li class="in" ng-repeat="comment in comments" id="comment_<%=$index%>">
@@ -130,7 +128,7 @@
         <div class="portlet showCard">
           <div class="portlet-title line">
             <div class="caption">
-              Who's involved
+              {{_('Who\'s involved')}}
             </div>
           </div>
           <div class="portlet-body" id="chats">
@@ -140,7 +138,7 @@
                 <ul id="tasks" class="list-unstyled">
 
                   <li>
-                    <a ng-click="showAddContributor=true;" class="btn-link addAnotherPhone" data-toggle="modal">Invite people to participate in this discussion</a>
+                    <a ng-click="showAddContributor=true;" class="btn-link addAnotherPhone" data-toggle="modal">{{_('Invite people to participate in this discussion')}}</a>
                   </li>
                 </ul>
                 <div class="add-contributor" ng-show="showAddContributor">
@@ -251,7 +249,7 @@
   <div class="modal-content">
       <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 id="myModalLabel" class="modal-title">Delete Note</h3>
+              <h3 id="myModalLabel" class="modal-title">{{_('Delete Note')}}</h3>
             </div>
             <div class="modal-body">
                <form id="seletesho" name="deletesho" class="form-horizontal">

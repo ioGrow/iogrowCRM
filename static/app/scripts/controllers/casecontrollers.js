@@ -587,7 +587,7 @@ $scope.addTags=function(){
    // Google+ Authentication
      Auth.init($scope);
      $(window).scroll(function() {
-          if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
+          if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
               $scope.listMoreItems();
           }
       });
@@ -852,7 +852,13 @@ if ($scope.newTaskform==false) {
             $scope.newTaskform=false;
       }
      }
-     }
+     };
+
+    //HKA 27.07.2014 Add button cancel on Task form
+       $scope.closeTaskForm=function(newTask){
+               $scope.newTask={};
+                $scope.newTaskform=false;
+    };
 
      $scope.hilightTask = function(){
 

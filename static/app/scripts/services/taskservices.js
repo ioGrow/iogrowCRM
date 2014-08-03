@@ -197,7 +197,6 @@ topicservices.factory('Task', function($http) {
 Task.delete=function($scope,params){
        $scope.isLoading= true ;
        gapi.client. crmengine.tasks.delete(params).execute(function(resp) {
-       $scope.taskDeleted();
        $scope.listTasks();
        $scope.isLoading=true;
        $scope.$apply();
@@ -349,7 +348,7 @@ topicservices.factory('Tag', function($http) {
               console.log('task service');
 
       gapi.client.crmengine.tags.patch(params).execute(function(resp) {
-      
+
           if(!resp.code){
             //$scope.tag = resp;
             $scope.isLoading = false;
@@ -368,7 +367,7 @@ topicservices.factory('Tag', function($http) {
              };
          }
       });
- 
+
 
   };
   Tag.delete = function($scope,params){

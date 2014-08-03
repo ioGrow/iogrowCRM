@@ -93,10 +93,14 @@ leadservices.factory('Lead', function($http) {
 
                   if (resp.tasks){
                      $scope.tasks = resp.tasks.items;
+                  }else{
+                    $scope.tasks = [];
                   }
 
                   if (resp.events){
                      $scope.events = resp.events.items;
+                  }else{
+                    $scope.events = [];  
                   }
                 // $scope.listTopics(resp);
                 // $scope.listTasks();

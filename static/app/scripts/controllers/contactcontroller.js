@@ -498,7 +498,7 @@ $scope.addTags=function(){
 		 // Google+ Authentication
 		 Auth.init($scope);
 		 $(window).scroll(function() {
-					if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
+					if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
 							$scope.listMoreItems();
 					}
 			});
@@ -973,19 +973,28 @@ $scope.listTags=function(){
                 $scope.newTaskform=false;
           }
          }
-     }
+     };
+  //HKA 27.07.2014 Add button cancel on Task form
+       $scope.closeTaskForm=function(newTask){
+               $scope.newTask={};
+                $scope.newTaskform=false;
+    };
     $scope.deleteTask = function(task){
 
        var params = {'entityKey':task.entityKey};
 
        Task.delete($scope, params);
 
+
      };
+
+
 
      // rederection after delete task . hadji hicham 08--07-2014
       $scope.taskDeleted = function(resp){
 
-     };
+    };
+
 		 $scope.hilightTask = function(){
 				console.log('Should higll');
 				$('#task_0').effect("highlight","slow");

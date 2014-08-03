@@ -29,7 +29,7 @@
   <div class="loader-container row" ng-show="isLoading">
     <div class="loader-dialog col-md-4 col-md-offset-4 ">
       <div class="loader-content">
-        Loading...
+        {{ _('Loading...')}}
       </div>
     </div>
   </div>
@@ -57,13 +57,13 @@
               <div class="tabbable tabbable-custom">
                 <ul class="nav nav-tabs">
                   <li class="ng-tab" ng-class="{active: selectedTab == 1}">
-                    <a ng-click="waterfall(); selectedTab = 1;">Opportunity Stages</a>
+                    <a ng-click="waterfall(); selectedTab = 1;">{{ _('Opportunity Stages')}}</a>
                   </li>
                   <li class="ng-tab" ng-class="{active: selectedTab == 2}">
-                    <a ng-click="waterfall(); selectedTab = 2;">Case Status</a>
+                    <a ng-click="waterfall(); selectedTab = 2;">{{ _('Case Status')}}</a>
                   </li>
                   <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==3}">
-                    <a ng-click="waterfall(); selectedTab = 3;">Lead Status</a>
+                    <a ng-click="waterfall(); selectedTab = 3;">{{ _('Lead Status')}}</a>
                   </li>
                 </ul>
               </div>
