@@ -93,10 +93,14 @@ leadservices.factory('Lead', function($http) {
 
                   if (resp.tasks){
                      $scope.tasks = resp.tasks.items;
+                  }else{
+                    $scope.tasks = [];
                   }
 
                   if (resp.events){
                      $scope.events = resp.events.items;
+                  }else{
+                    $scope.events = [];  
                   }
                 // $scope.listTopics(resp);
                 // $scope.listTasks();
@@ -223,7 +227,8 @@ leadservices.factory('Lead', function($http) {
 
   };
     Lead.listMore = function($scope,params){
-     $scope.isLoading = true;
+     $scope.isMoreItemLoading = true;
+     $( window ).trigger( "resize" );
      $scope.$apply();
       gapi.client.crmengine.leads.listv2(params).execute(function(resp) {
               if(!resp.code){
@@ -246,14 +251,15 @@ leadservices.factory('Lead', function($http) {
                   $scope.leadpagination.next = false;
                  }
                  // Call the method $apply to make the update on the scope
-                 $scope.isLoading = false;
+                 $scope.isMoreItemLoading = false;
                  $scope.$apply();
+
 
 
               }else {
                 if(resp.code==401){
                 $scope.refreshToken();
-                $scope.isLoading = false;
+                $scope.isMoreItemLoading = false;
                 $scope.$apply();
                };
               }

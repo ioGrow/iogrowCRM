@@ -2,13 +2,13 @@
     <div class="currentApp">
        <div class="btn-group">
            <a class="filterItem" href="#" data-toggle="dropdown" >
-            {{active_app.label}}
+            {{_(active_app.label)}}
             <i class="icon-angle-down"></i>
            </a>
            <ul class="dropdown-menu">
             {%for application in apps %}
 
-                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{application.label}}</a></li>
+                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
 
             {%endfor%}
            </ul>
@@ -67,7 +67,7 @@
                 <form ng-submit="addNewTask()" class="newTaskForm">
                     <div class="form-group">
                       <div class="input-icon right">
-                        <input taggable taggabledata="taggableOptions" ng-model="newTask.title" id="new_task_text" class="form-control"  placeholder="Add new task ..." autofocus/>
+                        <input taggable taggabledata="taggableOptions" ng-model="newTask.title" id="new_task_text" class="form-control"  placeholder="{{ _('Add new task ...')}}" autofocus/>
                       </div>
                     </div>
                 </form>
@@ -76,10 +76,10 @@
                     <div class=" event-schedule">
                     <p class="dueDatep"ng-hide="showStartsCalendar" ng-click="showStartsCalendar=true"><i class="fa fa-calendar"></i>
                     <%=newTask.due | date:'yy-MM-dd HH:mm'%>
-                    <span ng-hide="newTask.due" class="placeHolderSmScreen">Due date</span></p>
+                    <span ng-hide="newTask.due" class="placeHolderSmScreen">{{ _('Due date')}}</span></p>
                     <div ng-show="showStartsCalendar" class="input-icon">
                          <i class="fa fa-calendar"></i>
-                         <input cusdatetimepicker data-model="newTask.due" type="text" class="form-control dueDateInput" placeholder="Due date" value="" id="leadEventStartsAt">
+                         <input cusdatetimepicker data-model="newTask.due" type="text" class="form-control dueDateInput" placeholder="{{ _('Due date')}}" value="" id="leadEventStartsAt">
                    </div>
                   </div>
                   <div class="btn-group">
@@ -88,10 +88,10 @@
                     </button>
                     <ul class="dropdown-menu" role="menu">
                       <li>
-                        <p class="indication-item">Use <span>#</span> to add labels</p>
+                        <p class="indication-item">{{ _('Use')}} <span>#</span> {{ _('to add labels')}}</p>
                       </li>
                       <li>
-                        <p class="indication-item">Use<span>@</span> to assign the task</p>
+                        <p class="indication-item">{{ _('Use')}}<span>@</span> {{ _('to assign the task')}}</p>
                       </li>
                     </ul>
                   </div>
@@ -99,7 +99,7 @@
                 </div>
               </div>
               <div class="col-md-1">
-                <button type="button" ng-click="addNewTask()" class="btn red  pull-right btn-inline">Add</button>
+                <button type="button" ng-click="addNewTask()" class="btn red  pull-right btn-inline">{{ _('Add')}}</button>
                 </div>
           </div>
           <div class="row">
@@ -134,7 +134,7 @@
                                   <li ng-hide="tasks" class="task-actions taskCard list-group-item task-actions">
                                        <div class="row">
                                        <div class="col-md-12">
-                                             <p class="taskNoresult">{{ _('No results found') }}</p>
+                                             <p class="taskNoresult">{{ _('No tasks found') }}</p>
                                         </div>
                                       </div>
                                     </li>
@@ -150,31 +150,31 @@
                                         <button  class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-lock"></i>
                                           <span class="btn-text">
-                                            Close
+                                            {{ _('Close')}}
                                           </span>
                                         </button>
                                          <button  class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-unlock"></i>
                                         <span class="btn-text">
-                                        Reopen
+                                        {{ _('Reopen')}}
                                         </span>
                                         </button>
                                         <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-tags"></i>
                                          <span class="btn-text">
-                                            Tags
+                                            {{ _('Tags')}}
                                          </span>
                                         </button>
                                         <button ng-click="assigneeModal()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
                                           <i class="fa fa-mail-forward"></i>
                                            <span class="btn-text">
-                                            Assignee
+                                            {{ _('Assignee')}}
                                            </span>
                                         </button>
                                         <button ng-click="editbeforedelete()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
                                           <i class="icon-trash"></i>
                                            <span class="btn-text">
-                                            Delete
+                                            {{ _('Delete')}}
                                            </span>
                                         </button>
                                         </div>
@@ -192,7 +192,7 @@
                                           <a href="/#/tasks/show/<%= task.id %>"> <%= task.title %></a>
                                           <%=task.due%>
                                        </h4>
-                                      
+
                                        <div ng-show="edited_task==task" class="col-md-6 col-xs-7">
                                        <form ng-submit="done_edit_task(task)">
                                           <input ng-type="text" class="form-control inlineEditTask" ng-blur="done_edit_task(task)" ng-model="task.title">
@@ -211,11 +211,11 @@
                                     </div>
                                      <div class="row">
                                       <p class="col-md-11 col-md-offset-1 list-group-item-text">
-                                         <span ng-show="task.created_by">Opened by:<a href="#"> <%= task.created_by.display_name %></a></span>
+                                         <span ng-show="task.created_by">{{ _('Opened by:')}}<a href="#"> <%= task.created_by.display_name %></a></span>
                                           <span ng-show="task.about">{{ _('related to') }}<a href="<%= getUrl(task.about.kind,task.about.id); %>"> <%= task.about.name %></a> </span>
                                           <span ng-show="deletetask">
                                              <!-- to delete task -->
-                                                <a  ng-click="deleteThisTask(task.entityKey)" class="btn-link addAnotherPhone"><i class="icon-trash"></i>  
+                                                <a  ng-click="deleteThisTask(task.entityKey)" class="btn-link addAnotherPhone"><i class="icon-trash"></i>
                                              </a>
                                            <!-- end  -->
                                           </span>
@@ -250,25 +250,25 @@
                                         <button  class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-lock"></i>
                                           <span class="btn-text">
-                                            Close
+                                            {{ _('Close')}}
                                           </span>
                                         </button>
                                          <button   class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-unlock"></i>
                                         <span class="btn-text">
-                                        Reopen
+                                        {{ _('Reopen')}}
                                         </span>
                                         </button>
                                         <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-tags"></i>
                                          <span class="btn-text">
-                                            Tags
+                                            {{ _('Tags')}}
                                          </span>
                                         </button>
                                         <button ng-click="assigneeModal()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
                                           <i class="fa fa-mail-forward"></i>
                                            <span class="btn-text">
-                                            Assignee
+                                            {{ _('Assignee')}}
                                            </span>
                                         </button>
                                         </div>
@@ -303,7 +303,7 @@
                                     </div>
                                      <div class="row">
                                       <p class="col-md-11 col-md-offset-1 list-group-item-text">
-                                         <span ng-show="task.created_by">Opened by:<a href="#"> <%= task.created_by.display_name %></a></span> <span ng-show="task.about">{{ _('related to') }}<a href="#"> <%= task.about.name %></a></span>
+                                         <span ng-show="task.created_by">{{ _('Opened by:')}}<a href="#"> <%= task.created_by.display_name %></a></span> <span ng-show="task.about">{{ _('related to') }}<a href="#"> <%= task.about.name %></a></span>
                                          <!--<span>Closed by:<a href="#">Transline</a></span>-->
                                       </p>
                                       </div>
@@ -335,25 +335,25 @@
                                         <button  class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-lock"></i>
                                           <span class="btn-text">
-                                            Close
+                                            {{ _('Close')}}
                                           </span>
                                         </button>
                                          <button  class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-unlock"></i>
                                         <span class="btn-text">
-                                        Reopen
+                                        {{ _('Reopen')}}
                                         </span>
                                         </button>
                                         <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-tags"></i>
                                          <span class="btn-text">
-                                            Tags
+                                            {{ _('Tags')}}
                                          </span>
                                         </button>
                                         <button ng-click="assigneeModal()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
                                           <i class="fa fa-mail-forward"></i>
                                            <span class="btn-text">
-                                            Assignee
+                                            {{ _('Assignee')}}
                                            </span>
                                         </button>
                                         </div>
@@ -420,25 +420,25 @@
                                         <button   class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-lock"></i>
                                           <span class="btn-text">
-                                            Close
+                                            {{ _('Close')}}
                                           </span>
                                         </button>
                                          <button  class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-unlock"></i>
                                         <span class="btn-text">
-                                        Reopen
+                                        {{ _('Reopen')}}
                                         </span>
                                         </button>
                                         <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-tags"></i>
                                          <span class="btn-text">
-                                            Tags
+                                            {{ _('Tags')}}
                                          </span>
                                         </button>
                                         <button ng-click="assigneeModal()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
                                           <i class="fa fa-mail-forward"></i>
                                            <span class="btn-text">
-                                            Assignee
+                                            {{ _('Assignee')}}
                                            </span>
                                         </button>
                                         </div>
@@ -505,25 +505,25 @@
                                         <button   class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-lock"></i>
                                           <span class="btn-text">
-                                            Close
+                                            {{ _('Close')}}
                                           </span>
                                         </button>
                                          <button   class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-unlock"></i>
                                         <span class="btn-text">
-                                        Reopen
+                                        {{ _('Reopen')}}
                                         </span>
                                         </button>
                                         <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-tags"></i>
                                          <span class="btn-text">
-                                            Tags
+                                            {{ _('Tags')}}
                                          </span>
                                         </button>
                                         <button ng-click="assigneeModal()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
                                           <i class="fa fa-mail-forward"></i>
                                            <span class="btn-text">
-                                            Assignee
+                                            {{ _('Assignee')}}
                                            </span>
                                         </button>
                                         </div>
@@ -578,7 +578,7 @@
               <div class="portlet showCard">
                 <div class="portlet-title">
                   <div class="caption">
-                    <i class="fa fa-reorder"></i>Tags
+                    <i class="fa fa-reorder"></i>{{ _('Tags')}}
                   </div>
                   <!--div class="tools">
                       <a href="javascript:;" class="collapse">
@@ -613,16 +613,16 @@
                   </li>
                   <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
                        <a ng-click="" class="btn-link addAnotherPhone">
-                        <i class="fa fa-tags"></i>  Add a new tag</a>
+                        <i class="fa fa-tags"></i>  {{ _('Add a new tag')}}</a>
                   </li>
-                  
+
                 </ul>
 
                 <form class="well newTagForm" role="form" ng-show="showNewTag">
                  <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
                 <div class="row">
                   <div class="col-md-12 form-group">
-                    <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New tag name">
+                    <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('New tag name')}}">
                   </div>
                 </div>
                 <div class="row">
@@ -641,7 +641,7 @@
                   </div>
                 </form>
                 <div class="form-group" ng-show="tags">
-                  <button class="btn btn-default btn-block" ng-click="manage_tags=!manage_tags;manage()"> Manage Tags
+                  <button class="btn btn-default btn-block" ng-click="manage_tags=!manage_tags;manage()"> {{ _('Manage Tags')}}
                   </button>
                 </div>
                 </div>
@@ -672,7 +672,7 @@
                     <div class="modal-content">
                     <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                      <h3 id="myModalLabel" class="modal-title">Close Task</h3>
+                      <h3 id="myModalLabel" class="modal-title">{{ _('Close Task')}}</h3>
                     </div>
                     <div class="modal-body">
                        <form id="seletesho" name="deletesho" class="form-horizontal">
@@ -693,7 +693,7 @@
                     <div class="modal-content">
                     <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                      <h3 id="myModalLabel" class="modal-title">Add Tags </h3>
+                      <h3 id="myModalLabel" class="modal-title">{{ _('Add Tags')}} </h3>
                     </div>
                     <div class="modal-body">
                        <form id="seletesho" name="deletesho" class="form-horizontal">
@@ -757,7 +757,7 @@
               <div class="portlet showCard">
                 <div class="portlet-title">
                   <div class="caption">
-                    <i class="fa fa-reorder"></i>Tags
+                    <i class="fa fa-reorder"></i>{{ _('Tags')}}
                   </div>
                 </div>
                 <div class="portlet-body">
@@ -781,16 +781,16 @@
                       </li>
                       <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
                            <a ng-click="" class="btn-link addAnotherPhone">
-                            <i class="fa fa-tags"></i>  Add a new tag</a>
+                            <i class="fa fa-tags"></i>  {{ _('Add a new tag')}}</a>
                       </li>
-                      
+
                     </ul>
-                    </div>  
+                    </div>
                     <form class="well newTagForm" role="form" ng-show="showNewTag">
                      <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
                     <div class="row">
                       <div class="col-md-12 form-group">
-                        <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New tag name">
+                        <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('New tag name')}}">
                       </div>
                     </div>
                     <div class="row">
@@ -809,7 +809,7 @@
                       </div>
                     </form>
                     <div class="form-group" ng-show="tags">
-                      <button class="btn btn-default btn-block" ng-click="manage_tags=!manage_tags;manage()"> Manage Tags
+                      <button class="btn btn-default btn-block" ng-click="manage_tags=!manage_tags;manage()"> {{ _('Manage Tags')}}
                       </button>
                     </div>
                     </div>
@@ -832,7 +832,7 @@
                     <!--h3 class="pagination pull-right" ng-show="isLoading">{{ _('Loading') }}...</h3-->
               </div>
             <!-- END PAGE CONTENT-->
-          
+
       <!-- END PAGE CONTAINER-->
 </div>
 
@@ -842,7 +842,7 @@
     <div class="modal-content">
         <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">Delete Task</h3>
+                <h3 id="myModalLabel" class="modal-title">{{ _('Delete Task')}}</h3>
               </div>
               <div class="modal-body">
                  <form id="seletesho" name="deletesho" class="form-horizontal">
@@ -869,7 +869,7 @@
 
 <script type="text/javascript">
   $("#select2_sample2").select2({
-        placeholder: "Click to Select a label",
+        placeholder: "{{ _('Click to Select a label')}}",
         allowClear: false
     });
   var handleUniform = function () {

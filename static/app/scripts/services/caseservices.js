@@ -141,10 +141,14 @@ accountservices.factory('Case', function() {
 
                   if (resp.tasks){
                      $scope.tasks = resp.tasks.items;
+                  }else{
+                    $scope.tasks = [];
                   }
 
                   if (resp.events){
                      $scope.events = resp.events.items;
+                  }else{
+                    $scope.events = [];
                   }
 
                // $scope.listTopics(resp);
@@ -166,7 +170,7 @@ accountservices.factory('Case', function() {
             console.log('gapi #end_execute');
           });
           $scope.isLoading=false;
-          
+
   };
   Case.search = function($scope,params){
       gapi.client.crmengine.cases.search(params).execute(function(resp) {
@@ -220,10 +224,11 @@ accountservices.factory('Case', function() {
               }
       });
      $scope.isLoading=false;
-      
+
   };
   Case.listMore = function($scope,params){
-      $scope.isLoading = true;
+      $scope.isMoreItemLoading = true;
+      $( window ).trigger( "resize" );
       $scope.$apply();
       gapi.client.crmengine.cases.listv2(params).execute(function(resp) {
               if(!resp.code){
@@ -246,20 +251,20 @@ accountservices.factory('Case', function() {
                   $scope.casepagination.next = false;
                  }
                  // Loaded succefully
-                 $scope.isLoading = false;
+                 $scope.isMoreItemLoading = false;
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
               }else {
                  if(resp.code==401){
                 $scope.refreshToken();
-                $scope.isLoading = false;
+                $scope.isMoreItemLoading = false;
                 $scope.$apply();
                  $( window ).trigger( "resize" );
                };
               }
       });
-     $scope.isLoading=false;
- 
+     $scope.isMoreItemLoading=false;
+
   };
   Case.insert = function($scope,casee){
      $scope.isLoading = true;
@@ -317,7 +322,7 @@ accountservices.factory('Case', function() {
             console.log('cases.patch gapi #end_execute');
           });
      $scope.isLoading=false;
-          
+
   };
 
   Case.delete = function($scope,id){

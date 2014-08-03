@@ -12,7 +12,7 @@
         onbeforesave="inlinePatch('Lead','', 'lastname',lead.entityKey,$data)" > <%= lead.lastname %>
       </a>
     </h2>
-    <button class="btn red newAccountBtnOnscroll pull-right hidden" ng-click="save(lead)">Create</button>
+    <button class="btn red newAccountBtnOnscroll pull-right hidden" ng-click="save(lead)">{{ _('Create')}}</button>
   </div>
   </div>
 </div>
@@ -20,13 +20,13 @@
   <div class="loader-container row" ng-show="isLoading">
     <div class="loader-dialog col-md-4 col-md-offset-4 ">
       <div class="loader-content">
-        Loading...
+        {{ _('Loading...')}}
       </div>
     </div>
   </div>
   <div class="" ng-show="immediateFailed">
      <div class="col-md-12">
-      <h1>Sign-in Button;</h1>
+      <h1>{{ _('Sign-in Button;')}}</h1>
           <span id="signin">
               <span id="myGsignin"></span>
           </span>
@@ -36,8 +36,8 @@
   <div class="col-md-9">
       <div class="row">
           <div class="showPage col-md-12 newActionsBtn">
-          <span>Create Lead </span>
-          <button class="btn red newAccountBtn pull-right" ng-click="save(lead)">Create</button>
+          <span>{{ _('Create Lead')}} </span>
+          <button class="btn red newAccountBtn pull-right" ng-click="save(lead)">{{ _('Create')}}</button>
           <div class="clearfix"></div>
         </div>
     <div class="showPage slimForm col-md-12">
@@ -62,7 +62,7 @@
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label class="control-label col-md-4">First Name</label>
+                      <label class="control-label col-md-4">{{ _('First Name')}}</label>
                       <div class="col-md-8">
                         <input type="text" required id="id_firstname" class="form-control" ng-model="lead.firstname">
                       </div>
@@ -70,7 +70,7 @@
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label class="control-label col-md-4">Last Name</label>
+                      <label class="control-label col-md-4">{{ _('Last Name')}}</label>
                       <div class="col-md-8">
                         <input type="text"  required id="id_lastname" class="form-control" ng-model="lead.lastname">
                       </div>
@@ -80,7 +80,7 @@
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label class="control-label col-md-4">Title</label>
+                      <label class="control-label col-md-4">{{ _('Title')}}</label>
                       <div class="col-md-8">
                         <input type="text"  id="id_lastname" class="form-control" ng-model="lead.title">
                       </div>
@@ -88,7 +88,7 @@
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label class="control-label col-md-4">Company</label>
+                      <label class="control-label col-md-4">{{ _('Company')}}</label>
                       <div class="col-md-8">
                         <input type="text" ng-model="lead.company" class="form-control">
                       </div>
@@ -101,15 +101,14 @@
             <div class="row">
             <div class="col-md-6">
               <div class="news-blocks blank-card blank-card-yellow">
-                <h3>Lead Informations</h3>
+                <h3>{{ _('Lead Informations')}}</h3>
                   <div class="row">
                     <div class="form-group selector-margin">
                         <label  class="required col-md-3 control-label">{{_("Industry")}} </label>
 
                         <div class="col-md-9">
-                          <select class="form-control" ng-model="lead.industry">
-                            <option value="">--None--</option><option value="Agriculture">Agriculture</option><option value="Apparel">Apparel</option><option value="Banking">Banking</option><option value="Biotechnology">Biotechnology</option><option value="Chemicals">Chemicals</option><option value="Communications">Communications</option><option value="Construction">Construction</option><option value="Consulting">Consulting</option><option value="Education">Education</option><option value="Electronics">Electronics</option><option value="Energy">Energy</option><option value="Engineering">Engineering</option><option value="Entertainment">Entertainment</option><option value="Environmental">Environmental</option><option value="Finance">Finance</option><option value="Food &amp; Beverage">Food &amp; Beverage</option><option value="Government">Government</option><option value="Healthcare">Healthcare</option><option value="Hospitality">Hospitality</option><option value="Insurance">Insurance</option><option value="Machinery">Machinery</option><option value="Manufacturing">Manufacturing</option><option value="Media">Media</option><option value="Not For Profit">Not For Profit</option><option value="Recreation">Recreation</option><option value="Retail">Retail</option><option value="Shipping">Shipping</option><option value="Technology">Technology</option><option value="Telecommunications">Telecommunications</option><option value="Transportation">Transportation</option><option value="Utilities">Utilities</option><option value="Other">Other</option>>
-                          </select>
+                         <select ng-model="account.industry" class="form-control">
+                                 <option value="">--{{_('None')}}--</option><option value="Agriculture">{{_('Agriculture')}}</option><option value="Apparel">{{_('Apparel')}}</option><option value="Banking">{{_('Banking')}}</option><option value="Biotechnology">{{_('Biotechnology')}}</option><option value="Chemicals">{{_('Chemicals')}}</option><option value="Communications">{{_('Communications')}}</option><option value="Construction">{{_('Construction')}}</option><option value="Consulting">{{_('Consulting')}}</option><option value="Education">{{_('Education')}}</option><option value="Electronics">{{_('Electronics')}}</option><option value="Energy">{{_('Energy')}}</option><option value="Engineering">{{_('Engineering')}}</option><option value="Entertainment">{{_('Entertainment')}}</option><option value="Environmental">{{_('Environmental')}}</option><option value="Finance">{{_('Finance')}}</option><option value="Food &amp; Beverage">{{_('Food')}} &amp; {{_('Beverage')}}</option><option value="Government">{{_('Government')}}</option><option value="Healthcare">{{_('Healthcare')}}</option><option value="Hospitality">{{_('Hospitality')}}</option><option value="Insurance">{{_('Insurance')}}</option><option value="Machinery">{{_('Machinery')}}</option><option value="Manufacturing">{{_('Manufacturing')}}</option><option value="Media">{{_('Media')}}</option><option value="Not For Profit">{{_('Not For Profit')}}</option><option value="Recreation">{{_('Recreation')}}</option><option value="Retail">{{_('Retail')}}</option><option value="Shipping">{{_('Shipping')}}</option><option value="Technology">{{_('Technology')}}</option><option value="Telecommunications">{{_('Telecommunications')}}</option><option value="Transportation">{{_('Transportation')}}</option><option value="Utilities">{{_('Utilities')}}</option><option value="Other">{{_('Other')}}</option></select>
 
                         </div>
 
@@ -118,13 +117,13 @@
                     <label  class="required col-md-3 control-label">{{_("Source")}} </label>
                     <div class="col-md-9">
                         <select class="form-control" ng-model="lead.source" >
-                          <option value="">--None--</option>
-                          <option value="Social Media">Social Media</option>
-                          <option value="Web Source">Web Site</option>
-                          <option value="Phone Inquiry">Phone Inquiry</option>
-                          <option value="Partner Referral">Partner Referral</option>
-                          <option value="Purchased List">Purchased List</option>
-                          <option value="Other">Other</option>
+                          <option value="">--{{_('None')}}--</option>
+                          <option value="Social Media">{{_('Social Media')}}</option>
+                          <option value="Web Source">{{_('Web Site')}}</option>
+                          <option value="Phone Inquiry">{{_('Phone Inquiry')}}</option>
+                          <option value="Partner Referral">{{_('Partner Referral')}}</option>
+                          <option value="Purchased List">{{_('Purchased List')}}</option>
+                          <option value="Other">{{_('Other')}}</option>
                           </select>
 
                     </div>
@@ -133,18 +132,18 @@
                   <br>
                 </div>
                 <div class="news-block-tags">
-                  <strong>Phone</strong>
+                  <strong>{{_('Phone')}}</strong>
                 </div>
                 <ul class="list-unstyled contact-infos">
                   <li ng-show="showPhoneForm">
                     <div class="row">
                       <form class="form-inline newLeadForm" role="form">
                         <div class="form-group sm-group" style="">
-                          <label class="sr-only" for="exampleInputEmail2">Number</label>
-                          <input type="text" class="form-control" id="exampleInputEmail2" ng-model="phone.number" placeholder="Enter a number">
+                          <label class="sr-only" for="exampleInputEmail2">{{_('Number')}}</label>
+                          <input type="text" class="form-control" id="exampleInputEmail2" ng-model="phone.number" placeholder="{{_('Enter a number')}}">
                         </div>
                         <div class="form-group sm-group" style="">
-                          <label class="sr-only" for="exampleInputPassword2">Type</label>
+                          <label class="sr-only" for="exampleInputPassword2">{{_('Type')}}</label>
                           <select ng-model="phone.type" class="form-control">
                             <option value="home" selected="selected" >{{_('home')}}</option>
                             <option>{{_('work')}}</option>
@@ -152,7 +151,7 @@
                             <option>{{_('other')}}</option>
                           </select>
                         </div>
-                        <button type="submit" ng-click="pushElement(phone,phones,'phones')" class="btn blue jfk-button jfk-button-action">Add</button>
+                        <button type="submit" ng-click="pushElement(phone,phones,'phones')" class="btn blue jfk-button jfk-button-action">{{_('Add')}}</button>
                         <button type="submit" class="btn btn-default" ng-click="showPhoneForm=false">X</button>
                       </form>
                     </div>
@@ -171,22 +170,22 @@
                   </li>
                   <li>
                     <a ng-hide="showPhoneForm" ng-click="showPhoneForm=true" class="btn-link addAnotherPhone" >
-                      <i class="icon-plus"></i>Add a new Phone
+                      <i class="icon-plus"></i>{{_('Add a new Phone')}}
                     </a>
                   </li>
                 </ul>
                 <div class="news-block-tags">
-                  <strong>Email</strong>
+                  <strong>{{_('Email')}}</strong>
                 </div>
                 <ul class="list-unstyled contact-infos">
                   <li ng-show="showEmailForm">
                     <div class="row">
                       <form class="form-inline newLeadForm" role="form">
                         <div class="form-group lg-group" style="">
-                          <label class="sr-only" for="exampleInputEmail2">Email</label>
-                          <input type="email" class="form-control" id="exampleInputEmail2" ng-model="email.email" placeholder="Enter a number">
+                          <label class="sr-only" for="exampleInputEmail2">{{_('Email')}}</label>
+                          <input type="email" class="form-control" id="exampleInputEmail2" ng-model="email.email" placeholder="{{_('Enter a number')}}">
                         </div>
-                        <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(email,emails,'emails')" >Add</button>
+                        <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(email,emails,'emails')" >{{_('Add')}}</button>
                         <button type="submit" ng-click="showEmailForm=false" class="btn btn-default">X</button>
                       </form>
                     </div>
@@ -198,11 +197,11 @@
                   </li>
                   <li>
                     <a class="btn-link addAnotherPhone" ng-hide="showEmailForm" ng-click="showEmailForm=true">
-                      <i class="icon-plus"></i> Add a new email address </a>
+                      <i class="icon-plus"></i> {{_('Add a new email address')}} </a>
                   </li>
                 </ul>
                 <div class="news-block-tags">
-                  <strong>Address</strong>
+                  <strong>{{_('Address')}}</strong>
                 </div>
                 <ul class="list-unstyled contact-infos">
                   <li ng-repeat="address in addresses">
@@ -219,25 +218,25 @@
                   </li>
                   <li>
                     <a href="#addressmodal" class="btn-link addAnotherPhone" data-toggle="modal">
-                      <i class="icon-plus"></i> Add a new address
+                      <i class="icon-plus"></i> {{_('Add a new address')}}
                     </a>
                   </li>
                 </ul>
               </div>
               <div class="news-blocks blank-card blank-card-bluep">
-                <h3>Links</h3>
+                <h3>{{_('Links')}}</h3>
                 <div class="news-block-tags">
-                  <strong>Website</strong>
+                  <strong>{{_('Website')}}</strong>
                 </div>
                 <ul class="list-unstyled contact-infos" >
                   <li ng-show="showWebsiteForm">
                     <div class="row">
                       <form class="form-inline newLeadForm" role="form">
                         <div class="form-group lg-group" style="">
-                            <label class="sr-only" for="exampleInputEmail2">Website</label>
-                            <input type="text" ng-model="website.url" class="form-control" id="exampleInputEmail2" placeholder="Enter a Website">
+                            <label class="sr-only" for="exampleInputEmail2">{{_('Website')}}</label>
+                            <input type="text" ng-model="website.url" class="form-control" id="exampleInputEmail2" placeholder="{{_('Enter a Website')}}">
                         </div>
-                        <button type="submit" ng-click="pushElement(website,websites,'websites')" class="btn blue jfk-button jfk-button-action">Add</button>
+                        <button type="submit" ng-click="pushElement(website,websites,'websites')" class="btn blue jfk-button jfk-button-action">{{_('Add')}}</button>
                         <button type="submit" ng-click="showWebsiteForm=false" class="btn btn-default">X</button>
                       </form>
                     </div>
@@ -249,22 +248,22 @@
                   </li>
                   <li>
                     <a   ng-hide="showWebsiteForm" ng-click="showWebsiteForm=true" class="btn-link addAnotherPhone">
-                      <i class="icon-plus"></i> Add a new Website
+                      <i class="icon-plus"></i> {{_('Add a new Website')}}
                     </a>
                   </li>
                 </ul>
                 <div class="news-block-tags">
-                  <strong>Social Links</strong>
+                  <strong>{{_('Social Links')}}</strong>
                 </div>
                 <ul class="list-unstyled contact-infos" >
                   <li ng-show="showSociallinkForm">
                     <div class="row">
                       <form class="form-inline newLeadForm" role="form">
                         <div class="form-group lg-group" style="">
-                          <label class="sr-only" for="exampleInputEmail2">Social link</label>
-                          <input type="text" class="form-control" id="exampleInputEmail2" ng-model='sociallink.url' placeholder="Enter a social link">
+                          <label class="sr-only" for="exampleInputEmail2">{{_('Social link')}}</label>
+                          <input type="text" class="form-control" id="exampleInputEmail2" ng-model='sociallink.url' placeholder="{{_('Enter a social link')}}">
                         </div>
-                        <button ng-click="pushElement(sociallink,sociallinks,'sociallinks')" type="submit" class="btn blue jfk-button jfk-button-action">Add</button>
+                        <button ng-click="pushElement(sociallink,sociallinks,'sociallinks')" type="submit" class="btn blue jfk-button jfk-button-action">{{_('Add')}}</button>
                         <button type="submit" ng-click="showSociallinkForm=false" class="btn btn-default">X</button>
                       </form>
                     </div>
@@ -275,7 +274,7 @@
                   </li>
                   <li>
                     <a class="btn-link addAnotherPhone" ng-hide="showSociallinkForm" ng-click="showSociallinkForm=true">
-                      <i class="icon-plus"></i> Add a new social links
+                      <i class="icon-plus"></i> {{_('Add a new social links')}}
                     </a>
                   </li>
                 </ul>
@@ -283,7 +282,7 @@
             </div>
             <div class="col-md-6">
               <div class="news-blocks blank-card blank-card-red">
-                <h3>Story</h3>
+                <h3>{{_('Story')}}</h3>
                 <div class="news-block-tags">
                   <!--strong>Tagline </strong>
                   <span class="page-meta"><i class="icon-pencil">
@@ -292,7 +291,7 @@
                     </a></i>
                   </span-->
                     <div class="form-group row">
-                        <label class="control-label col-md-4">Tagline</label>
+                        <label class="control-label col-md-4">{{_('Tagline')}}</label>
                         <div class="col-md-8">
                               <input type="text" required id="id_tagline" class="form-control" ng-model="lead.tagline">
                         </div>
@@ -308,7 +307,7 @@
                     </a></i>
                   </span-->
                    <div class="form-group row">
-                        <label class="control-label col-md-4">Introduction</label>
+                        <label class="control-label col-md-4">{{_('Introduction')}}</label>
                         <div class="col-md-8">
                             <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="lead.introduction"></textarea>
                         </div>
@@ -323,14 +322,14 @@
                     <div class="row">
                       <form class="form-inline newLeadForm" role="form">
                         <div class="form-group sm-group" style="">
-                          <label class="sr-only" for="exampleInputEmail2">Field</label>
-                          <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="Enter field name">
+                          <label class="sr-only" for="exampleInputEmail2">{{_('Field')}}</label>
+                          <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="{{_('Enter field name')}}">
                         </div>
                         <div class="form-group sm-group" style="">
-                          <label class="sr-only" for="exampleInputEmail2">Value</label>
-                          <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="Enter a value">
+                          <label class="sr-only" for="exampleInputEmail2">{{_('Value')}}</label>
+                          <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="{{_('Enter a value')}}">
                         </div>
-                        <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(customfield,customfields,'customfields')">Add</button>
+                        <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(customfield,customfields,'customfields')">{{_('Add')}}</button>
                         <button type="submit" class="btn btn-default" ng-click="showCustomFieldForm=false">X</button>
                       </form>
                     </div>
@@ -343,7 +342,7 @@
                   </li>
                   <li>
                     <a ng-click="showCustomFieldForm=true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal">
-                      <i class="icon-plus"></i> Add a new custom field
+                      <i class="icon-plus"></i> {{_('Add a new custom field')}}
                     </a>
                   </li>
                 </ul>
@@ -361,17 +360,17 @@
           <div class="portlet showPage">
             <div class="portlet-title line">
               <div class="caption">
-                <i class="fa fa-lock"></i>Who can access ?
+                <i class="fa fa-lock"></i>{{_('Who can access ?')}}
               </div>
             </div>
             <div class="portlet-body" id="chats">
               <label class="radio line">
                 <input type="radio" value="public" ng-model="lead.access" />
-                  public: Anyone within your organization can access and find
+                  {{_('public: Anyone within your organization can access and find')}}
               </label>
               <label class="radio line">
                 <input type="radio"  value="private" ng-model="lead.access" />
-                private: only you and your collaborators
+                {{_('private: only you and your collaborators')}}
               </label>
             </div>
           </div>
@@ -423,7 +422,7 @@
         </form>
       </div>
       <div class="modal-footer">
-          <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+          <button class="btn" data-dismiss="modal" aria-hidden="true">{{_('Cancel')}}</button>
           <input  type="submit" ng-click="pushElement(address,addresses,'addresses')" class="btn green" value="Add this address">
       </div>
     </div>

@@ -89,7 +89,7 @@
       <div id="navbarSearch">
         <form id="navbarSearchForm"  ng-controller="SearchFormController" class="navbar-form ng-pristine ng-valid " ng-submit="executeSearch(searchQuery)" role="search">
               <div class="form-group">
-                <input type="text" ng-model="searchQuery" typeahead="result as result.title + ' (' + result.type + ')' for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="form-control" placeholder="Search">
+                <input type="text" ng-model="searchQuery" typeahead="result as result.title + ' (' + result.type + ')' for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()" class="form-control" placeholder="{{_('Search')}}">
               </div>
                <button class="gbqfb gbqfb-hvr"><span class="gbqfi"></span></button>
         </form>
@@ -102,15 +102,17 @@
         <!-- BEGIN TOP NAVIGATION MENU -->
 
         <ul class="nav navbar-nav pull-right">
-<!--
-              <li id="chromeExtension" class="dropdown user chrome-ext hidden-xs"  >
+
+
+              <!-- <li id="chromeExtension" class="dropdown user chrome-ext hidden-xs"  >
                   <input type="submit" onclick="$('#InstallChromeExtension').modal() " class="btn blue btn-block pull-right" value="Install chrome extension" style="padding-left:5px;padding-right:5px;">
-              </li>
--->
+              </li> -->
+
+
               <li class="dropdown user">
                 <a href="/#/admin/users" class="dropdown-tog">
                   <span class="username">
-                    Invite Users
+                    {{_('Invite Users')}}
                   </span>
                 </a>
               </li>
@@ -154,7 +156,7 @@
                           <span class="task">
                             <span class="desc">
                             <img class="platform_icons" src="/static/img/google_calendar.png">
-                           Calendar
+                           {{_('Calendar')}}
                             </span>
                           </span>
                           </a>
@@ -185,11 +187,11 @@
                 <ul class="dropdown-menu" >
                   <li>
                     <a href="#" onclick="SignOut();return false;">
-                      Sign Out
+                      {{_('Sign Out')}}
                     </a>
                   </li>
                   <li >
-                <a href="#EditSetting"  class="btn-link addAnotherPhone" data-toggle="modal">My Setting </a>
+                <a href="#EditSetting"  class="btn-link addAnotherPhone" data-toggle="modal">{{_('My Setting')}} </a>
 
                   </li>
                 </ul>
@@ -219,12 +221,12 @@
                         <label  class=" col-md-3 control-label">{{_("Language")}} </label>
 
                         <div class="col-md-9">
-                               
+
                           <select class="form-control" curr ng-model="user.language" >
                                         <option value="">{{uSerlanguage}}</option>
-                                        <option value="en" >English </option>
-                                        <option value="ar">Arabic</option>
-                                        <option value="fr" >French</option>
+                                        <option value="en" >{{_('English')}} </option>
+                                        <option value="ar">{{_('Arabic')}}</option>
+                                        <option value="fr" >{{_('French')}}</option>
                             </select>
 
                         </div>
@@ -239,6 +241,7 @@
                </div>
             </div>
 </div>
+
 <div id="InstallChromeExtension" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
  <div class="modal-dialog">
  <div class="modal-content">
@@ -252,10 +255,10 @@
 
 
      <div class="form-group">
-           <p>If you are looking to build a potential network of contacts,
+           <p> {{_("If you are looking to build a potential network of contacts,
              it's not just a matter of adding them manually,
              you can do better! Use the free Google Chrome extension that allows you to add people right from Linkedin, Twitter and Gmail in one click.
-             Keep the experience you know and connect with the people you need
+             Keep the experience you know and connect with the people you need")}}
            </p>
 
            <div class="col-md-12">
@@ -283,7 +286,7 @@
               <h3 id="myModalLabel">{{_("Error")}}</h3>
             </div>
             <div class="modal-body">
-                <p>An error has occured. Please try again</p>
+                <p>{{_("Oops !...An error has occured. Please try again")}}</p>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn default" data-dismiss="modal" ng-click="endError()">{{_("Close")}}</button>
@@ -314,9 +317,9 @@
                         <div class="col-md-9">
 
                           <select class="form-control" curr ng-model="user.language">
-                                        <option >English</option>
-                                        <option >Arabic</option>
-                                        <option >French</option>
+                                        <option >{{_('English')}}</option>
+                                        <option >{{_('Arabic')}}</option>
+                                        <option >{{_('French')}}</option>
                                       </select>
 
                         </div>
@@ -330,7 +333,26 @@
                </div>
                </div>
             </div>
+<div id="SendFeedbackModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+ <div class="modal-dialog">
+ <div class="modal-content">
+ <div class="modal-header">
+   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+   <h3 id="myModalLabel" class="modal-title">{{_("ioGrow Feedback")}}</h3>
+ </div>
 
+ <div class="modal-body">
+    ioGrow Feedback lets you send ioGrow suggestions about our product. We welcome problem reports, feature ideas and general comments.
+
+   Start by writing a brief description:
+    <iframe src="https://docs.google.com/forms/d/1kj_5QgfNnsyAdIC2TOGbHImF5BiZwxKNBi7FaTbxOlE/viewform?embedded=true" width="100%" height="500" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+
+ </div>
+
+  </form>
+  </div>
+  </div>
+</div>
 <div class="page-container">
 
   <!-- BEGIN SIDEBAR -->
@@ -343,7 +365,7 @@
                 <a href="{{ tab.url }}" data-toggle="collapse" data-target=".navbar-collapse">
                 <i class="fa fa-{{tab.icon}}"></i>
                 <span class="title">
-                  {{tab.label}}
+                  {{_(tab.label)}}
                 </span>
                 </a>
               </li>
@@ -361,9 +383,17 @@
 <!-- END CONTAINER -->
 
 <!-- BEGIN FOOTER -->
+
 <div class="footer">
-  <div class="footer-inner">
-         &copy; i/oGrow  2013 - 2014
+  <div class="footer-inner" style="
+    bottom: 0px;
+">
+<a href="#SendFeedbackModal"  class="btn-link addAnotherPhone" >
+  <a href="#SendFeedbackModal" data-toggle="modal" class="btn pull-right" style="
+    right: 0px;
+">Send feedback</a>
+<br>
+         © i/oGrow  2013 - 2014
   </div>
 <input type="hidden" id="userEmail" value="{{user.email}}">
 </div>
@@ -397,9 +427,20 @@
 
 
 
-     var ROOT = '/_ah/api';
 
- //var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+
+
+
+      //var ROOT = '/_ah/api';
+
+     var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+
+
+
+
+
+
+
 
 
         var callback = function() {

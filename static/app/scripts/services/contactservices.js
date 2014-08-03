@@ -152,10 +152,14 @@ accountservices.factory('Contact', function($http) {
 
                   if (resp.tasks){
                      $scope.tasks = resp.tasks.items;
+                  }else{
+                    $scope.tasks = [];
                   }
 
                   if (resp.events){
                      $scope.events = resp.events.items;
+                  }else{
+                    $scope.events = [];
                   }
                   if (resp.profile_img_url){
                     $scope.imageSrc=resp.profile_img_url;
@@ -320,7 +324,8 @@ accountservices.factory('Contact', function($http) {
       });
   };
   Contact.listMore = function($scope,params){
-      $scope.isLoading = true;
+      $scope.isMoreItemLoading = true;
+      $( window ).trigger( "resize" );
       $scope.$apply();
       gapi.client.crmengine.contacts.listv2(params).execute(function(resp) {
           if(!resp.code){
@@ -342,14 +347,14 @@ accountservices.factory('Contact', function($http) {
                   $scope.contactpagination.next = false;
                  }
                  // Loaded succefully
-                 $scope.isLoading = false;
+                 $scope.isMoreItemLoading = false;
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
 
               } else {
                  if(resp.code==401){
                 $scope.refreshToken();
-                $scope.isLoading = false;
+                $scope.isMoreItemLoading = false;
                 $scope.$apply();
                };
               }

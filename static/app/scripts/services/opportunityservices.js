@@ -97,10 +97,14 @@ opportunityservices.factory('Opportunity', function($http) {
 
                   if (resp.tasks){
                      $scope.tasks = resp.tasks.items;
+                  }else{
+                    $scope.tasks = [];
                   }
 
                   if (resp.events){
                      $scope.events = resp.events.items;
+                  }else{
+                    $scope.events = [];
                   }
 
         $scope.isContentLoaded = true;
@@ -179,7 +183,8 @@ opportunityservices.factory('Opportunity', function($http) {
       });
   };
   Opportunity.listMore = function($scope,params){
-      $scope.isLoading = true;
+      $scope.isMoreItemLoading = true;
+      $( window ).trigger( "resize" );
       $scope.$apply();
       gapi.client.crmengine.opportunities.listv2(params).execute(function(resp) {
               if(!resp.code){
@@ -201,7 +206,7 @@ opportunityservices.factory('Opportunity', function($http) {
                   $scope.opppagination.next = false;
                  }
                  // Loaded succefully
-                 $scope.isLoading = false;
+                 $scope.isMoreItemLoading = false;
                  // Call the method $apply to make the update on the scope
                  $scope.$apply();
               }else {

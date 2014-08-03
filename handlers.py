@@ -17,6 +17,7 @@ from google.appengine.ext import ndb
 from google.appengine.api import memcache
 from google.appengine.api import taskqueue
 from google.appengine.api import urlfetch
+from google.appengine.api import mail
 from apiclient import errors
 from apiclient.discovery import build
 from apiclient.http import BatchHttpRequest
@@ -41,15 +42,17 @@ from iomodels.crmengine.events import Event
 jinja_environment = jinja2.Environment(
   loader=jinja2.FileSystemLoader(os.getcwd()),
   extensions=['jinja2.ext.i18n'],cache_size=0)
-
-
 jinja_environment.install_gettext_translations(i18n)
+
+
+
+
 ADMIN_EMAILS = ['tedj.meabiou@gmail.com','hakim@iogrow.com']
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 
 SCOPES = [
-    'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/prediction https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar'
+    'https://mail.google.com/ https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds'
 ]
 
 VISIBLE_ACTIONS = [
@@ -82,12 +85,13 @@ folders = {}
 class BaseHandler(webapp2.RequestHandler):
     def set_user_locale(self,language=None):
         if language:
-            locale = self.request.GET.get('locale', 'en_US')
+            locale = self.request.GET.get('locale', 'en-US')
             i18n.get_i18n().set_locale(language)
 
         else:
-            locale = self.request.GET.get('locale', 'en_US')
+            locale = self.request.GET.get('locale', 'en-US')
             i18n.get_i18n().set_locale('en')
+
 
     def prepare_template(self,template_name):
         is_admin = False
@@ -113,13 +117,14 @@ class BaseHandler(webapp2.RequestHandler):
                 for app in apps:
                     if app is not None:
                         applications.append(app)
+                #text=i18n.gettext('Hello, world!')
                 template_values={
                           'is_admin':is_admin,
                           'is_business_user':is_business_user,
                           'ME':user.google_user_id,
                           'active_app':active_app,
                           'apps':applications,
-                          'tabs':tabs
+                          'tabs':tabs,
                           }
         template = jinja_environment.get_template(template_name)
         self.response.out.write(template.render(template_values))
@@ -219,7 +224,11 @@ class IndexHandler(BaseHandler,SessionEnabledHandler):
             self.redirect('/welcome/')
 class BlogHandler(BaseHandler,SessionEnabledHandler):
     def get(self):
-        template_values = {}
+        if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            template_values = {'user':user}
+        else:
+            template_values = {}
         template = jinja_environment.get_template('templates/blog/blog_base.html')
         self.response.out.write(template.render(template_values))
 class PublicArticlePageHandler(BaseHandler,SessionEnabledHandler):
@@ -297,7 +306,14 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             org_name = self.request.get('org_name')
-            mob_phone = self.request.get('mob_phone')
+            taskqueue.add(
+                            url='/workers/add_to_iogrow_leads',
+                            queue_name='iogrow-admin',
+                            params={
+                                    'email': user.email,
+                                    'organization': org_name
+                                    }
+                        )
             model.Organization.create_instance(org_name,user)
             self.redirect('/')
         else:
@@ -782,6 +798,43 @@ class SyncCalendarEvent(webapp2.RequestHandler):
         except:
             raise endpoints.UnauthorizedException('Invalid grant' )
 
+
+# syncronize tasks with google calendar . hadji hicham 10-07-2014.
+class SyncCalendarTask(webapp2.RequestHandler):
+    def post(self):
+        user_from_email = model.User.get_by_email(self.request.get('email'))
+        starts_at = datetime.datetime.strptime(
+                                              self.request.get('starts_at'),
+                                              "%Y-%m-%dT%H:%M:00.000000"
+                                              )
+        summary = self.request.get('summary')
+        location = self.request.get('location')
+        ends_at = datetime.datetime.strptime(
+                                              self.request.get('ends_at'),
+                                              "%Y-%m-%dT%H:%M:00.000000"
+                                              )
+        task=Task.getTaskById(self.request.get('task_id'))
+        credentials = user_from_email.google_credentials
+        http = credentials.authorize(httplib2.Http(memcache))
+        service = build('calendar', 'v3', http=http)
+            # prepare params to insert
+        params = {
+                 "start":
+                  {
+                    "date": starts_at.strftime("%Y-%m-%d")
+                  },
+                 "end":
+                  {
+                    "date": ends_at.strftime("%Y-%m-%d")
+                  },
+                  "summary": summary,
+            }
+
+        created_task = service.events().insert(calendarId='primary',body=params).execute()
+        task.task_google_id=created_task['id']
+        task.put()
+
+
 class SyncPatchCalendarEvent(webapp2.RequestHandler):
     def post(self):
         user_from_email = model.User.get_by_email(self.request.get('email'))
@@ -813,21 +866,52 @@ class SyncPatchCalendarEvent(webapp2.RequestHandler):
                   "summary": summary
                   }
 
-            print "-*-*-*-*-*-*here we go i'm the one -*-*-*-*-*-*-*-*"
-            print "yeah men"
-            print "*-*-*-*-*-*-*-*---------*-*-*-*-*-*-*-*-*-*-*-*-*-*-*"
             patched_event = service.events().patch(calendarId='primary',eventId=event_google_id,body=params).execute()
         except:
             raise endpoints.UnauthorizedException('Invalid grant' )
+
+# syncronize tasks with google calendar . hadji hicham 10-07-2014.
+class SyncPatchCalendarTask(webapp2.RequestHandler):
+    def post(self):
+        user_from_email = model.User.get_by_email(self.request.get('email'))
+        starts_at = datetime.datetime.strptime(
+                                              self.request.get('starts_at'),
+                                              "%Y-%m-%dT%H:%M:00.000000"
+                                              )
+        summary = self.request.get('summary')
+        location = self.request.get('location')
+        ends_at = datetime.datetime.strptime(
+                                              self.request.get('ends_at'),
+                                              "%Y-%m-%dT%H:%M:00.000000"
+                                              )
+        task_google_id= self.request.get('task_google_id')
+        try:
+            credentials = user_from_email.google_credentials
+            http = credentials.authorize(httplib2.Http(memcache))
+            service = build('calendar', 'v3', http=http)
+            # prepare params to insert
+            params = {
+                 "start":
+                  {
+                    "date": starts_at.strftime("%Y-%m-%d")
+                  },
+                 "end":
+                  {
+                    "date": ends_at.strftime("%Y-%m-%d")
+                  },
+                  "summary": summary
+                  }
+
+
+            patched_event = service.events().patch(calendarId='primary',eventId=task_google_id,body=params).execute()
+        except:
+            raise endpoints.UnauthorizedException('Invalid grant' )
+
 # sync delete events with google calendar . hadjo hicham 09-08-2014
 class SyncDeleteCalendarEvent(webapp2.RequestHandler):
     def post(self):
         user_from_email = model.User.get_by_email(self.request.get('email'))
         event_google_id= self.request.get('event_google_id')
-        print "<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
-        print "its me"
-        print event_google_id
-        print "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
         try:
             credentials = user_from_email.google_credentials
             http = credentials.authorize(httplib2.Http(memcache))
@@ -957,6 +1041,42 @@ class SyncDocumentWithTeam(webapp2.RequestHandler):
                                         'doc_id': doc_id
                                         }
                             )
+class SendEmailNotification(webapp2.RequestHandler):
+    def post(self):
+        user_email = self.request.get('user_email')
+        to = self.request.get('to')
+        subject = self.request.get('subject')
+        body = self.request.get('body')
+        sender_address = "ioGrow notifications <notifications@gcdc2013-iogrow.appspotmail.com>"
+        message = mail.EmailMessage()
+        message.sender = sender_address
+        message.to = to
+        message.subject = subject
+        message.html = body
+        message.reply_to = user_email
+        message.send()
+
+class SendGmailEmail(webapp2.RequestHandler):
+    def post(self):
+        user = model.User.get_by_email(self.request.get('email'))
+        credentials = user.google_credentials
+        http = credentials.authorize(httplib2.Http(memcache))
+        service = build('gmail', 'v1', http=http)
+        cc = None
+        bcc = None
+        if self.request.get('cc') !='None':
+            cc = self.request.get('cc')
+        if self.request.get('bcc') !='None':
+            bcc = self.request.get('bcc')
+        message = EndpointsHelper.create_message(
+                                                  user.email,
+                                                  self.request.get('to'),
+                                                  cc,
+                                                  bcc,
+                                                  self.request.get('subject'),
+                                                  self.request.get('body')
+                                                )
+        EndpointsHelper.send_message(service,'me',message)
 
 
 
@@ -978,7 +1098,9 @@ routes = [
     ('/workers/syncdeleteevent',SyncDeleteCalendarEvent),
     ('/workers/createcontactsgroup',CreateContactsGroup),
     ('/workers/sync_contacts',SyncContact),
+    ('/workers/send_email_notification',SendEmailNotification),
     ('/workers/add_to_iogrow_leads',AddToIoGrowLeads),
+    ('/workers/send_gmail_message',SendGmailEmail),
 
     ('/',IndexHandler),
     ('/blog',BlogHandler),
@@ -1052,4 +1174,8 @@ config = {}
 config['webapp2_extras.sessions'] = {
     'secret_key': 'YOUR_SESSION_SECRET'
 }
+# to config the local directory the way we want .
+# config['webapp2_extras.i18n'] = {
+#     'translations_path': 'path/to/my/locale/directory',
+# }
 app = webapp2.WSGIApplication(routes, config=config, debug=True)

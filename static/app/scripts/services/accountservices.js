@@ -235,12 +235,16 @@ accountservices.factory('Account', function($http) {
                     }
                 }
 
-                if (resp.tasks) {
-                    $scope.tasks = resp.tasks.items;
+                if (resp.tasks){
+                   $scope.tasks = resp.tasks.items;
+                }else{
+                  $scope.tasks = [];
                 }
 
-                if (resp.events) {
-                    $scope.events = resp.events.items;
+                if (resp.events){
+                   $scope.events = resp.events.items;
+                }else{
+                  $scope.events = [];
                 }
 
                 $scope.isContentLoaded = true;
@@ -350,7 +354,8 @@ accountservices.factory('Account', function($http) {
         $scope.isLoading = false;
     };
     Account.listMore = function($scope, params) {
-        $scope.isLoading = true;
+        $scope.isMoreItemLoading = true;
+        $( window ).trigger( "resize" );
         $scope.$apply();
         gapi.client.crmengine.accounts.listv2(params).execute(function(resp) {
             if (!resp.code) {
@@ -374,20 +379,20 @@ accountservices.factory('Account', function($http) {
                     $scope.pagination.next = false;
                 }
                 // Loaded succefully
-                $scope.isLoading = false;
+                $scope.isMoreItemLoading = false;
                 // Call the method $apply to make the update on the scope
                 $scope.$apply();
             } else {
 
                 if (resp.code == 401) {
                     $scope.refreshToken();
-                    $scope.isLoading = false;
+                    $scope.isMoreItemLoading = false;
                     $scope.$apply();
                 }
                 ;
             }
         });
-        $scope.isLoading = false;
+        $scope.isMoreItemLoading = false;
     };
     Account.search = function($scope, params) {
         console.log(params);
@@ -667,6 +672,8 @@ accountservices.factory('Attachement', function($http) {
     };
     Attachement.insert = function($scope, params) {
         $scope.isLoading = true;
+        $scope.$apply();
+        $('#newDocument').modal('hide');
         gapi.client.crmengine.documents.insertv2(params).execute(function(resp) {
             if (!resp.code) {
                 //$('#newDocument').modal('hide');
@@ -674,7 +681,6 @@ accountservices.factory('Attachement', function($http) {
                 $scope.isLoading = false;
                 $scope.blankStatdocuments = false;
                 $scope.$apply();
-                $('#newDocument').modal('hide');
                 $scope.newdocument.title = '';
             } else {
                 console.log(resp.message);
