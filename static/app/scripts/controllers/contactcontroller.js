@@ -566,6 +566,8 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
       $scope.newTask={};
       $scope.selected_members = [];
       $scope.selected_member = {};
+      $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
+
 
 			$scope.fromNow = function(fromDate){
 					return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
@@ -1166,14 +1168,27 @@ $scope.updatContactHeader = function(contact){
 	};
 	// HKA 02.12.2013 Add Opportunty related to Contact
 		$scope.saveOpp = function(opportunity){
-
+			var amount=0;
+			var type="";
+			
+            console.log(opportunity.amount_per_unit);
+            console.log(opportunity.duration);
 			var params = {'name':opportunity.name,
-											'amount': opportunity.amount,
+											'currency':opportunity.currency,
 											'account':$scope.contact.account.entityKey,
 											'contact':$scope.contact.entityKey,
 											'stage' :$scope.stage_selected.entityKey,
-											'access': $scope.contact.access
+											'access': $scope.contact.access,
 											};
+			if (opportunity.duration_unit=='fixed'){
+				params.amount_total=opportunity.amount_per_unit;
+              params.opportunity_type = 'fixed_bid';
+            }else{
+              params.opportunity_type = 'per_' + opportunity.duration;
+              params.amount_total=opportunity.amount_per_unit * opportunity.duration;
+              params.amount_per_unit=opportunity.amount_per_unit
+            }
+			
 			Opportunity.insert($scope,params);
 			$('#addOpportunityModal').modal('hide');
 		};

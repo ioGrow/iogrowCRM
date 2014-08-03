@@ -263,6 +263,8 @@ Opportunity.update_stage = function($scope,params){
     //HKA 09.11.2013 Add an opportunity
 Opportunity.insert = function($scope,params){
       $scope.isLoading = true;
+      console.log("inserttttt");
+      console.log(params);
       gapi.client.crmengine.opportunities.insertv2(params).execute(function(resp) {
 
          if(!resp.code){
@@ -279,7 +281,6 @@ Opportunity.insert = function($scope,params){
           $scope.opportunity = {};
           $scope.searchAccountQuery = '';
           $scope.$apply();
-
          }else{
           console.log(resp.message);
              $('#addOpportunityModal').modal('hide');

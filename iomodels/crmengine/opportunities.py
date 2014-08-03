@@ -582,6 +582,8 @@ class Opportunity(EndpointsModel):
 
     @classmethod
     def insert(cls,user_from_email,request):
+        print "kkkkkkkkkkk"
+        print request
         if request.opportunity_type=='fixed_bid':
             amount_total = request.amount_total
         elif request.amount_per_unit and request.duration:

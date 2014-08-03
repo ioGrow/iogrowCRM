@@ -2283,6 +2283,7 @@ class CrmEngineApi(remote.Service):
                       name='opportunities.insertv2')
     def opportunity_insert_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
+        print request
         return Opportunity.insert(
                             user_from_email = user_from_email,
                             request = request
@@ -2644,7 +2645,7 @@ class CrmEngineApi(remote.Service):
                 # clicking on the link below:
                 # %s
                 # """ % confirmation_url
-                body=request.message+confirmation_url
+                body=request.message+"  Url:  "+confirmation_url
                 print body
 
                 mail.send_mail(sender_address, email , subject, body)
