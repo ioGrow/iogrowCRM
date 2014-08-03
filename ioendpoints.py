@@ -2730,7 +2730,7 @@ class CrmEngineApi(remote.Service):
                 gmail=users[0].email
                 created_at=users[0].created_at
                 list_of_reports.append((gid,gname,len(leads),created_at))
-                item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2],created_at=list_of_reports[0][3].isoformat())
+                item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2])
             reporting = []
             reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
@@ -2751,7 +2751,7 @@ class CrmEngineApi(remote.Service):
             reporting = []
             print list_of_reports
             for item in list_of_reports:
-                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count=item[3],created_at=item[4].isoformat())
+                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count=item[3])
                 reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
 
@@ -2770,7 +2770,7 @@ class CrmEngineApi(remote.Service):
             list_of_reports.sort(key=itemgetter(2),reverse=True)
             reporting = []
             for item in list_of_reports:
-                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],count=item[2],created_at=item[3].isoformat())
+                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],count=item[2])
                 reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
             
@@ -2793,7 +2793,7 @@ class CrmEngineApi(remote.Service):
                 gname=users[0].google_display_name
                 created_at=users[0].created_at
                 list_of_reports.append((gid,gname,len(contacts),created_at))
-                item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2],created_at=list_of_reports[0][3].isoformat())
+                item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2])
             reporting = []
             reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
@@ -2813,7 +2813,7 @@ class CrmEngineApi(remote.Service):
             reporting = []
             print list_of_reports
             for item in list_of_reports:
-                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count=item[3],created_at=item[4].isoformat())
+                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count=item[3])
                 reporting.append(item_schema)
             return ReportingListResponse(items=reporting)    
         
@@ -2830,7 +2830,7 @@ class CrmEngineApi(remote.Service):
             list_of_reports.sort(key=itemgetter(2),reverse=True)
             reporting = []
             for item in list_of_reports:
-                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],count=item[2],created_at=item[3].isoformat())
+                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],count=item[2])
                 reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
 
@@ -2854,7 +2854,7 @@ class CrmEngineApi(remote.Service):
                 gname=users[0].google_display_name
                 created_at=users[0].created_at
                 list_of_reports.append((gid,gname,len(accounts),created_at))
-                item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2],created_at=list_of_reports[0][3].isoformat())
+                item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2])
             
             reporting = []
             reporting.append(item_schema)
@@ -2875,7 +2875,7 @@ class CrmEngineApi(remote.Service):
             reporting = []
             print list_of_reports
             for item in list_of_reports:
-                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count=item[3],created_at=item[4].isoformat())
+                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count=item[3])
                 reporting.append(item_schema)
             return ReportingListResponse(items=reporting)   
 
@@ -2892,7 +2892,7 @@ class CrmEngineApi(remote.Service):
             list_of_reports.sort(key=itemgetter(2),reverse=True)
             reporting = []
             for item in list_of_reports:
-                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],count=item[2],created_at=item[3].isoformat())
+                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],count=item[2])
                 reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
 
@@ -2915,7 +2915,7 @@ class CrmEngineApi(remote.Service):
                 gname=users[0].google_display_name
                 created_at=users[0].created_at
                 list_of_reports.append((gid,gname,len(tasks),created_at))
-                item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2],created_at=list_of_reports[0][3].isoformat())
+                item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2])
             reporting = []
             reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
@@ -2934,7 +2934,7 @@ class CrmEngineApi(remote.Service):
             
             reporting = []
             for item in list_of_reports:
-                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count=item[3],created_at=item[4].isoformat())
+                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count=item[3])
                 reporting.append(item_schema)
             return ReportingListResponse(items=reporting)  
                 
@@ -2952,7 +2952,7 @@ class CrmEngineApi(remote.Service):
             list_of_reports.sort(key=itemgetter(2),reverse=True)    
             reporting = []
             for item in list_of_reports:
-                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],count=item[2],created_at=item[3].isoformat())
+                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],count=item[2])
                 reporting.append(item_schema)
 
             return ReportingListResponse(items=reporting) 
