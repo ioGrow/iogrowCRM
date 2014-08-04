@@ -1168,7 +1168,7 @@ $scope.updatContactHeader = function(contact){
 	};
 	// HKA 02.12.2013 Add Opportunty related to Contact
 		$scope.saveOpp = function(opportunity){
-
+			if (opportunity.amount_per_unit){
 			var params = {'name':opportunity.name,
 											'currency':opportunity.currency,
 											'account':$scope.contact.account.entityKey,
@@ -1187,6 +1187,7 @@ $scope.updatContactHeader = function(contact){
 			
 			Opportunity.insert($scope,params);
 			$('#addOpportunityModal').modal('hide');
+		}	
 		};
 
 

@@ -1380,6 +1380,7 @@ $scope.updateEventRenderAfterAdd= function(){};
         };
         // HKA 19.11.2013 Add Opportunty related to account
         $scope.saveOpp = function(opportunity) {
+            if (opportunity.amount_per_unit){
             var params = {'name':opportunity.name,
                                             'currency':opportunity.currency,
                                             'account':$scope.account.entityKey,
@@ -1397,6 +1398,7 @@ $scope.updateEventRenderAfterAdd= function(){};
             
             Opportunity.insert($scope, params);
             $('#addOpportunityModal').modal('hide');
+        }
         };
 
         // HKA 19.11.2013 Add Case related to account

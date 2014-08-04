@@ -1507,6 +1507,7 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
       }
 
       $scope.save = function(opportunity){
+        if (opportunity.amount_per_unit){
         var hasContact = false;
         var hasAccount = false;
         opportunity.closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
@@ -1547,7 +1548,7 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
         }else{
             // should highlight contact and account
         }
-
+      }
       };
       $scope.accountInserted = function(resp){
           $scope.opportunity.account = resp;
