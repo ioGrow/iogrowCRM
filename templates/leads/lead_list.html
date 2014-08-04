@@ -329,7 +329,7 @@
               </ul>
             </div>
             <div class="col-md-4">
-              <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
+              <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="{{_('Add')}}">
             </div>
           </div>
         </form>
@@ -357,7 +357,7 @@
               <div class="modal-footer">
                 <button class="btn" ng-click="selectedLead={}" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-                <input ng-click="deletelead()" type="submit" class="btn red" value="Delete this Lead">
+                <input ng-click="deletelead()" type="submit" class="btn red" value="{{_('Delete this Lead')}}">
                 <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
               </div>
                </form>
@@ -385,7 +385,7 @@
             </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <input ng-hide="isLoadingTask" ng-click="addTagsTothis()" type="submit" class="btn green" value="Add">
+                <input ng-hide="isLoadingTask" ng-click="addTagsTothis()" type="submit" class="btn green" value="{{_('Add')}}">
                 <input ng-show="isLoadingTask" type="submit" class="btn green" value="Loading..." disabled>
               </div>
           </form>

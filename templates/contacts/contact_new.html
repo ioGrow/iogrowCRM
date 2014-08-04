@@ -185,7 +185,7 @@
                                                 <a class="btn-link addAnotherPhone" ng-hide="showEmailForm" ng-click="showEmailForm = true">
                                                     <i class="icon-plus"></i> {{ _('Add a new email address')}} </a>
                                             </li>
-                                            
+
                                         </ul>
                                         <div class="news-block-tags">
                                             <strong>{{ _('Address')}}</strong>
@@ -416,7 +416,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _('Cancel')}}</button>
-                <input  type="submit" ng-disabled="!address.country" ng-click="pushElement(address, addresses, 'addresses')" class="btn green" value="Add this address">
+                <input  type="submit" ng-disabled="!address.country" ng-click="pushElement(address, addresses, 'addresses')" class="btn green" value="{{_('Add this address')}}">
             </div>
         </div>
     </div>
