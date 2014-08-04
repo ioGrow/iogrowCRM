@@ -568,6 +568,8 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.newEventform=false;
         $scope.newTask={};
         $scope.ioevent = {};
+        $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
+
         // What to do after authentication
         $scope.endError = function() {
             alert("okkkkkkkkkkkkkkk");
@@ -1378,15 +1380,21 @@ $scope.updateEventRenderAfterAdd= function(){};
         };
         // HKA 19.11.2013 Add Opportunty related to account
         $scope.saveOpp = function(opportunity) {
-
-            var params = {'name': opportunity.name,
-                'amount': opportunity.amount,
-                'account': $scope.account.entityKey,
-                'stage': $scope.stage_selected.entityKey,
-                'access': $scope.account.access
-            };
-
-
+            var params = {'name':opportunity.name,
+                                            'currency':opportunity.currency,
+                                            'account':$scope.account.entityKey,
+                                            'stage' :$scope.stage_selected.entityKey,
+                                            'access': $scope.account.access,
+                                            };
+            if (opportunity.duration_unit=='fixed'){
+                params.amount_total=opportunity.amount_per_unit;
+              params.opportunity_type = 'fixed_bid';
+            }else{
+              params.opportunity_type = 'per_' + opportunity.duration;
+              params.amount_total=opportunity.amount_per_unit * opportunity.duration;
+              params.amount_per_unit=opportunity.amount_per_unit
+            }
+            
             Opportunity.insert($scope, params);
             $('#addOpportunityModal').modal('hide');
         };

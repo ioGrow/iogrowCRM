@@ -1168,11 +1168,7 @@ $scope.updatContactHeader = function(contact){
 	};
 	// HKA 02.12.2013 Add Opportunty related to Contact
 		$scope.saveOpp = function(opportunity){
-			var amount=0;
-			var type="";
-			
-            console.log(opportunity.amount_per_unit);
-            console.log(opportunity.duration);
+
 			var params = {'name':opportunity.name,
 											'currency':opportunity.currency,
 											'account':$scope.contact.account.entityKey,
