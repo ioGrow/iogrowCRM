@@ -1,4 +1,4 @@
-# Arabic translations for PROJECT.
+# Arabic (Algeria) translations for PROJECT.
 # Copyright (C) 2014 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
@@ -8,10 +8,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-01-13 18:46+0100\n"
-"PO-Revision-Date: 2014-01-13 18:47+0100\n"
+"POT-Creation-Date: 2014-07-26 11:00+0100\n"
+"PO-Revision-Date: 2014-08-03 12:50+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: ar <LL@li.org>\n"
+"Language-Team: ar_DZ <LL@li.org>\n"
 "Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n>=3 "
 "&& n<=10 ? 3 : n>=11 && n<=99 ? 4 : 5)\n"
 "MIME-Version: 1.0\n"
@@ -97,1294 +97,1738 @@ msgstr ""
 msgid "Redirected but the response is missing a Location: header."
 msgstr ""
 
-#: templates/base.html:155
-msgid "Error"
-msgstr ""
+#: templates/base.html:92 templates/cases/case_list.html:322
+#: templates/cases/case_list.html:330
+#: templates/opportunities/opportunity_list.html:284
+msgid "Search"
+msgstr "ابحث"
 
-#: templates/base.html:168 templates/accounts/show.html:1095
-#: templates/accounts/show.html:1124 templates/accounts/show.html:1153
-#: templates/activities/task_show.html:51
-#: templates/campaigns/campaign_show.html:643
-#: templates/cases/case_show.html:548 templates/contacts/show.html:865
-#: templates/contacts/show.html:893 templates/contacts/show.html:922
-#: templates/leads/lead_show.html:689 templates/leads/lead_show.html:881
-#: templates/leads/lead_show.html:910
+#: templates/base.html:113
+msgid "Invite Users"
+msgstr "استدعاء مستخدم"
+
+#: templates/base.html:157 templates/calendar/calendar_show.html:28
+msgid "Calendar"
+msgstr "رزنامة"
+
+#: templates/base.html:188
+msgid "Sign Out"
+msgstr "تسجيل الخروج"
+
+#: templates/base.html:192
+msgid "My Setting"
+msgstr "الاعدادات"
+
+#: templates/base.html:211 templates/base.html:304
+#: templates/blog/blog_base.html:181 templates/blog/blog_base.html:274
+#: templates/blog/public_blog_base.html:181
+#: templates/blog/public_blog_base.html:274
+msgid "My setting"
+msgstr "الاعدادات"
+
+#: templates/base.html:219 templates/base.html:312
+#: templates/blog/blog_base.html:189 templates/blog/blog_base.html:282
+#: templates/blog/public_blog_base.html:189
+#: templates/blog/public_blog_base.html:282
+msgid "Language"
+msgstr "اللغة"
+
+#: templates/base.html:225 templates/base.html:317
+msgid "English"
+msgstr "الانجليزبة"
+
+#: templates/base.html:226 templates/base.html:318
+msgid "Arabic"
+msgstr "العربية"
+
+#: templates/base.html:227 templates/base.html:319
+msgid "French"
+msgstr "الفرنسية"
+
+#: templates/base.html:234 templates/base.html:289 templates/base.html:326
+#: templates/opportunit_new.html:227 templates/opportunit_new.html:259
+#: templates/activities/all_tasks.html:153
+#: templates/activities/all_tasks.html:253
+#: templates/activities/all_tasks.html:338
+#: templates/activities/all_tasks.html:423
+#: templates/activities/all_tasks.html:508
+#: templates/articles/article_new.html:202
+#: templates/articles/article_new.html:234 templates/blog/blog_base.html:204
+#: templates/blog/blog_base.html:259 templates/blog/blog_base.html:296
+#: templates/blog/public_blog_base.html:204
+#: templates/blog/public_blog_base.html:259
+#: templates/blog/public_blog_base.html:296
+#: templates/calendar/calendar_show.html:107
+#: templates/calendar/calendar_show.html:164
+#: templates/calendar/calendar_show.html:196 templates/cases/case_new.html:268
+#: templates/cases/case_new.html:292 templates/contacts/contact_new.html:441
+#: templates/contacts/contact_new.html:465 templates/leads/lead_new.html:449
+#: templates/leads/lead_new.html:473
 #: templates/live/company_profile/comp_profile_show.html:176
 #: templates/live/company_profile/comp_profile_show.html:205
 #: templates/live/company_profile/comp_profile_show.html:233
 #: templates/live/company_profile/comp_profile_show.html:262
-#: templates/live/customer_stories/customer_stories_show.html:294
-#: templates/live/customer_stories/customer_stories_show.html:840
-#: templates/live/customer_stories/customer_stories_show.html:876
-#: templates/live/feedbacks/feedbacks_show.html:317
-#: templates/live/feedbacks/feedbacks_show.html:751
-#: templates/live/feedbacks/feedbacks_show.html:787
-#: templates/live/product_videos/product_videos_show.html:294
-#: templates/live/product_videos/product_videos_show.html:840
-#: templates/live/product_videos/product_videos_show.html:876
-#: templates/live/shows/show.html:294 templates/live/shows/show.html:841
-#: templates/live/shows/show.html:877 templates/needs/show.html:539
-#: templates/opportunities/opportunity_show.html:546
+#: templates/needs/show.html:572
+#: templates/opportunities/opportunity_new.html:412
+#: templates/opportunities/opportunity_new.html:444
 msgid "Close"
-msgstr ""
+msgstr "اغلاق"
 
-#: templates/ng-index.html:42 templates/accounts/list.html:110
-#: templates/accounts/show.html:132
+#: templates/base.html:235 templates/base.html:327
+#: templates/opportunit_new.html:228 templates/opportunit_new.html:260
+#: templates/admin/settings/settings.html:342
+#: templates/admin/settings/settings.html:410
+#: templates/articles/article_new.html:203
+#: templates/articles/article_new.html:235 templates/blog/blog_base.html:205
+#: templates/blog/blog_base.html:297 templates/blog/public_blog_base.html:205
+#: templates/blog/public_blog_base.html:297
+#: templates/calendar/calendar_show.html:108
+#: templates/calendar/calendar_show.html:165
+#: templates/calendar/calendar_show.html:197 templates/cases/case_new.html:269
+#: templates/cases/case_new.html:293 templates/contacts/contact_new.html:442
+#: templates/contacts/contact_new.html:466 templates/leads/lead_new.html:450
+#: templates/leads/lead_new.html:474
+#: templates/live/company_profile/comp_profile_show.html:177
+#: templates/live/company_profile/comp_profile_show.html:206
+#: templates/live/company_profile/comp_profile_show.html:234
+#: templates/live/company_profile/comp_profile_show.html:263
+#: templates/needs/show.html:573
+#: templates/opportunities/opportunity_new.html:413
+#: templates/opportunities/opportunity_new.html:445
+msgid "Save"
+msgstr "حفظ التغييرات"
+
+#: templates/base.html:247 templates/blog/blog_base.html:217
+#: templates/blog/public_blog_base.html:217
+msgid "Capture leads from your Social networks"
+msgstr "احصل على مداخل البيع من شبكتك الاجتماعية الخاصة"
+
+#: templates/base.html:255
+msgid ""
+"If you are looking to build a potential network of contacts,\n"
+"             it's not just a matter of adding them manually,\n"
+"             you can do better! Use the free Google Chrome extension that"
+" allows you to add people right from Linkedin, Twitter and Gmail in one "
+"click.\n"
+"             Keep the experience you know and connect with the people you"
+" need"
+msgstr ""
+"اذا كنت تبحث على انشاء شبكة اتصالات  فعالة بسرعة وبسهولة  استخدم تمديد  "
+"جوجل كروم الذي يوفر لك خدمة اضافة اشخاص من بريدك الاكتروني جيميل و من "
+"حسابك الخاص على تويتر و لنكد ان  وذلك بضغطة زر واحدة ."
+
+#: templates/base.html:272 templates/blog/blog_base.html:242
+#: templates/blog/public_blog_base.html:242
+msgid "Install Chrome Extension"
+msgstr "ثبت تمديد جوجل كروم"
+
+#: templates/base.html:283 templates/blog/blog_base.html:253
+#: templates/blog/public_blog_base.html:253
+msgid "Error"
+msgstr "خطأ"
+
+#: templates/base.html:286
+msgid "Oops !...An error has occured. Please try again"
+msgstr "عفوا! ... حدث خطأ. يرجى المحاولة مرة أخرى"
+
+#: templates/ng-index.html:42 templates/opportunit_new.html:30
 #: templates/products/validated_learning/list.html:91
 msgid "Accounts"
-msgstr "الحسابات"
+msgstr "حسابات"
 
 #: templates/ng-index.html:47 templates/ng-index.html:53
-#: templates/accounts/list.html:42 templates/accounts/list.html:115
 #: templates/products/features/list.html:43
 #: templates/products/roadmaps/list.html:42
 #: templates/products/validated_learning/list.html:43
 #: templates/products/validated_learning/list.html:96
-#: templates/search/list.html:42
+#: templates/search/list.html:48
 msgid "New Account"
 msgstr "حساب جديد"
 
-#: templates/ng-index.html:62 templates/accounts/list.html:51
-#: templates/accounts/list.html:161 templates/accounts/show.html:637
-#: templates/accounts/show.html:756 templates/accounts/show.html:1070
-#: templates/admin/settings/settings.html:110
-#: templates/admin/settings/settings.html:144
-#: templates/campaigns/campaign_list.html:51
-#: templates/campaigns/campaign_show.html:613
-#: templates/cases/case_list.html:205 templates/cases/case_show.html:498
-#: templates/contacts/show.html:513 templates/contacts/show.html:628
+#: templates/ng-index.html:62 templates/admin/settings/settings.html:219
+#: templates/admin/settings/settings.html:257
+#: templates/calendar/calendar_show.html:649
+#: templates/calendar/calendar_show.html:708
+#: templates/campaigns/campaign_list.html:51 templates/cases/case_list.html:31
 #: templates/live/company_profile/comp_profile_show.html:166
 #: templates/live/customer_stories/customer_stories_list.html:137
-#: templates/live/customer_stories/customer_stories_show.html:803
-#: templates/live/customer_stories/customer_stories_show.html:858
-#: templates/live/feedbacks/feedbacks_show.html:769
 #: templates/live/product_videos/product_videos_list.html:137
-#: templates/live/product_videos/product_videos_show.html:803
-#: templates/live/product_videos/product_videos_show.html:858
-#: templates/live/shows/list_show.html:139 templates/live/shows/show.html:804
-#: templates/live/shows/show.html:859 templates/needs/show.html:489
-#: templates/opportunities/list.html:52 templates/opportunities/list.html:185
-#: templates/opportunities/opportunity_show.html:502
+#: templates/live/shows/list_show.html:155 templates/needs/show.html:521
+#: templates/opportunities/list.html:62 templates/opportunities/list.html:283
+#: templates/opportunities/opportunity_list.html:46
+#: templates/opportunities/opportunity_list.html:273
 #: templates/products/list.html:51 templates/products/features/list.html:52
 #: templates/products/roadmaps/list.html:51
 #: templates/products/validated_learning/list.html:52
-#: templates/search/list.html:51
+#: templates/search/list.html:57
 msgid "Name"
-msgstr "الاسم"
+msgstr "اسم"
 
-#: templates/ng-index.html:70 templates/accounts/list.html:59
-#: templates/accounts/show.html:135 templates/accounts/show.html:1078
-#: templates/accounts/show.html:1171 templates/campaigns/campaign_show.html:621
-#: templates/cases/case_show.html:172 templates/contacts/show.html:940
-#: templates/leads/lead_show.html:707
+#: templates/ng-index.html:70 templates/calendar/calendar_show.html:217
+#: templates/contacts/contact_new.html:119 templates/leads/lead_new.html:146
 #: templates/live/company_profile/comp_profile_show.html:280
-#: templates/live/customer_stories/customer_stories_show.html:401
 #: templates/live/feedbacks/feedbacks_list.html:64
 #: templates/live/feedbacks/feedbacks_list.html:195
-#: templates/live/feedbacks/feedbacks_show.html:710
-#: templates/live/product_videos/product_videos_show.html:401
-#: templates/live/shows/show.html:402 templates/products/features/list.html:60
+#: templates/products/features/list.html:60
 #: templates/products/roadmaps/list.html:59
 #: templates/products/validated_learning/list.html:60
-#: templates/search/list.html:59
+#: templates/search/list.html:65
 msgid "Type"
-msgstr "طبيعة"
+msgstr "النوع"
 
-#: templates/ng-index.html:78 templates/accounts/list.html:67
-#: templates/accounts/show.html:136 templates/accounts/show.html:1086
-#: templates/campaigns/campaign_show.html:629
+#: templates/ng-index.html:78 templates/leads/lead_new.html:107
 #: templates/products/features/list.html:68
 #: templates/products/roadmaps/list.html:67
 #: templates/products/validated_learning/list.html:68
-#: templates/search/list.html:67
+#: templates/search/list.html:73
 msgid "Industry"
-msgstr ""
+msgstr "صناعة"
 
-#: templates/ng-index.html:89 templates/accounts/list.html:96
-#: templates/accounts/note_show.html:178 templates/accounts/show.html:84
-#: templates/accounts/show.html:107 templates/accounts/show.html:425
-#: templates/accounts/show.html:557 templates/accounts/show.html:671
-#: templates/accounts/show.html:809 templates/accounts/show.html:970
-#: templates/accounts/show.html:1028 templates/accounts/show.html:1193
-#: templates/accounts/show.html:1220 templates/accounts/show.html:1270
-#: templates/accounts/show.html:1297 templates/accounts/show.html:1324
-#: templates/activities/event_show.html:186
-#: templates/activities/task_show.html:228 templates/admin/groups/list.html:63
-#: templates/admin/groups/show.html:73
-#: templates/admin/settings/settings.html:129
-#: templates/admin/settings/settings.html:164
-#: templates/admin/settings/settings.html:242
-#: templates/admin/settings/settings.html:271
-#: templates/admin/settings/settings.html:351
-#: templates/admin/settings/settings.html:381
-#: templates/admin/users/list.html:64 templates/campaigns/campaign_list.html:71
-#: templates/cases/case_list.html:140 templates/cases/case_show.html:120
-#: templates/cases/case_show.html:143 templates/contacts/list.html:104
-#: templates/contacts/show.html:120 templates/contacts/show.html:143
-#: templates/contacts/show.html:542 templates/contacts/show.html:667
-#: templates/documents/show.html:190 templates/leads/lead_list.html:129
-#: templates/leads/lead_show.html:83 templates/leads/lead_show.html:146
-#: templates/leads/lead_show.html:169
+#: templates/ng-index.html:89 templates/activities/all_tasks.html:682
+#: templates/activities/all_tasks.html:710
+#: templates/activities/all_tasks.html:741
+#: templates/activities/all_tasks.html:855 templates/admin/groups/list.html:108
+#: templates/admin/groups/show.html:78
+#: templates/admin/settings/settings.html:238
+#: templates/admin/settings/settings.html:277
+#: templates/admin/settings/settings.html:309
+#: templates/admin/settings/settings.html:341
+#: templates/admin/settings/settings.html:375
+#: templates/admin/settings/settings.html:409
+#: templates/admin/users/list.html:141 templates/articles/article_new.html:167
+#: templates/articles/article_show.html:169
+#: templates/blog/public_article_show.html:170
+#: templates/blog/public_support.html:114
+#: templates/calendar/calendar_show.html:130
+#: templates/calendar/calendar_show.html:239
+#: templates/calendar/calendar_show.html:270
+#: templates/calendar/calendar_show.html:323
+#: templates/calendar/calendar_show.html:356
+#: templates/calendar/calendar_show.html:385
+#: templates/calendar/calendar_show.html:415
+#: templates/calendar/calendar_show.html:464
+#: templates/calendar/calendar_show.html:522
+#: templates/calendar/calendar_show.html:543
+#: templates/calendar/calendar_show.html:567
+#: templates/calendar/calendar_show.html:597
+#: templates/calendar/calendar_show.html:624
+#: templates/calendar/calendar_show.html:683
+#: templates/calendar/calendar_show.html:761
+#: templates/calendar/calendar_show.html:799
+#: templates/calendar/calendar_show.html:831
+#: templates/calendar/calendar_show.html:857
+#: templates/campaigns/campaign_list.html:71 templates/cases/case_list.html:410
+#: templates/cases/case_new.html:244 templates/contacts/contact_new.html:417
+#: templates/contacts/list.html:93 templates/leads/lead_list.html:331
+#: templates/leads/lead_new.html:425
 #: templates/live/company_profile/comp_profile_show.html:295
 #: templates/live/company_profile/comp_profile_show.html:322
 #: templates/live/company_profile/comp_profile_show.html:372
 #: templates/live/company_profile/comp_profile_show.html:399
 #: templates/live/company_profile/comp_profile_show.html:426
-#: templates/live/customer_stories/customer_stories_show.html:84
-#: templates/live/customer_stories/customer_stories_show.html:107
-#: templates/live/customer_stories/customer_stories_show.html:459
-#: templates/live/customer_stories/customer_stories_show.html:571
 #: templates/live/feedbacks/feedbacks_list.html:122
-#: templates/live/feedbacks/feedbacks_show.html:98
-#: templates/live/feedbacks/feedbacks_show.html:122
-#: templates/live/feedbacks/feedbacks_show.html:503
-#: templates/live/product_videos/product_videos_show.html:84
-#: templates/live/product_videos/product_videos_show.html:107
-#: templates/live/product_videos/product_videos_show.html:459
-#: templates/live/product_videos/product_videos_show.html:571
-#: templates/live/shows/show.html:84 templates/live/shows/show.html:107
-#: templates/live/shows/show.html:460 templates/live/shows/show.html:572
-#: templates/needs/show.html:120 templates/needs/show.html:143
-#: templates/opportunities/list.html:119
-#: templates/opportunities/opportunity_show.html:121
-#: templates/opportunities/opportunity_show.html:144
+#: templates/needs/show.html:126 templates/needs/show.html:153
+#: templates/opportunities/list.html:221
+#: templates/opportunities/opportunity_list.html:437
+#: templates/opportunities/opportunity_new.html:377
 #: templates/products/list.html:63 templates/products/features/list.html:79
 #: templates/products/roadmaps/list.html:78
 #: templates/products/validated_learning/list.html:79
-#: templates/search/list.html:78
+#: templates/search/list.html:84
 msgid "Cancel"
-msgstr ""
+msgstr "إلغاء"
 
 #: templates/ng-index.html:90 templates/products/features/list.html:80
 #: templates/products/roadmaps/list.html:79
 #: templates/products/validated_learning/list.html:80
-#: templates/search/list.html:79
+#: templates/search/list.html:85
 msgid "Add Account"
-msgstr ""
+msgstr "إضافة حساب"
 
-#: templates/ng-index.html:126 templates/accounts/list.html:212
-#: templates/accounts/note_show.html:101 templates/accounts/show.html:217
-#: templates/accounts/show.html:378 templates/accounts/show.html:483
-#: templates/accounts/show.html:614 templates/accounts/show.html:731
-#: templates/activities/event_show.html:109
-#: templates/activities/task_show.html:151 templates/admin/groups/list.html:132
-#: templates/admin/groups/show.html:130
-#: templates/admin/settings/settings.html:89
-#: templates/admin/settings/settings.html:209
-#: templates/admin/settings/settings.html:317
-#: templates/admin/users/list.html:125
-#: templates/campaigns/campaign_list.html:125
-#: templates/campaigns/campaign_show.html:128
-#: templates/cases/case_list.html:273 templates/cases/case_show.html:244
-#: templates/contacts/list.html:221 templates/contacts/show.html:246
-#: templates/contacts/show.html:492 templates/contacts/show.html:604
-#: templates/documents/show.html:111 templates/leads/lead_list.html:248
-#: templates/leads/lead_show.html:288
+#: templates/ng-index.html:126 templates/activities/all_tasks.html:656
+#: templates/activities/all_tasks.html:824 templates/admin/groups/show.html:140
+#: templates/campaigns/campaign_list.html:125 templates/contacts/list.html:237
 #: templates/live/customer_stories/customer_stories_list.html:185
-#: templates/live/customer_stories/customer_stories_show.html:224
 #: templates/live/feedbacks/feedbacks_list.html:249
-#: templates/live/feedbacks/feedbacks_show.html:247
 #: templates/live/product_videos/product_videos_list.html:186
-#: templates/live/product_videos/product_videos_show.html:224
-#: templates/live/shows/list_show.html:189 templates/live/shows/show.html:224
-#: templates/needs/show.html:244 templates/opportunities/list.html:239
-#: templates/opportunities/opportunity_show.html:248
-#: templates/products/list.html:117 templates/products/features/list.html:135
+#: templates/live/shows/list_show.html:205 templates/needs/show.html:256
+#: templates/opportunities/list.html:373 templates/products/list.html:117
+#: templates/products/features/list.html:135
 #: templates/products/roadmaps/list.html:134
 #: templates/products/validated_learning/list.html:133
-#: templates/search/list.html:128
+#: templates/search/list.html:144
 msgid "Prev"
-msgstr ""
+msgstr "السابقة"
 
-#: templates/ng-index.html:128 templates/accounts/list.html:216
-#: templates/accounts/note_show.html:105 templates/accounts/show.html:221
-#: templates/accounts/show.html:382 templates/accounts/show.html:487
-#: templates/accounts/show.html:618 templates/accounts/show.html:735
-#: templates/activities/event_show.html:113
-#: templates/activities/task_show.html:155 templates/admin/groups/list.html:136
-#: templates/admin/groups/show.html:134
-#: templates/admin/settings/settings.html:93
-#: templates/admin/settings/settings.html:213
-#: templates/admin/settings/settings.html:321
-#: templates/admin/users/list.html:129
-#: templates/campaigns/campaign_list.html:129
-#: templates/campaigns/campaign_show.html:132
-#: templates/cases/case_list.html:277 templates/cases/case_show.html:248
-#: templates/contacts/list.html:225 templates/contacts/show.html:250
-#: templates/contacts/show.html:496 templates/contacts/show.html:608
-#: templates/documents/show.html:115 templates/leads/lead_list.html:252
-#: templates/leads/lead_show.html:292
+#: templates/ng-index.html:128 templates/activities/all_tasks.html:660
+#: templates/activities/all_tasks.html:828 templates/admin/groups/show.html:144
+#: templates/campaigns/campaign_list.html:129 templates/contacts/list.html:241
 #: templates/live/customer_stories/customer_stories_list.html:189
-#: templates/live/customer_stories/customer_stories_show.html:228
 #: templates/live/feedbacks/feedbacks_list.html:253
-#: templates/live/feedbacks/feedbacks_show.html:251
 #: templates/live/product_videos/product_videos_list.html:190
-#: templates/live/product_videos/product_videos_show.html:228
-#: templates/live/shows/list_show.html:193 templates/live/shows/show.html:228
-#: templates/needs/show.html:248 templates/opportunities/list.html:243
-#: templates/opportunities/opportunity_show.html:252
-#: templates/products/list.html:121 templates/products/features/list.html:139
+#: templates/live/shows/list_show.html:209 templates/needs/show.html:260
+#: templates/opportunities/list.html:377 templates/products/list.html:121
+#: templates/products/features/list.html:139
 #: templates/products/roadmaps/list.html:138
 #: templates/products/validated_learning/list.html:137
-#: templates/search/list.html:132
+#: templates/search/list.html:148
 msgid "Next"
-msgstr ""
+msgstr "التالي"
 
-#: templates/accounts/list.html:23
-msgid "Portlet Settings"
-msgstr ""
+#: templates/opportunit_new.html:86
+msgid "Type here the company name of your customer,parnter..."
+msgstr "اكتب هنا اسم الشركة الخاصة بك العملاء،شريك ..."
 
-#: templates/accounts/list.html:26
-msgid "Here will be a configuration form"
-msgstr ""
+#: templates/opportunit_new.html:155 templates/articles/article_new.html:130
+#: templates/calendar/calendar_show.html:287 templates/cases/case_new.html:207
+#: templates/contacts/contact_new.html:380 templates/leads/lead_new.html:388
+#: templates/live/company_profile/comp_profile_show.html:335
+#: templates/opportunities/opportunity_new.html:340
+msgid "Add Address"
+msgstr "إضافة العنوان"
 
-#: templates/accounts/list.html:33 templates/accounts/note_show.html:14
-#: templates/accounts/show.html:22
-msgid "Sign-in Button;"
-msgstr ""
+#: templates/opportunit_new.html:161 templates/articles/article_new.html:136
+#: templates/calendar/calendar_show.html:292 templates/cases/case_new.html:212
+#: templates/contacts/contact_new.html:385 templates/leads/lead_new.html:393
+#: templates/live/company_profile/comp_profile_show.html:341
+#: templates/opportunities/opportunity_new.html:346
+msgid "Street"
+msgstr "شارع"
 
-#: templates/accounts/list.html:62
-msgid "eg: customer, partner, investor"
-msgstr ""
+#: templates/opportunit_new.html:167 templates/articles/article_new.html:142
+#: templates/calendar/calendar_show.html:298 templates/cases/case_new.html:218
+#: templates/contacts/contact_new.html:391 templates/leads/lead_new.html:399
+#: templates/live/company_profile/comp_profile_show.html:347
+#: templates/opportunities/opportunity_new.html:352
+msgid "City"
+msgstr "مدينة"
 
-#: templates/accounts/list.html:70
-msgid "eg: tech, health, energy"
-msgstr ""
+#: templates/opportunit_new.html:173 templates/articles/article_new.html:148
+#: templates/calendar/calendar_show.html:304 templates/cases/case_new.html:224
+#: templates/contacts/contact_new.html:397 templates/leads/lead_new.html:405
+#: templates/live/company_profile/comp_profile_show.html:353
+#: templates/opportunities/opportunity_new.html:358
+msgid "State/Province"
+msgstr "دولة/مقاطعة"
 
-#: templates/accounts/list.html:75
-#: templates/live/customer_stories/customer_stories_show.html:438
-#: templates/live/feedbacks/feedbacks_list.html:101
-#: templates/live/product_videos/product_videos_show.html:438
-#: templates/live/shows/show.html:439
-msgid "Who can access?"
-msgstr ""
+#: templates/opportunit_new.html:179 templates/articles/article_new.html:154
+#: templates/calendar/calendar_show.html:310 templates/cases/case_new.html:230
+#: templates/contacts/contact_new.html:403 templates/leads/lead_new.html:411
+#: templates/live/company_profile/comp_profile_show.html:359
+#: templates/opportunities/opportunity_new.html:364
+msgid "Postal Code"
+msgstr "الرمز البريدي"
 
-#: templates/accounts/list.html:82
-#: templates/live/customer_stories/customer_stories_show.html:445
-#: templates/live/feedbacks/feedbacks_list.html:108
-#: templates/live/product_videos/product_videos_show.html:445
-#: templates/live/shows/show.html:446
-msgid "public: Anyone within your organization"
-msgstr ""
+#: templates/opportunit_new.html:185 templates/articles/article_new.html:160
+#: templates/calendar/calendar_show.html:316 templates/cases/case_new.html:236
+#: templates/contacts/contact_new.html:409 templates/leads/lead_new.html:417
+#: templates/live/company_profile/comp_profile_show.html:365
+#: templates/opportunities/opportunity_new.html:370
+msgid "Country"
+msgstr "بلد"
 
-#: templates/accounts/list.html:86 templates/accounts/show.html:48
-#: templates/live/customer_stories/customer_stories_show.html:48
-#: templates/live/customer_stories/customer_stories_show.html:449
-#: templates/live/feedbacks/feedbacks_list.html:112
-#: templates/live/feedbacks/feedbacks_show.html:62
-#: templates/live/product_videos/product_videos_show.html:48
-#: templates/live/product_videos/product_videos_show.html:449
-#: templates/live/shows/show.html:48 templates/live/shows/show.html:450
-msgid "private: only you and your collaborators"
-msgstr ""
+#: templates/opportunit_new.html:209 templates/opportunit_new.html:242
+#: templates/articles/article_new.html:184
+#: templates/articles/article_new.html:217 templates/cases/case_new.html:255
+#: templates/cases/case_new.html:279 templates/contacts/contact_new.html:428
+#: templates/contacts/contact_new.html:452 templates/leads/lead_new.html:436
+#: templates/leads/lead_new.html:460
+#: templates/opportunities/opportunity_new.html:394
+#: templates/opportunities/opportunity_new.html:427
+msgid "Edit Lead"
+msgstr "تحرير مدخل البيع"
 
-#: templates/accounts/list.html:98
-msgid "Add this account"
-msgstr ""
+#: templates/opportunit_new.html:217 templates/articles/article_new.html:192
+#: templates/calendar/calendar_show.html:154 templates/cases/case_new.html:260
+#: templates/contacts/contact_new.html:284
+#: templates/contacts/contact_new.html:433 templates/leads/lead_new.html:294
+#: templates/leads/lead_new.html:441
+#: templates/live/company_profile/comp_profile_show.html:223
+#: templates/opportunities/opportunity_new.html:402
+msgid "Tagline"
+msgstr "مقدمة"
 
-#: templates/accounts/list.html:99 templates/accounts/show.html:191
-#: templates/accounts/show.html:386 templates/accounts/show.html:491
-#: templates/accounts/show.html:739 templates/accounts/show.html:1031
-#: templates/accounts/show.html:1196 templates/accounts/show.html:1273
-#: templates/accounts/show.html:1300 templates/accounts/show.html:1327
+#: templates/opportunit_new.html:249 templates/articles/article_new.html:224
+#: templates/calendar/calendar_show.html:186 templates/cases/case_new.html:284
+#: templates/contacts/contact_new.html:300
+#: templates/contacts/contact_new.html:457 templates/leads/lead_new.html:310
+#: templates/leads/lead_new.html:465
+#: templates/live/company_profile/comp_profile_show.html:252
+#: templates/opportunities/opportunity_new.html:434
+msgid "Introduction"
+msgstr "مقدمة"
+
+#: templates/sign-up-early-bird.html:1091 templates/sign-up.html:1091
+msgid "Hi"
+msgstr "مرحبا"
+
+#: templates/activities/all_tasks.html:24
+msgid "Tasks"
+msgstr "المهام"
+
+#: templates/activities/all_tasks.html:70
+msgid "Add new task ..."
+msgstr "إضافة مهمة جديدة..."
+
+#: templates/activities/all_tasks.html:79
+#: templates/activities/all_tasks.html:82
+msgid "Due date"
+msgstr "تاريخ الاستحقاق"
+
+#: templates/activities/all_tasks.html:91
+#: templates/activities/all_tasks.html:94
+msgid "Use"
+msgstr "استعمال"
+
+#: templates/activities/all_tasks.html:91
+msgid "to add labels"
+msgstr "لاضافة تسميات"
+
+#: templates/activities/all_tasks.html:94
+msgid "to assign the task"
+msgstr "لتعيين المهمة"
+
+#: templates/activities/all_tasks.html:102
+#: templates/articles/article_search.html:249 templates/cases/case_new.html:134
+#: templates/contacts/contact_new.html:140
+#: templates/contacts/contact_new.html:174
+#: templates/contacts/contact_new.html:228
+#: templates/contacts/contact_new.html:255
+#: templates/contacts/contact_new.html:322 templates/leads/lead_new.html:154
+#: templates/leads/lead_new.html:188 templates/leads/lead_new.html:239
+#: templates/leads/lead_new.html:266 templates/leads/lead_new.html:332
+#: templates/opportunities/opportunity_new.html:255
+msgid "Add"
+msgstr "إضافة"
+
+#: templates/activities/all_tasks.html:109
+msgid "All Tasks"
+msgstr "جميع المهام"
+
+#: templates/activities/all_tasks.html:110
+msgid "Urgent Tasks"
+msgstr "مهام عاجلة"
+
+#: templates/activities/all_tasks.html:111
+#: templates/activities/all_tasks.html:118
+msgid "Created by Me"
+msgstr "انشاتها انا "
+
+#: templates/activities/all_tasks.html:112
+#: templates/activities/all_tasks.html:119
+msgid "Assigned to Me"
+msgstr "عينت لي "
+
+#: templates/activities/all_tasks.html:137
+#: templates/activities/all_tasks.html:237
+#: templates/activities/all_tasks.html:322
+#: templates/activities/all_tasks.html:407
+#: templates/activities/all_tasks.html:492
+msgid "No results found"
+msgstr "لا توجد نتائج"
+
+#: templates/activities/all_tasks.html:159
+#: templates/activities/all_tasks.html:259
+#: templates/activities/all_tasks.html:344
+#: templates/activities/all_tasks.html:429
+#: templates/activities/all_tasks.html:514
+msgid "Reopen"
+msgstr "إعادة فتح"
+
+#: templates/activities/all_tasks.html:165
+#: templates/activities/all_tasks.html:265
+#: templates/activities/all_tasks.html:350
+#: templates/activities/all_tasks.html:435
+#: templates/activities/all_tasks.html:520
+#: templates/activities/all_tasks.html:581
+#: templates/activities/all_tasks.html:760
+msgid "Tags"
+msgstr "الوسوم"
+
+#: templates/activities/all_tasks.html:171
+#: templates/activities/all_tasks.html:271
+#: templates/activities/all_tasks.html:356
+#: templates/activities/all_tasks.html:441
+#: templates/activities/all_tasks.html:526
+msgid "Assignee"
+msgstr "تعيين"
+
+#: templates/activities/all_tasks.html:177
+#: templates/admin/settings/settings.html:105
+#: templates/admin/settings/settings.html:140
+#: templates/admin/settings/settings.html:177
+#: templates/articles/article_show.html:52 templates/needs/show.html:185
+msgid "Delete"
+msgstr "حذف"
+
+#: templates/activities/all_tasks.html:214
+#: templates/activities/all_tasks.html:306
+msgid "Opened by:"
+msgstr "فتحت عن طريق: "
+
+#: templates/activities/all_tasks.html:215
+#: templates/activities/all_tasks.html:306
+#: templates/activities/all_tasks.html:391
+#: templates/activities/all_tasks.html:476
+#: templates/activities/all_tasks.html:561
+msgid "related to"
+msgstr "متعلقة ب"
+
+#: templates/activities/all_tasks.html:616
+#: templates/activities/all_tasks.html:784
+msgid "Add a new tag"
+msgstr "اضف وسم جديد "
+
+#: templates/activities/all_tasks.html:625
+#: templates/activities/all_tasks.html:793
+msgid "New tag name"
+msgstr "اسم جديد"
+
+#: templates/activities/all_tasks.html:639
+#: templates/activities/all_tasks.html:744
+#: templates/activities/all_tasks.html:807 templates/admin/groups/list.html:29
+#: templates/admin/groups/show.html:149
+#: templates/admin/settings/settings.html:32 templates/admin/users/list.html:29
+#: templates/articles/article_list.html:25
+#: templates/articles/article_new.html:42
+#: templates/articles/article_search.html:25
+#: templates/articles/article_show.html:26
+#: templates/calendar/calendar_show.html:36
+#: templates/calendar/calendar_show.html:243
+#: templates/calendar/calendar_show.html:326
+#: templates/calendar/calendar_show.html:359
+#: templates/calendar/calendar_show.html:388
+#: templates/calendar/calendar_show.html:418
+#: templates/calendar/calendar_show.html:627
+#: templates/calendar/calendar_show.html:802
+#: templates/calendar/calendar_show.html:834
+#: templates/calendar/calendar_show.html:860
+#: templates/campaigns/campaign_list.html:133 templates/cases/case_list.html:53
+#: templates/cases/case_new.html:25 templates/contacts/contact_new.html:33
+#: templates/contacts/list.html:303 templates/leads/lead_list.html:55
+#: templates/leads/lead_new.html:23
 #: templates/live/company_profile/comp_profile_show.html:298
 #: templates/live/company_profile/comp_profile_show.html:375
 #: templates/live/company_profile/comp_profile_show.html:402
 #: templates/live/company_profile/comp_profile_show.html:429
-#: templates/live/customer_stories/customer_stories_show.html:462
 #: templates/live/feedbacks/feedbacks_list.html:125
-#: templates/live/product_videos/product_videos_show.html:462
-#: templates/live/shows/show.html:463
+#: templates/opportunities/list.html:439
+#: templates/opportunities/opportunity_list.html:65
+#: templates/opportunities/opportunity_new.html:34
+#: templates/search/list.html:18
 msgid "Loading..."
-msgstr ""
+msgstr "تحميل..."
 
-#: templates/accounts/list.html:129 templates/cases/case_list.html:172
-#: templates/contacts/list.html:137 templates/leads/lead_list.html:162
-#: templates/live/customer_stories/customer_stories_list.html:103
-#: templates/live/feedbacks/feedbacks_list.html:155
-#: templates/live/product_videos/product_videos_list.html:103
-#: templates/live/shows/list_show.html:105
-#: templates/opportunities/list.html:152
-msgid "Filter by"
-msgstr ""
+#: templates/activities/all_tasks.html:644
+#: templates/activities/all_tasks.html:812
+#: templates/articles/article_list.html:206
+#: templates/articles/article_list.html:296
+#: templates/articles/article_search.html:187
+#: templates/articles/article_search.html:254
+#: templates/cases/case_list.html:234 templates/cases/case_list.html:299
+#: templates/leads/lead_list.html:241 templates/leads/lead_list.html:310
+#: templates/opportunities/opportunity_list.html:248
+msgid "Manage Tags"
+msgstr "ادارة الوسوم"
 
-#: templates/accounts/list.html:133
-msgid "All accounts"
-msgstr ""
-
-#: templates/accounts/list.html:134
-msgid "My accounts"
-msgstr ""
-
-#: templates/accounts/list.html:136 templates/cases/case_list.html:180
-#: templates/contacts/list.html:144 templates/leads/lead_list.html:170
-#: templates/live/customer_stories/customer_stories_list.html:113
-#: templates/live/feedbacks/feedbacks_list.html:168
-#: templates/live/product_videos/product_videos_list.html:113
-#: templates/live/shows/list_show.html:115
-#: templates/opportunities/list.html:160
-msgid "Views"
-msgstr ""
-
-#: templates/accounts/list.html:145 templates/cases/case_list.html:189
-#: templates/contacts/list.html:153 templates/leads/lead_list.html:179
-#: templates/live/customer_stories/customer_stories_list.html:122
-#: templates/live/feedbacks/feedbacks_list.html:177
-#: templates/live/product_videos/product_videos_list.html:122
-#: templates/live/shows/list_show.html:124
-#: templates/opportunities/list.html:169
-msgid "Quick Filtering"
-msgstr ""
-
-#: templates/accounts/list.html:160 templates/cases/case_list.html:204
-#: templates/contacts/list.html:168 templates/leads/lead_list.html:193
-#: templates/live/customer_stories/customer_stories_list.html:136
-#: templates/live/feedbacks/feedbacks_list.html:191
-#: templates/live/product_videos/product_videos_list.html:136
-#: templates/live/shows/list_show.html:138
-#: templates/opportunities/list.html:184
-msgid "Last modified"
-msgstr ""
-
-#: templates/accounts/list.html:199
-msgid ""
-"Accounts  pages includes a detailed page for each customer, partner, or "
-"investor in your ecosystem. You and your co-workers can collaborate to "
-"get a deep understanding."
-msgstr ""
-
-#: templates/accounts/list.html:220
+#: templates/activities/all_tasks.html:664
+#: templates/activities/all_tasks.html:832
 msgid "Loading"
-msgstr ""
+msgstr "تحميل"
 
-#: templates/accounts/note_show.html:26 templates/accounts/show.html:85
-#: templates/accounts/show.html:123 templates/campaigns/campaign_show.html:37
-#: templates/cases/case_show.html:121 templates/contacts/show.html:121
-#: templates/leads/lead_show.html:147
-#: templates/live/company_profile/comp_profile_show.html:35
-#: templates/live/customer_stories/customer_stories_show.html:85
-#: templates/live/feedbacks/feedbacks_show.html:99
-#: templates/live/feedbacks/feedbacks_show.html:140
-#: templates/live/product_videos/product_videos_show.html:85
-#: templates/live/shows/show.html:85 templates/needs/show.html:121
-#: templates/opportunities/opportunity_show.html:122
-msgid "Share"
-msgstr ""
+#: templates/activities/all_tasks.html:675
+msgid "Close Task"
+msgstr "اغلاق مهمة"
 
-#: templates/accounts/note_show.html:69
-msgid "Just add comments to remember what's important :"
-msgstr ""
+#: templates/activities/all_tasks.html:679
+msgid "Are you sure you want to close selected tasks"
+msgstr "هل انت متاكد من انك تود اغلاق المهمات المحددة"
 
-#: templates/accounts/note_show.html:122
-msgid "Who's involved"
-msgstr ""
+#: templates/activities/all_tasks.html:696
+msgid "Add Tags"
+msgstr "اضف وسم "
 
-#: templates/accounts/note_show.html:135
-msgid "Add a new Contributor"
-msgstr ""
+#: templates/activities/all_tasks.html:725
+msgid "Assign someone to this task"
+msgstr "عين شخص لهذه المهمة"
 
-#: templates/accounts/note_show.html:146
-#: templates/activities/event_show.html:154
-#: templates/activities/task_show.html:196
-msgid "Involve new contributors"
-msgstr ""
-
-#: templates/accounts/note_show.html:152
-msgid ""
-"Invite people from your team and start working together on this task. "
-"Everyone you invite will receive an email."
-msgstr ""
-
-#: templates/accounts/note_show.html:160
-msgid "Enter name or email addresse to involve people in this discussion"
-msgstr ""
-
-#: templates/accounts/note_show.html:163
-msgid "Add as:"
-msgstr ""
-
-#: templates/accounts/note_show.html:166
-msgid "Responsible"
-msgstr ""
-
-#: templates/accounts/note_show.html:167
-msgid "Participant"
-msgstr ""
-
-#: templates/accounts/note_show.html:168
-msgid "Invited"
-msgstr ""
-
-#: templates/accounts/note_show.html:179
-#: templates/activities/event_show.html:187
-#: templates/activities/task_show.html:229
-msgid "Involve"
-msgstr ""
-
-#: templates/accounts/show.html:31 templates/cases/case_show.html:67
-#: templates/contacts/show.html:67 templates/leads/lead_show.html:93
-#: templates/live/customer_stories/customer_stories_show.html:31
-#: templates/live/feedbacks/feedbacks_show.html:45
-#: templates/live/product_videos/product_videos_show.html:31
-#: templates/live/shows/show.html:31 templates/needs/show.html:67
-#: templates/opportunities/opportunity_show.html:68
-msgid "Sharing Settings"
-msgstr ""
-
-#: templates/accounts/show.html:37
-#: templates/live/customer_stories/customer_stories_show.html:37
-#: templates/live/feedbacks/feedbacks_show.html:51
-#: templates/live/product_videos/product_videos_show.html:37
-#: templates/live/shows/show.html:37
-msgid "Who has access:"
-msgstr ""
-
-#: templates/accounts/show.html:44
-#: templates/live/customer_stories/customer_stories_show.html:44
-#: templates/live/feedbacks/feedbacks_show.html:58
-#: templates/live/product_videos/product_videos_show.html:44
-#: templates/live/shows/show.html:44
-msgid "public: Anyone within your organization can access and find"
-msgstr ""
-
-#: templates/accounts/show.html:56
-#: templates/live/customer_stories/customer_stories_show.html:56
-#: templates/live/feedbacks/feedbacks_show.html:70
-#: templates/live/product_videos/product_videos_show.html:56
-#: templates/live/shows/show.html:56
-msgid "Collaborators:"
-msgstr ""
-
-#: templates/accounts/show.html:66
-#: templates/live/customer_stories/customer_stories_show.html:66
-#: templates/live/feedbacks/feedbacks_show.html:80
-#: templates/live/product_videos/product_videos_show.html:66
-#: templates/live/shows/show.html:66
-msgid "Invited user:"
-msgstr ""
-
-#: templates/accounts/show.html:73
-#: templates/live/customer_stories/customer_stories_show.html:73
-#: templates/live/feedbacks/feedbacks_show.html:87
-#: templates/live/product_videos/product_videos_show.html:73
-#: templates/live/shows/show.html:73
-msgid "Invite collaborators:"
-msgstr ""
-
-#: templates/accounts/show.html:75
-#: templates/live/customer_stories/customer_stories_show.html:75
-#: templates/live/feedbacks/feedbacks_show.html:89
-#: templates/live/product_videos/product_videos_show.html:75
-#: templates/live/shows/show.html:75
+#: templates/activities/all_tasks.html:730
+#: templates/calendar/calendar_show.html:516
 msgid "Enter name or email addresse to add people to this group"
+msgstr "ادخل اسم او بريد الكتروني لاضافة اشخاص لهذه المجموعة "
+
+#: templates/activities/all_tasks.html:743
+msgid "Add this account"
+msgstr "إضافة هذا الحساب"
+
+#: templates/activities/all_tasks.html:845
+msgid "Delete Task"
+msgstr "حذف المهمة"
+
+#: templates/activities/all_tasks.html:851
+msgid "Are you sure you want to delete those tasks"
+msgstr "هل أنت متأكد أنك تريد حذف هذه المهمة"
+
+#: templates/activities/all_tasks.html:872 templates/admin/groups/list.html:121
+#: templates/admin/users/list.html:153 templates/articles/article_list.html:307
+#: templates/articles/article_search.html:265
+#: templates/cases/case_list.html:423 templates/leads/lead_list.html:342
+#: templates/opportunities/opportunity_list.html:450
+msgid "Click to Select a label"
+msgstr "انقر لتحديد تسمية"
+
+#: templates/admin/groups/list.html:22 templates/admin/groups/show.html:95
+msgid "Groups"
+msgstr "مجموعات"
+
+#: templates/admin/groups/list.html:45 templates/admin/groups/list.html:88
+msgid "New Group"
+msgstr "اضف مجموعة"
+
+#: templates/admin/groups/list.html:97 templates/admin/groups/list.html:99
+msgid "Group Name"
+msgstr "اسم المجموعة"
+
+#: templates/admin/groups/list.html:109
+msgid "Add this group"
+msgstr "اضف هذه المجموعة"
+
+#: templates/admin/groups/show.html:23
+#: templates/campaigns/campaign_list.html:23 templates/search/list.html:29
+msgid "portlet Settings"
+msgstr "إعدادات المدخل"
+
+#: templates/admin/groups/show.html:26
+#: templates/campaigns/campaign_list.html:26 templates/search/list.html:32
+msgid "Here will be a configuration form"
 msgstr ""
 
-#: templates/accounts/show.html:99 templates/cases/case_show.html:135
-#: templates/contacts/show.html:135 templates/leads/lead_show.html:161
-#: templates/live/customer_stories/customer_stories_show.html:99
-#: templates/live/feedbacks/feedbacks_show.html:114
-#: templates/live/product_videos/product_videos_show.html:99
-#: templates/live/shows/show.html:99 templates/needs/show.html:135
-#: templates/opportunities/opportunity_show.html:136
-msgid "Are you sure you want to delete"
-msgstr ""
+#: templates/admin/groups/show.html:46
+msgid "Add a new member"
+msgstr "إضافة عضو جديد"
 
-#: templates/accounts/show.html:138 templates/accounts/show.html:300
-#: templates/accounts/show.html:307 templates/activities/task_show.html:108
-#: templates/admin/settings/settings.html:70
-#: templates/admin/settings/settings.html:192
-#: templates/admin/settings/settings.html:300
-#: templates/campaigns/campaign_show.html:52 templates/cases/case_show.html:173
-#: templates/contacts/show.html:173 templates/contacts/show.html:332
-#: templates/contacts/show.html:338 templates/leads/lead_show.html:211
-#: templates/leads/lead_show.html:368 templates/leads/lead_show.html:374
-#: templates/live/live_company_page.html:199
+#: templates/admin/groups/show.html:64
+msgid "Add member as:"
+msgstr "إضافة عضو على النحو التالي:"
+
+#: templates/admin/groups/show.html:66
+msgid "Member"
+msgstr "عضو"
+
+#: templates/admin/groups/show.html:67
+msgid "Owner"
+msgstr "مالك"
+
+#: templates/admin/groups/show.html:79
+msgid "Add this member"
+msgstr "اضف هذا العضو "
+
+#: templates/admin/groups/show.html:104
+msgid "New Member"
+msgstr "عضو جديد"
+
+#: templates/admin/settings/settings.html:23
+msgid "Settings"
+msgstr "إعدادات"
+
+#: templates/admin/settings/settings.html:60
+msgid "Opportunity Stages"
+msgstr "مرحلة الفرصة "
+
+#: templates/admin/settings/settings.html:63
+#: templates/admin/settings/settings.html:297
+#: templates/admin/settings/settings.html:329
+msgid "Case Status"
+msgstr "وضعية الحالة"
+
+#: templates/admin/settings/settings.html:66
+#: templates/admin/settings/settings.html:362
+#: templates/admin/settings/settings.html:397
+msgid "Lead Status"
+msgstr "وضعية مدخل البيع"
+
+#: templates/admin/settings/settings.html:84
+msgid "Add a new stage"
+msgstr "اضف مرحلة جديدة"
+
+#: templates/admin/settings/settings.html:105
+#: templates/admin/settings/settings.html:140
+#: templates/admin/settings/settings.html:177
+#: templates/articles/article_show.html:47
+#: templates/contacts/contact_new.html:280
+#: templates/contacts/contact_new.html:296 templates/leads/lead_new.html:290
+#: templates/leads/lead_new.html:306 templates/live/live_company_page.html:199
 #: templates/live/live_company_page.html:209
 #: templates/live/company_profile/comp_profile_show.html:46
 #: templates/live/company_profile/comp_profile_show.html:118
 #: templates/live/company_profile/comp_profile_show.html:130
 #: templates/live/company_profile/comp_profile_show.html:137
-#: templates/live/customer_stories/customer_stories_show.html:148
-#: templates/live/customer_stories/customer_stories_show.html:256
-#: templates/live/customer_stories/customer_stories_show.html:262
-#: templates/live/feedbacks/feedbacks_show.html:171
-#: templates/live/feedbacks/feedbacks_show.html:279
-#: templates/live/feedbacks/feedbacks_show.html:285
-#: templates/live/product_videos/product_videos_show.html:148
-#: templates/live/product_videos/product_videos_show.html:256
-#: templates/live/product_videos/product_videos_show.html:262
-#: templates/live/shows/show.html:148 templates/live/shows/show.html:256
-#: templates/live/shows/show.html:262 templates/needs/show.html:173
-#: templates/opportunities/opportunity_show.html:178
+#: templates/needs/show.html:185
 msgid "Edit"
-msgstr ""
+msgstr "تحرير"
 
-#: templates/accounts/show.html:138 templates/activities/task_show.html:108
-#: templates/admin/settings/settings.html:70
-#: templates/admin/settings/settings.html:192
-#: templates/admin/settings/settings.html:300
-#: templates/campaigns/campaign_show.html:52 templates/cases/case_show.html:173
-#: templates/contacts/show.html:173 templates/leads/lead_show.html:211
-#: templates/live/customer_stories/customer_stories_show.html:148
-#: templates/live/feedbacks/feedbacks_show.html:171
-#: templates/live/product_videos/product_videos_show.html:148
-#: templates/live/shows/show.html:148 templates/needs/show.html:173
-#: templates/opportunities/opportunity_show.html:178
-msgid "Delete"
-msgstr ""
+#: templates/admin/settings/settings.html:125
+msgid "Add a Case status"
+msgstr "اضف وضعية حالة"
 
-#: templates/accounts/show.html:154
-msgid "Account Feeds"
-msgstr ""
+#: templates/admin/settings/settings.html:162
+msgid "Add a Lead status"
+msgstr "اضف وضعية مدخل البيع"
 
-#: templates/accounts/show.html:161 templates/cases/case_show.html:196
-#: templates/needs/show.html:196
-#: templates/opportunities/opportunity_show.html:200
-msgid "Notes"
-msgstr ""
+#: templates/admin/settings/settings.html:213
+msgid "New Opportunity Stage"
+msgstr "مرحلة الفرصة"
 
-#: templates/accounts/show.html:162
-msgid "About"
-msgstr ""
+#: templates/admin/settings/settings.html:227
+#: templates/admin/settings/settings.html:265
+msgid "Probability"
+msgstr "احتمال"
 
-#: templates/accounts/show.html:163 templates/contacts/list.html:118
-#: templates/contacts/show.html:168
-msgid "Contacts"
-msgstr ""
+#: templates/admin/settings/settings.html:239
+msgid "Add a new Opportunity stage"
+msgstr "اضف مرحلة جديدة "
 
-#: templates/accounts/show.html:164 templates/needs/show.html:168
-msgid "Customer Needs"
-msgstr ""
+#: templates/admin/settings/settings.html:251
+msgid "Edit Opportunity Stage"
+msgstr "تحرير المرحلة"
 
-#: templates/accounts/show.html:165 templates/opportunities/list.html:133
-#: templates/opportunities/opportunity_show.html:169
-msgid "Opportunities"
-msgstr ""
+#: templates/admin/settings/settings.html:278
+msgid "save"
+msgstr "حفظ"
 
-#: templates/accounts/show.html:166 templates/cases/case_list.html:154
-#: templates/cases/case_show.html:168
-msgid "Cases"
-msgstr ""
+#: templates/admin/settings/settings.html:291
+msgid "New Case Status"
+msgstr "وضعية جديدة"
 
-#: templates/accounts/show.html:167 templates/cases/case_show.html:197
-#: templates/contacts/show.html:200 templates/needs/show.html:197
-#: templates/opportunities/opportunity_show.html:201
-msgid "Attach Documents"
-msgstr ""
+#: templates/admin/settings/settings.html:310
+msgid "Add Case Status"
+msgstr "اضف وضعية جديدة"
 
-#: templates/accounts/show.html:168 templates/cases/case_show.html:198
-#: templates/needs/show.html:198
-#: templates/opportunities/opportunity_show.html:202
-msgid "Send an Email"
-msgstr ""
+#: templates/admin/settings/settings.html:323
+msgid "Edit Case Status"
+msgstr " تحرير وضعية الحالة"
 
-#: templates/accounts/show.html:175
-msgid "Just add notes to remember what's important :"
-msgstr ""
+#: templates/admin/settings/settings.html:356
+msgid "New Lead status"
+msgstr "وضعية جديدة لمدخل البيع"
 
-#: templates/accounts/show.html:178
-msgid "Add a new subject"
-msgstr ""
+#: templates/admin/settings/settings.html:376
+msgid "Add Lead Status"
+msgstr " اضف وضعية لمدخل البيع"
 
-#: templates/accounts/show.html:190
-msgid "Add this note"
-msgstr ""
+#: templates/admin/settings/settings.html:391
+msgid "Edit Lead status"
+msgstr "تحرير وضعية مدخل البيع"
 
-#: templates/accounts/show.html:235
-msgid "Account Informations"
-msgstr ""
+#: templates/admin/users/list.html:22
+msgid "Users"
+msgstr "المستخدمين"
 
-#: templates/accounts/show.html:237
-msgid "Phone"
-msgstr ""
+#: templates/admin/users/list.html:45 templates/admin/users/list.html:120
+msgid "New User"
+msgstr "مستخدم جديد"
 
-#: templates/accounts/show.html:247 templates/accounts/show.html:1213
-#: templates/accounts/show.html:1215 templates/admin/users/list.html:52
-#: templates/contacts/show.html:975 templates/documents/show.html:163
-#: templates/leads/lead_show.html:740
+#: templates/admin/users/list.html:99
+msgid "invited by"
+msgstr "مدعو من طرف"
+
+#: templates/admin/users/list.html:126
+msgid ""
+"Invite people from your team and start working together in seconds. "
+"Everyone you invite will receive a welcome email."
+msgstr ""
+"ادعو اناس من فريقك وابداو العمل الجماعي في ثواني .اي شخص تقوم بدعوته "
+"سيتلقى رسالة ترحيب ."
+
+#: templates/admin/users/list.html:129
+#: templates/calendar/calendar_show.html:263
+#: templates/calendar/calendar_show.html:265
+#: templates/contacts/contact_new.html:164
+#: templates/contacts/contact_new.html:171 templates/leads/lead_new.html:178
+#: templates/leads/lead_new.html:185
 #: templates/live/company_profile/comp_profile_show.html:315
 #: templates/live/company_profile/comp_profile_show.html:317
 msgid "Email"
+msgstr "البريد الالكتروني"
+
+#: templates/admin/users/list.html:142
+msgid "Add this user"
+msgstr "اضف هذا المستخدم"
+
+#: templates/articles/article_list.html:5 templates/articles/article_new.html:5
+#: templates/articles/article_search.html:5
+#: templates/articles/article_show.html:4
+#: templates/blog/public_article_show.html:6
+msgid "ioGrow Blog"
 msgstr ""
 
-#: templates/accounts/show.html:257
-msgid "Address"
-msgstr ""
+#: templates/articles/article_list.html:77
+#: templates/articles/article_search.html:77
+msgid "posted by"
+msgstr "أرسلت بواسطة"
 
-#: templates/accounts/show.html:272
-msgid "Links"
+#: templates/articles/article_list.html:110
+#: templates/articles/article_search.html:110
+#: templates/leads/lead_list.html:168
+msgid ""
+"You have leads coming in from a wide variety of sources. Some leads come "
+"from lists you acquired, others from business cards and still more from "
+"the \"contact us\" form on your website. i/oGrow help you organize "
+"informations about leads so they can be followed up on and qualified "
+"quickly."
 msgstr ""
+"لديك مداخيل البيع من عدت مصادر.بعض هذه المداخيل ياتي من قوائمك الخاصة و "
+"البعض الاخر من بطاقات العمل ,الاتصالات,المواقع الالكترونية. i/oGrow "
+"يساعدك على ادارة مداخيل البيع لديك لتتمكن متابتعهم وتقييمهم بشكل صحيح "
+"وبسهولة."
 
-#: templates/accounts/show.html:274 templates/accounts/show.html:1290
-#: templates/contacts/show.html:1052 templates/leads/lead_show.html:817
-#: templates/live/company_profile/comp_profile_show.html:392
-msgid "Website"
-msgstr ""
+#: templates/articles/article_list.html:122
+#: templates/articles/article_search.html:122
+#: templates/cases/case_list.html:171 templates/leads/lead_list.html:180
+#: templates/opportunities/opportunity_list.html:187
+msgid "No results found, try with another filter"
+msgstr "لا توجد نتائج، حاول مع مرشح آخر"
 
-#: templates/accounts/show.html:284
-msgid "Social Links"
-msgstr ""
+#: templates/articles/article_list.html:140
+#: templates/articles/article_list.html:226
+msgid "Share:"
+msgstr "نشر:"
 
-#: templates/accounts/show.html:297
-msgid "Story"
-msgstr ""
-
-#: templates/accounts/show.html:299 templates/accounts/show.html:1114
-#: templates/contacts/show.html:883 templates/leads/lead_show.html:871
-#: templates/live/company_profile/comp_profile_show.html:223
-msgid "Tagline"
-msgstr ""
-
-#: templates/accounts/show.html:306 templates/accounts/show.html:1143
-#: templates/contacts/show.html:912 templates/leads/lead_show.html:900
-#: templates/live/company_profile/comp_profile_show.html:252
-msgid "Introduction"
-msgstr ""
-
-#: templates/accounts/show.html:330 templates/campaigns/campaign_show.html:228
-msgid "Add a person to this account"
-msgstr ""
-
-#: templates/accounts/show.html:349 templates/accounts/show.html:591
-#: templates/accounts/show.html:706
-msgid "View more"
-msgstr ""
-
-#: templates/accounts/show.html:393 templates/contacts/list.html:42
-#: templates/contacts/list.html:123
-msgid "New Contact"
-msgstr ""
-
-#: templates/accounts/show.html:399 templates/contacts/list.html:51
-#: templates/contacts/list.html:169 templates/contacts/show.html:827
-#: templates/leads/lead_list.html:52 templates/leads/lead_list.html:194
-#: templates/leads/lead_show.html:624
-#: templates/live/customer_stories/customer_stories_show.html:523
-#: templates/live/feedbacks/feedbacks_show.html:455
-#: templates/live/product_videos/product_videos_show.html:523
-#: templates/live/shows/show.html:524
-msgid "First Name"
-msgstr ""
-
-#: templates/accounts/show.html:407 templates/contacts/list.html:59
-#: templates/contacts/list.html:170 templates/contacts/show.html:835
-#: templates/leads/lead_list.html:60 templates/leads/lead_list.html:195
-#: templates/leads/lead_show.html:632
-#: templates/live/customer_stories/customer_stories_show.html:531
-#: templates/live/feedbacks/feedbacks_show.html:463
-#: templates/live/product_videos/product_videos_show.html:531
-#: templates/live/shows/show.html:532
-msgid "Last Name"
-msgstr ""
-
-#: templates/accounts/show.html:414
-msgid "Position"
-msgstr ""
-
-#: templates/accounts/show.html:426
-msgid "Add Contact"
-msgstr ""
-
-#: templates/accounts/show.html:440
-msgid "Add a new Need"
-msgstr ""
-
-#: templates/accounts/show.html:453 templates/accounts/show.html:699
-msgid "Status:"
-msgstr ""
-
-#: templates/accounts/show.html:454 templates/accounts/show.html:700
-msgid "Priority:"
-msgstr ""
-
-#: templates/accounts/show.html:498
-msgid "Add new Customer Needs"
-msgstr ""
-
-#: templates/accounts/show.html:508
-msgid "Subject of the need"
-msgstr ""
-
-#: templates/accounts/show.html:516
-msgid "More details about this need"
-msgstr ""
-
-#: templates/accounts/show.html:525
-msgid "How is important for your customer?"
-msgstr ""
-
-#: templates/accounts/show.html:538 templates/accounts/show.html:784
-#: templates/activities/task_show.html:22
-#: templates/activities/task_show.html:107
-#: templates/campaigns/campaign_list.html:59
-#: templates/campaigns/campaign_show.html:49 templates/cases/case_list.html:94
-#: templates/cases/case_list.html:207 templates/cases/case_show.html:171
-#: templates/cases/case_show.html:514 templates/cases/case_show.html:530
-#: templates/contacts/show.html:645 templates/leads/lead_list.html:95
-#: templates/leads/lead_list.html:198 templates/leads/lead_show.html:674
-#: templates/live/customer_stories/customer_stories_show.html:426
-#: templates/live/customer_stories/customer_stories_show.html:555
-#: templates/live/feedbacks/feedbacks_list.html:89
-#: templates/live/feedbacks/feedbacks_list.html:193
-#: templates/live/feedbacks/feedbacks_show.html:487
-#: templates/live/feedbacks/feedbacks_show.html:735
-#: templates/live/product_videos/product_videos_show.html:426
-#: templates/live/product_videos/product_videos_show.html:555
-#: templates/live/shows/show.html:427 templates/live/shows/show.html:556
-#: templates/needs/show.html:171 templates/needs/show.html:505
-#: templates/needs/show.html:521
-msgid "Status"
-msgstr ""
-
-#: templates/accounts/show.html:558
-msgid "Add this need"
-msgstr ""
-
-#: templates/accounts/show.html:572 templates/campaigns/campaign_show.html:311
-#: templates/contacts/show.html:444
-msgid "Add a new opportunity"
-msgstr ""
-
-#: templates/accounts/show.html:584
-msgid "amount:"
-msgstr ""
-
-#: templates/accounts/show.html:585
-msgid "stage:"
-msgstr ""
-
-#: templates/accounts/show.html:631 templates/contacts/show.html:507
-#: templates/opportunities/list.html:43 templates/opportunities/list.html:138
-msgid "New Opportunity"
-msgstr ""
-
-#: templates/accounts/show.html:644 templates/accounts/show.html:796
-#: templates/cases/case_list.html:108 templates/cases/case_show.html:522
-#: templates/contacts/show.html:520 templates/contacts/show.html:654
-#: templates/needs/show.html:513 templates/opportunities/list.html:68
-#: templates/opportunities/opportunity_show.html:177
-#: templates/opportunities/opportunity_show.html:510
+#: templates/articles/article_list.html:159
+#: templates/articles/article_list.html:246
+#: templates/articles/article_search.html:140
+#: templates/articles/article_search.html:205
+#: templates/calendar/calendar_show.html:656
+#: templates/calendar/calendar_show.html:748 templates/cases/case_list.html:188
+#: templates/cases/case_list.html:252 templates/cases/case_list.html:378
+#: templates/leads/lead_list.html:198 templates/leads/lead_list.html:259
+#: templates/opportunities/list.html:79
+#: templates/opportunities/opportunity_list.html:203
+#: templates/opportunities/opportunity_list.html:290
 msgid "Labels"
-msgstr ""
+msgstr "تسميات"
 
-#: templates/accounts/show.html:651 templates/contacts/show.html:527
-#: templates/opportunities/list.html:76 templates/opportunities/list.html:186
-#: templates/opportunities/opportunity_show.html:518
-msgid "Amount"
-msgstr ""
+#: templates/articles/article_list.html:179
+#: templates/articles/article_list.html:269
+#: templates/articles/article_search.html:160
+#: templates/articles/article_search.html:228
+#: templates/cases/case_list.html:210 templates/cases/case_list.html:275
+#: templates/leads/lead_list.html:217 templates/leads/lead_list.html:286
+#: templates/opportunities/opportunity_list.html:224
+msgid "Add a new label"
+msgstr "إضافة تسمية جديدة"
 
-#: templates/accounts/show.html:657 templates/contacts/show.html:533
-#: templates/opportunities/list.html:84
-#: templates/opportunities/opportunity_show.html:176
-#: templates/opportunities/opportunity_show.html:526
-msgid "Stage"
-msgstr ""
+#: templates/articles/article_new.html:32
+#: templates/articles/article_show.html:18
+#: templates/blog/public_article_show.html:17
+msgid "Articles"
+msgstr "مقالات"
 
-#: templates/accounts/show.html:672 templates/contacts/show.html:543
-msgid "Add Opportunity"
-msgstr ""
+#: templates/articles/article_new.html:33
+#: templates/articles/article_new.html:64 templates/cases/case_new.html:17
+#: templates/cases/case_new.html:42 templates/contacts/contact_new.html:50
+#: templates/leads/lead_new.html:15 templates/leads/lead_new.html:40
+#: templates/opportunities/opportunity_new.html:26
+#: templates/opportunities/opportunity_new.html:56
+msgid "Create"
+msgstr "انشئ"
 
-#: templates/accounts/show.html:686 templates/campaigns/campaign_show.html:398
-#: templates/contacts/show.html:556
-msgid "Add a new case"
-msgstr ""
+#: templates/articles/article_new.html:63
+msgid "Crete a new article"
+msgstr "انشئ مقالة جديدة "
 
-#: templates/accounts/show.html:701
-msgid "Labels :"
-msgstr ""
+#: templates/articles/article_new.html:79
+#: templates/contacts/contact_new.html:92 templates/contacts/list.html:57
+#: templates/contacts/list.html:149 templates/leads/lead_list.html:35
+#: templates/leads/lead_new.html:83
+#: templates/live/feedbacks/feedbacks_list.html:48
+#: templates/live/feedbacks/feedbacks_list.html:192
+msgid "Title"
+msgstr "عنوان"
 
-#: templates/accounts/show.html:746 templates/cases/case_list.html:42
-#: templates/cases/case_list.html:159 templates/contacts/show.html:618
-msgid "New Case"
-msgstr ""
+#: templates/articles/article_new.html:81
+msgid "Type here the title of your post..."
+msgstr "اكتب هنا عنوان رسالتك ..."
 
-#: templates/accounts/show.html:764 templates/cases/case_list.html:74
-#: templates/cases/case_list.html:206 templates/cases/case_show.html:170
-#: templates/cases/case_show.html:506 templates/contacts/show.html:636
-#: templates/needs/show.html:170 templates/needs/show.html:497
-msgid "Priority"
-msgstr ""
+#: templates/articles/article_new.html:93
+msgid "Intro Card"
+msgstr "بطاقة مقدمة"
 
-#: templates/accounts/show.html:810 templates/contacts/show.html:668
-msgid "Add Case"
-msgstr ""
+#: templates/articles/article_new.html:99
+msgid "Full article card"
+msgstr "بطاقة المقال كاملا"
 
-#: templates/accounts/show.html:945 templates/accounts/show.html:1010
-msgid "Add a new event"
-msgstr ""
+#: templates/articles/article_new.html:101
+msgid "Enter text ..."
+msgstr "ادخل نص ..."
 
-#: templates/accounts/show.html:955
-msgid "Add a new Task"
-msgstr ""
-
-#: templates/accounts/show.html:962
-msgid "When's it due?"
-msgstr ""
-
-#: templates/accounts/show.html:981 templates/cases/case_show.html:19
-#: templates/contacts/show.html:19 templates/leads/lead_show.html:19
-#: templates/live/customer_stories/customer_stories_show.html:637
-#: templates/live/feedbacks/feedbacks_show.html:544
-#: templates/live/product_videos/product_videos_show.html:637
-#: templates/live/shows/show.html:638 templates/needs/show.html:19
-#: templates/opportunities/opportunity_show.html:19
-msgid "Create a new"
-msgstr ""
-
-#: templates/accounts/show.html:1005
-msgid "New Event"
-msgstr ""
-
-#: templates/accounts/show.html:1011
-msgid "When?"
-msgstr ""
-
-#: templates/accounts/show.html:1014
-msgid "Starts"
-msgstr ""
-
-#: templates/accounts/show.html:1019
-msgid "Ends"
-msgstr ""
-
-#: templates/accounts/show.html:1024
-msgid "Where?"
-msgstr ""
-
-#: templates/accounts/show.html:1030
-msgid "Add this event"
-msgstr ""
-
-#: templates/accounts/show.html:1062 templates/accounts/show.html:1106
-#: templates/accounts/show.html:1135 templates/campaigns/campaign_show.html:605
-msgid "Edit Account"
-msgstr ""
-
-#: templates/accounts/show.html:1096 templates/accounts/show.html:1125
-#: templates/accounts/show.html:1154 templates/activities/task_show.html:52
-#: templates/admin/settings/settings.html:272
-#: templates/admin/settings/settings.html:382
-#: templates/campaigns/campaign_show.html:644
-#: templates/cases/case_show.html:549 templates/contacts/show.html:866
-#: templates/contacts/show.html:894 templates/contacts/show.html:923
-#: templates/leads/lead_show.html:690 templates/leads/lead_show.html:882
-#: templates/leads/lead_show.html:911
-#: templates/live/company_profile/comp_profile_show.html:177
-#: templates/live/company_profile/comp_profile_show.html:206
-#: templates/live/company_profile/comp_profile_show.html:234
-#: templates/live/company_profile/comp_profile_show.html:263
-#: templates/live/customer_stories/customer_stories_show.html:295
-#: templates/live/customer_stories/customer_stories_show.html:841
-#: templates/live/customer_stories/customer_stories_show.html:877
-#: templates/live/feedbacks/feedbacks_show.html:318
-#: templates/live/feedbacks/feedbacks_show.html:752
-#: templates/live/feedbacks/feedbacks_show.html:788
-#: templates/live/product_videos/product_videos_show.html:295
-#: templates/live/product_videos/product_videos_show.html:841
-#: templates/live/product_videos/product_videos_show.html:877
-#: templates/live/shows/show.html:295 templates/live/shows/show.html:842
-#: templates/live/shows/show.html:878 templates/needs/show.html:540
-#: templates/opportunities/opportunity_show.html:547
-msgid "Save"
-msgstr ""
-
-#: templates/accounts/show.html:1165 templates/contacts/show.html:934
-#: templates/leads/lead_show.html:701
-#: templates/live/company_profile/comp_profile_show.html:274
-msgid "Add Phone"
-msgstr ""
-
-#: templates/accounts/show.html:1173 templates/accounts/show.html:1175
-#: templates/live/company_profile/comp_profile_show.html:282
-msgid "home"
-msgstr ""
-
-#: templates/accounts/show.html:1173 templates/accounts/show.html:1176
-#: templates/live/company_profile/comp_profile_show.html:282
-msgid "work"
-msgstr ""
-
-#: templates/accounts/show.html:1173 templates/accounts/show.html:1177
-#: templates/live/company_profile/comp_profile_show.html:282
-msgid "mobile"
-msgstr ""
-
-#: templates/accounts/show.html:1173 templates/accounts/show.html:1178
-#: templates/live/company_profile/comp_profile_show.html:282
-msgid "other"
-msgstr ""
-
-#: templates/accounts/show.html:1184 templates/contacts/show.html:946
-#: templates/leads/lead_show.html:713
-#: templates/live/company_profile/comp_profile_show.html:286
-msgid "Number"
-msgstr ""
-
-#: templates/accounts/show.html:1195
-#: templates/live/company_profile/comp_profile_show.html:297
-msgid "Add this phone"
-msgstr ""
-
-#: templates/accounts/show.html:1207 templates/contacts/show.html:969
-#: templates/leads/lead_show.html:734
-#: templates/live/company_profile/comp_profile_show.html:309
-msgid "Add Email"
-msgstr ""
-
-#: templates/accounts/show.html:1233 templates/contacts/show.html:995
-#: templates/leads/lead_show.html:760
-#: templates/live/company_profile/comp_profile_show.html:335
-msgid "Add Address"
-msgstr ""
-
-#: templates/accounts/show.html:1239 templates/contacts/show.html:1001
-#: templates/leads/lead_show.html:766
-#: templates/live/company_profile/comp_profile_show.html:341
-msgid "Street"
-msgstr ""
-
-#: templates/accounts/show.html:1245 templates/contacts/show.html:1007
-#: templates/leads/lead_show.html:772
-#: templates/live/company_profile/comp_profile_show.html:347
-msgid "City"
-msgstr ""
-
-#: templates/accounts/show.html:1251 templates/contacts/show.html:1013
-#: templates/leads/lead_show.html:778
-#: templates/live/company_profile/comp_profile_show.html:353
-msgid "State/Province"
-msgstr ""
-
-#: templates/accounts/show.html:1257 templates/contacts/show.html:1019
-#: templates/leads/lead_show.html:784
-#: templates/live/company_profile/comp_profile_show.html:359
-msgid "Postal Code"
-msgstr ""
-
-#: templates/accounts/show.html:1263 templates/contacts/show.html:1025
-#: templates/leads/lead_show.html:790
-#: templates/live/company_profile/comp_profile_show.html:365
-msgid "Country"
-msgstr ""
-
-#: templates/accounts/show.html:1272
+#: templates/articles/article_new.html:169
+#: templates/calendar/calendar_show.html:325
 #: templates/live/company_profile/comp_profile_show.html:374
 msgid "Add this address"
+msgstr "اضف هذا العنوان"
+
+#: templates/articles/article_search.html:170
+#: templates/articles/article_search.html:238
+#: templates/cases/case_list.html:218 templates/cases/case_list.html:283
+#: templates/leads/lead_list.html:225 templates/leads/lead_list.html:294
+#: templates/opportunities/opportunity_list.html:232
+msgid "New label"
+msgstr "تسمية جديدة"
+
+#: templates/articles/article_show.html:11
+#: templates/calendar/calendar_show.html:21
+#: templates/calendar/calendar_show.html:523
+#: templates/live/company_profile/comp_profile_show.html:35
+#: templates/needs/show.html:127
+msgid "Share"
+msgstr "نشر"
+
+#: templates/articles/article_show.html:58
+msgid "Posted by"
+msgstr "نشرت من طرف"
+
+#: templates/articles/article_show.html:107
+msgid "Community"
+msgstr "مجتمع"
+
+#: templates/articles/article_show.html:114
+msgid "TODO: put here social media connections"
+msgstr "للانجاز: ضع هنا الوصلات الخاصة بمواقعك الاجتماعية"
+
+#: templates/articles/article_show.html:137
+#: templates/blog/public_article_show.html:138
+#: templates/blog/public_support.html:82
+msgid "Involve new contributors"
+msgstr "اشرك مساههين جدد"
+
+#: templates/articles/article_show.html:143
+#: templates/blog/public_article_show.html:144
+#: templates/blog/public_support.html:88
+msgid ""
+"Invite people from your team and start working together on this task. "
+"Everyone you invite will receive an email."
+msgstr ""
+"استدعي اشخاص من فريقك وابداو العمل معا على هاته المهمة .كل شخص تدعوه "
+"سيتقى رسالة في بريده الاكتروني ."
+
+#: templates/articles/article_show.html:151
+#: templates/blog/public_article_show.html:152
+#: templates/blog/public_support.html:96
+msgid "Enter name or email addresse to involve people in this discussion"
+msgstr "أدخل اسم أو عنوان البريد الإلكتروني لإشراك اطراف اخرى في هذه المناقشة"
+
+#: templates/articles/article_show.html:154
+#: templates/blog/public_article_show.html:155
+#: templates/blog/public_support.html:99
+msgid "Add as:"
+msgstr "إضافة على النحو التالي:"
+
+#: templates/articles/article_show.html:157
+#: templates/blog/public_article_show.html:158
+#: templates/blog/public_support.html:102
+msgid "Responsible"
+msgstr "المسؤول"
+
+#: templates/articles/article_show.html:158
+#: templates/blog/public_article_show.html:159
+#: templates/blog/public_support.html:103
+msgid "Participant"
+msgstr "مشارك"
+
+#: templates/articles/article_show.html:159
+#: templates/blog/public_article_show.html:160
+#: templates/blog/public_support.html:104
+msgid "Invited"
+msgstr "مدعو"
+
+#: templates/articles/article_show.html:170
+#: templates/blog/public_article_show.html:171
+#: templates/blog/public_support.html:115
+msgid "Involve"
 msgstr ""
 
-#: templates/accounts/show.html:1284 templates/contacts/show.html:1046
-#: templates/leads/lead_show.html:811
+#: templates/blog/public_support.html:6
+msgid "ioGrow Support"
+msgstr ""
+
+#: templates/calendar/calendar_show.html:61
+#: templates/calendar/calendar_show.html:146
+msgid "Edit Contact"
+msgstr "تحرير اتصال"
+
+#: templates/calendar/calendar_show.html:69
+#: templates/calendar/calendar_show.html:440
+#: templates/contacts/contact_new.html:76 templates/contacts/list.html:41
+#: templates/contacts/list.html:147 templates/leads/lead_list.html:33
+#: templates/leads/lead_new.html:65
+msgid "First Name"
+msgstr "الاسم"
+
+#: templates/calendar/calendar_show.html:77
+#: templates/calendar/calendar_show.html:448
+#: templates/contacts/contact_new.html:83 templates/contacts/list.html:49
+#: templates/contacts/list.html:148 templates/leads/lead_list.html:34
+#: templates/leads/lead_new.html:73
+msgid "Last Name"
+msgstr "اللقب"
+
+#: templates/calendar/calendar_show.html:85
+#: templates/calendar/calendar_show.html:455
+msgid "Tittle"
+msgstr ""
+
+#: templates/calendar/calendar_show.html:93 templates/cases/case_list.html:35
+#: templates/contacts/contact_new.html:99 templates/contacts/list.html:150
+#: templates/leads/lead_list.html:36 templates/leads/lead_new.html:91
+#: templates/opportunities/list.html:285
+msgid "Company"
+msgstr "شركة"
+
+#: templates/calendar/calendar_show.html:120
+msgid "Delete Contact"
+msgstr "حذف اتصال"
+
+#: templates/calendar/calendar_show.html:126
+#: templates/calendar/calendar_show.html:540
+#: templates/calendar/calendar_show.html:564 templates/leads/lead_list.html:328
+#: templates/needs/show.html:145
+msgid "Are you sure you want to delete"
+msgstr "هل أنت متأكد أنك تريد حذف"
+
+#: templates/calendar/calendar_show.html:178
+msgid "Edit Account"
+msgstr "تحرير الحساب"
+
+#: templates/calendar/calendar_show.html:212
+#: templates/live/company_profile/comp_profile_show.html:274
+msgid "Add Phone"
+msgstr "إضافة الهاتف"
+
+#: templates/calendar/calendar_show.html:219
+#: templates/calendar/calendar_show.html:221
+#: templates/contacts/contact_new.html:121 templates/leads/lead_new.html:148
+#: templates/live/company_profile/comp_profile_show.html:282
+msgid "home"
+msgstr "الرئيسية"
+
+#: templates/calendar/calendar_show.html:219
+#: templates/calendar/calendar_show.html:222
+#: templates/contacts/contact_new.html:122 templates/leads/lead_new.html:149
+#: templates/live/company_profile/comp_profile_show.html:282
+msgid "work"
+msgstr "عمل"
+
+#: templates/calendar/calendar_show.html:219
+#: templates/calendar/calendar_show.html:223
+#: templates/contacts/contact_new.html:123 templates/leads/lead_new.html:150
+#: templates/live/company_profile/comp_profile_show.html:282
+msgid "mobile"
+msgstr "الهاتف محمول"
+
+#: templates/calendar/calendar_show.html:219
+#: templates/calendar/calendar_show.html:224
+#: templates/contacts/contact_new.html:124 templates/leads/lead_new.html:151
+#: templates/live/company_profile/comp_profile_show.html:282
+msgid "other"
+msgstr "اخرى"
+
+#: templates/calendar/calendar_show.html:230
+#: templates/contacts/contact_new.html:128 templates/leads/lead_new.html:142
+#: templates/live/company_profile/comp_profile_show.html:286
+msgid "Number"
+msgstr "رقم"
+
+#: templates/calendar/calendar_show.html:241
+#: templates/live/company_profile/comp_profile_show.html:297
+msgid "Add this phone"
+msgstr "اضف هذا الهاتف"
+
+#: templates/calendar/calendar_show.html:258
+#: templates/live/company_profile/comp_profile_show.html:309
+msgid "Add Email"
+msgstr "اضف البريد الإلكتروني"
+
+#: templates/calendar/calendar_show.html:339
+#: templates/calendar/calendar_show.html:373
 #: templates/live/company_profile/comp_profile_show.html:386
 msgid "Add Website"
-msgstr ""
+msgstr "اضف موقع"
 
-#: templates/accounts/show.html:1299
+#: templates/calendar/calendar_show.html:344
+msgid "Custom Field"
+msgstr "حقل مخصص"
+
+#: templates/calendar/calendar_show.html:347 templates/cases/case_new.html:127
+#: templates/contacts/contact_new.html:315 templates/leads/lead_new.html:325
+#: templates/opportunities/opportunity_new.html:248
+msgid "Field"
+msgstr "حقل "
+
+#: templates/calendar/calendar_show.html:350 templates/cases/case_new.html:131
+#: templates/contacts/contact_new.html:319 templates/leads/lead_new.html:329
+#: templates/opportunities/opportunity_new.html:252
+msgid "Value"
+msgstr "المحتوى"
+
+#: templates/calendar/calendar_show.html:358
+msgid "Add this custom field"
+msgstr "اضف هذا الحقل المخصص"
+
+#: templates/calendar/calendar_show.html:378
+#: templates/contacts/contact_new.html:218
+#: templates/contacts/contact_new.html:225 templates/leads/lead_new.html:229
+#: templates/leads/lead_new.html:236
+#: templates/live/company_profile/comp_profile_show.html:392
+msgid "Website"
+msgstr "موقع"
+
+#: templates/calendar/calendar_show.html:387
 #: templates/live/company_profile/comp_profile_show.html:401
 msgid "Add this Website"
-msgstr ""
+msgstr "اضف هذا الموقع"
 
-#: templates/accounts/show.html:1311 templates/contacts/show.html:1073
-#: templates/leads/lead_show.html:837
+#: templates/calendar/calendar_show.html:403
 #: templates/live/company_profile/comp_profile_show.html:413
 msgid "Add Social link"
-msgstr ""
+msgstr "اضف رابط اجتماعي "
 
-#: templates/accounts/show.html:1317 templates/accounts/show.html:1319
-#: templates/contacts/show.html:1079 templates/leads/lead_show.html:843
+#: templates/calendar/calendar_show.html:408
+#: templates/calendar/calendar_show.html:410
+#: templates/contacts/contact_new.html:252 templates/leads/lead_new.html:263
 #: templates/live/company_profile/comp_profile_show.html:419
 #: templates/live/company_profile/comp_profile_show.html:421
 msgid "Social link"
-msgstr ""
+msgstr "رابط اجتماعي"
 
-#: templates/accounts/show.html:1326
-#: templates/live/company_profile/comp_profile_show.html:428
-msgid "Add this Social link"
-msgstr ""
+#: templates/calendar/calendar_show.html:417
+msgid "Add this social link"
+msgstr "اضف هذا الرابط الاجتماعي"
 
-#: templates/activities/task_show.html:5
-msgid "Edit Task"
-msgstr ""
+#: templates/calendar/calendar_show.html:435 templates/contacts/list.html:36
+#: templates/contacts/list.html:113
+msgid "New Contact"
+msgstr "اتصال جديد"
 
-#: templates/activities/task_show.html:106
-msgid "Due on"
-msgstr ""
+#: templates/calendar/calendar_show.html:465
+msgid "Add Contact"
+msgstr "اضف اتصال"
 
-#: templates/admin/groups/list.html:42 templates/admin/groups/list.html:80
-msgid "New Group"
-msgstr ""
+#: templates/calendar/calendar_show.html:478 templates/needs/show.html:73
+msgid "Sharing Settings"
+msgstr "نشر الاعدادات"
 
-#: templates/admin/groups/list.html:51
-msgid "Group Name"
-msgstr ""
+#: templates/calendar/calendar_show.html:483
+msgid "Who has access:"
+msgstr "من له الحق في الاستعمال :"
 
-#: templates/admin/groups/list.html:64
-msgid "Add this group"
-msgstr ""
+#: templates/calendar/calendar_show.html:488 templates/cases/case_new.html:188
+#: templates/contacts/contact_new.html:361 templates/leads/lead_new.html:369
+#: templates/opportunities/opportunity_new.html:317
+msgid "public: Anyone within your organization can access and find"
+msgstr "عمومي : اي شخص داخل امؤسسة يمكنه الاستعمال"
 
-#: templates/admin/groups/list.html:75 templates/admin/groups/show.html:87
-msgid "Groups"
-msgstr ""
+#: templates/calendar/calendar_show.html:492 templates/cases/case_list.html:398
+#: templates/cases/case_new.html:192 templates/contacts/contact_new.html:365
+#: templates/leads/lead_new.html:373
+#: templates/live/feedbacks/feedbacks_list.html:112
+#: templates/opportunities/opportunity_list.html:427
+#: templates/opportunities/opportunity_new.html:321
+msgid "private: only you and your collaborators"
+msgstr "خصوصي : فقط انت و المتعاونين معك يمنهم الاستعمال"
 
-#: templates/admin/groups/list.html:118
-msgid "Manage easily your Group."
-msgstr ""
+#: templates/calendar/calendar_show.html:497
+msgid "Collaborators:"
+msgstr "المتعاونين:"
 
-#: templates/admin/groups/show.html:42
-msgid "Add a new member"
-msgstr ""
+#: templates/calendar/calendar_show.html:507
+msgid "Invited user:"
+msgstr "ادعو مستخدم"
 
-#: templates/admin/groups/show.html:74
-msgid "Add this member"
-msgstr ""
+#: templates/calendar/calendar_show.html:514
+msgid "Invite collaborators:"
+msgstr "ادعو متعاونين :"
 
-#: templates/admin/groups/show.html:92
-msgid "New Member"
-msgstr ""
+#: templates/calendar/calendar_show.html:536
+msgid "Delete Account"
+msgstr ": حذف الحساب"
 
-#: templates/admin/settings/settings.html:31
-msgid "Settings"
-msgstr ""
+#: templates/calendar/calendar_show.html:560
+msgid "Delete Information"
+msgstr "حذف معلومات :"
 
-#: templates/admin/settings/settings.html:56
-msgid "Add a new stage"
-msgstr ""
+#: templates/calendar/calendar_show.html:582
+#: templates/calendar/calendar_show.html:816
+msgid "Add a new Task"
+msgstr "اضف مهمة جديدة"
 
-#: templates/admin/settings/settings.html:104
-msgid "New Opportunity Stage"
-msgstr ""
+#: templates/calendar/calendar_show.html:589
+#: templates/calendar/calendar_show.html:823
+msgid "When's it due?"
+msgstr "تاريخ الاستحقاق ?"
 
-#: templates/admin/settings/settings.html:118
-#: templates/admin/settings/settings.html:152
-msgid "Probability"
-msgstr ""
+#: templates/calendar/calendar_show.html:613
+#: templates/calendar/calendar_show.html:846 templates/needs/show.html:21
+msgid "Create a new"
+msgstr "انشاء"
 
-#: templates/admin/settings/settings.html:130
-msgid "Add a new Opportunity stage"
-msgstr ""
+#: templates/calendar/calendar_show.html:626
+#: templates/calendar/calendar_show.html:859
+msgid "Create this document"
+msgstr "انشئ هذا الملف "
 
-#: templates/admin/settings/settings.html:138
-msgid "Edit Opportunity Stage"
-msgstr ""
+#: templates/calendar/calendar_show.html:643
+#: templates/opportunities/list.html:53 templates/opportunities/list.html:243
+#: templates/opportunities/opportunity_list.html:95
+#: templates/opportunities/opportunity_list.html:264
+msgid "New Opportunity"
+msgstr "انشئ فرصة"
 
-#: templates/admin/settings/settings.html:165
-msgid "save"
-msgstr ""
+#: templates/calendar/calendar_show.html:663
+#: templates/opportunities/list.html:86 templates/opportunities/list.html:284
+#: templates/opportunities/opportunity_list.html:297
+msgid "Amount"
+msgstr "المبلغ"
 
-#: templates/admin/settings/settings.html:178
-msgid "Add a Case status"
-msgstr ""
+#: templates/calendar/calendar_show.html:669
+#: templates/opportunities/list.html:186
+#: templates/opportunities/opportunity_list.html:402
+msgid "Stage"
+msgstr "المرحلة"
 
-#: templates/admin/settings/settings.html:224
-msgid "New Case Status"
-msgstr ""
+#: templates/calendar/calendar_show.html:672
+#: templates/opportunities/opportunity_list.html:406
+msgid "choose Stage"
+msgstr "اختر مرحلة"
 
-#: templates/admin/settings/settings.html:230
-#: templates/admin/settings/settings.html:259
-msgid "Case Status"
-msgstr ""
+#: templates/calendar/calendar_show.html:684
+msgid "Add Opportunity"
+msgstr "اضف فرصة"
 
-#: templates/admin/settings/settings.html:243
-msgid "Add Case Status"
-msgstr ""
+#: templates/calendar/calendar_show.html:698 templates/cases/case_list.html:313
+msgid "New Case"
+msgstr "حالة جديدة "
 
-#: templates/admin/settings/settings.html:253
-msgid "Edit Case Status"
-msgstr ""
+#: templates/calendar/calendar_show.html:716 templates/cases/case_list.html:32
+#: templates/cases/case_list.html:345 templates/cases/case_new.html:97
+#: templates/needs/show.html:182 templates/needs/show.html:538
+msgid "Priority"
+msgstr "الاولية"
 
-#: templates/admin/settings/settings.html:286
-msgid "Add a Lead status"
-msgstr ""
+#: templates/calendar/calendar_show.html:720 templates/cases/case_list.html:349
+#: templates/cases/case_new.html:102
+msgid "Low"
+msgstr "ادنى"
 
-#: templates/admin/settings/settings.html:332
-msgid "New Lead status"
-msgstr ""
+#: templates/calendar/calendar_show.html:729 templates/cases/case_list.html:358
+#: templates/cases/case_new.html:111
+msgid "Critical"
+msgstr "حرج"
 
-#: templates/admin/settings/settings.html:338
-#: templates/admin/settings/settings.html:368
-#: templates/leads/lead_show.html:207
-msgid "Lead Status"
-msgstr ""
+#: templates/calendar/calendar_show.html:736
+#: templates/campaigns/campaign_list.html:59 templates/cases/case_list.html:33
+#: templates/cases/case_list.html:365 templates/cases/case_new.html:88
+#: templates/leads/lead_list.html:37
+#: templates/live/feedbacks/feedbacks_list.html:89
+#: templates/live/feedbacks/feedbacks_list.html:193
+#: templates/needs/show.html:183 templates/needs/show.html:552
+msgid "Status"
+msgstr "وضعية"
 
-#: templates/admin/settings/settings.html:352
-msgid "Add Lead Status"
-msgstr ""
+#: templates/calendar/calendar_show.html:740
+msgid "Choose Status"
+msgstr "اختر وضعية"
 
-#: templates/admin/settings/settings.html:362
-msgid "Edit Lead status"
-msgstr ""
+#: templates/calendar/calendar_show.html:762
+msgid "Add Case"
+msgstr "اضف حالة"
 
-#: templates/admin/users/list.html:43 templates/admin/users/list.html:81
-#: templates/documents/show.html:154
-msgid "New User"
-msgstr ""
+#: templates/calendar/calendar_show.html:777
+msgid "New Event"
+msgstr "انشئ حدث"
 
-#: templates/admin/users/list.html:65
-msgid "Add this user"
-msgstr ""
+#: templates/calendar/calendar_show.html:782
+msgid "Add a new event"
+msgstr "اضف حدث جديد "
 
-#: templates/admin/users/list.html:76
-msgid "Users"
-msgstr ""
+#: templates/calendar/calendar_show.html:783
+msgid "When?"
+msgstr "متى?"
+
+#: templates/calendar/calendar_show.html:786
+msgid "Starts"
+msgstr "تاريخ البدء"
+
+#: templates/calendar/calendar_show.html:790
+msgid "Ends"
+msgstr "تاريخ الانتهاء"
+
+#: templates/calendar/calendar_show.html:794
+msgid "Where?"
+msgstr "اين?"
+
+#: templates/calendar/calendar_show.html:801
+msgid "Add this event"
+msgstr "اضف هذا الحدث "
+
+#: templates/calendar/calendar_show.html:833
+msgid "Add this task"
+msgstr "اضف هذه المهمة "
+
+#: templates/campaigns/campaign_list.html:33 templates/cases/case_list.html:66
+#: templates/cases/case_new.html:31 templates/contacts/contact_new.html:39
+#: templates/leads/lead_new.html:29
+#: templates/opportunities/opportunity_list.html:76
+#: templates/opportunities/opportunity_new.html:42
+#: templates/search/list.html:39
+msgid "Sign-in Button;"
+msgstr "تسجيل الدخول "
 
 #: templates/campaigns/campaign_list.html:42
 #: templates/campaigns/campaign_list.html:88
 msgid "New Campaign"
-msgstr ""
+msgstr "انشئ حملة دعاية"
 
 #: templates/campaigns/campaign_list.html:72
 msgid "Add Campaign"
-msgstr ""
+msgstr "اضف حملة دعاية"
 
 #: templates/campaigns/campaign_list.html:83
-#: templates/campaigns/campaign_show.html:46
 msgid "Campaigns"
-msgstr ""
+msgstr "حملات الدعاية "
 
-#: templates/campaigns/campaign_show.html:68
-msgid "Campaign Feeds"
-msgstr ""
+#: templates/campaigns/campaign_list.html:114 templates/search/list.html:114
+msgid "View more"
+msgstr "مشاهدة المزيد"
 
-#: templates/cases/case_list.html:48 templates/cases/case_list.html:208
+#: templates/cases/case_list.html:22 templates/leads/lead_list.html:24
+#: templates/opportunities/opportunity_list.html:22
+msgid "All"
+msgstr "الكل"
+
+#: templates/cases/case_list.html:22 templates/cases/case_list.html:23
+#: templates/cases/case_list.html:81 templates/cases/case_new.html:14
+msgid "Cases"
+msgstr "الحالات"
+
+#: templates/cases/case_list.html:23 templates/leads/lead_list.html:25
+msgid "My"
+msgstr "انا"
+
+#: templates/cases/case_list.html:26 templates/leads/lead_list.html:28
+#: templates/opportunities/list.html:278
+msgid "Sort by"
+msgstr "نقح بواسطة"
+
+#: templates/cases/case_list.html:30 templates/contacts/list.html:146
+#: templates/leads/lead_list.html:32
+#: templates/live/customer_stories/customer_stories_list.html:136
+#: templates/live/feedbacks/feedbacks_list.html:191
+#: templates/live/product_videos/product_videos_list.html:136
+#: templates/live/shows/list_show.html:154
+#: templates/opportunities/list.html:282
+#: templates/opportunities/opportunity_list.html:43
+msgid "Last modified"
+msgstr "تاريخ اخر تحرير"
+
+#: templates/cases/case_list.html:34 templates/cases/case_list.html:319
+#: templates/cases/case_new.html:67
+#: templates/opportunities/opportunity_new.html:199
 msgid "Contact"
-msgstr ""
+msgstr "اتصال"
 
-#: templates/cases/case_list.html:56 templates/contacts/list.html:75
-#: templates/opportunities/list.html:60
+#: templates/cases/case_list.html:42 templates/leads/lead_list.html:44
+#: templates/opportunities/opportunity_list.html:54
+msgid "New"
+msgstr "انشئ"
+
+#: templates/cases/case_list.html:42
+msgid "Case"
+msgstr "حالة"
+
+#: templates/cases/case_list.html:88
+msgid " New Case"
+msgstr "انشئ حالة"
+
+#: templates/cases/case_list.html:129
+msgid "Date:"
+msgstr "تاريخ:"
+
+#: templates/cases/case_list.html:159
+msgid ""
+"cases  pages includes a detailed page for each customer, partner, or "
+"investor in your ecosystem. You and your co-workers can collaborate to "
+"get a deep understanding."
+msgstr ""
+"صفحات الحالات تحتوي على تفاصيل و معلومات حول كل مستثمر , متعامل او شريك "
+"في شبكتك المهنية .من خلال هذه المعلومات يمكنك الحصول على فهم اوضح وتحليل "
+"اعمق لوضعك الحالي."
+
+#: templates/cases/case_list.html:327 templates/cases/case_new.html:74
+#: templates/contacts/list.html:65 templates/opportunities/list.html:70
+#: templates/opportunities/opportunity_list.html:281
+#: templates/opportunities/opportunity_new.html:188
 msgid "Account"
-msgstr ""
+msgstr "حساب"
 
-#: templates/cases/case_list.html:65
+#: templates/cases/case_list.html:336
 msgid "Subject"
-msgstr ""
+msgstr "الموضوع"
 
-#: templates/cases/case_list.html:176
-msgid "All cases"
-msgstr ""
+#: templates/cases/case_list.html:369
+msgid "choose a status"
+msgstr "اختر وضعية"
 
-#: templates/cases/case_list.html:177
-msgid "My cases"
-msgstr ""
+#: templates/cases/case_list.html:387
+#: templates/live/feedbacks/feedbacks_list.html:101
+#: templates/opportunities/opportunity_list.html:416
+msgid "Who can access?"
+msgstr "حدد اشخاص يمكنهم الاستعمال"
 
-#: templates/cases/case_list.html:209 templates/contacts/list.html:172
-#: templates/contacts/show.html:851 templates/leads/lead_list.html:68
-#: templates/leads/lead_list.html:197 templates/leads/lead_show.html:204
-#: templates/leads/lead_show.html:649
-#: templates/live/customer_stories/customer_stories_show.html:539
-#: templates/live/feedbacks/feedbacks_show.html:471
-#: templates/live/product_videos/product_videos_show.html:539
-#: templates/live/shows/show.html:540 templates/opportunities/list.html:187
-msgid "Company"
-msgstr ""
+#: templates/cases/case_list.html:394
+#: templates/live/feedbacks/feedbacks_list.html:108
+#: templates/opportunities/opportunity_list.html:423
+msgid "public: Anyone within your organization"
+msgstr "عمومي : اي شخص داخل امؤسسة يمكنه الاستعمال"
 
-#: templates/cases/case_show.html:189
-msgid "Case Feeds"
-msgstr ""
+#: templates/cases/case_new.html:41
+msgid "Create Case"
+msgstr "انشئ حالة"
 
-#: templates/cases/case_show.html:490 templates/needs/show.html:481
-msgid "Edit Case"
-msgstr ""
+#: templates/cases/case_new.html:58
+msgid "What’s the subject of this issue?"
+msgstr "ماهو محتوى هذا المنفذ?"
 
-#: templates/contacts/list.html:67 templates/contacts/list.html:171
-#: templates/leads/lead_list.html:76 templates/leads/lead_list.html:196
-#: templates/leads/lead_show.html:204 templates/leads/lead_show.html:640
-#: templates/live/customer_stories/customer_stories_show.html:385
-#: templates/live/customer_stories/customer_stories_show.html:547
-#: templates/live/feedbacks/feedbacks_list.html:48
-#: templates/live/feedbacks/feedbacks_list.html:192
-#: templates/live/feedbacks/feedbacks_show.html:479
-#: templates/live/feedbacks/feedbacks_show.html:694
-#: templates/live/product_videos/product_videos_show.html:385
-#: templates/live/product_videos/product_videos_show.html:547
-#: templates/live/shows/show.html:386 templates/live/shows/show.html:548
-msgid "Title"
-msgstr ""
+#: templates/cases/case_new.html:85
+msgid "Case Informations"
+msgstr "معلومات حول الحالة"
 
-#: templates/contacts/list.html:141
+#: templates/cases/case_new.html:91
+msgid "Choose a status"
+msgstr "اختر وضعية"
+
+#: templates/cases/case_new.html:101
+msgid "Choose a priority"
+msgstr "حدد الافضلية"
+
+#: templates/cases/case_new.html:121 templates/contacts/contact_new.html:309
+#: templates/leads/lead_new.html:319
+#: templates/opportunities/opportunity_new.html:241
+msgid "Custom Fields"
+msgstr "حقل مخصص"
+
+#: templates/cases/case_new.html:128 templates/contacts/contact_new.html:316
+#: templates/leads/lead_new.html:326
+#: templates/opportunities/opportunity_new.html:249
+msgid "Enter field name"
+msgstr "ادخل اسم الحقل"
+
+#: templates/cases/case_new.html:132 templates/contacts/contact_new.html:320
+#: templates/leads/lead_new.html:330
+#: templates/opportunities/opportunity_new.html:253
+msgid "Enter a value"
+msgstr "ادخل محتوى الحقل"
+
+#: templates/cases/case_new.html:146 templates/contacts/contact_new.html:337
+#: templates/leads/lead_new.html:345
+#: templates/opportunities/opportunity_new.html:267
+msgid "Add a new custom field"
+msgstr "اضف حقل مخصص"
+
+#: templates/cases/case_new.html:155
+#: templates/opportunities/opportunity_new.html:282
+msgid "Description"
+msgstr "شرح"
+
+#: templates/cases/case_new.html:182 templates/contacts/contact_new.html:355
+#: templates/leads/lead_new.html:363
+#: templates/opportunities/opportunity_new.html:311
+msgid "Who can access ?"
+msgstr "من يمكنه الاستعمال?"
+
+#: templates/contacts/contact_new.html:16 templates/contacts/list.html:107
+msgid "Contacts"
+msgstr "الاتصالات"
+
+#: templates/contacts/contact_new.html:49
+msgid "Creating now Contact"
+msgstr "انشئ اتصال"
+
+#: templates/contacts/contact_new.html:110
+msgid "Contact Informations"
+msgstr "معلومات حول الاتصال"
+
+#: templates/contacts/contact_new.html:112 templates/leads/lead_new.html:135
+msgid "Phone"
+msgstr "الهاتف"
+
+#: templates/contacts/contact_new.html:135
+#: templates/contacts/contact_new.html:172 templates/leads/lead_new.html:143
+#: templates/leads/lead_new.html:186
+msgid "Enter a number"
+msgstr "ادخل رقم الهاتف"
+
+#: templates/contacts/contact_new.html:159 templates/leads/lead_new.html:173
+msgid "Add a new Phone"
+msgstr "اضف رقم هاتف جديد"
+
+#: templates/contacts/contact_new.html:186 templates/leads/lead_new.html:200
+msgid "Add a new email address"
+msgstr "اضف بريد الكتروني جديد"
+
+#: templates/contacts/contact_new.html:190 templates/leads/lead_new.html:204
+msgid "Address"
+msgstr "عنوان"
+
+#: templates/contacts/contact_new.html:210 templates/leads/lead_new.html:221
+msgid "Add a new address"
+msgstr "اضف عنوان جديد"
+
+#: templates/contacts/contact_new.html:216 templates/leads/lead_new.html:227
+msgid "Links"
+msgstr "روابط"
+
+#: templates/contacts/contact_new.html:226 templates/leads/lead_new.html:237
+msgid "Enter a Website"
+msgstr "ادخل موقع جديد"
+
+#: templates/contacts/contact_new.html:240 templates/leads/lead_new.html:251
+msgid "Add a new Website"
+msgstr "اضف موقع جديد"
+
+#: templates/contacts/contact_new.html:245 templates/leads/lead_new.html:256
+msgid "Social Links"
+msgstr "رابط اجتماعي"
+
+#: templates/contacts/contact_new.html:253 templates/leads/lead_new.html:264
+msgid "Enter a social link"
+msgstr "ادخل رابط اجتماعي"
+
+#: templates/contacts/contact_new.html:266 templates/leads/lead_new.html:277
+msgid "Add a new social links"
+msgstr " اضف رابط اجتماعي"
+
+#: templates/contacts/contact_new.html:274 templates/leads/lead_new.html:285
+msgid "Story"
+msgstr "شرح"
+
+#: templates/contacts/list.html:119
+#: templates/live/customer_stories/customer_stories_list.html:103
+#: templates/live/feedbacks/feedbacks_list.html:155
+#: templates/live/product_videos/product_videos_list.html:103
+#: templates/live/shows/list_show.html:121
+#: templates/opportunities/list.html:250
+msgid "Filter by"
+msgstr "تنقيح بواسطة"
+
+#: templates/contacts/list.html:123
 msgid "All contacts"
-msgstr ""
+msgstr "كل الاتصالات"
 
-#: templates/contacts/list.html:142
+#: templates/contacts/list.html:124
 msgid "My contacts"
-msgstr ""
+msgstr "اتصالاتي"
 
-#: templates/contacts/show.html:172
-msgid "at"
-msgstr ""
+#: templates/contacts/list.html:132
+#: templates/live/customer_stories/customer_stories_list.html:122
+#: templates/live/feedbacks/feedbacks_list.html:177
+#: templates/live/product_videos/product_videos_list.html:122
+#: templates/live/shows/list_show.html:140
+#: templates/opportunities/list.html:266
+msgid "Quick Filtering"
+msgstr "تنقيح سريع"
 
-#: templates/contacts/show.html:188
-msgid "Contact Feeds"
-msgstr ""
-
-#: templates/contacts/show.html:819 templates/contacts/show.html:875
-#: templates/contacts/show.html:904
-msgid "Edit Contact"
-msgstr ""
-
-#: templates/contacts/show.html:843
-msgid "Tittle"
-msgstr ""
-
-#: templates/documents/show.html:171
-msgid "Profile"
-msgstr ""
-
-#: templates/documents/show.html:179
-msgid "Role"
-msgstr ""
-
-#: templates/documents/show.html:191
-msgid "Add Atendee"
-msgstr ""
-
-#: templates/leads/lead_list.html:43 templates/leads/lead_list.html:148
-#: templates/live/customer_stories/customer_stories_show.html:514
-#: templates/live/feedbacks/feedbacks_show.html:446
-#: templates/live/product_videos/product_videos_show.html:514
-#: templates/live/shows/show.html:515
-msgid "New Lead"
-msgstr ""
-
-#: templates/leads/lead_list.html:84 templates/leads/lead_show.html:205
-msgid "Lead Source"
-msgstr ""
-
-#: templates/leads/lead_list.html:143 templates/leads/lead_show.html:200
+#: templates/leads/lead_list.html:24 templates/leads/lead_list.html:25
+#: templates/leads/lead_list.html:85 templates/leads/lead_new.html:11
 msgid "Leads"
-msgstr ""
+msgstr "مداخيل البيع"
 
-#: templates/leads/lead_list.html:166
-msgid "All leads"
-msgstr ""
+#: templates/leads/lead_list.html:44
+msgid "Lead"
+msgstr "مدخل البيع"
 
-#: templates/leads/lead_list.html:167
-msgid "My leads"
-msgstr ""
+#: templates/leads/lead_list.html:92
+msgid " New Lead"
+msgstr " انشئ مدخل بيع"
 
-#: templates/leads/lead_show.html:69
-msgid "Are you sure you want to convert"
-msgstr ""
+#: templates/leads/lead_list.html:324
+msgid "Delete Lead"
+msgstr "حذف مدخل بيع "
 
-#: templates/leads/lead_show.html:185
-msgid "Convert"
-msgstr ""
+#: templates/leads/lead_new.html:39
+msgid "Create Lead"
+msgstr "انشئ مدخل بيع"
 
-#: templates/leads/lead_show.html:616 templates/leads/lead_show.html:863
-#: templates/leads/lead_show.html:892
-msgid "Edit Lead"
-msgstr ""
+#: templates/leads/lead_new.html:104
+msgid "Lead Informations"
+msgstr "معلومات حول مدخل البيع "
 
-#: templates/leads/lead_show.html:657
-#: templates/live/customer_stories/customer_stories_show.html:413
+#: templates/leads/lead_new.html:111 templates/leads/lead_new.html:120
+msgid "None"
+msgstr " لا شيء"
+
+#: templates/leads/lead_new.html:111
+msgid "Agriculture"
+msgstr "زراعة"
+
+#: templates/leads/lead_new.html:111
+msgid "Apparel"
+msgstr "ملابس"
+
+#: templates/leads/lead_new.html:111
+msgid "Banking"
+msgstr "مصرفي"
+
+#: templates/leads/lead_new.html:111
+msgid "Biotechnology"
+msgstr "التكنولوجيا الحيوية"
+
+#: templates/leads/lead_new.html:111
+msgid "Chemicals"
+msgstr "المواد الكيميائية"
+
+#: templates/leads/lead_new.html:111
+msgid "Communications"
+msgstr "الاتصالات"
+
+#: templates/leads/lead_new.html:111
+msgid "Construction"
+msgstr "إنشاءات"
+
+#: templates/leads/lead_new.html:111
+msgid "Consulting"
+msgstr "الاستشارات"
+
+#: templates/leads/lead_new.html:111
+msgid "Education"
+msgstr "تعليم"
+
+#: templates/leads/lead_new.html:111
+msgid "Electronics"
+msgstr "إلكترونيات"
+
+#: templates/leads/lead_new.html:111
+msgid "Energy"
+msgstr "طاقة"
+
+#: templates/leads/lead_new.html:111
+msgid "Engineering"
+msgstr "هندسة"
+
+#: templates/leads/lead_new.html:111
+msgid "Entertainment"
+msgstr "تسلية"
+
+#: templates/leads/lead_new.html:111
+msgid "Environmental"
+msgstr "بيئي"
+
+#: templates/leads/lead_new.html:111
+msgid "Finance"
+msgstr "تمويل"
+
+#: templates/leads/lead_new.html:111
+msgid "Food"
+msgstr "غذاء"
+
+#: templates/leads/lead_new.html:111
+msgid "Beverage"
+msgstr "شراب"
+
+#: templates/leads/lead_new.html:111
+msgid "Government"
+msgstr "حكومة"
+
+#: templates/leads/lead_new.html:111
+msgid "Healthcare"
+msgstr "الرعاية الصحية"
+
+#: templates/leads/lead_new.html:111
+msgid "Hospitality"
+msgstr "ضيافة"
+
+#: templates/leads/lead_new.html:111
+msgid "Insurance"
+msgstr "تأمين"
+
+#: templates/leads/lead_new.html:111
+msgid "Machinery"
+msgstr "آلية"
+
+#: templates/leads/lead_new.html:111
+msgid "Manufacturing"
+msgstr "تصنيع"
+
+#: templates/leads/lead_new.html:111
+msgid "Media"
+msgstr "وسائل الإعلام"
+
+#: templates/leads/lead_new.html:111
+msgid "Not For Profit"
+msgstr "غير نفعية"
+
+#: templates/leads/lead_new.html:111
+msgid "Recreation"
+msgstr "استجمام"
+
+#: templates/leads/lead_new.html:111
+msgid "Retail"
+msgstr "بيع بالتجزئة"
+
+#: templates/leads/lead_new.html:111
+msgid "Shipping"
+msgstr "الشحن"
+
+#: templates/leads/lead_new.html:111
+msgid "Technology"
+msgstr "تكنولوجيا"
+
+#: templates/leads/lead_new.html:111
+msgid "Telecommunications"
+msgstr "الاتصالات السلكية واللاسلكية"
+
+#: templates/leads/lead_new.html:111
+msgid "Transportation"
+msgstr "نقل"
+
+#: templates/leads/lead_new.html:111
+msgid "Utilities"
+msgstr "خدمات"
+
+#: templates/leads/lead_new.html:111 templates/leads/lead_new.html:126
+msgid "Other"
+msgstr "اشياء اخرى"
+
+#: templates/leads/lead_new.html:117
 #: templates/live/feedbacks/feedbacks_list.html:76
 #: templates/live/feedbacks/feedbacks_list.html:194
-#: templates/live/feedbacks/feedbacks_show.html:722
-#: templates/live/product_videos/product_videos_show.html:413
-#: templates/live/shows/show.html:414
 msgid "Source"
-msgstr ""
+msgstr "مصدر"
+
+#: templates/leads/lead_new.html:121
+msgid "Social Media"
+msgstr "وسائل الإعلام الاجتماعية"
+
+#: templates/leads/lead_new.html:122
+msgid "Web Site"
+msgstr "موقع"
+
+#: templates/leads/lead_new.html:123
+msgid "Phone Inquiry"
+msgstr "رسائل هاتفية"
+
+#: templates/leads/lead_new.html:124
+msgid "Partner Referral"
+msgstr "احالة الى شريك "
+
+#: templates/leads/lead_new.html:125
+msgid "Purchased List"
+msgstr "قائمة المشتريات"
 
 #: templates/live/live_all_recents_show.html:64
+#: templates/live/live_all_recents_show_company.html:64
 #: templates/live/live_all_upcomings_show.html:55
+#: templates/live/live_all_upcomings_show_company.html:55
 msgid ""
 "Big companies can spend lot of money on advertising, but small companies "
 "can’t . So why not following a new way: Instead of trying to out-"
@@ -1392,7 +1836,7 @@ msgid ""
 "information that’s valuable with people and you will create a whole "
 "different connection. You will gain more trust and more respect. The "
 "audience care often about what you have to say"
-msgstr ""
+msgstr "\n"
 
 #: templates/live/live_show_index.html:96
 msgid ""
@@ -1406,26 +1850,29 @@ msgstr ""
 
 #: templates/live/live_show_page.html:37
 msgid "Ask a question or give a feedback"
-msgstr ""
+msgstr "لديك سؤال تود طرحه او ملاحظة تعتقد انها مهمة ...هذا هو المكان الناسب"
 
 #: templates/live/company_profile/comp_profile_show.html:158
 #: templates/live/company_profile/comp_profile_show.html:187
 #: templates/live/company_profile/comp_profile_show.html:215
 msgid "Edit Company Profile"
-msgstr ""
+msgstr "تحرير معلومات الشركة"
 
 #: templates/live/company_profile/comp_profile_show.html:195
 msgid "Youtube Channel"
-msgstr ""
+msgstr "قناة اليويوب"
 
 #: templates/live/company_profile/comp_profile_show.html:244
 msgid "Edit Company profile"
-msgstr ""
+msgstr "تحرير معلومات الشركة"
+
+#: templates/live/company_profile/comp_profile_show.html:428
+msgid "Add this Social link"
+msgstr "اضف هذا الرابط الاجتماعي "
 
 #: templates/live/customer_stories/customer_stories_list.html:85
-#: templates/live/customer_stories/customer_stories_show.html:131
 msgid "Customer Stories"
-msgstr ""
+msgstr "اخبرني المزيد عن الزبون"
 
 #: templates/live/customer_stories/customer_stories_list.html:90
 msgid "Add Customer Story"
@@ -1442,15 +1889,22 @@ msgstr ""
 #: templates/live/customer_stories/customer_stories_list.html:109
 #: templates/live/feedbacks/feedbacks_list.html:164
 #: templates/live/product_videos/product_videos_list.html:109
-#: templates/live/shows/list_show.html:111
+#: templates/live/shows/list_show.html:127
 msgid "Upcoming shows"
 msgstr ""
 
 #: templates/live/customer_stories/customer_stories_list.html:110
 #: templates/live/feedbacks/feedbacks_list.html:165
 #: templates/live/product_videos/product_videos_list.html:110
-#: templates/live/shows/list_show.html:112
+#: templates/live/shows/list_show.html:128
 msgid "Recent shows"
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_list.html:113
+#: templates/live/feedbacks/feedbacks_list.html:168
+#: templates/live/product_videos/product_videos_list.html:113
+#: templates/live/shows/list_show.html:131
+msgid "Views"
 msgstr ""
 
 #: templates/live/customer_stories/customer_stories_list.html:172
@@ -1463,101 +1917,19 @@ msgid ""
 "care often about what you have to say. "
 msgstr ""
 
-#: templates/live/customer_stories/customer_stories_show.html:279
-#: templates/live/feedbacks/feedbacks_show.html:302
-#: templates/live/product_videos/product_videos_show.html:279
-#: templates/live/shows/show.html:279
-msgid "Edit Description"
-msgstr ""
-
-#: templates/live/customer_stories/customer_stories_show.html:284
-#: templates/live/feedbacks/feedbacks_show.html:307
-#: templates/live/product_videos/product_videos_show.html:284
-#: templates/live/shows/show.html:284
-msgid "Description"
-msgstr ""
-
-#: templates/live/customer_stories/customer_stories_show.html:339
-#: templates/live/feedbacks/feedbacks_show.html:362
-#: templates/live/product_videos/product_videos_show.html:339
-#: templates/live/shows/show.html:339
-msgid "Add feedbacks"
-msgstr ""
-
-#: templates/live/customer_stories/customer_stories_show.html:366
-#: templates/live/feedbacks/feedbacks_list.html:236
-#: templates/live/feedbacks/feedbacks_show.html:391
-#: templates/live/product_videos/product_videos_show.html:366
-#: templates/live/shows/show.html:367
-msgid "Feedbacks pages  let you receive a feedback from leads or customers "
-msgstr ""
-
-#: templates/live/customer_stories/customer_stories_show.html:379
 #: templates/live/feedbacks/feedbacks_list.html:42
-#: templates/live/product_videos/product_videos_show.html:379
-#: templates/live/shows/show.html:380
 msgid "New Feedback"
 msgstr ""
 
-#: templates/live/customer_stories/customer_stories_show.html:393
 #: templates/live/feedbacks/feedbacks_list.html:56
-#: templates/live/feedbacks/feedbacks_show.html:702
-#: templates/live/product_videos/product_videos_show.html:393
-#: templates/live/shows/show.html:394
 msgid "Content"
 msgstr ""
 
-#: templates/live/customer_stories/customer_stories_show.html:461
 #: templates/live/feedbacks/feedbacks_list.html:124
-#: templates/live/product_videos/product_videos_show.html:461
-#: templates/live/shows/show.html:462
 msgid "Add this Feedback"
 msgstr ""
 
-#: templates/live/customer_stories/customer_stories_show.html:473
-#: templates/live/feedbacks/feedbacks_show.html:405
-#: templates/live/product_videos/product_videos_show.html:473
-#: templates/live/shows/show.html:474
-msgid "Add a new lead"
-msgstr ""
-
-#: templates/live/customer_stories/customer_stories_show.html:795
-#: templates/live/feedbacks/feedbacks_show.html:686
-#: templates/live/product_videos/product_videos_show.html:795
-#: templates/live/shows/show.html:796
-msgid "Edit Show"
-msgstr ""
-
-#: templates/live/customer_stories/customer_stories_show.html:812
-#: templates/live/customer_stories/customer_stories_show.html:866
-#: templates/live/feedbacks/feedbacks_show.html:777
-#: templates/live/product_videos/product_videos_show.html:812
-#: templates/live/product_videos/product_videos_show.html:866
-#: templates/live/shows/show.html:813 templates/live/shows/show.html:867
-msgid "Youtube Url"
-msgstr ""
-
-#: templates/live/customer_stories/customer_stories_show.html:820
-#: templates/live/product_videos/product_videos_show.html:820
-#: templates/live/shows/show.html:821
-msgid "Tags"
-msgstr ""
-
-#: templates/live/customer_stories/customer_stories_show.html:828
-#: templates/live/product_videos/product_videos_show.html:828
-#: templates/live/shows/show.html:829
-msgid "Publish this show on i/oGrow Live: Url"
-msgstr ""
-
-#: templates/live/customer_stories/customer_stories_show.html:850
-#: templates/live/feedbacks/feedbacks_show.html:761
-#: templates/live/product_videos/product_videos_show.html:850
-#: templates/live/shows/show.html:851
-msgid "Edit Youtube url"
-msgstr ""
-
 #: templates/live/feedbacks/feedbacks_list.html:137
-#: templates/live/feedbacks/feedbacks_show.html:149
 msgid "Feedbacks"
 msgstr ""
 
@@ -1585,8 +1957,11 @@ msgstr ""
 msgid "Rejected"
 msgstr ""
 
+#: templates/live/feedbacks/feedbacks_list.html:236
+msgid "Feedbacks pages  let you receive a feedback from leads or customers "
+msgstr ""
+
 #: templates/live/product_videos/product_videos_list.html:85
-#: templates/live/product_videos/product_videos_show.html:131
 msgid "Product Videos"
 msgstr ""
 
@@ -1612,27 +1987,27 @@ msgid ""
 "what you have to say. "
 msgstr ""
 
-#: templates/live/shows/list_show.html:87 templates/live/shows/show.html:132
+#: templates/live/shows/list_show.html:103
 msgid "Shows"
 msgstr ""
 
-#: templates/live/shows/list_show.html:92
+#: templates/live/shows/list_show.html:108
 msgid "Schedule a show"
 msgstr ""
 
-#: templates/live/shows/list_show.html:109
+#: templates/live/shows/list_show.html:125
 msgid "All shows"
 msgstr ""
 
-#: templates/live/shows/list_show.html:110
+#: templates/live/shows/list_show.html:126
 msgid "My shows"
 msgstr ""
 
-#: templates/live/shows/list_show.html:140
+#: templates/live/shows/list_show.html:156
 msgid "Start at"
 msgstr ""
 
-#: templates/live/shows/list_show.html:176
+#: templates/live/shows/list_show.html:192
 msgid ""
 "Big companies can spend lot of money on advertising, but small companies "
 "can’t . So why not following a new way: Instead of trying to out-"
@@ -1642,57 +2017,163 @@ msgid ""
 "audience care often about what you have to say. "
 msgstr ""
 
-#: templates/needs/show.html:189
+#: templates/needs/show.html:180
+msgid "Customer Needs"
+msgstr "احتيجات العميل "
+
+#: templates/needs/show.html:201
+#, fuzzy
 msgid "Customer Needs   Feeds"
-msgstr ""
+msgstr "احتيجات العميل"
 
-#: templates/opportunities/list.html:156
+#: templates/needs/show.html:208
+msgid "Notes"
+msgstr "الملاحظات"
+
+#: templates/needs/show.html:209
+msgid "Attach Documents"
+msgstr "ارفق ملفات "
+
+#: templates/needs/show.html:210
+msgid "Send an Email"
+msgstr "ارسل بريد الكتروني "
+
+#: templates/needs/show.html:513
+msgid "Edit Need"
+msgstr "تحرير الحاجة"
+
+#: templates/needs/show.html:529
+msgid "description"
+msgstr "شرح"
+
+#: templates/opportunities/list.html:237
+#: templates/opportunities/opportunity_list.html:22
+#: templates/opportunities/opportunity_list.html:23
+#: templates/opportunities/opportunity_list.html:88
+#: templates/opportunities/opportunity_new.html:25
+msgid "Opportunities"
+msgstr "الفرص"
+
+#: templates/opportunities/list.html:254
+#: templates/opportunities/opportunity_list.html:31
 msgid "All opportunities"
-msgstr ""
+msgstr "كل الفرص"
 
-#: templates/opportunities/list.html:157
+#: templates/opportunities/list.html:255
+#: templates/opportunities/opportunity_list.html:32
 msgid "My opportunities"
-msgstr ""
+msgstr "الفرص الخاصة بي "
 
-#: templates/opportunities/list.html:188
+#: templates/opportunities/list.html:286
 msgid "Stage probability"
-msgstr ""
+msgstr "احتمال حصول المرحلة"
 
-#: templates/opportunities/opportunity_show.html:173
-#: templates/opportunities/opportunity_show.html:174
-msgid "associated with"
-msgstr ""
+#: templates/opportunities/opportunity_list.html:26
+msgid "Filter"
+msgstr "منقح"
 
-#: templates/opportunities/opportunity_show.html:194
-msgid "Opportunity Feeds"
-msgstr ""
+#: templates/opportunities/opportunity_list.html:27
+msgid "Stages"
+msgstr "المراحل"
 
-#: templates/opportunities/opportunity_show.html:494
-msgid "Edit Opportunity"
-msgstr ""
+#: templates/opportunities/opportunity_list.html:38
+msgid "Sort"
+msgstr "صنف"
+
+#: templates/opportunities/opportunity_list.html:54
+msgid "Opportunity"
+msgstr "فرصة"
+
+#: templates/opportunities/opportunity_list.html:130
+msgid "with"
+msgstr "ب"
+
+#: templates/opportunities/opportunity_list.html:142
+msgid "Estimated close date:"
+msgstr "الوقت التقديري للاقفال"
+
+#: templates/opportunities/opportunity_list.html:160
+#: templates/opportunities/opportunity_list.html:175
+msgid ""
+"Know which proposals/bids are pending, which you’ve won, and which you’ve"
+" lost. Enter notes about the opportunities, attach proposals or contracts"
+" to the opportunities, and keep a log of any changes."
+msgstr "اطلع اكثر حول العروض والاقتراحات   التي حصلت عليها والتي فقدتها "
+
+#: templates/opportunities/opportunity_list.html:386
+#: templates/opportunities/opportunity_new.html:169
+msgid "Fixed bid"
+msgstr "مناقصة ثابتة"
+
+#: templates/opportunities/opportunity_list.html:387
+#: templates/opportunities/opportunity_new.html:170
+msgid "Per hour"
+msgstr "كل ساعة"
+
+#: templates/opportunities/opportunity_list.html:388
+#: templates/opportunities/opportunity_new.html:171
+msgid "Per month"
+msgstr "كل شهر"
+
+#: templates/opportunities/opportunity_list.html:389
+#: templates/opportunities/opportunity_new.html:172
+msgid "Per year"
+msgstr "سنويا"
+
+#: templates/opportunities/opportunity_new.html:55
+msgid "Create Opportunity"
+msgstr "انشئ فرصة "
+
+#: templates/opportunities/opportunity_new.html:70
+msgid "Type here the opportunity name..."
+msgstr "ادخل اسم الفرصة..."
+
+#: templates/opportunities/opportunity_new.html:84
+msgid "Opportunity amount..."
+msgstr "مبلغ فرصة البيع"
+
+#: templates/opportunities/opportunity_new.html:214
+msgid "Opportunity Stage"
+msgstr "مرحلة الفرصة"
+
+#: templates/opportunities/opportunity_new.html:229
+msgid "Estimated closed date"
+msgstr "الوقت التقديري للاقفال"
+
+#: templates/opportunities/opportunity_new.html:278
+msgid "Opportunity Informations"
+msgstr "معلومات حول الفرصة "
+
+#: templates/opportunities/opportunity_new.html:290
+msgid "Competitors"
+msgstr "المنافسين"
 
 #: templates/products/list.html:42 templates/products/list.html:80
 msgid "New Product"
-msgstr ""
+msgstr "منتج جديد"
 
 #: templates/products/list.html:64
 msgid "Add Product"
-msgstr ""
+msgstr "اضف منتج "
 
 #: templates/products/list.html:75 templates/products/features/list.html:93
 #: templates/products/roadmaps/list.html:92
 msgid "Products"
-msgstr ""
+msgstr "المنتجات"
 
 #: templates/products/features/list.html:98
 msgid "New Feature"
-msgstr ""
+msgstr "ميزة جديدة"
 
 #: templates/products/roadmaps/list.html:97
 msgid "New Roadmap"
-msgstr ""
+msgstr "خارطة طريق جديدة"
 
-#: templates/search/list.html:90
+#: templates/search/list.html:11
 msgid "Search results"
-msgstr ""
+msgstr "نتائج البحث"
+
+#: templates/search/list.html:127
+msgid "No results found, try with another term"
+msgstr "لم يتم العثور على نتائج، حاول مع مصطلح آخر"
 

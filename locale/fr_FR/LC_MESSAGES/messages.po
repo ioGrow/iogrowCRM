@@ -200,6 +200,11 @@ msgid ""
 "             Keep the experience you know and connect with the people you"
 " need"
 msgstr ""
+"Si vous cherchez à construire un réseau potentiel de contacts, \\ nVous "
+"pouvez faire mieux! Utilisez l'extension gratuite de Google Chrome "
+"quiVous permet d'ajouter des gens à droite de Linkedin, Twitter et Gmail "
+"en uncliquez sur. \\ nGardez l'expérience que vous savez et se connecter "
+"avec les gens que vousNécessité"
 
 #: templates/base.html:272 templates/blog/blog_base.html:242
 #: templates/blog/public_blog_base.html:242
@@ -361,7 +366,7 @@ msgstr "Suivant"
 
 #: templates/opportunit_new.html:86
 msgid "Type here the company name of your customer,parnter..."
-msgstr ""
+msgstr "Tapez ici le nom de l'entreprise de votre client, partenaire ..."
 
 #: templates/opportunit_new.html:155 templates/articles/article_new.html:130
 #: templates/calendar/calendar_show.html:287 templates/cases/case_new.html:207
@@ -601,7 +606,7 @@ msgstr "Nouveau nom du tag"
 #: templates/opportunities/opportunity_new.html:34
 #: templates/search/list.html:18
 msgid "Loading..."
-msgstr "Chargement en cours ..."
+msgstr "Chargement..."
 
 #: templates/activities/all_tasks.html:644
 #: templates/activities/all_tasks.html:812
@@ -613,7 +618,7 @@ msgstr "Chargement en cours ..."
 #: templates/leads/lead_list.html:241 templates/leads/lead_list.html:310
 #: templates/opportunities/opportunity_list.html:248
 msgid "Manage Tags"
-msgstr "Gérer tags"
+msgstr "Gérer les tags"
 
 #: templates/activities/all_tasks.html:664
 #: templates/activities/all_tasks.html:832
@@ -626,7 +631,7 @@ msgstr "Terminer la tache"
 
 #: templates/activities/all_tasks.html:679
 msgid "Are you sure you want to close selected tasks"
-msgstr ""
+msgstr "Etes-vous sûr de vouloir fermer les tâches sélectionnées"
 
 #: templates/activities/all_tasks.html:696
 msgid "Add Tags"
@@ -634,12 +639,12 @@ msgstr "Ajouter des Tags"
 
 #: templates/activities/all_tasks.html:725
 msgid "Assign someone to this task"
-msgstr ""
+msgstr "Désigner quelqu'un pour cette tâche"
 
 #: templates/activities/all_tasks.html:730
 #: templates/calendar/calendar_show.html:516
 msgid "Enter name or email addresse to add people to this group"
-msgstr ""
+msgstr "Entrez le nom ou l'adresse e-mail pour ajouter des personnes à ce groupe"
 
 #: templates/activities/all_tasks.html:743
 msgid "Add this account"
@@ -651,7 +656,7 @@ msgstr "Supprimer la tâche"
 
 #: templates/activities/all_tasks.html:851
 msgid "Are you sure you want to delete those tasks"
-msgstr ""
+msgstr "Etes-vous sûr de vouloir supprimer ces tâches"
 
 #: templates/activities/all_tasks.html:872 templates/admin/groups/list.html:121
 #: templates/admin/users/list.html:153 templates/articles/article_list.html:307
@@ -685,7 +690,7 @@ msgstr "Paramètres de portlet"
 #: templates/admin/groups/show.html:26
 #: templates/campaigns/campaign_list.html:26 templates/search/list.html:32
 msgid "Here will be a configuration form"
-msgstr ""
+msgstr "Ici sera une formulaire de configuration"
 
 #: templates/admin/groups/show.html:46
 msgid "Add a new member"
@@ -786,23 +791,23 @@ msgstr ""
 
 #: templates/admin/settings/settings.html:310
 msgid "Add Case Status"
-msgstr ""
+msgstr "Ajouter Réclamation"
 
 #: templates/admin/settings/settings.html:323
 msgid "Edit Case Status"
-msgstr ""
+msgstr "Modifier Réclamation"
 
 #: templates/admin/settings/settings.html:356
 msgid "New Lead status"
-msgstr ""
+msgstr "Nouveau Piste"
 
 #: templates/admin/settings/settings.html:376
 msgid "Add Lead Status"
-msgstr ""
+msgstr "Ajouter Piste"
 
 #: templates/admin/settings/settings.html:391
 msgid "Edit Lead status"
-msgstr ""
+msgstr "Modifier Piste"
 
 #: templates/admin/users/list.html:22
 msgid "Users"
@@ -831,7 +836,7 @@ msgstr ""
 #: templates/live/company_profile/comp_profile_show.html:315
 #: templates/live/company_profile/comp_profile_show.html:317
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: templates/admin/users/list.html:142
 msgid "Add this user"
@@ -859,6 +864,11 @@ msgid ""
 "informations about leads so they can be followed up on and qualified "
 "quickly."
 msgstr ""
+"Vous avez conduit venant d'une grande variété de sources. Quelques pistes"
+" viennentÀ partir de listes que vous avez acquis, d'autres de cartes de "
+"visite et plus encore à partir deLe \" nous contacter \\ \"formulaire sur"
+" votre site Web. I / oGrow vous aider à organiserInformations sur câbles "
+"de sorte qu'ils peuvent être suivis sur et qualifiésrapidement."
 
 #: templates/articles/article_list.html:122
 #: templates/articles/article_search.html:122
@@ -900,7 +910,7 @@ msgstr "Ajouter un nouveau label"
 #: templates/articles/article_show.html:18
 #: templates/blog/public_article_show.html:17
 msgid "Articles"
-msgstr ""
+msgstr "Articles"
 
 #: templates/articles/article_new.html:33
 #: templates/articles/article_new.html:64 templates/cases/case_new.html:17
@@ -926,7 +936,7 @@ msgstr "Titre"
 
 #: templates/articles/article_new.html:81
 msgid "Type here the title of your post..."
-msgstr "Titre"
+msgstr "Tapez ici le titre de votre post ..."
 
 #: templates/articles/article_new.html:93
 msgid "Intro Card"
@@ -992,7 +1002,9 @@ msgstr "Tout le monde vous invitez receveront un e-mail"
 #: templates/blog/public_article_show.html:152
 #: templates/blog/public_support.html:96
 msgid "Enter name or email addresse to involve people in this discussion"
-msgstr "Entrez le nom ou l'adresse de courriel pour associer les utilisateurs à cette discussion"
+msgstr ""
+"Entrez le nom ou l'adresse de courriel pour associer les utilisateurs à "
+"cette discussion"
 
 #: templates/articles/article_show.html:154
 #: templates/blog/public_article_show.html:155
@@ -1219,7 +1231,7 @@ msgstr "collaborateurs"
 
 #: templates/calendar/calendar_show.html:507
 msgid "Invited user:"
-msgstr ""
+msgstr "Utilisateur invité:"
 
 #: templates/calendar/calendar_show.html:514
 msgid "Invite collaborators:"
@@ -1436,6 +1448,9 @@ msgid ""
 "investor in your ecosystem. You and your co-workers can collaborate to "
 "get a deep understanding."
 msgstr ""
+"Réclamations pages comprend une page détaillée pour chaque client, "
+"partenaire, ouinvestisseur dans votre écosystème. Vous et vos collègues "
+"pouvez collaborer àobtenir une compréhension profonde."
 
 #: templates/cases/case_list.html:327 templates/cases/case_new.html:74
 #: templates/contacts/list.html:65 templates/opportunities/list.html:70
@@ -1547,11 +1562,11 @@ msgstr "Ajouter un nouveau téléphone"
 
 #: templates/contacts/contact_new.html:186 templates/leads/lead_new.html:200
 msgid "Add a new email address"
-msgstr ""
+msgstr "jouter une nouvelle adresse e-mail\""
 
 #: templates/contacts/contact_new.html:190 templates/leads/lead_new.html:204
 msgid "Address"
-msgstr "Ajouter une nouvelle adresse e-mail"
+msgstr "Adresse"
 
 #: templates/contacts/contact_new.html:210 templates/leads/lead_new.html:221
 msgid "Add a new address"
@@ -1810,6 +1825,13 @@ msgid ""
 "different connection. You will gain more trust and more respect. The "
 "audience care often about what you have to say"
 msgstr ""
+"Les grandes entreprises peuvent dépenser beaucoup d'argent sur la "
+"publicité, mais les petites entreprisesne peut pas Alors pourquoi ne pas "
+"la suite d'une nouvelle façon:. lieu d'essayer de sortirannoncer vos "
+"concurrents, essayer de construire votre propre public. Parler, "
+"partagerinformation qui est précieux avec les gens et vous allez créer un"
+" ensembleconnexion différente. Vous allez acquérir plus de confiance et "
+"plus de respect. L'Les soins de public souvent de ce que vous avez à dire"
 
 #: templates/live/live_show_index.html:96
 msgid ""
@@ -1820,16 +1842,23 @@ msgid ""
 "different connection. You will gain more trust and more respect. The "
 "audience care often about what you have to say."
 msgstr ""
+"Les grandes entreprises peuvent dépenser beaucoup d'argent sur la "
+"publicité, mais les petites entreprisesne peut pas Alors pourquoi ne pas "
+"la suite d'une nouvelle façon:. lieu d'essayer de sortirannoncer vos "
+"concurrents, essayer de construire votre propre public. Parler, "
+"partagerinformation qui est précieux avec les gens et vous allez créer un"
+" ensembleconnexion différente. Vous allez acquérir plus de confiance et "
+"plus de respect. L'Les soins de public souvent de ce que vous avez à dire"
 
 #: templates/live/live_show_page.html:37
 msgid "Ask a question or give a feedback"
-msgstr ""
+msgstr "Posez une question ou donner une rétroaction"
 
 #: templates/live/company_profile/comp_profile_show.html:158
 #: templates/live/company_profile/comp_profile_show.html:187
 #: templates/live/company_profile/comp_profile_show.html:215
 msgid "Edit Company Profile"
-msgstr ""
+msgstr "Modifier le profil de la Société"
 
 #: templates/live/company_profile/comp_profile_show.html:195
 msgid "Youtube Channel"
@@ -1837,11 +1866,11 @@ msgstr ""
 
 #: templates/live/company_profile/comp_profile_show.html:244
 msgid "Edit Company profile"
-msgstr ""
+msgstr "Modifier le profil de la Société"
 
 #: templates/live/company_profile/comp_profile_show.html:428
 msgid "Add this Social link"
-msgstr ""
+msgstr "Ajouter ce lien"
 
 #: templates/live/customer_stories/customer_stories_list.html:85
 msgid "Customer Stories"

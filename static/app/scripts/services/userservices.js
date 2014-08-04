@@ -95,7 +95,7 @@ accountservices.factory('User', function($http) {
           
 
                    // be careful , right it back !
-               window.location.reload();
+               window.location.reload("http://localhost:8090/");
 
 
                // Call the method $apply to make the update on the scope
