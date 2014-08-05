@@ -1387,14 +1387,14 @@
                      <div class="form-group">
                         <label  class="col-md-3 control-label">{{_("Country")}} </label>
                         <div class="col-md-9">
-                          <input type="text"  class="form-control" id="id_country" ng-model="address.country">
+                          <input type="text"  class="form-control" id="id_country" placeholder="Required" ng-model="address.country">
                         </div>
                      </div>
               </div>
               <div class="modal-footer">
                   <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-                  <input ng-hide="isLoading" ng-click="addAddress(address)" ng-disabled="(!address.country || !address.state || !address.city || !address.street)" type="submit" class="btn green" value="{{_('Add this address')}}">
+                  <input ng-hide="isLoading" ng-click="addAddress(address)" ng-disabled="(!address.country)" type="submit" class="btn green" value="{{_('Add this address')}}">
                   <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
               </div>
                 </form>

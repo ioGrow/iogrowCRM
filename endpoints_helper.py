@@ -1,5 +1,6 @@
  #!/usr/bin/python
  # -*- coding: utf-8 -*-
+
 import base64
 from email.mime.audio import MIMEAudio
 from email.mime.base import MIMEBase
@@ -24,8 +25,12 @@ import gdata.contacts.data
 from gdata.gauth import OAuth2Token
 from gdata.contacts.client import ContactsClient
 from model import User
+
 import iograph
+
 from highrise.pyrise import Highrise, Person, Company, Deal, Task, Tag, Case
+
+
 
 
 FOLDERS = {
@@ -300,7 +305,6 @@ class EndpointsHelper():
     def highrise_import_company_details(cls, company_id):
         companie=Company.get(company_id)
         return companie
-
     @classmethod
     def highrise_import_opportunities(cls):
         Deals=Deal.all()

@@ -67,7 +67,7 @@ accountservices.factory('User', function($http) {
          console.log('in insert resp');
          console.log(resp);
          if(!resp.code){
-          console.log("there  are a response");       
+          console.log("there  are a response");
           $scope.isLoading = false;
          }else{
               console.log(resp.message);
@@ -92,10 +92,10 @@ accountservices.factory('User', function($http) {
             if(!resp.code){
                $scope.user = resp;
 
-          
+              console.log(resp);
 
                    // be careful , right it back !
-               window.location.reload();
+              window.location.reload();
 
 
                // Call the method $apply to make the update on the scope
@@ -131,6 +131,21 @@ accountservices.factory('Permission', function($http) {
          console.log(resp);
          if(!resp.code){
               $scope.updateCollaborators();
+
+
+         }else{
+          console.log(resp.code);
+         }
+      });
+  };
+  Permission.getColaborators = function($scope,params){
+      console.log(params);
+      gapi.client.crmengine.permissions.get_colaborators(params).execute(function(resp) {
+         console.log('in colabor resp');
+         console.log(resp);
+         if(!resp.code){
+              $scope.collaborators_list=resp.items;
+               $scope.$apply();
 
          }else{
           console.log(resp.code);
