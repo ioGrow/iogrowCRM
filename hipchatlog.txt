@@ -1,2 +1,0 @@
-[2][int main(int, char**)]hello 
-[67][int main(int, char**)]hello again "/opt/HipChat/lib" 

@@ -42,15 +42,17 @@ from iomodels.crmengine.events import Event
 jinja_environment = jinja2.Environment(
   loader=jinja2.FileSystemLoader(os.getcwd()),
   extensions=['jinja2.ext.i18n'],cache_size=0)
-
-
 jinja_environment.install_gettext_translations(i18n)
+
+
+
+
 ADMIN_EMAILS = ['tedj.meabiou@gmail.com','hakim@iogrow.com']
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 
 SCOPES = [
-    'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/prediction https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar'
+    'https://mail.google.com/ https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds'
 ]
 
 VISIBLE_ACTIONS = [
@@ -83,12 +85,13 @@ folders = {}
 class BaseHandler(webapp2.RequestHandler):
     def set_user_locale(self,language=None):
         if language:
-            locale = self.request.GET.get('locale', 'en_US')
+            locale = self.request.GET.get('locale', 'en-US')
             i18n.get_i18n().set_locale(language)
 
         else:
-            locale = self.request.GET.get('locale', 'en_US')
+            locale = self.request.GET.get('locale', 'en-US')
             i18n.get_i18n().set_locale('en')
+
 
     def prepare_template(self,template_name):
         is_admin = False
@@ -114,13 +117,14 @@ class BaseHandler(webapp2.RequestHandler):
                 for app in apps:
                     if app is not None:
                         applications.append(app)
+                #text=i18n.gettext('Hello, world!')
                 template_values={
                           'is_admin':is_admin,
                           'is_business_user':is_business_user,
                           'ME':user.google_user_id,
                           'active_app':active_app,
                           'apps':applications,
-                          'tabs':tabs
+                          'tabs':tabs,
                           }
         template = jinja_environment.get_template(template_name)
         self.response.out.write(template.render(template_values))
@@ -862,9 +866,6 @@ class SyncPatchCalendarEvent(webapp2.RequestHandler):
                   "summary": summary
                   }
 
-            print "-*-*-*-*-*-*here we go i'm the one -*-*-*-*-*-*-*-*"
-            print "yeah men"
-            print "*-*-*-*-*-*-*-*---------*-*-*-*-*-*-*-*-*-*-*-*-*-*-*"
             patched_event = service.events().patch(calendarId='primary',eventId=event_google_id,body=params).execute()
         except:
             raise endpoints.UnauthorizedException('Invalid grant' )
@@ -1075,7 +1076,35 @@ class SendEmailNotification(webapp2.RequestHandler):
         subject = self.request.get('subject')
         body = self.request.get('body')
         sender_address = "ioGrow notifications <notifications@gcdc2013-iogrow.appspotmail.com>"
-        mail.send_mail(sender_address, to , subject, body,reply_to=user_email)
+        message = mail.EmailMessage()
+        message.sender = sender_address
+        message.to = to
+        message.subject = subject
+        message.html = body
+        message.reply_to = user_email
+        message.send()
+
+class SendGmailEmail(webapp2.RequestHandler):
+    def post(self):
+        user = model.User.get_by_email(self.request.get('email'))
+        credentials = user.google_credentials
+        http = credentials.authorize(httplib2.Http(memcache))
+        service = build('gmail', 'v1', http=http)
+        cc = None
+        bcc = None
+        if self.request.get('cc') !='None':
+            cc = self.request.get('cc')
+        if self.request.get('bcc') !='None':
+            bcc = self.request.get('bcc')
+        message = EndpointsHelper.create_message(
+                                                  user.email,
+                                                  self.request.get('to'),
+                                                  cc,
+                                                  bcc,
+                                                  self.request.get('subject'),
+                                                  self.request.get('body')
+                                                )
+        EndpointsHelper.send_message(service,'me',message)
 
 
 
@@ -1100,6 +1129,8 @@ routes = [
     ('/workers/send_email_notification',SendEmailNotification),
     ('/workers/add_to_iogrow_leads',AddToIoGrowLeads),
     ('/workers/get_from_linkedin',GetFromLinkedinToIoGrow),
+    ('/workers/send_gmail_message',SendGmailEmail),
+
 
     ('/',IndexHandler),
     ('/blog',BlogHandler),
@@ -1173,4 +1204,8 @@ config = {}
 config['webapp2_extras.sessions'] = {
     'secret_key': 'YOUR_SESSION_SECRET'
 }
+# to config the local directory the way we want .
+# config['webapp2_extras.i18n'] = {
+#     'translations_path': 'path/to/my/locale/directory',
+# }
 app = webapp2.WSGIApplication(routes, config=config, debug=True)

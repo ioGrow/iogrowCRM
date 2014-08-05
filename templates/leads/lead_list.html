@@ -1,3 +1,5 @@
+
+
 <div class="row subHeader">
     <div class="currentApp">
        <div class="btn-group">
@@ -19,11 +21,14 @@
       <div class="row">
       <div class="col-md-10 col-xs-12 filter-content">
       <div class="filterOptions">
-          <span role="button" class="filterItem hiddenOnPhone" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">All <span class="hidden-xs hiddenOnxs">Leads</span> </span>
-          <span role="button" class="filterItem hiddenOnPhone" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">My <span class="hidden-xs hiddenOnxs">Leads</span></span>
+
+          <span role="button" class="filterItem" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">{{ _('All')}} <span class="hidden-xs hiddenOnxs">{{ _('Leads')}}</span> </span>
+          <span role="button" class="filterItem" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">{{ _('My')}} <span class="hidden-xs hiddenOnxs">{{ _('Leads')}}</span></span>
+
+          
             <div class="btn-group visibleOnPhone">
                 <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='filter'}" >
-                  Filter by
+                  {{ _('Filter by')}}
                   <i class="icon-angle-down"></i>
                 </a>
                 <ul class="dropdown-menu drp-dwn-xs-right">
@@ -32,9 +37,10 @@
                   <li><a ng-click="showTagFilterCard();selectedOption ='tags'" href="#" data-toggle="modal">{{ _('Tags') }}</a></li>
                 </ul>
           </div>
+
           <div class="btn-group">
               <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" >
-                Sort by
+                {{ _('Sort by')}}
                 <i class="icon-angle-down"></i>
               </a>
               <ul class="dropdown-menu drp-dwn-xs-right">
@@ -53,7 +59,7 @@
       </div>
       <div class="col-md-2 col-xs-2">
       <a href="/#/leads/new" class="hidden-sm hidden-xs btn red newAccountBtnOnscroll pull-right hidden afterScrollBtn">
-           New <span class="hidden-xs hiddenOnxs">Lead</span>
+           {{ _('New')}} <span class="hidden-xs hiddenOnxs">{{ _('Lead')}}</span>
          </a>
       </div>
       </div>
@@ -64,7 +70,7 @@
   <div class="loader-container row" ng-show="isLoading">
     <div class="loader-dialog col-md-4 col-md-offset-4 ">
       <div class="loader-content">
-          Loading...
+          {{ _('Loading...')}}
       </div>
     </div>
   </div>
@@ -102,10 +108,13 @@
          <div class="pull-right" >
            <a href="/#/leads/new" class="btn red newBtn">
                        {{ _(" New Lead") }}
+                       
           </a>
         </div>
          </div>
+    
     </div>
+
   </div>
   <div class="row">
   <div class="col-md-12">
@@ -263,6 +272,7 @@
   </div>
   </div>
   </div>
+
       <!-- END PAGE CONTAINER-->
 </div>
 </div>
@@ -273,7 +283,7 @@
     <div class="portlet showCard fixedCard">
       <div class="portlet-title">
         <div class="caption">
-                <!-- class="fa fa-reorder"--><i></i>Labels
+                <!-- class="fa fa-reorder"--><i></i>{{_("Labels")}}
         </div>
       </div>
       <div class="portlet-body">
@@ -300,7 +310,7 @@
           </li>
           <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
             <a ng-click="" class="btn-link addAnotherPhone">
-              <i class="fa fa-tags"></i>  Add a new label
+              <i class="fa fa-tags"></i>  {{ _('Add a new label')}}
             </a>
           </li>
         </ul>
@@ -308,7 +318,7 @@
           <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
           <div class="row">
             <div class="col-md-12 form-group">
-              <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New label">
+              <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('New label')}}">
             </div>
           </div>
           <div class="row">
@@ -324,7 +334,7 @@
           </div>
         </form>
         <div class="form-group btn-manage-tags" ng-show="tags">
-          <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
+          <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">{{ _('Manage Tags')}}
           </button>
         </div>
       </div>
@@ -338,7 +348,7 @@
             <div class="modal-content">
               <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                  <h3 id="myModalLabel" class="modal-title">Delete Lead</h3>
+                  <h3 id="myModalLabel" class="modal-title">{{ _('Delete Lead')}}</h3>
               </div>
               <div class="modal-body">
                  <form id="seletesho" name="deletesho" class="form-horizontal">
@@ -384,7 +394,7 @@
   </div>
 <script type="text/javascript">
   $("#select2_sample2").select2({
-        placeholder: "Click to Select a label",
+        placeholder: "{{ _('Click to Select a label')}}",
         allowClear: false
     });
   var handleUniform = function () {

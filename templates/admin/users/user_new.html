@@ -52,9 +52,8 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
-                                
                                 <div class="col-md-9">
-                                    <form class="form-horizontal ">
+                                   
                                         <div class="row">
                                             <div class="col-md-9">
                                                 <div class="form-group">
@@ -77,7 +76,7 @@
                                                             </div>
                                                         </li>
                                                         <li ng-repeat="email in emails">
-                                                            <a editoptions editdataattr="deleteInfos(emails,$index)"  editable-text="email.email" onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)">
+                                                            <a editoptions editdataattr="deleteInfos(emails,$index)"  editable-text="email.email" >
                                                                 <%=email.email %>
                                                             </a>
                                                         </li>
@@ -99,7 +98,6 @@
                                  
                                         </div>
                                        
-                                    </form>
                                 </div>
                             </div>
                             <div class="col-md-12">

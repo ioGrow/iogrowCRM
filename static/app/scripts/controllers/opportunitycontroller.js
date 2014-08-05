@@ -524,7 +524,7 @@ $scope.addTags=function(){
      // Google+ Authentication
      Auth.init($scope);
      $(window).scroll(function() {
-          if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
+          if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
               $scope.listMoreItems();
           }
       });
@@ -705,7 +705,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
       $scope.test=function(){
         console.log('testtest');
       }
-     
+
       $scope.selectMemberToTask = function() {
             console.log($scope.selected_members);
             if ($scope.selected_members.indexOf($scope.user) == -1) {
@@ -764,7 +764,14 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
             $scope.newTaskform=false;
       }
      }
-   }
+   };
+
+   
+    //HKA 27.07.2014 Add button cancel on Task form
+       $scope.closeTaskForm=function(newTask){
+               $scope.newTask={};
+                $scope.newTaskform=false;
+    };
      $scope.$watch('opportunity.closed_date', function(newValue, oldValue) {
             if (newValue!=oldValue){
                 $scope.patchDate(newValue);

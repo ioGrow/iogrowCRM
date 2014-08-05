@@ -61,13 +61,13 @@ accountservices.factory('User', function($http) {
       });
   };
   User.insert = function($scope,params){
-      $scope.isLoading = true;
+
       //console.log(params.emails);
       gapi.client.crmengine.users.insert(params).execute(function(resp) {
          console.log('in insert resp');
          console.log(resp);
          if(!resp.code){
-          console.log("there  are a response");       
+          console.log("there  are a response");
           $scope.isLoading = false;
          }else{
               console.log(resp.message);
@@ -86,10 +86,16 @@ accountservices.factory('User', function($http) {
   };
 
   User.patch = function($scope,params){
+
+
       gapi.client.crmengine.users.patch(params).execute(function(resp) {
             if(!resp.code){
                $scope.user = resp;
-               window.location.reload();
+
+              console.log(resp);
+
+                   // be careful , right it back !
+              window.location.reload();
 
 
                // Call the method $apply to make the update on the scope

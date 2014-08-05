@@ -2,7 +2,7 @@ from google.appengine.ext import ndb
 from google.appengine.api import memcache
 from google.appengine.datastore.datastore_query import Cursor
 from protorpc import messages
-#from endpoints_helper import EndpointsHelper
+from endpoints_helper import EndpointsHelper
 import iomessages
 from model import User
 INVERSED_EDGES = {
@@ -196,7 +196,7 @@ class Edge(ndb.Expando):
 
     @classmethod
     def delete_all_cascade(cls, start_node):
-        #EndpointsHelper.delete_document_from_index(start_node.id())
+        EndpointsHelper.delete_document_from_index(start_node.id())
         start_node_kind = start_node.kind()
         edges = cls.query( cls.start_node==start_node ).fetch()
         for edge in edges:
