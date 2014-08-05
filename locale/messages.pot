@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-08-04 16:17+0100\n"
+"POT-Creation-Date: 2014-08-05 14:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -93,8 +93,16 @@ msgstr ""
 msgid "Invite Users"
 msgstr ""
 
-#: templates/base.html:159 templates/calendar/calendar_show.html:28
+#: templates/base.html:149
+msgid "Drive"
+msgstr ""
+
+#: templates/base.html:159 templates/calendar/calendar_show.html:29
 msgid "Calendar"
+msgstr ""
+
+#: templates/base.html:169
+msgid "Gmail"
 msgstr ""
 
 #: templates/base.html:190
@@ -152,9 +160,9 @@ msgstr ""
 #: templates/blog/public_blog_base.html:204
 #: templates/blog/public_blog_base.html:259
 #: templates/blog/public_blog_base.html:296
-#: templates/calendar/calendar_show.html:107
-#: templates/calendar/calendar_show.html:164
-#: templates/calendar/calendar_show.html:196 templates/cases/case_new.html:268
+#: templates/calendar/calendar_show.html:110
+#: templates/calendar/calendar_show.html:167
+#: templates/calendar/calendar_show.html:199 templates/cases/case_new.html:268
 #: templates/cases/case_new.html:292 templates/cases/case_show.html:725
 #: templates/cases/case_show.html:896 templates/cases/case_show.html:928
 #: templates/cases/case_show.html:961 templates/cases/case_show.html:994
@@ -202,9 +210,9 @@ msgstr ""
 #: templates/articles/article_new.html:235 templates/blog/blog_base.html:205
 #: templates/blog/blog_base.html:297 templates/blog/public_blog_base.html:205
 #: templates/blog/public_blog_base.html:297
-#: templates/calendar/calendar_show.html:108
-#: templates/calendar/calendar_show.html:165
-#: templates/calendar/calendar_show.html:197 templates/cases/case_new.html:269
+#: templates/calendar/calendar_show.html:111
+#: templates/calendar/calendar_show.html:168
+#: templates/calendar/calendar_show.html:200 templates/cases/case_new.html:269
 #: templates/cases/case_new.html:293 templates/cases/case_show.html:726
 #: templates/cases/case_show.html:897 templates/cases/case_show.html:929
 #: templates/cases/case_show.html:962 templates/cases/case_show.html:995
@@ -270,6 +278,90 @@ msgstr ""
 msgid "ioGrow Feedback"
 msgstr ""
 
+#: templates/base.html:346
+msgid ""
+"ioGrow Feedback lets you send ioGrow suggestions about our product. We "
+"welcome problem reports, feature ideas and general comments."
+msgstr ""
+
+#: templates/base.html:348
+msgid "Start by writing a brief description:"
+msgstr ""
+
+#: templates/base.html:349 templates/accounts/account_list.html:59
+#: templates/accounts/account_list.html:140
+#: templates/accounts/account_list.html:218
+#: templates/accounts/account_new.html:35
+#: templates/accounts/account_show.html:41
+#: templates/accounts/account_show.html:1308
+#: templates/accounts/account_show.html:1391
+#: templates/accounts/account_show.html:1424
+#: templates/accounts/account_show.html:1453
+#: templates/accounts/account_show.html:1483
+#: templates/accounts/account_show.html:1890
+#: templates/accounts/note_show.html:26 templates/activities/all_tasks.html:639
+#: templates/activities/all_tasks.html:744
+#: templates/activities/all_tasks.html:807
+#: templates/activities/task_show.html:125 templates/admin/groups/list.html:29
+#: templates/admin/groups/show.html:149
+#: templates/admin/settings/settings.html:32
+#: templates/admin/users/user_list.html:29
+#: templates/articles/article_list.html:25
+#: templates/articles/article_new.html:42
+#: templates/articles/article_search.html:25
+#: templates/articles/article_show.html:26
+#: templates/calendar/calendar_show.html:39
+#: templates/calendar/calendar_show.html:246
+#: templates/calendar/calendar_show.html:329
+#: templates/calendar/calendar_show.html:362
+#: templates/calendar/calendar_show.html:391
+#: templates/calendar/calendar_show.html:421
+#: templates/calendar/calendar_show.html:630
+#: templates/calendar/calendar_show.html:805
+#: templates/calendar/calendar_show.html:837
+#: templates/calendar/calendar_show.html:863
+#: templates/campaigns/campaign_list.html:133 templates/cases/case_list.html:53
+#: templates/cases/case_new.html:25 templates/cases/case_show.html:39
+#: templates/cases/case_show.html:1093 templates/cases/case_show.html:1131
+#: templates/cases/case_show.html:1163 templates/contacts/contact_list.html:56
+#: templates/contacts/contact_list.html:158
+#: templates/contacts/contact_new.html:33
+#: templates/contacts/contact_show.html:42
+#: templates/contacts/contact_show.html:1310
+#: templates/contacts/contact_show.html:1393
+#: templates/contacts/contact_show.html:1426
+#: templates/contacts/contact_show.html:1455
+#: templates/contacts/contact_show.html:1485
+#: templates/contacts/contact_show.html:1878
+#: templates/contacts/contact_show.html:1976 templates/contacts/list.html:303
+#: templates/documents/show.html:28 templates/documents/show.html:366
+#: templates/documents/show.html:449 templates/documents/show.html:482
+#: templates/documents/show.html:511 templates/documents/show.html:541
+#: templates/documents/show.html:927 templates/documents/show.html:1025
+#: templates/leads/lead_list.html:73 templates/leads/lead_new.html:23
+#: templates/leads/lead_show.html:37 templates/leads/lead_show.html:1097
+#: templates/leads/lead_show.html:1180 templates/leads/lead_show.html:1213
+#: templates/leads/lead_show.html:1242 templates/leads/lead_show.html:1272
+#: templates/leads/lead_show.html:1640 templates/leads/lead_show.html:1741
+#: templates/live/company_profile/comp_profile_show.html:298
+#: templates/live/company_profile/comp_profile_show.html:375
+#: templates/live/company_profile/comp_profile_show.html:402
+#: templates/live/company_profile/comp_profile_show.html:429
+#: templates/live/feedbacks/feedbacks_list.html:125
+#: templates/opportunities/list.html:439
+#: templates/opportunities/opportunity_list.html:65
+#: templates/opportunities/opportunity_new.html:34
+#: templates/opportunities/opportunity_show.html:39
+#: templates/opportunities/opportunity_show.html:1211
+#: templates/opportunities/opportunity_show.html:1301
+#: templates/search/list.html:28
+msgid "Loading..."
+msgstr ""
+
+#: templates/base.html:395
+msgid "Send feedback"
+msgstr ""
+
 #: templates/ng-index.html:42 templates/opportunit_new.html:30
 #: templates/accounts/account_list.html:27
 #: templates/accounts/account_list.html:28
@@ -299,8 +391,8 @@ msgstr ""
 #: templates/accounts/account_show.html:1714
 #: templates/admin/settings/settings.html:219
 #: templates/admin/settings/settings.html:257
-#: templates/calendar/calendar_show.html:649
-#: templates/calendar/calendar_show.html:708
+#: templates/calendar/calendar_show.html:652
+#: templates/calendar/calendar_show.html:711
 #: templates/campaigns/campaign_list.html:51 templates/cases/case_list.html:31
 #: templates/cases/case_show.html:672 templates/contacts/contact_show.html:1723
 #: templates/contacts/contact_show.html:1782 templates/documents/show.html:772
@@ -327,7 +419,7 @@ msgstr ""
 #: templates/accounts/account_show.html:255
 #: templates/accounts/account_show.html:1095
 #: templates/accounts/account_show.html:1282
-#: templates/calendar/calendar_show.html:217
+#: templates/calendar/calendar_show.html:220
 #: templates/cases/case_show.html:1016 templates/contacts/contact_new.html:119
 #: templates/contacts/contact_show.html:260
 #: templates/contacts/contact_show.html:1284 templates/documents/show.html:340
@@ -398,24 +490,24 @@ msgstr ""
 #: templates/articles/article_show.html:169
 #: templates/blog/public_article_show.html:170
 #: templates/blog/public_support.html:114
-#: templates/calendar/calendar_show.html:130
-#: templates/calendar/calendar_show.html:239
-#: templates/calendar/calendar_show.html:270
-#: templates/calendar/calendar_show.html:323
-#: templates/calendar/calendar_show.html:356
-#: templates/calendar/calendar_show.html:385
-#: templates/calendar/calendar_show.html:415
-#: templates/calendar/calendar_show.html:464
-#: templates/calendar/calendar_show.html:522
-#: templates/calendar/calendar_show.html:543
-#: templates/calendar/calendar_show.html:567
-#: templates/calendar/calendar_show.html:597
-#: templates/calendar/calendar_show.html:624
-#: templates/calendar/calendar_show.html:683
-#: templates/calendar/calendar_show.html:761
-#: templates/calendar/calendar_show.html:799
-#: templates/calendar/calendar_show.html:831
-#: templates/calendar/calendar_show.html:857
+#: templates/calendar/calendar_show.html:133
+#: templates/calendar/calendar_show.html:242
+#: templates/calendar/calendar_show.html:273
+#: templates/calendar/calendar_show.html:326
+#: templates/calendar/calendar_show.html:359
+#: templates/calendar/calendar_show.html:388
+#: templates/calendar/calendar_show.html:418
+#: templates/calendar/calendar_show.html:467
+#: templates/calendar/calendar_show.html:525
+#: templates/calendar/calendar_show.html:546
+#: templates/calendar/calendar_show.html:570
+#: templates/calendar/calendar_show.html:600
+#: templates/calendar/calendar_show.html:627
+#: templates/calendar/calendar_show.html:686
+#: templates/calendar/calendar_show.html:764
+#: templates/calendar/calendar_show.html:802
+#: templates/calendar/calendar_show.html:834
+#: templates/calendar/calendar_show.html:860
 #: templates/campaigns/campaign_list.html:71 templates/cases/case_list.html:421
 #: templates/cases/case_new.html:244 templates/cases/case_show.html:525
 #: templates/cases/case_show.html:639 templates/cases/case_show.html:791
@@ -540,7 +632,7 @@ msgstr ""
 #: templates/opportunit_new.html:155 templates/accounts/account_new.html:426
 #: templates/accounts/account_show.html:1352
 #: templates/articles/article_new.html:130
-#: templates/calendar/calendar_show.html:287 templates/cases/case_new.html:207
+#: templates/calendar/calendar_show.html:290 templates/cases/case_new.html:207
 #: templates/contacts/contact_new.html:381
 #: templates/contacts/contact_show.html:1354 templates/documents/show.html:410
 #: templates/leads/lead_new.html:388 templates/leads/lead_show.html:1141
@@ -552,7 +644,7 @@ msgstr ""
 #: templates/opportunit_new.html:161 templates/accounts/account_new.html:432
 #: templates/accounts/account_show.html:1357
 #: templates/articles/article_new.html:136
-#: templates/calendar/calendar_show.html:292 templates/cases/case_new.html:212
+#: templates/calendar/calendar_show.html:295 templates/cases/case_new.html:212
 #: templates/contacts/contact_new.html:386
 #: templates/contacts/contact_show.html:1359 templates/documents/show.html:415
 #: templates/leads/lead_new.html:393 templates/leads/lead_show.html:1146
@@ -564,7 +656,7 @@ msgstr ""
 #: templates/opportunit_new.html:167 templates/accounts/account_new.html:438
 #: templates/accounts/account_show.html:1363
 #: templates/articles/article_new.html:142
-#: templates/calendar/calendar_show.html:298 templates/cases/case_new.html:218
+#: templates/calendar/calendar_show.html:301 templates/cases/case_new.html:218
 #: templates/contacts/contact_new.html:392
 #: templates/contacts/contact_show.html:1365 templates/documents/show.html:421
 #: templates/leads/lead_new.html:399 templates/leads/lead_show.html:1152
@@ -576,7 +668,7 @@ msgstr ""
 #: templates/opportunit_new.html:173 templates/accounts/account_new.html:444
 #: templates/accounts/account_show.html:1369
 #: templates/articles/article_new.html:148
-#: templates/calendar/calendar_show.html:304 templates/cases/case_new.html:224
+#: templates/calendar/calendar_show.html:307 templates/cases/case_new.html:224
 #: templates/contacts/contact_new.html:398
 #: templates/contacts/contact_show.html:1371 templates/documents/show.html:427
 #: templates/leads/lead_new.html:405 templates/leads/lead_show.html:1158
@@ -588,7 +680,7 @@ msgstr ""
 #: templates/opportunit_new.html:179 templates/accounts/account_new.html:450
 #: templates/accounts/account_show.html:1375
 #: templates/articles/article_new.html:154
-#: templates/calendar/calendar_show.html:310 templates/cases/case_new.html:230
+#: templates/calendar/calendar_show.html:313 templates/cases/case_new.html:230
 #: templates/contacts/contact_new.html:404
 #: templates/contacts/contact_show.html:1377 templates/documents/show.html:433
 #: templates/leads/lead_new.html:411 templates/leads/lead_show.html:1164
@@ -600,7 +692,7 @@ msgstr ""
 #: templates/opportunit_new.html:185 templates/accounts/account_new.html:456
 #: templates/accounts/account_show.html:1381
 #: templates/articles/article_new.html:160
-#: templates/calendar/calendar_show.html:316 templates/cases/case_new.html:236
+#: templates/calendar/calendar_show.html:319 templates/cases/case_new.html:236
 #: templates/contacts/contact_new.html:410
 #: templates/contacts/contact_show.html:1383 templates/documents/show.html:439
 #: templates/leads/lead_new.html:417 templates/leads/lead_show.html:1170
@@ -628,7 +720,7 @@ msgstr ""
 #: templates/accounts/account_show.html:410
 #: templates/accounts/account_show.html:1219
 #: templates/articles/article_new.html:192
-#: templates/calendar/calendar_show.html:154 templates/cases/case_new.html:260
+#: templates/calendar/calendar_show.html:157 templates/cases/case_new.html:260
 #: templates/contacts/contact_new.html:285
 #: templates/contacts/contact_new.html:434
 #: templates/contacts/contact_show.html:440
@@ -645,7 +737,7 @@ msgstr ""
 #: templates/accounts/account_show.html:419
 #: templates/accounts/account_show.html:1251
 #: templates/articles/article_new.html:224
-#: templates/calendar/calendar_show.html:186 templates/cases/case_new.html:284
+#: templates/calendar/calendar_show.html:189 templates/cases/case_new.html:284
 #: templates/contacts/contact_new.html:301
 #: templates/contacts/contact_new.html:458
 #: templates/contacts/contact_show.html:450
@@ -669,6 +761,7 @@ msgstr ""
 
 #: templates/accounts/account_list.html:28 templates/cases/case_list.html:23
 #: templates/contacts/contact_list.html:23 templates/leads/lead_list.html:26
+#: templates/opportunities/opportunity_list.html:23
 msgid "My"
 msgstr ""
 
@@ -702,76 +795,6 @@ msgstr ""
 #: templates/opportunities/opportunity_list.html:284
 #: templates/opportunities/opportunity_new.html:188
 msgid "Account"
-msgstr ""
-
-#: templates/accounts/account_list.html:59
-#: templates/accounts/account_list.html:140
-#: templates/accounts/account_list.html:218
-#: templates/accounts/account_new.html:35
-#: templates/accounts/account_show.html:41
-#: templates/accounts/account_show.html:1308
-#: templates/accounts/account_show.html:1391
-#: templates/accounts/account_show.html:1424
-#: templates/accounts/account_show.html:1453
-#: templates/accounts/account_show.html:1483
-#: templates/accounts/account_show.html:1890
-#: templates/accounts/note_show.html:26 templates/activities/all_tasks.html:639
-#: templates/activities/all_tasks.html:744
-#: templates/activities/all_tasks.html:807
-#: templates/activities/task_show.html:125 templates/admin/groups/list.html:29
-#: templates/admin/groups/show.html:149
-#: templates/admin/settings/settings.html:32
-#: templates/admin/users/user_list.html:29
-#: templates/articles/article_list.html:25
-#: templates/articles/article_new.html:42
-#: templates/articles/article_search.html:25
-#: templates/articles/article_show.html:26
-#: templates/calendar/calendar_show.html:36
-#: templates/calendar/calendar_show.html:243
-#: templates/calendar/calendar_show.html:326
-#: templates/calendar/calendar_show.html:359
-#: templates/calendar/calendar_show.html:388
-#: templates/calendar/calendar_show.html:418
-#: templates/calendar/calendar_show.html:627
-#: templates/calendar/calendar_show.html:802
-#: templates/calendar/calendar_show.html:834
-#: templates/calendar/calendar_show.html:860
-#: templates/campaigns/campaign_list.html:133 templates/cases/case_list.html:53
-#: templates/cases/case_new.html:25 templates/cases/case_show.html:39
-#: templates/cases/case_show.html:1093 templates/cases/case_show.html:1131
-#: templates/cases/case_show.html:1163 templates/contacts/contact_list.html:56
-#: templates/contacts/contact_list.html:158
-#: templates/contacts/contact_new.html:33
-#: templates/contacts/contact_show.html:42
-#: templates/contacts/contact_show.html:1310
-#: templates/contacts/contact_show.html:1393
-#: templates/contacts/contact_show.html:1426
-#: templates/contacts/contact_show.html:1455
-#: templates/contacts/contact_show.html:1485
-#: templates/contacts/contact_show.html:1878
-#: templates/contacts/contact_show.html:1976 templates/contacts/list.html:303
-#: templates/documents/show.html:28 templates/documents/show.html:366
-#: templates/documents/show.html:449 templates/documents/show.html:482
-#: templates/documents/show.html:511 templates/documents/show.html:541
-#: templates/documents/show.html:927 templates/documents/show.html:1025
-#: templates/leads/lead_list.html:73 templates/leads/lead_new.html:23
-#: templates/leads/lead_show.html:37 templates/leads/lead_show.html:1097
-#: templates/leads/lead_show.html:1180 templates/leads/lead_show.html:1213
-#: templates/leads/lead_show.html:1242 templates/leads/lead_show.html:1272
-#: templates/leads/lead_show.html:1640 templates/leads/lead_show.html:1741
-#: templates/live/company_profile/comp_profile_show.html:298
-#: templates/live/company_profile/comp_profile_show.html:375
-#: templates/live/company_profile/comp_profile_show.html:402
-#: templates/live/company_profile/comp_profile_show.html:429
-#: templates/live/feedbacks/feedbacks_list.html:125
-#: templates/opportunities/list.html:439
-#: templates/opportunities/opportunity_list.html:65
-#: templates/opportunities/opportunity_new.html:34
-#: templates/opportunities/opportunity_show.html:39
-#: templates/opportunities/opportunity_show.html:1211
-#: templates/opportunities/opportunity_show.html:1301
-#: templates/search/list.html:28
-msgid "Loading..."
 msgstr ""
 
 #: templates/accounts/account_list.html:95
@@ -1102,7 +1125,7 @@ msgstr ""
 #: templates/accounts/account_list.html:128
 #: templates/accounts/account_new.html:409
 #: templates/accounts/account_show.html:1557
-#: templates/calendar/calendar_show.html:492 templates/cases/case_list.html:409
+#: templates/calendar/calendar_show.html:495 templates/cases/case_list.html:409
 #: templates/cases/case_new.html:192 templates/cases/case_show.html:755
 #: templates/contacts/contact_new.html:366
 #: templates/contacts/contact_show.html:1562 templates/documents/show.html:615
@@ -1145,8 +1168,8 @@ msgstr ""
 #: templates/articles/article_list.html:246
 #: templates/articles/article_search.html:140
 #: templates/articles/article_search.html:205
-#: templates/calendar/calendar_show.html:656
-#: templates/calendar/calendar_show.html:748 templates/cases/case_list.html:195
+#: templates/calendar/calendar_show.html:659
+#: templates/calendar/calendar_show.html:751 templates/cases/case_list.html:195
 #: templates/cases/case_list.html:263 templates/cases/case_list.html:389
 #: templates/cases/case_show.html:699 templates/contacts/contact_list.html:200
 #: templates/contacts/contact_list.html:265
@@ -1167,7 +1190,8 @@ msgstr ""
 #: templates/articles/article_search.html:228
 #: templates/cases/case_list.html:218 templates/cases/case_list.html:286
 #: templates/contacts/contact_list.html:224
-#: templates/contacts/contact_list.html:292 templates/leads/lead_list.html:313
+#: templates/contacts/contact_list.html:292 templates/leads/lead_list.html:142
+#: templates/leads/lead_list.html:313
 #: templates/opportunities/opportunity_list.html:227
 msgid "Add a new label"
 msgstr ""
@@ -1181,6 +1205,55 @@ msgstr ""
 msgid "New label"
 msgstr ""
 
+#: templates/accounts/account_list.html:299
+#: templates/accounts/account_new.html:151
+#: templates/accounts/account_new.html:172
+#: templates/accounts/account_new.html:212
+#: templates/accounts/account_new.html:232
+#: templates/accounts/account_new.html:290
+#: templates/accounts/account_new.html:367
+#: templates/accounts/account_show.html:275
+#: templates/accounts/account_show.html:307
+#: templates/accounts/account_show.html:343
+#: templates/accounts/account_show.html:364
+#: templates/accounts/account_show.html:388
+#: templates/accounts/account_show.html:941
+#: templates/accounts/account_show.html:1052
+#: templates/activities/all_tasks.html:102
+#: templates/activities/all_tasks.html:638
+#: templates/activities/all_tasks.html:806
+#: templates/articles/article_search.html:249
+#: templates/cases/case_list.html:238 templates/cases/case_list.html:305
+#: templates/cases/case_new.html:134 templates/cases/case_show.html:256
+#: templates/cases/case_show.html:525 templates/contacts/contact_list.html:243
+#: templates/contacts/contact_list.html:311
+#: templates/contacts/contact_new.html:140
+#: templates/contacts/contact_new.html:174
+#: templates/contacts/contact_new.html:229
+#: templates/contacts/contact_new.html:256
+#: templates/contacts/contact_new.html:323
+#: templates/contacts/contact_show.html:287
+#: templates/contacts/contact_show.html:309
+#: templates/contacts/contact_show.html:349
+#: templates/contacts/contact_show.html:378
+#: templates/contacts/contact_show.html:413
+#: templates/contacts/contact_show.html:985
+#: templates/contacts/contact_show.html:1097 templates/leads/lead_list.html:332
+#: templates/leads/lead_list.html:388 templates/leads/lead_new.html:154
+#: templates/leads/lead_new.html:188 templates/leads/lead_new.html:239
+#: templates/leads/lead_new.html:266 templates/leads/lead_new.html:332
+#: templates/leads/lead_show.html:281 templates/leads/lead_show.html:303
+#: templates/leads/lead_show.html:348 templates/leads/lead_show.html:369
+#: templates/leads/lead_show.html:402 templates/leads/lead_show.html:773
+#: templates/leads/lead_show.html:885
+#: templates/opportunities/opportunity_list.html:246
+#: templates/opportunities/opportunity_new.html:255
+#: templates/opportunities/opportunity_show.html:366
+#: templates/opportunities/opportunity_show.html:645
+#: templates/opportunities/opportunity_show.html:756
+msgid "Add"
+msgstr ""
+
 #: templates/accounts/account_list.html:305
 #: templates/activities/all_tasks.html:644
 #: templates/activities/all_tasks.html:812
@@ -1190,7 +1263,8 @@ msgstr ""
 #: templates/articles/article_search.html:254
 #: templates/cases/case_list.html:244 templates/cases/case_list.html:310
 #: templates/contacts/contact_list.html:248
-#: templates/contacts/contact_list.html:316 templates/leads/lead_list.html:337
+#: templates/contacts/contact_list.html:316 templates/leads/lead_list.html:166
+#: templates/leads/lead_list.html:337
 #: templates/opportunities/opportunity_list.html:251
 msgid "Manage Tags"
 msgstr ""
@@ -1248,8 +1322,8 @@ msgstr ""
 #: templates/accounts/account_show.html:257
 #: templates/accounts/account_show.html:1284
 #: templates/accounts/account_show.html:1286
-#: templates/calendar/calendar_show.html:219
-#: templates/calendar/calendar_show.html:221
+#: templates/calendar/calendar_show.html:222
+#: templates/calendar/calendar_show.html:224
 #: templates/contacts/contact_new.html:121
 #: templates/contacts/contact_show.html:262
 #: templates/contacts/contact_show.html:1286
@@ -1265,8 +1339,8 @@ msgstr ""
 #: templates/accounts/account_show.html:258
 #: templates/accounts/account_show.html:1284
 #: templates/accounts/account_show.html:1287
-#: templates/calendar/calendar_show.html:219
 #: templates/calendar/calendar_show.html:222
+#: templates/calendar/calendar_show.html:225
 #: templates/contacts/contact_new.html:122
 #: templates/contacts/contact_show.html:263
 #: templates/contacts/contact_show.html:1286
@@ -1282,8 +1356,8 @@ msgstr ""
 #: templates/accounts/account_show.html:259
 #: templates/accounts/account_show.html:1284
 #: templates/accounts/account_show.html:1288
-#: templates/calendar/calendar_show.html:219
-#: templates/calendar/calendar_show.html:223
+#: templates/calendar/calendar_show.html:222
+#: templates/calendar/calendar_show.html:226
 #: templates/contacts/contact_new.html:123
 #: templates/contacts/contact_show.html:264
 #: templates/contacts/contact_show.html:1286
@@ -1299,8 +1373,8 @@ msgstr ""
 #: templates/accounts/account_show.html:260
 #: templates/accounts/account_show.html:1284
 #: templates/accounts/account_show.html:1289
-#: templates/calendar/calendar_show.html:219
-#: templates/calendar/calendar_show.html:224
+#: templates/calendar/calendar_show.html:222
+#: templates/calendar/calendar_show.html:227
 #: templates/contacts/contact_new.html:124
 #: templates/contacts/contact_show.html:265
 #: templates/contacts/contact_show.html:1286
@@ -1315,7 +1389,7 @@ msgstr ""
 #: templates/accounts/account_new.html:141
 #: templates/accounts/account_show.html:265
 #: templates/accounts/account_show.html:1295
-#: templates/calendar/calendar_show.html:230
+#: templates/calendar/calendar_show.html:233
 #: templates/contacts/contact_new.html:128
 #: templates/contacts/contact_show.html:269
 #: templates/contacts/contact_show.html:1297 templates/documents/show.html:353
@@ -1335,47 +1409,6 @@ msgstr ""
 msgid "Enter a number"
 msgstr ""
 
-#: templates/accounts/account_new.html:151
-#: templates/accounts/account_new.html:172
-#: templates/accounts/account_new.html:212
-#: templates/accounts/account_new.html:232
-#: templates/accounts/account_new.html:290
-#: templates/accounts/account_new.html:367
-#: templates/accounts/account_show.html:275
-#: templates/accounts/account_show.html:307
-#: templates/accounts/account_show.html:343
-#: templates/accounts/account_show.html:364
-#: templates/accounts/account_show.html:388
-#: templates/accounts/account_show.html:941
-#: templates/accounts/account_show.html:1052
-#: templates/activities/all_tasks.html:102
-#: templates/articles/article_search.html:249 templates/cases/case_new.html:134
-#: templates/cases/case_show.html:256 templates/cases/case_show.html:525
-#: templates/contacts/contact_new.html:140
-#: templates/contacts/contact_new.html:174
-#: templates/contacts/contact_new.html:229
-#: templates/contacts/contact_new.html:256
-#: templates/contacts/contact_new.html:323
-#: templates/contacts/contact_show.html:287
-#: templates/contacts/contact_show.html:309
-#: templates/contacts/contact_show.html:349
-#: templates/contacts/contact_show.html:378
-#: templates/contacts/contact_show.html:413
-#: templates/contacts/contact_show.html:985
-#: templates/contacts/contact_show.html:1097 templates/leads/lead_new.html:154
-#: templates/leads/lead_new.html:188 templates/leads/lead_new.html:239
-#: templates/leads/lead_new.html:266 templates/leads/lead_new.html:332
-#: templates/leads/lead_show.html:281 templates/leads/lead_show.html:303
-#: templates/leads/lead_show.html:348 templates/leads/lead_show.html:369
-#: templates/leads/lead_show.html:402 templates/leads/lead_show.html:773
-#: templates/leads/lead_show.html:885
-#: templates/opportunities/opportunity_new.html:255
-#: templates/opportunities/opportunity_show.html:366
-#: templates/opportunities/opportunity_show.html:645
-#: templates/opportunities/opportunity_show.html:756
-msgid "Add"
-msgstr ""
-
 #: templates/accounts/account_new.html:157
 #: templates/accounts/account_show.html:283
 #: templates/contacts/contact_new.html:159
@@ -1392,8 +1425,8 @@ msgstr ""
 #: templates/accounts/account_show.html:1328
 #: templates/accounts/account_show.html:1330
 #: templates/admin/users/user_list.html:130
-#: templates/calendar/calendar_show.html:263
-#: templates/calendar/calendar_show.html:265
+#: templates/calendar/calendar_show.html:266
+#: templates/calendar/calendar_show.html:268
 #: templates/cases/case_show.html:1051 templates/contacts/contact_new.html:164
 #: templates/contacts/contact_new.html:171
 #: templates/contacts/contact_show.html:299
@@ -1448,7 +1481,7 @@ msgstr ""
 #: templates/accounts/account_show.html:340
 #: templates/accounts/account_show.html:1443
 #: templates/accounts/account_show.html:1445
-#: templates/calendar/calendar_show.html:378
+#: templates/calendar/calendar_show.html:381
 #: templates/contacts/contact_new.html:219
 #: templates/contacts/contact_new.html:226
 #: templates/contacts/contact_show.html:333
@@ -1490,8 +1523,8 @@ msgstr ""
 #: templates/accounts/account_show.html:361
 #: templates/accounts/account_show.html:1473
 #: templates/accounts/account_show.html:1475
-#: templates/calendar/calendar_show.html:408
-#: templates/calendar/calendar_show.html:410
+#: templates/calendar/calendar_show.html:411
+#: templates/calendar/calendar_show.html:413
 #: templates/contacts/contact_new.html:253
 #: templates/contacts/contact_show.html:367
 #: templates/contacts/contact_show.html:1475
@@ -1566,7 +1599,7 @@ msgstr ""
 #: templates/accounts/account_new.html:283
 #: templates/accounts/account_show.html:381
 #: templates/accounts/account_show.html:1412
-#: templates/calendar/calendar_show.html:347 templates/cases/case_new.html:127
+#: templates/calendar/calendar_show.html:350 templates/cases/case_new.html:127
 #: templates/cases/case_show.html:249 templates/cases/case_show.html:1081
 #: templates/contacts/contact_new.html:316
 #: templates/contacts/contact_show.html:396
@@ -1592,7 +1625,7 @@ msgstr ""
 #: templates/accounts/account_new.html:287
 #: templates/accounts/account_show.html:385
 #: templates/accounts/account_show.html:1415
-#: templates/calendar/calendar_show.html:350 templates/cases/case_new.html:131
+#: templates/calendar/calendar_show.html:353 templates/cases/case_new.html:131
 #: templates/cases/case_show.html:253 templates/cases/case_show.html:1084
 #: templates/contacts/contact_new.html:320
 #: templates/contacts/contact_show.html:405
@@ -1630,8 +1663,8 @@ msgstr ""
 
 #: templates/accounts/account_new.html:332
 #: templates/accounts/account_show.html:1505
-#: templates/calendar/calendar_show.html:69
-#: templates/calendar/calendar_show.html:440
+#: templates/calendar/calendar_show.html:72
+#: templates/calendar/calendar_show.html:443
 #: templates/contacts/contact_new.html:76
 #: templates/contacts/contact_show.html:1136
 #: templates/contacts/contact_show.html:1507 templates/contacts/list.html:41
@@ -1644,8 +1677,8 @@ msgstr ""
 
 #: templates/accounts/account_new.html:336
 #: templates/accounts/account_show.html:1513
-#: templates/calendar/calendar_show.html:77
-#: templates/calendar/calendar_show.html:448
+#: templates/calendar/calendar_show.html:80
+#: templates/calendar/calendar_show.html:451
 #: templates/contacts/contact_new.html:83
 #: templates/contacts/contact_show.html:1144
 #: templates/contacts/contact_show.html:1515 templates/contacts/list.html:49
@@ -1677,7 +1710,7 @@ msgstr ""
 
 #: templates/accounts/account_new.html:405
 #: templates/accounts/account_show.html:1553
-#: templates/calendar/calendar_show.html:488 templates/cases/case_new.html:188
+#: templates/calendar/calendar_show.html:491 templates/cases/case_new.html:188
 #: templates/cases/case_show.html:751 templates/contacts/contact_new.html:362
 #: templates/contacts/contact_show.html:1558 templates/documents/show.html:611
 #: templates/leads/lead_new.html:369 templates/leads/lead_show.html:1370
@@ -1689,9 +1722,10 @@ msgstr ""
 #: templates/accounts/account_new.html:465
 #: templates/accounts/account_show.html:1390
 #: templates/articles/article_new.html:169
-#: templates/calendar/calendar_show.html:325
+#: templates/calendar/calendar_show.html:328
+#: templates/contacts/contact_new.html:419
 #: templates/contacts/contact_show.html:1392 templates/documents/show.html:448
-#: templates/leads/lead_show.html:1179
+#: templates/leads/lead_new.html:426 templates/leads/lead_show.html:1179
 #: templates/live/company_profile/comp_profile_show.html:374
 msgid "Add this address"
 msgstr ""
@@ -1699,8 +1733,8 @@ msgstr ""
 #: templates/accounts/account_show.html:21
 #: templates/accounts/account_show.html:1588
 #: templates/accounts/note_show.html:11 templates/articles/article_show.html:11
-#: templates/calendar/calendar_show.html:21
-#: templates/calendar/calendar_show.html:523 templates/cases/case_show.html:21
+#: templates/calendar/calendar_show.html:22
+#: templates/calendar/calendar_show.html:526 templates/cases/case_show.html:21
 #: templates/cases/case_show.html:792 templates/contacts/contact_show.html:21
 #: templates/contacts/contact_show.html:1593 templates/documents/show.html:11
 #: templates/documents/show.html:646 templates/leads/lead_show.html:25
@@ -1720,7 +1754,8 @@ msgstr ""
 #: templates/admin/settings/settings.html:177
 #: templates/articles/article_show.html:52 templates/cases/case_show.html:85
 #: templates/contacts/contact_show.html:79 templates/documents/show.html:56
-#: templates/leads/lead_show.html:74 templates/needs/show.html:185
+#: templates/leads/lead_list.html:182 templates/leads/lead_show.html:74
+#: templates/needs/show.html:185
 #: templates/opportunities/opportunity_show.html:85
 msgid "Delete"
 msgstr ""
@@ -1748,6 +1783,7 @@ msgstr ""
 #: templates/activities/all_tasks.html:581
 #: templates/activities/all_tasks.html:760
 #: templates/activities/task_show.html:177 templates/leads/lead_list.html:37
+#: templates/leads/lead_list.html:57
 msgid "Tags"
 msgstr ""
 
@@ -1978,6 +2014,12 @@ msgstr ""
 msgid "Enter text ..."
 msgstr ""
 
+#: templates/accounts/account_show.html:821 templates/cases/case_show.html:398
+#: templates/contacts/contact_show.html:864 templates/leads/lead_show.html:655
+#: templates/opportunities/opportunity_show.html:518
+msgid "Send"
+msgstr ""
+
 #: templates/accounts/account_show.html:840
 #: templates/activities/all_tasks.html:24
 #: templates/activities/task_show.html:21 templates/cases/case_show.html:424
@@ -2007,7 +2049,7 @@ msgstr ""
 #: templates/accounts/account_show.html:916
 #: templates/accounts/account_show.html:1581
 #: templates/activities/all_tasks.html:730
-#: templates/calendar/calendar_show.html:516 templates/cases/case_show.html:500
+#: templates/calendar/calendar_show.html:519 templates/cases/case_show.html:500
 #: templates/cases/case_show.html:782 templates/contacts/contact_show.html:960
 #: templates/contacts/contact_show.html:1586 templates/documents/show.html:639
 #: templates/leads/lead_show.html:748 templates/leads/lead_show.html:1398
@@ -2034,8 +2076,7 @@ msgstr ""
 msgid "Event tilte"
 msgstr ""
 
-#: templates/accounts/account_show.html:1011
-#: templates/contacts/contact_show.html:1055 templates/leads/lead_show.html:843
+#: templates/accounts/account_show.html:1011 templates/leads/lead_show.html:843
 #: templates/opportunities/opportunity_show.html:715
 msgid "All day"
 msgstr ""
@@ -2043,7 +2084,7 @@ msgstr ""
 #: templates/accounts/account_show.html:1017
 #: templates/accounts/account_show.html:1771
 #: templates/accounts/account_show.html:1870
-#: templates/calendar/calendar_show.html:783 templates/cases/case_show.html:603
+#: templates/calendar/calendar_show.html:786 templates/cases/case_show.html:603
 #: templates/cases/case_show.html:1110
 #: templates/contacts/contact_show.html:1061
 #: templates/contacts/contact_show.html:1857
@@ -2076,19 +2117,19 @@ msgstr ""
 #: templates/accounts/account_show.html:1079
 #: templates/accounts/account_show.html:1211
 #: templates/accounts/account_show.html:1243
-#: templates/calendar/calendar_show.html:178
+#: templates/calendar/calendar_show.html:181
 #: templates/contacts/contact_show.html:1245 templates/documents/show.html:301
 msgid "Edit Account"
 msgstr ""
 
 #: templates/accounts/account_show.html:1132
-#: templates/calendar/calendar_show.html:698 templates/cases/case_list.html:324
+#: templates/calendar/calendar_show.html:701 templates/cases/case_list.html:324
 #: templates/contacts/contact_show.html:1772 templates/documents/show.html:821
 msgid "New Case"
 msgstr ""
 
 #: templates/accounts/account_show.html:1150
-#: templates/calendar/calendar_show.html:716 templates/cases/case_list.html:32
+#: templates/calendar/calendar_show.html:719 templates/cases/case_list.html:32
 #: templates/cases/case_list.html:356 templates/cases/case_new.html:97
 #: templates/cases/case_show.html:221 templates/cases/case_show.html:680
 #: templates/contacts/contact_show.html:1790 templates/documents/show.html:839
@@ -2098,7 +2139,7 @@ msgid "Priority"
 msgstr ""
 
 #: templates/accounts/account_show.html:1154
-#: templates/calendar/calendar_show.html:720 templates/cases/case_list.html:360
+#: templates/calendar/calendar_show.html:723 templates/cases/case_list.html:360
 #: templates/cases/case_new.html:102 templates/cases/case_show.html:226
 #: templates/cases/case_show.html:684 templates/contacts/contact_show.html:1794
 #: templates/documents/show.html:843
@@ -2107,7 +2148,7 @@ msgid "Low"
 msgstr ""
 
 #: templates/accounts/account_show.html:1163
-#: templates/calendar/calendar_show.html:729 templates/cases/case_list.html:369
+#: templates/calendar/calendar_show.html:732 templates/cases/case_list.html:369
 #: templates/cases/case_new.html:111 templates/cases/case_show.html:235
 #: templates/cases/case_show.html:693 templates/contacts/contact_show.html:1803
 #: templates/documents/show.html:852
@@ -2117,7 +2158,7 @@ msgstr ""
 
 #: templates/accounts/account_show.html:1170
 #: templates/activities/task_show.html:74
-#: templates/calendar/calendar_show.html:736
+#: templates/calendar/calendar_show.html:739
 #: templates/campaigns/campaign_list.html:59 templates/cases/case_list.html:33
 #: templates/cases/case_list.html:376 templates/cases/case_new.html:88
 #: templates/cases/case_show.html:212 templates/cases/case_show.html:707
@@ -2132,19 +2173,19 @@ msgid "Status"
 msgstr ""
 
 #: templates/accounts/account_show.html:1174
-#: templates/calendar/calendar_show.html:740
+#: templates/calendar/calendar_show.html:743
 #: templates/contacts/contact_show.html:1814 templates/documents/show.html:863
 msgid "Choose Status"
 msgstr ""
 
 #: templates/accounts/account_show.html:1196
-#: templates/calendar/calendar_show.html:762
+#: templates/calendar/calendar_show.html:765
 #: templates/contacts/contact_show.html:1836 templates/documents/show.html:885
 msgid "Add Case"
 msgstr ""
 
 #: templates/accounts/account_show.html:1277
-#: templates/calendar/calendar_show.html:212
+#: templates/calendar/calendar_show.html:215
 #: templates/contacts/contact_show.html:1279 templates/documents/show.html:335
 #: templates/leads/lead_show.html:1066
 #: templates/live/company_profile/comp_profile_show.html:274
@@ -2152,7 +2193,7 @@ msgid "Add Phone"
 msgstr ""
 
 #: templates/accounts/account_show.html:1306
-#: templates/calendar/calendar_show.html:241
+#: templates/calendar/calendar_show.html:244
 #: templates/contacts/contact_show.html:1308 templates/documents/show.html:364
 #: templates/leads/lead_show.html:1095
 #: templates/live/company_profile/comp_profile_show.html:297
@@ -2160,7 +2201,7 @@ msgid "Add this phone"
 msgstr ""
 
 #: templates/accounts/account_show.html:1323
-#: templates/calendar/calendar_show.html:258
+#: templates/calendar/calendar_show.html:261
 #: templates/contacts/contact_show.html:1325 templates/documents/show.html:381
 #: templates/leads/lead_show.html:1112
 #: templates/live/company_profile/comp_profile_show.html:309
@@ -2173,8 +2214,8 @@ msgstr ""
 
 #: templates/accounts/account_show.html:1404
 #: templates/accounts/account_show.html:1438
-#: templates/calendar/calendar_show.html:339
-#: templates/calendar/calendar_show.html:373
+#: templates/calendar/calendar_show.html:342
+#: templates/calendar/calendar_show.html:376
 #: templates/contacts/contact_show.html:1406
 #: templates/contacts/contact_show.html:1440 templates/documents/show.html:462
 #: templates/documents/show.html:496 templates/leads/lead_show.html:1193
@@ -2184,7 +2225,7 @@ msgid "Add Website"
 msgstr ""
 
 #: templates/accounts/account_show.html:1409
-#: templates/calendar/calendar_show.html:344
+#: templates/calendar/calendar_show.html:347
 #: templates/cases/case_show.html:1078
 #: templates/contacts/contact_show.html:1411 templates/documents/show.html:467
 #: templates/leads/lead_show.html:1198
@@ -2193,7 +2234,7 @@ msgid "Custom Field"
 msgstr ""
 
 #: templates/accounts/account_show.html:1423
-#: templates/calendar/calendar_show.html:358
+#: templates/calendar/calendar_show.html:361
 #: templates/cases/case_show.html:1092
 #: templates/contacts/contact_show.html:1425 templates/documents/show.html:481
 #: templates/leads/lead_show.html:1212
@@ -2202,7 +2243,7 @@ msgid "Add this custom field"
 msgstr ""
 
 #: templates/accounts/account_show.html:1452
-#: templates/calendar/calendar_show.html:387
+#: templates/calendar/calendar_show.html:390
 #: templates/contacts/contact_show.html:1454 templates/documents/show.html:510
 #: templates/leads/lead_show.html:1241
 #: templates/live/company_profile/comp_profile_show.html:401
@@ -2210,7 +2251,7 @@ msgid "Add this Website"
 msgstr ""
 
 #: templates/accounts/account_show.html:1468
-#: templates/calendar/calendar_show.html:403
+#: templates/calendar/calendar_show.html:406
 #: templates/contacts/contact_show.html:1470 templates/documents/show.html:526
 #: templates/leads/lead_show.html:1257
 #: templates/live/company_profile/comp_profile_show.html:413
@@ -2218,14 +2259,14 @@ msgid "Add Social link"
 msgstr ""
 
 #: templates/accounts/account_show.html:1482
-#: templates/calendar/calendar_show.html:417
+#: templates/calendar/calendar_show.html:420
 #: templates/contacts/contact_show.html:1484 templates/documents/show.html:540
 #: templates/leads/lead_show.html:1271
 msgid "Add this social link"
 msgstr ""
 
 #: templates/accounts/account_show.html:1500
-#: templates/calendar/calendar_show.html:435
+#: templates/calendar/calendar_show.html:438
 #: templates/contacts/contact_list.html:90
 #: templates/contacts/contact_show.html:1502 templates/contacts/list.html:36
 #: templates/contacts/list.html:113 templates/documents/show.html:558
@@ -2234,8 +2275,8 @@ msgid "New Contact"
 msgstr ""
 
 #: templates/accounts/account_show.html:1520
-#: templates/calendar/calendar_show.html:85
-#: templates/calendar/calendar_show.html:455
+#: templates/calendar/calendar_show.html:88
+#: templates/calendar/calendar_show.html:458
 #: templates/contacts/contact_show.html:1152
 #: templates/contacts/contact_show.html:1522 templates/documents/show.html:208
 #: templates/documents/show.html:578 templates/leads/lead_show.html:939
@@ -2244,14 +2285,14 @@ msgid "Tittle"
 msgstr ""
 
 #: templates/accounts/account_show.html:1530
-#: templates/calendar/calendar_show.html:465
+#: templates/calendar/calendar_show.html:468
 #: templates/contacts/contact_show.html:1532 templates/documents/show.html:588
 #: templates/leads/lead_show.html:1319
 msgid "Add Contact"
 msgstr ""
 
 #: templates/accounts/account_show.html:1543
-#: templates/calendar/calendar_show.html:478 templates/cases/case_show.html:738
+#: templates/calendar/calendar_show.html:481 templates/cases/case_show.html:738
 #: templates/contacts/contact_show.html:1545 templates/documents/show.html:601
 #: templates/leads/lead_show.html:1360 templates/needs/show.html:73
 #: templates/opportunities/opportunity_show.html:856
@@ -2259,7 +2300,7 @@ msgid "Sharing Settings"
 msgstr ""
 
 #: templates/accounts/account_show.html:1548
-#: templates/calendar/calendar_show.html:483 templates/cases/case_show.html:744
+#: templates/calendar/calendar_show.html:486 templates/cases/case_show.html:744
 #: templates/contacts/contact_show.html:1553 templates/documents/show.html:606
 #: templates/leads/lead_show.html:1365
 #: templates/opportunities/opportunity_show.html:862
@@ -2267,7 +2308,7 @@ msgid "Who has access:"
 msgstr ""
 
 #: templates/accounts/account_show.html:1562
-#: templates/calendar/calendar_show.html:497 templates/cases/case_show.html:763
+#: templates/calendar/calendar_show.html:500 templates/cases/case_show.html:763
 #: templates/contacts/contact_show.html:1567 templates/documents/show.html:620
 #: templates/leads/lead_show.html:1379
 #: templates/opportunities/opportunity_show.html:881
@@ -2275,7 +2316,7 @@ msgid "Collaborators:"
 msgstr ""
 
 #: templates/accounts/account_show.html:1572
-#: templates/calendar/calendar_show.html:507 templates/cases/case_show.html:773
+#: templates/calendar/calendar_show.html:510 templates/cases/case_show.html:773
 #: templates/contacts/contact_show.html:1577 templates/documents/show.html:630
 #: templates/leads/lead_show.html:1389
 #: templates/opportunities/opportunity_show.html:891
@@ -2283,7 +2324,7 @@ msgid "Invited user:"
 msgstr ""
 
 #: templates/accounts/account_show.html:1579
-#: templates/calendar/calendar_show.html:514 templates/cases/case_show.html:780
+#: templates/calendar/calendar_show.html:517 templates/cases/case_show.html:780
 #: templates/contacts/contact_show.html:1584 templates/documents/show.html:637
 #: templates/leads/lead_show.html:1396
 #: templates/opportunities/opportunity_show.html:898
@@ -2291,7 +2332,7 @@ msgid "Invite collaborators:"
 msgstr ""
 
 #: templates/accounts/account_show.html:1601
-#: templates/calendar/calendar_show.html:536 templates/documents/show.html:659
+#: templates/calendar/calendar_show.html:539 templates/documents/show.html:659
 #: templates/leads/lead_show.html:1418
 msgid "Delete Account"
 msgstr ""
@@ -2299,9 +2340,9 @@ msgstr ""
 #: templates/accounts/account_show.html:1605
 #: templates/accounts/account_show.html:1629
 #: templates/accounts/note_show.html:258
-#: templates/calendar/calendar_show.html:126
-#: templates/calendar/calendar_show.html:540
-#: templates/calendar/calendar_show.html:564 templates/cases/case_show.html:811
+#: templates/calendar/calendar_show.html:129
+#: templates/calendar/calendar_show.html:543
+#: templates/calendar/calendar_show.html:567 templates/cases/case_show.html:811
 #: templates/contacts/contact_show.html:1193
 #: templates/contacts/contact_show.html:1610
 #: templates/contacts/contact_show.html:1634 templates/documents/show.html:249
@@ -2314,7 +2355,7 @@ msgid "Are you sure you want to delete"
 msgstr ""
 
 #: templates/accounts/account_show.html:1625
-#: templates/calendar/calendar_show.html:560
+#: templates/calendar/calendar_show.html:563
 #: templates/contacts/contact_show.html:1630 templates/documents/show.html:683
 #: templates/leads/lead_show.html:1442
 msgid "Delete Information"
@@ -2322,8 +2363,8 @@ msgstr ""
 
 #: templates/accounts/account_show.html:1647
 #: templates/accounts/account_show.html:1806
-#: templates/calendar/calendar_show.html:582
-#: templates/calendar/calendar_show.html:816
+#: templates/calendar/calendar_show.html:585
+#: templates/calendar/calendar_show.html:819
 #: templates/cases/case_show.html:1145
 #: templates/contacts/contact_show.html:1652
 #: templates/contacts/contact_show.html:1892 templates/documents/show.html:705
@@ -2346,8 +2387,8 @@ msgstr ""
 #: templates/accounts/account_show.html:1654
 #: templates/accounts/account_show.html:1813
 #: templates/activities/task_show.html:67
-#: templates/calendar/calendar_show.html:589
-#: templates/calendar/calendar_show.html:823
+#: templates/calendar/calendar_show.html:592
+#: templates/calendar/calendar_show.html:826
 #: templates/cases/case_show.html:1152
 #: templates/contacts/contact_show.html:1659
 #: templates/contacts/contact_show.html:1899 templates/documents/show.html:712
@@ -2359,8 +2400,8 @@ msgstr ""
 
 #: templates/accounts/account_show.html:1678
 #: templates/accounts/account_show.html:1836
-#: templates/calendar/calendar_show.html:613
-#: templates/calendar/calendar_show.html:846 templates/cases/case_show.html:848
+#: templates/calendar/calendar_show.html:616
+#: templates/calendar/calendar_show.html:849 templates/cases/case_show.html:848
 #: templates/contacts/contact_show.html:1685
 #: templates/contacts/contact_show.html:1921 templates/documents/show.html:736
 #: templates/documents/show.html:971 templates/leads/lead_show.html:1495
@@ -2388,7 +2429,7 @@ msgid "name"
 msgstr ""
 
 #: templates/accounts/account_show.html:1708
-#: templates/calendar/calendar_show.html:643
+#: templates/calendar/calendar_show.html:646
 #: templates/contacts/contact_show.html:1715 templates/documents/show.html:766
 #: templates/opportunities/list.html:53 templates/opportunities/list.html:243
 #: templates/opportunities/opportunity_list.html:95
@@ -2397,7 +2438,7 @@ msgid "New Opportunity"
 msgstr ""
 
 #: templates/accounts/account_show.html:1728
-#: templates/calendar/calendar_show.html:663
+#: templates/calendar/calendar_show.html:666
 #: templates/contacts/contact_show.html:1737 templates/documents/show.html:786
 #: templates/opportunities/list.html:86 templates/opportunities/list.html:284
 #: templates/opportunities/opportunity_list.html:300
@@ -2406,7 +2447,7 @@ msgid "Amount"
 msgstr ""
 
 #: templates/accounts/account_show.html:1734
-#: templates/calendar/calendar_show.html:669
+#: templates/calendar/calendar_show.html:672
 #: templates/contacts/contact_show.html:1743 templates/documents/show.html:792
 #: templates/opportunities/list.html:186
 #: templates/opportunities/opportunity_list.html:405
@@ -2415,21 +2456,21 @@ msgid "Stage"
 msgstr ""
 
 #: templates/accounts/account_show.html:1737
-#: templates/calendar/calendar_show.html:672
+#: templates/calendar/calendar_show.html:675
 #: templates/contacts/contact_show.html:1746 templates/documents/show.html:795
 #: templates/opportunities/opportunity_list.html:409
 msgid "choose Stage"
 msgstr ""
 
 #: templates/accounts/account_show.html:1749
-#: templates/calendar/calendar_show.html:684
+#: templates/calendar/calendar_show.html:687
 #: templates/contacts/contact_show.html:1758 templates/documents/show.html:807
 msgid "Add Opportunity"
 msgstr ""
 
 #: templates/accounts/account_show.html:1765
 #: templates/accounts/account_show.html:1864
-#: templates/calendar/calendar_show.html:777
+#: templates/calendar/calendar_show.html:780
 #: templates/cases/case_show.html:1104
 #: templates/contacts/contact_show.html:1851
 #: templates/contacts/contact_show.html:1949 templates/documents/show.html:900
@@ -2441,7 +2482,7 @@ msgstr ""
 
 #: templates/accounts/account_show.html:1770
 #: templates/accounts/account_show.html:1869
-#: templates/calendar/calendar_show.html:782
+#: templates/calendar/calendar_show.html:785
 #: templates/cases/case_show.html:1109
 #: templates/contacts/contact_show.html:1856
 #: templates/contacts/contact_show.html:1954 templates/documents/show.html:905
@@ -2453,7 +2494,7 @@ msgstr ""
 
 #: templates/accounts/account_show.html:1774
 #: templates/accounts/account_show.html:1873
-#: templates/calendar/calendar_show.html:786
+#: templates/calendar/calendar_show.html:789
 #: templates/cases/case_show.html:1113
 #: templates/contacts/contact_show.html:1860
 #: templates/contacts/contact_show.html:1958 templates/documents/show.html:909
@@ -2465,7 +2506,7 @@ msgstr ""
 
 #: templates/accounts/account_show.html:1779
 #: templates/accounts/account_show.html:1878
-#: templates/calendar/calendar_show.html:790
+#: templates/calendar/calendar_show.html:793
 #: templates/cases/case_show.html:1118
 #: templates/contacts/contact_show.html:1865
 #: templates/contacts/contact_show.html:1963 templates/documents/show.html:914
@@ -2477,7 +2518,7 @@ msgstr ""
 
 #: templates/accounts/account_show.html:1784
 #: templates/accounts/account_show.html:1883
-#: templates/calendar/calendar_show.html:794
+#: templates/calendar/calendar_show.html:797
 #: templates/cases/case_show.html:1123
 #: templates/contacts/contact_show.html:1870
 #: templates/contacts/contact_show.html:1968 templates/documents/show.html:919
@@ -2489,7 +2530,7 @@ msgstr ""
 
 #: templates/accounts/account_show.html:1791
 #: templates/accounts/account_show.html:1889
-#: templates/calendar/calendar_show.html:801
+#: templates/calendar/calendar_show.html:804
 #: templates/cases/case_show.html:1130
 #: templates/contacts/contact_show.html:1877
 #: templates/contacts/contact_show.html:1974 templates/documents/show.html:926
@@ -2695,7 +2736,7 @@ msgid "Are you sure you want to close selected tasks"
 msgstr ""
 
 #: templates/activities/all_tasks.html:696
-#: templates/activities/task_show.html:30
+#: templates/activities/task_show.html:30 templates/leads/lead_list.html:373
 msgid "Add Tags"
 msgstr ""
 
@@ -3010,15 +3051,15 @@ msgstr ""
 msgid "ioGrow Support"
 msgstr ""
 
-#: templates/calendar/calendar_show.html:61
-#: templates/calendar/calendar_show.html:146
+#: templates/calendar/calendar_show.html:64
+#: templates/calendar/calendar_show.html:149
 #: templates/contacts/contact_show.html:1126
 #: templates/contacts/contact_show.html:1213 templates/documents/show.html:184
 #: templates/documents/show.html:269 templates/leads/lead_show.html:915
 msgid "Edit Contact"
 msgstr ""
 
-#: templates/calendar/calendar_show.html:93 templates/cases/case_list.html:35
+#: templates/calendar/calendar_show.html:96 templates/cases/case_list.html:35
 #: templates/contacts/contact_new.html:99
 #: templates/contacts/contact_show.html:1160 templates/contacts/list.html:150
 #: templates/documents/show.html:216 templates/leads/lead_list.html:48
@@ -3028,18 +3069,18 @@ msgstr ""
 msgid "Company"
 msgstr ""
 
-#: templates/calendar/calendar_show.html:120
+#: templates/calendar/calendar_show.html:123
 #: templates/contacts/contact_show.html:1187 templates/documents/show.html:243
 #: templates/leads/lead_show.html:974
 msgid "Delete Contact"
 msgstr ""
 
-#: templates/calendar/calendar_show.html:626
-#: templates/calendar/calendar_show.html:859 templates/cases/case_show.html:861
+#: templates/calendar/calendar_show.html:629
+#: templates/calendar/calendar_show.html:862 templates/cases/case_show.html:861
 msgid "Create this document"
 msgstr ""
 
-#: templates/calendar/calendar_show.html:833
+#: templates/calendar/calendar_show.html:836
 #: templates/cases/case_show.html:1162
 msgid "Add this task"
 msgstr ""
@@ -3144,12 +3185,8 @@ msgstr ""
 msgid "To add an outside email to this account, forward or BCC to:"
 msgstr ""
 
-#: templates/cases/case_show.html:177
+#: templates/cases/case_show.html:177 templates/contacts/contact_show.html:220
 msgid "Add this note"
-msgstr ""
-
-#: templates/cases/case_show.html:398
-msgid "Send"
 msgstr ""
 
 #: templates/cases/case_show.html:596
@@ -3301,7 +3338,12 @@ msgstr ""
 msgid "Labels :"
 msgstr ""
 
+#: templates/contacts/contact_show.html:1055
+msgid "EAll day"
+msgstr ""
+
 #: templates/contacts/list.html:119 templates/leads/lead_list.html:31
+#: templates/leads/lead_list.html:57
 #: templates/live/customer_stories/customer_stories_list.html:103
 #: templates/live/feedbacks/feedbacks_list.html:155
 #: templates/live/product_videos/product_videos_list.html:103
@@ -3353,8 +3395,16 @@ msgstr ""
 msgid " New Lead"
 msgstr ""
 
+#: templates/leads/lead_list.html:178
+msgid "Add tags"
+msgstr ""
+
 #: templates/leads/lead_list.html:351 templates/leads/lead_show.html:525
 msgid "Delete Lead"
+msgstr ""
+
+#: templates/leads/lead_list.html:360
+msgid "Delete this Lead"
 msgstr ""
 
 #: templates/leads/lead_new.html:39

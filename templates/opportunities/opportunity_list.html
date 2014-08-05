@@ -20,7 +20,7 @@
       <div class="col-md-10 col-xs-10">
       <div class="filterOptions">
         <span role="button" class="filterItem activeFilter hidden-xs hiddenOnxs" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">{{_('All')}} <span class="hidden-xs hiddenOnxs">{{_('Opportunities')}}</span> </span>
-        <span role="button" class="filterItem hidden-xs hiddenOnxs" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">My <span class="hidden-xs hiddenOnxs">{{_('Opportunities')}}</span></span>
+        <span role="button" class="filterItem hidden-xs hiddenOnxs" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">{{_('My')}} <span class="hidden-xs hiddenOnxs">{{_('Opportunities')}}</span></span>
         <div class="btn-group">
             <a class="filterItem" href="#" data-toggle="dropdown">
               <span class="showOnxs">{{_('Filter')}}</span>
@@ -142,7 +142,7 @@
                                       {{_('Estimated close date:')}} <%=opportunity.closed_date | date:'MMMM dd, yyyy'%>
                                     </div>
                                     <div class="oppEstDate">
-                                      Last updated: <%=fromNow(opportunity.updated_at)%>
+                                      {{_('Last updated')}}: <%=fromNow(opportunity.updated_at)%>
                                     </div>
                             </div>
                           </div>

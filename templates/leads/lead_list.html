@@ -54,7 +54,7 @@
                 <li><a ng-click="orderBy('status')" href="#" data-toggle="modal">{{ _('Status') }}</a></li>
               </ul>
         </div>
-        <span role="button" class="filterItem hiddenOnPhone hiddenOnmd"  ng-class="{activeFilter: selectedOption =='tags'}" ng-click="showTagFilterCard();selectedOption ='tags'"><i class="fa fa-tags"></i><span class="hidden-xs hiddenOnxs">Filter by </span> Tags</span>
+        <span role="button" class="filterItem hiddenOnPhone hiddenOnmd"  ng-class="{activeFilter: selectedOption =='tags'}" ng-click="showTagFilterCard();selectedOption ='tags'"><i class="fa fa-tags"></i><span class="hidden-xs hiddenOnxs">{{_('Filter by')}} </span> {{_('Tags')}}</span>
       </div>
       </div>
       <div class="col-md-2 col-xs-2">
@@ -139,7 +139,7 @@
               </li>
               <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTagForm()">
                 <a ng-click="" class="btn-link addAnotherPhone">
-                  <i class="fa fa-tags"></i>  Add a new label
+                  <i class="fa fa-tags"></i>  {{_('Add a new label')}}
                 </a>
               </li>
             </ul>
@@ -163,7 +163,7 @@
               </div>
             </form>
             <div class="form-group btn-manage-tags" ng-show="tags">
-              <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
+              <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()">{{_('Manage Tags')}}
               </button>
             </div>
         </div>
@@ -175,11 +175,11 @@
             <ul class="dropdown-menu drp-dwn-right " role="menu">
               <li>
                <a href="" ng-click="showAssigneeTags(lead)">
-                   <i class='fa fa-tags'></i> Add tags </a>
+                   <i class='fa fa-tags'></i>{{_('Add tags')}} </a>
               </li>
               <li>
                <a href="" ng-click="editbeforedelete(lead)">
-                   <i class='fa fa-trash-o'></i> Delete </a>
+                   <i class='fa fa-trash-o'></i> {{_('Delete')}} </a>
               </li>
             </ul>
           </div>
@@ -370,7 +370,7 @@
             <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 id="myModalLabel" class="modal-title">Add Tags </h3>
+              <h3 id="myModalLabel" class="modal-title">{{_('Add Tags')}} </h3>
             </div>
             <div class="modal-body">
                <form id="seletesho" name="deletesho" class="form-horizontal">
