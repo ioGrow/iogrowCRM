@@ -617,7 +617,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
 
         };
         $scope.getColaborators=function(){
-          Permission.getColaborators($scope,{"entityKey":$scope.lead.entityKey});  
+          Permission.getColaborators($scope,{"entityKey":$scope.account.entityKey});  
         }
         $scope.selectMemberToTask = function() {
             console.log($scope.selected_members);
