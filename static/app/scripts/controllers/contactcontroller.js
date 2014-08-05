@@ -1080,6 +1080,7 @@ $scope.listTags=function(){
         }
      }
      //************************************//
+
      }
 
 //hadji hicham 14-07-2014 . update the event after we add .

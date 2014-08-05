@@ -502,8 +502,10 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.documentpagination = {};
         $scope.documentCurrentPage = 01;
         $scope.documentpages = [];
+        $scope.collaborators_list=[]
         $scope.pages = [];
         $scope.accounts = [];
+        $scope.account={};
         $scope.users = [];
         $scope.user = undefined;
         $scope.slected_memeber = undefined;
@@ -614,7 +616,9 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
 
 
         };
-
+        $scope.getColaborators=function(){
+          Permission.getColaborators($scope,{"entityKey":$scope.account.entityKey});  
+        }
         $scope.selectMemberToTask = function() {
             console.log($scope.selected_members);
             if ($scope.selected_members.indexOf($scope.user) == -1) {
@@ -1957,6 +1961,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge',
         $scope.addresses = [];
         $scope.emails = [];
         $scope.websites = [];
+
         $scope.sociallinks = [];
         $scope.customfields = [];
         $scope.newContactform = false;

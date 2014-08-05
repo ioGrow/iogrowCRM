@@ -403,6 +403,7 @@
 <!-- BEGIN CORE PLUGINS -->
   <script src="/static/plugins/jquery.min.js"  type="text/javascript"></script>
 
+
   <script src="/static/app/scripts/vendor/select2.min.js" ></script>
    <script src="/static/app/scripts/vendor/angular.js" ></script>
    <link href="/static/angular-xeditable-0.1.8/css/xeditable.css" rel="stylesheet">
@@ -412,6 +413,7 @@
     var apisToLoad;
 
     var callback = function() {
+
         console.log('callback');
         if (--apisToLoad == 0) {
           signin(true, userAuthed);
@@ -431,10 +433,13 @@
 
 
 
-      //var ROOT = '/_ah/api';
+    var ROOT = '/_ah/api';
 
-     var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 
+
+
+
+     // var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 
 
 

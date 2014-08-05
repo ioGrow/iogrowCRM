@@ -174,7 +174,8 @@
                             <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="note.content"></textarea>
                           </div>
                           <div class="pull-right">
-                            <input ng-disabled="isLoading" ng-click="addNote(note)" type="submit" class="btn green" value="{{ _('Add this note')}}">
+                            <input ng-disabled="isLoading || !note.title" ng-click="addNote(note)" type="submit" class="btn green" value="Add this note">
+
                           </div>
                         </form>
                       </div>

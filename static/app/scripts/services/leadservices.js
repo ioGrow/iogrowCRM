@@ -10,9 +10,12 @@ leadservices.factory('Lead', function($http) {
   Lead.get = function($scope,params) {
           $scope.isLoading = true;
           $scope.$apply();
+          $scope.getColaborators()
           gapi.client.crmengine.leads.getv2(params).execute(function(resp) {
             if(!resp.code){
                $scope.lead = resp;
+               console.log(resp);
+                 $scope.getColaborators();
                $scope.isContentLoaded = true;
                $scope.renderMaps();
                var renderMap = false;
@@ -130,6 +133,7 @@ leadservices.factory('Lead', function($http) {
                 });
                 $scope.isLoading = false;
                 $scope.renderMaps();
+                $scope.getLinkedinProfile();
                // Call the method $apply to make the update on the scope
                $scope.$apply();
                if (resp.topics && !params.topics.pageToken){
@@ -151,6 +155,41 @@ leadservices.factory('Lead', function($http) {
             }
             console.log('gapi #end_execute');
           });
+  }; 
+  Lead.get_linkedin= function($scope,params) {
+          $scope.isLoading = true;
+          
+          gapi.client.crmengine.people.getLinkedin(params).execute(function(resp) {
+            if(!resp.code){
+             $scope.linkedProfile.firstname=resp.firstname;
+             $scope.linkedProfile.lastname=resp.lastname;
+             $scope.linkedProfile.headline=resp.headline;
+             $scope.linkedProfile.formations=resp.formations
+             $scope.linkedProfile.locality=resp.locality;
+             $scope.linkedProfile.relation=resp.relation;
+             $scope.linkedProfile.industry=resp.industry;
+             $scope.linkedProfile.resume=resp.resume;
+             $scope.linkedProfile.skills=resp.skills;
+             $scope.linkedProfile.current_post=resp.current_post;
+             $scope.linkedProfile.past_post=resp.past_post;
+             $scope.linkedProfile.certifications=JSON.parse(resp.certifications);
+             $scope.linkedProfile.experiences=JSON.parse(resp.experiences);
+
+             $scope.isLoading = false;
+             $scope.$apply();
+              console.log($scope.linkedProfile);
+              console.log(resp)
+            }else {
+               if(resp.code==401){
+                // $scope.refreshToken();
+               
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
+          $scope.isLoading = false;
   };
   Lead.patch = function($scope,params) {
           console.log('in leads.patch service');
