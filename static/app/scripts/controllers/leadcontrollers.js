@@ -569,6 +569,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.email = {};
      $scope.infonodes = {};
      $scope.phone={};
+     $scope.collaborators_list=[];
      $scope.ioevent={};
      $scope.phone.type= 'work';
      $scope.documentpagination = {};
@@ -617,8 +618,9 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                           }
                       };
           Lead.get($scope,params);
-          console.log("==========================================")
-          console.log($scope.linkedProfile)
+          Permission.getColaborators({"entityKey":$scope.lead.entityKey});
+          console.log("ok to here ------------------------->")
+          console.log($scope.lead)
 
           User.list($scope,{});
           Leadstatus.list($scope,{});
@@ -626,6 +628,11 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
           Tag.list($scope, paramsTag);
 
       };
+
+       $scope.getColaborators=function(){
+           
+          Permission.getColaborators($scope,{"entityKey":$scope.lead.entityKey});  
+        }
       // We need to call this to refresh token when user credentials are invalid
       $scope.refreshToken = function() {
               Auth.refreshToken();
@@ -690,10 +697,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
 
      };
      $scope.share = function(slected_memeber){
-        console.log('permissions.insert share');
-        console.log(slected_memeber);
-        console.log("ssssssssss");
-        console.log($scope.lead.id);
+       
         $scope.$watch($scope.lead.access, function() {
          var body = {'access':$scope.lead.access};
          var id = $scope.lead.id;
@@ -1420,7 +1424,6 @@ $scope.deletelead = function(){
     return  JSON.parse(string);
   }
   $scope.checkIfEmpty=function(obj){
-    console.log("=====================================")
   for(var prop in obj) {
         if(obj.hasOwnProperty(prop))
             return false;

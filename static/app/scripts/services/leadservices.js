@@ -10,9 +10,12 @@ leadservices.factory('Lead', function($http) {
   Lead.get = function($scope,params) {
           $scope.isLoading = true;
           $scope.$apply();
+          $scope.getColaborators()
           gapi.client.crmengine.leads.getv2(params).execute(function(resp) {
             if(!resp.code){
                $scope.lead = resp;
+               console.log(resp);
+                 $scope.getColaborators();
                $scope.isContentLoaded = true;
                $scope.renderMaps();
                var renderMap = false;

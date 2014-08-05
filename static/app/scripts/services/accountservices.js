@@ -35,9 +35,15 @@ accountservices.factory('Account', function($http) {
     Account.get = function($scope, params) {
         $scope.isLoading = true;
         $scope.$apply();
+        $scope.getColaborators();
         gapi.client.crmengine.accounts.getv2(params).execute(function(resp) {
             if (!resp.code) {
                 $scope.account = resp;
+                console.log("######################################")
+                console.log($scope.account)
+                console.log($scope.account.entityKey)
+                $scope.getColaborators($scope.account.entityKey);
+                console.log($scope.collaborators_list)
                 if (resp.contacts) {
                     if (!resp.contacts.items) {
                         $scope.blankStatecontact = true;
