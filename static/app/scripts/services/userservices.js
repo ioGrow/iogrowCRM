@@ -67,7 +67,7 @@ accountservices.factory('User', function($http) {
          console.log('in insert resp');
          console.log(resp);
          if(!resp.code){
-          console.log("there  are a response");       
+          console.log("there  are a response");
           $scope.isLoading = false;
          }else{
               console.log(resp.message);
@@ -92,10 +92,12 @@ accountservices.factory('User', function($http) {
             if(!resp.code){
                $scope.user = resp;
 
-          
+              console.log(resp);
 
                    // be careful , right it back !
-               window.location.reload("http://localhost:8090/");
+
+              window.location.reload();
+
 
 
                // Call the method $apply to make the update on the scope
