@@ -285,13 +285,8 @@
             <ul class="list-group tags-list">
               <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
                 <div class="row">
-<<<<<<< HEAD
-                  <span ng-drag="dragTag(tag_item)" draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
-=======
                   <span editable-text="tag_item.name" draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;"
                   ng-model='tag_item.name'  onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
-
->>>>>>> 56971173634836bc31af9cfe5a1e32ff84193cd7
                       <%= tag_item.name %>
                   </span>
                  <input 
