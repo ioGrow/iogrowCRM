@@ -326,7 +326,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
             center: 'title',
             right: 'month,agendaWeek,agendaDay'
           },
-          lang:'es',
+          lang:user.language,
           defaultView:'agendaWeek',
           editable: true,
           eventSources: [{
