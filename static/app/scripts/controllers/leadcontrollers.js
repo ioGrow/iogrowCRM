@@ -18,7 +18,6 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
      $scope.selectedOption='all';
      $scope.stage_selected={};
      $scope.showTagsFilter=false;
-
       $scope.leads = [];
       $scope.lead = {};
       $scope.selectedLead={};
@@ -570,6 +569,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.email = {};
      $scope.infonodes = {};
      $scope.phone={};
+     $scope.collaborators_list=[];
      $scope.ioevent={};
      $scope.phone.type= 'work';
      $scope.documentpagination = {};
@@ -581,6 +581,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.newEventform=false;
      $scope.newTask={};
      $scope.ioevent = {};
+     $scope.linkedProfile={}
      $scope.statuses = [
       {value: 'Home', text: 'Home'},
       {value: 'Work', text: 'Work'},
@@ -617,16 +618,26 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                           }
                       };
           Lead.get($scope,params);
+          Permission.getColaborators({"entityKey":$scope.lead.entityKey});
+          console.log("ok to here ------------------------->")
+          console.log($scope.lead)
+
           User.list($scope,{});
           Leadstatus.list($scope,{});
           var paramsTag = {'about_kind': 'Lead'};
           Tag.list($scope, paramsTag);
 
       };
+
+       $scope.getColaborators=function(){
+           
+          Permission.getColaborators($scope,{"entityKey":$scope.lead.entityKey});  
+        }
       // We need to call this to refresh token when user credentials are invalid
       $scope.refreshToken = function() {
               Auth.refreshToken();
       };
+
 
 
       // HKA 08.05.2014 Delete infonode
@@ -686,10 +697,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
 
      };
      $scope.share = function(slected_memeber){
-        console.log('permissions.insert share');
-        console.log(slected_memeber);
-        console.log("ssssssssss");
-        console.log($scope.lead.id);
+       
         $scope.$watch($scope.lead.access, function() {
          var body = {'access':$scope.lead.access};
          var id = $scope.lead.id;
@@ -1411,6 +1419,22 @@ $scope.deletelead = function(){
       var paramsTag = {'about_kind':'Lead'}
       Tag.list($scope,paramsTag);
      };
+  // lendiri arezki 3-8-14
+  $scope.getLinkedinProfile=function(){
+    
+    Lead.get_linkedin($scope,{'entityKey':$scope.lead.entityKey});
+  }
+  $scope.convertToJson=function(string){
+    return  JSON.parse(string);
+  }
+  $scope.checkIfEmpty=function(obj){
+  for(var prop in obj) {
+        if(obj.hasOwnProperty(prop))
+            return false;
+    }
+
+    return true;
+  }
 
    // Google+ Authentication
    Auth.init($scope);

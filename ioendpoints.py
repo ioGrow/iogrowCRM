@@ -65,8 +65,10 @@ from model import Companyprofile
 from model import Invitation
 from search_helper import SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
+from people import linked_in
 from operator import itemgetter, attrgetter
 import iomessages
+from iomessages import profileSchema
 
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
@@ -163,6 +165,10 @@ class CommentListRequest(messages.Message):
     about = messages.StringField(1)
     limit = messages.IntegerField(2)
     pageToken = messages.StringField(3)
+class LinkedinProfileRequest(messages.Message):
+    firstname = messages.StringField(1)
+    lastname = messages.StringField(2)
+    company = messages.StringField(3)
 
 class CommentListResponse(messages.Message):
     items = messages.MessageField(CommentSchema, 1, repeated=True)
@@ -286,8 +292,13 @@ class EventResponse(messages.Message):
     comments = messages.IntegerField(7)
     about = messages.MessageField(DiscussionAboutSchema, 8)
     author = messages.MessageField(AuthorSchema, 9)
-
-
+#  the message for colaborator request
+class ColaboratorSchema(messages.Message):
+    display_name= messages.StringField(1)
+    email = messages.StringField(2)
+    img = messages.StringField(3)
+class ColaboratorItem(messages.Message):
+    items= messages.MessageField(ColaboratorSchema,1,repeated=True)
 # The message class that defines the shows.search response
 class ShowSearchResult(messages.Message):
     id = messages.StringField(1)
@@ -2772,7 +2783,40 @@ class CrmEngineApi(remote.Service):
     def upgrade_to_business(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         Organization.upgrade_to_business_version(user_from_email.organization)
-        return message_types.VoidMessage()# users.upgrade api v2
+        return message_types.VoidMessage()
+    # arezki lebdiri 15/07/2014
+    @endpoints.method(EntityKeyRequest, profileSchema,
+                      path='people/linkedinProfile', http_method='POST',
+                      name='people.getLinkedin')
+    def get_people_linkedin(self, request):
+        response=linked_in.get_people(request.entityKey)
+        return response   
+    # arezki lebdiri 15/07/2014
+    @endpoints.method(LinkedinProfileRequest, profileSchema,
+                      path='people/linkedinProfileV2', http_method='POST',
+                      name='people.getLinkedinV2')
+    def get_people_linkedinV2(self, request):
+        linkedin=linked_in()
+        pro=linkedin.scrape_linkedin(request.firstname,request.lastname)
+        if(pro):
+            response=profileSchema(
+                                        lastname = pro["lastname"],
+                                        firstname = pro["firstname"],
+                                        industry = pro["industry"],
+                                        locality = pro["locality"],
+                                        headline = pro["headline"],
+                                        current_post = pro["current_post"],
+                                        past_post=pro["past_post"],
+                                        formations=pro["formations"],
+                                        websites=pro["websites"],
+                                        relation=pro["relation"],
+                                        experiences=json.dumps(pro["experiences"]),
+                                        resume=pro["resume"],
+                                        certifications=json.dumps(pro["certifications"]),
+                                        skills=pro["skills"]
+                                        )
+        return response
+        return profileSchema(**response) 
 
 
     # lead reporting api
@@ -3148,6 +3192,7 @@ class CrmEngineApi(remote.Service):
                 task.put()
          return message_types.VoidMessage()
 
+
     # users.upgrade api v2
     @endpoints.method(message_types.VoidMessage, message_types.VoidMessage,
                       path='users/upgrade_early_birds', http_method='POST',
@@ -3157,3 +3202,19 @@ class CrmEngineApi(remote.Service):
         for user in users:
             Organization.upgrade_to_business_version(user.organization)
         return message_types.VoidMessage()
+    # list colaborator arezki lebdiri 4-8-14
+    @endpoints.method(EntityKeyRequest, ColaboratorItem,
+                      path='permissions/get_colaborators', http_method='POST',
+                      name='permissions.get_colaborators')
+    def getColaborators(self, request):
+        print request.entityKey
+        print '*************************************************************'
+        Key = ndb.Key(urlsafe=request.entityKey)
+        tab=[]
+        for node in Node.list_permissions(Key.get()) :
+            tab.append(ColaboratorSchema(display_name=node.google_display_name,
+                                          email=node.email,
+                                          img=node.google_public_profile_photo_url))
+
+        return ColaboratorItem(items=tab)
+

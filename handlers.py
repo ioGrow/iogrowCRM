@@ -10,7 +10,7 @@ import datetime
 import time
 import re
 import jinja2
-
+from google.appengine._internal.django.utils.encoding import smart_str
 # Google libs
 import endpoints
 from google.appengine.ext import ndb
@@ -27,14 +27,14 @@ from oauth2client.client import FlowExchangeError
 # Our libraries
 from iomodels.crmengine.shows import Show
 from endpoints_helper import EndpointsHelper
+from people import linked_in
 import model
 from iomodels.crmengine.contacts import Contact
 from iomodels.crmengine.leads import LeadInsertRequest,Lead
 from iomodels.crmengine.documents import Document
 import iomessages
 from blog import Article
-import iograph
-
+from iograph import Node , Edge
 # import event . hadji hicham 09-07-2014
 from iomodels.crmengine.events import Event
 # under the test .beata !
@@ -938,7 +938,35 @@ class AddToIoGrowLeads(webapp2.RequestHandler):
                                     access = 'public'
         )
         Lead.insert(user_from_email,request)
-
+class GetFromLinkedinToIoGrow(webapp2.RequestHandler):
+    def post(self):
+        entityKey= self.request.get('entityKey')
+        linkedin=linked_in()
+        key1=ndb.Key(urlsafe=entityKey)
+        lead=key1.get()
+        print "######################################################################################"
+        fullname= lead.firstname+" "+lead.lastname
+        print fullname
+        profil=linkedin.scrape_linkedin(lead.firstname,lead.lastname)
+        if profil:
+            pli=model.LinkedinProfile()
+            pli.formations=profil["formations"]
+            pli.firstname=profil["firstname"]
+            pli.lastname=profil["lastname"]
+            pli.industry=profil["industry"]
+            pli.locality=profil["locality"]
+            pli.headline=profil["headline"]
+            pli.relation=profil["relation"]
+            pli.resume=profil["resume"]
+            pli.current_post=profil["current_post"]
+            pli.past_post=profil["past_post"]
+            pli.certifications=json.dumps(profil["certifications"])
+            pli.experiences=json.dumps(profil["experiences"])
+            pli.skills=profil["skills"]
+            print pli
+            key2=pli.put()
+            Edge.insert(start_node=key1,end_node=key2,kind='linkedin',inverse_edge='parents')
+            # print profil
 class ShareDocument(webapp2.RequestHandler):
     def post(self):
         email = self.request.get('email')
@@ -1100,7 +1128,9 @@ routes = [
     ('/workers/sync_contacts',SyncContact),
     ('/workers/send_email_notification',SendEmailNotification),
     ('/workers/add_to_iogrow_leads',AddToIoGrowLeads),
+    ('/workers/get_from_linkedin',GetFromLinkedinToIoGrow),
     ('/workers/send_gmail_message',SendGmailEmail),
+
 
     ('/',IndexHandler),
     ('/blog',BlogHandler),

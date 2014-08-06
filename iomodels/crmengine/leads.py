@@ -575,6 +575,10 @@ class Lead(EndpointsModel):
                                   updated_at = lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   industry = lead.industry
                                 )
+        taskqueue.add(
+                            url='/workers/get_from_linkedin',
+                            params={'entityKey' :lead_key_async.urlsafe()}
+                        )
         return lead_schema
     @classmethod
     def from_twitter(cls,user_from_email,request):

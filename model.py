@@ -685,3 +685,31 @@ class Companyprofile(EndpointsModel):
            ])
         live_index = search.Index(name="ioGrowLiveIndex")
         live_index.put(show_document_for_live)
+class Certification(ndb.Model):
+    name=ndb.StringProperty()
+    specifics=ndb.StringProperty(repeated=True)
+class Experience(ndb.Model):
+    title=ndb.StringProperty()
+    period=ndb.StringProperty()
+    organisation=ndb.StringProperty()
+    description=ndb.StringProperty()
+class Experiences(ndb.Model):
+    current_exprience=ndb.StructuredProperty(Experience)
+    past_exprience=ndb.StructuredProperty(Experience,repeated=True)
+
+class LinkedinProfile(ndb.Model) :
+    lastname = ndb.StringProperty(indexed=False)
+    firstname =  ndb.StringProperty(indexed=False)
+    industry =  ndb.StringProperty(indexed=False)
+    locality =  ndb.StringProperty(indexed=False)
+    headline =  ndb.StringProperty(indexed=False)
+    current_post =  ndb.StringProperty(repeated=True,indexed=False)
+    past_post=ndb.StringProperty(repeated=True,indexed=False)
+    formations=ndb.StringProperty(repeated=True,indexed=False)
+    websites=ndb.StringProperty(repeated=True,indexed=False)
+    relation=ndb.StringProperty(indexed=False)
+    experiences=ndb.JsonProperty(indexed=False)
+    resume=ndb.TextProperty(indexed=False)
+    certifications=ndb.JsonProperty(indexed=False)
+    skills=ndb.StringProperty(repeated=True,indexed=False)
+
