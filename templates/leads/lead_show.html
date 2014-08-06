@@ -658,7 +658,7 @@
                                                         <textarea id="some-textarea" placeholder="{{_('Enter text ...')}}" id="noteBody" class="form-control ng-pristine ng-valid" rows="7" ng-model="email.body"></textarea>
                                                     </div>
                                                     <div class="pull-right">
-                                                        <input   ng-click="sendEmail(email)" ng-disabled="isLoading || !email.to" type="submit" class="btn green" value="Send">
+                                                        <input   ng-click="sendEmail(email)" ng-disabled="isLoading || !email.to" type="submit" class="btn green" value="{{_('Send')}}">
                                                     </div>
                                                 </form>
                                             </div>

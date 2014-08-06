@@ -140,7 +140,7 @@
               <div class="tabbable tabbable-custom">
                 <ul class="nav nav-tabs">
                   <li class="ng-tab" ng-class="{active: selectedTab == 2}">
-                    <a ng-click="selectedTab = 2;renderMaps();">{{ _('About')}}</a>
+                    <a ng-click="selectedTab = 2;renderMaps();">{{_('About')}}</a>
                   </li>
                   <li class="ng-tab" ng-class="{active: selectedTab == 1}">
                     <a ng-click="selectedTab = 1;">{{ _('Notes')}}</a>
@@ -214,7 +214,7 @@
                             <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="note.content"></textarea>
                           </div>
                           <div class="pull-right">
-                            <input ng-disabled="isLoading || !note.title" ng-click="addNote(note)" type="submit" class="btn green" value="Add this note">
+                            <input ng-disabled="isLoading || !note.title" ng-click="addNote(note)" type="submit" class="btn green" value="{{_('Add this note')}}">
                           </div>
                         </form>
                       </div>
@@ -1224,7 +1224,7 @@
 
                                          <div class="pull-right">
 
-                                            <input   ng-click="sendEmail(email)" ng-disabled="isLoading" type="submit" class="btn green" value="Send">
+                                            <input   ng-click="sendEmail(email)" ng-disabled="isLoading" type="submit" class="btn green" value="{{_('Send')}}">
 
 
                                           </div>
@@ -1415,7 +1415,7 @@
                               </div>
                               <!--/span-->
                             </div>
-                            {{ _('All day')}} <input type="checkbox" ng-model="allday"/>
+                            {{ _('EAll day')}} <input type="checkbox" ng-model="allday"/>
                               <!-- pick only date (the case of all day) -->
                               <div class="row" ng-show="allday">
                                 <div class="col-md-12 margin-bottom-10">
