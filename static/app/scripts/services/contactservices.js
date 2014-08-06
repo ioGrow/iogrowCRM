@@ -11,9 +11,11 @@ accountservices.factory('Contact', function($http) {
   Contact.get = function($scope,params) {
           $scope.isLoading = true;
           $scope.$apply();
+
           gapi.client.crmengine.contacts.getv2(params).execute(function(resp) {
             if(!resp.code){
                $scope.contact = resp;
+               $scope.getColaborators();
                // list infonodes
                 var renderMap = false;
                 if (resp.infonodes){

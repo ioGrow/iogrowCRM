@@ -618,6 +618,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
      $scope.pages = [];
      $scope.cases = [];
      $scope.users = [];
+     $scope.collaborators_list=[];
      $scope.user = undefined;
      $scope.slected_memeber = undefined;
      $scope.email = {};
@@ -669,7 +670,10 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
        $scope.refreshToken = function() {
             Auth.refreshToken();
        };
-
+       $scope.getColaborators=function(){
+           
+          Permission.getColaborators($scope,{"entityKey":$scope.casee.entityKey});  
+        }
   $scope.deleteInfonode = function(entityKey,kind){
     var params = {'entityKey':entityKey,'kind':kind};
 

@@ -297,6 +297,8 @@ class ColaboratorSchema(messages.Message):
     display_name= messages.StringField(1)
     email = messages.StringField(2)
     img = messages.StringField(3)
+    entityKey=messages.StringField(4)
+    
 class ColaboratorItem(messages.Message):
     items= messages.MessageField(ColaboratorSchema,1,repeated=True)
 # The message class that defines the shows.search response
@@ -3206,7 +3208,11 @@ class CrmEngineApi(remote.Service):
         for node in Node.list_permissions(Key.get()) :
             tab.append(ColaboratorSchema(display_name=node.google_display_name,
                                           email=node.email,
-                                          img=node.google_public_profile_photo_url))
+                                          img=node.google_public_profile_photo_url,
+                                          entityKey=node.entityKey
+
+                                          )
+            )
 
         return ColaboratorItem(items=tab)
 

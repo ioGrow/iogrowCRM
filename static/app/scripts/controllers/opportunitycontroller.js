@@ -79,6 +79,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
           //       $scope.save(opportunity);
           //   }
        };
+    
        $(window).resize(function() {
         });
         // We need to call this to refresh token when user credentials are invalid
@@ -557,6 +558,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
      $scope.documentpagination = {};
      $scope.documentCurrentPage=01;
      $scope.documentpages=[];
+     $scope.collaborators_list=[];
      $scope.sharing_with = [];
      $scope.opportunitystages=[];
      $scope.opportunity={'current_stage':{'name':'Incoming','probability':5}};
@@ -685,6 +687,10 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
            var paramsTag = {'about_kind': 'Opportunity'};
           Tag.list($scope, paramsTag);
        };
+         $scope.getColaborators=function(){
+           
+          Permission.getColaborators($scope,{"entityKey":$scope.opportunity.entityKey});  
+        }
         // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
           Auth.refreshToken();

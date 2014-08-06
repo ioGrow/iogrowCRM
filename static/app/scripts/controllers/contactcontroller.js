@@ -520,6 +520,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 		 $scope.prevPageToken = undefined;
 		 $scope.currentPage = 01;
 		 $scope.pages = [];
+		 $scope.collaborators_list=[];
 		 //HKA 10.12.2013 Var topic to manage Next & Prev
 		 $scope.topicCurrentPage=01;
 		 $scope.topicpagination={};
@@ -616,8 +617,13 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
           Tag.list($scope, paramsTag);
 
 			};
+			  $scope.getColaborators=function(){
+           
+          Permission.getColaborators($scope,{"entityKey":$scope.contact.entityKey});  
+        }
+
 				// We need to call this to refresh token when user credentials are invalid
-			$scope.refreshToken = function() {
+		$scope.refreshToken = function() {
 						Auth.refreshToken();
 			};
 			$scope.getTopicUrl = function(type,id){

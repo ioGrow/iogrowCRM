@@ -1565,8 +1565,8 @@
                     <hr/>
                     <div class=''>
                     <p>{{ _("Collaborators:") }}</p>
-                        <div ng-repeat="collaborator in contact.collaborators_list" class="invitation">
-                          <img class="google-avatar" ng-src="<%=collaborator.photo%>"/>
+                        <div ng-repeat="collaborator in collaborators_list" class="invitation">
+                          <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
                            <%=collaborator.display_name%> < <%=collaborator.email%> >
                         </div>
 
