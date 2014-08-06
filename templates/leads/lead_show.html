@@ -15,16 +15,6 @@
         </div>
     </div>
     <div class=" subHeaderContent">
-        <div class="pull-right sharebuttonDiv">
-
-            <a ng-click="showConvertModal()" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
-                <i class="icon-refresh"></i> {{_("Convert")}}
-            </a>
-
-            <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
-                <i class="icon-lock"></i> {{_('Share')}}
-            </a>
-        </div>
         <h2 class="page-title">
             <a href="/#/leads" data-toggle="tooltip" data-placement="bottom" title="Back to Leads">
                 <img onload="this.__gwtLastUnhandledEvent = & quot; load & quot; ;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Leads")}} > <a editable-text="lead.firstname" onbeforesave="inlinePatch('Lead','', 'firstname',lead.entityKey,$data)"> <%= lead.firstname %>  </a> <a editable-text="lead.lastname" onbeforesave="inlinePatch('Lead','', 'lastname',lead.entityKey,$data)" > <%= lead.lastname %> </a></h2>
@@ -109,9 +99,18 @@
                                            <span class="contact-title" >Last updated:  <%=fromNow(lead.updated_at)%> </span>
 
                                          </li>
-                                         <li>
-                                             <div id="placeholder-div1" class="pull-right hangout-btn"></div>
-                                             <br>
+                                         <li>                                            
+                                             <div id="placeholder-div1" class="pull-right hangout-btn"></div> 
+                                              <div class="pull-right sharebuttonDiv">
+                                                 <a ng-click="showConvertModal()" title="Convert" class="btn blue btn-sm jfk-button jfk-button-action" data-toggle="modal">
+                                                        <i class="icon-refresh"></i>
+                                                         <span class="text"> {{ _("Convert")}}</span>
+                                                    </a>
+                                                  <a href="#sharingSettingsModal" title="Share" class="btn blue btn-sm jfk-button jfk-button-action" data-toggle="modal">
+                                                    <i class="icon-share"></i>
+                                                    <span class="text">{{ _("Share")}}</span>                                          
+                                                  </a>
+                                             </div>                                            
                                          </li>
 
                                      </ul>

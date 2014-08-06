@@ -15,13 +15,7 @@
         </div>
     </div>
   <div class=" subHeaderContent">
-    <div class="pull-right sharebuttonDiv">
-      <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
-        <i class="icon-lock"></i>
-        {{ _("Share") }}
-      </a>
-    </div>
-    <h2 class="page-title" >
+    <h2 class="page-title">
       <a href="/#/contacts/" data-toggle="tooltip" id='testEdit' data-placement="bottom" title="{{ _("Back to Contacts") }}">
         <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="/static/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
       </a>
@@ -76,7 +70,7 @@
                     </i>
                      |
                     <i class="icon-trash">
-                      <a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  {{ _('Delete')}}
+                      <a ng-click="editbeforedelete(contact,'contact')" class="btn-link addAnotherPhone">  Delete
                       </a>
                     </i>
                   </span>
@@ -99,7 +93,7 @@
                         </a>
                       </span>
                     </li>
-                    <li>
+                    <li class="hangout-item">                        
                       <span>
                          {{ _('Owner:')}}
                         <a class="tag ng-binding" href="/#/search/type:Contact owner:<%= contact.owner.google_user_id %>">
@@ -113,7 +107,12 @@
                     <li>
                         <br>
                         <div id="placeholder-div1" class="pull-right hangout-btn"></div>
-                        <br>
+                        <div class="pull-right sharebuttonDiv">
+                            <a href="#sharingSettingsModal" class="btn blue btn-sm jfk-button jfk-button-action" data-toggle="modal">
+                              <i class="icon-share"></i>
+                              Share
+                            </a>
+                        </div>
                     </li>
                   </ul>
                 </div>
@@ -158,14 +157,12 @@
                   <!-- <li class="ng-tab md-menu" ng-class="{active: selectedTab == 4}">
                     <a ng-click="selectedTab = 4;">Needs</a>
                   </li> -->
-                  {% if is_business_user %}
                   <li class="ng-tab md-menu" ng-class="{active: selectedTab == 5}">
                     <a ng-click="waterfallTrigger();selectedTab = 5;">{{ _('Opportunities')}}</a>
                   </li>
                   <li class="ng-tab md-menu" ng-class="{active: selectedTab == 6}">
                     <a ng-click="waterfallTrigger();selectedTab = 6;">{{ _('Cases')}}</a>
                   </li>
-                  {%endif%}
                   <li class="dropdown md-menu-inv">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                       More <i class="fa fa-angle-down"></i>
@@ -176,8 +173,8 @@
                       <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 7}"><a ng-click="selectedTab = 7;">{{ _('Attach Documents')}}</a>
                       <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">{{ _('Needs')}}</a></li>
                       {% if is_business_user %}
-                      <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">{{ _('Opportunities')}}</a></li>
-                      <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 6}"><a ng-click="selectedTab = 6;">{{ _('Cases')}}</a></li>
+                      <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 5}"><a ng-click="waterfallTrigger(); selectedTab = 5;">{{ _('Opportunities')}}</a></li>
+                      <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 6}"><a ng-click="waterfallTrigger(); selectedTab = 6;">{{ _('Cases')}}</a></li>
                       {%endif%}
                     </ul>
                   </li>
@@ -570,85 +567,305 @@
                          <div class="row cards-container">
 
                          <div class="btn-group relbutton">
-
-                                <button ng-click="addOppModal()" id="sample_editable_1_new" class="btn red">
+                                <button ng-click="showNewOpp=true" ng-hide="showNewOpp" id="sample_editable_1_new" class="btn red">
                                 {{ _('Add opportunity')}}
                                 </button>
                           </div>
+                          <div class="col-md-12" ng-show="showNewOpp">
+                            <div class="relatedNewForm">
+                                <div class="showPage col-md-12 newActionsBtn">
+                                <span>{{ _("Create Opportunity")}} </span>
+                            <button class="btn btn-sm  red newAccountBtn pull-right" ng-click="saveOpp(opportunity)">{{ _("Create")}}</button>
+                             <button class="btn btn-sm btn-default newAccountBtn pull-right closeBtn" ng-click="hideNewOppForm()">{{ _("Close")}}</button>
+                                <div class="clearfix"></div>
+                              </div>
+                             <div class="showPage slimForm col-md-12 margin-bottom-15">
+                                  <div class="row">
+                                  <div class="col-md-12">
+                                  <div class="row">
+                                    <div class="col-md-12">
+                                    <!-- BEGIN PORTLET-->
+                                    <form class="form-horizontal ">
+                                  <div class="row">
+                                    <div class="col-md-12">
+                                      <div class="form-group">
+                                        <div class="col-md-12">
+                                          <input autofocus ng-model="opportunity.name" placeholder="{{_('Type here the opportunity name...')}}" type="text" class="form-control">
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                    <!-- BEGIN PORTLET-->
+                                    <form class="form-horizontal ">
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                              <div class="row">
+                                                <div class="col-md-12">
+                                                  <div class="form-group">
+                                                    <div class="col-md-7 sm-margin-bottom-15">
+                                                        <input type="text" required id="id_name" class="form-control" placeholder="{{_('Opportunity amount...')}}" ng-model="opportunity.amount_per_unit ">
+                                                     </div>
+                                                    <div class="col-md-5 ">
+                                                     <select  class="form-control" ng-model="opportunity.currency">
+                                                      <option value="USD" selected>$ - USD</option>
+                                                      <option value="EUR">€ - EUR</option>
+                                                      <option value="CAD">$ - CAD</option>
+                                                      <option value="GBP">£ - GBP</option>
+                                                      <option value="AUD">$ - AUD</option>
+                                                      <option value="">---</option>
+                                                      <option value="AED">د.إ - AED</option>
+                                                      <option value="ANG">ƒ - ANG</option>
+                                                      <option value="AOA">AOA - AOA</option>
+                                                      <option value="ARS">$ - ARS</option>
+                                                      <option value="BAM">KM - BAM</option>
+                                                      <option value="BBD">$ - BBD</option>
+                                                      <option value="BGL">лв - BGL</option>
+                                                      <option value="BHD">BD - BHD</option>
+                                                      <option value="BND">$ - BND</option>
+                                                      <option value="BRL">R$ - BRL</option>
+                                                      <option value="BTC">฿ - BTC</option>
+                                                      <option value="CHF">Fr - CHF</option>
+                                                      <option value="CLF">UF - CLF</option>
+                                                      <option value="CLP">$ - CLP</option>
+                                                      <option value="CNY">¥ - CNY</option>
+                                                      <option value="COP">$ - COP</option>
+                                                      <option value="CRC">₡ - CRC</option>
+                                                      <option value="CZK">Kč - CZK</option>
+                                                      <option value="DKK">kr - DKK</option>
+                                                      <option value="EEK">KR - EEK</option>
+                                                      <option value="EGP">E£ - EGP</option>
+                                                      <option value="FJD">FJ$ - FJD</option>
+                                                      <option value="GTQ">Q - GTQ</option>
+                                                      <option value="HKD">$ - HKD</option>
+                                                      <option value="HRK">kn  - HRK</option>
+                                                      <option value="HUF">Ft - HUF</option>
+                                                      <option value="IDR">Rp - IDR</option>
+                                                      <option value="ILS">₪ - ILS</option>
+                                                      <option value="INR">₨ - INR</option>
+                                                      <option value="IRR">ریال - IRR</option>
+                                                      <option value="ISK">kr - ISK</option>
+                                                      <option value="JOD">د.ا - JOD</option>
+                                                      <option value="JPY">¥ - JPY</option>
+                                                      <option value="KES">KSh - KES</option>
+                                                      <option value="KRW">₩ - KRW</option>
+                                                      <option value="KWD">KD - KWD</option>
+                                                      <option value="KYD">$ - KYD</option>
+                                                      <option value="LTL">Lt - LTL</option>
+                                                      <option value="LVL">Ls - LVL</option>
+                                                      <option value="MAD">د.م. - MAD</option>
+                                                      <option value="MVR">Rf - MVR</option>
+                                                      <option value="MXN">$ - MXN</option>
+                                                      <option value="MYR">RM - MYR</option>
+                                                      <option value="NGN">₦ - NGN</option>
+                                                      <option value="NOK">kr - NOK</option>
+                                                      <option value="NZD">$ - NZD</option>
+                                                      <option value="OMR">ر.ع - OMR</option>
+                                                      <option value="PEN">S/. - PEN</option>
+                                                      <option value="PHP">₱ - PHP</option>
+                                                      <option value="PLN">zł - PLN</option>
+                                                      <option value="QAR">ر.ق - QAR</option>
+                                                      <option value="RON">L - RON</option>
+                                                      <option value="RUB">руб. - RUB</option>
+                                                      <option value="SAR">ر.س - SAR</option>
+                                                      <option value="SEK">kr - SEK</option>
+                                                      <option value="SGD">$ - SGD</option>
+                                                      <option value="THB">฿ - THB</option>
+                                                      <option value="TRY">TL - TRY</option>
+                                                      <option value="TTD">$ - TTD</option>
+                                                      <option value="TWD">$ - TWD</option>
+                                                      <option value="UAH">₴ - UAH</option>
+                                                      <option value="VEF">Bs F - VEF</option>
+                                                      <option value="VND">₫ - VND</option>
+                                                      <option value="XCD">$ - XCD</option>
+                                                      <option value="ZAR">R - ZAR</option>
+                                                    </select>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                </div>                                                
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                  <div class="col-md-12">
+                                                  <div class="form-group">
+                                                      <div class="col-md-7 ">
+                                                          <select   class="form-control" ng-model="opportunity.duration_unit">
+                                                              <option value="fixed">{{ _("Fixed bid")}}</option>
+                                                              <option value="hour">{{ _("Per hour")}}</option>
+                                                              <option value="month">{{ _("Per month")}}</option>
+                                                              <option value="year">{{ _("Per year")}}</option>
+                                                          </select>
+                                                      </div>
+                                                      <div class="col-md-5 ">
+                                                         <input ng-hide="opportunity.duration_unit=='fixed'" type="text" pattern="\d*"  required id="" class="form-control" ng-model="opportunity.duration">
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                              </div>
+                                        </div>
+                                        </div>
+
+                                    </div>
+                                    </div>
+                                    <div class="row">
+                                               <div class="col-md-6">
+
+                                                     <div class="news-blocks blank-card blank-card-yellow">
+                                                      <h3>{{ _('Opportunity Stage') }}</h3>
+                                                      <div class="row">
+                                                        <div class="col-md-12">
+                                                          <div class="form-group">
+
+                                                              <div class="">
+                                                                <select ng-model="initialStage" ng-options="opps as opps.name + ' - ( ' + opps.probability + '% )'   for opps in opportunitystages track by opps.probability" class="form-control selector-margin" >
+
+                                                                </select>
+                                                              </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                      <div class="row">
+                                                        <div class="col-md-12">
+                                                          <p>{{ _('Estimated closed date') }}:</p>
+                                                          <div class="form-group row">
+                                                              <div class="col-md-12">
+                                                                  <datetimepick on-change="test()" ng-model='opportunity.closed_date' class="" label-format='EEEE, MMMM d, yyyy'></datetimepick>
+                                                              </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+
+
+                                                    </div>
+                                                    <div class="news-blocks blank-card blank-card-bluep">
+                                                     <h3>{{ _('Custom Fields') }}</h3>
+
+                                                     <ul class="list-unstyled contact-infos" >
+                                                         <li ng-show="showCustomFieldForm">
+                                                               <div class="row">
+                                                                 <form class="form-inline newLeadForm" role="form">
+                                                                   <div class="form-group sm-group" style="">
+                                                                     <label class="sr-only" for="exampleInputEmail2">{{ _("Field")}}</label>
+                                                                     <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="Enter field name">
+                                                                   </div>
+                                                                   <div class="form-group sm-group" style="">
+                                                                     <label class="sr-only" for="exampleInputEmail2">{{ _("Value")}}</label>
+                                                                     <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="Enter a value">
+                                                                   </div>
+                                                                    <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(customfield,customfields)">{{ _("Add")}}</button>
+                                                                     <button type="submit" class="btn btn-default" ng-click="showCustomFieldForm=false">X</button>
+                                                                 </form>
+                                                               </div>
+                                                         </li>
+                                                         <li ng-repeat="custom in customfields" class="newItems"  >
+                                                         <span>
+                                                         <%= custom.field%>  : <%= custom.value%>
+                                                         <a id="custom_<%=$index%>" href="" ng-click="pullElement($index,custom,customfields)" class="removeItem">x</a>
+                                                         </span>
+
+                                                         </li>
+                                                         <li><a ng-click="showCustomFieldForm=true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> {{ _("Add a new custom field")}} </a></li>
+
+                                                     </ul>
+
+                                                   </div>
+
+
+                                                </div>
+
+                                    <div class="col-md-6">
+                                        <div class="news-blocks blank-card blank-card-red">
+                                          <h3>{{ _("Opportunity Informations")}}</h3>
+
+                                          <div class="news-block-tags">
+                                            <div class="form-group row">
+                                              <label class="control-label col-md-3">{{ _("Description")}}</label>
+                                              <div class="col-md-9">
+                                                <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="opportunity.description"></textarea>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div class="news-block-tags">
+                                            <div class="form-group row">
+                                              <label class="control-label col-md-3">{{ _("Competitors")}}</label>
+                                              <div class="col-md-9">
+                                                <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="opportunity.competitor"></textarea>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                    </div>
+                                    </div>
+
+                                  </div>
+                                  </div>
+                                  </div>
+                                  </div>
+                             </div>
                           <div class="col-md-12">
                             <div class="row">
                               <!-- ngRepeat: opp in opportunities -->
-                               <div class="col-md-12 waterfall3" ng-hide="blankStateaccount">
-                                  <div  ng-repeat="opportunity in opportunities" data-column="<%=getPosition($index)%>" class="rightcards cardElement"  ng-class="{rightcards: getPosition($index)==4}">
-                                          <div class="detailsSection">
-                                            <div class="head">
-
-                                                <div class="row">
-                                                  <div class="col-md-2 col-sm-2 col-xs-12 hidden-xs">
-                                                    <div easypiechart class="chart" options="chartOptions" percent="opportunity.current_stage.probability">
-
-                                                      <span class="percent" ng-bind="percent=<%=opportunity.current_stage.probability%>" >
-                                                      </span>
-                                                    </div>
-                                                  </div>
-                                                  <div class="col-md-7 col-sm-7 col-xs-12" style="border-left: 1px solid rgb(218, 218, 218);">
-                                                    <div class="row">
-                                                      <!-- <div class="col-md-3 col-sm-3 col-xs-6 col-xs-offset-3 oppAccount">
-                                                          <div class="pic">
-                                                                       <img alt="test" class="img-responsive img-thumbnail" ng-src="/static/img/default_company.png" src="/static/img/default_company.png">
-                                                           </div>
-                                                      </div> -->
-                                                      <div class="col-md-9 col-sm-9 col-xs-12">
-                                                        <div class="oppDescription">
-                                                          <h3>
-                                                            <a href=""><%= opportunity.name %></a>
-                                                          </h3>
-                                                          <!-- <span class="accountName">
-                                                            NearBee
-                                                          </span> -->
-                                                          <!-- <span class="industry">
-                                                            Engineering
-                                                          </span>  -->
-                                                          <p class="description ellipsis">
-                                                              <%= opportunity.description %>
-                                                                <i></i>
-                                                          </p>
-
-                                                        </div>
-
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                                                  <div class="visible-xs col-xs-6">
-                                                    <div easypiechart class="chart" options="chartOptions" percent="percent">
-                                                      <span class="percent" ng-bind="percent"></span>
-                                                    </div>
-                                                  </div>
-                                                  <div class="col-md-3 col-sm-3 col-xs-6">
-                                                      <div class="oppPrice">
-                                                        <%= opportunity.currency %><%= opportunity.amount_total %>
-                                                      </div>
-                                                      <div class="oppStage">
-                                                        <%= opportunity.current_stage.name %>
-
-
-                                                      </div>
-                                                      <div class="oppEstDate">
-                                                        Estimated close date
-                                                        Apr 23, 2014 at 6:00PM
-                                                      </div>
-
-                                                  </div>
-                                                </div>
-                                            </div>
-                                          </div>
-                                          <div class="tagsSection" ng-class="{hidden: contact.tags==null}">
-                                              <div class="sectionContent">
-                                                   <a ng-repeat="tag in contact.tags" href="/#/search/type:contact tags:<%=tag.id%>"> <span class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
-                                                   </a>
+                            <div class="col-md-12 waterfall3 waterfallDiv" ng-hide="showNewOpp">
+                              <div  ng-repeat="opportunity in opportunities" droppable id="card_<%=$index%>"  class=" oppCard cardElement"  ng-drop="dropTag(opportunity,$index)" >
+                                <div class="btn-group inCardOptionsBtn">
+                                  <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
+                                   <i class="fa fa-ellipsis-vertical"></i>
+                                  </button>
+                                  <ul class="dropdown-menu drp-dwn-right " role="menu">
+                                    <li>
+                                     <a href="" ng-click="showAssigneeTags(opportunity)">
+                                         <i class='fa fa-tags'></i> {{ _("Add tags ")}}</a>
+                                    </li>
+                                    <li>
+                                     <a href="" ng-click="editbeforedelete(opportunity,'opportunity')">
+                                         <i class='fa fa-trash-o'></i> {{ _("Delete")}} </a>
+                                    </li>
+                                  </ul>
+                                </div>
+                                <div class="detailsSection">
+                                        <div class="col-md-4 col-xs-4">
+                                          <div class="stage">
+                                              <div easypiechart class="chart" options="chartOptions" percent="opportunity.current_stage.probability"></div>
+                                              <div class="oppStage">
+                                              <div class="oppStageContent">
+                                                <span><%=opportunity.current_stage.name%></span><br>
+                                                <span><%=opportunity.current_stage.probability%> %</span>
+                                              </div>
                                               </div>
                                           </div>
+                                        </div>
+                                        <div class="col-md-8 col-xs-8">
+                                          <div class="oppDescription row">
+                                                  <a href="/#/opportunities/show/<%= opportunity.id %>" title="<%= opportunity.name %>"><h4 style="height:26px" class="fittext ellipsis" min-font-size="14" max-font-size="22"  text="opportunity.name">
+                                                    <span class="fittext" max-font-size="18"  text="opportunity.name"></span>
+                                                  </h4></a>
+
+                                          </div>
+                                          <div class="oppDetails col-md-12">
+                                                  <div class="oppPrice">
+                                                    <span><%= opportunity.currency %> <%= opportunity.amount_total | customCurrency:"":",":".":0 %></span>
+                                                    <p class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
+                                                        <%= opportunity.duration %> × <%= opportunity.amount_per_unit | customCurrency:"":",":".":0 %>/<%= opportunity.duration_unit %>
+                                                    </p>
+                                                  </div>
+
+                                                  <div class="oppEstDate">
+                                                    {{ _("Estimated close date")}}: <%=opportunity.closed_date | date:'MMMM dd, yyyy'%>
+                                                  </div>
+                                          </div>
+                                        </div>
+
                                   </div>
+                                <div class="tagsSection" ng-class="{hidden: opportunity.tags==null}">
+                                    <div class="sectionContent">
+                                         <a ng-repeat="tag in opportunity.tags" href="/#/search/type:opportunity tags:<%=tag.id%>"> <span draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
+                                         </a>
+                                    </div>
+                                </div>
+                      </div>
+                                  <!-- end oppo card-->
                               </div>
                               <div ng-show="blankStateopportunity" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12" style="">
                                <div class="dashboard-stat cards">
@@ -690,47 +907,193 @@
 
                          <div class="row cards-container">
                          <div class="btn-group relbutton">
-
-                                <button ng-click="addCaseModal()" id="sample_editable_1_new" class="btn red">
-                                {{ _('Add case')}}
+                                <button ng-click="showNewCase=true" ng-hide="showNewCase" id="sample_editable_1_new" class="btn red">
+                                {{ _("Add case")}}
                                 </button>
                           </div>
-                          <div class="col-md-12">
-                            <div class="row">
+                         <div class="col-md-12" ng-show="showNewCase">
+                         <div class="relatedNewForm">
+                              <div class="showPage col-md-12 newActionsBtn">
+                              <span>{{ _("Create Case")}} </span>                              
+                              <button class="btn btn-sm  red newAccountBtn pull-right" ng-click="saveCase(casee)">{{ _("Create")}}</button>
+                              <button class="btn btn-sm btn-default newAccountBtn pull-right closeBtn" ng-click="hideNewCaseForm()">{{ _("Close")}}</button>
+                              <div class="clearfix"></div>
+                            </div>
+                        <div class="showPage slimForm col-md-12 margin-bottom-15">
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="row">
+                                <div class="col-md-12">
+                                  <form class="form-horizontal ">
+                                    <div class="row">
+                                      <div class="col-md-12">
+                                        <div class="form-group">
+                                          <div class="col-md-12">
+                                            <input type="text" required id="id_firstname" class="form-control" ng-model="casee.name" placeholder="What’s the subject of this issue? " autofocus>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                   </form>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                <div class="col-md-6">
+                                  <div class="news-blocks blank-card blank-card-yellow">
+                                    <h3>Case Informations</h3>
+                                    <div class="row">
+                                      <div class="form-group selector-margin">
+                                        <label  class="required col-md-3 control-label">{{_("Status")}} </label>
+                                        <div class="col-md-9">
+                                                 <select class="form-control" ng-model="status_selected" ng-options="stat.status for stat in casesatuses" >
+                                                  <option value="">-- {{_("Choose a status")}} --</option>
+                                                </select>
 
-                             <!-- ngRepeat: casee in cases -->
-                       <div  class="col-md-4 responsive" ng-repeat="casee in cases" data-tablet="span6" data-desktop="span4">
-                                <div class="dashboard-stat cards-small">
+                                        </div>
+                                      </div>
+                                      <div class="form-group selector-margin">
+                                            <label  class="required col-md-3 control-label">{{_("Priority")}} </label>
 
-                                  <div class="details">
-                                    <a href="/#/cases/show/<%= casee.id %>"><h3 class="relatedcardOppTitle">
-                                     <%=casee.name%>
-                                    </h3></a>
-                                    <div class="desc">
-                                    <span class="contact-title" ng-show="casee.status">{{ _('Status:')}}<a  class="desc" href="/#/search/type:Case <%=casee.status%>"># <%=casee.status%></a></span> <br>
-                                    <span ng-show="casee.priority" class="contact-title" >{{ _('Priority:')}}<a class="desc" href="/#/search/type:Case <%=casee.priority%>">#<%=casee.priority%> </a></span><br>
-                                      <span ng-show="casee.type_case" class="contact-title" >{{ _('Labels :')}}<a class="desc" href="/#/search/type:Case <%=casee.type_case%>">#<%=casee.type_case%></a>  </span>
+                                            <div class="col-md-9">
+                                              <select class="form-control" ng-model="casee.priority">
+                                                <option value="">-- {{_("Choose a priority")}} --</option>
+                                                <option value="1">1 - Low</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                                <option value="9">9</option>
+                                                <option value="10">10 - Critical</option>
+                                              </select>
 
+                                            </div>
+
+                                        </div>
+                                      <br>
                                     </div>
                                   </div>
-                                  <a class="more" href="/#/cases/show/<%=casee.id%>">
-                                  {{ _('View more')}} <i class="m-icon-swapright m-icon-white"></i>
-                                  </a>
+                                  <div class="news-blocks blank-card blank-card-bluep">
+                                    <h3>{{ _('Custom Fields') }}</h3>
+                                    <ul class="list-unstyled contact-infos" >
+                                      <li ng-show="showCustomFieldForm">
+                                        <div class="row">
+                                          <form class="form-inline newLeadForm" role="form">
+                                            <div class="form-group sm-group" style="">
+                                              <label class="sr-only" for="exampleInputEmail2">Field</label>
+                                              <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="Enter field name">
+                                            </div>
+                                            <div class="form-group sm-group" style="">
+                                              <label class="sr-only" for="exampleInputEmail2">Value</label>
+                                              <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="Enter a value">
+                                            </div>
+                                            <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(customfield,customfields)">Add</button>
+                                            <button type="submit" class="btn btn-default" ng-click="showCustomFieldForm=false">X</button>
+                                          </form>
+                                        </div>
+                                      </li>
+                                      <li ng-repeat="custom in customfields">
+                                        <span>
+                                          <%= custom.field%>  : <%= custom.value%>
+                                        </span>
+                                      </li>
+                                      <li>
+                                        <a ng-click="showCustomFieldForm=true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal">
+                                          <i class="icon-plus"></i> Add a new custom field
+                                        </a>
+                                      </li>
+                                    </ul>
+                                  </div>
+
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="news-blocks blank-card blank-card-red">
+                                    <h3>Description</h3>
+                                    <div class="news-block-tags">
+
+                                        <div class="form-group row">
+                                            <div class="col-md-12">
+                                                <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="casee.description"></textarea>
+                                            </div>
+                                      </div>
+                                    </div>
+
+                                  </div>
+
                                 </div>
                               </div>
-                      <div ng-show="blankStatecase" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12" style="">
-                          <div class="dashboard-stat cards">
-
-
-                                <div class="blank_slate_arrow"></div>
-                              <div class="thumbnail blank_slate_body">
-                                  <img src="/static/img/cases_blank.png" class="img-responsive">
-                                <p class="lead">{{ _('The main goal of cases is to assist collaboration and focus of teams on delivering amazing customer experience.')}}</p>
-                                   </div>
-
-
+                            </div>
+                            </div>
+                        </div>
                           </div>
                         </div>
+                          <div class="col-md-12">
+                            <div class="row">
+                            <div class="col-md-12 waterfall4 waterfallDiv" ng-hide="showNewCase">
+                             <!-- ngRepeat: casee in cases -->
+                             <div  class="cardElement caseRelatedCard" ng-repeat="casee in cases" >
+                              <div class="content" style="background-color:  <%=priorityColor(casee.priority)%>;color:<%=idealTextColor(priorityColor(casee.priority))%>;">
+                                    <div class="btn-group inCardOptionsBtn">
+                                      <button class="btn btn-default btn-xs dropdown-toggle" style="background-color:  <%=priorityColor(casee.priority)%>;color:<%=idealTextColor(priorityColor(casee.priority))%>;" type="button" data-toggle="dropdown">
+                                       <i class="fa fa-ellipsis-vertical" style="color:<%=idealTextColor(priorityColor(casee.priority))%>;"></i>
+                                      </button>
+                                      <ul class="dropdown-menu drp-dwn-right " role="menu">
+                                        <li>
+                                         <a href="" ng-click="showAssigneeTags(casee)">
+                                             <i class='fa fa-tags'></i> Add tags </a>
+                                        </li>
+                                        <li>
+                                         <a href="" ng-click="editbeforedelete(casee,'case')">
+                                             <i class='fa fa-trash-o'></i> Delete </a>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                     <div class="detailsSection">
+                                      <div class="head">
+                                        <div class="text">
+                                          <div class="name">
+                                              <a href="/#/cases/show/<%= casee.id %>"  class="profile-link" style="color:<%=idealTextColor(priorityColor(casee.priority))%>;">
+                                                 <%=casee.name%>
+                                              </a>
+                                          </div>
+                                          <div class="pitch">
+                                            <span>
+                                                <%=fromNow(casee.updated_at)%>
+                                            </span>
+                                            <span ng-show="casee.status" class="contact-title" >
+                                              Status:
+                                              <a class="desc status" href="/#/search/type:Case <%=casee.status%>">
+                                                <%=casee.status%>
+                                              </a>
+                                            </span>
+                                            <span ng-show="casee.priority">
+                                              <a  class="desc priority pull-right" href="/#/search/type:Case <%=casee.priority%>" style="color:<%=idealTextColor(priorityColor(casee.priority))%>;">
+                                                <%=casee.priority%>
+                                              </a>
+                                            </span>
+                                          </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                      </div>
+                                    </div>
+                              </div>
+                              </div>
+                              </div>
+                                    <div ng-show="blankStatecase&&!cshowNewCase"  class="col-md-12 responsive" data-tablet="span6" data-desktop="span12" style="">
+                                        <div class="dashboard-stat cards">
+
+
+                                              <div class="blank_slate_arrow"></div>
+                                            <div class="thumbnail blank_slate_body">
+                                                <img src="/static/img/cases_blank.png" class="img-responsive">
+                                              <p class="lead">The main goal of cases is to assist collaboration and focus of teams on delivering amazing customer experience.</p>
+                                                 </div>
+
+
+                                        </div>
+                                      </div>
                                 <div class="clearfix"></div>
                               </div>
                               </div>
@@ -1196,7 +1559,7 @@
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-                <input  ng-click="deletecontact()" type="submit" class="btn red" value="Delete this Contact">
+                <input  ng-click="deleteItem()" type="submit" class="btn red" value="Delete this Contact">
                 <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
               </div>
 
@@ -2019,6 +2382,16 @@
               autoresize: true
           });
   $('.waterfall2').waterfall({
+              colMinWidth: 210,
+              defaultContainerWidth: 840,
+              autoresize: true
+          });
+  $('.waterfall3').waterfall({
+              colMinWidth: 315,
+            defaultContainerWidth: 840,
+            autoresize: true
+          });
+  $('.waterfall4').waterfall({
               colMinWidth: 210,
               defaultContainerWidth: 840,
               autoresize: true

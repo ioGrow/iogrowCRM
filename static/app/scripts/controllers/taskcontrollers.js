@@ -387,6 +387,10 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
       attribute:'name'
       },'selected':[]}
       );
+      $scope.selectedTask=null;
+         $scope.currentTask=null;
+         $scope.showTagsFilter=false;
+           $scope.showNewTag=false;
      var handleColorPicker = function () {
           if (!jQuery().colorpicker) {
               return;
@@ -419,7 +423,23 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
      $scope.$watch('newTask.due', function(newValue, oldValue) {
               $scope.showStartsCalendar=false;
      });
-   // delete task from list hadji hicham 08-07-2014
+      $scope.showNewTagForm=function(){
+            $scope.showNewTag=true;
+            $( window ).trigger( 'resize' );  
+          }
+          $scope.hideNewTagForm=function(){
+            $scope.showNewTag=false;
+            $( window ).trigger( 'resize' ); 
+          }
+          $scope.hideTagFilterCard=function(){
+            $scope.showTagsFilter=false;
+            $( window ).trigger( 'resize' ); 
+          }
+          $scope.showTagFilterCard=function(){
+            $scope.showTagsFilter=true;
+            $( window ).trigger( 'resize' ); 
+          }
+   // delete task from list hadji hicham 08-07-2014 
    $scope.deleteThisTask= function(entityKey){
 
     var params = {'entityKey':entityKey};
@@ -908,13 +928,13 @@ $scope.selectTag= function(tag,index,$event){
          var text=element.find(".with-color");
          if($scope.selected_tags.indexOf(tag) == -1){
             $scope.selected_tags.push(tag);
-            element.css('background-color', tag.color+'!important');
-            text.css('color',$scope.idealTextColor(tag.color));
+           /* element.css('background-color', tag.color+'!important');
+            text.css('color',$scope.idealTextColor(tag.color));*/
 
          }else{
-            element.css('background-color','#ffffff !important');
+           /* element.css('background-color','#ffffff !important');*/
             $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
-             text.css('color','#000000');
+            /* text.css('color','#000000');*/
          }
 
          $scope.filterByTags($scope.selected_tags);
@@ -922,6 +942,30 @@ $scope.selectTag= function(tag,index,$event){
       }
 
     };
+      $scope.showAssigneeTags=function(task){
+            $('#assigneeTagsToTask').modal('show');
+            $scope.currentTask=task;
+         };
+      $scope.addTagsTothis=function(){
+          var tags=[];
+          var items = [];
+          tags=$('#select2_sample2').select2("val");
+              angular.forEach(tags, function(tag){
+                var edge = {
+                  'start_node': $scope.currentTask.entityKey,
+                  'end_node': tag,
+                  'kind':'tags',
+                  'inverse_edge': 'tagged_on'
+                };
+                items.push(edge);
+              });
+          params = {
+            'items': items
+          }
+          Edge.insert($scope,params);
+          $scope.currentTask=null;
+          $('#assigneeTagsToTask').modal('hide');
+         };
    $scope.listMoreItems = function(){
         var nextPage = $scope.currentPage + 1;
         var params = {};
@@ -1053,8 +1097,18 @@ $scope.addTags=function(){
       var tags=[];
       var items = [];
       tags=$('#select2_sample2').select2("val");
-
-      angular.forEach($scope.selected_tasks, function(selected_task){
+      if ($scope.currentTask!=null) {
+        angular.forEach(tags, function(tag){
+                var edge = {
+                  'start_node': $scope.currentTask.entityKey,
+                  'end_node': tag,
+                  'kind':'tags',
+                  'inverse_edge': 'tagged_on'
+                };
+                items.push(edge);
+              });
+      }else{
+        angular.forEach($scope.selected_tasks, function(selected_task){
           angular.forEach(tags, function(tag){
             var edge = {
               'start_node': selected_task.entityKey,
@@ -1065,12 +1119,11 @@ $scope.addTags=function(){
             items.push(edge);
           });
       });
-
+      }
+      
       params = {
         'items': items
       }
-      console.log('************** Edge *********************');
-      console.log(params);
       Edge.insert($scope,params);
       $('#assigneeTagsToTask').modal('hide');
 
@@ -1119,7 +1172,6 @@ $scope.addTags=function(){
      Auth.init($scope);
      $(window).scroll(function() {
           if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
-              console.log("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwork");
               $scope.listMoreItems();
           }
       });
