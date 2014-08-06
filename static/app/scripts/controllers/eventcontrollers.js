@@ -302,18 +302,23 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
      $scope.permet_clicking=true ;
      // What to do after authentication
 
+     $scope.user_id=document.getElementById('user_id').value;
+
+     console.log("hopa ");
+     console.log($scope.user_id);
+
      $scope.runTheProcess = function(){
           var eventid = {'id':$route.current.params.eventId};
-          $scope.renderCalendar();
+
+          var userGId={'google_user_id':$scope.user_id} ;
+          User.get_user_by_gid($scope,userGId) ;
          // Event.list($scope);
           User.list($scope,{});
-
-
-
-
-
+          
      };
-     $scope.renderCalendar = function(){
+     $scope.renderCalendar = function(user){
+
+               console.log(user.language);
 
         $('#calendar').fullCalendar({
           header: {
@@ -321,6 +326,7 @@ app.controller('EventListController',['$scope','$filter','$route','Auth','Note',
             center: 'title',
             right: 'month,agendaWeek,agendaDay'
           },
+          lang:user.language,
           defaultView:'agendaWeek',
           editable: true,
           eventSources: [{

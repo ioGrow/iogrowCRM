@@ -2567,7 +2567,7 @@ class CrmEngineApi(remote.Service):
                     url='/workers/syncdeletetask',
                     params={
                             'email': user_from_email.email,
-                            'event_google_id':task.task_google_id
+                            'task_google_id':task.task_google_id
                             }
                     )
         Edge.delete_all_cascade(start_node = entityKey)
@@ -2699,6 +2699,14 @@ class CrmEngineApi(remote.Service):
                 exec('patched_model.' + p + '= my_model.' + p)
         patched_model.put()
         return patched_model
+    # hadji hicham 4/08/2014 -- get user by google user id     
+    @User.method(user_required=True,
+                  http_method='GET', path='users/{google_user_id}', name='users.get_user_by_gid')
+    def UserGetByGId(self,my_model):
+        user=User.query().filter(User.google_user_id==my_model.google_user_id).get()
+        if user==None:
+            raise endpoints.NotFoundException('User not found ')
+        return user
 
     # this api to fetch tasks and events to feed the calendar . hadji hicham.14-07-2014
     @endpoints.method(CalendarFeedsRequest,CalendarFeedsResults,

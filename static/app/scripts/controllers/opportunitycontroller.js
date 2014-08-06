@@ -43,6 +43,10 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
          {'name':'purple','color':'#E874D6'},
      ];
      $scope.tag.color= {'name':'green','color':'#BBE535'};
+     $scope.selectedOpportunity=null;
+     $scope.currentOpportunity=null;
+     $scope.showTagsFilter=false;
+     $scope.showNewTag=false;
       $scope.percent = 0;
         $scope.chartOptions = {
             animate:{
@@ -85,7 +89,56 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
        $scope.refreshToken = function() {
             Auth.refreshToken();
        };
-
+       $scope.editbeforedelete = function(opportunity){
+         $scope.selectedOpportunity=opportunity;
+         $('#BeforedeleteOpportunity').modal('show');
+       };
+      $scope.deleteopportunity = function(){
+         var params = {'entityKey':$scope.selectedOpportunity.entityKey};
+         Opportunity.delete($scope, params);
+         $('#BeforedeleteOpportunity').modal('hide');
+         $scope.selectedOpportunity=null;
+       };
+      $scope.showAssigneeTags=function(opportunity){
+            $('#assigneeTagsToOpp').modal('show');
+            $scope.currentOpportunity=opportunity;
+         };
+        $scope.addTagsTothis=function(){
+          var tags=[];
+          var items = [];
+          tags=$('#select2_sample2').select2("val");
+              angular.forEach(tags, function(tag){
+                var edge = {
+                  'start_node': $scope.currentOpportunity.entityKey,
+                  'end_node': tag,
+                  'kind':'tags',
+                  'inverse_edge': 'tagged_on'
+                };
+                items.push(edge);
+              });
+          params = {
+            'items': items
+          }
+          Edge.insert($scope,params);
+          $scope.currentOpportunity=null;
+          $('#assigneeTagsToOpp').modal('hide');
+         };
+        $scope.showNewTagForm=function(){
+            $scope.showNewTag=true;
+            $( window ).trigger( 'resize' );  
+          }
+          $scope.hideNewTagForm=function(){
+            $scope.showNewTag=false;
+            $( window ).trigger( 'resize' ); 
+          }
+          $scope.hideTagFilterCard=function(){
+            $scope.showTagsFilter=false;
+            $( window ).trigger( 'resize' ); 
+          }
+          $scope.showTagFilterCard=function(){
+            $scope.showTagsFilter=true;
+            $( window ).trigger( 'resize' ); 
+          }
     $scope.getPosition= function(index){
         if(index<4){
 
@@ -176,14 +229,11 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
        opportunity.stagename= $scope.stage_selected.name;
        opportunity.stage_probability= $scope.stage_selected.probability;
        opportunity.stage = $scope.stage_selected.entityKey;
-        console.log(opportunity.account);
+
         if (typeof(opportunity.account)=='object'){
           opportunity.account_name = opportunity.account.name;
           opportunity.account_id = opportunity.account.id;
           opportunity.account = opportunity.account.entityKey;
-
-
-
           Opportunity.insert($scope,opportunity);
             $('#addOpportunityModal').modal('hide');
 
@@ -194,8 +244,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
             };
             $scope.opportunity = opportunity;
             Account.insert($scope,params);
-
-
         };
 
 
@@ -1452,9 +1500,6 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
         });
         return infonodes;
     };
-
-
-
 
       var params_search_contact ={};
       $scope.$watch('searchContactQuery', function() {

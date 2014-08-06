@@ -27,7 +27,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 				$scope.draggedTag=null;
 				$scope.tag = {};
 				$scope.showNewTag=false;
-				$scope.showUntag=false;
+				$scope.showUntag=false;				
 				$scope.edgekeytoDelete=undefined;
 				$scope.color_pallet=[
 				 {'name':'red','color':'#F7846A'},
@@ -40,6 +40,10 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 				 {'name':'purple','color':'#E874D6'},
 				 ];
 				 $scope.tag.color= {'name':'green','color':'#BBE535'};
+				 $scope.selectedContact=null;
+				 $scope.currentContact=null;
+				 $scope.showTagsFilter=false;
+     			 $scope.showNewTag=false;
 
 				// What to do after authentication
 			 $scope.runTheProcess = function(){
@@ -75,7 +79,56 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 			 $scope.refreshToken = function() {
 						Auth.refreshToken();
 			 };
-
+			$scope.editbeforedelete = function(contact){
+				 $scope.selectedContact=contact;
+				 $('#BeforedeleteContact').modal('show');
+			 };
+			$scope.deletecontact = function(){
+				 var params = {'entityKey':$scope.selectedContact.entityKey};
+				 Contact.delete($scope, params);
+				 $('#BeforedeleteContact').modal('hide');
+				 $scope.selectedContact=null;
+			 };
+			$scope.showAssigneeTags=function(contact){
+		        $('#assigneeTagsToTask').modal('show');
+		        $scope.currentContact=contact;
+		     };
+		    $scope.addTagsTothis=function(){
+		      var tags=[];
+		      var items = [];
+		      tags=$('#select2_sample2').select2("val");
+		          angular.forEach(tags, function(tag){
+		            var edge = {
+		              'start_node': $scope.currentContact.entityKey,
+		              'end_node': tag,
+		              'kind':'tags',
+		              'inverse_edge': 'tagged_on'
+		            };
+		            items.push(edge);
+		          });
+		      params = {
+		        'items': items
+		      }
+		      Edge.insert($scope,params);
+		      $scope.currentContact=null;
+		      $('#assigneeTagsToTask').modal('hide');
+		     };
+		    $scope.showNewTagForm=function(){
+	          $scope.showNewTag=true;
+	          $( window ).trigger( 'resize' );  
+	        }
+	        $scope.hideNewTagForm=function(){
+	          $scope.showNewTag=false;
+	          $( window ).trigger( 'resize' ); 
+	        }
+	        $scope.hideTagFilterCard=function(){
+	          $scope.showTagsFilter=false;
+	          $( window ).trigger( 'resize' ); 
+	        }
+	        $scope.showTagFilterCard=function(){
+	          $scope.showTagsFilter=true;
+	          $( window ).trigger( 'resize' ); 
+	        }
 			 $scope.listMoreItems = function(){
 				var nextPage = $scope.contactCurrentPage + 1;
 				var params = {};
@@ -323,13 +376,13 @@ $scope.selectTag= function(tag,index,$event){
 				 var text=element.find(".with-color");
 				 if($scope.selected_tags.indexOf(tag) == -1){
 						$scope.selected_tags.push(tag);
-						element.css('background-color', tag.color+'!important');
-						text.css('color',$scope.idealTextColor(tag.color));
+						/*element.css('background-color', tag.color+'!important');
+						text.css('color',$scope.idealTextColor(tag.color));*/
 
 				 }else{
-						element.css('background-color','#ffffff !important');
+					/*	element.css('background-color','#ffffff !important');*/
 						$scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
-						 text.css('color','#000000');
+						 /*text.css('color','#000000');*/
 				 }
 				 ;
 				 $scope.filterByTags($scope.selected_tags);
@@ -515,6 +568,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 		 $scope.isSignedIn = false;
 		 $scope.immediateFailed = false;
 		 $scope.isContentLoaded = false;
+		 $scope.isLoading = false;
 		 $scope.pagination = {};
 		 $scope.nextPageToken = undefined;
 		 $scope.prevPageToken = undefined;
@@ -536,50 +590,58 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 		 $scope.documentCurrentPage=01;
 		 $scope.documentpages=[];
 		 $scope.showPhoneForm=false;
-
-			$scope.accounts = [];
-			$scope.opportunities = [];
-			$scope.Opportunities = {};
-			$scope.email = {};
-			$scope.stage_selected={};
-			$scope.status_selected={};
-			$scope.infonodes = {};
-			$scope.phone={};
-			$scope.phone.type= 'work';
-      $scope.casee = {};
-			$scope.ioevent = {};
-			$scope.casee.priority = 4;
-			$scope.sharing_with = [];
-			$scope.statuses = [
-			{value: 'Home', text: 'Home'},
-			{value: 'Work', text: 'Work'},
-			{value: 'Mob', text: 'Mob'},
-			{value: 'Other', text: 'Other'}
-			];
-			$scope.showUpload=false;
-			$scope.profile_img = {
-														'profile_img_id':null,
-														'profile_img_url':null
-													};
-			$scope.newTaskform=false;
+		$scope.accounts = [];
+		$scope.opportunities = [];
+		$scope.Opportunities = {};
+		$scope.email = {};
+		$scope.stage_selected={};
+		$scope.status_selected={};
+		$scope.infonodes = {};
+		$scope.phone={};
+		$scope.phone.type= 'work';
+ 		 $scope.casee = {};
+		$scope.ioevent = {};
+		$scope.casee.priority = 4;
+		$scope.sharing_with = [];
+		$scope.statuses = [
+		{value: 'Home', text: 'Home'},
+		{value: 'Work', text: 'Work'},
+		{value: 'Mob', text: 'Mob'},
+		{value: 'Other', text: 'Other'}
+		];
+		$scope.showUpload=false;
+		$scope.profile_img = {
+								'profile_img_id':null,
+								'profile_img_url':null
+							};
+		$scope.newTaskform=false;
       $scope.newEventform=false;
       $scope.newTask={};
       $scope.selected_members = [];
       $scope.selected_member = {};
+
+      $scope.showNewOpp=false;
+      $scope.showNewCase=false;
       $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
+      $scope.selectedItem={};
+     $scope.chartOptions = {
+        animate:{
+            duration:0,
+            enabled:false
+        },
+        size:100,
+        barColor:'#58a618',
+        scaleColor:'#58a618',
+        lineWidth:7,
+        lineCap:'circle'
+    };
+    	$scope.fromNow = function(fromDate){
+				return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
+		}
+		$scope.waterfallTrigger= function(){
+				 $( window ).trigger( "resize" );
+		};
 
-
-			$scope.fromNow = function(fromDate){
-					return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
-			}
-
-			$scope.waterfallTrigger= function(){
-
-
-						/* $('.waterfall').hide();
-					 $('.waterfall').show();*/
-					 $( window ).trigger( "resize" );
-			};
 			// What to do after authentication
 			$scope.runTheProcess = function(){
 
@@ -614,8 +676,8 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 					User.list($scope,{});
 					Opportunitystage.list($scope,{});
 					Casestatus.list($scope,{});
-           var paramsTag = {'about_kind': 'Contact'};
-          Tag.list($scope, paramsTag);
+	           var paramsTag = {'about_kind': 'Contact'};
+	          Tag.list($scope, paramsTag);
 
 			};
 				// We need to call this to refresh token when user credentials are invalid
@@ -625,6 +687,25 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 			$scope.getTopicUrl = function(type,id){
 			return Topic.getUrl(type,id);
 		};
+		  $scope.idealTextColor=function(bgColor){
+        var nThreshold = 105;
+         var components = getRGBComponents(bgColor);
+         var bgDelta = (components.R * 0.299) + (components.G * 0.587) + (components.B * 0.114);
+
+         return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";
+      }
+      function getRGBComponents(color) {
+
+          var r = color.substring(1, 3);
+          var g = color.substring(3, 5);
+          var b = color.substring(5, 7);
+
+          return {
+             R: parseInt(r, 16),
+             G: parseInt(g, 16),
+             B: parseInt(b, 16)
+          };
+      }
 		 //HKA 11.11.2013
 		$scope.TopiclistNextPageItems = function(){
 
@@ -1168,6 +1249,24 @@ $scope.updatContactHeader = function(contact){
 		$('#addCaseModal').modal('show');
 	};
 	// HKA 02.12.2013 Add Opportunty related to Contact
+$scope.prepareInfonodes = function(){
+        var infonodes = [];
+
+        angular.forEach($scope.customfields, function(customfield){
+            var infonode = {
+                            'kind':'customfields',
+                            'fields':[
+                                    {
+                                    'field':customfield.field,
+                                    'value':customfield.value
+                                    }
+                            ]
+
+                          }
+            infonodes.push(infonode);
+        });
+        return infonodes;
+    };
 		$scope.saveOpp = function(opportunity){
 			if (opportunity.amount_per_unit){
 			var params = {'name':opportunity.name,
@@ -1191,20 +1290,45 @@ $scope.updatContactHeader = function(contact){
 		}	
 		};
 
-
+ $scope.opportunityInserted = function(resp){
+          window.location.replace('#/contacts');
+      };
+	
+	
+   $scope.priorityColor=function(pri){
+      if (pri<4) {
+          return '#BBE535';
+      }else{
+        if (pri<6) {
+             return '#EEEE22';
+        }else{
+          if (pri<8) {
+               return '#FFBB22';
+           }else{
+               return '#F7846A';
+           }    
+        }  
+      }
+     }
+     $scope.hideNewCaseForm=function(){
+     	$scope.casee={};
+     	$scope.casee.priority = 4;
+     	$scope.showNewCase=false;
+     	$( window ).trigger( 'resize' ); 
+     }
+     $scope.hideNewOppForm=function(){
+     	$scope.opportunity={};
+     	$scope.showNewOpp=false;
+     	$( window ).trigger( 'resize' ); 
+     }
 	// HKA 01.12.2013 Add Case related to Contact
 		$scope.saveCase = function(casee){
-
-
-				var params = {'name':casee.name,
-											'priority':casee.priority,
-											'status_name': $scope.status_selected.entityKey,
-											'account':$scope.contact.account.entityKey,
-											'contact':$scope.contact.entityKey,
-											'access': $scope.contact.access
-											};
-			Case.insert($scope,params);
-			$('#addCaseModal').modal('hide');
+			casee.account=$scope.contact.account.entityKey;
+			casee.contact=$scope.contact.entityKey;
+			casee.access=$scope.contact.access;
+			casee.infonodes = $scope.prepareInfonodes();
+            Case.insert($scope,casee);		
+            $scope.showNewCase=false;	
 		};
 
 	//HKA 01.12.2013 Add Phone
@@ -1358,9 +1482,26 @@ $scope.sendEmailSelected=function(){
 
 				Email.send($scope,params);
 			};
-			$scope.editbeforedelete = function(){
-		 $('#BeforedeleteContact').modal('show');
+	 $scope.editbeforedelete = function(item,typee){
+	 	$scope.selectedItem={'item':item,'typee':typee};
+		$('#BeforedeleteContact').modal('show');
 	 };
+	 $scope.deleteItem=function(){
+	 	var params = {'entityKey':$scope.selectedItem.item.entityKey};
+	 	console.log(params);
+	 	if ($scope.selectedItem.typee=='contact') {
+	 		 Contact.delete($scope, params);
+	 	}else{
+	 		if ($scope.selectedItem.typee=='opportunity') {
+	 			 Opportunity.delete($scope, params);
+	 		}else{
+	 			if ($scope.selectedItem.typee=='case') {
+	 				 Case.delete($scope, params);
+	 			};
+	 		}
+	 	}
+	 	 $('#BeforedeleteContact').modal('hide');
+	 }
 	 $scope.deletecontact = function(){
 
 		 var params = {'entityKey':$scope.contact.entityKey};
