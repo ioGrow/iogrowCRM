@@ -1,14 +1,8 @@
-
- #!/usr/bin/python
- # -*- coding: utf-8 -*-
 import mechanize
 from bs4 import BeautifulSoup
 import cookielib
-from iograph import Node , Edge
-from iomessages import profileSchema
-from google.appengine.ext import ndb
-from model import LinkedinProfile
 import re
+
 class linked_in():
     def __init__(self):
         # Browser
@@ -38,16 +32,8 @@ class linked_in():
         br.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
         self.browser=br
     def open_url(self,firstname,lastname):
-        r=self.browser.open('https://www.google.com')
-        self.browser.response().read()
-        self.browser.select_form(nr=0)
-        self.browser.form['q']=firstname +' '+lastname
-        self.browser.submit()
-        self.browser.response().read()
-        link= self.browser.links(url_regex="linkedin")
-        links=[l for l in link]
-        if links : return self.browser.follow_link(links[0]).read()
-    def open_url_twitter(self, firstname, lastname):
+        
+
         r=self.browser.open('https://www.google.com')
         self.browser.response().read()
         self.browser.select_form(nr=0)
@@ -55,6 +41,7 @@ class linked_in():
         self.browser.submit()
         self.browser.response().read()
         resp = None
+
 
         link= self.browser.links(url_regex="twitter.com")
         links=[l for l in link]
@@ -201,11 +188,11 @@ class linked_in():
 
         print person
         return person
-    def scrape_twitter(self, firstname, lastname):
-        peron={}
-        html=self.open_url_twitter(firstname, lastname)
-        if html:
-            return html
+    def scrap_twitter(self, firstname, lastname):
+        person={}
+        html= self.open_url(firstname,lastname)
+        print html,"ttttttttttt"
+
     @classmethod
     # arezki lebdiri 15/07/2014
     def get_people(cls,entityKey):
@@ -237,3 +224,7 @@ class linked_in():
             return response
 
         # print result
+
+ff=linked_in()
+ff.open_url("Meziane", "hadjadj")
+
