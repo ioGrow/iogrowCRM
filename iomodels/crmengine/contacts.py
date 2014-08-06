@@ -51,7 +51,9 @@ INFO_NODES = {
     'addresses' : {'default_field' : 'formatted'}
 }
 
-
+class InvitationRequest(messages.Message):
+    emails=messages.StringField(1, repeated=True)
+    message=messages.StringField(2, required=True)
 class ContactImportHighriseRequest(messages.Message):
     key=messages.StringField(1, required=True)
     server_name=messages.StringField(2, required=True)
@@ -147,6 +149,7 @@ class ContactSchema(messages.Message):
     addresses = messages.MessageField(iomessages.AddressListSchema,22)
     profile_img_id = messages.StringField(23)
     profile_img_url = messages.StringField(24)
+    owner = messages.MessageField(iomessages.UserSchema,25)
 
 class ContactListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -351,6 +354,15 @@ class Contact(EndpointsModel):
                                         parent_key = contact.key,
                                         request = request
                                         )
+        owner = model.User.get_by_gid(contact.owner)
+        owner_schema = iomessages.UserSchema(
+                                            id = str(owner.id),
+                                            email = owner.email,
+                                            google_display_name = owner.google_display_name,
+                                            google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                                            google_public_profile_url=owner.google_public_profile_url,
+                                            google_user_id = owner.google_user_id
+                                            )
         contact_schema = ContactSchema(
                                   id = str( contact.key.id() ),
                                   entityKey = contact.key.urlsafe(),
@@ -375,7 +387,8 @@ class Contact(EndpointsModel):
                                   profile_img_id = contact.profile_img_id,
                                   profile_img_url = contact.profile_img_url,
                                   created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                                  updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                  updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                  owner = owner_schema
                                 )
         return  contact_schema
     @classmethod
@@ -685,6 +698,7 @@ class Contact(EndpointsModel):
         if request.account:
             account_key = ndb.Key(urlsafe=request.account)
             account = account_key.get()
+            print request.account ,"rsiiiiiiiiiiiiiiiiiii"
             account_schema = AccountSchema(
                                         id = int( account_key.id() ),
                                         entityKey = request.account,

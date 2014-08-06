@@ -61,16 +61,14 @@ accountservices.factory('User', function($http) {
       });
   };
   User.insert = function($scope,params){
-      $scope.isLoading = true;
+
+      //console.log(params.emails);
       gapi.client.crmengine.users.insert(params).execute(function(resp) {
          console.log('in insert resp');
          console.log(resp);
          if(!resp.code){
-          $scope.user.email = '';
-
-
-          User.list($scope,params);
-
+          console.log("there  are a response");
+          $scope.isLoading = false;
          }else{
               console.log(resp.message);
                $('#addAccountModal').modal('hide');
@@ -88,10 +86,16 @@ accountservices.factory('User', function($http) {
   };
 
   User.patch = function($scope,params){
+
+
       gapi.client.crmengine.users.patch(params).execute(function(resp) {
             if(!resp.code){
                $scope.user = resp;
-               window.location.reload();
+
+              console.log(resp);
+
+                   // be careful , right it back !
+              window.location.reload();
 
 
                // Call the method $apply to make the update on the scope
@@ -127,6 +131,21 @@ accountservices.factory('Permission', function($http) {
          console.log(resp);
          if(!resp.code){
               $scope.updateCollaborators();
+
+
+         }else{
+          console.log(resp.code);
+         }
+      });
+  };
+  Permission.getColaborators = function($scope,params){
+      console.log(params);
+      gapi.client.crmengine.permissions.get_colaborators(params).execute(function(resp) {
+         console.log('in colabor resp');
+         console.log(resp);
+         if(!resp.code){
+              $scope.collaborators_list=resp.items;
+               $scope.$apply();
 
          }else{
           console.log(resp.code);

@@ -175,7 +175,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 					$('#importModal').modal('show');
 				}
 				$scope.createPickerUploader = function() {
-					
+
 					$('#importModal').modal('hide');
 					var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
 					var projectfolder = $scope.contact.folder;
@@ -189,7 +189,6 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 							setOAuthToken(window.authResult.access_token).
 							setDeveloperKey(developerKey).
 							setAppId(987765099891).
-								enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
 							build();
 					picker.setVisible(true);
 			};
@@ -210,6 +209,28 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 				$('#addContactModal').modal('show');
 
 			};
+
+
+
+
+// hadji hicham 23-07-2014 . inlinepatch for labels .
+  $scope.inlinePatch=function(kind,edge,name,tag,value){
+
+        if(kind=="tag"){
+
+        params={'id':tag.id,
+                'entityKey':tag.entityKey,
+                'about_kind':'Lead',
+                'name':value
+                  };
+
+
+           Tag.patch($scope,params);
+      };
+
+
+
+             }
 			$scope.save = function(contact){
 					var params = {};
 					var contact_name = new Array();
@@ -530,7 +551,7 @@ $scope.addTags=function(){
 		 // Google+ Authentication
 		 Auth.init($scope);
 		 $(window).scroll(function() {
-					if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
+					if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
 							$scope.listMoreItems();
 					}
 			});
@@ -569,51 +590,53 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 		 $scope.documentCurrentPage=01;
 		 $scope.documentpages=[];
 		 $scope.showPhoneForm=false;
-
-			$scope.accounts = [];
-			$scope.opportunities = [];
-			$scope.Opportunities = {};
-			$scope.email = {};
-			$scope.stage_selected={};
-			$scope.status_selected={};
-			$scope.infonodes = {};
-			$scope.phone={};
-			$scope.phone.type= 'work';
-      $scope.casee = {};
-			$scope.ioevent = {};
-			$scope.casee.priority = 4;
-			$scope.sharing_with = [];
-			$scope.statuses = [
-			{value: 'Home', text: 'Home'},
-			{value: 'Work', text: 'Work'},
-			{value: 'Mob', text: 'Mob'},
-			{value: 'Other', text: 'Other'}
-			];
-			$scope.showUpload=false;
-			$scope.profile_img = {
-														'profile_img_id':null,
-														'profile_img_url':null
-													};
-			$scope.newTaskform=false;
-		      $scope.newEventform=false;
-		      $scope.newTask={};
-		      $scope.selected_members = [];
-		      $scope.selected_member = {};
-		      $scope.showNewOpp=false;
-		      $scope.showNewCase=false;
-		      $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
-		      $scope.selectedItem={};
-         $scope.chartOptions = {
-            animate:{
-                duration:0,
-                enabled:false
-            },
-            size:100,
-            barColor:'#58a618',
-            scaleColor:'#58a618',
-            lineWidth:7,
-            lineCap:'circle'
-        };
+		$scope.accounts = [];
+		$scope.opportunities = [];
+		$scope.Opportunities = {};
+		$scope.email = {};
+		$scope.stage_selected={};
+		$scope.status_selected={};
+		$scope.infonodes = {};
+		$scope.phone={};
+		$scope.phone.type= 'work';
+ 		 $scope.casee = {};
+		$scope.ioevent = {};
+		$scope.casee.priority = 4;
+		$scope.sharing_with = [];
+		$scope.statuses = [
+		{value: 'Home', text: 'Home'},
+		{value: 'Work', text: 'Work'},
+		{value: 'Mob', text: 'Mob'},
+		{value: 'Other', text: 'Other'}
+		];
+		$scope.showUpload=false;
+		$scope.profile_img = {
+								'profile_img_id':null,
+								'profile_img_url':null
+							};
+		$scope.newTaskform=false;
+      $scope.newEventform=false;
+      $scope.newTask={};
+      $scope.selected_members = [];
+      $scope.selected_member = {};
+      $scope.showNewOpp=false;
+      $scope.showNewCase=false;
+      $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
+      $scope.selectedItem={};
+     $scope.chartOptions = {
+        animate:{
+            duration:0,
+            enabled:false
+        },
+        size:100,
+        barColor:'#58a618',
+        scaleColor:'#58a618',
+        lineWidth:7,
+        lineCap:'circle'
+    };
+    	$scope.fromNow = function(fromDate){
+				return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
+		}
 		$scope.waterfallTrigger= function(){
 			console.log("triggered");
 				 $( window ).trigger( "resize" );
@@ -789,7 +812,7 @@ $scope.listTags=function(){
         console.log(slected_memeber);
         console.log("ssssssssss");
         console.log($scope.contact.id);
-      
+
 
 
         $scope.$watch($scope.contact.access, function() {
@@ -870,7 +893,7 @@ $scope.listTags=function(){
 	$scope.share = function(slected_memeber){
 
 
-				 
+
 
 				console.log('permissions.insert share');
 				console.log(slected_memeber);
@@ -1000,7 +1023,7 @@ $scope.listTags=function(){
                     var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
                     params ={'title': task.title,
                               'due': dueDate,
-                              'parent': $scope.contact.entityKey, 
+                              'parent': $scope.contact.entityKey,
                               'access': $scope.contact.access
                     }
 
@@ -1013,7 +1036,7 @@ $scope.listTags=function(){
                 if ($scope.selected_members!=[]) {
                       params.assignees=$scope.selected_members;
                     };
-                    var tags=[];                
+                    var tags=[];
                     tags=$('#select2_sample2').select2("val");
                     if (tags!=[]) {
                       var tagitems = [];
@@ -1032,19 +1055,28 @@ $scope.listTags=function(){
                 $scope.newTaskform=false;
           }
          }
-     }
+     };
+  //HKA 27.07.2014 Add button cancel on Task form
+       $scope.closeTaskForm=function(newTask){
+               $scope.newTask={};
+                $scope.newTaskform=false;
+    };
     $scope.deleteTask = function(task){
-      
+
        var params = {'entityKey':task.entityKey};
-       
+
        Task.delete($scope, params);
 
+
      };
+
+
 
      // rederection after delete task . hadji hicham 08--07-2014
       $scope.taskDeleted = function(resp){
 
-     }; 
+    };
+
 		 $scope.hilightTask = function(){
 				console.log('Should higll');
 				$('#task_0').effect("highlight","slow");
@@ -1087,9 +1119,9 @@ $scope.listTags=function(){
                       }
 
 
-                 
+
                   }else{
-             
+
                   if (ioevent.starts_at){
                     if (ioevent.ends_at){
                       params ={'title': ioevent.title,
@@ -1114,8 +1146,8 @@ $scope.listTags=function(){
                     }
 
 
-                    
-                   
+
+
                   }
 
 
@@ -1130,6 +1162,7 @@ $scope.listTags=function(){
         }
      }
      //************************************//
+
      }
 
 //hadji hicham 14-07-2014 . update the event after we add .

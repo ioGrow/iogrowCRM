@@ -26,7 +26,7 @@
   <div class="loader-container row" ng-show="isLoading">
         <div class="loader-dialog col-md-4 col-md-offset-4 ">
           <div class="loader-content">
-            Loading...
+            {{ _('Loading...')}}
           </div>
         </div>
 
@@ -41,9 +41,10 @@
   </div>
   <div class="row" ng-show="isSignedIn">
     <div class="col-md-9">
-      <button  ng-click="showModal()" id="sample_editable_1_new" class="btn red newBtn">
-        {{ _("New User") }}
-      </button>
+       <a class="btn red newBtn" href="/#/admin/users/new" >
+                      New User    
+                    </a>
+
     </div>
     <div class="col-md-9">
      <div class="row">
@@ -96,7 +97,7 @@
                     </span>
                     <br>
                     <span>
-                      invited by <%= invitee.invited_by %> at <%= invitee.updated_at %>
+                      {{ _('invited by')}}<%= invitee.invited_by %> at <%= invitee.updated_at %>
                     </span>
 
 
@@ -123,7 +124,7 @@
                  <form id="addAccount" name="addaccount"  class="form-horizontal">
 
 
-                    <p>Invite people from your team and start working together in seconds. Everyone you invite will receive a welcome email.</p>
+                    <p>{{ _('Invite people from your team and start working together in seconds. Everyone you invite will receive a welcome email.')}}</p>
 
                     <div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Email")}} *</label>
@@ -150,7 +151,7 @@
                     height: '20px'
   });
   $("#select2_sample2").select2({
-        placeholder: "Click to Select a label",
+        placeholder: "{{ _('Click to Select a label')}}",
         allowClear: false
   });
   var handleUniform = function () {

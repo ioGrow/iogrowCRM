@@ -41,6 +41,9 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
          $scope.currentAccount=null;
          $scope.showTagsFilter=false;
          $scope.showNewTag=false;
+        $scope.fromNow = function(fromDate){
+            return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
+        }
         $scope.runTheProcess = function() {
             var params = {'order': $scope.order,
                 'limit': 20}
@@ -203,6 +206,26 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         $scope.q = undefined;
 
 
+
+
+// hadji hicham 23-07-2014 . inlinepatch for labels .
+  $scope.inlinePatch=function(kind,edge,name,tag,value){
+
+        if(kind=="tag"){
+
+        params={'id':tag.id,
+                'entityKey':tag.entityKey,
+                'about_kind':'Lead',
+                'name':value
+                  };
+
+
+           Tag.patch($scope,params);
+      };
+
+
+
+             }
         $scope.selectResult = function() {
             window.location.replace('#/accounts/show/' + $scope.searchQuery.id);
         };
@@ -490,7 +513,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         // Google+ Authentication
         Auth.init($scope);
         $(window).scroll(function() {
-            if (!$scope.isLoading && ($(window).scrollTop() > $(document).height() - $(window).height() - 100)) {
+            if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() > $(document).height() - $(window).height() - 100)) {
                 $scope.listMoreItems();
             }
         });
@@ -531,8 +554,10 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.documentpagination = {};
         $scope.documentCurrentPage = 01;
         $scope.documentpages = [];
+        $scope.collaborators_list=[]
         $scope.pages = [];
         $scope.accounts = [];
+        $scope.account={};
         $scope.users = [];
         $scope.user = undefined;
         $scope.slected_memeber = undefined;
@@ -712,6 +737,10 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             }
              $('#BeforedeleteAccount').modal('hide');
          }
+
+        $scope.fromNow = function(fromDate){
+            return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
+        }
         $scope.runTheProcess = function() {
 
             var params = {
@@ -749,7 +778,9 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
 
 
         };
-
+        $scope.getColaborators=function(){
+          Permission.getColaborators($scope,{"entityKey":$scope.account.entityKey});  
+        }
         $scope.selectMemberToTask = function() {
             console.log($scope.selected_members);
             if ($scope.selected_members.indexOf($scope.user) == -1) {
@@ -1181,7 +1212,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                     'access': $scope.account.access}
                 Account.patch($scope, params);
                   // who is the parent of this event .hadji hicham 21-07-2014.
-                  
+
                 params["parent"]="account";
                 Event.permission($scope,params);
                 Task.permission($scope,params);
@@ -1279,7 +1310,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                 if ($scope.selected_members!=[]) {
                       params.assignees=$scope.selected_members;
                     };
-                    var tags=[];                
+                    var tags=[];
                     tags=$('#select2_sample2').select2("val");
                     if (tags!=[]) {
                       var tagitems = [];
@@ -1302,6 +1333,12 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
 
         };
 
+    //HKA 27.07.2014 Add button cancel on Task form
+       $scope.closeTaskForm=function(newTask){
+               $scope.newTask={};
+                $scope.newTaskform=false;
+    };
+
         $scope.hilightTask = function() {
 
             $('#task_0').effect("highlight", "slow");
@@ -1316,7 +1353,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             Account.get($scope, params);
         };
 //HKA 11.11.2013 Add new Event
- $scope.addEvent = function(ioevent){ 
+ $scope.addEvent = function(ioevent){
             /*****************************/
 
              if ($scope.newEventform==false) {
@@ -1343,9 +1380,9 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                       }
 
 
-                 
+
                   }else{
-             
+
                   if (ioevent.starts_at){
                     if (ioevent.ends_at){
                       params ={'title': ioevent.title,
@@ -1370,13 +1407,13 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                     }
 
 
-                    
-                   
+
+
                   }
 
 
                   }
-                  
+
                    Event.insert($scope,params);
                   $scope.ioevent={};
                   $scope.newEventform=false;
@@ -1734,7 +1771,7 @@ $scope.deleteaccount = function(){
 
           var params = {'id':$scope.account.id,
                          'addresses':addressArray};
-  
+
           Account.patch($scope,params);
       };
        $scope.addGeo = function(address){
@@ -2058,6 +2095,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge',
         $scope.addresses = [];
         $scope.emails = [];
         $scope.websites = [];
+
         $scope.sociallinks = [];
         $scope.customfields = [];
         $scope.newContactform = false;

@@ -23,7 +23,7 @@
   <div class="loader-container row" ng-show="isLoading">
     <div class="loader-dialog col-md-4 col-md-offset-4 ">
       <div class="loader-content">
-        Loading...
+        {{ _('Loading...')}}
       </div>
     </div>
   </div>
@@ -44,18 +44,18 @@
         <span class="page-meta pull-right">
           <i class="icon-pencil">
             <a ng-click="editaccount()" class="btn-link addAnotherPhone" data-toggle="modal">
-              Edit
+              {{ _('Edit')}}
             </a>
           </i>
            |
           <i class="icon-trash">
-            <a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  Delete
+            <a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  {{ _('Delete')}}
             </a>
           </i>
         </span>
         {% endif %}
         <h2 class="note-title"><%= article.title%></h2>
-        <p>Posted by <%=article.created_by.display_name%></p>
+        <p>{{ _('Posted by')}} <%=article.created_by.display_name%></p>
 
         <div class="row margin-bottom-10">
           <div class="col-md-2">
@@ -104,14 +104,14 @@
         <div class="portlet showCard">
           <div class="portlet-title line">
             <div class="caption">
-              Community
+              {{ _('Community')}}
             </div>
           </div>
           <div class="portlet-body" id="chats">
             <div class="scroller" style="height:200x" data-always-visible="1" data-rail-visible="0">
               <div id="newTask">
 
-                  [TODO: put here social media connections ]
+                  [{{ _('TODO: put here social media connections')}} ]
 
               </div>
             </div>
@@ -156,7 +156,7 @@
                    <select class="medium m-wrap" tabindex="1" ng-model="role">
                      <option value="responsible">{{ _("Responsible") }}</option>
                      <option value="participant">{{ _("Participant") }}</option>
-                     <option value="invited">{{ _("Invited") }}/option>
+                     <option value="invited">{{ _("Invited") }}</option>
 
                    </select>
                  </div>

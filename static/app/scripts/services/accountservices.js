@@ -35,9 +35,15 @@ accountservices.factory('Account', function($http) {
     Account.get = function($scope, params) {
         $scope.isLoading = true;
         $scope.$apply();
+        $scope.getColaborators();
         gapi.client.crmengine.accounts.getv2(params).execute(function(resp) {
             if (!resp.code) {
                 $scope.account = resp;
+                console.log("######################################")
+                console.log($scope.account)
+                console.log($scope.account.entityKey)
+                $scope.getColaborators($scope.account.entityKey);
+                console.log($scope.collaborators_list)
                 if (resp.contacts) {
                     if (!resp.contacts.items) {
                         $scope.blankStatecontact = true;
@@ -235,12 +241,16 @@ accountservices.factory('Account', function($http) {
                     }
                 }
 
-                if (resp.tasks) {
-                    $scope.tasks = resp.tasks.items;
+                if (resp.tasks){
+                   $scope.tasks = resp.tasks.items;
+                }else{
+                  $scope.tasks = [];
                 }
 
-                if (resp.events) {
-                    $scope.events = resp.events.items;
+                if (resp.events){
+                   $scope.events = resp.events.items;
+                }else{
+                  $scope.events = [];
                 }
 
                 $scope.isContentLoaded = true;
@@ -668,6 +678,8 @@ accountservices.factory('Attachement', function($http) {
     };
     Attachement.insert = function($scope, params) {
         $scope.isLoading = true;
+        $scope.$apply();
+        $('#newDocument').modal('hide');
         gapi.client.crmengine.documents.insertv2(params).execute(function(resp) {
             if (!resp.code) {
                 //$('#newDocument').modal('hide');
@@ -675,7 +687,6 @@ accountservices.factory('Attachement', function($http) {
                 $scope.isLoading = false;
                 $scope.blankStatdocuments = false;
                 $scope.$apply();
-                $('#newDocument').modal('hide');
                 $scope.newdocument.title = '';
             } else {
                 console.log(resp.message);

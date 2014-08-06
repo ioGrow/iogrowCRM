@@ -8,23 +8,26 @@
            <ul class="dropdown-menu">
             {%for application in apps %}
 
-                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{application.label}}</a></li>
+                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
 
             {%endfor%}
            </ul>
         </div>
-    </div> 
+
+    </div>
+
+
     <div class=" subHeaderContent">
       <div class="col-md-9">
       <div class="row">
       <div class="col-md-10 col-xs-12 filter-content">
 
       <div class="filterOptions">
-        <span role="button" class="filterItem hiddenOnPhone" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">All <span class="hidden-xs hiddenOnxs">Accounts</span> </span>
-        <span role="button" class="filterItem hiddenOnPhone" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">My <span class="hidden-xs hiddenOnxs">Accounts</span></span>
+        <span role="button" class="filterItem hiddenOnPhone" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">{{ _("All")}} <span class="hidden-xs hiddenOnxs">{{ _("Accounts")}}</span> </span>
+        <span role="button" class="filterItem hiddenOnPhone" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">{{ _("My")}} <span class="hidden-xs hiddenOnxs">{{ _("Accounts")}}</span></span>
           <div class="btn-group visibleOnPhone">
                 <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='filter'}" >
-                  Filter by
+                  {{ _("Filter by")}}
                   <i class="icon-angle-down"></i>
                 </a>
                 <ul class="dropdown-menu drp-dwn-xs-right">
@@ -35,7 +38,7 @@
           </div>
         <div class="btn-group">
             <a class="filterItem" href="#" data-toggle="dropdown" ng-class="{activeFilter: selectedOption =='sort'}">
-              Sort by
+              {{_('Sort by')}}
               <i class="icon-angle-down"></i>
             </a>
             <ul class="dropdown-menu">
@@ -47,12 +50,12 @@
               </li>
             </ul>
       </div>
-      <span role="button" class="filterItem hiddenOnPhone hiddenOnmd"  ng-class="{activeFilter: selectedOption =='tags'}" ng-click="showTagFilterCard();selectedOption ='tags'"><i class="fa fa-tags"></i><span class="hidden-xs hiddenOnxs">Filter by </span> Tags</span>
+      <span role="button" class="filterItem hiddenOnPhone hiddenOnmd"  ng-class="{activeFilter: selectedOption =='tags'}" ng-click="showTagFilterCard();selectedOption ='tags'"><i class="fa fa-tags"></i><span class="hidden-xs hiddenOnxs">{{ _("Filter by")}} </span> {{ _("Tags")}}</span>
       </div>
       </div>
       <div class="col-md-2 col-xs-2">
       <a href="/#/accounts/new" class="hidden-sm hidden-xs btn red newAccountBtnOnscroll pull-right hidden afterScrollBtn">
-           New <span class="hidden-xs hiddenOnxs">Account</span>
+           {{_('New')}} <span class="hidden-xs hiddenOnxs">{{_('Account')}}</span>
          </a>
       </div>
       </div>
@@ -63,7 +66,7 @@
 <div class="loader-container row" ng-show="isLoading">
       <div class="loader-dialog col-md-4 col-md-offset-4 ">
         <div class="loader-content">
-          Loading...
+          {{_('Loading...')}}
         </div>
       </div>
 
@@ -93,18 +96,31 @@
                     <div class="modal-body">
                        <form id="addAccount" name="addaccount"  class=""  ng-keyup="addAccountOnKey(account)">
                     <div class="form-group">
-                        <label  class="required">{{_("Name")}}</label>
+                        <label  class="required">{{_('Name')}}</label>
                           <input type="text" class="form-control" required  ng-model="account.name">
                     </div>
                     <div class="form-group">
-                        <label  class="required">{{_("Type")}}</label>
+                        <label  class="required">{{_('Type')}}</label>
                           <select value="Customer" ng-model="account.account_type" class="form-control">
-                         <option value="Competitor">Competitor</option><option value="Customer">Customer</option><option value="Distributor">Distributor</option><option value="Integrator">Integrator</option><option value="Investor">Investor</option><option value="Partner">Partner</option><option value="Press">Press</option><option value="Prospect">Prospect</option><option value="Reseller">Reseller</option><option value="Supplier">Supplier</option><option value="Vendor">Vendor</option><option value="Other">Other</option></select>
+                         <option value="Competitor">{{_('Competitor')}}</option>
+                         <option value="Customer">{{_('Customer')}}</option>
+                         <option value="Distributor">{{_('Distributor')}}</option>
+                         <option value="Integrator">{{_('Integrator')}}</option>
+                         <option value="Investor">{{_('Investor')}}</option>
+                         <option value="Partner">{{_('Partner')}}</option>
+                         <option value="Press">{{_('Press')}}</option>
+                         <option value="Prospect">{{_('Prospect')}}</option>
+                         <option value="Reseller">{{_('Reseller')}}</option>
+                         <option value="Supplier">{{_('Supplier')}}</option>
+                         <option value="Vendor">{{_('Vendor')}}</option>
+                         <option value="Other">{{_('Other')}}</option>
+                         </select>
                     </div>
                     <div class="form-group">
                         <label  class="required control-label">{{_("Industry")}} </label>
                           <select ng-model="account.industry" class="form-control">
-                          <option value="">--None--</option><option value="Agriculture">Agriculture</option><option value="Apparel">Apparel</option><option value="Banking">Banking</option><option value="Biotechnology">Biotechnology</option><option value="Chemicals">Chemicals</option><option value="Communications">Communications</option><option value="Construction">Construction</option><option value="Consulting">Consulting</option><option value="Education">Education</option><option value="Electronics">Electronics</option><option value="Energy">Energy</option><option value="Engineering">Engineering</option><option value="Entertainment">Entertainment</option><option value="Environmental">Environmental</option><option value="Finance">Finance</option><option value="Food &amp; Beverage">Food &amp; Beverage</option><option value="Government">Government</option><option value="Healthcare">Healthcare</option><option value="Hospitality">Hospitality</option><option value="Insurance">Insurance</option><option value="Machinery">Machinery</option><option value="Manufacturing">Manufacturing</option><option value="Media">Media</option><option value="Not For Profit">Not For Profit</option><option value="Recreation">Recreation</option><option value="Retail">Retail</option><option value="Shipping">Shipping</option><option value="Technology">Technology</option><option value="Telecommunications">Telecommunications</option><option value="Transportation">Transportation</option><option value="Utilities">Utilities</option><option value="Other">Other</option></select>
+                          <option value="">--{{_('None')}}--</option><option value="Agriculture">{{_('Agriculture')}}</option><option value="Apparel">{{_('Apparel')}}</option><option value="Banking">{{_('Banking')}}</option><option value="Biotechnology">{{_('Biotechnology')}}</option><option value="Chemicals">{{_('Chemicals')}}</option><option value="Communications">{{_('Communications')}}</option><option value="Construction">{{_('Construction')}}</option><option value="Consulting">{{_('Consulting')}}</option><option value="Education">{{_('Education')}}</option><option value="Electronics">
+                          {{_('Electronics')}}</option><option value="Energy">{{_('Energy')}}</option><option value="Engineering">{{_('Engineering')}}</option><option value="Entertainment">{{_('Entertainment')}}</option><option value="Environmental">{{_('Environmental')}}</option><option value="Finance">{{_('Finance')}}</option><option value="Food &amp; Beverage">{{_('Food')}} &amp; {{_('Beverage')}}</option><option value="Government">{{_('Government')}}</option><option value="Healthcare">{{_('Healthcare')}}</option><option value="Hospitality">{{_('Hospitality')}}</option><option value="Insurance">{{_('Insurance')}}</option><option value="Machinery">{{_('Machinery')}}</option><option value="Manufacturing">{{_('Manufacturing')}}</option><option value="Media">{{_('Media')}}</option><option value="Not For Profit">{{_('Not For Profit')}}</option><option value="Recreation">{{_('Recreation')}}</option><option value="Retail">{{_('Retail')}}</option><option value="Shipping">{{_('Shipping')}}</option><option value="Technology">{{_('Technology')}}</option><option value="Telecommunications">{{_('Telecommunications')}}</option><option value="Transportation">{{_('Transportation')}}</option><option value="Utilities">{{_('Utilities')}}</option><option value="Other">{{_('Other')}}</option></select>
 
 
                     </div>
@@ -157,7 +173,7 @@
       <div class="row">
         <div class="pull-right" >
          <a href="/#/accounts/new" class="btn red newBtn">
-                        New Account
+                       {{_('New Account')}}
          </a>
       </div>
       </div>
@@ -238,7 +254,7 @@
                   </a>
                 </div>
                 <div class="text">
-                  <div class="name " >
+                <div class="name " >
                     <a class="profile-link" href="/#/accounts/show/<%= account.id %>">
                       <p class="fittext autoresizeName" max-heit="18" max-font-size="18" text="account.name"></p>
                     </a>
@@ -250,6 +266,10 @@
                     <span ng-show="account.industry">
                           <a href="/#/search/type:Account <%=account.industry%>"> - <%= account.industry %>
                           </a>
+                    </span>
+                    <br>
+                    <span>
+                      <%=fromNow(account.updated_at)%>
                     </span>
                   </div>
                 </div>
@@ -266,7 +286,7 @@
           <div class="cardElement loaderCard" ng-show="isMoreItemLoading" data-span="all">
             <div class="loaderCardContent">
                <img class="img-responsive " src="/static/img/gloader.gif">
-               <span>  Loading...</span>
+               <span> {{ _('Loading...')}}</span>
             </div>
           </div>
         </div><!--/inner-cards-container-->
@@ -309,57 +329,56 @@
   
   <div class="row">
   <div class="col-md-12">
-    <div class="portlet showCard fixedCard">
-      <div class="portlet-title">
-        <div class="caption">
-                <!-- class="fa fa-reorder"--><i></i>Labels
-        </div>
-      </div>
-      <div class="portlet-body">
-        <ul class="list-group tags-list">
-          <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
-            <div class="row">
-              <span ng-drag="dragTag(tag_item)" id="iii"  draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
-                  <%= tag_item.name %>
-              </span>
-              <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
-              <!--<span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
-                  <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>
-              </span>-->
-              <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
-                <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
-              </form>
-              <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
-            </div>
-          </li>
-          <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
-            <a ng-click="" class="btn-link addAnotherPhone">
-              <i class="fa fa-tags"></i>  Add a new label
-            </a>
-          </li>
-        </ul>
-        <form class="well newTagForm" role="form" ng-show="showNewTag">
-          <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
-          <div class="row">
-            <div class="col-md-12 form-group">
-              <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New label">
+        <div class="portlet showCard">
+          <div class="portlet-title">
+            <div class="caption">
+                    <!-- class="fa fa-reorder"--><i></i>{{_('Labels')}}
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-8">
-              <ul class="color_pallet_menu">
-                <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
-                </li>
-              </ul>
-            </div>
-            <div class="col-md-4">
-              <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
-            </div>
-          </div>
-        </form>
-        <div class="form-group btn-manage-tags" ng-show="tags">
-          <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
-          </button>
+          <div class="portlet-body">
+            <ul class="list-group tags-list">
+              <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  ng-drag="dragTag(tag_item)" >
+                <div class="row">
+                  <span  editable-text="tag_item.name" draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;"
+                    ng-model='tag_item.name'  onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
+                      <%= tag_item.name %>
+                  </span>
+                <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
+                  <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
+                    <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
+                  </form>
+                  <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
+                </div>
+              </li>
+              <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
+                <a ng-click="" class="btn-link addAnotherPhone">
+                  <i class="fa fa-tags"></i>  {{_('Add a new label')}}
+                </a>
+              </li>
+            </ul>
+            <form class="well newTagForm" role="form" ng-show="showNewTag">
+              <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
+              <div class="row">
+                <div class="col-md-12 form-group">
+                  <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{_('New label')}}">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-8">
+                  <ul class="color_pallet_menu">
+                    <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-md-4">
+                  <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
+                </div>
+              </div>
+            </form>
+            <div class="form-group btn-manage-tags" ng-show="tags">
+              <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">
+              {{_('Manage Tags')}}
+              </button>
         </div>
       </div>
     </div>
@@ -420,7 +439,7 @@
                     height: '20px'
   });
   $("#select2_sample2").select2({
-        placeholder: "Click to Select a label",
+        placeholder: "{{_('Click to Select a label')}}",
         allowClear: false
   });
   var handleUniform = function () {

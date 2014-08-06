@@ -20,10 +20,10 @@
       <div id="portlet-config" class="modal hide">
         <div class="modal-header">
           <button data-dismiss="modal" class="close" type="button"></button>
-          <h3>portlet Settings</h3>
+          <h3>{{ _('portlet Settings')}}</h3>
         </div>
         <div class="modal-body">
-          <p>Here will be a configuration form</p>
+          <p>{{ _('Here will be a configuration form')}}</p>
         </div>
       </div>
       <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
@@ -61,10 +61,10 @@
                       <input type="text" class="form-control"  ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="input-block-level" placeholder="Enter name or email addresse to add people to this group">
                     </div>
                     <div class="form-group">
-                          <label class="control-label">Add member as:</label>
+                          <label class="control-label">{{ _('Add member as:')}}</label>
                            <select class="form-control" ng-model="role">
-                              <option value="member">Member</option>
-                              <option value="owner">Owner</option>
+                              <option value="member">{{ _('Member')}}</option>
+                              <option value="owner">{{ _('Owner')}}</option>
                               
                             </select>
                        
@@ -146,7 +146,7 @@
                   </ul>
                 </div>
            
-                <h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3>
+                <h3 class="pagination pull-right" ng-show="isLoading">{{ _('Loading...')}}</h3>
             </div>
           </div>
 

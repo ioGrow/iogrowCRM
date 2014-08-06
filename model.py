@@ -29,12 +29,13 @@ EARLY_BIRD_TABS = [
                 {'name': 'Calendar','label': 'Calendar','url':'/#/calendar/','icon':'calendar'}
                 ]
 STANDARD_PROFILES = ['Super Administrator', 'Standard User']
-STANDARD_APPS = [{'name': 'sales', 'label': 'Relationships', 'url':'/#/leads/'}]
+STANDARD_APPS = [{'name': 'sales', 'label': 'Relationships', 'url':'/#/tasks/'}]
 STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
 ADMIN_TABS = [
             {'name': 'Users','label': 'Users','url':'/#/admin/users','icon':'user'},
             {'name': 'Groups','label': 'Groups','url':'/#/admin/groups','icon':'group'},
-            {'name': 'Settings','label': 'Settings','url':'/#/admin/settings','icon':'cogs'}
+            {'name': 'Settings','label': 'Settings','url':'/#/admin/settings','icon':'cogs'},
+            {'name': 'Imports','label': 'Imports','url':'/#/admin/imports','icon':'arrow-down'}
             ]
 ADMIN_APP = {'name': 'admin', 'label': 'Admin Console', 'url':'/#/admin/users'}
 """Iogrowlive_APP = {'name':'iogrowLive','label': 'i/oGrow Live','url':'/#/live/shows'}
@@ -90,6 +91,7 @@ class Tab(ndb.Model):
 
 # We use the Organization model to separate the data of each organization from each other
 class Organization(ndb.Model):
+    owner = ndb.StringProperty()
     name = ndb.StringProperty()
     # We can use status property later for checking if the organization is active or suspended
     status = ndb.StringProperty()
@@ -97,15 +99,7 @@ class Organization(ndb.Model):
     plan = ndb.StringProperty()
     instance_created = ndb.BooleanProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
-    org_folder = ndb.StringProperty()
-    products_folder = ndb.StringProperty()
-    accounts_folder = ndb.StringProperty()
-    contacts_folder = ndb.StringProperty()
-    leads_folder = ndb.StringProperty()
-    opportunities_folder = ndb.StringProperty()
-    cases_folder = ndb.StringProperty()
-    shows_folder = ndb.StringProperty()
-    feedbacks_folder = ndb.StringProperty()
+
 
     @classmethod
     def init_default_values(cls,org_key):
@@ -127,6 +121,7 @@ class Organization(ndb.Model):
         # init google drive folders
         # Add the task to the default queue.
         organization = cls(
+                        owner=admin.google_user_id,
                         name=org_name
                         )
         org_key = organization.put()
@@ -189,6 +184,7 @@ class Organization(ndb.Model):
         # init google drive folders
         # Add the task to the default queue.
         organization = cls(
+                        owner=admin.google_user_id,
                         name=org_name
                         )
         org_key = organization.put()
@@ -689,3 +685,31 @@ class Companyprofile(EndpointsModel):
            ])
         live_index = search.Index(name="ioGrowLiveIndex")
         live_index.put(show_document_for_live)
+class Certification(ndb.Model):
+    name=ndb.StringProperty()
+    specifics=ndb.StringProperty(repeated=True)
+class Experience(ndb.Model):
+    title=ndb.StringProperty()
+    period=ndb.StringProperty()
+    organisation=ndb.StringProperty()
+    description=ndb.StringProperty()
+class Experiences(ndb.Model):
+    current_exprience=ndb.StructuredProperty(Experience)
+    past_exprience=ndb.StructuredProperty(Experience,repeated=True)
+
+class LinkedinProfile(ndb.Model) :
+    lastname = ndb.StringProperty(indexed=False)
+    firstname =  ndb.StringProperty(indexed=False)
+    industry =  ndb.StringProperty(indexed=False)
+    locality =  ndb.StringProperty(indexed=False)
+    headline =  ndb.StringProperty(indexed=False)
+    current_post =  ndb.StringProperty(repeated=True,indexed=False)
+    past_post=ndb.StringProperty(repeated=True,indexed=False)
+    formations=ndb.StringProperty(repeated=True,indexed=False)
+    websites=ndb.StringProperty(repeated=True,indexed=False)
+    relation=ndb.StringProperty(indexed=False)
+    experiences=ndb.JsonProperty(indexed=False)
+    resume=ndb.TextProperty(indexed=False)
+    certifications=ndb.JsonProperty(indexed=False)
+    skills=ndb.StringProperty(repeated=True,indexed=False)
+

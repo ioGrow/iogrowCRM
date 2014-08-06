@@ -59,6 +59,9 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
             lineWidth:7,
             lineCap:'circle'
         };
+      $scope.fromNow = function(fromDate){
+          return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
+      }
 
       // What to do after authentication
        $scope.runTheProcess = function(){
@@ -198,6 +201,26 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
         $('#addOpportunityModal').modal('show');
 
       };
+// hadji hicham 23-07-2014 . inlinepatch for labels .
+  $scope.inlinePatch=function(kind,edge,name,tag,value){
+
+        if(kind=="tag"){
+
+        params={'id':tag.id,
+                'entityKey':tag.entityKey,
+                'about_kind':'Lead',
+                'name':value
+                  };
+
+
+           Tag.patch($scope,params);
+      };
+
+
+
+             }
+
+
 
     $scope.save = function(opportunity){
       var params = {};
@@ -548,7 +571,7 @@ $scope.addTags=function(){
      // Google+ Authentication
      Auth.init($scope);
      $(window).scroll(function() {
-          if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
+          if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
               $scope.listMoreItems();
           }
       });
@@ -677,6 +700,10 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
         { value:"XCD", text:"$ - XCD"},
         { value:"ZAR", text:"R - ZAR"}];
 
+      $scope.fromNow = function(fromDate){
+          return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
+      }
+
       // What to do after authentication
        $scope.runTheProcess = function(){
           var params = {
@@ -725,10 +752,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
       $scope.test=function(){
         console.log('testtest');
       }
-     //HKA 09.11.2013 Add a new Task
-     $scope.$watch($scope.opportunity.closed_date, function() {
-        console.log("work");
-     });
+
       $scope.selectMemberToTask = function() {
             console.log($scope.selected_members);
             if ($scope.selected_members.indexOf($scope.user) == -1) {
@@ -767,7 +791,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
             if ($scope.selected_members!=[]) {
                   params.assignees=$scope.selected_members;
                 };
-                var tags=[];                
+                var tags=[];
                 tags=$('#select2_sample2').select2("val");
                 if (tags!=[]) {
                   var tagitems = [];
@@ -787,7 +811,14 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
             $scope.newTaskform=false;
       }
      }
-   }
+   };
+
+   
+    //HKA 27.07.2014 Add button cancel on Task form
+       $scope.closeTaskForm=function(newTask){
+               $scope.newTask={};
+                $scope.newTaskform=false;
+    };
      $scope.$watch('opportunity.closed_date', function(newValue, oldValue) {
             if (newValue!=oldValue){
                 $scope.patchDate(newValue);
@@ -891,7 +922,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
                       'access':$scope.opportunity.access}
          Opportunity.patch($scope,params);
            // who is the parent of this event .hadji hicham 21-07-2014.
-                  
+
                 params["parent"]="opportunity";
                 Event.permission($scope,params);
                 Task.permission($scope,params);
@@ -964,9 +995,9 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
                       }
 
 
-                 
+
                   }else{
-             
+
                   if (ioevent.starts_at){
                     if (ioevent.ends_at){
                       params ={'title': ioevent.title,
@@ -991,13 +1022,13 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
                     }
 
 
-                    
-                   
+
+
                   }
 
 
                   }
-                  
+
                    Event.insert($scope,params);
                   $scope.ioevent={};
                   $scope.newEventform=false;
@@ -1010,7 +1041,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
 /*******************/
 
 
-     
+
     };
 
 // hadji hicham 14-07-2014 . update the event after we add .

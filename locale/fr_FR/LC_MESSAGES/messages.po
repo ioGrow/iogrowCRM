@@ -3,37 +3,2149 @@
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
 #
-# fuzzy
-# HKA 21.03.2014 Account List
-msgid "Account"
-msgstr "Compte"
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2014-07-26 11:00+0100\n"
+"PO-Revision-Date: 2014-07-26 11:01+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: fr_FR <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.6\n"
+
+#: babel/messages/tests/mofile.py:39 babel/messages/tests/mofile.py:40
+msgid "foo"
+msgstr ""
+
+#: babel/messages/tests/mofile.py:41 babel/messages/tests/mofile.py:42
+msgid "There is"
+msgid_plural "There are"
+msgstr[0] ""
+msgstr[1] ""
+
+#: babel/messages/tests/mofile.py:43 babel/messages/tests/mofile.py:44
+msgid "Fizz"
+msgstr ""
+
+#: babel/messages/tests/mofile.py:45 babel/messages/tests/mofile.py:46
+msgid "Fuzz"
+msgstr ""
+
+#: babel/messages/tests/mofile.py:47 babel/messages/tests/mofile.py:48
+msgid "Fuzzes"
+msgstr ""
+
+#: babel/messages/tests/data/project/file1.py:8
+msgid "bar"
+msgstr ""
+
+#: babel/messages/tests/data/project/file2.py:9
+msgid "foobar"
+msgid_plural "foobars"
+msgstr[0] ""
+msgstr[1] ""
+
+#: babel/messages/tests/data/project/ignored/this_wont_normally_be_here.py:11
+msgid "FooBar"
+msgid_plural "FooBars"
+msgstr[0] ""
+msgstr[1] ""
+
+#: httplib2/__init__.py:400
+#, python-format
+msgid "Content purported to be compressed with %s but failed to decompress."
+msgstr ""
+
+#: httplib2/__init__.py:510
+#, python-format
+msgid "Unsupported value for qop: %s."
+msgstr ""
+
+#: httplib2/__init__.py:513 httplib2/__init__.py:576
+#, python-format
+msgid "Unsupported value for algorithm: %s.algorithm"
+msgstr ""
+
+#: httplib2/__init__.py:573
+msgid "The challenge doesn't contain a server nonce, or this one is empty."
+msgstr ""
+
+#: httplib2/__init__.py:579
+#, python-format
+msgid "Unsupported value for pw-algorithm: %s.pw-algorithm"
+msgstr ""
+
+#: httplib2/__init__.py:1359
+msgid "Redirected but the response is missing a Location: header."
+msgstr ""
+
+#: templates/base.html:92 templates/cases/case_list.html:322
+#: templates/cases/case_list.html:330
+#: templates/opportunities/opportunity_list.html:284
+msgid "Search"
+msgstr "Recherche"
+
+#: templates/base.html:113
+msgid "Invite Users"
+msgstr "Inviter des Utilisateurs"
+
+#: templates/base.html:157 templates/calendar/calendar_show.html:28
+msgid "Calendar"
+msgstr "Calendrier"
+
+#: templates/base.html:188
+msgid "Sign Out"
+msgstr "Se Déconnecter"
+
+#: templates/base.html:192
+msgid "My Setting"
+msgstr "Paramètres"
+
+#: templates/base.html:211 templates/base.html:304
+#: templates/blog/blog_base.html:181 templates/blog/blog_base.html:274
+#: templates/blog/public_blog_base.html:181
+#: templates/blog/public_blog_base.html:274
+msgid "My setting"
+msgstr "Paramètres"
+
+#: templates/base.html:219 templates/base.html:312
+#: templates/blog/blog_base.html:189 templates/blog/blog_base.html:282
+#: templates/blog/public_blog_base.html:189
+#: templates/blog/public_blog_base.html:282
+msgid "Language"
+msgstr "Langue"
+
+#: templates/base.html:225 templates/base.html:317
+msgid "English"
+msgstr "Anglais"
+
+#: templates/base.html:226 templates/base.html:318
+msgid "Arabic"
+msgstr "Arabe"
+
+#: templates/base.html:227 templates/base.html:319
+msgid "French"
+msgstr "Français"
+
+#: templates/base.html:234 templates/base.html:289 templates/base.html:326
+#: templates/opportunit_new.html:227 templates/opportunit_new.html:259
+#: templates/activities/all_tasks.html:153
+#: templates/activities/all_tasks.html:253
+#: templates/activities/all_tasks.html:338
+#: templates/activities/all_tasks.html:423
+#: templates/activities/all_tasks.html:508
+#: templates/articles/article_new.html:202
+#: templates/articles/article_new.html:234 templates/blog/blog_base.html:204
+#: templates/blog/blog_base.html:259 templates/blog/blog_base.html:296
+#: templates/blog/public_blog_base.html:204
+#: templates/blog/public_blog_base.html:259
+#: templates/blog/public_blog_base.html:296
+#: templates/calendar/calendar_show.html:107
+#: templates/calendar/calendar_show.html:164
+#: templates/calendar/calendar_show.html:196 templates/cases/case_new.html:268
+#: templates/cases/case_new.html:292 templates/contacts/contact_new.html:441
+#: templates/contacts/contact_new.html:465 templates/leads/lead_new.html:449
+#: templates/leads/lead_new.html:473
+#: templates/live/company_profile/comp_profile_show.html:176
+#: templates/live/company_profile/comp_profile_show.html:205
+#: templates/live/company_profile/comp_profile_show.html:233
+#: templates/live/company_profile/comp_profile_show.html:262
+#: templates/needs/show.html:572
+#: templates/opportunities/opportunity_new.html:412
+#: templates/opportunities/opportunity_new.html:444
+msgid "Close"
+msgstr "Fermer"
+
+#: templates/base.html:235 templates/base.html:327
+#: templates/opportunit_new.html:228 templates/opportunit_new.html:260
+#: templates/admin/settings/settings.html:342
+#: templates/admin/settings/settings.html:410
+#: templates/articles/article_new.html:203
+#: templates/articles/article_new.html:235 templates/blog/blog_base.html:205
+#: templates/blog/blog_base.html:297 templates/blog/public_blog_base.html:205
+#: templates/blog/public_blog_base.html:297
+#: templates/calendar/calendar_show.html:108
+#: templates/calendar/calendar_show.html:165
+#: templates/calendar/calendar_show.html:197 templates/cases/case_new.html:269
+#: templates/cases/case_new.html:293 templates/contacts/contact_new.html:442
+#: templates/contacts/contact_new.html:466 templates/leads/lead_new.html:450
+#: templates/leads/lead_new.html:474
+#: templates/live/company_profile/comp_profile_show.html:177
+#: templates/live/company_profile/comp_profile_show.html:206
+#: templates/live/company_profile/comp_profile_show.html:234
+#: templates/live/company_profile/comp_profile_show.html:263
+#: templates/needs/show.html:573
+#: templates/opportunities/opportunity_new.html:413
+#: templates/opportunities/opportunity_new.html:445
+msgid "Save"
+msgstr "Sauvegarder"
+
+#: templates/base.html:247 templates/blog/blog_base.html:217
+#: templates/blog/public_blog_base.html:217
+msgid "Capture leads from your Social networks"
+msgstr "Insertion des pistes à partir des réseaux sociaux"
+
+#: templates/base.html:255
+msgid ""
+"If you are looking to build a potential network of contacts,\n"
+"             it's not just a matter of adding them manually,\n"
+"             you can do better! Use the free Google Chrome extension that"
+" allows you to add people right from Linkedin, Twitter and Gmail in one "
+"click.\n"
+"             Keep the experience you know and connect with the people you"
+" need"
+msgstr ""
+
+#: templates/base.html:272 templates/blog/blog_base.html:242
+#: templates/blog/public_blog_base.html:242
+msgid "Install Chrome Extension"
+msgstr "Installer Chrome Extension"
+
+#: templates/base.html:283 templates/blog/blog_base.html:253
+#: templates/blog/public_blog_base.html:253
+msgid "Error"
+msgstr "Erreur"
+
+#: templates/base.html:286
+msgid "Oops !...An error has occured. Please try again"
+msgstr "Oops! ... Une erreur s'est produite. S'il vous plaît essayer à nouveau"
+
+#: templates/ng-index.html:42 templates/opportunit_new.html:30
+#: templates/products/validated_learning/list.html:91
 msgid "Accounts"
 msgstr "Comptes"
+
+#: templates/ng-index.html:47 templates/ng-index.html:53
+#: templates/products/features/list.html:43
+#: templates/products/roadmaps/list.html:42
+#: templates/products/validated_learning/list.html:43
+#: templates/products/validated_learning/list.html:96
+#: templates/search/list.html:48
 msgid "New Account"
 msgstr "Nouveau Compte"
-msgid "Filter by"
-msgstr "Filtrer par"
-msgid "Sort by"
-msgstr "Tri par "
-msgid "Quick Filtering"
-msgstr "Filtrage Rapide"
-msgid "Labels"
-msgstr "Etiquettes"
-msgid "Add a new Label"
-msgstr "Ajouter une nouvelle étiquette"
+
+#: templates/ng-index.html:62 templates/admin/settings/settings.html:219
+#: templates/admin/settings/settings.html:257
+#: templates/calendar/calendar_show.html:649
+#: templates/calendar/calendar_show.html:708
+#: templates/campaigns/campaign_list.html:51 templates/cases/case_list.html:31
+#: templates/live/company_profile/comp_profile_show.html:166
+#: templates/live/customer_stories/customer_stories_list.html:137
+#: templates/live/product_videos/product_videos_list.html:137
+#: templates/live/shows/list_show.html:155 templates/needs/show.html:521
+#: templates/opportunities/list.html:62 templates/opportunities/list.html:283
+#: templates/opportunities/opportunity_list.html:46
+#: templates/opportunities/opportunity_list.html:273
+#: templates/products/list.html:51 templates/products/features/list.html:52
+#: templates/products/roadmaps/list.html:51
+#: templates/products/validated_learning/list.html:52
+#: templates/search/list.html:57
 msgid "Name"
 msgstr "Nom"
+
+#: templates/ng-index.html:70 templates/calendar/calendar_show.html:217
+#: templates/contacts/contact_new.html:119 templates/leads/lead_new.html:146
+#: templates/live/company_profile/comp_profile_show.html:280
+#: templates/live/feedbacks/feedbacks_list.html:64
+#: templates/live/feedbacks/feedbacks_list.html:195
+#: templates/products/features/list.html:60
+#: templates/products/roadmaps/list.html:59
+#: templates/products/validated_learning/list.html:60
+#: templates/search/list.html:65
 msgid "Type"
 msgstr "Type"
+
+#: templates/ng-index.html:78 templates/leads/lead_new.html:107
+#: templates/products/features/list.html:68
+#: templates/products/roadmaps/list.html:67
+#: templates/products/validated_learning/list.html:68
+#: templates/search/list.html:73
 msgid "Industry"
 msgstr "Industrie"
+
+#: templates/ng-index.html:89 templates/activities/all_tasks.html:682
+#: templates/activities/all_tasks.html:710
+#: templates/activities/all_tasks.html:741
+#: templates/activities/all_tasks.html:855 templates/admin/groups/list.html:108
+#: templates/admin/groups/show.html:78
+#: templates/admin/settings/settings.html:238
+#: templates/admin/settings/settings.html:277
+#: templates/admin/settings/settings.html:309
+#: templates/admin/settings/settings.html:341
+#: templates/admin/settings/settings.html:375
+#: templates/admin/settings/settings.html:409
+#: templates/admin/users/list.html:141 templates/articles/article_new.html:167
+#: templates/articles/article_show.html:169
+#: templates/blog/public_article_show.html:170
+#: templates/blog/public_support.html:114
+#: templates/calendar/calendar_show.html:130
+#: templates/calendar/calendar_show.html:239
+#: templates/calendar/calendar_show.html:270
+#: templates/calendar/calendar_show.html:323
+#: templates/calendar/calendar_show.html:356
+#: templates/calendar/calendar_show.html:385
+#: templates/calendar/calendar_show.html:415
+#: templates/calendar/calendar_show.html:464
+#: templates/calendar/calendar_show.html:522
+#: templates/calendar/calendar_show.html:543
+#: templates/calendar/calendar_show.html:567
+#: templates/calendar/calendar_show.html:597
+#: templates/calendar/calendar_show.html:624
+#: templates/calendar/calendar_show.html:683
+#: templates/calendar/calendar_show.html:761
+#: templates/calendar/calendar_show.html:799
+#: templates/calendar/calendar_show.html:831
+#: templates/calendar/calendar_show.html:857
+#: templates/campaigns/campaign_list.html:71 templates/cases/case_list.html:410
+#: templates/cases/case_new.html:244 templates/contacts/contact_new.html:417
+#: templates/contacts/list.html:93 templates/leads/lead_list.html:331
+#: templates/leads/lead_new.html:425
+#: templates/live/company_profile/comp_profile_show.html:295
+#: templates/live/company_profile/comp_profile_show.html:322
+#: templates/live/company_profile/comp_profile_show.html:372
+#: templates/live/company_profile/comp_profile_show.html:399
+#: templates/live/company_profile/comp_profile_show.html:426
+#: templates/live/feedbacks/feedbacks_list.html:122
+#: templates/needs/show.html:126 templates/needs/show.html:153
+#: templates/opportunities/list.html:221
+#: templates/opportunities/opportunity_list.html:437
+#: templates/opportunities/opportunity_new.html:377
+#: templates/products/list.html:63 templates/products/features/list.html:79
+#: templates/products/roadmaps/list.html:78
+#: templates/products/validated_learning/list.html:79
+#: templates/search/list.html:84
+msgid "Cancel"
+msgstr "Annuler"
+
+#: templates/ng-index.html:90 templates/products/features/list.html:80
+#: templates/products/roadmaps/list.html:79
+#: templates/products/validated_learning/list.html:80
+#: templates/search/list.html:85
+msgid "Add Account"
+msgstr "Ajouter un Compte"
+
+#: templates/ng-index.html:126 templates/activities/all_tasks.html:656
+#: templates/activities/all_tasks.html:824 templates/admin/groups/show.html:140
+#: templates/campaigns/campaign_list.html:125 templates/contacts/list.html:237
+#: templates/live/customer_stories/customer_stories_list.html:185
+#: templates/live/feedbacks/feedbacks_list.html:249
+#: templates/live/product_videos/product_videos_list.html:186
+#: templates/live/shows/list_show.html:205 templates/needs/show.html:256
+#: templates/opportunities/list.html:373 templates/products/list.html:117
+#: templates/products/features/list.html:135
+#: templates/products/roadmaps/list.html:134
+#: templates/products/validated_learning/list.html:133
+#: templates/search/list.html:144
+msgid "Prev"
+msgstr "Précédent"
+
+#: templates/ng-index.html:128 templates/activities/all_tasks.html:660
+#: templates/activities/all_tasks.html:828 templates/admin/groups/show.html:144
+#: templates/campaigns/campaign_list.html:129 templates/contacts/list.html:241
+#: templates/live/customer_stories/customer_stories_list.html:189
+#: templates/live/feedbacks/feedbacks_list.html:253
+#: templates/live/product_videos/product_videos_list.html:190
+#: templates/live/shows/list_show.html:209 templates/needs/show.html:260
+#: templates/opportunities/list.html:377 templates/products/list.html:121
+#: templates/products/features/list.html:139
+#: templates/products/roadmaps/list.html:138
+#: templates/products/validated_learning/list.html:137
+#: templates/search/list.html:148
+msgid "Next"
+msgstr "Suivant"
+
+#: templates/opportunit_new.html:86
+msgid "Type here the company name of your customer,parnter..."
+msgstr ""
+
+#: templates/opportunit_new.html:155 templates/articles/article_new.html:130
+#: templates/calendar/calendar_show.html:287 templates/cases/case_new.html:207
+#: templates/contacts/contact_new.html:380 templates/leads/lead_new.html:388
+#: templates/live/company_profile/comp_profile_show.html:335
+#: templates/opportunities/opportunity_new.html:340
+msgid "Add Address"
+msgstr "Ajouter une Adresse"
+
+#: templates/opportunit_new.html:161 templates/articles/article_new.html:136
+#: templates/calendar/calendar_show.html:292 templates/cases/case_new.html:212
+#: templates/contacts/contact_new.html:385 templates/leads/lead_new.html:393
+#: templates/live/company_profile/comp_profile_show.html:341
+#: templates/opportunities/opportunity_new.html:346
+msgid "Street"
+msgstr "Rue"
+
+#: templates/opportunit_new.html:167 templates/articles/article_new.html:142
+#: templates/calendar/calendar_show.html:298 templates/cases/case_new.html:218
+#: templates/contacts/contact_new.html:391 templates/leads/lead_new.html:399
+#: templates/live/company_profile/comp_profile_show.html:347
+#: templates/opportunities/opportunity_new.html:352
+msgid "City"
+msgstr "Ville"
+
+#: templates/opportunit_new.html:173 templates/articles/article_new.html:148
+#: templates/calendar/calendar_show.html:304 templates/cases/case_new.html:224
+#: templates/contacts/contact_new.html:397 templates/leads/lead_new.html:405
+#: templates/live/company_profile/comp_profile_show.html:353
+#: templates/opportunities/opportunity_new.html:358
+msgid "State/Province"
+msgstr "Etat/Province"
+
+#: templates/opportunit_new.html:179 templates/articles/article_new.html:154
+#: templates/calendar/calendar_show.html:310 templates/cases/case_new.html:230
+#: templates/contacts/contact_new.html:403 templates/leads/lead_new.html:411
+#: templates/live/company_profile/comp_profile_show.html:359
+#: templates/opportunities/opportunity_new.html:364
+msgid "Postal Code"
+msgstr "Code Postal"
+
+#: templates/opportunit_new.html:185 templates/articles/article_new.html:160
+#: templates/calendar/calendar_show.html:316 templates/cases/case_new.html:236
+#: templates/contacts/contact_new.html:409 templates/leads/lead_new.html:417
+#: templates/live/company_profile/comp_profile_show.html:365
+#: templates/opportunities/opportunity_new.html:370
+msgid "Country"
+msgstr "Pays"
+
+#: templates/opportunit_new.html:209 templates/opportunit_new.html:242
+#: templates/articles/article_new.html:184
+#: templates/articles/article_new.html:217 templates/cases/case_new.html:255
+#: templates/cases/case_new.html:279 templates/contacts/contact_new.html:428
+#: templates/contacts/contact_new.html:452 templates/leads/lead_new.html:436
+#: templates/leads/lead_new.html:460
+#: templates/opportunities/opportunity_new.html:394
+#: templates/opportunities/opportunity_new.html:427
+msgid "Edit Lead"
+msgstr "Modifier"
+
+#: templates/opportunit_new.html:217 templates/articles/article_new.html:192
+#: templates/calendar/calendar_show.html:154 templates/cases/case_new.html:260
+#: templates/contacts/contact_new.html:284
+#: templates/contacts/contact_new.html:433 templates/leads/lead_new.html:294
+#: templates/leads/lead_new.html:441
+#: templates/live/company_profile/comp_profile_show.html:223
+#: templates/opportunities/opportunity_new.html:402
+msgid "Tagline"
+msgstr "Description"
+
+#: templates/opportunit_new.html:249 templates/articles/article_new.html:224
+#: templates/calendar/calendar_show.html:186 templates/cases/case_new.html:284
+#: templates/contacts/contact_new.html:300
+#: templates/contacts/contact_new.html:457 templates/leads/lead_new.html:310
+#: templates/leads/lead_new.html:465
+#: templates/live/company_profile/comp_profile_show.html:252
+#: templates/opportunities/opportunity_new.html:434
+msgid "Introduction"
+msgstr "Introduction"
+
+#: templates/sign-up-early-bird.html:1091 templates/sign-up.html:1091
+msgid "Hi"
+msgstr "Salut"
+
+#: templates/activities/all_tasks.html:24
+msgid "Tasks"
+msgstr "Tâches"
+
+#: templates/activities/all_tasks.html:70
+msgid "Add new task ..."
+msgstr "Ajouter une nouvelle tâche .."
+
+#: templates/activities/all_tasks.html:79
+#: templates/activities/all_tasks.html:82
+msgid "Due date"
+msgstr "Échéance"
+
+#: templates/activities/all_tasks.html:91
+#: templates/activities/all_tasks.html:94
+msgid "Use"
+msgstr "Utilisez"
+
+#: templates/activities/all_tasks.html:91
+msgid "to add labels"
+msgstr "pour ajouter des étiquettes"
+
+#: templates/activities/all_tasks.html:94
+msgid "to assign the task"
+msgstr "pour assigner la tâche"
+
+#: templates/activities/all_tasks.html:102
+#: templates/articles/article_search.html:249 templates/cases/case_new.html:134
+#: templates/contacts/contact_new.html:140
+#: templates/contacts/contact_new.html:174
+#: templates/contacts/contact_new.html:228
+#: templates/contacts/contact_new.html:255
+#: templates/contacts/contact_new.html:322 templates/leads/lead_new.html:154
+#: templates/leads/lead_new.html:188 templates/leads/lead_new.html:239
+#: templates/leads/lead_new.html:266 templates/leads/lead_new.html:332
+#: templates/opportunities/opportunity_new.html:255
+msgid "Add"
+msgstr "Ajouter"
+
+#: templates/activities/all_tasks.html:109
+msgid "All Tasks"
+msgstr "Toutes les Tâches"
+
+#: templates/activities/all_tasks.html:110
+msgid "Urgent Tasks"
+msgstr "Tâches urgentes"
+
+#: templates/activities/all_tasks.html:111
+#: templates/activities/all_tasks.html:118
+msgid "Created by Me"
+msgstr "Créé par moi"
+
+#: templates/activities/all_tasks.html:112
+#: templates/activities/all_tasks.html:119
+msgid "Assigned to Me"
+msgstr "Assigné à moi"
+
+#: templates/activities/all_tasks.html:137
+#: templates/activities/all_tasks.html:237
+#: templates/activities/all_tasks.html:322
+#: templates/activities/all_tasks.html:407
+#: templates/activities/all_tasks.html:492
+msgid "No results found"
+msgstr "Aucun résultat trouvé"
+
+#: templates/activities/all_tasks.html:159
+#: templates/activities/all_tasks.html:259
+#: templates/activities/all_tasks.html:344
+#: templates/activities/all_tasks.html:429
+#: templates/activities/all_tasks.html:514
+msgid "Reopen"
+msgstr "Rouvrir"
+
+#: templates/activities/all_tasks.html:165
+#: templates/activities/all_tasks.html:265
+#: templates/activities/all_tasks.html:350
+#: templates/activities/all_tasks.html:435
+#: templates/activities/all_tasks.html:520
+#: templates/activities/all_tasks.html:581
+#: templates/activities/all_tasks.html:760
+msgid "Tags"
+msgstr "Tags"
+
+#: templates/activities/all_tasks.html:171
+#: templates/activities/all_tasks.html:271
+#: templates/activities/all_tasks.html:356
+#: templates/activities/all_tasks.html:441
+#: templates/activities/all_tasks.html:526
+msgid "Assignee"
+msgstr "Assignee"
+
+#: templates/activities/all_tasks.html:177
+#: templates/admin/settings/settings.html:105
+#: templates/admin/settings/settings.html:140
+#: templates/admin/settings/settings.html:177
+#: templates/articles/article_show.html:52 templates/needs/show.html:185
+msgid "Delete"
+msgstr "Supprimer"
+
+#: templates/activities/all_tasks.html:214
+#: templates/activities/all_tasks.html:306
+msgid "Opened by:"
+msgstr "Ouverte par:"
+
+#: templates/activities/all_tasks.html:215
+#: templates/activities/all_tasks.html:306
+#: templates/activities/all_tasks.html:391
+#: templates/activities/all_tasks.html:476
+#: templates/activities/all_tasks.html:561
+msgid "related to"
+msgstr "Lié à"
+
+#: templates/activities/all_tasks.html:616
+#: templates/activities/all_tasks.html:784
+msgid "Add a new tag"
+msgstr "Ajouter un nouveau tag"
+
+#: templates/activities/all_tasks.html:625
+#: templates/activities/all_tasks.html:793
+msgid "New tag name"
+msgstr "Nouveau nom du tag"
+
+#: templates/activities/all_tasks.html:639
+#: templates/activities/all_tasks.html:744
+#: templates/activities/all_tasks.html:807 templates/admin/groups/list.html:29
+#: templates/admin/groups/show.html:149
+#: templates/admin/settings/settings.html:32 templates/admin/users/list.html:29
+#: templates/articles/article_list.html:25
+#: templates/articles/article_new.html:42
+#: templates/articles/article_search.html:25
+#: templates/articles/article_show.html:26
+#: templates/calendar/calendar_show.html:36
+#: templates/calendar/calendar_show.html:243
+#: templates/calendar/calendar_show.html:326
+#: templates/calendar/calendar_show.html:359
+#: templates/calendar/calendar_show.html:388
+#: templates/calendar/calendar_show.html:418
+#: templates/calendar/calendar_show.html:627
+#: templates/calendar/calendar_show.html:802
+#: templates/calendar/calendar_show.html:834
+#: templates/calendar/calendar_show.html:860
+#: templates/campaigns/campaign_list.html:133 templates/cases/case_list.html:53
+#: templates/cases/case_new.html:25 templates/contacts/contact_new.html:33
+#: templates/contacts/list.html:303 templates/leads/lead_list.html:55
+#: templates/leads/lead_new.html:23
+#: templates/live/company_profile/comp_profile_show.html:298
+#: templates/live/company_profile/comp_profile_show.html:375
+#: templates/live/company_profile/comp_profile_show.html:402
+#: templates/live/company_profile/comp_profile_show.html:429
+#: templates/live/feedbacks/feedbacks_list.html:125
+#: templates/opportunities/list.html:439
+#: templates/opportunities/opportunity_list.html:65
+#: templates/opportunities/opportunity_new.html:34
+#: templates/search/list.html:18
+msgid "Loading..."
+msgstr "Chargement en cours ..."
+
+#: templates/activities/all_tasks.html:644
+#: templates/activities/all_tasks.html:812
+#: templates/articles/article_list.html:206
+#: templates/articles/article_list.html:296
+#: templates/articles/article_search.html:187
+#: templates/articles/article_search.html:254
+#: templates/cases/case_list.html:234 templates/cases/case_list.html:299
+#: templates/leads/lead_list.html:241 templates/leads/lead_list.html:310
+#: templates/opportunities/opportunity_list.html:248
+msgid "Manage Tags"
+msgstr "Gérer tags"
+
+#: templates/activities/all_tasks.html:664
+#: templates/activities/all_tasks.html:832
+msgid "Loading"
+msgstr "Chargement"
+
+#: templates/activities/all_tasks.html:675
+msgid "Close Task"
+msgstr "Terminer la tache"
+
+#: templates/activities/all_tasks.html:679
+msgid "Are you sure you want to close selected tasks"
+msgstr ""
+
+#: templates/activities/all_tasks.html:696
+msgid "Add Tags"
+msgstr "Ajouter des Tags"
+
+#: templates/activities/all_tasks.html:725
+msgid "Assign someone to this task"
+msgstr ""
+
+#: templates/activities/all_tasks.html:730
+#: templates/calendar/calendar_show.html:516
+msgid "Enter name or email addresse to add people to this group"
+msgstr ""
+
+#: templates/activities/all_tasks.html:743
+msgid "Add this account"
+msgstr "Ajouter ce compte"
+
+#: templates/activities/all_tasks.html:845
+msgid "Delete Task"
+msgstr "Supprimer la tâche"
+
+#: templates/activities/all_tasks.html:851
+msgid "Are you sure you want to delete those tasks"
+msgstr ""
+
+#: templates/activities/all_tasks.html:872 templates/admin/groups/list.html:121
+#: templates/admin/users/list.html:153 templates/articles/article_list.html:307
+#: templates/articles/article_search.html:265
+#: templates/cases/case_list.html:423 templates/leads/lead_list.html:342
+#: templates/opportunities/opportunity_list.html:450
+msgid "Click to Select a label"
+msgstr "Cliquez pour sélectionner une étiquette"
+
+#: templates/admin/groups/list.html:22 templates/admin/groups/show.html:95
+msgid "Groups"
+msgstr "Groupes"
+
+#: templates/admin/groups/list.html:45 templates/admin/groups/list.html:88
+msgid "New Group"
+msgstr "Nouveau Groupe"
+
+#: templates/admin/groups/list.html:97 templates/admin/groups/list.html:99
+msgid "Group Name"
+msgstr "Nom du groupe"
+
+#: templates/admin/groups/list.html:109
+msgid "Add this group"
+msgstr "Ajouter ce groupe"
+
+#: templates/admin/groups/show.html:23
+#: templates/campaigns/campaign_list.html:23 templates/search/list.html:29
+msgid "portlet Settings"
+msgstr "Paramètres de portlet"
+
+#: templates/admin/groups/show.html:26
+#: templates/campaigns/campaign_list.html:26 templates/search/list.html:32
+msgid "Here will be a configuration form"
+msgstr ""
+
+#: templates/admin/groups/show.html:46
+msgid "Add a new member"
+msgstr "Ajouter un nouveau membre"
+
+#: templates/admin/groups/show.html:64
+msgid "Add member as:"
+msgstr "Ajouter un membre en tant que:"
+
+#: templates/admin/groups/show.html:66
+msgid "Member"
+msgstr "Membre"
+
+#: templates/admin/groups/show.html:67
+msgid "Owner"
+msgstr "Propriétaire"
+
+#: templates/admin/groups/show.html:79
+msgid "Add this member"
+msgstr "Ajouter ce membre"
+
+#: templates/admin/groups/show.html:104
+msgid "New Member"
+msgstr "Nouveau Membre"
+
+#: templates/admin/settings/settings.html:23
+msgid "Settings"
+msgstr "Paramètres"
+
+#: templates/admin/settings/settings.html:60
+msgid "Opportunity Stages"
+msgstr "Étapes d'opportunité"
+
+#: templates/admin/settings/settings.html:63
+#: templates/admin/settings/settings.html:297
+#: templates/admin/settings/settings.html:329
+msgid "Case Status"
+msgstr ""
+
+#: templates/admin/settings/settings.html:66
+#: templates/admin/settings/settings.html:362
+#: templates/admin/settings/settings.html:397
+msgid "Lead Status"
+msgstr "Statut de piste"
+
+#: templates/admin/settings/settings.html:84
+msgid "Add a new stage"
+msgstr "Ajouter une nouvelle étape"
+
+#: templates/admin/settings/settings.html:105
+#: templates/admin/settings/settings.html:140
+#: templates/admin/settings/settings.html:177
+#: templates/articles/article_show.html:47
+#: templates/contacts/contact_new.html:280
+#: templates/contacts/contact_new.html:296 templates/leads/lead_new.html:290
+#: templates/leads/lead_new.html:306 templates/live/live_company_page.html:199
+#: templates/live/live_company_page.html:209
+#: templates/live/company_profile/comp_profile_show.html:46
+#: templates/live/company_profile/comp_profile_show.html:118
+#: templates/live/company_profile/comp_profile_show.html:130
+#: templates/live/company_profile/comp_profile_show.html:137
+#: templates/needs/show.html:185
+msgid "Edit"
+msgstr "Modifier"
+
+#: templates/admin/settings/settings.html:125
+msgid "Add a Case status"
+msgstr ""
+
+#: templates/admin/settings/settings.html:162
+msgid "Add a Lead status"
+msgstr ""
+
+#: templates/admin/settings/settings.html:213
+msgid "New Opportunity Stage"
+msgstr ""
+
+#: templates/admin/settings/settings.html:227
+#: templates/admin/settings/settings.html:265
+msgid "Probability"
+msgstr "Probabilité"
+
+#: templates/admin/settings/settings.html:239
+msgid "Add a new Opportunity stage"
+msgstr "Ajouter une nouvelle étape de l'opportunité"
+
+#: templates/admin/settings/settings.html:251
+msgid "Edit Opportunity Stage"
+msgstr ""
+
+#: templates/admin/settings/settings.html:278
+msgid "save"
+msgstr "Sauvegarder"
+
+#: templates/admin/settings/settings.html:291
+msgid "New Case Status"
+msgstr ""
+
+#: templates/admin/settings/settings.html:310
+msgid "Add Case Status"
+msgstr ""
+
+#: templates/admin/settings/settings.html:323
+msgid "Edit Case Status"
+msgstr ""
+
+#: templates/admin/settings/settings.html:356
+msgid "New Lead status"
+msgstr ""
+
+#: templates/admin/settings/settings.html:376
+msgid "Add Lead Status"
+msgstr ""
+
+#: templates/admin/settings/settings.html:391
+msgid "Edit Lead status"
+msgstr ""
+
+#: templates/admin/users/list.html:22
+msgid "Users"
+msgstr "Utilisateurs"
+
+#: templates/admin/users/list.html:45 templates/admin/users/list.html:120
+msgid "New User"
+msgstr "Nouvel utilisateur"
+
+#: templates/admin/users/list.html:99
+msgid "invited by"
+msgstr "invité par"
+
+#: templates/admin/users/list.html:126
+msgid ""
+"Invite people from your team and start working together in seconds. "
+"Everyone you invite will receive a welcome email."
+msgstr ""
+
+#: templates/admin/users/list.html:129
+#: templates/calendar/calendar_show.html:263
+#: templates/calendar/calendar_show.html:265
+#: templates/contacts/contact_new.html:164
+#: templates/contacts/contact_new.html:171 templates/leads/lead_new.html:178
+#: templates/leads/lead_new.html:185
+#: templates/live/company_profile/comp_profile_show.html:315
+#: templates/live/company_profile/comp_profile_show.html:317
+msgid "Email"
+msgstr ""
+
+#: templates/admin/users/list.html:142
+msgid "Add this user"
+msgstr "Ajouter cet utilisateur"
+
+#: templates/articles/article_list.html:5 templates/articles/article_new.html:5
+#: templates/articles/article_search.html:5
+#: templates/articles/article_show.html:4
+#: templates/blog/public_article_show.html:6
+msgid "ioGrow Blog"
+msgstr ""
+
+#: templates/articles/article_list.html:77
+#: templates/articles/article_search.html:77
+msgid "posted by"
+msgstr "posté par"
+
+#: templates/articles/article_list.html:110
+#: templates/articles/article_search.html:110
+#: templates/leads/lead_list.html:168
+msgid ""
+"You have leads coming in from a wide variety of sources. Some leads come "
+"from lists you acquired, others from business cards and still more from "
+"the \"contact us\" form on your website. i/oGrow help you organize "
+"informations about leads so they can be followed up on and qualified "
+"quickly."
+msgstr ""
+
+#: templates/articles/article_list.html:122
+#: templates/articles/article_search.html:122
+#: templates/cases/case_list.html:171 templates/leads/lead_list.html:180
+#: templates/opportunities/opportunity_list.html:187
+msgid "No results found, try with another filter"
+msgstr "Aucun résultat trouvé, essayez avec un autre filtre"
+
+#: templates/articles/article_list.html:140
+#: templates/articles/article_list.html:226
+msgid "Share:"
+msgstr "Partager:"
+
+#: templates/articles/article_list.html:159
+#: templates/articles/article_list.html:246
+#: templates/articles/article_search.html:140
+#: templates/articles/article_search.html:205
+#: templates/calendar/calendar_show.html:656
+#: templates/calendar/calendar_show.html:748 templates/cases/case_list.html:188
+#: templates/cases/case_list.html:252 templates/cases/case_list.html:378
+#: templates/leads/lead_list.html:198 templates/leads/lead_list.html:259
+#: templates/opportunities/list.html:79
+#: templates/opportunities/opportunity_list.html:203
+#: templates/opportunities/opportunity_list.html:290
+msgid "Labels"
+msgstr "étiquettes"
+
+#: templates/articles/article_list.html:179
+#: templates/articles/article_list.html:269
+#: templates/articles/article_search.html:160
+#: templates/articles/article_search.html:228
+#: templates/cases/case_list.html:210 templates/cases/case_list.html:275
+#: templates/leads/lead_list.html:217 templates/leads/lead_list.html:286
+#: templates/opportunities/opportunity_list.html:224
+msgid "Add a new label"
+msgstr "Ajouter un nouveau label"
+
+#: templates/articles/article_new.html:32
+#: templates/articles/article_show.html:18
+#: templates/blog/public_article_show.html:17
+msgid "Articles"
+msgstr ""
+
+#: templates/articles/article_new.html:33
+#: templates/articles/article_new.html:64 templates/cases/case_new.html:17
+#: templates/cases/case_new.html:42 templates/contacts/contact_new.html:50
+#: templates/leads/lead_new.html:15 templates/leads/lead_new.html:40
+#: templates/opportunities/opportunity_new.html:26
+#: templates/opportunities/opportunity_new.html:56
+msgid "Create"
+msgstr "Créer"
+
+#: templates/articles/article_new.html:63
+msgid "Crete a new article"
+msgstr "Créer un nouvel article"
+
+#: templates/articles/article_new.html:79
+#: templates/contacts/contact_new.html:92 templates/contacts/list.html:57
+#: templates/contacts/list.html:149 templates/leads/lead_list.html:35
+#: templates/leads/lead_new.html:83
+#: templates/live/feedbacks/feedbacks_list.html:48
+#: templates/live/feedbacks/feedbacks_list.html:192
+msgid "Title"
+msgstr "Titre"
+
+#: templates/articles/article_new.html:81
+msgid "Type here the title of your post..."
+msgstr "Titre"
+
+#: templates/articles/article_new.html:93
+msgid "Intro Card"
+msgstr "Introduction cate"
+
+#: templates/articles/article_new.html:99
+msgid "Full article card"
+msgstr "Article complet"
+
+#: templates/articles/article_new.html:101
+msgid "Enter text ..."
+msgstr "Entrer un texte"
+
+#: templates/articles/article_new.html:169
+#: templates/calendar/calendar_show.html:325
+#: templates/live/company_profile/comp_profile_show.html:374
+msgid "Add this address"
+msgstr "Ajouter cette adresse"
+
+#: templates/articles/article_search.html:170
+#: templates/articles/article_search.html:238
+#: templates/cases/case_list.html:218 templates/cases/case_list.html:283
+#: templates/leads/lead_list.html:225 templates/leads/lead_list.html:294
+#: templates/opportunities/opportunity_list.html:232
+msgid "New label"
+msgstr "Nouvelle étiquette"
+
+#: templates/articles/article_show.html:11
+#: templates/calendar/calendar_show.html:21
+#: templates/calendar/calendar_show.html:523
+#: templates/live/company_profile/comp_profile_show.html:35
+#: templates/needs/show.html:127
+msgid "Share"
+msgstr "Partager"
+
+#: templates/articles/article_show.html:58
+msgid "Posted by"
+msgstr "Posté par"
+
+#: templates/articles/article_show.html:107
+msgid "Community"
+msgstr "Communité"
+
+#: templates/articles/article_show.html:114
+msgid "TODO: put here social media connections"
+msgstr "TODO:mettre ici des liens de médias sociaux"
+
+#: templates/articles/article_show.html:137
+#: templates/blog/public_article_show.html:138
+#: templates/blog/public_support.html:82
+msgid "Involve new contributors"
+msgstr "Impliquer de nouveaux contributeurs"
+
+#: templates/articles/article_show.html:143
+#: templates/blog/public_article_show.html:144
+#: templates/blog/public_support.html:88
+msgid ""
+"Invite people from your team and start working together on this task. "
+"Everyone you invite will receive an email."
+msgstr "Tout le monde vous invitez receveront un e-mail"
+
+#: templates/articles/article_show.html:151
+#: templates/blog/public_article_show.html:152
+#: templates/blog/public_support.html:96
+msgid "Enter name or email addresse to involve people in this discussion"
+msgstr "Entrez le nom ou l'adresse de courriel pour associer les utilisateurs à cette discussion"
+
+#: templates/articles/article_show.html:154
+#: templates/blog/public_article_show.html:155
+#: templates/blog/public_support.html:99
+msgid "Add as:"
+msgstr "Ajouter tanque:"
+
+#: templates/articles/article_show.html:157
+#: templates/blog/public_article_show.html:158
+#: templates/blog/public_support.html:102
+msgid "Responsible"
+msgstr "Responsable"
+
+#: templates/articles/article_show.html:158
+#: templates/blog/public_article_show.html:159
+#: templates/blog/public_support.html:103
+msgid "Participant"
+msgstr "Participant"
+
+#: templates/articles/article_show.html:159
+#: templates/blog/public_article_show.html:160
+#: templates/blog/public_support.html:104
+msgid "Invited"
+msgstr "Invité"
+
+#: templates/articles/article_show.html:170
+#: templates/blog/public_article_show.html:171
+#: templates/blog/public_support.html:115
+msgid "Involve"
+msgstr "Impliquer"
+
+#: templates/blog/public_support.html:6
+msgid "ioGrow Support"
+msgstr "Support ioGrow"
+
+#: templates/calendar/calendar_show.html:61
+#: templates/calendar/calendar_show.html:146
+msgid "Edit Contact"
+msgstr "Modifier le contact"
+
+#: templates/calendar/calendar_show.html:69
+#: templates/calendar/calendar_show.html:440
+#: templates/contacts/contact_new.html:76 templates/contacts/list.html:41
+#: templates/contacts/list.html:147 templates/leads/lead_list.html:33
+#: templates/leads/lead_new.html:65
+msgid "First Name"
+msgstr "Prénom"
+
+#: templates/calendar/calendar_show.html:77
+#: templates/calendar/calendar_show.html:448
+#: templates/contacts/contact_new.html:83 templates/contacts/list.html:49
+#: templates/contacts/list.html:148 templates/leads/lead_list.html:34
+#: templates/leads/lead_new.html:73
+msgid "Last Name"
+msgstr "Nom"
+
+#: templates/calendar/calendar_show.html:85
+#: templates/calendar/calendar_show.html:455
+msgid "Tittle"
+msgstr "Titre"
+
+#: templates/calendar/calendar_show.html:93 templates/cases/case_list.html:35
+#: templates/contacts/contact_new.html:99 templates/contacts/list.html:150
+#: templates/leads/lead_list.html:36 templates/leads/lead_new.html:91
+#: templates/opportunities/list.html:285
+msgid "Company"
+msgstr "Companie"
+
+#: templates/calendar/calendar_show.html:120
+msgid "Delete Contact"
+msgstr "Supprimer le contact"
+
+#: templates/calendar/calendar_show.html:126
+#: templates/calendar/calendar_show.html:540
+#: templates/calendar/calendar_show.html:564 templates/leads/lead_list.html:328
+#: templates/needs/show.html:145
+msgid "Are you sure you want to delete"
+msgstr "Etes-vous sûr que vous voulez supprimer"
+
+#: templates/calendar/calendar_show.html:178
+msgid "Edit Account"
+msgstr "Modifier le compte"
+
+#: templates/calendar/calendar_show.html:212
+#: templates/live/company_profile/comp_profile_show.html:274
+msgid "Add Phone"
+msgstr "Ajouter un téléphone"
+
+#: templates/calendar/calendar_show.html:219
+#: templates/calendar/calendar_show.html:221
+#: templates/contacts/contact_new.html:121 templates/leads/lead_new.html:148
+#: templates/live/company_profile/comp_profile_show.html:282
+msgid "home"
+msgstr "Domicile"
+
+#: templates/calendar/calendar_show.html:219
+#: templates/calendar/calendar_show.html:222
+#: templates/contacts/contact_new.html:122 templates/leads/lead_new.html:149
+#: templates/live/company_profile/comp_profile_show.html:282
+msgid "work"
+msgstr "Travail"
+
+#: templates/calendar/calendar_show.html:219
+#: templates/calendar/calendar_show.html:223
+#: templates/contacts/contact_new.html:123 templates/leads/lead_new.html:150
+#: templates/live/company_profile/comp_profile_show.html:282
+msgid "mobile"
+msgstr "mobile"
+
+#: templates/calendar/calendar_show.html:219
+#: templates/calendar/calendar_show.html:224
+#: templates/contacts/contact_new.html:124 templates/leads/lead_new.html:151
+#: templates/live/company_profile/comp_profile_show.html:282
+msgid "other"
+msgstr "autre"
+
+#: templates/calendar/calendar_show.html:230
+#: templates/contacts/contact_new.html:128 templates/leads/lead_new.html:142
+#: templates/live/company_profile/comp_profile_show.html:286
+msgid "Number"
+msgstr "Numéro"
+
+#: templates/calendar/calendar_show.html:241
+#: templates/live/company_profile/comp_profile_show.html:297
+msgid "Add this phone"
+msgstr "Ajouter ce téléphone"
+
+#: templates/calendar/calendar_show.html:258
+#: templates/live/company_profile/comp_profile_show.html:309
+msgid "Add Email"
+msgstr "Ajouter un email"
+
+#: templates/calendar/calendar_show.html:339
+#: templates/calendar/calendar_show.html:373
+#: templates/live/company_profile/comp_profile_show.html:386
+msgid "Add Website"
+msgstr "Ajouter un site web"
+
+#: templates/calendar/calendar_show.html:344
+msgid "Custom Field"
+msgstr "Champ personnalisé"
+
+#: templates/calendar/calendar_show.html:347 templates/cases/case_new.html:127
+#: templates/contacts/contact_new.html:315 templates/leads/lead_new.html:325
+#: templates/opportunities/opportunity_new.html:248
+msgid "Field"
+msgstr "Champ"
+
+#: templates/calendar/calendar_show.html:350 templates/cases/case_new.html:131
+#: templates/contacts/contact_new.html:319 templates/leads/lead_new.html:329
+#: templates/opportunities/opportunity_new.html:252
+msgid "Value"
+msgstr "Valeur"
+
+#: templates/calendar/calendar_show.html:358
+msgid "Add this custom field"
+msgstr "Ajouter ce champ personnalisé"
+
+#: templates/calendar/calendar_show.html:378
+#: templates/contacts/contact_new.html:218
+#: templates/contacts/contact_new.html:225 templates/leads/lead_new.html:229
+#: templates/leads/lead_new.html:236
+#: templates/live/company_profile/comp_profile_show.html:392
+msgid "Website"
+msgstr "Site web"
+
+#: templates/calendar/calendar_show.html:387
+#: templates/live/company_profile/comp_profile_show.html:401
+msgid "Add this Website"
+msgstr "Ajouter ce site web"
+
+#: templates/calendar/calendar_show.html:403
+#: templates/live/company_profile/comp_profile_show.html:413
+msgid "Add Social link"
+msgstr "Ajouter un lien social"
+
+#: templates/calendar/calendar_show.html:408
+#: templates/calendar/calendar_show.html:410
+#: templates/contacts/contact_new.html:252 templates/leads/lead_new.html:263
+#: templates/live/company_profile/comp_profile_show.html:419
+#: templates/live/company_profile/comp_profile_show.html:421
+msgid "Social link"
+msgstr "Lien social"
+
+#: templates/calendar/calendar_show.html:417
+msgid "Add this social link"
+msgstr "Ajouter ce lien social"
+
+#: templates/calendar/calendar_show.html:435 templates/contacts/list.html:36
+#: templates/contacts/list.html:113
+msgid "New Contact"
+msgstr "Nouveau Contact"
+
+#: templates/calendar/calendar_show.html:465
+msgid "Add Contact"
+msgstr "Ajouter un Contact"
+
+#: templates/calendar/calendar_show.html:478 templates/needs/show.html:73
+msgid "Sharing Settings"
+msgstr "Paramètres de partage"
+
+#: templates/calendar/calendar_show.html:483
+msgid "Who has access:"
+msgstr "Qui peut accéder:"
+
+#: templates/calendar/calendar_show.html:488 templates/cases/case_new.html:188
+#: templates/contacts/contact_new.html:361 templates/leads/lead_new.html:369
+#: templates/opportunities/opportunity_new.html:317
+msgid "public: Anyone within your organization can access and find"
+msgstr "publique: Toute personne au sein de votre organisation peut accéder"
+
+#: templates/calendar/calendar_show.html:492 templates/cases/case_list.html:398
+#: templates/cases/case_new.html:192 templates/contacts/contact_new.html:365
+#: templates/leads/lead_new.html:373
+#: templates/live/feedbacks/feedbacks_list.html:112
+#: templates/opportunities/opportunity_list.html:427
+#: templates/opportunities/opportunity_new.html:321
+msgid "private: only you and your collaborators"
+msgstr "privé: seuls vous et vos collaborateurs"
+
+#: templates/calendar/calendar_show.html:497
+msgid "Collaborators:"
+msgstr "collaborateurs"
+
+#: templates/calendar/calendar_show.html:507
+msgid "Invited user:"
+msgstr ""
+
+#: templates/calendar/calendar_show.html:514
+msgid "Invite collaborators:"
+msgstr "Utilisateur invité"
+
+#: templates/calendar/calendar_show.html:536
+msgid "Delete Account"
+msgstr "Supprimer le compte"
+
+#: templates/calendar/calendar_show.html:560
+msgid "Delete Information"
+msgstr "Supprimer les informations"
+
+#: templates/calendar/calendar_show.html:582
+#: templates/calendar/calendar_show.html:816
+msgid "Add a new Task"
+msgstr "Ajouter un nouvelle tâche"
+
+#: templates/calendar/calendar_show.html:589
+#: templates/calendar/calendar_show.html:823
+msgid "When's it due?"
+msgstr "Due"
+
+#: templates/calendar/calendar_show.html:613
+#: templates/calendar/calendar_show.html:846 templates/needs/show.html:21
+msgid "Create a new"
+msgstr "Créer un nouveau"
+
+#: templates/calendar/calendar_show.html:626
+#: templates/calendar/calendar_show.html:859
+msgid "Create this document"
+msgstr "Créer ce document"
+
+#: templates/calendar/calendar_show.html:643
+#: templates/opportunities/list.html:53 templates/opportunities/list.html:243
+#: templates/opportunities/opportunity_list.html:95
+#: templates/opportunities/opportunity_list.html:264
+msgid "New Opportunity"
+msgstr "Nouvelle Opportunité"
+
+#: templates/calendar/calendar_show.html:663
+#: templates/opportunities/list.html:86 templates/opportunities/list.html:284
+#: templates/opportunities/opportunity_list.html:297
+msgid "Amount"
+msgstr "Montant"
+
+#: templates/calendar/calendar_show.html:669
+#: templates/opportunities/list.html:186
+#: templates/opportunities/opportunity_list.html:402
+msgid "Stage"
+msgstr "Etape"
+
+#: templates/calendar/calendar_show.html:672
+#: templates/opportunities/opportunity_list.html:406
+msgid "choose Stage"
+msgstr "Choisir l'étape"
+
+#: templates/calendar/calendar_show.html:684
+msgid "Add Opportunity"
+msgstr "Ajouter une opportunité"
+
+#: templates/calendar/calendar_show.html:698 templates/cases/case_list.html:313
+msgid "New Case"
+msgstr "Nouvelle réclamation"
+
+#: templates/calendar/calendar_show.html:716 templates/cases/case_list.html:32
+#: templates/cases/case_list.html:345 templates/cases/case_new.html:97
+#: templates/needs/show.html:182 templates/needs/show.html:538
+msgid "Priority"
+msgstr "Priorité"
+
+#: templates/calendar/calendar_show.html:720 templates/cases/case_list.html:349
+#: templates/cases/case_new.html:102
+msgid "Low"
+msgstr "Faible"
+
+#: templates/calendar/calendar_show.html:729 templates/cases/case_list.html:358
+#: templates/cases/case_new.html:111
+msgid "Critical"
+msgstr "Critique"
+
+#: templates/calendar/calendar_show.html:736
+#: templates/campaigns/campaign_list.html:59 templates/cases/case_list.html:33
+#: templates/cases/case_list.html:365 templates/cases/case_new.html:88
+#: templates/leads/lead_list.html:37
+#: templates/live/feedbacks/feedbacks_list.html:89
+#: templates/live/feedbacks/feedbacks_list.html:193
+#: templates/needs/show.html:183 templates/needs/show.html:552
+msgid "Status"
+msgstr "Statut"
+
+#: templates/calendar/calendar_show.html:740
+msgid "Choose Status"
+msgstr "Choisir un statut"
+
+#: templates/calendar/calendar_show.html:762
+msgid "Add Case"
+msgstr "Ajouter réclamation"
+
+#: templates/calendar/calendar_show.html:777
+msgid "New Event"
+msgstr "Ajouter rendez-vous"
+
+#: templates/calendar/calendar_show.html:782
+msgid "Add a new event"
+msgstr "Ajouter un nouveau rendez-vous"
+
+#: templates/calendar/calendar_show.html:783
+msgid "When?"
+msgstr "Quand?"
+
+#: templates/calendar/calendar_show.html:786
+msgid "Starts"
+msgstr "Débuts"
+
+#: templates/calendar/calendar_show.html:790
+msgid "Ends"
+msgstr "Fins"
+
+#: templates/calendar/calendar_show.html:794
+msgid "Where?"
+msgstr "Ou?"
+
+#: templates/calendar/calendar_show.html:801
+msgid "Add this event"
+msgstr "Ajouter ce rendez-vous"
+
+#: templates/calendar/calendar_show.html:833
+msgid "Add this task"
+msgstr "Ajouter cette tâche"
+
+#: templates/campaigns/campaign_list.html:33 templates/cases/case_list.html:66
+#: templates/cases/case_new.html:31 templates/contacts/contact_new.html:39
+#: templates/leads/lead_new.html:29
+#: templates/opportunities/opportunity_list.html:76
+#: templates/opportunities/opportunity_new.html:42
+#: templates/search/list.html:39
+msgid "Sign-in Button;"
+msgstr "Bouton sign-in"
+
+#: templates/campaigns/campaign_list.html:42
+#: templates/campaigns/campaign_list.html:88
+msgid "New Campaign"
+msgstr "Nouvelle compagne"
+
+#: templates/campaigns/campaign_list.html:72
+msgid "Add Campaign"
+msgstr ""
+
+#: templates/campaigns/campaign_list.html:83
+msgid "Campaigns"
+msgstr ""
+
+#: templates/campaigns/campaign_list.html:114 templates/search/list.html:114
+msgid "View more"
+msgstr ""
+
+#: templates/cases/case_list.html:22 templates/leads/lead_list.html:24
+#: templates/opportunities/opportunity_list.html:22
+msgid "All"
+msgstr "Tout"
+
+#: templates/cases/case_list.html:22 templates/cases/case_list.html:23
+#: templates/cases/case_list.html:81 templates/cases/case_new.html:14
+msgid "Cases"
+msgstr "Réclamations"
+
+#: templates/cases/case_list.html:23 templates/leads/lead_list.html:25
+msgid "My"
+msgstr "Mes"
+
+#: templates/cases/case_list.html:26 templates/leads/lead_list.html:28
+#: templates/opportunities/list.html:278
+msgid "Sort by"
+msgstr "Trier par"
+
+#: templates/cases/case_list.html:30 templates/contacts/list.html:146
+#: templates/leads/lead_list.html:32
+#: templates/live/customer_stories/customer_stories_list.html:136
+#: templates/live/feedbacks/feedbacks_list.html:191
+#: templates/live/product_videos/product_videos_list.html:136
+#: templates/live/shows/list_show.html:154
+#: templates/opportunities/list.html:282
+#: templates/opportunities/opportunity_list.html:43
+msgid "Last modified"
+msgstr "Dernière mise à jour"
+
+#: templates/cases/case_list.html:34 templates/cases/case_list.html:319
+#: templates/cases/case_new.html:67
+#: templates/opportunities/opportunity_new.html:199
+msgid "Contact"
+msgstr "Contact"
+
+#: templates/cases/case_list.html:42 templates/leads/lead_list.html:44
+#: templates/opportunities/opportunity_list.html:54
+msgid "New"
+msgstr "Nouveau"
+
+#: templates/cases/case_list.html:42
+msgid "Case"
+msgstr "Réclamation"
+
+#: templates/cases/case_list.html:88
+msgid " New Case"
+msgstr "Nouvelle Réclamation"
+
+#: templates/cases/case_list.html:129
+msgid "Date:"
+msgstr "Date"
+
+#: templates/cases/case_list.html:159
+msgid ""
+"cases  pages includes a detailed page for each customer, partner, or "
+"investor in your ecosystem. You and your co-workers can collaborate to "
+"get a deep understanding."
+msgstr ""
+
+#: templates/cases/case_list.html:327 templates/cases/case_new.html:74
+#: templates/contacts/list.html:65 templates/opportunities/list.html:70
+#: templates/opportunities/opportunity_list.html:281
+#: templates/opportunities/opportunity_new.html:188
+msgid "Account"
+msgstr "Compte"
+
+#: templates/cases/case_list.html:336
+msgid "Subject"
+msgstr "Sujet"
+
+#: templates/cases/case_list.html:369
+msgid "choose a status"
+msgstr "Choisir un statut"
+
+#: templates/cases/case_list.html:387
+#: templates/live/feedbacks/feedbacks_list.html:101
+#: templates/opportunities/opportunity_list.html:416
 msgid "Who can access?"
-msgstr "Qui peut accéder ?"
-msgid "public"
-msgstr "publique"
-msgid "private"
-msgstr "privé"
+msgstr "Qui peut accéder"
 
-#HKA 21.03.2014 Accout show page
+#: templates/cases/case_list.html:394
+#: templates/live/feedbacks/feedbacks_list.html:108
+#: templates/opportunities/opportunity_list.html:423
+msgid "public: Anyone within your organization"
+msgstr "publique:Toute personne au sein de votre organisation "
 
+#: templates/cases/case_new.html:41
+msgid "Create Case"
+msgstr "Créer réclamation"
+
+#: templates/cases/case_new.html:58
+msgid "What’s the subject of this issue?"
+msgstr "Quel est le sujet de cette question?"
+
+#: templates/cases/case_new.html:85
+msgid "Case Informations"
+msgstr "Information sur la réclamation"
+
+#: templates/cases/case_new.html:91
+msgid "Choose a status"
+msgstr "choisir le statut"
+
+#: templates/cases/case_new.html:101
+msgid "Choose a priority"
+msgstr "Choisir la priorité"
+
+#: templates/cases/case_new.html:121 templates/contacts/contact_new.html:309
+#: templates/leads/lead_new.html:319
+#: templates/opportunities/opportunity_new.html:241
+msgid "Custom Fields"
+msgstr "Champs personnalisés"
+
+#: templates/cases/case_new.html:128 templates/contacts/contact_new.html:316
+#: templates/leads/lead_new.html:326
+#: templates/opportunities/opportunity_new.html:249
+msgid "Enter field name"
+msgstr "Entrer le nom du champ"
+
+#: templates/cases/case_new.html:132 templates/contacts/contact_new.html:320
+#: templates/leads/lead_new.html:330
+#: templates/opportunities/opportunity_new.html:253
+msgid "Enter a value"
+msgstr "Entrer une valeur"
+
+#: templates/cases/case_new.html:146 templates/contacts/contact_new.html:337
+#: templates/leads/lead_new.html:345
+#: templates/opportunities/opportunity_new.html:267
+msgid "Add a new custom field"
+msgstr "Ajouter un champ personalisé"
+
+#: templates/cases/case_new.html:155
+#: templates/opportunities/opportunity_new.html:282
+msgid "Description"
+msgstr "description"
+
+#: templates/cases/case_new.html:182 templates/contacts/contact_new.html:355
+#: templates/leads/lead_new.html:363
+#: templates/opportunities/opportunity_new.html:311
+msgid "Who can access ?"
+msgstr "Qui peut accéder"
+
+#: templates/contacts/contact_new.html:16 templates/contacts/list.html:107
+msgid "Contacts"
+msgstr "Contacts"
+
+#: templates/contacts/contact_new.html:49
+msgid "Creating now Contact"
+msgstr "Créer contact"
+
+#: templates/contacts/contact_new.html:110
+msgid "Contact Informations"
+msgstr "Informations sur le contact"
+
+#: templates/contacts/contact_new.html:112 templates/leads/lead_new.html:135
+msgid "Phone"
+msgstr "Téléphone"
+
+#: templates/contacts/contact_new.html:135
+#: templates/contacts/contact_new.html:172 templates/leads/lead_new.html:143
+#: templates/leads/lead_new.html:186
+msgid "Enter a number"
+msgstr "Entrer un numéro"
+
+#: templates/contacts/contact_new.html:159 templates/leads/lead_new.html:173
+msgid "Add a new Phone"
+msgstr "Ajouter un nouveau téléphone"
+
+#: templates/contacts/contact_new.html:186 templates/leads/lead_new.html:200
+msgid "Add a new email address"
+msgstr ""
+
+#: templates/contacts/contact_new.html:190 templates/leads/lead_new.html:204
+msgid "Address"
+msgstr "Ajouter une nouvelle adresse e-mail"
+
+#: templates/contacts/contact_new.html:210 templates/leads/lead_new.html:221
+msgid "Add a new address"
+msgstr "Ajouter une nouvelle adresse"
+
+#: templates/contacts/contact_new.html:216 templates/leads/lead_new.html:227
+msgid "Links"
+msgstr "Liens"
+
+#: templates/contacts/contact_new.html:226 templates/leads/lead_new.html:237
+msgid "Enter a Website"
+msgstr "Ajouter un siteweb"
+
+#: templates/contacts/contact_new.html:240 templates/leads/lead_new.html:251
+msgid "Add a new Website"
+msgstr "Ajouter un nouveau siteweb"
+
+#: templates/contacts/contact_new.html:245 templates/leads/lead_new.html:256
+msgid "Social Links"
+msgstr "Liens réseaux sociaux"
+
+#: templates/contacts/contact_new.html:253 templates/leads/lead_new.html:264
+msgid "Enter a social link"
+msgstr "Entrer un lien social"
+
+#: templates/contacts/contact_new.html:266 templates/leads/lead_new.html:277
+msgid "Add a new social links"
+msgstr "Ajouter un nouveau lien social"
+
+#: templates/contacts/contact_new.html:274 templates/leads/lead_new.html:285
+msgid "Story"
+msgstr "Histoire"
+
+#: templates/contacts/list.html:119
+#: templates/live/customer_stories/customer_stories_list.html:103
+#: templates/live/feedbacks/feedbacks_list.html:155
+#: templates/live/product_videos/product_videos_list.html:103
+#: templates/live/shows/list_show.html:121
+#: templates/opportunities/list.html:250
+msgid "Filter by"
+msgstr "Filtrer par"
+
+#: templates/contacts/list.html:123
+msgid "All contacts"
+msgstr "Tous les contacts"
+
+#: templates/contacts/list.html:124
+msgid "My contacts"
+msgstr "Mes contacts"
+
+#: templates/contacts/list.html:132
+#: templates/live/customer_stories/customer_stories_list.html:122
+#: templates/live/feedbacks/feedbacks_list.html:177
+#: templates/live/product_videos/product_videos_list.html:122
+#: templates/live/shows/list_show.html:140
+#: templates/opportunities/list.html:266
+msgid "Quick Filtering"
+msgstr "Filtrage rapide"
+
+#: templates/leads/lead_list.html:24 templates/leads/lead_list.html:25
+#: templates/leads/lead_list.html:85 templates/leads/lead_new.html:11
+msgid "Leads"
+msgstr "Pistes"
+
+#: templates/leads/lead_list.html:44
+msgid "Lead"
+msgstr "Piste"
+
+#: templates/leads/lead_list.html:92
+msgid " New Lead"
+msgstr "Nouvelle piste"
+
+#: templates/leads/lead_list.html:324
+msgid "Delete Lead"
+msgstr "Supprimer piste"
+
+#: templates/leads/lead_new.html:39
+msgid "Create Lead"
+msgstr "Créer piste"
+
+#: templates/leads/lead_new.html:104
+msgid "Lead Informations"
+msgstr "Informations sur piste"
+
+#: templates/leads/lead_new.html:111 templates/leads/lead_new.html:120
+msgid "None"
+msgstr "Aucun"
+
+#: templates/leads/lead_new.html:111
+msgid "Agriculture"
+msgstr "Agriculture"
+
+#: templates/leads/lead_new.html:111
+msgid "Apparel"
+msgstr "Vêtements"
+
+#: templates/leads/lead_new.html:111
+msgid "Banking"
+msgstr "Bancaire"
+
+#: templates/leads/lead_new.html:111
+msgid "Biotechnology"
+msgstr "Biotechnologie"
+
+#: templates/leads/lead_new.html:111
+msgid "Chemicals"
+msgstr "Produits chimiques"
+
+#: templates/leads/lead_new.html:111
+msgid "Communications"
+msgstr "Communications"
+
+#: templates/leads/lead_new.html:111
+msgid "Construction"
+msgstr "Construction"
+
+#: templates/leads/lead_new.html:111
+msgid "Consulting"
+msgstr "Consultant"
+
+#: templates/leads/lead_new.html:111
+msgid "Education"
+msgstr "Education"
+
+#: templates/leads/lead_new.html:111
+msgid "Electronics"
+msgstr "Electroniques"
+
+#: templates/leads/lead_new.html:111
+msgid "Energy"
+msgstr "Energie"
+
+#: templates/leads/lead_new.html:111
+msgid "Engineering"
+msgstr "Ingénierie"
+
+#: templates/leads/lead_new.html:111
+msgid "Entertainment"
+msgstr "Divertissement"
+
+#: templates/leads/lead_new.html:111
+msgid "Environmental"
+msgstr "Ecologique"
+
+#: templates/leads/lead_new.html:111
+msgid "Finance"
+msgstr "Finance"
+
+#: templates/leads/lead_new.html:111
+msgid "Food"
+msgstr ""
+
+#: templates/leads/lead_new.html:111
+msgid "Beverage"
+msgstr "Nourriture"
+
+#: templates/leads/lead_new.html:111
+msgid "Government"
+msgstr "Gouvernement"
+
+#: templates/leads/lead_new.html:111
+msgid "Healthcare"
+msgstr "Soins et santé"
+
+#: templates/leads/lead_new.html:111
+msgid "Hospitality"
+msgstr "Hospitalité"
+
+#: templates/leads/lead_new.html:111
+msgid "Insurance"
+msgstr "Assurance"
+
+#: templates/leads/lead_new.html:111
+msgid "Machinery"
+msgstr "Machinerie"
+
+#: templates/leads/lead_new.html:111
+msgid "Manufacturing"
+msgstr "Fabrication"
+
+#: templates/leads/lead_new.html:111
+msgid "Media"
+msgstr "Médias"
+
+#: templates/leads/lead_new.html:111
+msgid "Not For Profit"
+msgstr "Organisme sans but lucratif"
+
+#: templates/leads/lead_new.html:111
+msgid "Recreation"
+msgstr "Récréation"
+
+#: templates/leads/lead_new.html:111
+msgid "Retail"
+msgstr "Vente au détail"
+
+#: templates/leads/lead_new.html:111
+msgid "Shipping"
+msgstr "Livraison"
+
+#: templates/leads/lead_new.html:111
+msgid "Technology"
+msgstr "Technologie"
+
+#: templates/leads/lead_new.html:111
+msgid "Telecommunications"
+msgstr "Télécommunications"
+
+#: templates/leads/lead_new.html:111
+msgid "Transportation"
+msgstr "Transport"
+
+#: templates/leads/lead_new.html:111
+msgid "Utilities"
+msgstr "Utilitaires"
+
+#: templates/leads/lead_new.html:111 templates/leads/lead_new.html:126
+msgid "Other"
+msgstr "Autre"
+
+#: templates/leads/lead_new.html:117
+#: templates/live/feedbacks/feedbacks_list.html:76
+#: templates/live/feedbacks/feedbacks_list.html:194
+msgid "Source"
+msgstr "Source"
+
+#: templates/leads/lead_new.html:121
+msgid "Social Media"
+msgstr "Médias sociaux"
+
+#: templates/leads/lead_new.html:122
+msgid "Web Site"
+msgstr "Site Web"
+
+#: templates/leads/lead_new.html:123
+msgid "Phone Inquiry"
+msgstr "Enquête de téléphone"
+
+#: templates/leads/lead_new.html:124
+msgid "Partner Referral"
+msgstr "Renvoi partenaire"
+
+#: templates/leads/lead_new.html:125
+msgid "Purchased List"
+msgstr "Liste acheté"
+
+#: templates/live/live_all_recents_show.html:64
+#: templates/live/live_all_recents_show_company.html:64
+#: templates/live/live_all_upcomings_show.html:55
+#: templates/live/live_all_upcomings_show_company.html:55
+msgid ""
+"Big companies can spend lot of money on advertising, but small companies "
+"can’t . So why not following a new way: Instead of trying to out-"
+"advertise your competitors, try to build your own audience. Speak, share "
+"information that’s valuable with people and you will create a whole "
+"different connection. You will gain more trust and more respect. The "
+"audience care often about what you have to say"
+msgstr ""
+
+#: templates/live/live_show_index.html:96
+msgid ""
+"Big companies can spend lot of money on advertising, but small companies "
+"can’t . So why not following a new way: Instead of trying to out-"
+"advertise your competitors, try to build your own audience. Speak, share "
+"information that’s valuable with people and you will create a whole "
+"different connection. You will gain more trust and more respect. The "
+"audience care often about what you have to say."
+msgstr ""
+
+#: templates/live/live_show_page.html:37
+msgid "Ask a question or give a feedback"
+msgstr ""
+
+#: templates/live/company_profile/comp_profile_show.html:158
+#: templates/live/company_profile/comp_profile_show.html:187
+#: templates/live/company_profile/comp_profile_show.html:215
+msgid "Edit Company Profile"
+msgstr ""
+
+#: templates/live/company_profile/comp_profile_show.html:195
+msgid "Youtube Channel"
+msgstr ""
+
+#: templates/live/company_profile/comp_profile_show.html:244
+msgid "Edit Company profile"
+msgstr ""
+
+#: templates/live/company_profile/comp_profile_show.html:428
+msgid "Add this Social link"
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_list.html:85
+msgid "Customer Stories"
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_list.html:90
+msgid "Add Customer Story"
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_list.html:107
+msgid "All product videos"
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_list.html:108
+msgid "My product videos"
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_list.html:109
+#: templates/live/feedbacks/feedbacks_list.html:164
+#: templates/live/product_videos/product_videos_list.html:109
+#: templates/live/shows/list_show.html:127
+msgid "Upcoming shows"
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_list.html:110
+#: templates/live/feedbacks/feedbacks_list.html:165
+#: templates/live/product_videos/product_videos_list.html:110
+#: templates/live/shows/list_show.html:128
+msgid "Recent shows"
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_list.html:113
+#: templates/live/feedbacks/feedbacks_list.html:168
+#: templates/live/product_videos/product_videos_list.html:113
+#: templates/live/shows/list_show.html:131
+msgid "Views"
+msgstr ""
+
+#: templates/live/customer_stories/customer_stories_list.html:172
+msgid ""
+"Big companies can spend lot of money on advertising, but small companies "
+"can’t . So why not following a new way: Instead of trying to out-"
+"advertise your competitors, try to build your own audience. Show the "
+"world who are your happy customers, how did your products or services "
+"changed their life. Do live hangouts with your customers. The audience "
+"care often about what you have to say. "
+msgstr ""
+
+#: templates/live/feedbacks/feedbacks_list.html:42
+msgid "New Feedback"
+msgstr ""
+
+#: templates/live/feedbacks/feedbacks_list.html:56
+msgid "Content"
+msgstr ""
+
+#: templates/live/feedbacks/feedbacks_list.html:124
+msgid "Add this Feedback"
+msgstr ""
+
+#: templates/live/feedbacks/feedbacks_list.html:137
+msgid "Feedbacks"
+msgstr ""
+
+#: templates/live/feedbacks/feedbacks_list.html:142
+msgid "Add new Feedback"
+msgstr ""
+
+#: templates/live/feedbacks/feedbacks_list.html:159
+msgid "All feedbacks"
+msgstr ""
+
+#: templates/live/feedbacks/feedbacks_list.html:160
+msgid "My feedbacks"
+msgstr ""
+
+#: templates/live/feedbacks/feedbacks_list.html:161
+msgid "Pending"
+msgstr ""
+
+#: templates/live/feedbacks/feedbacks_list.html:162
+msgid "Working"
+msgstr ""
+
+#: templates/live/feedbacks/feedbacks_list.html:163
+msgid "Rejected"
+msgstr ""
+
+#: templates/live/feedbacks/feedbacks_list.html:236
+msgid "Feedbacks pages  let you receive a feedback from leads or customers "
+msgstr ""
+
+#: templates/live/product_videos/product_videos_list.html:85
+msgid "Product Videos"
+msgstr ""
+
+#: templates/live/product_videos/product_videos_list.html:90
+msgid "Add Product Video"
+msgstr ""
+
+#: templates/live/product_videos/product_videos_list.html:107
+msgid "All customer stories"
+msgstr ""
+
+#: templates/live/product_videos/product_videos_list.html:108
+msgid "My customer story"
+msgstr ""
+
+#: templates/live/product_videos/product_videos_list.html:173
+msgid ""
+"Big companies can spend lot of money on advertising, but small companies "
+"can’t . So why not following a new way: Instead of trying to out-"
+"advertise your competitors, try to build your own audience. Show the "
+"world what are the products and best ideas you are working on. You will "
+"gain feedbacks, suggestions, and trafic. The audience care often about "
+"what you have to say. "
+msgstr ""
+
+#: templates/live/shows/list_show.html:103
+msgid "Shows"
+msgstr ""
+
+#: templates/live/shows/list_show.html:108
+msgid "Schedule a show"
+msgstr ""
+
+#: templates/live/shows/list_show.html:125
+msgid "All shows"
+msgstr ""
+
+#: templates/live/shows/list_show.html:126
+msgid "My shows"
+msgstr ""
+
+#: templates/live/shows/list_show.html:156
+msgid "Start at"
+msgstr ""
+
+#: templates/live/shows/list_show.html:192
+msgid ""
+"Big companies can spend lot of money on advertising, but small companies "
+"can’t . So why not following a new way: Instead of trying to out-"
+"advertise your competitors, try to build your own audience. Speak, share "
+"information that’s valuable with people and you will create a whole "
+"different connection. You will gain more trust and more respect. The "
+"audience care often about what you have to say. "
+msgstr ""
+
+#: templates/needs/show.html:180
+msgid "Customer Needs"
+msgstr ""
+
+#: templates/needs/show.html:201
+msgid "Customer Needs   Feeds"
+msgstr ""
+
+#: templates/needs/show.html:208
+msgid "Notes"
+msgstr "Notes"
+
+#: templates/needs/show.html:209
+msgid "Attach Documents"
+msgstr "Joindre des documents"
+
+#: templates/needs/show.html:210
+msgid "Send an Email"
+msgstr "Envoyer un email"
+
+#: templates/needs/show.html:513
+msgid "Edit Need"
+msgstr ""
+
+#: templates/needs/show.html:529
+msgid "description"
+msgstr "Description"
+
+#: templates/opportunities/list.html:237
+#: templates/opportunities/opportunity_list.html:22
+#: templates/opportunities/opportunity_list.html:23
+#: templates/opportunities/opportunity_list.html:88
+#: templates/opportunities/opportunity_new.html:25
+msgid "Opportunities"
+msgstr "Opportunités"
+
+#: templates/opportunities/list.html:254
+#: templates/opportunities/opportunity_list.html:31
+msgid "All opportunities"
+msgstr "Toutes les opportunités"
+
+#: templates/opportunities/list.html:255
+#: templates/opportunities/opportunity_list.html:32
+msgid "My opportunities"
+msgstr "Mes Opportunités"
+
+#: templates/opportunities/list.html:286
+msgid "Stage probability"
+msgstr "Probabilité de l étape"
+
+#: templates/opportunities/opportunity_list.html:26
+msgid "Filter"
+msgstr "Filtrer"
+
+#: templates/opportunities/opportunity_list.html:27
+msgid "Stages"
+msgstr "Etapes"
+
+#: templates/opportunities/opportunity_list.html:38
+msgid "Sort"
+msgstr "Classement"
+
+#: templates/opportunities/opportunity_list.html:54
+msgid "Opportunity"
+msgstr "Opportunité"
+
+#: templates/opportunities/opportunity_list.html:130
+msgid "with"
+msgstr "avec"
+
+#: templates/opportunities/opportunity_list.html:142
+msgid "Estimated close date:"
+msgstr "Date de clôture prévisionnelles"
+
+#: templates/opportunities/opportunity_list.html:160
+#: templates/opportunities/opportunity_list.html:175
+msgid ""
+"Know which proposals/bids are pending, which you’ve won, and which you’ve"
+" lost. Enter notes about the opportunities, attach proposals or contracts"
+" to the opportunities, and keep a log of any changes."
+msgstr ""
+
+#: templates/opportunities/opportunity_list.html:386
+#: templates/opportunities/opportunity_new.html:169
+msgid "Fixed bid"
+msgstr "Offre fixe"
+
+#: templates/opportunities/opportunity_list.html:387
+#: templates/opportunities/opportunity_new.html:170
+msgid "Per hour"
+msgstr "Par Heure"
+
+#: templates/opportunities/opportunity_list.html:388
+#: templates/opportunities/opportunity_new.html:171
+msgid "Per month"
+msgstr "Par mois"
+
+#: templates/opportunities/opportunity_list.html:389
+#: templates/opportunities/opportunity_new.html:172
+msgid "Per year"
+msgstr "Par an"
+
+#: templates/opportunities/opportunity_new.html:55
+msgid "Create Opportunity"
+msgstr "Créer l'opportunité"
+
+#: templates/opportunities/opportunity_new.html:70
+msgid "Type here the opportunity name..."
+msgstr "Ecrire ici le nom de l'opportunité"
+
+#: templates/opportunities/opportunity_new.html:84
+msgid "Opportunity amount..."
+msgstr "Montant de l'opportunité"
+
+#: templates/opportunities/opportunity_new.html:214
+msgid "Opportunity Stage"
+msgstr "Etape de l'opportunité"
+
+#: templates/opportunities/opportunity_new.html:229
+msgid "Estimated closed date"
+msgstr "Date de clôture prévisionnelle"
+
+#: templates/opportunities/opportunity_new.html:278
+msgid "Opportunity Informations"
+msgstr ""
+
+#: templates/opportunities/opportunity_new.html:290
+msgid "Competitors"
+msgstr "Compétiteurs"
+
+#: templates/products/list.html:42 templates/products/list.html:80
+msgid "New Product"
+msgstr "Nouveau produit"
+
+#: templates/products/list.html:64
+msgid "Add Product"
+msgstr ""
+
+#: templates/products/list.html:75 templates/products/features/list.html:93
+#: templates/products/roadmaps/list.html:92
+msgid "Products"
+msgstr ""
+
+#: templates/products/features/list.html:98
+msgid "New Feature"
+msgstr ""
+
+#: templates/products/roadmaps/list.html:97
+msgid "New Roadmap"
+msgstr ""
+
+#: templates/search/list.html:11
+msgid "Search results"
+msgstr ""
+
+#: templates/search/list.html:127
+msgid "No results found, try with another term"
+msgstr ""
 

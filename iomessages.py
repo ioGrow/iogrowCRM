@@ -69,3 +69,27 @@ class UserListSchema(messages.Message):
 class AddTagSchema(messages.Message):
     parent = messages.StringField(1,required=True)
     tag_key = messages.StringField(2,required=True)
+class profileSchema(messages.Message):
+    lastname = messages.StringField(1)
+    firstname = messages.StringField(2)
+    industry = messages.StringField(3)
+    locality = messages.StringField(4)
+    headline = messages.StringField(5)
+    current_post = messages.StringField(6,repeated=True)
+    past_post=messages.StringField(7,repeated=True)
+    formations=messages.StringField(8,repeated=True)
+    websites=messages.StringField(9,repeated=True)
+    relation=messages.StringField(10)
+    experiences=messages.StringField(11)
+    resume=messages.StringField(12)
+    certifications=messages.StringField(13)
+    skills=messages.StringField(14,repeated=True)
+
+
+
+class PatchTagSchema(messages.Message):
+     id=messages.StringField(1)
+     entityKey= messages.StringField(2)
+     about_kind=messages.StringField(3)
+     name=messages.StringField(4)
+
