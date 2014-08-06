@@ -2562,7 +2562,7 @@ class CrmEngineApi(remote.Service):
                     url='/workers/syncdeletetask',
                     params={
                             'email': user_from_email.email,
-                            'event_google_id':task.task_google_id
+                            'task_google_id':task.task_google_id
                             }
                     )
         Edge.delete_all_cascade(start_node = entityKey)

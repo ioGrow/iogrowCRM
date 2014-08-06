@@ -2579,7 +2579,7 @@ msgstr "Ou?"
 #: templates/leads/lead_show.html:1740
 #: templates/opportunities/opportunity_show.html:1300
 msgid "Add this event"
-msgstr "Ajouter ce rendez-vous"
+msgstr "Ajouter ce événement"
 
 #: templates/accounts/note_show.html:60 templates/articles/article_show.html:58
 msgid "Posted by"

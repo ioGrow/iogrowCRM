@@ -37,6 +37,7 @@ from blog import Article
 from iograph import Node , Edge
 # import event . hadji hicham 09-07-2014
 from iomodels.crmengine.events import Event
+from iomodels.crmengine.tasks import Task 
 # under the test .beata !
 
 jinja_environment = jinja2.Environment(
@@ -921,6 +922,20 @@ class SyncDeleteCalendarEvent(webapp2.RequestHandler):
         except:
             raise endpoints.UnauthorizedException('Invalid grant' )
 
+# sync delete tasks with google calendar . hadji hicham 06-09-2014
+class SyncDeleteCalendarTask(webapp2.RequestHandler):
+    def post(self):
+        user_from_email = model.User.get_by_email(self.request.get('email'))
+        task_google_id= self.request.get('task_google_id')
+        try:
+            credentials = user_from_email.google_credentials
+            http = credentials.authorize(httplib2.Http(memcache))
+            service = build('calendar', 'v3', http=http)
+            # prepare params to insert
+            patched_event = service.events().delete(calendarId='primary',eventId=task_google_id).execute()
+        except:
+            raise endpoints.UnauthorizedException('Invalid grant')
+
 class AddToIoGrowLeads(webapp2.RequestHandler):
     def post(self):
         user_from_email = model.User.get_by_email('tedj.meabiou@gmail.com')
@@ -1130,8 +1145,11 @@ routes = [
     ('/workers/add_to_iogrow_leads',AddToIoGrowLeads),
     ('/workers/get_from_linkedin',GetFromLinkedinToIoGrow),
     ('/workers/send_gmail_message',SendGmailEmail),
-
-
+    # tasks sync  hadji hicham 06/08/2014
+    ('/workers/synctask',SyncCalendarTask),
+    ('/workers/syncpatchtask',SyncPatchCalendarTask),
+    ('/workers/syncdeletetask',SyncDeleteCalendarTask),
+    #
     ('/',IndexHandler),
     ('/blog',BlogHandler),
     ('/support',PublicSupport),
