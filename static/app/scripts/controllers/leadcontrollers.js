@@ -18,6 +18,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
      $scope.selectedOption='all';
      $scope.stage_selected={};
      $scope.showTagsFilter=false;
+     $scope.showNewTag=false;
       $scope.leads = [];
       $scope.lead = {};
       $scope.selectedLead={};
@@ -29,7 +30,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.draggedTag=null;
       $scope.tag = {};
       $scope.currentLead=null;
-      $scope.showNewTag=false;
+
       $scope.showUntag=false;
      $scope.edgekeytoDelete=undefined;
         $scope.color_pallet=[
@@ -382,7 +383,6 @@ $scope.unselectAllTags= function(){
  };
 
 $scope.editbeforedelete = function(lead){
-  console.log('test');
    $scope.selectedLead=lead;
    $('#BeforedeleteLead').modal('show');
  };

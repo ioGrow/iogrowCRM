@@ -37,11 +37,13 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             {'name': 'purple', 'color': '#E874D6'},
         ];
         $scope.tag.color = {'name': 'green', 'color': '#BBE535'};
-
+        $scope.selectedAccount=null;
+         $scope.currentAccount=null;
+         $scope.showTagsFilter=false;
+         $scope.showNewTag=false;
         $scope.fromNow = function(fromDate){
             return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
         }
-
         $scope.runTheProcess = function() {
             var params = {'order': $scope.order,
                 'limit': 20}
@@ -75,6 +77,56 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         $scope.refreshToken = function() {
             Auth.refreshToken();
         };
+            $scope.editbeforedelete = function(account){
+                 $scope.selectedAccount=account;
+                 $('#BeforedeleteAccount').modal('show');
+             };
+            $scope.deleteaccount = function(){
+                 var params = {'entityKey':$scope.selectedAccount.entityKey};
+                 Account.delete($scope, params);
+                 $('#BeforedeleteAccount').modal('hide');
+                 $scope.selectedAccount=null;
+             };
+            $scope.showAssigneeTags=function(account){
+                $('#assigneeTagsToTask').modal('show');
+                $scope.currentAccount=account;
+             };
+            $scope.addTagsTothis=function(){
+              var tags=[];
+              var items = [];
+              tags=$('#select2_sample2').select2("val");
+                  angular.forEach(tags, function(tag){
+                    var edge = {
+                      'start_node': $scope.currentAccount.entityKey,
+                      'end_node': tag,
+                      'kind':'tags',
+                      'inverse_edge': 'tagged_on'
+                    };
+                    items.push(edge);
+                  });
+              params = {
+                'items': items
+              }
+              Edge.insert($scope,params);
+              $scope.currentAccount=null;
+              $('#assigneeTagsToTask').modal('hide');
+             };
+            $scope.showNewTagForm=function(){
+              $scope.showNewTag=true;
+              $( window ).trigger( 'resize' );  
+            }
+            $scope.hideNewTagForm=function(){
+              $scope.showNewTag=false;
+              $( window ).trigger( 'resize' ); 
+            }
+            $scope.hideTagFilterCard=function(){
+              $scope.showTagsFilter=false;
+              $( window ).trigger( 'resize' ); 
+            }
+            $scope.showTagFilterCard=function(){
+              $scope.showTagsFilter=true;
+              $( window ).trigger( 'resize' ); 
+            }
         // Next and Prev pagination
         $scope.listNextPageItems = function() {
             var nextPage = $scope.currentPage + 1;
@@ -274,13 +326,13 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
                 var text = element.find(".with-color");
                 if ($scope.selected_tags.indexOf(tag) == -1) {
                     $scope.selected_tags.push(tag);
-                    element.css('background-color', tag.color + '!important');
-                    text.css('color', $scope.idealTextColor(tag.color));
+                   /* element.css('background-color', tag.color + '!important');
+                    text.css('color', $scope.idealTextColor(tag.color));*/
 
                 } else {
-                    element.css('background-color', '#ffffff !important');
+                   /* element.css('background-color', '#ffffff !important');*/
                     $scope.selected_tags.splice($scope.selected_tags.indexOf(tag), 1);
-                    text.css('color', $scope.idealTextColor(tag.color));
+                   /* text.css('color', $scope.idealTextColor(tag.color));*/
                 }
 
                 $scope.filterByTags($scope.selected_tags);
@@ -554,31 +606,141 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
 
         $scope.editdata = {'edit': 'test()'};
         $scope.percent = 0;
-        $scope.chartOptions = {
-            animate: {
-                duration: 0,
-                enabled: false
+         $scope.chartOptions = {
+            animate:{
+                duration:0,
+                enabled:false
             },
-            size: 100,
-            barColor: '#58a618',
-            scaleColor: false,
-            lineWidth: 7,
-            lineCap: 'circle'
+            size:100,
+            barColor:'#58a618',
+            scaleColor:'#58a618',
+            lineWidth:7,
+            lineCap:'circle'
         };
         $scope.closed_date = new Date();
         $scope.newTaskform=false;
         $scope.newEventform=false;
         $scope.newTask={};
         $scope.ioevent = {};
+        $scope.showNewOpp=false;
+        $scope.showNewCase=false;
+        $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
+              $scope.selectedItem={};
         // What to do after authentication
         $scope.endError = function() {
             alert("okkkkkkkkkkkkkkk");
         }
+        $scope.prepareInfonodes = function(){
+            var infonodes = [];
+
+            angular.forEach($scope.customfields, function(customfield){
+                var infonode = {
+                                'kind':'customfields',
+                                'fields':[
+                                        {
+                                        'field':customfield.field,
+                                        'value':customfield.value
+                                        }
+                                ]
+
+                              }
+                infonodes.push(infonode);
+            });
+            return infonodes;
+        };
+            $scope.saveOpp = function(opportunity){
+            $scope.isLoading=true;
+            opportunity.closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
+            opportunity.stage = $scope.initialStage.entityKey;
+            opportunity.infonodes = $scope.prepareInfonodes();
+            // prepare amount attributes
+            if (opportunity.duration_unit=='fixed'){
+              opportunity.amount_total = opportunity.amount_per_unit;
+              opportunity.opportunity_type = 'fixed_bid';
+            }else{
+              opportunity.opportunity_type = 'per_' + opportunity.duration;
+            }
+            opportunity.account=$scope.account.entityKey;
+            console.log(opportunity);
+            Opportunity.insert($scope,opportunity);
+            $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
+            $scope.showNewOpp=false;
+            $scope.isLoading=false;
+            $scope.$apply();
+            console.log($scope.opportunitystages);
+
+        };
+       $scope.priorityColor=function(pri){
+          if (pri<4) {
+              return '#BBE535';
+          }else{
+            if (pri<6) {
+                 return '#EEEE22';
+            }else{
+              if (pri<8) {
+                   return '#FFBB22';
+               }else{
+                   return '#F7846A';
+               }    
+            }  
+          }
+         }
+         $scope.hideNewCaseForm=function(){
+            $scope.casee={};
+            $scope.casee.priority = 4;
+            $scope.showNewCase=false;
+            $( window ).trigger( 'resize' ); 
+         }
+         $scope.hideNewOppForm=function(){
+            $scope.opportunity={};
+            $scope.showNewOpp=false;
+            $( window ).trigger( 'resize' ); 
+         }
+        // HKA 01.12.2013 Add Case related to Contact
+            $scope.saveCase = function(casee) {
+            casee.account=$scope.account.entityKey;
+            casee.access=$scope.account.access;
+            casee.infonodes = $scope.prepareInfonodes();
+            casee.status = $scope.status_selected.entityKey;           
+            Case.insert($scope,casee);      
+            $scope.showNewCase=false;
+            $scope.casee={};
+           /* var params = {'name': casee.name,
+                'priority': casee.priority,
+                'status': $scope.status_selected.entityKey,
+                'account': $scope.account.entityKey,
+                'access': $scope.account.access,
+                'status_name': $scope.status_selected.name
+            };
+            Case.insert($scope, params);
+            $('#addCaseModal').modal('hide');   */
+        };
+         $scope.editbeforedelete = function(item,typee){
+            $scope.selectedItem={'item':item,'typee':typee};
+            console.log($scope.selectedItem);
+            $('#BeforedeleteAccount').modal('show');
+         };
+         $scope.deleteItem=function(){
+            var params = {'entityKey':$scope.selectedItem.item.entityKey};
+            console.log(params);
+            if ($scope.selectedItem.typee=='contact') {
+                 Contact.delete($scope, params);
+            }else{
+                if ($scope.selectedItem.typee=='opportunity') {
+                     Opportunity.delete($scope, params);
+                }else{
+                    if ($scope.selectedItem.typee=='case') {
+                        console.log('hererrrrr');
+                         Case.delete($scope, params);
+                    };
+                }
+            }
+             $('#BeforedeleteAccount').modal('hide');
+         }
 
         $scope.fromNow = function(fromDate){
             return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
         }
-
         $scope.runTheProcess = function() {
 
             var params = {
@@ -1381,33 +1543,9 @@ $scope.updateEventRenderAfterAdd= function(){};
             $('#addContactModal').modal('hide');
         };
         // HKA 19.11.2013 Add Opportunty related to account
-        $scope.saveOpp = function(opportunity) {
-
-            var params = {'name': opportunity.name,
-                'amount': opportunity.amount,
-                'account': $scope.account.entityKey,
-                'stage': $scope.stage_selected.entityKey,
-                'access': $scope.account.access
-            };
-
-
-            Opportunity.insert($scope, params);
-            $('#addOpportunityModal').modal('hide');
-        };
 
         // HKA 19.11.2013 Add Case related to account
-        $scope.saveCase = function(casee) {
 
-            var params = {'name': casee.name,
-                'priority': casee.priority,
-                'status': $scope.status_selected.entityKey,
-                'account': $scope.account.entityKey,
-                'access': $scope.account.access,
-                'status_name': $scope.status_selected.name
-            };
-            Case.insert($scope, params);
-            $('#addCaseModal').modal('hide');
-        };
         $scope.saveNeed = function(need) {
 
 
@@ -1606,9 +1744,7 @@ $scope.sendEmailSelected=function(){
       };
 
 
-$scope.editbeforedelete = function(){
-     $('#BeforedeleteAccount').modal('show');
-   };
+
 $scope.beforedeleteInfonde = function(){
     $('#BeforedeleteInfonode').modal('show');
 }
@@ -1738,9 +1874,7 @@ $scope.deleteaccount = function(){
         };
 
 
-        $scope.editbeforedelete = function() {
-            $('#BeforedeleteAccount').modal('show');
-        };
+
         $scope.beforedeleteInfonde = function() {
             $('#BeforedeleteInfonode').modal('show');
         }

@@ -561,7 +561,7 @@ class Task(EndpointsModel):
         if request.due and task.due == None :
             task.due = datetime.datetime.strptime(request.due,"%Y-%m-%dT%H:%M:00.000000")
             taskqueue.add(
-                    url='/workers/synctask',
+                    url='/workers/syncpatchtask',
                     params={
                             'email': user_from_email.email,
                             'starts_at': request.due,
@@ -572,9 +572,6 @@ class Task(EndpointsModel):
                     )
 
         elif request.due and task.due != None:
-            print "----------------------"
-            print "i'm the one ! "
-            print "-----------------------"
             taskqueue.add(
                     url='/workers/syncpatchtask',
                     params={
