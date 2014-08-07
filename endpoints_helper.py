@@ -392,17 +392,19 @@ class EndpointsHelper():
             profile_schema.created_at=user.created_at.strftime("%Y-%m-%dT%H:%M:00.000")
         if 'lang' in user.__dict__:
             profile_schema.language=user.lang
-        if 'retweet_count' in user.status.__dict__:
-            profile_schema.last_tweet_retweet_count=user.status.retweet_count
-        if 'favorite_count' in user.status.__dict__:
-            profile_schema.last_tweet_favorite_count=user.status.favorite_count
-        if 'text' in user.status.__dict__:
-            profile_schema.last_tweet_text=user.status.text
+        print user.__dict__, "ddddddddddddddddd"
+        if 'status' in user.__dict__:
+            if 'retweet_count' in user.status.__dict__:
+                profile_schema.last_tweet_retweet_count=user.status.retweet_count
+            if 'favorite_count' in user.status.__dict__:
+                profile_schema.last_tweet_favorite_count=user.status.favorite_count
+            if 'text' in user.status.__dict__:
+                profile_schema.last_tweet_text=user.status.text
         if 'profile_image_url_https' in user.__dict__:
             profile_schema.profile_image_url_https=user.profile_image_url_https
         if 'id' in user.__dict__:
             profile_schema.id=user.id
-        print profile_schema
+        print profile_schema, "inserttttt"
 
 
         return profile_schema

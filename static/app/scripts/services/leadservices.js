@@ -191,6 +191,51 @@ leadservices.factory('Lead', function($http) {
           });
           $scope.isLoading = false;
   };
+
+    Lead.get_twitter= function($scope,params) {
+          $scope.isLoading = true;
+          console.log("hhhhhhhhhhhhh");
+          gapi.client.crmengine.people.gettwitter(params).execute(function(resp) {
+            if(!resp.code){
+              console.log("entreeeeeeeeeeee");
+             $scope.twitterProfile.id=resp.id;
+             $scope.twitterProfile.followers_count=resp.followers_count;
+             $scope.twitterProfile.last_tweet_text=resp.last_tweet_text;
+             $scope.twitterProfile.last_tweet_favorite_count=resp.last_tweet_favorite_count;
+             $scope.twitterProfile.last_tweet_retweeted=resp.last_tweet_retweeted;
+             $scope.twitterProfile.last_tweet_retweet_count=resp.last_tweet_retweet_count;
+             $scope.twitterProfile.language=resp.language;
+             $scope.twitterProfile.created_at=resp.created_at;
+             $scope.twitterProfile.nbr_tweets=resp.nbr_tweets;
+             $scope.twitterProfile.description_of_user=resp.description_of_user;
+             $scope.twitterProfile.friends_count=resp.friends_count;
+             $scope.twitterProfile.name=resp.name;
+             $scope.twitterProfile.screen_name=resp.screen_name;
+             $scope.twitterProfile.url_of_user_their_company=resp.url_of_user_their_company;
+             $scope.twitterProfile.location=resp.location;
+             $scope.twitterProfile.profile_image_url_https=resp.profile_image_url_https;
+
+
+
+             $scope.isLoading = false;
+             $scope.$apply();
+              console.log($scope.twitterProfile);
+              console.log(resp);
+              console.log("iiiiiiiiii");
+            }else {
+               if(resp.code==401){
+                // $scope.refreshToken();
+               console.log(resp);
+               console.log("sssdeeeeeeeeeee");
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
+          $scope.isLoading = false;
+  };
+
   Lead.patch = function($scope,params) {
           console.log('in leads.patch service');
           $scope.isLoading=true;

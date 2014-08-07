@@ -237,3 +237,23 @@ class linked_in():
             return response
 
         # print result
+
+    @classmethod
+    # meziane hadjadj 07/08/2014
+    def get_people_twitter(cls,entityKey):
+
+        key=ndb.Key(urlsafe=entityKey)
+        print key
+        print "********************************************************"
+        result=Edge.list(start_node=key,kind='twitter')
+        print result
+        if result['items']:
+            profile_key=result['items'][0].end_node
+            profile= profile_key.get()
+            response=profileSchema(
+                                    name = profile.name
+                                    )
+            print response, "rrrrrrrrrr"
+            return response
+
+        # print result
