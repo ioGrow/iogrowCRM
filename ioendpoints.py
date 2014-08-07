@@ -518,8 +518,7 @@ class BlogEngineApi(remote.Service):
     def delete_tag(self, request):
         user_from_email = User.get_by_email('tedj.meabiou@gmail.com')
         tag_key = ndb.Key(urlsafe=request.entityKey)
-        Edge.delete_all(start_node=tag_key)
-        tag_key.delete()
+        Edge.delete_all_cascade(tag_key)
         return message_types.VoidMessage()
 
     # tags.insert api
@@ -2526,8 +2525,7 @@ class CrmEngineApi(remote.Service):
     def delete_tag(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         tag_key = ndb.Key(urlsafe=request.entityKey)
-        Edge.delete_all(start_node=tag_key)
-        tag_key.delete()
+        Edge.delete_all_cascade(tag_key)
         return message_types.VoidMessage()
 
     # tags.insert api
