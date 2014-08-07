@@ -75,7 +75,7 @@
                                         </i>
                                         |
                                         <i class="icon-trash">
-                                            <a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">
+                                            <a ng-click="editbeforedelete(account, 'account')" class="btn-link addAnotherPhone">
                                               {{_('Delete')}}
                                             </a>
                                         </i>
@@ -435,15 +435,327 @@
                                 <!-- $ contacts tab -->
                                 <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3" style="display: none;">
                                     <div class="row cards-container">
-                                        <div class="btn-group relbutton">
-                                            <button ng-click="addContactModal()" id="sample_editable_1_new" class="btn red">
+                                        <div class="btn-group relbutton" ng-hide="showNewContact">
+                                            <button ng-click="showNewContact=true" id="sample_editable_1_new" class="btn red">
                                                 {{_('Add person')}}
                                             </button>
                                         </div>
+                                        <div class="col-md-12" ng-show="showNewContact">
+                                            <div class="relatedNewForm">
+                                                <div class="showPage col-md-12 newActionsBtn">
+                                                  <span>{{ _('Creating now Contact')}} </span>                              
+                                                  <button class="btn btn-sm  red newAccountBtn pull-right" ng-click="savecontact(contact)">{{ _('Create')}}</button>
+                                                  <button class="btn btn-sm btn-default newAccountBtn pull-right closeBtn" ng-click="hideNewContactForm()">{{ _("Close")}}</button>
+                                                  <div class="clearfix"></div>
+                                                </div>
+                                                <div class="showPage slimForm col-md-12 margin-bottom-15">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <div class="portlet">
+                                                                        <div class="portlet-body left-sidebar" id="chats">
+                                                                            <div class="pic">
+                                                                                <img alt="<%=contact.firstname%> <%=contact.lastname%>" ng-src="<%=imageSrc%>" class="img-responsive profile-photo-large">
+                                                                                <a ng-click="createPickerUploader()" href="" class="btn btn-default btn-upload btn-upload-contact" data-toggle="modal">
+                                                                                    <img src="/static/img/upload_logo.png" class="" >
+                                                                                </a>
+                                                                                <div  class="responsivePhotoIcon"></div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-9">
+                                                                    <form class="form-horizontal ">
+                                                                        <div class="row">
+                                                                            <div class="col-md-6">
+                                                                                <div class="form-group">
+                                                                                    <div class="col-md-12">
+                                                                                        <input type="text" required id="id_firstname" class="form-control" ng-model="contact.firstname" placeholder="{{ _('First Name')}}">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <div class="form-group">
+                                                                                    <div class="col-md-12">
+                                                                                        <input type="text"  required id="id_lastname" class="form-control" ng-model="contact.lastname" placeholder="{{ _('Last Name')}}">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">
+                                                                                <div class="form-group">
+                                                                                    <div class="col-md-12">
+                                                                                        <input type="text"  id="id_lastname" class="form-control" ng-model="contact.title" placeholder="{{ _('Title')}}">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-6 ">
+                                                                    <div class="news-blocks blank-card blank-card-yellow">
+                                                                        <h3>{{ _('Contact Informations')}}</h3>
+                                                                        <div class="news-block-tags">
+                                                                            <strong>{{ _('Phone')}}</strong>
+                                                                        </div>
+                                                                        <ul class="list-unstyled contact-infos">
+                                                                            <li ng-show="showPhoneForm">
+                                                                                <div class="row ">
+                                                                                    <form class="form-inline newLeadForm" role="form">
+                                                                                        <div class="form-group sm-group" style="">
+                                                                                            <label class="sr-only" for="exampleInputPassword2">{{ _('Type')}}</label>
+                                                                                            <select ng-model="phone.type" class="form-control">
+                                                                                                <option value="home" selected="selected" >{{_('home')}}</option>
+                                                                                                <option>{{_('work')}}</option>
+                                                                                                <option>{{_('mobile')}}</option>
+                                                                                                <option>{{_('other')}}</option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                        <div class="form-group sm-group" style="">
+                                                                                            <label class="sr-only" for="exampleInputEmail2">{{ _('Number')}}</label>
+                                                                                             <input 
+                                                                                                  name="phonenumber" 
+                                                                                                  type="text"  
+                                                                                                  class="form-control" 
+                                                                                                  id="exampleInputEmail2" 
+                                                                                                  ng-model="phone.number" 
+                                                                                                  placeholder="{{ _('Enter a number')}}" 
+                                                                                                  required 
+                                                                                                  ng-pattern="/^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/i"
+                                                                                                  ng-focus="isFocused = true">
+                                                                                        </div>
+                                                                                        <button type="submit" ng-click="pushElement(phone, phones, 'phones')" class="btn blue jfk-button jfk-button-action">{{ _('Add')}}</button>
+                                                                                        <button type="submit" class="btn btn-default" ng-click="showPhoneForm = false">X</button>
+                                                                                    </form>
+                                                                                </div>
+                                                                            </li>
+                                                                            <li ng-repeat="phone in phones">
+                                                                                <a editoptions editdataattr="deleteInfos(phones,$index)" editable-text="phone.number" onbeforesave="inlinePatch('Infonode','phones', 'number',phone.entityKey,$data)">
+                                                                                    <%=phone.number%>
+                                                                                </a>
+                                                                                -
+                                                                                <a editable-select="phone.type" e-ng-options="s.value as s.text for s in statuses" onbeforesave="inlinePatch('Infonode','phones', 'type',phone.entityKey,$data)">
+                                                                                    <%=phone.type%>
+                                                                                </a>
+                                                                                <a>
+                                                                                    <img class="ctodeal"  />
+                                                                                </a>
+                                                                            </li>
+                                                                            <li>
+                                                                                <a ng-hide="showPhoneForm" ng-click="showPhoneForm = true" class="btn-link addAnotherPhone" >
+                                                                                    <i class="icon-plus"></i>{{ _('Add a new Phone')}}
+                                                                                </a>
+                                                                            </li>
+                                                                        </ul>
+                                                                        <div class="news-block-tags">
+                                                                            <strong>{{ _('Email')}}</strong>
+                                                                        </div>
+                                                                        <ul class="list-unstyled contact-infos">
+                                                                            <li ng-show="showEmailForm">
+                                                                                <div class="row">
+                                                                                    <form class="form-inline newLeadForm" role="form">
+                                                                                        <div class="form-group lg-group" style="">
+                                                                                            <label class="sr-only" for="exampleInputEmail2">{{ _('Email')}}</label>
+                                                                                            <input type="email" class="form-control" id="exampleInputEmail2" ng-model="email.email" placeholder="{{ _('Enter a number')}}" required>
+                                                                                        </div>
+                                                                                        <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(email, emails, 'emails')" >{{ _('Add')}}</button>
+                                                                                        <button type="submit" ng-click="showEmailForm = false" class="btn btn-default">X</button>
+                                                                                    </form>
+                                                                                </div>
+                                                                            </li>
+                                                                            <li ng-repeat="email in emails">
+                                                                                <a editoptions editdataattr="deleteInfos(emails,$index)"  editable-text="email.email" onbeforesave="inlinePatch('Infonode','emails', 'email',email.entityKey,$data)">
+                                                                                    <%=email.email %>
+                                                                                </a>
+                                                                            </li>
+                                                                            <li>
+                                                                                <a class="btn-link addAnotherPhone" ng-hide="showEmailForm" ng-click="showEmailForm = true">
+                                                                                    <i class="icon-plus"></i> {{ _('Add a new email address')}} </a>
+                                                                            </li>
+                                                                        </ul>
+                                                                        <div class="news-block-tags">
+                                                                            <strong>{{ _('Address')}}</strong>
+                                                                        </div>
+                                                                        <ul class="list-unstyled contact-infos">
+                                                                            <li ng-repeat="address in addresses">
+                                                                                -
+                                                                                <span editoptions editdataattr="deleteInfos(addresses,$index)" editable-text="address.country" onbeforesave="inlinePatch('Infonode','addresses', 'street',address.entityKey,$data)" ng-show="address.street">
+                                                                                    <%=address.street%>,
+                                                                                </span>
+                                                                                <span editable-text="address.city" onbeforesave="inlinePatch('Infonode','addresses', 'city',address.entityKey,$data)" ng-show="address.city"
+                                                                                      ><%=address.city%>,
+                                                                                </span> 
+                                                                                <span editable-text="address.state" onbeforesave="inlinePatch('Infonode','addresses', 'state',address.entityKey,$data)" ng-show="address.state"
+                                                                                      ><%=address.state%>,
+                                                                                </span>
+                                                                                <span editable-text="address.country" onbeforesave="inlinePatch('Infonode','addresses', 'country',address.entityKey,$data)" ng-show="address.country">
+                                                                                    <%=address.country%>
+                                                                                </span>
+                                                                            </li>
+                                                                            <li>
+                                                                                <a href="#addressmodal" class="btn-link addAnotherPhone" data-toggle="modal">
+                                                                                    <i class="icon-plus"></i> {{ _('Add a new address')}}
+                                                                                </a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                    <div class="news-blocks blank-card blank-card-bluep">
+                                                                        <h3>{{ _('Links')}}</h3>
+                                                                        <div class="news-block-tags">
+                                                                            <strong>{{ _('Website')}}</strong>
+                                                                        </div>
+                                                                        <ul class="list-unstyled contact-infos" >
+                                                                            <li ng-show="showWebsiteForm">
+                                                                                <div class="row">
+                                                                                    <form class="form-inline newLeadForm" role="form">
+                                                                                        <div class="form-group lg-group" style="">
+                                                                                            <label class="sr-only" for="exampleInputEmail2">{{ _('Website')}}</label>
+                                                                                            <input type="url" ng-model="website.url" class="form-control" id="exampleInputEmail2" placeholder="{{ _('Enter a Website')}}" required>
+                                                                                        </div>
+                                                                                        <button type="submit" ng-click="pushElement(website, websites, 'websites')" class="btn blue jfk-button jfk-button-action">{{ _('Add')}}</button>
+                                                                                        <button type="submit" ng-click="showWebsiteForm = false" class="btn btn-default">X</button>
+                                                                                    </form>
+                                                                                </div>
+                                                                            </li>
+                                                                            <li ng-repeat="website in websites">
+                                                                                <a editable-text="website.url" editoptions editdataattr="deleteInfos(websites,$index)" onbeforesave="inlinePatch('Infonode','websites', 'url',website.entityKey,$data)" href="http://<%=website.url%>"  target="_blank" >
+                                                                                    <%=website.url%>
+                                                                                </a>
+                                                                            </li>
+                                                                            <li>
+                                                                                <a   ng-hide="showWebsiteForm" ng-click="showWebsiteForm = true" class="btn-link addAnotherPhone">
+                                                                                    <i class="icon-plus"></i> {{ _('Add a new Website')}}
+                                                                                </a>
+                                                                            </li>
+                                                                        </ul>
+                                                                        <div class="news-block-tags">
+                                                                            <strong>{{ _('Social Links')}}</strong>
+                                                                        </div>
+                                                                        <ul class="list-unstyled contact-infos" >
+                                                                            <li ng-show="showSociallinkForm">
+                                                                                <div class="row">
+                                                                                    <form class="form-inline newLeadForm" role="form">
+                                                                                        <div class="form-group lg-group" style="">
+                                                                                            <label class="sr-only" for="exampleInputEmail2">{{ _('Social link')}}</label>
+                                                                                            <input type="url" class="form-control" id="exampleInputEmail2" ng-model='sociallink.url' placeholder="{{ _('Enter a social link')}}" required>
+                                                                                        </div>
+                                                                                        <button ng-click="pushElement(sociallink, sociallinks, 'sociallinks')" type="submit" class="btn blue jfk-button jfk-button-action">{{ _('Add')}}</button>
+                                                                                        <button type="submit" ng-click="showSociallinkForm = false" class="btn btn-default">X</button>
+                                                                                    </form>
+                                                                                </div>
+                                                                            </li>
+                                                                            <li ng-repeat="sociallink in sociallinks">
+                                                                                <a editoptions editdataattr="deleteInfos(sociallinks,$index)" editable-text="sociallink.url" onbeforesave="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,$data)" href="<%=sociallink.url%>" target="_blank"> <%=sociallink.url%>
+                                                                                </a>
+                                                                            </li>
+                                                                            <li>
+                                                                                <a class="btn-link addAnotherPhone" ng-hide="showSociallinkForm" ng-click="showSociallinkForm = true">
+                                                                                    <i class="icon-plus"></i> {{ _('Add a new social links')}}
+                                                                                </a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="news-blocks blank-card blank-card-red">
+                                                                        <h3>{{ _('Story')}}</h3>
+                                                                        <div class="news-block-tags">
+                                                                            <!--strong>Tagline </strong>
+                                                          
+                                                                            <span class="page-meta"><i class="icon-pencil">
+                                                                              <a ng-click="edittagline()" class="btn-link addAnotherPhone" data-toggle="modal">
+                                                                                {{_("Edit")}}
+                                                                              </a></i>
+                                                                            </span-->
+                                                                            <div class="form-group row">
+                                                                                <label class="control-label col-md-4">{{ _('Tagline')}}</label>
+                                                                                <div class="col-md-8">
+                                                                                    <input type="text" required id="id_tagline" class="form-control" ng-model="contact.tagline">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="news-block-tags">
+                                                                            <!--strong>Introduction</strong>
+                                                                            <span class="page-meta">
+                                                                              <i class="icon-pencil">
+                                                                              <a ng-click="editintro()" class="btn-link addAnotherPhone" data-toggle="modal" >
+                                                                                {{_("Edit")}}
+                                                                              </a></i>
+                                                                            </span-->
+                                                                            <div class="form-group row">
+                                                                                <label class="control-label col-md-4">{{ _('Introduction')}}</label>
+                                                                                <div class="col-md-8">
+                                                                                    <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="contact.introduction"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="news-blocks blank-card blank-card-yellow">
+                                                                        <h3>{{ _('Custom Fields')}}</h3>
+                                                                        <ul class="list-unstyled contact-infos" >
+                                                                            <li ng-show="showCustomFieldForm">
+                                                                                <div class="row">
+                                                                                    <form class="form-inline newLeadForm" role="form">
+                                                                                        <div class="form-group sm-group" style="">
+                                                                                            <label class="sr-only" for="exampleInputEmail2">{{ _('Field')}}</label>
+                                                                                            <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="{{ _('Enter field name')}}">
+                                                                                        </div>
+                                                                                        <div class="form-group sm-group" style="">
+                                                                                            <label class="sr-only" for="exampleInputEmail2">{{ _('Value')}}</label>
+                                                                                            <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="{{ _('Enter a value')}}">
+                                                                                        </div>
+                                                                                        <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(customfield, customfields, 'customfields')">{{ _('Add')}}</button>
+                                                                                        <button type="submit" class="btn btn-default" ng-click="showCustomFieldForm = false">X</button>
+                                                                                    </form>
+                                                                                </div>
+                                                                            </li>
+                                                                            <li ng-repeat="custom in customfields">
+
+                                                                                <a editoptions editdataattr="deleteInfos(customfields,$index)" editable-text="custom.field" onbeforesave="inlinePatch('Infonode','customfields', 'field',custom.entityKey,$data)" href="<%=custom.field%>" target="_blank"> <%=custom.field%>
+                                                                                </a>
+                                                                                <a editoptions editdataattr="deleteInfos(customfields,$index)" editable-text="custom.value" onbeforesave="inlinePatch('Infonode','customfields', 'value',custom.entityKey,$data)" href="<%=custom.value%>" target="_blank"> <%=custom.value%>
+                                                                                </a>
+
+                                                                            </li>
+                                                                            <li>
+                                                                                <a ng-click="showCustomFieldForm = true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal">
+                                                                                    <i class="icon-plus"></i> {{ _('Add a new custom field')}}
+                                                                                </a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="col-md-12">
                                             <div class="row">
-                                                <div class="col-md-12 waterfall" ng-hide="blankStateaccount">
+                                                <div class="col-md-12 waterfall waterfallDiv" ng-hide="showNewContact">
                                                     <div droppable  ng-repeat="contact in contacts"  class="cardElement" ng-drop="dropTag(contact)" >
+                                                        <div class="btn-group inCardOptionsBtn">
+                                                          <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
+                                                           <i class="fa fa-ellipsis-vertical"></i>
+                                                          </button>
+                                                          <ul class="dropdown-menu drp-dwn-right " role="menu">
+                                                            <li>
+                                                             <a href="" ng-click="showAssigneeTags(opportunity)">
+                                                                 <i class='fa fa-tags'></i> Add tags </a>
+                                                            </li>
+                                                            <li>
+                                                             <a href="" ng-click="editbeforedelete(contact,'contact',$index)">
+                                                                 <i class='fa fa-trash-o'></i> Delete </a>
+                                                            </li>
+                                                          </ul>
+                                                        </div>
                                                         <div class="detailsSection">
                                                             <div class="head">
                                                                 <div class="pic">
@@ -483,7 +795,7 @@
                                                     <div class="clearfix"></div>
 
                                                 </div><!--/inner-cards-container-->
-                                                <div ng-show="blankStatecontact" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12" style="">
+                                                <div ng-show="blankStatecontact&&!showNewContact"  class="col-md-12 responsive" data-tablet="span6" data-desktop="span12" style="">
                                                     <div class="dashboard-stat cards">
                                                         <div class="blank_slate_arrow"></div>
                                                         <div class="thumbnail blank_slate_body">
@@ -790,7 +1102,7 @@
                                                          <i class='fa fa-tags'></i> Add tags </a>
                                                     </li>
                                                     <li>
-                                                     <a href="" ng-click="editbeforedelete(opportunity,'opportunity')">
+                                                     <a href="" ng-click="editbeforedelete(opportunity,'opportunity',$index)">
                                                          <i class='fa fa-trash-o'></i> Delete </a>
                                                     </li>
                                                   </ul>
@@ -1002,7 +1314,7 @@
                                                              <i class='fa fa-tags'></i> Add tags </a>
                                                         </li>
                                                         <li>
-                                                         <a href="" ng-click="editbeforedelete(casee,'case')">
+                                                         <a href="" ng-click="editbeforedelete(casee,'case',$index)">
                                                              <i class='fa fa-trash-o'></i> Delete </a>
                                                         </li>
                                                       </ul>
