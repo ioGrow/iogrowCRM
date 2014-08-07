@@ -608,6 +608,7 @@ class Opportunity(EndpointsModel):
                     competitor = request.competitor,
                     description = request.description
                     )
+        print opportunity
         opportunity_key = opportunity.put_async()
         opportunity_key_async = opportunity_key.get_result()
         # taskqueue.add(

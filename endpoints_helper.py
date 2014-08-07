@@ -29,7 +29,8 @@ from model import User
 import iograph
 
 from highrise.pyrise import Highrise, Person, Company, Deal, Task, Tag, Case
-
+import tweepy as tweepy
+from iomessages import TwitterProfileSchema
 
 
 
@@ -352,6 +353,59 @@ class EndpointsHelper():
         company=Company.get(request.id)
         tasks=company.tasks
         return tasks
+    @classmethod
+    def twitter_import_people(cls,screen_name):
+        credentials = {
+            'consumer_key' : 'vk9ivGoO3YZja5bsMUTQ',
+            'consumer_secret' : 't2mSb7zu3tu1FyQ9s3M4GOIl0PfwHC7CTGDcOuSZzZ4',
+            'access_token_key' : '1157418127-gU3bUzLK0MgTA9pzWvgMpwD6E0R4Wi1dWp8FV9W',
+            'access_token_secret' : 'k8C5jEYh4F4Ej2C4kDasHWx61ZWPzi9MgzpbNCevoCwSH'
+        }
+        auth = tweepy.OAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
+        auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
+        api = tweepy.API(auth)
+
+        user=api.get_user(screen_name=screen_name)
+
+        profile_schema=TwitterProfileSchema(
+                    )
+        if 'location' in user.__dict__:
+            profile_schema.location=user.location
+        if 'last_tweet_retweeted' in user.__dict__:
+            profile_schema.last_tweet_retweeted=user.last_tweet_retweeted
+        if 'url' in user.__dict__:
+            profile_schema.url_of_user_their_company=user.url
+        if 'screen_name' in user.__dict__:
+            profile_schema.screen_name=user.screen_name
+        if 'name' in user.__dict__:
+            profile_schema.name=user.name
+        if 'followers_count' in user.__dict__:
+            profile_schema.followers_count=user.followers_count
+        if 'friends_count' in user.__dict__:
+            profile_schema.friends_count=user.friends_count
+
+        if 'description' in user.__dict__:
+            profile_schema.description_of_user=user.description
+        if 'statuses_count' in user.__dict__:
+            profile_schema.nbr_tweets=user.statuses_count
+        if 'created_at' in user.__dict__:
+            profile_schema.created_at=user.created_at.strftime("%Y-%m-%dT%H:%M:00.000")
+        if 'lang' in user.__dict__:
+            profile_schema.language=user.lang
+        if 'retweet_count' in user.status.__dict__:
+            profile_schema.last_tweet_retweet_count=user.status.retweet_count
+        if 'favorite_count' in user.status.__dict__:
+            profile_schema.last_tweet_favorite_count=user.status.favorite_count
+        if 'text' in user.status.__dict__:
+            profile_schema.last_tweet_text=user.status.text
+        if 'profile_image_url_https' in user.__dict__:
+            profile_schema.profile_image_url_https=user.profile_image_url_https
+        if 'id' in user.__dict__:
+            profile_schema.id=user.id
+        print profile_schema
+
+
+        return profile_schema
 
 
 class scor_new_lead():

@@ -68,7 +68,7 @@ from endpoints_helper import EndpointsHelper
 from people import linked_in
 from operator import itemgetter, attrgetter
 import iomessages
-from iomessages import profileSchema
+from iomessages import profileSchema, TwitterProfileSchema
 
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
@@ -132,6 +132,10 @@ def LISTING_QUERY(query, access, organization, owner, collaborators, order):
                         ).order(order)
 
 
+
+class TwitterProfileRequest(messages.Message):
+    firstname = messages.StringField(1)
+    lastname = messages.StringField(2)
 
  # The message class that defines the EntityKey schema
 class EntityKeyRequest(messages.Message):
@@ -2299,6 +2303,7 @@ class CrmEngineApi(remote.Service):
                       name='opportunities.insertv2')
     def opportunity_insert_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
+        print request
         return Opportunity.insert(
                             user_from_email = user_from_email,
                             request = request
@@ -2660,7 +2665,7 @@ class CrmEngineApi(remote.Service):
                 # clicking on the link below:
                 # %s
                 # """ % confirmation_url
-                body=request.message+confirmation_url
+                body=request.message+"  Url:  "+confirmation_url
                 print body
 
                 mail.send_mail(sender_address, email , subject, body)
@@ -3218,3 +3223,19 @@ class CrmEngineApi(remote.Service):
 
         return ColaboratorItem(items=tab)
 
+    # twitter.get_people api
+    @endpoints.method(TwitterProfileRequest, TwitterProfileSchema,
+                      path='twitter/get_people', http_method='POST',
+                      name='twitter.get_people')
+    def twitter_get_people(self, request):
+        print ("ssss")
+        #linkedin=linked_in()
+        #screen_name=linkedin.scrap_twitter("Meziane","Hadjadj")
+        linkedin=linked_in()
+        screen_name=linkedin.scrape_twitter(request.firstname,request.lastname)
+        #name=str.find(".com/", beg=0 end=len(string))
+        print name
+
+        profile_schema=EndpointsHelper.twitter_import_people(screen_name)
+
+        return profile_schema
