@@ -620,6 +620,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.newEventform=false;
         $scope.newTask={};
         $scope.ioevent = {};
+
         $scope.showNewOpp=false;
         $scope.showNewCase=false;
         $scope.showNewContact=false;
@@ -1574,6 +1575,31 @@ $scope.updateEventRenderAfterAdd= function(){};
 
      
         // HKA 19.11.2013 Add Opportunty related to account
+
+        $scope.saveOpp = function(opportunity) {
+            if (opportunity.amount_per_unit){
+            var params = {'name':opportunity.name,
+                                            'currency':opportunity.currency,
+                                            'account':$scope.account.entityKey,
+                                            'stage' :$scope.stage_selected.entityKey,
+                                            'access': $scope.account.access,
+                                            };
+            if (opportunity.duration_unit=='fixed'){
+                params.amount_total=opportunity.amount_per_unit;
+              params.opportunity_type = 'fixed_bid';
+            }else{
+              params.opportunity_type = 'per_' + opportunity.duration;
+              params.amount_total=opportunity.amount_per_unit * opportunity.duration;
+              params.amount_per_unit=opportunity.amount_per_unit
+            }
+            
+            Opportunity.insert($scope, params);
+            $('#addOpportunityModal').modal('hide');
+        }
+        };
+ $scope.opportunityInserted = function(resp){
+          window.location.replace('#/accounts');
+      };
 
         // HKA 19.11.2013 Add Case related to account
 

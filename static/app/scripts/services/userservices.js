@@ -95,7 +95,9 @@ accountservices.factory('User', function($http) {
               console.log(resp);
 
                    // be careful , right it back !
+
               window.location.reload();
+
 
 
                // Call the method $apply to make the update on the scope
@@ -112,6 +114,34 @@ accountservices.factory('User', function($http) {
           });
   }
 
+
+// hadji hicham 4/08/2014 -- get user by google user id 
+User.get_user_by_gid=function($scope,params){
+        
+                console.log(params)
+                console.log("hohohohohoho");
+ gapi.client.crmengine.users.get_user_by_gid(params).execute(function(resp) {
+      
+         if(!resp.code){
+            $scope.user_acc=resp ;
+            
+            $scope.renderCalendar(resp);
+          $scope.isLoading = false;
+         }else{
+              console.log(resp.message);
+               $('#addAccountModal').modal('hide');
+                $('#errorModal').modal('show');
+              if(resp.message=="Invalid grant"){
+               $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+            };
+              // To do add custom error handler
+
+
+         }
+      } );
+} 
 
 return User;
 });
@@ -152,6 +182,7 @@ accountservices.factory('Permission', function($http) {
          }
       });
   };
+
 
 
 return Permission;
