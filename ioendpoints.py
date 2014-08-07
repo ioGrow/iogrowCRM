@@ -2684,7 +2684,7 @@ class CrmEngineApi(remote.Service):
     @User.method(user_required=True,
                   http_method='PATCH', path='users/{id}', name='users.patch')
     def UserPatch(self, my_model):
-        #user_from_email = EndpointsHelper.require_iogrow_user()
+        user_from_email = EndpointsHelper.require_iogrow_user()
         # Todo: Check permissions
         if not my_model.from_datastore:
             raise endpoints.NotFoundException('Account not found.')
@@ -2698,6 +2698,7 @@ class CrmEngineApi(remote.Service):
             and (my_p and not(p in ['put', 'set_perm', 'put_index'])):
                 exec('patched_model.' + p + '= my_model.' + p)
         patched_model.put()
+        memcache.set(user_from_email.email, patched_model)
         return patched_model
     # hadji hicham 4/08/2014 -- get user by google user id     
     @User.method(user_required=True,
