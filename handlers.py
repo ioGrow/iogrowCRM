@@ -38,7 +38,7 @@ from iograph import Node , Edge
 # import event . hadji hicham 09-07-2014
 from iomodels.crmengine.events import Event
 # under the test .beata !
-
+import stripe
 jinja_environment = jinja2.Environment(
   loader=jinja2.FileSystemLoader(os.getcwd()),
   extensions=['jinja2.ext.i18n'],cache_size=0)
@@ -176,6 +176,28 @@ class WelcomeHandler(BaseHandler, SessionEnabledHandler):
         template = jinja_environment.get_template('templates/live/welcome.html')
         self.response.out.write(template.render(template_values))
 
+
+class StripeHandler(BaseHandler,SessionEnabledHandler):
+    def post(self):
+        stripe.api_key = "sk_test_4XbEK6FG7IWipzMTa3m4JaPY"
+
+        # Get the credit card details submitted by the form
+        token = self.request.get('stripeToken')
+        print "**************************************"
+        print token
+        print "***********************************"
+
+        # Create the charge on Stripe's servers - this will charge the user's card
+        try:
+          charge = stripe.Charge.create(
+              amount=1000, # amount in cents, again
+              currency="usd",
+              card=token,
+              description="arezki@iogrow.com"
+          )
+        except stripe.CardError, e:
+          # The card has been declined
+          pass
 
 class IndexHandler(BaseHandler,SessionEnabledHandler):
     def get(self):
@@ -1198,7 +1220,10 @@ routes = [
     ('/start-early-bird-account',StartEarlyBird),
     ('/sign-in',SignInHandler),
     ('/sign-up',SignUpHandler),
-    ('/gconnect',GooglePlusConnect)
+    ('/gconnect',GooglePlusConnect),
+
+    ('/stripe',StripeHandler),
+
     ]
 config = {}
 config['webapp2_extras.sessions'] = {

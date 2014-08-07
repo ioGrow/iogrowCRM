@@ -5,6 +5,7 @@ import mechanize
 from bs4 import BeautifulSoup
 import cookielib
 import re
+import stripe
 class linked_in():
     def __init__(self):
         # Browser
@@ -222,6 +223,23 @@ class linked_in():
                                     skills=pro.skills
                                     )
             return response
-ff=linked_in()
-ff.open_url("tedj  ", "meabou")
+# Set your secret key: remember to change this to your live secret key in production
+# See your keys here https://dashboard.stripe.com/account
+stripe.api_key = "sk_test_4XbEK6FG7IWipzMTa3m4JaPY"
+
+# Get the credit card details submitted by the form
+token = "tok_14OXLo40aCapGc6xmMDH52ML"
+
+
+# Create the charge on Stripe's servers - this will charge the user's card
+try:
+  charge = stripe.Charge.create(
+      amount=100000, # amount in cents, again
+      currency="usd",
+      card=token,
+      description="payinguser@example.com"
+  )
+except stripe.CardError, e:
+  # The card has been declined
+  print "error"
         # print result
