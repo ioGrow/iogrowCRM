@@ -619,6 +619,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
       $scope.newTask={};
       $scope.selected_members = [];
       $scope.selected_member = {};
+
       $scope.showNewOpp=false;
       $scope.showNewCase=false;
       $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
@@ -638,9 +639,9 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 				return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
 		}
 		$scope.waterfallTrigger= function(){
-			console.log("triggered");
 				 $( window ).trigger( "resize" );
 		};
+
 			// What to do after authentication
 			$scope.runTheProcess = function(){
 
@@ -1248,7 +1249,7 @@ $scope.updatContactHeader = function(contact){
 		$('#addCaseModal').modal('show');
 	};
 	// HKA 02.12.2013 Add Opportunty related to Contact
-	$scope.prepareInfonodes = function(){
+$scope.prepareInfonodes = function(){
         var infonodes = [];
 
         angular.forEach($scope.customfields, function(customfield){
@@ -1266,28 +1267,34 @@ $scope.updatContactHeader = function(contact){
         });
         return infonodes;
     };
-	$scope.saveOpp = function(opportunity){
-		$scope.isLoading=true;
-        opportunity.closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
-        opportunity.stage = $scope.initialStage.entityKey;
-        opportunity.infonodes = $scope.prepareInfonodes();
-        // prepare amount attributes
-        if (opportunity.duration_unit=='fixed'){
-          opportunity.amount_total = opportunity.amount_per_unit;
-          opportunity.opportunity_type = 'fixed_bid';
-        }else{
-          opportunity.opportunity_type = 'per_' + opportunity.duration;
-        }
-        opportunity.account=$scope.contact.account.entityKey;
-        opportunity.contact=$scope.contact.entityKey;
-        Opportunity.insert($scope,opportunity);
-        $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
-        $scope.showNewOpp=false;
-        $scope.isLoading=false;
-        $scope.$apply();
-        console.log($scope.opportunitystages);
+		$scope.saveOpp = function(opportunity){
+			if (opportunity.amount_per_unit){
+			var params = {'name':opportunity.name,
+											'currency':opportunity.currency,
+											'account':$scope.contact.account.entityKey,
+											'contact':$scope.contact.entityKey,
+											'stage' :$scope.stage_selected.entityKey,
+											'access': $scope.contact.access,
+											};
+			if (opportunity.duration_unit=='fixed'){
+				params.amount_total=opportunity.amount_per_unit;
+              params.opportunity_type = 'fixed_bid';
+            }else{
+              params.opportunity_type = 'per_' + opportunity.duration;
+              params.amount_total=opportunity.amount_per_unit * opportunity.duration;
+              params.amount_per_unit=opportunity.amount_per_unit
+            }
+			
+			Opportunity.insert($scope,params);
+			$('#addOpportunityModal').modal('hide');
+		}	
+		};
 
-	};
+ $scope.opportunityInserted = function(resp){
+          window.location.replace('#/contacts');
+      };
+	
+	
    $scope.priorityColor=function(pri){
       if (pri<4) {
           return '#BBE535';

@@ -93,3 +93,21 @@ class PatchTagSchema(messages.Message):
      about_kind=messages.StringField(3)
      name=messages.StringField(4)
 
+class TwitterProfileSchema(messages.Message):
+    id=messages.IntegerField(1)
+    followers_count=messages.IntegerField(2)
+    last_tweet_text=messages.StringField(3)
+    last_tweet_favorite_count=messages.IntegerField(4)
+    last_tweet_retweeted=messages.StringField(5)
+    last_tweet_retweet_count=messages.IntegerField(6)
+    language=messages.StringField(7)
+    created_at=messages.StringField(8)
+    nbr_tweets=messages.IntegerField(9)
+    description_of_user=messages.StringField(10)
+    friends_count=messages.IntegerField(11)
+    name=messages.StringField(12)
+    screen_name=messages.StringField(13)
+    url_of_user_their_company=messages.StringField(14)
+    location=messages.StringField(15)
+    profile_image_url_https=messages.StringField(16)
+
