@@ -194,10 +194,8 @@ leadservices.factory('Lead', function($http) {
 
     Lead.get_twitter= function($scope,params) {
           $scope.isLoading = true;
-          console.log("hhhhhhhhhhhhh");
           gapi.client.crmengine.people.gettwitter(params).execute(function(resp) {
             if(!resp.code){
-              console.log("entreeeeeeeeeeee");
              $scope.twitterProfile.id=resp.id;
              $scope.twitterProfile.followers_count=resp.followers_count;
              $scope.twitterProfile.last_tweet_text=resp.last_tweet_text;
@@ -214,6 +212,7 @@ leadservices.factory('Lead', function($http) {
              $scope.twitterProfile.url_of_user_their_company=resp.url_of_user_their_company;
              $scope.twitterProfile.location=resp.location;
              $scope.twitterProfile.profile_image_url_https=resp.profile_image_url_https;
+             $scope.twitterProfile.lang=resp.lang;
 
 
 
@@ -221,12 +220,10 @@ leadservices.factory('Lead', function($http) {
              $scope.$apply();
               console.log($scope.twitterProfile);
               console.log(resp);
-              console.log("iiiiiiiiii");
             }else {
                if(resp.code==401){
                 // $scope.refreshToken();
                console.log(resp);
-               console.log("sssdeeeeeeeeeee");
                 $scope.isLoading = false;
                 $scope.$apply();
                };

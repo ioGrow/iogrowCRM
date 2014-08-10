@@ -361,6 +361,7 @@ class EndpointsHelper():
             'access_token_key' : '1157418127-gU3bUzLK0MgTA9pzWvgMpwD6E0R4Wi1dWp8FV9W',
             'access_token_secret' : 'k8C5jEYh4F4Ej2C4kDasHWx61ZWPzi9MgzpbNCevoCwSH'
         }
+        print screen_name,"sccccccccccccccccccc"
         auth = tweepy.OAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
         auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
         api = tweepy.API(auth)
@@ -386,13 +387,14 @@ class EndpointsHelper():
 
         if 'description' in user.__dict__:
             profile_schema.description_of_user=user.description
+        if 'lang' in user.__dict__:
+            profile_schema.lang=user.lang
         if 'statuses_count' in user.__dict__:
             profile_schema.nbr_tweets=user.statuses_count
         if 'created_at' in user.__dict__:
             profile_schema.created_at=user.created_at.strftime("%Y-%m-%dT%H:%M:00.000")
         if 'lang' in user.__dict__:
             profile_schema.language=user.lang
-        print user.__dict__, "ddddddddddddddddd"
         if 'status' in user.__dict__:
             if 'retweet_count' in user.status.__dict__:
                 profile_schema.last_tweet_retweet_count=user.status.retweet_count
@@ -404,7 +406,6 @@ class EndpointsHelper():
             profile_schema.profile_image_url_https=user.profile_image_url_https
         if 'id' in user.__dict__:
             profile_schema.id=user.id
-        print profile_schema, "inserttttt"
 
 
         return profile_schema

@@ -110,4 +110,5 @@ class TwitterProfileSchema(messages.Message):
     url_of_user_their_company=messages.StringField(14)
     location=messages.StringField(15)
     profile_image_url_https=messages.StringField(16)
+    lang=messages.StringField(17)
 

@@ -154,7 +154,7 @@
                                         <a ng-click="waterfallTrigger(); selectedTab = 7;">{{_('Attach Documents')}}</a>
                                     </li>
                                     <li  class="ng-tab sm-menu"  ng-class="{active: selectedTab == 9}">
-                                        <a ng-hide="checkIfEmpty(linkedProfile)" ng-click="waterfallTrigger(); selectedTab = 9;"  >LinkedIn</a>
+                                        <a ng-hide="checkIfEmpty(linkedProfile,twitterProfile)" ng-click="waterfallTrigger(); selectedTab = 9;"  >Details of Lead</a>
                                     </li>  
                                     <!-- <li class="ng-tab md-menu" ng-class="{active: selectedTab == 4}">
                                       <a ng-click="selectedTab = 4;">Needs</a>
@@ -768,6 +768,99 @@
                                                     </li>
                                                 </ul>
                                             </div>
+                                            <div class="news-blocks blank-card blank-card-yellow newsCard">
+                                                <h3>General Informations from Twitter</h3>
+                                                <img class="google-avatar pull-right" src="<%=twitterProfile.profile_image_url_https%>"/>
+                                                <div class="news-block-tags">
+                                                    <strong>Description of user</strong>
+                                                </div>
+                                                <ul class="list-unstyled contact-infos">
+                                                
+                                                    <li>
+                                                        <%=twitterProfile.description_of_user%>
+                                                    </li>
+                                    
+
+                                                </ul>
+                                               
+                                                <div class="news-block-tags">
+                                                    <strong>Screen name</strong>
+                                                </div>
+                                                <ul class="list-unstyled contact-infos">
+                                                    <li>
+                                                        <%=twitterProfile.screen_name%>
+                                                    </li>
+                                                </ul> 
+                                                <div class="news-block-tags">
+                                                    <strong>Location</strong>
+                                                </div>
+                                                <ul class="list-unstyled contact-infos">
+                                                    <li>
+                                                        <%=twitterProfile.location%>
+                                                    </li>
+                                                </ul>
+                                                <div class="news-block-tags">
+                                                    <strong>Language</strong>
+                                                </div>
+                                                <ul class="list-unstyled contact-infos">
+                                                    <li>
+                                                        <%=twitterProfile.lang%>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="news-blocks blank-card blank-card-red newsCard">
+                                                <h3>Stats from Twitter</h3>
+                                                <div class="news-block-tags">
+                                                    <strong>Number of Tweets</strong>
+                                                </div>
+                                                <ul class="list-unstyled contact-infos">
+                                                    <li>
+                                                        <%=twitterProfile.nbr_tweets%>
+                                                    </li>
+                                                </ul>
+                                                <div class="news-block-tags">
+                                                    <strong>Number of followers</strong>
+                                                </div>
+                                                <ul class="list-unstyled contact-infos">
+                                                <li>
+                                                        <%=twitterProfile.followers_count%>
+                                                </li>
+                                                </ul>
+                                                <div class="news-block-tags">
+                                                    <strong>Number of friends</strong>
+                                                </div>
+                                                <ul class="list-unstyled contact-infos">
+                                                    <li>
+                                                        <%=twitterProfile.friends_count%>
+                                                    </li>
+                                                </ul> 
+                                            </div>
+                                             <div class="news-blocks blank-card blank-card-red newsCard">
+                                                <h3> Tweets</h3>
+                                                <div class="news-block-tags">
+                                                    <strong>Last Tweet:</strong>
+                                                </div>
+                                                <ul class="list-unstyled contact-infos">
+                                                    <li>
+                                                        Text:
+                                                        <br/>
+                                                        <%=twitterProfile.last_tweet_text%>
+                                                    </li>
+                                                </ul>
+                                                <ul  class="list-unstyled contact-infos" >
+                                                    Number of retweets:
+                                                    <br/>
+                                                        <%=twitterProfile.last_tweet_retweet_count%>
+                                                    <br/>
+                                                    Number of favorites:
+                                                    <br/>
+                                                <%=twitterProfile.last_tweet_favorite_count%>
+                                                    
+                                                </ul>
+                                                
+                                                
+                                            </div>
+
                                         </div>
                                         <div class="col-md-6">
                                             <div class="right-col">
@@ -799,6 +892,7 @@
                                                     </li>
                                                     </ul>
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>

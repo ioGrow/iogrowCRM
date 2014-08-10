@@ -980,7 +980,7 @@ class GetFromLinkedinToIoGrow(webapp2.RequestHandler):
             pli.skills=profil["skills"]
             print pli
             key2=pli.put()
-            Edge.insert(start_node=key1,end_node=key2,kind='linkedin',inverse_edge='parents')
+            es=Edge.insert(start_node=key1,end_node=key2,kind='linkedin',inverse_edge='parents')
             # print profil
 class GetFromTwitterToIoGrow(webapp2.RequestHandler):
     def post(self):
@@ -998,12 +998,12 @@ class GetFromTwitterToIoGrow(webapp2.RequestHandler):
         print screen_name
         name=screen_name[screen_name.find("twitter.com/")+12:]
         print name
-
         profile_schema=EndpointsHelper.twitter_import_people(name)
         if profile_schema:
             profile=model.TwitterProfile()
             profile.id=profile_schema.id
             profile.followers_count=profile_schema.followers_count
+            profile.lang=profile_schema.lang
             profile.last_tweet_text=profile_schema.last_tweet_text
             profile.last_tweet_favorite_count=profile_schema.last_tweet_favorite_count
             profile.last_tweet_retweeted=profile_schema.last_tweet_retweeted
@@ -1023,7 +1023,7 @@ class GetFromTwitterToIoGrow(webapp2.RequestHandler):
 
 
         key2=profile.put()
-        Edge.insert(start_node=key1,end_node=key2,kind='twitter',inverse_edge='parents')
+        ed=Edge.insert(start_node=key1,end_node=key2,kind='twitter',inverse_edge='parents')
 
 
         

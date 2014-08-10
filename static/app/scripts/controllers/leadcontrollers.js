@@ -1431,9 +1431,15 @@ $scope.deletelead = function(){
   $scope.convertToJson=function(string){
     return  JSON.parse(string);
   }
-  $scope.checkIfEmpty=function(obj){
+  $scope.checkIfEmpty=function(obj,obj1){
   for(var prop in obj) {
         if(obj.hasOwnProperty(prop))
+        console.log(prop);
+            return false;
+    }
+  for(var prop in obj1) {
+        if(obj1.hasOwnProperty(prop))
+        console.log(prop);
             return false;
     }
 

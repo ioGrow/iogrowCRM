@@ -3229,7 +3229,7 @@ class CrmEngineApi(remote.Service):
                       path='people/twitterprofile', http_method='POST',
                       name='people.gettwitter')
     def get_people_twitter(self, request):
-        print request.entitKey,"keyyyyyyyyyykeyyyyyyyyyy",request
+        print request.entityKey,"keyyyyyyyyyykeyyyyyyyyyy",request
         response=linked_in.get_people_twitter(request.entityKey)
         print response, "rssssssssssssssss"
         return response   
@@ -3238,7 +3238,6 @@ class CrmEngineApi(remote.Service):
                       path='twitter/get_people', http_method='POST',
                       name='twitter.get_people')
     def twitter_get_people(self, request):
-        print ("ssss")
         #linkedin=linked_in()
         #screen_name=linkedin.scrap_twitter("Meziane","Hadjadj")
         linkedin=linked_in()
@@ -3246,7 +3245,5 @@ class CrmEngineApi(remote.Service):
         print screen_name
         name=screen_name[screen_name.find("twitter.com/")+12:]
         print name
-
         profile_schema=EndpointsHelper.twitter_import_people(name)
-
         return profile_schema
