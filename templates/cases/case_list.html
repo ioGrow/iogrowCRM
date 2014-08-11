@@ -339,7 +339,7 @@
         </div>
       </div>
       <div class="portlet-body">
-        <ul class="list-group tags-list" id="slimList">
+        <ul class="list-group tags-list" >
           <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
             <div class="row">
               <span editable-text="tag_item.name"  ng-drag="dragTag(tag_item)" id="iii"  draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;"
