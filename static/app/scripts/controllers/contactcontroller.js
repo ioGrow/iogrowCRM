@@ -177,7 +177,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 				$scope.createPickerUploader = function() {
 
 					$('#importModal').modal('hide');
-					var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
+					var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
 					var projectfolder = $scope.contact.folder;
 					var docsView = new google.picker.DocsView()
 							.setIncludeFolders(true)
@@ -188,7 +188,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 							setCallback($scope.uploaderCallback).
 							setOAuthToken(window.authResult.access_token).
 							setDeveloperKey(developerKey).
-							setAppId(987765099891).
+							setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
 							build();
 					picker.setVisible(true);
 			};
@@ -619,6 +619,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
       $scope.newTask={};
       $scope.selected_members = [];
       $scope.selected_member = {};
+
       $scope.showNewOpp=false;
       $scope.showNewCase=false;
       $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
@@ -638,9 +639,9 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 				return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
 		}
 		$scope.waterfallTrigger= function(){
-			console.log("triggered");
 				 $( window ).trigger( "resize" );
 		};
+
 			// What to do after authentication
 			$scope.runTheProcess = function(){
 
@@ -1248,7 +1249,7 @@ $scope.updatContactHeader = function(contact){
 		$('#addCaseModal').modal('show');
 	};
 	// HKA 02.12.2013 Add Opportunty related to Contact
-	$scope.prepareInfonodes = function(){
+$scope.prepareInfonodes = function(){
         var infonodes = [];
 
         angular.forEach($scope.customfields, function(customfield){
@@ -1266,28 +1267,34 @@ $scope.updatContactHeader = function(contact){
         });
         return infonodes;
     };
-	$scope.saveOpp = function(opportunity){
-		$scope.isLoading=true;
-        opportunity.closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
-        opportunity.stage = $scope.initialStage.entityKey;
-        opportunity.infonodes = $scope.prepareInfonodes();
-        // prepare amount attributes
-        if (opportunity.duration_unit=='fixed'){
-          opportunity.amount_total = opportunity.amount_per_unit;
-          opportunity.opportunity_type = 'fixed_bid';
-        }else{
-          opportunity.opportunity_type = 'per_' + opportunity.duration;
-        }
-        opportunity.account=$scope.contact.account.entityKey;
-        opportunity.contact=$scope.contact.entityKey;
-        Opportunity.insert($scope,opportunity);
-        $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
-        $scope.showNewOpp=false;
-        $scope.isLoading=false;
-        $scope.$apply();
-        console.log($scope.opportunitystages);
+		$scope.saveOpp = function(opportunity){
+			if (opportunity.amount_per_unit){
+			var params = {'name':opportunity.name,
+											'currency':opportunity.currency,
+											'account':$scope.contact.account.entityKey,
+											'contact':$scope.contact.entityKey,
+											'stage' :$scope.stage_selected.entityKey,
+											'access': $scope.contact.access,
+											};
+			if (opportunity.duration_unit=='fixed'){
+				params.amount_total=opportunity.amount_per_unit;
+              params.opportunity_type = 'fixed_bid';
+            }else{
+              params.opportunity_type = 'per_' + opportunity.duration;
+              params.amount_total=opportunity.amount_per_unit * opportunity.duration;
+              params.amount_per_unit=opportunity.amount_per_unit
+            }
+			
+			Opportunity.insert($scope,params);
+			$('#addOpportunityModal').modal('hide');
+		}	
+		};
 
-	};
+ $scope.opportunityInserted = function(resp){
+          window.location.replace('#/contacts');
+      };
+	
+	
    $scope.priorityColor=function(pri){
       if (pri<4) {
           return '#BBE535';
@@ -1582,7 +1589,7 @@ $scope.sendEmailSelected=function(){
 
 		 };
 		 $scope.createPickerUploader = function() {
-					var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
+					var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
 					var projectfolder = $scope.contact.folder;
 					var docsView = new google.picker.DocsView()
 							.setIncludeFolders(true)
@@ -1593,7 +1600,7 @@ $scope.sendEmailSelected=function(){
 							setCallback($scope.uploaderCallback).
 							setOAuthToken(window.authResult.access_token).
 							setDeveloperKey(developerKey).
-							setAppId(987765099891).
+							setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
 								enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
 							build();
 					picker.setVisible(true);
@@ -1631,13 +1638,13 @@ $scope.sendEmailSelected=function(){
 					}
 			}
 			$scope.createLogoPickerUploader = function() {
-					 var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
+					 var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
 					 var picker = new google.picker.PickerBuilder().
 							 addView(new google.picker.DocsUploadView()).
 							 setCallback($scope.logoUploaderCallback).
 							 setOAuthToken(window.authResult.access_token).
 							 setDeveloperKey(developerKey).
-							 setAppId(987765099891).
+							 setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
 							 build();
 					 picker.setVisible(true);
 			 };
@@ -1828,13 +1835,13 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
 														'profile_img_url':null
 													};
 			$scope.createPickerUploader = function() {
-					var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
+					var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
 					var picker = new google.picker.PickerBuilder().
 							addView(new google.picker.DocsUploadView()).
 							setCallback($scope.uploaderCallback).
 							setOAuthToken(window.authResult.access_token).
 							setDeveloperKey(developerKey).
-							setAppId(987765099891).
+							setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
 							build();
 					picker.setVisible(true);
 			};

@@ -356,7 +356,10 @@
                                                             </form>
                                                         </div>
                                                     </li>
-                                                    <li ng-repeat="website in infonodes.websites"><a editable-text="website.url" onbeforesave="inlinePatch('Infonode','websites', 'url',website.entityKey,$data)" href="http://<%=website.url%>"  target="_blank" editoptions editdataattr="deleteInfonode('<%=website.entityKey%>','websites')" ><%=website.url%></a> </li>
+                                                    <li ng-repeat="website in infonodes.websites"><a editable-text="website.url" onbeforesave="inlinePatch('Infonode','websites', 'url',website.entityKey,$data)" href="http://<%=website.url%>"  target="_blank" editoptions editdataattr="deleteInfonode('<%=website.entityKey%>','websites')" ><%=website.url%></a>
+                                                        <a href="<%=website.url%>" target="new" class="icon-link" ></a>
+
+                                                     </li>
                                                     <li>
                                                         <a  ng-hide="showWebsiteForm" ng-click="showWebsiteForm = true" class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> {{_('Add a new Website')}} </a>
                                                     </li>
@@ -377,7 +380,9 @@
                                                             </form>
                                                         </div>
                                                     </li>
-                                                    <li ng-repeat="sociallink in infonodes.sociallinks"><a editable-text="sociallink.url" onbeforesave="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,$data)" href="<%=sociallink.url%>" target="_blank" editoptions editdataattr="deleteInfonode('<%=sociallink.entityKey%>','sociallinks')"> <%=sociallink.url%> </a></li>
+                                                    <li ng-repeat="sociallink in infonodes.sociallinks"><a editable-text="sociallink.url" onbeforesave="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,$data)" href="<%=sociallink.url%>" target="_blank" editoptions editdataattr="deleteInfonode('<%=sociallink.entityKey%>','sociallinks')"> <%=sociallink.url%> </a>
+                                                        <a href="<%=sociallink.url%>" target="new"  class="icon-link" ></a>
+                                                    </li>
                                                     <li>
                                                         <a class="btn-link addAnotherPhone" ng-hide="showSociallinkForm" ng-click="showSociallinkForm = true"><i class="icon-plus"></i> {{_('Add a new social links')}} </a>
                                                     </li>

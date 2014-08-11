@@ -1068,7 +1068,7 @@
                 </div>
                 <div class="portlet-body">
                     <div class="row">
-                    <ul class="list-group tags-list">
+                    <ul class="list-group tags-list" id="slimList">
                       <li  ng-repeat="tag_item in tags" class="list-group-item tags-list-item">
                         <span  editable-text="tag_item.name" draggable ng-drag="dragTag(tag_item)" style="background-color:<%=tag_item.color%>;color:idealTextColor(<%=tag_item.color%>);" class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"
                          ng-model='tag_item.name'  onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
@@ -1210,4 +1210,5 @@
                 disableFadeOut: true
             });
         });
+        $('#slimList').slimScroll({});
 </script>
