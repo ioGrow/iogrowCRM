@@ -113,10 +113,6 @@ class BaseHandler(webapp2.RequestHandler):
 
                 # Set the user locale from user's settings
                 self.set_user_locale(user.language)
-
-                print "*-*-*-*-*-*-*-*-*-*-*"
-                print user
-                print "*-*-*-*-*-*-*-*-*-*-*-"
                 # Render the template
                 active_app = user.get_user_active_app()
                 apps = user.get_user_apps()
@@ -133,6 +129,7 @@ class BaseHandler(webapp2.RequestHandler):
                           'active_app':active_app,
                           'apps':applications,
                           'tabs':tabs,
+                          'organization_key':user.organization.urlsafe()
                           }
         template = jinja_environment.get_template(template_name)
         self.response.out.write(template.render(template_values))
@@ -645,6 +642,10 @@ class CalendarShowHandler(BaseHandler,SessionEnabledHandler):
         self.prepare_template('templates/calendar/calendar_show.html')
 # hadji hicham 07/08/2014 
 class BillingHandler(BaseHandler,SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/billing/billing_list.html')
+# hadji hicham  11/08/2014
+class BillingShowHandler(BaseHandler,SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/billing/billing_show.html')
 # Workers
@@ -1218,7 +1219,8 @@ routes = [
     ('/views/admin/imports/list',ImportListHandler),
     ('/views/admin/imports/new',ImportNewHandler),
     #billing stuff. hadji hicham . 07/08/2014
-    ('/views/billing/show',BillingHandler),
+    ('/views/billing/list',BillingHandler),
+    ('/views/billing/show',BillingShowHandler),
 
     # Applications settings
     (r'/apps/(\d+)', ChangeActiveAppHandler),

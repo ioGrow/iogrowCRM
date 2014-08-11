@@ -171,6 +171,10 @@ app.config(['$routeProvider', function($routeProvider) {
       })
        .when('/billing/', {
         controller: 'BillingController',
+        templateUrl:'/views/billing/list'
+      })
+       .when('/billing/show/:userId', {
+        controller: 'BillingShowController',
         templateUrl:'/views/billing/show'
       });
 
