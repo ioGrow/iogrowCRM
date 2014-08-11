@@ -274,7 +274,7 @@
             </div>
           </div>
           <div class="portlet-body">
-            <ul class="list-group tags-list">
+            <ul class="list-group tags-list" id="slimList">
               <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item" >
                 <div class="row">
                   <span editable-text="tag_item.name" draggable ng-drag="dragTag(tag_item)"  class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;"
@@ -496,4 +496,5 @@
         autoresize: true
   });
   $('.textfill').textfill({debug: true, maxFontPixels: 16});
+  $('#slimList').slimScroll({});
 </script>

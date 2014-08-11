@@ -284,10 +284,11 @@
       <div class="portlet-title">
         <div class="caption">
                 <!-- class="fa fa-reorder"--><i></i>{{_("Labels")}}
-        </div>
+        </div>  
       </div>
       <div class="portlet-body">
-        <ul class="list-group tags-list">
+
+        <ul id="slimList" class="list-group tags-list ">
           <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
             <div class="row">
               <span editable-text="tag_item.name"  ng-drag="dragTag(tag_item)" id="iii"  draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;" 
@@ -419,4 +420,5 @@
         autoresize: true
       });
 $('.textfill').textfill({debug: true, maxFontPixels: 16});
+$('#slimList').slimScroll({});
 </script>
