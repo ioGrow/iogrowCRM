@@ -408,7 +408,15 @@ class ReportingResponseSchema(messages.Message):
 class ReportingListResponse(messages.Message):
     items = messages.MessageField(ReportingResponseSchema, 1, repeated=True)
 
+# hadji hicham 10/08/2014 -- Organization stuff .
 
+class OrganizationRquest(messages.Message):
+      organization=messages.StringField(1)
+
+class OrganizationResponse(messages.Message):
+      organizationName=messages.StringField(1)
+      organizationNumberOfUser=messages.StringField(2)
+      organizationNumberOfLicensed=messages.StringField(3)
 
 @endpoints.api(
                name='blogengine',
@@ -2685,7 +2693,7 @@ class CrmEngineApi(remote.Service):
                   http_method='PATCH', path='users/{id}', name='users.patch')
     def UserPatch(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        # Todo: Check permissions
+
         if not my_model.from_datastore:
             raise endpoints.NotFoundException('Account not found.')
         patched_model_key = my_model.entityKey
@@ -3240,3 +3248,20 @@ class CrmEngineApi(remote.Service):
         profile_schema=EndpointsHelper.twitter_import_people(screen_name)
 
         return profile_schema
+    @endpoints.method(OrganizationRquest,OrganizationResponse,path='organization/info',http_method='GET',name="users.get_organization")
+    def get_organization_info(self ,request):
+        organization_Key=ndb.Key(urlsafe=request.organization)
+        organization=organization_Key.get()
+        Users= User.query().filter(User.organization==organization_Key).fetch()
+        NmbrOfLicensed=0 
+        for user in Users :
+            # start_node=user.key
+            edge=Edge.query().filter(Edge.start_node==user.key and Edge.kind=="licenses").fetch()
+            if edge:
+                NmbrOfLicensed=NmbrOfLicensed+1
+
+        userslenght=len(Users)
+        response={ 'organizationName':organization.name,
+                   'organizationNumberOfUser': str(userslenght),
+                   'organizationNumberOfLicensed':str(NmbrOfLicensed)} 
+        return OrganizationResponse(**response)
