@@ -180,25 +180,41 @@ class WelcomeHandler(BaseHandler, SessionEnabledHandler):
 
 class StripeHandler(BaseHandler,SessionEnabledHandler):
     def post(self):
-        stripe.api_key = "sk_test_4XbEK6FG7IWipzMTa3m4JaPY"
+       
+
+        # Get the credit card details submitted by the form
+        
+        # Set your secret key: remember to change this to your live secret key in production
+        # See your keys here https://dashboard.stripe.com/account
+        stripe.api_key = "sk_test_4ZNpoS4mqf3YVHKVfQF7US1R"
 
         # Get the credit card details submitted by the form
         token = self.request.get('stripeToken')
-        print "**************************************"
-        print token
-        print "***********************************"
 
-        # Create the charge on Stripe's servers - this will charge the user's card
-        try:
-          charge = stripe.Charge.create(
-              amount=1000, # amount in cents, again
-              currency="usd",
-              card=token,
-              description="arezki@iogrow.com"
-          )
-        except stripe.CardError, e:
-          # The card has been declined
-          pass
+        # Create a Customer
+        customer = stripe.Customer.create(
+            card=token,
+            description="payinguser@example.com"
+        )
+
+        # Charge the Customer instead of the card
+        stripe.Charge.create(
+            amount=1000, # in cents
+            currency="usd",
+            customer=customer.id
+        )
+
+        # Save the customer ID in your database so you can use it later
+        save_stripe_customer_id(user, customer.id)
+
+        # Later...
+        customer_id = get_stripe_customer_id(user)
+
+        stripe.Charge.create(
+            amount=1500, # $15.00 this time
+            currency="usd",
+            customer=customer_id
+        )
 
 class IndexHandler(BaseHandler,SessionEnabledHandler):
     def get(self):

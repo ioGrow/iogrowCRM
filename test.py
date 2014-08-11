@@ -206,8 +206,7 @@ class linked_in():
         if result['items']:
             profile_key=result['items'][0].end_node
             pro= profile_key.get()
-            response=profileSchema(
-                                    lastname = pro.lastname,
+            response=profileSchema( lastname = pro.lastname,
                                     firstname = pro.firstname,
                                     industry = pro.industry,
                                     locality = pro.locality,
