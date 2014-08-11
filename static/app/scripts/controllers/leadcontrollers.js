@@ -1182,7 +1182,7 @@ $scope.deletelead = function(){
 
      };
      $scope.createPickerUploader = function() {
-          var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
+          var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
           var projectfolder = $scope.lead.folder;
           var docsView = new google.picker.DocsView()
               .setIncludeFolders(true)
@@ -1193,7 +1193,7 @@ $scope.deletelead = function(){
               setCallback($scope.uploaderCallback).
               setOAuthToken(window.authResult.access_token).
               setDeveloperKey(developerKey).
-              setAppId(987765099891).
+              setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
                 enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
               build();
           picker.setVisible(true);
@@ -1231,13 +1231,13 @@ $scope.deletelead = function(){
           }
       }
       $scope.createLogoPickerUploader = function() {
-           var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
+           var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
            var picker = new google.picker.PickerBuilder().
                addView(new google.picker.DocsUploadView()).
                setCallback($scope.logoUploaderCallback).
                setOAuthToken(window.authResult.access_token).
                setDeveloperKey(developerKey).
-               setAppId(987765099891).
+               setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
                build();
            picker.setVisible(true);
        };
@@ -1486,13 +1486,13 @@ app.controller('LeadNewCtrl', ['$scope','Auth','Lead','Leadstatus','Tag','Edge',
                             'profile_img_url':null
                           }
       $scope.createPickerUploader = function() {
-          var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
+          var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
           var picker = new google.picker.PickerBuilder().
               addView(new google.picker.DocsUploadView()).
               setCallback($scope.uploaderCallback).
               setOAuthToken(window.authResult.access_token).
               setDeveloperKey(developerKey).
-              setAppId(987765099891).
+              setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
               build();
           picker.setVisible(true);
       };

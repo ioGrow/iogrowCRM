@@ -64,14 +64,15 @@ class Tag(EndpointsModel):
       						)
         tag_list = []
         for edge in edge_list['items']:
-            tag_list.append(
-                            TagSchema(
-                            		id = str(edge.end_node.id()),
-                                    edgeKey = edge.key.urlsafe(),
-                                    name = edge.end_node.get().name,
-                                    color = edge.end_node.get().color
-                                    )
-                            )
+            if edge.end_node.get() is not None:
+                tag_list.append(
+                                TagSchema(
+                                		id = str(edge.end_node.id()),
+                                        edgeKey = edge.key.urlsafe(),
+                                        name = edge.end_node.get().name,
+                                        color = edge.end_node.get().color
+                                        )
+                                )
         return tag_list
 
     @classmethod
