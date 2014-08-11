@@ -230,6 +230,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
        opportunity.stagename= $scope.stage_selected.name;
        opportunity.stage_probability= $scope.stage_selected.probability;
        opportunity.stage = $scope.stage_selected.entityKey;
+
         if (typeof(opportunity.account)=='object'){
           opportunity.account_name = opportunity.account.name;
           opportunity.account_id = opportunity.account.id;
@@ -521,14 +522,12 @@ $scope.addTags=function(){
         $scope.draggedTag=tag;
       }
       $scope.dropTag=function(opportunity,index){
-        console.log("droooooooooooooooop");
         var items = [];
 
         var params = {
               'parent': opportunity.entityKey,
               'tag_key': $scope.draggedTag.entityKey
         };
-        console.log(params);
         $scope.draggedTag=null;
         Tag.attach($scope,params,index);
 
@@ -1559,6 +1558,7 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
       }
 
       $scope.save = function(opportunity){
+        if (opportunity.amount_per_unit){
         var hasContact = false;
         var hasAccount = false;
         opportunity.closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
@@ -1593,12 +1593,13 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
               opportunity.opportunity_type = 'fixed_bid';
             }else{
               opportunity.opportunity_type = 'per_' + opportunity.duration;
+              opportunity.amount_total = opportunity.amount_per_unit * opportunity.duration;
             }
             Opportunity.insert($scope,opportunity);
         }else{
             // should highlight contact and account
         }
-
+      }
       };
       $scope.accountInserted = function(resp){
           $scope.opportunity.account = resp;

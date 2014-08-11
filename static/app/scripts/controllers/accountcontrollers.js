@@ -602,8 +602,6 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             'logo_img_id': null,
             'logo_img_url': null
         };
-
-
         $scope.editdata = {'edit': 'test()'};
         $scope.percent = 0;
          $scope.chartOptions = {
@@ -622,10 +620,14 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.newEventform=false;
         $scope.newTask={};
         $scope.ioevent = {};
+
         $scope.showNewOpp=false;
         $scope.showNewCase=false;
+        $scope.showNewContact=false;
         $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
-              $scope.selectedItem={};
+        $scope.selectedItem={};
+        $scope.relatedCase=true;
+        $scope.relatedOpp=true;
         // What to do after authentication
         $scope.endError = function() {
             alert("okkkkkkkkkkkkkkk");
@@ -647,6 +649,29 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                 infonodes.push(infonode);
             });
             return infonodes;
+        };
+           $scope.savecontact = function(contact) {
+            console.log("started");
+            var params ={
+                        'firstname':contact.firstname,
+                        'lastname':contact.lastname,
+                        'title':contact.title,
+                        'tagline':contact.tagline,
+                        'introduction':contact.introduction,
+                        'phones':$scope.phones,
+                        'emails':$scope.emails,
+                        'addresses':$scope.addresses,
+                        'infonodes':$scope.prepareInfonodes(),
+                        'access': contact.access,
+                        'account': $scope.account.entityKey
+                         };
+                       /* if ($scope.profile_img.profile_img_id){
+                                params['profile_img_id'] = $scope.profile_img.profile_img_id;
+                                params['profile_img_url'] = 'https://docs.google.com/uc?id='+$scope.profile_img.profile_img_id;
+                        }*/
+                        Contact.insert($scope,params);
+                        $scope.contact={};
+                        $scope.showNewContact=false;
         };
             $scope.saveOpp = function(opportunity){
             $scope.isLoading=true;
@@ -685,6 +710,11 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             }  
           }
          }
+          $scope.hideNewContactForm=function(){
+            $scope.contact={};
+            $scope.showNewContact=false;
+            $( window ).trigger( 'resize' ); 
+         }
          $scope.hideNewCaseForm=function(){
             $scope.casee={};
             $scope.casee.priority = 4;
@@ -715,28 +745,48 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             Case.insert($scope, params);
             $('#addCaseModal').modal('hide');   */
         };
-         $scope.editbeforedelete = function(item,typee){
-            $scope.selectedItem={'item':item,'typee':typee};
+         $scope.editbeforedelete = function(item,typee,index){
+            $scope.selectedItem={'item':item,'typee':typee,'index':index};
             console.log($scope.selectedItem);
             $('#BeforedeleteAccount').modal('show');
          };
          $scope.deleteItem=function(){
             var params = {'entityKey':$scope.selectedItem.item.entityKey};
             console.log(params);
-            if ($scope.selectedItem.typee=='contact') {
-                 Contact.delete($scope, params);
+            if ($scope.selectedItem.typee=='account') {
+                Account.delete($scope, params);
             }else{
-                if ($scope.selectedItem.typee=='opportunity') {
-                     Opportunity.delete($scope, params);
+                if ($scope.selectedItem.typee=='contact') {
+                 Contact.delete($scope, params);                 
                 }else{
-                    if ($scope.selectedItem.typee=='case') {
-                        console.log('hererrrrr');
-                         Case.delete($scope, params);
-                    };
-                }
+                    if ($scope.selectedItem.typee=='opportunity') {
+                         Opportunity.delete($scope, params);
+                    }else{
+                        if ($scope.selectedItem.typee=='case') {
+                             Case.delete($scope, params);
+                        };
+                    }
+                }    
             }
+            
              $('#BeforedeleteAccount').modal('hide');
          }
+         $scope.contactDeleted = function(resp){
+               $scope.contacts.splice($scope.selectedItem.index, 1);
+               $scope.$apply();
+               $scope.waterfallTrigger();
+         };
+         $scope.caseDeleted = function(resp){
+               $scope.cases.splice($scope.selectedItem.index, 1);
+               $scope.$apply();
+               $scope.waterfallTrigger();
+         };
+        $scope.oppDeleted = function(resp){
+               $scope.opportunity.splice($scope.selectedItem.index, 1);
+               $scope.$apply();
+               $scope.waterfallTrigger();
+         };
+
 
         $scope.fromNow = function(fromDate){
             return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
@@ -1523,26 +1573,33 @@ $scope.updateEventRenderAfterAdd= function(){};
 
 //HKA 19.11.2013 Add Contact related to account
 
-        $scope.savecontact = function(contact) {
-            var contact_name = new Array();
-            contact_name.push(contact.firstname);
-            contact_name.push(contact.lastname);
-
-            var params = {'lastname': contact.lastname,
-                'firstname': contact.firstname,
-                'title': contact.title,
-                'account': $scope.account.entityKey,
-                'account_name': $scope.account.name,
-                'display_name': contact_name,
-                'access': $scope.account.access
-            };
-
-
-
-            Contact.insert($scope, params);
-            $('#addContactModal').modal('hide');
-        };
+     
         // HKA 19.11.2013 Add Opportunty related to account
+
+        $scope.saveOpp = function(opportunity) {
+            if (opportunity.amount_per_unit){
+            var params = {'name':opportunity.name,
+                                            'currency':opportunity.currency,
+                                            'account':$scope.account.entityKey,
+                                            'stage' :$scope.stage_selected.entityKey,
+                                            'access': $scope.account.access,
+                                            };
+            if (opportunity.duration_unit=='fixed'){
+                params.amount_total=opportunity.amount_per_unit;
+              params.opportunity_type = 'fixed_bid';
+            }else{
+              params.opportunity_type = 'per_' + opportunity.duration;
+              params.amount_total=opportunity.amount_per_unit * opportunity.duration;
+              params.amount_per_unit=opportunity.amount_per_unit
+            }
+            
+            Opportunity.insert($scope, params);
+            $('#addOpportunityModal').modal('hide');
+        }
+        };
+ $scope.opportunityInserted = function(resp){
+          window.location.replace('#/accounts');
+      };
 
         // HKA 19.11.2013 Add Case related to account
 

@@ -327,8 +327,15 @@ accountservices.factory('Case', function() {
   };
 
   Case.delete = function($scope,id){
+    $scope.isLoading=true;
     gapi.client.crmengine.cases.delete(id).execute(function(resp){
-        window.location.replace('#/cases');
+        $scope.isLoading=false;
+        if ($scope.relatedCase) {
+          $scope.caseDeleted(resp);
+        }else{
+          window.location.replace('#/cases');  
+        };
+        
       }
     )};
 

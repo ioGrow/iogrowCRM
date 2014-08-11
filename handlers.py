@@ -86,6 +86,9 @@ folders = {}
 class BaseHandler(webapp2.RequestHandler):
     def set_user_locale(self,language=None):
         if language:
+            print "*************************"
+            print language
+            print "*******************************"
             locale = self.request.GET.get('locale', 'en-US')
             i18n.get_i18n().set_locale(language)
 
@@ -126,6 +129,7 @@ class BaseHandler(webapp2.RequestHandler):
                           'active_app':active_app,
                           'apps':applications,
                           'tabs':tabs,
+                          'organization_key':user.organization.urlsafe()
                           }
         template = jinja_environment.get_template(template_name)
         self.response.out.write(template.render(template_values))
@@ -674,6 +678,14 @@ class SearchListHandler(BaseHandler, SessionEnabledHandler):
 class CalendarShowHandler(BaseHandler,SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/calendar/calendar_show.html')
+# hadji hicham 07/08/2014 
+class BillingHandler(BaseHandler,SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/billing/billing_list.html')
+# hadji hicham  11/08/2014
+class BillingShowHandler(BaseHandler,SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/billing/billing_show.html')
 # Workers
 class CreateOrganizationFolders(webapp2.RequestHandler):
     @staticmethod
@@ -1244,6 +1256,9 @@ routes = [
     ('/views/admin/settings',settingsShowHandler),
     ('/views/admin/imports/list',ImportListHandler),
     ('/views/admin/imports/new',ImportNewHandler),
+    #billing stuff. hadji hicham . 07/08/2014
+    ('/views/billing/list',BillingHandler),
+    ('/views/billing/show',BillingShowHandler),
 
     # Applications settings
     (r'/apps/(\d+)', ChangeActiveAppHandler),
