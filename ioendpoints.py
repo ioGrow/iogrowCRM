@@ -68,7 +68,7 @@ from endpoints_helper import EndpointsHelper
 from people import linked_in
 from operator import itemgetter, attrgetter
 import iomessages
-from iomessages import profileSchema, TwitterProfileSchema
+from iomessages import profileSchema, TwitterProfileSchema,KewordsRequest, tweetsSchema,tweetsResponse
 
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
@@ -3229,9 +3229,7 @@ class CrmEngineApi(remote.Service):
                       path='people/twitterprofile', http_method='POST',
                       name='people.gettwitter')
     def get_people_twitter(self, request):
-        print request.entityKey,"keyyyyyyyyyykeyyyyyyyyyy",request
         response=linked_in.get_people_twitter(request.entityKey)
-        print response, "rssssssssssssssss"
         return response   
 
     @endpoints.method(TwitterProfileRequest, TwitterProfileSchema,
@@ -3247,3 +3245,28 @@ class CrmEngineApi(remote.Service):
         print name
         profile_schema=EndpointsHelper.twitter_import_people(name)
         return profile_schema
+
+    @endpoints.method(KewordsRequest, tweetsResponse,
+                      path='twitter/get_recent_tweets', http_method='POST',
+                      name='twitter.get_recent_tweets')
+    def twitter_get_recent_tweets(self, request):
+        print request
+        
+        list_of_tweets=EndpointsHelper.get_tweets(request.value,"recent")
+        #print list_of_tweets
+        tweetsschema=tweetsSchema()
+
+        return tweetsResponse(items=list_of_tweets)
+
+    @endpoints.method(KewordsRequest, tweetsResponse,
+                      path='twitter/get_best_tweets', http_method='POST',
+                      name='twitter.get_best_tweets')
+    def twitter_get_best_tweets(self, request):
+        print request
+        val={"android","mobile"}
+        
+        #list_of_tweets=EndpointsHelper.get_tweets(val,"popular")
+        print list_of_tweets
+        #tweetsschema=tweetsSchema()
+
+        return tweetsResponse(items=list_of_tweets)
