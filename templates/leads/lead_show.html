@@ -119,11 +119,11 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <hr class="sm-hr">
-                                    <div class="tags-section hidden" ng-class="{hidden: contact.tags == null}">
+                                    <div class="tags-section hidden" ng-class="{hidden: lead.tags == null}">
                                         <div class="section-content">
                                             <span class="pull-left">{{_('Tags:')}} </span>
                                             <!-- ngRepeat: tag in account.tags -->
-                                            <a ng-repeat="tag in contact.tags" href="/#/search/type:Contact tags:<%=tag.id%>">
+                                            <a ng-repeat="tag in lead.tags" href="/#/search/type:Lead tags:<%=tag.id%>">
                                                 <span class="pull-left task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
                                                     <%= tag.name %>
                                                 </span>

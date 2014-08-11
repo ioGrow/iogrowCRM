@@ -72,7 +72,7 @@ from iomessages import profileSchema
 
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
-CLIENT_ID = '987765099891.apps.googleusercontent.com'
+CLIENT_ID = '935370948155-a4ib9t8oijcekj8ck6dtdcidnfof4u8q.apps.googleusercontent.com'
 SCOPES = [
             'https://www.googleapis.com/auth/userinfo.email',
             'https://www.googleapis.com/auth/drive',
