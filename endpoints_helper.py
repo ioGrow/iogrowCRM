@@ -417,6 +417,8 @@ class EndpointsHelper():
         print order,"oooooooooooo"
         list_of_tweets=[]
         for keyword in keywords:
+            print '***********'
+            print keyword
             dt = datetime.datetime.fromordinal(date.today().toordinal())
             str_date = str(dt.date())
             credentials = {
@@ -432,7 +434,7 @@ class EndpointsHelper():
             #print results[0].__dict__, "ressssssssssss"
             for result in results:
                 #print result.__dict__, "finnnnnnnnnnnn"
-                node_popularpost=tweetsSchema()
+                node_popularpost=tweetsSchema(id=str(result.id))
                 #print 'detaillllllllllllllll', result.author.__dict__
                 if 'profile_image_url' in result.user.__dict__:
                     node_popularpost.profile_image_url=(result.user.profile_image_url).encode('utf-8')
