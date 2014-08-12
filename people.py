@@ -5,7 +5,7 @@ import mechanize
 from bs4 import BeautifulSoup
 import cookielib
 from iograph import Node , Edge
-from iomessages import profileSchema
+from iomessages import profileSchema, TwitterProfileSchema
 from google.appengine.ext import ndb
 from model import LinkedinProfile
 import re
@@ -199,7 +199,6 @@ class linked_in():
             person['certifications']=self.get_certification(soup)
             person['skills']=self.get_skills(soup)
 
-        print person
         return person
     def scrape_twitter(self, firstname, lastname):
         peron={}
@@ -214,7 +213,6 @@ class linked_in():
         print key
         print "********************************************************"
         result=Edge.list(start_node=key,kind='linkedin')
-        print result
         if result['items']:
             profile_key=result['items'][0].end_node
             pro= profile_key.get()
@@ -233,6 +231,38 @@ class linked_in():
                                     resume=pro.resume,
                                     certifications=pro.certifications,
                                     skills=pro.skills
+                                    )
+            return response
+
+        # print result
+
+    @classmethod
+    # meziane hadjadj 07/08/2014
+    def get_people_twitter(cls,entityKey):
+        key=ndb.Key(urlsafe=entityKey)
+        print "********************************************************"
+        result=Edge.list(start_node=key,kind='twitter')
+        if result['items']:
+            profile_key=result['items'][0].end_node
+            profile= profile_key.get()
+            response=TwitterProfileSchema(
+                                    id=profile.id,
+                                    followers_count=profile.followers_count,
+                                    last_tweet_text=profile.last_tweet_text,
+                                    last_tweet_favorite_count=profile.last_tweet_favorite_count,
+                                    last_tweet_retweeted=profile.last_tweet_retweeted,
+                                    last_tweet_retweet_count=profile.last_tweet_retweet_count,
+                                    language=profile.language,
+                                    created_at=profile.created_at,
+                                    nbr_tweets=profile.nbr_tweets,
+                                    description_of_user=profile.description_of_user,
+                                     friends_count=profile.friends_count,
+                                     name=profile.name,
+                                     screen_name=profile.screen_name,
+                                    url_of_user_their_company=profile.url_of_user_their_company,
+                                    location=profile.location,
+                                    profile_image_url_https=profile.profile_image_url_https,
+                                    lang=profile.lang
                                     )
             return response
 
