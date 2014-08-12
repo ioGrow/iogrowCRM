@@ -7,3 +7,11 @@ queue:
   rate: 20/s
   bucket_size: 40
   max_concurrent_requests: 10
+- name: iogrow-events
+  rate: 20/s
+  bucket_size: 40
+  max_concurrent_requests: 10
+- name: iogrow-tasks
+  rate: 20/s
+  bucket_size: 40
+  max_concurrent_requests: 10 
