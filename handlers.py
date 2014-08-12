@@ -525,6 +525,9 @@ class AccountListHandler(BaseHandler, SessionEnabledHandler):
 class AccountShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/accounts/account_show.html')
+class DiscoverShowHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/discovers/discover_list.html')
 
 class AccountNewHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -995,8 +998,55 @@ class GetFromLinkedinToIoGrow(webapp2.RequestHandler):
             pli.skills=profil["skills"]
             print pli
             key2=pli.put()
-            Edge.insert(start_node=key1,end_node=key2,kind='linkedin',inverse_edge='parents')
+            es=Edge.insert(start_node=key1,end_node=key2,kind='linkedin',inverse_edge='parents')
             # print profil
+class GetFromTwitterToIoGrow(webapp2.RequestHandler):
+    def post(self):
+        entityKey= self.request.get('entityKey')
+        linkedin=linked_in()
+        print entityKey
+        key1=ndb.Key(urlsafe=entityKey)
+        print key1
+        lead=key1.get()
+        print "######################################################################################"
+        fullname= lead.firstname+" "+lead.lastname
+        print fullname
+        linkedin=linked_in()
+        screen_name=linkedin.scrape_twitter(lead.firstname,lead.lastname)
+        print screen_name
+        name=screen_name[screen_name.find("twitter.com/")+12:]
+        print name
+        profile_schema=EndpointsHelper.twitter_import_people(name)
+        if profile_schema:
+            profile=model.TwitterProfile()
+            profile.id=profile_schema.id
+            profile.followers_count=profile_schema.followers_count
+            profile.lang=profile_schema.lang
+            profile.last_tweet_text=profile_schema.last_tweet_text
+            profile.last_tweet_favorite_count=profile_schema.last_tweet_favorite_count
+            profile.last_tweet_retweeted=profile_schema.last_tweet_retweeted
+            profile.last_tweet_retweet_count=profile_schema.last_tweet_retweet_count
+            profile.language=profile_schema.language
+            profile.created_at=profile_schema.created_at
+            profile.nbr_tweets=profile_schema.nbr_tweets
+            profile.description_of_user=profile_schema.description_of_user
+            profile.friends_count=profile_schema.friends_count
+            profile.name=profile_schema.name
+            profile.screen_name=profile_schema.screen_name
+            profile.url_of_user_their_company=profile_schema.url_of_user_their_company
+            profile.location=profile_schema.location
+            profile.profile_image_url_https=profile_schema.profile_image_url_https
+
+
+
+
+        key2=profile.put()
+        ed=Edge.insert(start_node=key1,end_node=key2,kind='twitter',inverse_edge='parents')
+
+
+        
+
+
 class ShareDocument(webapp2.RequestHandler):
     def post(self):
         email = self.request.get('email')
@@ -1156,6 +1206,7 @@ routes = [
     ('/workers/send_email_notification',SendEmailNotification),
     ('/workers/add_to_iogrow_leads',AddToIoGrowLeads),
     ('/workers/get_from_linkedin',GetFromLinkedinToIoGrow),
+    ('/workers/get_from_twitter',GetFromTwitterToIoGrow),
     ('/workers/send_gmail_message',SendGmailEmail),
 
     # tasks sync  hadji hicham 06/08/2014 queue_name='iogrow-tasks'
@@ -1177,6 +1228,7 @@ routes = [
     ('/views/articles/search',ArticleSearchHandler),
 
     # Templates Views Routes
+    ('/views/discovers/list',DiscoverShowHandler),
     # Accounts Views
     ('/views/accounts/list',AccountListHandler),
     ('/views/accounts/show',AccountShowHandler),

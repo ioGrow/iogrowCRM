@@ -579,6 +579,10 @@ class Lead(EndpointsModel):
                             url='/workers/get_from_linkedin',
                             params={'entityKey' :lead_key_async.urlsafe()}
                         )
+        taskqueue.add(
+                        url='/workers/get_from_twitter',
+                        params={'entityKey': lead_key_async.urlsafe()}
+                    )
         return lead_schema
     @classmethod
     def from_twitter(cls,user_from_email,request):
