@@ -3270,8 +3270,8 @@ class CrmEngineApi(remote.Service):
                       name='twitter.get_best_tweets')
     def twitter_get_best_tweets(self, request):
         print request
-        val={"android","mobile"}
-        
+        val={"crm for startup","crm"}
+    
         list_of_tweets=EndpointsHelper.get_tweets(val,"popular")
         print list_of_tweets
         #tweetsschema=tweetsSchema()
