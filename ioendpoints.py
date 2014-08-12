@@ -3272,7 +3272,7 @@ class CrmEngineApi(remote.Service):
         print request
         val={"android","mobile"}
         
-        #list_of_tweets=EndpointsHelper.get_tweets(val,"popular")
+        list_of_tweets=EndpointsHelper.get_tweets(val,"popular")
         print list_of_tweets
         #tweetsschema=tweetsSchema()
 

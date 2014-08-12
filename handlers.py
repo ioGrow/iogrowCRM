@@ -527,7 +527,7 @@ class AccountShowHandler(BaseHandler, SessionEnabledHandler):
         self.prepare_template('templates/accounts/account_show.html')
 class DiscoverShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
-        self.prepare_template('templates/discovers/discover_show.html')
+        self.prepare_template('templates/discovers/discover_list.html')
 
 class AccountNewHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -1223,7 +1223,7 @@ routes = [
     ('/views/articles/search',ArticleSearchHandler),
 
     # Templates Views Routes
-    ('/views/discovers/show',DiscoverShowHandler),
+    ('/views/discovers/list',DiscoverShowHandler),
     # Accounts Views
     ('/views/accounts/list',AccountListHandler),
     ('/views/accounts/show',AccountShowHandler),

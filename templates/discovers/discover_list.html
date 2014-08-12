@@ -160,59 +160,30 @@
 
                                 </div>
                                 <!-- $ about tab -->
-                                <div class="tab-pane active col-md-4" id="tab_1_2" ng-show="selectedTab == 2">
+                                <div class="tab-pane active col-md-12" id="tab_1_2" ng-show="selectedTab == 2">
                                     
-                                     <div   droppable  id="card_<%=$index%>" class="cardElement" ng-drop="dropTag(account,$index)">
+                                     <div ng-repeat="tweet in tweets"   droppable  id="card_<%=$index%>" class="cardElement  col-md-4" ng-drop="dropTag(account,$index)">
           
             <div class="detailsSection" id="detailsId">
-              <div class="head">
+              
+              <div class="head"><%= tweet.author_name %>
                 <div class="pic">
-                  <a href="/#/accounts/show/<%= account.id %>" class="startup-link" title="account.name"><img ng-hide="account.logo_img_id" alt="account.name" class="img-resonsive img-thumbnail" src="/static/img/default_company.png" >
-                  <img  ng-show="account.logo_img_id" alt="account.name" class="img-thumbnail" ng-src="https://docs.google.com/uc?id=<%= account.logo_img_id %>" data-hasqtip="2">
-                  </a>
+                  <img   alt="account.name" class="img-thumbnail" ng-src="<%=tweet.profile_image_url %>" data-hasqtip="2"/>
+                 
                 </div>
-                <div class="text">
+               <div class="text">
                 <div class="name " >
-                    <a class="profile-link" href="/#/accounts/show/<%= account.id %>">
-                      <p class="fittext autoresizeName" max-heit="18" max-font-size="18" text="account.name"></p>
-                    </a>
+                     <%= tweet.content %>
                   </div>
-                  <div class="pitch">
-                    <span  ng-show="account.account_type">
-                        <a href="/#/search/type:Account <%=account.account_type%>"> <%= account.account_type %></a>
-                    </span>
-                    <span ng-show="account.industry">
-                          <a href="/#/search/type:Account <%=account.industry%>"> - <%= account.industry %>
-                          </a>
-                    </span>
-                    <br>
-                    <span>
-                      <%=fromNow(account.updated_at)%>
-                    </span>
-                  </div>
+                  
                 </div>
                 <div class="clearfix"></div>
               </div>
             </div>
-            <div class="tagsSection" ng-class="{hidden: account.tags==null}">
-              <div class="sectionContent">
-                <a ng-repeat="tag in account.tags" href="/#/search/type:Account tags:<%=tag.id%>"> <span draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
-                </a>
-              </div>
-
-
-            </div>
+         
           </div>
 
-
-
-                                </div>
-                                <!-- $ contacts tab -->
-                              
-                            
-                                <!-- $ documents tab -->
-                              
-                                <!-- $ send email tab -->
+                                
                               
                             </div>
                         </div>
