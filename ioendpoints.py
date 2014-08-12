@@ -1693,6 +1693,7 @@ class CrmEngineApi(remote.Service):
         event = entityKey.get()
         taskqueue.add(
                     url='/workers/syncdeleteevent',
+                    queue_name= 'iogrow-events',
                     params={
                             'email': user_from_email.email,
                             'event_google_id':event.event_google_id
@@ -1769,6 +1770,7 @@ class CrmEngineApi(remote.Service):
         if patched:
             taskqueue.add(
                     url='/workers/syncpatchevent',
+                    queue_name= 'iogrow-events',
                     params={
                             'email': user_from_email.email,
                             'starts_at': request.starts_at,
@@ -2569,13 +2571,15 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         entityKey = ndb.Key(urlsafe=request.entityKey)
         task=entityKey.get()
-        taskqueue.add(
-                    url='/workers/syncdeletetask',
-                    params={
-                            'email': user_from_email.email,
-                            'task_google_id':task.task_google_id
-                            }
-                    )
+        if task.due != None :
+            taskqueue.add(
+                        url='/workers/syncdeletetask',
+                        queue_name='iogrow-tasks',
+                        params={
+                                'email': user_from_email.email,
+                                'task_google_id':task.task_google_id
+                                }
+                        )
         Edge.delete_all_cascade(start_node = entityKey)
         return message_types.VoidMessage()
     # tasks.get api
@@ -2686,6 +2690,56 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return User.list(organization=user_from_email.organization)
 
+    @endpoints.method(message_types.VoidMessage, iomessages.UserListSchema,
+                      path='users/list_licenses', http_method='POST',
+                      name='users.list_licenses')
+    def user_list_licenses(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        items=[]
+        users=User.query(User.organization==user_from_email.organization)
+        for user in users :
+            nmbrOfLicenses=0
+            isLicensed=False
+            edge=Edge.query().filter(Edge.start_node==user.key and Edge.kind=="licenses").fetch()
+            if edge:
+                   nmbrOfLicenses=len(edge)
+                   LicenseStatus='Active'
+            else:
+                   LicenseStatus='Not active'
+            user_schema = iomessages.UserSchema(
+                                            id = str(user.key.id()),
+                                            entityKey = user.key.urlsafe(),
+                                            email = user.email,
+                                            google_display_name = user.google_display_name,
+                                            google_public_profile_url = user.google_public_profile_url,
+                                            google_public_profile_photo_url = user.google_public_profile_photo_url,
+                                            google_user_id = user.google_user_id,
+                                            is_admin = user.is_admin,
+                                            status = user.status,
+                                            LicenseStatus= LicenseStatus,
+                                            nmbrOfLicenses=str(nmbrOfLicenses)
+                                            )
+            items.append(user_schema)
+        invitees_list = []
+        invitees = Invitation.list_invitees(user_from_email.organization)
+        for invitee in invitees:
+            invitenmbrOfLicenses=0
+            inviteisLicensed=False
+            edgeinvite=Edge.query().filter(Edge.start_node==user.key and Edge.kind=="licenses").fetch()
+            if edgeinvite:
+                   invitenmbrOfLicenses=len(edge)
+                   inviteLicenseStatus='Active'
+            else:
+                   inviteLicenseStatus='Not active'
+            invited_schema = iomessages.InvitedUserSchema(
+                                                          invited_mail=invitee['invited_mail'],
+                                                          invited_by=invitee['invited_by'],
+                                                          updated_at=invitee['updated_at'].strftime("%Y-%m-%dT%H:%M:00.000"),
+                                                          LicenseStatus= inviteLicenseStatus,
+                                                          nmbrOfLicenses=str(invitenmbrOfLicenses)
+                                                        )
+            invitees_list.append(invited_schema)
+        return iomessages.UserListSchema(items=items,invitees=invitees_list) 
     # users.patch API
     @User.method(user_required=True,
                   http_method='PATCH', path='users/{id}', name='users.patch')
@@ -2714,6 +2768,14 @@ class CrmEngineApi(remote.Service):
         if user==None:
             raise endpoints.NotFoundException('User not found ')
         return user
+     # hadji hicham 11/08/2014. get user by id   
+    @User.method(user_required=True,
+                  http_method='GET', path='users/{id}', name='users.get')
+    def User_get(self,my_model):
+        #user=User.query().filter(User.id==my_model.id).get()
+        if not my_model.from_datastore:
+            raise endpoints.NotFoundException('User not found ')
+        return my_model
 
     # this api to fetch tasks and events to feed the calendar . hadji hicham.14-07-2014
     @endpoints.method(CalendarFeedsRequest,CalendarFeedsResults,
