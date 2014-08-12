@@ -110,4 +110,34 @@ class TwitterProfileSchema(messages.Message):
     url_of_user_their_company=messages.StringField(14)
     location=messages.StringField(15)
     profile_image_url_https=messages.StringField(16)
+    lang=messages.StringField(17)
+
+
+class tweetsSchema(messages.Message):
+    id=messages.StringField(1)
+    profile_image_url=messages.StringField(2)
+    author_name=messages.StringField(3)
+    created_at=messages.StringField(4)
+    content=messages.StringField(5)
+    author_followers_count=messages.IntegerField(6)
+    author_location=messages.StringField(7)
+    author_language=messages.StringField(8)
+    author_statuses_count=messages.IntegerField(9)
+    author_description=messages.StringField(10)
+    author_friends_count=messages.IntegerField(11)
+    author_favourites_count=messages.IntegerField(12)
+    author_url_website=messages.StringField(13)
+    created_at_author=messages.StringField(14)
+    time_zone_author=messages.StringField(15)
+    author_listed_count=messages.IntegerField(16)
+    screen_name=messages.StringField(17)
+    retweet_count=messages.IntegerField(18)
+    favorite_count=messages.IntegerField(19)
+
+class KewordsRequest(messages.Message):
+    value = messages.StringField(1,repeated=True)
+
+class tweetsResponse(messages.Message):
+    items=messages.MessageField(tweetsSchema,1,repeated=True)
+
 
