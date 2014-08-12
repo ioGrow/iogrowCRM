@@ -52,7 +52,7 @@ accountservices.factory('Auth', function($http) {
               Auth.$scope.$apply();
               gapi.signin.render('myGsignin', {
                 'callback': Auth.signIn,
-                'clientid': '987765099891.apps.googleusercontent.com',
+                'clientid': '935370948155-a4ib9t8oijcekj8ck6dtdcidnfof4u8q.apps.googleusercontent.com',
                 'scope': 'https://www.googleapis.com/auth/userinfo.email',
                 'theme': 'dark',
                 'cookiepolicy': 'single_host_origin',
@@ -103,7 +103,7 @@ accountservices.factory('Auth', function($http) {
             }else{
               gapi.signin.render('myGsignin', {
                 'callback': Auth.signIn,
-                'clientid': '987765099891.apps.googleusercontent.com',
+                'clientid': '935370948155-a4ib9t8oijcekj8ck6dtdcidnfof4u8q.apps.googleusercontent.com',
                 'scope': 'https://www.googleapis.com/auth/userinfo.email',
                 'theme': 'dark',
                 'cookiepolicy': 'single_host_origin',
@@ -167,7 +167,7 @@ accountservices.factory('Auth', function($http) {
     Auth.$scope.immediateFailed = true;
     gapi.signin.render('myGsignin', {
       'callback': Auth.signIn,
-      'clientid': '987765099891.apps.googleusercontent.com',
+      'clientid': '935370948155-a4ib9t8oijcekj8ck6dtdcidnfof4u8q.apps.googleusercontent.com',
       'scope': 'https://www.googleapis.com/auth/userinfo.email',
       'theme': 'dark',
       'cookiepolicy': 'single_host_origin',

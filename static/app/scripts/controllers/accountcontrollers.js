@@ -1185,7 +1185,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         };
         $scope.createPickerUploader = function() {
             var projectfolder = $scope.account.folder;
-            var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
+            var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
             var docsView = new google.picker.DocsView()
                     .setIncludeFolders(true)
                     .setSelectFolderEnabled(true);
@@ -1228,7 +1228,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             }
         }
         $scope.createLogoPickerUploader = function() {
-            var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
+            var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
             var picker = new google.picker.PickerBuilder().
                     addView(new google.picker.DocsUploadView()).
                     setCallback($scope.logoUploaderCallback).
@@ -2349,7 +2349,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge',
             return infonodes;
         };
         $scope.createPickerUploader = function() {
-            var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
+            var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
             var picker = new google.picker.PickerBuilder().
                     addView(new google.picker.DocsUploadView()).
                     setCallback($scope.uploaderCallback).

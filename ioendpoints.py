@@ -72,7 +72,7 @@ from iomessages import profileSchema, TwitterProfileSchema,KewordsRequest, tweet
 
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
-CLIENT_ID = '987765099891.apps.googleusercontent.com'
+CLIENT_ID = '935370948155-a4ib9t8oijcekj8ck6dtdcidnfof4u8q.apps.googleusercontent.com'
 SCOPES = [
             'https://www.googleapis.com/auth/userinfo.email',
             'https://www.googleapis.com/auth/drive',
@@ -530,8 +530,7 @@ class BlogEngineApi(remote.Service):
     def delete_tag(self, request):
         user_from_email = User.get_by_email('tedj.meabiou@gmail.com')
         tag_key = ndb.Key(urlsafe=request.entityKey)
-        Edge.delete_all(start_node=tag_key)
-        tag_key.delete()
+        Edge.delete_all_cascade(tag_key)
         return message_types.VoidMessage()
 
     # tags.insert api
@@ -2539,8 +2538,7 @@ class CrmEngineApi(remote.Service):
     def delete_tag(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         tag_key = ndb.Key(urlsafe=request.entityKey)
-        Edge.delete_all(start_node=tag_key)
-        tag_key.delete()
+        Edge.delete_all_cascade(tag_key)
         return message_types.VoidMessage()
 
     # tags.insert api

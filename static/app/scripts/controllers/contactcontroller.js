@@ -177,7 +177,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 				$scope.createPickerUploader = function() {
 
 					$('#importModal').modal('hide');
-					var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
+					var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
 					var projectfolder = $scope.contact.folder;
 					var docsView = new google.picker.DocsView()
 							.setIncludeFolders(true)
@@ -188,7 +188,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 							setCallback($scope.uploaderCallback).
 							setOAuthToken(window.authResult.access_token).
 							setDeveloperKey(developerKey).
-							setAppId(987765099891).
+							setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
 							build();
 					picker.setVisible(true);
 			};
@@ -1589,7 +1589,7 @@ $scope.sendEmailSelected=function(){
 
 		 };
 		 $scope.createPickerUploader = function() {
-					var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
+					var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
 					var projectfolder = $scope.contact.folder;
 					var docsView = new google.picker.DocsView()
 							.setIncludeFolders(true)
@@ -1600,7 +1600,7 @@ $scope.sendEmailSelected=function(){
 							setCallback($scope.uploaderCallback).
 							setOAuthToken(window.authResult.access_token).
 							setDeveloperKey(developerKey).
-							setAppId(987765099891).
+							setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
 								enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
 							build();
 					picker.setVisible(true);
@@ -1638,13 +1638,13 @@ $scope.sendEmailSelected=function(){
 					}
 			}
 			$scope.createLogoPickerUploader = function() {
-					 var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
+					 var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
 					 var picker = new google.picker.PickerBuilder().
 							 addView(new google.picker.DocsUploadView()).
 							 setCallback($scope.logoUploaderCallback).
 							 setOAuthToken(window.authResult.access_token).
 							 setDeveloperKey(developerKey).
-							 setAppId(987765099891).
+							 setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
 							 build();
 					 picker.setVisible(true);
 			 };
@@ -1835,13 +1835,13 @@ app.controller('ContactNewCtrl', ['$scope','Auth','Contact','Account','Edge',
 														'profile_img_url':null
 													};
 			$scope.createPickerUploader = function() {
-					var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
+					var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
 					var picker = new google.picker.PickerBuilder().
 							addView(new google.picker.DocsUploadView()).
 							setCallback($scope.uploaderCallback).
 							setOAuthToken(window.authResult.access_token).
 							setDeveloperKey(developerKey).
-							setAppId(987765099891).
+							setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
 							build();
 					picker.setVisible(true);
 			};
