@@ -72,7 +72,7 @@ from iomessages import profileSchema, TwitterProfileSchema
 
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
-CLIENT_ID = '987765099891.apps.googleusercontent.com'
+CLIENT_ID = '935370948155-a4ib9t8oijcekj8ck6dtdcidnfof4u8q.apps.googleusercontent.com'
 SCOPES = [
             'https://www.googleapis.com/auth/userinfo.email',
             'https://www.googleapis.com/auth/drive',
@@ -530,8 +530,7 @@ class BlogEngineApi(remote.Service):
     def delete_tag(self, request):
         user_from_email = User.get_by_email('tedj.meabiou@gmail.com')
         tag_key = ndb.Key(urlsafe=request.entityKey)
-        Edge.delete_all(start_node=tag_key)
-        tag_key.delete()
+        Edge.delete_all_cascade(tag_key)
         return message_types.VoidMessage()
 
     # tags.insert api
@@ -1694,6 +1693,7 @@ class CrmEngineApi(remote.Service):
         event = entityKey.get()
         taskqueue.add(
                     url='/workers/syncdeleteevent',
+                    queue_name= 'iogrow-events',
                     params={
                             'email': user_from_email.email,
                             'event_google_id':event.event_google_id
@@ -1770,6 +1770,7 @@ class CrmEngineApi(remote.Service):
         if patched:
             taskqueue.add(
                     url='/workers/syncpatchevent',
+                    queue_name= 'iogrow-events',
                     params={
                             'email': user_from_email.email,
                             'starts_at': request.starts_at,
@@ -2539,8 +2540,7 @@ class CrmEngineApi(remote.Service):
     def delete_tag(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         tag_key = ndb.Key(urlsafe=request.entityKey)
-        Edge.delete_all(start_node=tag_key)
-        tag_key.delete()
+        Edge.delete_all_cascade(tag_key)
         return message_types.VoidMessage()
 
     # tags.insert api
@@ -2571,13 +2571,15 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         entityKey = ndb.Key(urlsafe=request.entityKey)
         task=entityKey.get()
-        taskqueue.add(
-                    url='/workers/syncdeletetask',
-                    params={
-                            'email': user_from_email.email,
-                            'task_google_id':task.task_google_id
-                            }
-                    )
+        if task.due != None :
+            taskqueue.add(
+                        url='/workers/syncdeletetask',
+                        queue_name='iogrow-tasks',
+                        params={
+                                'email': user_from_email.email,
+                                'task_google_id':task.task_google_id
+                                }
+                        )
         Edge.delete_all_cascade(start_node = entityKey)
         return message_types.VoidMessage()
     # tasks.get api

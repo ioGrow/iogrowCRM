@@ -355,7 +355,7 @@ a:after {
 /* Header Wrap */
 
 #headerwrap {
-	background: url("../img/backgrndo.jpg") no-repeat center top;
+	background: url("../img/background.jpg") no-repeat center top;
 	background-size: cover;
 	padding-top: 80px;
 }

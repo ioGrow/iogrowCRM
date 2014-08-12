@@ -410,7 +410,7 @@ accountservices.factory('Contact', function($http) {
 Contact.delete = function($scope,params){
     $scope.isLoading = true;
     gapi.client.crmengine.contacts.delete(params).execute(function(resp){
-
+        
         if ($scope.contactDeleted){
             $scope.contactDeleted(resp);
             $scope.isLoading = false;
