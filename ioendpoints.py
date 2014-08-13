@@ -536,7 +536,7 @@ class BlogEngineApi(remote.Service):
     # tags.insert api
     @Tag.method(path='tags', http_method='POST', name='tags.insert')
     def TagInsert(self, my_model):
-        user_from_email = User.get_by_email('tedj.meabiou@gmail.com')
+        user_from_email = User.get_by_email('meziane@gsa-mena.org')
         my_model.organization = user_from_email.organization
         my_model.owner = user_from_email.google_user_id
         my_model.put()
@@ -3334,10 +3334,7 @@ class CrmEngineApi(remote.Service):
         print request
         user_from_email = EndpointsHelper.require_iogrow_user()
         val=[]
-        print "zaazzzzzzzzzzzzzzzz", user_from_email
         tagss=Tag.list_by_kind(user_from_email,"topics")
-        #print tags,"tiiiiiiiiiii"
-        print tagss,"eeee"
         for tag in tagss.items:
             val.append(tag.name)
         print val

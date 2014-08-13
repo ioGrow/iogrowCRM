@@ -77,9 +77,7 @@ class Tag(EndpointsModel):
 
     @classmethod
     def list_by_kind(cls,user_from_email,kind):
-        print user_from_email.organization,kind, "orggg"
         tags = cls.query(cls.about_kind==kind, cls.organization == user_from_email.organization).fetch()
-        print "bbbbb", tags
         tag_list = []
         if tags:
             tag_list = []

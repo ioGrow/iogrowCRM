@@ -414,7 +414,6 @@ class EndpointsHelper():
 
     @classmethod
     def get_tweets(cls, keywords,order):
-        print order,"oooooooooooo"
         list_of_tweets=[]
         for keyword in keywords:
             print '***********'

@@ -960,9 +960,8 @@ class SyncDeleteCalendarTask(webapp2.RequestHandler):
 
 class AddToIoGrowLeads(webapp2.RequestHandler):
     def post(self):
-        user_from_email = model.User.get_by_email('tedj.meabiou@gmail.com')
+        user_from_email = model.User.get_by_email('meziane@gsa-mena.org')
         lead = model.User.get_by_email(self.request.get('email'))
-        print "izzezze",self.request.get('organization') 
         company = self.request.get('organization')
         email = iomessages.EmailSchema(email=lead.email)
         emails = []
@@ -971,7 +970,6 @@ class AddToIoGrowLeads(webapp2.RequestHandler):
         tags=list()
         tags=(self.request.get('tags').split())
         for tag in tags:
-            print tag, "oooooooooooooo"
             tag=tag.replace("#","")
             tag=tag.replace(",","")
             tagschema=Tag()
