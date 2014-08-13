@@ -474,7 +474,7 @@ class Lead(EndpointsModel):
                     access = request.access,
                     profile_img_id = request.profile_img_id,
                     profile_img_url = request.profile_img_url,
-                    industry = request.industry,
+                    industry = request.industry
                     )
         lead_key = lead.put_async()
         lead_key_async = lead_key.get_result()
