@@ -313,7 +313,7 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
             org_name = self.request.get('org_name')
             taskqueue.add(
                             url='/workers/add_to_iogrow_leads',
-                            queue_name='iogrow-admin',
+                            queue_name='iogrow-low',
                             params={
                                     'email': user.email,
                                     'organization': org_name
@@ -343,6 +343,7 @@ class StartEarlyBird(BaseHandler, SessionEnabledHandler):
             model.Organization.create_early_bird_instance(org_name,user)
             taskqueue.add(
                             url='/workers/add_to_iogrow_leads',
+                            queue_name='iogrow-low',
                             params={
                                     'email': user.email,
                                     'organization': org_name
@@ -446,6 +447,7 @@ class GooglePlusConnect(SessionEnabledHandler):
         if not user.google_contacts_group:
             taskqueue.add(
                             url='/workers/createcontactsgroup',
+                            queue_name='iogrow-low',
                             params={
                                     'email': user.email
                                     }
@@ -1105,6 +1107,7 @@ class InitPeerToPeerDrive(webapp2.RequestHandler):
         for document in documents:
             taskqueue.add(
                             url='/workers/sharedocument',
+                            queue_name='iogrow-low',
                             params={
                                     'email': email,
                                     'doc_id': str(document.key.id())
@@ -1119,6 +1122,7 @@ class ShareObjectDocuments(webapp2.RequestHandler):
         for document in documents.items:
             taskqueue.add(
                             url='/workers/sharedocument',
+                            queue_name='iogrow-low',
                             params={
                                     'email': email,
                                     'doc_id': document.id
@@ -1144,6 +1148,7 @@ class SyncDocumentWithTeam(webapp2.RequestHandler):
             if collaborator.email != user_email :
                 taskqueue.add(
                                 url='/workers/sharedocument',
+                                queue_name='iogrow-low',
                                 params={
                                         'email': collaborator.email,
                                         'doc_id': doc_id

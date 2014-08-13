@@ -130,6 +130,7 @@ class Organization(ndb.Model):
         org_key = organization.put()
         # taskqueue.add(
         #             url='/workers/createorgfolders',
+        #             queue_name='iogrow-low',
         #             params={
         #                     'email': admin.email,
         #                     'org_key':org_key.urlsafe()
@@ -193,6 +194,7 @@ class Organization(ndb.Model):
         org_key = organization.put()
         # taskqueue.add(
         #             url='/workers/createorgfolders',
+        #             queue_name='iogrow-low',
         #             params={
         #                     'email': admin.email,
         #                     'org_key':org_key.urlsafe()
