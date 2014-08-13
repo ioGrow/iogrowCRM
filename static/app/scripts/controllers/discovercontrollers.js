@@ -90,7 +90,6 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag',
         $scope.tweets={};
         Discover.get($scope);
         Tag.list($scope,paramsTag);
-        $scope.selectTag()
 
      }
      $scope.updateTag = function(tag){
