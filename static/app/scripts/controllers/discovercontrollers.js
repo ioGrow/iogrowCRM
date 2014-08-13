@@ -1,7 +1,7 @@
-app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover',
+app.controller('DiscoverListCtrl', ['$scope','Auth','Discover',
     function($scope,Auth,Discover) {
      $("ul.page-sidebar-menu li").removeClass("active");
-        $("#id_Accounts").addClass("active");
+        $("#id_Discover").addClass("active");
         document.title = "Accounts: Home";
         $scope.selectedTab=2;
         $scope.selectedOption = 'all';

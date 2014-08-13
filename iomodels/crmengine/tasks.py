@@ -479,6 +479,7 @@ class Task(EndpointsModel):
         if request.due:
             taskqueue.add(
                     url='/workers/synctask',
+                    queue_name='iogrow-tasks',
                     params={
                             'email': user_from_email.email,
                             'starts_at': request.due,
@@ -519,6 +520,7 @@ class Task(EndpointsModel):
                 body += '</a></p>'
                 taskqueue.add(
                         url='/workers/send_email_notification',
+                        queue_name='iogrow-tasks',
                         params={
                                 'user_email': user_from_email.email,
                                 'to': assignee_email,
@@ -549,8 +551,7 @@ class Task(EndpointsModel):
 
     @classmethod
     def patch(cls,user_from_email,request):
-
-        task = cls.get_by_id( int(request.id) )
+        task = cls.get_by_id( int(request.id))
         task_id=int(request.id)
         if task is None:
             raise endpoints.NotFoundException('Task not found.')
@@ -559,9 +560,11 @@ class Task(EndpointsModel):
         if request.status:
             task.status = request.status
         if request.due and task.due == None :
+
             task.due = datetime.datetime.strptime(request.due,"%Y-%m-%dT%H:%M:00.000000")
             taskqueue.add(
-                    url='/workers/syncpatchtask',
+                    url='/workers/synctask',
+                    queue_name='iogrow-tasks',
                     params={
                             'email': user_from_email.email,
                             'starts_at': request.due,
@@ -574,6 +577,7 @@ class Task(EndpointsModel):
         elif request.due and task.due != None:
             taskqueue.add(
                     url='/workers/syncpatchtask',
+                    queue_name='iogrow-tasks',
                     params={
                             'email': user_from_email.email,
                             'starts_at': request.due,

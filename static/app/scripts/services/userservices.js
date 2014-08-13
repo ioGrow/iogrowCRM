@@ -9,13 +9,14 @@ accountservices.factory('User', function($http) {
 
 
   User.get = function($scope,id) {
-
+           
           gapi.client.crmengine.users.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.user = resp;
-
+                console.log("i'm here idiot , i'm here its me !");
+                console.log(resp);
                // Call the method $apply to make the update on the scope
-               $scope.apply();
+               $scope.$apply();
 
             }else {
                if(resp.code==401){
@@ -30,6 +31,40 @@ accountservices.factory('User', function($http) {
   User.list = function($scope,params){
       $scope.isLoading = true;
       gapi.client.crmengine.users.list(params).execute(function(resp) {
+              if(!resp.code){
+                 $scope.users = resp.items;
+                 $scope.invitees = resp.invitees;
+                 if ($scope.currentPage>1){
+                      $scope.pagination.prev = true;
+                   }else{
+                       $scope.pagination.prev = false;
+                   }
+                 if (resp.nextPageToken){
+                   var nextPage = $scope.currentPage + 1;
+                   // Store the nextPageToken
+                   $scope.pages[nextPage] = resp.nextPageToken;
+                   $scope.pagination.next = true;
+
+                 }else{
+                  $scope.pagination.next = false;
+                 }
+                 // Loaded succefully
+                 $scope.isLoading = false;
+                 // Call the method $apply to make the update on the scope
+                 $scope.$apply();
+              }else {
+                 if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+              }
+      });
+  };
+  // HADJI HICHAM  11/08/2014 -- get list Users with licenes .
+User.list_licenses = function($scope,params){
+      $scope.isLoading = true;
+      gapi.client.crmengine.users.list_licenses(params).execute(function(resp) {
               if(!resp.code){
                  $scope.users = resp.items;
                  $scope.invitees = resp.invitees;
