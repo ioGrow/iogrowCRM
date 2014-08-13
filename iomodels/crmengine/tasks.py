@@ -479,7 +479,7 @@ class Task(EndpointsModel):
         if request.due:
             taskqueue.add(
                     url='/workers/synctask',
-                    queue_name='iogrow-tasks',
+                    queue_name='iogrow-low',
                     params={
                             'email': user_from_email.email,
                             'starts_at': request.due,
@@ -520,7 +520,7 @@ class Task(EndpointsModel):
                 body += '</a></p>'
                 taskqueue.add(
                         url='/workers/send_email_notification',
-                        queue_name='iogrow-tasks',
+                        queue_name='iogrow-low',
                         params={
                                 'user_email': user_from_email.email,
                                 'to': assignee_email,
@@ -564,7 +564,7 @@ class Task(EndpointsModel):
             task.due = datetime.datetime.strptime(request.due,"%Y-%m-%dT%H:%M:00.000000")
             taskqueue.add(
                     url='/workers/synctask',
-                    queue_name='iogrow-tasks',
+                    queue_name='iogrow-low',
                     params={
                             'email': user_from_email.email,
                             'starts_at': request.due,
@@ -577,7 +577,7 @@ class Task(EndpointsModel):
         elif request.due and task.due != None:
             taskqueue.add(
                     url='/workers/syncpatchtask',
-                    queue_name='iogrow-tasks',
+                    queue_name='iogrow-low',
                     params={
                             'email': user_from_email.email,
                             'starts_at': request.due,
