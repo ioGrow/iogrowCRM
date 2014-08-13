@@ -1,251 +1,386 @@
+
+
 <div class="row subHeader">
     <div class="currentApp">
-        <div class="btn-group">
-            <a class="filterItem" href="#" data-toggle="dropdown" >
-                {{_(active_app.label)}}
-                <i class="icon-angle-down"></i>
-            </a>
-            <ul class="dropdown-menu">
-                {%for application in apps %}
+       <div class="btn-group">
+           <a class="filterItem" href="#" data-toggle="dropdown" >
+            {{active_app.label}}
+            <i class="icon-angle-down"></i>
+           </a>
+           <ul class="dropdown-menu">
+            {%for application in apps %}
 
-                <li><a href="/apps/{{ application.key.id()}}" data-toggle="modal">{{_(application.label)}}</a></li>
+                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{application.label}}</a></li>
 
-                {%endfor%}
-            </ul>
+            {%endfor%}
+           </ul>
         </div>
     </div>
     <div class=" subHeaderContent">
-        <div class="pull-right sharebuttonDiv">
-            <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
-                <i class="icon-lock"></i>
-                {{ _("Share")}}
-            </a>
-        </div>
-        <h2 class="page-title" >
-            <a href="/#/accounts/" data-toggle="tooltip" id='testEdit' data-placement="bottom" title="Back to Accounts">
-                <img onload="this.__gwtLastUnhandledEvent = & quot;
-                load & quot;
-                ;" src="/static/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
-            </a>
-            {{_("Accounts")}} >
-            <a editable-text="account.name"  onbeforesave="inlinePatch('Account','', 'name',account.entityKey,$data)">
-                <%= account.name %>
-            </a>
-        </h2>
+      <div class="col-md-9">
+      <div class="row">
+      <div class="col-md-10 col-xs-12 filter-content">
+      <div class="filterOptions">
+
+          <span role="button" class="filterItem" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">{{ _('Recent')}} <span class="hidden-xs hiddenOnxs">{{ _('Posts')}}</span> </span>
+          <span role="button" class="filterItem" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">{{ _('Popular')}} <span class="hidden-xs hiddenOnxs">{{ _('Posts')}}</span></span>
+
+          
+            <div class="btn-group visibleOnPhone">
+                <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='filter'}" >
+                  {{ _('Filter by')}}
+                  <i class="icon-angle-down"></i>
+                </a>
+                <ul class="dropdown-menu drp-dwn-xs-right">
+                  <li><a  ng-click="filterByOwner();selectedOption ='all'" href="#" data-toggle="modal">{{ _('Recent posts') }}</a></li>
+                  <li><a ng-click="filterByOwner('{{ME}}');selectedOption ='my'" href="#" data-toggle="modal">{{ _('Popular posts') }}</a></li>
+                  <li><a ng-click="showTagFilterCard();selectedOption ='tags'" href="#" data-toggle="modal">{{ _('Tags') }}</a></li>
+                </ul>
+          </div>
+        <span role="button" class="filterItem hiddenOnPhone hiddenOnmd"  ng-class="{activeFilter: selectedOption =='tags'}" ng-click="showTagFilterCard();selectedOption ='tags'"><i class="fa fa-tags"></i><span class="hidden-xs hiddenOnxs">{{_('Filter by')}} </span> {{_('Tags')}}</span>
+      </div>
+      </div>
+      <div class="col-md-2 col-xs-2">
+      <a href="/#/leads/new" class="hidden-sm hidden-xs btn red newAccountBtnOnscroll pull-right hidden afterScrollBtn">
+           {{ _('New')}} <span class="hidden-xs hiddenOnxs">{{ _('Lead')}}</span>
+         </a>
+      </div>
+      </div>
+    </div>
     </div>
 </div>
 <div  class="page-content">
-    <div class="loader-container row" ng-show="isLoading">
-        <div class="loader-dialog col-md-4 col-md-offset-4 ">
-            <div class="loader-content">
-               {{_('Loading...')}}
+  <div class="loader-container row" ng-show="isLoading">
+    <div class="loader-dialog col-md-4 col-md-offset-4 ">
+      <div class="loader-content">
+          {{ _('Loading...')}}
+      </div>
+    </div>
+  </div>
+  <div class="dropOut"  ng-show="showUntag" >
+    <div class="trash">
+      <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/img/iotrash.png" >
+    </div>
+</div>
+
+      <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+      <!-- BEGIN PAGE CONTAINER-->
+  <div class="" ng-show="immediateFailed">
+    <div class="col-md-12">
+
+        <span id="signin">
+                  <span id="myGsignin"></span>
+        </span>
+    </div>
+  </div>
+  <div ng-show="isSignedIn" class="listContainer">
+
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+    <div class="row">
+
+    <div class="col-md-12">
+  <div class="row">
+  <div class="col-md-12">
+    <div class="row ">
+    <div class="tab-pane">
+    <div class="row ">
+      <div class="col-md-12 waterfall" ng-hide="blankStatelead">
+        <div class="labelsCardElement cardElement" data-span="all" ng-show="showTagsFilter">
+              <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
+              <ul class="list-group tags-list">
+              <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
+                <div class="row">
+                  <span  ng-drag="dragTag(tag_item)" draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
+                      <%= tag_item.name %>
+                  </span>
+                   <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
+                  <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
+                    <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
+                  </form>
+                  <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
+                </div>
+              </li>
+              <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTagForm()">
+                <a ng-click="" class="btn-link addAnotherPhone">
+                  <i class="fa fa-tags"></i>  {{_('Add a new label')}}
+                </a>
+              </li>
+            </ul>
+            <form class="well newTagForm" role="form" ng-show="showNewTag">
+              <button type="button" class="close"  aria-hidden="true" ng-click="hideNewTagForm()"></button>
+              <div class="row">
+                <div class="col-md-12 form-group">
+                  <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New label">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-8">
+                  <ul class="color_pallet_menu">
+                    <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-md-4">
+                  <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
+                </div>
+              </div>
+            </form>
+            <div class="form-group btn-manage-tags" ng-show="tags">
+              <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()">{{_('Manage Tags')}}
+              </button>
             </div>
         </div>
-    </div>
-    <div class="container" ng-show="immediateFailed">
-        <div class="col-md-12">
-
-            <span id="signin">
-                <span id="myGsignin"></span>
-            </span>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-9">
-            <div class="row">
-                <div class="showPage custom-show margin-bottom-15  col-md-12">
-                    <div class="row margin-bottom-10">
-                        <div class="col-md-2" ng-mouseenter="showUpload = true" ng-mouseleave="showUpload = false">
-                            <div class="pic account-photo-large">
-                                <img alt="<%=account.name%>" class=" img-responsive img-thumbnail" ng-src="http://ozil-conseil.com/wp-content/uploads/2013/01/Twitter-logo.jpg">
-                                <a ng-show="showUpload" ng-click="createLogoPickerUploader()" href="" class="btn btn-default btn-upload btn-upload-account" data-toggle="modal" style="display: none;">
-                                    <img src="/static/img/upload_logo.png">
-                                </a>
-                            </div>
-
-                        </div>
-                        <div class="col-md-10">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <span class="page-meta pull-right">
-                                        
-                                    </span>
-                                    <ul class="list-unstyled contactInfos">
-                                      <li ng-show="account.account_type" >
-                                        <span>
-                                            {{_(' What people say about : <%= keywords %>')}}
-                                           
-                                        </span>
-                                      </li>
-                                     
-                                    
-                                    </ul>
-
-
-
-                                    <hr>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="tags-section hidden" ng-class="{hidden: account.tags == null}">
-                                        <div class="section-content">
-                                            <span class="pull-left">{{_('Tags')}}: </span>
-                                            <!-- ngRepeat: tag in account.tags -->
-                                            <a ng-repeat="tag in account.tags" href="/#/search/type:Account tags:<%=tag.id%>">
-                                                <span class="pull-left task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
-                                                    <%= tag.name %>
-                                                </span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="tabbable tabbable-custom">
-                                <ul class="nav nav-tabs">
-                                    <li class="ng-tab" ng-class="{active: selectedTab == 2}">
-                                        <a ng-click="selectedTab = 2;
-                        renderMaps();">{{_('Popular Tweets')}}</a>
-                                    </li>
-                                    <li class="ng-tab" ng-class="{active: selectedTab == 1}">
-                                        <a ng-click="selectedTab = 1;">{{_('Recent Tweets')}}</a>
-                                    </li>
-                                    
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- END PAGE HEADER-->
-                <!-- BEGIN PAGE CONTENT-->
-                <div class="col-md-12">
-                    <div class="row">
-                        <div class="">
-                            <!-- $ tabs -->
-                            <div class="tab-content">
-                                <!-- $ notes tab -->
-                                <div class="tab-pane active col-md-4" id="tab_1_1" ng-show="selectedTab == 1">
-                                  
-
-
-
-<div   droppable  id="card_<%=$index%>" class="cardElement" ng-drop="dropTag(account,$index)">
-           
-            <div class="detailsSection" id="detailsId">
-              <div class="head">Title
-                <div class="pic">
-                  <a href="" class="startup-link"><img   class="img-resonsive img-thumbnail" src="" >
-                  <img   class="img-thumbnail" ng-src="" data-hasqtip="2">
+        
+        <div ng-repeat="tweet in tweets" droppable  id="card_<%=$index%>"class="cardElement" ng-drop="dropTag(lead,$index)" ng-mouseenter="showClose= true" ng-mouseleave="showClose = false" style="z-index:109;overflow: visible;">
+        <div class="btn-group inCardOptionsBtn">
+            <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
+             <i class="fa fa-ellipsis-vertical"></i>
+            </button>
+            <ul class="dropdown-menu drp-dwn-right " role="menu">
+              <li>
+               <a href="" ng-click="showAssigneeTags(lead)">
+                   <i class='fa fa-tags'></i>{{_('Add tags')}} </a>
+              </li>
+              <li>
+               <a href="" ng-click="editbeforedelete(lead)">
+                   <i class='fa fa-trash-o'></i> {{_('Delete')}} </a>
+              </li>
+            </ul>
+          </div>
+          <div class="detailsSection">
+            <div class="head">
+              <div class="pic">
+                <a href="/#/leads/show/<%= lead.id %>" class="startup-link" title="account.name">
+                
+                <img alt="<%= lead.firstname %> <%= lead.lastname %>" class="img-responsive profile-photo" src="<%=tweet.profile_image_url %>">
+                </a>
+              </div>
+              <div class="text">
+               <!-- <button type="button" class="close deleteLeadBtn" ng-show="showClose" ng-click="editbeforedelete(lead)"></button>-->
+                <div class="name">
+                  <a href="/#/leads/show/<%= lead.id %>" class="profile-link">
+                    <%= tweet.author_name %>
                   </a>
                 </div>
-                <div class="text">
-                <div class="name " >
-                    Textt
-                  </div>
-                  
+                <div class="pitch">
+                  <span>
+                      <%=fromNow(lead.updated_at)%>
+                  </span>
+                  <span class="contact-title" >
+                    <%= tweet.content %>
+                  </span>
+                  <span ng-show="lead.title">
+                    <a  class="desc" href="/#/search/type:Lead <%=lead.title%>">
+                      #<%=lead.title%>
+                    </a>
+                  </span>
+                  <span ng-show="lead.company">
+                    <span ng-show="lead.title" class="contact-title">
+                      at
+                    </span>
+                    <a class="desc" href="/#/search/type:Lead <%=lead.company%>">
+                      #<%=lead.company%>
+                    </a>
+                  </span>
                 </div>
-                <div class="clearfix"></div>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <div class="tagsSection" ng-class="{hidden: lead.tags==null}">
+            <div class="sectionContent">
+              <a ng-repeat="tag in lead.tags" href="/#/search/type:Lead tags:<%=tag.id%>"> <span draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="cardElement loaderCard" ng-show="isMoreItemLoading" data-span="all">
+          <div class="loaderCardContent">
+             <img class="img-responsive " src="/static/img/gloader.gif">
+             <span>  Loading...</span>
+          </div>
+        </div>
+      </div><!--/inner-cards-container-->
+      <!--$Blank state-->
+      <div class="col-md-12 " ng-show="blankStatelead">
+        <div  data-span="all" class="dashboard-stat cards" data-tablet="span6" data-desktop="span12">
+          <div class="">
+            <div class="blank_slate_arrow"></div>
+            <div class="thumbnail blank_slate_body">
+              <img class="img-responsive" src="/static/img/leads_blank.png">
+              <p class="lead">
+                {{ _('You have leads coming in from a wide variety of sources. Some leads come from lists you acquired, others from business cards and still more from the "contact us" form on your website. i/oGrow help you organize informations about leads so they can be followed up on and qualified quickly.') }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+      </div><!--/inner-cards-container-->
+      <div ng-show="isFiltering * !leads"  class="col-md-12 " ng-show="blankStateaccount">
+          <div  data-span="3" class="dashboard-stat cards" data-tablet="span6" data-desktop="span12">
+            <div class="">
+              <div class="blank_slate_arrow"></div>
+              <div class="thumbnail blank_slate_body">
+                <p class="lead">{{ _('No results found, try with another filter') }}</p>
               </div>
             </div>
-         
           </div>
-
-
-
-
-
-                                </div>
-                                <!-- $ about tab -->
-                                <div class="tab-pane active col-md-12" id="tab_1_2" ng-show="selectedTab == 2">
-                                    
-                                     <div ng-repeat="tweet in tweets"   droppable  id="card_<%=$index%>" class="cardElement  col-md-4" ng-drop="dropTag(account,$index)">
-          
-            <div class="detailsSection" id="detailsId">
-              
-              <div class="head"><%= tweet.author_name %>
-                <div class="pic">
-                  <img   alt="account.name" class="img-thumbnail" ng-src="<%=tweet.profile_image_url %>" data-hasqtip="2"/>
-                 
-                </div>
-               <div class="text">
-                <div class="name " >
-                     <%= tweet.content %>
-                  </div>
-                  
-                </div>
-                <div class="clearfix"></div>
-              </div>
-            </div>
-         
-          </div>
-
-                                
-                              
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- tasks cards -->
-   
-      <script type="text/javascript">
-          $('.lead_related_events').slimScroll({
-                                    height: '160px'
-                                });
-
-      </script>
-        </div>
+          <div class="clearfix"></div>
+        </div><!--/inner-cards-container-->
+      </div>
+      </div>
     </div>
-   
+  </div>
+  </div>
+  </div>
 
-
+      <!-- END PAGE CONTAINER-->
+</div>
+</div>
+<div class="fixed-labelsCard visible-md visible-lg">
   
+  <div class="row">
+  <div class="col-md-12">
+    <div class="portlet showCard fixedCard">
+      <div class="portlet-title">
+        <div class="caption">
+                <!-- class="fa fa-reorder"--><i></i>{{_("Topics")}}
+        </div>  
+      </div>
+      <div class="portlet-body">
 
+        <ul id="slimList" class="list-group tags-list ">
+          <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
+            <div class="row">
+              <span editable-text="tag_item.name"  ng-drag="dragTag(tag_item)" id="iii"  draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;" 
 
+                  ng-model='tag_item.name'  onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
+               
+                  <%= tag_item.name %>
 
-                            </div>
-                            <script type="text/javascript">
-                                $(function() {
-                                    $('#datetimepicker2').datetimepicker({
-                                        language: 'fr',
-                                        pickTime: false
-                                    });
-                                });
-                                var originalLeave = $.fn.popover.Constructor.prototype.leave;
-                                $.fn.popover.Constructor.prototype.leave = function(obj) {
-                                    var self = obj instanceof this.constructor ?
-                                            obj : $(obj.currentTarget)[this.type](this.getDelegateOptions()).data('bs.' + this.type)
-                                    var container, timeout;
+              </span>
 
-                                    originalLeave.call(this, obj);
+              <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
+              <!--<span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
+                  <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>
+              </span>-->
+              <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
+                <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
+              </form>
+              <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
+            </div>
+          </li>
+          <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
+            <a ng-click="" class="btn-link addAnotherPhone">
+              <i class="fa fa-tags"></i>  {{ _('Add a new label')}}
+            </a>
+          </li>
+        </ul>
+        <form class="well newTagForm" role="form" ng-show="showNewTag">
+          <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
+          <div class="row">
+            <div class="col-md-12 form-group">
+              <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('New label')}}">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8">
+              <ul class="color_pallet_menu">
+                <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-4">
+              <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="{{_('Add')}}">
+            </div>
+          </div>
+        </form>
+        <div class="form-group btn-manage-tags" ng-show="tags">
+          <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">{{ _('Manage Tags')}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+<div id="BeforedeleteLead" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" 
+              aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3 id="myModalLabel" class="modal-title">{{ _('Delete Lead')}}</h3>
+              </div>
+              <div class="modal-body">
+                 <form id="seletesho" name="deletesho" class="form-horizontal">
+                  <p>{{_("Are you sure you want to delete")}} :  <%= selectedLead.firstname %> <%= selectedLead.lastname %> .</p>
+              </div>
+              <div class="modal-footer">
+                <button class="btn" ng-click="selectedLead={}" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-                                    if (obj.currentTarget) {
-                                        container = $(obj.currentTarget).siblings('.popover')
-                                        timeout = self.timeout;
-                                        container.one('mouseenter', function() {
-                                            //We entered the actual popover – call off the dogs
-                                            clearTimeout(timeout);
-                                            //Let's monitor popover content instead
-                                            container.one('mouseleave', function() {
-                                                $.fn.popover.Constructor.prototype.leave.call(self, self);
-                                            });
-                                        })
-                                    }
-                                };
-                                /* $('body').popover({ selector: '[data-popover]', trigger: 'click hover', placement: 'left', delay: {show: 50, hide: 400}});*/
-                                $('#assigeeList').slimScroll({
-                                    height: '200px'
-                                });
-                                
-                                                              
-                                $("#select2_sample2").select2({
-                                    placeholder: "{{_('Click to Select a label')}}",
-                                    allowClear: false
-                                });
+                <input ng-click="deletelead()" type="submit" class="btn red" value="{{_('Delete this Lead')}}">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
+              </div>
+               </form>
+               </div>
+          </div>
+       </div>
+      <!--assign tags model-->
+   <div id="assigneeTagsToTask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h3 id="myModalLabel" class="modal-title">{{_('Add Tags')}} </h3>
+            </div>
+            <div class="modal-body">
+               <form id="seletesho" name="deletesho" class="form-horizontal">
+               <div class="form-group">
+                    <select id="select2_sample2" class="form-control select2" multiple>
+                      <option ng-repeat="tag in tags"
+                      value='<%=tag.entityKey%>'>
+                        <%=tag.name%>
+                      </option>
+                    </select>
+                </div>
+            </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <input ng-hide="isLoadingTask" ng-click="addTagsTothis()" type="submit" class="btn green" value="{{_('Add')}}">
+                <input ng-show="isLoadingTask" type="submit" class="btn green" value="Loading..." disabled>
+              </div>
+          </form>
+        </div>
+      </div>
+  </div>
+<script type="text/javascript">
+  $("#select2_sample2").select2({
+        placeholder: "{{ _('Click to Select a label')}}",
+        allowClear: false
+    });
+  var handleUniform = function () {
+        if (!jQuery().uniform) {
+            return;
+        }
+        var test = $("input[type=radio]:not(.toggle, .star)");
+        if (test.size() > 0) {
+            test.each(function () {
+                if ($(this).parents(".checker").size() == 0) {
+                    $(this).show();
+                    $(this).uniform();
+                }
+            });
+        }
+    }
+    handleUniform();
 
-                            </script>
+    $('.waterfall').waterfall({
+        colMinWidth: 200,
+        defaultContainerWidth: 800,
+        autoresize: true
+      });
+$('.textfill').textfill({debug: true, maxFontPixels: 16});
+$('#slimList').slimScroll({});
+</script>
