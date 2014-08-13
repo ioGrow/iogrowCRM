@@ -577,10 +577,12 @@ class Lead(EndpointsModel):
                                 )
         taskqueue.add(
                             url='/workers/get_from_linkedin',
+                            queue_name='iogrow-low',
                             params={'entityKey' :lead_key_async.urlsafe()}
                         )
         taskqueue.add(
                         url='/workers/get_from_twitter',
+                        queue_name='iogrow-low',
                         params={'entityKey': lead_key_async.urlsafe()}
                     )
         return lead_schema
