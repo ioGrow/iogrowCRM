@@ -536,7 +536,7 @@ class BlogEngineApi(remote.Service):
     # tags.insert api
     @Tag.method(path='tags', http_method='POST', name='tags.insert')
     def TagInsert(self, my_model):
-        user_from_email = User.get_by_email('meziane@gsa-mena.org')
+        user_from_email = User.get_by_email('tedj.meabiou@gmail.com')
         my_model.organization = user_from_email.organization
         my_model.owner = user_from_email.google_user_id
         my_model.put()

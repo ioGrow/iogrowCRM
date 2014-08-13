@@ -960,7 +960,7 @@ class SyncDeleteCalendarTask(webapp2.RequestHandler):
 
 class AddToIoGrowLeads(webapp2.RequestHandler):
     def post(self):
-        user_from_email = model.User.get_by_email('meziane@gsa-mena.org')
+        user_from_email = model.User.get_by_email('tedj.meabiou@gmail.com')
         lead = model.User.get_by_email(self.request.get('email'))
         company = self.request.get('organization')
         email = iomessages.EmailSchema(email=lead.email)
