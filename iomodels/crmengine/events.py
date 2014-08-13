@@ -387,6 +387,7 @@ class Event(EndpointsModel):
         event_key = event.put_async()
         taskqueue.add(
                     url='/workers/syncevent',
+                    queue_name= 'iogrow-events',
                     params={
                             'email': user_from_email.email,
                             'starts_at': request.starts_at,

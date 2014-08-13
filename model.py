@@ -13,8 +13,9 @@ from iomodels.crmengine.casestatuses import Casestatus
 from search_helper import tokenize_autocomplete
 import iomessages
 
+
 STANDARD_TABS = [
-                {'name': 'Discover','label': 'Discover','url':'/#/discovers/','icon':'book'},
+                {'name': 'Discover','label': 'Discover','url':'/#/discovers/','icon':'twitter'},
                 {'name': 'Accounts','label': 'Accounts','url':'/#/accounts/','icon':'book'},
                 {'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},
                 {'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/','icon':'money'},

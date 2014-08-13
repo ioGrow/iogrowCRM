@@ -944,6 +944,9 @@ class SyncDeleteCalendarEvent(webapp2.RequestHandler):
 # sync delete tasks with google calendar . hadji hicham 06-09-2014
 class SyncDeleteCalendarTask(webapp2.RequestHandler):
     def post(self):
+        print "*******come over here************"
+        print "i'm deleting "
+        print "**********************************"
         user_from_email = model.User.get_by_email(self.request.get('email'))
         task_google_id= self.request.get('task_google_id')
         try:
@@ -1216,9 +1219,6 @@ routes = [
     ('/workers/syncdocumentwithteam',SyncDocumentWithTeam),
     ('/workers/createorgfolders',CreateOrganizationFolders),
     ('/workers/createobjectfolder',CreateObjectFolder),
-    ('/workers/syncevent',SyncCalendarEvent),
-    ('/workers/syncpatchevent',SyncPatchCalendarEvent),
-    ('/workers/syncdeleteevent',SyncDeleteCalendarEvent),
     ('/workers/createcontactsgroup',CreateContactsGroup),
     ('/workers/sync_contacts',SyncContact),
     ('/workers/send_email_notification',SendEmailNotification),
@@ -1226,10 +1226,15 @@ routes = [
     ('/workers/get_from_linkedin',GetFromLinkedinToIoGrow),
     ('/workers/get_from_twitter',GetFromTwitterToIoGrow),
     ('/workers/send_gmail_message',SendGmailEmail),
-    # tasks sync  hadji hicham 06/08/2014
+
+    # tasks sync  hadji hicham 06/08/2014 queue_name='iogrow-tasks'
     ('/workers/synctask',SyncCalendarTask),
     ('/workers/syncpatchtask',SyncPatchCalendarTask),
     ('/workers/syncdeletetask',SyncDeleteCalendarTask),
+    #Event  sync . hadji hicham 06/08/2014 queue_name= 'iogrow-events'
+    ('/workers/syncevent',SyncCalendarEvent),
+    ('/workers/syncpatchevent',SyncPatchCalendarEvent),
+    ('/workers/syncdeleteevent',SyncDeleteCalendarEvent),
     #
     ('/',IndexHandler),
     ('/blog',BlogHandler),
