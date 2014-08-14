@@ -692,7 +692,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             $scope.showNewOpp=false;
             $scope.isLoading=false;
             $scope.$apply();
-            console.log($scope.opportunitystages);
+           
 
         };
        $scope.priorityColor=function(pri){
@@ -819,7 +819,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             };
             Account.get($scope, params);
             User.list($scope, {});
-            Opportunitystage.list($scope, {});
+            Opportunitystage.list($scope, {'order':'probability'});
             Casestatus.list($scope, {});
             var paramsTag = {'about_kind': 'Account'};
             Tag.list($scope, paramsTag);

@@ -14,7 +14,7 @@ app.config(['$routeProvider', function($routeProvider) {
      $routeProvider.
      // Accounts
      when('/discovers/', {
-        controller: 'DiscoverShowCtrl',
+        controller: 'DiscoverListCtrl',
         templateUrl:'/views/discovers/list'
       }).
       when('/accounts/', {

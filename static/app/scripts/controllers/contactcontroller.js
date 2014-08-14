@@ -674,7 +674,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 											};
 					Contact.get($scope,params);
 					User.list($scope,{});
-					Opportunitystage.list($scope,{});
+					Opportunitystage.list($scope,{'order':'probability'});
 					Casestatus.list($scope,{});
 	           var paramsTag = {'about_kind': 'Contact'};
 	          Tag.list($scope, paramsTag);
