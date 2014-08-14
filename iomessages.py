@@ -137,6 +137,7 @@ class tweetsSchema(messages.Message):
     screen_name=messages.StringField(17)
     retweet_count=messages.IntegerField(18)
     favorite_count=messages.IntegerField(19)
+    topic=messages.StringField(20)
 
 class KewordsRequest(messages.Message):
     value = messages.StringField(1,repeated=True)

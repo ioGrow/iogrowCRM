@@ -417,7 +417,6 @@ class EndpointsHelper():
 
     @classmethod
     def get_tweets(cls, keywords,order):
-        print order,"oooooooooooo"
         list_of_tweets=[]
         for keyword in keywords:
             print '***********'
@@ -439,6 +438,7 @@ class EndpointsHelper():
                 #print result.__dict__, "finnnnnnnnnnnn"
                 node_popularpost=tweetsSchema(id=str(result.id))
                 #print 'detaillllllllllllllll', result.author.__dict__
+                node_popularpost.topic=keyword
                 if 'profile_image_url' in result.user.__dict__:
                     node_popularpost.profile_image_url=(result.user.profile_image_url).encode('utf-8')
                 if 'name' in result.user.__dict__:
