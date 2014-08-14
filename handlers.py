@@ -1209,7 +1209,23 @@ class SendGmailEmail(webapp2.RequestHandler):
                                                 )
         EndpointsHelper.send_message(service,'me',message)
 
-
+# paying with stripe 
+class StripePayingHandler(BaseHandler,SessionEnabledHandler):
+      def post(self):
+          # the secret key .
+          stripe.api_key="sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
+          # get the token from the client form 
+          token= self.request.get('stripeToken')
+          # charging operation after the payment 
+          try:
+            charge= stripe.Charge.create(
+                amount=1000, 
+                currency="usd",
+                card=token,
+                description="hadji@iogrow.com")
+          except stripe.CardError, e:
+                 # The card has been declined
+                 pass
 
 
 
@@ -1311,7 +1327,9 @@ routes = [
     ('/start-early-bird-account',StartEarlyBird),
     ('/sign-in',SignInHandler),
     ('/sign-up',SignUpHandler),
-    ('/gconnect',GooglePlusConnect)
+    ('/gconnect',GooglePlusConnect),
+    # paying with stripe
+    ('/paying',StripePayingHandler)
     ]
 config = {}
 config['webapp2_extras.sessions'] = {
