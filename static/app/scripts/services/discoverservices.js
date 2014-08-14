@@ -42,8 +42,9 @@ discoverservices.factory('Discover', function($http) {
             if(!resp.code){
                //$scope.user = resp;
                //console.log("eeeeeeeeeeeeee");
+               $scope.tweetsFromApi=resp.items;
                $scope.tweets=resp.items;
-               console.log($scope.tweets);
+               //console.log($scope.tweets);
                // Call the method $apply to make the update on the scope
                $scope.$apply();
             }else {

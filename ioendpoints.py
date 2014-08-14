@@ -3334,9 +3334,12 @@ class CrmEngineApi(remote.Service):
                       name='twitter.get_best_tweets')
     def twitter_get_best_tweets(self, request):
         print request
-
-        val={"crm","iogrow"}
-
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        val=[]
+        tagss=Tag.list_by_kind(user_from_email,"topics")
+        for tag in tagss.items:
+            val.append(tag.name)
+        print val
         list_of_tweets=EndpointsHelper.get_tweets(val,"popular")
         # print list_of_tweets
         #tweetsschema=tweetsSchema()
