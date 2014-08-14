@@ -1645,7 +1645,7 @@ class CrmEngineApi(remote.Service):
         user = EndpointsHelper.require_iogrow_user()
         taskqueue.add(
                         url='/workers/send_gmail_message',
-                        queue_name='gmail-queue',
+                        queue_name='iogrow-low',
                         params={
                                 'email': user.email,
                                 'to': request.to,
@@ -1693,7 +1693,7 @@ class CrmEngineApi(remote.Service):
         event = entityKey.get()
         taskqueue.add(
                     url='/workers/syncdeleteevent',
-                    queue_name= 'iogrow-events',
+                    queue_name='iogrow-low',
                     params={
                             'email': user_from_email.email,
                             'event_google_id':event.event_google_id
@@ -1770,7 +1770,7 @@ class CrmEngineApi(remote.Service):
         if patched:
             taskqueue.add(
                     url='/workers/syncpatchevent',
-                    queue_name= 'iogrow-events',
+                    queue_name='iogrow-low',
                     params={
                             'email': user_from_email.email,
                             'starts_at': request.starts_at,
@@ -2474,6 +2474,7 @@ class CrmEngineApi(remote.Service):
                         # insert the edge
                         taskqueue.add(
                                         url='/workers/shareobjectdocument',
+                                        queue_name='iogrow-low',
                                         params={
                                                 'email': shared_with_user.email,
                                                 'obj_key_str': about_key.urlsafe()
@@ -2574,7 +2575,7 @@ class CrmEngineApi(remote.Service):
         if task.due != None :
             taskqueue.add(
                         url='/workers/syncdeletetask',
-                        queue_name='iogrow-tasks',
+                        queue_name='iogrow-low',
                         params={
                                 'email': user_from_email.email,
                                 'task_google_id':task.task_google_id
@@ -2638,6 +2639,7 @@ class CrmEngineApi(remote.Service):
             my_model=User()
             taskqueue.add(
                             url='/workers/initpeertopeerdrive',
+                            queue_name='iogrow-low',
                             params={
                                     'invited_by_email':user_from_email.email,
                                     'email': email,
@@ -3332,9 +3334,12 @@ class CrmEngineApi(remote.Service):
                       name='twitter.get_best_tweets')
     def twitter_get_best_tweets(self, request):
         print request
-
-        val={"crm","iogrow"}
-
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        val=[]
+        tagss=Tag.list_by_kind(user_from_email,"topics")
+        for tag in tagss.items:
+            val.append(tag.name)
+        print val
         list_of_tweets=EndpointsHelper.get_tweets(val,"popular")
         # print list_of_tweets
         #tweetsschema=tweetsSchema()
