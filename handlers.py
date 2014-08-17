@@ -32,12 +32,14 @@ import model
 from iomodels.crmengine.contacts import Contact
 from iomodels.crmengine.leads import LeadInsertRequest,Lead
 from iomodels.crmengine.documents import Document
+from iomodels.crmengine.tags import Tag,TagSchema
 import iomessages
 from blog import Article
 from iograph import Node , Edge
 # import event . hadji hicham 09-07-2014
 from iomodels.crmengine.events import Event
 from iomodels.crmengine.tasks import Task 
+import random
 # under the test .beata !
 import stripe
 jinja_environment = jinja2.Environment(
@@ -349,12 +351,14 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             user = self.get_user_from_session()
             org_name = self.request.get('org_name')
+            tags = self.request.get('tags')
             taskqueue.add(
                             url='/workers/add_to_iogrow_leads',
-                            queue_name='iogrow-admin',
+                            queue_name='iogrow-low',
                             params={
                                     'email': user.email,
-                                    'organization': org_name
+                                    'organization': org_name,
+                                    'tags': tags
                                     }
                         )
             model.Organization.create_instance(org_name,user)
@@ -381,6 +385,7 @@ class StartEarlyBird(BaseHandler, SessionEnabledHandler):
             model.Organization.create_early_bird_instance(org_name,user)
             taskqueue.add(
                             url='/workers/add_to_iogrow_leads',
+                            queue_name='iogrow-low',
                             params={
                                     'email': user.email,
                                     'organization': org_name
@@ -484,6 +489,7 @@ class GooglePlusConnect(SessionEnabledHandler):
         if not user.google_contacts_group:
             taskqueue.add(
                             url='/workers/createcontactsgroup',
+                            queue_name='iogrow-low',
                             params={
                                     'email': user.email
                                     }
@@ -563,6 +569,9 @@ class AccountListHandler(BaseHandler, SessionEnabledHandler):
 class AccountShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/accounts/account_show.html')
+class DiscoverShowHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/discovers/discover_list.html')
 
 class AccountNewHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -975,6 +984,9 @@ class SyncDeleteCalendarEvent(webapp2.RequestHandler):
 # sync delete tasks with google calendar . hadji hicham 06-09-2014
 class SyncDeleteCalendarTask(webapp2.RequestHandler):
     def post(self):
+        print "*******come over here************"
+        print "i'm deleting "
+        print "**********************************"
         user_from_email = model.User.get_by_email(self.request.get('email'))
         task_google_id= self.request.get('task_google_id')
         try:
@@ -994,6 +1006,20 @@ class AddToIoGrowLeads(webapp2.RequestHandler):
         email = iomessages.EmailSchema(email=lead.email)
         emails = []
         emails.append(email)
+        colors=["#F7846A","#FFBB22","#EEEE22","#BBE535","#66CCDD","#B5C5C5","#77DDBB","#E874D6"]
+        tags=list()
+        tags=(self.request.get('tags').split())
+        for tag in tags:
+            tag=tag.replace("#","")
+            tag=tag.replace(",","")
+            tagschema=Tag()
+            tagschema.organization = user_from_email.organization
+            tagschema.owner = user_from_email.google_user_id
+            tagschema.name=tag
+            tagschema.about_kind="topics"
+            tagschema.color=random.choice(colors)
+            tagschema.put()
+        
         request = LeadInsertRequest(
                                     firstname = lead.google_display_name.split()[0],
                                     lastname = " ".join(lead.google_display_name.split()[1:]),
@@ -1030,8 +1056,55 @@ class GetFromLinkedinToIoGrow(webapp2.RequestHandler):
             pli.skills=profil["skills"]
             print pli
             key2=pli.put()
-            Edge.insert(start_node=key1,end_node=key2,kind='linkedin',inverse_edge='parents')
+            es=Edge.insert(start_node=key1,end_node=key2,kind='linkedin',inverse_edge='parents')
             # print profil
+class GetFromTwitterToIoGrow(webapp2.RequestHandler):
+    def post(self):
+        entityKey= self.request.get('entityKey')
+        linkedin=linked_in()
+        print entityKey
+        key1=ndb.Key(urlsafe=entityKey)
+        print key1
+        lead=key1.get()
+        print "######################################################################################"
+        fullname= lead.firstname+" "+lead.lastname
+        print fullname
+        linkedin=linked_in()
+        screen_name=linkedin.scrape_twitter(lead.firstname,lead.lastname)
+        print screen_name
+        name=screen_name[screen_name.find("twitter.com/")+12:]
+        print name
+        profile_schema=EndpointsHelper.twitter_import_people(name)
+        if profile_schema:
+            profile=model.TwitterProfile()
+            profile.id=profile_schema.id
+            profile.followers_count=profile_schema.followers_count
+            profile.lang=profile_schema.lang
+            profile.last_tweet_text=profile_schema.last_tweet_text
+            profile.last_tweet_favorite_count=profile_schema.last_tweet_favorite_count
+            profile.last_tweet_retweeted=profile_schema.last_tweet_retweeted
+            profile.last_tweet_retweet_count=profile_schema.last_tweet_retweet_count
+            profile.language=profile_schema.language
+            profile.created_at=profile_schema.created_at
+            profile.nbr_tweets=profile_schema.nbr_tweets
+            profile.description_of_user=profile_schema.description_of_user
+            profile.friends_count=profile_schema.friends_count
+            profile.name=profile_schema.name
+            profile.screen_name=profile_schema.screen_name
+            profile.url_of_user_their_company=profile_schema.url_of_user_their_company
+            profile.location=profile_schema.location
+            profile.profile_image_url_https=profile_schema.profile_image_url_https
+
+
+
+
+        key2=profile.put()
+        ed=Edge.insert(start_node=key1,end_node=key2,kind='twitter',inverse_edge='parents')
+
+
+        
+
+
 class ShareDocument(webapp2.RequestHandler):
     def post(self):
         email = self.request.get('email')
@@ -1090,6 +1163,7 @@ class InitPeerToPeerDrive(webapp2.RequestHandler):
         for document in documents:
             taskqueue.add(
                             url='/workers/sharedocument',
+                            queue_name='iogrow-low',
                             params={
                                     'email': email,
                                     'doc_id': str(document.key.id())
@@ -1104,6 +1178,7 @@ class ShareObjectDocuments(webapp2.RequestHandler):
         for document in documents.items:
             taskqueue.add(
                             url='/workers/sharedocument',
+                            queue_name='iogrow-low',
                             params={
                                     'email': email,
                                     'doc_id': document.id
@@ -1129,6 +1204,7 @@ class SyncDocumentWithTeam(webapp2.RequestHandler):
             if collaborator.email != user_email :
                 taskqueue.add(
                                 url='/workers/sharedocument',
+                                queue_name='iogrow-low',
                                 params={
                                         'email': collaborator.email,
                                         'doc_id': doc_id
@@ -1186,19 +1262,22 @@ routes = [
     ('/workers/syncdocumentwithteam',SyncDocumentWithTeam),
     ('/workers/createorgfolders',CreateOrganizationFolders),
     ('/workers/createobjectfolder',CreateObjectFolder),
-    ('/workers/syncevent',SyncCalendarEvent),
-    ('/workers/syncpatchevent',SyncPatchCalendarEvent),
-    ('/workers/syncdeleteevent',SyncDeleteCalendarEvent),
     ('/workers/createcontactsgroup',CreateContactsGroup),
     ('/workers/sync_contacts',SyncContact),
     ('/workers/send_email_notification',SendEmailNotification),
     ('/workers/add_to_iogrow_leads',AddToIoGrowLeads),
     ('/workers/get_from_linkedin',GetFromLinkedinToIoGrow),
+    ('/workers/get_from_twitter',GetFromTwitterToIoGrow),
     ('/workers/send_gmail_message',SendGmailEmail),
-    # tasks sync  hadji hicham 06/08/2014
+
+    # tasks sync  hadji hicham 06/08/2014 queue_name='iogrow-tasks'
     ('/workers/synctask',SyncCalendarTask),
     ('/workers/syncpatchtask',SyncPatchCalendarTask),
     ('/workers/syncdeletetask',SyncDeleteCalendarTask),
+    #Event  sync . hadji hicham 06/08/2014 queue_name= 'iogrow-events'
+    ('/workers/syncevent',SyncCalendarEvent),
+    ('/workers/syncpatchevent',SyncPatchCalendarEvent),
+    ('/workers/syncdeleteevent',SyncDeleteCalendarEvent),
     #
     ('/',IndexHandler),
     ('/blog',BlogHandler),
@@ -1210,6 +1289,7 @@ routes = [
     ('/views/articles/search',ArticleSearchHandler),
 
     # Templates Views Routes
+    ('/views/discovers/list',DiscoverShowHandler),
     # Accounts Views
     ('/views/accounts/list',AccountListHandler),
     ('/views/accounts/show',AccountShowHandler),

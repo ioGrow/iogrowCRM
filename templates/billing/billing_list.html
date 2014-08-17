@@ -54,7 +54,7 @@
   <div class="row" ng-show="isSignedIn">
     <div class="col-md-9">
        <a class="btn red newBtn" href="/#/admin/users/new" >
-                      New User    
+                      {{_('Purchase license')}}    
                     </a>
 
     </div>
@@ -82,8 +82,16 @@
                       <%= user.email %>
                     </span>
                     <br>
+                  <span>
+                      Status: <%= user.status %>
+                    </span>
+                    <br>
                     <span>
-                      status: <%= user.status %>
+                      Licenses: <%= user.nmbrOfLicenses %>
+                    </span>
+                  <br>
+                  <span>
+                      License Status: <%= user.LicenseStatus %>
                     </span>
 
 
@@ -111,6 +119,15 @@
                     <span>
                       {{ _('invited by')}}<%= invitee.invited_by %> at <%= invitee.updated_at %>
                     </span>
+                    <br>
+                    <span>
+                      Licenses: <%= invitee.nmbrOfLicenses %>
+                    </span>
+                  <br>
+                  <span>
+                      License Status: <%= invitee.LicenseStatus %>
+                    </span>
+
 
 
                   </div>

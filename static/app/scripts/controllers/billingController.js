@@ -1,5 +1,9 @@
 app.controller('BillingController', ['$scope','$route', 'Auth','Search','User',
     function($scope,$route,Auth,Search,User) {
+      
+   $("ul.page-sidebar-menu li").removeClass("active");
+   $("#id_Billing").addClass("active");
+
   
      $scope.organization_key=document.getElementById('organization_key').value;
 
@@ -24,7 +28,7 @@ app.controller('BillingController', ['$scope','$route', 'Auth','Search','User',
                        }
           User.get_organization($scope,params);
            var params = {'limit':7};
-          User.list($scope,params);
+          User.list_licenses($scope,params);
 
        };
   
@@ -102,11 +106,9 @@ app.controller('BillingShowController', ['$scope','$route', 'Auth','Search','Use
     function($scope,$route,Auth,Search,User) {
   
      //$scope.organization_key=document.getElementById('organization_key').value;
+   $("ul.page-sidebar-menu li").removeClass("active");
+   $("#id_Billing").addClass("active");
 
-     console.log("*******************************");
-     console.log("i never give up bacause i'm not coward!");
-     console.log($route.current.params.userId);
-     console.log("*******************************");
 
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
@@ -124,6 +126,8 @@ app.controller('BillingShowController', ['$scope','$route', 'Auth','Search','Use
     // What to do after authentication
       $scope.runTheProcess = function(){
     
+              var params={'id':$route.current.params.userId};
+              User.get($scope, params);
           //  var params={'organization':$scope.organization_key
           //              }
           // User.get_organization($scope,params);

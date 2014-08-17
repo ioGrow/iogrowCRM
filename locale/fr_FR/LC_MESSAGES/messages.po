@@ -1676,7 +1676,7 @@ msgstr "Ajouter un champ personalisé"
 #: templates/accounts/account_new.html:324
 #, fuzzy
 msgid "Related Contacts"
-msgstr "Supprimer le contact"
+msgstr "Contacts reliés"
 
 #: templates/accounts/account_new.html:332
 #: templates/accounts/account_show.html:1505

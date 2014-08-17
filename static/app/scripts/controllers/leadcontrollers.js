@@ -581,7 +581,9 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      $scope.newEventform=false;
      $scope.newTask={};
      $scope.ioevent = {};
-     $scope.linkedProfile={}
+     $scope.linkedProfile={};
+     $scope.twitterProfile={};
+
      $scope.statuses = [
       {value: 'Home', text: 'Home'},
       {value: 'Work', text: 'Work'},
@@ -1423,13 +1425,21 @@ $scope.deletelead = function(){
   $scope.getLinkedinProfile=function(){
     
     Lead.get_linkedin($scope,{'entityKey':$scope.lead.entityKey});
+    Lead.get_twitter($scope,{'entityKey':$scope.lead.entityKey});
   }
+
   $scope.convertToJson=function(string){
     return  JSON.parse(string);
   }
-  $scope.checkIfEmpty=function(obj){
+  $scope.checkIfEmpty=function(obj,obj1){
   for(var prop in obj) {
         if(obj.hasOwnProperty(prop))
+        console.log(prop);
+            return false;
+    }
+  for(var prop in obj1) {
+        if(obj1.hasOwnProperty(prop))
+        console.log(prop);
             return false;
     }
 

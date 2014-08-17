@@ -13,7 +13,9 @@ from iomodels.crmengine.casestatuses import Casestatus
 from search_helper import tokenize_autocomplete
 import iomessages
 
+
 STANDARD_TABS = [
+                {'name': 'Discover','label': 'Discover','url':'/#/discovers/','icon':'twitter'},
                 {'name': 'Accounts','label': 'Accounts','url':'/#/accounts/','icon':'book'},
                 {'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},
                 {'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/','icon':'money'},
@@ -128,6 +130,7 @@ class Organization(ndb.Model):
         org_key = organization.put()
         # taskqueue.add(
         #             url='/workers/createorgfolders',
+        #             queue_name='iogrow-low',
         #             params={
         #                     'email': admin.email,
         #                     'org_key':org_key.urlsafe()
@@ -191,6 +194,7 @@ class Organization(ndb.Model):
         org_key = organization.put()
         # taskqueue.add(
         #             url='/workers/createorgfolders',
+        #             queue_name='iogrow-low',
         #             params={
         #                     'email': admin.email,
         #                     'org_key':org_key.urlsafe()
@@ -714,3 +718,21 @@ class LinkedinProfile(ndb.Model) :
     certifications=ndb.JsonProperty(indexed=False)
     skills=ndb.StringProperty(repeated=True,indexed=False)
 
+class TwitterProfile(ndb.Model):
+    id= ndb.IntegerProperty(indexed=False)
+    followers_count= ndb.IntegerProperty(indexed=False)
+    last_tweet_text= ndb.StringProperty(indexed=False)
+    last_tweet_favorite_count= ndb.IntegerProperty(indexed=False)
+    last_tweet_retweeted= ndb.StringProperty(indexed=False)
+    last_tweet_retweet_count= ndb.IntegerProperty(indexed=False)
+    language= ndb.StringProperty(indexed=False)
+    created_at= ndb.StringProperty(indexed=False)
+    nbr_tweets= ndb.IntegerProperty(indexed=False)
+    description_of_user= ndb.StringProperty(indexed=False)
+    friends_count= ndb.IntegerProperty(indexed=False)
+    name= ndb.StringProperty(indexed=False)
+    screen_name= ndb.StringProperty(indexed=False)
+    url_of_user_their_company= ndb.StringProperty(indexed=False)
+    location= ndb.StringProperty(indexed=False)
+    profile_image_url_https= ndb.StringProperty(indexed=False)
+    lang= ndb.StringProperty(indexed=False)
