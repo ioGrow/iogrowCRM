@@ -69,7 +69,7 @@ class UserListSchema(messages.Message):
 class AddTagSchema(messages.Message):
     parent = messages.StringField(1,required=True)
     tag_key = messages.StringField(2,required=True)
-class profileSchema(messages.Message):
+class LinkedinProfileSchema(messages.Message):
     lastname = messages.StringField(1)
     firstname = messages.StringField(2)
     industry = messages.StringField(3)

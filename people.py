@@ -5,7 +5,7 @@ import mechanize
 from bs4 import BeautifulSoup
 import cookielib
 from iograph import Node , Edge
-from iomessages import profileSchema
+from iomessages import LinkedinProfileSchema
 from google.appengine.ext import ndb
 from model import LinkedinProfile
 import re
@@ -218,7 +218,7 @@ class linked_in():
         if result['items']:
             profile_key=result['items'][0].end_node
             pro= profile_key.get()
-            response=profileSchema(
+            response=LinkedinProfileSchema(
                                     lastname = pro.lastname,
                                     firstname = pro.firstname,
                                     industry = pro.industry,

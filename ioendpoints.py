@@ -68,7 +68,7 @@ from endpoints_helper import EndpointsHelper
 from people import linked_in
 from operator import itemgetter, attrgetter
 import iomessages
-from iomessages import profileSchema, TwitterProfileSchema
+from iomessages import LinkedinProfileSchema, TwitterProfileSchema
 
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
@@ -2799,21 +2799,21 @@ class CrmEngineApi(remote.Service):
         Organization.upgrade_to_business_version(user_from_email.organization)
         return message_types.VoidMessage()
     # arezki lebdiri 15/07/2014
-    @endpoints.method(EntityKeyRequest, profileSchema,
+    @endpoints.method(EntityKeyRequest, LinkedinProfileSchema,
                       path='people/linkedinProfile', http_method='POST',
                       name='people.getLinkedin')
     def get_people_linkedin(self, request):
         response=linked_in.get_people(request.entityKey)
         return response   
     # arezki lebdiri 15/07/2014
-    @endpoints.method(LinkedinProfileRequest, profileSchema,
+    @endpoints.method(LinkedinProfileRequest, LinkedinProfileSchema,
                       path='people/linkedinProfileV2', http_method='POST',
                       name='people.getLinkedinV2')
     def get_people_linkedinV2(self, request):
         linkedin=linked_in()
         pro=linkedin.scrape_linkedin(request.firstname,request.lastname)
         if(pro):
-            response=profileSchema(
+            response=LinkedinProfileSchema(
                                         lastname = pro["lastname"],
                                         firstname = pro["firstname"],
                                         industry = pro["industry"],
@@ -2830,7 +2830,7 @@ class CrmEngineApi(remote.Service):
                                         skills=pro["skills"]
                                         )
         return response
-        return profileSchema(**response) 
+       
 
 
     # lead reporting api
