@@ -729,9 +729,9 @@
                                                 </ul>
                     
                                             </div>
-                                            <div class="news-blocks blank-card blank-card-bluep newsCard">
+                                            <div class="news-blocks blank-card blank-card-bluep newsCard" ng-show="linkedProfile.current_post || linkedProfile.past_post">
                                                 <h3>Overview</h3>
-                                                <div class="news-block-tags" ng-show="kedProfile.current_post">
+                                                <div class="news-block-tags" ng-show="linkedProfile.current_post">
                                                     <strong>Current position</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">
