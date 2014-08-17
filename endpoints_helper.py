@@ -252,6 +252,7 @@ class EndpointsHelper():
                 if collaborator.email != user.email:
                     taskqueue.add(
                                     url='/workers/shareobjectdocument',
+                                    queue_name='iogrow-low',
                                     params={
                                             'email': collaborator.email,
                                             'obj_key_str': old_obj.key.urlsafe()
@@ -261,6 +262,7 @@ class EndpointsHelper():
             if old_obj.profile_img_id != new_obj.profile_img_id and new_obj.profile_img_id !="":
                 taskqueue.add(
                                 url='/workers/sharedocument',
+                                queue_name='iogrow-low',
                                 params={
                                         'user_email':user.email,
                                         'access': 'anyone',
@@ -271,6 +273,7 @@ class EndpointsHelper():
             if old_obj.logo_img_id != new_obj.logo_img_id and new_obj.logo_img_id !="":
                 taskqueue.add(
                                 url='/workers/sharedocument',
+                                queue_name='iogrow-low',
                                 params={
                                         'user_email':user.email,
                                         'access': 'anyone',

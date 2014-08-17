@@ -274,6 +274,7 @@ class Document(EndpointsModel):
             parent_key = ndb.Key(urlsafe=request.parent)
             taskqueue.add(
                         url='/workers/syncdocumentwithteam',
+                        queue_name='iogrow-low',
                         params={
                                 'user_email': user_from_email.email,
                                 'doc_id': str(document_key_async.id()),
@@ -325,6 +326,7 @@ class Document(EndpointsModel):
                 parent_key = ndb.Key(urlsafe=request.parent)
                 taskqueue.add(
                             url='/workers/syncdocumentwithteam',
+                            queue_name='iogrow-low',
                             params={
                                     'user_email': user_from_email.email,
                                     'doc_id': str(document_key_async.id()),

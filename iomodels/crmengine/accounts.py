@@ -345,6 +345,7 @@ class Account(EndpointsModel):
             account_key_async = account_key.get_result()
             # taskqueue.add(
             #                 url='/workers/createobjectfolder',
+            #                 queue_name='iogrow-low',
             #                 params={
             #                         'kind': "Account",
             #                         'folder_name': request.name,
@@ -440,6 +441,7 @@ class Account(EndpointsModel):
         if request.logo_img_id:
             taskqueue.add(
                             url='/workers/sharedocument',
+                            queue_name='iogrow-low',
                             params={
                                     'user_email':user_from_email.email,
                                     'access': 'anyone',
