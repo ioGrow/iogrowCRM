@@ -69,6 +69,7 @@ from people import linked_in
 from operator import itemgetter, attrgetter
 import iomessages
 from iomessages import profileSchema, TwitterProfileSchema,KewordsRequest, tweetsSchema,tweetsResponse
+import stripe
 
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
@@ -417,6 +418,13 @@ class OrganizationResponse(messages.Message):
       organizationName=messages.StringField(1)
       organizationNumberOfUser=messages.StringField(2)
       organizationNumberOfLicensed=messages.StringField(3)
+
+#hadji hicham . 17/08/2014 . 
+class BillingRequest(messages.Message):
+     token_id=messages.StringField(1)
+     token_email=messages.StringField(2)
+class BillingResponse(messages.Message):
+     response=messages.StringField(2)
 
 @endpoints.api(
                name='blogengine',
@@ -3364,3 +3372,19 @@ class CrmEngineApi(remote.Service):
                    'organizationNumberOfUser': str(userslenght),
                    'organizationNumberOfLicensed':str(NmbrOfLicensed)} 
         return OrganizationResponse(**response)
+    @endpoints.method(BillingRequest,BillingResponse,path='billing/purchase',http_method='POST',name="billing.purchase")
+    def purchase(self,request):
+        # sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA
+        stripe.api_key ="sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
+        token = request.token_id
+        try:
+            charge = stripe.Charge.create(
+                       amount=1000, # amount in cents, again
+                       currency="usd",
+                       card=token,
+                       description="payinguser@example.com"
+                        )
+        except stripe.CardError, e:
+                  # The card has been declined
+                  pass
+        return BillingResponse(response=token) 
