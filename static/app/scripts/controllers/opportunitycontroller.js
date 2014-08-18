@@ -1461,6 +1461,8 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
        $('#'+id).removeClass('hidden');
       }
       $scope.pushElement=function(elem,arr){
+        console.log('-------hello arr--------');
+        console.log(arr)
           if (arr.indexOf(elem) == -1) {
               var copyOfElement = angular.copy(elem);
               arr.push(copyOfElement);

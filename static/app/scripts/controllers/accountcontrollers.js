@@ -544,6 +544,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.opppagination = {};
         $scope.oppCurrentPage = 01;
         $scope.opppages = [];
+        $scope.customfields=[];
         //HKA 11.12.2013 var Case to manage Next & Prev
         $scope.casepagination = {};
         $scope.caseCurrentPage = 01;
