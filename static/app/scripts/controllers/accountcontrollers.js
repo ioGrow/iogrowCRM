@@ -677,6 +677,8 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             $scope.isLoading=true;
             opportunity.closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
             opportunity.stage = $scope.initialStage.entityKey;
+            console.log('-------------i am here----------------');
+            console.log($scope.initialStage.entityKey),
             opportunity.infonodes = $scope.prepareInfonodes();
             // prepare amount attributes
             if (opportunity.duration_unit=='fixed'){
