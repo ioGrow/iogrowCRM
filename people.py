@@ -201,6 +201,7 @@ class linked_in():
             person['resume']=self.get_resume(soup)
             person['certifications']=self.get_certification(soup)
             person['skills']=self.get_skills(soup)
+            person['url']= self.browser.geturl()
 
         return person
     def scrape_twitter(self, firstname, lastname):
@@ -233,7 +234,8 @@ class linked_in():
                                     experiences=pro.experiences,
                                     resume=pro.resume,
                                     certifications=pro.certifications,
-                                    skills=pro.skills
+                                    skills=pro.skills,
+                                    url=pro.url
                                     )
             return response
 

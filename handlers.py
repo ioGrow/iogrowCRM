@@ -1054,6 +1054,7 @@ class GetFromLinkedinToIoGrow(webapp2.RequestHandler):
             pli.certifications=json.dumps(profil["certifications"])
             pli.experiences=json.dumps(profil["experiences"])
             pli.skills=profil["skills"]
+            pli.url=profil["url"]
             print pli
             key2=pli.put()
             es=Edge.insert(start_node=key1,end_node=key2,kind='linkedin',inverse_edge='parents')

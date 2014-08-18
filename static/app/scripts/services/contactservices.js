@@ -16,6 +16,8 @@ accountservices.factory('Contact', function($http) {
             if(!resp.code){
                $scope.contact = resp;
                $scope.getColaborators();
+               $scope.getLinkedinProfile();
+               console.log($scope.linkedProfile)
                // list infonodes
                 var renderMap = false;
                 if (resp.infonodes){
@@ -365,6 +367,41 @@ accountservices.factory('Contact', function($http) {
 
 
 
+  };
+  Contact.get_linkedin= function($scope,params) {
+          $scope.isLoading = true;
+          
+          gapi.client.crmengine.people.getLinkedin(params).execute(function(resp) {
+            if(!resp.code){
+             $scope.linkedProfile.firstname=resp.firstname;
+             $scope.linkedProfile.lastname=resp.lastname;
+             $scope.linkedProfile.headline=resp.headline;
+             $scope.linkedProfile.formations=resp.formations
+             $scope.linkedProfile.locality=resp.locality;
+             $scope.linkedProfile.relation=resp.relation;
+             $scope.linkedProfile.industry=resp.industry;
+             $scope.linkedProfile.resume=resp.resume;
+             $scope.linkedProfile.skills=resp.skills;
+             $scope.linkedProfile.current_post=resp.current_post;
+             $scope.linkedProfile.past_post=resp.past_post;
+             $scope.linkedProfile.certifications=JSON.parse(resp.certifications);
+             $scope.linkedProfile.experiences=JSON.parse(resp.experiences);
+
+             $scope.isLoading = false;
+             $scope.$apply();
+              console.log($scope.linkedProfile);
+              console.log(resp)
+            }else {
+               if(resp.code==401){
+                // $scope.refreshToken();
+               
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
+          $scope.isLoading = false;
   };
   Contact.search = function($scope,params){
       gapi.client.crmengine.contacts.search(params).execute(function(resp) {

@@ -717,6 +717,7 @@ class LinkedinProfile(ndb.Model) :
     resume=ndb.TextProperty(indexed=False)
     certifications=ndb.JsonProperty(indexed=False)
     skills=ndb.StringProperty(repeated=True,indexed=False)
+    url=ndb.StringProperty(indexed=False)
 
 class TwitterProfile(ndb.Model):
     id= ndb.IntegerProperty(indexed=False)

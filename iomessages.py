@@ -88,6 +88,7 @@ class LinkedinProfileSchema(messages.Message):
     resume=messages.StringField(12)
     certifications=messages.StringField(13)
     skills=messages.StringField(14,repeated=True)
+    url=messages.StringField(15)
 
 
 
