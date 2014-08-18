@@ -7,7 +7,7 @@ settingservices.factory('Conf', function($location) {
         return rootUrl;
       };
       return {
-        'clientId': '987765099891.apps.googleusercontent.com',
+        'clientId': '935370948155-a4ib9t8oijcekj8ck6dtdcidnfof4u8q.apps.googleusercontent.com',
         'apiBase': '/api/',
         'rootUrl': getRootUrl(),
         'scopes': 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar',

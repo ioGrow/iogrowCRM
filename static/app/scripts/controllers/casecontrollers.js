@@ -1130,7 +1130,7 @@ $scope.deletecase = function(){
 
      };
      $scope.createPickerUploader = function() {
-          var developerKey = 'AIzaSyCqpqK8oOc4PUe77_nNYNvzh9xhTWd_gJk';
+          var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
           var projectfolder = $scope.casee.folder;
           var docsView = new google.picker.DocsView()
               .setIncludeFolders(true)
@@ -1141,7 +1141,7 @@ $scope.deletecase = function(){
               setCallback($scope.uploaderCallback).
               setOAuthToken(window.authResult.access_token).
               setDeveloperKey(developerKey).
-              setAppId(987765099891).
+              setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
                 enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
               build();
           picker.setVisible(true);
