@@ -737,15 +737,6 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             Case.insert($scope,casee);      
             $scope.showNewCase=false;
             $scope.casee={};
-           /* var params = {'name': casee.name,
-                'priority': casee.priority,
-                'status': $scope.status_selected.entityKey,
-                'account': $scope.account.entityKey,
-                'access': $scope.account.access,
-                'status_name': $scope.status_selected.name
-            };
-            Case.insert($scope, params);
-            $('#addCaseModal').modal('hide');   */
         };
          $scope.editbeforedelete = function(item,typee,index){
             $scope.selectedItem={'item':item,'typee':typee,'index':index};
