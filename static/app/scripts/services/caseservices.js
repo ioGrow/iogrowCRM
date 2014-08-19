@@ -280,9 +280,11 @@ accountservices.factory('Case', function() {
           $scope.cases.push(resp);
           $scope.casee = {};
           $scope.isLoading = false;
-          if ($scope.caseInserted){
+          if ($scope.relatedCase!=true) {
+            if ($scope.caseInserted){
               $scope.caseInserted(resp);
-          }
+            }  
+          };
           $scope.$apply();
 
          }else{

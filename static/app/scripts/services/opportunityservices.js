@@ -278,9 +278,11 @@ Opportunity.insert = function($scope,params){
             $scope.opportunities = [];
             $scope.blankStateopportunity = false;
           }
-          if ($scope.opportunityInserted){
-            $scope.opportunityInserted(resp);
-          }
+          if ($scope.relatedOpp!=true) {
+            if ($scope.opportunityInserted){
+              $scope.opportunityInserted(resp);
+             }
+          };    
           $scope.opportunities.push(resp);
           $scope.opportunity = {};
           $scope.searchAccountQuery = '';
@@ -299,9 +301,13 @@ Opportunity.insert = function($scope,params){
       $scope.isLoading=false;
 };
 Opportunity.delete = function($scope,params){
-    console.log(params);
-    gapi.client.crmengine.opportunities.delete(params).execute(function(resp){
-        window.location.replace('#/opportunities');
+      gapi.client.crmengine.opportunities.delete(params).execute(function(resp){
+        if ( $scope.relatedOpp==true) {
+          $scope.oppDeleted(resp);
+        }else{
+          window.location.replace('#/cases');  
+        };
+        
     }
     )};
 return Opportunity;
