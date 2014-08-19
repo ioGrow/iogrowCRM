@@ -141,7 +141,9 @@ app.controller('BillingShowController', ['$scope','$route', 'Auth','Search','Use
 
 // hadji hicham . to send the token to the api!
  $scope.purchase=function(user){
-
+// the key represent the public key which represent our company  , client side , we have two keys 
+// test  "pk_test_4Xa35zhZDqvXz1OzGRWaW4mX", mode dev 
+// live "pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD", mode prod 
 
   var handler = StripeCheckout.configure({
     key: 'pk_test_4Xa35zhZDqvXz1OzGRWaW4mX',
@@ -150,7 +152,7 @@ app.controller('BillingShowController', ['$scope','$route', 'Auth','Search','Use
     token: function(token) {
 
     var params={'token_id':token.id,
-                'token_amail':token.email
+                'token_email':token.email
               }
    gapi.client.crmengine.billing.purchase(params).execute(function(resp) {
             if(!resp.code){

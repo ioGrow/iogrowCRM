@@ -3374,17 +3374,15 @@ class CrmEngineApi(remote.Service):
         return OrganizationResponse(**response)
     @endpoints.method(BillingRequest,BillingResponse,path='billing/purchase',http_method='POST',name="billing.purchase")
     def purchase(self,request):
-        # sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA
+        #the key represent the secret key which represent our company  , server side , we have two keys 
+        # test "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF", mode dev 
+        # live "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA" , mode prod 
         stripe.api_key ="sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
         token = request.token_id
-        try:
-            charge = stripe.Charge.create(
-                       amount=1000, # amount in cents, again
-                       currency="usd",
-                       card=token,
-                       description="payinguser@example.com"
-                        )
-        except stripe.CardError, e:
-                  # The card has been declined
-                  pass
+        #customers=stripe.Customer.all()
+        print "*-*-*-*-*-*-*-*-*-*-"
+        print stripe.Customer.all()
+        print "*-*-*-**-*-*-*-*-*-*-"
+  
+
         return BillingResponse(response=token) 
