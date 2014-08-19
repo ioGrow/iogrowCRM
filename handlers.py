@@ -10,6 +10,7 @@ import datetime
 import time
 import re
 import jinja2
+import random
 from google.appengine._internal.django.utils.encoding import smart_str
 # Google libs
 import endpoints
@@ -39,7 +40,7 @@ from iograph import Node , Edge
 # import event . hadji hicham 09-07-2014
 from iomodels.crmengine.events import Event
 from iomodels.crmengine.tasks import Task 
-import random
+import sfoauth2
 # under the test .beata !
 
 jinja_environment = jinja2.Environment(
@@ -48,7 +49,7 @@ jinja_environment = jinja2.Environment(
 jinja_environment.install_gettext_translations(i18n)
 
 
-
+sfoauth2.SF_INSTANCE = 'na12'
 
 ADMIN_EMAILS = ['tedj.meabiou@gmail.com','hakim@iogrow.com']
 CLIENT_ID = json.loads(
@@ -657,6 +658,36 @@ class BillingHandler(BaseHandler,SessionEnabledHandler):
 class BillingShowHandler(BaseHandler,SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/billing/billing_show.html')
+
+class SalesforceImporter(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        flow = sfoauth2.SalesforceOAuth2WebServerFlow(
+            client_id='3MVG9QDx8IX8nP5SiRx6WcZGt_urvZZKtoKdTRn0h_ITamehH.ndEUTVBGZhyKJKnWdxun.jnZj0dbzCJNydO',
+            client_secret='8317004383056291259',
+            scope=['full'] ,
+            redirect_uri='http://localhost:8090/sfoauth2callback'
+        )
+        authorization_url = flow.step1_get_authorize_url()
+        self.redirect(authorization_url)
+class SalesforceImporterCallback(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        flow = sfoauth2.SalesforceOAuth2WebServerFlow(
+            client_id='3MVG9QDx8IX8nP5SiRx6WcZGt_urvZZKtoKdTRn0h_ITamehH.ndEUTVBGZhyKJKnWdxun.jnZj0dbzCJNydO',
+            client_secret='8317004383056291259',
+            scope=['full'] ,
+            redirect_uri='http://localhost:8090/sfoauth2callback'
+        )
+        code = self.request.get('code')
+        credentials = flow.step2_exchange(code)
+        http = httplib2.Http()
+        credentials.authorize(http)
+        r, c = http.request("https://na12.salesforce.com/services/data/v29.0/sobjects/Account/")
+        print 'i will print the results'
+        print r,c
+
+
+
+
 # Workers
 class CreateOrganizationFolders(webapp2.RequestHandler):
     @staticmethod
@@ -1328,6 +1359,8 @@ routes = [
     ('/sign-in',SignInHandler),
     ('/sign-up',SignUpHandler),
     ('/gconnect',GooglePlusConnect),
+    ('/sfimporter',SalesforceImporter),
+    ('/sfoauth2callback',SalesforceImporterCallback),
     # paying with stripe
     ('/paying',StripePayingHandler)
     ]
