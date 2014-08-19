@@ -392,6 +392,7 @@ class EventPermissionRequest(messages.Message):
 class ReportingRequest(messages.Message):
     user_google_id = messages.StringField(1)
     google_display_name=messages.StringField(2)
+    #sorted_by=messages.StringField(3)
 
 
 class ReportingResponseSchema(messages.Message):

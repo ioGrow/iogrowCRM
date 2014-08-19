@@ -232,7 +232,7 @@
                                                 </div>
                                             </li>
                                             <li ng-repeat="website in websites">
-                                                <a editable-text="website.url" editoptions editdataattr="deleteInfos(websites,$index)" onbeforesave="inlinePatch('Infonode','websites', 'url',website.entityKey,$data)" href="http://<%=website.url%>"  target="_blank" >
+                                                <a editable-text="website.url" editoptions editdataattr="deleteInfos(websites,$index)" onbeforesave="inlinePatch('Infonode','websites', 'url',website.entityKey,$data)" href="<%=website.url%>"  target="_blank" >
                                                     <%=website.url%>
                                                 </a>
                                             </li>

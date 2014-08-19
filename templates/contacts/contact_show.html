@@ -348,7 +348,7 @@
                                         </form>
                                       </div>
                             </li>
-                          <li  ng-repeat="website in infonodes.websites"><a editable-text="website.url" onbeforesave="inlinePatch('Infonode','websites', 'url',website.entityKey,$data)" href="http://<%=website.url%>"  target="_blank" editoptions editdataattr="deleteInfonode('<%=website.entityKey%>','websites')"><%=website.url%></a> 
+                          <li  ng-repeat="website in infonodes.websites"><a editable-text="website.url" onbeforesave="inlinePatch('Infonode','websites', 'url',website.entityKey,$data)" href="<%=website.url%>"  target="_blank" editoptions editdataattr="deleteInfonode('<%=website.entityKey%>','websites')"><%=website.url%></a> 
                             <a href="<%=website.url%>" target="new" class="icon-link" ></a>
 
                           </li>

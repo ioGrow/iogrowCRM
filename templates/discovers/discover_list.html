@@ -40,11 +40,7 @@
         <span role="button" class="filterItem hiddenOnPhone hiddenOnmd"  ng-class="{activeFilter: selectedOption =='tags'}" ng-click="showTagFilterCard();selectedOption ='tags'"><i class="fa fa-tags"></i><span class="hidden-xs hiddenOnxs">{{_('Filter by')}} </span> {{_('Tags')}}</span>
       </div>
       </div>
-      <div class="col-md-2 col-xs-2">
-      <a href="/#/leads/new" class="hidden-sm hidden-xs btn red newAccountBtnOnscroll pull-right hidden afterScrollBtn">
-           {{ _('New')}} <span class="hidden-xs hiddenOnxs">{{ _('Lead')}}</span>
-         </a>
-      </div>
+
       </div>
     </div>
     </div>
@@ -103,7 +99,7 @@
               </li>
               <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTagForm()">
                 <a ng-click="" class="btn-link addAnotherPhone">
-                  <i class="fa fa-tags"></i>  {{_('Add a new label')}}
+                  <i class="fa fa-tags"></i>  {{_('Add a new topic')}}
                 </a>
               </li>
             </ul>
@@ -111,7 +107,7 @@
               <button type="button" class="close"  aria-hidden="true" ng-click="hideNewTagForm()"></button>
               <div class="row">
                 <div class="col-md-12 form-group">
-                  <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New label">
+                  <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New topic">
                 </div>
               </div>
               <div class="row">
@@ -127,7 +123,7 @@
               </div>
             </form>
             <div class="form-group btn-manage-tags" ng-show="tags">
-              <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()">{{_('Manage Tags')}}
+              <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()">{{_('Manage Topics')}}
               </button>
             </div>
         </div>
@@ -140,7 +136,7 @@
             <ul class="dropdown-menu drp-dwn-right " role="menu">
               <li>
                <a href="" ng-click="showAssigneeTags(lead)">
-                   <i class='fa fa-tags'></i>{{_('Add tags')}} </a>
+                   <i class='fa fa-tags'></i>{{_('Add topics')}} </a>
               </li>
               <li>
                <a href="" ng-click="editbeforedelete(lead)">
@@ -273,7 +269,7 @@
           </li>
           <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
             <a ng-click="" class="btn-link addAnotherPhone">
-              <i class="fa fa-tags"></i>  {{ _('Add a new label')}}
+              <i class="fa fa-tags"></i>  {{ _('Add a new topic')}}
             </a>
           </li>
         </ul>
@@ -281,7 +277,7 @@
           <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
           <div class="row">
             <div class="col-md-12 form-group">
-              <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('New label')}}">
+              <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('New topic')}}">
             </div>
           </div>
           <div class="row">
@@ -297,7 +293,7 @@
           </div>
         </form>
         <div class="form-group btn-manage-tags" ng-show="tags">
-          <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">{{ _('Manage Tags')}}
+          <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">{{ _('Manage Topics')}}
           </button>
         </div>
       </div>
@@ -333,7 +329,7 @@
             <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 id="myModalLabel" class="modal-title">{{_('Add Tags')}} </h3>
+              <h3 id="myModalLabel" class="modal-title">{{_('Add Topics')}} </h3>
             </div>
             <div class="modal-body">
                <form id="seletesho" name="deletesho" class="form-horizontal">
