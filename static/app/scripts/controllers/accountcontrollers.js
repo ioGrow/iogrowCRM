@@ -677,6 +677,8 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             $scope.isLoading=true;
             opportunity.closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
             opportunity.stage = $scope.initialStage.entityKey;
+            console.log('-------------i am here----------------');
+            console.log($scope.initialStage.entityKey),
             opportunity.infonodes = $scope.prepareInfonodes();
             // prepare amount attributes
             if (opportunity.duration_unit=='fixed'){
@@ -692,7 +694,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             $scope.showNewOpp=false;
             $scope.isLoading=false;
             $scope.$apply();
-            console.log($scope.opportunitystages);
+           
 
         };
        $scope.priorityColor=function(pri){
@@ -819,7 +821,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             };
             Account.get($scope, params);
             User.list($scope, {});
-            Opportunitystage.list($scope, {});
+            Opportunitystage.list($scope, {'order':'probability'});
             Casestatus.list($scope, {});
             var paramsTag = {'about_kind': 'Account'};
             Tag.list($scope, paramsTag);
@@ -1195,7 +1197,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                     setCallback($scope.uploaderCallback).
                     setOAuthToken(window.authResult.access_token).
                     setDeveloperKey(developerKey).
-                    setAppId(987765099891).
+                    setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
                     enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
                     build();
             picker.setVisible(true);
@@ -1234,7 +1236,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                     setCallback($scope.logoUploaderCallback).
                     setOAuthToken(window.authResult.access_token).
                     setDeveloperKey(developerKey).
-                    setAppId(987765099891).
+                    setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
                     build();
             picker.setVisible(true);
         };
@@ -1755,9 +1757,8 @@ $scope.updatAccountHeader = function(account){
   $('#EditAccountModal').modal('hide');
 };
 
-    $('#some-textarea').wysihtml5();
     // arezki lebdiri 03/07/2014 send email
-$scope.sendEmailSelected=function(){
+/*$scope.sendEmailSelected=function(){
   $scope.email.to = '';
   angular.forEach($scope.infonodes.emails, function(value, key){
     console.log(value)
@@ -1767,7 +1768,6 @@ $scope.sendEmailSelected=function(){
 };
       $scope.sendEmail = function(email){
         email.body = $('#some-textarea').val();
-
         var params = {
                   'to': email.to,
                   'cc': email.cc,
@@ -1778,7 +1778,7 @@ $scope.sendEmailSelected=function(){
                   };
 
         Email.send($scope,params);
-      };
+      };*/
 
 
 
@@ -1898,7 +1898,6 @@ $scope.deleteaccount = function(){
         };
         $scope.sendEmail = function(email) {
             email.body = $('#some-textarea').val();
-
             var params = {
                 'to': email.to,
                 'cc': email.cc,
@@ -1909,8 +1908,6 @@ $scope.deleteaccount = function(){
 
             Email.send($scope, params);
         };
-
-
 
         $scope.beforedeleteInfonde = function() {
             $('#BeforedeleteInfonode').modal('show');
@@ -2335,7 +2332,7 @@ app.controller('AccountNewCtrl', ['$scope', 'Auth', 'Account', 'Tag', 'Edge',
                     setCallback($scope.uploaderCallback).
                     setOAuthToken(window.authResult.access_token).
                     setDeveloperKey(developerKey).
-                    setAppId(987765099891).
+                    setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
                     build();
             picker.setVisible(true);
         };

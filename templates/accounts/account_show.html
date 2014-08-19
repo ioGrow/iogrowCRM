@@ -345,7 +345,7 @@
                                                             </form>
                                                         </div>
                                                     </li>
-                                                    <li ng-repeat="website in infonodes.websites"><a editable-text="website.url" onbeforesave="inlinePatch('Infonode','websites', 'url',website.entityKey,$data)" href="<%=website.url%>"  target="_blank" editoptions editdataattr="deleteInfonode('<%=website.entityKey%>','websites')" ><%=website.url%></a>
+                                                    <li ng-repeat="website in infonodes.websites"><a editable-text="website.url" onbeforesave="inlinePatch('Infonode','websites', 'url',website.entityKey,$data)" href="http://<%=website.url%>"  target="_blank" editoptions editdataattr="deleteInfonode('<%=website.entityKey%>','websites')" ><%=website.url%></a>
                                                         <a href="<%=website.url%>" target="new" class="icon-link" >
                                                         </a>
                                                      </li>
@@ -971,7 +971,6 @@
                                                                   <option value="VND">₫ - VND</option>
                                                                   <option value="XCD">$ - XCD</option>
                                                                   <option value="ZAR">R - ZAR</option>
-                                                                  <option value="DZD">د.ج - DZD</option>
                                                                 </select>
                                                                 </div>
                                                               </div>
@@ -1157,7 +1156,7 @@
                                       </div>
                                                   <!-- end oppo card-->
                                               </div>
-                                              <div ng-show="blankStateopportunity" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12" style="">
+                                              <div ng-show="blankStateopportunity && !showNewOpp " class="col-md-12 responsive" data-tablet="span6" data-desktop="span12" style="">
                                                <div class="dashboard-stat cards">
 
 
@@ -1357,7 +1356,7 @@
                                               </div>
                                               </div>
                                               </div>
-                                                    <div ng-show="blankStatecase&&!cshowNewCase"  class="col-md-12 responsive" data-tablet="span6" data-desktop="span12" style="">
+                                                    <div ng-show="blankStatecase&&!showNewCase"  class="col-md-12 responsive" data-tablet="span6" data-desktop="span12" style="">
                                                         <div class="dashboard-stat cards">
 
 
@@ -2495,7 +2494,6 @@
                                 <option value="VND">₫ - VND</option>
                                 <option value="XCD">$ - XCD</option>
                                 <option value="ZAR">R - ZAR</option>
-                                <option value="DZD">د.ج - DZD</option>
                               </select>
                               </div>
                            
