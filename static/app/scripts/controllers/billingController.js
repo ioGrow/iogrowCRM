@@ -135,6 +135,7 @@ app.controller('BillingShowController', ['$scope','$route', 'Auth','Search','Use
           // User.list($scope,params);
 
        };
+
   
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {

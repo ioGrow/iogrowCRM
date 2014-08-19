@@ -553,6 +553,7 @@ class Lead(EndpointsModel):
         if request.profile_img_id:
             taskqueue.add(
                             url='/workers/sharedocument',
+                            queue_name='iogrow-low',
                             params={
                                     'user_email':user_from_email.email,
                                     'access': 'anyone',

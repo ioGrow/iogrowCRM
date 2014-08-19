@@ -252,6 +252,7 @@ class EndpointsHelper():
                 if collaborator.email != user.email:
                     taskqueue.add(
                                     url='/workers/shareobjectdocument',
+                                    queue_name='iogrow-low',
                                     params={
                                             'email': collaborator.email,
                                             'obj_key_str': old_obj.key.urlsafe()
@@ -261,6 +262,7 @@ class EndpointsHelper():
             if old_obj.profile_img_id != new_obj.profile_img_id and new_obj.profile_img_id !="":
                 taskqueue.add(
                                 url='/workers/sharedocument',
+                                queue_name='iogrow-low',
                                 params={
                                         'user_email':user.email,
                                         'access': 'anyone',
@@ -271,6 +273,7 @@ class EndpointsHelper():
             if old_obj.logo_img_id != new_obj.logo_img_id and new_obj.logo_img_id !="":
                 taskqueue.add(
                                 url='/workers/sharedocument',
+                                queue_name='iogrow-low',
                                 params={
                                         'user_email':user.email,
                                         'access': 'anyone',
@@ -487,5 +490,5 @@ class scor_new_lead():
         credentials=user.google_credentials
         http = credentials.authorize(httplib2.Http())
         service=build('prediction','v1.6',http=http)
-        result=service.trainedmodels().predict(project='987765099891',id='7',body={'input':{'csvInstance':['Sofware Engineer','Purchase List']}}).execute()
+        result=service.trainedmodels().predict(project='935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d',id='7',body={'input':{'csvInstance':['Sofware Engineer','Purchase List']}}).execute()
         return result

@@ -418,6 +418,7 @@ class User(EndpointsModel):
             if self.google_contacts_group is None:
                 taskqueue.add(
                             url='/workers/createcontactsgroup',
+                            queue_name='iogrow-low',
                             params={
                                     'email': self.email
                                     }
@@ -442,6 +443,7 @@ class User(EndpointsModel):
         if self.google_credentials:
             taskqueue.add(
                         url='/workers/createcontactsgroup',
+                        queue_name='iogrow-low',
                         params={
                                 'email': self.email
                                 }
