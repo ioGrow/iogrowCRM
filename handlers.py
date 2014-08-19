@@ -31,6 +31,7 @@ from people import linked_in
 import model
 from iomodels.crmengine.contacts import Contact
 from iomodels.crmengine.leads import LeadInsertRequest,Lead
+from iomodels.crmengine.Licenses import License
 from iomodels.crmengine.documents import Document
 from iomodels.crmengine.tags import Tag,TagSchema
 import iomessages
@@ -1058,6 +1059,10 @@ class GetFromLinkedinToIoGrow(webapp2.RequestHandler):
             print pli
             key2=pli.put()
             es=Edge.insert(start_node=key1,end_node=key2,kind='linkedin',inverse_edge='parents')
+class CheckLicenseHandler(webapp2.RequestHandler):
+    def get(self):
+        License.update()
+        print "arezkiaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" 
             # print profil
 class GetFromTwitterToIoGrow(webapp2.RequestHandler):
     def post(self):
@@ -1279,6 +1284,7 @@ routes = [
     ('/workers/syncevent',SyncCalendarEvent),
     ('/workers/syncpatchevent',SyncPatchCalendarEvent),
     ('/workers/syncdeleteevent',SyncDeleteCalendarEvent),
+    ('/workers/checklicense',CheckLicenseHandler),
     #
     ('/',IndexHandler),
     ('/blog',BlogHandler),

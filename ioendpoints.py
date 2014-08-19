@@ -45,6 +45,7 @@ from iomodels.crmengine.leads import Lead,LeadFromTwitterRequest,LeadInsertReque
 from iomodels.crmengine.cases import Case,CaseGetRequest,CaseInsertRequest,CaseSchema,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
 #from iomodels.crmengine.products import Product
 from iomodels.crmengine.comments import Comment
+from iomodels.crmengine.Licenses import License ,LicenseSchema,LicenseInsertRequest
 from iomodels.crmengine.opportunitystage import Opportunitystage
 from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.casestatuses import Casestatus
@@ -3371,3 +3372,13 @@ class CrmEngineApi(remote.Service):
                    'organizationNumberOfUser': str(userslenght),
                    'organizationNumberOfLicensed':str(NmbrOfLicensed)} 
         return OrganizationResponse(**response)
+    # *************** the licenses apis ***************************
+    @endpoints.method(LicenseInsertRequest, LicenseSchema,
+                      path='licenses/insert', http_method='POST',
+                      name='licenses.insert')
+    def license_insert(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return License.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
