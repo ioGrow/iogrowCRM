@@ -373,6 +373,9 @@ class User(EndpointsModel):
     # Is the user a public user or business user
     type = ndb.StringProperty()
     # If the user is a business user, we store the informations about him
+    #stripe id , id represent an enter in the table of customers in stripe api.
+    stripe_id=ndb.StringProperty()
+    #that's coool
     organization = ndb.KeyProperty()
     status = ndb.StringProperty()
     profile = ndb.KeyProperty()

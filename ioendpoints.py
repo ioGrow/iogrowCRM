@@ -72,6 +72,9 @@ import iomessages
 from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsRequest, tweetsSchema,tweetsResponse
 
 
+import stripe
+
+
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
 CLIENT_ID = '935370948155-a4ib9t8oijcekj8ck6dtdcidnfof4u8q.apps.googleusercontent.com'
@@ -396,6 +399,8 @@ class EventPermissionRequest(messages.Message):
 class ReportingRequest(messages.Message):
     user_google_id = messages.StringField(1)
     google_display_name=messages.StringField(2)
+    sorted_by=messages.StringField(3)
+    #sorted_by=messages.StringField(3)
 
 
 class ReportingResponseSchema(messages.Message):
@@ -408,6 +413,7 @@ class ReportingResponseSchema(messages.Message):
     count_contacts=messages.IntegerField(7)
     count_leads=messages.IntegerField(8)
     count_tasks=messages.IntegerField(9)
+    updated_at=messages.StringField(10)
 
 class ReportingListResponse(messages.Message):
     items = messages.MessageField(ReportingResponseSchema, 1, repeated=True)
@@ -421,6 +427,13 @@ class OrganizationResponse(messages.Message):
       organizationName=messages.StringField(1)
       organizationNumberOfUser=messages.StringField(2)
       organizationNumberOfLicensed=messages.StringField(3)
+
+#hadji hicham . 17/08/2014 . 
+class BillingRequest(messages.Message):
+     token_id=messages.StringField(1)
+     token_email=messages.StringField(2)
+class BillingResponse(messages.Message):
+     response=messages.StringField(2)
 
 @endpoints.api(
                name='blogengine',
@@ -3207,13 +3220,14 @@ class CrmEngineApi(remote.Service):
                 leads=Lead.query(Lead.owner==gid).fetch()
                 contacts=Contact.query(Contact.owner==gid).fetch()
                 created_at=user.created_at
+                updated_at=user.updated_at              
                 gmail=user.email
-                list_of_reports.append((gid,gname,gmail,len(accounts),len(contacts),len(leads),len(tasks),created_at))
+                list_of_reports.append((gid,gname,gmail,len(accounts),len(contacts),len(leads),len(tasks),created_at,updated_at))
                 
-            list_of_reports.sort(key=itemgetter(3),reverse=True)    
+            list_of_reports.sort(key=itemgetter(8),reverse=True)    
             reporting = []
             for item in list_of_reports:
-                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count_account=item[3],count_contacts=item[4],count_leads=item[5],count_tasks=item[6])
+                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count_account=item[3],count_contacts=item[4],count_leads=item[5],count_tasks=item[6],created_at=item[7].isoformat(),updated_at=item[8].isoformat())
                 reporting.append(item_schema)
 
             return ReportingListResponse(items=reporting)         
@@ -3372,6 +3386,7 @@ class CrmEngineApi(remote.Service):
                    'organizationNumberOfUser': str(userslenght),
                    'organizationNumberOfLicensed':str(NmbrOfLicensed)} 
         return OrganizationResponse(**response)
+<<<<<<< HEAD
     # *************** the licenses apis ***************************
     @endpoints.method(LicenseInsertRequest, LicenseSchema,
                       path='licenses/insert', http_method='POST',
@@ -3382,3 +3397,19 @@ class CrmEngineApi(remote.Service):
                             user_from_email = user_from_email,
                             request = request
                             )
+=======
+    @endpoints.method(BillingRequest,BillingResponse,path='billing/purchase',http_method='POST',name="billing.purchase")
+    def purchase(self,request):
+        #the key represent the secret key which represent our company  , server side , we have two keys 
+        # test "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF", mode dev 
+        # live "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA" , mode prod 
+        stripe.api_key ="sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
+        token = request.token_id
+        #customers=stripe.Customer.all()
+        print "*-*-*-*-*-*-*-*-*-*-"
+        print stripe.Customer.all()
+        print "*-*-*-**-*-*-*-*-*-*-"
+  
+
+        return BillingResponse(response=token) 
+>>>>>>> 87deffcc95f2cc590ddc0a246c5510f00a660f6e
