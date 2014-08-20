@@ -1564,6 +1564,7 @@ $scope.updateEventRenderAfterAdd= function(){};
 
         };
 
+
  $scope.opportunityInserted = function(resp){
           window.location.replace('#/accounts');
       };
@@ -1742,9 +1743,8 @@ $scope.updatAccountHeader = function(account){
   $('#EditAccountModal').modal('hide');
 };
 
-    $('#some-textarea').wysihtml5();
     // arezki lebdiri 03/07/2014 send email
-$scope.sendEmailSelected=function(){
+/*$scope.sendEmailSelected=function(){
   $scope.email.to = '';
   angular.forEach($scope.infonodes.emails, function(value, key){
     console.log(value)
@@ -1754,7 +1754,6 @@ $scope.sendEmailSelected=function(){
 };
       $scope.sendEmail = function(email){
         email.body = $('#some-textarea').val();
-
         var params = {
                   'to': email.to,
                   'cc': email.cc,
@@ -1765,7 +1764,7 @@ $scope.sendEmailSelected=function(){
                   };
 
         Email.send($scope,params);
-      };
+      };*/
 
 
 
@@ -1885,7 +1884,6 @@ $scope.deleteaccount = function(){
         };
         $scope.sendEmail = function(email) {
             email.body = $('#some-textarea').val();
-
             var params = {
                 'to': email.to,
                 'cc': email.cc,
@@ -1896,8 +1894,6 @@ $scope.deleteaccount = function(){
 
             Email.send($scope, params);
         };
-
-
 
         $scope.beforedeleteInfonde = function() {
             $('#BeforedeleteInfonode').modal('show');

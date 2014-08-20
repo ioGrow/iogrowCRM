@@ -5,7 +5,10 @@ import mechanize
 from bs4 import BeautifulSoup
 import cookielib
 from iograph import Node , Edge
-from iomessages import profileSchema, TwitterProfileSchema
+
+
+from iomessages import LinkedinProfileSchema, TwitterProfileSchema
+
 from google.appengine.ext import ndb
 from model import LinkedinProfile
 import re
@@ -198,6 +201,7 @@ class linked_in():
             person['resume']=self.get_resume(soup)
             person['certifications']=self.get_certification(soup)
             person['skills']=self.get_skills(soup)
+            person['url']= self.browser.geturl()
 
         return person
     def scrape_twitter(self, firstname, lastname):
@@ -216,7 +220,7 @@ class linked_in():
         if result['items']:
             profile_key=result['items'][0].end_node
             pro= profile_key.get()
-            response=profileSchema(
+            response=LinkedinProfileSchema(
                                     lastname = pro.lastname,
                                     firstname = pro.firstname,
                                     industry = pro.industry,
@@ -230,7 +234,8 @@ class linked_in():
                                     experiences=pro.experiences,
                                     resume=pro.resume,
                                     certifications=pro.certifications,
-                                    skills=pro.skills
+                                    skills=pro.skills,
+                                    url=pro.url
                                     )
             return response
 

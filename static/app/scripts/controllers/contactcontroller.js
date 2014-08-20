@@ -44,7 +44,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 				 $scope.currentContact=null;
 				 $scope.showTagsFilter=false;
      			 $scope.showNewTag=false;
-
+                 ;
 				// What to do after authentication
 			 $scope.runTheProcess = function(){
 						var params = {'order' : $scope.order,'limit':20}
@@ -75,6 +75,8 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 					return (index%4)+1;
 				}
 		 };
+		 // get the profile of the contact
+	
 				// We need to call this to refresh token when user credentials are invalid
 			 $scope.refreshToken = function() {
 						Auth.refreshToken();
@@ -574,6 +576,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 		 $scope.prevPageToken = undefined;
 		 $scope.currentPage = 01;
 		 $scope.pages = [];
+		 $scope.collaborators_list=[];
 		 //HKA 10.12.2013 Var topic to manage Next & Prev
 		 $scope.topicCurrentPage=01;
 		 $scope.topicpagination={};
@@ -636,6 +639,13 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
         lineWidth:7,
         lineCap:'circle'
     };
+    $scope.linkedProfile={}
+    $scope.getLinkedinProfile=function(){
+      
+      Contact.get_linkedin($scope,{'entityKey':$scope.contact.entityKey});
+      // Lead.get_twitter($scope,{'entityKey':$scope.lead.entityKey});
+    }
+
     	$scope.fromNow = function(fromDate){
 				return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
 		}
@@ -681,8 +691,13 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 	          Tag.list($scope, paramsTag);
 
 			};
+			  $scope.getColaborators=function(){
+           
+          Permission.getColaborators($scope,{"entityKey":$scope.contact.entityKey});  
+        }
+
 				// We need to call this to refresh token when user credentials are invalid
-			$scope.refreshToken = function() {
+		$scope.refreshToken = function() {
 						Auth.refreshToken();
 			};
 			$scope.getTopicUrl = function(type,id){

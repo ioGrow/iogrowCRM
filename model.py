@@ -373,6 +373,9 @@ class User(EndpointsModel):
     # Is the user a public user or business user
     type = ndb.StringProperty()
     # If the user is a business user, we store the informations about him
+    #stripe id , id represent an enter in the table of customers in stripe api.
+    stripe_id=ndb.StringProperty()
+    #that's coool
     organization = ndb.KeyProperty()
     status = ndb.StringProperty()
     profile = ndb.KeyProperty()
@@ -418,6 +421,7 @@ class User(EndpointsModel):
             if self.google_contacts_group is None:
                 taskqueue.add(
                             url='/workers/createcontactsgroup',
+                            queue_name='iogrow-low',
                             params={
                                     'email': self.email
                                     }
@@ -442,6 +446,7 @@ class User(EndpointsModel):
         if self.google_credentials:
             taskqueue.add(
                         url='/workers/createcontactsgroup',
+                        queue_name='iogrow-low',
                         params={
                                 'email': self.email
                                 }
@@ -717,6 +722,7 @@ class LinkedinProfile(ndb.Model) :
     resume=ndb.TextProperty(indexed=False)
     certifications=ndb.JsonProperty(indexed=False)
     skills=ndb.StringProperty(repeated=True,indexed=False)
+    url=ndb.StringProperty(indexed=False)
 
 class TwitterProfile(ndb.Model):
     id= ndb.IntegerProperty(indexed=False)

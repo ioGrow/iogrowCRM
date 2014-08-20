@@ -686,6 +686,7 @@ class Contact(EndpointsModel):
                                                 )
         # taskqueue.add(
         #             url='/workers/createobjectfolder',
+        #             queue_name='iogrow-low',
         #             params={
         #                     'kind': "Contact",
         #                     'folder_name': folder_name,
@@ -722,6 +723,7 @@ class Contact(EndpointsModel):
         if request.profile_img_id:
             taskqueue.add(
                             url='/workers/sharedocument',
+                            queue_name='iogrow-low',
                             params={
                                     'user_email':user_from_email.email,
                                     'access': 'anyone',
@@ -740,11 +742,20 @@ class Contact(EndpointsModel):
                                 )
         taskqueue.add(
                     url='/workers/sync_contacts',
+                    queue_name='iogrow-low',
                     params={
                             'email': user_from_email.email,
                             'id':contact_schema.id
                             }
                     )
+        taskqueue.add(
+                            url='/workers/get_from_linkedin',
+                            params={'entityKey' :contact_key_async.urlsafe()}
+                        )
+        # taskqueue.add(
+        #                 url='/workers/get_from_twitter',
+        #                 params={'entityKey': contact_key_async.urlsafe()}
+        #             )
         return contact_schema
     @classmethod
     def get_key_by_name(cls,user_from_email,name):
@@ -927,6 +938,7 @@ class Contact(EndpointsModel):
                                         account_key_async = account_key.get_result()
                                         # taskqueue.add(
                                         #             url='/workers/createobjectfolder',
+                                        #             queue_name='iogrow-low',
                                         #             params={
                                         #                 'kind': "Account",
                                         #                 'folder_name': account.name,
@@ -983,6 +995,7 @@ class Contact(EndpointsModel):
                             folder_name = contact['firstname'] + contact['lastname']
                             # taskqueue.add(
                             #                 url='/workers/createobjectfolder',
+                            #                 queue_name='iogrow-low',
                             #                 params={
                             #                         'kind': "Contact",
                             #                         'folder_name': folder_name,
