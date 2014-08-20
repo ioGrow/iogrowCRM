@@ -14,6 +14,7 @@ accountservices.factory('Case', function() {
           gapi.client.crmengine.cases.getv2(params).execute(function(resp) {
             if(!resp.code){
                $scope.casee = resp;
+               $scope.getColaborators();
                $scope.isContentLoaded = true;
                $scope.isLoading = false;
                // list infonodes

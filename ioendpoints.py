@@ -45,6 +45,7 @@ from iomodels.crmengine.leads import Lead,LeadFromTwitterRequest,LeadInsertReque
 from iomodels.crmengine.cases import Case,CaseGetRequest,CaseInsertRequest,CaseSchema,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
 #from iomodels.crmengine.products import Product
 from iomodels.crmengine.comments import Comment
+from iomodels.crmengine.Licenses import License ,LicenseSchema,LicenseInsertRequest
 from iomodels.crmengine.opportunitystage import Opportunitystage
 from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.casestatuses import Casestatus
@@ -68,8 +69,11 @@ from endpoints_helper import EndpointsHelper
 from people import linked_in
 from operator import itemgetter, attrgetter
 import iomessages
-from iomessages import profileSchema, TwitterProfileSchema,KewordsRequest, tweetsSchema,tweetsResponse
+from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsRequest, tweetsSchema,tweetsResponse
+
+
 import stripe
+
 
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
@@ -302,6 +306,8 @@ class ColaboratorSchema(messages.Message):
     display_name= messages.StringField(1)
     email = messages.StringField(2)
     img = messages.StringField(3)
+    entityKey=messages.StringField(4)
+    
 class ColaboratorItem(messages.Message):
     items= messages.MessageField(ColaboratorSchema,1,repeated=True)
 # The message class that defines the shows.search response
@@ -393,6 +399,8 @@ class EventPermissionRequest(messages.Message):
 class ReportingRequest(messages.Message):
     user_google_id = messages.StringField(1)
     google_display_name=messages.StringField(2)
+    sorted_by=messages.StringField(3)
+    #sorted_by=messages.StringField(3)
 
 
 class ReportingResponseSchema(messages.Message):
@@ -405,6 +413,7 @@ class ReportingResponseSchema(messages.Message):
     count_contacts=messages.IntegerField(7)
     count_leads=messages.IntegerField(8)
     count_tasks=messages.IntegerField(9)
+    updated_at=messages.StringField(10)
 
 class ReportingListResponse(messages.Message):
     items = messages.MessageField(ReportingResponseSchema, 1, repeated=True)
@@ -2863,21 +2872,21 @@ class CrmEngineApi(remote.Service):
         Organization.upgrade_to_business_version(user_from_email.organization)
         return message_types.VoidMessage()
     # arezki lebdiri 15/07/2014
-    @endpoints.method(EntityKeyRequest, profileSchema,
+    @endpoints.method(EntityKeyRequest, LinkedinProfileSchema,
                       path='people/linkedinProfile', http_method='POST',
                       name='people.getLinkedin')
     def get_people_linkedin(self, request):
         response=linked_in.get_people(request.entityKey)
         return response   
     # arezki lebdiri 15/07/2014
-    @endpoints.method(LinkedinProfileRequest, profileSchema,
+    @endpoints.method(LinkedinProfileRequest, LinkedinProfileSchema,
                       path='people/linkedinProfileV2', http_method='POST',
                       name='people.getLinkedinV2')
     def get_people_linkedinV2(self, request):
         linkedin=linked_in()
         pro=linkedin.scrape_linkedin(request.firstname,request.lastname)
         if(pro):
-            response=profileSchema(
+            response=LinkedinProfileSchema(
                                         lastname = pro["lastname"],
                                         firstname = pro["firstname"],
                                         industry = pro["industry"],
@@ -2894,7 +2903,7 @@ class CrmEngineApi(remote.Service):
                                         skills=pro["skills"]
                                         )
         return response
-        return profileSchema(**response) 
+       
 
 
     # lead reporting api
@@ -3195,6 +3204,7 @@ class CrmEngineApi(remote.Service):
                 
         # if the user input google_user_id    
         else:
+            sorted_by=request.sorted_by
             users=User.query().fetch()
             list_of_reports=[]
             for user in users:
@@ -3205,13 +3215,25 @@ class CrmEngineApi(remote.Service):
                 leads=Lead.query(Lead.owner==gid).fetch()
                 contacts=Contact.query(Contact.owner==gid).fetch()
                 created_at=user.created_at
+                updated_at=user.updated_at              
                 gmail=user.email
-                list_of_reports.append((gid,gname,gmail,len(accounts),len(contacts),len(leads),len(tasks),created_at))
+                list_of_reports.append((gid,gname,gmail,len(accounts),len(contacts),len(leads),len(tasks),created_at,updated_at))
                 
-            list_of_reports.sort(key=itemgetter(3),reverse=True)    
+            if sorted_by=='accounts':
+                list_of_reports.sort(key=itemgetter(3),reverse=True)
+            elif sorted_by=='contacts':
+                list_of_reports.sort(key=itemgetter(4),reverse=True)
+            elif sorted_by=='leads':
+                list_of_reports.sort(key=itemgetter(5),reverse=True)
+            elif sorted_by=='tasks':
+                list_of_reports.sort(key=itemgetter(6),reverse=True)
+            elif sorted_by=='created_at':
+                list_of_reports.sort(key=itemgetter(7),reverse=True)
+            else:
+                list_of_reports.sort(key=itemgetter(8),reverse=True)
             reporting = []
             for item in list_of_reports:
-                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count_account=item[3],count_contacts=item[4],count_leads=item[5],count_tasks=item[6])
+                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count_account=item[3],count_contacts=item[4],count_leads=item[5],count_tasks=item[6],created_at=item[7].isoformat(),updated_at=item[8].isoformat())
                 reporting.append(item_schema)
 
             return ReportingListResponse(items=reporting)         
@@ -3292,7 +3314,11 @@ class CrmEngineApi(remote.Service):
         for node in Node.list_permissions(Key.get()) :
             tab.append(ColaboratorSchema(display_name=node.google_display_name,
                                           email=node.email,
-                                          img=node.google_public_profile_photo_url))
+                                          img=node.google_public_profile_photo_url,
+                                          entityKey=node.entityKey
+
+                                          )
+            )
 
         return ColaboratorItem(items=tab)
 
@@ -3366,6 +3392,18 @@ class CrmEngineApi(remote.Service):
                    'organizationNumberOfUser': str(userslenght),
                    'organizationNumberOfLicensed':str(NmbrOfLicensed)} 
         return OrganizationResponse(**response)
+<<<<<<< HEAD
+    # *************** the licenses apis ***************************
+    @endpoints.method(LicenseInsertRequest, LicenseSchema,
+                      path='licenses/insert', http_method='POST',
+                      name='licenses.insert')
+    def license_insert(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return License.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+=======
     @endpoints.method(BillingRequest,BillingResponse,path='billing/purchase',http_method='POST',name="billing.purchase")
     def purchase(self,request):
         #the key represent the secret key which represent our company  , server side , we have two keys 
@@ -3376,3 +3414,4 @@ class CrmEngineApi(remote.Service):
   
 
         return BillingResponse(response=token) 
+>>>>>>> 87deffcc95f2cc590ddc0a246c5510f00a660f6e
