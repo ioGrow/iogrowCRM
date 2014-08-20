@@ -13,8 +13,7 @@ accountservices.factory('User', function($http) {
           gapi.client.crmengine.users.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.user = resp;
-                console.log("i'm here idiot , i'm here its me !");
-                console.log(resp);
+              
                // Call the method $apply to make the update on the scope
                $scope.$apply();
 
@@ -28,6 +27,27 @@ accountservices.factory('User', function($http) {
             console.log('gapi #end_execute');
           });
   };
+  
+  User.get_purchase = function($scope,id) {
+           
+          gapi.client.crmengine.users.get(id).execute(function(resp) {
+            if(!resp.code){
+               $scope.user = resp;
+              $scope.purchase($scope.user);
+               // Call the method $apply to make the update on the scope
+               $scope.$apply();
+
+            }else {
+               if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
+  };
+  
   User.list = function($scope,params){
       $scope.isLoading = true;
       gapi.client.crmengine.users.list(params).execute(function(resp) {
