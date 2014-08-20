@@ -1,4 +1,4 @@
-app.controller('BillingController', ['$scope','$route', 'Auth','Search','User',
+app.controller('BillingListController', ['$scope','$route', 'Auth','Search','User',
     function($scope,$route,Auth,Search,User) {
       
    $("ul.page-sidebar-menu li").removeClass("active");
