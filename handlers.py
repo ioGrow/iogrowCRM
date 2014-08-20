@@ -686,7 +686,7 @@ class CalendarShowHandler(BaseHandler,SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/calendar/calendar_show.html')
 # hadji hicham 07/08/2014 
-class BillingHandler(BaseHandler,SessionEnabledHandler):
+class BillingListHandler(BaseHandler,SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/billing/billing_list.html')
 # hadji hicham  11/08/2014
@@ -1351,7 +1351,7 @@ routes = [
     ('/views/admin/imports/list',ImportListHandler),
     ('/views/admin/imports/new',ImportNewHandler),
     #billing stuff. hadji hicham . 07/08/2014
-    ('/views/billing/list',BillingHandler),
+    ('/views/billing/list',BillingListHandler),
     ('/views/billing/show',BillingShowHandler),
 
     # Applications settings
