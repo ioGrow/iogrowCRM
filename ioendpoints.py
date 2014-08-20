@@ -3210,6 +3210,7 @@ class CrmEngineApi(remote.Service):
                 
         # if the user input google_user_id    
         else:
+            sorted_by=request.sorted_by
             users=User.query().fetch()
             list_of_reports=[]
             for user in users:
@@ -3224,7 +3225,18 @@ class CrmEngineApi(remote.Service):
                 gmail=user.email
                 list_of_reports.append((gid,gname,gmail,len(accounts),len(contacts),len(leads),len(tasks),created_at,updated_at))
                 
-            list_of_reports.sort(key=itemgetter(8),reverse=True)    
+            if sorted_by=='accounts':
+                list_of_reports.sort(key=itemgetter(3),reverse=True)
+            elif sorted_by=='contacts':
+                list_of_reports.sort(key=itemgetter(4),reverse=True)
+            elif sorted_by=='leads':
+                list_of_reports.sort(key=itemgetter(5),reverse=True)
+            elif sorted_by=='tasks':
+                list_of_reports.sort(key=itemgetter(6),reverse=True)
+            elif sorted_by=='created_at':
+                list_of_reports.sort(key=itemgetter(7),reverse=True)
+            else:
+                list_of_reports.sort(key=itemgetter(8),reverse=True)
             reporting = []
             for item in list_of_reports:
                 item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count_account=item[3],count_contacts=item[4],count_leads=item[5],count_tasks=item[6],created_at=item[7].isoformat(),updated_at=item[8].isoformat())
