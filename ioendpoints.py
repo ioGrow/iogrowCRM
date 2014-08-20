@@ -136,7 +136,8 @@ def LISTING_QUERY(query, access, organization, owner, collaborators, order):
                                    )
                         ).order(order)
 
-
+# hadji hicham  20/08/2014. our secret api key to auth at stripe .
+stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
 
 class TwitterProfileRequest(messages.Message):
     firstname = messages.StringField(1)
@@ -2784,11 +2785,17 @@ class CrmEngineApi(remote.Service):
                   http_method='GET', path='users/{id}', name='users.customer')
     def Customer(self,request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-
+        cust=stripe.Customer.retrieve(request.id)
+        print "*-*-*-*-*-*-*-*-*-*-*-*-*-*-**"
+        print cust.metadata 
+        print "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*"
+        kwargs = {
+               "google_public_profile_photo_url":cust.metadata.google_public_profile_photo_url,
+               "google_display_name":cust.metadata.google_display_name
+                 }
         #user=User.query().filter(User.id==my_model.id).get()
-        if not my_model.from_datastore:
-            raise endpoints.NotFoundException('User not found ')
-        return my_model
+
+        return iomessages.customerResponse(**kwargs)
 
     # this api to fetch tasks and events to feed the calendar . hadji hicham.14-07-2014
     @endpoints.method(CalendarFeedsRequest,CalendarFeedsResults,
@@ -3392,7 +3399,7 @@ class CrmEngineApi(remote.Service):
                    'organizationNumberOfUser': str(userslenght),
                    'organizationNumberOfLicensed':str(NmbrOfLicensed)} 
         return OrganizationResponse(**response)
-<<<<<<< HEAD
+
     # *************** the licenses apis ***************************
     @endpoints.method(LicenseInsertRequest, LicenseSchema,
                       path='licenses/insert', http_method='POST',
@@ -3403,7 +3410,7 @@ class CrmEngineApi(remote.Service):
                             user_from_email = user_from_email,
                             request = request
                             )
-=======
+
     @endpoints.method(BillingRequest,BillingResponse,path='billing/purchase',http_method='POST',name="billing.purchase")
     def purchase(self,request):
         #the key represent the secret key which represent our company  , server side , we have two keys 
@@ -3414,4 +3421,4 @@ class CrmEngineApi(remote.Service):
   
 
         return BillingResponse(response=token) 
->>>>>>> 87deffcc95f2cc590ddc0a246c5510f00a660f6e
+

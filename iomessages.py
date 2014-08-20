@@ -70,6 +70,9 @@ class InvitedUserSchema(messages.Message):
 class customerRequest(messages.Message):
       id=messages.StringField(1)
 class customerResponse(messages.Message):
+      google_public_profile_photo_url=messages.StringField(1)
+      google_display_name=messages.StringField(2)
+
 class UserListSchema(messages.Message):
     items = messages.MessageField(UserSchema, 1, repeated=True)
     invitees = messages.MessageField(InvitedUserSchema, 2, repeated=True)
