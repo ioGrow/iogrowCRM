@@ -4,14 +4,8 @@
 import mechanize
 from bs4 import BeautifulSoup
 import cookielib
-from iograph import Node , Edge
-
-
-from iomessages import LinkedinProfileSchema, TwitterProfileSchema
-
-from google.appengine.ext import ndb
-from model import LinkedinProfile
 import re
+import stripe
 class linked_in():
     def __init__(self):
         # Browser
@@ -44,25 +38,21 @@ class linked_in():
         r=self.browser.open('https://www.google.com')
         self.browser.response().read()
         self.browser.select_form(nr=0)
-        self.browser.form['q']=firstname +' '+lastname
-        self.browser.submit()
-        self.browser.response().read()
-        link= self.browser.links(url_regex="linkedin")
-        links=[l for l in link]
-        if links : return self.browser.follow_link(links[0]).read()
-    def open_url_twitter(self, firstname, lastname):
-        r=self.browser.open('https://www.google.com')
-        self.browser.response().read()
-        self.browser.select_form(nr=0)
         self.browser.form['q']=firstname +' '+lastname +' twitter'
         self.browser.submit()
         self.browser.response().read()
         resp = None
 
+        # for link in self.browser.links(url_regex="twitter.com"):
+        #     print "/////////////////////////////////////////////////////////////////////////////////////////"
+        #     print link.text, link.url
+        #     print "#########################################################################"
+        #     print link
+
         link= self.browser.links(url_regex="twitter.com")
         links=[l for l in link]
         #print links
-        return self.browser.follow_link(links[0]).geturl()
+        print self.browser.follow_link(links[0]).geturl()
     def get_profile_header(self,soup,person):
         # ***************************head***************************
         member_head=soup.find('div',{'id':'member-1'})
@@ -87,41 +77,40 @@ class linked_in():
             #**********************************************************
 
             overview=soup.find('dl',{'id':'overview'})
-            if overview:
-                current_post=overview.find('dd',{'class':'summary-current'})
-                # ---------------------------------------------------------
-                tab=[]
-                if current_post:
-                    for post in current_post.findAll('li'):
-                        tab.append(post.text.replace('\n',' '))
-                person['current_post']=tab
-                # ------------------------------------------------------------
-                tab=[]
-                past_post=overview.find('dd',{'class':'summary-past'})
-                if past_post:
-                    for post in past_post.findAll('li'):
-                        tab.append(post.text.replace('\n',' '))
-                person['past_post']=tab
-                # ------------------------------------------------------------
-                tab=[]
-                formation=overview.find('dd',{'class':'summary-education'})
-                if formation:
-                    for post in formation.findAll('li'):
-                        tab.append(post.text.replace('\n',' '))
-                person['formations']=tab
-            # -------------------------------------------------------------
+            current_post=overview.find('dd',{'class':'summary-current'})
+            # ---------------------------------------------------------
             tab=[]
-            formation=overview.find('dd',{'class':'websites'})
+            if current_post:
+                for post in current_post.findAll('li'):
+                    tab.append(post.text.replace('\n',' '))
+            person['current_post']=tab
+            # ------------------------------------------------------------
+            tab=[]
+            past_post=overview.find('dd',{'class':'summary-past'})
+            if past_post:
+                for post in past_post.findAll('li'):
+                    tab.append(post.text.replace('\n',' '))
+            person['past_post']=tab
+            # ------------------------------------------------------------
+            tab=[]
+            formation=overview.find('dd',{'class':'summary-education'})
             if formation:
                 for post in formation.findAll('li'):
-                    tab.append('www.linkedin.com'+post.a.get('href'))
-            person['websites']=tab
-            # -------------------------------------------------------------
-            relation=overview.find('dd',{'class':'overview-connections'})
-            r=None
-            if relation:
-                r=relation.p.strong.text
-            person['relation']=r
+                    tab.append(post.text.replace('\n',' '))
+            person['formations']=tab
+        # -------------------------------------------------------------
+        tab=[]
+        formation=overview.find('dd',{'class':'websites'})
+        if formation:
+            for post in formation.findAll('li'):
+                tab.append('www.linkedin.com'+post.a.get('href'))
+        person['websites']=tab
+        # -------------------------------------------------------------
+        relation=overview.find('dd',{'class':'overview-connections'})
+        r=None
+        if relation:
+            r=relation.p.strong.text
+        person['relation']=r
     def get_exprience(self,soup):
         expriences={}
         exp={}
@@ -202,14 +191,9 @@ class linked_in():
             person['resume']=self.get_resume(soup)
             person['certifications']=self.get_certification(soup)
             person['skills']=self.get_skills(soup)
-            person['url']= self.browser.geturl()
 
+        print person
         return person
-    def scrape_twitter(self, firstname, lastname):
-        peron={}
-        html=self.open_url_twitter(firstname, lastname)
-        if html:
-            return html
     @classmethod
     # arezki lebdiri 15/07/2014
     def get_people(cls,entityKey):
@@ -218,11 +202,11 @@ class linked_in():
         print key
         print "********************************************************"
         result=Edge.list(start_node=key,kind='linkedin')
+        print result
         if result['items']:
             profile_key=result['items'][0].end_node
             pro= profile_key.get()
-            response=LinkedinProfileSchema(
-                                    lastname = pro.lastname,
+            response=profileSchema( lastname = pro.lastname,
                                     firstname = pro.firstname,
                                     industry = pro.industry,
                                     locality = pro.locality,
@@ -235,41 +219,26 @@ class linked_in():
                                     experiences=pro.experiences,
                                     resume=pro.resume,
                                     certifications=pro.certifications,
-                                    skills=pro.skills,
-                                    url=pro.url
+                                    skills=pro.skills
                                     )
             return response
+# Set your secret key: remember to change this to your live secret key in production
+# See your keys here https://dashboard.stripe.com/account
+stripe.api_key = "sk_test_4XbEK6FG7IWipzMTa3m4JaPY"
 
-        # print result
+# Get the credit card details submitted by the form
+token = "tok_14OXLo40aCapGc6xmMDH52ML"
 
-    @classmethod
-    # meziane hadjadj 07/08/2014
-    def get_people_twitter(cls,entityKey):
-        key=ndb.Key(urlsafe=entityKey)
-        print "********************************************************"
-        result=Edge.list(start_node=key,kind='twitter')
-        if result['items']:
-            profile_key=result['items'][0].end_node
-            profile= profile_key.get()
-            response=TwitterProfileSchema(
-                                    id=profile.id,
-                                    followers_count=profile.followers_count,
-                                    last_tweet_text=profile.last_tweet_text,
-                                    last_tweet_favorite_count=profile.last_tweet_favorite_count,
-                                    last_tweet_retweeted=profile.last_tweet_retweeted,
-                                    last_tweet_retweet_count=profile.last_tweet_retweet_count,
-                                    language=profile.language,
-                                    created_at=profile.created_at,
-                                    nbr_tweets=profile.nbr_tweets,
-                                    description_of_user=profile.description_of_user,
-                                     friends_count=profile.friends_count,
-                                     name=profile.name,
-                                     screen_name=profile.screen_name,
-                                    url_of_user_their_company=profile.url_of_user_their_company,
-                                    location=profile.location,
-                                    profile_image_url_https=profile.profile_image_url_https,
-                                    lang=profile.lang
-                                    )
-            return response
 
+# Create the charge on Stripe's servers - this will charge the user's card
+try:
+  charge = stripe.Charge.create(
+      amount=100000, # amount in cents, again
+      currency="usd",
+      card=token,
+      description="payinguser@example.com"
+  )
+except stripe.CardError, e:
+  # The card has been declined
+  print "error"
         # print result

@@ -544,6 +544,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.opppagination = {};
         $scope.oppCurrentPage = 01;
         $scope.opppages = [];
+        $scope.customfields=[];
         //HKA 11.12.2013 var Case to manage Next & Prev
         $scope.casepagination = {};
         $scope.caseCurrentPage = 01;
@@ -674,11 +675,10 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                         $scope.showNewContact=false;
         };
             $scope.saveOpp = function(opportunity){
+
             $scope.isLoading=true;
             opportunity.closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
             opportunity.stage = $scope.initialStage.entityKey;
-            console.log('-------------i am here----------------');
-            console.log($scope.initialStage.entityKey),
             opportunity.infonodes = $scope.prepareInfonodes();
             // prepare amount attributes
             if (opportunity.duration_unit=='fixed'){
@@ -737,15 +737,6 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             Case.insert($scope,casee);      
             $scope.showNewCase=false;
             $scope.casee={};
-           /* var params = {'name': casee.name,
-                'priority': casee.priority,
-                'status': $scope.status_selected.entityKey,
-                'account': $scope.account.entityKey,
-                'access': $scope.account.access,
-                'status_name': $scope.status_selected.name
-            };
-            Case.insert($scope, params);
-            $('#addCaseModal').modal('hide');   */
         };
          $scope.editbeforedelete = function(item,typee,index){
             $scope.selectedItem={'item':item,'typee':typee,'index':index};
@@ -1573,32 +1564,7 @@ $scope.updateEventRenderAfterAdd= function(){};
 
         };
 
-//HKA 19.11.2013 Add Contact related to account
 
-     
-        // HKA 19.11.2013 Add Opportunty related to account
-
-        $scope.saveOpp = function(opportunity) {
-            if (opportunity.amount_per_unit){
-            var params = {'name':opportunity.name,
-                                            'currency':opportunity.currency,
-                                            'account':$scope.account.entityKey,
-                                            'stage' :$scope.stage_selected.entityKey,
-                                            'access': $scope.account.access,
-                                            };
-            if (opportunity.duration_unit=='fixed'){
-                params.amount_total=opportunity.amount_per_unit;
-              params.opportunity_type = 'fixed_bid';
-            }else{
-              params.opportunity_type = 'per_' + opportunity.duration;
-              params.amount_total=opportunity.amount_per_unit * opportunity.duration;
-              params.amount_per_unit=opportunity.amount_per_unit
-            }
-            
-            Opportunity.insert($scope, params);
-            $('#addOpportunityModal').modal('hide');
-        }
-        };
  $scope.opportunityInserted = function(resp){
           window.location.replace('#/accounts');
       };
@@ -1777,9 +1743,8 @@ $scope.updatAccountHeader = function(account){
   $('#EditAccountModal').modal('hide');
 };
 
-    $('#some-textarea').wysihtml5();
     // arezki lebdiri 03/07/2014 send email
-$scope.sendEmailSelected=function(){
+/*$scope.sendEmailSelected=function(){
   $scope.email.to = '';
   angular.forEach($scope.infonodes.emails, function(value, key){
     console.log(value)
@@ -1789,7 +1754,6 @@ $scope.sendEmailSelected=function(){
 };
       $scope.sendEmail = function(email){
         email.body = $('#some-textarea').val();
-
         var params = {
                   'to': email.to,
                   'cc': email.cc,
@@ -1800,7 +1764,7 @@ $scope.sendEmailSelected=function(){
                   };
 
         Email.send($scope,params);
-      };
+      };*/
 
 
 
@@ -1920,7 +1884,6 @@ $scope.deleteaccount = function(){
         };
         $scope.sendEmail = function(email) {
             email.body = $('#some-textarea').val();
-
             var params = {
                 'to': email.to,
                 'cc': email.cc,
@@ -1931,8 +1894,6 @@ $scope.deleteaccount = function(){
 
             Email.send($scope, params);
         };
-
-
 
         $scope.beforedeleteInfonde = function() {
             $('#BeforedeleteInfonode').modal('show');

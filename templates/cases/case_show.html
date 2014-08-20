@@ -283,7 +283,15 @@
                           <h3>{{ _('Description')}}</h3>
                           <div class="form-group row">
                               <div class="col-md-12">
-                                  <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="casee.description"></textarea>
+                                  <textarea id=option>
+                                                              </selectPrio>
+
+                                                            </div>
+
+                                                        </div>
+                                                      <br>
+                                                    </div>
+                                                  </div>"noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="casee.description"></textarea>
                               </div>
                           </div>
                         </div>
@@ -762,11 +770,10 @@
                     <hr/>
                     <div class=''>
                     <p>{{ _('Collaborators:')}}</p>
-                        <div ng-repeat="collaborator in case.collaborators_list" class="invitation">
-                          <img class="google-avatar" src="<%=collaborator.photo%>"/>
+                        <div ng-repeat="collaborator in collaborators_list" class="invitation">
+                          <img class="google-avatar" src="<%=collaborator.img%>"/>
                            <%=collaborator.display_name%> < <%=collaborator.email%> >
                         </div>
-
                     </div>
                     <hr/>
 
