@@ -484,6 +484,7 @@ class EndpointsHelper():
         return list_of_tweets
                 #Edge.insert(start_node=keyword.key,end_node=state_key,kind="TwitterPopularPosts")
 
+
 class scor_new_lead():
     def predict(predd,tedd) :
         user = User.get_by_email('hakim@iogrow.com')

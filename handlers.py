@@ -41,6 +41,7 @@ from iograph import Node , Edge
 from iomodels.crmengine.events import Event
 from iomodels.crmengine.tasks import Task 
 import sfoauth2
+from sf_importer_helper import SfImporterHelper
 # under the test .beata !
 
 jinja_environment = jinja2.Environment(
@@ -671,19 +672,21 @@ class SalesforceImporter(BaseHandler, SessionEnabledHandler):
         self.redirect(authorization_url)
 class SalesforceImporterCallback(BaseHandler, SessionEnabledHandler):
     def get(self):
-        flow = sfoauth2.SalesforceOAuth2WebServerFlow(
-            client_id='3MVG9QDx8IX8nP5SiRx6WcZGt_urvZZKtoKdTRn0h_ITamehH.ndEUTVBGZhyKJKnWdxun.jnZj0dbzCJNydO',
-            client_secret='8317004383056291259',
-            scope=['full'] ,
-            redirect_uri='http://localhost:8090/sfoauth2callback'
-        )
-        code = self.request.get('code')
-        credentials = flow.step2_exchange(code)
-        http = httplib2.Http()
-        credentials.authorize(http)
-        r, c = http.request("https://na12.salesforce.com/services/data/v29.0/sobjects/Account/")
-        print 'i will print the results'
-        print r,c
+        if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            if user is not None:
+                flow = sfoauth2.SalesforceOAuth2WebServerFlow(
+                    client_id='3MVG9QDx8IX8nP5SiRx6WcZGt_urvZZKtoKdTRn0h_ITamehH.ndEUTVBGZhyKJKnWdxun.jnZj0dbzCJNydO',
+                    client_secret='8317004383056291259',
+                    scope=['full'] ,
+                    redirect_uri='http://localhost:8090/sfoauth2callback'
+                )
+                code = self.request.get('code')
+                credentials = flow.step2_exchange(code)
+                http = httplib2.Http()
+                credentials.authorize(http)
+                SfImporterHelper.import_accounts(user,http)
+
 
 
 
