@@ -531,7 +531,7 @@ class AccountListHandler(BaseHandler, SessionEnabledHandler):
 class AccountShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/accounts/account_show.html')
-class DiscoverShowHandler(BaseHandler, SessionEnabledHandler):
+class DiscoverListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/discovers/discover_list.html')
 
@@ -1028,7 +1028,6 @@ class GetFromTwitterToIoGrow(webapp2.RequestHandler):
         key1=ndb.Key(urlsafe=entityKey)
         print key1
         lead=key1.get()
-        print "######################################################################################"
         fullname= lead.firstname+" "+lead.lastname
         print fullname
         linkedin=linked_in()
@@ -1037,6 +1036,7 @@ class GetFromTwitterToIoGrow(webapp2.RequestHandler):
         name=screen_name[screen_name.find("twitter.com/")+12:]
         print name
         profile_schema=EndpointsHelper.twitter_import_people(name)
+        print profile_schema
         if profile_schema:
             profile=model.TwitterProfile()
             profile.id=profile_schema.id
@@ -1267,7 +1267,7 @@ routes = [
     ('/views/articles/search',ArticleSearchHandler),
 
     # Templates Views Routes
-    ('/views/discovers/list',DiscoverShowHandler),
+    ('/views/discovers/list',DiscoverListHandler),
     # Accounts Views
     ('/views/accounts/list',AccountListHandler),
     ('/views/accounts/show',AccountShowHandler),

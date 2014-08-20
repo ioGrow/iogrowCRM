@@ -768,7 +768,7 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                            <div class="news-blocks blank-card blank-card-yellow newsCard">
+                                            <div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="twitterProfile.screen_name" >
                                                 <h3>General Informations from Twitter</h3>
                                                 <img class="google-avatar pull-right" src="<%=twitterProfile.profile_image_url_https%>"/>
                                                 <div class="news-block-tags">
@@ -808,7 +808,7 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                            <div class="news-blocks blank-card blank-card-red newsCard">
+                                            <div class="news-blocks blank-card blank-card-red newsCard" ng-show="twitterProfile.nbr_tweets" >
                                                 <h3>Stats from Twitter</h3>
                                                 <div class="news-block-tags">
                                                     <strong>Number of Tweets</strong>
@@ -835,7 +835,7 @@
                                                     </li>
                                                 </ul> 
                                             </div>
-                                             <div class="news-blocks blank-card blank-card-red newsCard">
+                                             <div class="news-blocks blank-card blank-card-red newsCard" ng-show="twitterProfile.last_tweet_text"  >
                                                 <h3> Tweets</h3>
                                                 <div class="news-block-tags">
                                                     <strong>Last Tweet:</strong>
