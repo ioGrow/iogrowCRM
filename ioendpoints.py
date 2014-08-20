@@ -45,6 +45,7 @@ from iomodels.crmengine.leads import Lead,LeadFromTwitterRequest,LeadInsertReque
 from iomodels.crmengine.cases import Case,CaseGetRequest,CaseInsertRequest,CaseSchema,CaseListRequest,CaseSchema,CaseListResponse,CaseSearchResults
 #from iomodels.crmengine.products import Product
 from iomodels.crmengine.comments import Comment
+from iomodels.crmengine.Licenses import License ,LicenseSchema,LicenseInsertRequest
 from iomodels.crmengine.opportunitystage import Opportunitystage
 from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.casestatuses import Casestatus
@@ -68,8 +69,11 @@ from endpoints_helper import EndpointsHelper
 from people import linked_in
 from operator import itemgetter, attrgetter
 import iomessages
-from iomessages import profileSchema, TwitterProfileSchema,KewordsRequest, tweetsSchema,tweetsResponse
+from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsRequest, tweetsSchema,tweetsResponse
+
+
 import stripe
+
 
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
@@ -302,6 +306,8 @@ class ColaboratorSchema(messages.Message):
     display_name= messages.StringField(1)
     email = messages.StringField(2)
     img = messages.StringField(3)
+    entityKey=messages.StringField(4)
+    
 class ColaboratorItem(messages.Message):
     items= messages.MessageField(ColaboratorSchema,1,repeated=True)
 # The message class that defines the shows.search response
@@ -2872,21 +2878,21 @@ class CrmEngineApi(remote.Service):
         Organization.upgrade_to_business_version(user_from_email.organization)
         return message_types.VoidMessage()
     # arezki lebdiri 15/07/2014
-    @endpoints.method(EntityKeyRequest, profileSchema,
+    @endpoints.method(EntityKeyRequest, LinkedinProfileSchema,
                       path='people/linkedinProfile', http_method='POST',
                       name='people.getLinkedin')
     def get_people_linkedin(self, request):
         response=linked_in.get_people(request.entityKey)
         return response   
     # arezki lebdiri 15/07/2014
-    @endpoints.method(LinkedinProfileRequest, profileSchema,
+    @endpoints.method(LinkedinProfileRequest, LinkedinProfileSchema,
                       path='people/linkedinProfileV2', http_method='POST',
                       name='people.getLinkedinV2')
     def get_people_linkedinV2(self, request):
         linkedin=linked_in()
         pro=linkedin.scrape_linkedin(request.firstname,request.lastname)
         if(pro):
-            response=profileSchema(
+            response=LinkedinProfileSchema(
                                         lastname = pro["lastname"],
                                         firstname = pro["firstname"],
                                         industry = pro["industry"],
@@ -2903,7 +2909,7 @@ class CrmEngineApi(remote.Service):
                                         skills=pro["skills"]
                                         )
         return response
-        return profileSchema(**response) 
+       
 
 
     # lead reporting api
@@ -3314,7 +3320,11 @@ class CrmEngineApi(remote.Service):
         for node in Node.list_permissions(Key.get()) :
             tab.append(ColaboratorSchema(display_name=node.google_display_name,
                                           email=node.email,
-                                          img=node.google_public_profile_photo_url))
+                                          img=node.google_public_profile_photo_url,
+                                          entityKey=node.entityKey
+
+                                          )
+            )
 
         return ColaboratorItem(items=tab)
 
@@ -3388,6 +3398,18 @@ class CrmEngineApi(remote.Service):
                    'organizationNumberOfUser': str(userslenght),
                    'organizationNumberOfLicensed':str(NmbrOfLicensed)} 
         return OrganizationResponse(**response)
+<<<<<<< HEAD
+    # *************** the licenses apis ***************************
+    @endpoints.method(LicenseInsertRequest, LicenseSchema,
+                      path='licenses/insert', http_method='POST',
+                      name='licenses.insert')
+    def license_insert(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return License.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+=======
     @endpoints.method(BillingRequest,BillingResponse,path='billing/purchase',http_method='POST',name="billing.purchase")
     def purchase(self,request):
         #the key represent the secret key which represent our company  , server side , we have two keys 
@@ -3402,3 +3424,4 @@ class CrmEngineApi(remote.Service):
   
 
         return BillingResponse(response=token) 
+>>>>>>> 87deffcc95f2cc590ddc0a246c5510f00a660f6e

@@ -154,7 +154,7 @@
                                         <a ng-click="waterfallTrigger(); selectedTab = 7;">{{_('Attach Documents')}}</a>
                                     </li>
                                     <li  class="ng-tab sm-menu"  ng-class="{active: selectedTab == 9}">
-                                        <a ng-hide="checkIfEmpty(linkedProfile,twitterProfile)" ng-click="waterfallTrigger(); selectedTab = 9;"  >Details of Lead</a>
+                                        <a ng-hide="checkIfEmpty(linkedProfile,twitterProfile)" ng-click="waterfallTrigger(); selectedTab = 9;"  >{{_('Details of Lead')}}</a>
                                     </li>  
                                     <!-- <li class="ng-tab md-menu" ng-class="{active: selectedTab == 4}">
                                       <a ng-click="selectedTab = 4;">Needs</a>
@@ -171,7 +171,7 @@
                                         </a>
                                         <ul class="dropdown-menu" role="menu">
                                           
-                                            <li ng-hide="checkIfEmpty(linkedProfile)" class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 9}"><a ng-click="selectedTab = 9;">LinkedIn</a></li>
+                                            <li ng-hide="checkIfEmpty(linkedProfile)" class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 9}"><a ng-click="selectedTab = 9;">{{_('Details of Lead')}}</a></li>
 
                                             <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 8}"><a ng-click="selectedTab = 8;">{{_('Send an Email')}}</a></li>
                                             <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">{{_('Contacts')}}</a></li>
@@ -729,9 +729,9 @@
                                                 </ul>
                     
                                             </div>
-                                            <div class="news-blocks blank-card blank-card-bluep newsCard">
+                                            <div class="news-blocks blank-card blank-card-bluep newsCard" ng-show="linkedProfile.current_post || linkedProfile.past_post">
                                                 <h3>Overview</h3>
-                                                <div class="news-block-tags" ng-show="kedProfile.current_post">
+                                                <div class="news-block-tags" ng-show="linkedProfile.current_post">
                                                     <strong>Current position</strong>
                                                 </div>
                                                 <ul class="list-unstyled contact-infos">

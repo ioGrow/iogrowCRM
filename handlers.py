@@ -31,6 +31,7 @@ from people import linked_in
 import model
 from iomodels.crmengine.contacts import Contact
 from iomodels.crmengine.leads import LeadInsertRequest,Lead
+from iomodels.crmengine.Licenses import License
 from iomodels.crmengine.documents import Document
 from iomodels.crmengine.tags import Tag,TagSchema
 import iomessages
@@ -41,7 +42,7 @@ from iomodels.crmengine.events import Event
 from iomodels.crmengine.tasks import Task 
 import random
 # under the test .beata !
-
+import stripe
 jinja_environment = jinja2.Environment(
   loader=jinja2.FileSystemLoader(os.getcwd()),
   extensions=['jinja2.ext.i18n'],cache_size=0)
@@ -180,6 +181,44 @@ class WelcomeHandler(BaseHandler, SessionEnabledHandler):
         template = jinja_environment.get_template('templates/live/welcome.html')
         self.response.out.write(template.render(template_values))
 
+
+class StripeHandler(BaseHandler,SessionEnabledHandler):
+    def post(self):
+       
+
+        # Get the credit card details submitted by the form
+        
+        # Set your secret key: remember to change this to your live secret key in production
+        # See your keys here https://dashboard.stripe.com/account
+        stripe.api_key = "sk_test_4ZNpoS4mqf3YVHKVfQF7US1R"
+
+        # Get the credit card details submitted by the form
+        token = self.request.get('stripeToken')
+
+        # Create a Customer
+        customer = stripe.Customer.create(
+            card=token,
+            description="payinguser@example.com"
+        )
+
+        # Charge the Customer instead of the card
+        stripe.Charge.create(
+            amount=1000, # in cents
+            currency="usd",
+            customer=customer.id
+        )
+
+        # Save the customer ID in your database so you can use it later
+        save_stripe_customer_id(user, customer.id)
+
+        # Later...
+        customer_id = get_stripe_customer_id(user)
+
+        stripe.Charge.create(
+            amount=1500, # $15.00 this time
+            currency="usd",
+            customer=customer_id
+        )
 
 class IndexHandler(BaseHandler,SessionEnabledHandler):
     def get(self):
@@ -1013,10 +1052,10 @@ class GetFromLinkedinToIoGrow(webapp2.RequestHandler):
             pli.certifications=json.dumps(profil["certifications"])
             pli.experiences=json.dumps(profil["experiences"])
             pli.skills=profil["skills"]
+            pli.url=profil["url"]
             print pli
             key2=pli.put()
             es=Edge.insert(start_node=key1,end_node=key2,kind='linkedin',inverse_edge='parents')
-            # print profil
 class GetFromTwitterToIoGrow(webapp2.RequestHandler):
     def post(self):
         entityKey= self.request.get('entityKey')
@@ -1325,8 +1364,14 @@ routes = [
     ('/sign-in',SignInHandler),
     ('/sign-up',SignUpHandler),
     ('/gconnect',GooglePlusConnect),
+
+
+    ('/stripe',StripeHandler),
+
+
     # paying with stripe
     ('/paying',StripePayingHandler)
+
     ]
 config = {}
 config['webapp2_extras.sessions'] = {
