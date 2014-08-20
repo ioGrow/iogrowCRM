@@ -87,40 +87,41 @@ class linked_in():
             #**********************************************************
 
             overview=soup.find('dl',{'id':'overview'})
-            current_post=overview.find('dd',{'class':'summary-current'})
-            # ---------------------------------------------------------
+            if overview:
+                current_post=overview.find('dd',{'class':'summary-current'})
+                # ---------------------------------------------------------
+                tab=[]
+                if current_post:
+                    for post in current_post.findAll('li'):
+                        tab.append(post.text.replace('\n',' '))
+                person['current_post']=tab
+                # ------------------------------------------------------------
+                tab=[]
+                past_post=overview.find('dd',{'class':'summary-past'})
+                if past_post:
+                    for post in past_post.findAll('li'):
+                        tab.append(post.text.replace('\n',' '))
+                person['past_post']=tab
+                # ------------------------------------------------------------
+                tab=[]
+                formation=overview.find('dd',{'class':'summary-education'})
+                if formation:
+                    for post in formation.findAll('li'):
+                        tab.append(post.text.replace('\n',' '))
+                person['formations']=tab
+            # -------------------------------------------------------------
             tab=[]
-            if current_post:
-                for post in current_post.findAll('li'):
-                    tab.append(post.text.replace('\n',' '))
-            person['current_post']=tab
-            # ------------------------------------------------------------
-            tab=[]
-            past_post=overview.find('dd',{'class':'summary-past'})
-            if past_post:
-                for post in past_post.findAll('li'):
-                    tab.append(post.text.replace('\n',' '))
-            person['past_post']=tab
-            # ------------------------------------------------------------
-            tab=[]
-            formation=overview.find('dd',{'class':'summary-education'})
+            formation=overview.find('dd',{'class':'websites'})
             if formation:
                 for post in formation.findAll('li'):
-                    tab.append(post.text.replace('\n',' '))
-            person['formations']=tab
-        # -------------------------------------------------------------
-        tab=[]
-        formation=overview.find('dd',{'class':'websites'})
-        if formation:
-            for post in formation.findAll('li'):
-                tab.append('www.linkedin.com'+post.a.get('href'))
-        person['websites']=tab
-        # -------------------------------------------------------------
-        relation=overview.find('dd',{'class':'overview-connections'})
-        r=None
-        if relation:
-            r=relation.p.strong.text
-        person['relation']=r
+                    tab.append('www.linkedin.com'+post.a.get('href'))
+            person['websites']=tab
+            # -------------------------------------------------------------
+            relation=overview.find('dd',{'class':'overview-connections'})
+            r=None
+            if relation:
+                r=relation.p.strong.text
+            person['relation']=r
     def get_exprience(self,soup):
         expriences={}
         exp={}
