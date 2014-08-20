@@ -3398,7 +3398,6 @@ class CrmEngineApi(remote.Service):
                    'organizationNumberOfUser': str(userslenght),
                    'organizationNumberOfLicensed':str(NmbrOfLicensed)} 
         return OrganizationResponse(**response)
-<<<<<<< HEAD
     # *************** the licenses apis ***************************
     @endpoints.method(LicenseInsertRequest, LicenseSchema,
                       path='licenses/insert', http_method='POST',
@@ -3409,7 +3408,6 @@ class CrmEngineApi(remote.Service):
                             user_from_email = user_from_email,
                             request = request
                             )
-=======
     @endpoints.method(BillingRequest,BillingResponse,path='billing/purchase',http_method='POST',name="billing.purchase")
     def purchase(self,request):
         #the key represent the secret key which represent our company  , server side , we have two keys 
@@ -3424,4 +3422,4 @@ class CrmEngineApi(remote.Service):
   
 
         return BillingResponse(response=token) 
->>>>>>> 87deffcc95f2cc590ddc0a246c5510f00a660f6e
+
