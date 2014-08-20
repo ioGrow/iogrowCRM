@@ -56,16 +56,20 @@ class UserSchema(messages.Message):
     google_user_id = messages.StringField(7)
     is_admin = messages.StringField(8)
     status = messages.StringField(9)
-    LicenseStatus= messages.StringField(10)
-    nmbrOfLicenses= messages.StringField(11)
+    stripe_id= messages.StringField(10)
+    # LicenseStatus= messages.StringField(10)
+    # nmbrOfLicenses= messages.StringField(11)
     
 class InvitedUserSchema(messages.Message):
     invited_mail = messages.StringField(1)
     invited_by = messages.StringField(2)
     updated_at = messages.StringField(3)
-    LicenseStatus= messages.StringField(4)
-    nmbrOfLicenses= messages.StringField(5)
-
+    stripe_id= messages.StringField(4)
+    # LicenseStatus= messages.StringField(4)
+    # nmbrOfLicenses= messages.StringField(5)
+class customerRequest(messages.Message):
+      id=messages.StringField(1)
+class customerResponse(messages.Message):
 class UserListSchema(messages.Message):
     items = messages.MessageField(UserSchema, 1, repeated=True)
     invitees = messages.MessageField(InvitedUserSchema, 2, repeated=True)
