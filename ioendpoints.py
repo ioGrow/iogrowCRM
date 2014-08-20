@@ -392,6 +392,7 @@ class EventPermissionRequest(messages.Message):
 class ReportingRequest(messages.Message):
     user_google_id = messages.StringField(1)
     google_display_name=messages.StringField(2)
+    sorted_by=messages.StringField(3)
     #sorted_by=messages.StringField(3)
 
 
@@ -405,6 +406,7 @@ class ReportingResponseSchema(messages.Message):
     count_contacts=messages.IntegerField(7)
     count_leads=messages.IntegerField(8)
     count_tasks=messages.IntegerField(9)
+    updated_at=messages.StringField(10)
 
 class ReportingListResponse(messages.Message):
     items = messages.MessageField(ReportingResponseSchema, 1, repeated=True)
@@ -3204,13 +3206,14 @@ class CrmEngineApi(remote.Service):
                 leads=Lead.query(Lead.owner==gid).fetch()
                 contacts=Contact.query(Contact.owner==gid).fetch()
                 created_at=user.created_at
+                updated_at=user.updated_at              
                 gmail=user.email
-                list_of_reports.append((gid,gname,gmail,len(accounts),len(contacts),len(leads),len(tasks),created_at))
+                list_of_reports.append((gid,gname,gmail,len(accounts),len(contacts),len(leads),len(tasks),created_at,updated_at))
                 
-            list_of_reports.sort(key=itemgetter(3),reverse=True)    
+            list_of_reports.sort(key=itemgetter(8),reverse=True)    
             reporting = []
             for item in list_of_reports:
-                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count_account=item[3],count_contacts=item[4],count_leads=item[5],count_tasks=item[6])
+                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count_account=item[3],count_contacts=item[4],count_leads=item[5],count_tasks=item[6],created_at=item[7].isoformat(),updated_at=item[8].isoformat())
                 reporting.append(item_schema)
 
             return ReportingListResponse(items=reporting)         
