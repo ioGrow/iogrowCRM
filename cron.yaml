@@ -1,4 +1,0 @@
-cron:
-- description: daily summary job
-  url: /workers/checklicense
-  schedule: every 1 minutes

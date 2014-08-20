@@ -1056,11 +1056,6 @@ class GetFromLinkedinToIoGrow(webapp2.RequestHandler):
             print pli
             key2=pli.put()
             es=Edge.insert(start_node=key1,end_node=key2,kind='linkedin',inverse_edge='parents')
-class CheckLicenseHandler(webapp2.RequestHandler):
-    def get(self):
-        License.update()
-        print "arezkiaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" 
-            # print profil
 class GetFromTwitterToIoGrow(webapp2.RequestHandler):
     def post(self):
         entityKey= self.request.get('entityKey')
@@ -1297,7 +1292,6 @@ routes = [
     ('/workers/syncevent',SyncCalendarEvent),
     ('/workers/syncpatchevent',SyncPatchCalendarEvent),
     ('/workers/syncdeleteevent',SyncDeleteCalendarEvent),
-    ('/workers/checklicense',CheckLicenseHandler),
     #
     ('/',IndexHandler),
     ('/blog',BlogHandler),
