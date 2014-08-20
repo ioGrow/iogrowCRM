@@ -54,6 +54,17 @@
 
   <!-- END THEME STYLES -->
 
+  <!-- **********************the stripe code******************************* -->
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+<script type="text/javascript">
+  // This identifies your website in the createToken call below
+  Stripe.setPublishableKey('pk_test_4XcXjg4Qggo2HeVWnGaXwGDB');
+  console.log("stripe---------------------------------------------------------->")
+  // ...
+</script>
+ 
+   <!-- end the stripe code -->
+
 
   <script type="text/javascript">
   window.___gcfg = {
@@ -432,7 +443,6 @@
 
 
 
-
     var ROOT = '/_ah/api';
 
 
@@ -440,7 +450,6 @@
 
 
      //var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
-
 
 
 
@@ -484,7 +493,7 @@
     }
 
   </script>
-
+<script src="https://checkout.stripe.com/checkout.js"></script>
   <script src="https://apis.google.com/js/client.js?onload=loadGapi">
   </script>
 
@@ -612,6 +621,7 @@
  ga('send', 'pageview');
 
 </script>
+
   <!-- END JAVASCRIPTS -->
 </body>
 

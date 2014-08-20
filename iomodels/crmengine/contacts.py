@@ -748,6 +748,14 @@ class Contact(EndpointsModel):
                             'id':contact_schema.id
                             }
                     )
+        taskqueue.add(
+                            url='/workers/get_from_linkedin',
+                            params={'entityKey' :contact_key_async.urlsafe()}
+                        )
+        # taskqueue.add(
+        #                 url='/workers/get_from_twitter',
+        #                 params={'entityKey': contact_key_async.urlsafe()}
+        #             )
         return contact_schema
     @classmethod
     def get_key_by_name(cls,user_from_email,name):
