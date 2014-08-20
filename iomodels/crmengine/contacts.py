@@ -598,7 +598,6 @@ class Contact(EndpointsModel):
                                     )
     @classmethod
     def insert(cls,user_from_email,request):
-        folder_name = request.firstname + ' ' + request.lastname
         contact = cls(
                     firstname = request.firstname,
                     lastname = request.lastname,

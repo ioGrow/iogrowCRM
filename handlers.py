@@ -685,7 +685,9 @@ class SalesforceImporterCallback(BaseHandler, SessionEnabledHandler):
                 credentials = flow.step2_exchange(code)
                 http = httplib2.Http()
                 credentials.authorize(http)
-                SfImporterHelper.import_accounts(user,http)
+                sf_objects={}
+                SfImporterHelper.import_accounts(user,http,sf_objects)
+                SfImporterHelper.import_contacts(user,http,sf_objects)
 
 
 
