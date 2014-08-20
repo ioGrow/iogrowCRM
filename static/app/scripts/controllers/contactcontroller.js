@@ -1325,12 +1325,13 @@ $scope.prepareInfonodes = function(){
      }
 	// HKA 01.12.2013 Add Case related to Contact
 		$scope.saveCase = function(casee){
-			casee.account=$scope.contact.account.entityKey;
+			//casee.account=$scope.contact.account.entityKey;
 			casee.contact=$scope.contact.entityKey;
 			casee.access=$scope.contact.access;
 			casee.infonodes = $scope.prepareInfonodes();
             Case.insert($scope,casee);		
-            $scope.showNewCase=false;	
+            $scope.showNewCase=false;
+            $scope.casee={};	
 		};
 
 	//HKA 01.12.2013 Add Phone
