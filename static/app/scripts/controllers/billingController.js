@@ -150,6 +150,7 @@ app.controller('BillingShowController', ['$scope','$route', 'Auth','Search','Use
     image: user.google_public_profile_photo_url,
     email:user.email,
     token: function(token) {
+      
 
     var params={'token_id':token.id,
                 'token_email':token.email
