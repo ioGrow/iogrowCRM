@@ -592,6 +592,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 		 $scope.documentpagination = {};
 		 $scope.documentCurrentPage=01;
 		 $scope.documentpages=[];
+		 $scope.customfields = [];
 		 $scope.showPhoneForm=false;
 		$scope.accounts = [];
 		$scope.opportunities = [];
@@ -1282,28 +1283,29 @@ $scope.prepareInfonodes = function(){
         });
         return infonodes;
     };
-		$scope.saveOpp = function(opportunity){
-			if (opportunity.amount_per_unit){
-			var params = {'name':opportunity.name,
-											'currency':opportunity.currency,
-											'account':$scope.contact.account.entityKey,
-											'contact':$scope.contact.entityKey,
-											'stage' :$scope.stage_selected.entityKey,
-											'access': $scope.contact.access,
-											};
-			if (opportunity.duration_unit=='fixed'){
-				params.amount_total=opportunity.amount_per_unit;
-              params.opportunity_type = 'fixed_bid';
+	     $scope.saveOpp = function(opportunity){
+
+            $scope.isLoading=true;
+            opportunity.closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
+            opportunity.stage = $scope.initialStage.entityKey;
+            opportunity.infonodes = $scope.prepareInfonodes();
+            // prepare amount attributes
+            if (opportunity.duration_unit=='fixed'){
+              opportunity.amount_total = opportunity.amount_per_unit;
+              opportunity.opportunity_type = 'fixed_bid';
             }else{
-              params.opportunity_type = 'per_' + opportunity.duration;
-              params.amount_total=opportunity.amount_per_unit * opportunity.duration;
-              params.amount_per_unit=opportunity.amount_per_unit
+              opportunity.opportunity_type = 'per_' + opportunity.duration;
             }
-			
-			Opportunity.insert($scope,params);
-			$('#addOpportunityModal').modal('hide');
-		}	
-		};
+            opportunity.contact=$scope.contact.entityKey;
+            
+            Opportunity.insert($scope,opportunity);
+            $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
+            $scope.showNewOpp=false;
+            $scope.isLoading=false;
+            $scope.$apply();
+           
+
+        };
 
  $scope.opportunityInserted = function(resp){
           window.location.replace('#/contacts');
@@ -1338,12 +1340,13 @@ $scope.prepareInfonodes = function(){
      }
 	// HKA 01.12.2013 Add Case related to Contact
 		$scope.saveCase = function(casee){
-			casee.account=$scope.contact.account.entityKey;
+			//casee.account=$scope.contact.account.entityKey;
 			casee.contact=$scope.contact.entityKey;
 			casee.access=$scope.contact.access;
 			casee.infonodes = $scope.prepareInfonodes();
             Case.insert($scope,casee);		
-            $scope.showNewCase=false;	
+            $scope.showNewCase=false;
+            $scope.casee={};	
 		};
 
 	//HKA 01.12.2013 Add Phone

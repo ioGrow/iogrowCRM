@@ -1033,7 +1033,7 @@ class GetFromLinkedinToIoGrow(webapp2.RequestHandler):
         linkedin=linked_in()
         key1=ndb.Key(urlsafe=entityKey)
         lead=key1.get()
-        print "######################################################################################"
+        print "Allllllllll################################################################################"
         fullname= lead.firstname+" "+lead.lastname
         print fullname
         profil=linkedin.scrape_linkedin(lead.firstname,lead.lastname)

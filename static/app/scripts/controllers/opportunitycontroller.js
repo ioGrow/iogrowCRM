@@ -1453,7 +1453,7 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
               }
       }
       $scope.test=function(){
-        console.log('testtest');
+        
       }
       $scope.pullElement=function(index,elem,arr){
         if ($scope.customfields.indexOf(elem) != -1) {
@@ -1467,6 +1467,7 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
        $('#'+id).removeClass('hidden');
       }
       $scope.pushElement=function(elem,arr){
+       
           if (arr.indexOf(elem) == -1) {
               var copyOfElement = angular.copy(elem);
               arr.push(copyOfElement);
