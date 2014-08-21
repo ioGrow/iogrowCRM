@@ -415,7 +415,7 @@ class ReportingResponseSchema(messages.Message):
     count_tasks=messages.IntegerField(9)
     updated_at=messages.StringField(10)
 
-class ReportingListResponse(messages.Message):
+class ReporstingListResponse(messages.Message):
     items = messages.MessageField(ReportingResponseSchema, 1, repeated=True)
 
 # hadji hicham 10/08/2014 -- Organization stuff .
@@ -3168,6 +3168,7 @@ class CrmEngineApi(remote.Service):
         gid=request.user_google_id
         gname=request.google_display_name
         created_at=''
+        #print '.....................test.......'
         item_schema=ReportingResponseSchema()
         # if the user input google_user_id
         if gid!=None and gid!='':
