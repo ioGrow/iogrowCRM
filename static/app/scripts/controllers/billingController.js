@@ -28,7 +28,8 @@ app.controller('BillingListController', ['$scope','$route', 'Auth','Search','Use
                        }
           User.get_organization($scope,params);
            var params = {'limit':7};
-          User.list_licenses($scope,params);
+          //User.list_licenses($scope,params);
+          User.Customers($scope,params);
 
        };
   
@@ -128,7 +129,7 @@ app.controller('BillingShowController', ['$scope','$route', 'Auth','Search','Use
     
               var params={'id':$route.current.params.userId};
              
-              User.get_purchase($scope, params)
+              User.customer($scope, params)
               
           //  var params={'organization':$scope.organization_key
           //              }
@@ -148,7 +149,7 @@ app.controller('BillingShowController', ['$scope','$route', 'Auth','Search','Use
   var handler = StripeCheckout.configure({
     key: 'pk_test_4Xa35zhZDqvXz1OzGRWaW4mX',
     image: user.google_public_profile_photo_url,
-    email:user.email,
+    email:"meziane@iogrow.com",
     token: function(token) {
       
 

@@ -1254,11 +1254,15 @@ class StripePayingHandler(BaseHandler,SessionEnabledHandler):
           token= self.request.get('stripeToken')
           # charging operation after the payment 
           try:
-            charge= stripe.Charge.create(
-                amount=1000, 
-                currency="usd",
-                card=token,
-                description="hadji@iogrow.com")
+            print "*-*-*-*-*-*-*-*-*-*-*-*-//////////////////////"
+            print "here we go !"
+            print stripe.Charge.all() 
+            print "-*-*-*-*-*-*-*-*-*-*-*-*-*"
+            # charge= stripe.Charge.create(
+            #     amount=1000, 
+            #     currency="usd",
+            #     card=token,
+            #     description="hadji@iogrow.com")
           except stripe.CardError, e:
                  # The card has been declined
                  pass
