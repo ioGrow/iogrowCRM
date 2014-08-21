@@ -415,7 +415,7 @@ class ReportingResponseSchema(messages.Message):
     count_tasks=messages.IntegerField(9)
     updated_at=messages.StringField(10)
 
-class ReporstingListResponse(messages.Message):
+class ReportingListResponse(messages.Message):
     items = messages.MessageField(ReportingResponseSchema, 1, repeated=True)
 
 # hadji hicham 10/08/2014 -- Organization stuff .
@@ -3168,7 +3168,6 @@ class CrmEngineApi(remote.Service):
         gid=request.user_google_id
         gname=request.google_display_name
         created_at=''
-        #print '.....................test.......'
         item_schema=ReportingResponseSchema()
         # if the user input google_user_id
         if gid!=None and gid!='':
@@ -3221,10 +3220,10 @@ class CrmEngineApi(remote.Service):
                 accounts=Account.query(Account.owner==gid).fetch()
                 leads=Lead.query(Lead.owner==gid).fetch()
                 contacts=Contact.query(Contact.owner==gid).fetch()
-                created_at=user.created_at
-                updated_at=user.updated_at              
+                #created_at=user.created_at
+                #updated_at=user.updated_at              
                 gmail=user.email
-                list_of_reports.append((gid,gname,gmail,len(accounts),len(contacts),len(leads),len(tasks),created_at,updated_at))
+                list_of_reports.append((gid,gname,gmail,len(accounts),len(contacts),len(leads),len(tasks)))#,created_at,updated_at))
                 
             if sorted_by=='accounts':
                 list_of_reports.sort(key=itemgetter(3),reverse=True)
@@ -3234,13 +3233,13 @@ class CrmEngineApi(remote.Service):
                 list_of_reports.sort(key=itemgetter(5),reverse=True)
             elif sorted_by=='tasks':
                 list_of_reports.sort(key=itemgetter(6),reverse=True)
-            elif sorted_by=='created_at':
-                list_of_reports.sort(key=itemgetter(7),reverse=True)
+            #elif sorted_by=='created_at':
+             #   list_of_reports.sort(key=itemgetter(7),reverse=True)
             else:
-                list_of_reports.sort(key=itemgetter(8),reverse=True)
+                list_of_reports.sort(key=itemgetter(4),reverse=True)
             reporting = []
             for item in list_of_reports:
-                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count_account=item[3],count_contacts=item[4],count_leads=item[5],count_tasks=item[6],created_at=item[7].isoformat(),updated_at=item[8].isoformat())
+                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count_account=item[3],count_contacts=item[4],count_leads=item[5],count_tasks=item[6])
                 reporting.append(item_schema)
 
             return ReportingListResponse(items=reporting)         
