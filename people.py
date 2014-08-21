@@ -44,7 +44,8 @@ class linked_in():
         r=self.browser.open('https://www.google.com')
         self.browser.response().read()
         self.browser.select_form(nr=0)
-        self.browser.form['q']=firstname +' '+lastname
+        self.browser.form['q']=firstname +' '+lastname + ' '+'LinkedIn'
+
         self.browser.submit()
         self.browser.response().read()
         link= self.browser.links(url_regex="linkedin")
@@ -62,7 +63,7 @@ class linked_in():
         link= self.browser.links(url_regex="twitter.com")
         links=[l for l in link]
         #print links
-        return self.browser.follow_link(links[0]).geturl()
+        if links: return self.browser.follow_link(links[0]).geturl()
     def get_profile_header(self,soup,person):
         # ***************************head***************************
         member_head=soup.find('div',{'id':'member-1'})
@@ -86,29 +87,32 @@ class linked_in():
             else : person['headline']=''
             #**********************************************************
 
-            overview=soup.find('dl',{'id':'overview'})
-            if overview:
-                current_post=overview.find('dd',{'class':'summary-current'})
-                # ---------------------------------------------------------
-                tab=[]
-                if current_post:
-                    for post in current_post.findAll('li'):
-                        tab.append(post.text.replace('\n',' '))
-                person['current_post']=tab
-                # ------------------------------------------------------------
-                tab=[]
-                past_post=overview.find('dd',{'class':'summary-past'})
-                if past_post:
-                    for post in past_post.findAll('li'):
-                        tab.append(post.text.replace('\n',' '))
-                person['past_post']=tab
-                # ------------------------------------------------------------
-                tab=[]
-                formation=overview.find('dd',{'class':'summary-education'})
-                if formation:
-                    for post in formation.findAll('li'):
-                        tab.append(post.text.replace('\n',' '))
-                person['formations']=tab
+        overview=soup.find('dl',{'id':'overview'})
+        print overview
+        if overview:
+            current_post=overview.find('dd',{'class':'summary-current'})
+            # ---------------------------------------------------------
+            tab=[]
+            if current_post:
+                for post in current_post.findAll('li'):
+                    tab.append(post.text.replace('\n',' '))
+            person['current_post']=tab
+            # ------------------------------------------------------------
+            tab=[]
+            past_post=overview.find('dd',{'class':'summary-past'})
+            if past_post:
+                for post in past_post.findAll('li'):
+                    tab.append(post.text.replace('\n',' '))
+            person['past_post']=tab
+            # ------------------------------------------------------------
+            tab=[]
+            formation=overview.find('dd',{'class':'summary-education'})
+            if formation:
+                for post in formation.findAll('li'):
+                    tab.append(post.text.replace('\n',' '))
+            person['formations']=tab
+            print '//////////////////////////////////////////////////////////////'
+            print person['formations']
             # -------------------------------------------------------------
             tab=[]
             formation=overview.find('dd',{'class':'websites'})
