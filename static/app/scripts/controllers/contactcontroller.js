@@ -638,11 +638,14 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
         lineWidth:7,
         lineCap:'circle'
     };
-    $scope.linkedProfile={}
+    $scope.linkedProfile={};
+     $scope.twitterProfile={};
     $scope.getLinkedinProfile=function(){
       
       Contact.get_linkedin($scope,{'entityKey':$scope.contact.entityKey});
-      // Lead.get_twitter($scope,{'entityKey':$scope.lead.entityKey});
+      Contact.get_twitter($scope,{'entityKey':$scope.contact.entityKey});
+      console.log($scope.twitterProfile);
+      console.log("piiiiiii");
     }
 
     	$scope.fromNow = function(fromDate){

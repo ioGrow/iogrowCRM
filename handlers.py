@@ -1072,7 +1072,8 @@ class GetFromTwitterToIoGrow(webapp2.RequestHandler):
         print name
         profile_schema=EndpointsHelper.twitter_import_people(name)
         if profile_schema:
-            if lead.firstname in profile_schema.name and lead.lastname in profile_schema.name :
+            d=(profile_schema.name).lower()
+            if lead.firstname in d and lead.lastname in d :
                 profile=model.TwitterProfile()
                 profile.id=profile_schema.id
                 profile.followers_count=profile_schema.followers_count
