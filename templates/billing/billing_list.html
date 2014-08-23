@@ -67,13 +67,13 @@
             <div class="detailsSection">
               <div class="head">
                 <div class="pic">
-                  <a href="/#/billing/show/<%=user.id%>" class="startup-link" title="user.google_display_name">
+                  <a href="/#/billing/show/<%=user.stripe_id%>" class="startup-link" title="user.google_display_name">
                     <img ng-show="user.google_public_profile_photo_url" class="img-responsive profile-photo" ng-src="<%= user.google_public_profile_photo_url %>">
                   </a>
                 </div>
                 <div class="text">
                   <div class="name">
-                    <a href="/#/billing/show/<%=user.id%>" class="profile-link">
+                    <a href="/#/billing/show/<%=user.stripe_id%>" class="profile-link">
                        <%= user.google_display_name %>
                     </a>
                   </div>
@@ -105,7 +105,7 @@
             <div class="detailsSection">
               <div class="head">
                 <div class="pic">
-                  <a href="<%= user.google_public_profile_url %>" class="startup-link" title="<%= invitee.invited_mail %>">
+                  <a href="/#/billing/show/<%=invitee.stripe_id%>" class="startup-link" title="<%= invitee.invited_mail %>">
                     <img ng-src="/static/img/avatar_2x.png" class="img-responsive profile-photo">
                   </a>
                 </div>
