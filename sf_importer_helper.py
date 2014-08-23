@@ -1,25 +1,29 @@
 import json
 from iomodels.crmengine.accounts import Account,AccountInsertRequest
 from iomodels.crmengine.contacts import Contact,ContactInsertRequest
+from iomodels.crmengine.opportunities import Opportunity,OpportunityInsertRequest
+from iomodels.crmengine.opportunitystage import Opportunitystage
 import iomessages
 """
 name = messages.StringField(1)
-    account = messages.StringField(1)
-    firstname = messages.StringField(2)
-    lastname = messages.StringField(3)
-    title = messages.StringField(4)
-    access = messages.StringField(5)
-    tagline = messages.StringField(6)
-    introduction = messages.StringField(7)
-    phones = messages.MessageField(iomessages.PhoneSchema,8, repeated = True)
-    emails = messages.MessageField(iomessages.EmailSchema,9, repeated = True)
-    addresses = messages.MessageField(iomessages.AddressSchema,10, repeated = True)
-    infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema,11, repeated = True)
-    profile_img_id = messages.StringField(12)
-    profile_img_url = messages.StringField(13)
-    """
+    stage = messages.StringField(3)
+    account = messages.StringField(4)
+    contact = messages.StringField(5)
+    access = messages.StringField(6)
+    opportunity_type = messages.StringField(7)
+    duration =  messages.IntegerField(8)
+    duration_unit  = messages.StringField(9)
+    currency = messages.StringField(10)
+    amount_per_unit = messages.IntegerField(11)
+    amount_total = messages.IntegerField(12)
+    closed_date = messages.StringField(13)
+    competitor = messages.StringField(14)
+    description = messages.StringField(15)
+    infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema,16,repeated=True)
+"""
  
 class SfImporterHelper():
+	# accounts
 	@classmethod
 	def import_accounts(cls,user,http,sf_objects):
 		print 'i will get the list of available accounts'
@@ -54,6 +58,7 @@ class SfImporterHelper():
 	def import_account(cls,user,account_request):
 		return Account.insert(user,account_request)
 
+	# contacts
 	@classmethod
 	def import_contacts(cls,user,http,sf_objects):
 		print '====='
@@ -128,3 +133,51 @@ class SfImporterHelper():
 	@classmethod
 	def import_contact(cls,user,contact_request):
 		return Contact.insert(user,contact_request)
+
+	# opportunities
+	@classmethod
+	def import_opportunities(cls,user,http,sf_objects):
+		print 'i will get the list of available opportunities'
+		sf_objects['Opportunity']={}
+		sf_objects['OpportunityStage']={}
+		r,c = http.request("https://na12.salesforce.com/services/data/v29.0/query?q=SELECT+Id+from+Opportunity")
+		results = json.loads(c)
+		for record in results['records']:
+			print 'i want to get the details of Opportunity number ' + record['Id']
+			r,c = http.request("https://na12.salesforce.com/services/data/v29.0/sobjects/Opportunity/"+record['Id'])
+			sf_opportunity = json.loads(c)
+			print sf_opportunity.keys()
+			opportunity_request = cls.get_opportunity_schema(sf_opportunity,sf_objects,user)
+			imported_opportunity = cls.import_opportunity(user,opportunity_request)
+			sf_objects['Opportunity'][record['Id']]=imported_opportunity.entityKey
+
+	@classmethod
+	def get_opportunity_schema(cls,sf_opportunity,sf_objects,user):
+		opportunity_schema = OpportunityInsertRequest(
+    										name = sf_opportunity['Name'],
+    										competitor = sf_opportunity['MainCompetitors__c'],
+    										description=sf_opportunity['Description']
+    										)
+		if sf_opportunity['Amount']:
+			opportunity_schema.amount_total = int(sf_opportunity['Amount'])
+		stage_name = sf_opportunity['StageName']
+		if stage_name in sf_objects['OpportunityStage'].keys():
+			stage_key = sf_objects['OpportunityStage'][stage_name]
+		else:
+			new_stage = Opportunitystage(
+										owner=user.google_user_id,
+										organization = user.organization,
+										name=stage_name,
+										probability=int(sf_opportunity['Probability'])
+										)
+			new_stage_async = new_stage.put_async()
+			stage_key = new_stage_async.get_result()
+        	sf_objects['OpportunityStage'][stage_name]=stage_key
+		opportunity_schema.stage = stage_key.urlsafe()
+		if sf_opportunity['AccountId']:
+			opportunity_schema.account = sf_objects['Account'][sf_opportunity['AccountId']]
+
+		return opportunity_schema
+	@classmethod
+	def import_opportunity(cls,user,opportunity_request):
+		return Opportunity.insert(user,opportunity_request)
