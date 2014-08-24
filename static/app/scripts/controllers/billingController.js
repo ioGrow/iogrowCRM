@@ -149,11 +149,12 @@ app.controller('BillingShowController', ['$scope','$route', 'Auth','Search','Use
   var handler = StripeCheckout.configure({
     key: 'pk_test_4Xa35zhZDqvXz1OzGRWaW4mX',
     image: user.google_public_profile_photo_url,
-    email:"meziane@iogrow.com",
+    email:user.email,
     token: function(token) {
 
     var params={'token_id':token.id,
-                'token_email':token.email
+                'token_email':token.email, 
+                'customer_id':user.customer_id
               }
    gapi.client.crmengine.billing.purchase(params).execute(function(resp) {
             if(!resp.code){
