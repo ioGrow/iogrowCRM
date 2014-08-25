@@ -887,13 +887,14 @@ $scope.selectTag= function(tag,index,$event){
          Task.list($scope,params);
 
   }
-  $scope.urgentTasks = function(){
+  $scope.completedTasks = function(){
          $scope.tasks = [];
          $scope.isLoading = true;
-         var params = { 'order': 'due',
-                        'urgent': true,
-
-                        'limit':7}
+         var params = { 'order': $scope.order,
+                        'completed_by': $scope.user_acc.google_user_id
+                      }
+          console.log('***');
+          console.log(params);
           Task.list($scope,params,true);
 
   }
