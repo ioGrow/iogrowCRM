@@ -544,6 +544,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.opppagination = {};
         $scope.oppCurrentPage = 01;
         $scope.opppages = [];
+        $scope.customfields=[];
         //HKA 11.12.2013 var Case to manage Next & Prev
         $scope.casepagination = {};
         $scope.caseCurrentPage = 01;
@@ -673,7 +674,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                         $scope.contact={};
                         $scope.showNewContact=false;
         };
- $scope.saveOpp = function(opportunity){
+            $scope.saveOpp = function(opportunity){
             $scope.isLoading=true;
             opportunity.closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
             opportunity.stage = $scope.initialStage.entityKey;
@@ -733,15 +734,6 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             Case.insert($scope,casee);      
             $scope.showNewCase=false;
             $scope.casee={};
-           /* var params = {'name': casee.name,
-                'priority': casee.priority,
-                'status': $scope.status_selected.entityKey,
-                'account': $scope.account.entityKey,
-                'access': $scope.account.access,
-                'status_name': $scope.status_selected.name
-            };
-            Case.insert($scope, params);
-            $('#addCaseModal').modal('hide');   */
         };
          $scope.editbeforedelete = function(item,typee,index){
             $scope.selectedItem={'item':item,'typee':typee,'index':index};
@@ -1569,9 +1561,7 @@ $scope.updateEventRenderAfterAdd= function(){};
 
         };
 
-//HKA 19.11.2013 Add Contact related to account
-
-     
+  
         // HKA 19.11.2013 Add Opportunty related to account
 
         $scope.saveOpp = function(opportunity) {
@@ -1595,7 +1585,9 @@ $scope.updateEventRenderAfterAdd= function(){};
             $('#addOpportunityModal').modal('hide');
         }
         };
-
+ $scope.opportunityInserted = function(resp){
+          window.location.replace('#/accounts');
+      };
         // HKA 19.11.2013 Add Case related to account
 
         $scope.saveNeed = function(need) {
@@ -1770,9 +1762,8 @@ $scope.updatAccountHeader = function(account){
   $('#EditAccountModal').modal('hide');
 };
 
-    $('#some-textarea').wysihtml5();
     // arezki lebdiri 03/07/2014 send email
-$scope.sendEmailSelected=function(){
+/*$scope.sendEmailSelected=function(){
   $scope.email.to = '';
   angular.forEach($scope.infonodes.emails, function(value, key){
     console.log(value)
@@ -1782,7 +1773,6 @@ $scope.sendEmailSelected=function(){
 };
       $scope.sendEmail = function(email){
         email.body = $('#some-textarea').val();
-
         var params = {
                   'to': email.to,
                   'cc': email.cc,
@@ -1793,7 +1783,7 @@ $scope.sendEmailSelected=function(){
                   };
 
         Email.send($scope,params);
-      };
+      };*/
 
 
 
@@ -1913,7 +1903,6 @@ $scope.deleteaccount = function(){
         };
         $scope.sendEmail = function(email) {
             email.body = $('#some-textarea').val();
-
             var params = {
                 'to': email.to,
                 'cc': email.cc,
@@ -1924,8 +1913,6 @@ $scope.deleteaccount = function(){
 
             Email.send($scope, params);
         };
-
-
 
         $scope.beforedeleteInfonde = function() {
             $('#BeforedeleteInfonode').modal('show');

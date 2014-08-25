@@ -12,6 +12,8 @@ from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.casestatuses import Casestatus
 from search_helper import tokenize_autocomplete
 import iomessages
+# hadji hicham 20/08/2014.
+import stripe
 
 
 STANDARD_TABS = [
@@ -74,7 +76,8 @@ FOLDERS = {
         }
 folders = {}
 
-
+# hadji hicham  20/08/2014. our secret api key to auth at stripe .
+stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
 
 class Application(ndb.Model):
     name = ndb.StringProperty(required=True)
@@ -138,6 +141,19 @@ class Organization(ndb.Model):
         #             )
 
         # create standard tabs
+        #  here where we create the first customer .
+
+        cust=stripe.Customer.create(
+                  email= admin.email,
+                  description=admin.email,
+                  metadata={"organization_key":org_key.urlsafe(), 
+                            "user_id":admin.id,
+                            "google_display_name":admin.google_display_name,
+                            "google_public_profile_photo_url":admin.google_public_profile_photo_url,
+                            "google_user_id":admin.google_user_id}
+                 )
+        admin.stripe_id=cust.id
+        admin.put()
         created_tabs = []
         for tab in STANDARD_TABS:
             created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
@@ -373,6 +389,9 @@ class User(EndpointsModel):
     # Is the user a public user or business user
     type = ndb.StringProperty()
     # If the user is a business user, we store the informations about him
+    #stripe id , id represent an enter in the table of customers in stripe api.
+    stripe_id=ndb.StringProperty()
+    #that's coool
     organization = ndb.KeyProperty()
     status = ndb.StringProperty()
     profile = ndb.KeyProperty()
@@ -596,6 +615,7 @@ class Invitation(ndb.Model) :
     invited_by = ndb.KeyProperty()
     organization = ndb.KeyProperty()
     updated_at = ndb.DateTimeProperty(auto_now=True)
+    stripe_id=ndb.StringProperty()
     @classmethod
     def delete_by(cls,email):
         invitations = cls.query(
@@ -617,6 +637,11 @@ class Invitation(ndb.Model) :
                             organization = invited_by.organization
                             )
         invitation.invited_by = invited_by.key
+        cust=stripe.Customer.create(  
+                  email= email,
+                  description=email,
+                  metadata={"organization_key":invited_by.organization.urlsafe()})
+        invitation.stripe_id=cust.id
         invitation.put()
     @classmethod
     def list_invitees(cls,organization):
@@ -626,7 +651,8 @@ class Invitation(ndb.Model) :
             item = {
                   'invited_mail' :invitee.invited_mail,
                   'invited_by' :invitee.invited_by.get().google_display_name,
-                  'updated_at' : invitee.updated_at
+                  'updated_at' : invitee.updated_at,
+                  'stripe_id':invitee.stripe_id
             }
             items.append(item)
         return items
@@ -719,6 +745,7 @@ class LinkedinProfile(ndb.Model) :
     resume=ndb.TextProperty(indexed=False)
     certifications=ndb.JsonProperty(indexed=False)
     skills=ndb.StringProperty(repeated=True,indexed=False)
+    url=ndb.StringProperty(indexed=False)
 
 class TwitterProfile(ndb.Model):
     id= ndb.IntegerProperty(indexed=False)

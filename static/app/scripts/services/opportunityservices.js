@@ -16,6 +16,8 @@ opportunityservices.factory('Opportunity', function($http) {
     gapi.client.crmengine.opportunities.getv2(params).execute(function(resp){
       if(!resp.code){
         $scope.opportunity = resp;
+        console.log(resp)
+        $scope.getColaborators();
                 // list infonodes
                 var renderMap = false;
                 if (resp.infonodes){

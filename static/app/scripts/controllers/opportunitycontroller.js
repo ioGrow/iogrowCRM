@@ -83,6 +83,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
           //       $scope.save(opportunity);
           //   }
        };
+    
        $(window).resize(function() {
         });
         // We need to call this to refresh token when user credentials are invalid
@@ -603,6 +604,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
      $scope.documentpagination = {};
      $scope.documentCurrentPage=01;
      $scope.documentpages=[];
+     $scope.collaborators_list=[];
      $scope.sharing_with = [];
      $scope.opportunitystages=[];
      $scope.opportunity={'current_stage':{'name':'Incoming','probability':5}};
@@ -730,6 +732,10 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
            var paramsTag = {'about_kind': 'Opportunity'};
           Tag.list($scope, paramsTag);
        };
+         $scope.getColaborators=function(){
+           
+          Permission.getColaborators($scope,{"entityKey":$scope.opportunity.entityKey});  
+        }
         // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
           Auth.refreshToken();
@@ -1447,7 +1453,7 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
               }
       }
       $scope.test=function(){
-        console.log('testtest');
+        
       }
       $scope.pullElement=function(index,elem,arr){
         if ($scope.customfields.indexOf(elem) != -1) {
@@ -1461,6 +1467,7 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
        $('#'+id).removeClass('hidden');
       }
       $scope.pushElement=function(elem,arr){
+       
           if (arr.indexOf(elem) == -1) {
               var copyOfElement = angular.copy(elem);
               arr.push(copyOfElement);

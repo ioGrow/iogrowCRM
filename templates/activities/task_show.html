@@ -325,35 +325,16 @@
 <div class="col-md-3 tasks-col">
   <div class="row">
     <div class="col-md-12">
-      <div class="portlet showCard">
-        <div class="portlet-title line">
-          <div class="caption">
-            <i class="icon-user"></i>{{ _('Who\'s involved')}}
-          </div>
+        <div class="portlet showCard">
+            <div class="portlet-title line">
+              <div class="caption">
+               <!-- <i class="icon-user"></i>{{ _('Who\'s involved')}}-->
+              </div>
+            </div>
+            <div class="portlet-body">
+            
+            </div>
         </div>
-                  <div class="portlet-body">
-                  <ul class="chats">
-
-                   <li>
-                        <span class="arrow">{{ _('Created By:')}} <%=task.created_by.display_name%></span>
-                   </li>
-                  </ul>
-                   <div class="caption"><i class="fa fa-group"></i>{{ _('Assignees')}}</div>
-                    <ul class="chats">
-
-                 <li  ng-repeat="assigned in task.assignees">
-
-
-                      <span class="arrow"><%=assigned.display_name%></span>
-
-
-                 </li>
-                  <li><a href="#addContributor"  class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i>{{ _('Add a new assignee')}}</a></li>
-
-
-                </ul>
-                  </div>
-      </div>
     </div>
   </div>
 </div>

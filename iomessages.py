@@ -56,15 +56,22 @@ class UserSchema(messages.Message):
     google_user_id = messages.StringField(7)
     is_admin = messages.StringField(8)
     status = messages.StringField(9)
-    LicenseStatus= messages.StringField(10)
-    nmbrOfLicenses= messages.StringField(11)
+    stripe_id= messages.StringField(10)
+    # LicenseStatus= messages.StringField(10)
+    # nmbrOfLicenses= messages.StringField(11)
     
 class InvitedUserSchema(messages.Message):
     invited_mail = messages.StringField(1)
     invited_by = messages.StringField(2)
     updated_at = messages.StringField(3)
-    LicenseStatus= messages.StringField(4)
-    nmbrOfLicenses= messages.StringField(5)
+    stripe_id= messages.StringField(4)
+    # LicenseStatus= messages.StringField(4)
+    # nmbrOfLicenses= messages.StringField(5)
+class customerRequest(messages.Message):
+      id=messages.StringField(1)
+class customerResponse(messages.Message):
+      google_public_profile_photo_url=messages.StringField(1)
+      google_display_name=messages.StringField(2)
 
 class UserListSchema(messages.Message):
     items = messages.MessageField(UserSchema, 1, repeated=True)
@@ -73,7 +80,7 @@ class UserListSchema(messages.Message):
 class AddTagSchema(messages.Message):
     parent = messages.StringField(1,required=True)
     tag_key = messages.StringField(2,required=True)
-class profileSchema(messages.Message):
+class LinkedinProfileSchema(messages.Message):
     lastname = messages.StringField(1)
     firstname = messages.StringField(2)
     industry = messages.StringField(3)
@@ -88,6 +95,7 @@ class profileSchema(messages.Message):
     resume=messages.StringField(12)
     certifications=messages.StringField(13)
     skills=messages.StringField(14,repeated=True)
+    url=messages.StringField(15)
 
 
 

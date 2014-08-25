@@ -13,8 +13,7 @@ accountservices.factory('User', function($http) {
           gapi.client.crmengine.users.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.user = resp;
-                console.log("i'm here idiot , i'm here its me !");
-                console.log(resp);
+              
                // Call the method $apply to make the update on the scope
                $scope.$apply();
 
@@ -28,6 +27,28 @@ accountservices.factory('User', function($http) {
             console.log('gapi #end_execute');
           });
   };
+  
+  User.customer = function($scope,id) {
+           
+          gapi.client.crmengine.users.customer(id).execute(function(resp) {
+            if(!resp.code){
+               $scope.user = resp;
+
+              $scope.purchase($scope.user);
+               // Call the method $apply to make the update on the scope
+               $scope.$apply();
+
+            }else {
+               if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
+  };
+  
   User.list = function($scope,params){
       $scope.isLoading = true;
       gapi.client.crmengine.users.list(params).execute(function(resp) {
@@ -62,12 +83,14 @@ accountservices.factory('User', function($http) {
       });
   };
   // HADJI HICHAM  11/08/2014 -- get list Users with licenes .
-User.list_licenses = function($scope,params){
+User.Customers = function($scope,params){
       $scope.isLoading = true;
-      gapi.client.crmengine.users.list_licenses(params).execute(function(resp) {
+      gapi.client.crmengine.users.customers(params).execute(function(resp) {
               if(!resp.code){
                  $scope.users = resp.items;
-                 $scope.invitees = resp.invitees;
+                 $scope.invitees=resp.invitees;
+                 
+
                  if ($scope.currentPage>1){
                       $scope.pagination.prev = true;
                    }else{

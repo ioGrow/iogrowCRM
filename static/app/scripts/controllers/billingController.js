@@ -1,4 +1,4 @@
-app.controller('BillingController', ['$scope','$route', 'Auth','Search','User',
+app.controller('BillingListController', ['$scope','$route', 'Auth','Search','User',
     function($scope,$route,Auth,Search,User) {
       
    $("ul.page-sidebar-menu li").removeClass("active");
@@ -28,7 +28,8 @@ app.controller('BillingController', ['$scope','$route', 'Auth','Search','User',
                        }
           User.get_organization($scope,params);
            var params = {'limit':7};
-          User.list_licenses($scope,params);
+          //User.list_licenses($scope,params);
+          User.Customers($scope,params);
 
        };
   
@@ -127,7 +128,9 @@ app.controller('BillingShowController', ['$scope','$route', 'Auth','Search','Use
       $scope.runTheProcess = function(){
     
               var params={'id':$route.current.params.userId};
-              User.get($scope, params);
+             
+              User.customer($scope, params)
+              
           //  var params={'organization':$scope.organization_key
           //              }
           // User.get_organization($scope,params);
@@ -136,6 +139,46 @@ app.controller('BillingShowController', ['$scope','$route', 'Auth','Search','Use
 
        };
 
+
+// hadji hicham . to send the token to the api!
+ $scope.purchase=function(user){
+// the key represent the public key which represent our company  , client side , we have two keys 
+// test  "pk_test_4Xa35zhZDqvXz1OzGRWaW4mX", mode dev 
+// live "pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD", mode prod 
+
+  var handler = StripeCheckout.configure({
+    key: 'pk_test_4Xa35zhZDqvXz1OzGRWaW4mX',
+    image: user.google_public_profile_photo_url,
+    email:"meziane@iogrow.com",
+    token: function(token) {
+
+    var params={'token_id':token.id,
+                'token_email':token.email
+              }
+   gapi.client.crmengine.billing.purchase(params).execute(function(resp) {
+            if(!resp.code){
+                 console.log(resp);
+            }
+
+            });
+      // Use the token to create the charge with a server-side script.
+      // You can access the token ID with `token.id`
+    }
+  });
+
+  document.getElementById('customButton').addEventListener('click', function(e) {
+    // Open Checkout with further options
+    handler.open({
+      name: user.google_display_name,
+      description: '$20.00',
+      amount: 2000
+    });
+    e.preventDefault();
+  });
+
+
+
+ }
   
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {

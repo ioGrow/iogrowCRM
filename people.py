@@ -5,7 +5,10 @@ import mechanize
 from bs4 import BeautifulSoup
 import cookielib
 from iograph import Node , Edge
-from iomessages import profileSchema, TwitterProfileSchema
+
+
+from iomessages import LinkedinProfileSchema, TwitterProfileSchema
+
 from google.appengine.ext import ndb
 from model import LinkedinProfile
 import re
@@ -84,40 +87,41 @@ class linked_in():
             #**********************************************************
 
             overview=soup.find('dl',{'id':'overview'})
-            current_post=overview.find('dd',{'class':'summary-current'})
-            # ---------------------------------------------------------
+            if overview:
+                current_post=overview.find('dd',{'class':'summary-current'})
+                # ---------------------------------------------------------
+                tab=[]
+                if current_post:
+                    for post in current_post.findAll('li'):
+                        tab.append(post.text.replace('\n',' '))
+                person['current_post']=tab
+                # ------------------------------------------------------------
+                tab=[]
+                past_post=overview.find('dd',{'class':'summary-past'})
+                if past_post:
+                    for post in past_post.findAll('li'):
+                        tab.append(post.text.replace('\n',' '))
+                person['past_post']=tab
+                # ------------------------------------------------------------
+                tab=[]
+                formation=overview.find('dd',{'class':'summary-education'})
+                if formation:
+                    for post in formation.findAll('li'):
+                        tab.append(post.text.replace('\n',' '))
+                person['formations']=tab
+            # -------------------------------------------------------------
             tab=[]
-            if current_post:
-                for post in current_post.findAll('li'):
-                    tab.append(post.text.replace('\n',' '))
-            person['current_post']=tab
-            # ------------------------------------------------------------
-            tab=[]
-            past_post=overview.find('dd',{'class':'summary-past'})
-            if past_post:
-                for post in past_post.findAll('li'):
-                    tab.append(post.text.replace('\n',' '))
-            person['past_post']=tab
-            # ------------------------------------------------------------
-            tab=[]
-            formation=overview.find('dd',{'class':'summary-education'})
+            formation=overview.find('dd',{'class':'websites'})
             if formation:
                 for post in formation.findAll('li'):
-                    tab.append(post.text.replace('\n',' '))
-            person['formations']=tab
-        # -------------------------------------------------------------
-        tab=[]
-        formation=overview.find('dd',{'class':'websites'})
-        if formation:
-            for post in formation.findAll('li'):
-                tab.append('www.linkedin.com'+post.a.get('href'))
-        person['websites']=tab
-        # -------------------------------------------------------------
-        relation=overview.find('dd',{'class':'overview-connections'})
-        r=None
-        if relation:
-            r=relation.p.strong.text
-        person['relation']=r
+                    tab.append('www.linkedin.com'+post.a.get('href'))
+            person['websites']=tab
+            # -------------------------------------------------------------
+            relation=overview.find('dd',{'class':'overview-connections'})
+            r=None
+            if relation:
+                r=relation.p.strong.text
+            person['relation']=r
     def get_exprience(self,soup):
         expriences={}
         exp={}
@@ -198,6 +202,7 @@ class linked_in():
             person['resume']=self.get_resume(soup)
             person['certifications']=self.get_certification(soup)
             person['skills']=self.get_skills(soup)
+            person['url']= self.browser.geturl()
 
         return person
     def scrape_twitter(self, firstname, lastname):
@@ -216,7 +221,7 @@ class linked_in():
         if result['items']:
             profile_key=result['items'][0].end_node
             pro= profile_key.get()
-            response=profileSchema(
+            response=LinkedinProfileSchema(
                                     lastname = pro.lastname,
                                     firstname = pro.firstname,
                                     industry = pro.industry,
@@ -230,7 +235,8 @@ class linked_in():
                                     experiences=pro.experiences,
                                     resume=pro.resume,
                                     certifications=pro.certifications,
-                                    skills=pro.skills
+                                    skills=pro.skills,
+                                    url=pro.url
                                     )
             return response
 
