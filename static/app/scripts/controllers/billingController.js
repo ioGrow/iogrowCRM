@@ -29,7 +29,7 @@ app.controller('BillingListController', ['$scope','$route', 'Auth','Search','Use
           User.get_organization($scope,params);
            var params = {'limit':7};
           //User.list_licenses($scope,params);
-          User.Customers($scope,params);
+        User.Customers($scope,params);
 
        };
   
@@ -147,9 +147,9 @@ app.controller('BillingShowController', ['$scope','$route', 'Auth','Search','Use
 // live "pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD", mode prod 
 
   var handler = StripeCheckout.configure({
-    key: 'pk_test_4Xa35zhZDqvXz1OzGRWaW4mX',
+    key: 'pk_test_4XcXjg4Qggo2HeVWnGaXwGDB',
     image: user.google_public_profile_photo_url,
-    email:"meziane@iogrow.com",
+    email:"arezki@iogrow.com",
     token: function(token) {
 
     var params={'token_id':token.id,
@@ -157,7 +157,7 @@ app.controller('BillingShowController', ['$scope','$route', 'Auth','Search','Use
               }
    gapi.client.crmengine.billing.purchase(params).execute(function(resp) {
             if(!resp.code){
-                 console.log(resp);
+                console.log(token)
             }
 
             });

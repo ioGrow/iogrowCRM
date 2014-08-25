@@ -137,7 +137,7 @@ def LISTING_QUERY(query, access, organization, owner, collaborators, order):
                         ).order(order)
 
 # hadji hicham  20/08/2014. our secret api key to auth at stripe .
-stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
+stripe.api_key = "sk_test_4ZNpoS4mqf3YVHKVfQF7US1R"
 
 class TwitterProfileRequest(messages.Message):
     firstname = messages.StringField(1)
@@ -3418,7 +3418,15 @@ class CrmEngineApi(remote.Service):
         # live "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA" , mode prod 
         stripe.api_key ="sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
         token = request.token_id
-  
+        cust=stripe.Customer.retrieve(request.customer_id)
+        cust.card=token
+        cust.save()
+        charge=stripe.Charge.create(
+                       amount=2000,
+                       currency="usd",
+                       customer=cust.id,
+                       description="Charge for  "+ request.token_email)
+
 
         return BillingResponse(response=token) 
 

@@ -44,7 +44,7 @@ class linked_in():
         r=self.browser.open('https://www.google.com')
         self.browser.response().read()
         self.browser.select_form(nr=0)
-        self.browser.form['q']=firstname +' '+lastname + ' '+'LinkedIn'
+        self.browser.form['q']=firstname +' '+lastname + ' '+'site:linkedin.com'
 
         self.browser.submit()
         self.browser.response().read()

@@ -224,21 +224,43 @@ class linked_in():
             return response
 # Set your secret key: remember to change this to your live secret key in production
 # See your keys here https://dashboard.stripe.com/account
-stripe.api_key = "sk_test_4XbEK6FG7IWipzMTa3m4JaPY"
+stripe.api_key = "sk_test_4ZNpoS4mqf3YVHKVfQF7US1R"
 
 # Get the credit card details submitted by the form
-token = "tok_14OXLo40aCapGc6xmMDH52ML"
 
 
-# Create the charge on Stripe's servers - this will charge the user's card
 try:
-  charge = stripe.Charge.create(
-      amount=100000, # amount in cents, again
-      currency="usd",
-      card=token,
-      description="payinguser@example.com"
-  )
-except stripe.CardError, e:
-  # The card has been declined
-  print "error"
-        # print result
+  print stripe.Customer.all()
+  pass
+except stripe.error.CardError, e:
+  # Since it's a decline, stripe.error.CardError will be caught
+  body = e.json_body
+  err  = body['error']
+
+  print "Status is: %s" % e.http_status
+  print "Type is: %s" % err['type']
+  print "Code is: %s" % err['code']
+  # param is '' in this case
+  print "Param is: %s" % err['param']
+  print "Message is: %s" % err['message']
+except stripe.error.InvalidRequestError, e:
+  # Invalid parameters were supplied to Stripe's API
+  pass
+except stripe.error.AuthenticationError, e:
+  # Authentication with Stripe's API failed
+  # (maybe you changed API keys recently)
+  pass
+except stripe.error.APIConnectionError, e:
+  # Network communication with Stripe failed
+  pass
+except stripe.error.StripeError, e:
+  # Display a very generic error to the user, and maybe send
+  # yourself an email
+  pass
+except Exception, e:
+  # Something else happened, completely unrelated to Stripe
+  pass
+        # print r&esult
+from nltk.corpus import treebank
+t = treebank.parsed_sents('wsj_0001.mrg')[0]
+t.draw()
