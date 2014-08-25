@@ -137,7 +137,7 @@ def LISTING_QUERY(query, access, organization, owner, collaborators, order):
                         ).order(order)
 
 # hadji hicham  20/08/2014. our secret api key to auth at stripe .
-stripe.api_key = "sk_test_4ZNpoS4mqf3YVHKVfQF7US1R"
+stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
 
 class TwitterProfileRequest(messages.Message):
     firstname = messages.StringField(1)
@@ -433,6 +433,8 @@ class OrganizationResponse(messages.Message):
 class BillingRequest(messages.Message):
      token_id=messages.StringField(1)
      token_email=messages.StringField(2)
+     customer_id=messages.StringField(3)
+
 class BillingResponse(messages.Message):
      response=messages.StringField(2)
 
@@ -2786,10 +2788,9 @@ class CrmEngineApi(remote.Service):
     def Customer(self,request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         cust=stripe.Customer.retrieve(request.id)
-        print "*-*-*-*-*-*-*-*-*-*-*-*-*-*-**"
-        print cust.metadata 
-        print "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*"
         kwargs = {
+               "customer_id":cust.id,
+               "email":cust.email,
                "google_public_profile_photo_url":cust.metadata.google_public_profile_photo_url,
                "google_display_name":cust.metadata.google_display_name
                  }
@@ -3416,7 +3417,6 @@ class CrmEngineApi(remote.Service):
         #the key represent the secret key which represent our company  , server side , we have two keys 
         # test "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF", mode dev 
         # live "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA" , mode prod 
-        stripe.api_key ="sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
         token = request.token_id
         cust=stripe.Customer.retrieve(request.customer_id)
         cust.card=token
@@ -3426,7 +3426,6 @@ class CrmEngineApi(remote.Service):
                        currency="usd",
                        customer=cust.id,
                        description="Charge for  "+ request.token_email)
-
 
         return BillingResponse(response=token) 
 
