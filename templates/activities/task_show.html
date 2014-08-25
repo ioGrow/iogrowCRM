@@ -187,7 +187,7 @@
                     </button>
                     <div class="taskShowDue">
                      <span ng-hide="showDueCalendar" ng-click="showDueCalendar=true" class="ng-binding">
-                     <i class="fa fa-calendar"></i>  {{ _("<%=task.due%>")}}</span>
+                     <i class="fa fa-calendar"></i>  {{ _("<%=task.due | date:'yyyy-MM-dd  HH:mm '%>")}}</span>
                      <div ng-show="showDueCalendar" class="input-icon" style="display: none;">
                            <i class="fa fa-calendar"></i>
 
@@ -196,7 +196,7 @@
                      </div>
                     </div>
                </form>
-               <ul class="list-unstyled ">
+               <ul class="list-unstyled showTagsList">
                  <li ng-show="task.tags" class="inline-tags">{{ _('Tags:')}}</li>
                  <li ng-repeat="tag in task.tags" class="inline-tags">
                    <a  href="/#/search/type:Task tags:<%=tag.id%>">
@@ -209,11 +209,27 @@
             </div>
 
         </div>
-      </div>
-    <!--HKA 19.11.2013 END Span comments-->
-      <div class=" col-md-12">
-                  <div class="row">
-        <div class="col-md-12 commentsShow">
+         <div class="row">
+          <div class="col-md-12">
+             <div class="portlet">
+                <div class="portlet-title line">
+                  <div class="caption"><i class="icon-user"></i>{{ _('Assignees')}}</div>
+                </div>
+                <div class="portlet-body">
+                      <ul class="chats">
+                        <li class="in" ng-repeat="assignee in task.assignees" id="comment_<%=$index%>">
+                          <img class="avatar" alt="" ng-src="<%=assignee.photo%>" />
+                          <span>{{ _("<%=assignee.display_name%>")}}</span>
+                        </li>
+                      </ul>
+                    </div>
+
+                </div>
+
+              </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
              <div class="portlet">
                 <div class="portlet-title line">
                   <div class="caption"><i class="icon-comments"></i>{{ _('Comments')}}</div>
@@ -232,40 +248,35 @@
                           </div>
                         </li>
                       </ul>
+                      <div class="portlet">
+                            <div class="portlet-body">
+                                 
+                                  <form id="addComment"  class=" ng-pristine ng-valid">
+                                  <div class="form-group">
+                                                    <textarea placeholder='{{ _("Add a comment")}}' id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="comment.content"></textarea>
+
+                                   </div>
+
+                                   <div class="pull-right">
+
+                                    <input  ng-disabled="isLoading || !comment.content" ng-click="addComment(comment)" type="submit" class="btn green" value="Add comment">
+
+                                    </div>
+                                              <div class="clearfix"></div>
+                              </form>
+                            </div>
+
+                          </div>
+                    </div>
 
                 </div>
 
               </div>
         </div>
-
         </div>
       </div>
-            <div class="showPage col-md-12">
-                  <div class="row">
-        <div class="col-md-12">
-             <div class="portlet">
-                <div class="portlet-body">
-                     <p class⁼"lead"=""><strong>{{ _('Add New Comment :')}}</strong> </p>
-                      <form id="addComment"  class=" ng-pristine ng-valid">
-                      <div class="form-group">
-                                        <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="comment.content"></textarea>
-
-                       </div>
-
-                       <div class="pull-right">
-
-                        <input  ng-disabled="isLoading || !comment.content" ng-click="addComment(comment)" type="submit" class="btn green" value="Add comment">
-
-                        </div>
-                                  <div class="clearfix"></div>
-                  </form>
-                </div>
-
-              </div>
-        </div>
-
-        </div>
-      </div>
+    <!--HKA 19.11.2013 END Span comments-->
+      <div class=" col-md-12">
 
 
   <!--HKA 19.11.2013 BEGIN Span who is involved -->

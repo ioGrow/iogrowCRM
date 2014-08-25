@@ -110,7 +110,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
                     'id':$scope.task.id,
                     'due':due_date
         };
-        console.log(params)
+        console.log(due_date)
           Task.patch($scope,params);
      }
      $scope.addNewContributor = function(selected_user,role){
