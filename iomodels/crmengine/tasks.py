@@ -561,7 +561,6 @@ class Task(EndpointsModel):
         if request.status:
             task.status = request.status
         if request.due and task.due == None :
-
             task.due = datetime.datetime.strptime(request.due,"%Y-%m-%dT%H:%M:00.000000")
             taskqueue.add(
                     url='/workers/synctask',
@@ -570,12 +569,13 @@ class Task(EndpointsModel):
                             'email': user_from_email.email,
                             'starts_at': request.due,
                             'ends_at': request.due,
-                            'summary': request.title,
+                            'summary': task.title,
                             'task_id':task_id
                             }
                     )
 
         elif request.due and task.due != None:
+            task.due = datetime.datetime.strptime(request.due,"%Y-%m-%dT%H:%M:00.000000")
             taskqueue.add(
                     url='/workers/syncpatchtask',
                     queue_name='iogrow-low',
@@ -583,7 +583,7 @@ class Task(EndpointsModel):
                             'email': user_from_email.email,
                             'starts_at': request.due,
                             'ends_at': request.due,
-                            'summary': request.title,
+                            'summary': task.title,
                             'task_google_id':task.task_google_id
                             }
                     )
