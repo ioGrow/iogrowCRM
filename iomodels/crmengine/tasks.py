@@ -64,6 +64,7 @@ class TaskRequest(messages.Message):
     assignee = messages.StringField(7)
     about = messages.StringField(8)
     urgent = messages.BooleanField(9)
+    completed_by = messages.StringField(10)
 
 class TaskListResponse(messages.Message):
     items = messages.MessageField(TaskSchema, 1, repeated=True)
@@ -295,6 +296,8 @@ class Task(EndpointsModel):
                         if not Edge.find(start_node=task.key,kind='assignees',end_node_set=end_node_set,operation='AND'):
                             is_filtered = False
                     if request.owner and task.owner!=request.owner and is_filtered:
+                        is_filtered = False
+                    if request.completed_by and task.completed_by!=request.completed_by and is_filtered:
                         is_filtered = False
                     if request.about and is_filtered:
                         end_node_set = [ndb.Key(urlsafe=request.about)]
