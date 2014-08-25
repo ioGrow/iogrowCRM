@@ -149,7 +149,7 @@ app.controller('BillingShowController', ['$scope','$route', 'Auth','Search','Use
   var handler = StripeCheckout.configure({
     key: 'pk_test_4Xa35zhZDqvXz1OzGRWaW4mX',
     image: user.google_public_profile_photo_url,
-    email:user.email,
+    email: user.email,
     token: function(token) {
 
     var params={'token_id':token.id,

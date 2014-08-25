@@ -2789,7 +2789,8 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         cust=stripe.Customer.retrieve(request.id)
         kwargs = {
-               "customer_id":cust.id ,
+               "customer_id":cust.id,
+               "email":cust.email,
                "google_public_profile_photo_url":cust.metadata.google_public_profile_photo_url,
                "google_display_name":cust.metadata.google_display_name
                  }
