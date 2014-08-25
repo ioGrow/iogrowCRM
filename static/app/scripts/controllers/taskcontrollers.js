@@ -20,6 +20,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      $scope.user = undefined;
      $scope.slected_memeber = undefined;
      $scope.role= 'participant';
+     $scope.taskShow=true;
 
     // What to do after authentication
      $scope.runTheProcess = function(){
@@ -77,9 +78,6 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
           Comment.list($scope,params);
      }
 
-
-
-
      $scope.showModal = function(){
         console.log('button clicked');
         $('#addAccountModal').modal('show');
@@ -96,6 +94,24 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      $scope.edgeInserted = function () {
        var taskid = {'id':$route.current.params.taskId};
           Task.get($scope,taskid);
+     }
+     $scope.$watch('task.due', function(newValue, oldValue) {
+            if (newValue!=oldValue){
+                console.log(newValue);
+                $scope.patchDate(newValue);
+                $scope.showDueCalendar=false;
+            }
+
+     });
+     $scope.patchDate = function(newValue){
+        console.log(newValue);
+        var due_date = $filter('date')(newValue,['yyyy-MM-ddTHH:mm:00.000000']);
+        var params = {
+                    'id':$scope.task.id,
+                    'due':due_date
+        };
+        console.log(params)
+          Task.patch($scope,params);
      }
      $scope.addNewContributor = function(selected_user,role){
       console.log('*************** selected user ***********************');
@@ -412,6 +428,11 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
         return true
       }
     }
+         $scope.gotoNewUser=function(){
+        console.log('goooooooooo');
+       $('#assigneeModal').modal('hide');
+       window.location.replace('/#/admin/users/new');
+     }
       $scope.idealTextColor=function(bgColor){
         var nThreshold = 105;
          var components = getRGBComponents(bgColor);
@@ -694,7 +715,6 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
     };
 
     $scope.select_task= function(task,index,$event){
-      console.log(task);
          var checkbox = $event.target;
          if(checkbox.checked){
             if ($scope.selected_tasks.indexOf(task) == -1) {

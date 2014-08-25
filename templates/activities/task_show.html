@@ -185,9 +185,16 @@
                       </i>
                     </span>
                     </button>
+                    <div class="taskShowDue">
+                     <span ng-hide="showDueCalendar" ng-click="showDueCalendar=true" class="ng-binding">
+                     <i class="fa fa-calendar"></i>  {{ _("<%=task.due%>")}}</span>
+                     <div ng-show="showDueCalendar" class="input-icon" style="display: none;">
+                           <i class="fa fa-calendar"></i>
 
-                    <datetimepick icon-class='fa fa-bell-o' label-format='MMM d, h:mm a' on-change="updateTask(task)" ng-model='newTask.reminder' class="new-task-reminder btn-unstyled  "></datetimepick>
-                    <datetimepick ng-model='newTask.due' class="new-task-date btn-unstyled" label-format='MMM d, h:mm a'></datetimepick>
+                          <input cusdatetimepicker data-model="task.due" type="text" class="form-control" placeholder="{{ _('From')}}" value="" id="leadEventStartsAt">
+
+                     </div>
+                    </div>
                </form>
                <ul class="list-unstyled ">
                  <li ng-show="task.tags" class="inline-tags">{{ _('Tags:')}}</li>
