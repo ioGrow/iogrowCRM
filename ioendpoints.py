@@ -3212,6 +3212,8 @@ class CrmEngineApi(remote.Service):
         else:
             sorted_by=request.sorted_by
             users=User.query().order(-User.updated_at)
+            if sorted_by=='created_at':
+                users=User.query().order(-User.created_at)
 
             list_of_reports=[]
             for user in users:
