@@ -1043,9 +1043,9 @@ $scope.selectTag= function(tag,index,$event){
     Task.list($scope,params,true);
 
  }
- $scope.assignedToMe=function(){
+ $scope.assignedToMe=function(assignedTo){
    var params = { 'order': $scope.order,
-                  'assignee' : true,
+                  'assignee' : assignedTo,
 
                   'limit':7
                 }

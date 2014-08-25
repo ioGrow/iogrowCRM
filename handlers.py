@@ -663,6 +663,10 @@ class UserListHandler(BaseHandler, SessionEnabledHandler):
 class UserNewHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/admin/users/user_new.html')
+
+class UserShowHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/admin/users/user_show.html')
 class GroupListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/admin/groups/list.html')
@@ -1386,6 +1390,7 @@ routes = [
     # Admin Console Views
     ('/views/admin/users/list',UserListHandler),
     ('/views/admin/users/new',UserNewHandler),
+    ('/views/admin/users/show',UserShowHandler),
     ('/views/admin/groups/list',GroupListHandler),
     ('/views/admin/groups/show',GroupShowHandler),
     ('/views/admin/settings',settingsShowHandler),
