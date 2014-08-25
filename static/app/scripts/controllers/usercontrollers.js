@@ -675,13 +675,16 @@ app.controller('UserShowCtrl', ['$scope','$route', '$filter','Auth','Task','User
 
      $scope.listTasks=function(effects){
       $scope.selected_tasks=[];/*we have to change it */
-      var params = { 'order': $scope.order,
-                        'limit':7}
+      var tasks_params = { 
+                              'order': $scope.order,
+                              'assignee' : $route.current.params.userGID,
+                              'status':'open'
+                            }
         if (effects){
-          Task.list($scope,params,effects);
+          Task.list($scope,tasks_params,effects);
         }
         else{
-          Task.list($scope,params);
+          Task.list($scope,tasks_params);
         }
 
      }
@@ -899,12 +902,20 @@ $scope.selectTag= function(tag,index,$event){
 
   }
  $scope.allTasks=function(){
-   var params = { 'order': $scope.order,
+      $scope.selected_tasks=[];/*we have to change it */
+      var tasks_params = { 
+                              'order': $scope.order,
+                              'assignee' : $route.current.params.userGID,
+                              'status':'open'
+                            }
+        if (effects){
+          Task.list($scope,tasks_params,effects);
+        }
+        else{
+          Task.list($scope,tasks_params);
+        }
 
-                        'limit':7}
-          Task.list($scope,params,true);
-
- }
+     }
  $scope.createdByMe=function(owner){
     var params = {
                 'order': $scope.order,
