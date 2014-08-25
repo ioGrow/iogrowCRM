@@ -61,7 +61,7 @@ class TaskRequest(messages.Message):
     status = messages.StringField(4)
     tags = messages.StringField(5,repeated = True)
     owner = messages.StringField(6)
-    assignee = messages.BooleanField(7)
+    assignee = messages.StringField(7)
     about = messages.StringField(8)
     urgent = messages.BooleanField(9)
 
@@ -290,7 +290,8 @@ class Task(EndpointsModel):
                         if not Edge.find(start_node=task.key,kind='tags',end_node_set=end_node_set,operation='AND'):
                             is_filtered = False
                     if request.assignee and is_filtered:
-                        end_node_set = [user_from_email.key]
+                        user_assigned = model.User.get_by_gid(request.assignee)
+                        end_node_set = [user_assigned.key]
                         if not Edge.find(start_node=task.key,kind='assignees',end_node_set=end_node_set,operation='AND'):
                             is_filtered = False
                     if request.owner and task.owner!=request.owner and is_filtered:
