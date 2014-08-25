@@ -82,7 +82,7 @@ class Task(EndpointsModel):
     title = ndb.StringProperty()
     due = ndb.DateTimeProperty()
     status = ndb.StringProperty()
-    completed_by = ndb.StructuredProperty(Userinfo)
+    completed_by = ndb.StringProperty()
     involved_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
     involved_ids = ndb.StringProperty(repeated=True)
     # number of comments in this topic
@@ -560,6 +560,8 @@ class Task(EndpointsModel):
             task.title = request.title
         if request.status:
             task.status = request.status
+            if task.status =='closed':
+                task.completed_by = user_from_email.google_user_id
         if request.due and task.due == None :
             task.due = datetime.datetime.strptime(request.due,"%Y-%m-%dT%H:%M:00.000000")
             taskqueue.add(
