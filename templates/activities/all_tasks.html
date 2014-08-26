@@ -214,12 +214,13 @@
                                   <li class="labelsCardElement taskCard list-group-item" ng-show="showTagsFilter">
                                       <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
                                       <ul class="list-group tags-list">
-                                      <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
+                                      <li ng-repeat="tag_item in tags innerTagItem" class="list-group-item tags-list-item"  >
                                         <div class="row">
                                           <span  ng-drag="dragTag(tag_item)" draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
+                                            <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-left: 3px;" class="customCheck" ng-checked="isSelected()">
                                               <%= tag_item.name %>
                                           </span>
-                                           <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
+                                           
                                           <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
                                             <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
                                           </form>
@@ -294,7 +295,7 @@
                                                 <%= task_tag.name %>
                                             </span>
                                             <span ng-repeat="assignee in task.assignees" class="pull-right">
-                                               <a href="#"> @<%= assignee.display_name %></a>
+                                               <a href="/#/admin/users/show/<%= assignee.google_user_id %>"> @<%= assignee.display_name %></a>
                                                <img alt="" src="<%= assignee.photo%>" class="user-photo" />
                                             </span>
                                         </div>
