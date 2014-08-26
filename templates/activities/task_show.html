@@ -337,17 +337,18 @@
 
     </div>
     <!-- tasks cards -->
-<div class="col-md-3 tasks-col">
+<div class="col-md-3 tasks-col hidden-sm hidden-xs " >
   <div class="row">
     <div class="col-md-12">
         <div class="portlet showCard">
             <div class="portlet-title line">
-              <div class="caption">
-               <!-- <i class="icon-user"></i>{{ _('Who\'s involved')}}-->
+              <div class="caption">               
+                  {{ _("Add Tasks directly from Gmail")}}              
               </div>
             </div>
             <div class="portlet-body">
-            
+              <input type="submit" onclick="chrome.webstore.install()"  class="btn blue btn-block pull-right" value="Install chrome extension" style="padding-left:5px;padding-right:5px;">
+              <div class="clearfix"></div>
             </div>
         </div>
     </div>
