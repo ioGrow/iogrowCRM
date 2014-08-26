@@ -19,22 +19,19 @@
   </h2>
 </div>
   <div class=" subHeaderContent">
-            <div class="pull-right sharebuttonDiv">
-
-                  <button class="btn red jfk-button jfk-button-action" ng-click="save(account)">
-                    Create
-                  </button>
-            </div>
+    <div class="col-md-9">
                   <h2 class="page-title">
-            <a href="/#/accounts" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
-            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Accounts")}} > <%= account.name %>  </h2>
+            <a href="/#/opportunities" data-toggle="tooltip" data-placement="bottom" title="Back to Accounts">
+            <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Opportunities")}} > <%= opportunity.name %>  </h2>
+            <button class="btn red newAccountBtnOnscroll pull-right hidden" ng-click="save(opportunity)">{{ _('Create')}}</button>
+  </div>
   </div>
 </div>
 <div  class="page-content">
   <div class="loader-container row" ng-show="isLoading">
         <div class="loader-dialog col-md-4 col-md-offset-4 ">
           <div class="loader-content">
-            Loading...
+            {{_('Loading...')}}
           </div>
         </div>
 
@@ -42,7 +39,7 @@
 
   <div class="" ng-show="immediateFailed">
      <div class="col-md-12">
-      <h1>Sign-in Button;</h1>
+      <h1>{{_('Sign-in Button;')}}</h1>
           <span id="signin">
               <span id="myGsignin"></span>
           </span>
@@ -52,96 +49,285 @@
 
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-       <div class="showPage newPage col-md-9 margin-bottom-15">
-                     <div class="row">
+      <div class="col-md-9">
+      <div class="row">
+          <div class="showPage col-md-12 newActionsBtn">
+          <span>{{_('Create Opportunity')}} </span>
+          <button class="btn red newAccountBtn pull-right" ng-click="save(opportunity)">{{_('Create')}}</button>
+          <div class="clearfix"></div>
+        </div>
+       <div class="showPage slimForm col-md-12 margin-bottom-15">
+            <div class="row">
+            <div class="col-md-12">
+            <div class="row">
               <div class="col-md-12">
               <!-- BEGIN PORTLET-->
+              <form class="form-horizontal ">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <input autofocus ng-model="opportunity.name" placeholder="{{_('Type here the opportunity name...')}}" type="text" class="form-control" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+              <!-- BEGIN PORTLET-->
+              <form class="form-horizontal ">
+
               <div class="row">
-                    <div class="col-md-3">
-                    <!-- BEGIN PORTLET-->
-                      <div class="portlet">
+                  <div class="col-md-6">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <div class="col-md-7 sm-margin-bottom-15 ">
+                                  <input type="text" required id="id_name" class="form-control" placeholder="{{_('Opportunity amount...')}}" ng-model="opportunity.amount_per_unit ">
+                               </div>
+                              <div class="col-md-5 ">
+                               <select  class="form-control" ng-model="opportunity.currency">
+                                <option value="USD" selected>$ - USD</option>
+                                <option value="EUR">€ - EUR</option>
+                                <option value="CAD">$ - CAD</option>
+                                <option value="GBP">£ - GBP</option>
+                                <option value="AUD">$ - AUD</option>
+                                <option value="">---</option>
+                                <option value="AED">د.إ - AED</option>
+                                <option value="ANG">ƒ - ANG</option>
+                                <option value="AOA">AOA - AOA</option>
+                                <option value="ARS">$ - ARS</option>
+                                <option value="BAM">KM - BAM</option>
+                                <option value="BBD">$ - BBD</option>
+                                <option value="BGL">лв - BGL</option>
+                                <option value="BHD">BD - BHD</option>
+                                <option value="BND">$ - BND</option>
+                                <option value="BRL">R$ - BRL</option>
+                                <option value="BTC">฿ - BTC</option>
+                                <option value="CHF">Fr - CHF</option>
+                                <option value="CLF">UF - CLF</option>
+                                <option value="CLP">$ - CLP</option>
+                                <option value="CNY">¥ - CNY</option>
+                                <option value="COP">$ - COP</option>
+                                <option value="CRC">₡ - CRC</option>
+                                <option value="CZK">Kč - CZK</option>
+                                <option value="DKK">kr - DKK</option>
+                                <option value="EEK">KR - EEK</option>
+                                <option value="EGP">E£ - EGP</option>
+                                <option value="FJD">FJ$ - FJD</option>
+                                <option value="GTQ">Q - GTQ</option>
+                                <option value="HKD">$ - HKD</option>
+                                <option value="HRK">kn  - HRK</option>
+                                <option value="HUF">Ft - HUF</option>
+                                <option value="IDR">Rp - IDR</option>
+                                <option value="ILS">₪ - ILS</option>
+                                <option value="INR">₨ - INR</option>
+                                <option value="IRR">ریال - IRR</option>
+                                <option value="ISK">kr - ISK</option>
+                                <option value="JOD">د.ا - JOD</option>
+                                <option value="JPY">¥ - JPY</option>
+                                <option value="KES">KSh - KES</option>
+                                <option value="KRW">₩ - KRW</option>
+                                <option value="KWD">KD - KWD</option>
+                                <option value="KYD">$ - KYD</option>
+                                <option value="LTL">Lt - LTL</option>
+                                <option value="LVL">Ls - LVL</option>
+                                <option value="MAD">د.م. - MAD</option>
+                                <option value="MVR">Rf - MVR</option>
+                                <option value="MXN">$ - MXN</option>
+                                <option value="MYR">RM - MYR</option>
+                                <option value="NGN">₦ - NGN</option>
+                                <option value="NOK">kr - NOK</option>
+                                <option value="NZD">$ - NZD</option>
+                                <option value="OMR">ر.ع - OMR</option>
+                                <option value="PEN">S/. - PEN</option>
+                                <option value="PHP">₱ - PHP</option>
+                                <option value="PLN">zł - PLN</option>
+                                <option value="QAR">ر.ق - QAR</option>
+                                <option value="RON">L - RON</option>
+                                <option value="RUB">руб. - RUB</option>
+                                <option value="SAR">ر.س - SAR</option>
+                                <option value="SEK">kr - SEK</option>
+                                <option value="SGD">$ - SGD</option>
+                                <option value="THB">฿ - THB</option>
+                                <option value="TRY">TL - TRY</option>
+                                <option value="TTD">$ - TTD</option>
+                                <option value="TWD">$ - TWD</option>
+                                <option value="UAH">₴ - UAH</option>
+                                <option value="VEF">Bs F - VEF</option>
+                                <option value="VND">₫ - VND</option>
+                                <option value="XCD">$ - XCD</option>
+                                <option value="ZAR">R - ZAR</option>
+                                <option value="DZD">د.ج - DZD</option>
+                              </select>
+                              </div>
+                            </div>
+                          </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-7 ">
+                                    <select   class="form-control" ng-model="opportunity.duration_unit">
+                                        <option value="fixed">{{_('Fixed bid')}}</option>
+                                        <option value="hour">{{_('Per hour')}}</option>
+                                        <option value="month">{{_('Per month')}}</option>
+                                        <option value="year">{{_('Per year')}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-5 ">
+                                   <input ng-hide="opportunity.duration_unit=='fixed'" type="text" pattern="\d*"  required id="" class="form-control" ng-model="opportunity.duration">
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                  </div>
 
-                        <div class="portlet-body left-sidebar" id="chats">
-                          <div class="pic">
-                              <img alt="<%=account.name%>" ng-src="<%=imageSrc%>" class="img-responsive img-thumbnail">
-                         </div>
-                          <a ng-click="createPickerUploader()" href="" class="btn btn-default btn-upload" data-toggle="modal">
-                                <img src="/static/img/upload_logo.png" >
-                          </a>
+                  <div class="col-md-6">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <div class="col-md-12">
+                                 <input type="text" required  ng-model="searchAccountQuery" typeahead="accountResult as accountResult.name  for accountResult in accountsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectAccount()" class="form-control" placeholder="{{_('Account')}}">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                  </div>
+                  <div class="col-md-6">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <div class="col-md-12">
+                                <input type="text" required ng-model="searchContactQuery" typeahead="contactResult as contactResult.firstname + ' '+  contactResult.lastname for contactResult in contactsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectContact()" class="form-control" placeholder="{{_('Contact')}}">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                  </div>
 
+                  </div>
+
+              </div>
+              </div>
+              <div class="row">
+                         <div class="col-md-6">
+
+                               <div class="news-blocks blank-card blank-card-yellow">
+                                <h3>{{ _('Opportunity Stage') }}</h3>
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <div class="form-group">
+
+                                        <div class="">
+                                          <select ng-model="initialStage" ng-options="opps as opps.name + ' - ( ' + opps.probability + '% )'   for opps in opportunitystages track by opps.probability" class="form-control selector-margin" >
+
+                                          </select>
+                                        </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <p>{{ _('Estimated closed date') }}:</p>
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <datetimepick on-change="test()" ng-model='opportunity.closed_date' class="" label-format='EEEE, MMMM d, yyyy'></datetimepick>
+                                        </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+
+                              </div>
+                              <div class="news-blocks blank-card blank-card-bluep">
+                               <h3>{{ _('Custom Fields') }}</h3>
+
+                               <ul class="list-unstyled contact-infos" >
+                                   <li ng-show="showCustomFieldForm">
+                                         <div class="row">
+                                           <form class="form-inline newLeadForm" role="form">
+                                             <div class="form-group sm-group" style="">
+                                               <label class="sr-only" for="exampleInputEmail2">{{_('Field')}}</label>
+                                               <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="{{_('Enter field name')}}">
+                                             </div>
+                                             <div class="form-group sm-group" style="">
+                                               <label class="sr-only" for="exampleInputEmail2">{{_('Value')}}</label>
+                                               <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="{{_('Enter a value')}}">
+                                             </div>
+                                              <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(customfield,customfields)">{{_('Add')}}</button>
+                                               <button type="submit" class="btn btn-default" ng-click="showCustomFieldForm=false">X</button>
+                                           </form>
+                                         </div>
+                                   </li>
+                                   <li ng-repeat="custom in customfields" class="newItems"  >
+                                   <span>
+                                   <%= custom.field%>  : <%= custom.value%>
+                                   <a id="custom_<%=$index%>" href="" ng-click="pullElement($index,custom,customfields)" class="removeItem">x</a>
+                                   </span>
+
+                                   </li>
+                                   <li><a ng-click="showCustomFieldForm=true" ng-hide="showCustomFieldForm"class="btn-link addAnotherPhone" data-toggle="modal"><i class="icon-plus"></i> {{_('Add a new custom field')}} </a></li>
+
+                               </ul>
+
+                             </div>
+
+
+                          </div>
+
+              <div class="col-md-6">
+                  <div class="news-blocks blank-card blank-card-red">
+                    <h3>{{_('Opportunity Informations')}}</h3>
+
+                    <div class="news-block-tags">
+                      <div class="form-group row">
+                        <label class="control-label col-md-3">{{_('Description')}}</label>
+                        <div class="col-md-9">
+                          <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="opportunity.description"></textarea>
                         </div>
                       </div>
-
-
-                    <!-- END PORTLET-->
-                  </div>
-                  <div class="col-md-9">
-                      <form class="form-horizontal ">
-                          <div class="row">
-                          <div class="col-md-12">
-
-                            <div class="form-group">
-                              <label class="control-label col-md-2">Name</label>
-                              <div class="col-md-10">
-                                <input autofocus ng-model="account.name" placeholder="{{_('Type here the company name of your customer,parnter...')}}" type="text" class="form-control">
-                              </div>
-                            </div>
-                          </div>
+                    </div>
+                    <div class="news-block-tags">
+                      <div class="form-group row">
+                        <label class="control-label col-md-3">{{_('Competitors')}}</label>
+                        <div class="col-md-9">
+                          <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="opportunity.competitor"></textarea>
                         </div>
-                         <div class="row">
-                          <div class="col-md-6">
-                            <div class="form-group">
-                              <label class="control-label col-md-4">Type</label>
-                              <div class="col-md-8">
-                               <select value="Customer" ng-model="account.account_type" class="form-control">
-                                <option value="Competitor">Competitor</option><option value="Customer">Customer</option><option value="Distributor">Distributor</option><option value="Integrator">Integrator</option><option value="Investor">Investor</option><option value="Partner">Partner</option><option value="Press">Press</option><option value="Prospect">Prospect</option><option value="Reseller">Reseller</option><option value="Supplier">Supplier</option><option value="Vendor">Vendor</option><option value="Other">Other</option></select>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-group">
-                              <label class="control-label col-md-4">Industry</label>
-                              <div class="col-md-8">
-                                <select ng-model="account.industry" class="form-control">
-                                 <option value="">--None--</option><option value="Agriculture">Agriculture</option><option value="Apparel">Apparel</option><option value="Banking">Banking</option><option value="Biotechnology">Biotechnology</option><option value="Chemicals">Chemicals</option><option value="Communications">Communications</option><option value="Construction">Construction</option><option value="Consulting">Consulting</option><option value="Education">Education</option><option value="Electronics">Electronics</option><option value="Energy">Energy</option><option value="Engineering">Engineering</option><option value="Entertainment">Entertainment</option><option value="Environmental">Environmental</option><option value="Finance">Finance</option><option value="Food &amp; Beverage">Food &amp; Beverage</option><option value="Government">Government</option><option value="Healthcare">Healthcare</option><option value="Hospitality">Hospitality</option><option value="Insurance">Insurance</option><option value="Machinery">Machinery</option><option value="Manufacturing">Manufacturing</option><option value="Media">Media</option><option value="Not For Profit">Not For Profit</option><option value="Recreation">Recreation</option><option value="Retail">Retail</option><option value="Shipping">Shipping</option><option value="Technology">Technology</option><option value="Telecommunications">Telecommunications</option><option value="Transportation">Transportation</option><option value="Utilities">Utilities</option><option value="Other">Other</option></select>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </form>
+                      </div>
+                    </div>
                   </div>
               </div>
+              </div>
 
-
-                      
-
+            </div>
+            </div>
+            </div>
             </div>
        </div>
-
-            </div>
               <div class="col-md-3 ">
                   <div class="row">
                     <div class="col-md-12">
                       <!-- BEGIN PORTLET-->
                       <div class="portlet showPage rightCardContent">
                         <div class="portlet-title line">
-                          <div class="caption"><i class="fa fa-lock"></i>Who can access ?</div>
+                          <div class="caption"><i class="fa fa-lock"></i>{{_('Who can access ?')}}</div>
 
                         </div>
                         <div class="portlet-body" id="chats">
                                   <label class="radio line inbox-label">
                                         <input type="radio" value="public" ng-model="account.access" />
-                                        public: Anyone within your organization can access and find
+                                        {{_('public: Anyone within your organization can access and find')}}
                                   </label>
                                   <label class="radio line inbox-label">
                                         <input type="radio"  value="private" ng-model="account.access" />
-                                        private: only you and your collaborators
+                                        {{_('private: only you and your collaborators')}}
                                   </label>
                         </div>
                       </div>
                     </div>
                   </div>
               </div>
+            </div>
+
         <!-- END PAGE CONTENT-->
       </div>
 
@@ -189,7 +375,7 @@
                      </div>
               </div>
               <div class="modal-footer">
-                  <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">{{_('Cancel')}}</button>
 
                   <input  type="submit" ng-click="pushElement(address,addresses)" class="btn green" value="Add this address">
                   <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
@@ -269,10 +455,4 @@
       <!-- END PAGE CONTAINER-->
 </div>
 <script type="text/javascript">
-  $(function() {
-    $('#datetimepicker2').datetimepicker({
-      language: 'fr',
-      pickTime: false
-    });
-  });
 </script>
