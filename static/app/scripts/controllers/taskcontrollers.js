@@ -19,6 +19,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      $scope.task={};
      $scope.user = undefined;
      $scope.slected_memeber = undefined;
+     $scope.slected_members = [];
      $scope.role= 'participant';
      $scope.taskShow=true;
 
@@ -30,6 +31,22 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
           User.list($scope,{});
            var varTagname = {'about_kind':'Task','limit':1};
           Tag.list($scope,varTagname);
+     };
+     $scope.assigneeModal = function(){
+        $('#assigneeModal').modal('show');
+      };
+     $scope.selectnewMember = function(){
+      if ($scope.slected_members.indexOf($scope.user) == -1) {
+         $scope.slected_members.push($scope.user);
+         $scope.slected_memeber = $scope.user;
+         $scope.user = $scope.slected_memeber.google_display_name;
+      }
+      $scope.user='';
+     };
+
+     $scope.unselectMember =function(index){
+         $scope.slected_members.splice(index, 1);
+          console.log($scope.slected_members);
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -92,6 +109,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      };
 
      $scope.edgeInserted = function () {
+      console.log('edge inserted');
        var taskid = {'id':$route.current.params.taskId};
           Task.get($scope,taskid);
      }
@@ -108,7 +126,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
         var due_date = $filter('date')(newValue,['yyyy-MM-ddTHH:mm:00.000000']);
         var params = {
                     'id':$scope.task.id,
-                    'due':due_date
+                    'due':due_dateF
         };
         console.log(due_date)
           Task.patch($scope,params);
@@ -166,9 +184,28 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
 
       // ask before delete task hadji hicham . 08-07-2014 .
        $scope.editbeforedelete = function(){
-     $('#BeforedeleteTask').modal('show');
-   };
-
+         $('#BeforedeleteTask').modal('show');
+       };
+      $scope.addNewContributors = function(){
+        items = [];
+        angular.forEach($scope.slected_members, function(selected_user){
+              var edge = {
+                'start_node': $scope.task.entityKey,
+                'end_node': selected_user.entityKey,
+                'kind':'assignees',
+                'inverse_edge': 'assigned_to'
+              };
+              console.log(edge);
+              items.push(edge);
+        });
+        if (items){
+          params = {
+            'items': items
+          }
+          Edge.insert($scope,params);
+        }
+       $('#assigneeModal').modal('hide');
+      };
    // delete task  hadji hicham  08-07-2014 .
    $scope.deleteTask = function(){
 

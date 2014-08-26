@@ -276,12 +276,6 @@
                                       <p class="col-md-11 col-md-offset-1 list-group-item-text">
                                          <span ng-show="task.created_by">{{ _('Opened by:')}}<a href="#"> <%= task.created_by.display_name %></a></span>
                                           <span ng-show="task.about">{{ _('related to') }}<a href="<%= getUrl(task.about.kind,task.about.id); %>"> <%= task.about.name %></a> </span>
-                                          <span ng-show="deletetask">
-                                             <!-- to delete task -->
-                                                <a  ng-click="deleteThisTask(task.entityKey)" class="btn-link addAnotherPhone"><i class="icon-trash"></i>
-                                             </a>
-                                           <!-- end  -->
-                                          </span>
                                       </p>
                                       </div>
                                   </li>
@@ -964,6 +958,7 @@
                         </a>
                       </div>
                     </div>
+                    </form>
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
@@ -971,7 +966,7 @@
                 <input ng-hide="isLoading" ng-click="addNewContributors()" type="submit" class="btn green" value="{{ _('Assign') }}">
                 <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
               </div>
-               </form>
+               
                </div>
                </div>
                 </div>
