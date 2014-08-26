@@ -50,8 +50,8 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
 
      // What to do after authentication
      $scope.runTheProcess = function(){
-          
-          Discover.get($scope);
+          $scope.tweets={};
+          Discover.get_recent_tweets($scope);
 
           var paramsTag = {'about_kind':'topics'};
         Tag.list($scope,paramsTag);
@@ -82,15 +82,16 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
                           'name': tag.name,
                           'about_kind':'topics',
                           'color':tag.color.color
-                      }  ;
+                      };
        Tag.insert($scope,params);
         $scope.tag.name='';
         $scope.tag.color= {'name':'green','color':'#BBE535'};
         var paramsTag = {'about_kind':'topics'};
-        
+        for (i = 0; i < 250; i++) {
+          console.log("sssses");
+        }
         $scope.tweets={};
-        Discover.get($scope);
-        Tag.list($scope,paramsTag);
+        $scope.runTheProcess();
         console.log($scope.tag);
      }
      $scope.updateTag = function(tag){
@@ -106,11 +107,17 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
           }
           Tag.delete($scope,params);
           $scope.tweets={};
-          Discover.get($scope);
+          Discover.get_recent_tweets($scope);
 
       };
 
+  $scope.popular_tweets=function(){
+         $scope.tweets={};
+         Discover.get_best_tweets($scope);
 
+          var paramsTag = {'about_kind':'topics'};
+        Tag.list($scope,paramsTag);   
+        }
 
 $scope.selectTag= function(tag,index,$event){
           
@@ -165,8 +172,7 @@ $scope.selectTag= function(tag,index,$event){
         $scope.tweets=$scope.tweetsFromApi;
        }
         
-        
-       console.log("ooooooooooo");
+      
        console.log($scope.tweets);
   };
 

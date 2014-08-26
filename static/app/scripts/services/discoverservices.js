@@ -32,7 +32,7 @@ discoverservices.factory('Discover', function($http) {
   }
 
 
-  Discover.get = function($scope) {
+  Discover.get_best_tweets = function($scope) {
         //var keywords=["android","mobile"];
         var keyw={"value":"android"};
         $scope.keywords=keyw.value;
@@ -40,11 +40,10 @@ discoverservices.factory('Discover', function($http) {
         //console.log(keywords);
           gapi.client.crmengine.twitter.get_best_tweets(keyw).execute(function(resp) {
             if(!resp.code){
-               //$scope.user = resp;
-               //console.log("eeeeeeeeeeeeee");
                $scope.tweetsFromApi=resp.items;
                $scope.tweets=resp.items;
-               //console.log($scope.tweets);
+               console.log($scope.tweets);
+               console.log("bestttttt");
                // Call the method $apply to make the update on the scope
                $scope.$apply();
             }else {
@@ -57,6 +56,32 @@ discoverservices.factory('Discover', function($http) {
             console.log('gapi #end_execute');
           });
   };
+
+  Discover.get_recent_tweets = function($scope) {
+        //var keywords=["android","mobile"];
+
+        var keyw={"value":"android"};
+        $scope.keywords=keyw.value;
+        console.log($scope.keywords);
+        //console.log(keywords);
+          gapi.client.crmengine.twitter.get_recent_tweets(keyw).execute(function(resp) {
+            if(!resp.code){
+               $scope.tweetsFromApi=resp.items;
+               $scope.tweets=resp.items;
+               console.log($scope.tweets);
+               // Call the method $apply to make the update on the scope
+               $scope.$apply();
+            }else {
+               if(resp.code==401){
+                $scope.refreshToken();
+                $scope.isLoading = false;
+                $scope.$apply();
+               };
+            }
+            console.log('gapi #end_execute');
+          });
+  };
+
 
  
 

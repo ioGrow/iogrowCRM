@@ -22,8 +22,8 @@
       <div class="col-md-10 col-xs-12 filter-content">
       <div class="filterOptions">
 
-          <span role="button" class="filterItem" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">{{ _('Recent')}} <span class="hidden-xs hiddenOnxs">{{ _('Posts')}}</span> </span>
-          <span role="button" class="filterItem" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">{{ _('Popular')}} <span class="hidden-xs hiddenOnxs">{{ _('Posts')}}</span></span>
+          <span role="button" class="filterItem" ng-click="runTheProcess();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">{{ _('Recent')}} <span class="hidden-xs hiddenOnxs">{{ _('Posts')}}</span> </span>
+          <span role="button" class="filterItem" ng-class="{activeFilter: selectedOption =='my'}" ng-click="popular_tweets();selectedOption ='my'">{{ _('Popular')}} <span class="hidden-xs hiddenOnxs">{{ _('Posts')}}</span></span>
 
           
             <div class="btn-group visibleOnPhone">
@@ -129,21 +129,7 @@
         </div>
         
         <div ng-repeat="tweet in tweets" droppable  id="card_<%=$index%>"class="cardElement" ng-drop="dropTag(lead,$index)" ng-mouseenter="showClose= true" ng-mouseleave="showClose = false" style="z-index:109;overflow: visible;">
-        <div class="btn-group inCardOptionsBtn">
-            <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
-             <i class="fa fa-ellipsis-vertical"></i>
-            </button>
-            <ul class="dropdown-menu drp-dwn-right " role="menu">
-              <li>
-               <a href="" ng-click="showAssigneeTags(lead)">
-                   <i class='fa fa-tags'></i>{{_('Add topics')}} </a>
-              </li>
-              <li>
-               <a href="" ng-click="editbeforedelete(lead)">
-                   <i class='fa fa-trash-o'></i> {{_('Delete')}} </a>
-              </li>
-            </ul>
-          </div>
+       
           <div class="detailsSection">
             <div class="head">
               <div class="pic">
