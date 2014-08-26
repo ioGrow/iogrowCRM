@@ -1101,7 +1101,6 @@ $scope.selectTag= function(tag,index,$event){
 
  }
  $scope.filterByAssignee=function(id){
-  console.log("wooooooooooooork2");
    var params = { 'order': $scope.order,
                   'assignee' : id
                 }
