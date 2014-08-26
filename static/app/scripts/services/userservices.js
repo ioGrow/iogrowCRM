@@ -33,6 +33,8 @@ accountservices.factory('User', function($http) {
           gapi.client.crmengine.users.customer(id).execute(function(resp) {
             if(!resp.code){
                $scope.user = resp;
+               $scope.loadCharges=false;
+
 
               $scope.purchase($scope.user);
                // Call the method $apply to make the update on the scope

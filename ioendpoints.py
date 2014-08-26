@@ -2788,11 +2788,25 @@ class CrmEngineApi(remote.Service):
     def Customer(self,request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         cust=stripe.Customer.retrieve(request.id)
+        charges_list=stripe.Charge.all(customer=request.id)
+        subscriptions_list=cust.subscriptions.all()
+        print "************************************"
+        print subscriptions_list
+        print "**************************************"
+        charges=[]
+        for charge in charges_list.data:
+            kwargscharge={
+               "id":charge.id,
+               "amount":str(charge.amount)
+               }
+            charges.append(kwargscharge)
+
         kwargs = {
                "customer_id":cust.id,
                "email":cust.email,
                "google_public_profile_photo_url":cust.metadata.google_public_profile_photo_url,
-               "google_display_name":cust.metadata.google_display_name
+               "google_display_name":cust.metadata.google_display_name,
+               "charges":charges
                  }
         #user=User.query().filter(User.id==my_model.id).get()
 
@@ -3426,6 +3440,6 @@ class CrmEngineApi(remote.Service):
                        currency="usd",
                        customer=cust.id,
                        description="Charge for  "+ request.token_email)
-
+        cust.subscriptions.create(plan="iogrow_plan")
         return BillingResponse(response=token) 
 
