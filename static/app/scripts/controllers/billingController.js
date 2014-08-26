@@ -20,7 +20,7 @@ app.controller('BillingListController', ['$scope','$route', 'Auth','Search','Use
      $scope.pages = [];
      
      $scope.users = [];
-    
+ 
     // What to do after authentication
       $scope.runTheProcess = function(){
     
@@ -114,14 +114,14 @@ app.controller('BillingShowController', ['$scope','$route', 'Auth','Search','Use
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      //
-     $scope.isContentLoaded = true;
+     
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
      $scope.pagination = {};
      $scope.currentPage = 01;
      $scope.pages = [];
-     
+     $scope.loadCharges=true;
      $scope.users = [];
     
     // What to do after authentication

@@ -69,6 +69,7 @@
 
                                             <a href="<%=user.google_public_profile_photo_url%>" class="">
                                                 <img alt="<%= user.google_display_name%>" src="<%=user.google_public_profile_photo_url%>" class="img-responsive profile-photo-large-billing-show" >
+
                                                 <span>
                                                   <%=user.google_display_name%>
                                                 </span>
@@ -86,7 +87,7 @@
                             </div>
                             <div class="col-md-12">
                                  <span class=" pull-right"  >
-               <button id="customButton" class="btn red newBtn">Purchase</button>                                      <!-- 
+               <button id="customButton" class="btn red newBtn" ng-disabled="isLicensed">Purchase</button>                                      <!-- 
                                               <form action="/paying" method="POST" id="BillingForm">
                                       <script
     src="https://checkout.stripe.com/checkout.js" class="stripe-button"
@@ -105,6 +106,45 @@
                 </div>
             </div>
 
+  <!-- be careful her where the charges will appear -->
+  <!-- begin -->
+        <div class="row">
+            <div class="col-md-12">
+                                <ul class="list-charge-group">
+                              
+                                    <!-- here all the charges will appear -->
+                                    <!-- here -->
+                             <li  ng-repeat="charge in user.charges" class="taskCard list-group-item" droppable ng-drop="dropTag(task)" id="task_<%=$index%>" title="<%= task.status_label %>" style="border-left: 3px solid <%= task.status_color%>;"  ng-mouseover="deletetask=true" ng-init="deletetask=false" ng-mouseleave="deletetask=false">
+
+                                     <div class="row">
+   
+                                       <h4   class="col-md-6 col-xs-10 list-group-item-heading"
+                                       >
+                                          <a href="/#/tasks/show/<%= task.id %>"> <%= charge.amount %></a>
+                                          <%=task.due%>
+                                       </h4>
+
+
+ 
+                                    </div>
+ 
+                                  </li>
+                                  <li class="taskCard list-group-item cardElement loaderCard" ng-show="loadCharges">
+                                            <div   data-span="all">
+                                      <div class="loaderCardContent">
+                                      <img class="img-responsive " src="/static/img/gloader.gif">
+                                       <span>  Loading...</span>
+                                         </div>
+                                            </div>
+                                  </li>
+                                    <!-- end -->
+       
+
+                                </ul>
+                              </div>
+
+        </div>
+ <!-- end -->
            
         </div>
         
