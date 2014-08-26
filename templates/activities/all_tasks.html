@@ -109,156 +109,31 @@
                   <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;allTasks();">{{ _("All Tasks") }}</a></li>
                   <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;urgentTasks();" >{{ _("Urgent Tasks") }}</a></li>
                   <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;createdByMe('{{ME}}');">{{ _("Created by Me") }}</a></li>
-                  <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;assignedToMe('{{ME}}');">{{ _("Assigned to Me") }}</a></li>
                   <li class="dropdown ng-tab sm-menu active" id="header_task_bar">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" ng-class="{active: selectedTab == 4}" data-hover="dropdown" data-close-others="true">
-                     {{ _("Assigned to Me") }}
+                     {{ _("Assignees") }}
                     </a>
                     <ul class="dropdown-menu extended tasks">
                       <li>
                         <p>
-                          You have 12 pending tasks
+                          {{ _("Filter by assignee ")}} 
                         </p>
                       </li>
                       <li>
                         <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 250px;"><ul class="dropdown-menu-list scroller" style="height: 250px; overflow: hidden; width: auto;">
-                          <li>
-                            <a href="#">
-                            <span class="task">
-                              <span class="desc">
-                                New release v1.2
-                              </span>
-                              <span class="percent">
-                                30%
-                              </span>
-                            </span>
-                            <span class="progress">
-                              <span style="width: 40%;" class="progress-bar progress-bar-success" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
-                                <span class="sr-only">
-                                  40% Complete
+                          <li ng-repeat="user in users">
+                            <a ng-click="filterByAssignee(user.google_user_id);">
+                              <span class="task">
+                                <span class="desc">
+                                  <%=user.google_display_name%>
                                 </span>
                               </span>
-                            </span>
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#">
-                            <span class="task">
-                              <span class="desc">
-                                Application deployment
-                              </span>
-                              <span class="percent">
-                                65%
-                              </span>
-                            </span>
-                            <span class="progress progress-striped">
-                              <span style="width: 65%;" class="progress-bar progress-bar-danger" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">
-                                <span class="sr-only">
-                                  65% Complete
-                                </span>
-                              </span>
-                            </span>
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#">
-                            <span class="task">
-                              <span class="desc">
-                                Mobile app release
-                              </span>
-                              <span class="percent">
-                                98%
-                              </span>
-                            </span>
-                            <span class="progress">
-                              <span style="width: 98%;" class="progress-bar progress-bar-success" aria-valuenow="98" aria-valuemin="0" aria-valuemax="100">
-                                <span class="sr-only">
-                                  98% Complete
-                                </span>
-                              </span>
-                            </span>
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#">
-                            <span class="task">
-                              <span class="desc">
-                                Database migration
-                              </span>
-                              <span class="percent">
-                                10%
-                              </span>
-                            </span>
-                            <span class="progress progress-striped">
-                              <span style="width: 10%;" class="progress-bar progress-bar-warning" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
-                                <span class="sr-only">
-                                  10% Complete
-                                </span>
-                              </span>
-                            </span>
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#">
-                            <span class="task">
-                              <span class="desc">
-                                Web server upgrade
-                              </span>
-                              <span class="percent">
-                                58%
-                              </span>
-                            </span>
-                            <span class="progress progress-striped">
-                              <span style="width: 58%;" class="progress-bar progress-bar-info" aria-valuenow="58" aria-valuemin="0" aria-valuemax="100">
-                                <span class="sr-only">
-                                  58% Complete
-                                </span>
-                              </span>
-                            </span>
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#">
-                            <span class="task">
-                              <span class="desc">
-                                Mobile development
-                              </span>
-                              <span class="percent">
-                                85%
-                              </span>
-                            </span>
-                            <span class="progress progress-striped">
-                              <span style="width: 85%;" class="progress-bar progress-bar-success" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100">
-                                <span class="sr-only">
-                                  85% Complete
-                                </span>
-                              </span>
-                            </span>
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#">
-                            <span class="task">
-                              <span class="desc">
-                                New UI release
-                              </span>
-                              <span class="percent">
-                                18%
-                              </span>
-                            </span>
-                            <span class="progress progress-striped">
-                              <span style="width: 18%;" class="progress-bar progress-bar-important" aria-valuenow="18" aria-valuemin="0" aria-valuemax="100">
-                                <span class="sr-only">
-                                  18% Complete
-                                </span>
-                              </span>
-                            </span>
                             </a>
                           </li>
                         </ul><div class="slimScrollBar" style="background-color: rgb(161, 178, 189); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; z-index: 99; right: 1px; height: 171.23287671232876px; background-position: initial initial; background-repeat: initial initial;"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; background-color: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px; background-position: initial initial; background-repeat: initial initial;"></div></div>
                       </li>
                       <li class="external">
-                        <a href="#">See all tasks <i class="m-icon-swapright"></i></a>
+                        <a href="#">Add new user <i class="m-icon-swapright"></i></a>
                       </li>
                     </ul>
                 </li>

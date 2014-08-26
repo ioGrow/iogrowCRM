@@ -1100,11 +1100,10 @@ $scope.selectTag= function(tag,index,$event){
     Task.list($scope,params,true);
 
  }
- $scope.assignedToMe=function(){
+ $scope.filterByAssignee=function(id){
+  console.log("wooooooooooooork2");
    var params = { 'order': $scope.order,
-                  'assignee' : true,
-
-                  'limit':7
+                  'assignee' : id
                 }
     Task.list($scope,params,true);
 
