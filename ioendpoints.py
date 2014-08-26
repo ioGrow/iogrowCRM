@@ -113,6 +113,7 @@ DISCUSSIONS = {
                         },
                 'Note': {
                             'title': 'discussion',
+
                             'url':  '/#/notes/show/'
                         }
         }
@@ -3426,6 +3427,16 @@ class CrmEngineApi(remote.Service):
                        currency="usd",
                        customer=cust.id,
                        description="Charge for  "+ request.token_email)
+        print "//////////////////////////////////////////////////////////////"
+        cust.subscriptions.create(plan="iogrow_plan")
+        sub=cust.subscriptions
+        print "*******************************************************************"
+        datetime.datetime.fromtimestamp(
+        int("1284101485")
+        ).strftime('%Y-%m-%d %H:%M:%S')
+        print sub[0]
+
+
 
         return BillingResponse(response=token) 
 

@@ -152,7 +152,9 @@ class Organization(ndb.Model):
                             "google_public_profile_photo_url":admin.google_public_profile_photo_url,
                             "google_user_id":admin.google_user_id}
                  )
+        cust.subscriptions.create(plan="iogrow_plan")
         admin.stripe_id=cust.id
+
         admin.put()
         created_tabs = []
         for tab in STANDARD_TABS:
