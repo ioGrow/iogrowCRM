@@ -1,25 +1,27 @@
 import json
 from iomodels.crmengine.accounts import Account,AccountInsertRequest
 from iomodels.crmengine.contacts import Contact,ContactInsertRequest
+from iomodels.crmengine.leads import Lead,LeadInsertRequest
 from iomodels.crmengine.opportunities import Opportunity,OpportunityInsertRequest
 from iomodels.crmengine.opportunitystage import Opportunitystage
 import iomessages
 """
-name = messages.StringField(1)
-    stage = messages.StringField(3)
-    account = messages.StringField(4)
-    contact = messages.StringField(5)
-    access = messages.StringField(6)
-    opportunity_type = messages.StringField(7)
-    duration =  messages.IntegerField(8)
-    duration_unit  = messages.StringField(9)
-    currency = messages.StringField(10)
-    amount_per_unit = messages.IntegerField(11)
-    amount_total = messages.IntegerField(12)
-    closed_date = messages.StringField(13)
-    competitor = messages.StringField(14)
-    description = messages.StringField(15)
-    infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema,16,repeated=True)
+firstname = messages.StringField(1)
+    lastname = messages.StringField(2)
+    title = messages.StringField(4)
+    company = messages.StringField(3)
+    access = messages.StringField(5)
+    source = messages.StringField(6)
+    status = messages.StringField(7)
+    tagline = messages.StringField(8)
+    introduction = messages.StringField(9)
+    phones = messages.MessageField(iomessages.PhoneSchema,10, repeated = True)
+    emails = messages.MessageField(iomessages.EmailSchema,11, repeated = True)
+    addresses = messages.MessageField(iomessages.AddressSchema,12, repeated = True)
+    infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema,13, repeated = True)
+    profile_img_id = messages.StringField(14)
+    profile_img_url = messages.StringField(15)
+    industry = messages.StringField(16)
 """
  
 class SfImporterHelper():
@@ -181,3 +183,66 @@ class SfImporterHelper():
 	@classmethod
 	def import_opportunity(cls,user,opportunity_request):
 		return Opportunity.insert(user,opportunity_request)
+
+	# leads
+	@classmethod
+	def import_leads(cls,user,http,sf_objects):
+		print 'i will get the list of available leads'
+		sf_objects['Lead']={}
+		r,c = http.request("https://na12.salesforce.com/services/data/v29.0/query?q=SELECT+Id+from+Lead")
+		results = json.loads(c)
+		for record in results['records']:
+			print 'i want to get the details of Lead number ' + record['Id']
+			r,c = http.request("https://na12.salesforce.com/services/data/v29.0/sobjects/Lead/"+record['Id'])
+			sf_lead = json.loads(c)
+			lead_request = cls.get_lead_schema(sf_lead,sf_objects)
+			imported_lead = cls.import_lead(user,lead_request)
+			sf_objects['Lead'][record['Id']]=imported_lead.entityKey
+	
+	@classmethod
+	def get_lead_schema(cls,sf_lead,sf_objects):
+		empty_string = lambda x: x if x else " "
+		phones = []
+		print '*************Lead Schema***********'
+		print sf_lead.keys()
+		if sf_lead['Phone']:
+			phones.append(iomessages.PhoneSchema(
+												type='work',
+												number=sf_lead['Phone']
+    											)
+						)
+		if sf_lead['MobilePhone']:
+			phones.append(iomessages.PhoneSchema(
+												type='mobile',
+												number=sf_lead['MobilePhone']
+    											)
+						)
+		if sf_lead['Fax']:
+			phones.append(iomessages.PhoneSchema(
+												type='fax',
+												number=sf_lead['Fax']
+    											)
+						)
+		lead_schema = LeadInsertRequest(
+    										firstname=empty_string(sf_lead['FirstName']),
+    										lastname=empty_string(sf_lead['LastName']),
+    										access = 'public',
+    										company = sf_lead['Company'],
+    										title = sf_lead['Title'],
+    										introduction = sf_lead['Description'],
+    										phones = phones,
+    										# addresses = [iomessages.AddressSchema(
+    										# 									country=sf_lead['MailingCountry']
+    										# 									),
+    										# 			iomessages.AddressSchema(
+    										# 									country=sf_lead['OtherCountry']
+    										# 									)
+    										# 			],
+    										emails = [iomessages.EmailSchema(
+    																		email=sf_lead['Email']
+    																		)]
+    										)
+		return lead_schema
+	@classmethod
+	def import_lead(cls,user,lead_request):
+		return Lead.insert(user,lead_request)
