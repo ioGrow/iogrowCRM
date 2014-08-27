@@ -599,7 +599,6 @@ class Opportunity(EndpointsModel):
                     access = request.access,
                     name = request.name,
                     opportunity_type = request.opportunity_type,
-                    amount_total = request.amount_total,
                     amount_per_unit = request.amount_per_unit,
                     duration = request.duration,
                     duration_unit = request.duration_unit,
@@ -608,7 +607,10 @@ class Opportunity(EndpointsModel):
                     competitor = request.competitor,
                     description = request.description
                     )
-        print opportunity
+        if request.amount_total:
+            opportunity.amount_total = int(request.amount_total)
+        else:
+            opportunity.amount_total = 0
         opportunity_key = opportunity.put_async()
         opportunity_key_async = opportunity_key.get_result()
         # taskqueue.add(
