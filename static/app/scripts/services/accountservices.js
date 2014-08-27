@@ -33,27 +33,7 @@ accountservices.factory('Account', function($http) {
 
 
     Account.get = function($scope, params) {
-        console.log("acccsssssssssssssssssssss");
-        console.log(params);
-        
-        //console.log(keywords);
-          gapi.client.crmengine.twitter.get_best_tweets("keyw").execute(function(resp) {
-            if(!resp.code){
-               //$scope.user = resp;
-               console.log("eeeeeeeeeeeeee");
-
-               console.log(resp);
-               // Call the method $apply to make the update on the scope
-               $scope.$apply();
-            }else {
-               if(resp.code==401){
-                $scope.refreshToken();
-                $scope.isLoading = false;
-                $scope.$apply();
-               };
-            }
-            console.log('gapi #end_execute');
-          });
+       
         gapi.client.crmengine.accounts.getv2(params).execute(function(resp) {
             if (!resp.code) {
                 $scope.account = resp;
