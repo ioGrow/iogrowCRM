@@ -432,6 +432,8 @@ class OrganizationResponse(messages.Message):
 class BillingRequest(messages.Message):
      token_id=messages.StringField(1)
      token_email=messages.StringField(2)
+     customer_id=messages.StringField(3)
+
 class BillingResponse(messages.Message):
      response=messages.StringField(2)
 
@@ -2788,9 +2790,37 @@ class CrmEngineApi(remote.Service):
             raise endpoints.NotFoundException('User not found ')
         return user
      # hadji hicham 11/08/2014. get user by id   
+<<<<<<< HEAD
     @User.method(user_required=True,
                   http_method='GET', path='users/{id}', name='users.get')
     def User_get(self,my_model):
+=======
+    @endpoints.method(iomessages.customerRequest,iomessages.customerResponse,
+                  http_method='GET', path='users/{id}', name='users.customer')
+    def Customer(self,request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        cust=stripe.Customer.retrieve(request.id)
+        charges_list=stripe.Charge.all(customer=request.id)
+        subscriptions_list=cust.subscriptions.all()
+        print "************************************"
+        print subscriptions_list
+        print "**************************************"
+        charges=[]
+        for charge in charges_list.data:
+            kwargscharge={
+               "id":charge.id,
+               "amount":str(charge.amount)
+               }
+            charges.append(kwargscharge)
+
+        kwargs = {
+               "customer_id":cust.id,
+               "email":cust.email,
+               "google_public_profile_photo_url":cust.metadata.google_public_profile_photo_url,
+               "google_display_name":cust.metadata.google_display_name,
+               "charges":charges
+                 }
+>>>>>>> 712e1857391b68aae03fb59ce5afe56c29cf04d0
         #user=User.query().filter(User.id==my_model.id).get()
         if not my_model.from_datastore:
             raise endpoints.NotFoundException('User not found ')
@@ -3418,13 +3448,24 @@ class CrmEngineApi(remote.Service):
         #the key represent the secret key which represent our company  , server side , we have two keys 
         # test "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF", mode dev 
         # live "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA" , mode prod 
-        stripe.api_key ="sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
         token = request.token_id
+<<<<<<< HEAD
         #customers=stripe.Customer.all()
         print "*-*-*-*-*-*-*-*-*-*-"
         print stripe.Customer.all()
         print "*-*-*-**-*-*-*-*-*-*-"
   
 
+=======
+        cust=stripe.Customer.retrieve(request.customer_id)
+        cust.card=token
+        cust.save()
+        charge=stripe.Charge.create(
+                       amount=2000,
+                       currency="usd",
+                       customer=cust.id,
+                       description="Charge for  "+ request.token_email)
+        cust.subscriptions.create(plan="iogrow_plan")
+>>>>>>> 712e1857391b68aae03fb59ce5afe56c29cf04d0
         return BillingResponse(response=token) 
 
