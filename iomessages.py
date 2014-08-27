@@ -69,9 +69,20 @@ class InvitedUserSchema(messages.Message):
     # nmbrOfLicenses= messages.StringField(5)
 class customerRequest(messages.Message):
       id=messages.StringField(1)
+
+# hadji hicham . 25/08/2014 . charges Schema.
+class chargeSchema(messages.Message): 
+      id=messages.StringField(1)
+      date=messages.StringField(2)
+      amount=messages.StringField(3)
+      status=messages.StringField(4)
+
 class customerResponse(messages.Message):
-      google_public_profile_photo_url=messages.StringField(1)
-      google_display_name=messages.StringField(2)
+      customer_id=messages.StringField(1)
+      email=messages.StringField(2)
+      google_public_profile_photo_url=messages.StringField(3)
+      google_display_name=messages.StringField(4)
+      charges=messages.MessageField(chargeSchema,5,repeated=True)
 
 class UserListSchema(messages.Message):
     items = messages.MessageField(UserSchema, 1, repeated=True)
