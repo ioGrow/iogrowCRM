@@ -4,24 +4,20 @@ from iomodels.crmengine.contacts import Contact,ContactInsertRequest
 from iomodels.crmengine.leads import Lead,LeadInsertRequest
 from iomodels.crmengine.opportunities import Opportunity,OpportunityInsertRequest
 from iomodels.crmengine.opportunitystage import Opportunitystage
+from iomodels.crmengine.opportunitystage import Opportunitystage
+from iomodels.crmengine.cases import Case,CaseInsertRequest
+from iomodels.crmengine.casestatuses import Casestatus
+
 import iomessages
 """
-firstname = messages.StringField(1)
-    lastname = messages.StringField(2)
-    title = messages.StringField(4)
-    company = messages.StringField(3)
-    access = messages.StringField(5)
-    source = messages.StringField(6)
-    status = messages.StringField(7)
-    tagline = messages.StringField(8)
-    introduction = messages.StringField(9)
-    phones = messages.MessageField(iomessages.PhoneSchema,10, repeated = True)
-    emails = messages.MessageField(iomessages.EmailSchema,11, repeated = True)
-    addresses = messages.MessageField(iomessages.AddressSchema,12, repeated = True)
-    infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema,13, repeated = True)
-    profile_img_id = messages.StringField(14)
-    profile_img_url = messages.StringField(15)
-    industry = messages.StringField(16)
+name = messages.StringField(1)
+    priority = messages.IntegerField(2)
+    status = messages.StringField(3)
+    account = messages.StringField(4)
+    contact = messages.StringField(5)
+    access = messages.StringField(6)
+    infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema,7,repeated=True)
+    description = messages.StringField(8)
 """
  
 class SfImporterHelper():
@@ -246,3 +242,52 @@ class SfImporterHelper():
 	@classmethod
 	def import_lead(cls,user,lead_request):
 		return Lead.insert(user,lead_request)
+
+	# cases
+	@classmethod
+	def import_cases(cls,user,http,sf_objects):
+		print 'i will get the list of available cases'
+		sf_objects['Case']={}
+		sf_objects['CaseStatus']={}
+		r,c = http.request("https://na12.salesforce.com/services/data/v29.0/query?q=SELECT+Id+from+Case")
+		results = json.loads(c)
+		for record in results['records']:
+			print 'i want to get the details of Case number ' + record['Id']
+			r,c = http.request("https://na12.salesforce.com/services/data/v29.0/sobjects/Case/"+record['Id'])
+			sf_case = json.loads(c)
+			case_request = cls.get_case_schema(sf_case,sf_objects,user)
+			imported_case = cls.import_case(user,case_request)
+			sf_objects['Case'][record['Id']]=imported_case.entityKey
+
+	@classmethod
+	def get_case_schema(cls,sf_case,sf_objects,user):
+		empty_string = lambda x: x if x else " "
+		case_schema = CaseInsertRequest(
+    										name = '[#'+ sf_case['CaseNumber']+'] ' +empty_string(sf_case['Subject']),
+    										description=sf_case['Description']
+    										)
+		status_name = sf_case['Status']
+		if status_name in sf_objects['CaseStatus'].keys():
+			status_key = sf_objects['CaseStatus'][status_name]
+		else:
+			new_status = Casestatus(
+										owner=user.google_user_id,
+										organization = user.organization,
+										status=status_name
+										)
+			new_status_async = new_status.put_async()
+			status_key = new_status_async.get_result()
+        	sf_objects['CaseStatus'][status_name]=status_key
+		case_schema.status = status_key.urlsafe()
+		if sf_case['ContactId']:
+			case_schema.contact = sf_objects['Contact'][sf_case['ContactId']]
+		if sf_case['Priority']=='High':
+			case_schema.priority = 10
+		elif sf_case['Priority']=='Medium':
+			case_schema.priority = 5
+		else:
+			case_schema.priority = 1
+		return case_schema
+	@classmethod
+	def import_case(cls,user,case_request):
+		return Case.insert(user,case_request)

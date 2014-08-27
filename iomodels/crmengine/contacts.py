@@ -747,11 +747,11 @@ class Contact(EndpointsModel):
         #                     'id':contact_schema.id
         #                     }
         #             )
-        taskqueue.add(
-                            url='/workers/get_from_linkedin',
-                            queue_name='iogrow-low',
-                            params={'entityKey' :contact_key_async.urlsafe()}
-                        )
+        # taskqueue.add(
+        #                     url='/workers/get_from_linkedin',
+        #                     queue_name='iogrow-low',
+        #                     params={'entityKey' :contact_key_async.urlsafe()}
+        #                 )
         # taskqueue.add(
         #                 url='/workers/get_from_twitter',
         #                 params={'entityKey': contact_key_async.urlsafe()}

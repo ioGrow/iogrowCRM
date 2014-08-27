@@ -726,10 +726,11 @@ class SalesforceImporterCallback(BaseHandler, SessionEnabledHandler):
                 http = httplib2.Http()
                 credentials.authorize(http)
                 sf_objects={}
-                # SfImporterHelper.import_accounts(user,http,sf_objects)
-                # SfImporterHelper.import_contacts(user,http,sf_objects)
+                SfImporterHelper.import_accounts(user,http,sf_objects)
+                SfImporterHelper.import_contacts(user,http,sf_objects)
                 # SfImporterHelper.import_opportunities(user,http,sf_objects)
-                SfImporterHelper.import_leads(user,http,sf_objects)
+                SfImporterHelper.import_cases(user,http,sf_objects)
+                # SfImporterHelper.import_leads(user,http,sf_objects)
 
 
 
