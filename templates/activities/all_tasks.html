@@ -109,7 +109,7 @@
                   <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;allTasks();">{{ _("All Tasks") }}</a></li>
                   <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;urgentTasks();" >{{ _("Urgent Tasks") }}</a></li>
                   <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;createdByMe('{{ME}}');">{{ _("Created by Me") }}</a></li>
-                  <li class="dropdown ng-tab sm-menu active" id="header_task_bar">
+                  <li class="dropdown ng-tab sm-menu" id="header_task_bar">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" ng-class="{active: selectedTab == 4}" data-hover="dropdown" data-close-others="true">
                      {{ _("Assignees") }}
                     </a>
@@ -133,10 +133,50 @@
                         </ul><div class="slimScrollBar" style="background-color: rgb(161, 178, 189); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; z-index: 99; right: 1px; height: 171.23287671232876px; background-position: initial initial; background-repeat: initial initial;"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; background-color: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px; background-position: initial initial; background-repeat: initial initial;"></div></div>
                       </li>
                       <li class="external">
-                        <a href="#">Add new user <i class="m-icon-swapright"></i></a>
+                        <a href="" ng-click="gotoNewUser()">Add new user <i class="m-icon-swapright"></i></a>
                       </li>
                     </ul>
                 </li>
+                 <li class="dropdown ng-tab sm-menu" id="header_task_bar">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" ng-class="{active: selectedTab == 5}" data-hover="dropdown" data-close-others="true">
+                     {{ _("Sort by") }}
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 90px;">
+                            <ul class="dropdown-menu-list scroller">
+                              <li>
+                                <a ng-click="filterByAssignee(user.google_user_id);">
+                                  <span class="task">
+                                    <span class="desc">
+                                      {{ _("Title")}}
+                                    </span>
+                                  </span>
+                                </a>
+                              </li>
+                              <li>
+                                <a ng-click="filterByAssignee(user.google_user_id);">
+                                  <span class="task">
+                                    <span class="desc">
+                                      {{ _("Created date")}}
+                                    </span>
+                                  </span>
+                                </a>
+                              </li>
+                              <li>
+                                <a ng-click="filterByAssignee(user.google_user_id);">
+                                  <span class="task">
+                                    <span class="desc">
+                                      {{ _("Due date")}}
+                                    </span>
+                                  </span>
+                                </a>
+                              </li>
+                            </ul>
+                            <div class="slimScrollBar" style="background-color: rgb(161, 178, 189); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; z-index: 99; right: 1px; height: 171.23287671232876px; background-position: initial initial; background-repeat: initial initial;"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; background-color: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px; background-position: initial initial; background-repeat: initial initial;"></div></div>
+                       </li>
+                    </ul>
+                 </li>
                   <li class="ng-tab sm-menu hidden-lg hidden-md"><a ng-click="showTagFilterCard();">{{ _("Filter by Tags") }}</a></li>                   
                   <li class="dropdown sm-menu-inv">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -214,7 +254,7 @@
                                   <li class="labelsCardElement taskCard list-group-item" ng-show="showTagsFilter">
                                       <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
                                       <ul class="list-group tags-list">
-                                      <li ng-repeat="tag_item in tags innerTagItem" class="list-group-item tags-list-item"  >
+                                      <li ng-repeat="tag_item in tags" class="innerTagItem list-group-item tags-list-item"  >
                                         <div class="row">
                                           <span  ng-drag="dragTag(tag_item)" draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
                                             <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-left: 3px;" class="customCheck" ng-checked="isSelected()">
@@ -227,7 +267,7 @@
                                           <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
                                         </div>
                                       </li>
-                                      <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTagForm()">
+                                      <li class="innerTagItem list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTagForm()">
                                         <a ng-click="" class="btn-link addAnotherPhone">
                                           <i class="fa fa-tags"></i>  Add a new label
                                         </a>
