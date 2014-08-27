@@ -13,7 +13,7 @@ app.run(function(editableOptions) {
 app.config(['$routeProvider', function($routeProvider) {
      $routeProvider.
      // Accounts
-     when('/discovers/', {
+     when('/discoveries/', {
         controller: 'DiscoverListCtrl',
         templateUrl:'/views/discovers/list'
       }).

@@ -33,6 +33,9 @@ accountservices.factory('User', function($http) {
           gapi.client.crmengine.users.customer(id).execute(function(resp) {
             if(!resp.code){
                $scope.user = resp;
+               console.log("****************************")
+               console.log(resp.subscriptions)
+               console.log("*****************************")
                $scope.loadCharges=false;
 
 
@@ -205,11 +208,15 @@ User.get_user_by_gid=function($scope,params){
 
 // hadji hicham 10/08/2014 --  get organization info 
 User.get_organization=function($scope,params){
+
    gapi.client.crmengine.users.get_organization(params).execute(function(resp) {
       
          if(!resp.code){
             $scope.organizationInfo=resp ;
-            console.log($scope.organizationInfo);
+            console.log("***************************************");
+            console.log(resp);
+            console.log("****************************************")
+            $scope.purchaseLiseneces(resp);  
 
           $scope.isLoading = false;
          }else{

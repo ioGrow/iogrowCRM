@@ -136,6 +136,9 @@ def LISTING_QUERY(query, access, organization, owner, collaborators, order):
                                    )
                         ).order(order)
 
+#the key represent the secret key which represent our company  , server side , we have two keys 
+# test "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF", mode dev 
+# live "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA" , mode prod 
 # hadji hicham  20/08/2014. our secret api key to auth at stripe .
 stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
 
@@ -427,13 +430,16 @@ class OrganizationRquest(messages.Message):
 class OrganizationResponse(messages.Message):
       organizationName=messages.StringField(1)
       organizationNumberOfUser=messages.StringField(2)
-      organizationNumberOfLicensed=messages.StringField(3)
+      organizationNumberOfLicense=messages.StringField(3)
+      licenses=messages.MessageField(LicenseSchema,4,repeated=True)
 
 #hadji hicham . 17/08/2014 . 
 class BillingRequest(messages.Message):
      token_id=messages.StringField(1)
      token_email=messages.StringField(2)
      customer_id=messages.StringField(3)
+     organization=messages.StringField(4)
+     organizationKey=messages.StringField(5)
 
 class BillingResponse(messages.Message):
      response=messages.StringField(2)
@@ -2790,23 +2796,24 @@ class CrmEngineApi(remote.Service):
         cust=stripe.Customer.retrieve(request.id)
         charges_list=stripe.Charge.all(customer=request.id)
         subscriptions_list=cust.subscriptions.all()
-        print "************************************"
-        print subscriptions_list
-        print "**************************************"
-        charges=[]
-        for charge in charges_list.data:
-            kwargscharge={
-               "id":charge.id,
-               "amount":str(charge.amount)
+        
+        subscriptions=[]            
+        for subscription in subscriptions_list.data:
+            kwargsubscription={
+               "id":subscription.id,
+               "current_period_start":datetime.datetime.fromtimestamp(int(subscription.current_period_start)).strftime('%Y-%m-%d %H:%M:%S'),
+               "current_period_end":datetime.datetime.fromtimestamp(int(subscription.current_period_end)).strftime('%Y-%m-%d %H:%M:%S'),
+               "status":str(subscription.status),
+               "plan":subscription.plan.name
                }
-            charges.append(kwargscharge)
+            subscriptions.append(kwargsubscription)
 
         kwargs = {
                "customer_id":cust.id,
                "email":cust.email,
                "google_public_profile_photo_url":cust.metadata.google_public_profile_photo_url,
                "google_display_name":cust.metadata.google_display_name,
-               "charges":charges
+               "subscriptions":subscriptions
                  }
         #user=User.query().filter(User.id==my_model.id).get()
 
@@ -3402,17 +3409,28 @@ class CrmEngineApi(remote.Service):
         organization_Key=ndb.Key(urlsafe=request.organization)
         organization=organization_Key.get()
         Users= User.query().filter(User.organization==organization_Key).fetch()
-        NmbrOfLicensed=0 
-        for user in Users :
-            # start_node=user.key
-            edge=Edge.query().filter(Edge.start_node==user.key and Edge.kind=="licenses").fetch()
-            if edge:
-                NmbrOfLicensed=NmbrOfLicensed+1
+        licenses=[]
+        licenses_list= License.query().filter(License.organization==organization_Key).fetch()
+        for license in licenses_list:
+            kwargs={
+                   'id':str(license.id),
+                   'entityKey':license.entityKey,
+                   'organization':license.organization.urlsafe(),
+                   'amount':str(license.amount),
+                   'purchase_date':license.purchase_date.isoformat(),
+                   'who_purchased_it':license.who_purchased_it
+            }
+
+            licenses.append(kwargs)
 
         userslenght=len(Users)
+        licenselenght=len(licenses_list)
         response={ 'organizationName':organization.name,
                    'organizationNumberOfUser': str(userslenght),
-                   'organizationNumberOfLicensed':str(NmbrOfLicensed)} 
+                   'organizationNumberOfLicense':str(licenselenght),
+                   'licenses':licenses
+
+                   } 
         return OrganizationResponse(**response)
 
     # *************** the licenses apis ***************************
@@ -3425,12 +3443,9 @@ class CrmEngineApi(remote.Service):
                             user_from_email = user_from_email,
                             request = request
                             )
-
-    @endpoints.method(BillingRequest,BillingResponse,path='billing/purchase',http_method='POST',name="billing.purchase")
-    def purchase(self,request):
-        #the key represent the secret key which represent our company  , server side , we have two keys 
-        # test "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF", mode dev 
-        # live "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA" , mode prod 
+    # hadji hicham 26/08/2014. purchase license for user.
+    @endpoints.method(BillingRequest,BillingResponse,path='billing/purchase_user',http_method='POST',name="billing.purchase_lisence_for_user")
+    def purchase_lisence_for_user(self,request):
         token = request.token_id
         cust=stripe.Customer.retrieve(request.customer_id)
         cust.card=token
@@ -3442,4 +3457,21 @@ class CrmEngineApi(remote.Service):
                        description="Charge for  "+ request.token_email)
         cust.subscriptions.create(plan="iogrow_plan")
         return BillingResponse(response=token) 
-
+    # hadji hicham 26/08/2014 . purchase license for the company.
+    @endpoints.method(BillingRequest,LicenseSchema,path='billing/purchase_org',http_method='POST',name="billing.purchase_lisence_for_org")
+    def purchase_lisence_for_org(self,request):
+        #the key represent the secret key which represent our company  , server side , we have two keys 
+        # test "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF", mode dev 
+        # live "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA" , mode prod 
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        token = request.token_id
+        charge=stripe.Charge.create(
+                       amount=2000,
+                       currency="usd",
+                       card=token,
+                       description="license for the organization  "+request.organization)
+        return License.insert(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
+    # hadji hicham 26/08/2014 . 

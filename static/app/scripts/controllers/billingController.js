@@ -5,7 +5,7 @@ app.controller('BillingListController', ['$scope','$route', 'Auth','Search','Use
    $("#id_Billing").addClass("active");
 
   
-     $scope.organization_key=document.getElementById('organization_key').value;
+  $scope.organization_key=document.getElementById('organization_key').value;
 
 
      $scope.isSignedIn = false;
@@ -30,9 +30,54 @@ app.controller('BillingListController', ['$scope','$route', 'Auth','Search','Use
            var params = {'limit':7};
           //User.list_licenses($scope,params);
           User.Customers($scope,params);
-
+        
        };
   
+
+// function for purchase lisenece .
+$scope.purchaseLiseneces=function(organization){
+// the key represent the public key which represent our company  , client side , we have two keys 
+// test  "pk_test_4Xa35zhZDqvXz1OzGRWaW4mX", mode dev 
+// live "pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD", mode prod 
+
+  var handler = StripeCheckout.configure({
+
+    key: 'pk_test_4Xa35zhZDqvXz1OzGRWaW4mX',
+    image:"/static/img/IO_Grow.png",
+    token: function(token) {
+  console.log();
+
+    var params={'token_id':token.id,
+                'token_email':token.email, 
+                "organization":organization.organizationName,
+                "organizationKey":$scope.organization_key
+              }
+
+   gapi.client.crmengine.billing.purchase_lisence_for_org(params).execute(function(resp) {
+            if(!resp.code){
+
+                  
+                 console.log(resp);
+                
+            }
+
+            });
+      // Use the token to create the charge with a server-side script.
+      // You can access the token ID with `token.id`
+    }
+  });
+
+  document.getElementById('customButton').addEventListener('click', function(e) {
+    // Open Checkout with further options
+    handler.open({
+      name: organization.organizationName,
+      description: 'bay a license $20.00',
+      amount: 2000
+    });
+    e.preventDefault();
+  });
+
+}
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
           Auth.refreshToken();
@@ -129,7 +174,7 @@ app.controller('BillingShowController', ['$scope','$route', 'Auth','Search','Use
     
               var params={'id':$route.current.params.userId};
              
-              User.customer($scope, params)
+              User.customer($scope, params);
               
           //  var params={'organization':$scope.organization_key
           //              }
@@ -156,7 +201,7 @@ app.controller('BillingShowController', ['$scope','$route', 'Auth','Search','Use
                 'token_email':token.email, 
                 'customer_id':user.customer_id
               }
-   gapi.client.crmengine.billing.purchase(params).execute(function(resp) {
+   gapi.client.crmengine.billing.purchase_lisence_for_user(params).execute(function(resp) {
             if(!resp.code){
                  console.log(resp);
             }

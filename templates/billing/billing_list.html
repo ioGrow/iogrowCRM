@@ -53,7 +53,8 @@
   </div>
   <div class="row" ng-show="isSignedIn">
     <div class="col-md-9">
-       <a class="btn red newBtn" href="/#/admin/users/new" >
+
+       <a class="btn red newBtn"  id="customButton" href="" >
                       {{_('Purchase license')}}    
                     </a>
 
@@ -86,13 +87,7 @@
                       Status: <%= user.status %>
                     </span>
                     <br>
-                    <span>
-                      Licenses: <%= user.nmbrOfLicenses %>
-                    </span>
-                  <br>
-                  <span>
-                      License Status: <%= user.LicenseStatus %>
-                    </span>
+              
 
 
                   </div>
@@ -142,6 +137,46 @@
     </div>
     </div>
   </div>
+
+  <!-- here where we find the license  -->
+  <div class="row">
+    <div class="col-md-3">
+         <div class="portlet showPage rightCardContent">
+                <div class="portlet-title line">
+                  <div class="caption"> <i class="fa fa-check"></i>{{ _('Licenses')}} </div>
+
+                </div>
+                <div class="newContactform portlet-body" id="chats">
+                   <ul id="tasks" class="list-unstyled lead_related_events" ng-hide="newEventform">
+                      <li ng-repeat="license in organizationInfo.licenses" id="event_<%=$index%>" class="relatedEventItem" ng-mouseenter="showDeleteBtn = true" ng-mouseleave="showDeleteBtn = false">
+                        <div class="event-container">
+                          <div class="showDescription">
+                            <span class="relatedEventTitle">
+                               <a href="/#/tasks/show/<%=task.id%>" class="discussion-content">
+                                 <%= task.title%>
+                               </a>
+                            </span>
+                            <a class="pull-right relatedEventMoreBtn">
+                              <i class="fa fa-chevron-right" ng-hide="showDetails" ng-click="showDetails=true"></i>
+                              <i class="fa fa-chevron-down" ng-show="showDetails" ng-click="showDetails=false"></i>
+                            </a>
+                            <a class="pull-left relatedEventDeleteBtn" ng-show="showDeleteBtn" ng-click="deleteTask(task)">
+                              <i class="fa fa fa-times-circle"></i>
+                            </a>
+                            <span class="relatedEventStartsAt pull-right" ng-hide="showDetails" ng-show="task.due" title="<%= task.due| date:'yyyy-MM-dd '%>">
+                                  <%= task.due | date:'dd MMM'%>
+                            </span>
+                          </div>
+                         
+                        </div>
+                      </li>
+                  </ul>
+
+                </div>
+              </div>
+    </div>
+  </div>
+  <!-- -->
 <div id="addAccountModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-dialog">
    <div class="modal-content">

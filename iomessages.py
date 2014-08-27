@@ -71,18 +71,19 @@ class customerRequest(messages.Message):
       id=messages.StringField(1)
 
 # hadji hicham . 25/08/2014 . charges Schema.
-class chargeSchema(messages.Message): 
+class subscriptionSchema(messages.Message): 
       id=messages.StringField(1)
-      date=messages.StringField(2)
-      amount=messages.StringField(3)
+      current_period_start=messages.StringField(2)
+      current_period_end=messages.StringField(3)
       status=messages.StringField(4)
+      plan=messages.StringField(5)
 
 class customerResponse(messages.Message):
       customer_id=messages.StringField(1)
       email=messages.StringField(2)
       google_public_profile_photo_url=messages.StringField(3)
       google_display_name=messages.StringField(4)
-      charges=messages.MessageField(chargeSchema,5,repeated=True)
+      subscriptions=messages.MessageField(subscriptionSchema,5,repeated=True)
 
 class UserListSchema(messages.Message):
     items = messages.MessageField(UserSchema, 1, repeated=True)
