@@ -109,7 +109,74 @@
                   <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;allTasks();">{{ _("All Tasks") }}</a></li>
                   <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;urgentTasks();" >{{ _("Urgent Tasks") }}</a></li>
                   <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;createdByMe('{{ME}}');">{{ _("Created by Me") }}</a></li>
-                  <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;assignedToMe('{{ME}}');">{{ _("Assigned to Me") }}</a></li>
+                  <li class="dropdown ng-tab sm-menu" id="header_task_bar">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" ng-class="{active: selectedTab == 4}" data-hover="dropdown" data-close-others="true">
+                     {{ _("Assignees") }}
+                    </a>
+                    <ul class="dropdown-menu extended tasks">
+                      <li>
+                        <p>
+                          {{ _("Filter by assignee ")}} 
+                        </p>
+                      </li>
+                      <li>
+                        <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 250px;"><ul class="dropdown-menu-list scroller" style="height: 250px; overflow: hidden; width: auto;">
+                          <li ng-repeat="user in users">
+                            <a ng-click="filterByAssignee(user.google_user_id);">
+                              <span class="task">
+                                <span class="desc">
+                                  <%=user.google_display_name%>
+                                </span>
+                              </span>
+                            </a>
+                          </li>
+                        </ul><div class="slimScrollBar" style="background-color: rgb(161, 178, 189); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; z-index: 99; right: 1px; height: 171.23287671232876px; background-position: initial initial; background-repeat: initial initial;"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; background-color: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px; background-position: initial initial; background-repeat: initial initial;"></div></div>
+                      </li>
+                      <li class="external">
+                        <a href="" ng-click="gotoNewUser()">Add new user <i class="m-icon-swapright"></i></a>
+                      </li>
+                    </ul>
+                </li>
+                 <li class="dropdown ng-tab sm-menu" id="header_task_bar">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" ng-class="{active: selectedTab == 5}" data-hover="dropdown" data-close-others="true">
+                     {{ _("Sort by") }}
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 90px;">
+                            <ul class="dropdown-menu-list scroller">
+                              <li>
+                                <a ng-click="filterByAssignee(user.google_user_id);">
+                                  <span class="task">
+                                    <span class="desc">
+                                      {{ _("Title")}}
+                                    </span>
+                                  </span>
+                                </a>
+                              </li>
+                              <li>
+                                <a ng-click="filterByAssignee(user.google_user_id);">
+                                  <span class="task">
+                                    <span class="desc">
+                                      {{ _("Created date")}}
+                                    </span>
+                                  </span>
+                                </a>
+                              </li>
+                              <li>
+                                <a ng-click="filterByAssignee(user.google_user_id);">
+                                  <span class="task">
+                                    <span class="desc">
+                                      {{ _("Due date")}}
+                                    </span>
+                                  </span>
+                                </a>
+                              </li>
+                            </ul>
+                            <div class="slimScrollBar" style="background-color: rgb(161, 178, 189); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; z-index: 99; right: 1px; height: 171.23287671232876px; background-position: initial initial; background-repeat: initial initial;"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; background-color: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px; background-position: initial initial; background-repeat: initial initial;"></div></div>
+                       </li>
+                    </ul>
+                 </li>
                   <li class="ng-tab sm-menu hidden-lg hidden-md"><a ng-click="showTagFilterCard();">{{ _("Filter by Tags") }}</a></li>                   
                   <li class="dropdown sm-menu-inv">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -146,34 +213,34 @@
                                        <form id="task_actions" class="form-inline" role="form">
                                        <div class="row">
                                        <label class="col-xs-1  col-md-1">
-                                           <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
+                                           <input title='{{ _("Select Task")}}' type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
                                        </label>
                                        <div class="col-xs-10  col-md-10">
-                                        <button  class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
+                                        <button  title='{{ _("Close Task")}}' class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-lock"></i>
                                           <span class="btn-text">
                                             {{ _('Close')}}
                                           </span>
                                         </button>
-                                         <button  class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
+                                         <button  title='{{ _("Reopen Task")}}' class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-unlock"></i>
                                         <span class="btn-text">
                                         {{ _('Reopen')}}
                                         </span>
                                         </button>
-                                        <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
+                                        <button title='{{ _("Add Tags")}}' ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
                                         <i class="fa fa-tags"></i>
                                          <span class="btn-text">
                                             {{ _('Tags')}}
                                          </span>
                                         </button>
-                                        <button ng-click="assigneeModal()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
+                                        <button title='{{ _("Assign someone to Task")}}' ng-click="assigneeModal()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
                                           <i class="fa fa-mail-forward"></i>
                                            <span class="btn-text">
                                             {{ _('Assignee')}}
                                            </span>
                                         </button>
-                                        <button ng-click="editbeforedelete()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
+                                        <button title='{{ _("Delete Task")}}' ng-click="editbeforedelete()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
                                           <i class="icon-trash"></i>
                                            <span class="btn-text">
                                             {{ _('Delete')}}
@@ -187,19 +254,20 @@
                                   <li class="labelsCardElement taskCard list-group-item" ng-show="showTagsFilter">
                                       <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
                                       <ul class="list-group tags-list">
-                                      <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
+                                      <li ng-repeat="tag_item in tags" class="innerTagItem list-group-item tags-list-item"  >
                                         <div class="row">
                                           <span  ng-drag="dragTag(tag_item)" draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
+                                            <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-left: 3px;" class="customCheck" ng-checked="isSelected()">
                                               <%= tag_item.name %>
                                           </span>
-                                           <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
+                                           
                                           <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
                                             <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
                                           </form>
                                           <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
                                         </div>
                                       </li>
-                                      <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTagForm()">
+                                      <li class="innerTagItem list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTagForm()">
                                         <a ng-click="" class="btn-link addAnotherPhone">
                                           <i class="fa fa-tags"></i>  Add a new label
                                         </a>
@@ -277,12 +345,6 @@
                                       <p class="col-md-11 col-md-offset-1 list-group-item-text">
                                          <span ng-show="task.created_by">{{ _('Opened by:')}}<a href="#"> <%= task.created_by.display_name %></a></span>
                                           <span ng-show="task.about">{{ _('related to') }}<a href="<%= getUrl(task.about.kind,task.about.id); %>"> <%= task.about.name %></a> </span>
-                                          <span ng-show="deletetask">
-                                             <!-- to delete task -->
-                                                <a  ng-click="deleteThisTask(task.entityKey)" class="btn-link addAnotherPhone"><i class="icon-trash"></i>
-                                             </a>
-                                           <!-- end  -->
-                                          </span>
                                       </p>
                                       </div>
                                   </li>
@@ -876,102 +938,6 @@
           </div>
           </div>
 
-            <div class="col-xs-12 col-sm-12 visible-xs visible-sm">
-           <div class="row">
-            <div class="col-md-12">
-              <div class="portlet showCard">
-                <div class="portlet-title">
-                  <div class="caption">
-                    <i class="fa fa-reorder"></i>{{ _('Tags')}}
-                  </div>
-                  <!--div class="tools">
-                      <a href="javascript:;" class="collapse">
-                      </a>
-                      <a href="#portlet-config" data-toggle="modal" class="config">
-                      </a>
-                      <a href="javascript:;" class="reload">
-                      </a>
-                      <a href="javascript:;" class="remove">
-                    </a>
-                  </div-->
-                </div>
-                <div class="portlet-body">
-                <ul class="list-group tags-list">
-                  <li  ng-repeat="tag_item in tags" class="list-group-item tags-list-item">
-                  <div class="row">
-                    <span editable-text="tag_item.name" draggable ng-drag="dragTag(tag_item)" style="background-color:<%=tag_item.color%>;color:idealTextColor(<%=tag_item.color%>);" class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"
-                    ng-model='tag_item.name'  onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)" >
-                    <%= tag_item.name %>
-
-                     </span>
-                    <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
-                   <!-- <span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
-                      <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>
-                    </span>-->
-
-                    <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
-                      <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
-                    </form>
-                    <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
-                    </div>
-                  </li>
-                  <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
-                       <a ng-click="" class="btn-link addAnotherPhone">
-                        <i class="fa fa-tags"></i>  {{ _('Add a new tag')}}</a>
-                  </li>
-
-                </ul>
-
-                <form class="well newTagForm" role="form" ng-show="showNewTag">
-                 <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
-                <div class="row">
-                  <div class="col-md-12 form-group">
-                    <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('New tag name')}}">
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-8">
-                      <!-- <input id="tag-col-pick" type="text" class="colorpicker-default form-control" value="#8fff00">-->
-                      <ul class="color_pallet_menu">
-                        <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
-                        </li>
-                      </ul>
-
-                  </div>
-                  <div class="col-md-4">
-                    <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="{{_('Add')}}">
-                    <!--input type="submit" ng-show="isLoading" class="btn green pull-right" value="{{ _('Loading...') }}"-->
-                  </div>
-                  </div>
-                </form>
-                <div class="form-group" ng-show="tags">
-                  <button class="btn btn-default btn-block" ng-click="manage_tags=!manage_tags;manage()"> {{ _('Manage Tags')}}
-                  </button>
-                </div>
-                </div>
-              </div>
-          </div>
-
-          <div class="row">
-            <div class="pagination pull-right" ng-hide="isLoading">
-
-                  <ul>
-                    <li ng-show="pagination.prev"><button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
-                    {{_("Prev")}}
-                    </button></li>
-                    <li ng-repeat="page in pagination.pages" ng-class='{active: page.isCurrent}'><a  href="#/accounts/"><%= page.id %></a></li>
-                    <li  ng-show="pagination.next"><button ng-click="listNextPageItems()"  class="btn">
-                    {{_("Next")}}
-                    </button></li>
-                  </ul>
-                </div>
-                <!--h3 class="pagination pull-right" ng-show="isLoading">{{ _('Loading') }}...</h3-->
-          </div>
-        <!-- END PAGE CONTENT-->
-      </div>
-      <!-- END PAGE CONTAINER-->
-</div>
-
 <div id="beforecloseTask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                   <div class="modal-dialog">
                     <div class="modal-content">
@@ -1034,23 +1000,42 @@
               <div class="modal-body">
                  <form id="addMember" name="addaccount" ng-submit="share(slected_memeber)" class="form-horizontal">
                     <div class=''>
-                        <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group') }}">
+                      <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email address to  assign users to thesetasks') }}">
                       <div id="assigeeList" class="list-group">
-                        <div class="invitation list-group-item" ng-repeat="selected_us in slected_members">
+                        <div class="taskAssigneList invitation list-group-item" ng-repeat="selected_us in slected_members">
                           <button type="button" class="close" ng-click="unselectMember($index)" data-dismiss="alert"></button>
-                          <img class="google-avatar" src="<%= selected_us.google_public_profile_photo_url%>"/>
-                            <strong> <%= selected_us.google_display_name %> < <%=selected_us.email%> ></strong>
+                          <div class="photo">
+                            <img class="google-avatar" src="<%= selected_us.google_public_profile_photo_url%>"/>
+                          </div>
+                          <div class="details">
+                            <p>
+                              <span>
+                                <strong> <%= selected_us.google_display_name %></strong>
+                              </span> 
+                              <span>
+                                <strong> < <%=selected_us.email%> ></strong>
+                              </span>
+                            </p>
+                          </div>
+                          <div class="clearfix"></div>
                         </div>
                       </div>
+                      <div class="newUser">
+                        <a href="" ng-click="gotoNewUser()">
+                          <i class="fa fa-user"></i>
+                          {{ _("Add new User")}} 
+                        </a>
+                      </div>
                     </div>
+                    </form>
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-                <input ng-hide="isLoading" ng-click="addNewContributors()" type="submit" class="btn green" value="{{ _('Add this account') }}">
+                <input ng-hide="isLoading" ng-click="addNewContributors()" type="submit" class="btn green" value="{{ _('Assign') }}">
                 <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
               </div>
-               </form>
+               
                </div>
                </div>
                 </div>
@@ -1058,7 +1043,7 @@
                </div>
 
        </div>
-             <div class="fixed-labelsCard visible-md visible-lg">
+         <div class="fixed-labelsCard visible-md visible-lg">
            <div class="row">
             <div class="col-md-12">
               <div class="portlet showCard">

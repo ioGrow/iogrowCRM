@@ -12,6 +12,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
      $scope.isMoreItemLoading = false;
+     $scope.isSelectedAll=false;
      $scope.leadpagination = {};
      $scope.currentPage = 01;
      $scope.pages = [];
@@ -30,7 +31,7 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
       $scope.draggedTag=null;
       $scope.tag = {};
       $scope.currentLead=null;
-
+      $scope.selected_leads=[];
       $scope.showUntag=false;
      $scope.edgekeytoDelete=undefined;
         $scope.color_pallet=[
@@ -64,7 +65,39 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
           //   }
 
         };
+        /* 
 
+        $scope.isSelected = function(index) {
+          return ($scope.selected_leads.indexOf(index) >= 0||$scope.isSelectedAll);
+        };
+        $scope.select_lead= function(lead,$index,$event){
+            var checkbox = $event.target;
+           if(checkbox.checked){
+              if ($scope.selected_leads.indexOf(lead) == -1) {
+                console.log("checked");
+                $scope.selected_leads.push(lead);
+               console.log($scope.selected_leads);
+
+             }
+           }else{
+              $scope.selected_leads.splice($scope.selected_leads.indexOf(lead), 1);
+               console.log($index);
+               console.log("unchecked");
+               console.log($scope.selected_leads);
+           }
+        }
+      $scope.select_all_tasks=function($event){
+          var checkbox = $event.target;
+           if(checkbox.checked){
+              $scope.selected_leads=[];
+               $scope.selected_leads.push($scope.leads);
+                $scope.isSelectedAll=true;
+           }else{
+            $scope.selected_leads=[];
+            $scope.isSelectedAll=false;
+            console.log($scope.selected_leads);
+           }
+      }*/
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
@@ -110,6 +143,13 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
             Lead.listMore($scope,params);
         }
       };
+      $scope.listview=function(){
+        console.log('work');
+        $('.leadElement').each(function() {
+          $( window ).trigger( 'resize' );
+        });
+        
+      }
      $scope.listPrevPageItems = function(){
 
        var prevPage = $scope.currentPage - 1;

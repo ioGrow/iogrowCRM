@@ -328,7 +328,12 @@
                                  {{ _('Estimated close date')}}
                               </div>
                               <div class="oppEstDate" >
-                                <%=opportunity.closed_date | date:'MMMM dd, yyyy'%>
+                                <span ng-hide="showStartsCalendar" ng-click="showStartsCalendar=true"><i class="fa fa-calendar"></i>
+                                <%=opportunity.closed_date | date:'yyyy-MM-dd - HH:mm:ss '%></span>
+                                <div ng-show="showStartsCalendar" class="input-icon">
+                                     <i class="fa fa-calendar"></i>
+                                     <input cusdatetimepicker data-model="opportunity.closed_date" type="text" class="form-control" placeholder="{{ _('Click to change the estimated date')}}" value="" id="leadEventStartsAt">
+                                     </div>
                               </div>
                               <span  class="margin-bottom-15">
                                 <datetimepick ng-model='opportunity.closed_date'  label-format='EEEE, MMMM d, yyyy'></datetimepick>
