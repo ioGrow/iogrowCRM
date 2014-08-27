@@ -419,8 +419,6 @@ class EndpointsHelper():
     def get_tweets(cls, keywords,order):
         list_of_tweets=[]
         for keyword in keywords:
-            print '***********'
-            print keyword
             dt = datetime.datetime.fromordinal(date.today().toordinal())
             str_date = str(dt.date())
             credentials = {
