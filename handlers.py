@@ -58,7 +58,7 @@ CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 
 SCOPES = [
-    'https://mail.google.com/ https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds'
+    'https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds'
 ]
 
 VISIBLE_ACTIONS = [
@@ -1407,7 +1407,7 @@ routes = [
     # ioGrow Live
     ('/welcome/',WelcomeHandler),
     # Authentication Handlers
-    ('/early-bird',EarlyBirdHandler),
+    ('/early-bird',SignInHandler),
     ('/start-early-bird-account',StartEarlyBird),
     ('/sign-in',SignInHandler),
     ('/sign-up',SignUpHandler),
