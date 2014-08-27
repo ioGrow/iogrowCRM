@@ -122,7 +122,7 @@
                       <li>
                         <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 250px;"><ul class="dropdown-menu-list scroller" style="height: 250px; overflow: hidden; width: auto;">
                           <li ng-repeat="user in users">
-                            <a ng-click="filterByAssignee(user.google_user_id);">
+                            <a ng-click="filterByAssignee('<%= user.google_user_id %>');">
                               <span class="task">
                                 <span class="desc">
                                   <%=user.google_display_name%>

@@ -1106,6 +1106,7 @@ $scope.selectTag= function(tag,index,$event){
                   'order': $scope.order,
                   'assignee' : id
                 }
+    console.log(params);
     Task.list($scope,params,true);
  }
  $scope.privateTasks=function(){
