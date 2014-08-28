@@ -1,3 +1,4 @@
+
 """
 
 This file is the main part of ioGrow API. It contains all request, response
@@ -3259,7 +3260,9 @@ class CrmEngineApi(remote.Service):
             for item in list_of_reports:
                 item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count_account=item[3],count_contacts=item[4],count_leads=item[5],count_tasks=item[6],created_at=item[7].isoformat(),updated_at=item[8].isoformat())
                 reporting.append(item_schema)
-            return ReportingListResponse(items=reporting)          
+
+            return ReportingListResponse(items=reporting)         
+
 
     # event permission
     @endpoints.method(EventPermissionRequest, message_types.VoidMessage,

@@ -1250,24 +1250,25 @@
                                                       <br>
                                                     </div>
                                                   </div>
- <div class="news-blocks blank-card blank-card-yellow newsCard">
-                        <h3>{{ _('Custom Fields')}}</h3>
-                        <ul class="list-unstyled contact-infos">
-                          <li ng-show="showCustomFieldForm">
-                            <div class="row">
-                              <form class="form-inline newLeadForm" role="form">
-                                <div class="form-group sm-group" style="">
-                                  <label class="sr-only" for="exampleInputEmail2">{{ _('Field')}}</label>
-                                  <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="{{ _('Enter field name')}}">
-                                </div>
-                                <div class="form-group sm-group" style="">
-                                  <label class="sr-only" for="exampleInputEmail2">{{ _('Value')}}</label>
-                                  <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="{{ _('Enter a value')}}">
-                                </div>
-                                <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="addCustomField(customfield)">{{ _('Add')}}</button>
-                                <button type="submit" class="btn btn-default" ng-click="showCustomFieldForm=false">X</button>
-                              </form>
-                            </div>                                                      </li>
+                                                  <div class="news-blocks blank-card blank-card-bluep">
+                                                    <h3>{{ _('Custom Fields') }}</h3>
+                                                    <ul class="list-unstyled contact-infos" >
+                                                      <li ng-show="showCustomFieldForm">
+                                                        <div class="row">
+                                                          <form class="form-inline newLeadForm" role="form">
+                                                            <div class="form-group sm-group" style="">
+                                                              <label class="sr-only" for="exampleInputEmail2">Field</label>
+                                                              <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.field" placeholder="Enter field name">
+                                                            </div>
+                                                            <div class="form-group sm-group" style="">
+                                                              <label class="sr-only" for="exampleInputEmail2">Value</label>
+                                                              <input type="text" class="form-control" id="exampleInputEmail2" ng-model="customfield.value" placeholder="Enter a value">
+                                                            </div>
+                                                            <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(customfield,customfields)">Add</button>
+                                                            <button type="submit" class="btn btn-default" ng-click="showCustomFieldForm=false">X</button>
+                                                          </form>
+                                                        </div>
+                                                      </li>
                                                       <li ng-repeat="custom in customfields">
                                                         <span>
                                                           <%= custom.field%>  : <%= custom.value%>
