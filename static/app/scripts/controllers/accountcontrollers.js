@@ -519,8 +519,8 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         });
 
     }]);
-app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Account', 'Contact', 'Case', 'Opportunity', 'Topic', 'Note', 'Task', 'Event', 'Permission', 'User', 'Attachement', 'Email', 'Need', 'Opportunitystage', 'Casestatus', 'Map', 'InfoNode', 'Tag',
-    function($scope, $filter, $route, Auth, Account, Contact, Case, Opportunity, Topic, Note, Task, Event, Permission, User, Attachement, Email, Need, Opportunitystage, Casestatus, Map, InfoNode, Tag) {
+app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Account', 'Contact', 'Case', 'Opportunity', 'Topic', 'Note', 'Task', 'Event', 'Permission', 'User', 'Attachement', 'Email', 'Need', 'Opportunitystage', 'Casestatus', 'Map', 'InfoNode', 'Tag','Edge',
+    function($scope, $filter, $route, Auth, Account, Contact, Case, Opportunity, Topic, Note, Task, Event, Permission, User, Attachement, Email, Need, Opportunitystage, Casestatus, Map, InfoNode, Tag, Edge) {
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Accounts").addClass("active");
 
@@ -629,6 +629,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.selectedItem={};
         $scope.relatedCase=true;
         $scope.relatedOpp=true;
+        $scope.selected_tags=[];
         // What to do after authentication
         $scope.endError = function() {
             alert("okkkkkkkkkkkkkkk");
@@ -709,6 +710,22 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             }  
           }
          }
+          $scope.addTagsTothis=function(){
+              var tags=[];
+              var items = [];
+              tags=$('#select2_sample2').select2("val");
+              console.log(tags);
+                  angular.forEach(tags, function(tag){
+                    var params = {
+                          'parent': $scope.account.entityKey,
+                          'tag_key': tag
+                    };
+                    Tag.attach($scope,params,index);
+                  });
+          };
+         $scope.edgeInserted = function() {
+          /* $scope.tags.push()*/
+          };
           $scope.hideNewContactForm=function(){
             $scope.contact={};
             $scope.showNewContact=false;
