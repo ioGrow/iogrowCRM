@@ -1307,11 +1307,6 @@ $scope.prepareInfonodes = function(){
 
         };
 
- $scope.opportunityInserted = function(resp){
-          window.location.replace('#/contacts');
-      };
-	
-	
    $scope.priorityColor=function(pri){
       if (pri<4) {
           return '#BBE535';

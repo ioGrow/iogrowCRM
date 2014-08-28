@@ -10,6 +10,7 @@ import datetime
 import time
 import re
 import jinja2
+import random
 from google.appengine._internal.django.utils.encoding import smart_str
 # Google libs
 import endpoints
@@ -40,7 +41,8 @@ from iograph import Node , Edge
 # import event . hadji hicham 09-07-2014
 from iomodels.crmengine.events import Event
 from iomodels.crmengine.tasks import Task 
-import random
+import sfoauth2
+from sf_importer_helper import SfImporterHelper
 # under the test .beata !
 import stripe
 jinja_environment = jinja2.Environment(
@@ -49,14 +51,14 @@ jinja_environment = jinja2.Environment(
 jinja_environment.install_gettext_translations(i18n)
 
 
-
+sfoauth2.SF_INSTANCE = 'na12'
 
 ADMIN_EMAILS = ['tedj.meabiou@gmail.com','hakim@iogrow.com']
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 
 SCOPES = [
-    'https://mail.google.com/ https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds'
+    'https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds'
 ]
 
 VISIBLE_ACTIONS = [
@@ -661,6 +663,10 @@ class UserListHandler(BaseHandler, SessionEnabledHandler):
 class UserNewHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/admin/users/user_new.html')
+
+class UserShowHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/admin/users/user_show.html')
 class GroupListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/admin/groups/list.html')
@@ -693,6 +699,43 @@ class BillingListHandler(BaseHandler,SessionEnabledHandler):
 class BillingShowHandler(BaseHandler,SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/billing/billing_show.html')
+
+class SalesforceImporter(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        flow = sfoauth2.SalesforceOAuth2WebServerFlow(
+            client_id='3MVG9QDx8IX8nP5SiRx6WcZGt_urvZZKtoKdTRn0h_ITamehH.ndEUTVBGZhyKJKnWdxun.jnZj0dbzCJNydO',
+            client_secret='8317004383056291259',
+            scope=['full'] ,
+            redirect_uri='http://localhost:8090/sfoauth2callback'
+        )
+        authorization_url = flow.step1_get_authorize_url()
+        self.redirect(authorization_url)
+class SalesforceImporterCallback(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+            user = self.get_user_from_session()
+            if user is not None:
+                flow = sfoauth2.SalesforceOAuth2WebServerFlow(
+                    client_id='3MVG9QDx8IX8nP5SiRx6WcZGt_urvZZKtoKdTRn0h_ITamehH.ndEUTVBGZhyKJKnWdxun.jnZj0dbzCJNydO',
+                    client_secret='8317004383056291259',
+                    scope=['full'] ,
+                    redirect_uri='http://localhost:8090/sfoauth2callback'
+                )
+                code = self.request.get('code')
+                credentials = flow.step2_exchange(code)
+                http = httplib2.Http()
+                credentials.authorize(http)
+                sf_objects={}
+                SfImporterHelper.import_accounts(user,http,sf_objects)
+                SfImporterHelper.import_contacts(user,http,sf_objects)
+                # SfImporterHelper.import_opportunities(user,http,sf_objects)
+                SfImporterHelper.import_cases(user,http,sf_objects)
+                # SfImporterHelper.import_leads(user,http,sf_objects)
+
+
+
+
+
 # Workers
 class CreateOrganizationFolders(webapp2.RequestHandler):
     @staticmethod
@@ -1373,6 +1416,7 @@ routes = [
     # Admin Console Views
     ('/views/admin/users/list',UserListHandler),
     ('/views/admin/users/new',UserNewHandler),
+    ('/views/admin/users/show',UserShowHandler),
     ('/views/admin/groups/list',GroupListHandler),
     ('/views/admin/groups/show',GroupShowHandler),
     ('/views/admin/settings',settingsShowHandler),
@@ -1387,16 +1431,14 @@ routes = [
     # ioGrow Live
     ('/welcome/',WelcomeHandler),
     # Authentication Handlers
-    ('/early-bird',EarlyBirdHandler),
+    ('/early-bird',SignInHandler),
     ('/start-early-bird-account',StartEarlyBird),
     ('/sign-in',SignInHandler),
     ('/sign-up',SignUpHandler),
     ('/gconnect',GooglePlusConnect),
-
-
+    ('/sfimporter',SalesforceImporter),
+    ('/sfoauth2callback',SalesforceImporterCallback),
     ('/stripe',StripeHandler),
-
-
     # paying with stripe
     ('/paying',StripePayingHandler)
 
