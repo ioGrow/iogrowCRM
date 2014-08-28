@@ -1100,12 +1100,14 @@ $scope.selectTag= function(tag,index,$event){
     Task.list($scope,params,true);
 
  }
+
  $scope.filterByAssignee=function(id){
-   var params = { 'order': $scope.order,
+    var params = { 
+                  'order': $scope.order,
                   'assignee' : id
                 }
+    console.log(params);
     Task.list($scope,params,true);
-
  }
  $scope.privateTasks=function(){
    var params = { 'order': $scope.order,
