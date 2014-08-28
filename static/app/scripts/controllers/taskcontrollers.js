@@ -19,7 +19,9 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      $scope.task={};
      $scope.user = undefined;
      $scope.slected_memeber = undefined;
+     $scope.slected_members = [];
      $scope.role= 'participant';
+     $scope.taskShow=true;
 
     // What to do after authentication
      $scope.runTheProcess = function(){
@@ -29,6 +31,22 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
           User.list($scope,{});
            var varTagname = {'about_kind':'Task','limit':1};
           Tag.list($scope,varTagname);
+     };
+     $scope.assigneeModal = function(){
+        $('#assigneeModal').modal('show');
+      };
+     $scope.selectnewMember = function(){
+      if ($scope.slected_members.indexOf($scope.user) == -1) {
+         $scope.slected_members.push($scope.user);
+         $scope.slected_memeber = $scope.user;
+         $scope.user = $scope.slected_memeber.google_display_name;
+      }
+      $scope.user='';
+     };
+
+     $scope.unselectMember =function(index){
+         $scope.slected_members.splice(index, 1);
+          console.log($scope.slected_members);
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -77,9 +95,6 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
           Comment.list($scope,params);
      }
 
-
-
-
      $scope.showModal = function(){
         console.log('button clicked');
         $('#addAccountModal').modal('show');
@@ -94,8 +109,27 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      };
 
      $scope.edgeInserted = function () {
+      console.log('edge inserted');
        var taskid = {'id':$route.current.params.taskId};
           Task.get($scope,taskid);
+     }
+     $scope.$watch('task.due', function(newValue, oldValue) {
+            if (newValue!=oldValue){
+                console.log(newValue);
+                $scope.patchDate(newValue);
+                $scope.showDueCalendar=false;
+            }
+
+     });
+     $scope.patchDate = function(newValue){
+        console.log(newValue);
+        var due_date = $filter('date')(newValue,['yyyy-MM-ddTHH:mm:00.000000']);
+        var params = {
+                    'id':$scope.task.id,
+                    'due':due_dateF
+        };
+        console.log(due_date)
+          Task.patch($scope,params);
      }
      $scope.addNewContributor = function(selected_user,role){
       console.log('*************** selected user ***********************');
@@ -150,9 +184,28 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
 
       // ask before delete task hadji hicham . 08-07-2014 .
        $scope.editbeforedelete = function(){
-     $('#BeforedeleteTask').modal('show');
-   };
-
+         $('#BeforedeleteTask').modal('show');
+       };
+      $scope.addNewContributors = function(){
+        items = [];
+        angular.forEach($scope.slected_members, function(selected_user){
+              var edge = {
+                'start_node': $scope.task.entityKey,
+                'end_node': selected_user.entityKey,
+                'kind':'assignees',
+                'inverse_edge': 'assigned_to'
+              };
+              console.log(edge);
+              items.push(edge);
+        });
+        if (items){
+          params = {
+            'items': items
+          }
+          Edge.insert($scope,params);
+        }
+       $('#assigneeModal').modal('hide');
+      };
    // delete task  hadji hicham  08-07-2014 .
    $scope.deleteTask = function(){
 
@@ -412,6 +465,11 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
         return true
       }
     }
+         $scope.gotoNewUser=function(){
+        console.log('goooooooooo');
+       $('#assigneeModal').modal('hide');
+       window.location.replace('/#/admin/users/new');
+     }
       $scope.idealTextColor=function(bgColor){
         var nThreshold = 105;
          var components = getRGBComponents(bgColor);
@@ -694,7 +752,6 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
     };
 
     $scope.select_task= function(task,index,$event){
-      console.log(task);
          var checkbox = $event.target;
          if(checkbox.checked){
             if ($scope.selected_tasks.indexOf(task) == -1) {
@@ -1043,14 +1100,14 @@ $scope.selectTag= function(tag,index,$event){
     Task.list($scope,params,true);
 
  }
- $scope.assignedToMe=function(){
-   var params = { 'order': $scope.order,
-                  'assignee' : true,
 
-                  'limit':7
+ $scope.filterByAssignee=function(id){
+    var params = { 
+                  'order': $scope.order,
+                  'assignee' : id
                 }
+    console.log(params);
     Task.list($scope,params,true);
-
  }
  $scope.privateTasks=function(){
    var params = { 'order': $scope.order,

@@ -116,6 +116,9 @@ app.config(['$routeProvider', function($routeProvider) {
       }).when('/admin/users/new', {
         controller: 'UserNewCtrl',
         templateUrl:'/views/admin/users/new'
+      }).when('/admin/users/show/:userGID', {
+        controller: 'UserShowCtrl',
+        templateUrl:'/views/admin/users/show'
       }).when('/admin/groups', {
         controller: 'GroupListCtrl',
         templateUrl:'/views/admin/groups/list'
