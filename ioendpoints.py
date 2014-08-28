@@ -1664,7 +1664,7 @@ class CrmEngineApi(remote.Service):
         user = EndpointsHelper.require_iogrow_user()
         taskqueue.add(
                         url='/workers/send_gmail_message',
-                        queue_name='iogrow-low',
+                        queue_name='iogrow-critical',
                         params={
                                 'email': user.email,
                                 'to': request.to,
