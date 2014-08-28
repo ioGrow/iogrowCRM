@@ -69,7 +69,7 @@ from endpoints_helper import EndpointsHelper
 from people import linked_in
 from operator import itemgetter, attrgetter
 import iomessages
-from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsRequest, tweetsSchema,tweetsResponse
+from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema
 
 
 import stripe
@@ -2895,6 +2895,14 @@ class CrmEngineApi(remote.Service):
         Organization.upgrade_to_business_version(user_from_email.organization)
         return message_types.VoidMessage()
     # arezki lebdiri 15/07/2014
+    @endpoints.method(EntityKeyRequest, LinkedinCompanySchema,
+                      path='people/linkedinCompany', http_method='POST',
+                      name='people.getCompanyLinkedin')
+    def get_company_linkedin(self, request):
+        print request.entityKey
+        response=linked_in.get_company(request.entityKey)
+        return response   
+    # arezki lebdiri 27/08/2014
     @endpoints.method(EntityKeyRequest, LinkedinProfileSchema,
                       path='people/linkedinProfile', http_method='POST',
                       name='people.getLinkedin')

@@ -38,21 +38,27 @@ class linked_in():
         r=self.browser.open('https://www.google.com')
         self.browser.response().read()
         self.browser.select_form(nr=0)
-        self.browser.form['q']=firstname +' '+lastname +' twitter'
+        self.browser.form['q']=firstname +' '+lastname +' linkedin' 
+        print self.browser.form['q']
+        self.browser.submit()
+        self.browser.response().read()
+        link= self.browser.links(url_regex="linkedin.com")
+        links=[l for l in link]
+        if links : return self.browser.follow_link(links[0]).read()
+    def open_url_company(self,name):
+        r=self.browser.open('https://www.google.com')
+        self.browser.response().read()
+        self.browser.select_form(nr=0)
+        self.browser.form['q']=name+' linkedin'
+        print self.browser.form['q']
         self.browser.submit()
         self.browser.response().read()
         resp = None
-
-        # for link in self.browser.links(url_regex="twitter.com"):
-        #     print "/////////////////////////////////////////////////////////////////////////////////////////"
-        #     print link.text, link.url
-        #     print "#########################################################################"
-        #     print link
-
-        link= self.browser.links(url_regex="twitter.com")
+        link= self.browser.links(url_regex="linkedin.com")
         links=[l for l in link]
         #print links
-        print self.browser.follow_link(links[0]).geturl()
+        if links:
+            return self.browser.follow_link(links[0]).read()
     def get_profile_header(self,soup,person):
         # ***************************head***************************
         member_head=soup.find('div',{'id':'member-1'})
@@ -76,37 +82,51 @@ class linked_in():
             else : person['headline']=''
             #**********************************************************
 
-            overview=soup.find('dl',{'id':'overview'})
-            current_post=overview.find('dd',{'class':'summary-current'})
-            # ---------------------------------------------------------
-            tab=[]
-            if current_post:
-                for post in current_post.findAll('li'):
-                    tab.append(post.text.replace('\n',' '))
-            person['current_post']=tab
-            # ------------------------------------------------------------
-            tab=[]
-            past_post=overview.find('dd',{'class':'summary-past'})
-            if past_post:
-                for post in past_post.findAll('li'):
-                    tab.append(post.text.replace('\n',' '))
-            person['past_post']=tab
-            # ------------------------------------------------------------
-            tab=[]
-            formation=overview.find('dd',{'class':'summary-education'})
-            if formation:
-                for post in formation.findAll('li'):
-                    tab.append(post.text.replace('\n',' '))
-            person['formations']=tab
+        overview=soup.find('dl',{'id':'overview'})
+       
+        current_post=soup.find('dd',{'class':'summary-current'})
+        # ---------------------------------------------------------
+        tab=[]
+        if current_post:
+            for post in current_post.findAll('li'):
+                tab.append(post.text.replace('\n',' '))
+        person['current_post']=tab
+        # ------------------------------------------------------------
+        tab=[]
+        past_post=soup.find('dd',{'class':'summary-past'})
+        if past_post:
+            for post in past_post.findAll('li'):
+                tab.append(post.text.replace('\n',' '))
+        person['past_post']=tab
+        # ------------------------------------------------------------
+        tab=[]
+        formation=soup.find('dd',{'class':'summary-education'})
+        if formation:
+            for post in formation.findAll('li'):
+                tab.append(post.text.replace('\n',' '))
+        person['formations']=tab
         # -------------------------------------------------------------
         tab=[]
-        formation=overview.find('dd',{'class':'websites'})
+        formation=soup.find('dd',{'class':'websites'})
         if formation:
             for post in formation.findAll('li'):
                 tab.append('www.linkedin.com'+post.a.get('href'))
         person['websites']=tab
         # -------------------------------------------------------------
-        relation=overview.find('dd',{'class':'overview-connections'})
+        relation=soup.find('dd',{'class':'overview-connections'})
+        r=None
+        if relation:
+            r=relation.p.strong.text
+        person['relation']=r
+    # -------------------------------------------------------------
+        tab=[]
+        formation=soup.find('dd',{'class':'websites'})
+        if formation:
+            for post in formation.findAll('li'):
+                tab.append('www.linkedin.com'+post.a.get('href'))
+        person['websites']=tab
+        # -------------------------------------------------------------
+        relation=soup.find('dd',{'class':'overview-connections'})
         r=None
         if relation:
             r=relation.p.strong.text
@@ -194,6 +214,51 @@ class linked_in():
 
         print person
         return person
+    def scrape_company(self,name):
+        company={}
+        html= self.open_url_company(name)
+        if html:
+            soup=BeautifulSoup(html)
+            name=soup.find('span',{'itemprop':"name"})
+            if name :
+                company["name"]=name.text
+            image_wrapper=soup.find('div',{'class':'image-wrapper'})
+            if image_wrapper :
+                company["logo"]=image_wrapper.img.get("src")
+            top_image=image_wrapper=soup.find('div',{'class':'top-image'})
+            if top_image:
+                company["top_image"]=top_image.img.get("src")
+            followers=soup.find('p',{'class':'followers-count'})
+            if followers :
+                company["followers"]= followers.strong.text
+            summary=soup.find('div',{'class':'text-logo'})
+            if summary :
+                company["summary"]=summary.p.text
+            specialties=soup.find('div',{'class':'specialties'})
+            if specialties:
+                company["specialties"]=specialties.p.text.replace('\n','')
+            website=soup.find('li',{'class':'website'})
+            if website:
+                company["website"]=website.p.text.replace('\n','')
+            industry=soup.find('li',{'class':'industry'})
+            if industry:
+                company["industry"]=industry.p.text.replace('\n','')
+            headquarters=soup.find('li',{'class':'vcard hq'})
+            if headquarters:
+                company["headquarters"]=headquarters.p.text.replace('\n','')
+            type=soup.find('li',{'class':'type'})
+            if type:
+                company["type"]=type.p.text.replace('\n','')
+            company_size=soup.find('li',{'class':'company-size'})
+            if company_size:
+                company["company_size"]=company_size.p.text.replace('\n','')
+            founded=soup.find('li',{'class':'founded'})
+            if founded:
+                company["founded"]=founded.p.text.replace('\n','')
+            company["url"]=
+
+        print company
+        return company
     @classmethod
     # arezki lebdiri 15/07/2014
     def get_people(cls,entityKey):
@@ -222,45 +287,5 @@ class linked_in():
                                     skills=pro.skills
                                     )
             return response
-# Set your secret key: remember to change this to your live secret key in production
-# See your keys here https://dashboard.stripe.com/account
-stripe.api_key = "sk_test_4ZNpoS4mqf3YVHKVfQF7US1R"
-
-# Get the credit card details submitted by the form
-
-
-try:
-  print stripe.Customer.all()
-  pass
-except stripe.error.CardError, e:
-  # Since it's a decline, stripe.error.CardError will be caught
-  body = e.json_body
-  err  = body['error']
-
-  print "Status is: %s" % e.http_status
-  print "Type is: %s" % err['type']
-  print "Code is: %s" % err['code']
-  # param is '' in this case
-  print "Param is: %s" % err['param']
-  print "Message is: %s" % err['message']
-except stripe.error.InvalidRequestError, e:
-  # Invalid parameters were supplied to Stripe's API
-  pass
-except stripe.error.AuthenticationError, e:
-  # Authentication with Stripe's API failed
-  # (maybe you changed API keys recently)
-  pass
-except stripe.error.APIConnectionError, e:
-  # Network communication with Stripe failed
-  pass
-except stripe.error.StripeError, e:
-  # Display a very generic error to the user, and maybe send
-  # yourself an email
-  pass
-except Exception, e:
-  # Something else happened, completely unrelated to Stripe
-  pass
-        # print r&esult
-from nltk.corpus import treebank
-t = treebank.parsed_sents('wsj_0001.mrg')[0]
-t.draw()
+l=linked_in()
+l.scrape_company("success2i")

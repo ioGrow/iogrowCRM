@@ -1033,7 +1033,6 @@ class GetFromLinkedinToIoGrow(webapp2.RequestHandler):
         linkedin=linked_in()
         key1=ndb.Key(urlsafe=entityKey)
         lead=key1.get()
-        print "Allllllllll################################################################################"
         fullname= lead.firstname+" "+lead.lastname
         print fullname
         profil=linkedin.scrape_linkedin(lead.firstname,lead.lastname)
@@ -1053,7 +1052,31 @@ class GetFromLinkedinToIoGrow(webapp2.RequestHandler):
             pli.experiences=json.dumps(profil["experiences"])
             pli.skills=profil["skills"]
             pli.url=profil["url"]
-            print pli
+            key2=pli.put()
+            es=Edge.insert(start_node=key1,end_node=key2,kind='linkedin',inverse_edge='parents')
+class GetCompanyFromLinkedinToIoGrow(webapp2.RequestHandler):
+    def post(self):
+        entityKey= self.request.get('entityKey')
+        linkedin=linked_in()
+        key1=ndb.Key(urlsafe=entityKey)
+        account=key1.get()
+        print account
+        profil=linkedin.scrape_company(account.name)
+        if profil:
+            pli=model.LinkedinCompany()
+            pli.name=profil["name"]
+            pli.website=profil["website"]
+            pli.industry=profil["industry"]
+            pli.headquarters=profil["headquarters"]
+            pli.summary=profil["summary"]
+            pli.founded=profil["founded"]
+            pli.followers=profil["followers"]
+            pli.logo=profil["logo"]
+            pli.specialties=profil["specialties"]
+            pli.top_image=profil["top_image"]
+            pli.type=profil["type"]
+            pli.company_size=profil["company_size"]
+            pli.url=profil["url"]
             key2=pli.put()
             es=Edge.insert(start_node=key1,end_node=key2,kind='linkedin',inverse_edge='parents')
 class GetFromTwitterToIoGrow(webapp2.RequestHandler):
@@ -1285,6 +1308,7 @@ routes = [
     ('/workers/send_email_notification',SendEmailNotification),
     ('/workers/add_to_iogrow_leads',AddToIoGrowLeads),
     ('/workers/get_from_linkedin',GetFromLinkedinToIoGrow),
+    ('/workers/get_company_from_linkedin',GetCompanyFromLinkedinToIoGrow),
     ('/workers/get_from_twitter',GetFromTwitterToIoGrow),
     ('/workers/send_gmail_message',SendGmailEmail),
 

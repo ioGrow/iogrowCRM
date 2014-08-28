@@ -748,6 +748,20 @@ class LinkedinProfile(ndb.Model) :
     certifications=ndb.JsonProperty(indexed=False)
     skills=ndb.StringProperty(repeated=True,indexed=False)
     url=ndb.StringProperty(indexed=False)
+class LinkedinCompany(ndb.Model) :
+    name = ndb.StringProperty(indexed=False)
+    website =  ndb.StringProperty(indexed=False)
+    industry =  ndb.StringProperty(indexed=False)
+    headquarters =  ndb.StringProperty(indexed=False)
+    summary =  ndb.TextProperty(indexed=False)
+    founded=ndb.StringProperty(indexed=False)
+    followers=ndb.StringProperty(indexed=False)
+    logo=ndb.StringProperty(indexed=False)
+    specialties=ndb.StringProperty(indexed=False)
+    top_image=ndb.StringProperty(indexed=False)
+    type=ndb.StringProperty(indexed=False)
+    company_size=ndb.StringProperty(indexed=False)
+    url=ndb.StringProperty(indexed=False)
 
 class TwitterProfile(ndb.Model):
     id= ndb.IntegerProperty(indexed=False)

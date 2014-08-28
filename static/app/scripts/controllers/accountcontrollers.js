@@ -811,6 +811,9 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
 
             };
             Account.get($scope, params);
+            console.log("########rrrrrrrrrrrrrrrrrr###################################")
+            console.log($scope.account);
+       
             User.list($scope, {});
             Opportunitystage.list($scope, {'order':'probability'});
             Casestatus.list($scope, {});
@@ -823,6 +826,9 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         };
         $scope.getColaborators=function(){
           Permission.getColaborators($scope,{"entityKey":$scope.account.entityKey});  
+        } 
+        $scope.getCompanyDetails=function(entityKey){
+               Account.getCompanyDetails($scope,{'entityKey':entityKey}) 
         }
         $scope.selectMemberToTask = function() {
             console.log($scope.selected_members);
