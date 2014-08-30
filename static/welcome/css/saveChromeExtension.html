@@ -229,13 +229,13 @@
 </div>
 **************
 <div class="nH anT" style="padding: 15px 0px 15px 15px; height: 332px;">
-    <img src="https://d1qb2nb5cznatu.cloudfront.net/users/62498-medium_jpg?1405474725" style="
+    <img class="lead-photo" src="https://d1qb2nb5cznatu.cloudfront.net/users/62498-medium_jpg?1405474725" style="
     width: 60px;
     border-radius: 30px;
     float: left;
     display: inline-block;
 ">
-    <ul style="
+    <ul class="sm-details" style="
     padding-left: 0;   list-style: none;
     margin-top: -3px;
     width: calc(100% - 75px);
@@ -274,13 +274,13 @@
       <li>assem.ch@gmail.com</li> 
       <li>Algeria, jijel</li> 
     </ul>
-    <a id="detailsOnIoGrow" href="http://www.iogrow.com/#/leads/show/5480755488620544" class="T-I J-J5-Ji T-I-KE L3 iogrow-sign-in" target="_blank" role="button" tabindex="1" style="-webkit-user-select: none;float: right;font-size: 12px;text-decoration: none;margin-right: 0px;text-transform: initial;width: 91%;margin-bottom: 7px;">Details on ioGrow</a>
+    <a class="btn show-details-btn" id="detailsOnIoGrow" href="http://www.iogrow.com/#/leads/show/5480755488620544" class="T-I J-J5-Ji T-I-KE L3 iogrow-sign-in" target="_blank" role="button" tabindex="1" style="-webkit-user-select: none;float: right;font-size: 12px;text-decoration: none;margin-right: 0px;text-transform: initial;width: 91%;margin-bottom: 7px;">Details on ioGrow</a>
     <div class="tasks" style="
     clear: both;
     border-top: 1px solid rgb(202, 200, 200);
     /* background-color: rgb(236, 236, 236); */
 ">
-      <h4 class="tasks-title" style="
+      <h4 class="tasks-header" style="
     margin-top: 10px;
     margin-bottom: 10px;
 ">Tasks :</h4>
@@ -289,19 +289,19 @@
     clear: both;
     height: 100%;
 ">
-        <input type="text" maxlength="225" ignoreesc="true" tabindex="0" placeholder="add a new task" id="iogrow-task-input" style="
+        <input type="text" class="task-title" maxlength="225" ignoreesc="true" tabindex="0" placeholder="add a new task" id="iogrow-task-input" style="
     font-size: 14px; font-weight: normal; color: #333333; background-color: #ffffff; border: 1px solid #e5e5e5; border-radius: 0; -webkit-box-shadow: none; box-shadow: none; -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s; transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
     padding: 5px;
     width: 94%;
     margin-bottom: 5px;
     float: left;
 ">
-<label style="
+<label class="assign-to-label"style="
     float: left;
     padding-top: 5px;
     font-size: 13px;
 ">Assign to: </label>
-  <select value="Customer" ng-model="account.account_type" class="form-control ng-pristine ng-valid" style="
+  <select value="Customer" class="assign-to" ng-model="account.account_type" class="form-control ng-pristine ng-valid" style="
     font-size: 14px; font-weight: normal; color: #333333; background-color: #ffffff; border: 1px solid #e5e5e5; border-radius: 0; -webkit-box-shadow: none; box-shadow: none; -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s; transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
     padding: 3px;
     /* padding-left: 0px; */
@@ -324,7 +324,7 @@
     <option value="Vendor"> Idriss Belamri </option>
     <option value="Other"> Meziane Hadjadj </option>
 </select>
-        <input type="submit" class="T-I J-J5-Ji aoO T-I-atl L3" role="button" tabindex="1" style="-webkit-user-select: none;margin-top: 5px;margin-right: auto;float: right;text-align: center;" id="iogrow-task-send-btn" value="Add">
+        <input class="add-task-btn" type="submit" class="T-I J-J5-Ji aoO T-I-atl L3" role="button" tabindex="1" style="-webkit-user-select: none;margin-top: 5px;margin-right: auto;float: right;text-align: center;" id="iogrow-task-send-btn" value="Add">
 <div class="clearfix" style="
     display: table; content: &quot; &quot;;
 "></div>

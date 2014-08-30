@@ -94,7 +94,7 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             $scope.addTagsTothis=function(){
               var tags=[];
               var items = [];
-              tags=$('#select2_sample2').select2("val");
+              tags=$('#select2_sample2').select2("val");              
                   angular.forEach(tags, function(tag){
                     var edge = {
                       'start_node': $scope.currentAccount.entityKey,
@@ -621,7 +621,6 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.newEventform=false;
         $scope.newTask={};
         $scope.ioevent = {};
-
         $scope.showNewOpp=false;
         $scope.showNewCase=false;
         $scope.showNewContact=false;
@@ -630,6 +629,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.relatedCase=true;
         $scope.relatedOpp=true;
         $scope.selected_tags=[];
+        $scope.showPage=true;
         // What to do after authentication
         $scope.endError = function() {
             alert("okkkkkkkkkkkkkkk");
@@ -710,22 +710,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             }  
           }
          }
-          $scope.addTagsTothis=function(){
-              var tags=[];
-              var items = [];
-              tags=$('#select2_sample2').select2("val");
-              console.log(tags);
-                  angular.forEach(tags, function(tag){
-                    var params = {
-                          'parent': $scope.account.entityKey,
-                          'tag_key': tag
-                    };
-                    Tag.attach($scope,params,index);
-                  });
-          };
-         $scope.edgeInserted = function() {
-          /* $scope.tags.push()*/
-          };
+          
           $scope.hideNewContactForm=function(){
             $scope.contact={};
             $scope.showNewContact=false;
@@ -752,6 +737,30 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             $scope.showNewCase=false;
             $scope.casee={};
         };
+        $scope.addTagsTothis=function(){
+              var tags=[];
+              var items = [];
+              tags=$('#select2_sample2').select2("val");
+              console.log(tags);
+                  angular.forEach(tags, function(tag){
+                    var params = {
+                          'parent': $scope.account.entityKey,
+                          'tag_key': tag
+                    };
+                    Tag.attach($scope,params);
+                  });
+          };
+         $scope.edgeInserted = function() {
+          /* $scope.tags.push()*/
+          };
+         $scope.removeTag = function(tag,$index) {
+            var params = {'tag': tag,'index':$index}
+            Edge.delete($scope, params);
+        }
+        $scope.edgeDeleted=function(index){
+         $scope.account.tags.splice(index, 1);
+         $scope.$apply();
+        }
          $scope.editbeforedelete = function(item,typee,index){
             $scope.selectedItem={'item':item,'typee':typee,'index':index};
             console.log($scope.selectedItem);
@@ -935,6 +944,19 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
               var paramsTag = {'about_kind':'Account'}
               Tag.list($scope,paramsTag);
              };
+        $scope.tagattached = function(tag, index) {
+            if ($scope.account.tags == undefined) {
+                $scope.account.tags = [];
+            }
+            var ind = $filter('exists')(tag, $scope.account.tags);
+            if (ind == -1) {
+                $scope.account.tags.push(tag);
+                
+            } else {
+            }
+            $('#select2_sample2').select2("val", "");
+            $scope.$apply();
+        };
 //HKA 06.12.2013 Manage Prev & Next Page on Related List Contact
         $scope.ContactlistNextPageItems = function() {
 

@@ -560,8 +560,8 @@ $scope.addTags=function(){
 }]);
 
 
-app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User','Attachement','Map','Opportunitystage','Casestatus','InfoNode','Tag',
-		function($scope,$filter,$route,Auth,Email,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User,Attachement,Map,Opportunitystage,Casestatus,InfoNode,Tag) {
+app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User','Attachement','Map','Opportunitystage','Casestatus','InfoNode','Tag','Edge',
+		function($scope,$filter,$route,Auth,Email,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User,Attachement,Map,Opportunitystage,Casestatus,InfoNode,Tag,Edge) {
  console.log('I am in ContactShowCtrl');
 			$("ul.page-sidebar-menu li").removeClass("active");
 			$("#id_Contacts").addClass("active");
@@ -639,7 +639,8 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
         lineWidth:7,
         lineCap:'circle'
     };
-    $scope.linkedProfile={}
+    $scope.linkedProfile={};
+     $scope.showPage=true;
     $scope.getLinkedinProfile=function(){
       
       Contact.get_linkedin($scope,{'entityKey':$scope.contact.entityKey});
@@ -703,6 +704,43 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 			$scope.getTopicUrl = function(type,id){
 			return Topic.getUrl(type,id);
 		};
+		 $scope.addTagsTothis=function(){
+              var tags=[];
+              var items = [];
+              tags=$('#select2_sample2').select2("val");
+              console.log(tags);
+                  angular.forEach(tags, function(tag){
+                    var params = {
+                          'parent': $scope.contact.entityKey,
+                          'tag_key': tag
+                    };
+                    Tag.attach($scope,params);
+                  });
+          };
+          $scope.tagattached = function(tag, index) {
+            if ($scope.contact.tags == undefined) {
+                $scope.contact.tags = [];
+            }
+            var ind = $filter('exists')(tag, $scope.contact.tags);
+            if (ind == -1) {
+                $scope.contact.tags.push(tag);
+                
+            } else {
+            }
+            $('#select2_sample2').select2("val", "");
+            $scope.$apply();
+          };
+         $scope.edgeInserted = function() {
+          /* $scope.tags.push()*/
+          };
+         $scope.removeTag = function(tag,$index) {
+            var params = {'tag': tag,'index':$index}
+            Edge.delete($scope, params);
+        }
+        $scope.edgeDeleted=function(index){
+         $scope.contact.tags.splice(index, 1);
+         $scope.$apply();
+        }
 		  $scope.idealTextColor=function(bgColor){
         var nThreshold = 105;
          var components = getRGBComponents(bgColor);

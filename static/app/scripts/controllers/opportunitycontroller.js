@@ -577,8 +577,8 @@ $scope.addTags=function(){
       });
 
 }]);
-app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage','Email','Attachement','InfoNode','Tag',
-    function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email,Attachement,InfoNode,Tag) {
+app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task','Event','Topic','Note','Opportunity','Permission','User','Opportunitystage','Email','Attachement','InfoNode','Tag','Edge',
+    function($scope,$filter,$route,Auth,Task,Event,Topic,Note,Opportunity,Permission,User,Opportunitystage,Email,Attachement,InfoNode,Tag,Edge) {
       $("ul.page-sidebar-menu li").removeClass("active");
      $("#id_Opportunities").addClass("active");
      $scope.selectedTab = 2;
@@ -628,6 +628,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
      $scope.selected_members=[];
      $scope.selected_member={};
      $scope.ioevent = {};
+     $scope.showPage=true;
       $scope.allcurrency=[
         { value:"USD", text:"$ - USD"},
         { value:"EUR", text:"€ - EUR"},
@@ -756,6 +757,43 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
       $scope.test=function(){
         console.log('testtest');
       }
+      $scope.addTagsTothis=function(){
+              var tags=[];
+              var items = [];
+              tags=$('#select2_sample2').select2("val");
+              console.log(tags);
+                  angular.forEach(tags, function(tag){
+                    var params = {
+                          'parent': $scope.opportunity.entityKey,
+                          'tag_key': tag
+                    };
+                    Tag.attach($scope,params);
+                  });
+          };
+          $scope.tagattached = function(tag, index) {
+            if ($scope.opportunity.tags == undefined) {
+                $scope.opportunity.tags = [];
+            }
+            var ind = $filter('exists')(tag, $scope.opportunity.tags);
+            if (ind == -1) {
+                $scope.opportunity.tags.push(tag);
+                
+            } else {
+            }
+            $('#select2_sample2').select2("val", "");
+            $scope.$apply();
+          };
+         $scope.edgeInserted = function() {
+          /* $scope.tags.push()*/
+          };
+         $scope.removeTag = function(tag,$index) {
+            var params = {'tag': tag,'index':$index}
+            Edge.delete($scope, params);
+        }
+        $scope.edgeDeleted=function(index){
+         $scope.opportunity.tags.splice(index, 1);
+         $scope.$apply();
+        }
 
       $scope.selectMemberToTask = function() {
             console.log($scope.selected_members);

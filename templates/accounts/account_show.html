@@ -117,24 +117,25 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="tags-section hidden" ng-class="{hidden: account.tags == null}">
+                                    <div class="relatedTags tags-section hidden" ng-class="{hidden: account.tags == null}">
                                         <div class="section-content">
                                             <span class="pull-left"><i class="fa fa-tags"></i>{{_('Tags')}}: </span>
                                             <!-- ngRepeat: tag in account.tags -->
-                                            <a ng-repeat="tag in account.tags" href="/#/search/type:Account tags:<%=tag.id%>">
+                                            <div ng-repeat="tag in account.tags">
                                                 <span class="pull-left task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
+                                                    <a href="" ng-click="removeTag(tag,$index)" class="removeRelatedTag select2-search-choice-close" ></a>
                                                     <%= tag.name %>
                                                 </span>
-                                            </a>
+                                            </div>
                                            <a href="" ng-hide="showNewTag" ng-click="showNewTag=true" style="margin-left:10px"> +Add new tag</a>
-                                           <form ng-show="showNewTag" ng-class="newTagFormShow">
+                                           <form ng-show="showNewTag" class="newTagFormShow">
                                                 <select id="select2_sample2" class="selectTagInput form-control select2" multiple>
                                                   <option ng-repeat="tag in tags"
                                                   value='<%=tag.entityKey%>'>
                                                     <%=tag.name%>
                                                   </option>
                                                 </select>
-                                                <button type="submit" style="vertical-align: top;" ng-click="addTagsTothis();showNewTag=false" class="btn blue jfk-button btn-sm jfk-button-action">{{_('Add')}}</button>
+                                                <button type="submit"  ng-click="addTagsTothis();showNewTag=false" class="btn blue jfk-button btn-sm jfk-button-action">{{_('Add')}}</button>
                                             </form>
                                         </div>
                                     </div>

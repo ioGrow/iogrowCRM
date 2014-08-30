@@ -196,14 +196,13 @@
                      </div>
                     </div>
                </form>
-               <ul class="list-unstyled showTagsList">
+               <ul class="relatedTags list-unstyled showTagsList">
                  <li ng-show="task.tags" class="inline-tags">{{ _('Tags:')}}</li>
                  <li ng-repeat="tag in task.tags" class="inline-tags">
-                   <a  href="/#/search/type:Task tags:<%=tag.id%>">
                         <span class="pull-left task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
+                          <a href="" ng-click="removeTag(tag,$index)" class="removeRelatedTag select2-search-choice-close" ></a>
                           <%= tag.name %>
                         </span>
-                      </a>
                  </li>
                </ul>
             </div>
@@ -332,7 +331,7 @@
 
       </div>
   <!--HKA 19.11.2013 END Span who is involved -->
-
+-
 
 
     </div>

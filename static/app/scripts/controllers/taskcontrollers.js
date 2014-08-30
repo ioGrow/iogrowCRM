@@ -22,6 +22,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      $scope.slected_members = [];
      $scope.role= 'participant';
      $scope.taskShow=true;
+     $scope.showPage=true;
 
     // What to do after authentication
      $scope.runTheProcess = function(){
@@ -43,7 +44,15 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
       }
       $scope.user='';
      };
-
+     $scope.removeTag = function(tag,$index) {
+          console.log('work.....');
+            var params = {'tag': tag,'index':$index}
+            Edge.delete($scope, params);
+        }
+        $scope.edgeDeleted=function(index){
+         $scope.task.tags.splice(index, 1);
+         $scope.$apply();
+        }
      $scope.unselectMember =function(index){
          $scope.slected_members.splice(index, 1);
           console.log($scope.slected_members);
@@ -261,6 +270,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
 
         Edge.insert($scope,params);
         $('#assigneeTagsToTask').modal('hide');
+        $('#select2_sample2').select2("val", "");
 
      };
     $scope.addComment = function(comment){
