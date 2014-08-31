@@ -69,7 +69,7 @@ from endpoints_helper import EndpointsHelper
 from people import linked_in
 from operator import itemgetter, attrgetter
 import iomessages
-from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsRequest, tweetsSchema,tweetsResponse
+from iomessages import LinkedinProfileSchema, TwitterProfileSchema,KewordsRequest, tweetsSchema,tweetsResponse,LinkedinCompanySchema
 
 
 import stripe
@@ -113,6 +113,7 @@ DISCUSSIONS = {
                         },
                 'Note': {
                             'title': 'discussion',
+
                             'url':  '/#/notes/show/'
                         }
         }
@@ -136,7 +137,8 @@ def LISTING_QUERY(query, access, organization, owner, collaborators, order):
                                    )
                         ).order(order)
 
-
+# hadji hicham  20/08/2014. our secret api key to auth at stripe .
+stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
 
 class TwitterProfileRequest(messages.Message):
     firstname = messages.StringField(1)
@@ -432,6 +434,8 @@ class OrganizationResponse(messages.Message):
 class BillingRequest(messages.Message):
      token_id=messages.StringField(1)
      token_email=messages.StringField(2)
+     customer_id=messages.StringField(3)
+
 class BillingResponse(messages.Message):
      response=messages.StringField(2)
 
@@ -1663,7 +1667,7 @@ class CrmEngineApi(remote.Service):
         user = EndpointsHelper.require_iogrow_user()
         taskqueue.add(
                         url='/workers/send_gmail_message',
-                        queue_name='iogrow-low',
+                        queue_name='iogrow-critical',
                         params={
                                 'email': user.email,
                                 'to': request.to,
@@ -2712,21 +2716,14 @@ class CrmEngineApi(remote.Service):
         return User.list(organization=user_from_email.organization)
 
     @endpoints.method(message_types.VoidMessage, iomessages.UserListSchema,
-                      path='users/list_licenses', http_method='POST',
-                      name='users.list_licenses')
-    def user_list_licenses(self, request):
+                      path='users/customers', http_method='POST',
+                      name='users.customers')
+    def customers(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
+
         items=[]
         users=User.query(User.organization==user_from_email.organization)
         for user in users :
-            nmbrOfLicenses=0
-            isLicensed=False
-            edge=Edge.query().filter(Edge.start_node==user.key and Edge.kind=="licenses").fetch()
-            if edge:
-                   nmbrOfLicenses=len(edge)
-                   LicenseStatus='Active'
-            else:
-                   LicenseStatus='Not active'
             user_schema = iomessages.UserSchema(
                                             id = str(user.key.id()),
                                             entityKey = user.key.urlsafe(),
@@ -2737,27 +2734,26 @@ class CrmEngineApi(remote.Service):
                                             google_user_id = user.google_user_id,
                                             is_admin = user.is_admin,
                                             status = user.status,
-                                            LicenseStatus= LicenseStatus,
-                                            nmbrOfLicenses=str(nmbrOfLicenses)
+                                            stripe_id=user.stripe_id
                                             )
             items.append(user_schema)
-        invitees_list = []
+        invitees_list=[]
         invitees = Invitation.list_invitees(user_from_email.organization)
         for invitee in invitees:
-            invitenmbrOfLicenses=0
-            inviteisLicensed=False
-            edgeinvite=Edge.query().filter(Edge.start_node==user.key and Edge.kind=="licenses").fetch()
-            if edgeinvite:
-                   invitenmbrOfLicenses=len(edge)
-                   inviteLicenseStatus='Active'
-            else:
-                   inviteLicenseStatus='Not active'
+        #     invitenmbrOfLicenses=0
+        #     inviteisLicensed=False
+        #     edgeinvite=Edge.query().filter(Edge.start_node==user.key and Edge.kind=="licenses").fetch()
+        #     if edgeinvite:
+        #            invitenmbrOfLicenses=len(edge)
+        #            inviteLicenseStatus='Active'
+        #     else:
+        #            inviteLicenseStatus='Not active'
             invited_schema = iomessages.InvitedUserSchema(
                                                           invited_mail=invitee['invited_mail'],
                                                           invited_by=invitee['invited_by'],
                                                           updated_at=invitee['updated_at'].strftime("%Y-%m-%dT%H:%M:00.000"),
-                                                          LicenseStatus= inviteLicenseStatus,
-                                                          nmbrOfLicenses=str(invitenmbrOfLicenses)
+                                                          # LicenseStatus= inviteLicenseStatus,
+                                                          stripe_id=invitee['stripe_id'] 
                                                         )
             invitees_list.append(invited_schema)
         return iomessages.UserListSchema(items=items,invitees=invitees_list) 
@@ -2790,13 +2786,34 @@ class CrmEngineApi(remote.Service):
             raise endpoints.NotFoundException('User not found ')
         return user
      # hadji hicham 11/08/2014. get user by id   
-    @User.method(user_required=True,
-                  http_method='GET', path='users/{id}', name='users.get')
-    def User_get(self,my_model):
+    @endpoints.method(iomessages.customerRequest,iomessages.customerResponse,
+                  http_method='GET', path='users/{id}', name='users.customer')
+    def Customer(self,request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        cust=stripe.Customer.retrieve(request.id)
+        charges_list=stripe.Charge.all(customer=request.id)
+        subscriptions_list=cust.subscriptions.all()
+        print "************************************"
+        print subscriptions_list
+        print "**************************************"
+        charges=[]
+        for charge in charges_list.data:
+            kwargscharge={
+               "id":charge.id,
+               "amount":str(charge.amount)
+               }
+            charges.append(kwargscharge)
+
+        kwargs = {
+               "customer_id":cust.id,
+               "email":cust.email,
+               "google_public_profile_photo_url":cust.metadata.google_public_profile_photo_url,
+               "google_display_name":cust.metadata.google_display_name,
+               "charges":charges
+                 }
         #user=User.query().filter(User.id==my_model.id).get()
-        if not my_model.from_datastore:
-            raise endpoints.NotFoundException('User not found ')
-        return my_model
+
+        return iomessages.customerResponse(**kwargs)
 
     # this api to fetch tasks and events to feed the calendar . hadji hicham.14-07-2014
     @endpoints.method(CalendarFeedsRequest,CalendarFeedsResults,
@@ -2880,6 +2897,14 @@ class CrmEngineApi(remote.Service):
         Organization.upgrade_to_business_version(user_from_email.organization)
         return message_types.VoidMessage()
     # arezki lebdiri 15/07/2014
+    @endpoints.method(EntityKeyRequest, LinkedinCompanySchema,
+                      path='people/linkedinCompany', http_method='POST',
+                      name='people.getCompanyLinkedin')
+    def get_company_linkedin(self, request):
+        print request.entityKey
+        response=linked_in.get_company(request.entityKey)
+        return response   
+    # arezki lebdiri 27/08/2014
     @endpoints.method(EntityKeyRequest, LinkedinProfileSchema,
                       path='people/linkedinProfile', http_method='POST',
                       name='people.getLinkedin')
@@ -3213,7 +3238,10 @@ class CrmEngineApi(remote.Service):
         # if the user input google_user_id    
         else:
             sorted_by=request.sorted_by
-            users=User.query().fetch()
+            users=User.query().order(-User.updated_at)
+            if sorted_by=='created_at':
+                users=User.query().order(-User.created_at)
+
             list_of_reports=[]
             for user in users:
                 gid=user.google_user_id
@@ -3235,16 +3263,17 @@ class CrmEngineApi(remote.Service):
                 list_of_reports.sort(key=itemgetter(5),reverse=True)
             elif sorted_by=='tasks':
                 list_of_reports.sort(key=itemgetter(6),reverse=True)
-            elif sorted_by=='created_at':
-                list_of_reports.sort(key=itemgetter(7),reverse=True)
-            else:
-                list_of_reports.sort(key=itemgetter(8),reverse=True)
+            #elif sorted_by=='created_at':
+            #   list_of_reports.sort(key=itemgetter(7),reverse=True)
+            #else:
+            #    list_of_reports.sort(key=itemgetter(4),reverse=True)
             reporting = []
             for item in list_of_reports:
                 item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count_account=item[3],count_contacts=item[4],count_leads=item[5],count_tasks=item[6],created_at=item[7].isoformat(),updated_at=item[8].isoformat())
                 reporting.append(item_schema)
 
             return ReportingListResponse(items=reporting)         
+
 
     # event permission
     @endpoints.method(EventPermissionRequest, message_types.VoidMessage,
@@ -3423,13 +3452,20 @@ class CrmEngineApi(remote.Service):
         #the key represent the secret key which represent our company  , server side , we have two keys 
         # test "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF", mode dev 
         # live "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA" , mode prod 
-        stripe.api_key ="sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
         token = request.token_id
-        #customers=stripe.Customer.all()
-        print "*-*-*-*-*-*-*-*-*-*-"
-        print stripe.Customer.all()
-        print "*-*-*-**-*-*-*-*-*-*-"
-  
 
-        return BillingResponse(response=token) 
+        cust=stripe.Customer.retrieve(request.customer_id)
+        cust.card=token
+        cust.save()
+        charge=stripe.Charge.create(
+                       amount=2000,
+                       currency="usd",
+                       customer=cust.id,
+                       description="Charge for  "+ request.token_email)
+        cust.subscriptions.create(plan="iogrow_plan")
+        sub=cust.subscriptions
+        print "*******************************************************************"
+        print sub[0]
+        cust.subscriptions.create(plan="iogrow_plan")
+
 

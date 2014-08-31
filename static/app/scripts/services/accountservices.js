@@ -33,13 +33,15 @@ accountservices.factory('Account', function($http) {
 
 
     Account.get = function($scope, params) {
-       
+
         gapi.client.crmengine.accounts.getv2(params).execute(function(resp) {
             if (!resp.code) {
                 $scope.account = resp;
-                console.log("######################################")
+                console.log("###############fffffffffff#######################")
                 console.log($scope.account)
                 console.log($scope.account.entityKey)
+                $scope.getCompanyDetails($scope.account.entityKey);
+
                 $scope.getColaborators($scope.account.entityKey);
                 console.log($scope.collaborators_list)
                 if (resp.contacts) {
@@ -442,6 +444,31 @@ accountservices.factory('Account', function($http) {
         }
         )
     };
+    // arezki lrbdiri 27/08/14
+     Account.getCompanyDetails = function($scope, params) {
+        $scope.isLoading = true;
+        console.log("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
+        gapi.client.crmengine.people.getCompanyLinkedin(params).execute(function(resp) {
+            if (!resp.code) {
+                $scope.companydetails=resp;
+                console.log("company services ")
+                console.log(resp)
+                $scope.isLoading = false;
+                $scope.$apply();
+
+            } else {
+                console.log(resp.code)
+                if (resp.code == 401) {
+                    $scope.refreshToken();
+
+                    $scope.$apply();
+                }
+                ;
+            }
+        });
+        $scope.isLoading = false;
+    };
+
 
     return Account;
 });

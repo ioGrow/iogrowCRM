@@ -1,4 +1,4 @@
-app.controller('BillingController', ['$scope','$route', 'Auth','Search','User',
+app.controller('BillingListController', ['$scope','$route', 'Auth','Search','User',
     function($scope,$route,Auth,Search,User) {
       
    $("ul.page-sidebar-menu li").removeClass("active");
@@ -20,7 +20,7 @@ app.controller('BillingController', ['$scope','$route', 'Auth','Search','User',
      $scope.pages = [];
      
      $scope.users = [];
-    
+ 
     // What to do after authentication
       $scope.runTheProcess = function(){
     
@@ -28,7 +28,8 @@ app.controller('BillingController', ['$scope','$route', 'Auth','Search','User',
                        }
           User.get_organization($scope,params);
            var params = {'limit':7};
-          User.list_licenses($scope,params);
+          //User.list_licenses($scope,params);
+        User.Customers($scope,params);
 
        };
   
@@ -113,14 +114,14 @@ app.controller('BillingShowController', ['$scope','$route', 'Auth','Search','Use
      $scope.isSignedIn = false;
      $scope.immediateFailed = false;
      //
-     $scope.isContentLoaded = true;
+     
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.isLoading = false;
      $scope.pagination = {};
      $scope.currentPage = 01;
      $scope.pages = [];
-     
+     $scope.loadCharges=true;
      $scope.users = [];
     
     // What to do after authentication
@@ -128,7 +129,7 @@ app.controller('BillingShowController', ['$scope','$route', 'Auth','Search','Use
     
               var params={'id':$route.current.params.userId};
              
-              User.get_purchase($scope, params)
+              User.customer($scope, params)
               
           //  var params={'organization':$scope.organization_key
           //              }
@@ -148,15 +149,19 @@ app.controller('BillingShowController', ['$scope','$route', 'Auth','Search','Use
   var handler = StripeCheckout.configure({
     key: 'pk_test_4Xa35zhZDqvXz1OzGRWaW4mX',
     image: user.google_public_profile_photo_url,
-    email:user.email,
+
+    email: user.email,
+
     token: function(token) {
+      
 
     var params={'token_id':token.id,
-                'token_email':token.email
+                'token_email':token.email, 
+                'customer_id':user.customer_id
               }
    gapi.client.crmengine.billing.purchase(params).execute(function(resp) {
             if(!resp.code){
-                 console.log(resp);
+                console.log(token)
             }
 
             });

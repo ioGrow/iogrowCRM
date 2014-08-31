@@ -700,7 +700,6 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
         { value:"VND", text:"₫ - VND"},
         { value:"XCD", text:"$ - XCD"},
         { value:"ZAR", text:"R - ZAR"}];
-
       $scope.fromNow = function(fromDate){
           return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
       }
@@ -827,6 +826,7 @@ app.controller('OpportunityShowCtrl', ['$scope','$filter','$route','Auth','Task'
      $scope.$watch('opportunity.closed_date', function(newValue, oldValue) {
             if (newValue!=oldValue){
                 $scope.patchDate(newValue);
+                $scope.showStartsCalendar=false;
             }
 
      });
@@ -1453,7 +1453,7 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
               }
       }
       $scope.test=function(){
-        console.log('testtest');
+        
       }
       $scope.pullElement=function(index,elem,arr){
         if ($scope.customfields.indexOf(elem) != -1) {
@@ -1467,6 +1467,7 @@ app.controller('OpportunityNewCtrl', ['$scope','$filter', 'Auth','Account','Cont
        $('#'+id).removeClass('hidden');
       }
       $scope.pushElement=function(elem,arr){
+       
           if (arr.indexOf(elem) == -1) {
               var copyOfElement = angular.copy(elem);
               arr.push(copyOfElement);

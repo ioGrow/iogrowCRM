@@ -456,6 +456,7 @@ app.controller('DiscoverNewCtrl', ['$scope','Auth','Discover','Tag',
                       };
       console.log(params);
        Tag.insert($scope,params);
+       location.reload();
      }
 
 

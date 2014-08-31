@@ -119,7 +119,9 @@
               </li>
               <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTagForm()">
                 <a ng-click="" class="btn-link addAnotherPhone">
-                  <i class="fa fa-tags"></i>  {{_('Add a new topic')}}
+
+                  <i class="fa fa-tags"></i>  {{_('Add a new Topic')}}
+
                 </a>
               </li>
             </ul>
@@ -224,7 +226,7 @@
             <div class="">
               <div class="blank_slate_arrow"></div>
               <div class="thumbnail blank_slate_body">
-                <p class="lead">{{ _('No results found, try with another filter') }}</p>
+                <p class="lead">{{ _('No results found, try with another filter, Add topics to retrieve news from twitter  ') }}</p>
               </div>
             </div>
           </div>
@@ -283,7 +285,9 @@
           <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
           <div class="row">
             <div class="col-md-12 form-group">
-              <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('New topic')}}">
+
+              <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('New Topic')}}">
+
             </div>
           </div>
           <div class="row">

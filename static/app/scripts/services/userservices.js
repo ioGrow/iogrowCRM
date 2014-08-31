@@ -28,11 +28,14 @@ accountservices.factory('User', function($http) {
           });
   };
   
-  User.get_purchase = function($scope,id) {
+  User.customer = function($scope,id) {
            
-          gapi.client.crmengine.users.get(id).execute(function(resp) {
+          gapi.client.crmengine.users.customer(id).execute(function(resp) {
             if(!resp.code){
                $scope.user = resp;
+               $scope.loadCharges=false;
+
+
               $scope.purchase($scope.user);
                // Call the method $apply to make the update on the scope
                $scope.$apply();
@@ -82,12 +85,16 @@ accountservices.factory('User', function($http) {
       });
   };
   // HADJI HICHAM  11/08/2014 -- get list Users with licenes .
-User.list_licenses = function($scope,params){
+User.Customers = function($scope,params){
       $scope.isLoading = true;
-      gapi.client.crmengine.users.list_licenses(params).execute(function(resp) {
+      console.log("lebdiri")
+      gapi.client.crmengine.users.customers(params).execute(function(resp) {
               if(!resp.code){
+                console.log("arezki")
                  $scope.users = resp.items;
-                 $scope.invitees = resp.invitees;
+                 $scope.invitees=resp.invitees;
+                 
+
                  if ($scope.currentPage>1){
                       $scope.pagination.prev = true;
                    }else{

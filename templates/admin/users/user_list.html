@@ -55,13 +55,13 @@
             <div class="detailsSection">
               <div class="head">
                 <div class="pic">
-                  <a href="<%= user.google_public_profile_url %>" class="startup-link" title="user.google_display_name">
+                  <a href="/#/admin/users/show/<%= user.google_user_id %>" class="startup-link" title="user.google_display_name">
                     <img ng-show="user.google_public_profile_photo_url" class="img-responsive profile-photo" ng-src="<%= user.google_public_profile_photo_url %>">
                   </a>
                 </div>
                 <div class="text">
                   <div class="name">
-                    <a href="<%= user.google_public_profile_url %>" class="profile-link">
+                    <a href="/#/admin/users/show/<%= user.google_user_id %>" class="profile-link">
                        <%= user.google_display_name %>
                     </a>
                   </div>

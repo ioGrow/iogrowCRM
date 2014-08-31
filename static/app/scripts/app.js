@@ -119,6 +119,9 @@ app.config(['$routeProvider', function($routeProvider) {
       }).when('/admin/users/new', {
         controller: 'UserNewCtrl',
         templateUrl:'/views/admin/users/new'
+      }).when('/admin/users/show/:userGID', {
+        controller: 'UserShowCtrl',
+        templateUrl:'/views/admin/users/show'
       }).when('/admin/groups', {
         controller: 'GroupListCtrl',
         templateUrl:'/views/admin/groups/list'
@@ -177,7 +180,7 @@ app.config(['$routeProvider', function($routeProvider) {
         templateUrl:'/views/calendar/show'
       })
        .when('/billing/', {
-        controller: 'BillingController',
+        controller: 'BillingListController',
         templateUrl:'/views/billing/list'
       })
        .when('/billing/show/:userId', {

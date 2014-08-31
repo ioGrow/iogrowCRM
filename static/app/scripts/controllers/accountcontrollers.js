@@ -544,6 +544,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.opppagination = {};
         $scope.oppCurrentPage = 01;
         $scope.opppages = [];
+        $scope.customfields=[];
         //HKA 11.12.2013 var Case to manage Next & Prev
         $scope.casepagination = {};
         $scope.caseCurrentPage = 01;
@@ -677,10 +678,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             $scope.isLoading=true;
             opportunity.closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
             opportunity.stage = $scope.initialStage.entityKey;
-            console.log('-------------i am here----------------');
-            console.log($scope.initialStage.entityKey),
             opportunity.infonodes = $scope.prepareInfonodes();
-            // prepare amount attributes
             if (opportunity.duration_unit=='fixed'){
               opportunity.amount_total = opportunity.amount_per_unit;
               opportunity.opportunity_type = 'fixed_bid';
@@ -688,15 +686,14 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
               opportunity.opportunity_type = 'per_' + opportunity.duration;
             }
             opportunity.account=$scope.account.entityKey;
-            console.log(opportunity);
             Opportunity.insert($scope,opportunity);
-            $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
             $scope.showNewOpp=false;
+            $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
             $scope.isLoading=false;
             $scope.$apply();
            
 
-        };
+};
        $scope.priorityColor=function(pri){
           if (pri<4) {
               return '#BBE535';
@@ -729,7 +726,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             $( window ).trigger( 'resize' ); 
          }
         // HKA 01.12.2013 Add Case related to Contact
-            $scope.saveCase = function(casee) {
+        $scope.saveCase = function(casee) {
             casee.account=$scope.account.entityKey;
             casee.access=$scope.account.access;
             casee.infonodes = $scope.prepareInfonodes();
@@ -737,15 +734,6 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
             Case.insert($scope,casee);      
             $scope.showNewCase=false;
             $scope.casee={};
-           /* var params = {'name': casee.name,
-                'priority': casee.priority,
-                'status': $scope.status_selected.entityKey,
-                'account': $scope.account.entityKey,
-                'access': $scope.account.access,
-                'status_name': $scope.status_selected.name
-            };
-            Case.insert($scope, params);
-            $('#addCaseModal').modal('hide');   */
         };
          $scope.editbeforedelete = function(item,typee,index){
             $scope.selectedItem={'item':item,'typee':typee,'index':index};
@@ -784,7 +772,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                $scope.waterfallTrigger();
          };
         $scope.oppDeleted = function(resp){
-               $scope.opportunity.splice($scope.selectedItem.index, 1);
+               $scope.opportunities.splice($scope.selectedItem.index, 1);
                $scope.$apply();
                $scope.waterfallTrigger();
          };
@@ -820,6 +808,9 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
 
             };
             Account.get($scope, params);
+            console.log("########rrrrrrrrrrrrrrrrrr###################################")
+            console.log($scope.account);
+       
             User.list($scope, {});
             Opportunitystage.list($scope, {'order':'probability'});
             Casestatus.list($scope, {});
@@ -832,6 +823,9 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         };
         $scope.getColaborators=function(){
           Permission.getColaborators($scope,{"entityKey":$scope.account.entityKey});  
+        } 
+        $scope.getCompanyDetails=function(entityKey){
+               Account.getCompanyDetails($scope,{'entityKey':entityKey}) 
         }
         $scope.selectMemberToTask = function() {
             console.log($scope.selected_members);
@@ -1573,16 +1567,33 @@ $scope.updateEventRenderAfterAdd= function(){};
 
         };
 
-//HKA 19.11.2013 Add Contact related to account
-
-     
+  
         // HKA 19.11.2013 Add Opportunty related to account
 
-           
+        $scope.saveOpp = function(opportunity) {
+            if (opportunity.amount_per_unit){
+            var params = {'name':opportunity.name,
+                                            'currency':opportunity.currency,
+                                            'account':$scope.account.entityKey,
+                                            'stage' :$scope.stage_selected.entityKey,
+                                            'access': $scope.account.access,
+                                            };
+            if (opportunity.duration_unit=='fixed'){
+                params.amount_total=opportunity.amount_per_unit;
+              params.opportunity_type = 'fixed_bid';
+            }else{
+              params.opportunity_type = 'per_' + opportunity.duration;
+              params.amount_total=opportunity.amount_per_unit * opportunity.duration;
+              params.amount_per_unit=opportunity.amount_per_unit
+            }
+            
+            Opportunity.insert($scope, params);
+            $('#addOpportunityModal').modal('hide');
+        }
+        };
  $scope.opportunityInserted = function(resp){
           window.location.replace('#/accounts');
       };
-
         // HKA 19.11.2013 Add Case related to account
 
         $scope.saveNeed = function(need) {

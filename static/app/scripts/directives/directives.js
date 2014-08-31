@@ -297,7 +297,6 @@ app.directive('cusdatetimepicker', function($parse) {
 
         }
         var model = $parse(attrs.model);
-        console.log(model($scope));  // logs "test"
         dp.appendDtpicker(params);
         dp.val(null);
         $scope.$watch(attrs.model, function(newValue, oldValue) {
@@ -305,6 +304,50 @@ app.directive('cusdatetimepicker', function($parse) {
                 dp.val(null);
               };
         });
+    }
+  }
+});
+app.directive('gototext', function($parse) {
+      return {
+      scope: {
+      'limit': '@',
+      'text': '='
+      },
+      restrict: 'A',
+      require:'?ngModel',
+      link: function($scope, element, attrs,ngModel) {
+          var limit = $scope.limit;
+          var model = $scope.text;
+          var ellipsestext = "...";
+          var moretext = attrs.moretext;
+          var lesstext = attrs.lesstext;
+          console.log($scope.moretext)
+          if(model.length > limit) {
+            var shortText = model.substr(0, limit);
+            var h = model.substr(limit-1, model.length - limit);
+            var cont = shortText + '<span class="moreelipses less">'+ellipsestext+'</span>&nbsp;<span class="morecontent more">' + h + '</span>&nbsp;&nbsp;<span><a href="" class="morelink">'+moretext+'</a></span>';
+            $(element).html(cont);
+          }
+        /*  console.log(shortText);
+          console.log(h);*/
+          $(".morelink").click(function(){
+            if($(".morelink").hasClass("less")) {
+              $(this).removeClass("less");
+              $(".morecontent").removeClass("less");
+              $(".morecontent").addClass("more");
+              $(".moreelipses").addClass("less");
+              $(".moreelipses").removeClass("more");
+              $(this).html(moretext);
+            } else {
+              $(this).addClass("less");        
+              $(".moreelipses").addClass("more");
+              $(".moreelipses").removeClass("less");
+              $(".morecontent").removeClass("more");
+              $(".morecontent").addClass("less");
+              $(this).html(lesstext);
+            }
+            return false;
+          });
     }
   }
 });
