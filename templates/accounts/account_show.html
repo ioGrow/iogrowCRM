@@ -164,6 +164,9 @@
                                     </li>
                                     <li class="ng-tab md-menu" ng-class="{active: selectedTab == 6}">
                                         <a ng-click="waterfallTrigger();selectedTab = 6;">{{_('Cases')}}</a>
+                                    </li> 
+                                    <li class="ng-tab md-menu" ng-class="{active: selectedTab == 9}">
+                                        <a ng-click="waterfallTrigger();selectedTab = 9;">{{_('Details of Account')}}</a>
                                     </li>
                                     <li class="dropdown md-menu-inv">
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -176,6 +179,7 @@
                                             <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">{{_('Needs')}}</a></li>
                                             <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">{{_('Opportunities')}}</a></li>
                                             <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 6}"><a ng-click="selectedTab = 6;">{{_('Cases')}}</a></li>
+                                            <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 6}"><a ng-click="selectedTab = 6;">{{_('Details of Lead')}}</a></li>
                                         </ul>
                                     </li>
                                 </ul>
@@ -1514,6 +1518,112 @@
                                                 </form>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane active" id="tab_1_9" ng-if="(selectedTab == 9)">
+                                    <div class="row slimform">
+                                        <div class="col-md-12">
+                                            <div class="news-blocks blank-card blank-card-yellow newsCard">
+                                                <img class="img-responsive" ng-src=" <%=companydetails.top_image%>">
+                                                <h3>Linkedin Account Informations</h3>
+                                                <div class="news-block-tags">
+                                                    <strong>Name</strong>
+                                                </div>
+                                                <ul class="list-unstyled contact-infos">
+                                                
+                                                    <li>
+                                                        <%=companydetails.name%>
+                                                    </li>
+                                    
+
+                                                </ul>
+                                                <div class="news-block-tags">
+                                                    <strong>logo</strong>
+                                                </div>
+                                                <ul class="list-unstyled contact-infos">
+                                                
+                                                    <li>
+                                                       <img ng-src="<%=companydetails.logo%>"> 
+                                                    </li>
+
+                                                </ul>
+                                                <div class="news-block-tags">
+                                                    <strong>Industry</strong>
+                                                </div>
+                                                <ul class="list-unstyled contact-infos">
+                                                    <li>
+                                                        <%=companydetails.industry%>
+                                                    </li>
+                                                </ul>
+                                                <div class="news-block-tags">
+                                                    <strong>Specialties</strong>
+                                                </div>
+                                                <ul class="list-unstyled contact-infos">
+                                                    <li>
+                                                        <%=companydetails.specialties%>
+                                                    </li>
+                                                </ul>
+                                                <div class="news-block-tags">
+                                                    <strong>Summary</strong>
+                                                </div>
+                                                <ul class="list-unstyled contact-infos">
+                                                    <li>
+                                                        <%=companydetails.summary%>
+                                                    </li>
+                                                </ul> 
+                                                <div class="news-block-tags">
+                                                    <strong>Locality</strong>
+                                                </div>
+                                                <ul class="list-unstyled contact-infos">
+                                                    <li>
+                                                        <%=companydetails.headquarters%>
+                                                    </li>
+                                                </ul>
+                                                <div class="news-block-tags">
+                                                    <strong>Company size</strong>
+                                                </div>
+                                                  <ul class="list-unstyled contact-infos">
+                                                    <li>
+                                                        <%=companydetails.company_size%>
+                                                    </li>
+                                                </ul>
+                                                <div class="news-block-tags">
+                                                    <strong>Followers</strong>
+                                                </div>
+                                                  <ul class="list-unstyled contact-infos">
+                                                    <li>
+                                                        <%=companydetails.followers%>
+                                                    </li>
+                                                </ul>
+                                                <div class="news-block-tags">
+                                                    <strong>Type</strong>
+                                                </div>
+                                                  <ul class="list-unstyled contact-infos">
+                                                    <li>
+                                                        <%=companydetails.type%>
+                                                    </li>
+                                                </ul>  
+                                                <div class="news-block-tags">
+                                                    <strong>Web site</strong>
+                                                </div>
+                                                  <ul class="list-unstyled contact-infos">
+                                                    <li>
+                                                        <a href="<%=companydetails.website%>"><%=companydetails.website%></a>
+                                                        
+                                                    </li>
+                                                </ul>
+                                                <div class="news-block-tags">
+                                                    <strong>Linkedin url</strong>
+                                                </div>
+                                                  <ul class="list-unstyled contact-infos">
+                                                    <li>
+                                                        <a href="<%=companydetails.url%>"><%=companydetails.url%></a> 
+                                                    </li>
+                                                </ul>
+                    
+                                            </div>
+                                        </div>
+                                       
                                     </div>
                                 </div>
                             </div>

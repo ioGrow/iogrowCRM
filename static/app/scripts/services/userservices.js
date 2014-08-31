@@ -87,8 +87,10 @@ accountservices.factory('User', function($http) {
   // HADJI HICHAM  11/08/2014 -- get list Users with licenes .
 User.Customers = function($scope,params){
       $scope.isLoading = true;
+      console.log("lebdiri")
       gapi.client.crmengine.users.customers(params).execute(function(resp) {
               if(!resp.code){
+                console.log("arezki")
                  $scope.users = resp.items;
                  $scope.invitees=resp.invitees;
                  

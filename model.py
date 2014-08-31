@@ -154,6 +154,7 @@ class Organization(ndb.Model):
                  )
         cust.subscriptions.create(plan="iogrow_plan")
         admin.stripe_id=cust.id
+
         admin.put()
         created_tabs = []
         for tab in STANDARD_TABS:
@@ -746,6 +747,20 @@ class LinkedinProfile(ndb.Model) :
     resume=ndb.TextProperty(indexed=False)
     certifications=ndb.JsonProperty(indexed=False)
     skills=ndb.StringProperty(repeated=True,indexed=False)
+    url=ndb.StringProperty(indexed=False)
+class LinkedinCompany(ndb.Model) :
+    name = ndb.StringProperty(indexed=False)
+    website =  ndb.StringProperty(indexed=False)
+    industry =  ndb.StringProperty(indexed=False)
+    headquarters =  ndb.StringProperty(indexed=False)
+    summary =  ndb.TextProperty(indexed=False)
+    founded=ndb.StringProperty(indexed=False)
+    followers=ndb.StringProperty(indexed=False)
+    logo=ndb.StringProperty(indexed=False)
+    specialties=ndb.StringProperty(indexed=False)
+    top_image=ndb.StringProperty(indexed=False)
+    type=ndb.StringProperty(indexed=False)
+    company_size=ndb.StringProperty(indexed=False)
     url=ndb.StringProperty(indexed=False)
 
 class TwitterProfile(ndb.Model):
