@@ -417,7 +417,8 @@ class EndpointsHelper():
     @classmethod
     def get_tweets(cls, keywords,order):
         import detectlanguage
-        detectlanguage.configuration.api_key = "0dd586141a3b89f3eba5a46703eeb5ab"
+        #detectlanguage.configuration.api_key = "0dd586141a3b89f3eba5a46703eeb5ab"
+        detectlanguage.configuration.api_key = "5840049ee8c484cde3e9832d99504c6c"
         list_of_tweets=[]
         for keyword in keywords:
             dt = datetime.datetime.fromordinal(date.today().toordinal())
