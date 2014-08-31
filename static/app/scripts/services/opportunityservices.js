@@ -307,7 +307,7 @@ Opportunity.delete = function($scope,params){
         if ( $scope.relatedOpp==true) {
           $scope.oppDeleted(resp);
         }else{
-          window.location.replace('#/cases');  
+          window.location.replace('#/opportunities');  
         };
         
     }
