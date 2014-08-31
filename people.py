@@ -7,7 +7,7 @@ import cookielib
 from iograph import Node , Edge
 
 
-from iomessages import LinkedinProfileSchema, TwitterProfileSchema
+from iomessages import LinkedinProfileSchema, TwitterProfileSchema,LinkedinCompanySchema
 
 from google.appengine.ext import ndb
 from model import LinkedinProfile
@@ -44,10 +44,10 @@ class linked_in():
         r=self.browser.open('https://www.google.com')
         self.browser.response().read()
         self.browser.select_form(nr=0)
-        self.browser.form['q']=firstname +' '+lastname
+        self.browser.form['q']=firstname +' '+lastname +' linkedin'
         self.browser.submit()
         self.browser.response().read()
-        link= self.browser.links(url_regex="linkedin")
+        link= self.browser.links(url_regex="linkedin.com")
         links=[l for l in link]
         if links : return self.browser.follow_link(links[0]).read()
     def open_url_twitter(self, firstname, lastname):
@@ -62,7 +62,21 @@ class linked_in():
         link= self.browser.links(url_regex="twitter.com")
         links=[l for l in link]
         #print links
-        return self.browser.follow_link(links[0]).geturl()
+        if links: return self.browser.follow_link(links[0]).geturl()
+    def open_url_company(self,name):
+        r=self.browser.open('https://www.google.com')
+        self.browser.response().read()
+        self.browser.select_form(nr=0)
+        self.browser.form['q']=name+' linkedin'
+        print self.browser.form['q']
+        self.browser.submit()
+        self.browser.response().read()
+        resp = None
+        link= self.browser.links(url_regex="linkedin.com")
+        links=[l for l in link]
+        #print links
+        if links:
+            return self.browser.follow_link(links[0]).read()
     def get_profile_header(self,soup,person):
         # ***************************head***************************
         member_head=soup.find('div',{'id':'member-1'})
@@ -86,42 +100,55 @@ class linked_in():
             else : person['headline']=''
             #**********************************************************
 
-            overview=soup.find('dl',{'id':'overview'})
-            if overview:
-                current_post=overview.find('dd',{'class':'summary-current'})
-                # ---------------------------------------------------------
-                tab=[]
-                if current_post:
-                    for post in current_post.findAll('li'):
-                        tab.append(post.text.replace('\n',' '))
-                person['current_post']=tab
-                # ------------------------------------------------------------
-                tab=[]
-                past_post=overview.find('dd',{'class':'summary-past'})
-                if past_post:
-                    for post in past_post.findAll('li'):
-                        tab.append(post.text.replace('\n',' '))
-                person['past_post']=tab
-                # ------------------------------------------------------------
-                tab=[]
-                formation=overview.find('dd',{'class':'summary-education'})
-                if formation:
-                    for post in formation.findAll('li'):
-                        tab.append(post.text.replace('\n',' '))
-                person['formations']=tab
-            # -------------------------------------------------------------
-            tab=[]
-            formation=overview.find('dd',{'class':'websites'})
-            if formation:
-                for post in formation.findAll('li'):
-                    tab.append('www.linkedin.com'+post.a.get('href'))
-            person['websites']=tab
-            # -------------------------------------------------------------
-            relation=overview.find('dd',{'class':'overview-connections'})
-            r=None
-            if relation:
-                r=relation.p.strong.text
-            person['relation']=r
+        overview=soup.find('dl',{'id':'overview'})
+       
+        current_post=soup.find('dd',{'class':'summary-current'})
+        # ---------------------------------------------------------
+        tab=[]
+        if current_post:
+            for post in current_post.findAll('li'):
+                tab.append(post.text.replace('\n',' '))
+        person['current_post']=tab
+        # ------------------------------------------------------------
+        tab=[]
+        past_post=soup.find('dd',{'class':'summary-past'})
+        if past_post:
+            for post in past_post.findAll('li'):
+                tab.append(post.text.replace('\n',' '))
+        person['past_post']=tab
+        # ------------------------------------------------------------
+        tab=[]
+        formation=soup.find('dd',{'class':'summary-education'})
+        if formation:
+            for post in formation.findAll('li'):
+                tab.append(post.text.replace('\n',' '))
+        person['formations']=tab
+        # -------------------------------------------------------------
+        tab=[]
+        formation=soup.find('dd',{'class':'websites'})
+        if formation:
+            for post in formation.findAll('li'):
+                tab.append('www.linkedin.com'+post.a.get('href'))
+        person['websites']=tab
+        # -------------------------------------------------------------
+        relation=soup.find('dd',{'class':'overview-connections'})
+        r=None
+        if relation:
+            r=relation.p.strong.text
+        person['relation']=r
+    # -------------------------------------------------------------
+        tab=[]
+        formation=soup.find('dd',{'class':'websites'})
+        if formation:
+            for post in formation.findAll('li'):
+                tab.append('www.linkedin.com'+post.a.get('href'))
+        person['websites']=tab
+        # -------------------------------------------------------------
+        relation=soup.find('dd',{'class':'overview-connections'})
+        r=None
+        if relation:
+            r=relation.p.strong.text
+        person['relation']=r
     def get_exprience(self,soup):
         expriences={}
         exp={}
@@ -204,12 +231,69 @@ class linked_in():
             person['skills']=self.get_skills(soup)
             person['url']= self.browser.geturl()
 
+
         return person
     def scrape_twitter(self, firstname, lastname):
         peron={}
         html=self.open_url_twitter(firstname, lastname)
         if html:
             return html
+    def scrape_company(self,name):
+        company={}
+        html= self.open_url_company(name)
+        if html:
+            soup=BeautifulSoup(html)
+            name=soup.find('span',{'itemprop':"name"})
+            if name :
+                company["name"]=name.text
+            else :company["name"]=None
+            image_wrapper=soup.find('div',{'class':'image-wrapper'})
+            if image_wrapper :
+                company["logo"]=image_wrapper.img.get("src")
+            else :company["logo"]=None
+            top_image=image_wrapper=soup.find('div',{'class':'top-image'})
+            if top_image:
+                company["top_image"]=top_image.img.get("src")
+            else :company["top_image"]=None            
+            followers=soup.find('p',{'class':'followers-count'})
+            if followers :
+                company["followers"]= followers.strong.text
+            else :company["followers"]=None
+            summary=soup.find('div',{'class':'text-logo'})
+            if summary :
+                company["summary"]=summary.p.text
+            else :company["summary"]=None
+            specialties=soup.find('div',{'class':'specialties'})
+            if specialties:
+                company["specialties"]=specialties.p.text.replace('\n','')
+            else :company["specialties"]=None
+            website=soup.find('li',{'class':'website'})
+            if website:
+                company["website"]=website.p.text.replace('\n','')
+            else :company["website"]=None
+            industry=soup.find('li',{'class':'industry'})
+            if industry:
+                company["industry"]=industry.p.text.replace('\n','')
+            else :company["industry"]=None
+            headquarters=soup.find('li',{'class':'vcard hq'})
+            if headquarters:
+                company["headquarters"]=headquarters.p.text.replace('\n','')
+            else :company["headquarters"]=None
+            type=soup.find('li',{'class':'type'})
+            if type:
+                company["type"]=type.p.text.replace('\n','')
+            else :company["type"]=None
+            company_size=soup.find('li',{'class':'company-size'})
+            if company_size:
+                company["company_size"]=company_size.p.text.replace('\n','')
+            else :company["company_size"]=None
+            founded=soup.find('li',{'class':'founded'})
+            if founded:
+                company["founded"]=founded.p.text.replace('\n','')
+            else :company["founded"]=None
+            company["url"]=self.browser.geturl()
+        print company
+        return company
     @classmethod
     # arezki lebdiri 15/07/2014
     def get_people(cls,entityKey):
@@ -236,6 +320,32 @@ class linked_in():
                                     resume=pro.resume,
                                     certifications=pro.certifications,
                                     skills=pro.skills,
+                                    url=pro.url
+                                    )
+            return response
+    @classmethod   
+    def get_company(cls,entityKey):
+
+        key=ndb.Key(urlsafe=entityKey)
+        print key
+        print "********************************************************"
+        result=Edge.list(start_node=key,kind='linkedin')
+        if result['items']:
+            profile_key=result['items'][0].end_node
+            pro= profile_key.get()
+            response=LinkedinCompanySchema(
+                                    name = pro.name,
+                                    website = pro.website,
+                                    industry = pro.industry,
+                                    headquarters = pro.headquarters,
+                                    summary = pro.summary,
+                                    founded = pro.founded,
+                                    followers=pro.followers,
+                                    logo=pro.logo,
+                                    specialties=pro.specialties,
+                                    top_image=pro.top_image,
+                                    type=pro.type,
+                                    company_size=pro.company_size,
                                     url=pro.url
                                     )
             return response
