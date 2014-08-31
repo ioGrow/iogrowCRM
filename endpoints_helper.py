@@ -430,7 +430,7 @@ class EndpointsHelper():
             auth = tweepy.OAuthHandler(credentials['consumer_key'], credentials['consumer_secret'])
             auth.set_access_token(credentials['access_token_key'], credentials['access_token_secret'])
             api = tweepy.API(auth)
-            results = api.search(q = '"'+keyword+'"', count = 20, result_type = order, until = str_date)
+            results = api.search(q = '"'+keyword+'"', count = 10, result_type = order, until = str_date)
             for result in results:
                 if 'text' in result.__dict__:
                     url=""
