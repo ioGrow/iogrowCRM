@@ -61,9 +61,10 @@ class TaskRequest(messages.Message):
     status = messages.StringField(4)
     tags = messages.StringField(5,repeated = True)
     owner = messages.StringField(6)
-    assignee = messages.BooleanField(7)
+    assignee = messages.StringField(7)
     about = messages.StringField(8)
     urgent = messages.BooleanField(9)
+    completed_by = messages.StringField(10)
 
 class TaskListResponse(messages.Message):
     items = messages.MessageField(TaskSchema, 1, repeated=True)
@@ -82,7 +83,7 @@ class Task(EndpointsModel):
     title = ndb.StringProperty()
     due = ndb.DateTimeProperty()
     status = ndb.StringProperty()
-    completed_by = ndb.StructuredProperty(Userinfo)
+    completed_by = ndb.StringProperty()
     involved_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
     involved_ids = ndb.StringProperty(repeated=True)
     # number of comments in this topic
@@ -290,10 +291,13 @@ class Task(EndpointsModel):
                         if not Edge.find(start_node=task.key,kind='tags',end_node_set=end_node_set,operation='AND'):
                             is_filtered = False
                     if request.assignee and is_filtered:
-                        end_node_set = [user_from_email.key]
+                        user_assigned = model.User.get_by_gid(request.assignee)
+                        end_node_set = [user_assigned.key]
                         if not Edge.find(start_node=task.key,kind='assignees',end_node_set=end_node_set,operation='AND'):
                             is_filtered = False
                     if request.owner and task.owner!=request.owner and is_filtered:
+                        is_filtered = False
+                    if request.completed_by and task.completed_by!=request.completed_by and is_filtered:
                         is_filtered = False
                     if request.about and is_filtered:
                         end_node_set = [ndb.Key(urlsafe=request.about)]
@@ -559,8 +563,9 @@ class Task(EndpointsModel):
             task.title = request.title
         if request.status:
             task.status = request.status
+            if task.status =='closed':
+                task.completed_by = user_from_email.google_user_id
         if request.due and task.due == None :
-
             task.due = datetime.datetime.strptime(request.due,"%Y-%m-%dT%H:%M:00.000000")
             taskqueue.add(
                     url='/workers/synctask',
@@ -569,12 +574,13 @@ class Task(EndpointsModel):
                             'email': user_from_email.email,
                             'starts_at': request.due,
                             'ends_at': request.due,
-                            'summary': request.title,
+                            'summary': task.title,
                             'task_id':task_id
                             }
                     )
 
         elif request.due and task.due != None:
+            task.due = datetime.datetime.strptime(request.due,"%Y-%m-%dT%H:%M:00.000000")
             taskqueue.add(
                     url='/workers/syncpatchtask',
                     queue_name='iogrow-low',
@@ -582,7 +588,7 @@ class Task(EndpointsModel):
                             'email': user_from_email.email,
                             'starts_at': request.due,
                             'ends_at': request.due,
-                            'summary': request.title,
+                            'summary': task.title,
                             'task_google_id':task.task_google_id
                             }
                     )

@@ -106,6 +106,7 @@ class EndpointsHelper():
         Returns:
           An object containing a base64 encoded email object.
         """
+        message_html = message_html + '<p>sent from my <a href="http://www.iogrow.com">ioGrow account </a></p>'
         message = MIMEText(smart_str(message_html),'html')
         message['to'] = to
         message['cc'] = cc
@@ -419,8 +420,6 @@ class EndpointsHelper():
     def get_tweets(cls, keywords,order):
         list_of_tweets=[]
         for keyword in keywords:
-            print '***********'
-            print keyword
             dt = datetime.datetime.fromordinal(date.today().toordinal())
             str_date = str(dt.date())
             credentials = {
@@ -483,6 +482,7 @@ class EndpointsHelper():
                 list_of_tweets.append(node_popularpost)
         return list_of_tweets
                 #Edge.insert(start_node=keyword.key,end_node=state_key,kind="TwitterPopularPosts")
+
 
 class scor_new_lead():
     def predict(predd,tedd) :

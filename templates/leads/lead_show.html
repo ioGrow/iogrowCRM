@@ -174,11 +174,10 @@
                                             <li ng-hide="checkIfEmpty(linkedProfile)" class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 9}"><a ng-click="selectedTab = 9;">{{_('Details of Lead')}}</a></li>
 
                                             <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 8}"><a ng-click="selectedTab = 8;">{{_('Send an Email')}}</a></li>
-                                            <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">{{_('Contacts')}}</a></li>
                                             <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 7}"><a ng-click="selectedTab = 7;">{{_('Attach Documents')}}</a>
-                                            <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">{{_('Needs')}}</a></li>
-                                            <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">{{_('Opportunities')}}</a></li>
-                                            <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 6}"><a ng-click="selectedTab = 6;">{{_('Cases')}}</a></li>
+                                           </li>
+                                       
+                                           
 
                                         </ul>
                                     </li>
@@ -674,27 +673,8 @@
                                 <div class="tab-pane active" id="tab_1_2" ng-if="(selectedTab == 9)">
                                     <div class="row slimform">
                                         <div class="col-md-6">
-                                            <div class="news-blocks blank-card blank-card-yellow newsCard">
+                                            <div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="linkedProfile.headline||linkedProfile.locality||linkedProfile.industry||linkedProfile.relation">
                                                 <h3>Lead Informations</h3>
-                                                <div class="news-block-tags">
-                                                    <strong>First name</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                
-                                                    <li>
-                                                        <%=linkedProfile.firstname%>
-                                                    </li>
-                                    
-
-                                                </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>Last Name</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=linkedProfile.lastname%>
-                                                    </li>
-                                                </ul>
                                                 <div class="news-block-tags">
                                                     <strong>profession</strong>
                                                 </div>
@@ -729,7 +709,7 @@
                                                 </ul>
                     
                                             </div>
-                                            <div class="news-blocks blank-card blank-card-bluep newsCard" ng-show="linkedProfile.current_post || linkedProfile.past_post">
+                                            <div class="news-blocks blank-card blank-card-bluep newsCard" ng-show="inkedProfile.current_post||linkedProfile.past_post">
                                                 <h3>Overview</h3>
                                                 <div class="news-block-tags" ng-show="linkedProfile.current_post">
                                                     <strong>Current position</strong>
@@ -748,7 +728,7 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                            <div class="news-blocks blank-card blank-card-yellow newsCard">
+                                            <div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="linkedProfile.experiences.current_exprience||linkedProfile.experiences.past_exprience">
                                                 <h3>Experiences</h3>
                                                 <div class="news-block-tags" ng-show="linkedProfile.experiences.current_exprience">
                                                     <strong>current experiences</strong>
@@ -768,7 +748,7 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                            <div class="news-blocks blank-card blank-card-yellow newsCard">
+                                            <div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="twitterProfile.description_of_user||twitterProfile.screen_name||twitterProfile.location||twitterProfile.lang">
                                                 <h3>General Informations from Twitter</h3>
                                                 <img class="google-avatar pull-right" src="<%=twitterProfile.profile_image_url_https%>"/>
                                                 <div class="news-block-tags">
@@ -808,7 +788,7 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                            <div class="news-blocks blank-card blank-card-red newsCard">
+                                            <div class="news-blocks blank-card blank-card-red newsCard" ng-show="twitterProfile.nbr_tweets||twitterProfile.followers_count||twitterProfile.friends_count">
                                                 <h3>Stats from Twitter</h3>
                                                 <div class="news-block-tags">
                                                     <strong>Number of Tweets</strong>
@@ -835,7 +815,7 @@
                                                     </li>
                                                 </ul> 
                                             </div>
-                                             <div class="news-blocks blank-card blank-card-red newsCard">
+                                             <div ng-show="twitterProfile.last_tweet_text||twitterProfile.last_tweet_retweet_count||twitterProfile.last_tweet_favorite_count" class="news-blocks blank-card blank-card-red newsCard">
                                                 <h3> Tweets</h3>
                                                 <div class="news-block-tags">
                                                     <strong>Last Tweet:</strong>
@@ -868,8 +848,8 @@
                                                     <h3>Summary</h3>
                                                     <div class="news-block-tags">
 
-                                                        <div class="form-group row">
-                                                            <label style="margin:10px;"><%=linkedProfile.resume%></label>
+                                                        <div class="" >
+                                                            <label gototext limit="100" lesstext='{{ _("Less")}}' moretext='{{ _("More")}}' text="linkedProfile.resume"></label>
                                                           
                                                         </div>
                                                     </div>
@@ -877,10 +857,10 @@
                                                 <div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="linkedProfile.skills">
                                                     <h3>Skills</h3>
                                                    
-                                                    <ul class="list-unstyled contact-infos">
-                                                    <li ng-repeat="skill in linkedProfile.skills">
-                                                      - <%=skill%>   
-                                                    </li>
+                                                    <ul class="list-unstyled">
+                                                    <span ng-repeat="skill in linkedProfile.skills">
+                                                      <%=skill%> ,    
+                                                    </span>
                                                     </ul>
                                                 </div> 
                                                 <div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="linkedProfile.formations">

@@ -108,8 +108,20 @@ class LinkedinProfileSchema(messages.Message):
     certifications=messages.StringField(13)
     skills=messages.StringField(14,repeated=True)
     url=messages.StringField(15)
-
-
+class LinkedinCompanySchema(messages.Message):
+    name = messages.StringField(1)
+    website = messages.StringField(2)
+    industry = messages.StringField(3)
+    headquarters = messages.StringField(4)
+    summary= messages.StringField(5)
+    founded = messages.StringField(6)
+    followers=messages.StringField(7)
+    logo=messages.StringField(8)
+    specialties=messages.StringField(9)
+    top_image=messages.StringField(10)
+    type=messages.StringField(11)
+    company_size=messages.StringField(12)
+    url=messages.StringField(13)
 
 class PatchTagSchema(messages.Message):
      id=messages.StringField(1)
