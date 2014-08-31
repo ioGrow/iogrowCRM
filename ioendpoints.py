@@ -3236,7 +3236,10 @@ class CrmEngineApi(remote.Service):
         # if the user input google_user_id    
         else:
             sorted_by=request.sorted_by
-            users=User.query().fetch()
+            users=User.query().order(-User.updated_at)
+            if sorted_by=='created_at':
+                users=User.query().order(-User.created_at)
+
             list_of_reports=[]
             for user in users:
                 gid=user.google_user_id
@@ -3258,16 +3261,17 @@ class CrmEngineApi(remote.Service):
                 list_of_reports.sort(key=itemgetter(5),reverse=True)
             elif sorted_by=='tasks':
                 list_of_reports.sort(key=itemgetter(6),reverse=True)
-            elif sorted_by=='created_at':
-                list_of_reports.sort(key=itemgetter(7),reverse=True)
-            else:
-                list_of_reports.sort(key=itemgetter(8),reverse=True)
+            #elif sorted_by=='created_at':
+            #   list_of_reports.sort(key=itemgetter(7),reverse=True)
+            #else:
+            #    list_of_reports.sort(key=itemgetter(4),reverse=True)
             reporting = []
             for item in list_of_reports:
                 item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count_account=item[3],count_contacts=item[4],count_leads=item[5],count_tasks=item[6],created_at=item[7].isoformat(),updated_at=item[8].isoformat())
                 reporting.append(item_schema)
 
             return ReportingListResponse(items=reporting)         
+
 
     # event permission
     @endpoints.method(EventPermissionRequest, message_types.VoidMessage,
