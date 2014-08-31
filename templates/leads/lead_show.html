@@ -1584,11 +1584,11 @@
                     <div class="radio-list">
 
                         <label >
-                            <input type="radio" name="optionRadio" value="public" ng-model="lead.access" />
+                            <input type="radio" name="optionRadio" value="public" ng-model="lead.access" ng-click="share();"/>
                             {{ _("public: Anyone within your organization can access and find")}}
                         </label>
                         <label >
-                            <input type="radio" name="optionRadio"  value="private" ng-model="lead.access" />
+                            <input type="radio" name="optionRadio"  value="private" ng-model="lead.access" ng-click="share();"/>
                             {{ _("private: only you and your collaborators")}}
                         </label>
                     </div>
@@ -1620,7 +1620,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button  type="submit"  ng-click="share(slected_memeber)"  class="btn blue addContactNow">{{_("Share")}}</button>
+                <button  type="submit"  ng-click="share()" data-dismiss="modal" aria-hidden="true" class="btn blue addContactNow">{{_("Share")}}</button>
             </div>
             </form>
         </div>

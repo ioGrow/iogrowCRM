@@ -248,7 +248,7 @@ accountservices.factory('Permission', function($http) {
          console.log('in insert resp');
          console.log(resp);
          if(!resp.code){
-              $scope.updateCollaborators();
+              $scope.getColaborators()
 
 
          }else{
