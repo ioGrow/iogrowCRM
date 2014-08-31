@@ -651,8 +651,6 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                           }
                       };
           Lead.get($scope,params);
-          Permission.getColaborators({"entityKey":$scope.lead.entityKey});
-          console.log("ok to here ------------------------->")
           console.log($scope.lead)
 
           User.list($scope,{});
@@ -742,6 +740,9 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
                 params["parent"]="lead";
                 Event.permission($scope,params);
                 Task.permission($scope,params);
+        $scope.getColaborators()
+        console.log("okkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
+        console.log($scope.collaborators_list)
         });
         $('#sharingSettingsModal').modal('hide');
 
