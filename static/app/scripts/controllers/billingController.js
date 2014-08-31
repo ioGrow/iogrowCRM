@@ -153,6 +153,7 @@ app.controller('BillingShowController', ['$scope','$route', 'Auth','Search','Use
     email: user.email,
 
     token: function(token) {
+      
 
     var params={'token_id':token.id,
                 'token_email':token.email, 
