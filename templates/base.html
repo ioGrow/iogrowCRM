@@ -17,7 +17,6 @@
  <link href='http://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
    <link href="/static/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
   <link href="/static/bootstrap3/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/static/bootstrap3/plugins/bootstrap-colorpicker2/css/colorpicker.css" rel="stylesheet" type="text/css"/>
   <link href="/static/bootstrap3/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
 <link href="//fonts.googleapis.com/css?family=Ubuntu:300,300italic,400,400italic,500,500italic,700,700italic&subset=latin" rel="stylesheet" type="text/css" />
 <link href="//fonts.googleapis.com/css?family=Exo+2:100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic&subset=latin" rel="stylesheet" type="text/css" />
@@ -30,8 +29,7 @@
   <link href="/static/bootstrap3/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css"/>
   <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="/static/css/bootstrap-wysihtml5.css">
-  <link href="/static/plugins/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css"/>
-  <link href='static/plugins/fullcalendar/fullcalendar.print.css' rel='stylesheet' media='print' />
+  
 
 
     <link href="/static/bootstrap3/plugins/select2/select2_metro.css" rel="stylesheet" type="text/css"/>
@@ -41,7 +39,6 @@
   <link href="static/bootstrap3/css/style.css" rel="stylesheet" type="text/css"/>
   <link href="static/bootstrap3/css/style-responsive.css" rel="stylesheet" type="text/css"/>
   <link href="static/bootstrap3/css/plugins.css" rel="stylesheet" type="text/css"/>
-  <link href="static/bootstrap3/css/pages/tasks.css" rel="stylesheet" type="text/css"/>
   <link href="static/bootstrap3/css/themes/light.css" rel="stylesheet" type="text/css" id="style_color"/>
    <link rel="stylesheet" href="static/plugins/ngQuickDate/ng-quick-date.css"/>
    <link rel="stylesheet" href="static/plugins/ngQuickDate/ng-quick-date-default-theme.css"/>
@@ -50,8 +47,11 @@
    <link href="/static/plugins/date-time-picker/jquery.simple-dtpicker.css" rel="stylesheet" type="text/css"/>
    <link href="/static/plugins/jquery-easy-pie-chart/jquery.easy-pie-chart.css" rel="stylesheet" type="text/css"/>
   <link href="/static/bootstrap3/css/custom.css" rel="stylesheet" type="text/css"/>
-  <link href="/static/bootstrap3/css/test.css" rel="stylesheet" type="text/css"/>
+  
   <link href="/static/angular-xeditable-0.1.8/css/xeditable.css" rel="stylesheet">
+  <link href="/static/plugins/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css"/>
+  <link href='/static/plugins/fullcalendar/fullcalendar.print.css' rel='stylesheet' media='print' />
+  <link href="/static/bootstrap3/css/test.css" rel="stylesheet" type="text/css"/>
 
 
   <!-- END THEME STYLES -->
@@ -419,8 +419,10 @@
 <!-- END FOOTER -->
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 <!-- BEGIN CORE PLUGINS -->
-  <script src="//code.jquery.com/jquery-1.11.0.min.js"  type="text/javascript"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js" ></script>
+  <script src="/static/plugins/jquery.min.js"  type="text/javascript"></script>
+  <script src="/static/bootstrap3/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
+  <script src="/static/bootstrap3/plugins/moment/moment.min.js"></script>
+  <script src="/static/app/scripts/vendor/angular.js" ></script>
   <script type="text/javascript">
     var apisToLoad;
     var callback = function() {
@@ -439,13 +441,13 @@
 
 
 
-  var ROOT = '/_ah/api';
+  // var ROOT = '/_ah/api';
 
 
 
 
 
-     // var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+     var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
 
 
 
@@ -486,47 +488,12 @@
   </script>
   <script src="https://apis.google.com/js/client.js?onload=loadGapi">
   </script>
-  <script src="//code.jquery.com/ui/1.11.1/jquery-ui.min.js" type="text/javascript"></script>
-
-  <script src="/static/bootstrap3/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-  <script src="/static/app/scripts/vendor/ui-bootstrap-0.5.0.js" ></script>
-  <script src="/static/app/scripts/vendor/ui-bootstrap-tpls-0.5.0.js"></script>
   
-  <script src="/static/app/scripts/vendor/wysihtml5-0.3.0.min.js" ></script>
-  <script src="/static/app/scripts/vendor/bootstrap-wysihtml5.js" ></script>
 
-  <script src="/static/app/scripts/vendor/select2.min.js" ></script>
-  <script src="/static/app/scripts/vendor/ui-select2.js" ></script>
-
-  <script src="/static/angular-xeditable-0.1.8/js/xeditable.js"></script>
-
-  <script src="/static/plugins/waterfall/zepto.js"></script>
-  <script src="/static/plugins/waterfall/jquery.waterfall.js"></script>
-  
-  <script src="/static/bootstrap3/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
-  
-  <script src="/static/bootstrap3/plugins/moment/moment.min.js"></script>
-  <script src="/static/bootstrap3/plugins/moment/angular.moment.js"></script>
-  <script src="/static/plugins/ngQuickDate/ng-quick-date.js"></script>
-  <script src="/static/app/scripts/vendor/datetimepicker.js"></script>
-
-  <script src="/static/bootstrap3/plugins/jquery.blockui.min.js" type="text/javascript"></script>
-  <script src="/static/bootstrap3/plugins/jquery.cokie.min.js" type="text/javascript"></script>
-  <script src="/static/bootstrap3/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
-  <script src="/static/plugins/bootstrap-switch/static/js/bootstrap-switch.js" type="text/javascript" ></script>
-  <script src="/static/plugins/jquery-textfill/jquery.textfill.min.js" type="text/javascript" ></script>
-  
-  <script src="/static/app/scripts/vendor/jquery.ui.map.min.js"></script>
-  <script type="text/javascript" src="/static/app/scripts/vendor/jquery.ui.map.services.js">
-  </script>
-  <script src="/static/plugins/jquery-easy-pie-chart/angular.easypiechart.js" type="text/javascript"></script>
+  <script src="/static/app/scripts/vendor/static_scripts.js" ></script>
   <script src="/static/plugins/fullcalendar/fullcalendar.min.js" type="text/javascript"></script>
    <script src="/static/plugins/fullcalendar/lang-all.js" type="text/javascript"></script>
   <script src="/static/plugins/fullcalendar/gcal.js" type="text/javascript"></script>
-  <script src="/static/plugins/date-time-picker/jquery.simple-dtpicker.js"></script>
-  <script type="text/javascript" src="/static/app/scripts/vendor/bootstrap-datetimepicker.min.js"></script>
-   <script type="text/javascript" src="/static/plugins/caret/jquery.caret.js"></script>
-  <script src="/static/bootstrap3/plugins/bootstrap-hover-dropdown/twitter-bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
 
 
   <!-- ioGrow Services -->
@@ -553,6 +520,10 @@
 
   <!--  /End of ioGrow Services -->
   <script src="/static/app/scripts/app.js" ></script>
+   <!-- ioGrow helpers and directives -->
+  <script src="/static/app/scripts/directives/directives.js" ></script>
+  <script src="/static/app/scripts/services/helpers.js" ></script>
+  <!-- /End of ioGrow helpers and directives -->
   <!-- ioGrow Controllers -->
   <script src="/static/app/scripts/controllers/discovercontrollers.js" ></script>
    <script src="/static/app/scripts/controllers/mysettingcontrollers.js" ></script>
@@ -577,10 +548,7 @@
   
   <!-- /End of ioGrow controllers -->
 
-  <!-- ioGrow helpers and directives -->
-  <script src="/static/app/scripts/directives/directives.js" ></script>
-  <script src="/static/app/scripts/services/helpers.js" ></script>
-  <!-- /End of ioGrow helpers and directives -->
+ 
 
    
   <!--[if lt IE 9]>
