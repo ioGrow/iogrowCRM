@@ -1,5 +1,6 @@
-app.controller('EventShowController',['$scope','$filter','$route','Auth','Note','Event','Task','Topic','Comment','User','Contributor','Show','Map',
-   function($scope,$filter,$route,Auth,Note,Event,Task,Topic,Comment,User,Contributor,Show,Map) {
+app.controller('EventShowController',['$scope','$filter','$route','Auth','Note','Event','Task','Topic','Comment','User','Contributor','Map',
+   function($scope,$filter,$route,Auth,Note,Event,Task,Topic,Comment,User,Contributor,Map) {
+
 //HKA 14.11.2013 Controller to show Events and add comments
    $scope.isSignedIn = false;
      $scope.immediateFailed = false;
@@ -271,8 +272,8 @@ $scope.inlineUpdateEvent= function(event,value){
   // Google+ Authentication
   Auth.init($scope);
 }]);
-app.controller('EventListController',['$scope','$filter','$route','Auth','Note','Event','Task','Topic','Comment','User','Contributor','Show','Map',
-   function($scope,$filter,$route,Auth,Note,Event,Task,Topic,Comment,User,Contributor,Show,Map) {
+app.controller('EventListController',['$scope','$filter','$route','Auth','Note','Event','Task','Topic','Comment','User','Contributor','Map',
+   function($scope,$filter,$route,Auth,Note,Event,Task,Topic,Comment,User,Contributor,Map) {
 //HKA 14.11.2013 Controller to show Events and add comments
 
    $("ul.page-sidebar-menu li").removeClass("active");

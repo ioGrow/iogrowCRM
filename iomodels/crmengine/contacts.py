@@ -739,23 +739,27 @@ class Contact(EndpointsModel):
                                   created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                                 )
-        # taskqueue.add(
-        #             url='/workers/sync_contacts',
-        #             queue_name='iogrow-low',
-        #             params={
-        #                     'email': user_from_email.email,
-        #                     'id':contact_schema.id
-        #                     }
-        #             )
-        # taskqueue.add(
-        #                     url='/workers/get_from_linkedin',
-        #                     queue_name='iogrow-low',
-        #                     params={'entityKey' :contact_key_async.urlsafe()}
-        #                 )
-        # taskqueue.add(
-        #                 url='/workers/get_from_twitter',
-        #                 params={'entityKey': contact_key_async.urlsafe()}
-        #             )
+
+        taskqueue.add(
+                    url='/workers/sync_contacts',
+                    queue_name='iogrow-low',
+                    params={
+                            'email': user_from_email.email,
+                            'id':contact_schema.id
+                            }
+                    )
+        taskqueue.add(
+                              url='/workers/get_from_linkedin',
+                              queue_name='iogrow-low',
+                              params={'entityKey' :contact_key_async.urlsafe()}
+                        )
+        taskqueue.add(
+                        url='/workers/get_from_twitter',
+                        queue_name="iogrow-low",
+                        params={'entityKey': contact_key_async.urlsafe()}
+                    )
+        
+
         return contact_schema
     @classmethod
     def get_key_by_name(cls,user_from_email,name):
