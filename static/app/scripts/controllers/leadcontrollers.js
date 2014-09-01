@@ -474,16 +474,7 @@ $scope.addTags=function(){
 
      };
 
-     var handleColorPicker = function () {
-          if (!jQuery().colorpicker) {
-              return;
-
-          }
-          $('.colorpicker-default').colorpicker({
-              format: 'hex'
-          });
-      }
-      handleColorPicker();
+    
 
       $('#addMemberToTask > *').on('click', null, function(e) {
             e.stopPropagation();
@@ -1950,16 +1941,7 @@ $scope.addTags=function(){
 
      };
 
-     var handleColorPicker = function () {
-          if (!jQuery().colorpicker) {
-              return;
-
-          }
-          $('.colorpicker-default').colorpicker({
-              format: 'hex'
-          });
-      }
-      handleColorPicker();
+     
 
       $('#addMemberToTask > *').on('click', null, function(e) {
             e.stopPropagation();
