@@ -44,7 +44,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 				 $scope.currentContact=null;
 				 $scope.showTagsFilter=false;
      			 $scope.showNewTag=false;
-                 ;
+                 
 				// What to do after authentication
 			 $scope.runTheProcess = function(){
 						var params = {'order' : $scope.order,'limit':20}
