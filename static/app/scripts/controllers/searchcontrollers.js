@@ -90,52 +90,52 @@ $scope.updatelanguage = function(user){
 }]);
 app.controller('SearchFormController', ['$scope','Search','User',
     function($scope,Search,User) {
-     if (annyang) {
+     // if (annyang) {
 
-        // Let's define our first command. First the text we expect, and then the function it should call
-        var commands = {
-          'go to contacts': function(account) {
-            window.location.replace('/#/contacts');
-          },
-          'go to accounts': function(account) {
-            window.location.replace('/#/accounts');
-          },
-          'go to leads': function(account) {
-            window.location.replace('/#/leads');
-          },
-          'go to opportunities': function(account) {
-            window.location.replace('/#/opportunities');
-          },
-          'go to cases': function(account) {
-            window.location.replace('/#/cases');
-          },
-          'go to tasks': function(account) {
-            window.location.replace('/#/tasks');
-          },
-          'search :account contacts': function(account) {
-            $scope.searchQuery = account + ' and type:Contact';
-
-
-            $scope.$apply();
-            $scope.executeSearch($scope.searchQuery);
-          },
-          'search *term': function(term) {
-            $scope.searchQuery = term;
+     //    // Let's define our first command. First the text we expect, and then the function it should call
+     //    var commands = {
+     //      'go to contacts': function(account) {
+     //        window.location.replace('/#/contacts');
+     //      },
+     //      'go to accounts': function(account) {
+     //        window.location.replace('/#/accounts');
+     //      },
+     //      'go to leads': function(account) {
+     //        window.location.replace('/#/leads');
+     //      },
+     //      'go to opportunities': function(account) {
+     //        window.location.replace('/#/opportunities');
+     //      },
+     //      'go to cases': function(account) {
+     //        window.location.replace('/#/cases');
+     //      },
+     //      'go to tasks': function(account) {
+     //        window.location.replace('/#/tasks');
+     //      },
+     //      'search :account contacts': function(account) {
+     //        $scope.searchQuery = account + ' and type:Contact';
 
 
-            $scope.$apply();
-            $scope.executeSearch($scope.searchQuery);
-          }
+     //        $scope.$apply();
+     //        $scope.executeSearch($scope.searchQuery);
+     //      },
+     //      'search *term': function(term) {
+     //        $scope.searchQuery = term;
 
-        };
+
+     //        $scope.$apply();
+     //        $scope.executeSearch($scope.searchQuery);
+     //      }
+
+     //    };
 
 
-        // Add our commands to annyang
-        annyang.addCommands(commands);
+     //    // Add our commands to annyang
+     //    annyang.addCommands(commands);
 
-        // Start listening. You can call this here, or attach this call to an event, button, etc.
-        // annyang.start();
-      }
+     //    // Start listening. You can call this here, or attach this call to an event, button, etc.
+     //    // annyang.start();
+     //  }
      var params ={};
      $scope.results =[];
      $scope.result = undefined;
