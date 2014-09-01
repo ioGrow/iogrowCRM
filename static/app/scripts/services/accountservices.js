@@ -333,6 +333,7 @@ accountservices.factory('Account', function($http) {
             } else {
                 alert("Error, response is: " + angular.toJson(resp));
             }
+            $scope.getColaborators();
             console.log('accounts.patch gapi #end_execute');
         });
     };

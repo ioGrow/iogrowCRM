@@ -248,6 +248,7 @@ accountservices.factory('Contact', function($http) {
                 $scope.$apply();
                };
             }
+            $scope.getColaborators();
             console.log('Contact.patch gapi #end_execute');
           });
   };

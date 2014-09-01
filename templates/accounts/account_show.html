@@ -179,7 +179,7 @@
                                             <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">{{_('Needs')}}</a></li>
                                             <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">{{_('Opportunities')}}</a></li>
                                             <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 6}"><a ng-click="selectedTab = 6;">{{_('Cases')}}</a></li>
-                                            <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 6}"><a ng-click="selectedTab = 6;">{{_('Details of Lead')}}</a></li>
+                                            <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 6}"><a ng-click="selectedTab = 6;">{{_('Details of Account')}}</a></li>
                                         </ul>
                                     </li>
                                 </ul>
@@ -2350,11 +2350,11 @@
                     <div class="radio-list">
 
                         <label >
-                            <input type="radio" name="optionRadio" value="public" ng-model="account.access" />
+                            <input type="radio" name="optionRadio" value="public" ng-model="account.access" ng-click="share()"/>
                             {{ _("public: Anyone within your organization can access and find")}}
                         </label>
                         <label >
-                            <input type="radio" name="optionRadio"  value="private" ng-model="account.access" />
+                            <input type="radio" name="optionRadio"  value="private" ng-model="account.access"  ng-click="share()"/>
                             {{ _("private: only you and your collaborators")}}
                         </label>
                     </div>
@@ -2386,7 +2386,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button  type="submit" ng-click="share(slected_memeber)" class="btn blue addContactNow">{{_("Share")}}</button>
+                <button  type="submit" data-dismiss="modal" aria-hidden="true" ng-click="share()" class="btn blue addContactNow">{{_("Share")}}</button>
             </div>
             </form>
         </div>

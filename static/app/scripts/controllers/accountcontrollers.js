@@ -1251,7 +1251,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         }
         $scope.share = function(slected_memeber) {
 
-            $scope.$watch($scope.account.access, function() {
+        
                 var body = {'access': $scope.account.access};
                 var id = $scope.account.id;
                 var params = {'id': id,
@@ -1262,8 +1262,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
                 params["parent"]="account";
                 Event.permission($scope,params);
                 Task.permission($scope,params);
-            });
-            $('#sharingSettingsModal').modal('hide');
+        
 
             if ($scope.sharing_with.length > 0) {
 
@@ -1293,11 +1292,7 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
 
         };
 
-        $scope.updateCollaborators = function() {
-            var accountid = {'id': $route.current.params.accountId};
-            Account.get($scope, accountid);
-
-        };
+      
         $scope.showModal = function() {
 
             $('#addAccountModal').modal('show');
