@@ -620,7 +620,23 @@ class Contact(EndpointsModel):
                 if (eval('contact.' + p) != eval('request.' + p)) \
                 and(eval('request.' + p) and not(p in ['put', 'set_perm', 'put_index'])):
                     exec('contact.' + p + '= request.' + p)
+        parents_edge_list = Edge.list(
+                                    start_node = contact.key,
+                                    kind = 'parents',
+                                    limit = 1
+                                    )
+        account_schema = None
+        if len(parents_edge_list['items'])>0:
+            account = parents_edge_list['items'][0].end_node.get()
+            if account:
+                account_schema = AccountSchema(
+                                            id = int( account.key.id() ),
+                                            entityKey = account.key.urlsafe(),
+                                            name = account.name
+                                            )
         if request.account:
+            if len(parents_edge_list['items'])>0:
+                Edge.delete(parents_edge_list['items'][0].key)
             account_key = ndb.Key(urlsafe=request.account)
             account = account_key.get()
             account_schema = AccountSchema(
@@ -640,20 +656,6 @@ class Contact(EndpointsModel):
                                             indexed_edge = str(account_key.id())
                                             )
         else:
-            parents_edge_list = Edge.list(
-                                    start_node = contact.key,
-                                    kind = 'parents',
-                                    limit = 1
-                                    )
-            account_schema = None
-            if len(parents_edge_list['items'])>0:
-                account = parents_edge_list['items'][0].end_node.get()
-                if account:
-                    account_schema = AccountSchema(
-                                            id = int( account.key.id() ),
-                                            entityKey = account.key.urlsafe(),
-                                            name = account.name
-                                            )
             contact.put()
 
         contact_schema = ContactSchema(
