@@ -641,6 +641,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
     };
     $scope.linkedProfile={};
      $scope.twitterProfile={};
+    $scope.ownerSelected={};
     $scope.getLinkedinProfile=function(){
       
       Contact.get_linkedin($scope,{'entityKey':$scope.contact.entityKey});
@@ -880,11 +881,15 @@ $scope.listTags=function(){
   //HKA 27.11.2013 Update Contact updatecontact
   $scope.updatecontact = function(contact){
     var params={'id':$scope.contact.id,
+    			'owner':$scope.ownerSelected.google_user_id,
                 'firstname':contact.firstname,
                 'lastname':contact.lastname,
-                'title':contact.title,
-            	'account':$scope.contact.account
+                'title':contact.title
             };
+       	if (typeof($scope.contact.account)=='string'){
+       		params.account = $scope.contact.account;
+       	}
+
         Contact.patch($scope,params);
         $('#EditContactModal').modal('hide')
 

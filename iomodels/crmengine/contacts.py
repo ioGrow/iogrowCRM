@@ -635,8 +635,6 @@ class Contact(EndpointsModel):
                                             name = account.name
                                             )
         if request.account:
-            if len(parents_edge_list['items'])>0:
-                Edge.delete(parents_edge_list['items'][0].key)
             account_key = ndb.Key(urlsafe=request.account)
             account = account_key.get()
             account_schema = AccountSchema(
