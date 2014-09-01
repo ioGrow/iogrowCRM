@@ -171,9 +171,11 @@
                   <span>
                       <%=fromNow(lead.updated_at)%>
                   </span>
-                  <span class="contact-title" >
+                  <a href="http://twitter.com/<%= tweet.screen_name %>/status/<%= tweet.id %>" >
+                  <span  class="contact-title" >
                     <%= tweet.content %>
                   </span>
+                  </a>
                   <span ng-show="lead.title">
                     <a  class="desc" href="/#/search/type:Lead <%=lead.title%>">
                       #<%=lead.title%>
