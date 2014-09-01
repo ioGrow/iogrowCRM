@@ -67,7 +67,7 @@
                                             <div class="col-md-9">
                                             <div class="pic">
 
-                                            <a href="<%=user.google_public_profile_photo_url%>" class="">
+                                            <a href="/#/admin/users/show/<%= user.google_user_id %>" class="">
                                                 <img alt="<%= user.google_display_name%>" src="<%=user.google_public_profile_photo_url%>" class="img-responsive profile-photo-large-billing-show" >
 
                                                 <span>
@@ -114,14 +114,22 @@
                               
                                     <!-- here all the charges will appear -->
                                     <!-- here -->
-                             <li  ng-repeat="charge in user.charges" class="taskCard list-group-item" droppable ng-drop="dropTag(task)" id="task_<%=$index%>" title="<%= task.status_label %>" style="border-left: 3px solid <%= task.status_color%>;"  ng-mouseover="deletetask=true" ng-init="deletetask=false" ng-mouseleave="deletetask=false">
+                             <li  ng-repeat="subscription in user.subscriptions" class="taskCard list-group-item" droppable ng-drop="dropTag(task)" id="task_<%=$index%>" title="<%= task.status_label %>" style="border-left: 3px solid <%= task.status_color%>;"  ng-mouseover="deletetask=true" ng-init="deletetask=false" ng-mouseleave="deletetask=false">
 
                                      <div class="row">
    
                                        <h4   class="col-md-6 col-xs-10 list-group-item-heading"
                                        >
-                                          <a href="/#/tasks/show/<%= task.id %>"> <%= charge.amount %></a>
-                                          <%=task.due%>
+                                          <a href="/#/tasks/show/<%= task.id %>"> <%= subscription.plan %></a>
+                                      <br/> 
+                                      <span> Starts at : 
+                                        <%= subscription.current_period_start %>
+                                      </span>
+                                      <br/>
+                                      <span>
+                                        Ends at : 
+                                        <%= subscription.current_period_end %>
+                                      </span>
                                        </h4>
 
 

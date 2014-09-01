@@ -748,6 +748,7 @@
                                                     </li>
                                                 </ul>
                                             </div>
+
                                             <div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="twitterProfile.description_of_user||twitterProfile.screen_name||twitterProfile.location||twitterProfile.lang">
                                                 <h3>General Informations from Twitter</h3>
                                                 <img class="google-avatar pull-right" src="<%=twitterProfile.profile_image_url_https%>"/>
@@ -788,7 +789,9 @@
                                                     </li>
                                                 </ul>
                                             </div>
+
                                             <div class="news-blocks blank-card blank-card-red newsCard" ng-show="twitterProfile.nbr_tweets||twitterProfile.followers_count||twitterProfile.friends_count">
+
                                                 <h3>Stats from Twitter</h3>
                                                 <div class="news-block-tags">
                                                     <strong>Number of Tweets</strong>
@@ -815,7 +818,9 @@
                                                     </li>
                                                 </ul> 
                                             </div>
+
                                              <div ng-show="twitterProfile.last_tweet_text||twitterProfile.last_tweet_retweet_count||twitterProfile.last_tweet_favorite_count" class="news-blocks blank-card blank-card-red newsCard">
+
                                                 <h3> Tweets</h3>
                                                 <div class="news-block-tags">
                                                     <strong>Last Tweet:</strong>
