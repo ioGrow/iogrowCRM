@@ -2,7 +2,9 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
     function($scope,Auth,Discover,Tag){
 
      $("ul.page-sidebar-menu li").removeClass("active");
+
         $("#id_Discovery").addClass("active");
+
         document.title = "Discovery: Home";
         $scope.selectedTab=2;
         $scope.selectedOption = 'all';
@@ -46,15 +48,21 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
          $scope.showNewTag=false;
         $scope.keywords=[];
         $scope.tweetsFromApi={};
-     
+        var keyw=[];
+        var list_of_tags={};
+      $scope.isLoadingtweets=false;
 
      // What to do after authentication
      $scope.runTheProcess = function(){
-          
-          Discover.get($scope);
 
+          $scope.tweets={};
+          Discover.get_recent_tweets($scope,list_of_tags);
+          console.log('iiiiz');
+          console.log(list_of_tags);
           var paramsTag = {'about_kind':'topics'};
         Tag.list($scope,paramsTag);
+        console.log("piiiiiiii");
+      console.log($scope.tags);
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -78,20 +86,27 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
       Tag.list($scope,paramsTag);
      };
      $scope.addNewtag = function(tag){
+      $scope.isLoading = true;
+      keyw.push(tag.name);
+      console.log("tagss");
+      console.log($scope.tags);
+      for (var id in $scope.tags){
+          keyw.push($scope.tags[id].name);
+        }
+
+       list_of_tags={"value":keyw};
+
        var params = {
                           'name': tag.name,
                           'about_kind':'topics',
                           'color':tag.color.color
-                      }  ;
+                      };
        Tag.insert($scope,params);
         $scope.tag.name='';
         $scope.tag.color= {'name':'green','color':'#BBE535'};
         var paramsTag = {'about_kind':'topics'};
         
-        $scope.tweets={};
-        Discover.get($scope);
-        Tag.list($scope,paramsTag);
-
+        $scope.runTheProcess();
      }
      $scope.updateTag = function(tag){
             params ={ 'id':tag.id,
@@ -106,11 +121,17 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
           }
           Tag.delete($scope,params);
           $scope.tweets={};
-          Discover.get($scope);
+          Discover.get_recent_tweets($scope);
 
       };
 
+  $scope.popular_tweets=function(){
+         $scope.tweets={};
+         Discover.get_best_tweets($scope);
 
+          var paramsTag = {'about_kind':'topics'};
+        Tag.list($scope,paramsTag);   
+        }
 
 $scope.selectTag= function(tag,index,$event){
           
@@ -165,8 +186,7 @@ $scope.selectTag= function(tag,index,$event){
         $scope.tweets=$scope.tweetsFromApi;
        }
         
-        
-       console.log("ooooooooooo");
+      
        console.log($scope.tweets);
   };
 
@@ -368,6 +388,81 @@ $scope.addTags=function(){
    
   // Google+ Authentication 
     Auth.init($scope);
+    $(window).scroll(function() {
+            if (!$scope.isLoading && !$scope.isFiltering && ($(window).scrollTop() > $(document).height() - $(window).height() - 100)) {
+                $scope.listMoreItems();
+            }
+        });
     
 }]);
 
+
+app.controller('DiscoverNewCtrl', ['$scope','Auth','Discover','Tag',
+    function($scope,Auth,Discover,Tag){
+
+     $("ul.page-sidebar-menu li").removeClass("active");
+        $("#id_Discover").addClass("active");
+        document.title = "Discovery: Home";
+        $scope.selectedTab=2;
+        $scope.selectedOption = 'all';
+        $scope.isSignedIn = false;
+        $scope.immediateFailed = false;
+        $scope.nextPageToken = undefined;
+        $scope.prevPageToken = undefined;
+        $scope.isLoading = false;
+        $scope.isMoreItemLoading = false;
+        $scope.pagination = {};
+        $scope.currentPage = 01;
+        $scope.pages = [];
+        $scope.accounts = [];
+        $scope.account = {};
+        $scope.selected_tags = [];
+        $scope.account.access = 'public';
+        $scope.order = '-updated_at';
+        $scope.account.account_type = 'Customer';
+        $scope.draggedTag = null;
+        $scope.tag = {};
+        $scope.tweets = {};
+        $scope.testtitle = "Customer Support Customer Support";
+        $scope.showNewTag = false;
+        $scope.showUntag = false;
+        $scope.edgekeytoDelete = undefined;
+        //Manage Color
+        $scope.color_pallet = [
+            {'name': 'red', 'color': '#F7846A'},
+            {'name': 'orange', 'color': '#FFBB22'},
+            {'name': 'yellow', 'color': '#EEEE22'},
+            {'name': 'green', 'color': '#BBE535'},
+            {'name': 'blue', 'color': '#66CCDD'},
+            {'name': 'gray', 'color': '#B5C5C5'},
+            {'name': 'teal', 'color': '#77DDBB'},
+            {'name': 'purple', 'color': '#E874D6'},
+        ];
+        $scope.tag.color = {'name': 'green', 'color': '#BBE535'};
+        $scope.selectedAccount=null;
+         $scope.currentAccount=null;
+         $scope.showTagsFilter=false;
+         $scope.showNewTag=false;
+         $scope.topic="";
+
+     // What to do after authentication
+     $scope.runTheProcess = function(){
+          
+     };
+     $scope.addNewTopic=function(){
+      console.log($scope.topic);
+      var params = {
+                          'name': $scope.topic,
+                          'about_kind':'topics',
+                          'color':$scope.tag.color.color
+                      };
+      console.log(params);
+       Tag.insert($scope,params);
+       location.reload();
+     }
+
+
+  // Google+ Authentication 
+    Auth.init($scope);
+    
+}]);

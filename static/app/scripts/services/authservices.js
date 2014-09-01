@@ -53,7 +53,7 @@ accountservices.factory('Auth', function($http) {
               gapi.signin.render('myGsignin', {
                 'callback': Auth.signIn,
                 'clientid': '935370948155-a4ib9t8oijcekj8ck6dtdcidnfof4u8q.apps.googleusercontent.com',
-                'scope': 'https://www.googleapis.com/auth/userinfo.email',
+                'scope': 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read',
                 'theme': 'dark',
                 'cookiepolicy': 'single_host_origin',
                 'accesstype': 'online',

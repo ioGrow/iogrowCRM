@@ -1,4 +1,4 @@
-var app = angular.module('crmEngine',['ui.bootstrap.datetimepicker','easypiechart','xeditable','ngQuickDate','ui.bootstrap','ui.select2','angularMoment','crmEngine.authservices', 'crmEngine.showservices', 'crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.eventservices', 'crmEngine.leadservices','crmEngine.opportunityservices','crmEngine.caseservices','crmEngine.userservices','crmEngine.groupservices','crmEngine.noteservices','crmEngine.commentservices','crmEngine.settingservices','crmEngine.importservices','crmEngine.feedbackservices','crmEngine.companyprofileservices','mapServices','crmEngine.needservices','crmEngine.infonodeservices','crmEngine.edgeservices','crmEngine.discoverservices']);
+var app = angular.module('crmEngine',['easypiechart','xeditable','ui.bootstrap','ui.select2','angularMoment','crmEngine.authservices', 'crmEngine.accountservices','crmEngine.contactservices','crmEngine.topicservices','crmEngine.taskservices','crmEngine.eventservices', 'crmEngine.leadservices','crmEngine.opportunityservices','crmEngine.caseservices','crmEngine.userservices','crmEngine.groupservices','crmEngine.noteservices','crmEngine.commentservices','crmEngine.settingservices','crmEngine.importservices','mapServices','crmEngine.infonodeservices','crmEngine.edgeservices','crmEngine.discoverservices']);
 var public_blog_app = angular.module('publicBlogEngine',['blogEngine.blogservices','ui.bootstrap','ui.select2']);
 
 
@@ -16,6 +16,9 @@ app.config(['$routeProvider', function($routeProvider) {
      when('/discoveries/', {
         controller: 'DiscoverListCtrl',
         templateUrl:'/views/discovers/list'
+      }).when('/discovers/new', {
+        controller: 'DiscoverNewCtrl',
+        templateUrl:'/views/discovers/new'
       }).
       when('/accounts/', {
         controller: 'AccountListCtrl',
@@ -186,20 +189,7 @@ app.config(['$routeProvider', function($routeProvider) {
       });
 
 }]);
-app.config(function(ngQuickDateDefaultsProvider) {
-  // Configure with icons from font-awesome
-  return ngQuickDateDefaultsProvider.set({
-    closeButtonHtml: "<i class='fa fa-times'></i>",
-    buttonIconHtml: "<i class='fa fa-clock-o'></i>",
-    nextLinkHtml: "<i class='fa fa-chevron-right'></i>",
-    prevLinkHtml: "<i class='fa fa-chevron-left'></i>",
-    // Take advantage of Sugar.js date parsing
-    parseDateFunction: function(str) {
-      d = Date.create(str);
-      return d.isValid() ? d : null;
-    }
-  });
-});
+
 app.filter("customCurrency", function (numberFilter)
   {
     function isNumeric(value)

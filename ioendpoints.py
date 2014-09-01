@@ -563,6 +563,7 @@ class BlogEngineApi(remote.Service):
     # tags.insert api
     @Tag.method(path='tags', http_method='POST', name='tags.insert')
     def TagInsert(self, my_model):
+
         user_from_email = User.get_by_email('tedj.meabiou@gmail.com')
         my_model.organization = user_from_email.organization
         my_model.owner = user_from_email.google_user_id
@@ -2574,6 +2575,7 @@ class CrmEngineApi(remote.Service):
     # tags.insert api
     @Tag.method(user_required=True,path='tags', http_method='POST', name='tags.insert')
     def TagInsert(self, my_model):
+        print "tagggggggginsert11", my_model
         user_from_email = EndpointsHelper.require_iogrow_user()
         my_model.organization = user_from_email.organization
         my_model.owner = user_from_email.google_user_id
@@ -3244,7 +3246,10 @@ class CrmEngineApi(remote.Service):
         # if the user input google_user_id    
         else:
             sorted_by=request.sorted_by
-            users=User.query().fetch()
+            users=User.query().order(-User.updated_at)
+            if sorted_by=='created_at':
+                users=User.query().order(-User.created_at)
+
             list_of_reports=[]
             for user in users:
                 gid=user.google_user_id
@@ -3266,16 +3271,17 @@ class CrmEngineApi(remote.Service):
                 list_of_reports.sort(key=itemgetter(5),reverse=True)
             elif sorted_by=='tasks':
                 list_of_reports.sort(key=itemgetter(6),reverse=True)
-            elif sorted_by=='created_at':
-                list_of_reports.sort(key=itemgetter(7),reverse=True)
-            else:
-                list_of_reports.sort(key=itemgetter(8),reverse=True)
+            #elif sorted_by=='created_at':
+            #   list_of_reports.sort(key=itemgetter(7),reverse=True)
+            #else:
+            #    list_of_reports.sort(key=itemgetter(4),reverse=True)
             reporting = []
             for item in list_of_reports:
                 item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count_account=item[3],count_contacts=item[4],count_leads=item[5],count_tasks=item[6],created_at=item[7].isoformat(),updated_at=item[8].isoformat())
                 reporting.append(item_schema)
 
             return ReportingListResponse(items=reporting)         
+
 
     # event permission
     @endpoints.method(EventPermissionRequest, message_types.VoidMessage,
@@ -3387,12 +3393,18 @@ class CrmEngineApi(remote.Service):
                       path='twitter/get_recent_tweets', http_method='POST',
                       name='twitter.get_recent_tweets')
     def twitter_get_recent_tweets(self, request):
-        print request
+        user_from_email = EndpointsHelper.require_iogrow_user()
         
+        print "tagggggglist22"
+        print request,"reqqqqqqqqqqq"
+        if len(request.value)==0:
+            tagss=Tag.list_by_kind(user_from_email,"topics")
+            val=[]
+            for tag in tagss.items:
+                val.append(tag.name)
+            request.value=val
+            print request, "iffffffff"
         list_of_tweets=EndpointsHelper.get_tweets(request.value,"recent")
-        #print list_of_tweets
-        tweetsschema=tweetsSchema()
-
         return tweetsResponse(items=list_of_tweets)
 
 
@@ -3457,6 +3469,7 @@ class CrmEngineApi(remote.Service):
     @endpoints.method(BillingRequest,BillingResponse,path='billing/purchase_user',http_method='POST',name="billing.purchase_lisence_for_user")
     def purchase_lisence_for_user(self,request):
         token = request.token_id
+
         cust=stripe.Customer.retrieve(request.customer_id)
         cust.card=token
         cust.save()
