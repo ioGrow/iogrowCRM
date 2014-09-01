@@ -31,7 +31,7 @@ discoverservices.factory('Discover', function($http) {
     angular.extend(this, data);
   }
 
-
+  var details={};
   Discover.get_best_tweets = function($scope,list_of_tags) {
         //var keywords=["android","mobile"];
         var keyw={"value":"android"};
@@ -84,9 +84,16 @@ discoverservices.factory('Discover', function($http) {
             console.log('gapi #end_execute');
           });
   };
+Discover.save_details=function($scope){
+  console.log("kkk");
+console.log($scope.tweet_details);
+details=$scope.tweet_details;
+};
 
-
- 
+ Discover.get_details=function($scope) {
+  console.log("details");
+   //$scope.details=details;
+ };
 
 
 

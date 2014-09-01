@@ -377,8 +377,14 @@ $scope.addTags=function(){
       console.log("details");
       console.log(tweetId);
       for (var ele in $scope.tweets){
-        if (ele[id]==id){
-          $scope.tweet_details= ele;
+        ;
+        if ($scope.tweets[ele].id==tweetId){
+          $scope.tweet_details= $scope.tweets[ele];
+          console.log("detailsss");
+          $scope.tweet_details=$scope.tweets[ele];
+          console.log($scope.tweet_details);
+          Discover.save_details($scope);
+          break;
           }
       }
     };
@@ -524,10 +530,14 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag',
          $scope.showTagsFilter=false;
          $scope.showNewTag=false;
          $scope.topic="";
+         $scope.details={};
 
      // What to do after authentication
      $scope.runTheProcess = function(){
-          
+          console.log("runnnnnnn");
+          Discover.get_details($scope);
+          console.log($scope.details);
+
      };
 
 
