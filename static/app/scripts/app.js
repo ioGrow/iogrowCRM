@@ -13,15 +13,15 @@ app.run(function(editableOptions) {
 app.config(['$routeProvider', function($routeProvider) {
      $routeProvider.
      // Accounts
-     when('/discoveries/', {
+     when('/discovers/', {
         controller: 'DiscoverListCtrl',
         templateUrl:'/views/discovers/list'
-      }).when('/discovers/show/:contactId', {
-        controller: 'DiscoverShowCtrl',
-        templateUrl:'/views/discovers/show'
       }).when('/discovers/new', {
         controller: 'DiscoverNewCtrl',
         templateUrl:'/views/discovers/new'
+      }).when('/discovers/show/:tweetId', {
+        controller: 'DiscoverShowCtrl',
+        templateUrl:'/views/discovers/show'
       }).
 
       when('/accounts/', {

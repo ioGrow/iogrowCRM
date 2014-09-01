@@ -576,12 +576,13 @@ class AccountShowHandler(BaseHandler, SessionEnabledHandler):
 class DiscoverListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/discovers/discover_list.html')
-class DiscoverNewHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/discovers/discover_new.html')
 class DiscoverShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/discovers/discover_show.html')
+class DiscoverNewHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/discovers/discover_new.html')
+
 class AccountNewHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/accounts/account_new.html')

@@ -171,7 +171,7 @@
                   <span>
                       <%=fromNow(lead.updated_at)%>
                   </span>
-                  <a href="/#/discovers/show/<%= tweet.id %>" ng-click="dtails_of_tweets(tweet.id)" target="new" >
+                  <a href="http://twitter.com/<%= tweet.screen_name %>/status/<%= tweet.id %>/" ng-click="details_of_tweets()" target="new" >
                   <span  class="contact-title" >
                     <%= tweet.content %>
                   </span>

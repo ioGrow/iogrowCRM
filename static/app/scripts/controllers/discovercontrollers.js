@@ -2,9 +2,7 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
     function($scope,Auth,Discover,Tag){
 
      $("ul.page-sidebar-menu li").removeClass("active");
-
         $("#id_Discovery").addClass("active");
-
         document.title = "Discovery: Home";
         $scope.selectedTab=2;
         $scope.selectedOption = 'all';
@@ -52,14 +50,17 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
         var list_of_tags={};
       $scope.isLoadingtweets=false;
       $scope.tweet_details={};
-
      // What to do after authentication
      $scope.runTheProcess = function(){
 
           $scope.tweets={};
           Discover.get_recent_tweets($scope,list_of_tags);
+          console.log('iiiiz');
+          console.log(list_of_tags);
           var paramsTag = {'about_kind':'topics'};
         Tag.list($scope,paramsTag);
+        console.log("piiiiiiii");
+      console.log($scope.tags);
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -372,6 +373,16 @@ $scope.addTags=function(){
       $('#addAccountModal').modal('hide');
       User.insert($scope,user);
     };
+    $scope.details_of_tweets=function(tweetId){
+      console.log("details");
+      console.log(tweetId);
+      for (var ele in $scope.tweets){
+        if (ele[id]==id){
+          $scope.tweet_details= ele;
+          }
+      }
+    };
+
     $scope.getPosition= function(index){
         if(index<4){
          
@@ -380,10 +391,8 @@ $scope.addTags=function(){
           return (index%4)+1;
         }
      };
+
      
-     $scope.dtails_of_tweets=function(id){
-        $scope.tweet_details= $scope.tweets[0];
-      }
      
    
   // Google+ Authentication 
@@ -460,6 +469,67 @@ app.controller('DiscoverNewCtrl', ['$scope','Auth','Discover','Tag',
        Tag.insert($scope,params);
        location.reload();
      }
+
+
+  // Google+ Authentication 
+    Auth.init($scope);
+    
+}]);
+
+
+app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag',
+    function($scope,Auth,Discover,Tag){
+
+     $("ul.page-sidebar-menu li").removeClass("active");
+        $("#id_Discover").addClass("active");
+        document.title = "Discovery: Home";
+        $scope.selectedTab=2;
+        $scope.selectedOption = 'all';
+        $scope.isSignedIn = false;
+        $scope.immediateFailed = false;
+        $scope.nextPageToken = undefined;
+        $scope.prevPageToken = undefined;
+        $scope.isLoading = false;
+        $scope.isMoreItemLoading = false;
+        $scope.pagination = {};
+        $scope.currentPage = 01;
+        $scope.pages = [];
+        $scope.accounts = [];
+        $scope.account = {};
+        $scope.selected_tags = [];
+        $scope.account.access = 'public';
+        $scope.order = '-updated_at';
+        $scope.account.account_type = 'Customer';
+        $scope.draggedTag = null;
+        $scope.tag = {};
+        $scope.tweets = {};
+        $scope.testtitle = "Customer Support Customer Support";
+        $scope.showNewTag = false;
+        $scope.showUntag = false;
+        $scope.edgekeytoDelete = undefined;
+        //Manage Color
+        $scope.color_pallet = [
+            {'name': 'red', 'color': '#F7846A'},
+            {'name': 'orange', 'color': '#FFBB22'},
+            {'name': 'yellow', 'color': '#EEEE22'},
+            {'name': 'green', 'color': '#BBE535'},
+            {'name': 'blue', 'color': '#66CCDD'},
+            {'name': 'gray', 'color': '#B5C5C5'},
+            {'name': 'teal', 'color': '#77DDBB'},
+            {'name': 'purple', 'color': '#E874D6'},
+        ];
+        $scope.tag.color = {'name': 'green', 'color': '#BBE535'};
+        $scope.selectedAccount=null;
+         $scope.currentAccount=null;
+         $scope.showTagsFilter=false;
+         $scope.showNewTag=false;
+         $scope.topic="";
+
+     // What to do after authentication
+     $scope.runTheProcess = function(){
+          
+     };
+
 
 
   // Google+ Authentication 
