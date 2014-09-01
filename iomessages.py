@@ -83,7 +83,8 @@ class customerResponse(messages.Message):
       email=messages.StringField(2)
       google_public_profile_photo_url=messages.StringField(3)
       google_display_name=messages.StringField(4)
-      subscriptions=messages.MessageField(subscriptionSchema,5,repeated=True)
+      google_user_id=messages.StringField(5)
+      subscriptions=messages.MessageField(subscriptionSchema,6,repeated=True)
 
 class UserListSchema(messages.Message):
     items = messages.MessageField(UserSchema, 1, repeated=True)

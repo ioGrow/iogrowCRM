@@ -25,7 +25,7 @@
 
       
 
-       <%= organizationInfo.organizationNumberOfLicensed %>   {{_('licenses')}}   <%= organizationInfo.organizationNumberOfUser %>  {{_('User')}}
+       <%= organizationInfo.organizationNumberOfLicensed %>    <%= organizationInfo.organizationNumberOfLicense %>  {{_('licenses')}}   <%= organizationInfo.organizationNumberOfUser %>  {{_('User')}}
 
     </div>
   </div>
@@ -143,7 +143,7 @@
     <div class="col-md-3">
          <div class="portlet showPage rightCardContent">
                 <div class="portlet-title line">
-                  <div class="caption"> <i class="fa fa-check"></i>{{ _('Licenses')}} </div>
+                  <div class="caption"> <i class="glyphicon glyphicon-certificate"></i>{{ _('Licenses')}} </div>
 
                 </div>
                 <div class="newContactform portlet-body" id="chats">
@@ -153,7 +153,7 @@
                           <div class="showDescription">
                             <span class="relatedEventTitle">
                                <a href="/#/tasks/show/<%=task.id%>" class="discussion-content">
-                                 <%= task.title%>
+                                 <%= license.purchase_date | date:'dd MMM'%>
                                </a>
                             </span>
                             <a class="pull-right relatedEventMoreBtn">

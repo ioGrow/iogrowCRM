@@ -33,9 +33,9 @@ accountservices.factory('User', function($http) {
           gapi.client.crmengine.users.customer(id).execute(function(resp) {
             if(!resp.code){
                $scope.user = resp;
-               console.log("****************************")
-               console.log(resp.subscriptions)
-               console.log("*****************************")
+
+
+               $scope.isLoading= false ;
                $scope.loadCharges=false;
 
 
@@ -47,6 +47,7 @@ accountservices.factory('User', function($http) {
                if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
+                $scope.loadCharges=false;
                 $scope.$apply();
                };
             }
@@ -215,12 +216,12 @@ User.get_organization=function($scope,params){
       
          if(!resp.code){
             $scope.organizationInfo=resp ;
-            console.log("***************************************");
-            console.log(resp);
-            console.log("****************************************")
+            $scope.isLoading = false;
+            $scope.$apply();
             $scope.purchaseLiseneces(resp);  
 
-          $scope.isLoading = false;
+      
+
          }else{
               console.log(resp.message);
                $('#addAccountModal').modal('hide');

@@ -47,7 +47,9 @@ $scope.purchaseLiseneces=function(organization){
     key: 'pk_test_4Xa35zhZDqvXz1OzGRWaW4mX',
     image:"/static/img/IO_Grow.png",
     token: function(token) {
-  console.log();
+
+            $scope.isLoading=true;
+            $scope.$apply();
 
     var params={'token_id':token.id,
                 'token_email':token.email, 
@@ -57,10 +59,9 @@ $scope.purchaseLiseneces=function(organization){
 
    gapi.client.crmengine.billing.purchase_lisence_for_org(params).execute(function(resp) {
             if(!resp.code){
-
+                // here be carefull .
+                $scope.reloadOrganizationInfo();
                   
-                 console.log(resp);
-                
             }
 
             });
@@ -75,10 +76,21 @@ $scope.purchaseLiseneces=function(organization){
       name: organization.organizationName,
       description: 'bay a license $20.00',
       amount: 2000
+
     });
     e.preventDefault();
   });
 
+}
+
+
+$scope.reloadOrganizationInfo=function(){
+
+
+
+            var params={'organization':$scope.organization_key
+                       }
+            User.get_organization($scope,params);
 }
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -170,6 +182,7 @@ app.controller('BillingShowController', ['$scope','$route', 'Auth','Search','Use
      $scope.pages = [];
      $scope.loadCharges=true;
      $scope.users = [];
+     $scope.isLicensed= true;
     
     // What to do after authentication
       $scope.runTheProcess = function(){
@@ -178,11 +191,7 @@ app.controller('BillingShowController', ['$scope','$route', 'Auth','Search','Use
              
               User.customer($scope, params);
               
-          //  var params={'organization':$scope.organization_key
-          //              }
-          // User.get_organization($scope,params);
-          //  var params = {'limit':7};
-          // User.list($scope,params);
+
 
        };
 
@@ -191,24 +200,51 @@ app.controller('BillingShowController', ['$scope','$route', 'Auth','Search','Use
  $scope.purchase=function(user){
 // the key represent the public key which represent our company  , client side , we have two keys 
 // test  "pk_test_4Xa35zhZDqvXz1OzGRWaW4mX", mode dev 
-// live "pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD", mode prod 
+// live "pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD", mode prod
+
+// deactivate purchase button
+try{
+     var oneDay = 24*60*60*1000;
+   current_period_end= new Date(user.subscriptions[0].current_period_end);
+   NowDate=new Date(Date.now());
+
+ var  purchsePermit=Math.round((current_period_end.getTime() - NowDate.getTime())/(oneDay));
+ if(purchsePermit<0){
+   $scope.isLicensed= false;
+ }else{
+    $scope.isLicensed= true ;
+ } 
+
+}catch(e){
+  $scope.isLicensed= false;
+  }  
+   
+
 
   var handler = StripeCheckout.configure({
     key: 'pk_test_4Xa35zhZDqvXz1OzGRWaW4mX',
     image: user.google_public_profile_photo_url,
 
     email: user.email,
-
+    
     token: function(token) {
-      
+
+        $scope.isLicensed= true;
+        $scope.isLoading= true ;
+        $scope.$apply();
+  
 
     var params={'token_id':token.id,
                 'token_email':token.email, 
                 'customer_id':user.customer_id
               }
+     
+
    gapi.client.crmengine.billing.purchase_lisence_for_user(params).execute(function(resp) {
             if(!resp.code){
-                console.log(token)
+
+                  $scope.runTheProcess();
+                  
             }
 
             });
@@ -231,6 +267,12 @@ app.controller('BillingShowController', ['$scope','$route', 'Auth','Search','Use
 
  }
   
+
+
+  $scope.test=function(){
+    console.log("the car can't move!");
+         
+  };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
           Auth.refreshToken();

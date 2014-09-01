@@ -2814,6 +2814,7 @@ class CrmEngineApi(remote.Service):
                "email":cust.email,
                "google_public_profile_photo_url":cust.metadata.google_public_profile_photo_url,
                "google_display_name":cust.metadata.google_display_name,
+               "google_user_id":cust.metadata.google_user_id,
                "subscriptions":subscriptions
                  }
         #user=User.query().filter(User.id==my_model.id).get()
@@ -3470,9 +3471,6 @@ class CrmEngineApi(remote.Service):
     # hadji hicham 26/08/2014 . purchase license for the company.
     @endpoints.method(BillingRequest,LicenseSchema,path='billing/purchase_org',http_method='POST',name="billing.purchase_lisence_for_org")
     def purchase_lisence_for_org(self,request):
-        #the key represent the secret key which represent our company  , server side , we have two keys 
-        # test "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF", mode dev 
-        # live "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA" , mode prod 
         user_from_email = EndpointsHelper.require_iogrow_user()
         token = request.token_id
         charge=stripe.Charge.create(

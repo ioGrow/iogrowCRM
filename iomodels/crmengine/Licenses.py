@@ -8,7 +8,7 @@ from protorpc import messages
 import model
 import iomessages
 from iograph import Edge
-
+import datetime
 
 
 class LicenseSchema(messages.Message):
@@ -36,21 +36,23 @@ class License(EndpointsModel):
 
     @classmethod
     def insert(cls,user_from_email,request):
-        print "******************"
-        print "i'm down here "
-        print "**************************"
         license= cls( organization=user_from_email.organization,
        	   	              amount=2000,
                           who_purchased_it=user_from_email.email,
        	   	)
         license_key=license.put_async()
         license_key_async=license_key.get_result()
+        license_ent= license_key_async.get()
+        print "*****************************"
+        print "what's up "
+        print license_ent
+        print "*****************************"
         license_schema= LicenseSchema(
             	                     id= str(license_key_async.id()),
                                    entityKey=str(license_key_async.urlsafe()),
                                    organization=license.organization.urlsafe(),
                                    amount=str(license.amount),
-                                   purchase_date=license_key_async.purchase_date,
+                                   purchase_date=license_ent.purchase_date.isoformat(),
                                    who_purchased_it=user_from_email.email
             	     )
         return license_schema
