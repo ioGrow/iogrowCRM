@@ -270,7 +270,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 				 Account.search($scope,params_search_account);
 
 			});
-			$scope.selectAccount = function(){
+		 $scope.selectAccount = function(){
 				$scope.contact.account = $scope.searchAccountQuery;
 
 		 };
@@ -560,8 +560,8 @@ $scope.addTags=function(){
 }]);
 
 
-app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User','Attachement','Map','Opportunitystage','Casestatus','InfoNode','Tag',
-		function($scope,$filter,$route,Auth,Email,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User,Attachement,Map,Opportunitystage,Casestatus,InfoNode,Tag) {
+app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User','Attachement','Map','Opportunitystage','Casestatus','InfoNode','Tag','Account',
+		function($scope,$filter,$route,Auth,Email,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User,Attachement,Map,Opportunitystage,Casestatus,InfoNode,Tag,Account) {
  console.log('I am in ContactShowCtrl');
 			$("ul.page-sidebar-menu li").removeClass("active");
 			$("#id_Contacts").addClass("active");
@@ -882,7 +882,9 @@ $scope.listTags=function(){
     var params={'id':$scope.contact.id,
                 'firstname':contact.firstname,
                 'lastname':contact.lastname,
-                'title':contact.title};
+                'title':contact.title,
+            	'account':$scope.contact.account
+            };
         Contact.patch($scope,params);
         $('#EditContactModal').modal('hide')
 
@@ -966,16 +968,7 @@ $scope.listTags=function(){
 	$scope.editacontact = function(){
 		$('#EditContactModal').modal('show');
 	}
-	//HKA 27.11.2013 Update Contact updatecontact
-	$scope.updatecontact = function(contact){
-		var params={'id':$scope.contact.id,
-								'firstname':contact.firstname,
-								'lastname':contact.lastname,
-								'title':contact.title};
-				Contact.patch($scope,params);
-				$('#EditContactModal').modal('hide')
-
-	};
+	
 	//HKA 01.12.2013 Edit tagline of Account
 		$scope.edittagline = function() {
 			 $('#EditTagModal').modal('show');
@@ -1799,6 +1792,18 @@ $scope.sendEmailSelected=function(){
 
 						}
 			};
+
+		var params_search_account ={};
+		$scope.result = undefined;
+		$scope.q = undefined;
+		$scope.$watch('searchAccountQuery', function() {
+				 params_search_account['q'] = $scope.searchAccountQuery;
+				 Account.search($scope,params_search_account);
+		});
+		$scope.selectAccount = function(){
+				$scope.contact.account = $scope.searchAccountQuery.entityKey;
+
+		 };
 		 // Google+ Authentication
 		 Auth.init($scope);
 		 $(window).scroll(function() {
