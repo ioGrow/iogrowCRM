@@ -58,7 +58,7 @@ CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 
 SCOPES = [
-    'https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds'
+    'https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds'
 ]
 
 VISIBLE_ACTIONS = [
@@ -452,13 +452,15 @@ class GooglePlusConnect(SessionEnabledHandler):
         """
         if user_id:
             user = model.User.get_by_id(user_id)
-            userinfo = GooglePlusConnect.get_user_email(credentials)
+            userinfo = GooglePlusConnect.get_user_profile(credentials)
             user.status = 'active'
             user.google_user_id = userinfo.get('id')
-            user.google_display_name = userinfo.get('name')
-            user.google_public_profile_url = userinfo.get('link')
-            user.email = userinfo.get('email')
-            user.google_public_profile_photo_url = userinfo.get('picture')
+            user.google_display_name = userinfo.get('displayName')
+            user.google_public_profile_url = userinfo.get('url')
+            emails = userinfo.get('emails')
+            user.email = emails[0]['value']
+            profile_image = userinfo.get('image')
+            user.google_public_profile_photo_url = profile_image['url']
             invited_by = user.invited_by.get()
             user.organization = invited_by.organization
             profile =  model.Profile.query(
@@ -470,15 +472,17 @@ class GooglePlusConnect(SessionEnabledHandler):
         else:
             user = model.User.get_by_email(email)
         if user is None:
-            userinfo = GooglePlusConnect.get_user_email(credentials)
+            userinfo = GooglePlusConnect.get_user_profile(credentials)
             user = model.User()
             user.type = 'public_user'
             user.status = 'active'
             user.google_user_id = userinfo.get('id')
-            user.google_display_name = userinfo.get('name')
-            user.google_public_profile_url = userinfo.get('link')
-            user.email = userinfo.get('email')
-            user.google_public_profile_photo_url = userinfo.get('picture')
+            user.google_display_name = userinfo.get('displayName')
+            user.google_public_profile_url = userinfo.get('url')
+            emails = userinfo.get('emails')
+            user.email = emails[0]['value']
+            profile_image = userinfo.get('image')
+            user.google_public_profile_photo_url = profile_image['url']
         user.google_credentials = credentials
         user_key = user.put_async()
         user_key_async = user_key.get_result()
