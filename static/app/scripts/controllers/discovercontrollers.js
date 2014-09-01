@@ -49,18 +49,15 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
         var keyw=[];
         var list_of_tags={};
       $scope.isLoadingtweets=false;
+      $scope.tweet_details={};
 
      // What to do after authentication
      $scope.runTheProcess = function(){
 
           $scope.tweets={};
           Discover.get_recent_tweets($scope,list_of_tags);
-          console.log('iiiiz');
-          console.log(list_of_tags);
           var paramsTag = {'about_kind':'topics'};
         Tag.list($scope,paramsTag);
-        console.log("piiiiiiii");
-      console.log($scope.tags);
      };
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
@@ -382,6 +379,9 @@ $scope.addTags=function(){
         }
      };
      
+     $scope.dtails_of_tweets=function(id){
+        $scope.tweet_details= $scope.tweets[0];
+      }
      
    
   // Google+ Authentication 

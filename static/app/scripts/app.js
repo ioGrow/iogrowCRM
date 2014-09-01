@@ -16,10 +16,14 @@ app.config(['$routeProvider', function($routeProvider) {
      when('/discovers/', {
         controller: 'DiscoverListCtrl',
         templateUrl:'/views/discovers/list'
+      }).when('/discovers/show/:contactId', {
+        controller: 'DiscoverShowCtrl',
+        templateUrl:'/views/discovers/show'
       }).when('/discovers/new', {
         controller: 'DiscoverNewCtrl',
         templateUrl:'/views/discovers/new'
       }).
+
       when('/accounts/', {
         controller: 'AccountListCtrl',
         templateUrl:'/views/accounts/list'

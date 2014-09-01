@@ -575,6 +575,9 @@ class DiscoverListHandler(BaseHandler, SessionEnabledHandler):
 class DiscoverNewHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/discovers/discover_new.html')
+class DiscoverShowHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/discovers/discover_show.html')
 class AccountNewHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/accounts/account_new.html')
@@ -1375,6 +1378,7 @@ routes = [
 
     # Templates Views Routes
     ('/views/discovers/list',DiscoverListHandler),
+    ('/views/discovers/show',DiscoverShowHandler),
     ('/views/discovers/new',DiscoverNewHandler),
     # Accounts Views
     ('/views/accounts/list',AccountListHandler),
