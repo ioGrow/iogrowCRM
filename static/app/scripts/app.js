@@ -16,6 +16,9 @@ app.config(['$routeProvider', function($routeProvider) {
      when('/discovers/', {
         controller: 'DiscoverListCtrl',
         templateUrl:'/views/discovers/list'
+      }).when('/discovers/new', {
+        controller: 'DiscoverNewCtrl',
+        templateUrl:'/views/discovers/new'
       }).
       when('/accounts/', {
         controller: 'AccountListCtrl',

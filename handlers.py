@@ -569,10 +569,12 @@ class AccountListHandler(BaseHandler, SessionEnabledHandler):
 class AccountShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/accounts/account_show.html')
-class DiscoverShowHandler(BaseHandler, SessionEnabledHandler):
+class DiscoverListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/discovers/discover_list.html')
-
+class DiscoverNewHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/discovers/discover_new.html')
 class AccountNewHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/accounts/account_new.html')
@@ -1130,7 +1132,6 @@ class GetFromTwitterToIoGrow(webapp2.RequestHandler):
         key1=ndb.Key(urlsafe=entityKey)
         print key1
         lead=key1.get()
-        print "######################################################################################"
         fullname= lead.firstname+" "+lead.lastname
         print fullname
         linkedin=linked_in()
@@ -1140,30 +1141,29 @@ class GetFromTwitterToIoGrow(webapp2.RequestHandler):
         print name
         profile_schema=EndpointsHelper.twitter_import_people(name)
         if profile_schema:
-            profile=model.TwitterProfile()
-            profile.id=profile_schema.id
-            profile.followers_count=profile_schema.followers_count
-            profile.lang=profile_schema.lang
-            profile.last_tweet_text=profile_schema.last_tweet_text
-            profile.last_tweet_favorite_count=profile_schema.last_tweet_favorite_count
-            profile.last_tweet_retweeted=profile_schema.last_tweet_retweeted
-            profile.last_tweet_retweet_count=profile_schema.last_tweet_retweet_count
-            profile.language=profile_schema.language
-            profile.created_at=profile_schema.created_at
-            profile.nbr_tweets=profile_schema.nbr_tweets
-            profile.description_of_user=profile_schema.description_of_user
-            profile.friends_count=profile_schema.friends_count
-            profile.name=profile_schema.name
-            profile.screen_name=profile_schema.screen_name
-            profile.url_of_user_their_company=profile_schema.url_of_user_their_company
-            profile.location=profile_schema.location
-            profile.profile_image_url_https=profile_schema.profile_image_url_https
+            d=(profile_schema.name).lower()
+            if lead.firstname in d and lead.lastname in d :
+                profile=model.TwitterProfile()
+                profile.id=profile_schema.id
+                profile.followers_count=profile_schema.followers_count
+                profile.lang=profile_schema.lang
+                profile.last_tweet_text=profile_schema.last_tweet_text
+                profile.last_tweet_favorite_count=profile_schema.last_tweet_favorite_count
+                profile.last_tweet_retweeted=profile_schema.last_tweet_retweeted
+                profile.last_tweet_retweet_count=profile_schema.last_tweet_retweet_count
+                profile.language=profile_schema.language
+                profile.created_at=profile_schema.created_at
+                profile.nbr_tweets=profile_schema.nbr_tweets
+                profile.description_of_user=profile_schema.description_of_user
+                profile.friends_count=profile_schema.friends_count
+                profile.name=profile_schema.name
+                profile.screen_name=profile_schema.screen_name
+                profile.url_of_user_their_company=profile_schema.url_of_user_their_company
+                profile.location=profile_schema.location
+                profile.profile_image_url_https=profile_schema.profile_image_url_https
 
-
-
-
-        key2=profile.put()
-        ed=Edge.insert(start_node=key1,end_node=key2,kind='twitter',inverse_edge='parents')
+                key2=profile.put()
+                ed=Edge.insert(start_node=key1,end_node=key2,kind='twitter',inverse_edge='parents')
 
 
         
@@ -1374,7 +1374,8 @@ routes = [
     ('/views/articles/search',ArticleSearchHandler),
 
     # Templates Views Routes
-    ('/views/discovers/list',DiscoverShowHandler),
+    ('/views/discovers/list',DiscoverListHandler),
+    ('/views/discovers/new',DiscoverNewHandler),
     # Accounts Views
     ('/views/accounts/list',AccountListHandler),
     ('/views/accounts/show',AccountShowHandler),

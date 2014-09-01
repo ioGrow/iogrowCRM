@@ -557,6 +557,7 @@ class BlogEngineApi(remote.Service):
     # tags.insert api
     @Tag.method(path='tags', http_method='POST', name='tags.insert')
     def TagInsert(self, my_model):
+
         user_from_email = User.get_by_email('tedj.meabiou@gmail.com')
         my_model.organization = user_from_email.organization
         my_model.owner = user_from_email.google_user_id
@@ -2568,6 +2569,7 @@ class CrmEngineApi(remote.Service):
     # tags.insert api
     @Tag.method(user_required=True,path='tags', http_method='POST', name='tags.insert')
     def TagInsert(self, my_model):
+        print "tagggggggginsert11", my_model
         user_from_email = EndpointsHelper.require_iogrow_user()
         my_model.organization = user_from_email.organization
         my_model.owner = user_from_email.google_user_id
@@ -3383,12 +3385,18 @@ class CrmEngineApi(remote.Service):
                       path='twitter/get_recent_tweets', http_method='POST',
                       name='twitter.get_recent_tweets')
     def twitter_get_recent_tweets(self, request):
-        print request
+        user_from_email = EndpointsHelper.require_iogrow_user()
         
+        print "tagggggglist22"
+        print request,"reqqqqqqqqqqq"
+        if len(request.value)==0:
+            tagss=Tag.list_by_kind(user_from_email,"topics")
+            val=[]
+            for tag in tagss.items:
+                val.append(tag.name)
+            request.value=val
+            print request, "iffffffff"
         list_of_tweets=EndpointsHelper.get_tweets(request.value,"recent")
-        #print list_of_tweets
-        tweetsschema=tweetsSchema()
-
         return tweetsResponse(items=list_of_tweets)
 
 
@@ -3445,6 +3453,7 @@ class CrmEngineApi(remote.Service):
         # test "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF", mode dev 
         # live "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA" , mode prod 
         token = request.token_id
+
         cust=stripe.Customer.retrieve(request.customer_id)
         cust.card=token
         cust.save()
