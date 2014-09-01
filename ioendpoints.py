@@ -33,7 +33,7 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 # Our libraries
 from iograph import Node,Edge,RecordSchema,InfoNodeResponse,InfoNodeConnectionSchema,InfoNodeListResponse
 from iomodels.crmengine.accounts import Account,AccountGetRequest,AccountSchema,AccountListRequest,AccountListResponse,AccountSearchResult,AccountSearchResults,AccountInsertRequest
-from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertRequest,ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults,ContactImportRequest,ContactImportHighriseRequest,ContactHighriseResponse, ContactHighriseSchema, DetailImportHighriseRequest, InvitationRequest
+from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertRequest,ContactPatchSchema, ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults,ContactImportRequest,ContactImportHighriseRequest,ContactHighriseResponse, ContactHighriseSchema, DetailImportHighriseRequest, InvitationRequest
 from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema,NoteSchema
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
 #from iomodels.crmengine.tags import Tag
@@ -1496,34 +1496,16 @@ class CrmEngineApi(remote.Service):
                             request = request
                             )
 
-    # contacts.patch API
-    @Contact.method(
-                    user_required=True,
-                    http_method='PATCH',
-                    path='contacts/{id}',
-                    name='contacts.patch'
-                    )
-    def ContactPatch(self, my_model):
+    #contacts.patch API
+    @endpoints.method(ContactPatchSchema, ContactSchema,
+                        path='contacts/patch', http_method='POST',
+                        name='contacts.patch')
+    def contact_patch(self,request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        #user_from_email = EndpointsHelper.require_iogrow_user()
-        # TODO: Check permissions
-        if not my_model.from_datastore:
-            raise endpoints.NotFoundException('Contact not found.')
-        patched_model_key = my_model.entityKey
-        patched_model = ndb.Key(urlsafe=patched_model_key).get()
-        EndpointsHelper.share_related_documents_after_patch(
-                                                            user_from_email,
-                                                            patched_model,
-                                                            my_model
-                                                          )
-        properties = Contact().__class__.__dict__
-        for p in properties.keys():
-            if (eval('patched_model.' + p) != eval('my_model.' + p)) \
-            and(eval('my_model.' + p) and not(p in ['put', 'set_perm', 'put_index'])):
-                exec('patched_model.' + p + '= my_model.' + p)
-        patched_model.put()
-        return patched_model
-
+        return Contact.patch(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
     #contacts.search API
     @endpoints.method(SearchRequest, ContactSearchResults,
                         path='contacts/search', http_method='POST',

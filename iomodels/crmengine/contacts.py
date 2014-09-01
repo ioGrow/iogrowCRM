@@ -151,6 +151,19 @@ class ContactSchema(messages.Message):
     profile_img_url = messages.StringField(24)
     owner = messages.MessageField(iomessages.UserSchema,25)
 
+class ContactPatchSchema(messages.Message):
+    id = messages.StringField(1)
+    firstname = messages.StringField(2)
+    lastname = messages.StringField(3)
+    account = messages.StringField(4)
+    title = messages.StringField(5)
+    tagline = messages.StringField(6)
+    introduction = messages.StringField(7)
+    access = messages.StringField(8)
+    profile_img_id = messages.StringField(9)
+    profile_img_url = messages.StringField(10)
+    owner = messages.StringField(11)
+
 class ContactListRequest(messages.Message):
     limit = messages.IntegerField(1)
     pageToken = messages.StringField(2)
@@ -178,15 +191,10 @@ class ContactSearchResults(messages.Message):
     nextPageToken = messages.StringField(2)
 
 class Contact(EndpointsModel):
-    _message_fields_schema = ('id','entityKey','owner', 'folder','created_at','updated_at',  'access','collaborators_list','collaborators_ids','display_name', 'firstname','lastname','title','company','account','account_name','introduction','tagline','profile_img_id','profile_img_url')
-    # Sharing fields
     owner = ndb.StringProperty()
     collaborators_list = ndb.StructuredProperty(model.Userinfo,repeated=True)
     collaborators_ids = ndb.StringProperty(repeated=True)
-    account = ndb.KeyProperty()
-    account_name = ndb.StringProperty()
     organization = ndb.KeyProperty()
-    folder = ndb.StringProperty()
     firstname = ndb.StringProperty()
     lastname = ndb.StringProperty()
     display_name = ndb.StringProperty(repeated=True)
@@ -233,7 +241,7 @@ class Contact(EndpointsModel):
         emails = " ".join(map(lambda x: x.email,  self.emails))
         phones = " ".join(map(lambda x: x.number,  self.phones))
         websites = " ".join(map(lambda x: x.website,  self.websites))
-        title_autocomplete = ','.join(tokenize_autocomplete(self.firstname + ' ' + self.lastname +' '+ empty_string(self.title)+ ' ' +empty_string(self.account_name)))
+        title_autocomplete = ','.join(tokenize_autocomplete(self.firstname + ' ' + self.lastname))
         #addresses = " \n".join(map(lambda x: " ".join([x.street,x.city,x.state, x.postal_code, x.country]) if x else "", self.addresses))
         if data:
             search_key = ['infos','contacts','tags','collaborators']
@@ -596,6 +604,70 @@ class Contact(EndpointsModel):
                                     items=search_results,
                                     nextPageToken=next_cursor
                                     )
+    @classmethod
+    def patch(cls,user_from_email,request):
+        contact = cls.get_by_id(int(request.id))
+        if contact is None:
+            raise endpoints.NotFoundException('Contact not found.')
+        EndpointsHelper.share_related_documents_after_patch(
+                                                            user_from_email,
+                                                            contact,
+                                                            request
+                                                          )
+        properties = Contact().__class__.__dict__
+        for p in properties.keys():
+            if hasattr(request,p):
+                if (eval('contact.' + p) != eval('request.' + p)) \
+                and(eval('request.' + p) and not(p in ['put', 'set_perm', 'put_index'])):
+                    exec('contact.' + p + '= request.' + p)
+        if request.account:
+            account_key = ndb.Key(urlsafe=request.account)
+            account = account_key.get()
+            account_schema = AccountSchema(
+                                        id = int( account_key.id() ),
+                                        entityKey = account.key.urlsafe(),
+                                        name = account.name
+                                        )
+            # insert edges
+            Edge.insert(start_node = account_key,
+                      end_node = contact.key,
+                      kind = 'contacts',
+                      inverse_edge = 'parents')
+            contact.put_async()
+            EndpointsHelper.update_edge_indexes(
+                                            parent_key = contact.key,
+                                            kind = 'contacts',
+                                            indexed_edge = str(account_key.id())
+                                            )
+        else:
+            parents_edge_list = Edge.list(
+                                    start_node = contact.key,
+                                    kind = 'parents',
+                                    limit = 1
+                                    )
+            account_schema = None
+            if len(parents_edge_list['items'])>0:
+                account = parents_edge_list['items'][0].end_node.get()
+                if account:
+                    account_schema = AccountSchema(
+                                            id = int( account.key.id() ),
+                                            entityKey = account.key.urlsafe(),
+                                            name = account.name
+                                            )
+            contact.put()
+
+        contact_schema = ContactSchema(
+                                  id = str( contact.key.id() ),
+                                  entityKey = contact.key.urlsafe(),
+                                  firstname = contact.firstname,
+                                  lastname = contact.lastname,
+                                  title = contact.title,
+                                  account = account_schema,
+                                  access = contact.access,
+                                  created_at = contact.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                                  updated_at = contact.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                                )
+        return contact_schema
     @classmethod
     def insert(cls,user_from_email,request):
         contact = cls(
