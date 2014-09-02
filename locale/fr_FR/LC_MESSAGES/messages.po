@@ -3912,3 +3912,19 @@ msgstr ""
 msgid "No results found, try with another term"
 msgstr ""
 
+# Facturation
+msgid "Billing"
+msgstr "Facturation"
+
+# Discovery
+msgid "Discovery"
+msgstr "Découverte"
+
+# Relationships
+msgid "Relationships"
+msgstr "Relations"
+
+
+# Admin Console 
+msgid "Admin Console"
+msgstr "Console Administration"
