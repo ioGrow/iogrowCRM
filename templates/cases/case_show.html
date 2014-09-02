@@ -750,11 +750,11 @@
 
 
                             <label class="radio line">
-                            <input type="radio" value="public" ng-model="casee.access" />
+                            <input type="radio" value="public" ng-click="share()" ng-model="casee.access" />
                             {{ _('public: Anyone within your organization can access and find')}}
                             </label>
                             <label class="radio line">
-                            <input type="radio"  value="private" ng-model="casee.access" />
+                            <input type="radio"  value="private" ng-click="share()" ng-model="casee.access" />
                             {{ _('private: only you and your collaborators')}}
                             </label>
 
@@ -772,12 +772,12 @@
                     <hr/>
 
                     <div class=''>
-                    <p>{{ _('Invited user:')}}</p>
-                    <div class="invitation" ng-show="slected_memeber">
-                      <img class="google-avatar" src="<%= slected_memeber.google_public_profile_photo_url%>"/>
-                        <strong> <%= slected_memeber.google_display_name %> < <%=slected_memeber.email%> ></strong>
-                      <hr/>
+                    <p>{{ _("Invited user:") }}</p>
+                    <div class="invitation" ng-repeat="invited in sharing_with">
+                      <img class="google-avatar" src="<%= invited.google_public_profile_photo_url%>"/>
+                        <strong> <%= invited.google_display_name %> < <%=invited.email%> ></strong>
                     </div>
+                     <hr/>
 
                     <p>{{ _('Invite collaborators:')}}</p>
                     <div class="form-group">
@@ -791,7 +791,7 @@
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button  type="submit" ng-click="share(slected_memeber)" class="btn blue addContactNow">{{_("Share")}}</button>
+                <button  type="submit" ng-click="share()" data-dismiss="modal" aria-hidden="true" class="btn blue addContactNow">{{_("Share")}}</button>
               </div>
                </form>
                </div>

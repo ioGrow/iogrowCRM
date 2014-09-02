@@ -1,5 +1,5 @@
-app.controller('EventShowController',['$scope','$filter','$route','Auth','Note','Event','Task','Topic','Comment','User','Contributor','Map',
-   function($scope,$filter,$route,Auth,Note,Event,Task,Topic,Comment,User,Contributor,Map) {
+app.controller('EventShowController',['$scope','$filter','$route','Auth','Note','Event','Task','Topic','Comment','User','Contributor','Map','Permission',
+   function($scope,$filter,$route,Auth,Note,Event,Task,Topic,Comment,User,Contributor,Map,Permission) {
 //HKA 14.11.2013 Controller to show Events and add comments
    $scope.isSignedIn = false;
      $scope.immediateFailed = false;
@@ -14,6 +14,8 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
      $scope.pagescomment = [];
      $scope.addresses=[];
      $scope.event={};
+     $scope.event.access="private";
+     $scope.collaborators_list=[];
      $scope.notes = [];
      $scope.users = [];
      $scope.user = undefined;
@@ -129,8 +131,56 @@ app.controller('EventShowController',['$scope','$filter','$route','Auth','Note',
           console.log($scope);
           Map.searchLocation($scope,$scope.event.where);
       };
+      // arezki 1/9/14
+      $scope.getColaborators=function(){
+           
+          Permission.getColaborators($scope,{"entityKey":$scope.event.entityKey});  
+        }
+// arezki lebdiri 1/9/14
+      $scope.share = function(){
+    
+         var body = {'access':$scope.event.access};
+         var id = $scope.event.id;
+         var params ={'id':id,
+                      'access':$scope.event.access}
+          Event.patch($scope,params);
+                  // who is the parent of this event .hadji hicham 21-07-2014.
+
+          // params["parent"]="event";
+          // Event.permission($scope,params);
+          // Task.permission($scope,params);
+
+    
+        
+
+        if ($scope.sharing_with.length>0){
+
+          var items = [];
+
+          angular.forEach($scope.sharing_with, function(user){
+                      var item = {
+                                  'type':"user",
+                                  'value':user.entityKey
+                                };
+                      items.push(item);
+          });
+
+          if(items.length>0){
+              var params = {
+                            'about': $scope.event.entityKey,
+                            'items': items
+              }
+               Permission.insert($scope,params);
+          }
 
 
+          $scope.sharing_with = [];
+
+
+        }
+
+
+     };
 
      $scope.showModal = function(){
         console.log('button clicked');
@@ -641,7 +691,8 @@ $scope.cancelAddOperation= function(){
                       'starts_at':  $scope.start_event,
                       'ends_at': $scope.end_event,
                       'where': ioevent.where,
-                      'allday':$scope.allday.toString()
+                      'allday':$scope.allday.toString(),
+                      'access':$scope.event.access
                         }
               
             }else{
@@ -649,7 +700,9 @@ $scope.cancelAddOperation= function(){
                       'starts_at':$scope.start_event,
                       'ends_at': $scope.end_event,
                       'where': ioevent.where,
-                      'allday':$scope.allday.toString()
+                      'allday':$scope.allday.toString(),
+                      'access':$scope.event.access
+                      
                         }
             };
 

@@ -322,6 +322,7 @@ accountservices.factory('Case', function() {
                 $scope.$apply();
                };
             }
+            $scope.getColaborators()
             console.log('cases.patch gapi #end_execute');
           });
      $scope.isLoading=false;

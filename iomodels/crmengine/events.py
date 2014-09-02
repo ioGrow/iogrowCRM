@@ -40,6 +40,7 @@ class EventSchema(messages.Message):
     tags = messages.MessageField(TagSchema,10, repeated = True)
     created_at = messages.StringField(11)
     updated_at = messages.StringField(12)
+    access=messages.StringField(13)
 
 class EventInsertRequest(messages.Message):
     parent = messages.StringField(1)
@@ -234,7 +235,9 @@ class Event(EndpointsModel):
                                     created_by = author_schema,
                                     tags = tag_list,
                                     created_at = event.created_at.isoformat(),
-                                    updated_at = event.updated_at.isoformat()
+                                    updated_at = event.updated_at.isoformat(),
+                                    access=event.access
+
                                 )
         return event_schema
     @classmethod
