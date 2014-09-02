@@ -889,6 +889,8 @@ $scope.listTags=function(){
             };
        	if (typeof($scope.contact.account)=='string'){
        		params.account = $scope.contact.account;
+       	} else if ($scope.searchAccountQuery){
+       		params.account = $scope.searchAccountQuery;
        	}
 
         Contact.patch($scope,params);

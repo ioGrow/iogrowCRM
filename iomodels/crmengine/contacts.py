@@ -636,13 +636,22 @@ class Contact(EndpointsModel):
                                             name = account.name
                                             )
         if request.account:
-            account_key = ndb.Key(urlsafe=request.account)
-            account = account_key.get()
-            account_schema = AccountSchema(
-                                        id = int( account_key.id() ),
-                                        entityKey = account.key.urlsafe(),
-                                        name = account.name
-                                        )
+            if (len(request.account) % 4 == 0) and re.match('^[A-Za-z0-9+/]+[=]{0,2}$',request.account):
+                account_key = ndb.Key(urlsafe=request.account)
+                account = account_key.get()
+            else:
+                from iomodels.crmengine.accounts import Account
+                account = Account(
+                                name=request.account,
+                                owner = user_from_email.google_user_id,
+                                organization = user_from_email.organization,
+                                access = request.access
+                                )
+                account_key_async = account.put_async()
+                account_key = account_key_async.get_result()
+                data = {}
+                data['id'] = account_key.id()
+                account.put_index(data)
             # insert edges
             Edge.insert(start_node = account_key,
                       end_node = contact.key,
@@ -758,9 +767,22 @@ class Contact(EndpointsModel):
                                                 )
         account_schema = None
         if request.account:
-            account_key = ndb.Key(urlsafe=request.account)
-            account = account_key.get()
-            print request.account ,"rsiiiiiiiiiiiiiiiiiii"
+            if (len(request.account) % 4 == 0) and re.match('^[A-Za-z0-9+/]+[=]{0,2}$',request.account):
+                account_key = ndb.Key(urlsafe=request.account)
+                account = account_key.get()
+            else:
+                from iomodels.crmengine.accounts import Account
+                account = Account(
+                                name=request.account,
+                                owner = user_from_email.google_user_id,
+                                organization = user_from_email.organization,
+                                access = request.access
+                                )
+                account_key_async = account.put_async()
+                account_key = account_key_async.get_result()
+                data = {}
+                data['id'] = account_key.id()
+                account.put_index(data)
             account_schema = AccountSchema(
                                         id = int( account_key.id() ),
                                         entityKey = request.account,
