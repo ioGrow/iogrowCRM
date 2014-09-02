@@ -5,7 +5,7 @@
         <ul class="page-sidebar-menu">
         opp
         {% for tab in tabs %}
-           <li id="id_{{tab.name}}"  ><a href="{{tab.url}}"><i class="icon-cogs"></i><span class="title">{{tab.label}}</span></a></li>
+           <li id="id_{{tab.name}}"  ><a href="{{tab.url}}"><i class="icon-cogs"></i><span class="title">{{_(tab.label)}}</span></a></li>
           {% endfor %}
         </ul>
      
