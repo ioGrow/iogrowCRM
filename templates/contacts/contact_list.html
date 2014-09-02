@@ -404,7 +404,17 @@
               <h3 id="myModalLabel">{{_("Import contacts")}}</h3>
             </div>
             <div class="modal-body">
-                <p>{{_("We support importing CSV files from Google Contacts, Outlook, Outlook Expressand some other apps. Please select a CSV file to upload:")}}</p>
+                <p>{{_("We support importing CSV files from Google Contacts, Outlook, Outlook Express and some other apps. Please select a CSV file to upload:")}}</p>
+                <div class="radio-list">
+                    
+                    <label>
+                        <input type="radio" name="optionsRadios" id="optionsRadios23"  ng-model="file_type" value="google"  checked="" > Google CSV format
+                    </label>
+                    <label>
+                        
+                        <input type="radio" name="optionsRadios" id="optionsRadios22" ng-model="file_type" value="outlook" checked=""> Outlook CSV format
+                    </label>
+                  </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn default" data-dismiss="modal">{{_("Close")}}</button>

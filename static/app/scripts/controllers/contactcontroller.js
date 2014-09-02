@@ -44,7 +44,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 				 $scope.currentContact=null;
 				 $scope.showTagsFilter=false;
      			 $scope.showNewTag=false;
-                 ;
+                 $scope.file_type = 'outlook';
 				// What to do after authentication
 			 $scope.runTheProcess = function(){
 						var params = {'order' : $scope.order,'limit':20}
@@ -200,7 +200,8 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 				if (data.action == google.picker.Action.PICKED) {
 								if(data.docs){
 										var params = {
-																	'file_id': data.docs[0].id
+																	'file_id': data.docs[0].id,
+																	'file_type':$scope.file_type
 																	};
 										Contact.import($scope,params);
 								}

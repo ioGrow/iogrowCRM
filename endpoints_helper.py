@@ -30,10 +30,11 @@ import iograph
 
 from highrise.pyrise import Highrise, Person, Company, Deal, Task, Tag, Case
 import tweepy as tweepy
-from iomessages import TwitterProfileSchema, tweetsSchema
+from iomessages import TwitterProfileSchema, tweetsSchema,EmailSchema,AddressSchema,PhoneSchema
 import datetime
 import time
 from datetime import date
+
 
 
 FOLDERS = {
@@ -225,7 +226,7 @@ class EndpointsHelper():
             return cls.read_file(service,drive_file)
         except errors.HttpError, error:
             print 'An error occurred: %s' % error
-            return None
+            raise endpoints.UnauthorizedException(cls.INVALID_GRANT)
 
     @classmethod
     def create_contact_group(cls,credentials):
@@ -489,6 +490,75 @@ class EndpointsHelper():
                             list_of_tweets.append(node_popularpost)
         return list_of_tweets
                 #Edge.insert(start_node=keyword.key,end_node=state_key,kind="TwitterPopularPosts")
+    @classmethod
+    def import_addresses_from_outlook(cls,row):
+        empty_string = lambda x: x if x else ""
+        addresses = []
+        for index in [24,25,26]:
+            if row[index]:
+                addresses.append(AddressSchema(
+                                            street=empty_string(unicode(row[index], errors='ignore')),
+                                            city=empty_string(unicode(row[28], errors='ignore')),
+                                            state=empty_string(unicode(row[29], errors='ignore')),
+                                            postal_code=empty_string(unicode(row[30], errors='ignore')),
+                                            country=empty_string(unicode(row[31], errors='ignore')),
+
+                                ))
+        for index in [50,51,52]:
+            if row[index]:
+                addresses.append(AddressSchema(
+                                            street=empty_string(unicode(row[index], errors='ignore')),
+                                            city=empty_string(unicode(row[54], errors='ignore')),
+                                            state=empty_string(unicode(row[55], errors='ignore')),
+                                            postal_code=empty_string(unicode(row[56], errors='ignore')),
+                                            country=empty_string(unicode(row[57], errors='ignore')),
+
+                                ))
+        return addresses
+
+    @classmethod
+    def import_emails_from_outlook(cls,row):
+        emails = []
+        indexes = [14,15,16]
+        for key in indexes:
+            if row[key]:
+                emails.append(EmailSchema(email=row[key]))
+        return emails
+
+    @classmethod
+    def import_phones_from_outlook(cls,row):
+        phones = []
+        work_phones_indexes = [17,38,39,41]
+        for index in work_phones_indexes:
+            if row[index]:
+                phones.append(PhoneSchema(
+                                    type='work',
+                                    number=unicode(row[index], errors='ignore') 
+                                    )
+            )
+        fax_indexes = [22,40]
+        for index in fax_indexes:
+            if row[index]:
+                phones.append(PhoneSchema(
+                                    type='fax',
+                                    number=unicode(row[index], errors='ignore')
+                                    )
+            )
+        home_phones_indexes = [18,19]
+        for index in home_phones_indexes:
+            if row[index]:
+                phones.append(PhoneSchema(
+                                    type='home',
+                                    number=unicode(row[index], errors='ignore')
+                                    )
+            )
+        if row[20]:
+            phones.append(PhoneSchema(
+                                    type='mobile',
+                                    number=unicode(row[20], errors='ignore')
+                                    )
+            )
+        return phones
 
 
 class scor_new_lead():
