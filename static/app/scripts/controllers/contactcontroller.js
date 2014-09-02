@@ -1340,9 +1340,6 @@ $scope.prepareInfonodes = function(){
             $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
             $scope.showNewOpp=false;
             $scope.isLoading=false;
-            $scope.$apply();
-           
-
         };
 
    $scope.priorityColor=function(pri){

@@ -606,16 +606,16 @@ app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Accou
         $scope.editdata = {'edit': 'test()'};
         $scope.percent = 0;
          $scope.chartOptions = {
-            animate:{
-                duration:0,
-                enabled:false
-            },
-            size:100,
-            barColor:'#58a618',
-            scaleColor:'#58a618',
-            lineWidth:7,
-            lineCap:'circle'
-        };
+         animate:{
+             duration:0,
+             enabled:false
+         },
+         size:100,
+         barColor:'#58a618',
+         scaleColor:false,
+         lineWidth:7,
+         lineCap:'circle'
+     };
         $scope.closed_date = new Date();
         $scope.newTaskform=false;
         $scope.newEventform=false;

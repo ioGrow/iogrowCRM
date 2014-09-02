@@ -45,8 +45,9 @@ app.controller('LeadListCtrl', ['$scope','$filter','Auth','Lead','Leadstatus','T
          {'name':'purple','color':'#E874D6'},
          ];
          $scope.tag.color= {'name':'green','color':'#BBE535'};
-
-
+          $scope.redirectTo=function(url){
+          window.location.replace('/#/search/type:contact tags:'+url);
+        }
       // What to do after authentication
         $scope.runTheProcess = function(){
             var params = {'order' : $scope.order,'limit':20};

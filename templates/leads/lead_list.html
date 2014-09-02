@@ -225,8 +225,7 @@
           </div>
           <div class="tagsSection" ng-class="{hidden: lead.tags==null}">
             <div class="sectionContent">
-              <a ng-repeat="tag in lead.tags" href="/#/search/type:Lead tags:<%=tag.id%>"> <span draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
-              </a>
+              <span ng-repeat="tag in lead.tags" ng-click="redirectTo(<%=tag.id%>)" draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
             </div>
           </div>
         </div>

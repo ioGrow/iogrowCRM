@@ -289,8 +289,8 @@
             </div>
             <div class="tagsSection" ng-class="{hidden: account.tags==null}">
               <div class="sectionContent">
-                <a ng-repeat="tag in account.tags" href="/#/search/type:Account tags:<%=tag.id%>"> <span draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
-                </a>
+                 <span ng-repeat="tag in account.tags"  draggable  ng-drag="dragTagItem(tag.edgeKey)" class="pull-right task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %>  </span>
+                 <div class="clearfix"></div>
               </div>
             </div>
           </div>

@@ -58,7 +58,7 @@
                         <div class="col-md-2 col-sm-2" ng-mouseenter="showUpload = true" ng-mouseleave="showUpload = false">
                             <div class="pic account-photo-large">
                                 <img alt="<%=account.name%>" class=" img-responsive img-thumbnail" ng-src="<%=imageSrc%>">
-                                <a ng-show="showUpload" ng-click="createLogoPickerUploader()" href="" class="btn btn-default btn-upload btn-upload-account" data-toggle="modal" style="display: none;">
+                                <a ng-show="showUpload" ng-click="createLogoPickerUploader()" href="" class="btn-on-show btn-upload btn-upload-account" data-toggle="modal" style="display: none;">
                                     <img src="/static/img/upload_logo.png">
                                 </a>
                             </div>
@@ -474,7 +474,7 @@
                                                                         <div class="portlet-body left-sidebar" id="chats">
                                                                             <div class="pic">
                                                                                 <img alt="<%=contact.firstname%> <%=contact.lastname%>" ng-src="<%=imageSrc%>" class="img-responsive profile-photo-large">
-                                                                                <a ng-click="createPickerUploader()" href="" class="btn btn-default btn-upload btn-upload-contact" data-toggle="modal">
+                                                                                <a ng-click="createPickerUploader()" href="" class="btn-upload btn-upload-contact" data-toggle="modal">
                                                                                     <img src="/static/img/upload_logo.png" class="" >
                                                                                 </a>
                                                                                 <div  class="responsivePhotoIcon"></div>
@@ -1601,16 +1601,6 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-12 margin-bottom-10">
-                                        <div class="input-icon ">
-                                            <i class="fa fa-bell-o"></i>
-
-                                              <input cusdatetimepicker data-model="newTask.reminder" type="text" class="form-control" placeholder="{{_('Add a reminder')}}" value="" id="leadEventStartsAt">
-                                          </div>
-
-                                    </div>
-                                </div>
-                                <div class="row">
                                     <div class="col-md-12">
                                         <div class='assigneeMemberToTask' >
                                             <div class="input-icon ">
@@ -1627,16 +1617,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                      <div class="col-md-12">
-                                          <select id="select2_sample2" class="form-control select2" multiple>
-                                              <option ng-repeat="tag in tags"
-                                                      value='<%=tag.entityKey%>'>
-                                                  <%=tag.name%>
-                                              </option>
-                                          </select>
-                                      </div>
-                                 </div>
                       </div>
                       <div class="row">
                           <div class="col-md-12 margin-top-10">
@@ -1710,7 +1690,13 @@
                               </div>
                               <!--/span-->
                             </div>
-                            {{_('All day')}} <input type="checkbox" ng-model="allday"/>
+                            <div class="row">
+                              <div class="col-md-12 margin-bottom-10">
+                                  <input type="checkbox" ng-model="allday"/> {{_('All day')}}
+                              </div>
+                              <!--/span-->
+                            </div>
+                             
                               <!-- pick only date (the case of all day) -->
                               <div class="row" ng-show="allday">
                                 <div class="col-md-12 margin-bottom-10">
@@ -2693,6 +2679,10 @@
                                 </div>
                             </div>
                             <script type="text/javascript">
+                                $("#select2_sample2").select2({
+                                    placeholder: "{{_('Click to Select a label')}}",
+                                    allowClear: false
+                                });
                                 $(function() {
                                     $('#datetimepicker2').datetimepicker({
                                         language: 'fr',
@@ -2743,10 +2733,6 @@
                                     colMinWidth: 220,
                                     defaultContainerWidth: 840,
                                     autoresize: true
-                                });                               
-                                $("#select2_sample2").select2({
-                                    placeholder: "{{_('Click to Select a label')}}",
-                                    allowClear: false
-                                });
+                                });                                                               
 
                             </script>

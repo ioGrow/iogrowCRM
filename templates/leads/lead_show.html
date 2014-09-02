@@ -44,7 +44,7 @@
                         <div class="col-md-2" ng-mouseenter="showUpload = true" ng-mouseleave="showUpload = false">
                             <div class="pic">
                                 <img alt="<%= lead.firstname %> <%= lead.lastname %>" class="img-responsive profile-photo-large" ng-src="<%=imageSrc%>">
-                                <a ng-show="showUpload" ng-click="createLogoPickerUploader()" href="" class="btn btn-default btn-upload btn-upload-contact" data-toggle="modal" style="display: none;">
+                                <a ng-show="showUpload" ng-click="createLogoPickerUploader()" href="" class="btn-on-show btn-upload btn-upload-contact" data-toggle="modal" style="display: none;">
                                     <img src="/static/img/upload_logo.png">
                                 </a>
                             </div>
@@ -963,14 +963,6 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-12 margin-bottom-10">
-                                        <div class="input-icon ">
-                                            <i class="fa fa-bell-o"></i>
-                                              <input cusdatetimepicker data-model="newTask.reminder" type="text" class="form-control" placeholder="{{_('Add a reminder')}}" value="" id="leadEventStartsAt">
-                                          </div>
-                                    </div>
-                                </div>
-                                <div class="row">
                                     <div class="col-md-12">
                                         <div class='assigneeMemberToTask' >
                                             <div class="input-icon ">
@@ -987,16 +979,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                      <div class="col-md-12">
-                                          <select id="select2_sample2" class="form-control select2" multiple>
-                                              <option ng-repeat="tag in tags"
-                                                      value='<%=tag.entityKey%>'>
-                                                  <%=tag.name%>
-                                              </option>
-                                          </select>
-                                      </div>
-                                 </div>
                       </div>
                       <div class="row">
                           <div class="col-md-12 margin-top-10">
