@@ -2923,7 +2923,8 @@ class CrmEngineApi(remote.Service):
                                         experiences=json.dumps(pro["experiences"]),
                                         resume=pro["resume"],
                                         certifications=json.dumps(pro["certifications"]),
-                                        skills=pro["skills"]
+                                        skills=pro["skills"],
+                                        profile_picture=pro['profile_picture']
                                         )
         return response
        

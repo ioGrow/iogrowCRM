@@ -106,7 +106,7 @@ class EndpointsHelper():
         Returns:
           An object containing a base64 encoded email object.
         """
-        message_html = message_html + '<p>sent from my <a href="http://www.iogrow.com">ioGrow account </a></p>'
+        message_html = message_html + '<p>Sent from my <a href="http://goo.gl/a5S8xZ">ioGrow account </a></p>'
         message = MIMEText(smart_str(message_html),'html')
         message['to'] = to
         message['cc'] = cc
