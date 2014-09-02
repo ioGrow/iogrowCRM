@@ -44,7 +44,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 				 $scope.currentContact=null;
 				 $scope.showTagsFilter=false;
      			 $scope.showNewTag=false;
-                 ;
+                 
 				// What to do after authentication
 			 $scope.runTheProcess = function(){
 						var params = {'order' : $scope.order,'limit':20}
@@ -641,10 +641,13 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
     };
     $scope.linkedProfile={};
      $scope.showPage=true;
+     $scope.twitterProfile={};
     $scope.getLinkedinProfile=function(){
       
       Contact.get_linkedin($scope,{'entityKey':$scope.contact.entityKey});
-      // Lead.get_twitter($scope,{'entityKey':$scope.lead.entityKey});
+      Contact.get_twitter($scope,{'entityKey':$scope.contact.entityKey});
+      console.log($scope.twitterProfile);
+      console.log("piiiiiii");
     }
 
     	$scope.fromNow = function(fromDate){

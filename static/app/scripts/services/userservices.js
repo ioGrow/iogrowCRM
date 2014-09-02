@@ -33,6 +33,9 @@ accountservices.factory('User', function($http) {
           gapi.client.crmengine.users.customer(id).execute(function(resp) {
             if(!resp.code){
                $scope.user = resp;
+
+
+               $scope.isLoading= false ;
                $scope.loadCharges=false;
 
 
@@ -44,6 +47,7 @@ accountservices.factory('User', function($http) {
                if(resp.code==401){
                 $scope.refreshToken();
                 $scope.isLoading = false;
+                $scope.loadCharges=false;
                 $scope.$apply();
                };
             }
@@ -87,8 +91,10 @@ accountservices.factory('User', function($http) {
   // HADJI HICHAM  11/08/2014 -- get list Users with licenes .
 User.Customers = function($scope,params){
       $scope.isLoading = true;
+      console.log("lebdiri")
       gapi.client.crmengine.users.customers(params).execute(function(resp) {
               if(!resp.code){
+                console.log("arezki")
                  $scope.users = resp.items;
                  $scope.invitees=resp.invitees;
                  
@@ -205,13 +211,17 @@ User.get_user_by_gid=function($scope,params){
 
 // hadji hicham 10/08/2014 --  get organization info 
 User.get_organization=function($scope,params){
+
    gapi.client.crmengine.users.get_organization(params).execute(function(resp) {
       
          if(!resp.code){
             $scope.organizationInfo=resp ;
-            console.log($scope.organizationInfo);
+            $scope.isLoading = false;
+            $scope.$apply();
+            $scope.purchaseLiseneces(resp);  
 
-          $scope.isLoading = false;
+      
+
          }else{
               console.log(resp.message);
                $('#addAccountModal').modal('hide');

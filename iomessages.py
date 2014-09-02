@@ -71,18 +71,20 @@ class customerRequest(messages.Message):
       id=messages.StringField(1)
 
 # hadji hicham . 25/08/2014 . charges Schema.
-class chargeSchema(messages.Message): 
+class subscriptionSchema(messages.Message): 
       id=messages.StringField(1)
-      date=messages.StringField(2)
-      amount=messages.StringField(3)
+      current_period_start=messages.StringField(2)
+      current_period_end=messages.StringField(3)
       status=messages.StringField(4)
+      plan=messages.StringField(5)
 
 class customerResponse(messages.Message):
       customer_id=messages.StringField(1)
       email=messages.StringField(2)
       google_public_profile_photo_url=messages.StringField(3)
       google_display_name=messages.StringField(4)
-      charges=messages.MessageField(chargeSchema,5,repeated=True)
+      google_user_id=messages.StringField(5)
+      subscriptions=messages.MessageField(subscriptionSchema,6,repeated=True)
 
 class UserListSchema(messages.Message):
     items = messages.MessageField(UserSchema, 1, repeated=True)
@@ -107,8 +109,20 @@ class LinkedinProfileSchema(messages.Message):
     certifications=messages.StringField(13)
     skills=messages.StringField(14,repeated=True)
     url=messages.StringField(15)
-
-
+class LinkedinCompanySchema(messages.Message):
+    name = messages.StringField(1)
+    website = messages.StringField(2)
+    industry = messages.StringField(3)
+    headquarters = messages.StringField(4)
+    summary= messages.StringField(5)
+    founded = messages.StringField(6)
+    followers=messages.StringField(7)
+    logo=messages.StringField(8)
+    specialties=messages.StringField(9)
+    top_image=messages.StringField(10)
+    type=messages.StringField(11)
+    company_size=messages.StringField(12)
+    url=messages.StringField(13)
 
 class PatchTagSchema(messages.Message):
      id=messages.StringField(1)

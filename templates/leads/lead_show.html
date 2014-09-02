@@ -185,11 +185,10 @@
                                             <li ng-hide="checkIfEmpty(linkedProfile)" class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 9}"><a ng-click="selectedTab = 9;">{{_('Details of Lead')}}</a></li>
 
                                             <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 8}"><a ng-click="selectedTab = 8;">{{_('Send an Email')}}</a></li>
-                                            <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">{{_('Contacts')}}</a></li>
                                             <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 7}"><a ng-click="selectedTab = 7;">{{_('Attach Documents')}}</a>
-                                            <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">{{_('Needs')}}</a></li>
-                                            <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 5}"><a ng-click="selectedTab = 5;">{{_('Opportunities')}}</a></li>
-                                            <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 6}"><a ng-click="selectedTab = 6;">{{_('Cases')}}</a></li>
+                                           </li>
+                                       
+                                           
 
                                         </ul>
                                     </li>
@@ -760,6 +759,7 @@
                                                     </li>
                                                 </ul>
                                             </div>
+
                                             <div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="twitterProfile.description_of_user||twitterProfile.screen_name||twitterProfile.location||twitterProfile.lang">
                                                 <h3>General Informations from Twitter</h3>
                                                 <img class="google-avatar pull-right" src="<%=twitterProfile.profile_image_url_https%>"/>
@@ -800,7 +800,9 @@
                                                     </li>
                                                 </ul>
                                             </div>
+
                                             <div class="news-blocks blank-card blank-card-red newsCard" ng-show="twitterProfile.nbr_tweets||twitterProfile.followers_count||twitterProfile.friends_count">
+
                                                 <h3>Stats from Twitter</h3>
                                                 <div class="news-block-tags">
                                                     <strong>Number of Tweets</strong>
@@ -827,7 +829,9 @@
                                                     </li>
                                                 </ul> 
                                             </div>
+
                                              <div ng-show="twitterProfile.last_tweet_text||twitterProfile.last_tweet_retweet_count||twitterProfile.last_tweet_favorite_count" class="news-blocks blank-card blank-card-red newsCard">
+
                                                 <h3> Tweets</h3>
                                                 <div class="news-block-tags">
                                                     <strong>Last Tweet:</strong>

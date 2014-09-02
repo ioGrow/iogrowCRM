@@ -8,80 +8,54 @@ from protorpc import messages
 import model
 import iomessages
 from iograph import Edge
-
+import datetime
 
 
 class LicenseSchema(messages.Message):
     id=messages.StringField(1)
-    day_nbr=messages.IntegerField(10)
     entityKey=messages.StringField(2)
     organization=messages.StringField(3)
-    cost=messages.IntegerField(4)
-    next_billing_date=messages.StringField(5)
-    billing_begin_date=messages.StringField(6)
-    billing_end_date=messages.StringField(7)
-    actif=messages.BooleanField(8)
-    who_paid=messages.StringField(9)
-    day_nbr=messages.IntegerField(10)
-    
+    amount=messages.StringField(4)
+    purchase_date=messages.StringField(5)
+    who_purchased_it=messages.StringField(6)
 
     
 class LicenseInsertRequest(messages.Message):
-    parent=messages.StringField(1)
-    cost=messages.IntegerField(2)
-    next_billing_date=messages.StringField(3)
-    billing_begin_date=messages.StringField(4)
-    billing_end_date=messages.StringField(5)
+    organization=messages.StringField(1)
+    amount=messages.IntegerField(2)
+    purchase_date=messages.StringField(3)
+    who_purchased_it=messages.StringField(4)
+
 
 class License(EndpointsModel):
-    # _message_fields_schema = ('id','organization','cost','next_billing_date','billing_begin_date','billing_end_date','actif','who_paid')
+    _message_fields_schema = ('id','entityKey','organization','amount','purchase_date','who_purchased_it')
     organization = ndb.KeyProperty()
-    cost=ndb.IntegerProperty()
-    day_nbr=ndb.IntegerProperty()
-    next_billing_date= ndb.DateTimeProperty()
-    billing_begin_date= ndb.DateTimeProperty(auto_now_add=True)
-    billing_end_date=ndb.DateTimeProperty()
-    actif= ndb.BooleanProperty()
-    who_paid=ndb.StringProperty()
+    amount=ndb.IntegerProperty()
+    purchase_date= ndb.DateTimeProperty(auto_now_add=True)
+    who_purchased_it=ndb.StringProperty()
+
     @classmethod
     def insert(cls,user_from_email,request):
-        print user_from_email
         license= cls( organization=user_from_email.organization,
-       	   	              cost=int(request.cost),
-       	   	              # next_billing_date= request.next_billing_date, 
-       	   	              # billing_begin_date= request.billing_begin_date, 
-       	   	              # billing_end_date= request.billing_end_date,
-                          day_nbr=0,
-       	   	              actif=False,
-       	   	              who_paid=user_from_email.google_user_id
+       	   	              amount=2000,
+                          who_purchased_it=user_from_email.email,
        	   	)
         license_key=license.put_async()
         license_key_async=license_key.get_result()
-        if request.parent:
-            parent_key = ndb.Key(urlsafe=request.parent)
-            # insert edges
-            Edge.insert(start_node = parent_key,
-                      end_node = license_key_async,
-                      kind = 'licenses',
-                      inverse_edge = 'parents')
-            # EndpointsHelper.update_edge_indexes(
-            #                                 parent_key = license_key_async,
-            #                                 kind = 'licenses',
-            #                                 indexed_edge = str(parent_key.id())
-            #                                 )
-            license_schema= LicenseSchema(
+        license_ent= license_key_async.get()
+        print "*****************************"
+        print "what's up "
+        print license_ent
+        print "*****************************"
+        license_schema= LicenseSchema(
             	                     id= str(license_key_async.id()),
                                    entityKey=str(license_key_async.urlsafe()),
                                    organization=license.organization.urlsafe(),
-                                   cost=int(license.cost),
-                                   # next_billing_date=license.next_billing_date,
-                                   # billing_begin_date=license.billing_begin_date,
-                                   # billing_end_date=license.billing_end_date,
-                                   actif=license.actif,
-                                   who_paid=license.who_paid,
-                                   day_nbr=license.day_nbr
+                                   amount=str(license.amount),
+                                   purchase_date=license_ent.purchase_date.isoformat(),
+                                   who_purchased_it=user_from_email.email
             	     )
-            return license_schema
+        return license_schema
     @classmethod
     def update(cls):
         q =cls.query()
