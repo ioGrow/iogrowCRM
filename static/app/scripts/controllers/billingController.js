@@ -74,8 +74,8 @@ $scope.purchaseLiseneces=function(organization){
     // Open Checkout with further options
     handler.open({
       name: organization.organizationName,
-      description: 'bay a license $20.00',
-      amount: 2000
+      description: 'bay a license $9.99',
+      amount: 999
 
     });
     e.preventDefault();
@@ -257,8 +257,8 @@ try{
     // Open Checkout with further options
     handler.open({
       name: user.google_display_name,
-      description: '$20.00',
-      amount: 2000
+      description: '$9.99',
+      amount: 999
     });
     e.preventDefault();
   });
