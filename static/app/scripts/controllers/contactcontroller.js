@@ -3,8 +3,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 		function($scope,$filter,Auth,Account,Contact,Tag,Edge) {
 				$("ul.page-sidebar-menu li").removeClass("active");
 				$("#id_Contacts").addClass("active");
-
-				document.title = "Contacts: Home";
+                document.title = "Contacts: Home";
 				$scope.isSignedIn = false;
 				$scope.immediateFailed = false;
 				$scope.nextPageToken = undefined;
@@ -439,6 +438,9 @@ $scope.tag_save = function(tag){
 $scope.editTag=function(tag){
 				$scope.edited_tag=tag;
 		 }
+$scope.hideEditable=function(){
+  $scope.edited_tag=null;
+}
 $scope.doneEditTag=function(tag){
 				$scope.edited_tag=null;
 				$scope.updateTag(tag);
@@ -563,13 +565,10 @@ $scope.addTags=function(){
 			});
 }]);
 
-
-app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User','Attachement','Map','Opportunitystage','Casestatus','InfoNode','Tag','Account',
-		function($scope,$filter,$route,Auth,Email,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User,Attachement,Map,Opportunitystage,Casestatus,InfoNode,Tag,Account) {
- console.log('I am in ContactShowCtrl');
-			$("ul.page-sidebar-menu li").removeClass("active");
-			$("#id_Contacts").addClass("active");
-
+app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Task','Event','Note','Topic','Contact','Opportunity','Case','Permission','User','Attachement','Map','Opportunitystage','Casestatus','InfoNode','Tag','Account','Edge',
+		function($scope,$filter,$route,Auth,Email,Task,Event,Note,Topic,Contact,Opportunity,Case,Permission,User,Attachement,Map,Opportunitystage,Casestatus,InfoNode,Tag,Account,Edge) {
+	     $("ul.page-sidebar-menu li").removeClass("active");
+		 $("#id_Contacts").addClass("active");
 		 $scope.selectedTab = 2;
 		 $scope.isSignedIn = false;
 		 $scope.immediateFailed = false;
@@ -644,6 +643,7 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
         lineCap:'circle'
     };
     $scope.linkedProfile={};
+     $scope.showPage=true;
      $scope.twitterProfile={};
     $scope.ownerSelected={};
     $scope.getLinkedinProfile=function(){
@@ -711,6 +711,43 @@ app.controller('ContactShowCtrl', ['$scope','$filter','$route','Auth','Email', '
 			$scope.getTopicUrl = function(type,id){
 			return Topic.getUrl(type,id);
 		};
+		 $scope.addTagsTothis=function(){
+              var tags=[];
+              var items = [];
+              tags=$('#select2_sample2').select2("val");
+              console.log(tags);
+                  angular.forEach(tags, function(tag){
+                    var params = {
+                          'parent': $scope.contact.entityKey,
+                          'tag_key': tag
+                    };
+                    Tag.attach($scope,params);
+                  });
+          };
+          $scope.tagattached = function(tag, index) {
+            if ($scope.contact.tags == undefined) {
+                $scope.contact.tags = [];
+            }
+            var ind = $filter('exists')(tag, $scope.contact.tags);
+            if (ind == -1) {
+                $scope.contact.tags.push(tag);
+                
+            } else {
+            }
+            $('#select2_sample2').select2("val", "");
+            $scope.$apply();
+          };
+         $scope.edgeInserted = function() {
+          /* $scope.tags.push()*/
+          };
+         $scope.removeTag = function(tag,$index) {
+            var params = {'tag': tag,'index':$index}
+            Edge.delete($scope, params);
+        }
+        $scope.edgeDeleted=function(index){
+         $scope.contact.tags.splice(index, 1);
+         $scope.$apply();
+        }
 		  $scope.idealTextColor=function(bgColor){
         var nThreshold = 105;
          var components = getRGBComponents(bgColor);
@@ -824,32 +861,14 @@ $scope.listTags=function(){
         $scope.sharing_with.push($scope.slected_memeber);
 
      };
-     $scope.updateCollaborators = function(){
-          var contactid = {'id':$route.current.params.contactId};
-          Contact.get($scope,contactid);
 
-     };
-      $scope.share = function(slected_memeber){
-
-
-
-        console.log('permissions.insert share');
-        console.log(slected_memeber);
-        console.log("ssssssssss");
-        console.log($scope.contact.id);
-
-
-
-        $scope.$watch($scope.contact.access, function() {
+      $scope.share = function(){
+ 
          var body = {'access':$scope.contact.access};
          var id = $scope.contact.id;
          var params ={'id':id,
                       'access':$scope.contact.access}
-            Contact.patch($scope,params);
-        });
-
-        $('#sharingSettingsModal').modal('hide');
-
+        Contact.patch($scope,params);
         if ($scope.sharing_with.length>0){
 
           var items = [];
@@ -917,22 +936,10 @@ $scope.listTags=function(){
 				$scope.sharing_with.push($scope.slected_memeber);
 
 		 };
-		 $scope.updateCollaborators = function(){
-					var contactid = {'id':$route.current.params.contactId};
-					Contact.get($scope,contactid);
+	
 
-		 };
-
-	$scope.share = function(slected_memeber){
-
-
-
-
-				console.log('permissions.insert share');
-				console.log(slected_memeber);
-
-				$scope.$watch($scope.contact.access, function() {
-
+	$scope.share = function(){
+		
 				 var body = {'access':$scope.contact.access};
 				 var id = $scope.contact.id;
 				 var params ={'id':id,
@@ -944,8 +951,8 @@ $scope.listTags=function(){
 				  Event.permission($scope,params);
 				  Task.permission($scope,params);
 
-				});
-				$('#sharingSettingsModal').modal('hide');
+		
+				
 
 				if ($scope.sharing_with.length>0){
 
@@ -1309,9 +1316,6 @@ $scope.prepareInfonodes = function(){
             $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
             $scope.showNewOpp=false;
             $scope.isLoading=false;
-            $scope.$apply();
-           
-
         };
 
    $scope.priorityColor=function(pri){

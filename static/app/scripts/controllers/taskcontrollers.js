@@ -22,6 +22,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      $scope.slected_members = [];
      $scope.role= 'participant';
      $scope.taskShow=true;
+     $scope.showPage=true;
 
     // What to do after authentication
      $scope.runTheProcess = function(){
@@ -43,7 +44,15 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
       }
       $scope.user='';
      };
-
+     $scope.removeTag = function(tag,$index) {
+          console.log('work.....');
+            var params = {'tag': tag,'index':$index}
+            Edge.delete($scope, params);
+        }
+        $scope.edgeDeleted=function(index){
+         $scope.task.tags.splice(index, 1);
+         $scope.$apply();
+        }
      $scope.unselectMember =function(index){
          $scope.slected_members.splice(index, 1);
           console.log($scope.slected_members);
@@ -263,6 +272,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
 
         Edge.insert($scope,params);
         $('#assigneeTagsToTask').modal('hide');
+        $('#select2_sample2').select2("val", "");
 
      };
     $scope.addComment = function(comment){
@@ -905,19 +915,13 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
         $scope.$apply();
      };
      // Sorting
-     $scope.orderBy = function(order){
-      if($scope.filter!=undefined){
-        var params = { 'order': order,
-                        'status': $scope.filter,
-                        'limit':7};
-      }else{
-          var params = { 'order': order,
-                        'limit':7};
-      }
-
-        $scope.order = order;
-        Task.list($scope,params);
-     };
+     $scope.orderBy = function(order) {
+          console.log('wooooooooooooork2');
+            var params = {'order': order,
+                'limit': 20};
+            $scope.order = order;
+            Task.list($scope, params);
+        };
      $scope.filterByOwner = function(filter){
         if (filter){
           var params = { 'owner': filter,
@@ -1137,6 +1141,9 @@ $scope.tag_save = function(tag){
              console.log("tag saved");
            };
       };
+$scope.hideEditable=function(){
+  $scope.edited_tag=null;
+}
 $scope.deleteTag=function(tag){
           params = {
             'entityKey': tag.entityKey
@@ -1146,6 +1153,7 @@ $scope.deleteTag=function(tag){
       };
 $scope.editTag=function(tag){
         $scope.edited_tag=tag;
+        console.log("work");
      }
 $scope.doneEditTag=function(tag){
         $scope.edited_tag=null;

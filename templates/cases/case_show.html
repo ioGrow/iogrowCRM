@@ -104,17 +104,28 @@
               </div>
               <div class="row">
                 <div class="col-md-12">
-                  <div class="tags-section hidden" ng-class="{hidden: cases.tags==null}">
-                    <div class="section-content">
-                      <span class="pull-left">{{ _('Tags:')}} </span>
-                       <!-- ngRepeat: tag in account.tags -->
-                      <a ng-repeat="tag in case.tags" href="/#/search/type:Case tags:<%=tag.id%>">
-                        <span class="pull-left task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
-                          <%= tag.name %>
-                        </span>
-                      </a>
-                    </div>
-                  </div>
+                 <div class="relatedTags tags-section">
+                                        <div class="section-content">
+                                            <span class="pull-left"><i class="fa fa-tags"></i>{{_('Tags')}}: </span>
+                                            <!-- ngRepeat: tag in account.tags -->
+                                            <div ng-repeat="tag in casee.tags">
+                                                <span class="pull-left task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
+                                                    <a href="" ng-click="removeTag(tag,$index)" class="removeRelatedTag select2-search-choice-close" ></a>
+                                                    <%= tag.name %>
+                                                </span>
+                                            </div>
+                                           <a href="" ng-hide="showNewTag" ng-click="showNewTag=true" style="margin-left:10px"> +Add new tag</a>
+                                           <form ng-show="showNewTag" class="newTagFormShow">
+                                                <select id="select2_sample2" class="selectTagInput form-control select2" multiple>
+                                                  <option ng-repeat="tag in tags"
+                                                  value='<%=tag.entityKey%>'>
+                                                    <%=tag.name%>
+                                                  </option>
+                                                </select>
+                                                <button type="submit"  ng-click="addTagsTothis();showNewTag=false" class="btn blue jfk-button btn-sm jfk-button-action">{{_('Add')}}</button>
+                                            </form>
+                                        </div>
+                                    </div>
                 </div>
               </div>
             </div>
@@ -486,16 +497,6 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-12 margin-bottom-10">
-                                        <div class="input-icon ">
-                                            <i class="fa fa-bell-o"></i>
-
-                                              <input cusdatetimepicker data-model="newTask.reminder" type="text" class="form-control" placeholder="{{ _('Add a reminder')}}" value="" id="leadEventStartsAt">
-                                          </div>
-
-                                    </div>
-                                </div>
-                                <div class="row">
                                     <div class="col-md-12">
                                         <div class='assigneeMemberToTask' >
                                             <div class="input-icon ">
@@ -512,16 +513,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                      <div class="col-md-12">
-                                          <select id="select2_sample2" class="form-control select2" multiple>
-                                              <option ng-repeat="tag in tags"
-                                                      value='<%=tag.entityKey%>'>
-                                                  <%=tag.name%>
-                                              </option>
-                                          </select>
-                                      </div>
-                                 </div>
                       </div>
                       <div class="row">
                           <div class="col-md-12 margin-top-10">
@@ -758,11 +749,11 @@
 
 
                             <label class="radio line">
-                            <input type="radio" value="public" ng-model="casee.access" />
+                            <input type="radio" value="public" ng-click="share()" ng-model="casee.access" />
                             {{ _('public: Anyone within your organization can access and find')}}
                             </label>
                             <label class="radio line">
-                            <input type="radio"  value="private" ng-model="casee.access" />
+                            <input type="radio"  value="private" ng-click="share()" ng-model="casee.access" />
                             {{ _('private: only you and your collaborators')}}
                             </label>
 
@@ -780,12 +771,12 @@
                     <hr/>
 
                     <div class=''>
-                    <p>{{ _('Invited user:')}}</p>
-                    <div class="invitation" ng-show="slected_memeber">
-                      <img class="google-avatar" src="<%= slected_memeber.google_public_profile_photo_url%>"/>
-                        <strong> <%= slected_memeber.google_display_name %> < <%=slected_memeber.email%> ></strong>
-                      <hr/>
+                    <p>{{ _("Invited user:") }}</p>
+                    <div class="invitation" ng-repeat="invited in sharing_with">
+                      <img class="google-avatar" src="<%= invited.google_public_profile_photo_url%>"/>
+                        <strong> <%= invited.google_display_name %> < <%=invited.email%> ></strong>
                     </div>
+                     <hr/>
 
                     <p>{{ _('Invite collaborators:')}}</p>
                     <div class="form-group">
@@ -799,7 +790,7 @@
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button  type="submit" ng-click="share(slected_memeber)" class="btn blue addContactNow">{{_("Share")}}</button>
+                <button  type="submit" ng-click="share()" data-dismiss="modal" aria-hidden="true" class="btn blue addContactNow">{{_("Share")}}</button>
               </div>
                </form>
                </div>

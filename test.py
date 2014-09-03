@@ -35,7 +35,7 @@ class linked_in():
         br.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
         self.browser=br
     def open_url(self,firstname,lastname):
-        r=self.browser.open('https://www.google.com')
+        r=self.browser.open('https://www.google.com/?pws=0')
         self.browser.response().read()
         self.browser.select_form(nr=0)
         self.browser.form['q']=firstname +' '+lastname +' linkedin' 
@@ -46,7 +46,7 @@ class linked_in():
         links=[l for l in link]
         if links : return self.browser.follow_link(links[0]).read()
     def open_url_company(self,name):
-        r=self.browser.open('https://www.google.com')
+        r=self.browser.open('https://www.google.com/?pws=0')
         self.browser.response().read()
         self.browser.select_form(nr=0)
         self.browser.form['q']=name+' linkedin'
@@ -255,7 +255,7 @@ class linked_in():
             founded=soup.find('li',{'class':'founded'})
             if founded:
                 company["founded"]=founded.p.text.replace('\n','')
-            company["url"]=
+        
 
         print company
         return company
@@ -288,4 +288,4 @@ class linked_in():
                                     )
             return response
 l=linked_in()
-l.scrape_company("success2i")
+l.scrape_linkedin("blake","anderson pushlee")

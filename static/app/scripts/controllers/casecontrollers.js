@@ -523,6 +523,9 @@ $scope.tag_save = function(tag){
 $scope.editTag=function(tag){
         $scope.edited_tag=tag;
      }
+$scope.hideEditable=function(){
+  $scope.edited_tag=null;
+}
 $scope.doneEditTag=function(tag){
         $scope.edited_tag=null;
         $scope.updateTag(tag);
@@ -647,8 +650,8 @@ $scope.addTags=function(){
 
 }]);
 
-app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Topic','Note','Task','Event','Permission','User','Casestatus','Email','Attachement','InfoNode','Tag',
-    function($scope,$filter,$route,Auth,Case,Topic,Note,Task,Event,Permission,User,Casestatus,Email,Attachement,InfoNode,Tag) {
+app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Topic','Note','Task','Event','Permission','User','Casestatus','Email','Attachement','InfoNode','Tag','Edge',
+    function($scope,$filter,$route,Auth,Case,Topic,Note,Task,Event,Permission,User,Casestatus,Email,Attachement,InfoNode,Tag,Edge) {
       $("ul.page-sidebar-menu li").removeClass("active");
       $("#id_Cases").addClass("active");
 
@@ -686,8 +689,8 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
      $scope.ioevent = {};
      $scope.selected_members=[];
      $scope.selected_member={};
+     $scope.showPage=true;
      $scope.ownerSelected={};
-
     $scope.fromNow = function(fromDate){
         return moment(fromDate,"YYYY-MM-DD HH:mm Z").fromNow();
     }
@@ -733,6 +736,45 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
     InfoNode.delete($scope,params);
 
   };
+    $scope.addTagsTothis=function(){
+          var tags=[];
+          var items = [];
+          tags=$('#select2_sample2').select2("val");
+          console.log(tags);
+              angular.forEach(tags, function(tag){
+                var params = {
+                      'parent': $scope.casee.entityKey,
+                      'tag_key': tag
+                };
+                console.log(params);
+                Tag.attach($scope,params);
+              });
+        };
+        $scope.tagattached = function(tag, index) {
+          if ($scope.casee.tags == undefined) {
+              $scope.casee.tags = [];
+          }
+          var ind = $filter('exists')(tag, $scope.casee.tags);
+          if (ind == -1) {
+              $scope.casee.tags.push(tag);
+              
+          } else {
+          }
+          $('#select2_sample2').select2("val", "");
+          $scope.$apply();
+        };
+         $scope.edgeInserted = function() {
+          /* $scope.tags.push()*/
+          };
+         $scope.removeTag = function(tag,$index) {
+          console.log('work.....');
+            var params = {'tag': tag,'index':$index}
+            Edge.delete($scope, params);
+        }
+        $scope.edgeDeleted=function(index){
+         $scope.casee.tags.splice(index, 1);
+         $scope.$apply();
+        }
      $scope.TopiclistNextPageItems = function(){
 
 
@@ -778,9 +820,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
         $scope.sharing_with.push($scope.slected_memeber);
 
      };
-  $scope.share = function(slected_memeber){
-
-        $scope.$watch($scope.casee.access, function() {
+  $scope.share = function(){
            var id = $scope.casee.id;
            var params ={
                         'id':id,
@@ -792,9 +832,9 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
                 params["parent"]="case";
                 Event.permission($scope,params);
                 Task.permission($scope,params);
-        });
 
-        $('#sharingSettingsModal').modal('hide');
+
+
 
         if ($scope.sharing_with.length>0){
 

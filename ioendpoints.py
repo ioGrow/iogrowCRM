@@ -1690,6 +1690,7 @@ class CrmEngineApi(remote.Service):
                                 user_from_email = user_from_email,
                                 request = request
                             )
+        
 
 
     # events.insertv2 api
@@ -1754,10 +1755,14 @@ class CrmEngineApi(remote.Service):
                             'starts_at': request.starts_at,
                             'ends_at': request.ends_at,
                             'summary': request.title,
-                            'event_google_id':event.event_google_id
+                            'event_google_id':event.event_google_id,
+                            'access':request.access
+
                             }
                     )
+            
             event.put()
+            
         return message_types.VoidMessage()
     # Groups API
     # groups.delete api
@@ -2875,7 +2880,8 @@ class CrmEngineApi(remote.Service):
                       name='people.getLinkedinV2')
     def get_people_linkedinV2(self, request):
         linkedin=linked_in()
-        pro=linkedin.scrape_linkedin(request.firstname,request.lastname)
+        keyword=request.firstname+" "+request.lastname+" "+request.company
+        pro=linkedin.scrape_linkedin(keyword)
         if(pro):
             response=LinkedinProfileSchema(
                                         lastname = pro["lastname"],
@@ -3228,7 +3234,7 @@ class CrmEngineApi(remote.Service):
             #    list_of_reports.sort(key=itemgetter(4),reverse=True)
             reporting = []
             for item in list_of_reports:
-                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count_account=item[3],count_contacts=item[4],count_leads=item[5],count_tasks=item[6],created_at=item[7].isoformat(),updated_at=item[8].isoformat())
+                item_schema = ReportingResponseSchema(user_google_id=item[0],google_display_name=item[1],email=item[2],count_account=item[3],count_contacts=item[4],count_leads=item[5],count_tasks=item[6],created_at=str(item[7]),updated_at=str(item[8]))
                 reporting.append(item_schema)
 
             return ReportingListResponse(items=reporting)         

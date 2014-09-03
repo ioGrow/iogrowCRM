@@ -53,7 +53,7 @@
             <div class="col-md-2" ng-mouseenter="showUpload= true" ng-mouseleave="showUpload = false">
               <div class="pic">
                   <img alt="<%=contact.firstname%> <%=contact.lastname%>" ng-src="<%=imageSrc%>" class="img-responsive profile-photo-large" >
-                  <a ng-show="showUpload" ng-click="createLogoPickerUploader()" href="" class="btn btn-default btn-upload btn-upload-contact" data-toggle="modal" style="display: none;">
+                  <a ng-show="showUpload" ng-click="createLogoPickerUploader()" href="" class="btn-on-show btn-upload btn-upload-contact" data-toggle="modal" style="display: none;">
                  <img src="/static/img/upload_logo.png">
                </a>
                <div ng-show="showUpload" class="responsivePhotoIcon"></div>
@@ -120,17 +120,28 @@
               <div class="row">
                 <div class="col-md-12">
                   <hr class="sm-hr">
-                  <div class="tags-section hidden" ng-class="{hidden: contact.tags==null}">
-                    <div class="section-content">
-                      <span class="pull-left">{{ _('Tags:')}} </span>
-                       <!-- ngRepeat: tag in account.tags -->
-                      <a ng-repeat="tag in contact.tags" href="/#/search/type:Contact tags:<%=tag.id%>">
-                        <span class="pull-left task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
-                          <%= tag.name %>
-                        </span>
-                      </a>
+                  <div class="relatedTags tags-section" ng-class="{hidden: contact.tags == null}">
+                        <div class="section-content">
+                            <span class="pull-left"><i class="fa fa-tags"></i>{{_('Tags')}}: </span>
+                            <!-- ngRepeat: tag in account.tags -->
+                            <div ng-repeat="tag in contact.tags">
+                                <span class="pull-left task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
+                                    <a href="" ng-click="removeTag(tag,$index)" class="removeRelatedTag select2-search-choice-close" ></a>
+                                    <%= tag.name %>
+                                </span>
+                            </div>
+                           <a href="" ng-hide="showNewTag" ng-click="showNewTag=true" style="margin-left:10px"> +Add new tag</a>
+                           <form ng-show="showNewTag" class="newTagFormShow">
+                                <select id="select2_sample2" class="selectTagInput form-control select2" multiple>
+                                  <option ng-repeat="tag in tags"
+                                  value='<%=tag.entityKey%>'>
+                                    <%=tag.name%>
+                                  </option>
+                                </select>
+                                <button type="submit"  ng-click="addTagsTothis();showNewTag=false" class="btn blue jfk-button btn-sm jfk-button-action">{{_('Add')}}</button>
+                            </form>
+                        </div>
                     </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -179,7 +190,7 @@
                       {% if is_business_user %}
                       <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 5}"><a ng-click="waterfallTrigger(); selectedTab = 5;">{{ _('Opportunities')}}</a></li>
                       <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 6}"><a ng-click="waterfallTrigger(); selectedTab = 6;">{{ _('Cases')}}</a></li>  
-                      <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 9}"><a ng-click="waterfallTrigger(); selectedTab = 9;">{{_('Details of Lead')}}</a></li>
+                      <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 9}"><a ng-click="waterfallTrigger(); selectedTab = 9;">{{_('Details of Contact')}}</a></li>
                     
                       {%endif%}
 
@@ -1250,7 +1261,7 @@
                                     <div class="row slimform">
                                         <div class="col-md-6">
                                             <div class="news-blocks blank-card blank-card-yellow newsCard">
-                                                <h3>Lead Informations</h3>
+                                                <h3>Contact Informations from Linkedin</h3>
                                                 <div class="news-block-tags">
                                                     <strong>First name</strong>
                                                 </div>
@@ -1547,14 +1558,6 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-12 margin-bottom-10">
-                                        <div class="input-icon ">
-                                            <i class="fa fa-bell-o"></i>
-                                              <input cusdatetimepicker data-model="newTask.reminder" type="text" class="form-control" placeholder="{{ _('Add a reminder')}}" value="" id="leadEventStartsAt">
-                                          </div>
-                                    </div>
-                                </div>
-                                <div class="row">
                                     <div class="col-md-12">
                                         <div class='assigneeMemberToTask' >
                                             <div class="input-icon ">
@@ -1571,16 +1574,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                      <div class="col-md-12">
-                                          <select id="select2_sample2" class="form-control select2" multiple>
-                                              <option ng-repeat="tag in tags"
-                                                      value='<%=tag.entityKey%>'>
-                                                  <%=tag.name%>
-                                              </option>
-                                          </select>
-                                      </div>
-                                 </div>
                       </div>
                       <div class="row">
                           <div class="col-md-12 margin-top-10">
@@ -2164,11 +2157,11 @@
                     <div class="radio-list">
 
                             <label >
-                            <input type="radio" name="optionRadio" value="public" ng-model="contact.access" />
+                            <input type="radio" name="optionRadio" value="public" ng-model="contact.access" ng-click="share()"/>
                             {{ _("public: Anyone within your organization can access and find") }}
                             </label>
                             <label >
-                            <input type="radio" name="optionRadio"  value="private" ng-model="contact.access" />
+                            <input type="radio" name="optionRadio"  value="private" ng-model="contact.access" ng-click="share()"/>
                             {{ _("private: only you and your collaborators") }}
                             </label>
                     </div>
@@ -2200,7 +2193,7 @@
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button  type="submit" ng-click="share(slected_memeber)" class="btn blue addContactNow">{{_("Share")}}</button>
+                <button  type="submit" data-dismiss="modal" aria-hidden="true" ng-click="share()" class="btn blue addContactNow">{{_("Share")}}</button>
               </div>
                </form>
                </div>
