@@ -50,9 +50,12 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
         var list_of_tags={};
       $scope.isLoadingtweets=false;
       $scope.tweet_details={};
+      $scope.mapshow=false;
+      $scope.tweetsshow=true;
      // What to do after authentication
      $scope.runTheProcess = function(){
-
+      $scope.mapshow=false;
+      $scope.tweetsshow=true;
           $scope.tweets={};
           Discover.get_recent_tweets($scope,list_of_tags);
           console.log('iiiiz');
@@ -124,6 +127,8 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag',
       };
 
   $scope.popular_tweets=function(){
+          $scope.mapshow=false;
+      $scope.tweetsshow=true;
          $scope.tweets={};
          Discover.get_best_tweets($scope);
 
@@ -383,7 +388,13 @@ $scope.addTags=function(){
           console.log("detailsss");
           $scope.tweet_details=$scope.tweets[ele];
           console.log($scope.tweet_details);
-          Discover.save_details($scope);
+          Discover.details=$scope.tweet_details;
+          console.log(tweetId);
+          console.log(Discover.details);
+          Discover.set();
+          //location.load("/#/discovers/show/"+tweetId );
+          window.location.href += "show/"+tweetId;
+          window.location.reload();
           break;
           }
       }
@@ -399,7 +410,79 @@ $scope.addTags=function(){
      };
 
      
-     
+   
+
+
+     $scope.showMaps= function(){
+           $scope.tweetsshow=false;
+      $scope.mapshow=true;
+      $scope.selectedTab = 5;
+        var params =  {'value':$scope.currentKeyword};
+        //Twitter.maps($scope,params);
+       
+
+        Discover.get_location($scope);
+        
+     };
+$scope.initialize= function(values){
+
+           var mapOptions = {
+            zoom: 2,
+            mapTypeId: google.maps.MapTypeId.TERRAIN,
+            center: new google.maps.LatLng(15.363882, 11.044922)
+          };
+          console.log("sssssss")
+          console.log(values)
+          var lat=[];
+          var lon=[];
+          if (values ) {
+            for (var i = 0; i < values.length; i++) {
+             lat.push(values[i]['latitude']);
+            lon.push(values[i]['longitude']);          
+          }
+          console.log(lat);
+        }
+          
+          var map = new google.maps.Map(document.getElementById('map-canvas'),
+              mapOptions);
+ 
+         
+
+          for (var i = 0; i < values.length ; i++) {
+             var marker = new google.maps.Marker({
+              position: new google.maps.LatLng(values[i]['latitude'], values[i]['longitude']),
+              map: map
+            });
+
+
+            marker.setTitle(values[i]['location']);
+            $scope.adddialgo(marker,values[i]['number'],values[i]['location'])
+
+            //var message = [values[i][0]];
+          
+
+
+
+          }
+
+       
+
+};
+$scope.adddialgo= function (marker,val,location){
+
+  var message = ['title1', 'title2', 'title3', 'title4', 'title5'];
+          var infowindow = new google.maps.InfoWindow({
+            content: val+' tweets from '+location
+          });
+
+          google.maps.event.addListener(marker, 'click', function() {
+            infowindow.open(marker.get('map'), marker);
+          });
+};
+
+
+
+
    
   // Google+ Authentication 
     Auth.init($scope);
@@ -530,13 +613,18 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag',
          $scope.showTagsFilter=false;
          $scope.showNewTag=false;
          $scope.topic="";
-         $scope.details={};
+         $scope.tweet_details={};
+         console.log("isoiz");
+         console.log(Discover.details);
 
      // What to do after authentication
      $scope.runTheProcess = function(){
           console.log("runnnnnnn");
-          Discover.get_details($scope);
-          console.log($scope.details);
+          var i="vfff";
+          i=Discover.details;
+          console.log(i);
+          
+          
 
      };
 

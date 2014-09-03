@@ -179,3 +179,12 @@ class tweetsResponse(messages.Message):
     items=messages.MessageField(tweetsSchema,1,repeated=True)
 
 
+class TwitterMapsSchema(messages.Message):
+    id=messages.StringField(1)
+    location=messages.StringField(2)
+    latitude=messages.StringField(3)
+    longitude=messages.StringField(4)
+    number=messages.StringField(5)
+
+class TwitterMapsResponse(messages.Message):
+    items=messages.MessageField(TwitterMapsSchema,1,repeated=True)
