@@ -19,6 +19,7 @@ from iomodels.crmengine.notes import Note,TopicListResponse
 from iomodels.crmengine.cases import Case,CaseListResponse
 from iomodels.crmengine.documents import Document,DocumentListResponse
 from iomodels.crmengine.needs import Need, NeedListResponse
+from endpoints_helper import EndpointsHelper
 import iomessages
 # The message class that defines the EntityKey schema
 class EntityKeyRequest(messages.Message):
@@ -66,6 +67,17 @@ class AccountSchema(messages.Message):
     logo_img_url = messages.StringField(23)
     owner = messages.MessageField(iomessages.UserSchema,24)
 
+class AccountPatchRequest(messages.Message):
+    id = messages.StringField(1)
+    name = messages.StringField(3)
+    account_type = messages.StringField(4)
+    industry = messages.StringField(5)
+    tagline = messages.StringField(6)
+    introduction = messages.StringField(7)
+    access = messages.StringField(8)
+    logo_img_id = messages.StringField(9)
+    logo_img_url = messages.StringField(10)
+    owner = messages.MessageField(iomessages.UserSchema,11)
 
 class AccountListRequest(messages.Message):
     limit = messages.IntegerField(1)
@@ -318,7 +330,30 @@ class Account(EndpointsModel):
             raise endpoints.NotFoundException('Permission denied')
 
 
-
+    @classmethod
+    def patch(cls,user_from_email,request):
+        account = cls.get_by_id(int(request.id))
+        if account is None:
+            raise endpoints.NotFoundException('Account not found.')
+        EndpointsHelper.share_related_documents_after_patch(
+                                                            user_from_email,
+                                                            account,
+                                                            request
+                                                          )
+        properties = Account().__class__.__dict__
+        for p in properties.keys():
+            if hasattr(request,p):
+                patched_p = eval('account.' + p)
+                my_p = eval('request.' + p)
+                if (patched_p != my_p) \
+                and (my_p and not(p in ['put', 'set_perm', 'put_index'])):
+                    exec('account.' + p + '= request.' + p)
+        account_key_async = account.put_async()
+        data = {}
+        data['id'] = account.key.id()
+        account.put_index(data)
+        get_schema_request = AccountGetRequest(id=int(request.id))
+        return cls.get_schema(user_from_email,get_schema_request)
     @classmethod
     def insert(cls,user_from_email,request):
         account=None

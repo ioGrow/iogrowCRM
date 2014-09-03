@@ -32,7 +32,7 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 
 # Our libraries
 from iograph import Node,Edge,RecordSchema,InfoNodeResponse,InfoNodeConnectionSchema,InfoNodeListResponse
-from iomodels.crmengine.accounts import Account,AccountGetRequest,AccountSchema,AccountListRequest,AccountListResponse,AccountSearchResult,AccountSearchResults,AccountInsertRequest
+from iomodels.crmengine.accounts import Account,AccountGetRequest,AccountPatchRequest,AccountSchema,AccountListRequest,AccountListResponse,AccountSearchResult,AccountSearchResults,AccountInsertRequest
 from iomodels.crmengine.contacts import Contact,ContactGetRequest,ContactInsertRequest,ContactPatchSchema, ContactSchema,ContactListRequest,ContactListResponse,ContactSearchResults,ContactImportRequest,ContactImportHighriseRequest,ContactHighriseResponse, ContactHighriseSchema, DetailImportHighriseRequest, InvitationRequest
 from iomodels.crmengine.notes import Note, Topic, AuthorSchema,TopicSchema,TopicListResponse,DiscussionAboutSchema,NoteSchema
 from iomodels.crmengine.tasks import Task,TaskSchema,TaskRequest,TaskListResponse,TaskInsertRequest
@@ -691,46 +691,15 @@ class CrmEngineApi(remote.Service):
                             request = request
                             )
     # accounts.patch API
-    @Account.method(
-                    
-                    http_method='PATCH',
-                    path='accounts/{id}',
-                    name='accounts.patch'
-                    )
-    def AccountPatch(self, my_model):
-        # user_from_email = EndpointsHelper.require_iogrow_user()
-        # Todo: Check permissions
-        user = EndpointsHelper.require_iogrow_user()
-        if not my_model.from_datastore:
-            raise endpoints.NotFoundException('Account not found.')
-        patched_model_key = my_model.entityKey
-        patched_model = ndb.Key(urlsafe=patched_model_key).get()
-        EndpointsHelper.share_related_documents_after_patch(
-                                                            user,
-                                                            patched_model,
-                                                            my_model
-                                                          )
-        properties = Account().__class__.__dict__
-        for p in properties.keys():
-            patched_p = eval('patched_model.' + p)
-            my_p = eval('my_model.' + p)
-            if (patched_p != my_p) \
-            and (my_p and not(p in ['put', 'set_perm', 'put_index'])):
-                exec('patched_model.' + p + '= my_model.' + p)
-        patched_model.put()
-        # if my_model.logo_img_id:
-        #     if patched_model.folder:
-        #         credentials = user.google_credentials
-        #         http = credentials.authorize(httplib2.Http(memcache))
-        #         service = build('drive', 'v2', http=http)
-        #         params = {
-        #                   'parents': [{'id': patched_model.folder}]
-        #                 }
-        #         service.files().patch(
-        #                             fileId=my_model.logo_img_id,
-        #                             body=params,
-        #                             fields='id').execute()
-        return patched_model
+    @endpoints.method(AccountPatchRequest, AccountSchema,
+                      path='accounts/patch', http_method='POST',
+                      name='accounts.patch')
+    def accounts_patch_beta(self, request):
+        user_from_email = EndpointsHelper.require_iogrow_user()
+        return Account.patch(
+                            user_from_email = user_from_email,
+                            request = request
+                            )
 
     # accounts.search API
     @endpoints.method(SearchRequest, AccountSearchResults,
