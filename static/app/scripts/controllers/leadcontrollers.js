@@ -667,8 +667,10 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
       };
 
        $scope.getColaborators=function(){
-           
+         $scope.collaborators_list=[];
           Permission.getColaborators($scope,{"entityKey":$scope.lead.entityKey});  
+
+
         }
       // We need to call this to refresh token when user credentials are invalid
       $scope.refreshToken = function() {
@@ -770,9 +772,9 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
         $scope.sharing_with.push($scope.slected_memeber);
 
      };
-     $scope.share = function(slected_memeber){
+      
+     $scope.share = function(){
        
-        $scope.$watch($scope.lead.access, function() {
          var body = {'access':$scope.lead.access};
          var id = $scope.lead.id;
          var params ={'id':id,
@@ -780,14 +782,12 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
          Lead.patch($scope,params);
              // who is the parent of this event .hadji hicham 21-07-2014.
 
-                params["parent"]="lead";
-                Event.permission($scope,params);
-                Task.permission($scope,params);
-        $scope.getColaborators()
-        console.log("okkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
-        console.log($scope.collaborators_list)
-        });
-        $('#sharingSettingsModal').modal('hide');
+          params["parent"]="lead";
+          Event.permission($scope,params);
+          Task.permission($scope,params);
+     
+        
+        // $('#sharingSettingsModal').modal('hide');
 
         if ($scope.sharing_with.length>0){
 
@@ -813,11 +813,7 @@ app.controller('LeadShowCtrl', ['$scope','$filter','$route','Auth','Email', 'Tas
      };
 
 
-     $scope.updateCollaborators = function(){
 
-          Lead.get($scope,$scope.lead.id);
-
-     };
       $scope.selectMemberToTask = function() {
             console.log($scope.selected_members);
             if ($scope.selected_members.indexOf($scope.user) == -1) {
@@ -1510,7 +1506,6 @@ $scope.deletelead = function(){
   $scope.checkIfEmpty=function(obj,obj1){
   for(var prop in obj) {
         if(obj.hasOwnProperty(prop))
-        console.log(prop);
             return false;
     }
   for(var prop in obj1) {

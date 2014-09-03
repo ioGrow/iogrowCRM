@@ -40,11 +40,11 @@ class linked_in():
         # User-Agent (this is cheating, ok?)
         br.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
         self.browser=br
-    def open_url(self,firstname,lastname):
+    def open_url(self,keyword):
         r=self.browser.open('https://www.google.com')
         self.browser.response().read()
         self.browser.select_form(nr=0)
-        self.browser.form['q']=firstname +' '+lastname +' linkedin'
+        self.browser.form['q']=keyword+' linkedin'
         self.browser.submit()
         self.browser.response().read()
         link= self.browser.links(url_regex="linkedin.com")
@@ -223,9 +223,9 @@ class linked_in():
         return tab
         # print skills_soup
         # print current_exprience
-    def scrape_linkedin(self, firstname , lastname):
+    def scrape_linkedin(self, keyword):
         person={}
-        html= self.open_url(firstname,lastname)
+        html= self.open_url(keyword)
         if html:
             soup=BeautifulSoup(html)
             self.get_profile_header(soup,person)

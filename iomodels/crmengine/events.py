@@ -40,6 +40,7 @@ class EventSchema(messages.Message):
     tags = messages.MessageField(TagSchema,10, repeated = True)
     created_at = messages.StringField(11)
     updated_at = messages.StringField(12)
+    access=messages.StringField(13)
 
 class EventInsertRequest(messages.Message):
     parent = messages.StringField(1)
@@ -93,7 +94,7 @@ class EventFetchResults(messages.Message):
 
 class Event(EndpointsModel):
 
-    _message_fields_schema = ('id','entityKey','owner','author','collaborators_ids','collaborators_list','created_at','updated_at', 'starts_at','ends_at','title','where','about_kind','about_item')
+    _message_fields_schema = ('id','entityKey','owner','author','collaborators_ids','collaborators_list','created_at','updated_at', 'starts_at','ends_at','title','where','about_kind','about_item','access')
 
     author = ndb.StructuredProperty(Userinfo)
     # Sharing fields
@@ -234,8 +235,11 @@ class Event(EndpointsModel):
                                     created_by = author_schema,
                                     tags = tag_list,
                                     created_at = event.created_at.isoformat(),
-                                    updated_at = event.updated_at.isoformat()
+                                    updated_at = event.updated_at.isoformat(),
+                                    access=event.access
+
                                 )
+    
         return event_schema
     @classmethod
     def list(cls,user_from_email,request):
@@ -422,7 +426,8 @@ class Event(EndpointsModel):
                                     ends_at = event.ends_at.isoformat(),
                                     where = event.where,
                                     created_at = event.created_at.isoformat(),
-                                    updated_at = event.updated_at.isoformat()
+                                    updated_at = event.updated_at.isoformat(),
+                                    access=event.access
                                 )
         return event_schema
 

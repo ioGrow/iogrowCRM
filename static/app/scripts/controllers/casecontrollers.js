@@ -820,9 +820,7 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
         $scope.sharing_with.push($scope.slected_memeber);
 
      };
-  $scope.share = function(slected_memeber){
-
-        $scope.$watch($scope.casee.access, function() {
+  $scope.share = function(){
            var id = $scope.casee.id;
            var params ={
                         'id':id,
@@ -834,9 +832,9 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
                 params["parent"]="case";
                 Event.permission($scope,params);
                 Task.permission($scope,params);
-        });
 
-        $('#sharingSettingsModal').modal('hide');
+
+
 
         if ($scope.sharing_with.length>0){
 

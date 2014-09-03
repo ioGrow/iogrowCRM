@@ -3,8 +3,7 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 		function($scope,$filter,Auth,Account,Contact,Tag,Edge) {
 				$("ul.page-sidebar-menu li").removeClass("active");
 				$("#id_Contacts").addClass("active");
-
-				document.title = "Contacts: Home";
+                document.title = "Contacts: Home";
 				$scope.isSignedIn = false;
 				$scope.immediateFailed = false;
 				$scope.nextPageToken = undefined;
@@ -862,32 +861,14 @@ $scope.listTags=function(){
         $scope.sharing_with.push($scope.slected_memeber);
 
      };
-     $scope.updateCollaborators = function(){
-          var contactid = {'id':$route.current.params.contactId};
-          Contact.get($scope,contactid);
 
-     };
-      $scope.share = function(slected_memeber){
-
-
-
-        console.log('permissions.insert share');
-        console.log(slected_memeber);
-        console.log("ssssssssss");
-        console.log($scope.contact.id);
-
-
-
-        $scope.$watch($scope.contact.access, function() {
+      $scope.share = function(){
+ 
          var body = {'access':$scope.contact.access};
          var id = $scope.contact.id;
          var params ={'id':id,
                       'access':$scope.contact.access}
-            Contact.patch($scope,params);
-        });
-
-        $('#sharingSettingsModal').modal('hide');
-
+        Contact.patch($scope,params);
         if ($scope.sharing_with.length>0){
 
           var items = [];
@@ -955,22 +936,10 @@ $scope.listTags=function(){
 				$scope.sharing_with.push($scope.slected_memeber);
 
 		 };
-		 $scope.updateCollaborators = function(){
-					var contactid = {'id':$route.current.params.contactId};
-					Contact.get($scope,contactid);
+	
 
-		 };
-
-	$scope.share = function(slected_memeber){
-
-
-
-
-				console.log('permissions.insert share');
-				console.log(slected_memeber);
-
-				$scope.$watch($scope.contact.access, function() {
-
+	$scope.share = function(){
+		
 				 var body = {'access':$scope.contact.access};
 				 var id = $scope.contact.id;
 				 var params ={'id':id,
@@ -982,8 +951,8 @@ $scope.listTags=function(){
 				  Event.permission($scope,params);
 				  Task.permission($scope,params);
 
-				});
-				$('#sharingSettingsModal').modal('hide');
+		
+				
 
 				if ($scope.sharing_with.length>0){
 

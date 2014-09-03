@@ -360,11 +360,11 @@
                         </div>
                         <div class="portlet-body" id="chats">
                             <label class="radio line">
-                                <input type="radio" value="public" ng-model="contact.access" />
+                                <input type="radio" value="public" ng-model="contact.access" ng-click="share()" />
                                 {{ _('public: Anyone within your organization can access and find')}}
                             </label>
                             <label class="radio line">
-                                <input type="radio"  value="private" ng-model="contact.access" />
+                                <input type="radio"  value="private" ng-model="contact.access" ng-click="share()"/>
                                 {{ _('private: only you and your collaborators')}}
                             </label>
                         </div>

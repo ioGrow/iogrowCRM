@@ -235,9 +235,9 @@ opportunityservices.factory('Opportunity', function($http) {
       });
 };
 Opportunity.patch = function($scope,params) {
-        console.log('*****************JJjjjj');
+       
         $scope.isLoading = true;
-         console.log(params);
+         
           gapi.client.crmengine.opportunities.patch(params).execute(function(resp) {
             if(!resp.code){
 
@@ -258,8 +258,10 @@ Opportunity.patch = function($scope,params) {
                 $scope.$apply();
                };
             }
+            $scope.getColaborators()
             console.log('opportunities.patch gapi #end_execute');
           });
+
           $scope.isLoading=false;
 };
 Opportunity.update_stage = function($scope,params){
