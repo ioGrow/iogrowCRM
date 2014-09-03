@@ -45,6 +45,9 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
 				 $scope.showTagsFilter=false;
      			 $scope.showNewTag=false;
                  $scope.file_type = 'outlook';
+
+                 
+
 				// What to do after authentication
 			 $scope.runTheProcess = function(){
 						var params = {'order' : $scope.order,'limit':20}
