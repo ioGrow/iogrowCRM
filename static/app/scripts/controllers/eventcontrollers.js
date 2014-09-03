@@ -1,5 +1,6 @@
 app.controller('EventShowController',['$scope','$filter','$route','Auth','Note','Event','Task','Topic','Comment','User','Contributor','Map','Permission',
    function($scope,$filter,$route,Auth,Note,Event,Task,Topic,Comment,User,Contributor,Map,Permission) {
+
 //HKA 14.11.2013 Controller to show Events and add comments
    $scope.isSignedIn = false;
      $scope.immediateFailed = false;
