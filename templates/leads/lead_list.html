@@ -287,15 +287,15 @@
         <ul id="slimList" class="list-group tags-list ">
           <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
             <div class="row">
-              <span editable-text="tag_item.name"  ng-drag="dragTag(tag_item)" id="iii"  draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;" 
+              <span editable-text="tag_item.name"  ng-drag="dragTag(tag_item)" id="iii"  draggable class="with-color" ng-click="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;" 
 
-                  ng-model='tag_item.name'  onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
+                  ng-model='tag_item.name' onhide="hideEditable()" onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
                
                   <%= tag_item.name %>
 
               </span>
 
-              <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
+              <input type="checkbox" ng-show="(tag_item!=edited_tag)&&(!manage_tags)"  ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
               <!--<span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
                   <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>
               </span>-->

@@ -1147,6 +1147,9 @@ $scope.tag_save = function(tag){
              console.log("tag saved");
            };
       };
+$scope.hideEditable=function(){
+  $scope.edited_tag=null;
+}
 $scope.deleteTag=function(tag){
           params = {
             'entityKey': tag.entityKey
@@ -1156,6 +1159,7 @@ $scope.deleteTag=function(tag){
       };
 $scope.editTag=function(tag){
         $scope.edited_tag=tag;
+        console.log("work");
      }
 $scope.doneEditTag=function(tag){
         $scope.edited_tag=null;

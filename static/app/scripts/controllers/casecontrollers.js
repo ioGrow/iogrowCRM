@@ -523,6 +523,9 @@ $scope.tag_save = function(tag){
 $scope.editTag=function(tag){
         $scope.edited_tag=tag;
      }
+$scope.hideEditable=function(){
+  $scope.edited_tag=null;
+}
 $scope.doneEditTag=function(tag){
         $scope.edited_tag=null;
         $scope.updateTag(tag);

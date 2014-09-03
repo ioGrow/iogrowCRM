@@ -382,7 +382,9 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
             }
             ;
         };
-
+        $scope.hideEditable=function(){
+          $scope.edited_tag=null;
+        }
         $scope.editTag = function(tag) {
             $scope.edited_tag = tag;
         }
@@ -519,8 +521,8 @@ app.controller('AccountListCtrl', ['$scope', '$filter', 'Auth', 'Account', 'Tag'
         });
 
     }]);
-app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Account', 'Contact', 'Case', 'Opportunity', 'Topic', 'Note', 'Task', 'Event', 'Permission', 'User', 'Attachement', 'Email', 'Need', 'Opportunitystage', 'Casestatus', 'Map', 'InfoNode', 'Tag','Edge',
-    function($scope, $filter, $route, Auth, Account, Contact, Case, Opportunity, Topic, Note, Task, Event, Permission, User, Attachement, Email, Need, Opportunitystage, Casestatus, Map, InfoNode, Tag, Edge) {
+app.controller('AccountShowCtrl', ['$scope', '$filter', '$route', 'Auth', 'Account', 'Contact', 'Case', 'Opportunity', 'Topic', 'Note', 'Task', 'Event', 'Permission', 'User', 'Attachement', 'Email', 'Opportunitystage', 'Casestatus', 'Map', 'InfoNode', 'Tag','Edge',
+    function($scope, $filter, $route, Auth, Account, Contact, Case, Opportunity, Topic, Note, Task, Event, Permission, User, Attachement, Email, Opportunitystage, Casestatus, Map, InfoNode, Tag, Edge) {
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Accounts").addClass("active");
 
